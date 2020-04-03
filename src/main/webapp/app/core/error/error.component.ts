@@ -1,6 +1,7 @@
 import Component from 'vue-class-component';
 import { Vue, Inject } from 'vue-property-decorator';
 import LoginService from '@/account/login.service';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
 @Component
 export default class Error extends Vue {
@@ -37,7 +38,7 @@ export default class Error extends Vue {
     this.error403 = error403;
     this.error404 = error404;
 
-    if (!this.$store.getters.authenticated && this.error403) {
+    if (!accountStore.authenticated && this.error403) {
       this.loginService().openLogin((<any>this).$root);
     }
   }

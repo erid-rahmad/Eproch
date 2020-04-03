@@ -2,6 +2,7 @@ import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
 import Home from '@/core/home/home.vue';
 import HomeClass from '@/core/home/home.component';
 import * as config from '@/shared/config/config';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store'
 
 const localVue = createLocalVue();
 config.initVueApp(localVue);
@@ -36,7 +37,7 @@ describe('Home', () => {
   });
 
   it('should have user data set after authentication', () => {
-    store.commit('authenticated', { login: 'test' });
+    accountStore.setAuthenticated({ login: 'test'})
 
     expect(home.authenticated).toBeTruthy();
     expect(home.username).toBe('test');

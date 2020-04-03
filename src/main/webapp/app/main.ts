@@ -1,10 +1,19 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
-import Vue from 'vue';
+import Vue, { DirectiveOptions } from 'vue';
+import 'normalize.css';
+import ElementUI from 'element-ui';
+import SvgIcon from 'vue-svgicon';
+import '@/styles/element-variables.scss';
+import '@/styles/index.scss';
+
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
 import Vue2Filters from 'vue2-filters';
 import router from './router';
+import store from '@/shared/config/store';
+import { AppStoreModule as appStore } from '@/shared/config/store/app-store';
+import * as directives from '@/shared/directives';
 import * as config from './shared/config/config';
 import * as bootstrapVueConfig from './shared/config/config-bootstrap-vue';
 import JhiItemCountComponent from './shared/jhi-item-count.vue';
@@ -44,13 +53,28 @@ Vue.component('jhi-sort-indicator', JhiSortIndicatorComponent);
 Vue.component('infinite-loading', InfiniteLoading);
 
 const i18n = config.initI18N(Vue);
-const store = config.initVueXStore(Vue);
 
 const alertService = new AlertService(store);
 const trackerService = new TrackerService(router);
 const translationService = new TranslationService(store, i18n);
 const loginService = new LoginService();
 const accountService = new AccountService(store, translationService, trackerService, router);
+
+Vue.use(ElementUI, {
+  size: appStore.size, // Set element-ui default size
+  i18n: (key: string, value: string) => i18n.t(key, value)
+});
+
+Vue.use(SvgIcon, {
+  tagName: 'svg-icon',
+  defaultWidth: '1em',
+  defaultHeight: '1em'
+});
+
+// Register global directives
+Object.keys(directives).forEach(key => {
+  Vue.directive(key, (directives as { [key: string ]: DirectiveOptions })[key]);
+});
 
 router.beforeEach((to, from, next) => {
   if (!to.matched.length) {
@@ -81,11 +105,8 @@ new Vue({
     activateService: () => new ActivateService(),
     registerService: () => new RegisterService(),
     userService: () => new UserManagementService(),
-
     auditsService: () => new AuditsService(),
-
     healthService: () => new HealthService(),
-
     configurationService: () => new ConfigurationService(),
     logsService: () => new LogsService(),
     metricsService: () => new MetricsService(),

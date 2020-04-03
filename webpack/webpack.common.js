@@ -45,6 +45,18 @@ module.exports = {
         include: [resolve('src'), resolve('test')]
       },
       {
+        test: /\.scss$/,
+        use: ['style-loader', 'css-loader', 'sass-loader', {
+          loader: 'style-resources-loader',
+          options: {
+            patterns: [
+              resolve('src/main/webapp/app/styles/_variables.scss'),
+              resolve('src/main/webapp/app/styles/_mixins.scss')
+            ]
+          }
+        }]
+      },
+      {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {

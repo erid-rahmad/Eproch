@@ -4,6 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 import AlertService from '@/shared/alert/alert.service';
 import * as config from '@/shared/config/config';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store'
 import UserManagement from '@/admin/user-management/user-management.vue';
 import UserManagementClass from '@/admin/user-management/user-management.component';
 import UserManagementService from '@/admin/user-management/user-management.service';
@@ -41,7 +42,7 @@ describe('UserManagement Component', () => {
     mockedAxios.get.mockReset();
     mockedAxios.get.mockReturnValue(Promise.resolve({ headers: {} }));
 
-    store.commit('authenticated', account);
+    accountStore.setAuthenticated(account)
     wrapper = shallowMount<UserManagementClass>(UserManagement, {
       store,
       i18n,

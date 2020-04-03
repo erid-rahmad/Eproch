@@ -2,6 +2,8 @@ import { email, maxLength, minLength, required } from 'vuelidate/lib/validators'
 import axios from 'axios';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
 import { Vue, Component, Inject } from 'vue-property-decorator';
+import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
 const validations = {
   settingsAccount: {
@@ -31,7 +33,7 @@ export default class Settings extends Vue {
   public success: string = null;
   public error: string = null;
   public errorEmailExists: string = null;
-  public languages: any = this.$store.getters.languages || [];
+  public languages: any = translationStore.languages || [];
 
   public save(): void {
     this.error = null;
@@ -54,10 +56,10 @@ export default class Settings extends Vue {
   }
 
   public get settingsAccount(): any {
-    return this.$store.getters.account;
+    return accountStore.account;
   }
 
   public get username(): string {
-    return this.$store.getters.account ? this.$store.getters.account.login : '';
+    return accountStore.account ? accountStore.account.login : '';
   }
 }

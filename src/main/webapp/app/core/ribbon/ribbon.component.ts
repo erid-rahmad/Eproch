@@ -1,12 +1,13 @@
 import { Component, Vue } from 'vue-property-decorator';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
 @Component
 export default class Ribbon extends Vue {
   public get ribbonEnv(): string {
-    return this.$store.getters.ribbonOnProfiles;
+    return accountStore.ribbonOnProfiles;
   }
 
   public get ribbonEnabled(): boolean {
-    return this.$store.getters.ribbonOnProfiles && this.$store.getters.activeProfiles.indexOf(this.$store.getters.ribbonOnProfiles) > -1;
+    return accountStore.ribbonOnProfiles && accountStore.activeProfiles.indexOf(accountStore.ribbonOnProfiles) > -1;
   }
 }

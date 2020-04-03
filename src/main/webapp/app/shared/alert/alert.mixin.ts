@@ -1,20 +1,21 @@
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import AlertService from '@/shared/alert/alert.service';
+import { AlertStoreModule as alertStore } from '@/shared/config/store/alert-store';
 
 @Component
 export default class AlertMixin extends Vue {
   @Inject('alertService') protected alertService: () => AlertService;
 
-  public dismissCountDown: number = this.$store.getters.dismissCountDown;
-  public dismissSecs: number = this.$store.getters.dismissSecs;
-  public alertType: string = this.$store.getters.alertType;
-  public alertMessage: any = this.$store.getters.alertMessage;
+  public dismissCountDown: number = alertStore.dismissCountDown;
+  public dismissSecs: number = alertStore.dismissTimeout;
+  public alertType: string = alertStore.type;
+  public alertMessage: any = alertStore.message;
 
   public getAlertFromStore() {
-    this.dismissCountDown = this.$store.getters.dismissCountDown;
-    this.dismissSecs = this.$store.getters.dismissSecs;
-    this.alertType = this.$store.getters.alertType;
-    this.alertMessage = this.$store.getters.alertMessage;
+    this.dismissCountDown = alertStore.dismissCountDown;
+    this.dismissSecs = alertStore.dismissTimeout;
+    this.alertType = alertStore.type;
+    this.alertMessage = alertStore.message;
   }
 
   public countDownChanged(dismissCountDown: number) {

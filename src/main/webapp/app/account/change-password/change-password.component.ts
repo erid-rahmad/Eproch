@@ -3,6 +3,7 @@ import axios from 'axios';
 import { mapGetters } from 'vuex';
 import Component from 'vue-class-component';
 import { Vue, Inject } from 'vue-property-decorator';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
 const validations = {
   resetPassword: {
@@ -25,7 +26,9 @@ const validations = {
 @Component({
   validations,
   computed: {
-    ...mapGetters(['account'])
+    ...mapGetters({
+      account: 'accountStore/account'
+    })
   }
 })
 export default class ChangePassword extends Vue {
@@ -62,6 +65,6 @@ export default class ChangePassword extends Vue {
   }
 
   public get username(): string {
-    return this.$store.getters.account ? this.$store.getters.account.login : '';
+    return accountStore.account ? accountStore.account.login : '';
   }
 }

@@ -1,19 +1,20 @@
 import { Store } from 'vuex';
+import { AlertStoreModule as alertStore } from '@/shared/config/store/alert-store'
 
 export default class JhiAlertService {
   private store: Store<{}>;
 
   constructor(store: Store<{}>) {
     this.store = store;
-    this.store.commit('initAlert');
+    alertStore.init();
   }
 
   public showAlert(alertMessage: any, alertType = 'info') {
-    this.store.commit('setAlertType', alertType);
-    this.store.commit('setAlertMessage', alertMessage);
+    alertStore.setType(alertType)
+    alertStore.setMessage(alertMessage)
   }
 
   public countDownChanged(dismissCountDown: number) {
-    this.store.commit('countDownChanged', dismissCountDown);
+    alertStore.setCountDown(dismissCountDown)
   }
 }

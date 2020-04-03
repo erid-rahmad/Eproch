@@ -2,6 +2,7 @@ import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
 import axios from 'axios';
 
 import * as config from '@/shared/config/config';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store'
 import Settings from '@/account/settings/settings.vue';
 import SettingsClass from '@/account/settings/settings.component';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
@@ -27,12 +28,12 @@ describe('Settings Component', () => {
     email: 'john.doe@jhipster.org'
   };
 
-  beforeEach(() => {
+  beforeEach(async () => {
     mockedAxios.get.mockReset();
     mockedAxios.get.mockReturnValue(Promise.resolve({}));
     mockedAxios.post.mockReset();
 
-    store.commit('authenticated', account);
+    await accountStore.setAuthenticated(account)
     wrapper = shallowMount<SettingsClass>(Settings, {
       store,
       i18n,

@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { Store } from 'vuex';
 import VueRouter from 'vue-router';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store'
+import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store'
 import TranslationService from '@/locale/translation.service';
 
 import TrackerService from '@/admin/tracker/tracker.service';
+import { PermissionStoreModule as permissionStore } from '@/shared/config/store/permission-store';
 
 export default class AccountService {
   constructor(
@@ -17,7 +20,7 @@ export default class AccountService {
 
   public init(): void {
     const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
-    if (!this.store.getters.account && !this.store.getters.logon && token) {
+    if (!accountStore.userIdentity && !accountStore.logon && token) {
       this.retrieveAccount();
     }
     this.retrieveProfiles();
@@ -26,37 +29,39 @@ export default class AccountService {
   public retrieveProfiles(): void {
     axios.get('management/info').then(res => {
       if (res.data && res.data.activeProfiles) {
-        this.store.commit('setRibbonOnProfiles', res.data['display-ribbon-on-profiles']);
-        this.store.commit('setActiveProfiles', res.data['activeProfiles']);
+        accountStore.setRibbonOnProfiles(res.data['display-ribbon-on-profiles'])
+        accountStore.setActiveProfiles(res.data['activeProfiles'])
       }
     });
   }
 
   public retrieveAccount(): void {
-    this.store.commit('authenticate');
+    accountStore.authenticate()
     axios
       .get('api/account')
       .then(response => {
         const account = response.data;
         if (account) {
-          this.store.commit('authenticated', account);
-          if (this.store.getters.currentLanguage !== account.langKey) {
-            this.store.commit('currentLanguage', account.langKey);
+          accountStore.setAuthenticated(account)
+          if (translationStore.language !== account.langKey) {
+            translationStore.setLanguage(account.langKey)
           }
           if (sessionStorage.getItem('requested-url')) {
             this.router.replace(sessionStorage.getItem('requested-url'));
             sessionStorage.removeItem('requested-url');
           }
+          permissionStore.generateRoutes(account.authorities)
+          this.router.addRoutes(permissionStore.dynamicRoutes)
           this.trackerService.connect();
         } else {
-          this.store.commit('logout');
+          accountStore.logout()
           this.router.push('/');
           sessionStorage.removeItem('requested-url');
         }
-        this.translationService.refreshTranslation(this.store.getters.currentLanguage);
+        this.translationService.refreshTranslation(translationStore.language);
       })
       .catch(() => {
-        this.store.commit('logout');
+        accountStore.logout()
         this.router.push('/');
       });
   }
@@ -79,10 +84,10 @@ export default class AccountService {
   }
 
   public get authenticated(): boolean {
-    return this.store.getters.authenticated;
+    return accountStore.authenticated;
   }
 
   public get userAuthorities(): any {
-    return this.store.getters.account.authorities;
+    return accountStore.userIdentity.authorities;
   }
 }
