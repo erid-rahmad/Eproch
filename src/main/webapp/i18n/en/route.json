@@ -1,0 +1,19 @@
+{
+    "route": {
+        "home": "Home",
+        "myAccount": "My Account",
+        "changePassword": "Change Password",
+        "settings": "Settings",
+        "admin": {
+            "default": "System Administration",
+            "userManagement": "Users",
+            "api": "API References",
+            "audits": "Audits",
+            "health": "Health",
+            "logs": "Logs",
+            "metrics": "Metrics",
+            "config": "Configuration",
+            "tracker": "User Tracker"
+        }
+    }
+}
