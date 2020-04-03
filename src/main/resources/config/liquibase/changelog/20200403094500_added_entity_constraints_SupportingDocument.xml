@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity SupportingDocument.
+    -->
+    <changeSet id="20200403094500-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="type_id"
+                                 baseTableName="supporting_document"
+                                 constraintName="fk_supporting_document_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="document_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="vendor_id"
+                                 baseTableName="supporting_document"
+                                 constraintName="fk_supporting_document_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="vendor"/>
+
+    </changeSet>
+</databaseChangeLog>

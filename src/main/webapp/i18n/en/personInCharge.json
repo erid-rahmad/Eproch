@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "personInCharge": {
+      "home": {
+        "title": "Person In Charges",
+        "createLabel": "Create a new Person In Charge",
+        "createOrEditLabel": "Create or edit a Person In Charge",
+        "notFound": "No Person In Charges found"
+      },
+      "created": "A new Person In Charge is created with identifier {{ param }}",
+      "updated": "A Person In Charge is updated with identifier {{ param }}",
+      "deleted": "A Person In Charge is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Person In Charge {{ id }}?"
+      },
+      "detail": {
+        "title": "Person In Charge"
+      },
+      "position": "Position",
+      "phone": "Phone",
+      "user": "User",
+      "vendor": "Vendor"
+    }
+  }
+}

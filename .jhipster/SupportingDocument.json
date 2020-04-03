@@ -1,0 +1,50 @@
+{
+    "name": "SupportingDocument",
+    "fields": [
+        {
+            "fieldName": "documentNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "expirationDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "file",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "any"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "documentType",
+            "otherEntityRelationshipName": "supportingDocument",
+            "relationshipValidateRules": "required",
+            "relationshipName": "type",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "vendor",
+            "otherEntityRelationshipName": "supportingDocument",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200403094500",
+    "entityTableName": "supporting_document",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

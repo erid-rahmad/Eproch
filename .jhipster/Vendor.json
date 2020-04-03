@@ -1,0 +1,122 @@
+{
+    "name": "Vendor",
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "npwp",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "branch",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "email",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "phone",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "fax",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "website",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "VendorType",
+            "fieldValues": "COMPANY,PROFESSIONAL",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "paymentCategory",
+            "fieldType": "PaymentCategory",
+            "fieldValues": "RED,GREEN",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "approvalStatus",
+            "fieldType": "VendorApprovalStatus",
+            "fieldValues": "PENDING,REJECTED,APPROVED",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "location",
+            "otherEntityRelationshipName": "vendor",
+            "relationshipValidateRules": "required",
+            "relationshipName": "location",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "companyFunctionary",
+            "otherEntityRelationshipName": "vendor",
+            "relationshipName": "companyFunctionary"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "personInCharge",
+            "otherEntityRelationshipName": "vendor",
+            "relationshipName": "personInCharge"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "supportingDocument",
+            "otherEntityRelationshipName": "vendor",
+            "relationshipName": "supportingDocument"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "businessCategory",
+            "otherEntityRelationshipName": "vendor",
+            "relationshipName": "businessCategory",
+            "otherEntityField": "id",
+            "ownerSide": true
+        }
+    ],
+    "changelogDate": "20200403094300",
+    "javadoc": "The Vendor entity.",
+    "entityTableName": "vendor",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

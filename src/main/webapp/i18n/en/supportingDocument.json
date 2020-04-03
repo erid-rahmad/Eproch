@@ -1,0 +1,26 @@
+{
+  "opusWebApp": {
+    "supportingDocument": {
+      "home": {
+        "title": "Supporting Documents",
+        "createLabel": "Create a new Supporting Document",
+        "createOrEditLabel": "Create or edit a Supporting Document",
+        "notFound": "No Supporting Documents found"
+      },
+      "created": "A new Supporting Document is created with identifier {{ param }}",
+      "updated": "A Supporting Document is updated with identifier {{ param }}",
+      "deleted": "A Supporting Document is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Supporting Document {{ id }}?"
+      },
+      "detail": {
+        "title": "Supporting Document"
+      },
+      "documentNo": "Document No",
+      "expirationDate": "Expiration Date",
+      "file": "File",
+      "type": "Type",
+      "vendor": "Vendor"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "opusWebApp": {
+    "companyFunctionary": {
+      "home": {
+        "title": "Company Functionaries",
+        "createLabel": "Create a new Company Functionary",
+        "createOrEditLabel": "Create or edit a Company Functionary",
+        "notFound": "No Company Functionaries found"
+      },
+      "created": "A new Company Functionary is created with identifier {{ param }}",
+      "updated": "A Company Functionary is updated with identifier {{ param }}",
+      "deleted": "A Company Functionary is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Company Functionary {{ id }}?"
+      },
+      "detail": {
+        "title": "Company Functionary"
+      },
+      "name": "Name",
+      "position": "Position",
+      "phone": "Phone",
+      "email": "Email",
+      "vendor": "Vendor"
+    }
+  }
+}

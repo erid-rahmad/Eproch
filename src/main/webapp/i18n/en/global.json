@@ -7,6 +7,18 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
+        "country": "Country",
+        "currency": "Currency",
+        "location": "Location",
+        "vendor": "Vendor",
+        "businessCategory": "Business Category",
+        "supportingDocument": "Supporting Document",
+        "documentType": "Document Type",
+        "documentTypeBusinessCategory": "Document Type Business Category",
+        "personInCharge": "Person In Charge",
+        "companyFunctionary": "Company Functionary",
+        "reference": "Reference",
+        "referenceList": "Reference List",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

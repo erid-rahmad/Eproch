@@ -1,0 +1,27 @@
+{
+  "opusWebApp": {
+    "businessCategory": {
+      "home": {
+        "title": "Business Categories",
+        "createLabel": "Buat Business Category baru",
+        "createOrEditLabel": "Buat atau edit Business Category",
+        "notFound": "No Business Categories found"
+      },
+      "created": "Business Category dengan id {{ param }} telah dibuat",
+      "updated": "Business Category dengan id {{ param }} telah diperbaharui",
+      "deleted": "Business Category dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Business Category {{ id }}?"
+      },
+      "detail": {
+        "title": "Business Category"
+      },
+      "name": "Name",
+      "description": "Description",
+      "businessCategory": "Business Category",
+      "documentTypeBusinessCategory": "Document Type Business Category",
+      "parentCategory": "Parent Category",
+      "vendor": "Vendor"
+    }
+  }
+}

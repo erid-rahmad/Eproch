@@ -1,0 +1,139 @@
+entity Country {
+	name String
+	code String
+}
+
+entity Currency {
+	code String required pattern(/^[A-Z]{3}$/) unique
+	symbol String required
+	name String required
+}
+
+entity Location {
+	streetAddress String
+	postalCode Integer min(5) max(5)
+	city String
+	stateProvince String
+}
+
+/**
+ * The Vendor entity.
+ */
+entity Vendor {
+	code String
+	name String required
+	npwp Long required
+	branch Boolean
+	email String required
+	phone String required
+	fax String
+	website String
+	type VendorType required
+	paymentCategory PaymentCategory required
+	approvalStatus VendorApprovalStatus required
+}
+
+entity BusinessCategory {
+	name String required unique
+	description String
+}
+
+entity SupportingDocument {
+	documentNo String required
+	expirationDate LocalDate
+	file Blob
+}
+
+entity DocumentType {
+	name String required unique
+	description String
+	hasExpirationDate Boolean
+    forCompany Boolean
+    forProfessional Boolean
+    active Boolean
+}
+
+entity DocumentTypeBusinessCategory(doctype_businesscat) {
+	mandatory Boolean
+    additional Boolean
+}
+
+/**
+ * The PIC entity.
+ */
+entity PersonInCharge {
+	position String required
+	phone String required
+}
+
+/**
+ * The Functionary entity.
+ */
+entity CompanyFunctionary {
+	name String required
+	position String required
+	phone String required
+	email String required
+}
+
+entity Reference {
+	name String required unique
+    description String
+    referenceType ReferenceType
+}
+
+entity ReferenceList {
+	name String
+    description String
+    value String
+}
+
+enum ReferenceType {
+	LIST, TABLE
+}
+
+enum VendorType {
+	COMPANY, PROFESSIONAL
+}
+
+enum PaymentCategory {
+	RED, GREEN
+}
+
+enum VendorApprovalStatus {
+	PENDING, REJECTED, APPROVED
+}
+
+relationship OneToOne {
+	Country{currency required} to Currency
+	Location{country required} to Country
+	Vendor{location required} to Location
+	SupportingDocument{type required} to DocumentType
+	PersonInCharge{user(login) required} to User
+}
+
+relationship OneToMany {
+	Vendor to CompanyFunctionary{vendor}
+	Vendor to PersonInCharge{vendor}
+	Vendor to SupportingDocument{vendor}
+	BusinessCategory to BusinessCategory{parentCategory}
+    DocumentType to DocumentTypeBusinessCategory{documentType}
+    BusinessCategory to DocumentTypeBusinessCategory{businessCategory}
+    Reference to ReferenceList{reference}
+}
+
+relationship ManyToMany {
+	Vendor{businessCategory} to BusinessCategory{vendor}
+}
+
+// Allow filtering to all entities.
+filter * except DocumentTypeBusinessCategory
+
+// Set pagination options.
+paginate * with pagination except DocumentTypeBusinessCategory
+
+// Use Data Transfert Objects (DTO)
+dto * with mapstruct except DocumentTypeBusinessCategory
+
+// Set service options to all except few
+service * with serviceClass except DocumentTypeBusinessCategory

@@ -1,0 +1,28 @@
+{
+  "opusWebApp": {
+    "documentType": {
+      "home": {
+        "title": "Document Types",
+        "createLabel": "Buat Document Type baru",
+        "createOrEditLabel": "Buat atau edit Document Type",
+        "notFound": "No Document Types found"
+      },
+      "created": "Document Type dengan id {{ param }} telah dibuat",
+      "updated": "Document Type dengan id {{ param }} telah diperbaharui",
+      "deleted": "Document Type dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Document Type {{ id }}?"
+      },
+      "detail": {
+        "title": "Document Type"
+      },
+      "name": "Name",
+      "description": "Description",
+      "hasExpirationDate": "Has Expiration Date",
+      "forCompany": "For Company",
+      "forProfessional": "For Professional",
+      "active": "Active",
+      "documentTypeBusinessCategory": "Document Type Business Category"
+    }
+  }
+}

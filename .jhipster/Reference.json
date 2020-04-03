@@ -1,0 +1,41 @@
+{
+    "name": "Reference",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "referenceType",
+            "fieldType": "ReferenceType",
+            "fieldValues": "LIST,TABLE"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "referenceList",
+            "otherEntityRelationshipName": "reference",
+            "relationshipName": "referenceList"
+        }
+    ],
+    "changelogDate": "20200403095000",
+    "entityTableName": "reference",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

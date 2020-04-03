@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity DocumentTypeBusinessCategory.
+    -->
+    <changeSet id="20200403094700-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="document_type_id"
+                                 baseTableName="doctype_businesscat"
+                                 constraintName="fk_doctype_businesscat_document_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="document_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="business_category_id"
+                                 baseTableName="doctype_businesscat"
+                                 constraintName="fk_doctype_businesscat_business_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="business_category"/>
+
+    </changeSet>
+</databaseChangeLog>

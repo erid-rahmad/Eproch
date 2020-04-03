@@ -39,6 +39,18 @@ import ConfigurationService from '@/admin/configuration/configuration.service';
 import TrackerService from './admin/tracker/tracker.service';
 /* tslint:disable */
 
+import CountryService from '@/entities/country/country.service';
+import CurrencyService from '@/entities/currency/currency.service';
+import LocationService from '@/entities/location/location.service';
+import VendorService from '@/entities/vendor/vendor.service';
+import BusinessCategoryService from '@/entities/business-category/business-category.service';
+import SupportingDocumentService from '@/entities/supporting-document/supporting-document.service';
+import DocumentTypeService from '@/entities/document-type/document-type.service';
+import DocumentTypeBusinessCategoryService from '@/entities/document-type-business-category/document-type-business-category.service';
+import PersonInChargeService from '@/entities/person-in-charge/person-in-charge.service';
+import CompanyFunctionaryService from '@/entities/company-functionary/company-functionary.service';
+import ReferenceService from '@/entities/reference/reference.service';
+import ReferenceListService from '@/entities/reference-list/reference-list.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -73,7 +85,7 @@ Vue.use(SvgIcon, {
 
 // Register global directives
 Object.keys(directives).forEach(key => {
-  Vue.directive(key, (directives as { [key: string ]: DirectiveOptions })[key]);
+  Vue.directive(key, (directives as { [key: string]: DirectiveOptions })[key]);
 });
 
 router.beforeEach((to, from, next) => {
@@ -113,6 +125,18 @@ new Vue({
     trackerService: () => trackerService,
     alertService: () => alertService,
     translationService: () => translationService,
+    countryService: () => new CountryService(),
+    currencyService: () => new CurrencyService(),
+    locationService: () => new LocationService(),
+    vendorService: () => new VendorService(),
+    businessCategoryService: () => new BusinessCategoryService(),
+    supportingDocumentService: () => new SupportingDocumentService(),
+    documentTypeService: () => new DocumentTypeService(),
+    documentTypeBusinessCategoryService: () => new DocumentTypeBusinessCategoryService(),
+    personInChargeService: () => new PersonInChargeService(),
+    companyFunctionaryService: () => new CompanyFunctionaryService(),
+    referenceService: () => new ReferenceService(),
+    referenceListService: () => new ReferenceListService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService
   },

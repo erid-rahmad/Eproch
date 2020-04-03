@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "documentTypeBusinessCategory": {
+      "home": {
+        "title": "Document Type Business Categories",
+        "createLabel": "Create a new Document Type Business Category",
+        "createOrEditLabel": "Create or edit a Document Type Business Category",
+        "notFound": "No Document Type Business Categories found"
+      },
+      "created": "A new Document Type Business Category is created with identifier {{ param }}",
+      "updated": "A Document Type Business Category is updated with identifier {{ param }}",
+      "deleted": "A Document Type Business Category is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Document Type Business Category {{ id }}?"
+      },
+      "detail": {
+        "title": "Document Type Business Category"
+      },
+      "mandatory": "Mandatory",
+      "additional": "Additional",
+      "documentType": "Document Type",
+      "businessCategory": "Business Category"
+    }
+  }
+}

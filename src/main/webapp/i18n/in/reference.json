@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "reference": {
+      "home": {
+        "title": "References",
+        "createLabel": "Buat Reference baru",
+        "createOrEditLabel": "Buat atau edit Reference",
+        "notFound": "No References found"
+      },
+      "created": "Reference dengan id {{ param }} telah dibuat",
+      "updated": "Reference dengan id {{ param }} telah diperbaharui",
+      "deleted": "Reference dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Reference {{ id }}?"
+      },
+      "detail": {
+        "title": "Reference"
+      },
+      "name": "Name",
+      "description": "Description",
+      "referenceType": "Reference Type",
+      "referenceList": "Reference List"
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "opusWebApp": {
+    "supportingDocument": {
+      "home": {
+        "title": "Supporting Documents",
+        "createLabel": "Buat Supporting Document baru",
+        "createOrEditLabel": "Buat atau edit Supporting Document",
+        "notFound": "No Supporting Documents found"
+      },
+      "created": "Supporting Document dengan id {{ param }} telah dibuat",
+      "updated": "Supporting Document dengan id {{ param }} telah diperbaharui",
+      "deleted": "Supporting Document dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Supporting Document {{ id }}?"
+      },
+      "detail": {
+        "title": "Supporting Document"
+      },
+      "documentNo": "Document No",
+      "expirationDate": "Expiration Date",
+      "file": "File",
+      "type": "Type",
+      "vendor": "Vendor"
+    }
+  }
+}

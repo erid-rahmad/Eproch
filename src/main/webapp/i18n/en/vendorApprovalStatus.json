@@ -1,0 +1,10 @@
+{
+  "opusWebApp": {
+    "VendorApprovalStatus": {
+      "null": "",
+      "PENDING": "PENDING",
+      "REJECTED": "REJECTED",
+      "APPROVED": "APPROVED"
+    }
+  }
+}

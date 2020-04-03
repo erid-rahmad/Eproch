@@ -1,0 +1,52 @@
+{
+    "name": "DocumentType",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "hasExpirationDate",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "forCompany",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "forProfessional",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "documentTypeBusinessCategory",
+            "otherEntityRelationshipName": "documentType",
+            "relationshipName": "documentTypeBusinessCategory"
+        }
+    ],
+    "changelogDate": "20200403094600",
+    "entityTableName": "document_type",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

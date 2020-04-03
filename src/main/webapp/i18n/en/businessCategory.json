@@ -1,0 +1,27 @@
+{
+  "opusWebApp": {
+    "businessCategory": {
+      "home": {
+        "title": "Business Categories",
+        "createLabel": "Create a new Business Category",
+        "createOrEditLabel": "Create or edit a Business Category",
+        "notFound": "No Business Categories found"
+      },
+      "created": "A new Business Category is created with identifier {{ param }}",
+      "updated": "A Business Category is updated with identifier {{ param }}",
+      "deleted": "A Business Category is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Business Category {{ id }}?"
+      },
+      "detail": {
+        "title": "Business Category"
+      },
+      "name": "Name",
+      "description": "Description",
+      "businessCategory": "Business Category",
+      "documentTypeBusinessCategory": "Document Type Business Category",
+      "parentCategory": "Parent Category",
+      "vendor": "Vendor"
+    }
+  }
+}

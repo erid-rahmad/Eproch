@@ -1,0 +1,26 @@
+{
+  "opusWebApp": {
+    "location": {
+      "home": {
+        "title": "Locations",
+        "createLabel": "Buat Location baru",
+        "createOrEditLabel": "Buat atau edit Location",
+        "notFound": "No Locations found"
+      },
+      "created": "Location dengan id {{ param }} telah dibuat",
+      "updated": "Location dengan id {{ param }} telah diperbaharui",
+      "deleted": "Location dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Location {{ id }}?"
+      },
+      "detail": {
+        "title": "Location"
+      },
+      "streetAddress": "Street Address",
+      "postalCode": "Postal Code",
+      "city": "City",
+      "stateProvince": "State Province",
+      "country": "Country"
+    }
+  }
+}

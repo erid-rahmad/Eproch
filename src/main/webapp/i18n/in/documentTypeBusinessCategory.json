@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "documentTypeBusinessCategory": {
+      "home": {
+        "title": "Document Type Business Categories",
+        "createLabel": "Buat Document Type Business Category baru",
+        "createOrEditLabel": "Buat atau edit Document Type Business Category",
+        "notFound": "No Document Type Business Categories found"
+      },
+      "created": "Document Type Business Category dengan id {{ param }} telah dibuat",
+      "updated": "Document Type Business Category dengan id {{ param }} telah diperbaharui",
+      "deleted": "Document Type Business Category dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Document Type Business Category {{ id }}?"
+      },
+      "detail": {
+        "title": "Document Type Business Category"
+      },
+      "mandatory": "Mandatory",
+      "additional": "Additional",
+      "documentType": "Document Type",
+      "businessCategory": "Business Category"
+    }
+  }
+}
