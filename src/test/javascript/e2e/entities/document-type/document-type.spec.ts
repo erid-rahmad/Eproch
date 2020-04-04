@@ -77,22 +77,46 @@ describe('DocumentType e2e test', () => {
         expect(await updatePage.hasExpirationDateInput.isSelected()).to.be.true;
       }
 
-      const selectedForCompany = await updatePage.forCompanyInput.isSelected();
-      if (selectedForCompany) {
-        await updatePage.forCompanyInput.click();
-        expect(await updatePage.forCompanyInput.isSelected()).to.be.false;
+      await updatePage.mandatoryBusinessCategoriesInput.sendKeys('mandatoryBusinessCategories');
+      expect(await updatePage.mandatoryBusinessCategoriesInput.getAttribute('value')).to.match(/mandatoryBusinessCategories/);
+
+      await updatePage.additionalBusinessCategoriesInput.sendKeys('additionalBusinessCategories');
+      expect(await updatePage.additionalBusinessCategoriesInput.getAttribute('value')).to.match(/additionalBusinessCategories/);
+
+      const selectedMandatoryForCompany = await updatePage.mandatoryForCompanyInput.isSelected();
+      if (selectedMandatoryForCompany) {
+        await updatePage.mandatoryForCompanyInput.click();
+        expect(await updatePage.mandatoryForCompanyInput.isSelected()).to.be.false;
       } else {
-        await updatePage.forCompanyInput.click();
-        expect(await updatePage.forCompanyInput.isSelected()).to.be.true;
+        await updatePage.mandatoryForCompanyInput.click();
+        expect(await updatePage.mandatoryForCompanyInput.isSelected()).to.be.true;
       }
 
-      const selectedForProfessional = await updatePage.forProfessionalInput.isSelected();
-      if (selectedForProfessional) {
-        await updatePage.forProfessionalInput.click();
-        expect(await updatePage.forProfessionalInput.isSelected()).to.be.false;
+      const selectedMandatoryForProfessional = await updatePage.mandatoryForProfessionalInput.isSelected();
+      if (selectedMandatoryForProfessional) {
+        await updatePage.mandatoryForProfessionalInput.click();
+        expect(await updatePage.mandatoryForProfessionalInput.isSelected()).to.be.false;
       } else {
-        await updatePage.forProfessionalInput.click();
-        expect(await updatePage.forProfessionalInput.isSelected()).to.be.true;
+        await updatePage.mandatoryForProfessionalInput.click();
+        expect(await updatePage.mandatoryForProfessionalInput.isSelected()).to.be.true;
+      }
+
+      const selectedAdditionalForCompany = await updatePage.additionalForCompanyInput.isSelected();
+      if (selectedAdditionalForCompany) {
+        await updatePage.additionalForCompanyInput.click();
+        expect(await updatePage.additionalForCompanyInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.additionalForCompanyInput.click();
+        expect(await updatePage.additionalForCompanyInput.isSelected()).to.be.true;
+      }
+
+      const selectedAdditionalForProfessional = await updatePage.additionalForProfessionalInput.isSelected();
+      if (selectedAdditionalForProfessional) {
+        await updatePage.additionalForProfessionalInput.click();
+        expect(await updatePage.additionalForProfessionalInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.additionalForProfessionalInput.click();
+        expect(await updatePage.additionalForProfessionalInput.isSelected()).to.be.true;
       }
 
       const selectedActive = await updatePage.activeInput.isSelected();
@@ -177,22 +201,48 @@ describe('DocumentType e2e test', () => {
           expect(await updatePage.hasExpirationDateInput.isSelected()).to.be.true;
         }
 
-        const selectedForCompany = await updatePage.forCompanyInput.isSelected();
-        if (selectedForCompany) {
-          await updatePage.forCompanyInput.click();
-          expect(await updatePage.forCompanyInput.isSelected()).to.be.false;
+        await updatePage.mandatoryBusinessCategoriesInput.clear();
+        await updatePage.mandatoryBusinessCategoriesInput.sendKeys('modified');
+        expect(await updatePage.mandatoryBusinessCategoriesInput.getAttribute('value')).to.match(/modified/);
+
+        await updatePage.additionalBusinessCategoriesInput.clear();
+        await updatePage.additionalBusinessCategoriesInput.sendKeys('modified');
+        expect(await updatePage.additionalBusinessCategoriesInput.getAttribute('value')).to.match(/modified/);
+
+        const selectedMandatoryForCompany = await updatePage.mandatoryForCompanyInput.isSelected();
+        if (selectedMandatoryForCompany) {
+          await updatePage.mandatoryForCompanyInput.click();
+          expect(await updatePage.mandatoryForCompanyInput.isSelected()).to.be.false;
         } else {
-          await updatePage.forCompanyInput.click();
-          expect(await updatePage.forCompanyInput.isSelected()).to.be.true;
+          await updatePage.mandatoryForCompanyInput.click();
+          expect(await updatePage.mandatoryForCompanyInput.isSelected()).to.be.true;
         }
 
-        const selectedForProfessional = await updatePage.forProfessionalInput.isSelected();
-        if (selectedForProfessional) {
-          await updatePage.forProfessionalInput.click();
-          expect(await updatePage.forProfessionalInput.isSelected()).to.be.false;
+        const selectedMandatoryForProfessional = await updatePage.mandatoryForProfessionalInput.isSelected();
+        if (selectedMandatoryForProfessional) {
+          await updatePage.mandatoryForProfessionalInput.click();
+          expect(await updatePage.mandatoryForProfessionalInput.isSelected()).to.be.false;
         } else {
-          await updatePage.forProfessionalInput.click();
-          expect(await updatePage.forProfessionalInput.isSelected()).to.be.true;
+          await updatePage.mandatoryForProfessionalInput.click();
+          expect(await updatePage.mandatoryForProfessionalInput.isSelected()).to.be.true;
+        }
+
+        const selectedAdditionalForCompany = await updatePage.additionalForCompanyInput.isSelected();
+        if (selectedAdditionalForCompany) {
+          await updatePage.additionalForCompanyInput.click();
+          expect(await updatePage.additionalForCompanyInput.isSelected()).to.be.false;
+        } else {
+          await updatePage.additionalForCompanyInput.click();
+          expect(await updatePage.additionalForCompanyInput.isSelected()).to.be.true;
+        }
+
+        const selectedAdditionalForProfessional = await updatePage.additionalForProfessionalInput.isSelected();
+        if (selectedAdditionalForProfessional) {
+          await updatePage.additionalForProfessionalInput.click();
+          expect(await updatePage.additionalForProfessionalInput.isSelected()).to.be.false;
+        } else {
+          await updatePage.additionalForProfessionalInput.click();
+          expect(await updatePage.additionalForProfessionalInput.isSelected()).to.be.true;
         }
 
         const selectedActive = await updatePage.activeInput.isSelected();

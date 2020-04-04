@@ -36,11 +36,23 @@ public class DocumentType implements Serializable {
     @Column(name = "has_expiration_date")
     private Boolean hasExpirationDate;
 
-    @Column(name = "for_company")
-    private Boolean forCompany;
+    @Column(name = "mandatory_business_categories")
+    private String mandatoryBusinessCategories;
 
-    @Column(name = "for_professional")
-    private Boolean forProfessional;
+    @Column(name = "additional_business_categories")
+    private String additionalBusinessCategories;
+
+    @Column(name = "mandatory_for_company")
+    private Boolean mandatoryForCompany;
+
+    @Column(name = "mandatory_for_professional")
+    private Boolean mandatoryForProfessional;
+
+    @Column(name = "additional_for_company")
+    private Boolean additionalForCompany;
+
+    @Column(name = "additional_for_professional")
+    private Boolean additionalForProfessional;
 
     @Column(name = "active")
     private Boolean active;
@@ -97,30 +109,82 @@ public class DocumentType implements Serializable {
         this.hasExpirationDate = hasExpirationDate;
     }
 
-    public Boolean isForCompany() {
-        return forCompany;
+    public String getMandatoryBusinessCategories() {
+        return mandatoryBusinessCategories;
     }
 
-    public DocumentType forCompany(Boolean forCompany) {
-        this.forCompany = forCompany;
+    public DocumentType mandatoryBusinessCategories(String mandatoryBusinessCategories) {
+        this.mandatoryBusinessCategories = mandatoryBusinessCategories;
         return this;
     }
 
-    public void setForCompany(Boolean forCompany) {
-        this.forCompany = forCompany;
+    public void setMandatoryBusinessCategories(String mandatoryBusinessCategories) {
+        this.mandatoryBusinessCategories = mandatoryBusinessCategories;
     }
 
-    public Boolean isForProfessional() {
-        return forProfessional;
+    public String getAdditionalBusinessCategories() {
+        return additionalBusinessCategories;
     }
 
-    public DocumentType forProfessional(Boolean forProfessional) {
-        this.forProfessional = forProfessional;
+    public DocumentType additionalBusinessCategories(String additionalBusinessCategories) {
+        this.additionalBusinessCategories = additionalBusinessCategories;
         return this;
     }
 
-    public void setForProfessional(Boolean forProfessional) {
-        this.forProfessional = forProfessional;
+    public void setAdditionalBusinessCategories(String additionalBusinessCategories) {
+        this.additionalBusinessCategories = additionalBusinessCategories;
+    }
+
+    public Boolean isMandatoryForCompany() {
+        return mandatoryForCompany;
+    }
+
+    public DocumentType mandatoryForCompany(Boolean mandatoryForCompany) {
+        this.mandatoryForCompany = mandatoryForCompany;
+        return this;
+    }
+
+    public void setMandatoryForCompany(Boolean mandatoryForCompany) {
+        this.mandatoryForCompany = mandatoryForCompany;
+    }
+
+    public Boolean isMandatoryForProfessional() {
+        return mandatoryForProfessional;
+    }
+
+    public DocumentType mandatoryForProfessional(Boolean mandatoryForProfessional) {
+        this.mandatoryForProfessional = mandatoryForProfessional;
+        return this;
+    }
+
+    public void setMandatoryForProfessional(Boolean mandatoryForProfessional) {
+        this.mandatoryForProfessional = mandatoryForProfessional;
+    }
+
+    public Boolean isAdditionalForCompany() {
+        return additionalForCompany;
+    }
+
+    public DocumentType additionalForCompany(Boolean additionalForCompany) {
+        this.additionalForCompany = additionalForCompany;
+        return this;
+    }
+
+    public void setAdditionalForCompany(Boolean additionalForCompany) {
+        this.additionalForCompany = additionalForCompany;
+    }
+
+    public Boolean isAdditionalForProfessional() {
+        return additionalForProfessional;
+    }
+
+    public DocumentType additionalForProfessional(Boolean additionalForProfessional) {
+        this.additionalForProfessional = additionalForProfessional;
+        return this;
+    }
+
+    public void setAdditionalForProfessional(Boolean additionalForProfessional) {
+        this.additionalForProfessional = additionalForProfessional;
     }
 
     public Boolean isActive() {
@@ -185,8 +249,12 @@ public class DocumentType implements Serializable {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", hasExpirationDate='" + isHasExpirationDate() + "'" +
-            ", forCompany='" + isForCompany() + "'" +
-            ", forProfessional='" + isForProfessional() + "'" +
+            ", mandatoryBusinessCategories='" + getMandatoryBusinessCategories() + "'" +
+            ", additionalBusinessCategories='" + getAdditionalBusinessCategories() + "'" +
+            ", mandatoryForCompany='" + isMandatoryForCompany() + "'" +
+            ", mandatoryForProfessional='" + isMandatoryForProfessional() + "'" +
+            ", additionalForCompany='" + isAdditionalForCompany() + "'" +
+            ", additionalForProfessional='" + isAdditionalForProfessional() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

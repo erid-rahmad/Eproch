@@ -48,8 +48,12 @@ entity DocumentType {
 	name String required unique
 	description String
 	hasExpirationDate Boolean
-    forCompany Boolean
-    forProfessional Boolean
+	mandatoryBusinessCategories String
+	additionalBusinessCategories String
+    mandatoryForCompany Boolean
+    mandatoryForProfessional Boolean
+    additionalForCompany Boolean
+    additionalForProfessional Boolean
     active Boolean
 }
 

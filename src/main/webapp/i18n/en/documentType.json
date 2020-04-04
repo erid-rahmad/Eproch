@@ -19,8 +19,12 @@
       "name": "Name",
       "description": "Description",
       "hasExpirationDate": "Has Expiration Date",
-      "forCompany": "For Company",
-      "forProfessional": "For Professional",
+      "mandatoryBusinessCategories": "Mandatory Business Categories",
+      "additionalBusinessCategories": "Additional Business Categories",
+      "mandatoryForCompany": "Mandatory For Company",
+      "mandatoryForProfessional": "Mandatory For Professional",
+      "additionalForCompany": "Additional For Company",
+      "additionalForProfessional": "Additional For Professional",
       "active": "Active",
       "documentTypeBusinessCategory": "Document Type Business Category"
     }

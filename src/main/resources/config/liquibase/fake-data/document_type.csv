@@ -1,11 +1,11 @@
-id;name;description;has_expiration_date;for_company;for_professional;active
-1;definition Bedfordshire;Iraqi Dinar Berkshire Customer;false;true;true;true
-2;integrate Cotton withdrawal;Yemeni Rial;true;false;true;true
-3;back-end generate Incredible;Communications Handcrafted;true;false;false;false
-4;Lodge hierarchy Mauritania;Tools;false;false;false;false
-5;Lake;Savings Account Mountain cyan;false;false;false;false
-6;Licensed Steel Chips Savings Account;Indiana;true;false;true;true
-7;Junction orchestration;Light 24/365 attitude;true;false;false;true
-8;functionalities;Berkshire Rubber;true;false;false;true
-9;Sleek Steel Hat Functionality;Garden SSL Refined Cotton Soap;false;true;true;true
-10;Antarctica (the territory South of 60 deg S);innovative;false;false;true;false
+id;name;description;has_expiration_date;mandatory_business_categories;additional_business_categories;mandatory_for_company;mandatory_for_professional;additional_for_company;additional_for_professional;active
+1;definition Bedfordshire;Iraqi Dinar Berkshire Customer;false;Credit Card Account AI Music;withdrawal magenta;true;true;false;true;true
+2;back-end generate Incredible;Communications Handcrafted;true;Mouse;Lodge hierarchy Mauritania;false;false;false;false;false
+3;monetize;infomediaries Savings Account;false;cyan e-tailers;grey;false;true;false;true;true
+4;Rubber;Maryland;true;Berkshire envisioneer Bolivar Fuerte;action-items monetize;false;true;false;false;true
+5;functionalities;Berkshire Rubber;true;Licensed Cotton Car Avon;Functionality Supervisor;false;true;false;false;true
+6;Alabama COM;sky blue Music;false;deploy;coherent CSS Devolved;false;false;false;false;false
+7;Quality Investor;Wooden;true;Rand;Refined;false;true;true;false;false
+8;matrix neural Home Loan Account;programming non-volatile asynchronous;true;Gorgeous Frozen;Rand Loti Chips protocol;true;true;true;true;true
+9;database overriding;Handmade SMTP Handmade;true;Rubber Cambridgeshire modular;hacking Berkshire Drive;true;false;true;false;true
+10;Borders salmon;Optimized Western Sahara Bike;true;Human Savings Account Fantastic Cotton Chicken;Borders synthesize;false;false;false;true;false

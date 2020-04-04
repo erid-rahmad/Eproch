@@ -100,11 +100,23 @@ public class DocumentTypeQueryService extends QueryService<DocumentType> {
             if (criteria.getHasExpirationDate() != null) {
                 specification = specification.and(buildSpecification(criteria.getHasExpirationDate(), DocumentType_.hasExpirationDate));
             }
-            if (criteria.getForCompany() != null) {
-                specification = specification.and(buildSpecification(criteria.getForCompany(), DocumentType_.forCompany));
+            if (criteria.getMandatoryBusinessCategories() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getMandatoryBusinessCategories(), DocumentType_.mandatoryBusinessCategories));
             }
-            if (criteria.getForProfessional() != null) {
-                specification = specification.and(buildSpecification(criteria.getForProfessional(), DocumentType_.forProfessional));
+            if (criteria.getAdditionalBusinessCategories() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getAdditionalBusinessCategories(), DocumentType_.additionalBusinessCategories));
+            }
+            if (criteria.getMandatoryForCompany() != null) {
+                specification = specification.and(buildSpecification(criteria.getMandatoryForCompany(), DocumentType_.mandatoryForCompany));
+            }
+            if (criteria.getMandatoryForProfessional() != null) {
+                specification = specification.and(buildSpecification(criteria.getMandatoryForProfessional(), DocumentType_.mandatoryForProfessional));
+            }
+            if (criteria.getAdditionalForCompany() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdditionalForCompany(), DocumentType_.additionalForCompany));
+            }
+            if (criteria.getAdditionalForProfessional() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdditionalForProfessional(), DocumentType_.additionalForProfessional));
             }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), DocumentType_.active));

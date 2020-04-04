@@ -16,8 +16,12 @@ const validations: any = {
     },
     description: {},
     hasExpirationDate: {},
-    forCompany: {},
-    forProfessional: {},
+    mandatoryBusinessCategories: {},
+    additionalBusinessCategories: {},
+    mandatoryForCompany: {},
+    mandatoryForProfessional: {},
+    additionalForCompany: {},
+    additionalForProfessional: {},
     active: {}
   }
 };

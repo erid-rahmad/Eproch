@@ -5,8 +5,12 @@ export interface IDocumentType {
   name?: string;
   description?: string;
   hasExpirationDate?: boolean;
-  forCompany?: boolean;
-  forProfessional?: boolean;
+  mandatoryBusinessCategories?: string;
+  additionalBusinessCategories?: string;
+  mandatoryForCompany?: boolean;
+  mandatoryForProfessional?: boolean;
+  additionalForCompany?: boolean;
+  additionalForProfessional?: boolean;
   active?: boolean;
   documentTypeBusinessCategories?: IDocumentTypeBusinessCategory[];
 }
@@ -17,14 +21,20 @@ export class DocumentType implements IDocumentType {
     public name?: string,
     public description?: string,
     public hasExpirationDate?: boolean,
-    public forCompany?: boolean,
-    public forProfessional?: boolean,
+    public mandatoryBusinessCategories?: string,
+    public additionalBusinessCategories?: string,
+    public mandatoryForCompany?: boolean,
+    public mandatoryForProfessional?: boolean,
+    public additionalForCompany?: boolean,
+    public additionalForProfessional?: boolean,
     public active?: boolean,
     public documentTypeBusinessCategories?: IDocumentTypeBusinessCategory[]
   ) {
     this.hasExpirationDate = this.hasExpirationDate || false;
-    this.forCompany = this.forCompany || false;
-    this.forProfessional = this.forProfessional || false;
+    this.mandatoryForCompany = this.mandatoryForCompany || false;
+    this.mandatoryForProfessional = this.mandatoryForProfessional || false;
+    this.additionalForCompany = this.additionalForCompany || false;
+    this.additionalForProfessional = this.additionalForProfessional || false;
     this.active = this.active || false;
   }
 }

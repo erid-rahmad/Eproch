@@ -14,9 +14,17 @@ export default class DocumentTypeUpdatePage extends AlertPage {
 
   hasExpirationDateInput: ElementFinder = element(by.css('input#document-type-hasExpirationDate'));
 
-  forCompanyInput: ElementFinder = element(by.css('input#document-type-forCompany'));
+  mandatoryBusinessCategoriesInput: ElementFinder = element(by.css('input#document-type-mandatoryBusinessCategories'));
 
-  forProfessionalInput: ElementFinder = element(by.css('input#document-type-forProfessional'));
+  additionalBusinessCategoriesInput: ElementFinder = element(by.css('input#document-type-additionalBusinessCategories'));
+
+  mandatoryForCompanyInput: ElementFinder = element(by.css('input#document-type-mandatoryForCompany'));
+
+  mandatoryForProfessionalInput: ElementFinder = element(by.css('input#document-type-mandatoryForProfessional'));
+
+  additionalForCompanyInput: ElementFinder = element(by.css('input#document-type-additionalForCompany'));
+
+  additionalForProfessionalInput: ElementFinder = element(by.css('input#document-type-additionalForProfessional'));
 
   activeInput: ElementFinder = element(by.css('input#document-type-active'));
 }

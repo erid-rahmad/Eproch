@@ -18,9 +18,17 @@ public class DocumentTypeDTO implements Serializable {
 
     private Boolean hasExpirationDate;
 
-    private Boolean forCompany;
+    private String mandatoryBusinessCategories;
 
-    private Boolean forProfessional;
+    private String additionalBusinessCategories;
+
+    private Boolean mandatoryForCompany;
+
+    private Boolean mandatoryForProfessional;
+
+    private Boolean additionalForCompany;
+
+    private Boolean additionalForProfessional;
 
     private Boolean active;
 
@@ -57,20 +65,52 @@ public class DocumentTypeDTO implements Serializable {
         this.hasExpirationDate = hasExpirationDate;
     }
 
-    public Boolean isForCompany() {
-        return forCompany;
+    public String getMandatoryBusinessCategories() {
+        return mandatoryBusinessCategories;
     }
 
-    public void setForCompany(Boolean forCompany) {
-        this.forCompany = forCompany;
+    public void setMandatoryBusinessCategories(String mandatoryBusinessCategories) {
+        this.mandatoryBusinessCategories = mandatoryBusinessCategories;
     }
 
-    public Boolean isForProfessional() {
-        return forProfessional;
+    public String getAdditionalBusinessCategories() {
+        return additionalBusinessCategories;
     }
 
-    public void setForProfessional(Boolean forProfessional) {
-        this.forProfessional = forProfessional;
+    public void setAdditionalBusinessCategories(String additionalBusinessCategories) {
+        this.additionalBusinessCategories = additionalBusinessCategories;
+    }
+
+    public Boolean isMandatoryForCompany() {
+        return mandatoryForCompany;
+    }
+
+    public void setMandatoryForCompany(Boolean mandatoryForCompany) {
+        this.mandatoryForCompany = mandatoryForCompany;
+    }
+
+    public Boolean isMandatoryForProfessional() {
+        return mandatoryForProfessional;
+    }
+
+    public void setMandatoryForProfessional(Boolean mandatoryForProfessional) {
+        this.mandatoryForProfessional = mandatoryForProfessional;
+    }
+
+    public Boolean isAdditionalForCompany() {
+        return additionalForCompany;
+    }
+
+    public void setAdditionalForCompany(Boolean additionalForCompany) {
+        this.additionalForCompany = additionalForCompany;
+    }
+
+    public Boolean isAdditionalForProfessional() {
+        return additionalForProfessional;
+    }
+
+    public void setAdditionalForProfessional(Boolean additionalForProfessional) {
+        this.additionalForProfessional = additionalForProfessional;
     }
 
     public Boolean isActive() {
@@ -109,8 +149,12 @@ public class DocumentTypeDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", hasExpirationDate='" + isHasExpirationDate() + "'" +
-            ", forCompany='" + isForCompany() + "'" +
-            ", forProfessional='" + isForProfessional() + "'" +
+            ", mandatoryBusinessCategories='" + getMandatoryBusinessCategories() + "'" +
+            ", additionalBusinessCategories='" + getAdditionalBusinessCategories() + "'" +
+            ", mandatoryForCompany='" + isMandatoryForCompany() + "'" +
+            ", mandatoryForProfessional='" + isMandatoryForProfessional() + "'" +
+            ", additionalForCompany='" + isAdditionalForCompany() + "'" +
+            ", additionalForProfessional='" + isAdditionalForProfessional() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

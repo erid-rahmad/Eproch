@@ -45,11 +45,23 @@ public class DocumentTypeResourceIT {
     private static final Boolean DEFAULT_HAS_EXPIRATION_DATE = false;
     private static final Boolean UPDATED_HAS_EXPIRATION_DATE = true;
 
-    private static final Boolean DEFAULT_FOR_COMPANY = false;
-    private static final Boolean UPDATED_FOR_COMPANY = true;
+    private static final String DEFAULT_MANDATORY_BUSINESS_CATEGORIES = "AAAAAAAAAA";
+    private static final String UPDATED_MANDATORY_BUSINESS_CATEGORIES = "BBBBBBBBBB";
 
-    private static final Boolean DEFAULT_FOR_PROFESSIONAL = false;
-    private static final Boolean UPDATED_FOR_PROFESSIONAL = true;
+    private static final String DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES = "AAAAAAAAAA";
+    private static final String UPDATED_ADDITIONAL_BUSINESS_CATEGORIES = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_MANDATORY_FOR_COMPANY = false;
+    private static final Boolean UPDATED_MANDATORY_FOR_COMPANY = true;
+
+    private static final Boolean DEFAULT_MANDATORY_FOR_PROFESSIONAL = false;
+    private static final Boolean UPDATED_MANDATORY_FOR_PROFESSIONAL = true;
+
+    private static final Boolean DEFAULT_ADDITIONAL_FOR_COMPANY = false;
+    private static final Boolean UPDATED_ADDITIONAL_FOR_COMPANY = true;
+
+    private static final Boolean DEFAULT_ADDITIONAL_FOR_PROFESSIONAL = false;
+    private static final Boolean UPDATED_ADDITIONAL_FOR_PROFESSIONAL = true;
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -85,8 +97,12 @@ public class DocumentTypeResourceIT {
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .hasExpirationDate(DEFAULT_HAS_EXPIRATION_DATE)
-            .forCompany(DEFAULT_FOR_COMPANY)
-            .forProfessional(DEFAULT_FOR_PROFESSIONAL)
+            .mandatoryBusinessCategories(DEFAULT_MANDATORY_BUSINESS_CATEGORIES)
+            .additionalBusinessCategories(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES)
+            .mandatoryForCompany(DEFAULT_MANDATORY_FOR_COMPANY)
+            .mandatoryForProfessional(DEFAULT_MANDATORY_FOR_PROFESSIONAL)
+            .additionalForCompany(DEFAULT_ADDITIONAL_FOR_COMPANY)
+            .additionalForProfessional(DEFAULT_ADDITIONAL_FOR_PROFESSIONAL)
             .active(DEFAULT_ACTIVE);
         return documentType;
     }
@@ -101,8 +117,12 @@ public class DocumentTypeResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .hasExpirationDate(UPDATED_HAS_EXPIRATION_DATE)
-            .forCompany(UPDATED_FOR_COMPANY)
-            .forProfessional(UPDATED_FOR_PROFESSIONAL)
+            .mandatoryBusinessCategories(UPDATED_MANDATORY_BUSINESS_CATEGORIES)
+            .additionalBusinessCategories(UPDATED_ADDITIONAL_BUSINESS_CATEGORIES)
+            .mandatoryForCompany(UPDATED_MANDATORY_FOR_COMPANY)
+            .mandatoryForProfessional(UPDATED_MANDATORY_FOR_PROFESSIONAL)
+            .additionalForCompany(UPDATED_ADDITIONAL_FOR_COMPANY)
+            .additionalForProfessional(UPDATED_ADDITIONAL_FOR_PROFESSIONAL)
             .active(UPDATED_ACTIVE);
         return documentType;
     }
@@ -131,8 +151,12 @@ public class DocumentTypeResourceIT {
         assertThat(testDocumentType.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testDocumentType.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testDocumentType.isHasExpirationDate()).isEqualTo(DEFAULT_HAS_EXPIRATION_DATE);
-        assertThat(testDocumentType.isForCompany()).isEqualTo(DEFAULT_FOR_COMPANY);
-        assertThat(testDocumentType.isForProfessional()).isEqualTo(DEFAULT_FOR_PROFESSIONAL);
+        assertThat(testDocumentType.getMandatoryBusinessCategories()).isEqualTo(DEFAULT_MANDATORY_BUSINESS_CATEGORIES);
+        assertThat(testDocumentType.getAdditionalBusinessCategories()).isEqualTo(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES);
+        assertThat(testDocumentType.isMandatoryForCompany()).isEqualTo(DEFAULT_MANDATORY_FOR_COMPANY);
+        assertThat(testDocumentType.isMandatoryForProfessional()).isEqualTo(DEFAULT_MANDATORY_FOR_PROFESSIONAL);
+        assertThat(testDocumentType.isAdditionalForCompany()).isEqualTo(DEFAULT_ADDITIONAL_FOR_COMPANY);
+        assertThat(testDocumentType.isAdditionalForProfessional()).isEqualTo(DEFAULT_ADDITIONAL_FOR_PROFESSIONAL);
         assertThat(testDocumentType.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -190,8 +214,12 @@ public class DocumentTypeResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].hasExpirationDate").value(hasItem(DEFAULT_HAS_EXPIRATION_DATE.booleanValue())))
-            .andExpect(jsonPath("$.[*].forCompany").value(hasItem(DEFAULT_FOR_COMPANY.booleanValue())))
-            .andExpect(jsonPath("$.[*].forProfessional").value(hasItem(DEFAULT_FOR_PROFESSIONAL.booleanValue())))
+            .andExpect(jsonPath("$.[*].mandatoryBusinessCategories").value(hasItem(DEFAULT_MANDATORY_BUSINESS_CATEGORIES)))
+            .andExpect(jsonPath("$.[*].additionalBusinessCategories").value(hasItem(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES)))
+            .andExpect(jsonPath("$.[*].mandatoryForCompany").value(hasItem(DEFAULT_MANDATORY_FOR_COMPANY.booleanValue())))
+            .andExpect(jsonPath("$.[*].mandatoryForProfessional").value(hasItem(DEFAULT_MANDATORY_FOR_PROFESSIONAL.booleanValue())))
+            .andExpect(jsonPath("$.[*].additionalForCompany").value(hasItem(DEFAULT_ADDITIONAL_FOR_COMPANY.booleanValue())))
+            .andExpect(jsonPath("$.[*].additionalForProfessional").value(hasItem(DEFAULT_ADDITIONAL_FOR_PROFESSIONAL.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -209,8 +237,12 @@ public class DocumentTypeResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.hasExpirationDate").value(DEFAULT_HAS_EXPIRATION_DATE.booleanValue()))
-            .andExpect(jsonPath("$.forCompany").value(DEFAULT_FOR_COMPANY.booleanValue()))
-            .andExpect(jsonPath("$.forProfessional").value(DEFAULT_FOR_PROFESSIONAL.booleanValue()))
+            .andExpect(jsonPath("$.mandatoryBusinessCategories").value(DEFAULT_MANDATORY_BUSINESS_CATEGORIES))
+            .andExpect(jsonPath("$.additionalBusinessCategories").value(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES))
+            .andExpect(jsonPath("$.mandatoryForCompany").value(DEFAULT_MANDATORY_FOR_COMPANY.booleanValue()))
+            .andExpect(jsonPath("$.mandatoryForProfessional").value(DEFAULT_MANDATORY_FOR_PROFESSIONAL.booleanValue()))
+            .andExpect(jsonPath("$.additionalForCompany").value(DEFAULT_ADDITIONAL_FOR_COMPANY.booleanValue()))
+            .andExpect(jsonPath("$.additionalForProfessional").value(DEFAULT_ADDITIONAL_FOR_PROFESSIONAL.booleanValue()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -444,106 +476,366 @@ public class DocumentTypeResourceIT {
 
     @Test
     @Transactional
-    public void getAllDocumentTypesByForCompanyIsEqualToSomething() throws Exception {
+    public void getAllDocumentTypesByMandatoryBusinessCategoriesIsEqualToSomething() throws Exception {
         // Initialize the database
         documentTypeRepository.saveAndFlush(documentType);
 
-        // Get all the documentTypeList where forCompany equals to DEFAULT_FOR_COMPANY
-        defaultDocumentTypeShouldBeFound("forCompany.equals=" + DEFAULT_FOR_COMPANY);
+        // Get all the documentTypeList where mandatoryBusinessCategories equals to DEFAULT_MANDATORY_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldBeFound("mandatoryBusinessCategories.equals=" + DEFAULT_MANDATORY_BUSINESS_CATEGORIES);
 
-        // Get all the documentTypeList where forCompany equals to UPDATED_FOR_COMPANY
-        defaultDocumentTypeShouldNotBeFound("forCompany.equals=" + UPDATED_FOR_COMPANY);
+        // Get all the documentTypeList where mandatoryBusinessCategories equals to UPDATED_MANDATORY_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldNotBeFound("mandatoryBusinessCategories.equals=" + UPDATED_MANDATORY_BUSINESS_CATEGORIES);
     }
 
     @Test
     @Transactional
-    public void getAllDocumentTypesByForCompanyIsNotEqualToSomething() throws Exception {
+    public void getAllDocumentTypesByMandatoryBusinessCategoriesIsNotEqualToSomething() throws Exception {
         // Initialize the database
         documentTypeRepository.saveAndFlush(documentType);
 
-        // Get all the documentTypeList where forCompany not equals to DEFAULT_FOR_COMPANY
-        defaultDocumentTypeShouldNotBeFound("forCompany.notEquals=" + DEFAULT_FOR_COMPANY);
+        // Get all the documentTypeList where mandatoryBusinessCategories not equals to DEFAULT_MANDATORY_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldNotBeFound("mandatoryBusinessCategories.notEquals=" + DEFAULT_MANDATORY_BUSINESS_CATEGORIES);
 
-        // Get all the documentTypeList where forCompany not equals to UPDATED_FOR_COMPANY
-        defaultDocumentTypeShouldBeFound("forCompany.notEquals=" + UPDATED_FOR_COMPANY);
+        // Get all the documentTypeList where mandatoryBusinessCategories not equals to UPDATED_MANDATORY_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldBeFound("mandatoryBusinessCategories.notEquals=" + UPDATED_MANDATORY_BUSINESS_CATEGORIES);
     }
 
     @Test
     @Transactional
-    public void getAllDocumentTypesByForCompanyIsInShouldWork() throws Exception {
+    public void getAllDocumentTypesByMandatoryBusinessCategoriesIsInShouldWork() throws Exception {
         // Initialize the database
         documentTypeRepository.saveAndFlush(documentType);
 
-        // Get all the documentTypeList where forCompany in DEFAULT_FOR_COMPANY or UPDATED_FOR_COMPANY
-        defaultDocumentTypeShouldBeFound("forCompany.in=" + DEFAULT_FOR_COMPANY + "," + UPDATED_FOR_COMPANY);
+        // Get all the documentTypeList where mandatoryBusinessCategories in DEFAULT_MANDATORY_BUSINESS_CATEGORIES or UPDATED_MANDATORY_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldBeFound("mandatoryBusinessCategories.in=" + DEFAULT_MANDATORY_BUSINESS_CATEGORIES + "," + UPDATED_MANDATORY_BUSINESS_CATEGORIES);
 
-        // Get all the documentTypeList where forCompany equals to UPDATED_FOR_COMPANY
-        defaultDocumentTypeShouldNotBeFound("forCompany.in=" + UPDATED_FOR_COMPANY);
+        // Get all the documentTypeList where mandatoryBusinessCategories equals to UPDATED_MANDATORY_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldNotBeFound("mandatoryBusinessCategories.in=" + UPDATED_MANDATORY_BUSINESS_CATEGORIES);
     }
 
     @Test
     @Transactional
-    public void getAllDocumentTypesByForCompanyIsNullOrNotNull() throws Exception {
+    public void getAllDocumentTypesByMandatoryBusinessCategoriesIsNullOrNotNull() throws Exception {
         // Initialize the database
         documentTypeRepository.saveAndFlush(documentType);
 
-        // Get all the documentTypeList where forCompany is not null
-        defaultDocumentTypeShouldBeFound("forCompany.specified=true");
+        // Get all the documentTypeList where mandatoryBusinessCategories is not null
+        defaultDocumentTypeShouldBeFound("mandatoryBusinessCategories.specified=true");
 
-        // Get all the documentTypeList where forCompany is null
-        defaultDocumentTypeShouldNotBeFound("forCompany.specified=false");
+        // Get all the documentTypeList where mandatoryBusinessCategories is null
+        defaultDocumentTypeShouldNotBeFound("mandatoryBusinessCategories.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllDocumentTypesByMandatoryBusinessCategoriesContainsSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where mandatoryBusinessCategories contains DEFAULT_MANDATORY_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldBeFound("mandatoryBusinessCategories.contains=" + DEFAULT_MANDATORY_BUSINESS_CATEGORIES);
+
+        // Get all the documentTypeList where mandatoryBusinessCategories contains UPDATED_MANDATORY_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldNotBeFound("mandatoryBusinessCategories.contains=" + UPDATED_MANDATORY_BUSINESS_CATEGORIES);
     }
 
     @Test
     @Transactional
-    public void getAllDocumentTypesByForProfessionalIsEqualToSomething() throws Exception {
+    public void getAllDocumentTypesByMandatoryBusinessCategoriesNotContainsSomething() throws Exception {
         // Initialize the database
         documentTypeRepository.saveAndFlush(documentType);
 
-        // Get all the documentTypeList where forProfessional equals to DEFAULT_FOR_PROFESSIONAL
-        defaultDocumentTypeShouldBeFound("forProfessional.equals=" + DEFAULT_FOR_PROFESSIONAL);
+        // Get all the documentTypeList where mandatoryBusinessCategories does not contain DEFAULT_MANDATORY_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldNotBeFound("mandatoryBusinessCategories.doesNotContain=" + DEFAULT_MANDATORY_BUSINESS_CATEGORIES);
 
-        // Get all the documentTypeList where forProfessional equals to UPDATED_FOR_PROFESSIONAL
-        defaultDocumentTypeShouldNotBeFound("forProfessional.equals=" + UPDATED_FOR_PROFESSIONAL);
+        // Get all the documentTypeList where mandatoryBusinessCategories does not contain UPDATED_MANDATORY_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldBeFound("mandatoryBusinessCategories.doesNotContain=" + UPDATED_MANDATORY_BUSINESS_CATEGORIES);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalBusinessCategoriesIsEqualToSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalBusinessCategories equals to DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldBeFound("additionalBusinessCategories.equals=" + DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES);
+
+        // Get all the documentTypeList where additionalBusinessCategories equals to UPDATED_ADDITIONAL_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldNotBeFound("additionalBusinessCategories.equals=" + UPDATED_ADDITIONAL_BUSINESS_CATEGORIES);
     }
 
     @Test
     @Transactional
-    public void getAllDocumentTypesByForProfessionalIsNotEqualToSomething() throws Exception {
+    public void getAllDocumentTypesByAdditionalBusinessCategoriesIsNotEqualToSomething() throws Exception {
         // Initialize the database
         documentTypeRepository.saveAndFlush(documentType);
 
-        // Get all the documentTypeList where forProfessional not equals to DEFAULT_FOR_PROFESSIONAL
-        defaultDocumentTypeShouldNotBeFound("forProfessional.notEquals=" + DEFAULT_FOR_PROFESSIONAL);
+        // Get all the documentTypeList where additionalBusinessCategories not equals to DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldNotBeFound("additionalBusinessCategories.notEquals=" + DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES);
 
-        // Get all the documentTypeList where forProfessional not equals to UPDATED_FOR_PROFESSIONAL
-        defaultDocumentTypeShouldBeFound("forProfessional.notEquals=" + UPDATED_FOR_PROFESSIONAL);
+        // Get all the documentTypeList where additionalBusinessCategories not equals to UPDATED_ADDITIONAL_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldBeFound("additionalBusinessCategories.notEquals=" + UPDATED_ADDITIONAL_BUSINESS_CATEGORIES);
     }
 
     @Test
     @Transactional
-    public void getAllDocumentTypesByForProfessionalIsInShouldWork() throws Exception {
+    public void getAllDocumentTypesByAdditionalBusinessCategoriesIsInShouldWork() throws Exception {
         // Initialize the database
         documentTypeRepository.saveAndFlush(documentType);
 
-        // Get all the documentTypeList where forProfessional in DEFAULT_FOR_PROFESSIONAL or UPDATED_FOR_PROFESSIONAL
-        defaultDocumentTypeShouldBeFound("forProfessional.in=" + DEFAULT_FOR_PROFESSIONAL + "," + UPDATED_FOR_PROFESSIONAL);
+        // Get all the documentTypeList where additionalBusinessCategories in DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES or UPDATED_ADDITIONAL_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldBeFound("additionalBusinessCategories.in=" + DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES + "," + UPDATED_ADDITIONAL_BUSINESS_CATEGORIES);
 
-        // Get all the documentTypeList where forProfessional equals to UPDATED_FOR_PROFESSIONAL
-        defaultDocumentTypeShouldNotBeFound("forProfessional.in=" + UPDATED_FOR_PROFESSIONAL);
+        // Get all the documentTypeList where additionalBusinessCategories equals to UPDATED_ADDITIONAL_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldNotBeFound("additionalBusinessCategories.in=" + UPDATED_ADDITIONAL_BUSINESS_CATEGORIES);
     }
 
     @Test
     @Transactional
-    public void getAllDocumentTypesByForProfessionalIsNullOrNotNull() throws Exception {
+    public void getAllDocumentTypesByAdditionalBusinessCategoriesIsNullOrNotNull() throws Exception {
         // Initialize the database
         documentTypeRepository.saveAndFlush(documentType);
 
-        // Get all the documentTypeList where forProfessional is not null
-        defaultDocumentTypeShouldBeFound("forProfessional.specified=true");
+        // Get all the documentTypeList where additionalBusinessCategories is not null
+        defaultDocumentTypeShouldBeFound("additionalBusinessCategories.specified=true");
 
-        // Get all the documentTypeList where forProfessional is null
-        defaultDocumentTypeShouldNotBeFound("forProfessional.specified=false");
+        // Get all the documentTypeList where additionalBusinessCategories is null
+        defaultDocumentTypeShouldNotBeFound("additionalBusinessCategories.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalBusinessCategoriesContainsSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalBusinessCategories contains DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldBeFound("additionalBusinessCategories.contains=" + DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES);
+
+        // Get all the documentTypeList where additionalBusinessCategories contains UPDATED_ADDITIONAL_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldNotBeFound("additionalBusinessCategories.contains=" + UPDATED_ADDITIONAL_BUSINESS_CATEGORIES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalBusinessCategoriesNotContainsSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalBusinessCategories does not contain DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldNotBeFound("additionalBusinessCategories.doesNotContain=" + DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES);
+
+        // Get all the documentTypeList where additionalBusinessCategories does not contain UPDATED_ADDITIONAL_BUSINESS_CATEGORIES
+        defaultDocumentTypeShouldBeFound("additionalBusinessCategories.doesNotContain=" + UPDATED_ADDITIONAL_BUSINESS_CATEGORIES);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByMandatoryForCompanyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where mandatoryForCompany equals to DEFAULT_MANDATORY_FOR_COMPANY
+        defaultDocumentTypeShouldBeFound("mandatoryForCompany.equals=" + DEFAULT_MANDATORY_FOR_COMPANY);
+
+        // Get all the documentTypeList where mandatoryForCompany equals to UPDATED_MANDATORY_FOR_COMPANY
+        defaultDocumentTypeShouldNotBeFound("mandatoryForCompany.equals=" + UPDATED_MANDATORY_FOR_COMPANY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByMandatoryForCompanyIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where mandatoryForCompany not equals to DEFAULT_MANDATORY_FOR_COMPANY
+        defaultDocumentTypeShouldNotBeFound("mandatoryForCompany.notEquals=" + DEFAULT_MANDATORY_FOR_COMPANY);
+
+        // Get all the documentTypeList where mandatoryForCompany not equals to UPDATED_MANDATORY_FOR_COMPANY
+        defaultDocumentTypeShouldBeFound("mandatoryForCompany.notEquals=" + UPDATED_MANDATORY_FOR_COMPANY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByMandatoryForCompanyIsInShouldWork() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where mandatoryForCompany in DEFAULT_MANDATORY_FOR_COMPANY or UPDATED_MANDATORY_FOR_COMPANY
+        defaultDocumentTypeShouldBeFound("mandatoryForCompany.in=" + DEFAULT_MANDATORY_FOR_COMPANY + "," + UPDATED_MANDATORY_FOR_COMPANY);
+
+        // Get all the documentTypeList where mandatoryForCompany equals to UPDATED_MANDATORY_FOR_COMPANY
+        defaultDocumentTypeShouldNotBeFound("mandatoryForCompany.in=" + UPDATED_MANDATORY_FOR_COMPANY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByMandatoryForCompanyIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where mandatoryForCompany is not null
+        defaultDocumentTypeShouldBeFound("mandatoryForCompany.specified=true");
+
+        // Get all the documentTypeList where mandatoryForCompany is null
+        defaultDocumentTypeShouldNotBeFound("mandatoryForCompany.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByMandatoryForProfessionalIsEqualToSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where mandatoryForProfessional equals to DEFAULT_MANDATORY_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldBeFound("mandatoryForProfessional.equals=" + DEFAULT_MANDATORY_FOR_PROFESSIONAL);
+
+        // Get all the documentTypeList where mandatoryForProfessional equals to UPDATED_MANDATORY_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldNotBeFound("mandatoryForProfessional.equals=" + UPDATED_MANDATORY_FOR_PROFESSIONAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByMandatoryForProfessionalIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where mandatoryForProfessional not equals to DEFAULT_MANDATORY_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldNotBeFound("mandatoryForProfessional.notEquals=" + DEFAULT_MANDATORY_FOR_PROFESSIONAL);
+
+        // Get all the documentTypeList where mandatoryForProfessional not equals to UPDATED_MANDATORY_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldBeFound("mandatoryForProfessional.notEquals=" + UPDATED_MANDATORY_FOR_PROFESSIONAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByMandatoryForProfessionalIsInShouldWork() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where mandatoryForProfessional in DEFAULT_MANDATORY_FOR_PROFESSIONAL or UPDATED_MANDATORY_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldBeFound("mandatoryForProfessional.in=" + DEFAULT_MANDATORY_FOR_PROFESSIONAL + "," + UPDATED_MANDATORY_FOR_PROFESSIONAL);
+
+        // Get all the documentTypeList where mandatoryForProfessional equals to UPDATED_MANDATORY_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldNotBeFound("mandatoryForProfessional.in=" + UPDATED_MANDATORY_FOR_PROFESSIONAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByMandatoryForProfessionalIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where mandatoryForProfessional is not null
+        defaultDocumentTypeShouldBeFound("mandatoryForProfessional.specified=true");
+
+        // Get all the documentTypeList where mandatoryForProfessional is null
+        defaultDocumentTypeShouldNotBeFound("mandatoryForProfessional.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalForCompanyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalForCompany equals to DEFAULT_ADDITIONAL_FOR_COMPANY
+        defaultDocumentTypeShouldBeFound("additionalForCompany.equals=" + DEFAULT_ADDITIONAL_FOR_COMPANY);
+
+        // Get all the documentTypeList where additionalForCompany equals to UPDATED_ADDITIONAL_FOR_COMPANY
+        defaultDocumentTypeShouldNotBeFound("additionalForCompany.equals=" + UPDATED_ADDITIONAL_FOR_COMPANY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalForCompanyIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalForCompany not equals to DEFAULT_ADDITIONAL_FOR_COMPANY
+        defaultDocumentTypeShouldNotBeFound("additionalForCompany.notEquals=" + DEFAULT_ADDITIONAL_FOR_COMPANY);
+
+        // Get all the documentTypeList where additionalForCompany not equals to UPDATED_ADDITIONAL_FOR_COMPANY
+        defaultDocumentTypeShouldBeFound("additionalForCompany.notEquals=" + UPDATED_ADDITIONAL_FOR_COMPANY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalForCompanyIsInShouldWork() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalForCompany in DEFAULT_ADDITIONAL_FOR_COMPANY or UPDATED_ADDITIONAL_FOR_COMPANY
+        defaultDocumentTypeShouldBeFound("additionalForCompany.in=" + DEFAULT_ADDITIONAL_FOR_COMPANY + "," + UPDATED_ADDITIONAL_FOR_COMPANY);
+
+        // Get all the documentTypeList where additionalForCompany equals to UPDATED_ADDITIONAL_FOR_COMPANY
+        defaultDocumentTypeShouldNotBeFound("additionalForCompany.in=" + UPDATED_ADDITIONAL_FOR_COMPANY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalForCompanyIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalForCompany is not null
+        defaultDocumentTypeShouldBeFound("additionalForCompany.specified=true");
+
+        // Get all the documentTypeList where additionalForCompany is null
+        defaultDocumentTypeShouldNotBeFound("additionalForCompany.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalForProfessionalIsEqualToSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalForProfessional equals to DEFAULT_ADDITIONAL_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldBeFound("additionalForProfessional.equals=" + DEFAULT_ADDITIONAL_FOR_PROFESSIONAL);
+
+        // Get all the documentTypeList where additionalForProfessional equals to UPDATED_ADDITIONAL_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldNotBeFound("additionalForProfessional.equals=" + UPDATED_ADDITIONAL_FOR_PROFESSIONAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalForProfessionalIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalForProfessional not equals to DEFAULT_ADDITIONAL_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldNotBeFound("additionalForProfessional.notEquals=" + DEFAULT_ADDITIONAL_FOR_PROFESSIONAL);
+
+        // Get all the documentTypeList where additionalForProfessional not equals to UPDATED_ADDITIONAL_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldBeFound("additionalForProfessional.notEquals=" + UPDATED_ADDITIONAL_FOR_PROFESSIONAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalForProfessionalIsInShouldWork() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalForProfessional in DEFAULT_ADDITIONAL_FOR_PROFESSIONAL or UPDATED_ADDITIONAL_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldBeFound("additionalForProfessional.in=" + DEFAULT_ADDITIONAL_FOR_PROFESSIONAL + "," + UPDATED_ADDITIONAL_FOR_PROFESSIONAL);
+
+        // Get all the documentTypeList where additionalForProfessional equals to UPDATED_ADDITIONAL_FOR_PROFESSIONAL
+        defaultDocumentTypeShouldNotBeFound("additionalForProfessional.in=" + UPDATED_ADDITIONAL_FOR_PROFESSIONAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllDocumentTypesByAdditionalForProfessionalIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        documentTypeRepository.saveAndFlush(documentType);
+
+        // Get all the documentTypeList where additionalForProfessional is not null
+        defaultDocumentTypeShouldBeFound("additionalForProfessional.specified=true");
+
+        // Get all the documentTypeList where additionalForProfessional is null
+        defaultDocumentTypeShouldNotBeFound("additionalForProfessional.specified=false");
     }
 
     @Test
@@ -628,8 +920,12 @@ public class DocumentTypeResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].hasExpirationDate").value(hasItem(DEFAULT_HAS_EXPIRATION_DATE.booleanValue())))
-            .andExpect(jsonPath("$.[*].forCompany").value(hasItem(DEFAULT_FOR_COMPANY.booleanValue())))
-            .andExpect(jsonPath("$.[*].forProfessional").value(hasItem(DEFAULT_FOR_PROFESSIONAL.booleanValue())))
+            .andExpect(jsonPath("$.[*].mandatoryBusinessCategories").value(hasItem(DEFAULT_MANDATORY_BUSINESS_CATEGORIES)))
+            .andExpect(jsonPath("$.[*].additionalBusinessCategories").value(hasItem(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES)))
+            .andExpect(jsonPath("$.[*].mandatoryForCompany").value(hasItem(DEFAULT_MANDATORY_FOR_COMPANY.booleanValue())))
+            .andExpect(jsonPath("$.[*].mandatoryForProfessional").value(hasItem(DEFAULT_MANDATORY_FOR_PROFESSIONAL.booleanValue())))
+            .andExpect(jsonPath("$.[*].additionalForCompany").value(hasItem(DEFAULT_ADDITIONAL_FOR_COMPANY.booleanValue())))
+            .andExpect(jsonPath("$.[*].additionalForProfessional").value(hasItem(DEFAULT_ADDITIONAL_FOR_PROFESSIONAL.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -681,8 +977,12 @@ public class DocumentTypeResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .hasExpirationDate(UPDATED_HAS_EXPIRATION_DATE)
-            .forCompany(UPDATED_FOR_COMPANY)
-            .forProfessional(UPDATED_FOR_PROFESSIONAL)
+            .mandatoryBusinessCategories(UPDATED_MANDATORY_BUSINESS_CATEGORIES)
+            .additionalBusinessCategories(UPDATED_ADDITIONAL_BUSINESS_CATEGORIES)
+            .mandatoryForCompany(UPDATED_MANDATORY_FOR_COMPANY)
+            .mandatoryForProfessional(UPDATED_MANDATORY_FOR_PROFESSIONAL)
+            .additionalForCompany(UPDATED_ADDITIONAL_FOR_COMPANY)
+            .additionalForProfessional(UPDATED_ADDITIONAL_FOR_PROFESSIONAL)
             .active(UPDATED_ACTIVE);
         DocumentTypeDTO documentTypeDTO = documentTypeMapper.toDto(updatedDocumentType);
 
@@ -698,8 +998,12 @@ public class DocumentTypeResourceIT {
         assertThat(testDocumentType.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testDocumentType.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testDocumentType.isHasExpirationDate()).isEqualTo(UPDATED_HAS_EXPIRATION_DATE);
-        assertThat(testDocumentType.isForCompany()).isEqualTo(UPDATED_FOR_COMPANY);
-        assertThat(testDocumentType.isForProfessional()).isEqualTo(UPDATED_FOR_PROFESSIONAL);
+        assertThat(testDocumentType.getMandatoryBusinessCategories()).isEqualTo(UPDATED_MANDATORY_BUSINESS_CATEGORIES);
+        assertThat(testDocumentType.getAdditionalBusinessCategories()).isEqualTo(UPDATED_ADDITIONAL_BUSINESS_CATEGORIES);
+        assertThat(testDocumentType.isMandatoryForCompany()).isEqualTo(UPDATED_MANDATORY_FOR_COMPANY);
+        assertThat(testDocumentType.isMandatoryForProfessional()).isEqualTo(UPDATED_MANDATORY_FOR_PROFESSIONAL);
+        assertThat(testDocumentType.isAdditionalForCompany()).isEqualTo(UPDATED_ADDITIONAL_FOR_COMPANY);
+        assertThat(testDocumentType.isAdditionalForProfessional()).isEqualTo(UPDATED_ADDITIONAL_FOR_PROFESSIONAL);
         assertThat(testDocumentType.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

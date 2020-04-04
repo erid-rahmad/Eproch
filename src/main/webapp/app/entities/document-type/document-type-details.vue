@@ -23,16 +23,40 @@
                         <span>{{documentType.hasExpirationDate}}</span>
                     </dd>
                     <dt>
-                        <span v-text="$t('opusWebApp.documentType.forCompany')">For Company</span>
+                        <span v-text="$t('opusWebApp.documentType.mandatoryBusinessCategories')">Mandatory Business Categories</span>
                     </dt>
                     <dd>
-                        <span>{{documentType.forCompany}}</span>
+                        <span>{{documentType.mandatoryBusinessCategories}}</span>
                     </dd>
                     <dt>
-                        <span v-text="$t('opusWebApp.documentType.forProfessional')">For Professional</span>
+                        <span v-text="$t('opusWebApp.documentType.additionalBusinessCategories')">Additional Business Categories</span>
                     </dt>
                     <dd>
-                        <span>{{documentType.forProfessional}}</span>
+                        <span>{{documentType.additionalBusinessCategories}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.documentType.mandatoryForCompany')">Mandatory For Company</span>
+                    </dt>
+                    <dd>
+                        <span>{{documentType.mandatoryForCompany}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.documentType.mandatoryForProfessional')">Mandatory For Professional</span>
+                    </dt>
+                    <dd>
+                        <span>{{documentType.mandatoryForProfessional}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.documentType.additionalForCompany')">Additional For Company</span>
+                    </dt>
+                    <dd>
+                        <span>{{documentType.additionalForCompany}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.documentType.additionalForProfessional')">Additional For Professional</span>
+                    </dt>
+                    <dd>
+                        <span>{{documentType.additionalForProfessional}}</span>
                     </dd>
                     <dt>
                         <span v-text="$t('opusWebApp.documentType.active')">Active</span>

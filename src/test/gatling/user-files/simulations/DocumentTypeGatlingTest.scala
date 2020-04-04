@@ -75,8 +75,12 @@ class DocumentTypeGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "hasExpirationDate":null
-                , "forCompany":null
-                , "forProfessional":null
+                , "mandatoryBusinessCategories":"SAMPLE_TEXT"
+                , "additionalBusinessCategories":"SAMPLE_TEXT"
+                , "mandatoryForCompany":null
+                , "mandatoryForProfessional":null
+                , "additionalForCompany":null
+                , "additionalForProfessional":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

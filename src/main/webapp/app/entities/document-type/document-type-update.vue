@@ -30,14 +30,34 @@
                             :class="{'valid': !$v.documentType.hasExpirationDate.$invalid, 'invalid': $v.documentType.hasExpirationDate.$invalid }" v-model="$v.documentType.hasExpirationDate.$model" />
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.documentType.forCompany')" for="document-type-forCompany">For Company</label>
-                        <input type="checkbox" class="form-check" name="forCompany" id="document-type-forCompany"
-                            :class="{'valid': !$v.documentType.forCompany.$invalid, 'invalid': $v.documentType.forCompany.$invalid }" v-model="$v.documentType.forCompany.$model" />
+                        <label class="form-control-label" v-text="$t('opusWebApp.documentType.mandatoryBusinessCategories')" for="document-type-mandatoryBusinessCategories">Mandatory Business Categories</label>
+                        <input type="text" class="form-control" name="mandatoryBusinessCategories" id="document-type-mandatoryBusinessCategories"
+                            :class="{'valid': !$v.documentType.mandatoryBusinessCategories.$invalid, 'invalid': $v.documentType.mandatoryBusinessCategories.$invalid }" v-model="$v.documentType.mandatoryBusinessCategories.$model" />
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.documentType.forProfessional')" for="document-type-forProfessional">For Professional</label>
-                        <input type="checkbox" class="form-check" name="forProfessional" id="document-type-forProfessional"
-                            :class="{'valid': !$v.documentType.forProfessional.$invalid, 'invalid': $v.documentType.forProfessional.$invalid }" v-model="$v.documentType.forProfessional.$model" />
+                        <label class="form-control-label" v-text="$t('opusWebApp.documentType.additionalBusinessCategories')" for="document-type-additionalBusinessCategories">Additional Business Categories</label>
+                        <input type="text" class="form-control" name="additionalBusinessCategories" id="document-type-additionalBusinessCategories"
+                            :class="{'valid': !$v.documentType.additionalBusinessCategories.$invalid, 'invalid': $v.documentType.additionalBusinessCategories.$invalid }" v-model="$v.documentType.additionalBusinessCategories.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.documentType.mandatoryForCompany')" for="document-type-mandatoryForCompany">Mandatory For Company</label>
+                        <input type="checkbox" class="form-check" name="mandatoryForCompany" id="document-type-mandatoryForCompany"
+                            :class="{'valid': !$v.documentType.mandatoryForCompany.$invalid, 'invalid': $v.documentType.mandatoryForCompany.$invalid }" v-model="$v.documentType.mandatoryForCompany.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.documentType.mandatoryForProfessional')" for="document-type-mandatoryForProfessional">Mandatory For Professional</label>
+                        <input type="checkbox" class="form-check" name="mandatoryForProfessional" id="document-type-mandatoryForProfessional"
+                            :class="{'valid': !$v.documentType.mandatoryForProfessional.$invalid, 'invalid': $v.documentType.mandatoryForProfessional.$invalid }" v-model="$v.documentType.mandatoryForProfessional.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.documentType.additionalForCompany')" for="document-type-additionalForCompany">Additional For Company</label>
+                        <input type="checkbox" class="form-check" name="additionalForCompany" id="document-type-additionalForCompany"
+                            :class="{'valid': !$v.documentType.additionalForCompany.$invalid, 'invalid': $v.documentType.additionalForCompany.$invalid }" v-model="$v.documentType.additionalForCompany.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.documentType.additionalForProfessional')" for="document-type-additionalForProfessional">Additional For Professional</label>
+                        <input type="checkbox" class="form-check" name="additionalForProfessional" id="document-type-additionalForProfessional"
+                            :class="{'valid': !$v.documentType.additionalForProfessional.$invalid, 'invalid': $v.documentType.additionalForProfessional.$invalid }" v-model="$v.documentType.additionalForProfessional.$model" />
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.documentType.active')" for="document-type-active">Active</label>

@@ -30,7 +30,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new DocumentTypeService();
 
-      elemDefault = new DocumentType(0, 'AAAAAAA', 'AAAAAAA', false, false, false, false);
+      elemDefault = new DocumentType(0, 'AAAAAAA', 'AAAAAAA', false, 'AAAAAAA', 'AAAAAAA', false, false, false, false, false);
     });
 
     describe('Service methods', () => {
@@ -85,8 +85,12 @@ describe('Service Tests', () => {
             name: 'BBBBBB',
             description: 'BBBBBB',
             hasExpirationDate: true,
-            forCompany: true,
-            forProfessional: true,
+            mandatoryBusinessCategories: 'BBBBBB',
+            additionalBusinessCategories: 'BBBBBB',
+            mandatoryForCompany: true,
+            mandatoryForProfessional: true,
+            additionalForCompany: true,
+            additionalForProfessional: true,
             active: true
           },
           elemDefault
@@ -117,8 +121,12 @@ describe('Service Tests', () => {
             name: 'BBBBBB',
             description: 'BBBBBB',
             hasExpirationDate: true,
-            forCompany: true,
-            forProfessional: true,
+            mandatoryBusinessCategories: 'BBBBBB',
+            additionalBusinessCategories: 'BBBBBB',
+            mandatoryForCompany: true,
+            mandatoryForProfessional: true,
+            additionalForCompany: true,
+            additionalForProfessional: true,
             active: true
           },
           elemDefault

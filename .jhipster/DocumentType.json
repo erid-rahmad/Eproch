@@ -18,11 +18,27 @@
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "forCompany",
+            "fieldName": "mandatoryBusinessCategories",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "additionalBusinessCategories",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mandatoryForCompany",
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "forProfessional",
+            "fieldName": "mandatoryForProfessional",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "additionalForCompany",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "additionalForProfessional",
             "fieldType": "Boolean"
         },
         {

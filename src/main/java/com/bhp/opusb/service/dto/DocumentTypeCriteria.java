@@ -32,9 +32,17 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
 
     private BooleanFilter hasExpirationDate;
 
-    private BooleanFilter forCompany;
+    private StringFilter mandatoryBusinessCategories;
 
-    private BooleanFilter forProfessional;
+    private StringFilter additionalBusinessCategories;
+
+    private BooleanFilter mandatoryForCompany;
+
+    private BooleanFilter mandatoryForProfessional;
+
+    private BooleanFilter additionalForCompany;
+
+    private BooleanFilter additionalForProfessional;
 
     private BooleanFilter active;
 
@@ -48,8 +56,12 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.hasExpirationDate = other.hasExpirationDate == null ? null : other.hasExpirationDate.copy();
-        this.forCompany = other.forCompany == null ? null : other.forCompany.copy();
-        this.forProfessional = other.forProfessional == null ? null : other.forProfessional.copy();
+        this.mandatoryBusinessCategories = other.mandatoryBusinessCategories == null ? null : other.mandatoryBusinessCategories.copy();
+        this.additionalBusinessCategories = other.additionalBusinessCategories == null ? null : other.additionalBusinessCategories.copy();
+        this.mandatoryForCompany = other.mandatoryForCompany == null ? null : other.mandatoryForCompany.copy();
+        this.mandatoryForProfessional = other.mandatoryForProfessional == null ? null : other.mandatoryForProfessional.copy();
+        this.additionalForCompany = other.additionalForCompany == null ? null : other.additionalForCompany.copy();
+        this.additionalForProfessional = other.additionalForProfessional == null ? null : other.additionalForProfessional.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.documentTypeBusinessCategoryId = other.documentTypeBusinessCategoryId == null ? null : other.documentTypeBusinessCategoryId.copy();
     }
@@ -91,20 +103,52 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
         this.hasExpirationDate = hasExpirationDate;
     }
 
-    public BooleanFilter getForCompany() {
-        return forCompany;
+    public StringFilter getMandatoryBusinessCategories() {
+        return mandatoryBusinessCategories;
     }
 
-    public void setForCompany(BooleanFilter forCompany) {
-        this.forCompany = forCompany;
+    public void setMandatoryBusinessCategories(StringFilter mandatoryBusinessCategories) {
+        this.mandatoryBusinessCategories = mandatoryBusinessCategories;
     }
 
-    public BooleanFilter getForProfessional() {
-        return forProfessional;
+    public StringFilter getAdditionalBusinessCategories() {
+        return additionalBusinessCategories;
     }
 
-    public void setForProfessional(BooleanFilter forProfessional) {
-        this.forProfessional = forProfessional;
+    public void setAdditionalBusinessCategories(StringFilter additionalBusinessCategories) {
+        this.additionalBusinessCategories = additionalBusinessCategories;
+    }
+
+    public BooleanFilter getMandatoryForCompany() {
+        return mandatoryForCompany;
+    }
+
+    public void setMandatoryForCompany(BooleanFilter mandatoryForCompany) {
+        this.mandatoryForCompany = mandatoryForCompany;
+    }
+
+    public BooleanFilter getMandatoryForProfessional() {
+        return mandatoryForProfessional;
+    }
+
+    public void setMandatoryForProfessional(BooleanFilter mandatoryForProfessional) {
+        this.mandatoryForProfessional = mandatoryForProfessional;
+    }
+
+    public BooleanFilter getAdditionalForCompany() {
+        return additionalForCompany;
+    }
+
+    public void setAdditionalForCompany(BooleanFilter additionalForCompany) {
+        this.additionalForCompany = additionalForCompany;
+    }
+
+    public BooleanFilter getAdditionalForProfessional() {
+        return additionalForProfessional;
+    }
+
+    public void setAdditionalForProfessional(BooleanFilter additionalForProfessional) {
+        this.additionalForProfessional = additionalForProfessional;
     }
 
     public BooleanFilter getActive() {
@@ -138,8 +182,12 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(hasExpirationDate, that.hasExpirationDate) &&
-            Objects.equals(forCompany, that.forCompany) &&
-            Objects.equals(forProfessional, that.forProfessional) &&
+            Objects.equals(mandatoryBusinessCategories, that.mandatoryBusinessCategories) &&
+            Objects.equals(additionalBusinessCategories, that.additionalBusinessCategories) &&
+            Objects.equals(mandatoryForCompany, that.mandatoryForCompany) &&
+            Objects.equals(mandatoryForProfessional, that.mandatoryForProfessional) &&
+            Objects.equals(additionalForCompany, that.additionalForCompany) &&
+            Objects.equals(additionalForProfessional, that.additionalForProfessional) &&
             Objects.equals(active, that.active) &&
             Objects.equals(documentTypeBusinessCategoryId, that.documentTypeBusinessCategoryId);
     }
@@ -151,8 +199,12 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
         name,
         description,
         hasExpirationDate,
-        forCompany,
-        forProfessional,
+        mandatoryBusinessCategories,
+        additionalBusinessCategories,
+        mandatoryForCompany,
+        mandatoryForProfessional,
+        additionalForCompany,
+        additionalForProfessional,
         active,
         documentTypeBusinessCategoryId
         );
@@ -165,8 +217,12 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (hasExpirationDate != null ? "hasExpirationDate=" + hasExpirationDate + ", " : "") +
-                (forCompany != null ? "forCompany=" + forCompany + ", " : "") +
-                (forProfessional != null ? "forProfessional=" + forProfessional + ", " : "") +
+                (mandatoryBusinessCategories != null ? "mandatoryBusinessCategories=" + mandatoryBusinessCategories + ", " : "") +
+                (additionalBusinessCategories != null ? "additionalBusinessCategories=" + additionalBusinessCategories + ", " : "") +
+                (mandatoryForCompany != null ? "mandatoryForCompany=" + mandatoryForCompany + ", " : "") +
+                (mandatoryForProfessional != null ? "mandatoryForProfessional=" + mandatoryForProfessional + ", " : "") +
+                (additionalForCompany != null ? "additionalForCompany=" + additionalForCompany + ", " : "") +
+                (additionalForProfessional != null ? "additionalForProfessional=" + additionalForProfessional + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (documentTypeBusinessCategoryId != null ? "documentTypeBusinessCategoryId=" + documentTypeBusinessCategoryId + ", " : "") +
             "}";

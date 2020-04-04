@@ -28,8 +28,12 @@
                     <th v-on:click="changeOrder('name')"><span v-text="$t('opusWebApp.documentType.name')">Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('description')"><span v-text="$t('opusWebApp.documentType.description')">Description</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'description'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('hasExpirationDate')"><span v-text="$t('opusWebApp.documentType.hasExpirationDate')">Has Expiration Date</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'hasExpirationDate'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('forCompany')"><span v-text="$t('opusWebApp.documentType.forCompany')">For Company</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'forCompany'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('forProfessional')"><span v-text="$t('opusWebApp.documentType.forProfessional')">For Professional</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'forProfessional'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('mandatoryBusinessCategories')"><span v-text="$t('opusWebApp.documentType.mandatoryBusinessCategories')">Mandatory Business Categories</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'mandatoryBusinessCategories'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('additionalBusinessCategories')"><span v-text="$t('opusWebApp.documentType.additionalBusinessCategories')">Additional Business Categories</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'additionalBusinessCategories'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('mandatoryForCompany')"><span v-text="$t('opusWebApp.documentType.mandatoryForCompany')">Mandatory For Company</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'mandatoryForCompany'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('mandatoryForProfessional')"><span v-text="$t('opusWebApp.documentType.mandatoryForProfessional')">Mandatory For Professional</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'mandatoryForProfessional'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('additionalForCompany')"><span v-text="$t('opusWebApp.documentType.additionalForCompany')">Additional For Company</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'additionalForCompany'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('additionalForProfessional')"><span v-text="$t('opusWebApp.documentType.additionalForProfessional')">Additional For Professional</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'additionalForProfessional'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.documentType.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
@@ -43,8 +47,12 @@
                     <td>{{documentType.name}}</td>
                     <td>{{documentType.description}}</td>
                     <td>{{documentType.hasExpirationDate}}</td>
-                    <td>{{documentType.forCompany}}</td>
-                    <td>{{documentType.forProfessional}}</td>
+                    <td>{{documentType.mandatoryBusinessCategories}}</td>
+                    <td>{{documentType.additionalBusinessCategories}}</td>
+                    <td>{{documentType.mandatoryForCompany}}</td>
+                    <td>{{documentType.mandatoryForProfessional}}</td>
+                    <td>{{documentType.additionalForCompany}}</td>
+                    <td>{{documentType.additionalForProfessional}}</td>
                     <td>{{documentType.active}}</td>
                     <td class="text-right">
                         <div class="btn-group">
