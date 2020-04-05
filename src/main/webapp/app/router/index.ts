@@ -99,6 +99,24 @@ const ReferenceList = () => import('../entities/reference-list/reference-list.vu
 const ReferenceListUpdate = () => import('../entities/reference-list/reference-list-update.vue');
 // prettier-ignore
 const ReferenceListDetails = () => import('../entities/reference-list/reference-list-details.vue');
+// prettier-ignore
+const Region = () => import('../entities/region/region.vue');
+// prettier-ignore
+const RegionUpdate = () => import('../entities/region/region-update.vue');
+// prettier-ignore
+const RegionDetails = () => import('../entities/region/region-details.vue');
+// prettier-ignore
+const City = () => import('../entities/city/city.vue');
+// prettier-ignore
+const CityUpdate = () => import('../entities/city/city-update.vue');
+// prettier-ignore
+const CityDetails = () => import('../entities/city/city-details.vue');
+// prettier-ignore
+const Permission = () => import('../entities/permission/permission.vue');
+// prettier-ignore
+const PermissionUpdate = () => import('../entities/permission/permission-update.vue');
+// prettier-ignore
+const PermissionDetails = () => import('../entities/permission/permission-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 Vue.use(Router);
@@ -542,7 +560,7 @@ export const asyncRoutes: RouteConfig[] = [
           title: 'document-type.detail',
           roles: [Authority.ADMIN]
         }
-      },
+      }
     ]
   },
   {
@@ -640,6 +658,150 @@ export const asyncRoutes: RouteConfig[] = [
     name: 'ReferenceListView',
     component: ReferenceListDetails,
     meta: { roles: [Authority.USER] }
+  },
+  {
+    path: '/country',
+    name: 'Country',
+    component: Country,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/country/new',
+    name: 'CountryCreate',
+    component: CountryUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/country/:countryId/edit',
+    name: 'CountryEdit',
+    component: CountryUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/country/:countryId/view',
+    name: 'CountryView',
+    component: CountryDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/region',
+    name: 'Region',
+    component: Region,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/region/new',
+    name: 'RegionCreate',
+    component: RegionUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/region/:regionId/edit',
+    name: 'RegionEdit',
+    component: RegionUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/region/:regionId/view',
+    name: 'RegionView',
+    component: RegionDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/city',
+    name: 'City',
+    component: City,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/city/new',
+    name: 'CityCreate',
+    component: CityUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/city/:cityId/edit',
+    name: 'CityEdit',
+    component: CityUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/city/:cityId/view',
+    name: 'CityView',
+    component: CityDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/location',
+    name: 'Location',
+    component: Location,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/location/new',
+    name: 'LocationCreate',
+    component: LocationUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/location/:locationId/edit',
+    name: 'LocationEdit',
+    component: LocationUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/location/:locationId/view',
+    name: 'LocationView',
+    component: LocationDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/vendor',
+    name: 'Vendor',
+    component: Vendor,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/vendor/new',
+    name: 'VendorCreate',
+    component: VendorUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/vendor/:vendorId/edit',
+    name: 'VendorEdit',
+    component: VendorUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/vendor/:vendorId/view',
+    name: 'VendorView',
+    component: VendorDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/permission',
+    name: 'Permission',
+    component: Permission,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/permission/new',
+    name: 'PermissionCreate',
+    component: PermissionUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/permission/:permissionId/edit',
+    name: 'PermissionEdit',
+    component: PermissionUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/permission/:permissionId/view',
+    name: 'PermissionView',
+    component: PermissionDetails,
+    meta: { authorities: [Authority.USER] }
   }
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
 ];

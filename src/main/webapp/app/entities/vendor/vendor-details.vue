@@ -71,14 +71,6 @@
                         <span v-text="$t('opusWebApp.VendorApprovalStatus.' + vendor.approvalStatus)">{{vendor.approvalStatus}}</span>
                     </dd>
                     <dt>
-                        <span v-text="$t('opusWebApp.vendor.location')">Location</span>
-                    </dt>
-                    <dd>
-                        <div v-if="vendor.locationId">
-                            <router-link :to="{name: 'LocationView', params: {locationId: vendor.locationId}}">{{vendor.locationId}}</router-link>
-                        </div>
-                    </dd>
-                    <dt>
                         <span v-text="$t('opusWebApp.vendor.businessCategory')">Business Category</span>
                     </dt>
                     <dd>

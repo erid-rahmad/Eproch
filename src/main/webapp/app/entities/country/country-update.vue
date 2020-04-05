@@ -12,12 +12,25 @@
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.country.name')" for="country-name">Name</label>
                         <input type="text" class="form-control" name="name" id="country-name"
-                            :class="{'valid': !$v.country.name.$invalid, 'invalid': $v.country.name.$invalid }" v-model="$v.country.name.$model" />
+                            :class="{'valid': !$v.country.name.$invalid, 'invalid': $v.country.name.$invalid }" v-model="$v.country.name.$model"  required/>
+                        <div v-if="$v.country.name.$anyDirty && $v.country.name.$invalid">
+                            <small class="form-text text-danger" v-if="!$v.country.name.required" v-text="$t('entity.validation.required')">
+                                This field is required.
+                            </small>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.country.code')" for="country-code">Code</label>
                         <input type="text" class="form-control" name="code" id="country-code"
-                            :class="{'valid': !$v.country.code.$invalid, 'invalid': $v.country.code.$invalid }" v-model="$v.country.code.$model" />
+                            :class="{'valid': !$v.country.code.$invalid, 'invalid': $v.country.code.$invalid }" v-model="$v.country.code.$model"  required/>
+                        <div v-if="$v.country.code.$anyDirty && $v.country.code.$invalid">
+                            <small class="form-text text-danger" v-if="!$v.country.code.required" v-text="$t('entity.validation.required')">
+                                This field is required.
+                            </small>
+                            <small class="form-text text-danger" v-if="!$v.country.code.pattern" v-text="$t('entity.validation.pattern', {pattern: 'Code'})">
+                                This field should follow pattern for "Code".
+                            </small>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.country.currency')" for="country-currency">Currency</label>

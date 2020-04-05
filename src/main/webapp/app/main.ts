@@ -51,6 +51,9 @@ import PersonInChargeService from '@/entities/person-in-charge/person-in-charge.
 import CompanyFunctionaryService from '@/entities/company-functionary/company-functionary.service';
 import ReferenceService from '@/entities/reference/reference.service';
 import ReferenceListService from '@/entities/reference-list/reference-list.service';
+import RegionService from '@/entities/region/region.service';
+import CityService from '@/entities/city/city.service';
+import PermissionService from '@/entities/permission/permission.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -137,6 +140,9 @@ new Vue({
     companyFunctionaryService: () => new CompanyFunctionaryService(),
     referenceService: () => new ReferenceService(),
     referenceListService: () => new ReferenceListService(),
+    regionService: () => new RegionService(),
+    cityService: () => new CityService(),
+    permissionService: () => new PermissionService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService
   },

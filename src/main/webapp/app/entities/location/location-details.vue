@@ -20,20 +20,16 @@
                         <span v-text="$t('opusWebApp.location.city')">City</span>
                     </dt>
                     <dd>
-                        <span>{{location.city}}</span>
+                        <div v-if="location.cityId">
+                            <router-link :to="{name: 'CityView', params: {cityId: location.cityId}}">{{location.cityId}}</router-link>
+                        </div>
                     </dd>
                     <dt>
-                        <span v-text="$t('opusWebApp.location.stateProvince')">State Province</span>
+                        <span v-text="$t('opusWebApp.location.vendor')">Vendor</span>
                     </dt>
                     <dd>
-                        <span>{{location.stateProvince}}</span>
-                    </dd>
-                    <dt>
-                        <span v-text="$t('opusWebApp.location.country')">Country</span>
-                    </dt>
-                    <dd>
-                        <div v-if="location.countryId">
-                            <router-link :to="{name: 'CountryView', params: {countryId: location.countryId}}">{{location.countryId}}</router-link>
+                        <div v-if="location.vendorId">
+                            <router-link :to="{name: 'VendorView', params: {vendorId: location.vendorId}}">{{location.vendorId}}</router-link>
                         </div>
                     </dd>
                 </dl>

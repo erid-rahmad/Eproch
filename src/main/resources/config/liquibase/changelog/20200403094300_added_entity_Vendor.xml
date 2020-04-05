@@ -48,9 +48,6 @@
             <column name="approval_status" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="location_id" type="bigint">
-                <constraints unique="true" nullable="false" uniqueConstraintName="ux_vendor_location_id" />
-            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
     </changeSet>
@@ -96,7 +93,6 @@
             <column name="type" type="string"/>
             <column name="payment_category" type="string"/>
             <column name="approval_status" type="string"/>
-            <column name="location_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

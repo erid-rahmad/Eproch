@@ -36,7 +36,6 @@
                     <th v-on:click="changeOrder('type')"><span v-text="$t('opusWebApp.vendor.type')">Type</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'type'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('paymentCategory')"><span v-text="$t('opusWebApp.vendor.paymentCategory')">Payment Category</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'paymentCategory'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('approvalStatus')"><span v-text="$t('opusWebApp.vendor.approvalStatus')">Approval Status</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'approvalStatus'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('locationId')"><span v-text="$t('opusWebApp.vendor.location')">Location</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'locationId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -57,11 +56,6 @@
                     <td v-text="$t('opusWebApp.VendorType.' + vendor.type)">{{vendor.type}}</td>
                     <td v-text="$t('opusWebApp.PaymentCategory.' + vendor.paymentCategory)">{{vendor.paymentCategory}}</td>
                     <td v-text="$t('opusWebApp.VendorApprovalStatus.' + vendor.approvalStatus)">{{vendor.approvalStatus}}</td>
-                    <td>
-                        <div v-if="vendor.locationId">
-                            <router-link :to="{name: 'LocationView', params: {locationId: vendor.locationId}}">{{vendor.locationId}}</router-link>
-                        </div>
-                    </td>
                     <td class="text-right">
                         <div class="btn-group">
                             <router-link :to="{name: 'VendorView', params: {vendorId: vendor.id}}" tag="button" class="btn btn-info btn-sm details">

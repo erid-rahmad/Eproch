@@ -2,11 +2,11 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
 
-import LocationService from '../location/location.service';
-import { ILocation } from '@/shared/model/location.model';
-
 import CompanyFunctionaryService from '../company-functionary/company-functionary.service';
 import { ICompanyFunctionary } from '@/shared/model/company-functionary.model';
+
+import LocationService from '../location/location.service';
+import { ILocation } from '@/shared/model/location.model';
 
 import PersonInChargeService from '../person-in-charge/person-in-charge.service';
 import { IPersonInCharge } from '@/shared/model/person-in-charge.model';
@@ -48,9 +48,6 @@ const validations: any = {
     },
     approvalStatus: {
       required
-    },
-    locationId: {
-      required
     }
   }
 };
@@ -63,13 +60,13 @@ export default class VendorUpdate extends Vue {
   @Inject('vendorService') private vendorService: () => VendorService;
   public vendor: IVendor = new Vendor();
 
-  @Inject('locationService') private locationService: () => LocationService;
-
-  public locations: ILocation[] = [];
-
   @Inject('companyFunctionaryService') private companyFunctionaryService: () => CompanyFunctionaryService;
 
   public companyFunctionaries: ICompanyFunctionary[] = [];
+
+  @Inject('locationService') private locationService: () => LocationService;
+
+  public locations: ILocation[] = [];
 
   @Inject('personInChargeService') private personInChargeService: () => PersonInChargeService;
 
@@ -133,15 +130,15 @@ export default class VendorUpdate extends Vue {
   }
 
   public initRelationships(): void {
-    this.locationService()
-      .retrieve()
-      .then(res => {
-        this.locations = res.data;
-      });
     this.companyFunctionaryService()
       .retrieve()
       .then(res => {
         this.companyFunctionaries = res.data;
+      });
+    this.locationService()
+      .retrieve()
+      .then(res => {
+        this.locations = res.data;
       });
     this.personInChargeService()
       .retrieve()

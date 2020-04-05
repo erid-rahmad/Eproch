@@ -9,7 +9,9 @@ import LocationUpdateComponent from '@/entities/location/location-update.vue';
 import LocationClass from '@/entities/location/location-update.component';
 import LocationService from '@/entities/location/location.service';
 
-import CountryService from '@/entities/country/country.service';
+import CityService from '@/entities/city/city.service';
+
+import VendorService from '@/entities/vendor/vendor.service';
 
 const localVue = createLocalVue();
 
@@ -38,7 +40,9 @@ describe('Component Tests', () => {
           alertService: () => new AlertService(store),
           locationService: () => locationServiceStub,
 
-          countryService: () => new CountryService()
+          cityService: () => new CityService(),
+
+          vendorService: () => new VendorService()
         }
       });
       comp = wrapper.vm;

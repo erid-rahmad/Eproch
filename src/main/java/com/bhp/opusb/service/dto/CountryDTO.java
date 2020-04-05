@@ -11,8 +11,11 @@ public class CountryDTO implements Serializable {
     
     private Long id;
 
+    @NotNull
     private String name;
 
+    @NotNull
+    @Pattern(regexp = "^[A-Z]{2}$")
     private String code;
 
 

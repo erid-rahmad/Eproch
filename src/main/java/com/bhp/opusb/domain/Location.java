@@ -1,5 +1,6 @@
 package com.bhp.opusb.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -24,24 +25,21 @@ public class Location implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "street_address")
+    @NotNull
+    @Column(name = "street_address", nullable = false)
     private String streetAddress;
 
-    @Min(value = 5)
-    @Max(value = 5)
     @Column(name = "postal_code")
-    private Integer postalCode;
+    private String postalCode;
 
-    @Column(name = "city")
-    private String city;
-
-    @Column(name = "state_province")
-    private String stateProvince;
-
-    @OneToOne(optional = false)
+    @ManyToOne(optional = false)
     @NotNull
-    @JoinColumn(unique = true)
-    private Country country;
+    @JsonIgnoreProperties("locations")
+    private City city;
+
+    @ManyToOne
+    @JsonIgnoreProperties("locations")
+    private Vendor vendor;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -65,56 +63,43 @@ public class Location implements Serializable {
         this.streetAddress = streetAddress;
     }
 
-    public Integer getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public Location postalCode(Integer postalCode) {
+    public Location postalCode(String postalCode) {
         this.postalCode = postalCode;
         return this;
     }
 
-    public void setPostalCode(Integer postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public Location city(String city) {
+    public Location city(City city) {
         this.city = city;
         return this;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
 
-    public String getStateProvince() {
-        return stateProvince;
+    public Vendor getVendor() {
+        return vendor;
     }
 
-    public Location stateProvince(String stateProvince) {
-        this.stateProvince = stateProvince;
+    public Location vendor(Vendor vendor) {
+        this.vendor = vendor;
         return this;
     }
 
-    public void setStateProvince(String stateProvince) {
-        this.stateProvince = stateProvince;
-    }
-
-    public Country getCountry() {
-        return country;
-    }
-
-    public Location country(Country country) {
-        this.country = country;
-        return this;
-    }
-
-    public void setCountry(Country country) {
-        this.country = country;
+    public void setVendor(Vendor vendor) {
+        this.vendor = vendor;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -139,9 +124,7 @@ public class Location implements Serializable {
         return "Location{" +
             "id=" + getId() +
             ", streetAddress='" + getStreetAddress() + "'" +
-            ", postalCode=" + getPostalCode() +
-            ", city='" + getCity() + "'" +
-            ", stateProvince='" + getStateProvince() + "'" +
+            ", postalCode='" + getPostalCode() + "'" +
             "}";
     }
 }

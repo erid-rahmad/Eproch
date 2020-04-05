@@ -11,18 +11,15 @@ public class LocationDTO implements Serializable {
     
     private Long id;
 
+    @NotNull
     private String streetAddress;
 
-    @Min(value = 5)
-    @Max(value = 5)
-    private Integer postalCode;
-
-    private String city;
-
-    private String stateProvince;
+    private String postalCode;
 
 
-    private Long countryId;
+    private Long cityId;
+
+    private Long vendorId;
     
     public Long getId() {
         return id;
@@ -40,36 +37,28 @@ public class LocationDTO implements Serializable {
         this.streetAddress = streetAddress;
     }
 
-    public Integer getPostalCode() {
+    public String getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(Integer postalCode) {
+    public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
     }
 
-    public String getCity() {
-        return city;
+    public Long getCityId() {
+        return cityId;
     }
 
-    public void setCity(String city) {
-        this.city = city;
+    public void setCityId(Long cityId) {
+        this.cityId = cityId;
     }
 
-    public String getStateProvince() {
-        return stateProvince;
+    public Long getVendorId() {
+        return vendorId;
     }
 
-    public void setStateProvince(String stateProvince) {
-        this.stateProvince = stateProvince;
-    }
-
-    public Long getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(Long countryId) {
-        this.countryId = countryId;
+    public void setVendorId(Long vendorId) {
+        this.vendorId = vendorId;
     }
 
     @Override
@@ -98,10 +87,9 @@ public class LocationDTO implements Serializable {
         return "LocationDTO{" +
             "id=" + getId() +
             ", streetAddress='" + getStreetAddress() + "'" +
-            ", postalCode=" + getPostalCode() +
-            ", city='" + getCity() + "'" +
-            ", stateProvince='" + getStateProvince() + "'" +
-            ", countryId=" + getCountryId() +
+            ", postalCode='" + getPostalCode() + "'" +
+            ", cityId=" + getCityId() +
+            ", vendorId=" + getVendorId() +
             "}";
     }
 }

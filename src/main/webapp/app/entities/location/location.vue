@@ -27,9 +27,8 @@
                     <th v-on:click="changeOrder('id')"><span v-text="$t('global.field.id')">ID</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('streetAddress')"><span v-text="$t('opusWebApp.location.streetAddress')">Street Address</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'streetAddress'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('postalCode')"><span v-text="$t('opusWebApp.location.postalCode')">Postal Code</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'postalCode'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('city')"><span v-text="$t('opusWebApp.location.city')">City</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'city'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('stateProvince')"><span v-text="$t('opusWebApp.location.stateProvince')">State Province</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'stateProvince'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('countryId')"><span v-text="$t('opusWebApp.location.country')">Country</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'countryId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('cityId')"><span v-text="$t('opusWebApp.location.city')">City</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'cityId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('vendorId')"><span v-text="$t('opusWebApp.location.vendor')">Vendor</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'vendorId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -41,11 +40,14 @@
                     </td>
                     <td>{{location.streetAddress}}</td>
                     <td>{{location.postalCode}}</td>
-                    <td>{{location.city}}</td>
-                    <td>{{location.stateProvince}}</td>
                     <td>
-                        <div v-if="location.countryId">
-                            <router-link :to="{name: 'CountryView', params: {countryId: location.countryId}}">{{location.countryId}}</router-link>
+                        <div v-if="location.cityId">
+                            <router-link :to="{name: 'CityView', params: {cityId: location.cityId}}">{{location.cityId}}</router-link>
+                        </div>
+                    </td>
+                    <td>
+                        <div v-if="location.vendorId">
+                            <router-link :to="{name: 'VendorView', params: {vendorId: location.vendorId}}">{{location.vendorId}}</router-link>
                         </div>
                     </td>
                     <td class="text-right">

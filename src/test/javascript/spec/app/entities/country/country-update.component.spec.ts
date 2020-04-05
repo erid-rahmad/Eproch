@@ -11,6 +11,10 @@ import CountryService from '@/entities/country/country.service';
 
 import CurrencyService from '@/entities/currency/currency.service';
 
+import RegionService from '@/entities/region/region.service';
+
+import CityService from '@/entities/city/city.service';
+
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);
@@ -38,7 +42,11 @@ describe('Component Tests', () => {
           alertService: () => new AlertService(store),
           countryService: () => countryServiceStub,
 
-          currencyService: () => new CurrencyService()
+          currencyService: () => new CurrencyService(),
+
+          regionService: () => new RegionService(),
+
+          cityService: () => new CityService()
         }
       });
       comp = wrapper.vm;

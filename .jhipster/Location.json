@@ -3,36 +3,31 @@
     "fields": [
         {
             "fieldName": "streetAddress",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldName": "postalCode",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "min",
-                "max"
-            ],
-            "fieldValidateRulesMin": "5",
-            "fieldValidateRulesMax": "5"
-        },
-        {
-            "fieldName": "city",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "stateProvince",
             "fieldType": "String"
         }
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "country",
+            "relationshipType": "many-to-one",
+            "otherEntityName": "city",
             "otherEntityRelationshipName": "location",
             "relationshipValidateRules": "required",
-            "relationshipName": "country",
-            "otherEntityField": "id",
-            "ownerSide": true
+            "relationshipName": "city",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "vendor",
+            "otherEntityRelationshipName": "location",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20200403094200",

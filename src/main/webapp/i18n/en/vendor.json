@@ -27,8 +27,8 @@
       "type": "Type",
       "paymentCategory": "Payment Category",
       "approvalStatus": "Approval Status",
-      "location": "Location",
       "companyFunctionary": "Company Functionary",
+      "location": "Location",
       "personInCharge": "Person In Charge",
       "supportingDocument": "Supporting Document",
       "businessCategory": "Business Category"

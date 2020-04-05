@@ -16,10 +16,10 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="name" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="code" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_country_code" />
             </column>
             <column name="currency_id" type="bigint">
                 <constraints unique="true" nullable="false" uniqueConstraintName="ux_country_currency_id" />

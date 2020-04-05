@@ -26,6 +26,9 @@
     <include file="config/liquibase/changelog/20200403094900_added_entity_CompanyFunctionary.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200403095000_added_entity_Reference.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200403095100_added_entity_ReferenceList.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200405155200_added_entity_Region.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200405155300_added_entity_City.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200405160400_added_entity_Permission.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200403094000_added_entity_constraints_Country.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200403094200_added_entity_constraints_Location.xml" relativeToChangelogFile="false"/>
@@ -36,5 +39,7 @@
     <include file="config/liquibase/changelog/20200403094800_added_entity_constraints_PersonInCharge.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200403094900_added_entity_constraints_CompanyFunctionary.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200403095100_added_entity_constraints_ReferenceList.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200405155200_added_entity_constraints_Region.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200405155300_added_entity_constraints_City.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

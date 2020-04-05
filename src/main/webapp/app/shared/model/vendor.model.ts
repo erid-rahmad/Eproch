@@ -1,4 +1,5 @@
 import { ICompanyFunctionary } from '@/shared/model/company-functionary.model';
+import { ILocation } from '@/shared/model/location.model';
 import { IPersonInCharge } from '@/shared/model/person-in-charge.model';
 import { ISupportingDocument } from '@/shared/model/supporting-document.model';
 import { IBusinessCategory } from '@/shared/model/business-category.model';
@@ -32,8 +33,8 @@ export interface IVendor {
   type?: VendorType;
   paymentCategory?: PaymentCategory;
   approvalStatus?: VendorApprovalStatus;
-  locationId?: number;
   companyFunctionaries?: ICompanyFunctionary[];
+  locations?: ILocation[];
   personInCharges?: IPersonInCharge[];
   supportingDocuments?: ISupportingDocument[];
   businessCategories?: IBusinessCategory[];
@@ -53,8 +54,8 @@ export class Vendor implements IVendor {
     public type?: VendorType,
     public paymentCategory?: PaymentCategory,
     public approvalStatus?: VendorApprovalStatus,
-    public locationId?: number,
     public companyFunctionaries?: ICompanyFunctionary[],
+    public locations?: ILocation[],
     public personInCharges?: IPersonInCharge[],
     public supportingDocuments?: ISupportingDocument[],
     public businessCategories?: IBusinessCategory[]

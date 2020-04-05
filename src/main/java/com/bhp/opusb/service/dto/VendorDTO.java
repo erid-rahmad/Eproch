@@ -47,8 +47,6 @@ public class VendorDTO implements Serializable {
     @NotNull
     private VendorApprovalStatus approvalStatus;
 
-
-    private Long locationId;
     private Set<BusinessCategoryDTO> businessCategories = new HashSet<>();
     
     public Long getId() {
@@ -147,14 +145,6 @@ public class VendorDTO implements Serializable {
         this.approvalStatus = approvalStatus;
     }
 
-    public Long getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(Long locationId) {
-        this.locationId = locationId;
-    }
-
     public Set<BusinessCategoryDTO> getBusinessCategories() {
         return businessCategories;
     }
@@ -199,7 +189,6 @@ public class VendorDTO implements Serializable {
             ", type='" + getType() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
             ", approvalStatus='" + getApprovalStatus() + "'" +
-            ", locationId=" + getLocationId() +
             ", businessCategories='" + getBusinessCategories() + "'" +
             "}";
     }

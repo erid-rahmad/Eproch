@@ -9,9 +9,9 @@ import VendorUpdateComponent from '@/entities/vendor/vendor-update.vue';
 import VendorClass from '@/entities/vendor/vendor-update.component';
 import VendorService from '@/entities/vendor/vendor.service';
 
-import LocationService from '@/entities/location/location.service';
-
 import CompanyFunctionaryService from '@/entities/company-functionary/company-functionary.service';
+
+import LocationService from '@/entities/location/location.service';
 
 import PersonInChargeService from '@/entities/person-in-charge/person-in-charge.service';
 
@@ -46,9 +46,9 @@ describe('Component Tests', () => {
           alertService: () => new AlertService(store),
           vendorService: () => vendorServiceStub,
 
-          locationService: () => new LocationService(),
-
           companyFunctionaryService: () => new CompanyFunctionaryService(),
+
+          locationService: () => new LocationService(),
 
           personInChargeService: () => new PersonInChargeService(),
 

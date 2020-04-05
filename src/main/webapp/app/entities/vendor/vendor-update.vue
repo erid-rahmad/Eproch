@@ -110,18 +110,6 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.vendor.location')" for="vendor-location">Location</label>
-                        <select class="form-control" id="vendor-location" name="location" v-model="$v.vendor.locationId.$model" required>
-                            <option v-if="!vendor.locationId" v-bind:value="null" selected></option>
-                            <option v-bind:value="locationOption.id" v-for="locationOption in locations" :key="locationOption.id">{{locationOption.id}}</option>
-                        </select>
-                    </div>
-                    <div v-if="$v.vendor.locationId.$anyDirty && $v.vendor.locationId.$invalid">
-                        <small class="form-text text-danger" v-if="!$v.vendor.locationId.required" v-text="$t('entity.validation.required')">
-                            This field is required.
-                        </small>
-                    </div>
-                    <div class="form-group">
                         <label v-text="$t('opusWebApp.vendor.businessCategory')" for="vendor-businessCategory">Business Category</label>
                         <select class="form-control" id="vendor-businessCategory" multiple name="businessCategory" v-model="vendor.businessCategories">
                             <option v-bind:value="getSelected(vendor.businessCategories, businessCategoryOption)" v-for="businessCategoryOption in businessCategories" :key="businessCategoryOption.id">{{businessCategoryOption.id}}</option>

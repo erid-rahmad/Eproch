@@ -105,9 +105,9 @@ public class VendorCriteria implements Serializable, Criteria {
 
     private VendorApprovalStatusFilter approvalStatus;
 
-    private LongFilter locationId;
-
     private LongFilter companyFunctionaryId;
+
+    private LongFilter locationId;
 
     private LongFilter personInChargeId;
 
@@ -131,8 +131,8 @@ public class VendorCriteria implements Serializable, Criteria {
         this.type = other.type == null ? null : other.type.copy();
         this.paymentCategory = other.paymentCategory == null ? null : other.paymentCategory.copy();
         this.approvalStatus = other.approvalStatus == null ? null : other.approvalStatus.copy();
-        this.locationId = other.locationId == null ? null : other.locationId.copy();
         this.companyFunctionaryId = other.companyFunctionaryId == null ? null : other.companyFunctionaryId.copy();
+        this.locationId = other.locationId == null ? null : other.locationId.copy();
         this.personInChargeId = other.personInChargeId == null ? null : other.personInChargeId.copy();
         this.supportingDocumentId = other.supportingDocumentId == null ? null : other.supportingDocumentId.copy();
         this.businessCategoryId = other.businessCategoryId == null ? null : other.businessCategoryId.copy();
@@ -239,20 +239,20 @@ public class VendorCriteria implements Serializable, Criteria {
         this.approvalStatus = approvalStatus;
     }
 
-    public LongFilter getLocationId() {
-        return locationId;
-    }
-
-    public void setLocationId(LongFilter locationId) {
-        this.locationId = locationId;
-    }
-
     public LongFilter getCompanyFunctionaryId() {
         return companyFunctionaryId;
     }
 
     public void setCompanyFunctionaryId(LongFilter companyFunctionaryId) {
         this.companyFunctionaryId = companyFunctionaryId;
+    }
+
+    public LongFilter getLocationId() {
+        return locationId;
+    }
+
+    public void setLocationId(LongFilter locationId) {
+        this.locationId = locationId;
     }
 
     public LongFilter getPersonInChargeId() {
@@ -302,8 +302,8 @@ public class VendorCriteria implements Serializable, Criteria {
             Objects.equals(type, that.type) &&
             Objects.equals(paymentCategory, that.paymentCategory) &&
             Objects.equals(approvalStatus, that.approvalStatus) &&
-            Objects.equals(locationId, that.locationId) &&
             Objects.equals(companyFunctionaryId, that.companyFunctionaryId) &&
+            Objects.equals(locationId, that.locationId) &&
             Objects.equals(personInChargeId, that.personInChargeId) &&
             Objects.equals(supportingDocumentId, that.supportingDocumentId) &&
             Objects.equals(businessCategoryId, that.businessCategoryId);
@@ -324,8 +324,8 @@ public class VendorCriteria implements Serializable, Criteria {
         type,
         paymentCategory,
         approvalStatus,
-        locationId,
         companyFunctionaryId,
+        locationId,
         personInChargeId,
         supportingDocumentId,
         businessCategoryId
@@ -347,8 +347,8 @@ public class VendorCriteria implements Serializable, Criteria {
                 (type != null ? "type=" + type + ", " : "") +
                 (paymentCategory != null ? "paymentCategory=" + paymentCategory + ", " : "") +
                 (approvalStatus != null ? "approvalStatus=" + approvalStatus + ", " : "") +
-                (locationId != null ? "locationId=" + locationId + ", " : "") +
                 (companyFunctionaryId != null ? "companyFunctionaryId=" + companyFunctionaryId + ", " : "") +
+                (locationId != null ? "locationId=" + locationId + ", " : "") +
                 (personInChargeId != null ? "personInChargeId=" + personInChargeId + ", " : "") +
                 (supportingDocumentId != null ? "supportingDocumentId=" + supportingDocumentId + ", " : "") +
                 (businessCategoryId != null ? "businessCategoryId=" + businessCategoryId + ", " : "") +

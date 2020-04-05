@@ -1,6 +1,6 @@
 entity Country {
-	name String
-	code String
+	name String required
+	code String required pattern(/^[A-Z]{2}$/) unique
 }
 
 entity Currency {
@@ -9,11 +9,17 @@ entity Currency {
 	name String required
 }
 
+entity Region {
+	name String required
+}
+
+entity City {
+	name String required
+}
+
 entity Location {
-	streetAddress String
-	postalCode Integer min(5) max(5)
-	city String
-	stateProvince String
+	streetAddress String required
+	postalCode String
 }
 
 /**
@@ -92,6 +98,12 @@ entity ReferenceList {
     value String
 }
 
+entity Permission {
+	name String required unique
+	module String required unique
+	canWrite Boolean
+}
+
 enum ReferenceType {
 	LIST, TABLE
 }
@@ -110,20 +122,31 @@ enum VendorApprovalStatus {
 
 relationship OneToOne {
 	Country{currency required} to Currency
-	Location{country required} to Country
-	Vendor{location required} to Location
 	SupportingDocument{type required} to DocumentType
 	PersonInCharge{user(login) required} to User
 }
 
 relationship OneToMany {
+	Country to Region{country required}
+
+	// For city without region.
+	Country to City{country}
+
+	// For city with region.
+	Region to City{region}
+	
 	Vendor to CompanyFunctionary{vendor}
+	Vendor to Location{vendor}
 	Vendor to PersonInCharge{vendor}
 	Vendor to SupportingDocument{vendor}
 	BusinessCategory to BusinessCategory{parentCategory}
     DocumentType to DocumentTypeBusinessCategory{documentType}
     BusinessCategory to DocumentTypeBusinessCategory{businessCategory}
     Reference to ReferenceList{reference}
+}
+
+relationship ManyToOne {
+	Location{city required} to City
 }
 
 relationship ManyToMany {

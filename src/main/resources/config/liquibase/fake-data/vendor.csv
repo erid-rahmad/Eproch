@@ -1,11 +1,11 @@
-id;code;name;npwp;branch;email;phone;fax;website;type;payment_category;approval_status;location_id
-1;invoice Auto Loan Account Senior;Planner Shoes;58912;false;Gina.Schinner@yahoo.com;(478) 229-7500 x4335;connecting Switchable;Brazilian Real connect;COMPANY;RED;PENDING;1
-2;Savings Account;Reverse-engineered;33366;true;Eusebio_Bashirian@yahoo.com;926-137-8096;transparent turquoise Principal;Indiana;COMPANY;GREEN;APPROVED;2
-3;functionalities;Awesome Rubber Keyboard Baht transparent;42433;true;Marty_Mante36@yahoo.com;1-632-623-9142;systems Union reboot;Intelligent Steel Keyboard real-time Multi-layered;PROFESSIONAL;RED;REJECTED;3
-4;Shirt Lari Kentucky;Orchestrator withdrawal monitor;79495;true;Norma32@gmail.com;007.805.9152 x42776;Games;Bermuda;PROFESSIONAL;GREEN;APPROVED;4
-5;open-source programming;24/7 Handcrafted Wooden;18251;true;Lenore84@gmail.com;163.304.9761 x5433;Gloves;enhance 1080p Regional;COMPANY;RED;APPROVED;5
-6;Robust COM;National compressing B2C;35298;false;Justus_Armstrong49@hotmail.com;(454) 037-5376 x557;Garden;Cotton Berkshire;PROFESSIONAL;RED;APPROVED;6
-7;invoice Refined;Guinea-Bissau;48124;false;Jovanny.Farrell48@yahoo.com;311.263.1197 x7883;Oregon Buckinghamshire Auto Loan Account;Intelligent Soft Shirt redundant;COMPANY;GREEN;PENDING;7
-8;users Granite bleeding-edge;Berkshire Progressive Intelligent Granite Shoes;48834;true;Kathleen_Wilderman@gmail.com;1-915-548-5717 x602;compressing;Security;COMPANY;GREEN;PENDING;8
-9;productize;copy SSL Persevering;99836;true;Chelsie_Gottlieb30@hotmail.com;040-095-1974 x80782;compress Myanmar;Rwanda Franc deliverables;PROFESSIONAL;GREEN;APPROVED;9
-10;Shirt;wireless;23589;false;Ashtyn4@yahoo.com;130-537-0033;paradigms;Tasty solution-oriented withdrawal;COMPANY;RED;PENDING;10
+id;code;name;npwp;branch;email;phone;fax;website;type;payment_category;approval_status
+1;invoice Auto Loan Account Senior;Planner Shoes;58912;false;Gina.Schinner@yahoo.com;(478) 229-7500 x4335;connecting Switchable;Brazilian Real connect;COMPANY;RED;PENDING
+2;Savings Account;Reverse-engineered;33366;true;Eusebio_Bashirian@yahoo.com;926-137-8096;transparent turquoise Principal;Indiana;COMPANY;GREEN;APPROVED
+3;functionalities;Awesome Rubber Keyboard Baht transparent;42433;true;Marty_Mante36@yahoo.com;1-632-623-9142;systems Union reboot;Intelligent Steel Keyboard real-time Multi-layered;PROFESSIONAL;RED;REJECTED
+4;Shirt Lari Kentucky;Orchestrator withdrawal monitor;79495;true;Norma32@gmail.com;007.805.9152 x42776;Games;Bermuda;PROFESSIONAL;GREEN;APPROVED
+5;open-source programming;24/7 Handcrafted Wooden;18251;true;Lenore84@gmail.com;163.304.9761 x5433;Gloves;enhance 1080p Regional;COMPANY;RED;APPROVED
+6;Robust COM;National compressing B2C;35298;false;Justus_Armstrong49@hotmail.com;(454) 037-5376 x557;Garden;Cotton Berkshire;PROFESSIONAL;RED;APPROVED
+7;invoice Refined;Guinea-Bissau;48124;false;Jovanny.Farrell48@yahoo.com;311.263.1197 x7883;Oregon Buckinghamshire Auto Loan Account;Intelligent Soft Shirt redundant;COMPANY;GREEN;PENDING
+8;users Granite bleeding-edge;Berkshire Progressive Intelligent Granite Shoes;48834;true;Kathleen_Wilderman@gmail.com;1-915-548-5717 x602;compressing;Security;COMPANY;GREEN;PENDING
+9;productize;copy SSL Persevering;99836;true;Chelsie_Gottlieb30@hotmail.com;040-095-1974 x80782;compress Myanmar;Rwanda Franc deliverables;PROFESSIONAL;GREEN;APPROVED
+10;Shirt;wireless;23589;false;Ashtyn4@yahoo.com;130-537-0033;paradigms;Tasty solution-oriented withdrawal;COMPANY;RED;PENDING

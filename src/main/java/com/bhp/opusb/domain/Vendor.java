@@ -75,14 +75,13 @@ public class Vendor implements Serializable {
     @Column(name = "approval_status", nullable = false)
     private VendorApprovalStatus approvalStatus;
 
-    @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
-    private Location location;
-
     @OneToMany(mappedBy = "vendor")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<CompanyFunctionary> companyFunctionaries = new HashSet<>();
+
+    @OneToMany(mappedBy = "vendor")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<Location> locations = new HashSet<>();
 
     @OneToMany(mappedBy = "vendor")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -251,19 +250,6 @@ public class Vendor implements Serializable {
         this.approvalStatus = approvalStatus;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public Vendor location(Location location) {
-        this.location = location;
-        return this;
-    }
-
-    public void setLocation(Location location) {
-        this.location = location;
-    }
-
     public Set<CompanyFunctionary> getCompanyFunctionaries() {
         return companyFunctionaries;
     }
@@ -287,6 +273,31 @@ public class Vendor implements Serializable {
 
     public void setCompanyFunctionaries(Set<CompanyFunctionary> companyFunctionaries) {
         this.companyFunctionaries = companyFunctionaries;
+    }
+
+    public Set<Location> getLocations() {
+        return locations;
+    }
+
+    public Vendor locations(Set<Location> locations) {
+        this.locations = locations;
+        return this;
+    }
+
+    public Vendor addLocation(Location location) {
+        this.locations.add(location);
+        location.setVendor(this);
+        return this;
+    }
+
+    public Vendor removeLocation(Location location) {
+        this.locations.remove(location);
+        location.setVendor(null);
+        return this;
+    }
+
+    public void setLocations(Set<Location> locations) {
+        this.locations = locations;
     }
 
     public Set<PersonInCharge> getPersonInCharges() {

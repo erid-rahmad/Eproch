@@ -95,17 +95,15 @@ public class LocationQueryService extends QueryService<Location> {
                 specification = specification.and(buildStringSpecification(criteria.getStreetAddress(), Location_.streetAddress));
             }
             if (criteria.getPostalCode() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getPostalCode(), Location_.postalCode));
+                specification = specification.and(buildStringSpecification(criteria.getPostalCode(), Location_.postalCode));
             }
-            if (criteria.getCity() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getCity(), Location_.city));
+            if (criteria.getCityId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCityId(),
+                    root -> root.join(Location_.city, JoinType.LEFT).get(City_.id)));
             }
-            if (criteria.getStateProvince() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getStateProvince(), Location_.stateProvince));
-            }
-            if (criteria.getCountryId() != null) {
-                specification = specification.and(buildSpecification(criteria.getCountryId(),
-                    root -> root.join(Location_.country, JoinType.LEFT).get(Country_.id)));
+            if (criteria.getVendorId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorId(),
+                    root -> root.join(Location_.vendor, JoinType.LEFT).get(Vendor_.id)));
             }
         }
         return specification;

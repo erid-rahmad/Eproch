@@ -12,9 +12,7 @@ export default class LocationUpdatePage extends AlertPage {
 
   postalCodeInput: ElementFinder = element(by.css('input#location-postalCode'));
 
-  cityInput: ElementFinder = element(by.css('input#location-city'));
+  citySelect = element(by.css('select#location-city'));
 
-  stateProvinceInput: ElementFinder = element(by.css('input#location-stateProvince'));
-
-  countrySelect = element(by.css('select#location-country'));
+  vendorSelect = element(by.css('select#location-vendor'));
 }

@@ -29,7 +29,5 @@ export default class VendorUpdatePage extends AlertPage {
   paymentCategorySelect = element(by.css('select#vendor-paymentCategory'));
 
   approvalStatusSelect = element(by.css('select#vendor-approvalStatus'));
-  locationSelect = element(by.css('select#vendor-location'));
-
   businessCategorySelect = element(by.css('select#vendor-businessCategory'));
 }

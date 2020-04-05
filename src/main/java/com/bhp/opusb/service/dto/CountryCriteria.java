@@ -32,6 +32,10 @@ public class CountryCriteria implements Serializable, Criteria {
 
     private LongFilter currencyId;
 
+    private LongFilter regionId;
+
+    private LongFilter cityId;
+
     public CountryCriteria() {
     }
 
@@ -40,6 +44,8 @@ public class CountryCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.code = other.code == null ? null : other.code.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
+        this.regionId = other.regionId == null ? null : other.regionId.copy();
+        this.cityId = other.cityId == null ? null : other.cityId.copy();
     }
 
     @Override
@@ -79,6 +85,22 @@ public class CountryCriteria implements Serializable, Criteria {
         this.currencyId = currencyId;
     }
 
+    public LongFilter getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(LongFilter regionId) {
+        this.regionId = regionId;
+    }
+
+    public LongFilter getCityId() {
+        return cityId;
+    }
+
+    public void setCityId(LongFilter cityId) {
+        this.cityId = cityId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -93,7 +115,9 @@ public class CountryCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(code, that.code) &&
-            Objects.equals(currencyId, that.currencyId);
+            Objects.equals(currencyId, that.currencyId) &&
+            Objects.equals(regionId, that.regionId) &&
+            Objects.equals(cityId, that.cityId);
     }
 
     @Override
@@ -102,7 +126,9 @@ public class CountryCriteria implements Serializable, Criteria {
         id,
         name,
         code,
-        currencyId
+        currencyId,
+        regionId,
+        cityId
         );
     }
 
@@ -113,6 +139,8 @@ public class CountryCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (code != null ? "code=" + code + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
+                (regionId != null ? "regionId=" + regionId + ", " : "") +
+                (cityId != null ? "cityId=" + cityId + ", " : "") +
             "}";
     }
 

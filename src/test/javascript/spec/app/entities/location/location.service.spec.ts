@@ -30,7 +30,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new LocationService();
 
-      elemDefault = new Location(0, 'AAAAAAA', 0, 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new Location(0, 'AAAAAAA', 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -83,9 +83,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             streetAddress: 'BBBBBB',
-            postalCode: 1,
-            city: 'BBBBBB',
-            stateProvince: 'BBBBBB'
+            postalCode: 'BBBBBB'
           },
           elemDefault
         );
@@ -113,9 +111,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             streetAddress: 'BBBBBB',
-            postalCode: 1,
-            city: 'BBBBBB',
-            stateProvince: 'BBBBBB'
+            postalCode: 'BBBBBB'
           },
           elemDefault
         );

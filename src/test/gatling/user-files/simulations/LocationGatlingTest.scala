@@ -73,9 +73,7 @@ class LocationGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "streetAddress":"SAMPLE_TEXT"
-                , "postalCode":"0"
-                , "city":"SAMPLE_TEXT"
-                , "stateProvince":"SAMPLE_TEXT"
+                , "postalCode":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_location_url"))).exitHereIfFailed

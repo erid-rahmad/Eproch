@@ -124,13 +124,13 @@ public class VendorQueryService extends QueryService<Vendor> {
             if (criteria.getApprovalStatus() != null) {
                 specification = specification.and(buildSpecification(criteria.getApprovalStatus(), Vendor_.approvalStatus));
             }
-            if (criteria.getLocationId() != null) {
-                specification = specification.and(buildSpecification(criteria.getLocationId(),
-                    root -> root.join(Vendor_.location, JoinType.LEFT).get(Location_.id)));
-            }
             if (criteria.getCompanyFunctionaryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCompanyFunctionaryId(),
                     root -> root.join(Vendor_.companyFunctionaries, JoinType.LEFT).get(CompanyFunctionary_.id)));
+            }
+            if (criteria.getLocationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getLocationId(),
+                    root -> root.join(Vendor_.locations, JoinType.LEFT).get(Location_.id)));
             }
             if (criteria.getPersonInChargeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getPersonInChargeId(),

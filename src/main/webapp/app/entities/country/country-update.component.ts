@@ -5,14 +5,24 @@ import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vue
 import CurrencyService from '../currency/currency.service';
 import { ICurrency } from '@/shared/model/currency.model';
 
+import RegionService from '../region/region.service';
+import { IRegion } from '@/shared/model/region.model';
+
+import CityService from '../city/city.service';
+import { ICity } from '@/shared/model/city.model';
+
 import AlertService from '@/shared/alert/alert.service';
 import { ICountry, Country } from '@/shared/model/country.model';
 import CountryService from './country.service';
 
 const validations: any = {
   country: {
-    name: {},
-    code: {},
+    name: {
+      required
+    },
+    code: {
+      required
+    },
     currencyId: {
       required
     }
@@ -30,6 +40,14 @@ export default class CountryUpdate extends Vue {
   @Inject('currencyService') private currencyService: () => CurrencyService;
 
   public currencies: ICurrency[] = [];
+
+  @Inject('regionService') private regionService: () => RegionService;
+
+  public regions: IRegion[] = [];
+
+  @Inject('cityService') private cityService: () => CityService;
+
+  public cities: ICity[] = [];
   public isSaving = false;
 
   beforeRouteEnter(to, from, next) {
@@ -81,6 +99,16 @@ export default class CountryUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.currencies = res.data;
+      });
+    this.regionService()
+      .retrieve()
+      .then(res => {
+        this.regions = res.data;
+      });
+    this.cityService()
+      .retrieve()
+      .then(res => {
+        this.cities = res.data;
       });
   }
 }

@@ -67,8 +67,8 @@ describe('Country e2e test', () => {
       expect(await updatePage.nameInput.getAttribute('value')).to.match(/name/);
 
 
-      await updatePage.codeInput.sendKeys('code');
-      expect(await updatePage.codeInput.getAttribute('value')).to.match(/code/);
+      await updatePage.codeInput.sendKeys('RD');
+      expect(await updatePage.codeInput.getAttribute('value')).to.eq('RD');
 
       // await  selectLastOption(updatePage.currencySelect);
 
@@ -138,8 +138,8 @@ describe('Country e2e test', () => {
           expect(await updatePage.nameInput.getAttribute('value')).to.match(/modified/);
 
           await updatePage.codeInput.clear();
-          await updatePage.codeInput.sendKeys('modified');
-          expect(await updatePage.codeInput.getAttribute('value')).to.match(/modified/);
+          await updatePage.codeInput.sendKeys('OM');
+          expect(await updatePage.codeInput.getAttribute('value')).to.eq('OM');
 
 
         await updatePage.saveButton.click();

@@ -18,7 +18,9 @@
       },
       "name": "Name",
       "code": "Code",
-      "currency": "Currency"
+      "currency": "Currency",
+      "region": "Region",
+      "city": "City"
     }
   }
 }

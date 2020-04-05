@@ -16,6 +16,10 @@ public interface CountryMapper extends EntityMapper<CountryDTO, Country> {
     CountryDTO toDto(Country country);
 
     @Mapping(source = "currencyId", target = "currency")
+    @Mapping(target = "regions", ignore = true)
+    @Mapping(target = "removeRegion", ignore = true)
+    @Mapping(target = "cities", ignore = true)
+    @Mapping(target = "removeCity", ignore = true)
     Country toEntity(CountryDTO countryDTO);
 
     default Country fromId(Long id) {

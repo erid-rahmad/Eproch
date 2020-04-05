@@ -2,8 +2,8 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.Vendor;
-import com.bhp.opusb.domain.Location;
 import com.bhp.opusb.domain.CompanyFunctionary;
+import com.bhp.opusb.domain.Location;
 import com.bhp.opusb.domain.PersonInCharge;
 import com.bhp.opusb.domain.SupportingDocument;
 import com.bhp.opusb.domain.BusinessCategory;
@@ -129,16 +129,6 @@ public class VendorResourceIT {
             .type(DEFAULT_TYPE)
             .paymentCategory(DEFAULT_PAYMENT_CATEGORY)
             .approvalStatus(DEFAULT_APPROVAL_STATUS);
-        // Add required entity
-        Location location;
-        if (TestUtil.findAll(em, Location.class).isEmpty()) {
-            location = LocationResourceIT.createEntity(em);
-            em.persist(location);
-            em.flush();
-        } else {
-            location = TestUtil.findAll(em, Location.class).get(0);
-        }
-        vendor.setLocation(location);
         return vendor;
     }
     /**
@@ -160,16 +150,6 @@ public class VendorResourceIT {
             .type(UPDATED_TYPE)
             .paymentCategory(UPDATED_PAYMENT_CATEGORY)
             .approvalStatus(UPDATED_APPROVAL_STATUS);
-        // Add required entity
-        Location location;
-        if (TestUtil.findAll(em, Location.class).isEmpty()) {
-            location = LocationResourceIT.createUpdatedEntity(em);
-            em.persist(location);
-            em.flush();
-        } else {
-            location = TestUtil.findAll(em, Location.class).get(0);
-        }
-        vendor.setLocation(location);
         return vendor;
     }
 
@@ -1232,22 +1212,6 @@ public class VendorResourceIT {
 
     @Test
     @Transactional
-    public void getAllVendorsByLocationIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        Location location = vendor.getLocation();
-        vendorRepository.saveAndFlush(vendor);
-        Long locationId = location.getId();
-
-        // Get all the vendorList where location equals to locationId
-        defaultVendorShouldBeFound("locationId.equals=" + locationId);
-
-        // Get all the vendorList where location equals to locationId + 1
-        defaultVendorShouldNotBeFound("locationId.equals=" + (locationId + 1));
-    }
-
-
-    @Test
-    @Transactional
     public void getAllVendorsByCompanyFunctionaryIsEqualToSomething() throws Exception {
         // Initialize the database
         vendorRepository.saveAndFlush(vendor);
@@ -1263,6 +1227,26 @@ public class VendorResourceIT {
 
         // Get all the vendorList where companyFunctionary equals to companyFunctionaryId + 1
         defaultVendorShouldNotBeFound("companyFunctionaryId.equals=" + (companyFunctionaryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllVendorsByLocationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        vendorRepository.saveAndFlush(vendor);
+        Location location = LocationResourceIT.createEntity(em);
+        em.persist(location);
+        em.flush();
+        vendor.addLocation(location);
+        vendorRepository.saveAndFlush(vendor);
+        Long locationId = location.getId();
+
+        // Get all the vendorList where location equals to locationId
+        defaultVendorShouldBeFound("locationId.equals=" + locationId);
+
+        // Get all the vendorList where location equals to locationId + 1
+        defaultVendorShouldNotBeFound("locationId.equals=" + (locationId + 1));
     }
 
 

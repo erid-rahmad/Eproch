@@ -3,6 +3,8 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.Country;
 import com.bhp.opusb.domain.Currency;
+import com.bhp.opusb.domain.Region;
+import com.bhp.opusb.domain.City;
 import com.bhp.opusb.repository.CountryRepository;
 import com.bhp.opusb.service.CountryService;
 import com.bhp.opusb.service.dto.CountryDTO;
@@ -39,8 +41,8 @@ public class CountryResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_CODE = "BBBBBBBBBB";
+    private static final String DEFAULT_CODE = "WJ";
+    private static final String UPDATED_CODE = "BB";
 
     @Autowired
     private CountryRepository countryRepository;
@@ -152,6 +154,44 @@ public class CountryResourceIT {
         assertThat(countryList).hasSize(databaseSizeBeforeCreate);
     }
 
+
+    @Test
+    @Transactional
+    public void checkNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = countryRepository.findAll().size();
+        // set the field null
+        country.setName(null);
+
+        // Create the Country, which fails.
+        CountryDTO countryDTO = countryMapper.toDto(country);
+
+        restCountryMockMvc.perform(post("/api/countries")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(countryDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Country> countryList = countryRepository.findAll();
+        assertThat(countryList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkCodeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = countryRepository.findAll().size();
+        // set the field null
+        country.setCode(null);
+
+        // Create the Country, which fails.
+        CountryDTO countryDTO = countryMapper.toDto(country);
+
+        restCountryMockMvc.perform(post("/api/countries")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(countryDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Country> countryList = countryRepository.findAll();
+        assertThat(countryList).hasSize(databaseSizeBeforeTest);
+    }
 
     @Test
     @Transactional
@@ -372,6 +412,46 @@ public class CountryResourceIT {
 
         // Get all the countryList where currency equals to currencyId + 1
         defaultCountryShouldNotBeFound("currencyId.equals=" + (currencyId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCountriesByRegionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+        Region region = RegionResourceIT.createEntity(em);
+        em.persist(region);
+        em.flush();
+        country.addRegion(region);
+        countryRepository.saveAndFlush(country);
+        Long regionId = region.getId();
+
+        // Get all the countryList where region equals to regionId
+        defaultCountryShouldBeFound("regionId.equals=" + regionId);
+
+        // Get all the countryList where region equals to regionId + 1
+        defaultCountryShouldNotBeFound("regionId.equals=" + (regionId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCountriesByCityIsEqualToSomething() throws Exception {
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+        City city = CityResourceIT.createEntity(em);
+        em.persist(city);
+        em.flush();
+        country.addCity(city);
+        countryRepository.saveAndFlush(country);
+        Long cityId = city.getId();
+
+        // Get all the countryList where city equals to cityId
+        defaultCountryShouldBeFound("cityId.equals=" + cityId);
+
+        // Get all the countryList where city equals to cityId + 1
+        defaultCountryShouldNotBeFound("cityId.equals=" + (cityId + 1));
     }
 
     /**

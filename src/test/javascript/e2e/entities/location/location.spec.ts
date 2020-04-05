@@ -67,18 +67,11 @@ describe('Location e2e test', () => {
       expect(await updatePage.streetAddressInput.getAttribute('value')).to.match(/streetAddress/);
 
 
-      await updatePage.postalCodeInput.sendKeys('5');
-      expect(await updatePage.postalCodeInput.getAttribute('value')).to.eq('5');
+      await updatePage.postalCodeInput.sendKeys('postalCode');
+      expect(await updatePage.postalCodeInput.getAttribute('value')).to.match(/postalCode/);
 
-
-      await updatePage.cityInput.sendKeys('city');
-      expect(await updatePage.cityInput.getAttribute('value')).to.match(/city/);
-
-
-      await updatePage.stateProvinceInput.sendKeys('stateProvince');
-      expect(await updatePage.stateProvinceInput.getAttribute('value')).to.match(/stateProvince/);
-
-      // await  selectLastOption(updatePage.countrySelect);
+      // await  selectLastOption(updatePage.citySelect);
+      // await  selectLastOption(updatePage.vendorSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
       await updatePage.saveButton.click();
@@ -145,17 +138,9 @@ describe('Location e2e test', () => {
           await updatePage.streetAddressInput.sendKeys('modified');
           expect(await updatePage.streetAddressInput.getAttribute('value')).to.match(/modified/);
 
-          await clear(updatePage.postalCodeInput);
-          await updatePage.postalCodeInput.sendKeys('6');
-          expect(await updatePage.postalCodeInput.getAttribute('value')).to.eq('6');
-
-          await updatePage.cityInput.clear();
-          await updatePage.cityInput.sendKeys('modified');
-          expect(await updatePage.cityInput.getAttribute('value')).to.match(/modified/);
-
-          await updatePage.stateProvinceInput.clear();
-          await updatePage.stateProvinceInput.sendKeys('modified');
-          expect(await updatePage.stateProvinceInput.getAttribute('value')).to.match(/modified/);
+          await updatePage.postalCodeInput.clear();
+          await updatePage.postalCodeInput.sendKeys('modified');
+          expect(await updatePage.postalCodeInput.getAttribute('value')).to.match(/modified/);
 
 
         await updatePage.saveButton.click();

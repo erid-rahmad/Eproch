@@ -26,7 +26,7 @@ describe('Vendor e2e test', () => {
   let updatePage: VendorUpdatePage;
   let detailsPage: VendorDetailsPage;
   let listPage: VendorComponentsPage;
-  /*let deleteDialog: VendorDeleteDialog;*/
+  let deleteDialog: VendorDeleteDialog;
   let beforeRecordsCount = 0;
 
   before(async () => {
@@ -61,19 +61,15 @@ describe('Vendor e2e test', () => {
       expect(await updatePage.title.getAttribute('id')).to.match(/opusWebApp.vendor.home.createOrEditLabel/);
     });
 
-    /* it('should create and save Vendors', async () => {
-
+    it('should create and save Vendors', async () => {
       await updatePage.codeInput.sendKeys('code');
       expect(await updatePage.codeInput.getAttribute('value')).to.match(/code/);
-
 
       await updatePage.nameInput.sendKeys('name');
       expect(await updatePage.nameInput.getAttribute('value')).to.match(/name/);
 
-
       await updatePage.npwpInput.sendKeys('5');
       expect(await updatePage.npwpInput.getAttribute('value')).to.eq('5');
-
 
       const selectedBranch = await updatePage.branchInput.isSelected();
       if (selectedBranch) {
@@ -84,32 +80,24 @@ describe('Vendor e2e test', () => {
         expect(await updatePage.branchInput.isSelected()).to.be.true;
       }
 
-
       await updatePage.emailInput.sendKeys('email');
       expect(await updatePage.emailInput.getAttribute('value')).to.match(/email/);
-
 
       await updatePage.phoneInput.sendKeys('phone');
       expect(await updatePage.phoneInput.getAttribute('value')).to.match(/phone/);
 
-
       await updatePage.faxInput.sendKeys('fax');
       expect(await updatePage.faxInput.getAttribute('value')).to.match(/fax/);
-
 
       await updatePage.websiteInput.sendKeys('website');
       expect(await updatePage.websiteInput.getAttribute('value')).to.match(/website/);
 
-
       await selectLastOption(updatePage.typeSelect);
-
 
       await selectLastOption(updatePage.paymentCategorySelect);
 
-
       await selectLastOption(updatePage.approvalStatusSelect);
 
-      // await  selectLastOption(updatePage.locationSelect);
       // await  selectLastOption(updatePage.businessCategorySelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
@@ -123,13 +111,10 @@ describe('Vendor e2e test', () => {
 
       await waitUntilCount(listPage.records, beforeRecordsCount + 1);
       expect(await listPage.records.count()).to.eq(beforeRecordsCount + 1);
-    });*/
+    });
 
-    /*
     describe('Details, Update, Delete flow', () => {
-
       after(async () => {
-
         const deleteButton = listPage.getDeleteButton(listPage.records.first());
         await click(deleteButton);
 
@@ -149,7 +134,6 @@ describe('Vendor e2e test', () => {
       });
 
       it('should load details Vendor page and fetch data', async () => {
-
         const detailsButton = listPage.getDetailsButton(listPage.records.first());
         await click(detailsButton);
 
@@ -165,7 +149,6 @@ describe('Vendor e2e test', () => {
       });
 
       it('should load edit Vendor page, fetch data and update', async () => {
-
         const editButton = listPage.getEditButton(listPage.records.first());
         await click(editButton);
 
@@ -173,43 +156,42 @@ describe('Vendor e2e test', () => {
 
         expect(await updatePage.title.getText()).not.to.be.empty;
 
-          await updatePage.codeInput.clear();
-          await updatePage.codeInput.sendKeys('modified');
-          expect(await updatePage.codeInput.getAttribute('value')).to.match(/modified/);
+        await updatePage.codeInput.clear();
+        await updatePage.codeInput.sendKeys('modified');
+        expect(await updatePage.codeInput.getAttribute('value')).to.match(/modified/);
 
-          await updatePage.nameInput.clear();
-          await updatePage.nameInput.sendKeys('modified');
-          expect(await updatePage.nameInput.getAttribute('value')).to.match(/modified/);
+        await updatePage.nameInput.clear();
+        await updatePage.nameInput.sendKeys('modified');
+        expect(await updatePage.nameInput.getAttribute('value')).to.match(/modified/);
 
-          await clear(updatePage.npwpInput);
-          await updatePage.npwpInput.sendKeys('6');
-          expect(await updatePage.npwpInput.getAttribute('value')).to.eq('6');
+        await clear(updatePage.npwpInput);
+        await updatePage.npwpInput.sendKeys('6');
+        expect(await updatePage.npwpInput.getAttribute('value')).to.eq('6');
 
-          const selectedBranch = await updatePage.branchInput.isSelected();
-          if (selectedBranch) {
-            await updatePage.branchInput.click();
-            expect(await updatePage.branchInput.isSelected()).to.be.false;
-          } else {
-            await updatePage.branchInput.click();
-            expect(await updatePage.branchInput.isSelected()).to.be.true;
-          }
+        const selectedBranch = await updatePage.branchInput.isSelected();
+        if (selectedBranch) {
+          await updatePage.branchInput.click();
+          expect(await updatePage.branchInput.isSelected()).to.be.false;
+        } else {
+          await updatePage.branchInput.click();
+          expect(await updatePage.branchInput.isSelected()).to.be.true;
+        }
 
-          await updatePage.emailInput.clear();
-          await updatePage.emailInput.sendKeys('modified');
-          expect(await updatePage.emailInput.getAttribute('value')).to.match(/modified/);
+        await updatePage.emailInput.clear();
+        await updatePage.emailInput.sendKeys('modified');
+        expect(await updatePage.emailInput.getAttribute('value')).to.match(/modified/);
 
-          await updatePage.phoneInput.clear();
-          await updatePage.phoneInput.sendKeys('modified');
-          expect(await updatePage.phoneInput.getAttribute('value')).to.match(/modified/);
+        await updatePage.phoneInput.clear();
+        await updatePage.phoneInput.sendKeys('modified');
+        expect(await updatePage.phoneInput.getAttribute('value')).to.match(/modified/);
 
-          await updatePage.faxInput.clear();
-          await updatePage.faxInput.sendKeys('modified');
-          expect(await updatePage.faxInput.getAttribute('value')).to.match(/modified/);
+        await updatePage.faxInput.clear();
+        await updatePage.faxInput.sendKeys('modified');
+        expect(await updatePage.faxInput.getAttribute('value')).to.match(/modified/);
 
-          await updatePage.websiteInput.clear();
-          await updatePage.websiteInput.sendKeys('modified');
-          expect(await updatePage.websiteInput.getAttribute('value')).to.match(/modified/);
-
+        await updatePage.websiteInput.clear();
+        await updatePage.websiteInput.sendKeys('modified');
+        expect(await updatePage.websiteInput.getAttribute('value')).to.match(/modified/);
 
         await updatePage.saveButton.click();
 
@@ -220,6 +202,5 @@ describe('Vendor e2e test', () => {
         await waitUntilCount(listPage.records, beforeRecordsCount + 1);
       });
     });
-    */
   });
 });

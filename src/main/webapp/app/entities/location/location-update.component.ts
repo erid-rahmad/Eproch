@@ -2,8 +2,11 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
 
-import CountryService from '../country/country.service';
-import { ICountry } from '@/shared/model/country.model';
+import CityService from '../city/city.service';
+import { ICity } from '@/shared/model/city.model';
+
+import VendorService from '../vendor/vendor.service';
+import { IVendor } from '@/shared/model/vendor.model';
 
 import AlertService from '@/shared/alert/alert.service';
 import { ILocation, Location } from '@/shared/model/location.model';
@@ -11,15 +14,11 @@ import LocationService from './location.service';
 
 const validations: any = {
   location: {
-    streetAddress: {},
-    postalCode: {
-      numeric,
-      min: minValue(5),
-      max: maxValue(5)
+    streetAddress: {
+      required
     },
-    city: {},
-    stateProvince: {},
-    countryId: {
+    postalCode: {},
+    cityId: {
       required
     }
   }
@@ -33,9 +32,13 @@ export default class LocationUpdate extends Vue {
   @Inject('locationService') private locationService: () => LocationService;
   public location: ILocation = new Location();
 
-  @Inject('countryService') private countryService: () => CountryService;
+  @Inject('cityService') private cityService: () => CityService;
 
-  public countries: ICountry[] = [];
+  public cities: ICity[] = [];
+
+  @Inject('vendorService') private vendorService: () => VendorService;
+
+  public vendors: IVendor[] = [];
   public isSaving = false;
 
   beforeRouteEnter(to, from, next) {
@@ -83,10 +86,15 @@ export default class LocationUpdate extends Vue {
   }
 
   public initRelationships(): void {
-    this.countryService()
+    this.cityService()
       .retrieve()
       .then(res => {
-        this.countries = res.data;
+        this.cities = res.data;
+      });
+    this.vendorService()
+      .retrieve()
+      .then(res => {
+        this.vendors = res.data;
       });
   }
 }

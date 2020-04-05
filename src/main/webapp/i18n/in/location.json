@@ -19,8 +19,7 @@
       "streetAddress": "Street Address",
       "postalCode": "Postal Code",
       "city": "City",
-      "stateProvince": "State Province",
-      "country": "Country"
+      "vendor": "Vendor"
     }
   }
 }

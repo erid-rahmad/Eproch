@@ -28,13 +28,11 @@ public class LocationCriteria implements Serializable, Criteria {
 
     private StringFilter streetAddress;
 
-    private IntegerFilter postalCode;
+    private StringFilter postalCode;
 
-    private StringFilter city;
+    private LongFilter cityId;
 
-    private StringFilter stateProvince;
-
-    private LongFilter countryId;
+    private LongFilter vendorId;
 
     public LocationCriteria() {
     }
@@ -43,9 +41,8 @@ public class LocationCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.streetAddress = other.streetAddress == null ? null : other.streetAddress.copy();
         this.postalCode = other.postalCode == null ? null : other.postalCode.copy();
-        this.city = other.city == null ? null : other.city.copy();
-        this.stateProvince = other.stateProvince == null ? null : other.stateProvince.copy();
-        this.countryId = other.countryId == null ? null : other.countryId.copy();
+        this.cityId = other.cityId == null ? null : other.cityId.copy();
+        this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
     }
 
     @Override
@@ -69,36 +66,28 @@ public class LocationCriteria implements Serializable, Criteria {
         this.streetAddress = streetAddress;
     }
 
-    public IntegerFilter getPostalCode() {
+    public StringFilter getPostalCode() {
         return postalCode;
     }
 
-    public void setPostalCode(IntegerFilter postalCode) {
+    public void setPostalCode(StringFilter postalCode) {
         this.postalCode = postalCode;
     }
 
-    public StringFilter getCity() {
-        return city;
+    public LongFilter getCityId() {
+        return cityId;
     }
 
-    public void setCity(StringFilter city) {
-        this.city = city;
+    public void setCityId(LongFilter cityId) {
+        this.cityId = cityId;
     }
 
-    public StringFilter getStateProvince() {
-        return stateProvince;
+    public LongFilter getVendorId() {
+        return vendorId;
     }
 
-    public void setStateProvince(StringFilter stateProvince) {
-        this.stateProvince = stateProvince;
-    }
-
-    public LongFilter getCountryId() {
-        return countryId;
-    }
-
-    public void setCountryId(LongFilter countryId) {
-        this.countryId = countryId;
+    public void setVendorId(LongFilter vendorId) {
+        this.vendorId = vendorId;
     }
 
 
@@ -115,9 +104,8 @@ public class LocationCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(streetAddress, that.streetAddress) &&
             Objects.equals(postalCode, that.postalCode) &&
-            Objects.equals(city, that.city) &&
-            Objects.equals(stateProvince, that.stateProvince) &&
-            Objects.equals(countryId, that.countryId);
+            Objects.equals(cityId, that.cityId) &&
+            Objects.equals(vendorId, that.vendorId);
     }
 
     @Override
@@ -126,9 +114,8 @@ public class LocationCriteria implements Serializable, Criteria {
         id,
         streetAddress,
         postalCode,
-        city,
-        stateProvince,
-        countryId
+        cityId,
+        vendorId
         );
     }
 
@@ -138,9 +125,8 @@ public class LocationCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (streetAddress != null ? "streetAddress=" + streetAddress + ", " : "") +
                 (postalCode != null ? "postalCode=" + postalCode + ", " : "") +
-                (city != null ? "city=" + city + ", " : "") +
-                (stateProvince != null ? "stateProvince=" + stateProvince + ", " : "") +
-                (countryId != null ? "countryId=" + countryId + ", " : "") +
+                (cityId != null ? "cityId=" + cityId + ", " : "") +
+                (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
             "}";
     }
 

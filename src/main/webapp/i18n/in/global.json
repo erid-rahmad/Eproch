@@ -19,6 +19,9 @@
         "companyFunctionary": "Company Functionary",
         "reference": "Reference",
         "referenceList": "Reference List",
+        "region": "Region",
+        "city": "City",
+        "permission": "Permission",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

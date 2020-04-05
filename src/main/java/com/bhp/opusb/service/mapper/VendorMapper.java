@@ -9,15 +9,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link Vendor} and its DTO {@link VendorDTO}.
  */
-@Mapper(componentModel = "spring", uses = {LocationMapper.class, BusinessCategoryMapper.class})
+@Mapper(componentModel = "spring", uses = {BusinessCategoryMapper.class})
 public interface VendorMapper extends EntityMapper<VendorDTO, Vendor> {
 
-    @Mapping(source = "location.id", target = "locationId")
-    VendorDTO toDto(Vendor vendor);
 
-    @Mapping(source = "locationId", target = "location")
     @Mapping(target = "companyFunctionaries", ignore = true)
     @Mapping(target = "removeCompanyFunctionary", ignore = true)
+    @Mapping(target = "locations", ignore = true)
+    @Mapping(target = "removeLocation", ignore = true)
     @Mapping(target = "personInCharges", ignore = true)
     @Mapping(target = "removePersonInCharge", ignore = true)
     @Mapping(target = "supportingDocuments", ignore = true)
