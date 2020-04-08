@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.Currency} entity.
  */
-public class CurrencyDTO implements Serializable {
+public class CurrencyDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 

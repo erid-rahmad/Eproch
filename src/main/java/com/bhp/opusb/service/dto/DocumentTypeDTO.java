@@ -1,13 +1,18 @@
 package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
+
+import com.bhp.opusb.domain.DocumentTypeBusinessCategory;
+
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.DocumentType} entity.
  */
-public class DocumentTypeDTO implements Serializable {
+public class DocumentTypeDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 
@@ -31,7 +36,8 @@ public class DocumentTypeDTO implements Serializable {
     private Boolean additionalForProfessional;
 
     private Boolean active;
-
+    
+    private Set<DocumentTypeBusinessCategory> documentTypeBusinessCategories = new HashSet<>();
     
     public Long getId() {
         return id;
@@ -119,6 +125,14 @@ public class DocumentTypeDTO implements Serializable {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Set<DocumentTypeBusinessCategory> getDocumentTypeBusinessCategories() {
+        return documentTypeBusinessCategories;
+    }
+
+    public void setDocumentTypeBusinessCategories(Set<DocumentTypeBusinessCategory> documentTypeBusinessCategories) {
+        this.documentTypeBusinessCategories = documentTypeBusinessCategories;
     }
 
     @Override

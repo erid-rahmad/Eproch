@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface BusinessCategoryMapper extends EntityMapper<BusinessCategoryDTO, BusinessCategory> {
 
     @Mapping(source = "parentCategory.id", target = "parentCategoryId")
+    @Mapping(source = "parentCategory.name", target = "parentCategoryName")
     BusinessCategoryDTO toDto(BusinessCategory businessCategory);
 
     @Mapping(target = "businessCategories", ignore = true)

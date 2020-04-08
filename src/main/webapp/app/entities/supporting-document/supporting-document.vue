@@ -2,7 +2,7 @@
     <div>
         <h2 id="page-heading">
             <span v-text="$t('opusWebApp.supportingDocument.home.title')" id="supporting-document-heading">Supporting Documents</span>
-            <router-link :to="{name: 'SupportingDocumentCreate'}" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-supporting-document">
+            <router-link :to="{name: 'SupportingDocumentNew'}" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-supporting-document">
                 <font-awesome-icon icon="plus"></font-awesome-icon>
                 <span  v-text="$t('opusWebApp.supportingDocument.home.createLabel')">
                     Create a new Supporting Document
@@ -37,7 +37,7 @@
                 <tr v-for="supportingDocument in supportingDocuments"
                     :key="supportingDocument.id">
                     <td>
-                        <router-link :to="{name: 'SupportingDocumentView', params: {supportingDocumentId: supportingDocument.id}}">{{supportingDocument.id}}</router-link>
+                        <router-link :to="{name: 'SupportingDocumentDetails', params: {supportingDocumentId: supportingDocument.id}}">{{supportingDocument.id}}</router-link>
                     </td>
                     <td>{{supportingDocument.documentNo}}</td>
                     <td>{{supportingDocument.expirationDate}}</td>
@@ -57,11 +57,11 @@
                     </td>
                     <td class="text-right">
                         <div class="btn-group">
-                            <router-link :to="{name: 'SupportingDocumentView', params: {supportingDocumentId: supportingDocument.id}}" tag="button" class="btn btn-info btn-sm details">
+                            <router-link :to="{name: 'SupportingDocumentDetails', params: {supportingDocumentId: supportingDocument.id}}" tag="button" class="btn btn-info btn-sm details">
                                 <font-awesome-icon icon="eye"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
                             </router-link>
-                            <router-link :to="{name: 'SupportingDocumentEdit', params: {supportingDocumentId: supportingDocument.id}}"  tag="button" class="btn btn-primary btn-sm edit">
+                            <router-link :to="{name: 'DocumentTypeUpdate', params: {supportingDocumentId: supportingDocument.id}}"  tag="button" class="btn btn-primary btn-sm edit">
                                 <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
                             </router-link>

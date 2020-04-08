@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface CountryMapper extends EntityMapper<CountryDTO, Country> {
 
     @Mapping(source = "currency.id", target = "currencyId")
+    @Mapping(source = "currency.code", target = "currencyCode")
     CountryDTO toDto(Country country);
 
     @Mapping(source = "currencyId", target = "currency")

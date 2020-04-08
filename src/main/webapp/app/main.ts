@@ -6,6 +6,7 @@ import ElementUI from 'element-ui';
 import SvgIcon from 'vue-svgicon';
 import '@/styles/element-variables.scss';
 import '@/styles/index.scss';
+import '@/assets/icons/components';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './app.vue';

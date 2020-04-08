@@ -44,6 +44,7 @@
         "audits": "Audit",
         "apidocs": "API",
         "database": "Database",
+        "entity-audit": "Entity Audit",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
       "language": "Bahasa"
@@ -150,5 +151,11 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "Ini bagian footer"
+  "footer": "Ini bagian footer",
+  "tagsView": {
+    "refresh": "Muat Ulang",
+    "close": "Tutup",
+    "closeOthers": "Tutup Lainnya",
+    "closeAll": "Tutup Semua"
+  }
 }

@@ -30,7 +30,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new DocumentTypeService();
 
-      elemDefault = new DocumentType(0, 'AAAAAAA', 'AAAAAAA', false, 'AAAAAAA', 'AAAAAAA', false, false, false, false, false);
+      elemDefault = new DocumentType(0, 'AAAAAAA', 'AAAAAAA', false, 'AAAAAAA', 'AAAAAAA', false, false, false, false, false, []);
     });
 
     describe('Service methods', () => {

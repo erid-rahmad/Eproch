@@ -30,7 +30,7 @@
                     </dt>
                     <dd>
                         <div v-if="supportingDocument.typeId">
-                            <router-link :to="{name: 'DocumentTypeView', params: {documentTypeId: supportingDocument.typeId}}">{{supportingDocument.typeId}}</router-link>
+                            <router-link :to="{name: 'DocumentTypeDetails', params: {documentTypeId: supportingDocument.typeId}}">{{supportingDocument.typeId}}</router-link>
                         </div>
                     </dd>
                     <dt>
@@ -47,7 +47,7 @@
                         class="btn btn-info">
                     <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
                 </button>
-                <router-link v-if="supportingDocument.id" :to="{name: 'SupportingDocumentEdit', params: {supportingDocumentId: supportingDocument.id}}" tag="button" class="btn btn-primary">
+                <router-link v-if="supportingDocument.id" :to="{name: 'DocumentTypeUpdate', params: {supportingDocumentId: supportingDocument.id}}" tag="button" class="btn btn-primary">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
                 </router-link>
             </div>

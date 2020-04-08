@@ -17,7 +17,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "supporting_document")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class SupportingDocument implements Serializable {
+public class SupportingDocument extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

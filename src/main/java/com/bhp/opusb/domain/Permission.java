@@ -15,7 +15,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "permission")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Permission implements Serializable {
+public class Permission extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

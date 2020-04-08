@@ -1,11 +1,11 @@
-id;name;code;currency_id
-1;content backing up Usability;"MK";1
-2;responsive Solomon Islands Dollar interface;"OJ";2
-3;Personal Loan Account;"HJ";3
-4;Operations;"GP";4
-5;scalable;"HE";5
-6;Music Direct;"GJ";6
-7;SMS deposit Gorgeous;"BW";7
-8;compress Enterprise-wide;"VL";8
-9;Rustic Rubber Computer;"XV";9
-10;sexy;"YS";10
+id;name;code
+1;content backing up Usability;"MK"
+2;responsive Solomon Islands Dollar interface;"OJ"
+3;Personal Loan Account;"HJ"
+4;Operations;"GP"
+5;scalable;"HE"
+6;Music Direct;"GJ"
+7;SMS deposit Gorgeous;"BW"
+8;compress Enterprise-wide;"VL"
+9;Rustic Rubber Computer;"XV"
+10;sexy;"YS"

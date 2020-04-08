@@ -1,6 +1,8 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.DocumentType;
+import com.bhp.opusb.domain.DocumentTypeBusinessCategory;
+import com.bhp.opusb.repository.DocumentTypeBusinessCategoryRepository;
 import com.bhp.opusb.repository.DocumentTypeRepository;
 import com.bhp.opusb.service.dto.DocumentTypeDTO;
 import com.bhp.opusb.service.mapper.DocumentTypeMapper;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Set;
 
 /**
  * Service Implementation for managing {@link DocumentType}.
@@ -24,11 +27,13 @@ public class DocumentTypeService {
     private final Logger log = LoggerFactory.getLogger(DocumentTypeService.class);
 
     private final DocumentTypeRepository documentTypeRepository;
+    private final DocumentTypeBusinessCategoryRepository documentTypeBusinessCategoryRepository;
 
     private final DocumentTypeMapper documentTypeMapper;
 
-    public DocumentTypeService(DocumentTypeRepository documentTypeRepository, DocumentTypeMapper documentTypeMapper) {
+    public DocumentTypeService(DocumentTypeRepository documentTypeRepository, DocumentTypeBusinessCategoryRepository documentTypeBusinessCategoryRepository, DocumentTypeMapper documentTypeMapper) {
         this.documentTypeRepository = documentTypeRepository;
+        this.documentTypeBusinessCategoryRepository = documentTypeBusinessCategoryRepository;
         this.documentTypeMapper = documentTypeMapper;
     }
 
@@ -41,7 +46,21 @@ public class DocumentTypeService {
     public DocumentTypeDTO save(DocumentTypeDTO documentTypeDTO) {
         log.debug("Request to save DocumentType : {}", documentTypeDTO);
         DocumentType documentType = documentTypeMapper.toEntity(documentTypeDTO);
+        Set<DocumentTypeBusinessCategory> businessCategories = documentType.getDocumentTypeBusinessCategories();
+        boolean isNew = documentType.getId() == null;
+        
+        documentType.setDocumentTypeBusinessCategories(null);
         documentType = documentTypeRepository.save(documentType);
+
+        if (isNew) {
+            for (DocumentTypeBusinessCategory category : businessCategories) {
+                category.setDocumentType(documentType);
+            }
+
+        }
+
+        documentTypeBusinessCategoryRepository.saveAll(businessCategories);
+        documentType.setDocumentTypeBusinessCategories(businessCategories);
         return documentTypeMapper.toDto(documentType);
     }
 

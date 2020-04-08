@@ -21,7 +21,7 @@
                     </dt>
                     <dd>
                         <div v-if="businessCategory.parentCategoryId">
-                            <router-link :to="{name: 'BusinessCategoryView', params: {businessCategoryId: businessCategory.parentCategoryId}}">{{businessCategory.parentCategoryId}}</router-link>
+                            <router-link :to="{name: 'BusinessCategoryDetails', params: {businessCategoryId: businessCategory.parentCategoryId}}">{{businessCategory.parentCategoryId}}</router-link>
                         </div>
                     </dd>
                 </dl>
@@ -30,7 +30,7 @@
                         class="btn btn-info">
                     <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
                 </button>
-                <router-link v-if="businessCategory.id" :to="{name: 'BusinessCategoryEdit', params: {businessCategoryId: businessCategory.id}}" tag="button" class="btn btn-primary">
+                <router-link v-if="businessCategory.id" :to="{name: 'BusinessCategoryUpdate', params: {businessCategoryId: businessCategory.id}}" tag="button" class="btn btn-primary">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
                 </router-link>
             </div>

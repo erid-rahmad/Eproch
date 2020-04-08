@@ -2,7 +2,7 @@
     <div>
         <h2 id="page-heading">
             <span v-text="$t('opusWebApp.documentTypeBusinessCategory.home.title')" id="document-type-business-category-heading">Document Type Business Categories</span>
-            <router-link :to="{name: 'DocumentTypeBusinessCategoryCreate'}" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-document-type-business-category">
+            <router-link :to="{name: 'DocumentTypeBusinessCategoryNew'}" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-document-type-business-category">
                 <font-awesome-icon icon="plus"></font-awesome-icon>
                 <span  v-text="$t('opusWebApp.documentTypeBusinessCategory.home.createLabel')">
                     Create a new Document Type Business Category
@@ -36,27 +36,27 @@
                 <tr v-for="documentTypeBusinessCategory in documentTypeBusinessCategories"
                     :key="documentTypeBusinessCategory.id">
                     <td>
-                        <router-link :to="{name: 'DocumentTypeBusinessCategoryView', params: {documentTypeBusinessCategoryId: documentTypeBusinessCategory.id}}">{{documentTypeBusinessCategory.id}}</router-link>
+                        <router-link :to="{name: 'DocumentTypeBusinessCategoryDetails', params: {documentTypeBusinessCategoryId: documentTypeBusinessCategory.id}}">{{documentTypeBusinessCategory.id}}</router-link>
                     </td>
                     <td>{{documentTypeBusinessCategory.mandatory}}</td>
                     <td>{{documentTypeBusinessCategory.additional}}</td>
                     <td>
                         <div v-if="documentTypeBusinessCategory.documentType">
-                            <router-link :to="{name: 'DocumentTypeView', params: {documentTypeId: documentTypeBusinessCategory.documentType.id}}">{{documentTypeBusinessCategory.documentType.id}}</router-link>
+                            <router-link :to="{name: 'DocumentTypeDetails', params: {documentTypeId: documentTypeBusinessCategory.documentType.id}}">{{documentTypeBusinessCategory.documentType.id}}</router-link>
                         </div>
                     </td>
                     <td>
                         <div v-if="documentTypeBusinessCategory.businessCategory">
-                            <router-link :to="{name: 'BusinessCategoryView', params: {businessCategoryId: documentTypeBusinessCategory.businessCategory.id}}">{{documentTypeBusinessCategory.businessCategory.id}}</router-link>
+                            <router-link :to="{name: 'BusinessCategoryDetails', params: {businessCategoryId: documentTypeBusinessCategory.businessCategory.id}}">{{documentTypeBusinessCategory.businessCategory.id}}</router-link>
                         </div>
                     </td>
                     <td class="text-right">
                         <div class="btn-group">
-                            <router-link :to="{name: 'DocumentTypeBusinessCategoryView', params: {documentTypeBusinessCategoryId: documentTypeBusinessCategory.id}}" tag="button" class="btn btn-info btn-sm details">
+                            <router-link :to="{name: 'DocumentTypeBusinessCategoryDetails', params: {documentTypeBusinessCategoryId: documentTypeBusinessCategory.id}}" tag="button" class="btn btn-info btn-sm details">
                                 <font-awesome-icon icon="eye"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
                             </router-link>
-                            <router-link :to="{name: 'DocumentTypeBusinessCategoryEdit', params: {documentTypeBusinessCategoryId: documentTypeBusinessCategory.id}}"  tag="button" class="btn btn-primary btn-sm edit">
+                            <router-link :to="{name: 'DocumentTypeBusinessCategoryUpdate', params: {documentTypeBusinessCategoryId: documentTypeBusinessCategory.id}}"  tag="button" class="btn btn-primary btn-sm edit">
                                 <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
                             </router-link>

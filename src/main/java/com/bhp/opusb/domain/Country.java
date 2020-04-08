@@ -17,7 +17,7 @@ import java.util.Set;
 @Entity
 @Table(name = "country")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Country implements Serializable {
+public class Country extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,8 +35,7 @@ public class Country implements Serializable {
     @Column(name = "code", nullable = false, unique = true)
     private String code;
 
-    @OneToOne(optional = false)
-    @NotNull
+    @OneToOne
     @JoinColumn(unique = true)
     private Currency currency;
 

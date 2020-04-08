@@ -10,12 +10,13 @@ import BusinessCategoryService from './business-category.service';
 @Component
 export default class BusinessCategory extends mixins(Vue2Filters.mixin, AlertMixin) {
   @Inject('businessCategoryService') private businessCategoryService: () => BusinessCategoryService;
+  private showDeleteDialog: boolean = false;
   private removeId: number = null;
   public itemsPerPage = 20;
   public queryCount: number = null;
   public page = 1;
   public previousPage = 1;
-  public propOrder = 'id';
+  public propOrder = 'name';
   public reverse = false;
   public totalItems = 0;
 
@@ -57,9 +58,7 @@ export default class BusinessCategory extends mixins(Vue2Filters.mixin, AlertMix
 
   public prepareRemove(instance: IBusinessCategory): void {
     this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
+    this.showDeleteDialog = true;
   }
 
   public removeBusinessCategory(): void {
@@ -67,8 +66,12 @@ export default class BusinessCategory extends mixins(Vue2Filters.mixin, AlertMix
       .delete(this.removeId)
       .then(() => {
         const message = this.$t('opusWebApp.businessCategory.deleted', { param: this.removeId });
-        this.alertService().showAlert(message, 'danger');
-        this.getAlertFromStore();
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        })
         this.removeId = null;
         this.retrieveAllBusinessCategorys();
         this.closeDialog();
@@ -90,17 +93,38 @@ export default class BusinessCategory extends mixins(Vue2Filters.mixin, AlertMix
     }
   }
 
+  public handleSizeChange(size: number) {
+    this.itemsPerPage = size;
+    this.retrieveAllBusinessCategorys();
+  }
+
   public transition(): void {
     this.retrieveAllBusinessCategorys();
   }
 
+  public changeClassificationSelection(currentRow: IBusinessCategory) {
+    console.log('Selected classification#%d', currentRow.id);
+  }
+
   public changeOrder(propOrder): void {
-    this.propOrder = propOrder;
-    this.reverse = !this.reverse;
+    this.propOrder = propOrder.prop;
+    this.reverse = propOrder.order === 'ascending';
     this.transition();
   }
 
   public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
+    this.showDeleteDialog = false;
+  }
+
+  public openDetails(instance: IBusinessCategory) {
+    this.$router.push(`/business-category/${instance.id}/view`);
+  }
+
+  public add() {
+    this.$router.push('/business-category/new')
+  }
+
+  public edit(instance: IBusinessCategory) {
+    this.$router.push(`/business-category/${instance.id}/edit`);
   }
 }

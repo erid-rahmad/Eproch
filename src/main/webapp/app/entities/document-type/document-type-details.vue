@@ -70,7 +70,7 @@
                         class="btn btn-info">
                     <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
                 </button>
-                <router-link v-if="documentType.id" :to="{name: 'DocumentTypeEdit', params: {documentTypeId: documentType.id}}" tag="button" class="btn btn-primary">
+                <router-link v-if="documentType.id" :to="{name: 'DocumentTypeUpdate', params: {documentTypeId: documentType.id}}" tag="button" class="btn btn-primary">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
                 </router-link>
             </div>

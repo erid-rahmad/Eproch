@@ -37,15 +37,17 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/OpusWebApp
-    username: OpusWebApp
-    password:
+    url: jdbc:postgresql://localhost:5432/eproc
+    username: aaryadewa
+    password: aaryadewa
     hikari:
       poolName: Hikari
       auto-commit: false
   jpa:
     database-platform: io.github.jhipster.domain.util.FixedPostgreSQL10Dialect
     show-sql: true
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate.id.new_generator_mappings: true
       hibernate.connection.provider_disables_autocommit: true

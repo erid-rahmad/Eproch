@@ -2,8 +2,10 @@
   "opusWebApp": {
     "businessCategory": {
       "home": {
-        "title": "Business Categories",
-        "createLabel": "Create a new Business Category",
+        "title": "Business Classifications & Categories",
+        "categoryTitle": "Categories",
+        "subCategoryTitle": "Sub-categories",
+        "createLabel": "Create a new Classification",
         "createOrEditLabel": "Create or edit a Business Category",
         "notFound": "No Business Categories found"
       },

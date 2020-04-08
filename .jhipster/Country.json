@@ -24,7 +24,6 @@
             "relationshipType": "one-to-one",
             "otherEntityName": "currency",
             "otherEntityRelationshipName": "country",
-            "relationshipValidateRules": "required",
             "relationshipName": "currency",
             "otherEntityField": "id",
             "ownerSide": true
@@ -52,5 +51,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "enableEntityAudit": true
 }

@@ -22,9 +22,6 @@ const validations: any = {
     },
     code: {
       required
-    },
-    currencyId: {
-      required
     }
   }
 };
@@ -33,7 +30,6 @@ const validations: any = {
   validations
 })
 export default class CountryUpdate extends Vue {
-  @Inject('alertService') private alertService: () => AlertService;
   @Inject('countryService') private countryService: () => CountryService;
   public country: ICountry = new Country();
 
@@ -68,7 +64,12 @@ export default class CountryUpdate extends Vue {
           this.isSaving = false;
           this.$router.go(-1);
           const message = this.$t('opusWebApp.country.updated', { param: param.id });
-          this.alertService().showAlert(message, 'info');
+          this.$notify({
+            title: 'Success',
+            message: message.toString(),
+            type: 'info',
+            duration: 3000
+          })
         });
     } else {
       this.countryService()
@@ -77,7 +78,12 @@ export default class CountryUpdate extends Vue {
           this.isSaving = false;
           this.$router.go(-1);
           const message = this.$t('opusWebApp.country.created', { param: param.id });
-          this.alertService().showAlert(message, 'success');
+          this.$notify({
+            title: 'Success',
+            message: message.toString(),
+            type: 'success',
+            duration: 3000
+          })
         });
     }
   }

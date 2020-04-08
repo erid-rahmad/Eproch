@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.BusinessCategory} entity.
  */
-public class BusinessCategoryDTO implements Serializable {
+public class BusinessCategoryDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 
@@ -16,8 +16,8 @@ public class BusinessCategoryDTO implements Serializable {
 
     private String description;
 
-
     private Long parentCategoryId;
+    private String parentCategoryName;
     
     public Long getId() {
         return id;
@@ -51,6 +51,14 @@ public class BusinessCategoryDTO implements Serializable {
         this.parentCategoryId = businessCategoryId;
     }
 
+    public String getParentCategoryName() {
+        return parentCategoryName;
+    }
+
+    public void setParentCategoryName(String parentCategoryName) {
+        this.parentCategoryName = parentCategoryName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -79,6 +87,7 @@ public class BusinessCategoryDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", parentCategoryId=" + getParentCategoryId() +
+            ", parentCategoryName=" + getParentCategoryName() +
             "}";
     }
 }

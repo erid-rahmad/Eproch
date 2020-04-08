@@ -14,7 +14,7 @@ import com.bhp.opusb.domain.enumeration.VendorApprovalStatus;
  * A DTO for the {@link com.bhp.opusb.domain.Vendor} entity.
  */
 @ApiModel(description = "The Vendor entity.")
-public class VendorDTO implements Serializable {
+public class VendorDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 

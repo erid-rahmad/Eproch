@@ -10,12 +10,13 @@ import DocumentTypeService from './document-type.service';
 @Component
 export default class DocumentType extends mixins(Vue2Filters.mixin, AlertMixin) {
   @Inject('documentTypeService') private documentTypeService: () => DocumentTypeService;
+  private showDeleteDialog: boolean = false;
   private removeId: number = null;
   public itemsPerPage = 20;
   public queryCount: number = null;
   public page = 1;
   public previousPage = 1;
-  public propOrder = 'id';
+  public propOrder = 'name';
   public reverse = false;
   public totalItems = 0;
 
@@ -57,9 +58,7 @@ export default class DocumentType extends mixins(Vue2Filters.mixin, AlertMixin) 
 
   public prepareRemove(instance: IDocumentType): void {
     this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
+    this.showDeleteDialog = true;
   }
 
   public removeDocumentType(): void {
@@ -67,8 +66,12 @@ export default class DocumentType extends mixins(Vue2Filters.mixin, AlertMixin) 
       .delete(this.removeId)
       .then(() => {
         const message = this.$t('opusWebApp.documentType.deleted', { param: this.removeId });
-        this.alertService().showAlert(message, 'danger');
-        this.getAlertFromStore();
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        })
         this.removeId = null;
         this.retrieveAllDocumentTypes();
         this.closeDialog();
@@ -90,17 +93,34 @@ export default class DocumentType extends mixins(Vue2Filters.mixin, AlertMixin) 
     }
   }
 
+  public handleSizeChange(size: number) {
+    this.itemsPerPage = size;
+    this.retrieveAllDocumentTypes();
+  }
+
   public transition(): void {
     this.retrieveAllDocumentTypes();
   }
 
   public changeOrder(propOrder): void {
-    this.propOrder = propOrder;
-    this.reverse = !this.reverse;
+    this.propOrder = propOrder.prop;
+    this.reverse = propOrder.order === 'ascending';
     this.transition();
   }
 
   public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
+    this.showDeleteDialog = false;
+  }
+
+  public openDetails(instance: IDocumentType) {
+    this.$router.push(`/document-type/${instance.id}/view`);
+  }
+
+  public add() {
+    this.$router.push('/document-type/new')
+  }
+
+  public edit(instance: IDocumentType) {
+    this.$router.push(`/document-type/${instance.id}/edit`);
   }
 }

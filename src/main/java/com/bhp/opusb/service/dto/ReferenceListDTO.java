@@ -6,7 +6,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ReferenceList} entity.
  */
-public class ReferenceListDTO implements Serializable {
+public class ReferenceListDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 

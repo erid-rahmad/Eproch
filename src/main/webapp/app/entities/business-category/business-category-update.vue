@@ -1,47 +1,45 @@
 <template>
-    <div class="row justify-content-center">
-        <div class="col-8">
-            <form name="editForm" role="form" novalidate v-on:submit.prevent="save()" >
-                <h2 id="opusWebApp.businessCategory.home.createOrEditLabel" v-text="$t('opusWebApp.businessCategory.home.createOrEditLabel')">Create or edit a BusinessCategory</h2>
-                <div>
-                    <div class="form-group" v-if="businessCategory.id">
-                        <label for="id" v-text="$t('global.field.id')">ID</label>
-                        <input type="text" class="form-control" id="id" name="id"
-                               v-model="businessCategory.id" readonly />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.businessCategory.name')" for="business-category-name">Name</label>
-                        <input type="text" class="form-control" name="name" id="business-category-name"
-                            :class="{'valid': !$v.businessCategory.name.$invalid, 'invalid': $v.businessCategory.name.$invalid }" v-model="$v.businessCategory.name.$model"  required/>
-                        <div v-if="$v.businessCategory.name.$anyDirty && $v.businessCategory.name.$invalid">
-                            <small class="form-text text-danger" v-if="!$v.businessCategory.name.required" v-text="$t('entity.validation.required')">
-                                This field is required.
-                            </small>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.businessCategory.description')" for="business-category-description">Description</label>
-                        <input type="text" class="form-control" name="description" id="business-category-description"
-                            :class="{'valid': !$v.businessCategory.description.$invalid, 'invalid': $v.businessCategory.description.$invalid }" v-model="$v.businessCategory.description.$model" />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.businessCategory.parentCategory')" for="business-category-parentCategory">Parent Category</label>
-                        <select class="form-control" id="business-category-parentCategory" name="parentCategory" v-model="businessCategory.parentCategoryId">
-                            <option v-bind:value="null"></option>
-                            <option v-bind:value="businessCategoryOption.id" v-for="businessCategoryOption in businessCategories" :key="businessCategoryOption.id">{{businessCategoryOption.id}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div>
-                    <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">
-                        <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
-                    </button>
-                    <button type="submit" id="save-entity" :disabled="$v.businessCategory.$invalid || isSaving" class="btn btn-primary">
-                        <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
-                    </button>
-                </div>
-            </form>
+    <div class="app-container">
+        <div class="page-heading">
+            <h2 v-text="$t('opusWebApp.businessCategory.home.createOrEditLabel')">
+                Create or edit a Business Category
+            </h2>
         </div>
+        <el-form
+            ref="businessCategory"
+            label-width="256px"
+            :model="businessCategory"
+            :rules="rules"
+        >
+            <el-form-item :label="$t('opusWebApp.businessCategory.name')" prop="name" required>
+                <el-col :span="6">
+                    <el-input v-model="businessCategory.name" />
+                </el-col>
+            </el-form-item>
+            <el-form-item :label="$t('opusWebApp.businessCategory.description')" prop="description">
+                <el-col :span="6">
+                    <el-input v-model="businessCategory.description" />
+                </el-col>
+            </el-form-item>
+            <el-form-item :label="$t('opusWebApp.businessCategory.parentCategory')" prop="parentCategory">
+                <el-select
+                    filterable
+                    v-model="businessCategory.parentCategoryId"
+                    placeholder="Select Parent Category"
+                >
+                    <el-option
+                        v-for="businessCategory in businessCategories"
+                        :key="businessCategory.id"
+                        :label="businessCategory.name"
+                        :value="businessCategory.id"
+                    />
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button type="primary" :loading="isSaving" @click.prevent="save()">{{ $t('entity.action.save') }}</el-button>
+                <el-button @click="previousState()">{{ $t('entity.action.cancel') }}</el-button>
+            </el-form-item>
+        </el-form>
     </div>
 </template>
 <script lang="ts" src="./business-category-update.component.ts">

@@ -2,7 +2,7 @@
     <div>
         <h2 id="page-heading">
             <span v-text="$t('opusWebApp.currency.home.title')" id="currency-heading">Currencies</span>
-            <router-link :to="{name: 'CurrencyCreate'}" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-currency">
+            <router-link :to="{name: 'CurrencyNew'}" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-currency">
                 <font-awesome-icon icon="plus"></font-awesome-icon>
                 <span  v-text="$t('opusWebApp.currency.home.createLabel')">
                     Create a new Currency
@@ -35,18 +35,18 @@
                 <tr v-for="currency in currencies"
                     :key="currency.id">
                     <td>
-                        <router-link :to="{name: 'CurrencyView', params: {currencyId: currency.id}}">{{currency.id}}</router-link>
+                        <router-link :to="{name: 'CountryDetails', params: {currencyId: currency.id}}">{{currency.id}}</router-link>
                     </td>
                     <td>{{currency.code}}</td>
                     <td>{{currency.symbol}}</td>
                     <td>{{currency.name}}</td>
                     <td class="text-right">
                         <div class="btn-group">
-                            <router-link :to="{name: 'CurrencyView', params: {currencyId: currency.id}}" tag="button" class="btn btn-info btn-sm details">
+                            <router-link :to="{name: 'CountryDetails', params: {currencyId: currency.id}}" tag="button" class="btn btn-info btn-sm details">
                                 <font-awesome-icon icon="eye"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
                             </router-link>
-                            <router-link :to="{name: 'CurrencyEdit', params: {currencyId: currency.id}}"  tag="button" class="btn btn-primary btn-sm edit">
+                            <router-link :to="{name: 'CountryUpdate', params: {currencyId: currency.id}}"  tag="button" class="btn btn-primary btn-sm edit">
                                 <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                 <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
                             </router-link>

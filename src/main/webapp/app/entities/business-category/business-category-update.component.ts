@@ -12,33 +12,17 @@ import AlertService from '@/shared/alert/alert.service';
 import { IBusinessCategory, BusinessCategory } from '@/shared/model/business-category.model';
 import BusinessCategoryService from './business-category.service';
 
-const validations: any = {
-  businessCategory: {
-    name: {
-      required
-    },
-    description: {}
-  }
-};
-
-@Component({
-  validations
-})
+@Component
 export default class BusinessCategoryUpdate extends Vue {
-  @Inject('alertService') private alertService: () => AlertService;
   @Inject('businessCategoryService') private businessCategoryService: () => BusinessCategoryService;
-  public businessCategory: IBusinessCategory = new BusinessCategory();
-
-  public businessCategories: IBusinessCategory[] = [];
-
   @Inject('documentTypeBusinessCategoryService') private documentTypeBusinessCategoryService: () => DocumentTypeBusinessCategoryService;
-
-  public documentTypeBusinessCategories: IDocumentTypeBusinessCategory[] = [];
-
   @Inject('vendorService') private vendorService: () => VendorService;
-
+  public businessCategory: IBusinessCategory = new BusinessCategory();
+  public businessCategories: IBusinessCategory[] = [];
+  public documentTypeBusinessCategories: IDocumentTypeBusinessCategory[] = [];
   public vendors: IVendor[] = [];
   public isSaving = false;
+  private rules = {};
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -58,7 +42,12 @@ export default class BusinessCategoryUpdate extends Vue {
           this.isSaving = false;
           this.$router.go(-1);
           const message = this.$t('opusWebApp.businessCategory.updated', { param: param.id });
-          this.alertService().showAlert(message, 'info');
+          this.$notify({
+            title: 'Success',
+            message: message.toString(),
+            type: 'info',
+            duration: 3000
+          });
         });
     } else {
       this.businessCategoryService()
@@ -67,7 +56,12 @@ export default class BusinessCategoryUpdate extends Vue {
           this.isSaving = false;
           this.$router.go(-1);
           const message = this.$t('opusWebApp.businessCategory.created', { param: param.id });
-          this.alertService().showAlert(message, 'success');
+          this.$notify({
+            title: 'Success',
+            message: message.toString(),
+            type: 'success',
+            duration: 3000
+          });
         });
     }
   }

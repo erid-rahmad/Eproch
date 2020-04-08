@@ -9,7 +9,7 @@ import java.util.Objects;
  * A DTO for the {@link com.bhp.opusb.domain.PersonInCharge} entity.
  */
 @ApiModel(description = "The PIC entity.")
-public class PersonInChargeDTO implements Serializable {
+public class PersonInChargeDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 

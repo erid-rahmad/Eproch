@@ -23,7 +23,7 @@ import com.bhp.opusb.domain.enumeration.VendorApprovalStatus;
 @Entity
 @Table(name = "vendor")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Vendor implements Serializable {
+public class Vendor extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

@@ -12,7 +12,10 @@ export interface IDocumentType {
   additionalForCompany?: boolean;
   additionalForProfessional?: boolean;
   active?: boolean;
+  vendorTypes?: Array<string>;
   documentTypeBusinessCategories?: IDocumentTypeBusinessCategory[];
+  mandatoryCategorySelections?: Array<object>;
+  additionalCategorySelections?: Array<object>;
 }
 
 export class DocumentType implements IDocumentType {
@@ -28,13 +31,21 @@ export class DocumentType implements IDocumentType {
     public additionalForCompany?: boolean,
     public additionalForProfessional?: boolean,
     public active?: boolean,
-    public documentTypeBusinessCategories?: IDocumentTypeBusinessCategory[]
+    public vendorTypes?: Array<string>,
+    public documentTypeBusinessCategories?: IDocumentTypeBusinessCategory[],
+    public mandatoryCategorySelections?: Array<object>,
+    public additionalCategorySelections?: Array<object>
   ) {
     this.hasExpirationDate = this.hasExpirationDate || false;
+    this.mandatoryBusinessCategories = this.mandatoryBusinessCategories || 'A';
+    this.additionalBusinessCategories = this.additionalBusinessCategories || 'A';
     this.mandatoryForCompany = this.mandatoryForCompany || false;
     this.mandatoryForProfessional = this.mandatoryForProfessional || false;
     this.additionalForCompany = this.additionalForCompany || false;
     this.additionalForProfessional = this.additionalForProfessional || false;
-    this.active = this.active || false;
+    this.active = this.active || true;
+    this.vendorTypes = [];
+    this.mandatoryCategorySelections = this.mandatoryCategorySelections || [];
+    this.additionalCategorySelections = this.additionalCategorySelections || [];
   }
 }

@@ -2,12 +2,9 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
@@ -32,7 +29,7 @@ public class BusinessCategoryCriteria implements Serializable, Criteria {
 
     private LongFilter businessCategoryId;
 
-    private LongFilter documentTypeBusinessCategoryId;
+    private LongFilter documentTypeId;
 
     private LongFilter parentCategoryId;
 
@@ -46,7 +43,7 @@ public class BusinessCategoryCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.businessCategoryId = other.businessCategoryId == null ? null : other.businessCategoryId.copy();
-        this.documentTypeBusinessCategoryId = other.documentTypeBusinessCategoryId == null ? null : other.documentTypeBusinessCategoryId.copy();
+        this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
         this.parentCategoryId = other.parentCategoryId == null ? null : other.parentCategoryId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
     }
@@ -89,11 +86,11 @@ public class BusinessCategoryCriteria implements Serializable, Criteria {
     }
 
     public LongFilter getDocumentTypeBusinessCategoryId() {
-        return documentTypeBusinessCategoryId;
+        return documentTypeId;
     }
 
     public void setDocumentTypeBusinessCategoryId(LongFilter documentTypeBusinessCategoryId) {
-        this.documentTypeBusinessCategoryId = documentTypeBusinessCategoryId;
+        this.documentTypeId = documentTypeBusinessCategoryId;
     }
 
     public LongFilter getParentCategoryId() {
@@ -127,7 +124,7 @@ public class BusinessCategoryCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(businessCategoryId, that.businessCategoryId) &&
-            Objects.equals(documentTypeBusinessCategoryId, that.documentTypeBusinessCategoryId) &&
+            Objects.equals(documentTypeId, that.documentTypeId) &&
             Objects.equals(parentCategoryId, that.parentCategoryId) &&
             Objects.equals(vendorId, that.vendorId);
     }
@@ -139,7 +136,7 @@ public class BusinessCategoryCriteria implements Serializable, Criteria {
         name,
         description,
         businessCategoryId,
-        documentTypeBusinessCategoryId,
+        documentTypeId,
         parentCategoryId,
         vendorId
         );
@@ -152,7 +149,7 @@ public class BusinessCategoryCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (businessCategoryId != null ? "businessCategoryId=" + businessCategoryId + ", " : "") +
-                (documentTypeBusinessCategoryId != null ? "documentTypeBusinessCategoryId=" + documentTypeBusinessCategoryId + ", " : "") +
+                (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
                 (parentCategoryId != null ? "parentCategoryId=" + parentCategoryId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
             "}";

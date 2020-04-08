@@ -1,4 +1,3 @@
-import { IBusinessCategory } from '@/shared/model/business-category.model';
 import { IDocumentTypeBusinessCategory } from '@/shared/model/document-type-business-category.model';
 import { IVendor } from '@/shared/model/vendor.model';
 

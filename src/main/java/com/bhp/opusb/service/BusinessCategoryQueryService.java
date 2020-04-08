@@ -103,7 +103,9 @@ public class BusinessCategoryQueryService extends QueryService<BusinessCategory>
             }
             if (criteria.getDocumentTypeBusinessCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getDocumentTypeBusinessCategoryId(),
-                    root -> root.join(BusinessCategory_.documentTypeBusinessCategories, JoinType.LEFT).get(DocumentTypeBusinessCategory_.id)));
+                    root -> root.join(BusinessCategory_.documentTypeBusinessCategories, JoinType.LEFT)
+                        .join(DocumentTypeBusinessCategory_.documentType, JoinType.LEFT)
+                        .get(DocumentType_.id)));
             }
             if (criteria.getParentCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getParentCategoryId(),

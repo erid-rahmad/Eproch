@@ -6,17 +6,19 @@ import { ICountry } from '@/shared/model/country.model';
 import AlertMixin from '@/shared/alert/alert.mixin';
 
 import CountryService from './country.service';
+import { ElTable } from 'element-ui/types/table';
 
 @Component
 export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   @Inject('countryService') private countryService: () => CountryService;
+  private showDeleteDialog: boolean = false;
   private removeId: number = null;
   public itemsPerPage = 20;
   public queryCount: number = null;
   public page = 1;
   public previousPage = 1;
-  public propOrder = 'id';
-  public reverse = false;
+  public propOrder = 'name';
+  public reverse = true;
   public totalItems = 0;
 
   public countries: ICountry[] = [];
@@ -24,15 +26,15 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   public isFetching = false;
 
   public mounted(): void {
-    this.retrieveAllCountrys();
+    this.retrieveAllCountries();
   }
 
   public clear(): void {
     this.page = 1;
-    this.retrieveAllCountrys();
+    this.retrieveAllCountries();
   }
 
-  public retrieveAllCountrys(): void {
+  public retrieveAllCountries(): void {
     this.isFetching = true;
 
     const paginationQuery = {
@@ -57,9 +59,7 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
 
   public prepareRemove(instance: ICountry): void {
     this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
+    this.showDeleteDialog = true;
   }
 
   public removeCountry(): void {
@@ -67,10 +67,14 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
       .delete(this.removeId)
       .then(() => {
         const message = this.$t('opusWebApp.country.deleted', { param: this.removeId });
-        this.alertService().showAlert(message, 'danger');
-        this.getAlertFromStore();
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        })
         this.removeId = null;
-        this.retrieveAllCountrys();
+        this.retrieveAllCountries();
         this.closeDialog();
       });
   }
@@ -90,17 +94,34 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     }
   }
 
+  public handleSizeChange(size: number) {
+    this.itemsPerPage = size;
+    this.retrieveAllCountries();
+  }
+
   public transition(): void {
-    this.retrieveAllCountrys();
+    this.retrieveAllCountries();
   }
 
   public changeOrder(propOrder): void {
-    this.propOrder = propOrder;
-    this.reverse = !this.reverse;
+    this.propOrder = propOrder.prop;
+    this.reverse = propOrder.order === 'ascending';
     this.transition();
   }
 
   public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
+    this.showDeleteDialog = false;
+  }
+
+  public openDetails(instance: ICountry) {
+    this.$router.push(`/country/${instance.id}/view`);
+  }
+
+  public add() {
+    this.$router.push('/country/new')
+  }
+
+  public edit(instance: ICountry) {
+    this.$router.push(`/country/${instance.id}/edit`);
   }
 }

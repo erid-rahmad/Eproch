@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.City} entity.
  */
-public class CityDTO implements Serializable {
+public class CityDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 

@@ -117,41 +117,14 @@ export default class SupportingDocuments extends DocumentProps {
         });
     }
 
-  addDocument(target: string) {
-      this.editingForm = target;
-      this.editDialogVisible = true;
-  }
+    addDocument(target: string) {
+        this.editingForm = target;
+        this.editDialogVisible = true;
+    }
 
-  saveDocument() {
-      this.loading = true;
-      this.eventBus.$emit('save-document');
-  }
+    saveDocument() {
+        this.loading = true;
+        this.eventBus.$emit('save-document');
+    }
 }
 </script>
-
-<style lang="scss">
-.table-container {
-    border: 1px solid #ebebeb;
-    border-radius: 3px;
-    margin-bottom: 24px;
-    padding: 24px;
-    position: relative;
-    transition: .25s;
-
-    &:hover {
-        box-shadow: 0 0 8px 0 rgba(232,237,250,.6), 0 2px 4px 0 rgba(232,237,250,.5);
-    }
-
-    .toolbar {
-        &.float-top-right {
-            position: absolute;
-            right: 24px;
-            top: -48px;
-        }
-
-        .el-button--primary {
-            box-shadow: 0 0 8px 0 rgba(232,237,250,.6), 0 2px 4px 0 rgba(232,237,250,.5);
-        }
-    }
-}
-</style>

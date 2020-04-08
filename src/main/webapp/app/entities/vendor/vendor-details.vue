@@ -75,7 +75,7 @@
                     </dt>
                     <dd>
                         <span v-for="(businessCategory, i) in vendor.businessCategories" :key="businessCategory.id">{{i > 0 ? ', ' : ''}}
-                            <router-link :to="{name: 'BusinessCategoryView', params: {businessCategoryId: businessCategory.id}}">{{businessCategory.id}}</router-link>
+                            <router-link :to="{name: 'BusinessCategoryDetails', params: {businessCategoryId: businessCategory.id}}">{{businessCategory.id}}</router-link>
                         </span>
                     </dd>
                 </dl>

@@ -2,12 +2,10 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
@@ -46,7 +44,7 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
-    private LongFilter documentTypeBusinessCategoryId;
+    private LongFilter businessCategoryId;
 
     public DocumentTypeCriteria() {
     }
@@ -63,7 +61,7 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
         this.additionalForCompany = other.additionalForCompany == null ? null : other.additionalForCompany.copy();
         this.additionalForProfessional = other.additionalForProfessional == null ? null : other.additionalForProfessional.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.documentTypeBusinessCategoryId = other.documentTypeBusinessCategoryId == null ? null : other.documentTypeBusinessCategoryId.copy();
+        this.businessCategoryId = other.businessCategoryId == null ? null : other.businessCategoryId.copy();
     }
 
     @Override
@@ -159,12 +157,12 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
-    public LongFilter getDocumentTypeBusinessCategoryId() {
-        return documentTypeBusinessCategoryId;
+    public LongFilter getBusinessCategoryId() {
+        return businessCategoryId;
     }
 
-    public void setDocumentTypeBusinessCategoryId(LongFilter documentTypeBusinessCategoryId) {
-        this.documentTypeBusinessCategoryId = documentTypeBusinessCategoryId;
+    public void setBusinessCategoryId(LongFilter businessCategoryId) {
+        this.businessCategoryId = businessCategoryId;
     }
 
 
@@ -189,7 +187,7 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
             Objects.equals(additionalForCompany, that.additionalForCompany) &&
             Objects.equals(additionalForProfessional, that.additionalForProfessional) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(documentTypeBusinessCategoryId, that.documentTypeBusinessCategoryId);
+            Objects.equals(businessCategoryId, that.businessCategoryId);
     }
 
     @Override
@@ -206,7 +204,7 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
         additionalForCompany,
         additionalForProfessional,
         active,
-        documentTypeBusinessCategoryId
+        businessCategoryId
         );
     }
 
@@ -224,7 +222,7 @@ public class DocumentTypeCriteria implements Serializable, Criteria {
                 (additionalForCompany != null ? "additionalForCompany=" + additionalForCompany + ", " : "") +
                 (additionalForProfessional != null ? "additionalForProfessional=" + additionalForProfessional + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (documentTypeBusinessCategoryId != null ? "documentTypeBusinessCategoryId=" + documentTypeBusinessCategoryId + ", " : "") +
+                (businessCategoryId != null ? "businessCategoryId=" + businessCategoryId + ", " : "") +
             "}";
     }
 

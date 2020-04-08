@@ -15,7 +15,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "reference_list")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ReferenceList implements Serializable {
+public class ReferenceList extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

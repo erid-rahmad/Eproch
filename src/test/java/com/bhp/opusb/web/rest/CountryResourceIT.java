@@ -74,16 +74,6 @@ public class CountryResourceIT {
         Country country = new Country()
             .name(DEFAULT_NAME)
             .code(DEFAULT_CODE);
-        // Add required entity
-        Currency currency;
-        if (TestUtil.findAll(em, Currency.class).isEmpty()) {
-            currency = CurrencyResourceIT.createEntity(em);
-            em.persist(currency);
-            em.flush();
-        } else {
-            currency = TestUtil.findAll(em, Currency.class).get(0);
-        }
-        country.setCurrency(currency);
         return country;
     }
     /**
@@ -96,16 +86,6 @@ public class CountryResourceIT {
         Country country = new Country()
             .name(UPDATED_NAME)
             .code(UPDATED_CODE);
-        // Add required entity
-        Currency currency;
-        if (TestUtil.findAll(em, Currency.class).isEmpty()) {
-            currency = CurrencyResourceIT.createUpdatedEntity(em);
-            em.persist(currency);
-            em.flush();
-        } else {
-            currency = TestUtil.findAll(em, Currency.class).get(0);
-        }
-        country.setCurrency(currency);
         return country;
     }
 
@@ -402,8 +382,12 @@ public class CountryResourceIT {
     @Test
     @Transactional
     public void getAllCountriesByCurrencyIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        Currency currency = country.getCurrency();
+        // Initialize the database
+        countryRepository.saveAndFlush(country);
+        Currency currency = CurrencyResourceIT.createEntity(em);
+        em.persist(currency);
+        em.flush();
+        country.setCurrency(currency);
         countryRepository.saveAndFlush(country);
         Long currencyId = currency.getId();
 

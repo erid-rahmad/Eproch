@@ -121,9 +121,11 @@ public class DocumentTypeQueryService extends QueryService<DocumentType> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), DocumentType_.active));
             }
-            if (criteria.getDocumentTypeBusinessCategoryId() != null) {
-                specification = specification.and(buildSpecification(criteria.getDocumentTypeBusinessCategoryId(),
-                    root -> root.join(DocumentType_.documentTypeBusinessCategories, JoinType.LEFT).get(DocumentTypeBusinessCategory_.id)));
+            if (criteria.getBusinessCategoryId() != null) {
+                specification = specification.and(buildSpecification(criteria.getBusinessCategoryId(),
+                    root -> root.join(DocumentType_.documentTypeBusinessCategories, JoinType.LEFT)
+                        .join(DocumentTypeBusinessCategory_.businessCategory, JoinType.LEFT)
+                        .get(BusinessCategory_.id)));
             }
         }
         return specification;

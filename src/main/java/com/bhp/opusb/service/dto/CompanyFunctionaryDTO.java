@@ -9,7 +9,7 @@ import java.util.Objects;
  * A DTO for the {@link com.bhp.opusb.domain.CompanyFunctionary} entity.
  */
 @ApiModel(description = "The Functionary entity.")
-public class CompanyFunctionaryDTO implements Serializable {
+public class CompanyFunctionaryDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 

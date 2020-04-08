@@ -2,7 +2,7 @@
     <div>
         <h2>
             <span id="user-management-page-heading" v-text="$t('userManagement.home.title')">Users</span>
-            <router-link tag="button" class="btn btn-primary float-right jh-create-entity" :to="{name: 'JhiUserCreate'}">
+            <router-link tag="button" class="btn btn-primary float-right jh-create-entity" :to="{name: 'JhiUserManagementNew'}">
                 <font-awesome-icon icon="plus"></font-awesome-icon> <span v-text="$t('userManagement.home.createLabel')">Create a new User</span>
             </router-link>
         </h2>
@@ -31,7 +31,7 @@
                 </thead>
                 <tbody v-if ="users">
                     <tr v-for="user in users" :key="user.id" :id="user.login">
-                        <td><router-link tag="a" :to="{name: 'JhiUserView', params: {userId: user.login}}">{{user.id}}</router-link></td>
+                        <td><router-link tag="a" :to="{name: 'JhiUserManagementViewComponent', params: {userId: user.login}}">{{user.id}}</router-link></td>
                         <td>{{user.login}}</td>
                         <td class="jhi-user-email">{{user.email}}</td>
                         <td>
@@ -51,11 +51,11 @@
                         <td v-if="user.lastModifiedDate">{{$d(Date.parse(user.lastModifiedDate), 'short') }}</td><td v-else>{{user.lastModifiedDate | formatDate}}</td>
                         <td class="text-right">
                             <div class="btn-group">
-                                <router-link :to="{name: 'JhiUserView', params: {userId: user.login}}" tag="button" class="btn btn-info btn-sm details">
+                                <router-link :to="{name: 'JhiUserManagementViewComponent', params: {userId: user.login}}" tag="button" class="btn btn-info btn-sm details">
                                     <font-awesome-icon icon="eye"></font-awesome-icon>
                                     <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
                                 </router-link>
-                                <router-link :to="{name: 'JhiUserEdit', params: {userId: user.login}}"  tag="button" class="btn btn-primary btn-sm edit">
+                                <router-link :to="{name: 'JhiUserManagementEditComponent', params: {userId: user.login}}"  tag="button" class="btn btn-primary btn-sm edit">
                                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
                                     <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
                                 </router-link>
@@ -71,7 +71,7 @@
                     </tr>
                 </tbody>
             </table>
-            <b-modal ref="removeUser" id="removeUser" title="Confirm delete operation" v-bind:title="$t('entity.delete.title')" @ok="deleteUser()">
+            <b-modal ref="removeUser" id="removeUser" v-bind:title="$t('entity.delete.title')" @ok="deleteUser()">
                 <div class="modal-body">
                     <p id="jhi-delete-user-heading" v-text="$t('userManagement.delete.question', { 'login': removeId})">Are you sure you want to delete this user?</p>
                 </div>

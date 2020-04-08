@@ -19,7 +19,7 @@ import com.bhp.opusb.domain.enumeration.ReferenceType;
 @Entity
 @Table(name = "reference")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class Reference implements Serializable {
+public class Reference extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

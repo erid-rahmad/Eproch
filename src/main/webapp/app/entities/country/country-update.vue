@@ -34,15 +34,10 @@
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.country.currency')" for="country-currency">Currency</label>
-                        <select class="form-control" id="country-currency" name="currency" v-model="$v.country.currencyId.$model" required>
-                            <option v-if="!country.currencyId" v-bind:value="null" selected></option>
+                        <select class="form-control" id="country-currency" name="currency" v-model="country.currencyId">
+                            <option v-bind:value="null"></option>
                             <option v-bind:value="currencyOption.id" v-for="currencyOption in currencies" :key="currencyOption.id">{{currencyOption.id}}</option>
                         </select>
-                    </div>
-                    <div v-if="$v.country.currencyId.$anyDirty && $v.country.currencyId.$invalid">
-                        <small class="form-text text-danger" v-if="!$v.country.currencyId.required" v-text="$t('entity.validation.required')">
-                            This field is required.
-                        </small>
                     </div>
                 </div>
                 <div>

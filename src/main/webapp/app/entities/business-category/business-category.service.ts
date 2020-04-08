@@ -3,6 +3,7 @@ import axios from 'axios';
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 
 import { IBusinessCategory } from '@/shared/model/business-category.model';
+import buildCriteriaQueryString from '@/shared/filter/filters';
 
 const baseApiUrl = 'api/business-categories';
 
@@ -13,6 +14,22 @@ export default class BusinessCategoryService {
         .get(`${baseApiUrl}/${id}`)
         .then(function(res) {
           resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public retrieveWithFilter(criteriaQuery: any, paginationQuery?: any): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      let criteria = buildCriteriaQueryString(criteriaQuery);
+      const pagination = buildPaginationQueryOpts(paginationQuery);
+      const separator = pagination.length ? '&' : '';
+      axios
+        .get(baseApiUrl + `?${criteria}${separator}${pagination}`)
+        .then(function(res) {
+          resolve(res);
         })
         .catch(err => {
           reject(err);

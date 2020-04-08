@@ -26,7 +26,7 @@ describe('Country e2e test', () => {
   let updatePage: CountryUpdatePage;
   let detailsPage: CountryDetailsPage;
   let listPage: CountryComponentsPage;
-  /*let deleteDialog: CountryDeleteDialog;*/
+  let deleteDialog: CountryDeleteDialog;
   let beforeRecordsCount = 0;
 
   before(async () => {
@@ -61,11 +61,9 @@ describe('Country e2e test', () => {
       expect(await updatePage.title.getAttribute('id')).to.match(/opusWebApp.country.home.createOrEditLabel/);
     });
 
-    /* it('should create and save Countries', async () => {
-
+    it('should create and save Countries', async () => {
       await updatePage.nameInput.sendKeys('name');
       expect(await updatePage.nameInput.getAttribute('value')).to.match(/name/);
-
 
       await updatePage.codeInput.sendKeys('RD');
       expect(await updatePage.codeInput.getAttribute('value')).to.eq('RD');
@@ -83,13 +81,10 @@ describe('Country e2e test', () => {
 
       await waitUntilCount(listPage.records, beforeRecordsCount + 1);
       expect(await listPage.records.count()).to.eq(beforeRecordsCount + 1);
-    });*/
+    });
 
-    /*
     describe('Details, Update, Delete flow', () => {
-
       after(async () => {
-
         const deleteButton = listPage.getDeleteButton(listPage.records.first());
         await click(deleteButton);
 
@@ -109,7 +104,6 @@ describe('Country e2e test', () => {
       });
 
       it('should load details Country page and fetch data', async () => {
-
         const detailsButton = listPage.getDetailsButton(listPage.records.first());
         await click(detailsButton);
 
@@ -125,7 +119,6 @@ describe('Country e2e test', () => {
       });
 
       it('should load edit Country page, fetch data and update', async () => {
-
         const editButton = listPage.getEditButton(listPage.records.first());
         await click(editButton);
 
@@ -133,14 +126,13 @@ describe('Country e2e test', () => {
 
         expect(await updatePage.title.getText()).not.to.be.empty;
 
-          await updatePage.nameInput.clear();
-          await updatePage.nameInput.sendKeys('modified');
-          expect(await updatePage.nameInput.getAttribute('value')).to.match(/modified/);
+        await updatePage.nameInput.clear();
+        await updatePage.nameInput.sendKeys('modified');
+        expect(await updatePage.nameInput.getAttribute('value')).to.match(/modified/);
 
-          await updatePage.codeInput.clear();
-          await updatePage.codeInput.sendKeys('OM');
-          expect(await updatePage.codeInput.getAttribute('value')).to.eq('OM');
-
+        await updatePage.codeInput.clear();
+        await updatePage.codeInput.sendKeys('OM');
+        expect(await updatePage.codeInput.getAttribute('value')).to.eq('OM');
 
         await updatePage.saveButton.click();
 
@@ -151,6 +143,5 @@ describe('Country e2e test', () => {
         await waitUntilCount(listPage.records, beforeRecordsCount + 1);
       });
     });
-    */
   });
 });

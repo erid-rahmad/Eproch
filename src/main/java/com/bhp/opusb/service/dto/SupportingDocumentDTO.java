@@ -9,7 +9,7 @@ import javax.persistence.Lob;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.SupportingDocument} entity.
  */
-public class SupportingDocumentDTO implements Serializable {
+public class SupportingDocumentDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 

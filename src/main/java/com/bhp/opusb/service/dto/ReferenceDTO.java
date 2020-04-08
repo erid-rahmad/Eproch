@@ -8,7 +8,7 @@ import com.bhp.opusb.domain.enumeration.ReferenceType;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.Reference} entity.
  */
-public class ReferenceDTO implements Serializable {
+public class ReferenceDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 

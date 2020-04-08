@@ -21,7 +21,7 @@
                     </dt>
                     <dd>
                         <div v-if="documentTypeBusinessCategory.documentType">
-                            <router-link :to="{name: 'DocumentTypeView', params: {documentTypeId: documentTypeBusinessCategory.documentType.id}}">{{documentTypeBusinessCategory.documentType.id}}</router-link>
+                            <router-link :to="{name: 'DocumentTypeDetails', params: {documentTypeId: documentTypeBusinessCategory.documentType.id}}">{{documentTypeBusinessCategory.documentType.id}}</router-link>
                         </div>
                     </dd>
                     <dt>
@@ -29,7 +29,7 @@
                     </dt>
                     <dd>
                         <div v-if="documentTypeBusinessCategory.businessCategory">
-                            <router-link :to="{name: 'BusinessCategoryView', params: {businessCategoryId: documentTypeBusinessCategory.businessCategory.id}}">{{documentTypeBusinessCategory.businessCategory.id}}</router-link>
+                            <router-link :to="{name: 'BusinessCategoryDetails', params: {businessCategoryId: documentTypeBusinessCategory.businessCategory.id}}">{{documentTypeBusinessCategory.businessCategory.id}}</router-link>
                         </div>
                     </dd>
                 </dl>
@@ -38,7 +38,7 @@
                         class="btn btn-info">
                     <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
                 </button>
-                <router-link v-if="documentTypeBusinessCategory.id" :to="{name: 'DocumentTypeBusinessCategoryEdit', params: {documentTypeBusinessCategoryId: documentTypeBusinessCategory.id}}" tag="button" class="btn btn-primary">
+                <router-link v-if="documentTypeBusinessCategory.id" :to="{name: 'DocumentTypeBusinessCategoryUpdate', params: {documentTypeBusinessCategoryId: documentTypeBusinessCategory.id}}" tag="button" class="btn btn-primary">
                     <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
                 </router-link>
             </div>

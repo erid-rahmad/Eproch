@@ -70,12 +70,6 @@ const DocumentTypeUpdate = () => import('../entities/document-type/document-type
 // prettier-ignore
 const DocumentTypeDetails = () => import('../entities/document-type/document-type-details.vue');
 // prettier-ignore
-const DocumentTypeBusinessCategory = () => import('../entities/document-type-business-category/document-type-business-category.vue');
-// prettier-ignore
-const DocumentTypeBusinessCategoryUpdate = () => import('../entities/document-type-business-category/document-type-business-category-update.vue');
-// prettier-ignore
-const DocumentTypeBusinessCategoryDetails = () => import('../entities/document-type-business-category/document-type-business-category-details.vue');
-// prettier-ignore
 const PersonInCharge = () => import('../entities/person-in-charge/person-in-charge.vue');
 // prettier-ignore
 const PersonInChargeUpdate = () => import('../entities/person-in-charge/person-in-charge-update.vue');
@@ -105,18 +99,6 @@ const Region = () => import('../entities/region/region.vue');
 const RegionUpdate = () => import('../entities/region/region-update.vue');
 // prettier-ignore
 const RegionDetails = () => import('../entities/region/region-details.vue');
-// prettier-ignore
-const City = () => import('../entities/city/city.vue');
-// prettier-ignore
-const CityUpdate = () => import('../entities/city/city-update.vue');
-// prettier-ignore
-const CityDetails = () => import('../entities/city/city-details.vue');
-// prettier-ignore
-const Permission = () => import('../entities/permission/permission.vue');
-// prettier-ignore
-const PermissionUpdate = () => import('../entities/permission/permission-update.vue');
-// prettier-ignore
-const PermissionDetails = () => import('../entities/permission/permission-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 Vue.use(Router);
@@ -151,6 +133,17 @@ Vue.use(Router);
 */
 export const constantRoutes: RouteConfig[] = [
   {
+    path: '/redirect',
+    component: Layout,
+    meta: { hidden: true },
+    children: [
+      {
+        path: '/redirect/:path(.*)',
+        component: () => import(/* webpackChunkName: "redirect" */ '@/shared/components/redirect/index.vue')
+      }
+    ]
+  },
+  {
     path: '/',
     component: Layout,
     children: [
@@ -159,7 +152,6 @@ export const constantRoutes: RouteConfig[] = [
         component: Home,
         meta: {
           title: 'home',
-          affix: false,
           breadcrumb: false
         }
       }
@@ -262,7 +254,7 @@ export const asyncRoutes: RouteConfig[] = [
       },
       {
         path: '/admin/user-management/new',
-        name: 'JhiUserManagementEditComponent',
+        name: 'JhiUserManagementNew',
         component: JhiUserManagementEditComponent,
         meta: {
           hidden: true,
@@ -357,33 +349,46 @@ export const asyncRoutes: RouteConfig[] = [
     component: Layout,
     redirect: '/country/list',
     meta: {
+      breadcrumb: false,
       title: 'country.default',
       roles: [Authority.ADMIN]
     },
     children: [
       {
-        path: '/list',
+        path: '/country/list',
         name: 'Country',
         component: Country,
-        meta: { roles: [Authority.ADMIN] }
+        meta: {
+          title: 'country.list',
+          roles: [Authority.ADMIN]
+        }
       },
       {
         path: '/country/new',
-        name: 'CountryCreate',
         component: CountryUpdate,
-        meta: { roles: [Authority.ADMIN] }
+        meta: {
+          affix: false,
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
       },
       {
         path: '/country/:countryId/edit',
-        name: 'CountryEdit',
         component: CountryUpdate,
-        meta: { roles: [Authority.ADMIN] }
+        meta: {
+          affix: false,
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
       },
       {
         path: '/country/:countryId/view',
-        name: 'CountryView',
         component: CountryDetails,
-        meta: { roles: [Authority.ADMIN] }
+        meta: {
+          affix: false,
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
       }
     ]
   },
@@ -394,415 +399,405 @@ export const asyncRoutes: RouteConfig[] = [
     meta: {
       title: 'currency.default',
       roles: [Authority.ADMIN]
-    }
+    },
+    children: [
+      {
+        path: '/currency/list',
+        name: 'Currency',
+        component: Currency,
+        meta: {
+          title: 'currency.list',
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/currency/new',
+        name: 'CurrencyNew',
+        component: CurrencyUpdate,
+        meta: {
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/currency/:currencyId/edit',
+        name: 'CurrencyUpdate',
+        component: CurrencyUpdate,
+        meta: {
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/currency/:currencyId/view',
+        name: 'CurrencyDetails',
+        component: CurrencyDetails,
+        meta: {
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      }
+    ]
   },
-  {
-    path: '/currency',
-    name: 'Currency',
-    component: Currency,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/currency/new',
-    name: 'CurrencyCreate',
-    component: CurrencyUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/currency/:currencyId/edit',
-    name: 'CurrencyEdit',
-    component: CurrencyUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/currency/:currencyId/view',
-    name: 'CurrencyView',
-    component: CurrencyDetails,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/location',
-    name: 'Location',
-    component: Location,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/location/new',
-    name: 'LocationCreate',
-    component: LocationUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/location/:locationId/edit',
-    name: 'LocationEdit',
-    component: LocationUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/location/:locationId/view',
-    name: 'LocationView',
-    component: LocationDetails,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/vendor',
-    name: 'Vendor',
-    component: Vendor,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/vendor/new',
-    name: 'VendorCreate',
-    component: VendorUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/vendor/:vendorId/edit',
-    name: 'VendorEdit',
-    component: VendorUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/vendor/:vendorId/view',
-    name: 'VendorView',
-    component: VendorDetails,
-    meta: { roles: [Authority.USER] }
-  },
+  // {
+  //   path: '/location',
+  //   name: 'Location',
+  //   component: Location,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/location/new',
+  //   name: 'LocationCreate',
+  //   component: LocationUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/location/:locationId/edit',
+  //   name: 'LocationEdit',
+  //   component: LocationUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/location/:locationId/view',
+  //   name: 'LocationView',
+  //   component: LocationDetails,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/vendor',
+  //   name: 'Vendor',
+  //   component: Vendor,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/vendor/new',
+  //   name: 'VendorCreate',
+  //   component: VendorUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/vendor/:vendorId/edit',
+  //   name: 'VendorEdit',
+  //   component: VendorUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/vendor/:vendorId/view',
+  //   name: 'VendorView',
+  //   component: VendorDetails,
+  //   meta: { roles: [Authority.USER] }
+  // },
   {
     path: '/business-category',
-    name: 'BusinessCategory',
-    component: BusinessCategory,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/business-category/new',
-    name: 'BusinessCategoryCreate',
-    component: BusinessCategoryUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/business-category/:businessCategoryId/edit',
-    name: 'BusinessCategoryEdit',
-    component: BusinessCategoryUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/business-category/:businessCategoryId/view',
-    name: 'BusinessCategoryView',
-    component: BusinessCategoryDetails,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/supporting-document',
-    name: 'SupportingDocument',
-    component: SupportingDocument,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/supporting-document/new',
-    name: 'SupportingDocumentCreate',
-    component: SupportingDocumentUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/supporting-document/:supportingDocumentId/edit',
-    name: 'SupportingDocumentEdit',
-    component: SupportingDocumentUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/supporting-document/:supportingDocumentId/view',
-    name: 'SupportingDocumentView',
-    component: SupportingDocumentDetails,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/document-type',
     component: Layout,
-    redirect: '/document-type/list',
+    redirect: '/business-category/list',
     meta: {
-      title: 'document-type.default',
+      breadcrumb: false,
+      title: 'business-category.default',
       roles: [Authority.ADMIN]
     },
     children: [
       {
-        path: '/list',
-        name: 'DocumentType',
-        component: DocumentType,
+        path: '/business-category/list',
+        name: 'BusinessCategory',
+        component: BusinessCategory,
         meta: {
-          title: 'document-type.default',
+          title: 'business-category.list',
           roles: [Authority.ADMIN]
         }
       },
       {
-        path: '/new',
-        name: 'DocumentTypeCreate',
-        component: DocumentTypeUpdate,
+        path: '/business-category/new',
+        component: BusinessCategoryUpdate,
         meta: {
-          title: 'document-type.create',
+          affix: false,
+          hidden: true,
           roles: [Authority.ADMIN]
         }
       },
       {
-        path: '/:documentTypeId/edit',
-        name: 'DocumentTypeEdit',
-        component: DocumentTypeUpdate,
+        path: '/business-category/:businessCategoryId/edit',
+        component: BusinessCategoryUpdate,
         meta: {
-          title: 'document-type.edit',
+          affix: false,
+          hidden: true,
           roles: [Authority.ADMIN]
         }
       },
       {
-        path: '/:documentTypeId/view',
-        name: 'DocumentTypeView',
-        component: DocumentTypeDetails,
+        path: '/business-category/:businessCategoryId/view',
+        component: BusinessCategoryDetails,
         meta: {
-          title: 'document-type.detail',
+          affix: false,
+          hidden: true,
           roles: [Authority.ADMIN]
         }
       }
     ]
   },
   {
-    path: '/person-in-charge',
-    name: 'PersonInCharge',
-    component: PersonInCharge,
-    meta: { roles: [Authority.USER] }
+    path: '/supporting-document',
+    component: Layout,
+    redirect: '/supporting-document/list',
+    meta: {
+      title: 'supporting-document.default',
+      roles: [Authority.ADMIN]
+    },
+    children: [
+      {
+        path: '/supporting-document/list',
+        name: 'SupportingDocument',
+        component: SupportingDocument,
+        meta: {
+          title: 'supporting-document.list',
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/supporting-document/new',
+        name: 'SupportingDocumentNew',
+        component: SupportingDocumentUpdate,
+        meta: {
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/supporting-document/:supportingDocumentId/edit',
+        name: 'SupportingDocumentUpdate',
+        component: SupportingDocumentUpdate,
+        meta: {
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/supporting-document/:supportingDocumentId/view',
+        name: 'SupportingDocumentDetails',
+        component: SupportingDocumentDetails,
+        meta: {
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      }
+    ]
   },
   {
-    path: '/person-in-charge/new',
-    name: 'PersonInChargeCreate',
-    component: PersonInChargeUpdate,
-    meta: { roles: [Authority.USER] }
+    path: '/document-type',
+    component: Layout,
+    redirect: '/document-type/list',
+    meta: {
+      breadcrumb: false,
+      title: 'document-type.default',
+      roles: [Authority.ADMIN]
+    },
+    children: [
+      {
+        path: '/document-type/list',
+        name: 'DocumentType',
+        component: DocumentType,
+        meta: {
+          title: 'document-type.list',
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/document-type/new',
+        component: DocumentTypeUpdate,
+        meta: {
+          affix: false,
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/document-type/:documentTypeId/edit',
+        component: DocumentTypeUpdate,
+        meta: {
+          affix: false,
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/document-type/:documentTypeId/view',
+        component: DocumentTypeDetails,
+        meta: {
+          affix: false,
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+    ]
   },
-  {
-    path: '/person-in-charge/:personInChargeId/edit',
-    name: 'PersonInChargeEdit',
-    component: PersonInChargeUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/person-in-charge/:personInChargeId/view',
-    name: 'PersonInChargeView',
-    component: PersonInChargeDetails,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/company-functionary',
-    name: 'CompanyFunctionary',
-    component: CompanyFunctionary,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/company-functionary/new',
-    name: 'CompanyFunctionaryCreate',
-    component: CompanyFunctionaryUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/company-functionary/:companyFunctionaryId/edit',
-    name: 'CompanyFunctionaryEdit',
-    component: CompanyFunctionaryUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/company-functionary/:companyFunctionaryId/view',
-    name: 'CompanyFunctionaryView',
-    component: CompanyFunctionaryDetails,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/reference',
-    name: 'Reference',
-    component: Reference,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/reference/new',
-    name: 'ReferenceCreate',
-    component: ReferenceUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/reference/:referenceId/edit',
-    name: 'ReferenceEdit',
-    component: ReferenceUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/reference/:referenceId/view',
-    name: 'ReferenceView',
-    component: ReferenceDetails,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/reference-list',
-    name: 'ReferenceList',
-    component: ReferenceList,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/reference-list/new',
-    name: 'ReferenceListCreate',
-    component: ReferenceListUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/reference-list/:referenceListId/edit',
-    name: 'ReferenceListEdit',
-    component: ReferenceListUpdate,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/reference-list/:referenceListId/view',
-    name: 'ReferenceListView',
-    component: ReferenceListDetails,
-    meta: { roles: [Authority.USER] }
-  },
-  {
-    path: '/country',
-    name: 'Country',
-    component: Country,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/country/new',
-    name: 'CountryCreate',
-    component: CountryUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/country/:countryId/edit',
-    name: 'CountryEdit',
-    component: CountryUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/country/:countryId/view',
-    name: 'CountryView',
-    component: CountryDetails,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/region',
-    name: 'Region',
-    component: Region,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/region/new',
-    name: 'RegionCreate',
-    component: RegionUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/region/:regionId/edit',
-    name: 'RegionEdit',
-    component: RegionUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/region/:regionId/view',
-    name: 'RegionView',
-    component: RegionDetails,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/city',
-    name: 'City',
-    component: City,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/city/new',
-    name: 'CityCreate',
-    component: CityUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/city/:cityId/edit',
-    name: 'CityEdit',
-    component: CityUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/city/:cityId/view',
-    name: 'CityView',
-    component: CityDetails,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/location',
-    name: 'Location',
-    component: Location,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/location/new',
-    name: 'LocationCreate',
-    component: LocationUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/location/:locationId/edit',
-    name: 'LocationEdit',
-    component: LocationUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/location/:locationId/view',
-    name: 'LocationView',
-    component: LocationDetails,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/vendor',
-    name: 'Vendor',
-    component: Vendor,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/vendor/new',
-    name: 'VendorCreate',
-    component: VendorUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/vendor/:vendorId/edit',
-    name: 'VendorEdit',
-    component: VendorUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/vendor/:vendorId/view',
-    name: 'VendorView',
-    component: VendorDetails,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/permission',
-    name: 'Permission',
-    component: Permission,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/permission/new',
-    name: 'PermissionCreate',
-    component: PermissionUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/permission/:permissionId/edit',
-    name: 'PermissionEdit',
-    component: PermissionUpdate,
-    meta: { authorities: [Authority.USER] }
-  },
-  {
-    path: '/permission/:permissionId/view',
-    name: 'PermissionView',
-    component: PermissionDetails,
-    meta: { authorities: [Authority.USER] }
-  }
+  // {
+  //   path: '/person-in-charge',
+  //   name: 'PersonInCharge',
+  //   component: PersonInCharge,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/person-in-charge/new',
+  //   name: 'PersonInChargeCreate',
+  //   component: PersonInChargeUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/person-in-charge/:personInChargeId/edit',
+  //   name: 'PersonInChargeEdit',
+  //   component: PersonInChargeUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/person-in-charge/:personInChargeId/view',
+  //   name: 'PersonInChargeView',
+  //   component: PersonInChargeDetails,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/company-functionary',
+  //   name: 'CompanyFunctionary',
+  //   component: CompanyFunctionary,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/company-functionary/new',
+  //   name: 'CompanyFunctionaryCreate',
+  //   component: CompanyFunctionaryUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/company-functionary/:companyFunctionaryId/edit',
+  //   name: 'CompanyFunctionaryEdit',
+  //   component: CompanyFunctionaryUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/company-functionary/:companyFunctionaryId/view',
+  //   name: 'CompanyFunctionaryView',
+  //   component: CompanyFunctionaryDetails,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/reference',
+  //   name: 'Reference',
+  //   component: Reference,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/reference/new',
+  //   name: 'ReferenceCreate',
+  //   component: ReferenceUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/reference/:referenceId/edit',
+  //   name: 'ReferenceEdit',
+  //   component: ReferenceUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/reference/:referenceId/view',
+  //   name: 'ReferenceView',
+  //   component: ReferenceDetails,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/reference-list',
+  //   name: 'ReferenceList',
+  //   component: ReferenceList,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/reference-list/new',
+  //   name: 'ReferenceListCreate',
+  //   component: ReferenceListUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/reference-list/:referenceListId/edit',
+  //   name: 'ReferenceListEdit',
+  //   component: ReferenceListUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/reference-list/:referenceListId/view',
+  //   name: 'ReferenceListView',
+  //   component: ReferenceListDetails,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/region',
+  //   name: 'Region',
+  //   component: () => import('@/entities/region/region.vue'),
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/region/new',
+  //   name: 'RegionNew',
+  //   component: RegionUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/region/:regionId/edit',
+  //   name: 'RegionUpdate',
+  //   component: RegionUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/region/:regionId/view',
+  //   name: 'RegionDetails',
+  //   component: RegionDetails,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/city',
+  //   name: 'City',
+  //   component: City,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/city/new',
+  //   name: 'CityCreate',
+  //   component: CityUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/city/:cityId/edit',
+  //   name: 'CityEdit',
+  //   component: CityUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/city/:cityId/view',
+  //   name: 'CityView',
+  //   component: CityDetails,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/permission',
+  //   name: 'Permission',
+  //   component: Permission,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/permission/new',
+  //   name: 'PermissionCreate',
+  //   component: PermissionUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/permission/:permissionId/edit',
+  //   name: 'PermissionEdit',
+  //   component: PermissionUpdate,
+  //   meta: { roles: [Authority.USER] }
+  // },
+  // {
+  //   path: '/permission/:permissionId/view',
+  //   name: 'PermissionView',
+  //   component: PermissionDetails,
+  //   meta: { roles: [Authority.USER] }
+  // }
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
 ];
 
@@ -874,80 +869,80 @@ export default router;
 //       path: '/account/password',
 //       name: 'ChangePassword',
 //       component: ChangePassword,
-//       meta: { authorities: [Authority.USER] }
+//       meta: { roles: [Authority.USER] }
 //     },
 //     {
 //       path: '/account/settings',
 //       name: 'Settings',
 //       component: Settings,
-//       meta: { authorities: [Authority.USER] }
+//       meta: { roles: [Authority.USER] }
 //     },
 //     {
 //       path: '/admin/user-management',
 //       name: 'JhiUser',
 //       component: JhiUserManagementComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     },
 //     {
 //       path: '/admin/user-management/new',
-//       name: 'JhiUserCreate',
+//       name: 'JhiUserManagementNew',
 //       component: JhiUserManagementEditComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     },
 //     {
 //       path: '/admin/user-management/:userId/edit',
-//       name: 'JhiUserEdit',
+//       name: 'JhiUserManagementEditComponent',
 //       component: JhiUserManagementEditComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     },
 //     {
 //       path: '/admin/user-management/:userId/view',
-//       name: 'JhiUserView',
+//       name: 'JhiUserManagementViewComponent',
 //       component: JhiUserManagementViewComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     },
 //     {
 //       path: '/admin/docs',
 //       name: 'JhiDocsComponent',
 //       component: JhiDocsComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     },
 //     {
 //       path: '/admin/audits',
 //       name: 'JhiAuditsComponent',
 //       component: JhiAuditsComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     },
 //     {
 //       path: '/admin/jhi-health',
 //       name: 'JhiHealthComponent',
 //       component: JhiHealthComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     },
 //     {
 //       path: '/admin/logs',
 //       name: 'JhiLogsComponent',
 //       component: JhiLogsComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     },
 //     {
 //       path: '/admin/jhi-metrics',
 //       name: 'JhiMetricsComponent',
 //       component: JhiMetricsComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     },
 //     {
 //       path: '/admin/jhi-configuration',
 //       name: 'JhiConfigurationComponent',
 //       component: JhiConfigurationComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     }
 // ,
 //     {
 //       path: '/admin/jhi-tracker',
 //       name: 'JhiTrackerComponent',
 //       component: JhiTrackerComponent,
-//       meta: { authorities: [Authority.ADMIN] }
+//       meta: { roles: [Authority.ADMIN] }
 //     }
 //   ]
 // });

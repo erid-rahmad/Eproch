@@ -13,7 +13,6 @@ import org.mapstruct.*;
 public interface DocumentTypeMapper extends EntityMapper<DocumentTypeDTO, DocumentType> {
 
 
-    @Mapping(target = "documentTypeBusinessCategories", ignore = true)
     @Mapping(target = "removeDocumentTypeBusinessCategory", ignore = true)
     DocumentType toEntity(DocumentTypeDTO documentTypeDTO);
 

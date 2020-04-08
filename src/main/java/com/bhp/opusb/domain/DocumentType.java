@@ -7,7 +7,6 @@ import javax.persistence.*;
 import javax.validation.constraints.*;
 
 import java.io.Serializable;
-import java.util.Objects;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -17,7 +16,7 @@ import java.util.Set;
 @Entity
 @Table(name = "document_type")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class DocumentType implements Serializable {
+public class DocumentType extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

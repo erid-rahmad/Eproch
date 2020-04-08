@@ -154,3 +154,46 @@ aside {
 .no-padding {
   padding: 0px !important;
 }
+
+// Element UI overrides.
+.el-pagination {
+  padding: 8px;
+
+  &.is-background {
+    .btn-prev,
+    .btn-next,
+    .el-pager li,
+    .number:not(.active) {
+      background: none;
+    }
+  }
+}
+
+.table-container {
+  border: 1px solid #ebebeb;
+  border-radius: 3px;
+  margin-bottom: 24px;
+  padding: 24px;
+  position: relative;
+  transition: .25s;
+
+  &:hover {
+    box-shadow: 0 0 8px 0 rgba(232,237,250,.6), 0 2px 4px 0 rgba(232,237,250,.5);
+  }
+
+  .el-tabs {
+    padding: 24px 0 0;
+  }
+
+  .toolbar {
+    &.float-top-right {
+      position: absolute;
+      right: 24px;
+      top: -48px;
+    }
+
+    .el-button--primary {
+      box-shadow: 0 0 8px 0 rgba(232,237,250,.6), 0 2px 4px 0 rgba(232,237,250,.5);
+    }
+  }
+}

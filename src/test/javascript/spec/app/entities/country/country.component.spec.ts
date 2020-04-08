@@ -61,7 +61,7 @@ describe('Component Tests', () => {
       countryServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
       // WHEN
-      comp.retrieveAllCountrys();
+      comp.retrieveAllCountries();
       await comp.$nextTick();
 
       // THEN

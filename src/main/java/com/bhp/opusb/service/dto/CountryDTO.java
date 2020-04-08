@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.Country} entity.
  */
-public class CountryDTO implements Serializable {
+public class CountryDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 
@@ -20,6 +20,7 @@ public class CountryDTO implements Serializable {
 
 
     private Long currencyId;
+    private String currencyCode;
     
     public Long getId() {
         return id;
@@ -53,6 +54,14 @@ public class CountryDTO implements Serializable {
         this.currencyId = currencyId;
     }
 
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public void setCurrencyCode(String currencyCode) {
+        this.currencyCode = currencyCode;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -81,6 +90,7 @@ public class CountryDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", code='" + getCode() + "'" +
             ", currencyId=" + getCurrencyId() +
+            ", currencyCode=" + getCurrencyCode() +
             "}";
     }
 }

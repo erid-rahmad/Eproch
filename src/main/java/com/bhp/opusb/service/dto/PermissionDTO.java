@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.Permission} entity.
  */
-public class PermissionDTO implements Serializable {
+public class PermissionDTO extends AbstractAuditingDTO implements Serializable {
     
     private Long id;
 

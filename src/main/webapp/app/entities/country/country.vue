@@ -1,13 +1,7 @@
 <template>
-    <div>
+    <div class="app-container">
         <h2 id="page-heading">
             <span v-text="$t('opusWebApp.country.home.title')" id="country-heading">Countries</span>
-            <router-link :to="{name: 'CountryCreate'}" tag="button" id="jh-create-entity" class="btn btn-primary float-right jh-create-entity create-country">
-                <font-awesome-icon icon="plus"></font-awesome-icon>
-                <span  v-text="$t('opusWebApp.country.home.createLabel')">
-                    Create a new Country
-                </span>
-            </router-link>
         </h2>
         <b-alert :show="dismissCountDown"
             dismissible
@@ -16,75 +10,92 @@
             @dismiss-count-down="countDownChanged">
             {{alertMessage}}
         </b-alert>
-        <br/>
-        <div class="alert alert-warning" v-if="!isFetching && countries && countries.length === 0">
-            <span v-text="$t('opusWebApp.country.home.notFound')">No countries found</span>
+        <div class="table-container">
+            <div class="toolbar float-top-right">
+                <el-button
+                    type="primary"
+                    icon="el-icon-plus"
+                    circle
+                    :title="$t('opusWebApp.country.home.createLabel')"
+                    @click="add()"
+                />
+            </div>
+            <el-table
+                ref="mainTable"
+                max-height="512px"
+                style="width: 100%"
+                @sort-change="changeOrder"
+                :data="countries"
+                :default-sort="{prop: 'name', order: 'ascending'}"
+                :empty-text="$t('opusWebApp.country.home.notFound')"
+            >
+                <el-table-column
+                    prop="name"
+                    sortable
+                    :label="$t('opusWebApp.country.name')"
+                />
+                <el-table-column
+                    prop="code"
+                    sortable
+                    :label="$t('opusWebApp.country.code')"
+                />
+                <el-table-column
+                    prop="currencyCode"
+                    :label="$t('opusWebApp.country.currency')"
+                />
+                <el-table-column
+                    label="Operations"
+                    width="200"
+                >
+                    <template slot-scope="scope">
+                        <el-button
+                            @click="openDetails(scope.row)"
+                            type="text"
+                            size="mini"
+                            icon="el-icon-info"
+                            :title="$t('entity.action.view')"
+                        />
+                        <el-button
+                            @click="edit(scope.row)"
+                            type="primary"
+                            size="mini"
+                            icon="el-icon-edit"
+                            plain
+                            :title="$t('entity.action.edit')"
+                        />
+                        <el-button
+                            @click="prepareRemove(scope.row)"
+                            type="danger"
+                            size="mini"
+                            icon="el-icon-delete"
+                            plain
+                            :title="$t('entity.action.delete')"
+                        />
+                    </template>
+                </el-table-column>
+            </el-table>
+            <el-pagination
+                background
+                @size-change="handleSizeChange"
+                @current-change="loadPage"
+                :current-page.sync="page"
+                :page-sizes="[10, 20, 50, 100]"
+                :page-size="itemsPerPage"
+                layout="total, sizes, prev, pager, next, jumper"
+                :total="queryCount">
+            </el-pagination>
         </div>
-        <div class="table-responsive" v-if="countries && countries.length > 0">
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th v-on:click="changeOrder('id')"><span v-text="$t('global.field.id')">ID</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('name')"><span v-text="$t('opusWebApp.country.name')">Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('code')"><span v-text="$t('opusWebApp.country.code')">Code</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'code'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('currencyId')"><span v-text="$t('opusWebApp.country.currency')">Currency</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'currencyId'"></jhi-sort-indicator></th>
-                    <th></th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr v-for="country in countries"
-                    :key="country.id">
-                    <td>
-                        <router-link :to="{name: 'CountryView', params: {countryId: country.id}}">{{country.id}}</router-link>
-                    </td>
-                    <td>{{country.name}}</td>
-                    <td>{{country.code}}</td>
-                    <td>
-                        <div v-if="country.currencyId">
-                            <router-link :to="{name: 'CurrencyView', params: {currencyId: country.currencyId}}">{{country.currencyId}}</router-link>
-                        </div>
-                    </td>
-                    <td class="text-right">
-                        <div class="btn-group">
-                            <router-link :to="{name: 'CountryView', params: {countryId: country.id}}" tag="button" class="btn btn-info btn-sm details">
-                                <font-awesome-icon icon="eye"></font-awesome-icon>
-                                <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
-                            </router-link>
-                            <router-link :to="{name: 'CountryEdit', params: {countryId: country.id}}"  tag="button" class="btn btn-primary btn-sm edit">
-                                <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                                <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
-                            </router-link>
-                            <b-button v-on:click="prepareRemove(country)"
-                                   variant="danger"
-                                   class="btn btn-sm"
-                                   v-b-modal.removeEntity>
-                                <font-awesome-icon icon="times"></font-awesome-icon>
-                                <span class="d-none d-md-inline" v-text="$t('entity.action.delete')">Delete</span>
-                            </b-button>
-                        </div>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-        <b-modal ref="removeEntity" id="removeEntity" >
-            <span slot="modal-title"><span id="opusWebApp.country.delete.question" v-text="$t('entity.delete.title')">Confirm delete operation</span></span>
-            <div class="modal-body">
-                <p id="jhi-delete-country-heading" v-text="$t('opusWebApp.country.delete.question', {'id': removeId})">Are you sure you want to delete this Country?</p>
+        <el-dialog
+            width="30%"
+            :title="$t('entity.delete.title')"
+            :visible="showDeleteDialog"
+        >
+            <span>{{ $t('opusWebApp.country.delete.question', {'id': removeId}) }}</span>
+            <div slot="footer">
+                <el-button @click="closeDialog()">{{ $t('entity.action.cancel') }}</el-button>
+                <el-button type="danger" @click="removeCountry()">{{ $t('entity.action.delete') }}</el-button>
             </div>
-            <div slot="modal-footer">
-                <button type="button" class="btn btn-secondary" v-text="$t('entity.action.cancel')" v-on:click="closeDialog()">Cancel</button>
-                <button type="button" class="btn btn-primary" id="jhi-confirm-delete-country" v-text="$t('entity.action.delete')" v-on:click="removeCountry()">Delete</button>
-            </div>
-        </b-modal>
-        <div v-show="countries && countries.length > 0">
-            <div class="row justify-content-center">
-                <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
-            </div>
-            <div class="row justify-content-center">
-                <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
-            </div>
-        </div>
+        </el-dialog>
     </div>
 </template>
 

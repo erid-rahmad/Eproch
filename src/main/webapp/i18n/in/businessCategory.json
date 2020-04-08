@@ -2,7 +2,9 @@
   "opusWebApp": {
     "businessCategory": {
       "home": {
-        "title": "Business Categories",
+        "title": "Klasifikasi & Kategori Bisnis",
+        "categoryTitle": "Kategori",
+        "subCategoryTitle": "Sub-kategori",
         "createLabel": "Buat Business Category baru",
         "createOrEditLabel": "Buat atau edit Business Category",
         "notFound": "No Business Categories found"

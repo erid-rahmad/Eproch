@@ -121,7 +121,7 @@ enum VendorApprovalStatus {
 }
 
 relationship OneToOne {
-	Country{currency required} to Currency
+	Country{currency} to Currency
 	SupportingDocument{type required} to DocumentType
 	PersonInCharge{user(login) required} to User
 }
