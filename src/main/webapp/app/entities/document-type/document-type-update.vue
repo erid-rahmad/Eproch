@@ -36,8 +36,10 @@
                 <el-cascader-panel
                     ref="mandatoryBusinessCategories"
                     :class="{'hide': shouldHide(documentType.mandatoryBusinessCategories)}"
-                    :v-model="documentType.mandatoryCategorySelections"
-                    :props="businessCategoriesProps"
+                    :value="mandatoryBusinessCategories"
+                    :options="businessCategories"
+                    :props="{multiple: true}"
+                    @change="handleMandatoryBusinessCategoriesChange"
                 />
             </el-form-item>
             <el-form-item label="Mandatory for Supplier Type" prop="vendorTypes">
@@ -55,8 +57,10 @@
                 <el-cascader-panel
                     ref="additionalBusinessCategories"
                     :class="{'hide': shouldHide(documentType.additionalBusinessCategories)}"
-                    :v-model="documentType.additionalCategorySelections"
-                    :props="businessCategoriesProps"
+                    :value="additionalBusinessCategories"
+                    :options="businessCategories"
+                    :props="{multiple: true}"
+                    @change="handleAdditionalBusinessCategoriesChange"
                 />
             </el-form-item>
             <el-form-item label="Active" prop="active">

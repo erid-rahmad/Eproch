@@ -7,10 +7,8 @@ import AlertService from '@/shared/alert/alert.service';
 import { IDocumentType, DocumentType } from '@/shared/model/document-type.model';
 import DocumentTypeService from './document-type.service';
 import BusinessCategoryService from '../business-category/business-category.service';
-import { flatten } from '@/utils';
-import { ElCascader } from 'element-ui/types/cascader';
-import { ElCascaderPanel } from 'element-ui/types/cascader-panel';
-import { BusinessCategory } from '@/shared/model/business-category.model';
+import { flattenProperty } from '@/utils';
+import { BusinessCategory, IBusinessCategory } from '@/shared/model/business-category.model';
 
 @Component
 export default class DocumentTypeUpdate extends Vue {
@@ -25,28 +23,31 @@ export default class DocumentTypeUpdate extends Vue {
   public columnSpacing = 32;
   public rules = {};
   public businessCategories = [];
+  private mandatoryBusinessCategories = [];
+  private additionalBusinessCategories = [];
   public businessCategoriesProps = {
     multiple: true,
     lazy: true,
     lazyLoad: (node, resolve) => {
       let query = node.root ? { 'parentCategoryId.specified': false } : { 'parentCategoryId.equals': node.value };
-      
+
       this.businessCategoryService()
         .retrieveWithFilter(query)
         .then(res => {
           const nodes = res.data.map(item => {
-            return {value: item.id, label: item.name}
+            return { value: item.id, label: item.name };
           });
           resolve(nodes);
         });
     }
-  }
+  };
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.documentTypeId) {
         vm.retrieveDocumentType(to.params.documentTypeId);
       }
+      vm.initBusinessCategories();
       vm.initRelationships();
     });
   }
@@ -62,14 +63,13 @@ export default class DocumentTypeUpdate extends Vue {
 
   public save(): void {
     this.isSaving = true;
-    this.documentType.documentTypeBusinessCategories = this.buildJoin();
-
+    this.documentType.documentTypeBusinessCategories = this.buildJoin(this.documentType.documentTypeBusinessCategories);
     if (this.documentType.id) {
       this.documentTypeService()
         .update(this.documentType)
         .then(param => {
           this.isSaving = false;
-          this.$router.go(-1);
+          this.previousState();
           const message = this.$t('opusWebApp.documentType.updated', { param: param.id });
           this.$notify({
             title: 'Success',
@@ -83,7 +83,7 @@ export default class DocumentTypeUpdate extends Vue {
         .create(this.documentType)
         .then(param => {
           this.isSaving = false;
-          this.$router.go(-1);
+          this.previousState();
           const message = this.$t('opusWebApp.documentType.created', { param: param.id });
           this.$notify({
             title: 'Success',
@@ -95,15 +95,21 @@ export default class DocumentTypeUpdate extends Vue {
     }
   }
 
-  private buildJoin(): Array<any> {
+  private buildJoin(existingBusinessCategories: IDocumentTypeBusinessCategory[]): IDocumentTypeBusinessCategory[] {
     let join = [];
+    let existingMap = new Map();
     let mandatorySet = new Set();
     let mandatory = (<any>this.$refs.mandatoryBusinessCategories).getCheckedNodes();
     let additional = (<any>this.$refs.additionalBusinessCategories).getCheckedNodes();
+
+    if (existingBusinessCategories) {
+      existingMap = new Map(existingBusinessCategories.map((item): [number, number] => [item.businessCategory.id, item.id]));
+    }
     mandatory.forEach(element => {
       const entity = new DocumentTypeBusinessCategory(
-        0,
-        true, false,
+        existingMap.get(element.value) || 0,
+        true,
+        false,
         new DocumentType(this.documentType.id),
         new BusinessCategory(element.value)
       );
@@ -116,12 +122,13 @@ export default class DocumentTypeUpdate extends Vue {
       // Don't add additional sub-category if it's already declared as mandatory.
       if (!mandatorySet.has(element.value)) {
         const entity = new DocumentTypeBusinessCategory(
-          0,
-          false, true,
+          existingMap.get(element.value) || 0,
+          false,
+          true,
           new DocumentType(this.documentType.id),
           new BusinessCategory(element.value)
         );
-  
+
         join.push(entity);
       }
     });
@@ -134,19 +141,68 @@ export default class DocumentTypeUpdate extends Vue {
       .find(documentTypeId)
       .then(res => {
         this.documentType = res;
+
+        // Mandatory for Supplier Type checkbox group.
         let vendorTypes = [];
         if (this.documentType.mandatoryForCompany) {
-          vendorTypes.push('C')
+          vendorTypes.push('C');
         }
         if (this.documentType.mandatoryForProfessional) {
-          vendorTypes.push('P')
+          vendorTypes.push('P');
         }
         this.documentType.vendorTypes = vendorTypes;
+
+        // Init model for Mandatory & Additional for Sub-business Category fields.
+        this.initSubBusinessCategoryModels(this.documentType);
       });
   }
 
+  public handleMandatoryBusinessCategoriesChange(value: number[][]) {
+    this.documentType.mandatoryCategorySelections = value;
+  }
+
+  public handleAdditionalBusinessCategoriesChange(value: number[][]) {
+    this.documentType.mandatoryCategorySelections = value;
+  }
+
+  private initSubBusinessCategoryModels(documentType: IDocumentType): void {
+    if (documentType.documentTypeBusinessCategories.length) {
+      let mandatorySelections = [];
+      let additionalSelections = [];
+      documentType.documentTypeBusinessCategories.forEach(item => {
+        let ids = flattenProperty(item.businessCategory, 'parentCategory', 'id');
+        if (ids.length === 3) {
+          if (item.mandatory) {
+            mandatorySelections.push(ids);
+          } else if (item.additional) {
+            additionalSelections.push(ids);
+          }
+        }
+      });
+      this.mandatoryBusinessCategories = mandatorySelections;
+      this.additionalBusinessCategories = additionalSelections;
+    }
+  }
+
   public previousState(): void {
-    this.$router.go(-1);
+    this.$router.push('/redirect/document-type/list');
+  }
+
+  public initBusinessCategories(): void {
+    this.businessCategoryService()
+      .retrieve()
+      .then(res => {
+        let categories = (res.data as IBusinessCategory[]).map(item => {
+          return {
+            value: item.id,
+            label: item.name,
+            parent: item.parentCategoryId
+          };
+        });
+
+        // Use set to to uniquely identify added category.
+        this.businessCategories = this.collect(categories);
+      });
   }
 
   public initRelationships(): void {
@@ -155,5 +211,57 @@ export default class DocumentTypeUpdate extends Vue {
       .then(res => {
         this.documentTypeBusinessCategories = res.data;
       });
+  }
+
+  private collect(source) {
+    let parents = new Map();
+    let children = new Map();
+    let result = [];
+    let addToChildrenCache = item => {
+      let items = children.get(item.parent);
+      if (!items) {
+        items = [];
+        children.set(item.parent, items);
+      }
+      items.push(item);
+    };
+
+    let addChild = (parent, item) => {
+      if (!parent.children) {
+        parent.children = [];
+      }
+      parent.children.push(item);
+    };
+
+    let addChildren = item => {
+      let items = children.get(item.value);
+      if (items) {
+        if (!item.children) {
+          item.children = [];
+        }
+        item.children.concat(items);
+      }
+    };
+
+    source.forEach(s => {
+      let item = { ...s };
+      if (item.parent) {
+        let parent = parents.get(item.parent);
+        if (!parent) {
+          addToChildrenCache(item);
+        } else {
+          addChild(parent, item);
+        }
+
+        addChildren(item);
+      } else {
+        result.push(item);
+        addChildren(item);
+      }
+      parents.set(item.value, item);
+      delete item.parent;
+    });
+
+    return result;
   }
 }

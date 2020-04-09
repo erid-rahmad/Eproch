@@ -14,8 +14,8 @@ export interface IDocumentType {
   active?: boolean;
   vendorTypes?: Array<string>;
   documentTypeBusinessCategories?: IDocumentTypeBusinessCategory[];
-  mandatoryCategorySelections?: Array<object>;
-  additionalCategorySelections?: Array<object>;
+  mandatoryCategorySelections?: Array<any>;
+  additionalCategorySelections?: Array<any>;
 }
 
 export class DocumentType implements IDocumentType {
@@ -33,8 +33,8 @@ export class DocumentType implements IDocumentType {
     public active?: boolean,
     public vendorTypes?: Array<string>,
     public documentTypeBusinessCategories?: IDocumentTypeBusinessCategory[],
-    public mandatoryCategorySelections?: Array<object>,
-    public additionalCategorySelections?: Array<object>
+    public mandatoryCategorySelections?: Array<any>,
+    public additionalCategorySelections?: Array<any>
   ) {
     this.hasExpirationDate = this.hasExpirationDate || false;
     this.mandatoryBusinessCategories = this.mandatoryBusinessCategories || 'A';
