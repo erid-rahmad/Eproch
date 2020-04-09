@@ -83,3 +83,25 @@ export const toggleClass = (ele: HTMLElement, className: string) => {
   }
   ele.className = classString
 }
+
+export const flatten = (source: any[], nestedKey: string) => {
+  let result = []
+  source.forEach(element => {
+    result.push(element);
+
+    if (Array.isArray(element[nestedKey])) {
+      result = result.concat(flatten(element[nestedKey], nestedKey));
+    }
+  })
+
+  return result
+}
+
+export const flattenProperty = (source: object, nestedKey: string, property: string) => {
+  let result = [];
+  if (source[nestedKey]) {
+    result = result.concat(flattenProperty(source[nestedKey], nestedKey, property));
+  }
+  result.push(source[property]);
+  return result;
+}
