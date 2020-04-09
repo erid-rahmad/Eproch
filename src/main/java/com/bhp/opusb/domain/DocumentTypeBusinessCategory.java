@@ -113,7 +113,10 @@ public class DocumentTypeBusinessCategory extends AbstractAuditingEntity {
         if (!(o instanceof DocumentTypeBusinessCategory)) {
             return false;
         }
-        return id != null && id.equals(((DocumentTypeBusinessCategory) o).id);
+        DocumentTypeBusinessCategory obj = (DocumentTypeBusinessCategory) o;
+        return id != null && id.equals(obj.id)
+            && documentType != null && documentType.equals(obj.documentType)
+            && businessCategory != null && businessCategory.equals(obj.businessCategory);
     }
 
     @Override
