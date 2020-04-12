@@ -1,8 +1,10 @@
 package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.domain.DocumentTypeBusinessCategory;
-import com.bhp.opusb.repository.DocumentTypeBusinessCategoryRepository;
+import com.bhp.opusb.service.DocumentTypeBusinessCategoryService;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+import com.bhp.opusb.service.dto.DocumentTypeBusinessCategoryCriteria;
+import com.bhp.opusb.service.DocumentTypeBusinessCategoryQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -23,7 +24,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class DocumentTypeBusinessCategoryResource {
 
     private final Logger log = LoggerFactory.getLogger(DocumentTypeBusinessCategoryResource.class);
@@ -33,10 +33,13 @@ public class DocumentTypeBusinessCategoryResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final DocumentTypeBusinessCategoryRepository documentTypeBusinessCategoryRepository;
+    private final DocumentTypeBusinessCategoryService documentTypeBusinessCategoryService;
 
-    public DocumentTypeBusinessCategoryResource(DocumentTypeBusinessCategoryRepository documentTypeBusinessCategoryRepository) {
-        this.documentTypeBusinessCategoryRepository = documentTypeBusinessCategoryRepository;
+    private final DocumentTypeBusinessCategoryQueryService documentTypeBusinessCategoryQueryService;
+
+    public DocumentTypeBusinessCategoryResource(DocumentTypeBusinessCategoryService documentTypeBusinessCategoryService, DocumentTypeBusinessCategoryQueryService documentTypeBusinessCategoryQueryService) {
+        this.documentTypeBusinessCategoryService = documentTypeBusinessCategoryService;
+        this.documentTypeBusinessCategoryQueryService = documentTypeBusinessCategoryQueryService;
     }
 
     /**
@@ -52,7 +55,7 @@ public class DocumentTypeBusinessCategoryResource {
         if (documentTypeBusinessCategory.getId() != null) {
             throw new BadRequestAlertException("A new documentTypeBusinessCategory cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        DocumentTypeBusinessCategory result = documentTypeBusinessCategoryRepository.save(documentTypeBusinessCategory);
+        DocumentTypeBusinessCategory result = documentTypeBusinessCategoryService.save(documentTypeBusinessCategory);
         return ResponseEntity.created(new URI("/api/document-type-business-categories/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -73,7 +76,7 @@ public class DocumentTypeBusinessCategoryResource {
         if (documentTypeBusinessCategory.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        DocumentTypeBusinessCategory result = documentTypeBusinessCategoryRepository.save(documentTypeBusinessCategory);
+        DocumentTypeBusinessCategory result = documentTypeBusinessCategoryService.save(documentTypeBusinessCategory);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, documentTypeBusinessCategory.getId().toString()))
             .body(result);
@@ -82,12 +85,26 @@ public class DocumentTypeBusinessCategoryResource {
     /**
      * {@code GET  /document-type-business-categories} : get all the documentTypeBusinessCategories.
      *
+     * @param criteria the criteria which the requested entities should match.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of documentTypeBusinessCategories in body.
      */
     @GetMapping("/document-type-business-categories")
-    public List<DocumentTypeBusinessCategory> getAllDocumentTypeBusinessCategories() {
-        log.debug("REST request to get all DocumentTypeBusinessCategories");
-        return documentTypeBusinessCategoryRepository.findAll();
+    public ResponseEntity<List<DocumentTypeBusinessCategory>> getAllDocumentTypeBusinessCategories(DocumentTypeBusinessCategoryCriteria criteria) {
+        log.debug("REST request to get DocumentTypeBusinessCategories by criteria: {}", criteria);
+        List<DocumentTypeBusinessCategory> entityList = documentTypeBusinessCategoryQueryService.findByCriteria(criteria);
+        return ResponseEntity.ok().body(entityList);
+    }
+
+    /**
+     * {@code GET  /document-type-business-categories/count} : count all the documentTypeBusinessCategories.
+     *
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the count in body.
+     */
+    @GetMapping("/document-type-business-categories/count")
+    public ResponseEntity<Long> countDocumentTypeBusinessCategories(DocumentTypeBusinessCategoryCriteria criteria) {
+        log.debug("REST request to count DocumentTypeBusinessCategories by criteria: {}", criteria);
+        return ResponseEntity.ok().body(documentTypeBusinessCategoryQueryService.countByCriteria(criteria));
     }
 
     /**
@@ -99,7 +116,7 @@ public class DocumentTypeBusinessCategoryResource {
     @GetMapping("/document-type-business-categories/{id}")
     public ResponseEntity<DocumentTypeBusinessCategory> getDocumentTypeBusinessCategory(@PathVariable Long id) {
         log.debug("REST request to get DocumentTypeBusinessCategory : {}", id);
-        Optional<DocumentTypeBusinessCategory> documentTypeBusinessCategory = documentTypeBusinessCategoryRepository.findById(id);
+        Optional<DocumentTypeBusinessCategory> documentTypeBusinessCategory = documentTypeBusinessCategoryService.findOne(id);
         return ResponseUtil.wrapOrNotFound(documentTypeBusinessCategory);
     }
 
@@ -112,7 +129,7 @@ public class DocumentTypeBusinessCategoryResource {
     @DeleteMapping("/document-type-business-categories/{id}")
     public ResponseEntity<Void> deleteDocumentTypeBusinessCategory(@PathVariable Long id) {
         log.debug("REST request to delete DocumentTypeBusinessCategory : {}", id);
-        documentTypeBusinessCategoryRepository.deleteById(id);
+        documentTypeBusinessCategoryService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

@@ -1,53 +1,29 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-
-import DocumentTypeBusinessCategoryService from '../document-type-business-category/document-type-business-category.service';
-import { IDocumentTypeBusinessCategory, DocumentTypeBusinessCategory } from '@/shared/model/document-type-business-category.model';
-
-import AlertService from '@/shared/alert/alert.service';
-import { IDocumentType, DocumentType } from '@/shared/model/document-type.model';
-import DocumentTypeService from './document-type.service';
-import BusinessCategoryService from '../business-category/business-category.service';
-import { flattenProperty } from '@/utils';
 import { BusinessCategory, IBusinessCategory } from '@/shared/model/business-category.model';
+import { DocumentTypeBusinessCategory, IDocumentTypeBusinessCategory } from '@/shared/model/document-type-business-category.model';
+import { DocumentType, IDocumentType } from '@/shared/model/document-type.model';
+import { flattenProperty } from '@/utils';
+import { Component, Inject, Vue } from 'vue-property-decorator';
+import BusinessCategoryService from '../business-category/business-category.service';
+import DocumentTypeService from './document-type.service';
 
 @Component
 export default class DocumentTypeUpdate extends Vue {
-  @Inject('alertService') private alertService: () => AlertService;
   @Inject('businessCategoryService') private businessCategoryService: () => BusinessCategoryService;
   @Inject('documentTypeService') private documentTypeService: () => DocumentTypeService;
-  @Inject('documentTypeBusinessCategoryService') private documentTypeBusinessCategoryService: () => DocumentTypeBusinessCategoryService;
 
   public documentType: IDocumentType = new DocumentType();
-  public documentTypeBusinessCategories: IDocumentTypeBusinessCategory[] = [];
   public isSaving = false;
   public columnSpacing = 32;
   public rules = {};
   public businessCategories = [];
-  private mandatoryBusinessCategories = [];
-  private additionalBusinessCategories = [];
-  public businessCategoriesProps = {
-    multiple: true,
-    lazy: true,
-    lazyLoad: (node, resolve) => {
-      let query = node.root ? { 'parentCategoryId.specified': false } : { 'parentCategoryId.equals': node.value };
-
-      this.businessCategoryService()
-        .retrieveWithFilter(query)
-        .then(res => {
-          const nodes = res.data.map(item => {
-            return { value: item.id, label: item.name };
-          });
-          resolve(nodes);
-        });
-    }
-  };
+  public mandatoryBusinessCategories = [];
+  public additionalBusinessCategories = [];
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.documentTypeId) {
         vm.retrieveDocumentType(to.params.documentTypeId);
       }
-      vm.initBusinessCategories();
       vm.initRelationships();
     });
   }
@@ -63,7 +39,7 @@ export default class DocumentTypeUpdate extends Vue {
 
   public save(): void {
     this.isSaving = true;
-    this.documentType.documentTypeBusinessCategories = this.buildJoin(this.documentType.documentTypeBusinessCategories);
+    this.documentType.documentTypeBusinessCategories = this.updateBusinessCategoriesLink(this.documentType.documentTypeBusinessCategories);
     if (this.documentType.id) {
       this.documentTypeService()
         .update(this.documentType)
@@ -95,21 +71,26 @@ export default class DocumentTypeUpdate extends Vue {
     }
   }
 
-  private buildJoin(existingBusinessCategories: IDocumentTypeBusinessCategory[]): IDocumentTypeBusinessCategory[] {
+  private updateBusinessCategoriesLink(existingBusinessCategories: IDocumentTypeBusinessCategory[]): IDocumentTypeBusinessCategory[] {
     let join = [];
-    let existingMap = new Map();
-    let mandatorySet = new Set();
+    let existingMap = new Map<number, number>();
+
+    // Cache for mandatory & additional business categories.
+    let mandatorySet = new Set<number>();
+    let additionalSet = new Set<number>();
+    
     let mandatory = (<any>this.$refs.mandatoryBusinessCategories).getCheckedNodes();
     let additional = (<any>this.$refs.additionalBusinessCategories).getCheckedNodes();
 
     if (existingBusinessCategories) {
-      existingMap = new Map(existingBusinessCategories.map((item): [number, number] => [item.businessCategory.id, item.id]));
+      existingMap = new Map(existingBusinessCategories
+        .map((item): [number, number] => [item.businessCategory.id, item.id])
+      );
     }
     mandatory.forEach(element => {
       const entity = new DocumentTypeBusinessCategory(
-        existingMap.get(element.value) || 0,
-        true,
-        false,
+        existingMap.get(element.value) || 0,  // The existing ID if any.
+        true, false,
         new DocumentType(this.documentType.id),
         new BusinessCategory(element.value)
       );
@@ -123,16 +104,32 @@ export default class DocumentTypeUpdate extends Vue {
       if (!mandatorySet.has(element.value)) {
         const entity = new DocumentTypeBusinessCategory(
           existingMap.get(element.value) || 0,
-          false,
-          true,
+          false, true,
           new DocumentType(this.documentType.id),
           new BusinessCategory(element.value)
         );
 
         join.push(entity);
+        additionalSet.add(element.value);
       }
     });
 
+    // Flag the unchecked items as deleted, if any.
+    if (existingBusinessCategories) {
+      existingBusinessCategories.forEach(element => {
+        if (mandatorySet.has(element.businessCategory.id) || additionalSet.has(element.businessCategory.id)) {
+          const entity = new DocumentTypeBusinessCategory(
+            element.id || 0,
+            false, false,
+            element.documentType,
+            element.businessCategory,
+            true  // Removal flag.
+          );
+          join.push(entity);
+        }
+      });
+    }
+    
     return join;
   }
 
@@ -188,7 +185,7 @@ export default class DocumentTypeUpdate extends Vue {
     this.$router.push('/redirect/document-type/list');
   }
 
-  public initBusinessCategories(): void {
+  public initRelationships(): void {
     this.businessCategoryService()
       .retrieve()
       .then(res => {
@@ -202,14 +199,6 @@ export default class DocumentTypeUpdate extends Vue {
 
         // Use set to to uniquely identify added category.
         this.businessCategories = this.collect(categories);
-      });
-  }
-
-  public initRelationships(): void {
-    this.documentTypeBusinessCategoryService()
-      .retrieve()
-      .then(res => {
-        this.documentTypeBusinessCategories = res.data;
       });
   }
 
