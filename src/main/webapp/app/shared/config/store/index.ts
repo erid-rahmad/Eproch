@@ -9,6 +9,7 @@ import { ISettingsState } from '@/shared/config/store/settings-store'
 import { IAccountState } from '@/shared/config/store/account-store';
 import { IAlertState } from '@/shared/config/store/alert-store';
 import { ITranslationState } from '@/shared/config/store/translation-store';
+import { IRegistrationState } from './registration-store'
 
 Vue.use(Vuex)
 
@@ -22,6 +23,7 @@ export interface IRootState {
   permissionStore: IPermissionState
   settingsStore: ISettingsState
   alertStore: IAlertState
+  registrationStore: IRegistrationState
 }
 
 // Declare empty store first, dynamically register all modules later.
