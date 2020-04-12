@@ -58,12 +58,17 @@
                 />
             </el-table>
         </div>
-        <el-dialog :title="$t('register.form.document[\'title.edit\']')" :visible.sync="editDialogVisible">
+        <el-dialog
+            :title="$t('register.form.document[\'title.edit\']')"
+            :visible.sync="editDialogVisible"
+            @opened="handleDialogOpen"
+        >
             <el-row :gutter="16">
                 <el-col :span="18" :offset="3">
                     <supporting-documents-form
                         :event-bus="eventBus"
                         :document="document"
+                        :mandatory="editingForm === 'mainDocuments'"
                     />
                 </el-col>
             </el-row>
@@ -74,57 +79,4 @@
         </el-dialog>
     </div>
 </template>
-<script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import { ElForm } from 'element-ui/types/form'
-import SupportingDocumentsForm from './supporting-documents-form.vue';
-
-const DocumentProps = Vue.extend({
-  props: {
-    eventBus: {
-      type: Object,
-      default: () => {}
-    },
-    mainDocuments: {
-      type: Array,
-      default: () => []
-    },
-    additionalDocuments: {
-        type: Array,
-        default: () => []
-    }
-  }
-})
-
-@Component({
-    components: {
-        SupportingDocumentsForm
-    }
-})
-export default class SupportingDocuments extends DocumentProps {
-    loading = false;
-    columnSpacing = 32;
-    editDialogVisible = false;
-    document = {};
-    editingForm = null;
-
-    mounted() {
-        this.eventBus.$on('push-document', (document) => {
-            this[this.editingForm].push(document);
-            this.loading = false;
-            this.editDialogVisible = false;
-        });
-    }
-
-    addDocument(target: string) {
-        this.editingForm = target;
-        this.editDialogVisible = true;
-    }
-
-    saveDocument() {
-        this.loading = true;
-        this.eventBus.$emit('save-document');
-    }
-}
-</script>
+<script lang="ts" src="./supporting-documents.component.ts"></script>

@@ -4,6 +4,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -110,6 +112,13 @@ public class DocumentTypeResource {
         Page<DocumentTypeDTO> page = documentTypeQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/document-types/selector")
+    public ResponseEntity<List<DocumentTypeDTO>> getDocumentTypesByBusinessCategories(@RequestParam boolean mandatory, @RequestParam Set<Long> businessCategoryIds) {
+        log.debug("REST request to get DocumentTypes by business categories: {}", businessCategoryIds.toString());
+        List<DocumentTypeDTO> list = documentTypeService.findByBusinessCategories(mandatory, businessCategoryIds);
+        return ResponseEntity.ok().body(list);
     }
 
     /**

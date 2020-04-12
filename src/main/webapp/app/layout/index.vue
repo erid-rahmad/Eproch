@@ -10,7 +10,7 @@
     />
     <sidebar v-if="authenticated" class="sidebar-container" />
     <div
-      :class="{hasTagsView: showTagsView}"
+      :class="{hasTagsView: showTagsView, 'no-sidebar': !authenticated}"
       class="main-container"
     >
       <div :class="{'fixed-header': fixedHeader}">
@@ -110,6 +110,10 @@ export default class extends mixins(ResizeMixin) {
   transition: margin-left .28s;
   margin-left: $sideBarWidth;
   position: relative;
+
+  &.no-sidebar {
+    margin-left: 0;
+  }
 }
 
 .sidebar-container {

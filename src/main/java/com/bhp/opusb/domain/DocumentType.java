@@ -60,6 +60,13 @@ public class DocumentType extends AbstractAuditingEntity implements Serializable
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<DocumentTypeBusinessCategory> documentTypeBusinessCategories = new HashSet<>();
 
+    public DocumentType() {}
+    
+    public DocumentType(Long id, @NotNull String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
