@@ -127,6 +127,14 @@ aside {
   text-align: center
 }
 
+.navbar {
+  display: block;
+  flex-wrap: nowrap;
+  align-items: unset;
+  justify-content: unset;
+  padding: 0;
+}
+
 .sub-navbar {
   height: 50px;
   line-height: 50px;
