@@ -7,6 +7,7 @@ export interface IAccountState {
   authenticated: boolean
   ribbonOnProfiles: string
   activeProfiles: Array<string>
+  authorities: Set<string>
 }
 
 @Module({ dynamic: true, store, name: 'accountStore', namespaced: true })
@@ -16,6 +17,7 @@ class AccountStore extends VuexModule implements IAccountState {
   public authenticated = false
   public ribbonOnProfiles = ''
   public activeProfiles = []
+  public authorities = new Set<string>()
 
   public get account() { return this.userIdentity }
 
@@ -25,8 +27,9 @@ class AccountStore extends VuexModule implements IAccountState {
   }
 
   @Mutation
-  private SET_AUTHENTICATED(identity: object) {
+  private SET_AUTHENTICATED(identity: any) {
     this.userIdentity = identity
+    this.authorities = new Set(identity.authorities)
     this.authenticated = true
     this.logon = false
   }

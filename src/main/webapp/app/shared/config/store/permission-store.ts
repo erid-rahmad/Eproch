@@ -4,15 +4,16 @@ import { asyncRoutes, constantRoutes } from '@/router'
 import store from '@/shared/config/store'
 import { Authority } from '@/shared/security/authority'
 
-const hasPermission = (roles: string[], route: RouteConfig) => {
-  if (route.meta && route.meta.roles) {
-    return roles.some(role => route.meta.roles.includes(role))
+const hasPermission = (roles: Set<string>, route: RouteConfig) => {
+  const authorities: Array<string> = route.meta.authorities;
+  if (route.meta && authorities && authorities.length) {
+    return authorities.some(authority => roles.has(authority))
   } else {
     return true
   }
 }
 
-export const filterAsyncRoutes = (routes: RouteConfig[], roles: string[]) => {
+export const filterAsyncRoutes = (routes: RouteConfig[], roles: Set<string>) => {
   const res: RouteConfig[] = []
   routes.forEach(route => {
     const r = { ...route }
@@ -43,9 +44,9 @@ class PermissionStore extends VuexModule implements IPermissionState {
   }
 
   @Action
-  public generateRoutes(roles: string[]) {
+  public generateRoutes(roles: Set<string>) {
     let accessedRoutes
-    if (roles.includes(Authority.ADMIN)) {
+    if (roles.has(Authority.ADMIN)) {
       accessedRoutes = asyncRoutes
     } else {
       accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)

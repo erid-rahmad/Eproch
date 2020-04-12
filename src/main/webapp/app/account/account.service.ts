@@ -50,7 +50,7 @@ export default class AccountService {
             this.router.replace(sessionStorage.getItem('requested-url'));
             sessionStorage.removeItem('requested-url');
           }
-          permissionStore.generateRoutes(account.authorities)
+          permissionStore.generateRoutes(new Set<string>(account.authorities))
           this.router.addRoutes(permissionStore.dynamicRoutes)
           this.trackerService.connect();
         } else {
@@ -66,28 +66,26 @@ export default class AccountService {
       });
   }
 
+  /**
+   * Checks whether a user has any authority accessing a route.
+   * @param authorities Route meta authorities.
+   */
   public hasAnyAuthority(authorities: any): boolean {
-    if (typeof authorities === 'string') {
-      authorities = [authorities];
-    }
     if (!this.authenticated || !this.userAuthorities) {
       return false;
     }
 
-    for (let i = 0; i < authorities.length; i++) {
-      if (this.userAuthorities.includes(authorities[i])) {
-        return true;
-      }
+    if (typeof authorities === 'string') {
+      authorities = [authorities];
     }
-
-    return false;
+    return authorities.some(authority => this.userAuthorities.has(authority))
   }
 
   public get authenticated(): boolean {
     return accountStore.authenticated;
   }
 
-  public get userAuthorities(): any {
-    return accountStore.userIdentity.authorities;
+  public get userAuthorities(): Set<string> {
+    return accountStore.authorities;
   }
 }
