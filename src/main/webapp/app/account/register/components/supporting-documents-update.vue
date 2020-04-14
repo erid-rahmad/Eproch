@@ -6,10 +6,10 @@
         :model="document"
         :rules="rules"
     >
-        <el-form-item label="Document Type" prop="docType" required>
+        <el-form-item label="Document Type" prop="typeId" required>
             <el-select
                 filterable
-                v-model="document.docType"
+                v-model="document.typeId"
                 placeholder="Select Document Type"
                 @change="handleDocumentTypeChange"
             >
@@ -21,8 +21,8 @@
                 />
             </el-select>
         </el-form-item>
-        <el-form-item label="Document No." prop="docNo" required>
-            <el-input v-model="document.docNo" />
+        <el-form-item label="Document No." prop="documentNo" required>
+            <el-input v-model="document.documentNo" />
         </el-form-item>
         <el-form-item label="Expiration Date" prop="expirationDate" :required="hasExpirationDate">
             <el-date-picker
@@ -36,4 +36,4 @@
     </el-form>
 </template>
 
-<script lang="ts" src="./supporting-documents-form.component.ts"></script>
+<script lang="ts" src="./supporting-documents-update.component.ts"></script>

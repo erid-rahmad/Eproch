@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import SupportingDocumentsForm from './supporting-documents-form.vue';
+import SupportingDocumentsUpdate from './supporting-documents-update.vue';
+import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store'
 
 const DocumentProps = Vue.extend({
   props: {
@@ -21,35 +22,81 @@ const DocumentProps = Vue.extend({
 
 @Component({
     components: {
-        SupportingDocumentsForm
+        SupportingDocumentsUpdate
     }
 })
 export default class SupportingDocuments extends DocumentProps {
     loading = false;
     columnSpacing = 32;
     editDialogVisible = false;
-    document = {};
     editingForm = null;
-
-    mounted() {
-        this.eventBus.$on('push-document', (document) => {
-            this[this.editingForm].push(document);
-            this.loading = false;
-            this.editDialogVisible = false;
-        });
+    errors = {
+        mainDocuments: null
     }
 
-    addDocument(target: string) {
+    mounted() {
+        this.eventBus.$on('validate-form', this.validate);
+        this.eventBus.$on('document-validation-failed', this.hideLoadingIndicator);
+        this.eventBus.$on('push-document', this.pushDocument);
+    }
+
+    beforeDestroy() {
+        this.eventBus.$off('validate-form', this.validate);
+        this.eventBus.$off('document-validation-failed', this.hideLoadingIndicator);
+        this.eventBus.$off('push-document', this.pushDocument);
+        (<Vue>this.$refs.dialogBody)?.$destroy();
+    }
+
+    get shouldFillMandatoryDocuments() {
+        return registrationStore.mandatoryDocumentTypes.length > 0;
+    }
+
+    get hasErrors() {
+        return this.errors.mainDocuments !== null;
+    }
+
+    public addDocument(target: string) {
         this.editingForm = target;
         this.editDialogVisible = true;
     }
 
-    saveDocument() {
+    public saveDocument() {
         this.loading = true;
         this.eventBus.$emit('save-document');
     }
 
-    private handleDialogOpen() {
-        this.eventBus.$emit('document-entry-open');
+    public hideDialog() {
+        this.eventBus.$emit('reset-document-form');
+        this.editDialogVisible = false;
+    }
+
+    private hideLoadingIndicator() {
+        this.loading = false;
+    }
+
+    private pushDocument(document) {
+        this[this.editingForm].push(document);
+        if (this.mainDocuments.length === registrationStore.mandatoryDocumentTypes.length) {
+            this.errors.mainDocuments = null;
+        }
+        this.loading = false;
+        this.editDialogVisible = false;
+    }
+
+    private validate(formIndex: number) {
+        if (formIndex === 3) {
+            let passed = true;
+
+            if (this.mainDocuments.length < registrationStore.mandatoryDocumentTypes.length) {
+                const types = registrationStore.mandatoryDocumentTypes
+                    .map(item => item.name)
+                    .join(', ');
+                passed = false;
+                this.errors.mainDocuments = `Document of the following types are required: ${types}`;
+            } else {
+                this.errors.mainDocuments = null;
+            }
+            this.eventBus.$emit('step-validated', { passed, errors: this.errors });
+        }
     }
 }

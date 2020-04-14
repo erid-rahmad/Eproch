@@ -1,14 +1,18 @@
 package com.bhp.opusb.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * The PIC entity.
@@ -16,13 +20,11 @@ import java.util.Objects;
 @Entity
 @Table(name = "person_in_charge")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class PersonInCharge extends AbstractAuditingEntity implements Serializable {
+public class PersonInCharge extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
     @NotNull
@@ -34,8 +36,7 @@ public class PersonInCharge extends AbstractAuditingEntity implements Serializab
     private String phone;
 
     @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
+    @MapsId
     private User user;
 
     @ManyToOne

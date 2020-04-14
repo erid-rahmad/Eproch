@@ -5,6 +5,7 @@ export interface IPersonInCharge {
   userLogin?: string;
   userId?: number;
   vendorId?: number;
+  name?: string;
 }
 
 export class PersonInCharge implements IPersonInCharge {
@@ -14,6 +15,7 @@ export class PersonInCharge implements IPersonInCharge {
     public phone?: string,
     public userLogin?: string,
     public userId?: number,
-    public vendorId?: number
+    public vendorId?: number,
+    public name?: string
   ) {}
 }

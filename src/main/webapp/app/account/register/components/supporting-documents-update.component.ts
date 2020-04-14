@@ -23,48 +23,51 @@ const SupportingDocumentsProps = Vue.extend({
 })
 
 @Component
-export default class SupportingDocumentsForm extends SupportingDocumentsProps {
+export default class SupportingDocumentsUpdate extends SupportingDocumentsProps {
     @Inject('documentTypeService')
     private documentTypeService: () => DocumentTypeService;
 
-    private documentTypes = [];
-    private rules = {};
-    private hasExpirationDate = false;
+    public rules = {};
+    public hasExpirationDate = false;
 
     mounted() {
         this.eventBus.$on('save-document', this.save);
-        this.eventBus.$on('document-entry-open', () => {
-            this.retrieveMandatoryDocumentTypes();
-        });
+        this.eventBus.$on('reset-document-form', this.reset);
     }
 
-    save() {
-        setTimeout(() => {
-            const data = { ...this.document };
-            this.eventBus.$emit('push-document', data);
-            (<ElForm>this.$refs.document).resetFields();
-        }, 1000);
+    beforeDestroy() {
+        this.eventBus.$off('save-document', this.save);
+        this.eventBus.$off('reset-document-form', this.reset);
+    }
+
+    get documentTypes() {
+        return this.mandatory ? registrationStore.mandatoryDocumentTypes : registrationStore.additionalDocumentTypes;
     }
 
     public handleDocumentTypeChange(id: number) {
         this.documentTypeService()
             .find(id)
             .then(res => {
+                this.document.typeName = res.name;
                 this.hasExpirationDate = res.hasExpirationDate;
             });
     }
 
-    private async retrieveMandatoryDocumentTypes() {
-        await registrationStore.addBusinessCategory(1205);
-        await registrationStore.addBusinessCategory(1206);
-        const businessCategories = Array.from(registrationStore.businessCategories);
-        this.documentTypeService()
-            .retrieveWithFilter(
-                [`mandatory=${this.mandatory}`]
-                .concat(businessCategories.map(id => `businessCategoryIds=${id}`))
-            )
-            .then(res => {
-                this.documentTypes = res.data;
-            })
+    private reset() {
+        (<ElForm>this.$refs.document).resetFields();
+    }
+
+    private save() {
+        (<ElForm>this.$refs.document).validate((passed, errors) => {
+            if (passed) {
+                setTimeout(() => {
+                    const data = { ...this.document };
+                    this.eventBus.$emit('push-document', data);
+                    this.reset();
+                }, 1000);
+            } else {
+                this.eventBus.$emit('document-validation-failed', {passed, errors});
+            }
+        });
     }
 }

@@ -12,7 +12,11 @@
           <el-input v-model="company.name" />
         </el-form-item>
         <el-form-item label="Type" prop="type" required>
-          <el-select v-model="company.type" placeholder="Select">
+          <el-select
+            v-model="company.type"
+            placeholder="Select"
+            @change="handleTypeChange"
+          >
             <el-option
               v-for="item in typeOptions"
               :key="item.value"
@@ -161,82 +165,4 @@
     </el-row>
   </el-form>
 </template>
-<script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import { ElForm } from 'element-ui/types/form'
-
-const CompanyProps = Vue.extend({
-  props: {
-    eventBus: {
-      type: Object,
-      default: () => {}
-    },
-    company: {
-      type: Object,
-      default: () => {}
-    }
-  }
-})
-
-@Component
-export default class CompanyProfile extends CompanyProps {
-  data() {
-    return {
-      columnSpacing: 32,
-      rules: {
-        website: {
-          type: 'url'
-        }
-      },
-      typeOptions: [{
-        label: 'Company',
-        value: 'C'
-      }, {
-        label: 'Professional',
-        value: 'P'
-      }],
-      countryOptions: [{
-        label: 'Indonesia',
-        value: 'ID'
-      }, {
-        label: 'Malaysia',
-        value: 'MY'
-      }, {
-        label: 'Singapore',
-        value: 'SG'
-      }],
-      regionOptions: [{
-        label: 'DKI Jakarta',
-        value: 'JKT'
-      }, {
-        label: 'Jawa Barat',
-        value: 'JBR'
-      }, {
-        label: 'Jawa Tengah',
-        value: 'JTG'
-      }],
-      cityOptions: [
-        'Jakarta Barat',
-        'Jakarta Pusat',
-        'Jakarta Selatan',
-        'Jakarta Timur',
-        'Jakarta Utara',
-        'Kep. Seribu'
-      ]
-    }
-  }
-
-  mounted() {
-    this.eventBus.$on('validate-form', this.validate)
-  }
-
-  validate(formIndex) {
-    if (formIndex === 1) {
-      (this.$refs.company as ElForm).validate((passed, errors) => {
-        this.eventBus.$emit('step-validated', { passed, errors })
-      })
-    }
-  }
-}
-</script>
+<script lang="ts" src="./company-profile.component.ts"></script>

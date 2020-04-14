@@ -24,6 +24,7 @@ public class SupportingDocumentDTO extends AbstractAuditingDTO implements Serial
     private String fileContentType;
 
     private Long typeId;
+    private String typeName;
 
     private Long vendorId;
     
@@ -73,6 +74,14 @@ public class SupportingDocumentDTO extends AbstractAuditingDTO implements Serial
 
     public void setTypeId(Long documentTypeId) {
         this.typeId = documentTypeId;
+    }
+
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
     }
 
     public Long getVendorId() {

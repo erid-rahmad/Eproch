@@ -1,14 +1,18 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import BusinessCategories from './components/business-categories.vue'
 import CompanyProfile from './components/company-profile.vue'
 import LoginDetails from './components/login-details.vue'
 import SupportingDocuments from './components/supporting-documents.vue'
+import PersonInCharge from './components/person-in-charge.vue'
 
 @Component({
   components: {
     LoginDetails,
     CompanyProfile,
-    SupportingDocuments
+    BusinessCategories,
+    SupportingDocuments,
+    PersonInCharge
   }
 })
 export default class StepsForm extends Vue {
@@ -44,8 +48,11 @@ export default class StepsForm extends Vue {
           email: 'cs@terbaik.com',
           website: ''
         },
+        businessCategories: [],
         mainDocuments: [],
-        additionalDocuments: []
+        additionalDocuments: [],
+        contacts: [],
+        functionaries: []
       }
     }
   }
@@ -66,7 +73,7 @@ export default class StepsForm extends Vue {
   }
 
   proceedNext(validationState) {
-    if (validationState.passed && this.active <= 2) {
+    if (validationState.passed && this.active <= 6) {
       ++this.active
     }
   }
