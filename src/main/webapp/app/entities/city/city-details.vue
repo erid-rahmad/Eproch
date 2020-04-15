@@ -1,4 +1,43 @@
 <template>
+<div class="app-container">
+        <div class="page-heading">
+            <h2>
+                <span v-text="$t('opusWebApp.city.detail.title')">City</span> {{city.id}}
+            </h2>
+        </div>
+        <el-form
+            ref="city"
+            label-width="100px"
+            :model="city"
+        >
+            <el-form-item :label="$t('opusWebApp.city.name')" prop="name" required>
+                <el-col :span="6">
+                    {{city.name}}
+                </el-col>
+            </el-form-item>
+            <el-form-item :label="$t('opusWebApp.city.country')" prop="country" required>
+                <el-col :span="6">
+                    {{city.countryId}}
+                </el-col>
+            </el-form-item>
+            <el-form-item :label="$t('opusWebApp.city.region')" prop="region" required>
+                <el-col :span="6">
+                    {{city.regionId}}
+                </el-col>
+            </el-form-item>
+            <el-form-item>
+
+                <!--<router-link v-if="country.id" :to="{name: 'CountryUpdate', params: {countryId: country.id}}">
+                    <el-button type="primary">{{ $t('entity.action.edit') }}</el-button>
+                </router-link>-->
+                <el-button icon="el-icon-edit" @click="edit(city)" type="primary">{{ $t('entity.action.edit') }}</el-button>
+                <el-button icon="el-icon-close" @click="previousState()">{{ $t('entity.action.cancel') }}</el-button>
+                
+            </el-form-item>
+        </el-form>
+    </div>
+
+    <!--
     <div class="row justify-content-center">
         <div class="col-8">
             <div v-if="city">
@@ -38,6 +77,7 @@
             </div>
         </div>
     </div>
+    -->
 </template>
 
 <script lang="ts" src="./city-details.component.ts">

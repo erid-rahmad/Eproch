@@ -22,12 +22,14 @@
             </div>
             <el-table
                 ref="mainTable"
+                highlight-current-row
                 max-height="512px"
                 style="width: 100%"
                 @sort-change="changeOrder"
                 :data="countries"
                 :default-sort="{prop: 'name', order: 'ascending'}"
                 :empty-text="$t('opusWebApp.country.home.notFound')"
+                @current-change="changeClassificationSelection"
             >
                 <el-table-column
                     prop="name"
@@ -41,6 +43,7 @@
                 />
                 <el-table-column
                     prop="currencyCode"
+                    sortable
                     :label="$t('opusWebApp.country.currency')"
                 />
                 <el-table-column
@@ -50,9 +53,10 @@
                     <template slot-scope="scope">
                         <el-button
                             @click="openDetails(scope.row)"
-                            type="text"
+                            type="warning"
                             size="mini"
                             icon="el-icon-info"
+                            plain
                             :title="$t('entity.action.view')"
                         />
                         <el-button
@@ -92,8 +96,8 @@
         >
             <span>{{ $t('opusWebApp.country.delete.question', {'id': removeId}) }}</span>
             <div slot="footer">
-                <el-button @click="closeDialog()">{{ $t('entity.action.cancel') }}</el-button>
-                <el-button type="danger" @click="removeCountry()">{{ $t('entity.action.delete') }}</el-button>
+                <el-button icon="el-icon-close" @click="closeDialog()">{{ $t('entity.action.cancel') }}</el-button>
+                <el-button icon="el-icon-delete" type="danger" @click="removeCountry()">{{ $t('entity.action.delete') }}</el-button>
             </div>
         </el-dialog>
     </div>

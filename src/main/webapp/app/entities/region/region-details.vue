@@ -1,4 +1,41 @@
 <template>
+    <div class="app-container">
+        <div class="page-heading">
+            <h2>
+                <span v-text="$t('opusWebApp.region.detail.title')">Region</span> {{region.id}}
+            </h2>
+        </div>
+
+        <el-form
+            ref="region"
+            label-width="100px"
+            :model="region"
+        >
+           
+            <el-form-item :label="$t('opusWebApp.region.name')" prop="name" required>
+                <el-col :span="6">
+                    {{region.name}}
+                </el-col>
+            </el-form-item>
+            
+            <el-form-item :label="$t('opusWebApp.region.country')" prop="country" required>
+                <el-col :span="6">
+                    {{region.countryId}}
+                </el-col>
+            </el-form-item>
+
+            <el-form-item>
+                
+                <!--<router-link v-if="region.id" :to="{name: 'RegionUpdate', params: {regionId: region.id}}">
+                    <el-button type="primary">{{ $t('entity.action.edit') }}</el-button>
+                </router-link>-->
+                <el-button icon="el-icon-edit" @click="edit(region)" type="primary">{{ $t('entity.action.edit') }}</el-button>
+                <el-button icon="el-icon-close" @click="previousState()">{{ $t('entity.action.cancel') }}</el-button>
+
+            </el-form-item>
+        </el-form>
+    </div>
+<!--
     <div class="row justify-content-center">
         <div class="col-8">
             <div v-if="region">
@@ -30,6 +67,7 @@
             </div>
         </div>
     </div>
+    -->
 </template>
 
 <script lang="ts" src="./region-details.component.ts">

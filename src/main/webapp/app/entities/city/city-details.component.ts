@@ -27,4 +27,8 @@ export default class CityDetails extends Vue {
   public previousState() {
     this.$router.go(-1);
   }
+
+  public edit(instance: ICity) {
+    this.$router.push(`/city/${instance.id}/edit`);
+  }
 }

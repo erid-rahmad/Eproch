@@ -6,7 +6,7 @@ import AlertService from '@/shared/alert/alert.service';
 import { ICurrency, Currency } from '@/shared/model/currency.model';
 import CurrencyService from './currency.service';
 
-const validations: any = {
+/*const validations: any = {
   currency: {
     code: {
       required
@@ -18,16 +18,21 @@ const validations: any = {
       required
     }
   }
-};
+};*/
 
-@Component({
+@Component /*({
   validations
-})
+})*/
 export default class CurrencyUpdate extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('currencyService') private currencyService: () => CurrencyService;
   public currency: ICurrency = new Currency();
   public isSaving = false;
+  public rules = {
+    code: {
+      pattern: '^[A-Z]{3}$'
+    }
+  };
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -46,7 +51,12 @@ export default class CurrencyUpdate extends Vue {
           this.isSaving = false;
           this.$router.go(-1);
           const message = this.$t('opusWebApp.currency.updated', { param: param.id });
-          this.alertService().showAlert(message, 'info');
+          this.$notify({
+            title: 'Success',
+            message: message.toString(),
+            type: 'success',
+            duration: 3000
+          });
         });
     } else {
       this.currencyService()
@@ -55,7 +65,12 @@ export default class CurrencyUpdate extends Vue {
           this.isSaving = false;
           this.$router.go(-1);
           const message = this.$t('opusWebApp.currency.created', { param: param.id });
-          this.alertService().showAlert(message, 'success');
+          this.$notify({
+            title: 'Success',
+            message: message.toString(),
+            type: 'success',
+            duration: 3000
+          });
         });
     }
   }

@@ -27,4 +27,8 @@ export default class CurrencyDetails extends Vue {
   public previousState() {
     this.$router.go(-1);
   }
+
+  public edit(instance: ICurrency) {
+    this.$router.push(`/currency/${instance.id}/edit`);
+  }
 }

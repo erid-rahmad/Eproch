@@ -1,4 +1,42 @@
 <template>
+    <div class="app-container">
+        <div class="page-heading">
+            <h2 v-text="$t('opusWebApp.region.home.createOrEditLabel')">
+                Create or edit a Region
+            </h2>
+        </div>
+        <el-form
+            ref="region"
+            label-width="100px"
+            :model="region"
+        >
+            <el-form-item :label="$t('opusWebApp.region.name')" prop="name" required>
+                <el-col :span="6">
+                    <el-input v-model="region.name" required />
+                </el-col>
+            </el-form-item>
+            <el-form-item :label="$t('opusWebApp.region.country')" prop="country">
+                <el-select
+                    filterable
+                    v-model="region.countryId"
+                    placeholder="Select Parent Country"
+                >
+                    <el-option
+                        v-for="countryOption in countries"
+                        :key="countryOption.id"
+                        :label="countryOption.name"
+                        :value="countryOption.id"
+                    />
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button icon="el-icon-edit-outline" type="primary" :loading="isSaving" @click.prevent="save()">{{ $t('entity.action.save') }}</el-button>
+                <el-button icon="el-icon-close" @click="previousState()">{{ $t('entity.action.cancel') }}</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+
+    <!--
     <div class="row justify-content-center">
         <div class="col-8">
             <form name="editForm" role="form" novalidate v-on:submit.prevent="save()" >
@@ -43,6 +81,7 @@
             </form>
         </div>
     </div>
+    -->
 </template>
 <script lang="ts" src="./region-update.component.ts">
 </script>

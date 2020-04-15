@@ -1,4 +1,56 @@
 <template>
+    <div class="app-container">
+        <div class="page-heading">
+            <h2 v-text="$t('opusWebApp.city.home.createOrEditLabel')">
+                Create or edit a City
+            </h2>
+        </div>
+        <el-form
+            ref="city"
+            label-width="100px"
+            :model="city"
+        >
+            <el-form-item :label="$t('opusWebApp.city.name')" prop="name" required>
+                <el-col :span="6">
+                    <el-input v-model="city.name" required />
+                </el-col>
+            </el-form-item>
+            <el-form-item :label="$t('opusWebApp.city.country')" prop="country">
+                <el-select
+                    filterable
+                    v-model="city.countryId"
+                    placeholder="Select Parent Country"
+                >
+                    <el-option
+                        v-for="countryOption in countries"
+                        :key="countryOption.id"
+                        :label="countryOption.name"
+                        :value="countryOption.id"
+                    />
+                </el-select>
+            </el-form-item>
+            <el-form-item :label="$t('opusWebApp.city.region')" prop="region">
+                <el-select
+                    filterable
+                    v-model="city.regionId"
+                    placeholder="Select Parent Region"
+                >
+                    <el-option
+                        v-for="regionOption in regions"
+                        :key="regionOption.id"
+                        :label="regionOption.name"
+                        :value="regionOption.id"
+                    />
+                </el-select>
+            </el-form-item>
+            <el-form-item>
+                <el-button icon="el-icon-edit-outline" type="primary" :loading="isSaving" @click.prevent="save()">{{ $t('entity.action.save') }}</el-button>
+                <el-button icon="el-icon-close" @click="previousState()">{{ $t('entity.action.cancel') }}</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+
+    <!--
     <div class="row justify-content-center">
         <div class="col-8">
             <form name="editForm" role="form" novalidate v-on:submit.prevent="save()" >
@@ -45,6 +97,7 @@
             </form>
         </div>
     </div>
+    -->
 </template>
 <script lang="ts" src="./city-update.component.ts">
 </script>

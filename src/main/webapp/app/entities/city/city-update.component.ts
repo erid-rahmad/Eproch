@@ -55,7 +55,13 @@ export default class CityUpdate extends Vue {
           this.isSaving = false;
           this.$router.go(-1);
           const message = this.$t('opusWebApp.city.updated', { param: param.id });
-          this.alertService().showAlert(message, 'info');
+          //this.alertService().showAlert(message, 'info');
+          this.$notify({
+            title: 'Success',
+            message: message.toString(),
+            type: 'success',
+            duration: 3000
+          });
         });
     } else {
       this.cityService()
@@ -64,7 +70,13 @@ export default class CityUpdate extends Vue {
           this.isSaving = false;
           this.$router.go(-1);
           const message = this.$t('opusWebApp.city.created', { param: param.id });
-          this.alertService().showAlert(message, 'success');
+          //this.alertService().showAlert(message, 'success');
+          this.$notify({
+            title: 'Success',
+            message: message.toString(),
+            type: 'success',
+            duration: 3000
+          });
         });
     }
   }

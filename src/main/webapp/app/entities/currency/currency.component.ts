@@ -10,13 +10,14 @@ import CurrencyService from './currency.service';
 @Component
 export default class Currency extends mixins(Vue2Filters.mixin, AlertMixin) {
   @Inject('currencyService') private currencyService: () => CurrencyService;
+  private showDeleteDialog: boolean = false;
   private removeId: number = null;
   public itemsPerPage = 20;
   public queryCount: number = null;
   public page = 1;
   public previousPage = 1;
-  public propOrder = 'id';
-  public reverse = false;
+  public propOrder = 'name';
+  public reverse = true;
   public totalItems = 0;
 
   public currencies: ICurrency[] = [];
@@ -57,9 +58,10 @@ export default class Currency extends mixins(Vue2Filters.mixin, AlertMixin) {
 
   public prepareRemove(instance: ICurrency): void {
     this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
+    /*if (<any>this.$refs.removeEntity) {
       (<any>this.$refs.removeEntity).show();
-    }
+    }*/
+    this.showDeleteDialog = true;
   }
 
   public removeCurrency(): void {
@@ -67,8 +69,14 @@ export default class Currency extends mixins(Vue2Filters.mixin, AlertMixin) {
       .delete(this.removeId)
       .then(() => {
         const message = this.$t('opusWebApp.currency.deleted', { param: this.removeId });
-        this.alertService().showAlert(message, 'danger');
-        this.getAlertFromStore();
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        });
+        //this.alertService().showAlert(message, 'danger');
+        //this.getAlertFromStore();
         this.removeId = null;
         this.retrieveAllCurrencys();
         this.closeDialog();
@@ -90,17 +98,40 @@ export default class Currency extends mixins(Vue2Filters.mixin, AlertMixin) {
     }
   }
 
+  public handleSizeChange(size: number) {
+    this.itemsPerPage = size;
+    this.retrieveAllCurrencys();
+  }
+
   public transition(): void {
     this.retrieveAllCurrencys();
   }
 
+  public changeClassificationSelection(currentRow: ICurrency) {
+    console.log('Selected classification#%d', currentRow.id);
+  }
+
   public changeOrder(propOrder): void {
     this.propOrder = propOrder;
-    this.reverse = !this.reverse;
+    //this.reverse = !this.reverse;
+    this.reverse = propOrder.order === 'ascending';
     this.transition();
   }
 
   public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
+    //(<any>this.$refs.removeEntity).hide();
+    this.showDeleteDialog = false;
+  }
+
+  public openDetails(instance: ICurrency) {
+    this.$router.push(`/currency/${instance.id}/view`);
+  }
+
+  public add() {
+    this.$router.push('/currency/new');
+  }
+
+  public edit(instance: ICurrency) {
+    this.$router.push(`/currency/${instance.id}/edit`);
   }
 }

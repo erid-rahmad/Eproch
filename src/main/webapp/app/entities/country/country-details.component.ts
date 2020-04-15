@@ -27,4 +27,8 @@ export default class CountryDetails extends Vue {
   public previousState() {
     this.$router.go(-1);
   }
+
+  public edit(instance: ICountry) {
+    this.$router.push(`/country/${instance.id}/edit`);
+  }
 }

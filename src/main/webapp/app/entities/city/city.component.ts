@@ -10,6 +10,7 @@ import CityService from './city.service';
 @Component
 export default class City extends mixins(Vue2Filters.mixin, AlertMixin) {
   @Inject('cityService') private cityService: () => CityService;
+  private showDeleteDialog: boolean = false;
   private removeId: number = null;
   public itemsPerPage = 20;
   public queryCount: number = null;
@@ -57,9 +58,10 @@ export default class City extends mixins(Vue2Filters.mixin, AlertMixin) {
 
   public prepareRemove(instance: ICity): void {
     this.removeId = instance.id;
-    if (<any>this.$refs.removeEntity) {
-      (<any>this.$refs.removeEntity).show();
-    }
+    //if (<any>this.$refs.removeEntity) {
+    //  (<any>this.$refs.removeEntity).show();
+    //}
+    this.showDeleteDialog = true;
   }
 
   public removeCity(): void {
@@ -67,8 +69,14 @@ export default class City extends mixins(Vue2Filters.mixin, AlertMixin) {
       .delete(this.removeId)
       .then(() => {
         const message = this.$t('opusWebApp.city.deleted', { param: this.removeId });
-        this.alertService().showAlert(message, 'danger');
-        this.getAlertFromStore();
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        });
+        //this.alertService().showAlert(message, 'danger');
+        //this.getAlertFromStore();
         this.removeId = null;
         this.retrieveAllCitys();
         this.closeDialog();
@@ -90,17 +98,40 @@ export default class City extends mixins(Vue2Filters.mixin, AlertMixin) {
     }
   }
 
+  public handleSizeChange(size: number) {
+    this.itemsPerPage = size;
+    this.retrieveAllCitys();
+  }
+
   public transition(): void {
     this.retrieveAllCitys();
   }
 
+  public changeClassificationSelection(currentRow: ICity) {
+    console.log('Selected classification#%d', currentRow.id);
+  }
+
   public changeOrder(propOrder): void {
     this.propOrder = propOrder;
-    this.reverse = !this.reverse;
+    //this.reverse = !this.reverse;
+    this.reverse = propOrder.order === 'ascending';
     this.transition();
   }
 
   public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
+    //(<any>this.$refs.removeEntity).hide();
+    this.showDeleteDialog = false;
+  }
+
+  public openDetails(instance: ICity) {
+    this.$router.push(`/city/${instance.id}/view`);
+  }
+
+  public add() {
+    this.$router.push('/city/new');
+  }
+
+  public edit(instance: ICity) {
+    this.$router.push(`/city/${instance.id}/edit`);
   }
 }

@@ -27,4 +27,8 @@ export default class RegionDetails extends Vue {
   public previousState() {
     this.$router.go(-1);
   }
+
+  public edit(instance: IRegion) {
+    this.$router.push(`/region/${instance.id}/edit`);
+  }
 }

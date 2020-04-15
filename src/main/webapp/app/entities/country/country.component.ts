@@ -72,7 +72,7 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
           message: message.toString(),
           type: 'success',
           duration: 3000
-        })
+        });
         this.removeId = null;
         this.retrieveAllCountries();
         this.closeDialog();
@@ -103,6 +103,10 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     this.retrieveAllCountries();
   }
 
+  public changeClassificationSelection(currentRow: ICountry) {
+    console.log('Selected classification#%d', currentRow.id);
+  }
+
   public changeOrder(propOrder): void {
     this.propOrder = propOrder.prop;
     this.reverse = propOrder.order === 'ascending';
@@ -118,7 +122,7 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   }
 
   public add() {
-    this.$router.push('/country/new')
+    this.$router.push('/country/new');
   }
 
   public edit(instance: ICountry) {

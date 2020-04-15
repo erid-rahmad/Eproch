@@ -15,7 +15,7 @@ import AlertService from '@/shared/alert/alert.service';
 import { ICountry, Country } from '@/shared/model/country.model';
 import CountryService from './country.service';
 
-const validations: any = {
+/*const validations: any = {
   country: {
     name: {
       required
@@ -24,27 +24,33 @@ const validations: any = {
       required
     }
   }
-};
+};*/
 
-@Component({
-  validations
-})
+@Component
+//({
+//  validations
+//})
 export default class CountryUpdate extends Vue {
+  @Inject('alertService') private alertService: () => AlertService;
+
   @Inject('countryService') private countryService: () => CountryService;
   public country: ICountry = new Country();
 
   @Inject('currencyService') private currencyService: () => CurrencyService;
-
   public currencies: ICurrency[] = [];
 
   @Inject('regionService') private regionService: () => RegionService;
-
   public regions: IRegion[] = [];
 
   @Inject('cityService') private cityService: () => CityService;
-
   public cities: ICity[] = [];
+
   public isSaving = false;
+  public rules = {
+    code: {
+      pattern: '^[A-Z]{2}$'
+    }
+  };
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -67,9 +73,9 @@ export default class CountryUpdate extends Vue {
           this.$notify({
             title: 'Success',
             message: message.toString(),
-            type: 'info',
+            type: 'success',
             duration: 3000
-          })
+          });
         });
     } else {
       this.countryService()
@@ -83,7 +89,7 @@ export default class CountryUpdate extends Vue {
             message: message.toString(),
             type: 'success',
             duration: 3000
-          })
+          });
         });
     }
   }
