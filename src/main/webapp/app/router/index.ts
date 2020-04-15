@@ -99,6 +99,12 @@ const Region = () => import('../entities/region/region.vue');
 const RegionUpdate = () => import('../entities/region/region-update.vue');
 // prettier-ignore
 const RegionDetails = () => import('../entities/region/region-details.vue');
+// prettier-ignore
+const City = () => import('../entities/city/city.vue');
+// prettier-ignore
+const CityUpdate = () => import('../entities/city/city-update.vue');
+// prettier-ignore
+const CityDetails = () => import('../entities/city/city-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 Vue.use(Router);
@@ -346,10 +352,11 @@ export const asyncRoutes: RouteConfig[] = [
   },
   {
     path: '/country',
+    //name: 'Country',
     component: Layout,
     redirect: '/country/list',
     meta: {
-      breadcrumb: false,
+      breadcrumb: true,
       title: 'country.default',
       roles: [Authority.ADMIN]
     },
@@ -365,27 +372,33 @@ export const asyncRoutes: RouteConfig[] = [
       },
       {
         path: '/country/new',
+        name: 'CountryNew',
         component: CountryUpdate,
         meta: {
           affix: false,
+          title: 'country.add',
           hidden: true,
           roles: [Authority.ADMIN]
         }
       },
       {
         path: '/country/:countryId/edit',
+        name: 'CountryUpdate',
         component: CountryUpdate,
         meta: {
           affix: false,
+          title: 'country.edit',
           hidden: true,
           roles: [Authority.ADMIN]
         }
       },
       {
         path: '/country/:countryId/view',
+        name: 'CountryView',
         component: CountryDetails,
         meta: {
           affix: false,
+          title: 'country.view',
           hidden: true,
           roles: [Authority.ADMIN]
         }
@@ -394,9 +407,11 @@ export const asyncRoutes: RouteConfig[] = [
   },
   {
     path: '/currency',
+    //name: 'Currency',
     component: Layout,
     redirect: '/currency/list',
     meta: {
+      breadcrumb: true,
       title: 'currency.default',
       roles: [Authority.ADMIN]
     },
@@ -415,6 +430,7 @@ export const asyncRoutes: RouteConfig[] = [
         name: 'CurrencyNew',
         component: CurrencyUpdate,
         meta: {
+          title: 'currency.add',
           hidden: true,
           roles: [Authority.ADMIN]
         }
@@ -424,15 +440,17 @@ export const asyncRoutes: RouteConfig[] = [
         name: 'CurrencyUpdate',
         component: CurrencyUpdate,
         meta: {
+          title: 'currency.edit',
           hidden: true,
           roles: [Authority.ADMIN]
         }
       },
       {
         path: '/currency/:currencyId/view',
-        name: 'CurrencyDetails',
+        name: 'CurrencyView',
         component: CurrencyDetails,
         meta: {
+          title: 'currency.view',
           hidden: true,
           roles: [Authority.ADMIN]
         }
@@ -627,7 +645,7 @@ export const asyncRoutes: RouteConfig[] = [
           hidden: true,
           roles: [Authority.ADMIN]
         }
-      },
+      }
     ]
   },
   // {
@@ -726,54 +744,118 @@ export const asyncRoutes: RouteConfig[] = [
   //   component: ReferenceListDetails,
   //   meta: { roles: [Authority.USER] }
   // },
-  // {
-  //   path: '/region',
-  //   name: 'Region',
-  //   component: () => import('@/entities/region/region.vue'),
-  //   meta: { roles: [Authority.USER] }
-  // },
-  // {
-  //   path: '/region/new',
-  //   name: 'RegionNew',
-  //   component: RegionUpdate,
-  //   meta: { roles: [Authority.USER] }
-  // },
-  // {
-  //   path: '/region/:regionId/edit',
-  //   name: 'RegionUpdate',
-  //   component: RegionUpdate,
-  //   meta: { roles: [Authority.USER] }
-  // },
-  // {
-  //   path: '/region/:regionId/view',
-  //   name: 'RegionDetails',
-  //   component: RegionDetails,
-  //   meta: { roles: [Authority.USER] }
-  // },
-  // {
-  //   path: '/city',
-  //   name: 'City',
-  //   component: City,
-  //   meta: { roles: [Authority.USER] }
-  // },
-  // {
-  //   path: '/city/new',
-  //   name: 'CityCreate',
-  //   component: CityUpdate,
-  //   meta: { roles: [Authority.USER] }
-  // },
-  // {
-  //   path: '/city/:cityId/edit',
-  //   name: 'CityEdit',
-  //   component: CityUpdate,
-  //   meta: { roles: [Authority.USER] }
-  // },
-  // {
-  //   path: '/city/:cityId/view',
-  //   name: 'CityView',
-  //   component: CityDetails,
-  //   meta: { roles: [Authority.USER] }
-  // },
+  {
+    path: '/region',
+    //name: 'Region',
+    component: Layout,
+    redirect: '/region/list',
+    meta: {
+      breadcrumb: true,
+      title: 'region.default',
+      roles: [Authority.ADMIN]
+    },
+    children: [
+      {
+        path: '/region/list',
+        name: 'Region',
+        component: Region,
+        meta: {
+          title: 'region.list',
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/region/new',
+        name: 'RegionNew',
+        component: RegionUpdate,
+        meta: {
+          affix: false,
+          title: 'region.add',
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/region/:regionId/edit',
+        name: 'RegionUpdate',
+        component: RegionUpdate,
+        meta: {
+          affix: false,
+          title: 'region.edit',
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/region/:regionId/view',
+        name: 'RegionDetails',
+        component: RegionDetails,
+        meta: {
+          affix: false,
+          title: 'region.view',
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      }
+    ]
+  },
+
+  {
+    path: '/city',
+    //name: 'Region',
+    component: Layout,
+    redirect: '/city/list',
+    meta: {
+      breadcrumb: true,
+      title: 'city.default',
+      roles: [Authority.ADMIN]
+    },
+    children: [
+      {
+        path: '/city/list',
+        name: 'City',
+        component: City,
+        meta: {
+          title: 'city.list',
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/city/new',
+        name: 'CityNew',
+        component: CityUpdate,
+        meta: {
+          affix: false,
+          title: 'city.add',
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/city/:cityId/edit',
+        name: 'CityUpdate',
+        component: CityUpdate,
+        meta: {
+          affix: false,
+          title: 'city.edit',
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      },
+      {
+        path: '/city/:cityId/view',
+        name: 'CityDetails',
+        component: CityDetails,
+        meta: {
+          affix: false,
+          title: 'city.view',
+          hidden: true,
+          roles: [Authority.ADMIN]
+        }
+      }
+    ]
+  }
+
   // {
   //   path: '/permission',
   //   name: 'Permission',
