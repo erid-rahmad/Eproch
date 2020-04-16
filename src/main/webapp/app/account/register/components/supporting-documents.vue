@@ -4,23 +4,31 @@
         <p>{{ $t('register.document.mandatory.description') }}</p>
         <div class="table-container">
             <div class="toolbar float-top-right">
-                <el-button type="primary" icon="el-icon-plus" circle @click.native.prevent="addDocument('mainDocuments')" />
+                <el-button
+                    type="primary"
+                    icon="el-icon-plus"
+                    circle
+                    v-if="shouldFillMandatoryDocuments"
+                    @click.native.prevent="addDocument('mainDocuments')"
+                />
             </div>
+            <p v-if="hasErrors" :text="errors.mainDocuments.message" class="error">All mandatory documents must be uploaded</p>
             <el-table
                 ref="mainDocuments"
+                max-height="250"
+                style="width: 100%"
                 :data="mainDocuments"
-                height="250"
-                style="width: 100%">
+            >
                 <el-table-column
-                    prop="docType"
+                    prop="typeName"
                     label="Document Type"
                 />
                 <el-table-column
-                    prop="docNo"
+                    prop="documentNo"
                     label="Document No."
                 />
                 <el-table-column
-                    prop="expirationDate"
+                    prop="expirationDate | formatDate"
                     label="Expiration Date"
                 />
                 <el-table-column
@@ -37,15 +45,16 @@
             </div>
             <el-table
                 ref="additionalDocuments"
+                max-height="250"
+                style="width: 100%"
                 :data="additionalDocuments"
-                height="250"
-                style="width: 100%">
+            >
                 <el-table-column
-                    prop="docType"
+                    prop="typeName"
                     label="Document Type"
                 />
                 <el-table-column
-                    prop="docNo"
+                    prop="documentNo"
                     label="Document No."
                 />
                 <el-table-column
@@ -58,73 +67,33 @@
                 />
             </el-table>
         </div>
-        <el-dialog :title="$t('register.form.document[\'title.edit\']')" :visible.sync="editDialogVisible">
+        <el-dialog
+            :title="$t('register.form.document[\'title.edit\']')"
+            :visible.sync="editDialogVisible"
+        >
             <el-row :gutter="16">
                 <el-col :span="18" :offset="3">
-                    <supporting-documents-form
+                    <supporting-documents-update
+                        ref="dialogBody"
                         :event-bus="eventBus"
-                        :document="document"
+                        :mandatory="editingForm === 'mainDocuments'"
                     />
                 </el-col>
             </el-row>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editDialogVisible = false">Cancel</el-button>
+                <el-button @click="hideDialog">Cancel</el-button>
                 <el-button :loading="loading" type="primary" @click="saveDocument">Save</el-button>
             </span>
         </el-dialog>
     </div>
 </template>
-<script lang="ts">
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import { ElForm } from 'element-ui/types/form'
-import SupportingDocumentsForm from './supporting-documents-form.vue';
+<script lang="ts" src="./supporting-documents.component.ts"></script>
 
-const DocumentProps = Vue.extend({
-  props: {
-    eventBus: {
-      type: Object,
-      default: () => {}
-    },
-    mainDocuments: {
-      type: Array,
-      default: () => []
-    },
-    additionalDocuments: {
-        type: Array,
-        default: () => []
-    }
-  }
-})
-
-@Component({
-    components: {
-        SupportingDocumentsForm
-    }
-})
-export default class SupportingDocuments extends DocumentProps {
-    loading = false;
-    columnSpacing = 32;
-    editDialogVisible = false;
-    document = {};
-    editingForm = null;
-
-    mounted() {
-        this.eventBus.$on('push-document', (document) => {
-            this[this.editingForm].push(document);
-            this.loading = false;
-            this.editDialogVisible = false;
-        });
-    }
-
-    addDocument(target: string) {
-        this.editingForm = target;
-        this.editDialogVisible = true;
-    }
-
-    saveDocument() {
-        this.loading = true;
-        this.eventBus.$emit('save-document');
-    }
+<style lang="scss" scoped>
+.error {
+    background: none;
+    color: #ff4949;
+    font-size: 12px;
+    line-height: 1;
 }
-</script>
+</style>

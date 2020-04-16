@@ -1,13 +1,20 @@
-export default function buildCriteriaQueryString(options) {
-    if (options) {
-        let query = '';
-        for (let key in options) {
-          if (query.length > 0) {
-            query += '&';
-          }
-          query += key + '=' + options[key];
+import _ from 'lodash';
+
+export default function buildCriteriaQueryString(options: Array<string> | object) {
+  if (options) {
+    let query = '';
+
+    if (_.isPlainObject(options)) {
+      for (let key in options) {
+        if (query.length > 0) {
+          query += '&';
         }
-        return query;
+        query += key + '=' + options[key];
       }
-      return '';
+    } else if (_.isArray(options)) {
+      query = options.join('&');
+    }
+    return query;
+  }
+  return '';
 }

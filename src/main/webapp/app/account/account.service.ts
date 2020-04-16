@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { Store } from 'vuex';
 import VueRouter from 'vue-router';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store'
-import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store'
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store';
 import TranslationService from '@/locale/translation.service';
 
 import TrackerService from '@/admin/tracker/tracker.service';
@@ -29,65 +29,63 @@ export default class AccountService {
   public retrieveProfiles(): void {
     axios.get('management/info').then(res => {
       if (res.data && res.data.activeProfiles) {
-        accountStore.setRibbonOnProfiles(res.data['display-ribbon-on-profiles'])
-        accountStore.setActiveProfiles(res.data['activeProfiles'])
+        accountStore.setRibbonOnProfiles(res.data['display-ribbon-on-profiles']);
+        accountStore.setActiveProfiles(res.data['activeProfiles']);
       }
     });
   }
 
   public retrieveAccount(): void {
-    accountStore.authenticate()
+    accountStore.authenticate();
     axios
       .get('api/account')
       .then(response => {
         const account = response.data;
         if (account) {
-          accountStore.setAuthenticated(account)
+          accountStore.setAuthenticated(account);
           if (translationStore.language !== account.langKey) {
-            translationStore.setLanguage(account.langKey)
+            translationStore.setLanguage(account.langKey);
           }
           if (sessionStorage.getItem('requested-url')) {
             this.router.replace(sessionStorage.getItem('requested-url'));
             sessionStorage.removeItem('requested-url');
           }
-          permissionStore.generateRoutes(account.authorities)
-          this.router.addRoutes(permissionStore.dynamicRoutes)
+          permissionStore.generateRoutes(new Set<string>(account.authorities));
+          this.router.addRoutes(permissionStore.dynamicRoutes);
           this.trackerService.connect();
         } else {
-          accountStore.logout()
+          accountStore.logout();
           this.router.push('/');
           sessionStorage.removeItem('requested-url');
         }
         this.translationService.refreshTranslation(translationStore.language);
       })
       .catch(() => {
-        accountStore.logout()
+        accountStore.logout();
         this.router.push('/');
       });
   }
 
+  /**
+   * Checks whether a user has any authority accessing a route.
+   * @param authorities Route meta authorities.
+   */
   public hasAnyAuthority(authorities: any): boolean {
-    if (typeof authorities === 'string') {
-      authorities = [authorities];
-    }
     if (!this.authenticated || !this.userAuthorities) {
       return false;
     }
 
-    for (let i = 0; i < authorities.length; i++) {
-      if (this.userAuthorities.includes(authorities[i])) {
-        return true;
-      }
+    if (typeof authorities === 'string') {
+      authorities = [authorities];
     }
-
-    return false;
+    return authorities.some(authority => this.userAuthorities.has(authority));
   }
 
   public get authenticated(): boolean {
     return accountStore.authenticated;
   }
 
-  public get userAuthorities(): any {
-    return accountStore.userIdentity.authorities;
+  public get userAuthorities(): Set<string> {
+    return accountStore.authorities;
   }
 }

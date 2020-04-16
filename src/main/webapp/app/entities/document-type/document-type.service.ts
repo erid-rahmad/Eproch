@@ -3,6 +3,7 @@ import axios from 'axios';
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 
 import { IDocumentType } from '@/shared/model/document-type.model';
+import buildCriteriaQueryString from '@/shared/filter/filters';
 
 const baseApiUrl = 'api/document-types';
 
@@ -24,6 +25,20 @@ export default class DocumentTypeService {
     return new Promise<any>((resolve, reject) => {
       axios
         .get(baseApiUrl + `?${buildPaginationQueryOpts(paginationQuery)}`)
+        .then(function(res) {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public retrieveWithFilter(criteriaQuery: any): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      let criteria = buildCriteriaQueryString(criteriaQuery);
+      axios
+        .get(baseApiUrl + `/selector?${criteria}`)
         .then(function(res) {
           resolve(res);
         })

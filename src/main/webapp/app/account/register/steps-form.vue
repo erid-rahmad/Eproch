@@ -4,6 +4,7 @@
     <el-steps align-center :active="active">
       <el-step title="Login Details" />
       <el-step title="Basic Information" />
+      <el-step title="Business Categories" />
       <el-step title="Supporting Documents" />
       <el-step title="PIC" />
       <el-step title="Payment Information" />
@@ -13,22 +14,35 @@
     <div :model="registration">
       <login-details
         class="step-panel"
-        :class="{'hide': active !== 0}"
+        v-if="active === 0"
         :event-bus="eventBus"
         :login="registration.loginDetails"
       />
       <company-profile
         class="step-panel"
-        :class="{'hide': active !== 1}"
+        v-if="active === 1"
         :event-bus="eventBus"
         :company="registration.companyProfile"
       />
+      <business-categories
+        class="step-panel"
+        v-if="active === 2"
+        :event-bus="eventBus"
+        :business-categories="registration.businessCategories"
+      />
       <supporting-documents
         class="step-panel"
-        :class="{'hide': active !== 2}"
+        v-if="active === 3"
         :event-bus="eventBus"
         :main-documents="registration.mainDocuments"
         :additional-documents="registration.additionalDocuments"
+      />
+      <person-in-charge
+        class="step-panel"
+        v-if="active === 4"
+        :event-bus="eventBus"
+        :contacts="registration.contacts"
+        :functionaries="registration.functionaries"
       />
     </div>
     <el-container class="steps-control-btn-group">
@@ -45,7 +59,7 @@
         round
         type="primary"
         style="margin-top: 12px;"
-        :disabled="active === 2"
+        :disabled="active === 6"
         @click="next"
       >
         Next <i class="el-icon-arrow-right" />
@@ -55,7 +69,7 @@
   </div>
 </template>
 <script lang="ts" src="./steps-form.component.js"></script>
-<style scoped>
+<style lang="scss" scoped>
   .app-container .page-title {
     font-size: 2em;
     margin: 24px 24px 48px;
@@ -63,9 +77,10 @@
   .step-panel {
     margin-top: 24px;
     padding: 24px;
-  }
-  .step-panel.hide {
-    display: none;
+
+    &.hide {
+      display: none;
+    }
   }
   .steps-control-btn-group {
     float: right;

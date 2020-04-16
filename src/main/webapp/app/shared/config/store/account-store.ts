@@ -1,77 +1,82 @@
-import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
-import store from '@/shared/config/store'
+import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
+import store from '@/shared/config/store';
 
 export interface IAccountState {
-  logon: boolean
-  userIdentity: object
-  authenticated: boolean
-  ribbonOnProfiles: string
-  activeProfiles: Array<string>
+  logon: boolean;
+  userIdentity: object;
+  authenticated: boolean;
+  ribbonOnProfiles: string;
+  activeProfiles: Array<string>;
+  authorities: Set<string>;
 }
 
 @Module({ dynamic: true, store, name: 'accountStore', namespaced: true })
 class AccountStore extends VuexModule implements IAccountState {
-  public logon = false
-  public userIdentity = null
-  public authenticated = false
-  public ribbonOnProfiles = ''
-  public activeProfiles = []
+  public logon = false;
+  public userIdentity = null;
+  public authenticated = false;
+  public ribbonOnProfiles = '';
+  public activeProfiles = [];
+  public authorities = new Set<string>();
 
-  public get account() { return this.userIdentity }
-
-  @Mutation
-  private INIT_AUTHENTICATION() {
-    this.logon = true
+  public get account() {
+    return this.userIdentity;
   }
 
   @Mutation
-  private SET_AUTHENTICATED(identity: object) {
-    this.userIdentity = identity
-    this.authenticated = true
-    this.logon = false
+  private INIT_AUTHENTICATION() {
+    this.logon = true;
+  }
+
+  @Mutation
+  private SET_AUTHENTICATED(identity: any) {
+    this.userIdentity = identity;
+    this.authorities = new Set(identity.authorities);
+    this.authenticated = true;
+    this.logon = false;
   }
 
   @Mutation
   private SET_LOGOUT() {
-    this.userIdentity = null
-    this.authenticated = false
-    this.logon = false
+    this.userIdentity = null;
+    this.authenticated = false;
+    this.logon = false;
   }
 
   @Mutation
   private SET_PROFILES(profiles: Array<string>) {
-    this.activeProfiles = profiles
+    this.activeProfiles = profiles;
   }
 
   @Mutation
   private SET_RIBBON(ribbon: string) {
-    this.ribbonOnProfiles = ribbon
+    this.ribbonOnProfiles = ribbon;
   }
 
   @Action
   public authenticate() {
-    this.INIT_AUTHENTICATION()
+    this.INIT_AUTHENTICATION();
   }
 
   @Action
   public async setAuthenticated(identity: object) {
-    this.SET_AUTHENTICATED(identity)
+    this.SET_AUTHENTICATED(identity);
   }
 
   @Action
   public async logout() {
-    this.SET_LOGOUT
+    this.SET_LOGOUT;
   }
 
   @Action
   public async setActiveProfiles(profiles: Array<string>) {
-    this.SET_PROFILES(profiles)
+    this.SET_PROFILES(profiles);
   }
 
   @Action
   public async setRibbonOnProfiles(ribbon: string) {
-    this.SET_RIBBON(ribbon)
+    this.SET_RIBBON(ribbon);
   }
 }
 
-export const AccountStoreModule = getModule(AccountStore)
+export const AccountStoreModule = getModule(AccountStore);

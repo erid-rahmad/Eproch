@@ -5,6 +5,7 @@ export interface ISupportingDocument {
   fileContentType?: string;
   file?: any;
   typeId?: number;
+  typeName?: string;
   vendorId?: number;
 }
 
@@ -16,6 +17,7 @@ export class SupportingDocument implements ISupportingDocument {
     public fileContentType?: string,
     public file?: any,
     public typeId?: number,
+    public typeName?: string,
     public vendorId?: number
   ) {}
 }

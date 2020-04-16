@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface SupportingDocumentMapper extends EntityMapper<SupportingDocumentDTO, SupportingDocument> {
 
     @Mapping(source = "type.id", target = "typeId")
+    @Mapping(source = "type.name", target = "typeName")
     @Mapping(source = "vendor.id", target = "vendorId")
     SupportingDocumentDTO toDto(SupportingDocument supportingDocument);
 

@@ -4,9 +4,6 @@ import Vue, { DirectiveOptions } from 'vue';
 import 'normalize.css';
 import ElementUI from 'element-ui';
 import SvgIcon from 'vue-svgicon';
-import '@/styles/element-variables.scss';
-import '@/styles/index.scss';
-import '@/assets/icons/components';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
@@ -33,6 +30,9 @@ import LoginService from './account/login.service';
 import AccountService from './account/account.service';
 
 import '../content/scss/vendor.scss';
+import '@/styles/element-variables.scss';
+import '@/styles/index.scss';
+import '@/assets/icons/components';
 import AlertService from '@/shared/alert/alert.service';
 import TranslationService from '@/locale/translation.service';
 import ConfigurationService from '@/admin/configuration/configuration.service';

@@ -154,7 +154,7 @@ relationship ManyToMany {
 }
 
 // Allow filtering to all entities.
-filter * except DocumentTypeBusinessCategory
+filter *
 
 // Set pagination options.
 paginate * with pagination except DocumentTypeBusinessCategory
@@ -163,4 +163,4 @@ paginate * with pagination except DocumentTypeBusinessCategory
 dto * with mapstruct except DocumentTypeBusinessCategory
 
 // Set service options to all except few
-service * with serviceClass except DocumentTypeBusinessCategory
+service * with serviceClass

@@ -7,6 +7,7 @@ export interface IDocumentTypeBusinessCategory {
   additional?: boolean;
   documentType?: IDocumentType;
   businessCategory?: IBusinessCategory;
+  removed?: boolean;
 }
 
 export class DocumentTypeBusinessCategory implements IDocumentTypeBusinessCategory {
@@ -15,7 +16,8 @@ export class DocumentTypeBusinessCategory implements IDocumentTypeBusinessCatego
     public mandatory?: boolean,
     public additional?: boolean,
     public documentType?: IDocumentType,
-    public businessCategory?: IBusinessCategory
+    public businessCategory?: IBusinessCategory,
+    public removed?: boolean
   ) {
     this.mandatory = this.mandatory || false;
     this.additional = this.additional || false;

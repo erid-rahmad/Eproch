@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -42,6 +43,9 @@ public class DocumentTypeBusinessCategory extends AbstractAuditingEntity {
     @ManyToOne
     @JsonIgnoreProperties("documentTypeBusinessCategories")
     private BusinessCategory businessCategory;
+
+    @Transient
+    private boolean removed;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -103,6 +107,14 @@ public class DocumentTypeBusinessCategory extends AbstractAuditingEntity {
     public void setBusinessCategory(BusinessCategory businessCategory) {
         this.businessCategory = businessCategory;
     }
+
+    public boolean isRemoved() {
+        return removed;
+    }
+
+    public void setRemoved(boolean removed) {
+        this.removed = removed;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -115,8 +127,8 @@ public class DocumentTypeBusinessCategory extends AbstractAuditingEntity {
         }
         DocumentTypeBusinessCategory obj = (DocumentTypeBusinessCategory) o;
         return id != null && id.equals(obj.id)
-            && documentType != null && documentType.equals(obj.documentType)
-            && businessCategory != null && businessCategory.equals(obj.businessCategory);
+            && (documentType == null || (documentType != null && documentType.equals(obj.documentType)))
+            && (businessCategory == null || (businessCategory != null && businessCategory.equals(obj.businessCategory)));
     }
 
     @Override

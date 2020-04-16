@@ -1,14 +1,18 @@
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import CompanyProfile from './components/company-profile.vue'
-import LoginDetails from './components/login-details.vue'
-import SupportingDocuments from './components/supporting-documents.vue'
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import BusinessCategories from './components/business-categories.vue';
+import CompanyProfile from './components/company-profile.vue';
+import LoginDetails from './components/login-details.vue';
+import SupportingDocuments from './components/supporting-documents.vue';
+import PersonInCharge from './components/person-in-charge.vue';
 
 @Component({
   components: {
     LoginDetails,
     CompanyProfile,
-    SupportingDocuments
+    BusinessCategories,
+    SupportingDocuments,
+    PersonInCharge
   }
 })
 export default class StepsForm extends Vue {
@@ -44,34 +48,37 @@ export default class StepsForm extends Vue {
           email: 'cs@terbaik.com',
           website: ''
         },
+        businessCategories: [],
         mainDocuments: [],
-        additionalDocuments: []
+        additionalDocuments: [],
+        contacts: [],
+        functionaries: []
       }
-    }
+    };
   }
 
   mounted() {
-    this.eventBus.$on('step-validated', this.proceedNext)
+    this.eventBus.$on('step-validated', this.proceedNext);
   }
 
   previous() {
     if (this.active >= 0) {
-      --this.active
+      --this.active;
     }
   }
 
   next() {
     // Trigger the validation of the current form.
-    this.eventBus.$emit('validate-form', this.active)
+    this.eventBus.$emit('validate-form', this.active);
   }
 
   proceedNext(validationState) {
-    if (validationState.passed && this.active <= 2) {
-      ++this.active
+    if (validationState.passed && this.active <= 6) {
+      ++this.active;
     }
   }
 
   showAt(index) {
-    return index !== this.active ? 'hide' : ''
+    return index !== this.active ? 'hide' : '';
   }
 }

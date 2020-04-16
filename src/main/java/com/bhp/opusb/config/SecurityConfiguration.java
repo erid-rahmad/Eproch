@@ -82,6 +82,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/account/reset-password/init").permitAll()
             .antMatchers("/api/account/reset-password/finish").permitAll()
             .antMatchers("/api/opus-web-app-kafka/publish").permitAll()
+            .antMatchers(
+                HttpMethod.GET,
+                "/api/countries",
+                "/api/regions",
+                "/api/cities",
+                "/api/document-types/**",
+                "/api/business-categories",
+                "/api/document-type-business-categories"
+            ).permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()

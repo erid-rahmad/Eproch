@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { IDocumentTypeBusinessCategory } from '@/shared/model/document-type-business-category.model';
+import buildCriteriaQueryString from '@/shared/filter/filters';
 
 const baseApiUrl = 'api/document-type-business-categories';
 
@@ -11,6 +12,20 @@ export default class DocumentTypeBusinessCategoryService {
         .get(`${baseApiUrl}/${id}`)
         .then(function(res) {
           resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public retrieveWithFilter(criteriaQuery: any): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      let criteria = buildCriteriaQueryString(criteriaQuery);
+      axios
+        .get(baseApiUrl + `?${criteria}`)
+        .then(function(res) {
+          resolve(res);
         })
         .catch(err => {
           reject(err);
