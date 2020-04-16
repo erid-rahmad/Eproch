@@ -17,12 +17,12 @@
             </el-form-item>
             <el-form-item :label="$t('opusWebApp.city.country')" prop="country" required>
                 <el-col :span="6">
-                    {{city.countryId}}
+                    {{city.countryName}}
                 </el-col>
             </el-form-item>
             <el-form-item :label="$t('opusWebApp.city.region')" prop="region" required>
                 <el-col :span="6">
-                    {{city.regionId}}
+                    {{city.regionName}}
                 </el-col>
             </el-form-item>
             <el-form-item>

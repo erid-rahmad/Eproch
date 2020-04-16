@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface RegionMapper extends EntityMapper<RegionDTO, Region> {
 
     @Mapping(source = "country.id", target = "countryId")
+    @Mapping(source = "country.name", target = "countryName")
     RegionDTO toDto(Region region);
 
     @Mapping(target = "cities", ignore = true)

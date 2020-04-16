@@ -20,7 +20,7 @@
             
             <el-form-item :label="$t('opusWebApp.region.country')" prop="country" required>
                 <el-col :span="6">
-                    {{region.countryId}}
+                    {{region.countryName}}
                 </el-col>
             </el-form-item>
 

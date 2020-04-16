@@ -16,8 +16,9 @@ public class CityDTO extends AbstractAuditingDTO implements Serializable {
 
 
     private Long countryId;
-
+    private String countryName;
     private Long regionId;
+    private String regionName;
     
     public Long getId() {
         return id;
@@ -43,12 +44,28 @@ public class CityDTO extends AbstractAuditingDTO implements Serializable {
         this.countryId = countryId;
     }
 
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
     public Long getRegionId() {
         return regionId;
     }
 
     public void setRegionId(Long regionId) {
         this.regionId = regionId;
+    }
+
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
     }
 
     @Override
@@ -78,7 +95,9 @@ public class CityDTO extends AbstractAuditingDTO implements Serializable {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", countryId=" + getCountryId() +
+            ", countryName=" + getCountryName() +
             ", regionId=" + getRegionId() +
+            ", regionName=" + getRegionName() +
             "}";
     }
 }

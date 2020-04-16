@@ -37,12 +37,12 @@
                     :label="$t('opusWebApp.city.name')"
                 />
                 <el-table-column
-                    prop="countryId"
+                    prop="countryName"
                     sortable
                     :label="$t('opusWebApp.city.country')"
                 />
                 <el-table-column
-                    prop="regionId"
+                    prop="regionName"
                     sortable
                     :label="$t('opusWebApp.city.region')"
                 />
