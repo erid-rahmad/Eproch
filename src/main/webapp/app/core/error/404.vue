@@ -31,9 +31,9 @@
           All rights reserved
           <a
             style="color:#20a0ff"
-            href="https://wallstreetcn.com"
+            href="https://www.berca.co.id/"
             target="_blank"
-          >wallstreetcn</a>
+          >Berca Hardayaperkasa</a>
         </div>
         <div class="text-404__headline">
           {{ message }}

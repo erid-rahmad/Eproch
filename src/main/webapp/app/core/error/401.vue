@@ -5,34 +5,26 @@
       class="back-btn"
       @click="back"
     >
-      返回
+      Back
     </el-button>
     <el-row>
       <el-col :span="12">
         <h1 class="text-jumbo text-ginormous">
           Oops!
         </h1>
-        gif来源<a
-          href="https://zh.airbnb.com/"
-          target="_blank"
-        >airbnb</a> 页面
-        <h2>你没有权限去该页面</h2>
-        <h6>如有不满请联系你领导</h6>
+        <h2>No Coffees</h2>
+        <h6>You are not allowed to access the page</h6>
         <ul class="list-unstyled">
-          <li>或者你可以去:</li>
           <li class="link-type">
-            <router-link to="/dashboard">
-              回首页
+            <router-link to="/">
+              Back to Home
             </router-link>
-          </li>
-          <li class="link-type">
-            <a href="https://github.com/armour">随便看看</a>
           </li>
           <li>
             <a
               href="#"
-              @click.prevent="dialogVisible=true"
-            >点我看图</a>
+              @click.prevent="showLogin"
+            >Login</a>
           </li>
         </ul>
       </el-col>
@@ -46,21 +38,13 @@
         >
       </el-col>
     </el-row>
-    <el-dialog
-      :visible.sync="dialogVisible"
-      title="随便看"
-    >
-      <img
-        :src="ewizardClap"
-        class="some-img"
-      >
-    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator'
 import errGif from '@/assets/401-images/401.gif'
+import { DialogEventBus } from '../event/dialog-event-bus'
 
 @Component({
   name: 'Page401'
@@ -68,14 +52,17 @@ import errGif from '@/assets/401-images/401.gif'
 export default class extends Vue {
   private errGif = errGif + '?' + +new Date()
   private ewizardClap = 'https://wpimg.wallstcn.com/007ef517-bafd-4066-aae4-6883632d9646'
-  private dialogVisible = false
 
   private back() {
     if (this.$route.query.noGoBack) {
-      this.$router.push({ path: '/dashboard' })
+      this.$router.push({ path: '/' })
     } else {
       this.$router.go(-1)
     }
+  }
+
+  private showLogin() {
+    DialogEventBus.$emit('show-login');
   }
 }
 </script>

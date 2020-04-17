@@ -35,7 +35,7 @@ export default class AccountService {
     });
   }
 
-  public retrieveAccount(): void {
+  public async retrieveAccount(): Promise<void> {
     accountStore.authenticate();
     axios
       .get('api/account')
@@ -52,7 +52,7 @@ export default class AccountService {
           }
           permissionStore.generateRoutes(new Set<string>(account.authorities));
           this.router.addRoutes(permissionStore.dynamicRoutes);
-          this.trackerService.connect();
+          // this.trackerService.connect();
         } else {
           accountStore.logout();
           this.router.push('/');
@@ -78,7 +78,7 @@ export default class AccountService {
     if (typeof authorities === 'string') {
       authorities = [authorities];
     }
-    return authorities.some(authority => this.userAuthorities.has(authority));
+    return authorities.some((authority: string) => this.userAuthorities.has(authority));
   }
 
   public get authenticated(): boolean {

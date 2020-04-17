@@ -154,9 +154,11 @@ export const constantRoutes: RouteConfig[] = [
     component: Layout,
     children: [
       {
-        path: '/',
+        path: '',
+        name: 'Home',
         component: () => import(/* webpackChunkName: "home" */ '@/core/home/home.vue'),
         meta: {
+          affix: true,
           title: 'home',
           breadcrumb: false
         }
@@ -166,7 +168,6 @@ export const constantRoutes: RouteConfig[] = [
   {
     path: '/forbidden',
     component: () => import(/* webpackChunkName: "error" */ '@/core/error/401.vue'),
-    redirect: 'noredirect',
     meta: {
       hidden: true
     }
@@ -174,7 +175,6 @@ export const constantRoutes: RouteConfig[] = [
   {
     path: '/not-found',
     component: () => import(/* webpackChunkName: "error" */ '@/core/error/404.vue'),
-    redirect: 'noredirect',
     meta: {
       hidden: true
     }
@@ -182,7 +182,6 @@ export const constantRoutes: RouteConfig[] = [
   {
     path: '/register',
     component: Layout,
-    redirect: 'noredirect',
     children: [
       {
         path: '/register',
@@ -199,7 +198,7 @@ export const constantRoutes: RouteConfig[] = [
     },
     children: [
       {
-        path: '/account/password',
+        path: 'password',
         name: 'ChangePassword',
         component: ChangePassword,
         meta: {
@@ -208,47 +207,38 @@ export const constantRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/account/settings',
+        path: 'settings',
         name: 'Settings',
         component: Settings,
         meta: {
           title: 'settings',
           authorities: [Authority.USER]
         }
+      },
+      {
+        path: 'activate',
+        component: Activate,
+        meta: {
+          hidden: true
+        }
+      },
+      {
+        path: 'reset/request',
+        component: ResetPasswordInit,
+        meta: {
+          hidden: true
+        }
+      },
+      {
+        path: 'reset/finish',
+        component: ResetPasswordFinish,
+        redirect: 'noredirect',
+        meta: {
+          hidden: true
+        }
       }
     ]
   },
-  {
-    path: '/account/activate',
-    component: Activate,
-    redirect: 'noredirect',
-    meta: {
-      hidden: true
-    }
-  },
-  {
-    path: '/account/reset/request',
-    component: ResetPasswordInit,
-    redirect: 'noredirect',
-    meta: {
-      hidden: true
-    }
-  },
-  {
-    path: '/account/reset/finish',
-    component: ResetPasswordFinish,
-    redirect: 'noredirect',
-    meta: {
-      hidden: true
-    }
-  }
-];
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user authorities
- */
-export const asyncRoutes: RouteConfig[] = [
   {
     path: '/admin',
     component: Layout,
@@ -258,7 +248,7 @@ export const asyncRoutes: RouteConfig[] = [
     },
     children: [
       {
-        path: '/admin/user-management',
+        path: 'user-management',
         name: 'JhiUserManagementComponent',
         component: JhiUserManagementComponent,
         meta: {
@@ -267,7 +257,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/admin/user-management/new',
+        path: 'user-management/new',
         name: 'JhiUserManagementNew',
         component: JhiUserManagementEditComponent,
         meta: {
@@ -276,7 +266,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/admin/user-management/:userId/edit',
+        path: 'user-management/:userId/edit',
         name: 'JhiUserManagementEditComponent',
         component: JhiUserManagementEditComponent,
         meta: {
@@ -285,7 +275,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/admin/user-management/:userId/view',
+        path: 'user-management/:userId/view',
         name: 'JhiUserManagementViewComponent',
         component: JhiUserManagementViewComponent,
         meta: {
@@ -294,7 +284,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/admin/docs',
+        path: 'docs',
         name: 'JhiDocsComponent',
         component: JhiDocsComponent,
         meta: {
@@ -303,7 +293,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/admin/audits',
+        path: 'audits',
         name: 'JhiAuditsComponent',
         component: JhiAuditsComponent,
         meta: {
@@ -312,7 +302,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/admin/jhi-health',
+        path: 'jhi-health',
         name: 'JhiHealthComponent',
         component: JhiHealthComponent,
         meta: {
@@ -321,7 +311,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/admin/logs',
+        path: 'logs',
         name: 'JhiLogsComponent',
         component: JhiLogsComponent,
         meta: {
@@ -330,7 +320,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/admin/jhi-metrics',
+        path: 'jhi-metrics',
         name: 'JhiMetricsComponent',
         component: JhiMetricsComponent,
         meta: {
@@ -339,7 +329,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/admin/jhi-configuration',
+        path: 'jhi-configuration',
         name: 'JhiConfigurationComponent',
         component: JhiConfigurationComponent,
         meta: {
@@ -348,7 +338,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/admin/jhi-tracker',
+        path: 'jhi-tracker',
         name: 'JhiTrackerComponent',
         component: JhiTrackerComponent,
         meta: {
@@ -370,7 +360,7 @@ export const asyncRoutes: RouteConfig[] = [
     },
     children: [
       {
-        path: '/country/list',
+        path: 'list',
         name: 'Country',
         component: Country,
         meta: {
@@ -379,7 +369,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/country/new',
+        path: 'new',
         name: 'CountryNew',
         component: CountryUpdate,
         meta: {
@@ -390,7 +380,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/country/:countryId/edit',
+        path: ':countryId/edit',
         name: 'CountryUpdate',
         component: CountryUpdate,
         meta: {
@@ -401,7 +391,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/country/:countryId/view',
+        path: ':countryId/view',
         name: 'CountryView',
         component: CountryDetails,
         meta: {
@@ -425,7 +415,7 @@ export const asyncRoutes: RouteConfig[] = [
     },
     children: [
       {
-        path: '/currency/list',
+        path: 'list',
         name: 'Currency',
         component: Currency,
         meta: {
@@ -434,7 +424,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/currency/new',
+        path: 'new',
         name: 'CurrencyNew',
         component: CurrencyUpdate,
         meta: {
@@ -444,7 +434,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/currency/:currencyId/edit',
+        path: ':currencyId/edit',
         name: 'CurrencyUpdate',
         component: CurrencyUpdate,
         meta: {
@@ -454,7 +444,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/currency/:currencyId/view',
+        path: ':currencyId/view',
         name: 'CurrencyView',
         component: CurrencyDetails,
         meta: {
@@ -524,7 +514,7 @@ export const asyncRoutes: RouteConfig[] = [
     },
     children: [
       {
-        path: '/business-category/list',
+        path: 'list',
         name: 'BusinessCategory',
         component: BusinessCategory,
         meta: {
@@ -533,7 +523,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/business-category/new',
+        path: 'new',
         component: BusinessCategoryUpdate,
         meta: {
           affix: false,
@@ -542,7 +532,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/business-category/:businessCategoryId/edit',
+        path: ':businessCategoryId/edit',
         component: BusinessCategoryUpdate,
         meta: {
           affix: false,
@@ -551,7 +541,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/business-category/:businessCategoryId/view',
+        path: ':businessCategoryId/view',
         component: BusinessCategoryDetails,
         meta: {
           affix: false,
@@ -571,7 +561,7 @@ export const asyncRoutes: RouteConfig[] = [
     },
     children: [
       {
-        path: '/supporting-document/list',
+        path: 'list',
         name: 'SupportingDocument',
         component: SupportingDocument,
         meta: {
@@ -580,7 +570,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/supporting-document/new',
+        path: 'new',
         name: 'SupportingDocumentNew',
         component: SupportingDocumentUpdate,
         meta: {
@@ -589,7 +579,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/supporting-document/:supportingDocumentId/edit',
+        path: ':supportingDocumentId/edit',
         name: 'SupportingDocumentUpdate',
         component: SupportingDocumentUpdate,
         meta: {
@@ -598,7 +588,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/supporting-document/:supportingDocumentId/view',
+        path: ':supportingDocumentId/view',
         name: 'SupportingDocumentDetails',
         component: SupportingDocumentDetails,
         meta: {
@@ -619,7 +609,7 @@ export const asyncRoutes: RouteConfig[] = [
     },
     children: [
       {
-        path: '/document-type/list',
+        path: 'list',
         name: 'DocumentType',
         component: DocumentType,
         meta: {
@@ -628,7 +618,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/document-type/new',
+        path: 'new',
         component: DocumentTypeUpdate,
         meta: {
           affix: false,
@@ -637,7 +627,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/document-type/:documentTypeId/edit',
+        path: ':documentTypeId/edit',
         component: DocumentTypeUpdate,
         meta: {
           affix: false,
@@ -646,7 +636,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/document-type/:documentTypeId/view',
+        path: ':documentTypeId/view',
         component: DocumentTypeDetails,
         meta: {
           affix: false,
@@ -756,7 +746,7 @@ export const asyncRoutes: RouteConfig[] = [
     path: '/region',
     //name: 'Region',
     component: Layout,
-    redirect: '/region/list',
+    redirect: 'list',
     meta: {
       breadcrumb: true,
       title: 'region.default',
@@ -764,7 +754,7 @@ export const asyncRoutes: RouteConfig[] = [
     },
     children: [
       {
-        path: '/region/list',
+        path: 'list',
         name: 'Region',
         component: Region,
         meta: {
@@ -773,7 +763,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/region/new',
+        path: 'new',
         name: 'RegionNew',
         component: RegionUpdate,
         meta: {
@@ -784,7 +774,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/region/:regionId/edit',
+        path: ':regionId/edit',
         name: 'RegionUpdate',
         component: RegionUpdate,
         meta: {
@@ -795,7 +785,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/region/:regionId/view',
+        path: ':regionId/view',
         name: 'RegionDetails',
         component: RegionDetails,
         meta: {
@@ -820,7 +810,7 @@ export const asyncRoutes: RouteConfig[] = [
     },
     children: [
       {
-        path: '/city/list',
+        path: 'list',
         name: 'City',
         component: City,
         meta: {
@@ -829,7 +819,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/city/new',
+        path: 'new',
         name: 'CityNew',
         component: CityUpdate,
         meta: {
@@ -840,7 +830,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/city/:cityId/edit',
+        path: ':cityId/edit',
         name: 'CityUpdate',
         component: CityUpdate,
         meta: {
@@ -851,7 +841,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       },
       {
-        path: '/city/:cityId/view',
+        path: ':cityId/view',
         name: 'CityDetails',
         component: CityDetails,
         meta: {
@@ -862,8 +852,12 @@ export const asyncRoutes: RouteConfig[] = [
         }
       }
     ]
+  },
+  {
+    path: '*',
+    redirect: '/404',
+    meta: { hidden: true }
   }
-
   // {
   //   path: '/permission',
   //   name: 'Permission',
@@ -891,6 +885,14 @@ export const asyncRoutes: RouteConfig[] = [
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
 ];
 
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user authorities
+ */
+export const asyncRoutes: RouteConfig[] = [
+  
+];
+
 // prettier-ignore
 const createRouter = () => new Router({
   // mode: 'history',
@@ -914,125 +916,3 @@ export function resetRouter() {
 }
 
 export default router;
-
-// export default new Router({
-//   mode: 'history',
-//   routes: [
-//     {
-//       path: '/',
-//       name: 'Home',
-//       component: Home
-//     },
-//     {
-//       path: '/forbidden',
-//       name: 'Forbidden',
-//       component: Error,
-//       meta: { error403: true }
-//     },
-//     {
-//       path: '/not-found',
-//       name: 'NotFound',
-//       component: Error,
-//       meta: { error404: true }
-//     },
-//     {
-//       path: '/register',
-//       name: 'Register',
-//       component: Register
-//     },
-//     {
-//       path: '/account/activate',
-//       name: 'Activate',
-//       component: Activate
-//     },
-//     {
-//       path: '/account/reset/request',
-//       name: 'ResetPasswordInit',
-//       component: ResetPasswordInit
-//     },
-//     {
-//       path: '/account/reset/finish',
-//       name: 'ResetPasswordFinish',
-//       component: ResetPasswordFinish
-//     },
-//     {
-//       path: '/account/password',
-//       name: 'ChangePassword',
-//       component: ChangePassword,
-//       meta: { authorities: [Authority.USER] }
-//     },
-//     {
-//       path: '/account/settings',
-//       name: 'Settings',
-//       component: Settings,
-//       meta: { authorities: [Authority.USER] }
-//     },
-//     {
-//       path: '/admin/user-management',
-//       name: 'JhiUser',
-//       component: JhiUserManagementComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     },
-//     {
-//       path: '/admin/user-management/new',
-//       name: 'JhiUserManagementNew',
-//       component: JhiUserManagementEditComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     },
-//     {
-//       path: '/admin/user-management/:userId/edit',
-//       name: 'JhiUserManagementEditComponent',
-//       component: JhiUserManagementEditComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     },
-//     {
-//       path: '/admin/user-management/:userId/view',
-//       name: 'JhiUserManagementViewComponent',
-//       component: JhiUserManagementViewComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     },
-//     {
-//       path: '/admin/docs',
-//       name: 'JhiDocsComponent',
-//       component: JhiDocsComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     },
-//     {
-//       path: '/admin/audits',
-//       name: 'JhiAuditsComponent',
-//       component: JhiAuditsComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     },
-//     {
-//       path: '/admin/jhi-health',
-//       name: 'JhiHealthComponent',
-//       component: JhiHealthComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     },
-//     {
-//       path: '/admin/logs',
-//       name: 'JhiLogsComponent',
-//       component: JhiLogsComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     },
-//     {
-//       path: '/admin/jhi-metrics',
-//       name: 'JhiMetricsComponent',
-//       component: JhiMetricsComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     },
-//     {
-//       path: '/admin/jhi-configuration',
-//       name: 'JhiConfigurationComponent',
-//       component: JhiConfigurationComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     }
-// ,
-//     {
-//       path: '/admin/jhi-tracker',
-//       name: 'JhiTrackerComponent',
-//       component: JhiTrackerComponent,
-//       meta: { authorities: [Authority.ADMIN] }
-//     }
-//   ]
-// });

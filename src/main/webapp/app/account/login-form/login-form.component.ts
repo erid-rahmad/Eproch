@@ -29,11 +29,28 @@ export default class LoginForm extends Vue {
   }
 
   mounted() {
-    DialogEventBus.$on('show-login', () => {
-      this.visible = true
-      this.focusField();
-    })
-    DialogEventBus.$on('hide-login', () => this.visible = false)
+    console.log('login form mounted')
+    DialogEventBus.$on('show-login', this.onShow)
+    DialogEventBus.$on('hide-login', this.onHide)
+  }
+
+  beforeDestroy() {
+    console.log('login form beforeDestroy')
+    DialogEventBus.$off('show-login', this.onShow)
+    DialogEventBus.$off('hide-login', this.onHide)
+  }
+
+  private onShow() {
+    this.visible = true;
+  }
+
+  private onHide() {
+    this.visible = false;
+  }
+
+  public onLoginFormOpened() {
+    console.log('login form opened')
+    this.focusField();
   }
 
   private focusField() {
