@@ -55,6 +55,8 @@ import ReferenceListService from '@/entities/reference-list/reference-list.servi
 import RegionService from '@/entities/region/region.service';
 import CityService from '@/entities/city/city.service';
 import PermissionService from '@/entities/permission/permission.service';
+import ADClientService from '@/entities/ad-client/ad-client.service';
+import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -144,6 +146,8 @@ new Vue({
     regionService: () => new RegionService(),
     cityService: () => new CityService(),
     permissionService: () => new PermissionService(),
+    aDClientService: () => new ADClientService(),
+    aDOrganizationService: () => new ADOrganizationService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService
   },

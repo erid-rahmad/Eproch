@@ -70,6 +70,12 @@ const DocumentTypeUpdate = () => import('../entities/document-type/document-type
 // prettier-ignore
 const DocumentTypeDetails = () => import('../entities/document-type/document-type-details.vue');
 // prettier-ignore
+const DocumentTypeBusinessCategory = () => import('../entities/document-type-business-category/document-type-business-category.vue');
+// prettier-ignore
+const DocumentTypeBusinessCategoryUpdate = () => import('../entities/document-type-business-category/document-type-business-category-update.vue');
+// prettier-ignore
+const DocumentTypeBusinessCategoryDetails = () => import('../entities/document-type-business-category/document-type-business-category-details.vue');
+// prettier-ignore
 const PersonInCharge = () => import('../entities/person-in-charge/person-in-charge.vue');
 // prettier-ignore
 const PersonInChargeUpdate = () => import('../entities/person-in-charge/person-in-charge-update.vue');
@@ -105,6 +111,102 @@ const City = () => import('../entities/city/city.vue');
 const CityUpdate = () => import('../entities/city/city-update.vue');
 // prettier-ignore
 const CityDetails = () => import('../entities/city/city-details.vue');
+// prettier-ignore
+const Permission = () => import('../entities/permission/permission.vue');
+// prettier-ignore
+const PermissionUpdate = () => import('../entities/permission/permission-update.vue');
+// prettier-ignore
+const PermissionDetails = () => import('../entities/permission/permission-details.vue');
+// prettier-ignore
+const CCountry = () => import('../entities/c-country/c-country.vue');
+// prettier-ignore
+const CCountryUpdate = () => import('../entities/c-country/c-country-update.vue');
+// prettier-ignore
+const CCountryDetails = () => import('../entities/c-country/c-country-details.vue');
+// prettier-ignore
+const CCurrency = () => import('../entities/c-currency/c-currency.vue');
+// prettier-ignore
+const CCurrencyUpdate = () => import('../entities/c-currency/c-currency-update.vue');
+// prettier-ignore
+const CCurrencyDetails = () => import('../entities/c-currency/c-currency-details.vue');
+// prettier-ignore
+const CRegion = () => import('../entities/c-region/c-region.vue');
+// prettier-ignore
+const CRegionUpdate = () => import('../entities/c-region/c-region-update.vue');
+// prettier-ignore
+const CRegionDetails = () => import('../entities/c-region/c-region-details.vue');
+// prettier-ignore
+const CCity = () => import('../entities/c-city/c-city.vue');
+// prettier-ignore
+const CCityUpdate = () => import('../entities/c-city/c-city-update.vue');
+// prettier-ignore
+const CCityDetails = () => import('../entities/c-city/c-city-details.vue');
+// prettier-ignore
+const CLocation = () => import('../entities/c-location/c-location.vue');
+// prettier-ignore
+const CLocationUpdate = () => import('../entities/c-location/c-location-update.vue');
+// prettier-ignore
+const CLocationDetails = () => import('../entities/c-location/c-location-details.vue');
+// prettier-ignore
+const CBank = () => import('../entities/c-bank/c-bank.vue');
+// prettier-ignore
+const CBankUpdate = () => import('../entities/c-bank/c-bank-update.vue');
+// prettier-ignore
+const CBankDetails = () => import('../entities/c-bank/c-bank-details.vue');
+// prettier-ignore
+const CVendor = () => import('../entities/c-vendor/c-vendor.vue');
+// prettier-ignore
+const CVendorUpdate = () => import('../entities/c-vendor/c-vendor-update.vue');
+// prettier-ignore
+const CVendorDetails = () => import('../entities/c-vendor/c-vendor-details.vue');
+// prettier-ignore
+const CBusinessCategory = () => import('../entities/c-business-category/c-business-category.vue');
+// prettier-ignore
+const CBusinessCategoryUpdate = () => import('../entities/c-business-category/c-business-category-update.vue');
+// prettier-ignore
+const CBusinessCategoryDetails = () => import('../entities/c-business-category/c-business-category-details.vue');
+// prettier-ignore
+const CSupportingDocument = () => import('../entities/c-supporting-document/c-supporting-document.vue');
+// prettier-ignore
+const CSupportingDocumentUpdate = () => import('../entities/c-supporting-document/c-supporting-document-update.vue');
+// prettier-ignore
+const CSupportingDocumentDetails = () => import('../entities/c-supporting-document/c-supporting-document-details.vue');
+// prettier-ignore
+const CDocumentType = () => import('../entities/c-document-type/c-document-type.vue');
+// prettier-ignore
+const CDocumentTypeUpdate = () => import('../entities/c-document-type/c-document-type-update.vue');
+// prettier-ignore
+const CDocumentTypeDetails = () => import('../entities/c-document-type/c-document-type-details.vue');
+// prettier-ignore
+const CDocumentTypeBusinessCategory = () => import('../entities/c-document-type-business-category/c-document-type-business-category.vue');
+// prettier-ignore
+const CDocumentTypeBusinessCategoryUpdate = () => import('../entities/c-document-type-business-category/c-document-type-business-category-update.vue');
+// prettier-ignore
+const CDocumentTypeBusinessCategoryDetails = () => import('../entities/c-document-type-business-category/c-document-type-business-category-details.vue');
+// prettier-ignore
+const CPersonInCharge = () => import('../entities/c-person-in-charge/c-person-in-charge.vue');
+// prettier-ignore
+const CPersonInChargeUpdate = () => import('../entities/c-person-in-charge/c-person-in-charge-update.vue');
+// prettier-ignore
+const CPersonInChargeDetails = () => import('../entities/c-person-in-charge/c-person-in-charge-details.vue');
+// prettier-ignore
+const ADReference = () => import('../entities/ad-reference/ad-reference.vue');
+// prettier-ignore
+const ADReferenceUpdate = () => import('../entities/ad-reference/ad-reference-update.vue');
+// prettier-ignore
+const ADReferenceDetails = () => import('../entities/ad-reference/ad-reference-details.vue');
+// prettier-ignore
+const ADReferenceList = () => import('../entities/ad-reference-list/ad-reference-list.vue');
+// prettier-ignore
+const ADReferenceListUpdate = () => import('../entities/ad-reference-list/ad-reference-list-update.vue');
+// prettier-ignore
+const ADReferenceListDetails = () => import('../entities/ad-reference-list/ad-reference-list-details.vue');
+// prettier-ignore
+const ADPermission = () => import('../entities/ad-permission/ad-permission.vue');
+// prettier-ignore
+const ADPermissionUpdate = () => import('../entities/ad-permission/ad-permission-update.vue');
+// prettier-ignore
+const ADPermissionDetails = () => import('../entities/ad-permission/ad-permission-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 Vue.use(Router);
@@ -350,11 +452,9 @@ export const constantRoutes: RouteConfig[] = [
   },
   {
     path: '/country',
-    //name: 'Country',
     component: Layout,
     redirect: '/country/list',
     meta: {
-      breadcrumb: true,
       title: 'country.default',
       authorities: [Authority.ADMIN]
     },
@@ -405,11 +505,9 @@ export const constantRoutes: RouteConfig[] = [
   },
   {
     path: '/currency',
-    //name: 'Currency',
     component: Layout,
     redirect: '/currency/list',
     meta: {
-      breadcrumb: true,
       title: 'currency.default',
       authorities: [Authority.ADMIN]
     },
@@ -603,7 +701,6 @@ export const constantRoutes: RouteConfig[] = [
     component: Layout,
     redirect: '/document-type/list',
     meta: {
-      breadcrumb: false,
       title: 'document-type.default',
       authorities: [Authority.ADMIN]
     },
@@ -854,35 +951,60 @@ export const constantRoutes: RouteConfig[] = [
     ]
   },
   {
+    path: '/ad-client',
+    name: 'ADClient',
+    component: ADClient,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-client/new',
+    name: 'ADClientCreate',
+    component: ADClientUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-client/:aDClientId/edit',
+    name: 'ADClientEdit',
+    component: ADClientUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-client/:aDClientId/view',
+    name: 'ADClientView',
+    component: ADClientDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-organization',
+    name: 'ADOrganization',
+    component: ADOrganization,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-organization/new',
+    name: 'ADOrganizationCreate',
+    component: ADOrganizationUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-organization/:aDOrganizationId/edit',
+    name: 'ADOrganizationEdit',
+    component: ADOrganizationUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-organization/:aDOrganizationId/view',
+    name: 'ADOrganizationView',
+    component: ADOrganizationDetails,
+    meta: { authorities: [Authority.USER] }
+  }
+  // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
+  ,
+  {
     path: '*',
     redirect: '/404',
     meta: { hidden: true }
   }
-  // {
-  //   path: '/permission',
-  //   name: 'Permission',
-  //   component: Permission,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/permission/new',
-  //   name: 'PermissionCreate',
-  //   component: PermissionUpdate,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/permission/:permissionId/edit',
-  //   name: 'PermissionEdit',
-  //   component: PermissionUpdate,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/permission/:permissionId/view',
-  //   name: 'PermissionView',
-  //   component: PermissionDetails,
-  //   meta: { authorities: [Authority.USER] }
-  // }
-  // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
 ];
 
 /**

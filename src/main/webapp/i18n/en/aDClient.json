@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "aDClient": {
+      "home": {
+        "title": "AD Clients",
+        "createLabel": "Create a new AD Client",
+        "createOrEditLabel": "Create or edit a AD Client",
+        "notFound": "No AD Clients found"
+      },
+      "created": "A new AD Client is created with identifier {{ param }}",
+      "updated": "A AD Client is updated with identifier {{ param }}",
+      "deleted": "A AD Client is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete AD Client {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Client"
+      },
+      "name": "Name",
+      "code": "Code",
+      "description": "Description",
+      "active": "Active"
+    }
+  }
+}

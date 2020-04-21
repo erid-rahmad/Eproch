@@ -22,6 +22,9 @@
         "region": "Region",
         "city": "City",
         "permission": "Permission",
+        "adClient": "AD Client",
+        "adOrganization": "AD Organization",
+        "cBank": "C Bank",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
