@@ -1,0 +1,98 @@
+{
+    "name": "ADTab",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "targetEndpoint",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "level",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "min"
+            ],
+            "fieldValidateRulesMin": "0"
+        },
+        {
+            "fieldName": "writable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "displayLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "readOnlyLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "filterQuery",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "orderQuery",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDClient",
+            "otherEntityRelationshipName": "aDTab",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adClient",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "aDTab",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDTable",
+            "otherEntityRelationshipName": "aDTab",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTable",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDWindow",
+            "otherEntityRelationshipName": "aDTab",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adWindow",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200429153000",
+    "entityTableName": "ad_tab",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

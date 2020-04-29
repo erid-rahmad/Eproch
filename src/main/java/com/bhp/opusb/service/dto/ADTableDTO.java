@@ -1,0 +1,108 @@
+package com.bhp.opusb.service.dto;
+
+import java.util.Objects;
+
+import javax.validation.constraints.NotNull;
+
+/**
+ * A DTO for the {@link com.bhp.opusb.domain.ADTable} entity.
+ */
+public class ADTableDTO extends AbstractAuditingDTO {
+    
+    private static final long serialVersionUID = 1L;
+
+    private Long id;
+
+    @NotNull
+    private String name;
+
+    private Boolean view;
+
+    private Boolean active;
+
+
+    private Long adClientId;
+
+    private Long adOrganizationId;
+    
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Boolean isView() {
+        return view;
+    }
+
+    public void setView(Boolean view) {
+        this.view = view;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Long getAdClientId() {
+        return adClientId;
+    }
+
+    public void setAdClientId(Long aDClientId) {
+        this.adClientId = aDClientId;
+    }
+
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        ADTableDTO aDTableDTO = (ADTableDTO) o;
+        if (aDTableDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), aDTableDTO.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "ADTableDTO{" +
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", view='" + isView() + "'" +
+            ", active='" + isActive() + "'" +
+            ", adClientId=" + getAdClientId() +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            "}";
+    }
+}

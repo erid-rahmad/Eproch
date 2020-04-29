@@ -1,0 +1,39 @@
+{
+  "opusWebApp": {
+    "aDField": {
+      "home": {
+        "title": "AD Fields",
+        "createLabel": "Buat AD Field baru",
+        "createOrEditLabel": "Buat atau edit AD Field",
+        "notFound": "No AD Fields found"
+      },
+      "created": "AD Field dengan id {{ param }} telah dibuat",
+      "updated": "AD Field dengan id {{ param }} telah diperbaharui",
+      "deleted": "AD Field dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus AD Field {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Field"
+      },
+      "name": "Name",
+      "description": "Description",
+      "hint": "Hint",
+      "staticText": "Static Text",
+      "staticField": "Static Field",
+      "labelOnly": "Label Only",
+      "showLabel": "Show Label",
+      "showInGrid": "Show In Grid",
+      "showInDetail": "Show In Detail",
+      "gridSequence": "Grid Sequence",
+      "detailSequence": "Detail Sequence",
+      "displayLogic": "Display Logic",
+      "writable": "Writable",
+      "columnNo": "Column No",
+      "columnSpan": "Column Span",
+      "active": "Active",
+      "adClient": "Ad Client",
+      "adOrganization": "Ad Organization"
+    }
+  }
+}

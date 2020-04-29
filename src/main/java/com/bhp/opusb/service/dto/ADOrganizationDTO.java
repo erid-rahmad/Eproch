@@ -1,14 +1,16 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADOrganization} entity.
  */
-public class ADOrganizationDTO implements Serializable {
+public class ADOrganizationDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -21,6 +23,8 @@ public class ADOrganizationDTO implements Serializable {
 
     private Boolean active;
 
+
+    private Long adClientId;
     
     public Long getId() {
         return id;
@@ -62,6 +66,14 @@ public class ADOrganizationDTO implements Serializable {
         this.active = active;
     }
 
+    public Long getAdClientId() {
+        return adClientId;
+    }
+
+    public void setAdClientId(Long aDClientId) {
+        this.adClientId = aDClientId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -91,6 +103,7 @@ public class ADOrganizationDTO implements Serializable {
             ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +
             ", active='" + isActive() + "'" +
+            ", adClientId=" + getAdClientId() +
             "}";
     }
 }

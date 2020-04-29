@@ -89,7 +89,7 @@ public class ADOrganizationResourceIT {
         } else {
             aDClient = TestUtil.findAll(em, ADClient.class).get(0);
         }
-        aDOrganization.setClient(aDClient);
+        aDOrganization.setAdClient(aDClient);
         return aDOrganization;
     }
     /**
@@ -113,7 +113,7 @@ public class ADOrganizationResourceIT {
         } else {
             aDClient = TestUtil.findAll(em, ADClient.class).get(0);
         }
-        aDOrganization.setClient(aDClient);
+        aDOrganization.setAdClient(aDClient);
         return aDOrganization;
     }
 
@@ -545,17 +545,17 @@ public class ADOrganizationResourceIT {
 
     @Test
     @Transactional
-    public void getAllADOrganizationsByClientIsEqualToSomething() throws Exception {
+    public void getAllADOrganizationsByAdClientIsEqualToSomething() throws Exception {
         // Get already existing entity
-        ADClient client = aDOrganization.getClient();
+        ADClient adClient = aDOrganization.getAdClient();
         aDOrganizationRepository.saveAndFlush(aDOrganization);
-        Long clientId = client.getId();
+        Long adClientId = adClient.getId();
 
-        // Get all the aDOrganizationList where client equals to clientId
-        defaultADOrganizationShouldBeFound("clientId.equals=" + clientId);
+        // Get all the aDOrganizationList where adClient equals to adClientId
+        defaultADOrganizationShouldBeFound("adClientId.equals=" + adClientId);
 
-        // Get all the aDOrganizationList where client equals to clientId + 1
-        defaultADOrganizationShouldNotBeFound("clientId.equals=" + (clientId + 1));
+        // Get all the aDOrganizationList where adClient equals to adClientId + 1
+        defaultADOrganizationShouldNotBeFound("adClientId.equals=" + (adClientId + 1));
     }
 
     /**

@@ -19,7 +19,7 @@ const validations: any = {
     },
     description: {},
     active: {},
-    clientId: {
+    adClientId: {
       required
     }
   }

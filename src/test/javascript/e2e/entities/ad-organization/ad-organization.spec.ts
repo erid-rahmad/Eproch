@@ -84,7 +84,7 @@ describe('ADOrganization e2e test', () => {
         expect(await updatePage.activeInput.isSelected()).to.be.true;
       }
 
-      // await  selectLastOption(updatePage.clientSelect);
+      // await  selectLastOption(updatePage.adClientSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
       await updatePage.saveButton.click();

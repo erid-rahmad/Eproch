@@ -29,11 +29,11 @@
                         <span>{{aDOrganization.active}}</span>
                     </dd>
                     <dt>
-                        <span v-text="$t('opusWebApp.aDOrganization.client')">Client</span>
+                        <span v-text="$t('opusWebApp.aDOrganization.adClient')">Ad Client</span>
                     </dt>
                     <dd>
-                        <div v-if="aDOrganization.clientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDOrganization.clientId}}">{{aDOrganization.clientId}}</router-link>
+                        <div v-if="aDOrganization.adClientId">
+                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDOrganization.adClientId}}">{{aDOrganization.adClientId}}</router-link>
                         </div>
                     </dd>
                 </dl>

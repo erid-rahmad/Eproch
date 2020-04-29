@@ -1,0 +1,106 @@
+{
+    "name": "ADColumn",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "key",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "ADColumnType",
+            "fieldValues": "STRING,INTEGER,LONG,BIG_DECIMAL,FLOAT,DOUBLE,BOOLEAN,LOCAL_DATE,ZONED_DATE_TIME,DURATION,INSTANT"
+        },
+        {
+            "fieldName": "mandatory",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "mandatoryLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "readOnlyLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "updatable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "defaultValue",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "formatPattern",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "minValue",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "maxValue",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDClient",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adClient",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDReference",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipName": "adReference",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDTable",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTable",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200429152800",
+    "entityTableName": "ad_column",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

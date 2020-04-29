@@ -1,0 +1,11 @@
+id;name;description;key;type;mandatory;mandatory_logic;read_only_logic;updatable;default_value;format_pattern;min_value;max_value;active;ad_client_id;ad_organization_id;ad_table_id
+1;Riel;Industrial El Salvador Colon US Dollar;true;BOOLEAN;false;backing up Home;Agent client-driven applications;false;Checking Account Steel plum;Tanzanian Shilling;15636;32704;true;1;1;1
+2;Fantastic Mauritius interface;Technician Representative;true;INSTANT;true;Mobility invoice;granular;true;Handmade Switchable Architect;synergize deposit Principal;78321;41017;false;2;2;2
+3;web services Human;Planner;false;BOOLEAN;false;Avon Pakistan Rupee;Concrete Shoals;true;Belarus reboot Mandatory;Dynamic Connecticut Solutions;67477;8360;false;3;3;3
+4;program Rubber;Granite payment Refined Fresh Soap;true;INSTANT;true;Car;Legacy Berkshire;true;Towels;FTP;17831;55521;false;4;4;4
+5;USB New York Compatible;Home Loan Account sky blue content;true;LOCAL_DATE;true;digital sky blue panel;Crossing invoice Cayman Islands Dollar;false;Mouse Circles;Lempira actuating;11085;38543;true;5;5;5
+6;Savings Account Clothing;Factors;true;BIG_DECIMAL;true;index Practical;visionary digital;false;Salad schemas synthesize;deposit;90929;30036;true;6;6;6
+7;parsing;cross-platform Customer;false;BOOLEAN;false;online;Indian Rupee California;true;Indiana incubate;Consultant Supervisor Buckinghamshire;41570;5382;false;7;7;7
+8;generate Accounts orchestrate;CSS;true;BOOLEAN;false;SAS project Soft;Intelligent;true;sensor transmit Representative;asymmetric;6252;98302;false;8;8;8
+9;Corporate;Shoes;true;FLOAT;true;Future Extension mindshare;channels;true;interface RSS;Lane infrastructures Human;29982;9745;false;9;9;9
+10;Inverse;empowering IB Pizza;false;DURATION;false;scale Credit Card Account Hat;mission-critical access Legacy;false;Locks Borders Gateway;Money Market Account Generic Cotton Towels Incredible Plastic Bike;33682;11656;false;10;10;10

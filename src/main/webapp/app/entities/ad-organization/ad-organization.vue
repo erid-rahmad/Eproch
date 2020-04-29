@@ -29,7 +29,7 @@
                     <th v-on:click="changeOrder('code')"><span v-text="$t('opusWebApp.aDOrganization.code')">Code</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'code'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('description')"><span v-text="$t('opusWebApp.aDOrganization.description')">Description</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'description'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.aDOrganization.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('clientId')"><span v-text="$t('opusWebApp.aDOrganization.client')">Client</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'clientId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('adClientId')"><span v-text="$t('opusWebApp.aDOrganization.adClient')">Ad Client</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adClientId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -44,8 +44,8 @@
                     <td>{{aDOrganization.description}}</td>
                     <td>{{aDOrganization.active}}</td>
                     <td>
-                        <div v-if="aDOrganization.clientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDOrganization.clientId}}">{{aDOrganization.clientId}}</router-link>
+                        <div v-if="aDOrganization.adClientId">
+                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDOrganization.adClientId}}">{{aDOrganization.adClientId}}</router-link>
                         </div>
                     </td>
                     <td class="text-right">

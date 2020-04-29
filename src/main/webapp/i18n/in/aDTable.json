@@ -1,0 +1,27 @@
+{
+  "opusWebApp": {
+    "aDTable": {
+      "home": {
+        "title": "AD Tables",
+        "createLabel": "Buat AD Table baru",
+        "createOrEditLabel": "Buat atau edit AD Table",
+        "notFound": "No AD Tables found"
+      },
+      "created": "AD Table dengan id {{ param }} telah dibuat",
+      "updated": "AD Table dengan id {{ param }} telah diperbaharui",
+      "deleted": "AD Table dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus AD Table {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Table"
+      },
+      "name": "Name",
+      "view": "View",
+      "active": "Active",
+      "aDColumn": "A D Column",
+      "adClient": "Ad Client",
+      "adOrganization": "Ad Organization"
+    }
+  }
+}

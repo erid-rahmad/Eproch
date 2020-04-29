@@ -1,0 +1,38 @@
+{
+  "opusWebApp": {
+    "aDColumn": {
+      "home": {
+        "title": "AD Columns",
+        "createLabel": "Create a new AD Column",
+        "createOrEditLabel": "Create or edit a AD Column",
+        "notFound": "No AD Columns found"
+      },
+      "created": "A new AD Column is created with identifier {{ param }}",
+      "updated": "A AD Column is updated with identifier {{ param }}",
+      "deleted": "A AD Column is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete AD Column {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Column"
+      },
+      "name": "Name",
+      "description": "Description",
+      "key": "Key",
+      "type": "Type",
+      "mandatory": "Mandatory",
+      "mandatoryLogic": "Mandatory Logic",
+      "readOnlyLogic": "Read Only Logic",
+      "updatable": "Updatable",
+      "defaultValue": "Default Value",
+      "formatPattern": "Format Pattern",
+      "minValue": "Min Value",
+      "maxValue": "Max Value",
+      "active": "Active",
+      "adClient": "Ad Client",
+      "adOrganization": "Ad Organization",
+      "adReference": "Ad Reference",
+      "adTable": "Ad Table"
+    }
+  }
+}

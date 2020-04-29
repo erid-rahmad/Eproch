@@ -4,7 +4,7 @@ export interface IADOrganization {
   code?: string;
   description?: string;
   active?: boolean;
-  clientId?: number;
+  adClientId?: number;
 }
 
 export class ADOrganization implements IADOrganization {
@@ -14,7 +14,7 @@ export class ADOrganization implements IADOrganization {
     public code?: string,
     public description?: string,
     public active?: boolean,
-    public clientId?: number
+    public adClientId?: number
   ) {
     this.active = this.active || false;
   }

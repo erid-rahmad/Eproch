@@ -2,12 +2,10 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 
@@ -34,6 +32,8 @@ public class ADClientCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter aDOrganizationId;
+
     public ADClientCriteria() {
     }
 
@@ -43,6 +43,7 @@ public class ADClientCriteria implements Serializable, Criteria {
         this.code = other.code == null ? null : other.code.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.aDOrganizationId = other.aDOrganizationId == null ? null : other.aDOrganizationId.copy();
     }
 
     @Override
@@ -90,6 +91,14 @@ public class ADClientCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getADOrganizationId() {
+        return aDOrganizationId;
+    }
+
+    public void setADOrganizationId(LongFilter aDOrganizationId) {
+        this.aDOrganizationId = aDOrganizationId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -105,7 +114,8 @@ public class ADClientCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(code, that.code) &&
             Objects.equals(description, that.description) &&
-            Objects.equals(active, that.active);
+            Objects.equals(active, that.active) &&
+            Objects.equals(aDOrganizationId, that.aDOrganizationId);
     }
 
     @Override
@@ -115,7 +125,8 @@ public class ADClientCriteria implements Serializable, Criteria {
         name,
         code,
         description,
-        active
+        active,
+        aDOrganizationId
         );
     }
 
@@ -127,6 +138,7 @@ public class ADClientCriteria implements Serializable, Criteria {
                 (code != null ? "code=" + code + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (aDOrganizationId != null ? "aDOrganizationId=" + aDOrganizationId + ", " : "") +
             "}";
     }
 

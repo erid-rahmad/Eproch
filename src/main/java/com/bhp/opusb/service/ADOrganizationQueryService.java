@@ -103,6 +103,10 @@ public class ADOrganizationQueryService extends QueryService<ADOrganization> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADOrganization_.active));
             }
+            if (criteria.getAdClientId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdClientId(),
+                    root -> root.join(ADOrganization_.adClient, JoinType.LEFT).get(ADClient_.id)));
+            }
         }
         return specification;
     }

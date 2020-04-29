@@ -1,0 +1,38 @@
+{
+  "opusWebApp": {
+    "aDColumn": {
+      "home": {
+        "title": "AD Columns",
+        "createLabel": "Buat AD Column baru",
+        "createOrEditLabel": "Buat atau edit AD Column",
+        "notFound": "No AD Columns found"
+      },
+      "created": "AD Column dengan id {{ param }} telah dibuat",
+      "updated": "AD Column dengan id {{ param }} telah diperbaharui",
+      "deleted": "AD Column dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus AD Column {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Column"
+      },
+      "name": "Name",
+      "description": "Description",
+      "key": "Key",
+      "type": "Type",
+      "mandatory": "Mandatory",
+      "mandatoryLogic": "Mandatory Logic",
+      "readOnlyLogic": "Read Only Logic",
+      "updatable": "Updatable",
+      "defaultValue": "Default Value",
+      "formatPattern": "Format Pattern",
+      "minValue": "Min Value",
+      "maxValue": "Max Value",
+      "active": "Active",
+      "adClient": "Ad Client",
+      "adOrganization": "Ad Organization",
+      "adReference": "Ad Reference",
+      "adTable": "Ad Table"
+    }
+  }
+}

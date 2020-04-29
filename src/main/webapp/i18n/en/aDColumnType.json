@@ -1,0 +1,18 @@
+{
+  "opusWebApp": {
+    "ADColumnType": {
+      "null": "",
+      "STRING": "STRING",
+      "INTEGER": "INTEGER",
+      "LONG": "LONG",
+      "BIG_DECIMAL": "BIG_DECIMAL",
+      "FLOAT": "FLOAT",
+      "DOUBLE": "DOUBLE",
+      "BOOLEAN": "BOOLEAN",
+      "LOCAL_DATE": "LOCAL_DATE",
+      "ZONED_DATE_TIME": "ZONED_DATE_TIME",
+      "DURATION": "DURATION",
+      "INSTANT": "INSTANT"
+    }
+  }
+}

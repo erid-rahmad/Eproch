@@ -1,0 +1,26 @@
+{
+  "opusWebApp": {
+    "aDReferenceList": {
+      "home": {
+        "title": "AD Reference Lists",
+        "createLabel": "Buat AD Reference List baru",
+        "createOrEditLabel": "Buat atau edit AD Reference List",
+        "notFound": "No AD Reference Lists found"
+      },
+      "created": "AD Reference List dengan id {{ param }} telah dibuat",
+      "updated": "AD Reference List dengan id {{ param }} telah diperbaharui",
+      "deleted": "AD Reference List dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus AD Reference List {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Reference List"
+      },
+      "name": "Name",
+      "value": "Value",
+      "description": "Description",
+      "active": "Active",
+      "adReference": "Ad Reference"
+    }
+  }
+}

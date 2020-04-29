@@ -9,6 +9,8 @@ import ADClientUpdateComponent from '@/entities/ad-client/ad-client-update.vue';
 import ADClientClass from '@/entities/ad-client/ad-client-update.component';
 import ADClientService from '@/entities/ad-client/ad-client.service';
 
+import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
+
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);
@@ -34,7 +36,9 @@ describe('Component Tests', () => {
         router,
         provide: {
           alertService: () => new AlertService(store),
-          aDClientService: () => aDClientServiceStub
+          aDClientService: () => aDClientServiceStub,
+
+          aDOrganizationService: () => new ADOrganizationService()
         }
       });
       comp = wrapper.vm;

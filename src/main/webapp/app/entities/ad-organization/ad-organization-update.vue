@@ -40,14 +40,14 @@
                             :class="{'valid': !$v.aDOrganization.active.$invalid, 'invalid': $v.aDOrganization.active.$invalid }" v-model="$v.aDOrganization.active.$model" />
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.aDOrganization.client')" for="ad-organization-client">Client</label>
-                        <select class="form-control" id="ad-organization-client" name="client" v-model="$v.aDOrganization.clientId.$model" required>
-                            <option v-if="!aDOrganization.clientId" v-bind:value="null" selected></option>
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDOrganization.adClient')" for="ad-organization-adClient">Ad Client</label>
+                        <select class="form-control" id="ad-organization-adClient" name="adClient" v-model="$v.aDOrganization.adClientId.$model" required>
+                            <option v-if="!aDOrganization.adClientId" v-bind:value="null" selected></option>
                             <option v-bind:value="aDClientOption.id" v-for="aDClientOption in aDClients" :key="aDClientOption.id">{{aDClientOption.id}}</option>
                         </select>
                     </div>
-                    <div v-if="$v.aDOrganization.clientId.$anyDirty && $v.aDOrganization.clientId.$invalid">
-                        <small class="form-text text-danger" v-if="!$v.aDOrganization.clientId.required" v-text="$t('entity.validation.required')">
+                    <div v-if="$v.aDOrganization.adClientId.$anyDirty && $v.aDOrganization.adClientId.$invalid">
+                        <small class="form-text text-danger" v-if="!$v.aDOrganization.adClientId.required" v-text="$t('entity.validation.required')">
                             This field is required.
                         </small>
                     </div>

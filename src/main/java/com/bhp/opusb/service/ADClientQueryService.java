@@ -103,6 +103,10 @@ public class ADClientQueryService extends QueryService<ADClient> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADClient_.active));
             }
+            if (criteria.getADOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getADOrganizationId(),
+                    root -> root.join(ADClient_.aDOrganizations, JoinType.LEFT).get(ADOrganization_.id)));
+            }
         }
         return specification;
     }

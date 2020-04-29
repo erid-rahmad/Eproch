@@ -1,0 +1,28 @@
+{
+  "opusWebApp": {
+    "aDWindow": {
+      "home": {
+        "title": "AD Windows",
+        "createLabel": "Create a new AD Window",
+        "createOrEditLabel": "Create or edit a AD Window",
+        "notFound": "No AD Windows found"
+      },
+      "created": "A new AD Window is created with identifier {{ param }}",
+      "updated": "A AD Window is updated with identifier {{ param }}",
+      "deleted": "A AD Window is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete AD Window {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Window"
+      },
+      "name": "Name",
+      "description": "Description",
+      "type": "Type",
+      "active": "Active",
+      "aDTab": "A D Tab",
+      "adClient": "Ad Client",
+      "adOrganization": "Ad Organization"
+    }
+  }
+}

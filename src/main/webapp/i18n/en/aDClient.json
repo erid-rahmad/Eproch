@@ -19,7 +19,8 @@
       "name": "Name",
       "code": "Code",
       "description": "Description",
-      "active": "Active"
+      "active": "Active",
+      "aDOrganization": "A D Organization"
     }
   }
 }

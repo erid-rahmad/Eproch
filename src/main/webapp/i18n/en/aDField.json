@@ -1,0 +1,39 @@
+{
+  "opusWebApp": {
+    "aDField": {
+      "home": {
+        "title": "AD Fields",
+        "createLabel": "Create a new AD Field",
+        "createOrEditLabel": "Create or edit a AD Field",
+        "notFound": "No AD Fields found"
+      },
+      "created": "A new AD Field is created with identifier {{ param }}",
+      "updated": "A AD Field is updated with identifier {{ param }}",
+      "deleted": "A AD Field is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete AD Field {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Field"
+      },
+      "name": "Name",
+      "description": "Description",
+      "hint": "Hint",
+      "staticText": "Static Text",
+      "staticField": "Static Field",
+      "labelOnly": "Label Only",
+      "showLabel": "Show Label",
+      "showInGrid": "Show In Grid",
+      "showInDetail": "Show In Detail",
+      "gridSequence": "Grid Sequence",
+      "detailSequence": "Detail Sequence",
+      "displayLogic": "Display Logic",
+      "writable": "Writable",
+      "columnNo": "Column No",
+      "columnSpan": "Column Span",
+      "active": "Active",
+      "adClient": "Ad Client",
+      "adOrganization": "Ad Organization"
+    }
+  }
+}

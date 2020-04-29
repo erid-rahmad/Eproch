@@ -2,6 +2,9 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
 
+import ADOrganizationService from '../ad-organization/ad-organization.service';
+import { IADOrganization } from '@/shared/model/ad-organization.model';
+
 import AlertService from '@/shared/alert/alert.service';
 import { IADClient, ADClient } from '@/shared/model/ad-client.model';
 import ADClientService from './ad-client.service';
@@ -26,6 +29,10 @@ export default class ADClientUpdate extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('aDClientService') private aDClientService: () => ADClientService;
   public aDClient: IADClient = new ADClient();
+
+  @Inject('aDOrganizationService') private aDOrganizationService: () => ADOrganizationService;
+
+  public aDOrganizations: IADOrganization[] = [];
   public isSaving = false;
 
   beforeRouteEnter(to, from, next) {
@@ -33,6 +40,7 @@ export default class ADClientUpdate extends Vue {
       if (to.params.aDClientId) {
         vm.retrieveADClient(to.params.aDClientId);
       }
+      vm.initRelationships();
     });
   }
 
@@ -71,5 +79,11 @@ export default class ADClientUpdate extends Vue {
     this.$router.go(-1);
   }
 
-  public initRelationships(): void {}
+  public initRelationships(): void {
+    this.aDOrganizationService()
+      .retrieve()
+      .then(res => {
+        this.aDOrganizations = res.data;
+      });
+  }
 }

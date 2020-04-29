@@ -8,6 +8,8 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A ADClient.
@@ -15,7 +17,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "ad_client")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ADClient implements Serializable {
+public class ADClient extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,6 +39,10 @@ public class ADClient implements Serializable {
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToMany(mappedBy = "adClient")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ADOrganization> aDOrganizations = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -97,6 +103,31 @@ public class ADClient implements Serializable {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Set<ADOrganization> getADOrganizations() {
+        return aDOrganizations;
+    }
+
+    public ADClient aDOrganizations(Set<ADOrganization> aDOrganizations) {
+        this.aDOrganizations = aDOrganizations;
+        return this;
+    }
+
+    public ADClient addADOrganization(ADOrganization aDOrganization) {
+        this.aDOrganizations.add(aDOrganization);
+        aDOrganization.setAdClient(this);
+        return this;
+    }
+
+    public ADClient removeADOrganization(ADOrganization aDOrganization) {
+        this.aDOrganizations.remove(aDOrganization);
+        aDOrganization.setAdClient(null);
+        return this;
+    }
+
+    public void setADOrganizations(Set<ADOrganization> aDOrganizations) {
+        this.aDOrganizations = aDOrganizations;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

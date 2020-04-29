@@ -9,10 +9,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ADOrganization} and its DTO {@link ADOrganizationDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {ADClientMapper.class})
 public interface ADOrganizationMapper extends EntityMapper<ADOrganizationDTO, ADOrganization> {
 
+    @Mapping(source = "adClient.id", target = "adClientId")
+    ADOrganizationDTO toDto(ADOrganization aDOrganization);
 
+    @Mapping(source = "adClientId", target = "adClient")
+    ADOrganization toEntity(ADOrganizationDTO aDOrganizationDTO);
 
     default ADOrganization fromId(Long id) {
         if (id == null) {

@@ -1,5 +1,6 @@
 package com.bhp.opusb.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -15,7 +16,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "ad_organization")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ADOrganization implements Serializable {
+public class ADOrganization extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -37,6 +38,11 @@ public class ADOrganization implements Serializable {
 
     @Column(name = "active")
     private Boolean active;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("aDOrganizations")
+    private ADClient adClient;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -97,6 +103,19 @@ public class ADOrganization implements Serializable {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public ADClient getAdClient() {
+        return adClient;
+    }
+
+    public ADOrganization adClient(ADClient aDClient) {
+        this.adClient = aDClient;
+        return this;
+    }
+
+    public void setAdClient(ADClient aDClient) {
+        this.adClient = aDClient;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

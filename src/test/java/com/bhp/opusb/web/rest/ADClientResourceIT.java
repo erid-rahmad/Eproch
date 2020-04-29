@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADClient;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.ADClientRepository;
 import com.bhp.opusb.service.ADClientService;
 import com.bhp.opusb.service.dto.ADClientDTO;
@@ -521,6 +522,26 @@ public class ADClientResourceIT {
         // Get all the aDClientList where active is null
         defaultADClientShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllADClientsByADOrganizationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDClientRepository.saveAndFlush(aDClient);
+        ADOrganization aDOrganization = ADOrganizationResourceIT.createEntity(em);
+        em.persist(aDOrganization);
+        em.flush();
+        aDClient.addADOrganization(aDOrganization);
+        aDClientRepository.saveAndFlush(aDClient);
+        Long aDOrganizationId = aDOrganization.getId();
+
+        // Get all the aDClientList where aDOrganization equals to aDOrganizationId
+        defaultADClientShouldBeFound("aDOrganizationId.equals=" + aDOrganizationId);
+
+        // Get all the aDClientList where aDOrganization equals to aDOrganizationId + 1
+        defaultADClientShouldNotBeFound("aDOrganizationId.equals=" + (aDOrganizationId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */

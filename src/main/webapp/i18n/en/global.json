@@ -25,6 +25,14 @@
         "adClient": "AD Client",
         "adOrganization": "AD Organization",
         "cBank": "C Bank",
+        "adTable": "AD Table",
+        "adColumn": "AD Column",
+        "adWindow": "AD Window",
+        "adTab": "AD Tab",
+        "adField": "AD Field",
+        "adFieldGroup": "AD Field Group",
+        "adReference": "AD Reference",
+        "adReferenceList": "AD Reference List",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

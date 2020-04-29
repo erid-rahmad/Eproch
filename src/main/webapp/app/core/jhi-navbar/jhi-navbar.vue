@@ -93,6 +93,30 @@
                         <font-awesome-icon icon="asterisk" />
                         <span v-text="$t('global.menu.entities.adOrganization')">ADOrganization</span>
                     </b-dropdown-item>
+                    <b-dropdown-item to="/ad-table">
+                        <font-awesome-icon icon="asterisk" />
+                        <span v-text="$t('global.menu.entities.adTable')">ADTable</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item to="/ad-column">
+                        <font-awesome-icon icon="asterisk" />
+                        <span v-text="$t('global.menu.entities.adColumn')">ADColumn</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item to="/ad-window">
+                        <font-awesome-icon icon="asterisk" />
+                        <span v-text="$t('global.menu.entities.adWindow')">ADWindow</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item to="/ad-tab">
+                        <font-awesome-icon icon="asterisk" />
+                        <span v-text="$t('global.menu.entities.adTab')">ADTab</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item to="/ad-field">
+                        <font-awesome-icon icon="asterisk" />
+                        <span v-text="$t('global.menu.entities.adField')">ADField</span>
+                    </b-dropdown-item>
+                    <b-dropdown-item to="/ad-field-group">
+                        <font-awesome-icon icon="asterisk" />
+                        <span v-text="$t('global.menu.entities.adFieldGroup')">ADFieldGroup</span>
+                    </b-dropdown-item>
                     <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
                 </b-nav-item-dropdown>
                 <b-nav-item-dropdown

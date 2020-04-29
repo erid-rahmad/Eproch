@@ -20,7 +20,7 @@
       "code": "Code",
       "description": "Description",
       "active": "Active",
-      "client": "Client"
+      "adClient": "Ad Client"
     }
   }
 }

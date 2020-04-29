@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "aDFieldGroup": {
+      "home": {
+        "title": "AD Field Groups",
+        "createLabel": "Buat AD Field Group baru",
+        "createOrEditLabel": "Buat atau edit AD Field Group",
+        "notFound": "No AD Field Groups found"
+      },
+      "created": "AD Field Group dengan id {{ param }} telah dibuat",
+      "updated": "AD Field Group dengan id {{ param }} telah diperbaharui",
+      "deleted": "AD Field Group dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus AD Field Group {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Field Group"
+      },
+      "name": "Name",
+      "collapsible": "Collapsible",
+      "collapseByDefault": "Collapse By Default",
+      "active": "Active"
+    }
+  }
+}

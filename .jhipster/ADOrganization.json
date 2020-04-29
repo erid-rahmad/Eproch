@@ -25,7 +25,16 @@
             "fieldType": "Boolean"
         }
     ],
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDClient",
+            "otherEntityRelationshipName": "aDOrganization",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adClient",
+            "otherEntityField": "id"
+        }
+    ],
     "changelogDate": "20200420192000",
     "entityTableName": "ad_organization",
     "dto": "mapstruct",
@@ -36,5 +45,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "enableEntityAudit": true
 }

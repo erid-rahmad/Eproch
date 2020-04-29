@@ -1,0 +1,9 @@
+{
+  "opusWebApp": {
+    "ADReferenceType": {
+      "null": "",
+      "LIST": "LIST",
+      "TABLE": "TABLE"
+    }
+  }
+}
