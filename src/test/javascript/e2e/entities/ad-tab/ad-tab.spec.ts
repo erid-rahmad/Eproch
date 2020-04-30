@@ -75,10 +75,6 @@ describe('ADTab e2e test', () => {
       expect(await updatePage.targetEndpointInput.getAttribute('value')).to.match(/targetEndpoint/);
 
 
-      await updatePage.levelInput.sendKeys('5');
-      expect(await updatePage.levelInput.getAttribute('value')).to.eq('5');
-
-
       const selectedWritable = await updatePage.writableInput.isSelected();
       if (selectedWritable) {
         await updatePage.writableInput.click();
@@ -118,6 +114,7 @@ describe('ADTab e2e test', () => {
       // await  selectLastOption(updatePage.adOrganizationSelect);
       // await  selectLastOption(updatePage.adTableSelect);
       // await  selectLastOption(updatePage.adWindowSelect);
+      // await  selectLastOption(updatePage.parentTabSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
       await updatePage.saveButton.click();
@@ -191,10 +188,6 @@ describe('ADTab e2e test', () => {
           await updatePage.targetEndpointInput.clear();
           await updatePage.targetEndpointInput.sendKeys('modified');
           expect(await updatePage.targetEndpointInput.getAttribute('value')).to.match(/modified/);
-
-          await clear(updatePage.levelInput);
-          await updatePage.levelInput.sendKeys('6');
-          expect(await updatePage.levelInput.getAttribute('value')).to.eq('6');
 
           const selectedWritable = await updatePage.writableInput.isSelected();
           if (selectedWritable) {

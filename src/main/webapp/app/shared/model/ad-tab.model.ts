@@ -3,17 +3,18 @@ export interface IADTab {
   name?: string;
   description?: string;
   targetEndpoint?: string;
-  level?: number;
   writable?: boolean;
   displayLogic?: string;
   readOnlyLogic?: string;
   filterQuery?: string;
   orderQuery?: string;
   active?: boolean;
+  aDTabs?: IADTab[];
   adClientId?: number;
   adOrganizationId?: number;
   adTableId?: number;
   adWindowId?: number;
+  parentTabId?: number;
 }
 
 export class ADTab implements IADTab {
@@ -22,17 +23,18 @@ export class ADTab implements IADTab {
     public name?: string,
     public description?: string,
     public targetEndpoint?: string,
-    public level?: number,
     public writable?: boolean,
     public displayLogic?: string,
     public readOnlyLogic?: string,
     public filterQuery?: string,
     public orderQuery?: string,
     public active?: boolean,
+    public aDTabs?: IADTab[],
     public adClientId?: number,
     public adOrganizationId?: number,
     public adTableId?: number,
-    public adWindowId?: number
+    public adWindowId?: number,
+    public parentTabId?: number
   ) {
     this.writable = this.writable || false;
     this.active = this.active || false;

@@ -30,19 +30,6 @@
                             :class="{'valid': !$v.aDTab.targetEndpoint.$invalid, 'invalid': $v.aDTab.targetEndpoint.$invalid }" v-model="$v.aDTab.targetEndpoint.$model" />
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.aDTab.level')" for="ad-tab-level">Level</label>
-                        <input type="number" class="form-control" name="level" id="ad-tab-level"
-                            :class="{'valid': !$v.aDTab.level.$invalid, 'invalid': $v.aDTab.level.$invalid }" v-model.number="$v.aDTab.level.$model" />
-                        <div v-if="$v.aDTab.level.$anyDirty && $v.aDTab.level.$invalid">
-                            <small class="form-text text-danger" v-if="!$v.aDTab.level.min" v-text="$t('entity.validation.min', {min: 0})">
-                                This field should be at least 0.
-                            </small>
-                            <small class="form-text text-danger" v-if="!$v.aDTab.level.numeric" v-text="$t('entity.validation.number')">
-                                This field should be a number.
-                            </small>
-                        </div>
-                    </div>
-                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDTab.writable')" for="ad-tab-writable">Writable</label>
                         <input type="checkbox" class="form-check" name="writable" id="ad-tab-writable"
                             :class="{'valid': !$v.aDTab.writable.$invalid, 'invalid': $v.aDTab.writable.$invalid }" v-model="$v.aDTab.writable.$model" />
@@ -119,6 +106,13 @@
                         <small class="form-text text-danger" v-if="!$v.aDTab.adWindowId.required" v-text="$t('entity.validation.required')">
                             This field is required.
                         </small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDTab.parentTab')" for="ad-tab-parentTab">Parent Tab</label>
+                        <select class="form-control" id="ad-tab-parentTab" name="parentTab" v-model="aDTab.parentTabId">
+                            <option v-bind:value="null"></option>
+                            <option v-bind:value="aDTabOption.id" v-for="aDTabOption in aDTabs" :key="aDTabOption.id">{{aDTabOption.id}}</option>
+                        </select>
                     </div>
                 </div>
                 <div>

@@ -100,9 +100,6 @@ public class ADTabQueryService extends QueryService<ADTab> {
             if (criteria.getTargetEndpoint() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTargetEndpoint(), ADTab_.targetEndpoint));
             }
-            if (criteria.getLevel() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getLevel(), ADTab_.level));
-            }
             if (criteria.getWritable() != null) {
                 specification = specification.and(buildSpecification(criteria.getWritable(), ADTab_.writable));
             }
@@ -121,6 +118,10 @@ public class ADTabQueryService extends QueryService<ADTab> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADTab_.active));
             }
+            if (criteria.getADTabId() != null) {
+                specification = specification.and(buildSpecification(criteria.getADTabId(),
+                    root -> root.join(ADTab_.aDTabs, JoinType.LEFT).get(ADTab_.id)));
+            }
             if (criteria.getAdClientId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdClientId(),
                     root -> root.join(ADTab_.adClient, JoinType.LEFT).get(ADClient_.id)));
@@ -136,6 +137,10 @@ public class ADTabQueryService extends QueryService<ADTab> {
             if (criteria.getAdWindowId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdWindowId(),
                     root -> root.join(ADTab_.adWindow, JoinType.LEFT).get(ADWindow_.id)));
+            }
+            if (criteria.getParentTabId() != null) {
+                specification = specification.and(buildSpecification(criteria.getParentTabId(),
+                    root -> root.join(ADTab_.parentTab, JoinType.LEFT).get(ADTab_.id)));
             }
         }
         return specification;

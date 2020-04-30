@@ -2,7 +2,6 @@ package com.bhp.opusb.service.dto;
 
 import java.util.Objects;
 
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -20,9 +19,6 @@ public class ADTabDTO extends AbstractAuditingDTO {
     private String description;
 
     private String targetEndpoint;
-
-    @Min(value = 0)
-    private Integer level;
 
     private Boolean writable;
 
@@ -44,6 +40,8 @@ public class ADTabDTO extends AbstractAuditingDTO {
     private Long adTableId;
 
     private Long adWindowId;
+
+    private Long parentTabId;
     
     public Long getId() {
         return id;
@@ -75,14 +73,6 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     public void setTargetEndpoint(String targetEndpoint) {
         this.targetEndpoint = targetEndpoint;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
     }
 
     public Boolean isWritable() {
@@ -165,6 +155,14 @@ public class ADTabDTO extends AbstractAuditingDTO {
         this.adWindowId = aDWindowId;
     }
 
+    public Long getParentTabId() {
+        return parentTabId;
+    }
+
+    public void setParentTabId(Long aDTabId) {
+        this.parentTabId = aDTabId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -193,7 +191,6 @@ public class ADTabDTO extends AbstractAuditingDTO {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
-            ", level=" + getLevel() +
             ", writable='" + isWritable() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +
@@ -204,6 +201,7 @@ public class ADTabDTO extends AbstractAuditingDTO {
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adTableId=" + getAdTableId() +
             ", adWindowId=" + getAdWindowId() +
+            ", parentTabId=" + getParentTabId() +
             "}";
     }
 }

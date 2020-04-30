@@ -25,10 +25,6 @@ const validations: any = {
     },
     description: {},
     targetEndpoint: {},
-    level: {
-      numeric,
-      min: minValue(0)
-    },
     writable: {},
     displayLogic: {},
     readOnlyLogic: {},
@@ -57,6 +53,8 @@ export default class ADTabUpdate extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('aDTabService') private aDTabService: () => ADTabService;
   public aDTab: IADTab = new ADTab();
+
+  public aDTabs: IADTab[] = [];
 
   @Inject('aDClientService') private aDClientService: () => ADClientService;
 
@@ -120,6 +118,11 @@ export default class ADTabUpdate extends Vue {
   }
 
   public initRelationships(): void {
+    this.aDTabService()
+      .retrieve()
+      .then(res => {
+        this.aDTabs = res.data;
+      });
     this.aDClientService()
       .retrieve()
       .then(res => {

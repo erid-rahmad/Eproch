@@ -32,5 +32,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="ad_window"/>
 
+        <addForeignKeyConstraint baseColumnNames="parent_tab_id"
+                                 baseTableName="ad_tab"
+                                 constraintName="fk_ad_tab_parent_tab_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_tab"/>
+
     </changeSet>
 </databaseChangeLog>

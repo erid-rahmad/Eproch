@@ -19,17 +19,18 @@
       "name": "Name",
       "description": "Description",
       "targetEndpoint": "Target Endpoint",
-      "level": "Level",
       "writable": "Writable",
       "displayLogic": "Display Logic",
       "readOnlyLogic": "Read Only Logic",
       "filterQuery": "Filter Query",
       "orderQuery": "Order Query",
       "active": "Active",
+      "aDTab": "A D Tab",
       "adClient": "Ad Client",
       "adOrganization": "Ad Organization",
       "adTable": "Ad Table",
-      "adWindow": "Ad Window"
+      "adWindow": "Ad Window",
+      "parentTab": "Parent Tab"
     }
   }
 }

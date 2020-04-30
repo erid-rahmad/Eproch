@@ -14,8 +14,6 @@ export default class ADTabUpdatePage extends AlertPage {
 
   targetEndpointInput: ElementFinder = element(by.css('input#ad-tab-targetEndpoint'));
 
-  levelInput: ElementFinder = element(by.css('input#ad-tab-level'));
-
   writableInput: ElementFinder = element(by.css('input#ad-tab-writable'));
 
   displayLogicInput: ElementFinder = element(by.css('input#ad-tab-displayLogic'));
@@ -34,4 +32,6 @@ export default class ADTabUpdatePage extends AlertPage {
   adTableSelect = element(by.css('select#ad-tab-adTable'));
 
   adWindowSelect = element(by.css('select#ad-tab-adWindow'));
+
+  parentTabSelect = element(by.css('select#ad-tab-parentTab'));
 }

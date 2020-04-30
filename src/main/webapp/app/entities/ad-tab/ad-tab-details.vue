@@ -23,12 +23,6 @@
                         <span>{{aDTab.targetEndpoint}}</span>
                     </dd>
                     <dt>
-                        <span v-text="$t('opusWebApp.aDTab.level')">Level</span>
-                    </dt>
-                    <dd>
-                        <span>{{aDTab.level}}</span>
-                    </dd>
-                    <dt>
                         <span v-text="$t('opusWebApp.aDTab.writable')">Writable</span>
                     </dt>
                     <dd>
@@ -94,6 +88,14 @@
                     <dd>
                         <div v-if="aDTab.adWindowId">
                             <router-link :to="{name: 'ADWindowView', params: {aDWindowId: aDTab.adWindowId}}">{{aDTab.adWindowId}}</router-link>
+                        </div>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDTab.parentTab')">Parent Tab</span>
+                    </dt>
+                    <dd>
+                        <div v-if="aDTab.parentTabId">
+                            <router-link :to="{name: 'ADTabView', params: {aDTabId: aDTab.parentTabId}}">{{aDTab.parentTabId}}</router-link>
                         </div>
                     </dd>
                 </dl>

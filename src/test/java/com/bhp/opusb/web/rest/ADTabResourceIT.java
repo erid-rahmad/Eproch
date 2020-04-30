@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADTab;
+import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADTable;
@@ -47,10 +48,6 @@ public class ADTabResourceIT {
 
     private static final String DEFAULT_TARGET_ENDPOINT = "AAAAAAAAAA";
     private static final String UPDATED_TARGET_ENDPOINT = "BBBBBBBBBB";
-
-    private static final Integer DEFAULT_LEVEL = 0;
-    private static final Integer UPDATED_LEVEL = 1;
-    private static final Integer SMALLER_LEVEL = 0 - 1;
 
     private static final Boolean DEFAULT_WRITABLE = false;
     private static final Boolean UPDATED_WRITABLE = true;
@@ -101,7 +98,6 @@ public class ADTabResourceIT {
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .targetEndpoint(DEFAULT_TARGET_ENDPOINT)
-            .level(DEFAULT_LEVEL)
             .writable(DEFAULT_WRITABLE)
             .displayLogic(DEFAULT_DISPLAY_LOGIC)
             .readOnlyLogic(DEFAULT_READ_ONLY_LOGIC)
@@ -161,7 +157,6 @@ public class ADTabResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .targetEndpoint(UPDATED_TARGET_ENDPOINT)
-            .level(UPDATED_LEVEL)
             .writable(UPDATED_WRITABLE)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
             .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
@@ -235,7 +230,6 @@ public class ADTabResourceIT {
         assertThat(testADTab.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADTab.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testADTab.getTargetEndpoint()).isEqualTo(DEFAULT_TARGET_ENDPOINT);
-        assertThat(testADTab.getLevel()).isEqualTo(DEFAULT_LEVEL);
         assertThat(testADTab.isWritable()).isEqualTo(DEFAULT_WRITABLE);
         assertThat(testADTab.getDisplayLogic()).isEqualTo(DEFAULT_DISPLAY_LOGIC);
         assertThat(testADTab.getReadOnlyLogic()).isEqualTo(DEFAULT_READ_ONLY_LOGIC);
@@ -298,7 +292,6 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
-            .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)))
             .andExpect(jsonPath("$.[*].writable").value(hasItem(DEFAULT_WRITABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
             .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
@@ -321,7 +314,6 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.targetEndpoint").value(DEFAULT_TARGET_ENDPOINT))
-            .andExpect(jsonPath("$.level").value(DEFAULT_LEVEL))
             .andExpect(jsonPath("$.writable").value(DEFAULT_WRITABLE.booleanValue()))
             .andExpect(jsonPath("$.displayLogic").value(DEFAULT_DISPLAY_LOGIC))
             .andExpect(jsonPath("$.readOnlyLogic").value(DEFAULT_READ_ONLY_LOGIC))
@@ -581,111 +573,6 @@ public class ADTabResourceIT {
 
         // Get all the aDTabList where targetEndpoint does not contain UPDATED_TARGET_ENDPOINT
         defaultADTabShouldBeFound("targetEndpoint.doesNotContain=" + UPDATED_TARGET_ENDPOINT);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllADTabsByLevelIsEqualToSomething() throws Exception {
-        // Initialize the database
-        aDTabRepository.saveAndFlush(aDTab);
-
-        // Get all the aDTabList where level equals to DEFAULT_LEVEL
-        defaultADTabShouldBeFound("level.equals=" + DEFAULT_LEVEL);
-
-        // Get all the aDTabList where level equals to UPDATED_LEVEL
-        defaultADTabShouldNotBeFound("level.equals=" + UPDATED_LEVEL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllADTabsByLevelIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        aDTabRepository.saveAndFlush(aDTab);
-
-        // Get all the aDTabList where level not equals to DEFAULT_LEVEL
-        defaultADTabShouldNotBeFound("level.notEquals=" + DEFAULT_LEVEL);
-
-        // Get all the aDTabList where level not equals to UPDATED_LEVEL
-        defaultADTabShouldBeFound("level.notEquals=" + UPDATED_LEVEL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllADTabsByLevelIsInShouldWork() throws Exception {
-        // Initialize the database
-        aDTabRepository.saveAndFlush(aDTab);
-
-        // Get all the aDTabList where level in DEFAULT_LEVEL or UPDATED_LEVEL
-        defaultADTabShouldBeFound("level.in=" + DEFAULT_LEVEL + "," + UPDATED_LEVEL);
-
-        // Get all the aDTabList where level equals to UPDATED_LEVEL
-        defaultADTabShouldNotBeFound("level.in=" + UPDATED_LEVEL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllADTabsByLevelIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        aDTabRepository.saveAndFlush(aDTab);
-
-        // Get all the aDTabList where level is not null
-        defaultADTabShouldBeFound("level.specified=true");
-
-        // Get all the aDTabList where level is null
-        defaultADTabShouldNotBeFound("level.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllADTabsByLevelIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        aDTabRepository.saveAndFlush(aDTab);
-
-        // Get all the aDTabList where level is greater than or equal to DEFAULT_LEVEL
-        defaultADTabShouldBeFound("level.greaterThanOrEqual=" + DEFAULT_LEVEL);
-
-        // Get all the aDTabList where level is greater than or equal to UPDATED_LEVEL
-        defaultADTabShouldNotBeFound("level.greaterThanOrEqual=" + UPDATED_LEVEL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllADTabsByLevelIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        aDTabRepository.saveAndFlush(aDTab);
-
-        // Get all the aDTabList where level is less than or equal to DEFAULT_LEVEL
-        defaultADTabShouldBeFound("level.lessThanOrEqual=" + DEFAULT_LEVEL);
-
-        // Get all the aDTabList where level is less than or equal to SMALLER_LEVEL
-        defaultADTabShouldNotBeFound("level.lessThanOrEqual=" + SMALLER_LEVEL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllADTabsByLevelIsLessThanSomething() throws Exception {
-        // Initialize the database
-        aDTabRepository.saveAndFlush(aDTab);
-
-        // Get all the aDTabList where level is less than DEFAULT_LEVEL
-        defaultADTabShouldNotBeFound("level.lessThan=" + DEFAULT_LEVEL);
-
-        // Get all the aDTabList where level is less than UPDATED_LEVEL
-        defaultADTabShouldBeFound("level.lessThan=" + UPDATED_LEVEL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllADTabsByLevelIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        aDTabRepository.saveAndFlush(aDTab);
-
-        // Get all the aDTabList where level is greater than DEFAULT_LEVEL
-        defaultADTabShouldNotBeFound("level.greaterThan=" + DEFAULT_LEVEL);
-
-        // Get all the aDTabList where level is greater than SMALLER_LEVEL
-        defaultADTabShouldBeFound("level.greaterThan=" + SMALLER_LEVEL);
     }
 
 
@@ -1107,6 +994,26 @@ public class ADTabResourceIT {
 
     @Test
     @Transactional
+    public void getAllADTabsByADTabIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+        ADTab aDTab = ADTabResourceIT.createEntity(em);
+        em.persist(aDTab);
+        em.flush();
+        aDTab.addADTab(aDTab);
+        aDTabRepository.saveAndFlush(aDTab);
+        Long aDTabId = aDTab.getId();
+
+        // Get all the aDTabList where aDTab equals to aDTabId
+        defaultADTabShouldBeFound("aDTabId.equals=" + aDTabId);
+
+        // Get all the aDTabList where aDTab equals to aDTabId + 1
+        defaultADTabShouldNotBeFound("aDTabId.equals=" + (aDTabId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADTabsByAdClientIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADClient adClient = aDTab.getAdClient();
@@ -1168,6 +1075,26 @@ public class ADTabResourceIT {
         defaultADTabShouldNotBeFound("adWindowId.equals=" + (adWindowId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllADTabsByParentTabIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+        ADTab parentTab = ADTabResourceIT.createEntity(em);
+        em.persist(parentTab);
+        em.flush();
+        aDTab.setParentTab(parentTab);
+        aDTabRepository.saveAndFlush(aDTab);
+        Long parentTabId = parentTab.getId();
+
+        // Get all the aDTabList where parentTab equals to parentTabId
+        defaultADTabShouldBeFound("parentTabId.equals=" + parentTabId);
+
+        // Get all the aDTabList where parentTab equals to parentTabId + 1
+        defaultADTabShouldNotBeFound("parentTabId.equals=" + (parentTabId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -1179,7 +1106,6 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
-            .andExpect(jsonPath("$.[*].level").value(hasItem(DEFAULT_LEVEL)))
             .andExpect(jsonPath("$.[*].writable").value(hasItem(DEFAULT_WRITABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
             .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
@@ -1236,7 +1162,6 @@ public class ADTabResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .targetEndpoint(UPDATED_TARGET_ENDPOINT)
-            .level(UPDATED_LEVEL)
             .writable(UPDATED_WRITABLE)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
             .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
@@ -1257,7 +1182,6 @@ public class ADTabResourceIT {
         assertThat(testADTab.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADTab.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testADTab.getTargetEndpoint()).isEqualTo(UPDATED_TARGET_ENDPOINT);
-        assertThat(testADTab.getLevel()).isEqualTo(UPDATED_LEVEL);
         assertThat(testADTab.isWritable()).isEqualTo(UPDATED_WRITABLE);
         assertThat(testADTab.getDisplayLogic()).isEqualTo(UPDATED_DISPLAY_LOGIC);
         assertThat(testADTab.getReadOnlyLogic()).isEqualTo(UPDATED_READ_ONLY_LOGIC);

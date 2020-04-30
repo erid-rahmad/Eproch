@@ -2,10 +2,11 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -31,8 +32,6 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     private StringFilter targetEndpoint;
 
-    private IntegerFilter level;
-
     private BooleanFilter writable;
 
     private StringFilter displayLogic;
@@ -45,6 +44,8 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter aDTabId;
+
     private LongFilter adClientId;
 
     private LongFilter adOrganizationId;
@@ -52,6 +53,8 @@ public class ADTabCriteria implements Serializable, Criteria {
     private LongFilter adTableId;
 
     private LongFilter adWindowId;
+
+    private LongFilter parentTabId;
 
     public ADTabCriteria() {
     }
@@ -61,17 +64,18 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.targetEndpoint = other.targetEndpoint == null ? null : other.targetEndpoint.copy();
-        this.level = other.level == null ? null : other.level.copy();
         this.writable = other.writable == null ? null : other.writable.copy();
         this.displayLogic = other.displayLogic == null ? null : other.displayLogic.copy();
         this.readOnlyLogic = other.readOnlyLogic == null ? null : other.readOnlyLogic.copy();
         this.filterQuery = other.filterQuery == null ? null : other.filterQuery.copy();
         this.orderQuery = other.orderQuery == null ? null : other.orderQuery.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.aDTabId = other.aDTabId == null ? null : other.aDTabId.copy();
         this.adClientId = other.adClientId == null ? null : other.adClientId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adTableId = other.adTableId == null ? null : other.adTableId.copy();
         this.adWindowId = other.adWindowId == null ? null : other.adWindowId.copy();
+        this.parentTabId = other.parentTabId == null ? null : other.parentTabId.copy();
     }
 
     @Override
@@ -109,14 +113,6 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     public void setTargetEndpoint(StringFilter targetEndpoint) {
         this.targetEndpoint = targetEndpoint;
-    }
-
-    public IntegerFilter getLevel() {
-        return level;
-    }
-
-    public void setLevel(IntegerFilter level) {
-        this.level = level;
     }
 
     public BooleanFilter getWritable() {
@@ -167,6 +163,14 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getADTabId() {
+        return aDTabId;
+    }
+
+    public void setADTabId(LongFilter aDTabId) {
+        this.aDTabId = aDTabId;
+    }
+
     public LongFilter getAdClientId() {
         return adClientId;
     }
@@ -199,6 +203,14 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.adWindowId = adWindowId;
     }
 
+    public LongFilter getParentTabId() {
+        return parentTabId;
+    }
+
+    public void setParentTabId(LongFilter parentTabId) {
+        this.parentTabId = parentTabId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -214,17 +226,18 @@ public class ADTabCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(targetEndpoint, that.targetEndpoint) &&
-            Objects.equals(level, that.level) &&
             Objects.equals(writable, that.writable) &&
             Objects.equals(displayLogic, that.displayLogic) &&
             Objects.equals(readOnlyLogic, that.readOnlyLogic) &&
             Objects.equals(filterQuery, that.filterQuery) &&
             Objects.equals(orderQuery, that.orderQuery) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(aDTabId, that.aDTabId) &&
             Objects.equals(adClientId, that.adClientId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adTableId, that.adTableId) &&
-            Objects.equals(adWindowId, that.adWindowId);
+            Objects.equals(adWindowId, that.adWindowId) &&
+            Objects.equals(parentTabId, that.parentTabId);
     }
 
     @Override
@@ -234,17 +247,18 @@ public class ADTabCriteria implements Serializable, Criteria {
         name,
         description,
         targetEndpoint,
-        level,
         writable,
         displayLogic,
         readOnlyLogic,
         filterQuery,
         orderQuery,
         active,
+        aDTabId,
         adClientId,
         adOrganizationId,
         adTableId,
-        adWindowId
+        adWindowId,
+        parentTabId
         );
     }
 
@@ -255,17 +269,18 @@ public class ADTabCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (targetEndpoint != null ? "targetEndpoint=" + targetEndpoint + ", " : "") +
-                (level != null ? "level=" + level + ", " : "") +
                 (writable != null ? "writable=" + writable + ", " : "") +
                 (displayLogic != null ? "displayLogic=" + displayLogic + ", " : "") +
                 (readOnlyLogic != null ? "readOnlyLogic=" + readOnlyLogic + ", " : "") +
                 (filterQuery != null ? "filterQuery=" + filterQuery + ", " : "") +
                 (orderQuery != null ? "orderQuery=" + orderQuery + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (aDTabId != null ? "aDTabId=" + aDTabId + ", " : "") +
                 (adClientId != null ? "adClientId=" + adClientId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adTableId != null ? "adTableId=" + adTableId + ", " : "") +
                 (adWindowId != null ? "adWindowId=" + adWindowId + ", " : "") +
+                (parentTabId != null ? "parentTabId=" + parentTabId + ", " : "") +
             "}";
     }
 

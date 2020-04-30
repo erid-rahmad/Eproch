@@ -1,14 +1,23 @@
 package com.bhp.opusb.domain;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A ADTab.
@@ -16,7 +25,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "ad_tab")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ADTab extends AbstractAuditingEntity implements Serializable {
+public class ADTab extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,10 +44,6 @@ public class ADTab extends AbstractAuditingEntity implements Serializable {
     @Column(name = "target_endpoint")
     private String targetEndpoint;
 
-    @Min(value = 0)
-    @Column(name = "level")
-    private Integer level;
-
     @Column(name = "writable")
     private Boolean writable;
 
@@ -56,6 +61,10 @@ public class ADTab extends AbstractAuditingEntity implements Serializable {
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToMany(mappedBy = "parentTab")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ADTab> aDTabs = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -76,6 +85,10 @@ public class ADTab extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @JsonIgnoreProperties("aDTabs")
     private ADWindow adWindow;
+
+    @ManyToOne
+    @JsonIgnoreProperties("aDTabs")
+    private ADTab parentTab;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -123,19 +136,6 @@ public class ADTab extends AbstractAuditingEntity implements Serializable {
 
     public void setTargetEndpoint(String targetEndpoint) {
         this.targetEndpoint = targetEndpoint;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    public ADTab level(Integer level) {
-        this.level = level;
-        return this;
-    }
-
-    public void setLevel(Integer level) {
-        this.level = level;
     }
 
     public Boolean isWritable() {
@@ -216,6 +216,31 @@ public class ADTab extends AbstractAuditingEntity implements Serializable {
         this.active = active;
     }
 
+    public Set<ADTab> getADTabs() {
+        return aDTabs;
+    }
+
+    public ADTab aDTabs(Set<ADTab> aDTabs) {
+        this.aDTabs = aDTabs;
+        return this;
+    }
+
+    public ADTab addADTab(ADTab aDTab) {
+        this.aDTabs.add(aDTab);
+        aDTab.setParentTab(this);
+        return this;
+    }
+
+    public ADTab removeADTab(ADTab aDTab) {
+        this.aDTabs.remove(aDTab);
+        aDTab.setParentTab(null);
+        return this;
+    }
+
+    public void setADTabs(Set<ADTab> aDTabs) {
+        this.aDTabs = aDTabs;
+    }
+
     public ADClient getAdClient() {
         return adClient;
     }
@@ -267,6 +292,19 @@ public class ADTab extends AbstractAuditingEntity implements Serializable {
     public void setAdWindow(ADWindow aDWindow) {
         this.adWindow = aDWindow;
     }
+
+    public ADTab getParentTab() {
+        return parentTab;
+    }
+
+    public ADTab parentTab(ADTab aDTab) {
+        this.parentTab = aDTab;
+        return this;
+    }
+
+    public void setParentTab(ADTab aDTab) {
+        this.parentTab = aDTab;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -292,7 +330,6 @@ public class ADTab extends AbstractAuditingEntity implements Serializable {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
-            ", level=" + getLevel() +
             ", writable='" + isWritable() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +

@@ -1,11 +1,11 @@
-id;name;description;target_endpoint;level;writable;display_logic;read_only_logic;filter_query;order_query;active;ad_client_id;ad_organization_id;ad_table_id;ad_window_id
-1;New York composite Developer;reintermediate;South Dakota override Towels;59420;true;Towels Belarus;Intelligent Soft Fish modular concept;Shoals;Operations connect;false;1;1;1;1
-2;HDD Group capacity;bypassing ADP Colombia;Consultant port;8534;true;Generic Consultant Awesome;Soft human-resource Village;installation;parsing;true;2;2;2;2
-3;connect customized Sleek;Berkshire;monitor orchid;18700;false;neural Soap Implementation;quantifying Mouse Bermudian Dollar (customarily known as Bermuda Dollar);reboot;Granite;false;3;3;3;3
-4;deposit Handmade;Dynamic Sleek Plastic Shirt;Handmade;87062;false;Cheese;reboot;PCI solid state synergistic;Personal Loan Account;true;4;4;4;4
-5;Forward transparent;back-end;Creative;64970;false;Concrete Jersey;Massachusetts;Developer quantifying Research;compressing Baby framework;false;5;5;5;5
-6;Svalbard & Jan Mayen Islands holistic;transmit;24/365 Architect;97614;false;navigating SMTP Yemeni Rial;Fresh end-to-end;Checking Account AI;Orchestrator Tuna;true;6;6;6;6
-7;leverage Small;Cote d'Ivoire schemas;Berkshire Liaison Unbranded Plastic Fish;76654;true;Track SAS;User-centric;Innovative viral Forward;Sleek Small;true;7;7;7;7
-8;Small;microchip;index moderator RSS;247;true;product systems;Inlet;Credit Card Account RSS;Avon Dynamic Savings Account;false;8;8;8;8
-9;generate Operations JBOD;Pizza;Facilitator Lead;5127;true;Customer reboot Personal Loan Account;Borders system;wireless Liaison Dynamic;sky blue;false;9;9;9;9
-10;overriding Senior Shoes;Falkland Islands (Malvinas) bus;South Carolina Rustic;60424;true;Corporate;technologies Tactics;Credit Card Account New Zealand Dollar approach;programming;false;10;10;10;10
+id;name;description;target_endpoint;writable;display_logic;read_only_logic;filter_query;order_query;active;ad_client_id;ad_organization_id;ad_table_id;ad_window_id
+1;New York composite Developer;reintermediate;South Dakota override Towels;true;Drive Nebraska Licensed;ivory;modular concept Health;invoice Samoa Divide;true;1;1;1;1
+2;Personal Loan Account e-tailers Cheese;Refined relationships tan;input Cloned Metrics;false;Consultant Awesome;Soft human-resource Village;installation;parsing;true;2;2;2;2
+3;connect customized Sleek;Berkshire;monitor orchid;false;Data;Soap Implementation Facilitator;Mouse Bermudian Dollar (customarily known as Bermuda Dollar);reboot;false;3;3;3;3
+4;Berkshire;deposit Handmade;Dynamic Sleek Plastic Shirt;false;bus;Intelligent;Licensed Creative PCI;National port Personal Loan Account;true;4;4;4;4
+5;Forward transparent;back-end;Creative;true;infrastructures;Jersey;Massachusetts;Developer quantifying Research;true;5;5;5;5
+6;Advanced withdrawal orchestrate;Svalbard & Jan Mayen Islands holistic;transmit;true;redefine Walks;Creative metrics;Yemeni Rial Bulgaria;end-to-end Borders Unbranded;false;6;6;6;6
+7;Orchestrator Tuna;Massachusetts Computer Health;maroon neural;true;Liaison Unbranded Plastic Fish;copying Track SAS;User-centric;Innovative viral Forward;true;7;7;7;7
+8;Common;Lead;Home;true;application;moderator RSS;payment;index;true;8;8;8;8
+9;Inlet;Credit Card Account RSS;Avon Dynamic Savings Account;false;generate Operations JBOD;Pizza;Facilitator Lead;payment;true;9;9;9;9
+10;reboot Personal Loan Account;Borders system;wireless Liaison Dynamic;false;Kenya;overriding Senior Shoes;Falkland Islands (Malvinas) bus;South Carolina Rustic;true;10;10;10;10

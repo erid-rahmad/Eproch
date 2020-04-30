@@ -75,7 +75,6 @@ class ADTabGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "targetEndpoint":"SAMPLE_TEXT"
-                , "level":"0"
                 , "writable":null
                 , "displayLogic":"SAMPLE_TEXT"
                 , "readOnlyLogic":"SAMPLE_TEXT"
