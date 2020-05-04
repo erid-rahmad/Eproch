@@ -1,11 +1,6 @@
-id;name;description;target_endpoint;writable;display_logic;read_only_logic;filter_query;order_query;active;ad_client_id;ad_organization_id;ad_table_id;ad_window_id
-1;New York composite Developer;reintermediate;South Dakota override Towels;true;Drive Nebraska Licensed;ivory;modular concept Health;invoice Samoa Divide;true;1;1;1;1
-2;Personal Loan Account e-tailers Cheese;Refined relationships tan;input Cloned Metrics;false;Consultant Awesome;Soft human-resource Village;installation;parsing;true;2;2;2;2
-3;connect customized Sleek;Berkshire;monitor orchid;false;Data;Soap Implementation Facilitator;Mouse Bermudian Dollar (customarily known as Bermuda Dollar);reboot;false;3;3;3;3
-4;Berkshire;deposit Handmade;Dynamic Sleek Plastic Shirt;false;bus;Intelligent;Licensed Creative PCI;National port Personal Loan Account;true;4;4;4;4
-5;Forward transparent;back-end;Creative;true;infrastructures;Jersey;Massachusetts;Developer quantifying Research;true;5;5;5;5
-6;Advanced withdrawal orchestrate;Svalbard & Jan Mayen Islands holistic;transmit;true;redefine Walks;Creative metrics;Yemeni Rial Bulgaria;end-to-end Borders Unbranded;false;6;6;6;6
-7;Orchestrator Tuna;Massachusetts Computer Health;maroon neural;true;Liaison Unbranded Plastic Fish;copying Track SAS;User-centric;Innovative viral Forward;true;7;7;7;7
-8;Common;Lead;Home;true;application;moderator RSS;payment;index;true;8;8;8;8
-9;Inlet;Credit Card Account RSS;Avon Dynamic Savings Account;false;generate Operations JBOD;Pizza;Facilitator Lead;payment;true;9;9;9;9
-10;reboot Personal Loan Account;Borders system;wireless Liaison Dynamic;false;Kenya;overriding Senior Shoes;Falkland Islands (Malvinas) bus;South Carolina Rustic;true;10;10;10;10
+id;name;description;target_endpoint;writable;display_logic;read_only_logic;filter_query;order_query;active;ad_client_id;ad_organization_id;ad_table_id;ad_window_id;parent_tab_id
+1;Table;;/api/ad-tables;true;;;;;true;1;1;5359;1;
+2;Columns;;/api/ad-columns;true;;;;;true;1;1;5352;1;1
+3;Window;;/api/ad-windows;true;;;;;true;1;1;5360;2;
+4;Tabs;;/api/ad-tabs;true;;;;;true;1;1;5358;2;3
+5;Fields;;/api/ad-fields;true;;;;;true;1;1;5353;2;4

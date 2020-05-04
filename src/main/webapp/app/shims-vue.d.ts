@@ -6,3 +6,6 @@ declare module '*.vue' {
 declare module '*.gif' {
   export const gif: any
 }
+
+declare module 'vue-form-json-schema'
+declare module 'splitpanes'

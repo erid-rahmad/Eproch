@@ -2,14 +2,13 @@ import axios from 'axios';
 
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 
-import { IADTab } from '@/shared/model/ad-tab.model';
-import buildCriteriaQueryString from '@/shared/filter/filters';
+import { IADReference } from '@/shared/model/ad-reference.model';
 
-const baseApiUrl = 'api/ad-tabs';
+const baseApiUrl = 'api/ad-references';
 
-export default class ADTabService {
-  public find(id: number): Promise<IADTab> {
-    return new Promise<IADTab>((resolve, reject) => {
+export default class ADReferenceService {
+  public find(id: number): Promise<IADReference> {
+    return new Promise<IADReference>((resolve, reject) => {
       axios
         .get(`${baseApiUrl}/${id}`)
         .then(function(res) {
@@ -34,22 +33,6 @@ export default class ADTabService {
     });
   }
 
-  public retrieveWithFilter(criteriaQuery: any, paginationQuery?: any): Promise<any> {
-    return new Promise<any>((resolve, reject) => {
-      let criteria = buildCriteriaQueryString(criteriaQuery);
-      const pagination = buildPaginationQueryOpts(paginationQuery);
-      const separator = pagination.length ? '&' : '';
-      axios
-        .get(baseApiUrl + `?${criteria}${separator}${pagination}`)
-        .then(function(res) {
-          resolve(res);
-        })
-        .catch(err => {
-          reject(err);
-        });
-    });
-  }
-
   public delete(id: number): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
@@ -63,8 +46,8 @@ export default class ADTabService {
     });
   }
 
-  public create(entity: IADTab): Promise<IADTab> {
-    return new Promise<IADTab>((resolve, reject) => {
+  public create(entity: IADReference): Promise<IADReference> {
+    return new Promise<IADReference>((resolve, reject) => {
       axios
         .post(`${baseApiUrl}`, entity)
         .then(function(res) {
@@ -76,8 +59,8 @@ export default class ADTabService {
     });
   }
 
-  public update(entity: IADTab): Promise<IADTab> {
-    return new Promise<IADTab>((resolve, reject) => {
+  public update(entity: IADReference): Promise<IADReference> {
+    return new Promise<IADReference>((resolve, reject) => {
       axios
         .put(`${baseApiUrl}`, entity)
         .then(function(res) {

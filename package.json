@@ -26,6 +26,7 @@
     "script-loader": "^0.7.2",
     "simple-progress-webpack-plugin": "^1.1.2",
     "sockjs-client": "1.1.4",
+    "splitpanes": "^2.2.1",
     "swagger-ui-dist": "3.24.3",
     "vue": "2.6.11",
     "vue-class-component": "7.2.3",
@@ -46,7 +47,7 @@
     "@types/chai": "4.1.7",
     "@types/chai-string": "1.4.1",
     "@types/jest": "24.0.23",
-    "@types/lodash": "^4.14.149",
+    "@types/lodash": "^4.14.150",
     "@types/mocha": "5.2.6",
     "@types/node": "10.12.18",
     "@types/nprogress": "^0.2.0",
@@ -120,8 +121,7 @@
     "webpack-bundle-analyzer": "3.3.2",
     "webpack-cli": "3.2.3",
     "webpack-dev-server": "3.2.1",
-    "webpack-merge": "4.2.1",
-    "generator-jhipster-entity-audit": "3.3.0"
+    "webpack-merge": "4.2.1"
   },
   "engines": {
     "node": ">= 10.17.0",

@@ -1,16 +1,24 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.ADColumnType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A ADColumn.
@@ -18,7 +26,7 @@ import com.bhp.opusb.domain.enumeration.ADColumnType;
 @Entity
 @Table(name = "ad_column")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ADColumn extends AbstractAuditingEntity implements Serializable {
+public class ADColumn extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -82,12 +90,20 @@ public class ADColumn extends AbstractAuditingEntity implements Serializable {
     @JsonIgnoreProperties("aDColumns")
     private ADReference adReference;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @NotNull
     @JsonIgnoreProperties("aDColumns")
+    @JsonBackReference
     private ADTable adTable;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
+    public ADColumn() {}
+
+    public ADColumn(String name) {
+        this.name = name;
+    }
+    
     public Long getId() {
         return id;
     }
@@ -326,7 +342,8 @@ public class ADColumn extends AbstractAuditingEntity implements Serializable {
         if (!(o instanceof ADColumn)) {
             return false;
         }
-        return id != null && id.equals(((ADColumn) o).id);
+        return id != null && id.equals(((ADColumn) o).id)
+            && (name == null || name.equals(((ADColumn) o).name));
     }
 
     @Override

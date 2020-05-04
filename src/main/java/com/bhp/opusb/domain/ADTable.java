@@ -1,16 +1,25 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
 import java.util.HashSet;
 import java.util.Set;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A ADTable.
@@ -18,7 +27,7 @@ import java.util.Set;
 @Entity
 @Table(name = "ad_table")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ADTable extends AbstractAuditingEntity implements Serializable {
+public class ADTable extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -39,6 +48,7 @@ public class ADTable extends AbstractAuditingEntity implements Serializable {
 
     @OneToMany(mappedBy = "adTable")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonManagedReference
     private Set<ADColumn> aDColumns = new HashSet<>();
 
     @ManyToOne(optional = false)
@@ -46,12 +56,19 @@ public class ADTable extends AbstractAuditingEntity implements Serializable {
     @JsonIgnoreProperties("aDTables")
     private ADClient adClient;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @NotNull
     @JsonIgnoreProperties("aDTables")
     private ADOrganization adOrganization;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
+    public ADTable() {}
+
+    public ADTable(@NotNull String name) {
+        this.name = name;
+    }
+
     public Long getId() {
         return id;
     }

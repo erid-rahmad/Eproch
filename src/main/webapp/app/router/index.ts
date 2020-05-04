@@ -8,9 +8,6 @@ Component.registerHooks([
 import Router, { RouteConfig } from 'vue-router';
 import Layout from '@/layout/index.vue';
 import { Authority } from '@/shared/security/authority';
-const Home = () => import('../core/home/home.vue');
-const Error = () => import('../core/error/error.vue');
-const Register = () => import('../account/register/steps-form.vue');
 const Activate = () => import('../account/activate/activate.vue');
 const ResetPasswordInit = () => import('../account/reset-password/init/reset-password-init.vue');
 const ResetPasswordFinish = () => import('../account/reset-password/finish/reset-password-finish.vue');
@@ -26,6 +23,7 @@ const JhiLogsComponent = () => import('../admin/logs/logs.vue');
 const JhiAuditsComponent = () => import('../admin/audits/audits.vue');
 const JhiMetricsComponent = () => import('../admin/metrics/metrics.vue');
 const JhiTrackerComponent = () => import('../admin/tracker/tracker.vue');
+const DynamicWindow = () => import(/* webpackChunkName: "dynamicWindow" */ '@/core/application-dictionary/components/DynamicWindow/dynamic-window.vue');
 /* tslint:disable */
 // prettier-ignore
 const Country = () => import('../entities/country/country.vue');
@@ -39,18 +37,6 @@ const Currency = () => import('../entities/currency/currency.vue');
 const CurrencyUpdate = () => import('../entities/currency/currency-update.vue');
 // prettier-ignore
 const CurrencyDetails = () => import('../entities/currency/currency-details.vue');
-// prettier-ignore
-const Location = () => import('../entities/location/location.vue');
-// prettier-ignore
-const LocationUpdate = () => import('../entities/location/location-update.vue');
-// prettier-ignore
-const LocationDetails = () => import('../entities/location/location-details.vue');
-// prettier-ignore
-const Vendor = () => import('../entities/vendor/vendor.vue');
-// prettier-ignore
-const VendorUpdate = () => import('../entities/vendor/vendor-update.vue');
-// prettier-ignore
-const VendorDetails = () => import('../entities/vendor/vendor-details.vue');
 // prettier-ignore
 const BusinessCategory = () => import('../entities/business-category/business-category.vue');
 // prettier-ignore
@@ -82,24 +68,6 @@ const PersonInChargeUpdate = () => import('../entities/person-in-charge/person-i
 // prettier-ignore
 const PersonInChargeDetails = () => import('../entities/person-in-charge/person-in-charge-details.vue');
 // prettier-ignore
-const CompanyFunctionary = () => import('../entities/company-functionary/company-functionary.vue');
-// prettier-ignore
-const CompanyFunctionaryUpdate = () => import('../entities/company-functionary/company-functionary-update.vue');
-// prettier-ignore
-const CompanyFunctionaryDetails = () => import('../entities/company-functionary/company-functionary-details.vue');
-// prettier-ignore
-const Reference = () => import('../entities/reference/reference.vue');
-// prettier-ignore
-const ReferenceUpdate = () => import('../entities/reference/reference-update.vue');
-// prettier-ignore
-const ReferenceDetails = () => import('../entities/reference/reference-details.vue');
-// prettier-ignore
-const ReferenceList = () => import('../entities/reference-list/reference-list.vue');
-// prettier-ignore
-const ReferenceListUpdate = () => import('../entities/reference-list/reference-list-update.vue');
-// prettier-ignore
-const ReferenceListDetails = () => import('../entities/reference-list/reference-list-details.vue');
-// prettier-ignore
 const Region = () => import('../entities/region/region.vue');
 // prettier-ignore
 const RegionUpdate = () => import('../entities/region/region-update.vue');
@@ -118,78 +86,6 @@ const PermissionUpdate = () => import('../entities/permission/permission-update.
 // prettier-ignore
 const PermissionDetails = () => import('../entities/permission/permission-details.vue');
 // prettier-ignore
-const CCountry = () => import('../entities/c-country/c-country.vue');
-// prettier-ignore
-const CCountryUpdate = () => import('../entities/c-country/c-country-update.vue');
-// prettier-ignore
-const CCountryDetails = () => import('../entities/c-country/c-country-details.vue');
-// prettier-ignore
-const CCurrency = () => import('../entities/c-currency/c-currency.vue');
-// prettier-ignore
-const CCurrencyUpdate = () => import('../entities/c-currency/c-currency-update.vue');
-// prettier-ignore
-const CCurrencyDetails = () => import('../entities/c-currency/c-currency-details.vue');
-// prettier-ignore
-const CRegion = () => import('../entities/c-region/c-region.vue');
-// prettier-ignore
-const CRegionUpdate = () => import('../entities/c-region/c-region-update.vue');
-// prettier-ignore
-const CRegionDetails = () => import('../entities/c-region/c-region-details.vue');
-// prettier-ignore
-const CCity = () => import('../entities/c-city/c-city.vue');
-// prettier-ignore
-const CCityUpdate = () => import('../entities/c-city/c-city-update.vue');
-// prettier-ignore
-const CCityDetails = () => import('../entities/c-city/c-city-details.vue');
-// prettier-ignore
-const CLocation = () => import('../entities/c-location/c-location.vue');
-// prettier-ignore
-const CLocationUpdate = () => import('../entities/c-location/c-location-update.vue');
-// prettier-ignore
-const CLocationDetails = () => import('../entities/c-location/c-location-details.vue');
-// prettier-ignore
-const CBank = () => import('../entities/c-bank/c-bank.vue');
-// prettier-ignore
-const CBankUpdate = () => import('../entities/c-bank/c-bank-update.vue');
-// prettier-ignore
-const CBankDetails = () => import('../entities/c-bank/c-bank-details.vue');
-// prettier-ignore
-const CVendor = () => import('../entities/c-vendor/c-vendor.vue');
-// prettier-ignore
-const CVendorUpdate = () => import('../entities/c-vendor/c-vendor-update.vue');
-// prettier-ignore
-const CVendorDetails = () => import('../entities/c-vendor/c-vendor-details.vue');
-// prettier-ignore
-const CBusinessCategory = () => import('../entities/c-business-category/c-business-category.vue');
-// prettier-ignore
-const CBusinessCategoryUpdate = () => import('../entities/c-business-category/c-business-category-update.vue');
-// prettier-ignore
-const CBusinessCategoryDetails = () => import('../entities/c-business-category/c-business-category-details.vue');
-// prettier-ignore
-const CSupportingDocument = () => import('../entities/c-supporting-document/c-supporting-document.vue');
-// prettier-ignore
-const CSupportingDocumentUpdate = () => import('../entities/c-supporting-document/c-supporting-document-update.vue');
-// prettier-ignore
-const CSupportingDocumentDetails = () => import('../entities/c-supporting-document/c-supporting-document-details.vue');
-// prettier-ignore
-const CDocumentType = () => import('../entities/c-document-type/c-document-type.vue');
-// prettier-ignore
-const CDocumentTypeUpdate = () => import('../entities/c-document-type/c-document-type-update.vue');
-// prettier-ignore
-const CDocumentTypeDetails = () => import('../entities/c-document-type/c-document-type-details.vue');
-// prettier-ignore
-const CDocumentTypeBusinessCategory = () => import('../entities/c-document-type-business-category/c-document-type-business-category.vue');
-// prettier-ignore
-const CDocumentTypeBusinessCategoryUpdate = () => import('../entities/c-document-type-business-category/c-document-type-business-category-update.vue');
-// prettier-ignore
-const CDocumentTypeBusinessCategoryDetails = () => import('../entities/c-document-type-business-category/c-document-type-business-category-details.vue');
-// prettier-ignore
-const CPersonInCharge = () => import('../entities/c-person-in-charge/c-person-in-charge.vue');
-// prettier-ignore
-const CPersonInChargeUpdate = () => import('../entities/c-person-in-charge/c-person-in-charge-update.vue');
-// prettier-ignore
-const CPersonInChargeDetails = () => import('../entities/c-person-in-charge/c-person-in-charge-details.vue');
-// prettier-ignore
 const ADReference = () => import('../entities/ad-reference/ad-reference.vue');
 // prettier-ignore
 const ADReferenceUpdate = () => import('../entities/ad-reference/ad-reference-update.vue');
@@ -202,11 +98,35 @@ const ADReferenceListUpdate = () => import('../entities/ad-reference-list/ad-ref
 // prettier-ignore
 const ADReferenceListDetails = () => import('../entities/ad-reference-list/ad-reference-list-details.vue');
 // prettier-ignore
-const ADPermission = () => import('../entities/ad-permission/ad-permission.vue');
+const ADTable = () => import('../entities/ad-table/ad-table.vue');
 // prettier-ignore
-const ADPermissionUpdate = () => import('../entities/ad-permission/ad-permission-update.vue');
+const ADTableUpdate = () => import('../entities/ad-table/ad-table-update.vue');
 // prettier-ignore
-const ADPermissionDetails = () => import('../entities/ad-permission/ad-permission-details.vue');
+const ADTableDetails = () => import('../entities/ad-table/ad-table-details.vue');
+// prettier-ignore
+const ADColumn = () => import('../entities/ad-column/ad-column.vue');
+// prettier-ignore
+const ADColumnUpdate = () => import('../entities/ad-column/ad-column-update.vue');
+// prettier-ignore
+const ADColumnDetails = () => import('../entities/ad-column/ad-column-details.vue');
+// prettier-ignore
+const ADWindow = () => import('../entities/ad-window/ad-window.vue');
+// prettier-ignore
+const ADWindowUpdate = () => import('../entities/ad-window/ad-window-update.vue');
+// prettier-ignore
+const ADWindowDetails = () => import('../entities/ad-window/ad-window-details.vue');
+// prettier-ignore
+const ADTab = () => import('../entities/ad-tab/ad-tab.vue');
+// prettier-ignore
+const ADTabUpdate = () => import('../entities/ad-tab/ad-tab-update.vue');
+// prettier-ignore
+const ADTabDetails = () => import('../entities/ad-tab/ad-tab-details.vue');
+// prettier-ignore
+const ADField = () => import('../entities/ad-field/ad-field.vue');
+// prettier-ignore
+const ADFieldUpdate = () => import('../entities/ad-field/ad-field-update.vue');
+// prettier-ignore
+const ADFieldDetails = () => import('../entities/ad-field/ad-field-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 Vue.use(Router);
@@ -446,6 +366,39 @@ export const constantRoutes: RouteConfig[] = [
         meta: {
           title: 'admin.tracker',
           authorities: [Authority.ADMIN]
+        }
+      }
+    ]
+  },
+  {
+    path: '/application-dictionary',
+    component: Layout,
+    redirect: 'application-dictionary/window',
+    meta: {
+      title: 'applicationDictionary.default',
+      authorities: [Authority.ADMIN]
+    },
+    children: [
+      {
+        path: 'table',
+        name: 'TableEditor',
+        component: DynamicWindow,
+        meta: {
+          title: 'applicationDictionary.table',
+          authorities: [Authority.ADMIN],
+          baseApiUrl: '/api/ad-tables',
+          schemaId: 'table'
+        }
+      },
+      {
+        path: 'window',
+        name: 'WindowEditor',
+        component: DynamicWindow,
+        meta: {
+          title: 'applicationDictionary.window',
+          authorities: [Authority.ADMIN],
+          baseApiUrl: '/api/ad-windows',
+          schemaId: 'window'
         }
       }
     ]
@@ -767,78 +720,6 @@ export const constantRoutes: RouteConfig[] = [
   //   component: PersonInChargeDetails,
   //   meta: { authorities: [Authority.USER] }
   // },
-  // {
-  //   path: '/company-functionary',
-  //   name: 'CompanyFunctionary',
-  //   component: CompanyFunctionary,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/company-functionary/new',
-  //   name: 'CompanyFunctionaryCreate',
-  //   component: CompanyFunctionaryUpdate,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/company-functionary/:companyFunctionaryId/edit',
-  //   name: 'CompanyFunctionaryEdit',
-  //   component: CompanyFunctionaryUpdate,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/company-functionary/:companyFunctionaryId/view',
-  //   name: 'CompanyFunctionaryView',
-  //   component: CompanyFunctionaryDetails,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/reference',
-  //   name: 'Reference',
-  //   component: Reference,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/reference/new',
-  //   name: 'ReferenceCreate',
-  //   component: ReferenceUpdate,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/reference/:referenceId/edit',
-  //   name: 'ReferenceEdit',
-  //   component: ReferenceUpdate,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/reference/:referenceId/view',
-  //   name: 'ReferenceView',
-  //   component: ReferenceDetails,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/reference-list',
-  //   name: 'ReferenceList',
-  //   component: ReferenceList,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/reference-list/new',
-  //   name: 'ReferenceListCreate',
-  //   component: ReferenceListUpdate,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/reference-list/:referenceListId/edit',
-  //   name: 'ReferenceListEdit',
-  //   component: ReferenceListUpdate,
-  //   meta: { authorities: [Authority.USER] }
-  // },
-  // {
-  //   path: '/reference-list/:referenceListId/view',
-  //   name: 'ReferenceListView',
-  //   component: ReferenceListDetails,
-  //   meta: { authorities: [Authority.USER] }
-  // },
   {
     path: '/region',
     //name: 'Region',
@@ -949,7 +830,7 @@ export const constantRoutes: RouteConfig[] = [
         }
       }
     ]
-  },
+  }/* ,
   {
     path: '/ad-client',
     name: 'ADClient',
@@ -997,10 +878,221 @@ export const constantRoutes: RouteConfig[] = [
     name: 'ADOrganizationView',
     component: ADOrganizationDetails,
     meta: { authorities: [Authority.USER] }
-  }
-  // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
-  ,
+  },
   {
+    path: '/ad-table',
+    name: 'ADTable',
+    component: ADTable,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-table/new',
+    name: 'ADTableCreate',
+    component: ADTableUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-table/:aDTableId/edit',
+    name: 'ADTableEdit',
+    component: ADTableUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-table/:aDTableId/view',
+    name: 'ADTableView',
+    component: ADTableDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-column',
+    name: 'ADColumn',
+    component: ADColumn,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-column/new',
+    name: 'ADColumnCreate',
+    component: ADColumnUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-column/:aDColumnId/edit',
+    name: 'ADColumnEdit',
+    component: ADColumnUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-column/:aDColumnId/view',
+    name: 'ADColumnView',
+    component: ADColumnDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-window',
+    name: 'ADWindow',
+    component: ADWindow,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-window/new',
+    name: 'ADWindowCreate',
+    component: ADWindowUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-window/:aDWindowId/edit',
+    name: 'ADWindowEdit',
+    component: ADWindowUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-window/:aDWindowId/view',
+    name: 'ADWindowView',
+    component: ADWindowDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-tab',
+    name: 'ADTab',
+    component: ADTab,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-tab/new',
+    name: 'ADTabCreate',
+    component: ADTabUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-tab/:aDTabId/edit',
+    name: 'ADTabEdit',
+    component: ADTabUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-tab/:aDTabId/view',
+    name: 'ADTabView',
+    component: ADTabDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-field',
+    name: 'ADField',
+    component: ADField,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-field/new',
+    name: 'ADFieldCreate',
+    component: ADFieldUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-field/:aDFieldId/edit',
+    name: 'ADFieldEdit',
+    component: ADFieldUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-field/:aDFieldId/view',
+    name: 'ADFieldView',
+    component: ADFieldDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  
+  {
+    path: '/c-bank',
+    name: 'CBank',
+    component: CBank,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/c-bank/new',
+    name: 'CBankCreate',
+    component: CBankUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/c-bank/:cBankId/edit',
+    name: 'CBankEdit',
+    component: CBankUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/c-bank/:cBankId/view',
+    name: 'CBankView',
+    component: CBankDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-reference/new',
+    name: 'ADReferenceCreate',
+    component: ADReferenceUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-reference/:aDReferenceId/edit',
+    name: 'ADReferenceEdit',
+    component: ADReferenceUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-reference/:aDReferenceId/view',
+    name: 'ADReferenceView',
+    component: ADReferenceDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-reference-list',
+    name: 'ADReferenceList',
+    component: ADReferenceList,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-reference-list/new',
+    name: 'ADReferenceListCreate',
+    component: ADReferenceListUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-reference-list/:aDReferenceListId/edit',
+    name: 'ADReferenceListEdit',
+    component: ADReferenceListUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/ad-reference-list/:aDReferenceListId/view',
+    name: 'ADReferenceListView',
+    component: ADReferenceListDetails,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/permission',
+    name: 'Permission',
+    component: Permission,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/permission/new',
+    name: 'PermissionCreate',
+    component: PermissionUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/permission/:permissionId/edit',
+    name: 'PermissionEdit',
+    component: PermissionUpdate,
+    meta: { authorities: [Authority.USER] }
+  },
+  {
+    path: '/permission/:permissionId/view',
+    name: 'PermissionView',
+    component: PermissionDetails,
+    meta: { authorities: [Authority.USER] }
+  } */
+  // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
+  
+  ,{
     path: '*',
     redirect: '/404',
     meta: { hidden: true }
@@ -1011,9 +1103,7 @@ export const constantRoutes: RouteConfig[] = [
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user authorities
  */
-export const asyncRoutes: RouteConfig[] = [
-  
-];
+export const asyncRoutes: RouteConfig[] = [];
 
 // prettier-ignore
 const createRouter = () => new Router({
