@@ -9,6 +9,8 @@ import ADTabUpdateComponent from '@/entities/ad-tab/ad-tab-update.vue';
 import ADTabClass from '@/entities/ad-tab/ad-tab-update.component';
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
 
+import ADFieldService from '@/entities/ad-field/ad-field.service';
+
 import ADClientService from '@/entities/ad-client/ad-client.service';
 
 import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
@@ -43,6 +45,8 @@ describe('Component Tests', () => {
         provide: {
           alertService: () => new AlertService(store),
           aDTabService: () => aDTabServiceStub,
+
+          aDFieldService: () => new ADFieldService(),
 
           aDClientService: () => new ADClientService(),
 

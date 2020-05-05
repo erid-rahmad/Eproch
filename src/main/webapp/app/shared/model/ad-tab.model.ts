@@ -1,3 +1,5 @@
+import { IADField } from '@/shared/model/ad-field.model';
+
 export interface IADTab {
   id?: number;
   name?: string;
@@ -10,6 +12,7 @@ export interface IADTab {
   orderQuery?: string;
   active?: boolean;
   aDTabs?: IADTab[];
+  aDFields?: IADField[];
   adClientId?: number;
   adOrganizationId?: number;
   adTableId?: number;
@@ -30,6 +33,7 @@ export class ADTab implements IADTab {
     public orderQuery?: string,
     public active?: boolean,
     public aDTabs?: IADTab[],
+    public aDFields?: IADField[],
     public adClientId?: number,
     public adOrganizationId?: number,
     public adTableId?: number,

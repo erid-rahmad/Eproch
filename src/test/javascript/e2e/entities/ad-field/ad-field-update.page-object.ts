@@ -42,4 +42,8 @@ export default class ADFieldUpdatePage extends AlertPage {
   adClientSelect = element(by.css('select#ad-field-adClient'));
 
   adOrganizationSelect = element(by.css('select#ad-field-adOrganization'));
+
+  adReferenceSelect = element(by.css('select#ad-field-adReference'));
+
+  adTabSelect = element(by.css('select#ad-field-adTab'));
 }

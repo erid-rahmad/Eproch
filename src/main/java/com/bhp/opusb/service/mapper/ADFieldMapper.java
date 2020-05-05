@@ -9,15 +9,19 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ADField} and its DTO {@link ADFieldDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADClientMapper.class, ADOrganizationMapper.class})
+@Mapper(componentModel = "spring", uses = {ADClientMapper.class, ADOrganizationMapper.class, ADReferenceMapper.class, ADTabMapper.class})
 public interface ADFieldMapper extends EntityMapper<ADFieldDTO, ADField> {
 
     @Mapping(source = "adClient.id", target = "adClientId")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adReference.id", target = "adReferenceId")
+    @Mapping(source = "adTab.id", target = "adTabId")
     ADFieldDTO toDto(ADField aDField);
 
     @Mapping(source = "adClientId", target = "adClient")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
+    @Mapping(source = "adReferenceId", target = "adReference")
+    @Mapping(source = "adTabId", target = "adTab")
     ADField toEntity(ADFieldDTO aDFieldDTO);
 
     default ADField fromId(Long id) {

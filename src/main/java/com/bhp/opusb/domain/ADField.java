@@ -1,14 +1,19 @@
 package com.bhp.opusb.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A ADField.
@@ -16,7 +21,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "ad_field")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ADField extends AbstractAuditingEntity implements Serializable {
+public class ADField extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -83,6 +88,15 @@ public class ADField extends AbstractAuditingEntity implements Serializable {
     @NotNull
     @JsonIgnoreProperties("aDFields")
     private ADOrganization adOrganization;
+
+    @ManyToOne
+    @JsonIgnoreProperties("aDFields")
+    private ADReference adReference;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("aDFields")
+    private ADTab adTab;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -325,6 +339,32 @@ public class ADField extends AbstractAuditingEntity implements Serializable {
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
+    }
+
+    public ADReference getAdReference() {
+        return adReference;
+    }
+
+    public ADField adReference(ADReference aDReference) {
+        this.adReference = aDReference;
+        return this;
+    }
+
+    public void setAdReference(ADReference aDReference) {
+        this.adReference = aDReference;
+    }
+
+    public ADTab getAdTab() {
+        return adTab;
+    }
+
+    public ADField adTab(ADTab aDTab) {
+        this.adTab = aDTab;
+        return this;
+    }
+
+    public void setAdTab(ADTab aDTab) {
+        this.adTab = aDTab;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

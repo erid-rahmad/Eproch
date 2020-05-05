@@ -85,6 +85,21 @@
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDReference",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipName": "adReference",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDTab",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTab",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20200429153100",

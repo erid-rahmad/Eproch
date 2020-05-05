@@ -21,6 +21,8 @@ public interface ADTabMapper extends EntityMapper<ADTabDTO, ADTab> {
 
     @Mapping(target = "aDTabs", ignore = true)
     @Mapping(target = "removeADTab", ignore = true)
+    @Mapping(target = "aDFields", ignore = true)
+    @Mapping(target = "removeADField", ignore = true)
     @Mapping(source = "adClientId", target = "adClient")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "adTableId", target = "adTable")

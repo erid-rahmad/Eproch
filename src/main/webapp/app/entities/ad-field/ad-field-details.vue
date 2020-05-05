@@ -116,6 +116,22 @@
                             <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: aDField.adOrganizationId}}">{{aDField.adOrganizationId}}</router-link>
                         </div>
                     </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDField.adReference')">Ad Reference</span>
+                    </dt>
+                    <dd>
+                        <div v-if="aDField.adReferenceId">
+                            <router-link :to="{name: 'ADReferenceView', params: {aDReferenceId: aDField.adReferenceId}}">{{aDField.adReferenceId}}</router-link>
+                        </div>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDField.adTab')">Ad Tab</span>
+                    </dt>
+                    <dd>
+                        <div v-if="aDField.adTabId">
+                            <router-link :to="{name: 'ADTabView', params: {aDTabId: aDField.adTabId}}">{{aDField.adTabId}}</router-link>
+                        </div>
+                    </dd>
                 </dl>
                 <button type="submit"
                         v-on:click.prevent="previousState()"

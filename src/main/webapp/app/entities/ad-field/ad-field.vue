@@ -43,6 +43,8 @@
                     <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.aDField.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adClientId')"><span v-text="$t('opusWebApp.aDField.adClient')">Ad Client</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adClientId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adOrganizationId')"><span v-text="$t('opusWebApp.aDField.adOrganization')">Ad Organization</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adOrganizationId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('adReferenceId')"><span v-text="$t('opusWebApp.aDField.adReference')">Ad Reference</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adReferenceId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('adTabId')"><span v-text="$t('opusWebApp.aDField.adTab')">Ad Tab</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adTabId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -76,6 +78,16 @@
                     <td>
                         <div v-if="aDField.adOrganizationId">
                             <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: aDField.adOrganizationId}}">{{aDField.adOrganizationId}}</router-link>
+                        </div>
+                    </td>
+                    <td>
+                        <div v-if="aDField.adReferenceId">
+                            <router-link :to="{name: 'ADReferenceView', params: {aDReferenceId: aDField.adReferenceId}}">{{aDField.adReferenceId}}</router-link>
+                        </div>
+                    </td>
+                    <td>
+                        <div v-if="aDField.adTabId">
+                            <router-link :to="{name: 'ADTabView', params: {aDTabId: aDField.adTabId}}">{{aDField.adTabId}}</router-link>
                         </div>
                     </td>
                     <td class="text-right">

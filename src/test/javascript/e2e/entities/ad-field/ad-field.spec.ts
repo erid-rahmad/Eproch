@@ -170,6 +170,8 @@ describe('ADField e2e test', () => {
 
       // await  selectLastOption(updatePage.adClientSelect);
       // await  selectLastOption(updatePage.adOrganizationSelect);
+      // await  selectLastOption(updatePage.adReferenceSelect);
+      // await  selectLastOption(updatePage.adTabSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
       await updatePage.saveButton.click();

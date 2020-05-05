@@ -118,6 +118,25 @@
                             This field is required.
                         </small>
                     </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.adReference')" for="ad-field-adReference">Ad Reference</label>
+                        <select class="form-control" id="ad-field-adReference" name="adReference" v-model="aDField.adReferenceId">
+                            <option v-bind:value="null"></option>
+                            <option v-bind:value="aDReferenceOption.id" v-for="aDReferenceOption in aDReferences" :key="aDReferenceOption.id">{{aDReferenceOption.id}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.adTab')" for="ad-field-adTab">Ad Tab</label>
+                        <select class="form-control" id="ad-field-adTab" name="adTab" v-model="$v.aDField.adTabId.$model" required>
+                            <option v-if="!aDField.adTabId" v-bind:value="null" selected></option>
+                            <option v-bind:value="aDTabOption.id" v-for="aDTabOption in aDTabs" :key="aDTabOption.id">{{aDTabOption.id}}</option>
+                        </select>
+                    </div>
+                    <div v-if="$v.aDField.adTabId.$anyDirty && $v.aDField.adTabId.$invalid">
+                        <small class="form-text text-danger" v-if="!$v.aDField.adTabId.required" v-text="$t('entity.validation.required')">
+                            This field is required.
+                        </small>
+                    </div>
                 </div>
                 <div>
                     <button type="button" id="cancel-save" class="btn btn-secondary" v-on:click="previousState()">

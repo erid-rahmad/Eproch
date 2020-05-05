@@ -2,6 +2,9 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
 
+import ADFieldService from '../ad-field/ad-field.service';
+import { IADField } from '@/shared/model/ad-field.model';
+
 import ADClientService from '../ad-client/ad-client.service';
 import { IADClient } from '@/shared/model/ad-client.model';
 
@@ -55,6 +58,10 @@ export default class ADTabUpdate extends Vue {
   public aDTab: IADTab = new ADTab();
 
   public aDTabs: IADTab[] = [];
+
+  @Inject('aDFieldService') private aDFieldService: () => ADFieldService;
+
+  public aDFields: IADField[] = [];
 
   @Inject('aDClientService') private aDClientService: () => ADClientService;
 
@@ -122,6 +129,11 @@ export default class ADTabUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.aDTabs = res.data;
+      });
+    this.aDFieldService()
+      .retrieve()
+      .then(res => {
+        this.aDFields = res.data;
       });
     this.aDClientService()
       .retrieve()

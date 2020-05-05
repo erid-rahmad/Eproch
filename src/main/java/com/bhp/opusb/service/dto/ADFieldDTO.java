@@ -1,8 +1,8 @@
 package com.bhp.opusb.service.dto;
 
-import java.util.Objects;
-
 import javax.validation.constraints.NotNull;
+
+import java.util.Objects;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADField} entity.
@@ -50,6 +50,10 @@ public class ADFieldDTO extends AbstractAuditingDTO {
     private Long adClientId;
 
     private Long adOrganizationId;
+
+    private Long adReferenceId;
+
+    private Long adTabId;
     
     public Long getId() {
         return id;
@@ -203,6 +207,22 @@ public class ADFieldDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public Long getAdReferenceId() {
+        return adReferenceId;
+    }
+
+    public void setAdReferenceId(Long aDReferenceId) {
+        this.adReferenceId = aDReferenceId;
+    }
+
+    public Long getAdTabId() {
+        return adTabId;
+    }
+
+    public void setAdTabId(Long aDTabId) {
+        this.adTabId = aDTabId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -246,6 +266,8 @@ public class ADFieldDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", adClientId=" + getAdClientId() +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adReferenceId=" + getAdReferenceId() +
+            ", adTabId=" + getAdTabId() +
             "}";
     }
 }

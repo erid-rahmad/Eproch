@@ -49,6 +49,12 @@
             "relationshipName": "aDTab"
         },
         {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "aDField",
+            "otherEntityRelationshipName": "adTab",
+            "relationshipName": "aDField"
+        },
+        {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDClient",
             "otherEntityRelationshipName": "aDTab",

@@ -33,7 +33,9 @@
       "columnSpan": "Column Span",
       "active": "Active",
       "adClient": "Ad Client",
-      "adOrganization": "Ad Organization"
+      "adOrganization": "Ad Organization",
+      "adReference": "Ad Reference",
+      "adTab": "Ad Tab"
     }
   }
 }

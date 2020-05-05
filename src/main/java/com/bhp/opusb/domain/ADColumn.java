@@ -90,7 +90,7 @@ public class ADColumn extends AbstractAuditingEntity {
     @JsonIgnoreProperties("aDColumns")
     private ADReference adReference;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("aDColumns")
     @JsonBackReference

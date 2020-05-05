@@ -18,6 +18,8 @@ export interface IADField {
   active?: boolean;
   adClientId?: number;
   adOrganizationId?: number;
+  adReferenceId?: number;
+  adTabId?: number;
 }
 
 export class ADField implements IADField {
@@ -40,7 +42,9 @@ export class ADField implements IADField {
     public columnSpan?: number,
     public active?: boolean,
     public adClientId?: number,
-    public adOrganizationId?: number
+    public adOrganizationId?: number,
+    public adReferenceId?: number,
+    public adTabId?: number
   ) {
     this.staticField = this.staticField || false;
     this.labelOnly = this.labelOnly || false;

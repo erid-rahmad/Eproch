@@ -66,6 +66,10 @@ public class ADTab extends AbstractAuditingEntity {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ADTab> aDTabs = new HashSet<>();
 
+    @OneToMany(mappedBy = "adTab")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<ADField> aDFields = new HashSet<>();
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("aDTabs")
@@ -239,6 +243,31 @@ public class ADTab extends AbstractAuditingEntity {
 
     public void setADTabs(Set<ADTab> aDTabs) {
         this.aDTabs = aDTabs;
+    }
+
+    public Set<ADField> getADFields() {
+        return aDFields;
+    }
+
+    public ADTab aDFields(Set<ADField> aDFields) {
+        this.aDFields = aDFields;
+        return this;
+    }
+
+    public ADTab addADField(ADField aDField) {
+        this.aDFields.add(aDField);
+        aDField.setAdTab(this);
+        return this;
+    }
+
+    public ADTab removeADField(ADField aDField) {
+        this.aDFields.remove(aDField);
+        aDField.setAdTab(null);
+        return this;
+    }
+
+    public void setADFields(Set<ADField> aDFields) {
+        this.aDFields = aDFields;
     }
 
     public ADClient getAdClient() {

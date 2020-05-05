@@ -8,6 +8,12 @@ import { IADClient } from '@/shared/model/ad-client.model';
 import ADOrganizationService from '../ad-organization/ad-organization.service';
 import { IADOrganization } from '@/shared/model/ad-organization.model';
 
+import ADReferenceService from '../ad-reference/ad-reference.service';
+import { IADReference } from '@/shared/model/ad-reference.model';
+
+import ADTabService from '../ad-tab/ad-tab.service';
+import { IADTab } from '@/shared/model/ad-tab.model';
+
 import AlertService from '@/shared/alert/alert.service';
 import { IADField, ADField } from '@/shared/model/ad-field.model';
 import ADFieldService from './ad-field.service';
@@ -37,6 +43,9 @@ const validations: any = {
     },
     adOrganizationId: {
       required
+    },
+    adTabId: {
+      required
     }
   }
 };
@@ -56,6 +65,14 @@ export default class ADFieldUpdate extends Vue {
   @Inject('aDOrganizationService') private aDOrganizationService: () => ADOrganizationService;
 
   public aDOrganizations: IADOrganization[] = [];
+
+  @Inject('aDReferenceService') private aDReferenceService: () => ADReferenceService;
+
+  public aDReferences: IADReference[] = [];
+
+  @Inject('aDTabService') private aDTabService: () => ADTabService;
+
+  public aDTabs: IADTab[] = [];
   public isSaving = false;
 
   beforeRouteEnter(to, from, next) {
@@ -112,6 +129,16 @@ export default class ADFieldUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.aDOrganizations = res.data;
+      });
+    this.aDReferenceService()
+      .retrieve()
+      .then(res => {
+        this.aDReferences = res.data;
+      });
+    this.aDTabService()
+      .retrieve()
+      .then(res => {
+        this.aDTabs = res.data;
       });
   }
 }

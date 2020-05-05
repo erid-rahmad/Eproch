@@ -13,6 +13,10 @@ import ADClientService from '@/entities/ad-client/ad-client.service';
 
 import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
 
+import ADReferenceService from '@/entities/ad-reference/ad-reference.service';
+
+import ADTabService from '@/entities/ad-tab/ad-tab.service';
+
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);
@@ -42,7 +46,11 @@ describe('Component Tests', () => {
 
           aDClientService: () => new ADClientService(),
 
-          aDOrganizationService: () => new ADOrganizationService()
+          aDOrganizationService: () => new ADOrganizationService(),
+
+          aDReferenceService: () => new ADReferenceService(),
+
+          aDTabService: () => new ADTabService()
         }
       });
       comp = wrapper.vm;

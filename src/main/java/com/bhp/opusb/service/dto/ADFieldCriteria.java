@@ -2,10 +2,11 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -61,6 +62,10 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
+    private LongFilter adReferenceId;
+
+    private LongFilter adTabId;
+
     public ADFieldCriteria() {
     }
 
@@ -84,6 +89,8 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adClientId = other.adClientId == null ? null : other.adClientId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
+        this.adTabId = other.adTabId == null ? null : other.adTabId.copy();
     }
 
     @Override
@@ -243,6 +250,22 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getAdReferenceId() {
+        return adReferenceId;
+    }
+
+    public void setAdReferenceId(LongFilter adReferenceId) {
+        this.adReferenceId = adReferenceId;
+    }
+
+    public LongFilter getAdTabId() {
+        return adTabId;
+    }
+
+    public void setAdTabId(LongFilter adTabId) {
+        this.adTabId = adTabId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -272,7 +295,9 @@ public class ADFieldCriteria implements Serializable, Criteria {
             Objects.equals(columnSpan, that.columnSpan) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adClientId, that.adClientId) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adReferenceId, that.adReferenceId) &&
+            Objects.equals(adTabId, that.adTabId);
     }
 
     @Override
@@ -296,7 +321,9 @@ public class ADFieldCriteria implements Serializable, Criteria {
         columnSpan,
         active,
         adClientId,
-        adOrganizationId
+        adOrganizationId,
+        adReferenceId,
+        adTabId
         );
     }
 
@@ -322,6 +349,8 @@ public class ADFieldCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adClientId != null ? "adClientId=" + adClientId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
+                (adTabId != null ? "adTabId=" + adTabId + ", " : "") +
             "}";
     }
 

@@ -69,6 +69,12 @@
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
+            <column name="ad_reference_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_tab_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
     </changeSet>
@@ -124,6 +130,7 @@
             <column name="active" type="boolean"/>
             <column name="ad_client_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
+            <column name="ad_tab_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

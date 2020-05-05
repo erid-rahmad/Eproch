@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.domain.ADTab;
+import com.bhp.opusb.domain.ADField;
 import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADTable;
@@ -1009,6 +1010,26 @@ public class ADTabResourceIT {
 
         // Get all the aDTabList where aDTab equals to aDTabId + 1
         defaultADTabShouldNotBeFound("aDTabId.equals=" + (aDTabId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADTabsByADFieldIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+        ADField aDField = ADFieldResourceIT.createEntity(em);
+        em.persist(aDField);
+        em.flush();
+        aDTab.addADField(aDField);
+        aDTabRepository.saveAndFlush(aDTab);
+        Long aDFieldId = aDField.getId();
+
+        // Get all the aDTabList where aDField equals to aDFieldId
+        defaultADTabShouldBeFound("aDFieldId.equals=" + aDFieldId);
+
+        // Get all the aDTabList where aDField equals to aDFieldId + 1
+        defaultADTabShouldNotBeFound("aDFieldId.equals=" + (aDFieldId + 1));
     }
 
 

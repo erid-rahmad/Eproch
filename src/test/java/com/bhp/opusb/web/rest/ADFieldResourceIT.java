@@ -4,6 +4,8 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADField;
 import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.ADReference;
+import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.repository.ADFieldRepository;
 import com.bhp.opusb.service.ADFieldService;
 import com.bhp.opusb.service.dto.ADFieldDTO;
@@ -153,6 +155,16 @@ public class ADFieldResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         aDField.setAdOrganization(aDOrganization);
+        // Add required entity
+        ADTab aDTab;
+        if (TestUtil.findAll(em, ADTab.class).isEmpty()) {
+            aDTab = ADTabResourceIT.createEntity(em);
+            em.persist(aDTab);
+            em.flush();
+        } else {
+            aDTab = TestUtil.findAll(em, ADTab.class).get(0);
+        }
+        aDField.setAdTab(aDTab);
         return aDField;
     }
     /**
@@ -199,6 +211,16 @@ public class ADFieldResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         aDField.setAdOrganization(aDOrganization);
+        // Add required entity
+        ADTab aDTab;
+        if (TestUtil.findAll(em, ADTab.class).isEmpty()) {
+            aDTab = ADTabResourceIT.createUpdatedEntity(em);
+            em.persist(aDTab);
+            em.flush();
+        } else {
+            aDTab = TestUtil.findAll(em, ADTab.class).get(0);
+        }
+        aDField.setAdTab(aDTab);
         return aDField;
     }
 
@@ -1562,6 +1584,42 @@ public class ADFieldResourceIT {
 
         // Get all the aDFieldList where adOrganization equals to adOrganizationId + 1
         defaultADFieldShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByAdReferenceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+        ADReference adReference = ADReferenceResourceIT.createEntity(em);
+        em.persist(adReference);
+        em.flush();
+        aDField.setAdReference(adReference);
+        aDFieldRepository.saveAndFlush(aDField);
+        Long adReferenceId = adReference.getId();
+
+        // Get all the aDFieldList where adReference equals to adReferenceId
+        defaultADFieldShouldBeFound("adReferenceId.equals=" + adReferenceId);
+
+        // Get all the aDFieldList where adReference equals to adReferenceId + 1
+        defaultADFieldShouldNotBeFound("adReferenceId.equals=" + (adReferenceId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByAdTabIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADTab adTab = aDField.getAdTab();
+        aDFieldRepository.saveAndFlush(aDField);
+        Long adTabId = adTab.getId();
+
+        // Get all the aDFieldList where adTab equals to adTabId
+        defaultADFieldShouldBeFound("adTabId.equals=" + adTabId);
+
+        // Get all the aDFieldList where adTab equals to adTabId + 1
+        defaultADFieldShouldNotBeFound("adTabId.equals=" + (adTabId + 1));
     }
 
     /**

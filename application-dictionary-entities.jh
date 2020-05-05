@@ -106,8 +106,9 @@ relationship OneToMany {
 	ADClient to ADOrganization{adClient required}
 	ADTable to ADColumn{adTable required}
 	ADWindow to ADTab{adWindow required}
-	ADReference to ADReferenceList{adReference required}
 	ADTab to ADTab{parentTab}
+	ADTab to ADField{adTab required}
+	ADReference to ADReferenceList{adReference required}
 }
 /**
  * The left side entity won't be included in the right side entity.
@@ -116,16 +117,21 @@ relationship ManyToOne {
 	// Application Dictionaries.
 	ADTable{adClient required} to ADClient
 	ADTable{adOrganization required} to ADOrganization
+
 	ADColumn{adClient required} to ADClient
 	ADColumn{adOrganization required} to ADOrganization
+	ADColumn{adReference} to ADReference
+
 	ADWindow{adClient required} to ADClient
 	ADWindow{adOrganization required} to ADOrganization
+	
 	ADTab{adClient required} to ADClient
 	ADTab{adOrganization required} to ADOrganization
+	ADTab{adTable required} to ADTable
+	
 	ADField{adClient required} to ADClient
 	ADField{adOrganization required} to ADOrganization
-	ADTab{adTable required} to ADTable
-	ADColumn{adReference} to ADReference
+	ADField{adReference} to ADReference
 }
 // Allow filtering to all entities.
 filter *

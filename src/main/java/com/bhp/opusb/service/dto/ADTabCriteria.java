@@ -46,6 +46,8 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     private LongFilter aDTabId;
 
+    private LongFilter aDFieldId;
+
     private LongFilter adClientId;
 
     private LongFilter adOrganizationId;
@@ -71,6 +73,7 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.orderQuery = other.orderQuery == null ? null : other.orderQuery.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.aDTabId = other.aDTabId == null ? null : other.aDTabId.copy();
+        this.aDFieldId = other.aDFieldId == null ? null : other.aDFieldId.copy();
         this.adClientId = other.adClientId == null ? null : other.adClientId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adTableId = other.adTableId == null ? null : other.adTableId.copy();
@@ -171,6 +174,14 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.aDTabId = aDTabId;
     }
 
+    public LongFilter getADFieldId() {
+        return aDFieldId;
+    }
+
+    public void setADFieldId(LongFilter aDFieldId) {
+        this.aDFieldId = aDFieldId;
+    }
+
     public LongFilter getAdClientId() {
         return adClientId;
     }
@@ -233,6 +244,7 @@ public class ADTabCriteria implements Serializable, Criteria {
             Objects.equals(orderQuery, that.orderQuery) &&
             Objects.equals(active, that.active) &&
             Objects.equals(aDTabId, that.aDTabId) &&
+            Objects.equals(aDFieldId, that.aDFieldId) &&
             Objects.equals(adClientId, that.adClientId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adTableId, that.adTableId) &&
@@ -254,6 +266,7 @@ public class ADTabCriteria implements Serializable, Criteria {
         orderQuery,
         active,
         aDTabId,
+        aDFieldId,
         adClientId,
         adOrganizationId,
         adTableId,
@@ -276,6 +289,7 @@ public class ADTabCriteria implements Serializable, Criteria {
                 (orderQuery != null ? "orderQuery=" + orderQuery + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (aDTabId != null ? "aDTabId=" + aDTabId + ", " : "") +
+                (aDFieldId != null ? "aDFieldId=" + aDFieldId + ", " : "") +
                 (adClientId != null ? "adClientId=" + adClientId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adTableId != null ? "adTableId=" + adTableId + ", " : "") +
