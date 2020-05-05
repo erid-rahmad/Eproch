@@ -101,6 +101,10 @@ public class CountryQueryService extends QueryService<Country> {
                 specification = specification.and(buildSpecification(criteria.getCurrencyId(),
                     root -> root.join(Country_.currency, JoinType.LEFT).get(Currency_.id)));
             }
+            if (criteria.getCurrencyName() != null) {
+                specification = specification.and(buildSpecification(criteria.getCurrencyName(),
+                    root -> root.join(Country_.currency, JoinType.LEFT).get(Currency_.name)));
+            }
             if (criteria.getRegionId() != null) {
                 specification = specification.and(buildSpecification(criteria.getRegionId(),
                     root -> root.join(Country_.regions, JoinType.LEFT).get(Region_.id)));

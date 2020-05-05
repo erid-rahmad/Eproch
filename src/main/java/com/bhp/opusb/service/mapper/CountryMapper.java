@@ -14,6 +14,7 @@ public interface CountryMapper extends EntityMapper<CountryDTO, Country> {
 
     @Mapping(source = "currency.id", target = "currencyId")
     @Mapping(source = "currency.code", target = "currencyCode")
+    @Mapping(source = "currency.name", target = "currencyName")
     CountryDTO toDto(Country country);
 
     @Mapping(source = "currencyId", target = "currency")

@@ -21,6 +21,7 @@ public class CountryDTO extends AbstractAuditingDTO implements Serializable {
 
     private Long currencyId;
     private String currencyCode;
+    private String currencyName;
     
     public Long getId() {
         return id;
@@ -62,6 +63,14 @@ public class CountryDTO extends AbstractAuditingDTO implements Serializable {
         this.currencyCode = currencyCode;
     }
 
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -91,6 +100,7 @@ public class CountryDTO extends AbstractAuditingDTO implements Serializable {
             ", code='" + getCode() + "'" +
             ", currencyId=" + getCurrencyId() +
             ", currencyCode=" + getCurrencyCode() +
+            ", currencyName=" + getCurrencyName() +
             "}";
     }
 }

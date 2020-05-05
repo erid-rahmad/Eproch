@@ -31,6 +31,7 @@ public class CountryCriteria implements Serializable, Criteria {
     private StringFilter code;
 
     private LongFilter currencyId;
+    private StringFilter currencyName;
 
     private LongFilter regionId;
 
@@ -44,6 +45,7 @@ public class CountryCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.code = other.code == null ? null : other.code.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
+        this.currencyName = other.currencyName == null ? null : other.currencyName.copy();
         this.regionId = other.regionId == null ? null : other.regionId.copy();
         this.cityId = other.cityId == null ? null : other.cityId.copy();
     }
@@ -85,6 +87,14 @@ public class CountryCriteria implements Serializable, Criteria {
         this.currencyId = currencyId;
     }
 
+    public StringFilter getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(StringFilter currencyName) {
+        this.currencyName = currencyName;
+    }
+
     public LongFilter getRegionId() {
         return regionId;
     }
@@ -116,6 +126,7 @@ public class CountryCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(code, that.code) &&
             Objects.equals(currencyId, that.currencyId) &&
+            Objects.equals(currencyName, that.currencyName) &&
             Objects.equals(regionId, that.regionId) &&
             Objects.equals(cityId, that.cityId);
     }
@@ -127,6 +138,7 @@ public class CountryCriteria implements Serializable, Criteria {
         name,
         code,
         currencyId,
+        currencyName,
         regionId,
         cityId
         );
@@ -139,6 +151,7 @@ public class CountryCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (code != null ? "code=" + code + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
+                (currencyName != null ? "currencyName=" + currencyName + ", " : "") +
                 (regionId != null ? "regionId=" + regionId + ", " : "") +
                 (cityId != null ? "cityId=" + cityId + ", " : "") +
             "}";
