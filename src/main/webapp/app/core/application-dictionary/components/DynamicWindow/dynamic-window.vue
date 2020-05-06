@@ -19,7 +19,7 @@
               ref="mainGrid"
               v-if="gridView"
               :base-api-url="mainTabBaseApiUrl"
-              :fields="mainTab.adFields"
+              :fields="mainTabFields()"
               @current-row-change="loadChildTab"
             />
             <detail-view v-else/>
@@ -39,6 +39,7 @@
             <grid-view
               ref="lineGrid"
               :base-api-url="tab.targetEndpoint"
+              :fields="tab.adfields"
               :filter-query="tab.filterQuery"
             />
           </el-tab-pane>

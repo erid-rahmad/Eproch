@@ -23,8 +23,8 @@ export default class DynamicWindow extends Vue {
   public windowId: number = 0;
   public title: string = null;
   public gridView = true;
-  public mainTab: IADTab;
-  public childTabs: IADTab[] = [];
+  public mainTab;
+  public childTabs = [];
   public mainTabBaseApiUrl: string = null;
 
   @ProvideReactive()
@@ -37,6 +37,10 @@ export default class DynamicWindow extends Vue {
     this.windowId = this.$route.meta.windowId;
     this.title = this.$t(`route.${this.$route.meta.title}`).toString();
     this.retrieveTabs(null);
+  }
+
+  mainTabFields() {
+    return this.mainTab?.adfields || [];
   }
 
   get hasChildTabs() {

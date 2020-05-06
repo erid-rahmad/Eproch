@@ -3,6 +3,7 @@ import { Vue, InjectReactive, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import { ElPagination } from 'element-ui/types/pagination';
 import { ElTable } from 'element-ui/types/table';
+import { IADField } from '@/shared/model/ad-field.model';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -35,10 +36,7 @@ export default class GridView extends GridViewProps {
   totalItems = 0;
   isFetching = false;
   gridData: Array<any> = [];
-
-  get gridFields() {
-    return this.fields.filter(field => field.showInGrid)
-  }
+  gridFields: Array<IADField> = [];
 
   @Watch('baseApiUrl')
   onBaseApiUrlChange(url: string) {
@@ -47,7 +45,14 @@ export default class GridView extends GridViewProps {
     }
   }
 
+  @Watch('fields')
+  onFieldsChange(fields: Array<IADField>) {
+    this.gridFields = fields.filter(field => field.showInGrid);
+    console.log('fields: %O', this.gridFields);
+  }
+
   created() {
+    this.onFieldsChange(this.fields);
     this.onBaseApiUrlChange(this.baseApiUrl);
   }
 

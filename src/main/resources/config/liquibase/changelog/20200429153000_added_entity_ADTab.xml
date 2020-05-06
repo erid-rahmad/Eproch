@@ -54,12 +54,6 @@
             <column name="ad_table_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="parent_column_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-            <column name="foreign_column_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
             <column name="ad_window_id" type="bigint">
                 <constraints nullable="false" />
             </column>
