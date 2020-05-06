@@ -16,6 +16,8 @@ export interface IADTab {
   adClientId?: number;
   adOrganizationId?: number;
   adTableId?: number;
+  parentColumnId?: number;
+  foreignColumnId?: number;
   adWindowId?: number;
   parentTabId?: number;
 }
@@ -37,6 +39,8 @@ export class ADTab implements IADTab {
     public adClientId?: number,
     public adOrganizationId?: number,
     public adTableId?: number,
+    public parentColumnId?: number,
+    public foreignColumnId?: number,
     public adWindowId?: number,
     public parentTabId?: number
   ) {

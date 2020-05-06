@@ -95,6 +95,14 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "aDColumn",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adColumn",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "aDTab",
             "otherEntityRelationshipName": "aDField",
             "relationshipValidateRules": "required",

@@ -83,6 +83,22 @@
                         </div>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDTab.parentColumn')">Parent Column</span>
+                    </dt>
+                    <dd>
+                        <div v-if="aDTab.parentColumnId">
+                            <router-link :to="{name: 'ADColumnView', params: {aDColumnId: aDTab.parentColumnId}}">{{aDTab.parentColumnId}}</router-link>
+                        </div>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDTab.foreignColumn')">Foreign Column</span>
+                    </dt>
+                    <dd>
+                        <div v-if="aDTab.foreignColumnId">
+                            <router-link :to="{name: 'ADColumnView', params: {aDColumnId: aDTab.foreignColumnId}}">{{aDTab.foreignColumnId}}</router-link>
+                        </div>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDTab.adWindow')">Ad Window</span>
                     </dt>
                     <dd>

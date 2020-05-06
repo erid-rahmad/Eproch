@@ -128,10 +128,13 @@ relationship ManyToOne {
 	ADTab{adClient required} to ADClient
 	ADTab{adOrganization required} to ADOrganization
 	ADTab{adTable required} to ADTable
+	ADTab{parentColumn} to ADColumn
+	ADTab{foreignColumn} to ADColumn
 	
 	ADField{adClient required} to ADClient
 	ADField{adOrganization required} to ADOrganization
 	ADField{adReference} to ADReference
+	ADField{adColumn required} to ADColumn
 }
 // Allow filtering to all entities.
 filter *

@@ -9,12 +9,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ADTab} and its DTO {@link ADTabDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADClientMapper.class, ADOrganizationMapper.class, ADTableMapper.class, ADWindowMapper.class})
+@Mapper(componentModel = "spring", uses = {ADClientMapper.class, ADOrganizationMapper.class, ADTableMapper.class, ADColumnMapper.class, ADWindowMapper.class})
 public interface ADTabMapper extends EntityMapper<ADTabDTO, ADTab> {
 
     @Mapping(source = "adClient.id", target = "adClientId")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adTable.id", target = "adTableId")
+    @Mapping(source = "parentColumn.id", target = "parentColumnId")
+    @Mapping(source = "foreignColumn.id", target = "foreignColumnId")
     @Mapping(source = "adWindow.id", target = "adWindowId")
     @Mapping(source = "parentTab.id", target = "parentTabId")
     ADTabDTO toDto(ADTab aDTab);
@@ -26,6 +28,8 @@ public interface ADTabMapper extends EntityMapper<ADTabDTO, ADTab> {
     @Mapping(source = "adClientId", target = "adClient")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "adTableId", target = "adTable")
+    @Mapping(source = "parentColumnId", target = "parentColumn")
+    @Mapping(source = "foreignColumnId", target = "foreignColumn")
     @Mapping(source = "adWindowId", target = "adWindow")
     @Mapping(source = "parentTabId", target = "parentTab")
     ADTab toEntity(ADTabDTO aDTabDTO);

@@ -1130,3 +1130,125 @@ export function resetRouter() {
 }
 
 export default router;
+
+// export default new Router({
+//   mode: 'history',
+//   routes: [
+//     {
+//       path: '/',
+//       name: 'Home',
+//       component: Home
+//     },
+//     {
+//       path: '/forbidden',
+//       name: 'Forbidden',
+//       component: Error,
+//       meta: { error403: true }
+//     },
+//     {
+//       path: '/not-found',
+//       name: 'NotFound',
+//       component: Error,
+//       meta: { error404: true }
+//     },
+//     {
+//       path: '/register',
+//       name: 'Register',
+//       component: Register
+//     },
+//     {
+//       path: '/account/activate',
+//       name: 'Activate',
+//       component: Activate
+//     },
+//     {
+//       path: '/account/reset/request',
+//       name: 'ResetPasswordInit',
+//       component: ResetPasswordInit
+//     },
+//     {
+//       path: '/account/reset/finish',
+//       name: 'ResetPasswordFinish',
+//       component: ResetPasswordFinish
+//     },
+//     {
+//       path: '/account/password',
+//       name: 'ChangePassword',
+//       component: ChangePassword,
+//       meta: { authorities: [Authority.USER] }
+//     },
+//     {
+//       path: '/account/settings',
+//       name: 'Settings',
+//       component: Settings,
+//       meta: { authorities: [Authority.USER] }
+//     },
+//     {
+//       path: '/admin/user-management',
+//       name: 'JhiUser',
+//       component: JhiUserManagementComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     },
+//     {
+//       path: '/admin/user-management/new',
+//       name: 'JhiUserCreate',
+//       component: JhiUserManagementEditComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     },
+//     {
+//       path: '/admin/user-management/:userId/edit',
+//       name: 'JhiUserEdit',
+//       component: JhiUserManagementEditComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     },
+//     {
+//       path: '/admin/user-management/:userId/view',
+//       name: 'JhiUserView',
+//       component: JhiUserManagementViewComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     },
+//     {
+//       path: '/admin/docs',
+//       name: 'JhiDocsComponent',
+//       component: JhiDocsComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     },
+//     {
+//       path: '/admin/audits',
+//       name: 'JhiAuditsComponent',
+//       component: JhiAuditsComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     },
+//     {
+//       path: '/admin/jhi-health',
+//       name: 'JhiHealthComponent',
+//       component: JhiHealthComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     },
+//     {
+//       path: '/admin/logs',
+//       name: 'JhiLogsComponent',
+//       component: JhiLogsComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     },
+//     {
+//       path: '/admin/jhi-metrics',
+//       name: 'JhiMetricsComponent',
+//       component: JhiMetricsComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     },
+//     {
+//       path: '/admin/jhi-configuration',
+//       name: 'JhiConfigurationComponent',
+//       component: JhiConfigurationComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     }
+// ,
+//     {
+//       path: '/admin/jhi-tracker',
+//       name: 'JhiTrackerComponent',
+//       component: JhiTrackerComponent,
+//       meta: { authorities: [Authority.ADMIN] }
+//     }
+//   ]
+// });

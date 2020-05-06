@@ -30,6 +30,8 @@
       "adClient": "Ad Client",
       "adOrganization": "Ad Organization",
       "adTable": "Ad Table",
+      "parentColumn": "Parent Column",
+      "foreignColumn": "Foreign Column",
       "adWindow": "Ad Window",
       "parentTab": "Parent Tab"
     }

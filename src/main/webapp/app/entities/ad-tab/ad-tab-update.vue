@@ -96,6 +96,20 @@
                         </small>
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDTab.parentColumn')" for="ad-tab-parentColumn">Parent Column</label>
+                        <select class="form-control" id="ad-tab-parentColumn" name="parentColumn" v-model="aDTab.parentColumnId">
+                            <option v-bind:value="null"></option>
+                            <option v-bind:value="aDColumnOption.id" v-for="aDColumnOption in aDColumns" :key="aDColumnOption.id">{{aDColumnOption.id}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDTab.foreignColumn')" for="ad-tab-foreignColumn">Foreign Column</label>
+                        <select class="form-control" id="ad-tab-foreignColumn" name="foreignColumn" v-model="aDTab.foreignColumnId">
+                            <option v-bind:value="null"></option>
+                            <option v-bind:value="aDColumnOption.id" v-for="aDColumnOption in aDColumns" :key="aDColumnOption.id">{{aDColumnOption.id}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDTab.adWindow')" for="ad-tab-adWindow">Ad Window</label>
                         <select class="form-control" id="ad-tab-adWindow" name="adWindow" v-model="$v.aDTab.adWindowId.$model" required>
                             <option v-if="!aDTab.adWindowId" v-bind:value="null" selected></option>

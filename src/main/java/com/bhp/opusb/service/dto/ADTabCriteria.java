@@ -54,6 +54,10 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     private LongFilter adTableId;
 
+    private LongFilter parentColumnId;
+
+    private LongFilter foreignColumnId;
+
     private LongFilter adWindowId;
 
     private LongFilter parentTabId;
@@ -77,6 +81,8 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.adClientId = other.adClientId == null ? null : other.adClientId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adTableId = other.adTableId == null ? null : other.adTableId.copy();
+        this.parentColumnId = other.parentColumnId == null ? null : other.parentColumnId.copy();
+        this.foreignColumnId = other.foreignColumnId == null ? null : other.foreignColumnId.copy();
         this.adWindowId = other.adWindowId == null ? null : other.adWindowId.copy();
         this.parentTabId = other.parentTabId == null ? null : other.parentTabId.copy();
     }
@@ -206,6 +212,22 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.adTableId = adTableId;
     }
 
+    public LongFilter getParentColumnId() {
+        return parentColumnId;
+    }
+
+    public void setParentColumnId(LongFilter parentColumnId) {
+        this.parentColumnId = parentColumnId;
+    }
+
+    public LongFilter getForeignColumnId() {
+        return foreignColumnId;
+    }
+
+    public void setForeignColumnId(LongFilter foreignColumnId) {
+        this.foreignColumnId = foreignColumnId;
+    }
+
     public LongFilter getAdWindowId() {
         return adWindowId;
     }
@@ -248,6 +270,8 @@ public class ADTabCriteria implements Serializable, Criteria {
             Objects.equals(adClientId, that.adClientId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adTableId, that.adTableId) &&
+            Objects.equals(parentColumnId, that.parentColumnId) &&
+            Objects.equals(foreignColumnId, that.foreignColumnId) &&
             Objects.equals(adWindowId, that.adWindowId) &&
             Objects.equals(parentTabId, that.parentTabId);
     }
@@ -270,6 +294,8 @@ public class ADTabCriteria implements Serializable, Criteria {
         adClientId,
         adOrganizationId,
         adTableId,
+        parentColumnId,
+        foreignColumnId,
         adWindowId,
         parentTabId
         );
@@ -293,6 +319,8 @@ public class ADTabCriteria implements Serializable, Criteria {
                 (adClientId != null ? "adClientId=" + adClientId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adTableId != null ? "adTableId=" + adTableId + ", " : "") +
+                (parentColumnId != null ? "parentColumnId=" + parentColumnId + ", " : "") +
+                (foreignColumnId != null ? "foreignColumnId=" + foreignColumnId + ", " : "") +
                 (adWindowId != null ? "adWindowId=" + adWindowId + ", " : "") +
                 (parentTabId != null ? "parentTabId=" + parentTabId + ", " : "") +
             "}";

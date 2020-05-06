@@ -37,6 +37,8 @@
                     <th v-on:click="changeOrder('adClientId')"><span v-text="$t('opusWebApp.aDTab.adClient')">Ad Client</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adClientId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adOrganizationId')"><span v-text="$t('opusWebApp.aDTab.adOrganization')">Ad Organization</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adOrganizationId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adTableId')"><span v-text="$t('opusWebApp.aDTab.adTable')">Ad Table</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adTableId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('parentColumnId')"><span v-text="$t('opusWebApp.aDTab.parentColumn')">Parent Column</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'parentColumnId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('foreignColumnId')"><span v-text="$t('opusWebApp.aDTab.foreignColumn')">Foreign Column</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'foreignColumnId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adWindowId')"><span v-text="$t('opusWebApp.aDTab.adWindow')">Ad Window</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adWindowId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('parentTabId')"><span v-text="$t('opusWebApp.aDTab.parentTab')">Parent Tab</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'parentTabId'"></jhi-sort-indicator></th>
                     <th></th>
@@ -70,6 +72,16 @@
                     <td>
                         <div v-if="aDTab.adTableId">
                             <router-link :to="{name: 'ADTableView', params: {aDTableId: aDTab.adTableId}}">{{aDTab.adTableId}}</router-link>
+                        </div>
+                    </td>
+                    <td>
+                        <div v-if="aDTab.parentColumnId">
+                            <router-link :to="{name: 'ADColumnView', params: {aDColumnId: aDTab.parentColumnId}}">{{aDTab.parentColumnId}}</router-link>
+                        </div>
+                    </td>
+                    <td>
+                        <div v-if="aDTab.foreignColumnId">
+                            <router-link :to="{name: 'ADColumnView', params: {aDColumnId: aDTab.foreignColumnId}}">{{aDTab.foreignColumnId}}</router-link>
                         </div>
                     </td>
                     <td>

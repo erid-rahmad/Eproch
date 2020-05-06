@@ -7,6 +7,7 @@ import com.bhp.opusb.domain.ADField;
 import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADTable;
+import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.domain.ADWindow;
 import com.bhp.opusb.repository.ADTabRepository;
 import com.bhp.opusb.service.ADTabService;
@@ -1078,6 +1079,46 @@ public class ADTabResourceIT {
 
         // Get all the aDTabList where adTable equals to adTableId + 1
         defaultADTabShouldNotBeFound("adTableId.equals=" + (adTableId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADTabsByParentColumnIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+        ADColumn parentColumn = ADColumnResourceIT.createEntity(em);
+        em.persist(parentColumn);
+        em.flush();
+        aDTab.setParentColumn(parentColumn);
+        aDTabRepository.saveAndFlush(aDTab);
+        Long parentColumnId = parentColumn.getId();
+
+        // Get all the aDTabList where parentColumn equals to parentColumnId
+        defaultADTabShouldBeFound("parentColumnId.equals=" + parentColumnId);
+
+        // Get all the aDTabList where parentColumn equals to parentColumnId + 1
+        defaultADTabShouldNotBeFound("parentColumnId.equals=" + (parentColumnId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADTabsByForeignColumnIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+        ADColumn foreignColumn = ADColumnResourceIT.createEntity(em);
+        em.persist(foreignColumn);
+        em.flush();
+        aDTab.setForeignColumn(foreignColumn);
+        aDTabRepository.saveAndFlush(aDTab);
+        Long foreignColumnId = foreignColumn.getId();
+
+        // Get all the aDTabList where foreignColumn equals to foreignColumnId
+        defaultADTabShouldBeFound("foreignColumnId.equals=" + foreignColumnId);
+
+        // Get all the aDTabList where foreignColumn equals to foreignColumnId + 1
+        defaultADTabShouldNotBeFound("foreignColumnId.equals=" + (foreignColumnId + 1));
     }
 
 

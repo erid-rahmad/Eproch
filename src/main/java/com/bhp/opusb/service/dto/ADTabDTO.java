@@ -43,6 +43,10 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     private Long adTableId;
 
+    private Long parentColumnId;
+
+    private Long foreignColumnId;
+
     private Long adWindowId;
 
     private Long parentTabId;
@@ -154,6 +158,22 @@ public class ADTabDTO extends AbstractAuditingDTO {
         this.adTableId = aDTableId;
     }
 
+    public Long getParentColumnId() {
+        return parentColumnId;
+    }
+
+    public void setParentColumnId(Long aDColumnId) {
+        this.parentColumnId = aDColumnId;
+    }
+
+    public Long getForeignColumnId() {
+        return foreignColumnId;
+    }
+
+    public void setForeignColumnId(Long aDColumnId) {
+        this.foreignColumnId = aDColumnId;
+    }
+
     public Long getAdWindowId() {
         return adWindowId;
     }
@@ -215,6 +235,8 @@ public class ADTabDTO extends AbstractAuditingDTO {
             ", adClientId=" + getAdClientId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adTableId=" + getAdTableId() +
+            ", parentColumnId=" + getParentColumnId() +
+            ", foreignColumnId=" + getForeignColumnId() +
             ", adWindowId=" + getAdWindowId() +
             ", parentTabId=" + getParentTabId() +
             "}";

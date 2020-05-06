@@ -138,6 +138,14 @@ public class ADTabQueryService extends QueryService<ADTab> {
                 specification = specification.and(buildSpecification(criteria.getAdTableId(),
                     root -> root.join(ADTab_.adTable, JoinType.LEFT).get(ADTable_.id)));
             }
+            if (criteria.getParentColumnId() != null) {
+                specification = specification.and(buildSpecification(criteria.getParentColumnId(),
+                    root -> root.join(ADTab_.parentColumn, JoinType.LEFT).get(ADColumn_.id)));
+            }
+            if (criteria.getForeignColumnId() != null) {
+                specification = specification.and(buildSpecification(criteria.getForeignColumnId(),
+                    root -> root.join(ADTab_.foreignColumn, JoinType.LEFT).get(ADColumn_.id)));
+            }
             if (criteria.getAdWindowId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdWindowId(),
                     root -> root.join(ADTab_.adWindow, JoinType.LEFT).get(ADWindow_.id)));

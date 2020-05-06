@@ -31,6 +31,10 @@ export default class ADTabUpdatePage extends AlertPage {
 
   adTableSelect = element(by.css('select#ad-tab-adTable'));
 
+  parentColumnSelect = element(by.css('select#ad-tab-parentColumn'));
+
+  foreignColumnSelect = element(by.css('select#ad-tab-foreignColumn'));
+
   adWindowSelect = element(by.css('select#ad-tab-adWindow'));
 
   parentTabSelect = element(by.css('select#ad-tab-parentTab'));

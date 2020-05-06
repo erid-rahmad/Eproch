@@ -113,6 +113,8 @@ describe('ADTab e2e test', () => {
       // await  selectLastOption(updatePage.adClientSelect);
       // await  selectLastOption(updatePage.adOrganizationSelect);
       // await  selectLastOption(updatePage.adTableSelect);
+      // await  selectLastOption(updatePage.parentColumnSelect);
+      // await  selectLastOption(updatePage.foreignColumnSelect);
       // await  selectLastOption(updatePage.adWindowSelect);
       // await  selectLastOption(updatePage.parentTabSelect);
 

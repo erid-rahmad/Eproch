@@ -14,6 +14,9 @@ import { IADOrganization } from '@/shared/model/ad-organization.model';
 import ADTableService from '../ad-table/ad-table.service';
 import { IADTable } from '@/shared/model/ad-table.model';
 
+import ADColumnService from '../ad-column/ad-column.service';
+import { IADColumn } from '@/shared/model/ad-column.model';
+
 import ADWindowService from '../ad-window/ad-window.service';
 import { IADWindow } from '@/shared/model/ad-window.model';
 
@@ -74,6 +77,10 @@ export default class ADTabUpdate extends Vue {
   @Inject('aDTableService') private aDTableService: () => ADTableService;
 
   public aDTables: IADTable[] = [];
+
+  @Inject('aDColumnService') private aDColumnService: () => ADColumnService;
+
+  public aDColumns: IADColumn[] = [];
 
   @Inject('aDWindowService') private aDWindowService: () => ADWindowService;
 
@@ -149,6 +156,11 @@ export default class ADTabUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.aDTables = res.data;
+      });
+    this.aDColumnService()
+      .retrieve()
+      .then(res => {
+        this.aDColumns = res.data;
       });
     this.aDWindowService()
       .retrieve()

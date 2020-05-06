@@ -87,6 +87,14 @@ public class ADTab extends AbstractAuditingEntity {
     @JsonIgnoreProperties("aDTabs")
     private ADTable adTable;
 
+    @ManyToOne
+    @JsonIgnoreProperties("aDTabs")
+    private ADColumn parentColumn;
+
+    @ManyToOne
+    @JsonIgnoreProperties("aDTabs")
+    private ADColumn foreignColumn;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("aDTabs")
@@ -309,6 +317,32 @@ public class ADTab extends AbstractAuditingEntity {
 
     public void setAdTable(ADTable aDTable) {
         this.adTable = aDTable;
+    }
+
+    public ADColumn getParentColumn() {
+        return parentColumn;
+    }
+
+    public ADTab parentColumn(ADColumn aDColumn) {
+        this.parentColumn = aDColumn;
+        return this;
+    }
+
+    public void setParentColumn(ADColumn aDColumn) {
+        this.parentColumn = aDColumn;
+    }
+
+    public ADColumn getForeignColumn() {
+        return foreignColumn;
+    }
+
+    public ADTab foreignColumn(ADColumn aDColumn) {
+        this.foreignColumn = aDColumn;
+        return this;
+    }
+
+    public void setForeignColumn(ADColumn aDColumn) {
+        this.foreignColumn = aDColumn;
     }
 
     public ADWindow getAdWindow() {

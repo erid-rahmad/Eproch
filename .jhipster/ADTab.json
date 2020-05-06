@@ -80,6 +80,20 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "aDColumn",
+            "otherEntityRelationshipName": "aDTab",
+            "relationshipName": "parentColumn",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDColumn",
+            "otherEntityRelationshipName": "aDTab",
+            "relationshipName": "foreignColumn",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "aDWindow",
             "otherEntityRelationshipName": "aDTab",
             "relationshipValidateRules": "required",
