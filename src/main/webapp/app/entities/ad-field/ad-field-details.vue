@@ -125,6 +125,14 @@
                         </div>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDField.adColumn')">Ad Column</span>
+                    </dt>
+                    <dd>
+                        <div v-if="aDField.adColumnId">
+                            <router-link :to="{name: 'ADColumnView', params: {aDColumnId: aDField.adColumnId}}">{{aDField.adColumnId}}</router-link>
+                        </div>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDField.adTab')">Ad Tab</span>
                     </dt>
                     <dd>

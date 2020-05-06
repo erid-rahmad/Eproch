@@ -19,6 +19,7 @@ export interface IADField {
   adClientId?: number;
   adOrganizationId?: number;
   adReferenceId?: number;
+  adColumnId?: number;
   adTabId?: number;
 }
 
@@ -44,6 +45,7 @@ export class ADField implements IADField {
     public adClientId?: number,
     public adOrganizationId?: number,
     public adReferenceId?: number,
+    public adColumnId?: number,
     public adTabId?: number
   ) {
     this.staticField = this.staticField || false;

@@ -126,6 +126,18 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.adColumn')" for="ad-field-adColumn">Ad Column</label>
+                        <select class="form-control" id="ad-field-adColumn" name="adColumn" v-model="$v.aDField.adColumnId.$model" required>
+                            <option v-if="!aDField.adColumnId" v-bind:value="null" selected></option>
+                            <option v-bind:value="aDColumnOption.id" v-for="aDColumnOption in aDColumns" :key="aDColumnOption.id">{{aDColumnOption.id}}</option>
+                        </select>
+                    </div>
+                    <div v-if="$v.aDField.adColumnId.$anyDirty && $v.aDField.adColumnId.$invalid">
+                        <small class="form-text text-danger" v-if="!$v.aDField.adColumnId.required" v-text="$t('entity.validation.required')">
+                            This field is required.
+                        </small>
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDField.adTab')" for="ad-field-adTab">Ad Tab</label>
                         <select class="form-control" id="ad-field-adTab" name="adTab" v-model="$v.aDField.adTabId.$model" required>
                             <option v-if="!aDField.adTabId" v-bind:value="null" selected></option>

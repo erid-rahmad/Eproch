@@ -97,6 +97,11 @@ public class ADField extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("aDFields")
+    private ADColumn adColumn;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("aDFields")
     @JsonBackReference
     private ADTab adTab;
 
@@ -354,6 +359,19 @@ public class ADField extends AbstractAuditingEntity {
 
     public void setAdReference(ADReference aDReference) {
         this.adReference = aDReference;
+    }
+
+    public ADColumn getAdColumn() {
+        return adColumn;
+    }
+
+    public ADField adColumn(ADColumn aDColumn) {
+        this.adColumn = aDColumn;
+        return this;
+    }
+
+    public void setAdColumn(ADColumn aDColumn) {
+        this.adColumn = aDColumn;
     }
 
     public ADTab getAdTab() {

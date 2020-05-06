@@ -11,6 +11,9 @@ import { IADOrganization } from '@/shared/model/ad-organization.model';
 import ADReferenceService from '../ad-reference/ad-reference.service';
 import { IADReference } from '@/shared/model/ad-reference.model';
 
+import ADColumnService from '../ad-column/ad-column.service';
+import { IADColumn } from '@/shared/model/ad-column.model';
+
 import ADTabService from '../ad-tab/ad-tab.service';
 import { IADTab } from '@/shared/model/ad-tab.model';
 
@@ -44,6 +47,9 @@ const validations: any = {
     adOrganizationId: {
       required
     },
+    adColumnId: {
+      required
+    },
     adTabId: {
       required
     }
@@ -69,6 +75,10 @@ export default class ADFieldUpdate extends Vue {
   @Inject('aDReferenceService') private aDReferenceService: () => ADReferenceService;
 
   public aDReferences: IADReference[] = [];
+
+  @Inject('aDColumnService') private aDColumnService: () => ADColumnService;
+
+  public aDColumns: IADColumn[] = [];
 
   @Inject('aDTabService') private aDTabService: () => ADTabService;
 
@@ -134,6 +144,11 @@ export default class ADFieldUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.aDReferences = res.data;
+      });
+    this.aDColumnService()
+      .retrieve()
+      .then(res => {
+        this.aDColumns = res.data;
       });
     this.aDTabService()
       .retrieve()

@@ -15,6 +15,8 @@ import ADOrganizationService from '@/entities/ad-organization/ad-organization.se
 
 import ADReferenceService from '@/entities/ad-reference/ad-reference.service';
 
+import ADColumnService from '@/entities/ad-column/ad-column.service';
+
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
 
 const localVue = createLocalVue();
@@ -49,6 +51,8 @@ describe('Component Tests', () => {
           aDOrganizationService: () => new ADOrganizationService(),
 
           aDReferenceService: () => new ADReferenceService(),
+
+          aDColumnService: () => new ADColumnService(),
 
           aDTabService: () => new ADTabService()
         }

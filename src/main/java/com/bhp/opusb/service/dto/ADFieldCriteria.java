@@ -64,6 +64,8 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     private LongFilter adReferenceId;
 
+    private LongFilter adColumnId;
+
     private LongFilter adTabId;
 
     public ADFieldCriteria() {
@@ -90,6 +92,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.adClientId = other.adClientId == null ? null : other.adClientId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
+        this.adColumnId = other.adColumnId == null ? null : other.adColumnId.copy();
         this.adTabId = other.adTabId == null ? null : other.adTabId.copy();
     }
 
@@ -258,6 +261,14 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.adReferenceId = adReferenceId;
     }
 
+    public LongFilter getAdColumnId() {
+        return adColumnId;
+    }
+
+    public void setAdColumnId(LongFilter adColumnId) {
+        this.adColumnId = adColumnId;
+    }
+
     public LongFilter getAdTabId() {
         return adTabId;
     }
@@ -297,6 +308,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
             Objects.equals(adClientId, that.adClientId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adReferenceId, that.adReferenceId) &&
+            Objects.equals(adColumnId, that.adColumnId) &&
             Objects.equals(adTabId, that.adTabId);
     }
 
@@ -323,6 +335,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
         adClientId,
         adOrganizationId,
         adReferenceId,
+        adColumnId,
         adTabId
         );
     }
@@ -350,6 +363,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
                 (adClientId != null ? "adClientId=" + adClientId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
+                (adColumnId != null ? "adColumnId=" + adColumnId + ", " : "") +
                 (adTabId != null ? "adTabId=" + adTabId + ", " : "") +
             "}";
     }

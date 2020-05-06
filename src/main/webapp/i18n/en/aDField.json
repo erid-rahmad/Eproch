@@ -35,6 +35,7 @@
       "adClient": "Ad Client",
       "adOrganization": "Ad Organization",
       "adReference": "Ad Reference",
+      "adColumn": "Ad Column",
       "adTab": "Ad Tab"
     }
   }

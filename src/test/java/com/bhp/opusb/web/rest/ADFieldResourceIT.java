@@ -5,6 +5,7 @@ import com.bhp.opusb.domain.ADField;
 import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADReference;
+import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.repository.ADFieldRepository;
 import com.bhp.opusb.service.ADFieldService;
@@ -156,6 +157,16 @@ public class ADFieldResourceIT {
         }
         aDField.setAdOrganization(aDOrganization);
         // Add required entity
+        ADColumn aDColumn;
+        if (TestUtil.findAll(em, ADColumn.class).isEmpty()) {
+            aDColumn = ADColumnResourceIT.createEntity(em);
+            em.persist(aDColumn);
+            em.flush();
+        } else {
+            aDColumn = TestUtil.findAll(em, ADColumn.class).get(0);
+        }
+        aDField.setAdColumn(aDColumn);
+        // Add required entity
         ADTab aDTab;
         if (TestUtil.findAll(em, ADTab.class).isEmpty()) {
             aDTab = ADTabResourceIT.createEntity(em);
@@ -211,6 +222,16 @@ public class ADFieldResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         aDField.setAdOrganization(aDOrganization);
+        // Add required entity
+        ADColumn aDColumn;
+        if (TestUtil.findAll(em, ADColumn.class).isEmpty()) {
+            aDColumn = ADColumnResourceIT.createUpdatedEntity(em);
+            em.persist(aDColumn);
+            em.flush();
+        } else {
+            aDColumn = TestUtil.findAll(em, ADColumn.class).get(0);
+        }
+        aDField.setAdColumn(aDColumn);
         // Add required entity
         ADTab aDTab;
         if (TestUtil.findAll(em, ADTab.class).isEmpty()) {
@@ -1604,6 +1625,22 @@ public class ADFieldResourceIT {
 
         // Get all the aDFieldList where adReference equals to adReferenceId + 1
         defaultADFieldShouldNotBeFound("adReferenceId.equals=" + (adReferenceId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByAdColumnIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADColumn adColumn = aDField.getAdColumn();
+        aDFieldRepository.saveAndFlush(aDField);
+        Long adColumnId = adColumn.getId();
+
+        // Get all the aDFieldList where adColumn equals to adColumnId
+        defaultADFieldShouldBeFound("adColumnId.equals=" + adColumnId);
+
+        // Get all the aDFieldList where adColumn equals to adColumnId + 1
+        defaultADFieldShouldNotBeFound("adColumnId.equals=" + (adColumnId + 1));
     }
 
 

@@ -26,6 +26,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="ad_reference"/>
 
+        <addForeignKeyConstraint baseColumnNames="ad_column_id"
+                                 baseTableName="ad_field"
+                                 constraintName="fk_ad_field_ad_column_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_column"/>
+
         <addForeignKeyConstraint baseColumnNames="ad_tab_id"
                                  baseTableName="ad_field"
                                  constraintName="fk_ad_field_ad_tab_id"

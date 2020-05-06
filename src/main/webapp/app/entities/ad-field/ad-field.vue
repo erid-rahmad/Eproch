@@ -44,6 +44,7 @@
                     <th v-on:click="changeOrder('adClientId')"><span v-text="$t('opusWebApp.aDField.adClient')">Ad Client</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adClientId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adOrganizationId')"><span v-text="$t('opusWebApp.aDField.adOrganization')">Ad Organization</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adOrganizationId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adReferenceId')"><span v-text="$t('opusWebApp.aDField.adReference')">Ad Reference</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adReferenceId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('adColumnId')"><span v-text="$t('opusWebApp.aDField.adColumn')">Ad Column</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adColumnId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adTabId')"><span v-text="$t('opusWebApp.aDField.adTab')">Ad Tab</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adTabId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
@@ -83,6 +84,11 @@
                     <td>
                         <div v-if="aDField.adReferenceId">
                             <router-link :to="{name: 'ADReferenceView', params: {aDReferenceId: aDField.adReferenceId}}">{{aDField.adReferenceId}}</router-link>
+                        </div>
+                    </td>
+                    <td>
+                        <div v-if="aDField.adColumnId">
+                            <router-link :to="{name: 'ADColumnView', params: {aDColumnId: aDField.adColumnId}}">{{aDField.adColumnId}}</router-link>
                         </div>
                     </td>
                     <td>
