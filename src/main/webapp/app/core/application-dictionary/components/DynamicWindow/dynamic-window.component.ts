@@ -1,4 +1,4 @@
-import { Component, Vue, ProvideReactive, Inject } from 'vue-property-decorator'
+import { Component, Vue, ProvideReactive, Inject, Watch } from 'vue-property-decorator'
 import { Splitpanes, Pane } from 'splitpanes'
 import 'splitpanes/dist/splitpanes.css'
 import ActionToolbar from '../ActionToolbar/action-toolbar.vue'
@@ -7,6 +7,8 @@ import GridView from "../GridView/grid-view.vue";
 
 import DynamicWindowService from './dynamic-window.service'
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
+import { IADTab } from '@/shared/model/ad-tab.model';
+import buildCriteriaQueryString from '@/shared/filter/filters';
 
 @Component({
   components: {
@@ -15,13 +17,15 @@ import ADTabService from '@/entities/ad-tab/ad-tab.service';
     ActionToolbar,
     DetailView,
     GridView
-  },
-  inject: []
+  }
 })
 export default class DynamicWindow extends Vue {
+  public windowId: number = 0;
   public title: string = null;
-  public baseApiUrl = null;
   public gridView = true;
+  public mainTab: IADTab;
+  public childTabs: IADTab[] = [];
+  public mainTabBaseApiUrl: string = null;
 
   @ProvideReactive()
   public dynamicWindowService = (baseApiUrl: string) => new DynamicWindowService(baseApiUrl);
@@ -30,8 +34,13 @@ export default class DynamicWindow extends Vue {
   private aDTabService: () => ADTabService;
 
   created() {
+    this.windowId = this.$route.meta.windowId;
     this.title = this.$t(`route.${this.$route.meta.title}`).toString();
-    this.baseApiUrl = this.$route.meta.baseApiUrl;
+    this.retrieveTabs(null);
+  }
+
+  get hasChildTabs() {
+    return this.childTabs.length > 0;
   }
 
   public prepareNew() {
@@ -44,19 +53,49 @@ export default class DynamicWindow extends Vue {
 
   public updateHeight() {
     (<any>this.$refs.mainGrid).syncHeight();
-    (<any>this.$refs.lineGrid).syncHeight();
+
+    if (this.hasChildTabs) {
+      (<Array<any>>this.$refs.lineGrid).forEach(grid => {
+        grid.syncHeight();
+      });
+    }
+  }
+
+  public loadChildTab(parent) {
+    console.log('loadChildTab. parent: %O', parent);
   }
 
   /**
    * Retrieve header/main tab which has no parent ID.
    */
-  private retrieveHeaderTab(): void {
+  private retrieveTabs(parentTabId: number): void {
+    let params = {
+      'adWindowId.equals': this.windowId,
+    };
+
+    if (parentTabId) {
+      params['parentTabId.equals'] = parentTabId;
+    } else {
+      params['parentTabId.specified'] = false;
+    }
+
     this.aDTabService()
-      .retrieveWithFilter({
-        'parentTabId.specified': false
-      })
+      .retrieveWithFilter(params)
       .then((res) => {
-        console.log('response: %O', res);
+        const tabs = res.data;
+        for (let tab of tabs) {
+          if (parentTabId === null) {
+            this.mainTab = tab;
+            this.mainTabBaseApiUrl = tab.targetEndpoint
+            this.retrieveTabs(tab.id)
+          } else {
+            tab.filterQuery = buildCriteriaQueryString([
+              `parentTabId.equals=${this.mainTab.id}`,
+              tab.filterQuery
+            ])
+            this.childTabs.push(tab);
+          }
+        }
       });
   }
 }

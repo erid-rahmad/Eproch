@@ -1,11 +1,41 @@
 id;name;description;hint;static_text;static_field;label_only;show_label;show_in_grid;show_in_detail;grid_sequence;detail_sequence;display_logic;writable;column_no;column_span;active;ad_client_id;ad_organization_id;ad_tab_id
-1;B2C Buckinghamshire Checking Account;global Assurance intuitive;Legacy Personal Loan Account Heard Island and McDonald Islands;Forward platforms Toys;true;false;true;false;true;43475;72138;Investment Account;false;83195;13759;false;1;1;1
-2;compress;Vietnam Metrics Small;Administrator Generic Applications;Chips open-source Representative;false;true;true;true;false;12583;51854;Florida Rubber XML;true;8539;4539;false;2;2;2
-3;Central African Republic;Virginia Incredible Cotton Keyboard;deposit Coordinator Money Market Account;Savings Account;false;true;false;false;false;56202;58494;FTP Cross-platform;true;87281;9023;true;3;3;3
-4;hacking;feed Jewelery;Ohio;Plastic Unbranded Granite Computer Locks;false;true;true;false;false;67183;22153;Rustic;true;85525;87545;true;4;4;4
-5;Micronesia Tasty;Sleek Cotton Towels;Pants Quality;ROI deposit;true;false;false;false;true;9486;94522;synthesize Uzbekistan;true;25040;44232;true;5;5;5
-6;teal;cohesive bus;Electronics;synthesize;true;false;false;true;false;60730;63649;Portugal Vietnam;false;63727;92751;true;6;6;6
-7;card Cheese;Berkshire Analyst;Berkshire Personal Loan Account;Lodge Metal invoice;false;true;true;false;false;20082;81381;card Oregon Frozen;false;27097;14701;true;7;7;7
-8;Concrete;Buckinghamshire;mission-critical HDD HDD;compressing robust microchip;false;true;true;false;false;13297;40705;Cotton;true;67304;10530;false;8;8;8
-9;secured line;cultivate;Georgia engineer;Synergistic payment;false;false;true;true;false;31589;74355;deposit circuit;false;35739;37278;true;9;9;9
-10;Gorgeous digital payment;gold Home Loan Account;Industrial;Morocco;false;false;false;false;true;37918;6922;Buckinghamshire Pants Legacy;true;24017;38627;false;10;10;10
+1;Active;;;;false;false;true;true;true;;;;true;1;4;true;1;1;1
+2;Client;;;;false;false;true;true;true;;;;true;1;4;true;1;1;1
+3;Organization;;;;false;false;true;true;true;;;;true;1;4;true;1;1;1
+4;Name;;;;false;false;true;true;true;;;;true;1;4;true;1;1;1
+5;Is View;;;;false;false;true;true;true;;;;true;1;4;true;1;1;1
+6;Active;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+7;Client;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+8;Organization;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+9;Name;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+10;Description;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+11;Is Key;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+12;Type;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+13;Is Mandatory;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+14;Mandatory Logic;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+15;Readonly Logic;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+16;Updatable;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+17;Default Value;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+18;Format Pattern;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+19;Min Value;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+20;Max Value;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+21;Reference;;;;false;false;true;true;true;;;;true;1;4;true;1;1;2
+22;Active;;;;false;false;true;true;true;;;;true;1;4;true;1;1;3
+23;Client;;;;false;false;true;true;true;;;;true;1;4;true;1;1;3
+24;Organization;;;;false;false;true;true;true;;;;true;1;4;true;1;1;3
+25;Name;Window name;;;false;false;true;true;true;;;;true;1;4;true;1;1;3
+26;Description;Window description;;;false;false;true;true;true;;;;true;1;4;true;1;1;3
+27;Type;Window type;The window type includes Maintain, Transaction, and Query;;false;false;true;true;true;;;;true;1;4;true;1;1;3
+28;Active;;;;false;false;true;true;true;;;;true;1;4;true;1;1;4
+29;Client;;;;false;false;true;true;true;;;;true;1;4;true;1;1;4
+30;Organization;;;;false;false;true;true;true;;;;true;1;4;true;1;1;4
+31;Name;Tab name;;;false;false;true;true;true;;;;true;1;4;true;1;1;4
+32;Description;Tab description;;;false;false;true;true;true;;;;true;1;4;true;1;1;4
+33;Target Endpoint;Target API endpoint;The base URL of the RESTful API endpoint;;false;false;true;false;true;;;;true;1;8;true;1;1;4
+34;Writable;Writable option;Whether or not this tab is writable;;false;false;true;true;true;;;;true;1;4;true;1;1;4
+35;Display Logic;Tab visibility condition;;;false;false;true;true;true;;;;true;1;8;true;1;1;4
+36;Readonly Logic;Tab read only condition;;;false;false;true;true;true;;;;true;1;8;true;1;1;4
+37;Filter Query;Default filter for fetching records;;;false;false;true;true;true;;;;true;1;8;true;1;1;4
+38;Order Query;Default order for sorting records;;;false;false;true;true;true;;;;true;2;8;true;1;1;4
+39;Table;The linked table;;;false;false;true;true;true;;;;true;1;4;true;1;1;4
+40;Parent Tab;The parent tab;;;false;false;true;true;true;;;;true;1;4;true;1;1;4

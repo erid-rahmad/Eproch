@@ -1,5 +1,5 @@
 import Component from 'vue-class-component';
-import { Vue, InjectReactive } from 'vue-property-decorator';
+import { Vue, InjectReactive, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import { ElPagination } from 'element-ui/types/pagination';
 import { ElTable } from 'element-ui/types/table';
@@ -7,6 +7,12 @@ import { ElTable } from 'element-ui/types/table';
 const GridViewProps = Vue.extend({
   props: {
     baseApiUrl: String,
+    filterQuery: String,
+    orderQuery: String,
+    fields: {
+      type: Array,
+      default: () => []
+    }
   }
 });
 
@@ -30,8 +36,19 @@ export default class GridView extends GridViewProps {
   isFetching = false;
   gridData: Array<any> = [];
 
+  get gridFields() {
+    return this.fields.filter(field => field.showInGrid)
+  }
+
+  @Watch('baseApiUrl')
+  onBaseApiUrlChange(url: string) {
+    if (url) {
+      this.retrieveAllRecords();
+    }
+  }
+
   created() {
-    this.retrieveAllRecords();
+    this.onBaseApiUrlChange(this.baseApiUrl);
   }
 
   public clear(): void {
@@ -39,8 +56,14 @@ export default class GridView extends GridViewProps {
     this.retrieveAllRecords();
   }
 
-  changeSelection(value: any) {
-    console.log('Row selection changed. value: %O', value)
+  changeCurrentRow(row: any) {
+    console.log('Current row changed. value: %O', row)
+    this.$emit('current-row-change', row)
+  }
+
+  changeRowSelection(rows: Array<any>) {
+    console.log('Selected rows: %O', rows);
+    this.$emit('row-selection-change', rows);
   }
 
   public retrieveAllRecords(): void {
@@ -52,13 +75,20 @@ export default class GridView extends GridViewProps {
       sort: this.sort()
     };
     this.dynamicWindowService(this.baseApiUrl)
-      .retrieve(paginationQuery)
+      .retrieve({
+        criteriaQuery: this.filterQuery,
+        paginationQuery
+      })
       .then(
         res => {
           this.gridData = res.data;
           this.totalItems = Number(res.headers['x-total-count']);
           this.queryCount = this.totalItems;
           this.isFetching = false;
+          if (this.gridData.length) {
+            let row = this.gridData[0];
+            (<ElTable>this.$refs.grid).setCurrentRow(row);
+          }
         },
         err => {
           this.isFetching = false;
@@ -86,7 +116,6 @@ export default class GridView extends GridViewProps {
 
   public syncHeight() {
     const grid = (<ElTable>this.$refs.grid).$el;
-    const pagination = (<ElPagination>this.$refs.pagination).$el;
     this.height = grid.clientHeight;
   }
 

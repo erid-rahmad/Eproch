@@ -1,8 +1,13 @@
 package com.bhp.opusb.service.dto;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
+
+import com.bhp.opusb.domain.ADField;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADTab} entity.
@@ -32,7 +37,6 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
-
     private Long adClientId;
 
     private Long adOrganizationId;
@@ -43,6 +47,9 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     private Long parentTabId;
     
+    @JsonProperty("adFields")
+    private Set<ADField> aDFields = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -161,6 +168,14 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     public void setParentTabId(Long aDTabId) {
         this.parentTabId = aDTabId;
+    }
+
+    public Set<ADField> getADFields() {
+        return aDFields;
+    }
+
+    public void setADFields(Set<ADField> aDFields) {
+        this.aDFields = aDFields;
     }
 
     @Override

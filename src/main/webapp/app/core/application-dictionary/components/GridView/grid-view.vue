@@ -11,15 +11,22 @@
       :data="gridData"
       :default-sort="gridSchema.defaultSort"
       :empty-text="gridSchema.emptyText"
-      @current-change="changeSelection"
+      @current-change="changeCurrentRow"
       @sort-change="changeOrder"
+      @selection-change="changeRowSelection"
     >
       <el-table-column
-        prop="name"
+        type="selection"
+        width="55">
+      </el-table-column>
+      <el-table-column
+        v-for="field in gridFields"
+        :key="field.id"
+        :prop="field.name"
+        :label="field.name"
         sortable
-        label="Name"
       />
-      <el-table-column label="" width="96">
+      <el-table-column fixed="right" width="96">
         <template slot-scope="scope">
           <el-button
             @click="edit(scope.row)"

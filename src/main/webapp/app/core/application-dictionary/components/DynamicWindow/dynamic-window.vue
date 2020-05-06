@@ -18,19 +18,29 @@
             <grid-view
               ref="mainGrid"
               v-if="gridView"
-              :base-api-url="baseApiUrl"
+              :base-api-url="mainTabBaseApiUrl"
+              :fields="mainTab.adFields"
+              @current-row-change="loadChildTab"
             />
             <detail-view v-else/>
           </keep-alive>
         </transition>
       </pane>
-      <pane ref="linePane" size="30" style="position: relative">
+      <pane
+        ref="linePane"
+        size="30"
+        style="position: relative"
+        v-if="hasChildTabs">
         <el-tabs class="tab-container" type="border-card">
-          <el-tab-pane>
+          <el-tab-pane v-for="tab in childTabs" :key="tab.id">
             <span slot="label">
-              <i class="el-icon-suitcase"></i> Columns
+              <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
             </span>
-            <grid-view ref="lineGrid" base-api-url="/api/ad-columns"/>
+            <grid-view
+              ref="lineGrid"
+              :base-api-url="tab.targetEndpoint"
+              :filter-query="tab.filterQuery"
+            />
           </el-tab-pane>
         </el-tabs>
       </pane>

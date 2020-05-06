@@ -4,6 +4,12 @@
     "myAccount": "My Account",
     "changePassword": "Change Password",
     "settings": "Settings",
+    "applicationDictionary": {
+      "default": "Application Dictionary",
+      "menu": "Menu",
+      "table": "Table",
+      "window": "Window"
+    },
     "admin": {
       "default": "System Administration",
       "userManagement": "Users",

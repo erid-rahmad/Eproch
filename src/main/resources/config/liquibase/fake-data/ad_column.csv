@@ -1,5 +1,5 @@
 id;name;description;key;type;mandatory;mandatory_logic;read_only_logic;updatable;default_value;format_pattern;min_value;max_value;active;ad_client_id;ad_organization_id;ad_table_id
-1;Riel;Industrial El Salvador Colon US Dollar;true;BOOLEAN;false;backing up Home;Agent client-driven applications;false;Checking Account Steel plum;Tanzanian Shilling;15636;32704;true;1;1;1
+1;name;Table Name;true;BOOLEAN;false;backing up Home;Agent client-driven applications;false;Checking Account Steel plum;Tanzanian Shilling;15636;32704;true;1;1;1
 2;Fantastic Mauritius interface;Technician Representative;true;INSTANT;true;Mobility invoice;granular;true;Handmade Switchable Architect;synergize deposit Principal;78321;41017;false;2;2;2
 3;web services Human;Planner;false;BOOLEAN;false;Avon Pakistan Rupee;Concrete Shoals;true;Belarus reboot Mandatory;Dynamic Connecticut Solutions;67477;8360;false;3;3;3
 4;program Rubber;Granite payment Refined Fresh Soap;true;INSTANT;true;Car;Legacy Berkshire;true;Towels;FTP;17831;55521;false;4;4;4

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
+import buildCriteriaQueryString from '@/shared/filter/filters';
 
 const delay: number = 0;
 
@@ -22,10 +23,16 @@ export default class DynamicWindowService {
     });
   }
 
-  public retrieve(paginationQuery?: any): Promise<any> {
+  public retrieve({criteriaQuery, paginationQuery}): Promise<any> {
     return new Promise<any>((resolve, reject) => {
+      let queryParams = buildPaginationQueryOpts(paginationQuery);
+
+      if (criteriaQuery) {
+        queryParams += '&' + buildCriteriaQueryString(criteriaQuery);
+      }
+
       axios
-        .get(this.baseApiUrl + `?${buildPaginationQueryOpts(paginationQuery)}`)
+        .get(`${this.baseApiUrl}?${queryParams}`)
         .then(function(res) {
           resolve(res);
         })

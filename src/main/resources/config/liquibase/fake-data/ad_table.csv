@@ -1,11 +1,9 @@
 id;name;view;active;ad_client_id;ad_organization_id
-1;withdrawal;false;true;1;1
-2;workforce;true;false;2;2
-3;Lari Refined;false;true;3;3
-4;Forest Granite;true;true;4;4
-5;Accounts Ergonomic;true;true;5;5
-6;Lead synthesizing;false;false;6;6
-7;Ville;false;false;7;7
-8;Texas Chief;true;false;8;8
-9;infomediaries Sausages infrastructures;true;true;9;9
-10;Savings Account lavender plum;false;false;10;10
+1;ad_table;false;true;1;1
+2;ad_column;false;true;1;1
+3;ad_window;false;true;1;1
+4;ad_tab;false;true;1;1
+5;ad_field;false;true;1;1
+6;ad_field_group;false;true;1;1
+7;ad_reference;false;true;1;1
+8;ad_reference_list;false;true;1;1

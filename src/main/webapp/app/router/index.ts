@@ -387,7 +387,8 @@ export const constantRoutes: RouteConfig[] = [
           title: 'applicationDictionary.table',
           authorities: [Authority.ADMIN],
           baseApiUrl: '/api/ad-tables',
-          schemaId: 'table'
+          schemaId: 'table',
+          windowId: 1
         }
       },
       {
@@ -398,7 +399,8 @@ export const constantRoutes: RouteConfig[] = [
           title: 'applicationDictionary.window',
           authorities: [Authority.ADMIN],
           baseApiUrl: '/api/ad-windows',
-          schemaId: 'window'
+          schemaId: 'window',
+          windowId: 2
         }
       }
     ]
