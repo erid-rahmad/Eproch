@@ -34,6 +34,8 @@ describe('Service Tests', () => {
         0,
         'AAAAAAA',
         'AAAAAAA',
+        'AAAAAAA',
+        0,
         false,
         ADColumnType.STRING,
         false,
@@ -42,6 +44,8 @@ describe('Service Tests', () => {
         false,
         'AAAAAAA',
         'AAAAAAA',
+        0,
+        0,
         0,
         0,
         false
@@ -98,7 +102,9 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             name: 'BBBBBB',
+            sqlName: 'BBBBBB',
             description: 'BBBBBB',
+            fieldLength: 1,
             key: true,
             type: 'BBBBBB',
             mandatory: true,
@@ -107,6 +113,8 @@ describe('Service Tests', () => {
             updatable: true,
             defaultValue: 'BBBBBB',
             formatPattern: 'BBBBBB',
+            minLength: 1,
+            maxLength: 1,
             minValue: 1,
             maxValue: 1,
             active: true
@@ -137,7 +145,9 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             name: 'BBBBBB',
+            sqlName: 'BBBBBB',
             description: 'BBBBBB',
+            fieldLength: 1,
             key: true,
             type: 'BBBBBB',
             mandatory: true,
@@ -146,6 +156,8 @@ describe('Service Tests', () => {
             updatable: true,
             defaultValue: 'BBBBBB',
             formatPattern: 'BBBBBB',
+            minLength: 1,
+            maxLength: 1,
             minValue: 1,
             maxValue: 1,
             active: true

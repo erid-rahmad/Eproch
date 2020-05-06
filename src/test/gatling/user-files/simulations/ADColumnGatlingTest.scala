@@ -73,7 +73,9 @@ class ADColumnGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "name":"SAMPLE_TEXT"
+                , "sqlName":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
+                , "fieldLength":null
                 , "key":null
                 , "type":"STRING"
                 , "mandatory":null
@@ -82,8 +84,10 @@ class ADColumnGatlingTest extends Simulation {
                 , "updatable":null
                 , "defaultValue":"SAMPLE_TEXT"
                 , "formatPattern":"SAMPLE_TEXT"
-                , "minValue":"0"
-                , "maxValue":"0"
+                , "minLength":"0"
+                , "maxLength":"0"
+                , "minValue":null
+                , "maxValue":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

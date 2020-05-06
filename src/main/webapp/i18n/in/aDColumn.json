@@ -17,7 +17,9 @@
         "title": "AD Column"
       },
       "name": "Name",
+      "sqlName": "Sql Name",
       "description": "Description",
+      "fieldLength": "Field Length",
       "key": "Key",
       "type": "Type",
       "mandatory": "Mandatory",
@@ -26,6 +28,8 @@
       "updatable": "Updatable",
       "defaultValue": "Default Value",
       "formatPattern": "Format Pattern",
+      "minLength": "Min Length",
+      "maxLength": "Max Length",
       "minValue": "Min Value",
       "maxValue": "Max Value",
       "active": "Active",

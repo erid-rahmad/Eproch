@@ -94,8 +94,14 @@ public class ADColumnQueryService extends QueryService<ADColumn> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), ADColumn_.name));
             }
+            if (criteria.getSqlName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getSqlName(), ADColumn_.sqlName));
+            }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), ADColumn_.description));
+            }
+            if (criteria.getFieldLength() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getFieldLength(), ADColumn_.fieldLength));
             }
             if (criteria.getKey() != null) {
                 specification = specification.and(buildSpecification(criteria.getKey(), ADColumn_.key));
@@ -120,6 +126,12 @@ public class ADColumnQueryService extends QueryService<ADColumn> {
             }
             if (criteria.getFormatPattern() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getFormatPattern(), ADColumn_.formatPattern));
+            }
+            if (criteria.getMinLength() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getMinLength(), ADColumn_.minLength));
+            }
+            if (criteria.getMaxLength() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getMaxLength(), ADColumn_.maxLength));
             }
             if (criteria.getMinValue() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getMinValue(), ADColumn_.minValue));

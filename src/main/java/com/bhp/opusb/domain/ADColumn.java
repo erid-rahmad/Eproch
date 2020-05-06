@@ -39,8 +39,15 @@ public class ADColumn extends AbstractAuditingEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @NotNull
+    @Column(name = "sql_name", nullable = false)
+    private String sqlName;
+
     @Column(name = "description")
     private String description;
+
+    @Column(name = "field_length")
+    private Long fieldLength;
 
     @Column(name = "key")
     private Boolean key;
@@ -67,11 +74,17 @@ public class ADColumn extends AbstractAuditingEntity {
     @Column(name = "format_pattern")
     private String formatPattern;
 
+    @Column(name = "min_length")
+    private Integer minLength;
+
+    @Column(name = "max_length")
+    private Integer maxLength;
+
     @Column(name = "min_value")
-    private Integer minValue;
+    private Long minValue;
 
     @Column(name = "max_value")
-    private Integer maxValue;
+    private Long maxValue;
 
     @Column(name = "active")
     private Boolean active;
@@ -125,6 +138,19 @@ public class ADColumn extends AbstractAuditingEntity {
         this.name = name;
     }
 
+    public String getSqlName() {
+        return sqlName;
+    }
+
+    public ADColumn sqlName(String sqlName) {
+        this.sqlName = sqlName;
+        return this;
+    }
+
+    public void setSqlName(String sqlName) {
+        this.sqlName = sqlName;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -136,6 +162,19 @@ public class ADColumn extends AbstractAuditingEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getFieldLength() {
+        return fieldLength;
+    }
+
+    public ADColumn fieldLength(Long fieldLength) {
+        this.fieldLength = fieldLength;
+        return this;
+    }
+
+    public void setFieldLength(Long fieldLength) {
+        this.fieldLength = fieldLength;
     }
 
     public Boolean isKey() {
@@ -242,29 +281,55 @@ public class ADColumn extends AbstractAuditingEntity {
         this.formatPattern = formatPattern;
     }
 
-    public Integer getMinValue() {
+    public Integer getMinLength() {
+        return minLength;
+    }
+
+    public ADColumn minLength(Integer minLength) {
+        this.minLength = minLength;
+        return this;
+    }
+
+    public void setMinLength(Integer minLength) {
+        this.minLength = minLength;
+    }
+
+    public Integer getMaxLength() {
+        return maxLength;
+    }
+
+    public ADColumn maxLength(Integer maxLength) {
+        this.maxLength = maxLength;
+        return this;
+    }
+
+    public void setMaxLength(Integer maxLength) {
+        this.maxLength = maxLength;
+    }
+
+    public Long getMinValue() {
         return minValue;
     }
 
-    public ADColumn minValue(Integer minValue) {
+    public ADColumn minValue(Long minValue) {
         this.minValue = minValue;
         return this;
     }
 
-    public void setMinValue(Integer minValue) {
+    public void setMinValue(Long minValue) {
         this.minValue = minValue;
     }
 
-    public Integer getMaxValue() {
+    public Long getMaxValue() {
         return maxValue;
     }
 
-    public ADColumn maxValue(Integer maxValue) {
+    public ADColumn maxValue(Long maxValue) {
         this.maxValue = maxValue;
         return this;
     }
 
-    public void setMaxValue(Integer maxValue) {
+    public void setMaxValue(Long maxValue) {
         this.maxValue = maxValue;
     }
 
@@ -356,7 +421,9 @@ public class ADColumn extends AbstractAuditingEntity {
         return "ADColumn{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", sqlName='" + getSqlName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", fieldLength=" + getFieldLength() +
             ", key='" + isKey() + "'" +
             ", type='" + getType() + "'" +
             ", mandatory='" + isMandatory() + "'" +
@@ -365,6 +432,8 @@ public class ADColumn extends AbstractAuditingEntity {
             ", updatable='" + isUpdatable() + "'" +
             ", defaultValue='" + getDefaultValue() + "'" +
             ", formatPattern='" + getFormatPattern() + "'" +
+            ", minLength=" + getMinLength() +
+            ", maxLength=" + getMaxLength() +
             ", minValue=" + getMinValue() +
             ", maxValue=" + getMaxValue() +
             ", active='" + isActive() + "'" +

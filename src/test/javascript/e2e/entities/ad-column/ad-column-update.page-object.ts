@@ -10,7 +10,11 @@ export default class ADColumnUpdatePage extends AlertPage {
 
   nameInput: ElementFinder = element(by.css('input#ad-column-name'));
 
+  sqlNameInput: ElementFinder = element(by.css('input#ad-column-sqlName'));
+
   descriptionInput: ElementFinder = element(by.css('input#ad-column-description'));
+
+  fieldLengthInput: ElementFinder = element(by.css('input#ad-column-fieldLength'));
 
   keyInput: ElementFinder = element(by.css('input#ad-column-key'));
 
@@ -27,6 +31,10 @@ export default class ADColumnUpdatePage extends AlertPage {
   defaultValueInput: ElementFinder = element(by.css('input#ad-column-defaultValue'));
 
   formatPatternInput: ElementFinder = element(by.css('input#ad-column-formatPattern'));
+
+  minLengthInput: ElementFinder = element(by.css('input#ad-column-minLength'));
+
+  maxLengthInput: ElementFinder = element(by.css('input#ad-column-maxLength'));
 
   minValueInput: ElementFinder = element(by.css('input#ad-column-minValue'));
 

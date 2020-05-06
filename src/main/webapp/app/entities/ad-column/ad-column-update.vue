@@ -20,9 +20,24 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.sqlName')" for="ad-column-sqlName">Sql Name</label>
+                        <input type="text" class="form-control" name="sqlName" id="ad-column-sqlName"
+                            :class="{'valid': !$v.aDColumn.sqlName.$invalid, 'invalid': $v.aDColumn.sqlName.$invalid }" v-model="$v.aDColumn.sqlName.$model"  required/>
+                        <div v-if="$v.aDColumn.sqlName.$anyDirty && $v.aDColumn.sqlName.$invalid">
+                            <small class="form-text text-danger" v-if="!$v.aDColumn.sqlName.required" v-text="$t('entity.validation.required')">
+                                This field is required.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.description')" for="ad-column-description">Description</label>
                         <input type="text" class="form-control" name="description" id="ad-column-description"
                             :class="{'valid': !$v.aDColumn.description.$invalid, 'invalid': $v.aDColumn.description.$invalid }" v-model="$v.aDColumn.description.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.fieldLength')" for="ad-column-fieldLength">Field Length</label>
+                        <input type="number" class="form-control" name="fieldLength" id="ad-column-fieldLength"
+                            :class="{'valid': !$v.aDColumn.fieldLength.$invalid, 'invalid': $v.aDColumn.fieldLength.$invalid }" v-model.number="$v.aDColumn.fieldLength.$model" />
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.key')" for="ad-column-key">Key</label>
@@ -74,6 +89,16 @@
                         <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.formatPattern')" for="ad-column-formatPattern">Format Pattern</label>
                         <input type="text" class="form-control" name="formatPattern" id="ad-column-formatPattern"
                             :class="{'valid': !$v.aDColumn.formatPattern.$invalid, 'invalid': $v.aDColumn.formatPattern.$invalid }" v-model="$v.aDColumn.formatPattern.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.minLength')" for="ad-column-minLength">Min Length</label>
+                        <input type="number" class="form-control" name="minLength" id="ad-column-minLength"
+                            :class="{'valid': !$v.aDColumn.minLength.$invalid, 'invalid': $v.aDColumn.minLength.$invalid }" v-model.number="$v.aDColumn.minLength.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.maxLength')" for="ad-column-maxLength">Max Length</label>
+                        <input type="number" class="form-control" name="maxLength" id="ad-column-maxLength"
+                            :class="{'valid': !$v.aDColumn.maxLength.$invalid, 'invalid': $v.aDColumn.maxLength.$invalid }" v-model.number="$v.aDColumn.maxLength.$model" />
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.minValue')" for="ad-column-minValue">Min Value</label>

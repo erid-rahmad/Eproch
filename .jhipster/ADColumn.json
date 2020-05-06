@@ -9,8 +9,19 @@
             ]
         },
         {
+            "fieldName": "sqlName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "description",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "fieldLength",
+            "fieldType": "Long"
         },
         {
             "fieldName": "key",
@@ -46,12 +57,20 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "minValue",
+            "fieldName": "minLength",
             "fieldType": "Integer"
         },
         {
-            "fieldName": "maxValue",
+            "fieldName": "maxLength",
             "fieldType": "Integer"
+        },
+        {
+            "fieldName": "minValue",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "maxValue",
+            "fieldType": "Long"
         },
         {
             "fieldName": "active",

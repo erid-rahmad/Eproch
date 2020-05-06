@@ -67,8 +67,16 @@ describe('ADColumn e2e test', () => {
       expect(await updatePage.nameInput.getAttribute('value')).to.match(/name/);
 
 
+      await updatePage.sqlNameInput.sendKeys('sqlName');
+      expect(await updatePage.sqlNameInput.getAttribute('value')).to.match(/sqlName/);
+
+
       await updatePage.descriptionInput.sendKeys('description');
       expect(await updatePage.descriptionInput.getAttribute('value')).to.match(/description/);
+
+
+      await updatePage.fieldLengthInput.sendKeys('5');
+      expect(await updatePage.fieldLengthInput.getAttribute('value')).to.eq('5');
 
 
       const selectedKey = await updatePage.keyInput.isSelected();
@@ -118,6 +126,14 @@ describe('ADColumn e2e test', () => {
 
       await updatePage.formatPatternInput.sendKeys('formatPattern');
       expect(await updatePage.formatPatternInput.getAttribute('value')).to.match(/formatPattern/);
+
+
+      await updatePage.minLengthInput.sendKeys('5');
+      expect(await updatePage.minLengthInput.getAttribute('value')).to.eq('5');
+
+
+      await updatePage.maxLengthInput.sendKeys('5');
+      expect(await updatePage.maxLengthInput.getAttribute('value')).to.eq('5');
 
 
       await updatePage.minValueInput.sendKeys('5');
@@ -207,9 +223,17 @@ describe('ADColumn e2e test', () => {
           await updatePage.nameInput.sendKeys('modified');
           expect(await updatePage.nameInput.getAttribute('value')).to.match(/modified/);
 
+          await updatePage.sqlNameInput.clear();
+          await updatePage.sqlNameInput.sendKeys('modified');
+          expect(await updatePage.sqlNameInput.getAttribute('value')).to.match(/modified/);
+
           await updatePage.descriptionInput.clear();
           await updatePage.descriptionInput.sendKeys('modified');
           expect(await updatePage.descriptionInput.getAttribute('value')).to.match(/modified/);
+
+          await clear(updatePage.fieldLengthInput);
+          await updatePage.fieldLengthInput.sendKeys('6');
+          expect(await updatePage.fieldLengthInput.getAttribute('value')).to.eq('6');
 
           const selectedKey = await updatePage.keyInput.isSelected();
           if (selectedKey) {
@@ -253,6 +277,14 @@ describe('ADColumn e2e test', () => {
           await updatePage.formatPatternInput.clear();
           await updatePage.formatPatternInput.sendKeys('modified');
           expect(await updatePage.formatPatternInput.getAttribute('value')).to.match(/modified/);
+
+          await clear(updatePage.minLengthInput);
+          await updatePage.minLengthInput.sendKeys('6');
+          expect(await updatePage.minLengthInput.getAttribute('value')).to.eq('6');
+
+          await clear(updatePage.maxLengthInput);
+          await updatePage.maxLengthInput.sendKeys('6');
+          expect(await updatePage.maxLengthInput.getAttribute('value')).to.eq('6');
 
           await clear(updatePage.minValueInput);
           await updatePage.minValueInput.sendKeys('6');

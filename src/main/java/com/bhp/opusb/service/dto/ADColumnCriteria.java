@@ -2,12 +2,12 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
-import com.bhp.opusb.domain.enumeration.ADColumnType;
-
 import io.github.jhipster.service.Criteria;
+import com.bhp.opusb.domain.enumeration.ADColumnType;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -47,7 +47,11 @@ public class ADColumnCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
+    private StringFilter sqlName;
+
     private StringFilter description;
+
+    private LongFilter fieldLength;
 
     private BooleanFilter key;
 
@@ -65,9 +69,13 @@ public class ADColumnCriteria implements Serializable, Criteria {
 
     private StringFilter formatPattern;
 
-    private IntegerFilter minValue;
+    private IntegerFilter minLength;
 
-    private IntegerFilter maxValue;
+    private IntegerFilter maxLength;
+
+    private LongFilter minValue;
+
+    private LongFilter maxValue;
 
     private BooleanFilter active;
 
@@ -85,7 +93,9 @@ public class ADColumnCriteria implements Serializable, Criteria {
     public ADColumnCriteria(ADColumnCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.sqlName = other.sqlName == null ? null : other.sqlName.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.fieldLength = other.fieldLength == null ? null : other.fieldLength.copy();
         this.key = other.key == null ? null : other.key.copy();
         this.type = other.type == null ? null : other.type.copy();
         this.mandatory = other.mandatory == null ? null : other.mandatory.copy();
@@ -94,6 +104,8 @@ public class ADColumnCriteria implements Serializable, Criteria {
         this.updatable = other.updatable == null ? null : other.updatable.copy();
         this.defaultValue = other.defaultValue == null ? null : other.defaultValue.copy();
         this.formatPattern = other.formatPattern == null ? null : other.formatPattern.copy();
+        this.minLength = other.minLength == null ? null : other.minLength.copy();
+        this.maxLength = other.maxLength == null ? null : other.maxLength.copy();
         this.minValue = other.minValue == null ? null : other.minValue.copy();
         this.maxValue = other.maxValue == null ? null : other.maxValue.copy();
         this.active = other.active == null ? null : other.active.copy();
@@ -124,12 +136,28 @@ public class ADColumnCriteria implements Serializable, Criteria {
         this.name = name;
     }
 
+    public StringFilter getSqlName() {
+        return sqlName;
+    }
+
+    public void setSqlName(StringFilter sqlName) {
+        this.sqlName = sqlName;
+    }
+
     public StringFilter getDescription() {
         return description;
     }
 
     public void setDescription(StringFilter description) {
         this.description = description;
+    }
+
+    public LongFilter getFieldLength() {
+        return fieldLength;
+    }
+
+    public void setFieldLength(LongFilter fieldLength) {
+        this.fieldLength = fieldLength;
     }
 
     public BooleanFilter getKey() {
@@ -196,19 +224,35 @@ public class ADColumnCriteria implements Serializable, Criteria {
         this.formatPattern = formatPattern;
     }
 
-    public IntegerFilter getMinValue() {
+    public IntegerFilter getMinLength() {
+        return minLength;
+    }
+
+    public void setMinLength(IntegerFilter minLength) {
+        this.minLength = minLength;
+    }
+
+    public IntegerFilter getMaxLength() {
+        return maxLength;
+    }
+
+    public void setMaxLength(IntegerFilter maxLength) {
+        this.maxLength = maxLength;
+    }
+
+    public LongFilter getMinValue() {
         return minValue;
     }
 
-    public void setMinValue(IntegerFilter minValue) {
+    public void setMinValue(LongFilter minValue) {
         this.minValue = minValue;
     }
 
-    public IntegerFilter getMaxValue() {
+    public LongFilter getMaxValue() {
         return maxValue;
     }
 
-    public void setMaxValue(IntegerFilter maxValue) {
+    public void setMaxValue(LongFilter maxValue) {
         this.maxValue = maxValue;
     }
 
@@ -265,7 +309,9 @@ public class ADColumnCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(sqlName, that.sqlName) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(fieldLength, that.fieldLength) &&
             Objects.equals(key, that.key) &&
             Objects.equals(type, that.type) &&
             Objects.equals(mandatory, that.mandatory) &&
@@ -274,6 +320,8 @@ public class ADColumnCriteria implements Serializable, Criteria {
             Objects.equals(updatable, that.updatable) &&
             Objects.equals(defaultValue, that.defaultValue) &&
             Objects.equals(formatPattern, that.formatPattern) &&
+            Objects.equals(minLength, that.minLength) &&
+            Objects.equals(maxLength, that.maxLength) &&
             Objects.equals(minValue, that.minValue) &&
             Objects.equals(maxValue, that.maxValue) &&
             Objects.equals(active, that.active) &&
@@ -288,7 +336,9 @@ public class ADColumnCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         name,
+        sqlName,
         description,
+        fieldLength,
         key,
         type,
         mandatory,
@@ -297,6 +347,8 @@ public class ADColumnCriteria implements Serializable, Criteria {
         updatable,
         defaultValue,
         formatPattern,
+        minLength,
+        maxLength,
         minValue,
         maxValue,
         active,
@@ -312,7 +364,9 @@ public class ADColumnCriteria implements Serializable, Criteria {
         return "ADColumnCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (sqlName != null ? "sqlName=" + sqlName + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (fieldLength != null ? "fieldLength=" + fieldLength + ", " : "") +
                 (key != null ? "key=" + key + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
                 (mandatory != null ? "mandatory=" + mandatory + ", " : "") +
@@ -321,6 +375,8 @@ public class ADColumnCriteria implements Serializable, Criteria {
                 (updatable != null ? "updatable=" + updatable + ", " : "") +
                 (defaultValue != null ? "defaultValue=" + defaultValue + ", " : "") +
                 (formatPattern != null ? "formatPattern=" + formatPattern + ", " : "") +
+                (minLength != null ? "minLength=" + minLength + ", " : "") +
+                (maxLength != null ? "maxLength=" + maxLength + ", " : "") +
                 (minValue != null ? "minValue=" + minValue + ", " : "") +
                 (maxValue != null ? "maxValue=" + maxValue + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +

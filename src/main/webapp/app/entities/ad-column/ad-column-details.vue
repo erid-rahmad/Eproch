@@ -11,10 +11,22 @@
                         <span>{{aDColumn.name}}</span>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.sqlName')">Sql Name</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.sqlName}}</span>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDColumn.description')">Description</span>
                     </dt>
                     <dd>
                         <span>{{aDColumn.description}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.fieldLength')">Field Length</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.fieldLength}}</span>
                     </dd>
                     <dt>
                         <span v-text="$t('opusWebApp.aDColumn.key')">Key</span>
@@ -63,6 +75,18 @@
                     </dt>
                     <dd>
                         <span>{{aDColumn.formatPattern}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.minLength')">Min Length</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.minLength}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.maxLength')">Max Length</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.maxLength}}</span>
                     </dd>
                     <dt>
                         <span v-text="$t('opusWebApp.aDColumn.minValue')">Min Value</span>

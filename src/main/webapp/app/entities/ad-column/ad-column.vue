@@ -26,7 +26,9 @@
                 <tr>
                     <th v-on:click="changeOrder('id')"><span v-text="$t('global.field.id')">ID</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('name')"><span v-text="$t('opusWebApp.aDColumn.name')">Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('sqlName')"><span v-text="$t('opusWebApp.aDColumn.sqlName')">Sql Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'sqlName'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('description')"><span v-text="$t('opusWebApp.aDColumn.description')">Description</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'description'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('fieldLength')"><span v-text="$t('opusWebApp.aDColumn.fieldLength')">Field Length</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'fieldLength'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('key')"><span v-text="$t('opusWebApp.aDColumn.key')">Key</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'key'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('type')"><span v-text="$t('opusWebApp.aDColumn.type')">Type</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'type'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('mandatory')"><span v-text="$t('opusWebApp.aDColumn.mandatory')">Mandatory</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'mandatory'"></jhi-sort-indicator></th>
@@ -35,6 +37,8 @@
                     <th v-on:click="changeOrder('updatable')"><span v-text="$t('opusWebApp.aDColumn.updatable')">Updatable</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'updatable'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('defaultValue')"><span v-text="$t('opusWebApp.aDColumn.defaultValue')">Default Value</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'defaultValue'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('formatPattern')"><span v-text="$t('opusWebApp.aDColumn.formatPattern')">Format Pattern</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'formatPattern'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('minLength')"><span v-text="$t('opusWebApp.aDColumn.minLength')">Min Length</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'minLength'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('maxLength')"><span v-text="$t('opusWebApp.aDColumn.maxLength')">Max Length</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'maxLength'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('minValue')"><span v-text="$t('opusWebApp.aDColumn.minValue')">Min Value</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'minValue'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('maxValue')"><span v-text="$t('opusWebApp.aDColumn.maxValue')">Max Value</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'maxValue'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.aDColumn.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
@@ -52,7 +56,9 @@
                         <router-link :to="{name: 'ADColumnView', params: {aDColumnId: aDColumn.id}}">{{aDColumn.id}}</router-link>
                     </td>
                     <td>{{aDColumn.name}}</td>
+                    <td>{{aDColumn.sqlName}}</td>
                     <td>{{aDColumn.description}}</td>
+                    <td>{{aDColumn.fieldLength}}</td>
                     <td>{{aDColumn.key}}</td>
                     <td v-text="$t('opusWebApp.ADColumnType.' + aDColumn.type)">{{aDColumn.type}}</td>
                     <td>{{aDColumn.mandatory}}</td>
@@ -61,6 +67,8 @@
                     <td>{{aDColumn.updatable}}</td>
                     <td>{{aDColumn.defaultValue}}</td>
                     <td>{{aDColumn.formatPattern}}</td>
+                    <td>{{aDColumn.minLength}}</td>
+                    <td>{{aDColumn.maxLength}}</td>
                     <td>{{aDColumn.minValue}}</td>
                     <td>{{aDColumn.maxValue}}</td>
                     <td>{{aDColumn.active}}</td>

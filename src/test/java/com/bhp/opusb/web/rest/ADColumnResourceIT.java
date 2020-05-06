@@ -43,8 +43,15 @@ public class ADColumnResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_SQL_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_SQL_NAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final Long DEFAULT_FIELD_LENGTH = 1L;
+    private static final Long UPDATED_FIELD_LENGTH = 2L;
+    private static final Long SMALLER_FIELD_LENGTH = 1L - 1L;
 
     private static final Boolean DEFAULT_KEY = false;
     private static final Boolean UPDATED_KEY = true;
@@ -70,13 +77,21 @@ public class ADColumnResourceIT {
     private static final String DEFAULT_FORMAT_PATTERN = "AAAAAAAAAA";
     private static final String UPDATED_FORMAT_PATTERN = "BBBBBBBBBB";
 
-    private static final Integer DEFAULT_MIN_VALUE = 1;
-    private static final Integer UPDATED_MIN_VALUE = 2;
-    private static final Integer SMALLER_MIN_VALUE = 1 - 1;
+    private static final Integer DEFAULT_MIN_LENGTH = 1;
+    private static final Integer UPDATED_MIN_LENGTH = 2;
+    private static final Integer SMALLER_MIN_LENGTH = 1 - 1;
 
-    private static final Integer DEFAULT_MAX_VALUE = 1;
-    private static final Integer UPDATED_MAX_VALUE = 2;
-    private static final Integer SMALLER_MAX_VALUE = 1 - 1;
+    private static final Integer DEFAULT_MAX_LENGTH = 1;
+    private static final Integer UPDATED_MAX_LENGTH = 2;
+    private static final Integer SMALLER_MAX_LENGTH = 1 - 1;
+
+    private static final Long DEFAULT_MIN_VALUE = 1L;
+    private static final Long UPDATED_MIN_VALUE = 2L;
+    private static final Long SMALLER_MIN_VALUE = 1L - 1L;
+
+    private static final Long DEFAULT_MAX_VALUE = 1L;
+    private static final Long UPDATED_MAX_VALUE = 2L;
+    private static final Long SMALLER_MAX_VALUE = 1L - 1L;
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -110,7 +125,9 @@ public class ADColumnResourceIT {
     public static ADColumn createEntity(EntityManager em) {
         ADColumn aDColumn = new ADColumn()
             .name(DEFAULT_NAME)
+            .sqlName(DEFAULT_SQL_NAME)
             .description(DEFAULT_DESCRIPTION)
+            .fieldLength(DEFAULT_FIELD_LENGTH)
             .key(DEFAULT_KEY)
             .type(DEFAULT_TYPE)
             .mandatory(DEFAULT_MANDATORY)
@@ -119,6 +136,8 @@ public class ADColumnResourceIT {
             .updatable(DEFAULT_UPDATABLE)
             .defaultValue(DEFAULT_DEFAULT_VALUE)
             .formatPattern(DEFAULT_FORMAT_PATTERN)
+            .minLength(DEFAULT_MIN_LENGTH)
+            .maxLength(DEFAULT_MAX_LENGTH)
             .minValue(DEFAULT_MIN_VALUE)
             .maxValue(DEFAULT_MAX_VALUE)
             .active(DEFAULT_ACTIVE);
@@ -163,7 +182,9 @@ public class ADColumnResourceIT {
     public static ADColumn createUpdatedEntity(EntityManager em) {
         ADColumn aDColumn = new ADColumn()
             .name(UPDATED_NAME)
+            .sqlName(UPDATED_SQL_NAME)
             .description(UPDATED_DESCRIPTION)
+            .fieldLength(UPDATED_FIELD_LENGTH)
             .key(UPDATED_KEY)
             .type(UPDATED_TYPE)
             .mandatory(UPDATED_MANDATORY)
@@ -172,6 +193,8 @@ public class ADColumnResourceIT {
             .updatable(UPDATED_UPDATABLE)
             .defaultValue(UPDATED_DEFAULT_VALUE)
             .formatPattern(UPDATED_FORMAT_PATTERN)
+            .minLength(UPDATED_MIN_LENGTH)
+            .maxLength(UPDATED_MAX_LENGTH)
             .minValue(UPDATED_MIN_VALUE)
             .maxValue(UPDATED_MAX_VALUE)
             .active(UPDATED_ACTIVE);
@@ -230,7 +253,9 @@ public class ADColumnResourceIT {
         assertThat(aDColumnList).hasSize(databaseSizeBeforeCreate + 1);
         ADColumn testADColumn = aDColumnList.get(aDColumnList.size() - 1);
         assertThat(testADColumn.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testADColumn.getSqlName()).isEqualTo(DEFAULT_SQL_NAME);
         assertThat(testADColumn.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testADColumn.getFieldLength()).isEqualTo(DEFAULT_FIELD_LENGTH);
         assertThat(testADColumn.isKey()).isEqualTo(DEFAULT_KEY);
         assertThat(testADColumn.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testADColumn.isMandatory()).isEqualTo(DEFAULT_MANDATORY);
@@ -239,6 +264,8 @@ public class ADColumnResourceIT {
         assertThat(testADColumn.isUpdatable()).isEqualTo(DEFAULT_UPDATABLE);
         assertThat(testADColumn.getDefaultValue()).isEqualTo(DEFAULT_DEFAULT_VALUE);
         assertThat(testADColumn.getFormatPattern()).isEqualTo(DEFAULT_FORMAT_PATTERN);
+        assertThat(testADColumn.getMinLength()).isEqualTo(DEFAULT_MIN_LENGTH);
+        assertThat(testADColumn.getMaxLength()).isEqualTo(DEFAULT_MAX_LENGTH);
         assertThat(testADColumn.getMinValue()).isEqualTo(DEFAULT_MIN_VALUE);
         assertThat(testADColumn.getMaxValue()).isEqualTo(DEFAULT_MAX_VALUE);
         assertThat(testADColumn.isActive()).isEqualTo(DEFAULT_ACTIVE);
@@ -286,6 +313,25 @@ public class ADColumnResourceIT {
 
     @Test
     @Transactional
+    public void checkSqlNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = aDColumnRepository.findAll().size();
+        // set the field null
+        aDColumn.setSqlName(null);
+
+        // Create the ADColumn, which fails.
+        ADColumnDTO aDColumnDTO = aDColumnMapper.toDto(aDColumn);
+
+        restADColumnMockMvc.perform(post("/api/ad-columns")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(aDColumnDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<ADColumn> aDColumnList = aDColumnRepository.findAll();
+        assertThat(aDColumnList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllADColumns() throws Exception {
         // Initialize the database
         aDColumnRepository.saveAndFlush(aDColumn);
@@ -296,7 +342,9 @@ public class ADColumnResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDColumn.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].sqlName").value(hasItem(DEFAULT_SQL_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].fieldLength").value(hasItem(DEFAULT_FIELD_LENGTH.intValue())))
             .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY.booleanValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].mandatory").value(hasItem(DEFAULT_MANDATORY.booleanValue())))
@@ -305,8 +353,10 @@ public class ADColumnResourceIT {
             .andExpect(jsonPath("$.[*].updatable").value(hasItem(DEFAULT_UPDATABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].defaultValue").value(hasItem(DEFAULT_DEFAULT_VALUE)))
             .andExpect(jsonPath("$.[*].formatPattern").value(hasItem(DEFAULT_FORMAT_PATTERN)))
-            .andExpect(jsonPath("$.[*].minValue").value(hasItem(DEFAULT_MIN_VALUE)))
-            .andExpect(jsonPath("$.[*].maxValue").value(hasItem(DEFAULT_MAX_VALUE)))
+            .andExpect(jsonPath("$.[*].minLength").value(hasItem(DEFAULT_MIN_LENGTH)))
+            .andExpect(jsonPath("$.[*].maxLength").value(hasItem(DEFAULT_MAX_LENGTH)))
+            .andExpect(jsonPath("$.[*].minValue").value(hasItem(DEFAULT_MIN_VALUE.intValue())))
+            .andExpect(jsonPath("$.[*].maxValue").value(hasItem(DEFAULT_MAX_VALUE.intValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -322,7 +372,9 @@ public class ADColumnResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aDColumn.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.sqlName").value(DEFAULT_SQL_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.fieldLength").value(DEFAULT_FIELD_LENGTH.intValue()))
             .andExpect(jsonPath("$.key").value(DEFAULT_KEY.booleanValue()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.mandatory").value(DEFAULT_MANDATORY.booleanValue()))
@@ -331,8 +383,10 @@ public class ADColumnResourceIT {
             .andExpect(jsonPath("$.updatable").value(DEFAULT_UPDATABLE.booleanValue()))
             .andExpect(jsonPath("$.defaultValue").value(DEFAULT_DEFAULT_VALUE))
             .andExpect(jsonPath("$.formatPattern").value(DEFAULT_FORMAT_PATTERN))
-            .andExpect(jsonPath("$.minValue").value(DEFAULT_MIN_VALUE))
-            .andExpect(jsonPath("$.maxValue").value(DEFAULT_MAX_VALUE))
+            .andExpect(jsonPath("$.minLength").value(DEFAULT_MIN_LENGTH))
+            .andExpect(jsonPath("$.maxLength").value(DEFAULT_MAX_LENGTH))
+            .andExpect(jsonPath("$.minValue").value(DEFAULT_MIN_VALUE.intValue()))
+            .andExpect(jsonPath("$.maxValue").value(DEFAULT_MAX_VALUE.intValue()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -436,6 +490,84 @@ public class ADColumnResourceIT {
 
     @Test
     @Transactional
+    public void getAllADColumnsBySqlNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where sqlName equals to DEFAULT_SQL_NAME
+        defaultADColumnShouldBeFound("sqlName.equals=" + DEFAULT_SQL_NAME);
+
+        // Get all the aDColumnList where sqlName equals to UPDATED_SQL_NAME
+        defaultADColumnShouldNotBeFound("sqlName.equals=" + UPDATED_SQL_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySqlNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where sqlName not equals to DEFAULT_SQL_NAME
+        defaultADColumnShouldNotBeFound("sqlName.notEquals=" + DEFAULT_SQL_NAME);
+
+        // Get all the aDColumnList where sqlName not equals to UPDATED_SQL_NAME
+        defaultADColumnShouldBeFound("sqlName.notEquals=" + UPDATED_SQL_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySqlNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where sqlName in DEFAULT_SQL_NAME or UPDATED_SQL_NAME
+        defaultADColumnShouldBeFound("sqlName.in=" + DEFAULT_SQL_NAME + "," + UPDATED_SQL_NAME);
+
+        // Get all the aDColumnList where sqlName equals to UPDATED_SQL_NAME
+        defaultADColumnShouldNotBeFound("sqlName.in=" + UPDATED_SQL_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySqlNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where sqlName is not null
+        defaultADColumnShouldBeFound("sqlName.specified=true");
+
+        // Get all the aDColumnList where sqlName is null
+        defaultADColumnShouldNotBeFound("sqlName.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllADColumnsBySqlNameContainsSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where sqlName contains DEFAULT_SQL_NAME
+        defaultADColumnShouldBeFound("sqlName.contains=" + DEFAULT_SQL_NAME);
+
+        // Get all the aDColumnList where sqlName contains UPDATED_SQL_NAME
+        defaultADColumnShouldNotBeFound("sqlName.contains=" + UPDATED_SQL_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySqlNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where sqlName does not contain DEFAULT_SQL_NAME
+        defaultADColumnShouldNotBeFound("sqlName.doesNotContain=" + DEFAULT_SQL_NAME);
+
+        // Get all the aDColumnList where sqlName does not contain UPDATED_SQL_NAME
+        defaultADColumnShouldBeFound("sqlName.doesNotContain=" + UPDATED_SQL_NAME);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADColumnsByDescriptionIsEqualToSomething() throws Exception {
         // Initialize the database
         aDColumnRepository.saveAndFlush(aDColumn);
@@ -509,6 +641,111 @@ public class ADColumnResourceIT {
 
         // Get all the aDColumnList where description does not contain UPDATED_DESCRIPTION
         defaultADColumnShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByFieldLengthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where fieldLength equals to DEFAULT_FIELD_LENGTH
+        defaultADColumnShouldBeFound("fieldLength.equals=" + DEFAULT_FIELD_LENGTH);
+
+        // Get all the aDColumnList where fieldLength equals to UPDATED_FIELD_LENGTH
+        defaultADColumnShouldNotBeFound("fieldLength.equals=" + UPDATED_FIELD_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByFieldLengthIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where fieldLength not equals to DEFAULT_FIELD_LENGTH
+        defaultADColumnShouldNotBeFound("fieldLength.notEquals=" + DEFAULT_FIELD_LENGTH);
+
+        // Get all the aDColumnList where fieldLength not equals to UPDATED_FIELD_LENGTH
+        defaultADColumnShouldBeFound("fieldLength.notEquals=" + UPDATED_FIELD_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByFieldLengthIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where fieldLength in DEFAULT_FIELD_LENGTH or UPDATED_FIELD_LENGTH
+        defaultADColumnShouldBeFound("fieldLength.in=" + DEFAULT_FIELD_LENGTH + "," + UPDATED_FIELD_LENGTH);
+
+        // Get all the aDColumnList where fieldLength equals to UPDATED_FIELD_LENGTH
+        defaultADColumnShouldNotBeFound("fieldLength.in=" + UPDATED_FIELD_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByFieldLengthIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where fieldLength is not null
+        defaultADColumnShouldBeFound("fieldLength.specified=true");
+
+        // Get all the aDColumnList where fieldLength is null
+        defaultADColumnShouldNotBeFound("fieldLength.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByFieldLengthIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where fieldLength is greater than or equal to DEFAULT_FIELD_LENGTH
+        defaultADColumnShouldBeFound("fieldLength.greaterThanOrEqual=" + DEFAULT_FIELD_LENGTH);
+
+        // Get all the aDColumnList where fieldLength is greater than or equal to UPDATED_FIELD_LENGTH
+        defaultADColumnShouldNotBeFound("fieldLength.greaterThanOrEqual=" + UPDATED_FIELD_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByFieldLengthIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where fieldLength is less than or equal to DEFAULT_FIELD_LENGTH
+        defaultADColumnShouldBeFound("fieldLength.lessThanOrEqual=" + DEFAULT_FIELD_LENGTH);
+
+        // Get all the aDColumnList where fieldLength is less than or equal to SMALLER_FIELD_LENGTH
+        defaultADColumnShouldNotBeFound("fieldLength.lessThanOrEqual=" + SMALLER_FIELD_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByFieldLengthIsLessThanSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where fieldLength is less than DEFAULT_FIELD_LENGTH
+        defaultADColumnShouldNotBeFound("fieldLength.lessThan=" + DEFAULT_FIELD_LENGTH);
+
+        // Get all the aDColumnList where fieldLength is less than UPDATED_FIELD_LENGTH
+        defaultADColumnShouldBeFound("fieldLength.lessThan=" + UPDATED_FIELD_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByFieldLengthIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where fieldLength is greater than DEFAULT_FIELD_LENGTH
+        defaultADColumnShouldNotBeFound("fieldLength.greaterThan=" + DEFAULT_FIELD_LENGTH);
+
+        // Get all the aDColumnList where fieldLength is greater than SMALLER_FIELD_LENGTH
+        defaultADColumnShouldBeFound("fieldLength.greaterThan=" + SMALLER_FIELD_LENGTH);
     }
 
 
@@ -1034,6 +1271,216 @@ public class ADColumnResourceIT {
 
     @Test
     @Transactional
+    public void getAllADColumnsByMinLengthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where minLength equals to DEFAULT_MIN_LENGTH
+        defaultADColumnShouldBeFound("minLength.equals=" + DEFAULT_MIN_LENGTH);
+
+        // Get all the aDColumnList where minLength equals to UPDATED_MIN_LENGTH
+        defaultADColumnShouldNotBeFound("minLength.equals=" + UPDATED_MIN_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMinLengthIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where minLength not equals to DEFAULT_MIN_LENGTH
+        defaultADColumnShouldNotBeFound("minLength.notEquals=" + DEFAULT_MIN_LENGTH);
+
+        // Get all the aDColumnList where minLength not equals to UPDATED_MIN_LENGTH
+        defaultADColumnShouldBeFound("minLength.notEquals=" + UPDATED_MIN_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMinLengthIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where minLength in DEFAULT_MIN_LENGTH or UPDATED_MIN_LENGTH
+        defaultADColumnShouldBeFound("minLength.in=" + DEFAULT_MIN_LENGTH + "," + UPDATED_MIN_LENGTH);
+
+        // Get all the aDColumnList where minLength equals to UPDATED_MIN_LENGTH
+        defaultADColumnShouldNotBeFound("minLength.in=" + UPDATED_MIN_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMinLengthIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where minLength is not null
+        defaultADColumnShouldBeFound("minLength.specified=true");
+
+        // Get all the aDColumnList where minLength is null
+        defaultADColumnShouldNotBeFound("minLength.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMinLengthIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where minLength is greater than or equal to DEFAULT_MIN_LENGTH
+        defaultADColumnShouldBeFound("minLength.greaterThanOrEqual=" + DEFAULT_MIN_LENGTH);
+
+        // Get all the aDColumnList where minLength is greater than or equal to UPDATED_MIN_LENGTH
+        defaultADColumnShouldNotBeFound("minLength.greaterThanOrEqual=" + UPDATED_MIN_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMinLengthIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where minLength is less than or equal to DEFAULT_MIN_LENGTH
+        defaultADColumnShouldBeFound("minLength.lessThanOrEqual=" + DEFAULT_MIN_LENGTH);
+
+        // Get all the aDColumnList where minLength is less than or equal to SMALLER_MIN_LENGTH
+        defaultADColumnShouldNotBeFound("minLength.lessThanOrEqual=" + SMALLER_MIN_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMinLengthIsLessThanSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where minLength is less than DEFAULT_MIN_LENGTH
+        defaultADColumnShouldNotBeFound("minLength.lessThan=" + DEFAULT_MIN_LENGTH);
+
+        // Get all the aDColumnList where minLength is less than UPDATED_MIN_LENGTH
+        defaultADColumnShouldBeFound("minLength.lessThan=" + UPDATED_MIN_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMinLengthIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where minLength is greater than DEFAULT_MIN_LENGTH
+        defaultADColumnShouldNotBeFound("minLength.greaterThan=" + DEFAULT_MIN_LENGTH);
+
+        // Get all the aDColumnList where minLength is greater than SMALLER_MIN_LENGTH
+        defaultADColumnShouldBeFound("minLength.greaterThan=" + SMALLER_MIN_LENGTH);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMaxLengthIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where maxLength equals to DEFAULT_MAX_LENGTH
+        defaultADColumnShouldBeFound("maxLength.equals=" + DEFAULT_MAX_LENGTH);
+
+        // Get all the aDColumnList where maxLength equals to UPDATED_MAX_LENGTH
+        defaultADColumnShouldNotBeFound("maxLength.equals=" + UPDATED_MAX_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMaxLengthIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where maxLength not equals to DEFAULT_MAX_LENGTH
+        defaultADColumnShouldNotBeFound("maxLength.notEquals=" + DEFAULT_MAX_LENGTH);
+
+        // Get all the aDColumnList where maxLength not equals to UPDATED_MAX_LENGTH
+        defaultADColumnShouldBeFound("maxLength.notEquals=" + UPDATED_MAX_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMaxLengthIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where maxLength in DEFAULT_MAX_LENGTH or UPDATED_MAX_LENGTH
+        defaultADColumnShouldBeFound("maxLength.in=" + DEFAULT_MAX_LENGTH + "," + UPDATED_MAX_LENGTH);
+
+        // Get all the aDColumnList where maxLength equals to UPDATED_MAX_LENGTH
+        defaultADColumnShouldNotBeFound("maxLength.in=" + UPDATED_MAX_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMaxLengthIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where maxLength is not null
+        defaultADColumnShouldBeFound("maxLength.specified=true");
+
+        // Get all the aDColumnList where maxLength is null
+        defaultADColumnShouldNotBeFound("maxLength.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMaxLengthIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where maxLength is greater than or equal to DEFAULT_MAX_LENGTH
+        defaultADColumnShouldBeFound("maxLength.greaterThanOrEqual=" + DEFAULT_MAX_LENGTH);
+
+        // Get all the aDColumnList where maxLength is greater than or equal to UPDATED_MAX_LENGTH
+        defaultADColumnShouldNotBeFound("maxLength.greaterThanOrEqual=" + UPDATED_MAX_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMaxLengthIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where maxLength is less than or equal to DEFAULT_MAX_LENGTH
+        defaultADColumnShouldBeFound("maxLength.lessThanOrEqual=" + DEFAULT_MAX_LENGTH);
+
+        // Get all the aDColumnList where maxLength is less than or equal to SMALLER_MAX_LENGTH
+        defaultADColumnShouldNotBeFound("maxLength.lessThanOrEqual=" + SMALLER_MAX_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMaxLengthIsLessThanSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where maxLength is less than DEFAULT_MAX_LENGTH
+        defaultADColumnShouldNotBeFound("maxLength.lessThan=" + DEFAULT_MAX_LENGTH);
+
+        // Get all the aDColumnList where maxLength is less than UPDATED_MAX_LENGTH
+        defaultADColumnShouldBeFound("maxLength.lessThan=" + UPDATED_MAX_LENGTH);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByMaxLengthIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where maxLength is greater than DEFAULT_MAX_LENGTH
+        defaultADColumnShouldNotBeFound("maxLength.greaterThan=" + DEFAULT_MAX_LENGTH);
+
+        // Get all the aDColumnList where maxLength is greater than SMALLER_MAX_LENGTH
+        defaultADColumnShouldBeFound("maxLength.greaterThan=" + SMALLER_MAX_LENGTH);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADColumnsByMinValueIsEqualToSomething() throws Exception {
         // Initialize the database
         aDColumnRepository.saveAndFlush(aDColumn);
@@ -1370,7 +1817,9 @@ public class ADColumnResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDColumn.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].sqlName").value(hasItem(DEFAULT_SQL_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].fieldLength").value(hasItem(DEFAULT_FIELD_LENGTH.intValue())))
             .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY.booleanValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].mandatory").value(hasItem(DEFAULT_MANDATORY.booleanValue())))
@@ -1379,8 +1828,10 @@ public class ADColumnResourceIT {
             .andExpect(jsonPath("$.[*].updatable").value(hasItem(DEFAULT_UPDATABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].defaultValue").value(hasItem(DEFAULT_DEFAULT_VALUE)))
             .andExpect(jsonPath("$.[*].formatPattern").value(hasItem(DEFAULT_FORMAT_PATTERN)))
-            .andExpect(jsonPath("$.[*].minValue").value(hasItem(DEFAULT_MIN_VALUE)))
-            .andExpect(jsonPath("$.[*].maxValue").value(hasItem(DEFAULT_MAX_VALUE)))
+            .andExpect(jsonPath("$.[*].minLength").value(hasItem(DEFAULT_MIN_LENGTH)))
+            .andExpect(jsonPath("$.[*].maxLength").value(hasItem(DEFAULT_MAX_LENGTH)))
+            .andExpect(jsonPath("$.[*].minValue").value(hasItem(DEFAULT_MIN_VALUE.intValue())))
+            .andExpect(jsonPath("$.[*].maxValue").value(hasItem(DEFAULT_MAX_VALUE.intValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -1430,7 +1881,9 @@ public class ADColumnResourceIT {
         em.detach(updatedADColumn);
         updatedADColumn
             .name(UPDATED_NAME)
+            .sqlName(UPDATED_SQL_NAME)
             .description(UPDATED_DESCRIPTION)
+            .fieldLength(UPDATED_FIELD_LENGTH)
             .key(UPDATED_KEY)
             .type(UPDATED_TYPE)
             .mandatory(UPDATED_MANDATORY)
@@ -1439,6 +1892,8 @@ public class ADColumnResourceIT {
             .updatable(UPDATED_UPDATABLE)
             .defaultValue(UPDATED_DEFAULT_VALUE)
             .formatPattern(UPDATED_FORMAT_PATTERN)
+            .minLength(UPDATED_MIN_LENGTH)
+            .maxLength(UPDATED_MAX_LENGTH)
             .minValue(UPDATED_MIN_VALUE)
             .maxValue(UPDATED_MAX_VALUE)
             .active(UPDATED_ACTIVE);
@@ -1454,7 +1909,9 @@ public class ADColumnResourceIT {
         assertThat(aDColumnList).hasSize(databaseSizeBeforeUpdate);
         ADColumn testADColumn = aDColumnList.get(aDColumnList.size() - 1);
         assertThat(testADColumn.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testADColumn.getSqlName()).isEqualTo(UPDATED_SQL_NAME);
         assertThat(testADColumn.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testADColumn.getFieldLength()).isEqualTo(UPDATED_FIELD_LENGTH);
         assertThat(testADColumn.isKey()).isEqualTo(UPDATED_KEY);
         assertThat(testADColumn.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testADColumn.isMandatory()).isEqualTo(UPDATED_MANDATORY);
@@ -1463,6 +1920,8 @@ public class ADColumnResourceIT {
         assertThat(testADColumn.isUpdatable()).isEqualTo(UPDATED_UPDATABLE);
         assertThat(testADColumn.getDefaultValue()).isEqualTo(UPDATED_DEFAULT_VALUE);
         assertThat(testADColumn.getFormatPattern()).isEqualTo(UPDATED_FORMAT_PATTERN);
+        assertThat(testADColumn.getMinLength()).isEqualTo(UPDATED_MIN_LENGTH);
+        assertThat(testADColumn.getMaxLength()).isEqualTo(UPDATED_MAX_LENGTH);
         assertThat(testADColumn.getMinValue()).isEqualTo(UPDATED_MIN_VALUE);
         assertThat(testADColumn.getMaxValue()).isEqualTo(UPDATED_MAX_VALUE);
         assertThat(testADColumn.isActive()).isEqualTo(UPDATED_ACTIVE);

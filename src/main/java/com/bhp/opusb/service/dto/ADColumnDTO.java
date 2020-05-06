@@ -18,7 +18,12 @@ public class ADColumnDTO extends AbstractAuditingDTO {
     @NotNull
     private String name;
 
+    @NotNull
+    private String sqlName;
+
     private String description;
+
+    private Long fieldLength;
 
     private Boolean key;
 
@@ -36,9 +41,13 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     private String formatPattern;
 
-    private Integer minValue;
+    private Integer minLength;
 
-    private Integer maxValue;
+    private Integer maxLength;
+
+    private Long minValue;
+
+    private Long maxValue;
 
     private Boolean active;
 
@@ -67,12 +76,28 @@ public class ADColumnDTO extends AbstractAuditingDTO {
         this.name = name;
     }
 
+    public String getSqlName() {
+        return sqlName;
+    }
+
+    public void setSqlName(String sqlName) {
+        this.sqlName = sqlName;
+    }
+
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getFieldLength() {
+        return fieldLength;
+    }
+
+    public void setFieldLength(Long fieldLength) {
+        this.fieldLength = fieldLength;
     }
 
     public Boolean isKey() {
@@ -139,19 +164,35 @@ public class ADColumnDTO extends AbstractAuditingDTO {
         this.formatPattern = formatPattern;
     }
 
-    public Integer getMinValue() {
+    public Integer getMinLength() {
+        return minLength;
+    }
+
+    public void setMinLength(Integer minLength) {
+        this.minLength = minLength;
+    }
+
+    public Integer getMaxLength() {
+        return maxLength;
+    }
+
+    public void setMaxLength(Integer maxLength) {
+        this.maxLength = maxLength;
+    }
+
+    public Long getMinValue() {
         return minValue;
     }
 
-    public void setMinValue(Integer minValue) {
+    public void setMinValue(Long minValue) {
         this.minValue = minValue;
     }
 
-    public Integer getMaxValue() {
+    public Long getMaxValue() {
         return maxValue;
     }
 
-    public void setMaxValue(Integer maxValue) {
+    public void setMaxValue(Long maxValue) {
         this.maxValue = maxValue;
     }
 
@@ -221,7 +262,9 @@ public class ADColumnDTO extends AbstractAuditingDTO {
         return "ADColumnDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", sqlName='" + getSqlName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", fieldLength=" + getFieldLength() +
             ", key='" + isKey() + "'" +
             ", type='" + getType() + "'" +
             ", mandatory='" + isMandatory() + "'" +
@@ -230,6 +273,8 @@ public class ADColumnDTO extends AbstractAuditingDTO {
             ", updatable='" + isUpdatable() + "'" +
             ", defaultValue='" + getDefaultValue() + "'" +
             ", formatPattern='" + getFormatPattern() + "'" +
+            ", minLength=" + getMinLength() +
+            ", maxLength=" + getMaxLength() +
             ", minValue=" + getMinValue() +
             ", maxValue=" + getMaxValue() +
             ", active='" + isActive() + "'" +

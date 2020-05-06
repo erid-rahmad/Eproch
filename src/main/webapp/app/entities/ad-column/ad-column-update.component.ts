@@ -23,7 +23,11 @@ const validations: any = {
     name: {
       required
     },
+    sqlName: {
+      required
+    },
     description: {},
+    fieldLength: {},
     key: {},
     type: {},
     mandatory: {},
@@ -32,6 +36,8 @@ const validations: any = {
     updatable: {},
     defaultValue: {},
     formatPattern: {},
+    minLength: {},
+    maxLength: {},
     minValue: {},
     maxValue: {},
     active: {},

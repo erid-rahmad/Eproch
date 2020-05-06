@@ -15,7 +15,9 @@ export const enum ADColumnType {
 export interface IADColumn {
   id?: number;
   name?: string;
+  sqlName?: string;
   description?: string;
+  fieldLength?: number;
   key?: boolean;
   type?: ADColumnType;
   mandatory?: boolean;
@@ -24,6 +26,8 @@ export interface IADColumn {
   updatable?: boolean;
   defaultValue?: string;
   formatPattern?: string;
+  minLength?: number;
+  maxLength?: number;
   minValue?: number;
   maxValue?: number;
   active?: boolean;
@@ -37,7 +41,9 @@ export class ADColumn implements IADColumn {
   constructor(
     public id?: number,
     public name?: string,
+    public sqlName?: string,
     public description?: string,
+    public fieldLength?: number,
     public key?: boolean,
     public type?: ADColumnType,
     public mandatory?: boolean,
@@ -46,6 +52,8 @@ export class ADColumn implements IADColumn {
     public updatable?: boolean,
     public defaultValue?: string,
     public formatPattern?: string,
+    public minLength?: number,
+    public maxLength?: number,
     public minValue?: number,
     public maxValue?: number,
     public active?: boolean,

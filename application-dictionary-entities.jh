@@ -17,7 +17,9 @@ entity ADTable {
 }
 entity ADColumn {
 	name String required
+	sqlName String required
 	description String
+	fieldLength Long
 	key Boolean
 	type ADColumnType
 	mandatory Boolean
@@ -26,8 +28,10 @@ entity ADColumn {
 	updatable Boolean
 	defaultValue String
 	formatPattern String
-	minValue Integer
-	maxValue Integer
+	minLength Integer
+	maxLength Integer
+	minValue Long
+	maxValue Long
 	active Boolean
 }
 entity ADWindow {
