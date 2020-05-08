@@ -22,7 +22,7 @@
       <el-table-column
         v-for="field in gridFields"
         :key="field.id"
-        :prop="field.name"
+        :prop="field.adColumn.name"
         :label="field.name"
         sortable
       />

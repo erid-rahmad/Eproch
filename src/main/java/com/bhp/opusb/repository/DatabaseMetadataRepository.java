@@ -16,13 +16,13 @@ import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADTable;
 import com.bhp.opusb.repository.util.ColumnTypeMapper;
+import com.google.common.base.CaseFormat;
 
 import org.hibernate.engine.spi.SessionImplementor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -85,15 +85,18 @@ public class DatabaseMetadataRepository {
       }
 
       while (columns.next()) {
+        String columnName = columns.getString("COLUMN_NAME");
         int dataType = columns.getInt("DATA_TYPE");
-        String typeName = columns.getString("TYPE_NAME");
-        int columnSize = columns.getInt("COLUMN_SIZE");
-        int decimalDigits = columns.getInt("DECIMAL_DIGITS");
+        // String typeName = columns.getString("TYPE_NAME");
+        long columnSize = columns.getInt("COLUMN_SIZE");
+        // int decimalDigits = columns.getInt("DECIMAL_DIGITS");
         boolean nullable = columns.getString("IS_NULLABLE").equals("YES");
         ADColumn column = new ADColumn();
         column.adClient(client)
           .adOrganization(organization)
-          .name(columns.getString("COLUMN_NAME"))
+          .name(columnName)
+          .sqlName(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_CAMEL, columnName))
+          .fieldLength(columnSize)
           .type(ColumnTypeMapper.getColumnType(dataType))
           .key(primaryKeys.contains(column.getName()))
           .mandatory(!nullable)
