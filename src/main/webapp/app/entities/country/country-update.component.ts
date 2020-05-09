@@ -1,4 +1,5 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
+import { Form } from 'element-ui';
 
 import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
 
@@ -14,6 +15,9 @@ import { ICity } from '@/shared/model/city.model';
 import AlertService from '@/shared/alert/alert.service';
 import { ICountry, Country } from '@/shared/model/country.model';
 import CountryService from './country.service';
+import { CrudEventBus } from '@/core/event/crud-event-bus';
+
+//import { TagsViewModule, ITagView } from '@/store/modules/tags-view'
 
 /*const validations: any = {
   country: {
@@ -46,52 +50,101 @@ export default class CountryUpdate extends Vue {
   public cities: ICity[] = [];
 
   public isSaving = false;
+  //public tempTagView?: ITagView
+  public status = ''
+  public textMap = {
+    edit: 'Edit Country',
+    create: 'Create Country'
+  }
   public rules = {
-    code: {
-      pattern: '^[A-Z]{2}$'
-    }
+    name: [{ 
+      required: true, 
+      trigger: 'blur' 
+    }],
+    code: [{
+      pattern: '^[A-Z]{2}$',
+      required: true, 
+      trigger: 'change' 
+    }],
+    //currency: [{ 
+      //required: true, 
+      //trigger: 'change' 
+    //}]
   };
 
   beforeRouteEnter(to, from, next) {
     next(vm => {
       if (to.params.countryId) {
+        vm.status = 'edit'
+        //console.log("1")
         vm.retrieveCountry(to.params.countryId);
+        
+      }else{
+        vm.status = 'create'
+        //console.log("2")
       }
       vm.initRelationships();
     });
   }
 
   public save(): void {
-    this.isSaving = true;
-    if (this.country.id) {
-      this.countryService()
-        .update(this.country)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('opusWebApp.country.updated', { param: param.id });
-          this.$notify({
-            title: 'Success',
-            message: message.toString(),
-            type: 'success',
-            duration: 3000
-          });
-        });
-    } else {
-      this.countryService()
-        .create(this.country)
-        .then(param => {
-          this.isSaving = false;
-          this.$router.go(-1);
-          const message = this.$t('opusWebApp.country.created', { param: param.id });
-          this.$notify({
-            title: 'Success',
-            message: message.toString(),
-            type: 'success',
-            duration: 3000
-          });
-        });
-    }
+    
+    (this.$refs.country as Form).validate(async(valid) => {
+      if (valid) {
+        this.isSaving = true;
+        if (this.country.id) {
+          this.countryService()
+            .update(this.country)
+            .then(param => {
+              this.isSaving = false;
+              this.$router.go(-1);
+              const message = this.$t('opusWebApp.country.updated', { param: param.id });
+              CrudEventBus.$emit('country-update-success')
+              this.$notify({
+                title: 'Success',
+                message: message.toString(),
+                type: 'success',
+                duration: 3000
+              });
+            })
+            .catch(()=>{
+              const message = "Error, data already exist/ .........";
+              this.$notify({
+                title: 'Error',
+                message: message.toString(),
+                type: 'error',
+                duration: 3000
+              });
+              this.isSaving = false;
+            });
+        } else {
+          this.countryService()
+            .create(this.country)
+            .then(param => {
+              this.isSaving = false;
+              this.$router.go(-1);
+              const message = this.$t('opusWebApp.country.created', { param: param.id });
+              CrudEventBus.$emit('country-update-success')
+              this.$notify({
+                title: 'Success',
+                message: message.toString(),
+                type: 'success',
+                duration: 3000
+              });
+            })
+            .catch(()=>{
+              const message = "Error, data already exist/ .........";
+              this.$notify({
+                title: 'Error',
+                message: message.toString(),
+                type: 'error',
+                duration: 3000
+              });
+              this.isSaving = false;
+            });
+        }
+      }
+    })
   }
 
   public retrieveCountry(countryId): void {

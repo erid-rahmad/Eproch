@@ -3,6 +3,7 @@ import axios from 'axios';
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 
 import { ICountry } from '@/shared/model/country.model';
+import buildCriteriaQueryString from '@/shared/filter/filters';
 
 const baseApiUrl = 'api/countries';
 
@@ -20,10 +21,24 @@ export default class CountryService {
     });
   }
 
-  public retrieve(paginationQuery?: any): Promise<any> {
+  public retrieve(paginationQuery?: any, params?: any): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios
-        .get(baseApiUrl + `?${buildPaginationQueryOpts(paginationQuery)}`)
+        .get(baseApiUrl + `?${buildPaginationQueryOpts(paginationQuery)}` + params)
+        .then(function(res) {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public retrieveWithFilter(criteriaQuery: any): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      let criteria = buildCriteriaQueryString(criteriaQuery);
+      axios
+        .get(baseApiUrl + `/selector?${criteria}`)
         .then(function(res) {
           resolve(res);
         })

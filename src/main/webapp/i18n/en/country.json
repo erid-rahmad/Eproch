@@ -5,7 +5,11 @@
         "title": "Countries",
         "createLabel": "Create a new Country",
         "createOrEditLabel": "Create or edit a Country",
-        "notFound": "No Countries found"
+        "notFound": "No Countries found",
+        "filterRecord": "Filter Record",
+        "visibleColumn": "Visible Column",
+        "downloadDocument": "Download Excel",
+        "refresh": "Refresh"
       },
       "created": "A new Country is created with identifier {{ param }}",
       "updated": "A Country is updated with identifier {{ param }}",
@@ -20,7 +24,8 @@
       "code": "Code",
       "currency": "Currency",
       "region": "Region",
-      "city": "City"
+      "city": "City",
+      "active": "Active"
     }
   }
 }
