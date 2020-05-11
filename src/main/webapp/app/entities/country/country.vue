@@ -97,19 +97,21 @@
                     :title="$t('entity.action.delete')"/>
             </div>
             <el-table
-                :key="tableKey"
-                ref="multipleTable"
                 v-loading="listLoading"
                 fit
-                max-height="512px"
+                max-height="560px"
                 style="width: 100%"
+                :row-class-name="tableRowClassName"
                 :data="countries"
                 :default-sort="{prop: 'name', order: 'ascending'}"
                 :empty-text="$t('opusWebApp.country.home.notFound')"
                 @sort-change="changeOrder"
-                @selection-change="handleSelectionChange"
+                @select="handleSelectionChange"
+                @select-all="handleSelectionChangeAll"
             >
             <!--
+                :key="tableKey"
+                ref="multipleTable"
                 highlight-current-row
                 @current-change="changeClassificationSelection"
             -->
@@ -214,71 +216,68 @@
                     align="center"
                     width="120px"
                 >
-
                     <template slot-scope="scope">
-                        <!--<el-button
-                            @click="openDetails(scope.row)"
-                            type="warning"
-                            size="mini"
-                            icon="el-icon-info"
-                            plain
-                            :title="$t('entity.action.view')"
-                        />-->
 
-                        <el-button
-                            style="margin-left: 0px;"
-                            v-if="scope.row.edit"
-                            class="cancel-btn"
-                            size="mini"
-                            icon="el-icon-close"
-                            type="warning"
-                            plain
-                            @click="cancelEdit(scope.row)"
-                            :title="$t('entity.action.cancel')"
+                        <span v-if="scope.row.duplicate">
+                            <el-button
+                                style="margin-left: 0px;"
+                                class="cancel-btn"
+                                size="mini"
+                                icon="el-icon-close"
+                                type="danger"
+                                plain
+                                @click="cancelDuplicate(scope.row, scope.$index)"
+                                :title="$t('entity.action.cancel')"
                             />
 
-                        <el-button
-                            style="margin-left: 0px;"
-                            v-if="scope.row.edit"
-                            type="success"
-                            size="mini"
-                            icon="el-icon-edit-outline"
-                            plain
-                            @click="confirmEdit(scope.row)"
-                            :title="$t('entity.action.save')"
-                        />
-                        <el-button
-                            style="margin-left: 0px;"
-                            v-else
-                            type="primary"
-                            size="mini"
-                            icon="el-icon-edit"
-                            @click="scope.row.edit=!scope.row.edit"
-                            plain
-                            :title="$t('entity.action.edit')"
-                        />
+                            <el-button
+                                style="margin-left: 0px;"
+                                type="success"
+                                size="mini"
+                                icon="el-icon-edit-outline"
+                                plain
+                                @click="confirmDuplicate(scope.row)"
+                                :title="$t('entity.action.save')"
+                            />
+                        </span>
 
-                        <!--
-                        <el-button
-                            style="margin-left: 0px;"
-                            @click="edit(scope.row)"
-                            type="primary"
-                            size="mini"
-                            icon="el-icon-edit"
-                            plain
-                            :title="$t('entity.action.edit')"
-                        />
-                        -->
-                        <!--<el-button
-                            style="margin-left: 0px;"
-                            @click="prepareRemove(scope.row)"
-                            type="danger"
-                            size="mini"
-                            icon="el-icon-delete"
-                            plain
-                            :title="$t('entity.action.delete')"
-                        />-->
+                        <span v-else>
+                            <el-button
+                                style="margin-left: 0px;"
+                                v-if="scope.row.edit"
+                                class="cancel-btn"
+                                size="mini"
+                                icon="el-icon-close"
+                                type="warning"
+                                plain
+                                @click="cancelEdit(scope.row)"
+                                :title="$t('entity.action.cancel')"
+                            />
+
+                            <el-button
+                                style="margin-left: 0px;"
+                                v-if="scope.row.edit"
+                                type="success"
+                                size="mini"
+                                icon="el-icon-edit-outline"
+                                plain
+                                @click="confirmEdit(scope.row)"
+                                :title="$t('entity.action.save')"
+                            />
+                            <el-button
+                                style="margin-left: 0px;"
+                                v-else
+                                type="primary"
+                                size="mini"
+                                icon="el-icon-edit"
+                                @click="scope.row.edit=!scope.row.edit"
+                                plain
+                                :title="$t('entity.action.edit')"
+                            />
+                        </span>
+                        
                     </template>
+
                 </el-table-column>
                 
             </el-table>
@@ -418,16 +417,16 @@
                             @click="clear"
                         >Clear</el-button>
 
-                        <!-- :key="tableKey" -->
                         <el-table
-                            ref="multipleTableFilterAdvance"
                             :data="itemListQueryAdvance"
                             @selection-change="handleSelectionChangeFilterAdvance"
                             fit
                             style="width: 100%"
                             :empty-text="$t('opusWebApp.country.home.notFound')"
                         >
-
+                        <!--
+                            ref="multipleTableFilterAdvance"
+                        -->
                             <el-table-column
                                 type="selection"
                                 align="center"/>
@@ -471,8 +470,7 @@
                                         placeholder="Select Query"
                                     >
                                         <el-option
-                                            v-for="queryOption in query"
-                                            v-if="queryOption.type === changeColumnOptionType"
+                                            v-for="queryOption in operators"
                                             :key="queryOption.code"
                                             :label="queryOption.value"
                                             :value="queryOption"
@@ -573,7 +571,7 @@
                             size="mini" />
                     </el-form-item>
 
-                    <el-form-item label="Type">
+                    <el-form-item label="Files of Type:">
                         <el-select
                             size="mini"
                             v-model="listTypeBook.type"
@@ -587,6 +585,17 @@
                             />
                         </el-select>
                     </el-form-item>
+
+                    <el-form-item >
+                        <el-checkbox
+                            v-model="checkSelected"
+                            @change="handleDownloadSelection"
+                            align="center"
+                            label="Export current row only?"
+                            >
+                            
+                        </el-checkbox>
+                    </el-form-item>
                     
                 </el-form>
                 <div slot="footer">
@@ -595,6 +604,7 @@
                         size="mini"
                         type="primary" 
                         icon="el-icon-download"
+                        v-bind:disabled="buttonDisable"
                         :loading="listLoading"
                         @click="handleDownload"
                         :title="$t('opusWebApp.country.home.search')">
@@ -614,6 +624,16 @@
 
     </div>
 </template>
+
+<style>
+  .el-table .primary-row {
+    background: #F5F7FA;
+  }
+
+  .el-table .warning-row {
+    background: oldlace;
+  }
+</style>
 
 <script lang="ts" src="./country.component.ts">
 </script>

@@ -165,7 +165,7 @@ export const exportJson2Excel = (header: string[], data: any, filename = 'excel-
     data.unshift(multiHeader[i])
   }
 
-  const wsName = 'SheetJS'
+  const wsName = filename
   const wb = new Workbook()
   const ws = sheetFromDataArray(data)
 
