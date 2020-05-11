@@ -26,7 +26,7 @@ import { CrudEventBus } from '@/core/event/crud-event-bus';
 })
 export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   @Inject('countryService') private countryService: () => CountryService;
-  public countries: ICountry[] = [];
+  public countries = [];
 
   @Inject('currencyService') private currencyService: () => CurrencyService;
   public currencies: ICurrency[] = [];
@@ -42,6 +42,8 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   public showDownloadDoc: boolean = false;
   public showFilterRecord: boolean = false;
   public checkedActive: boolean = true;
+  public checkSelected: boolean = true;
+  public buttonDisable: boolean = false;
   
   public showName: boolean = true;
   public showCode: boolean = true;
@@ -59,6 +61,7 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
 
   public isFetching = false;
   //new
+  public multipleSelectionCheckbox = []
   public multipleSelection = []
   public multipleSelectionFilterAdvance = []
   public tempMultipleSelectionFilterAdvance = ''
@@ -73,7 +76,7 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   public filename = 'Country List'
   public autoWidth = true
   public bookType = 'csv'
-  public tableKey = 0
+  //public tableKey = 0
 
   public listTypeBook = {
     id: undefined,
@@ -84,14 +87,6 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     { id: '1', type: 'csv' },
     { id: '2', type: 'xls' },
     { id: '3', type: 'xlsx' },
-  ]
-  public tableVisibleColumn = [
-    { 
-      name: this.showName, 
-      code: this.showCode, 
-      currency: this.showCurrency, 
-      active: this.showActive
-    },
   ]
 
   //filter query
@@ -147,14 +142,9 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     { id: '13', code: 'sort', value: 'Sort', type: 'array' },
   ]
 
-  /*private a
-  get computeMethod(){
-    this.a = this.changeColumnOptionType === this.query[0].type
-    return this.a
-  }*/
-
   public mounted(): void {
-    this.retrieveAllCountries();
+    //this.retrieveAllCountries();
+    this.retrieveAndClearSelectionRow();
     CrudEventBus.$on('country-update-success', this.clear)
     this.initRelationships()
   }
@@ -169,6 +159,12 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     this.listQuery.code = ''
     this.listQuery.name = ''
     this.listQuery.currencyId = ''
+    //this.retrieveAllCountries();
+    this.retrieveAndClearSelectionRow();
+  }
+
+  public retrieveAndClearSelectionRow(): void{
+    this.multipleSelectionCheckbox.splice(0)
     this.retrieveAllCountries();
   }
 
@@ -178,7 +174,7 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
 
   columnOptionType(key: any) {
     this.changeColumnOptionType = key.type
-    console.log(key.type)
+    //console.log(key.type)
   }
   
   public handleSelectionChangeFilterAdvance(value: any) {
@@ -199,7 +195,8 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
       }
       this.filterQuery = ''
       this.filterQuery = this.tempMultipleSelectionFilterAdvance
-      this.retrieveAllCountries()
+      //this.retrieveAllCountries()
+      this.retrieveAndClearSelectionRow()
 
     }else{
       this.$notify({
@@ -230,7 +227,8 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
         this.filterQueryCurrency = ''
       }
       this.filterQuery = this.filterQueryCode + this.filterQueryName + this.filterQueryCurrency
-      this.retrieveAllCountries()
+      //this.retrieveAllCountries()
+      this.retrieveAndClearSelectionRow()
     /*}else{
       this.$notify({
         title: 'Warning',
@@ -241,6 +239,10 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     }*/
   }
 
+  get operators(){
+    return this.query.filter(query=>query.type===this.changeColumnOptionType)
+  }
+  
   public retrieveAllCountries(): void {
     this.listLoading = true
     this.isFetching = true;
@@ -298,19 +300,22 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     
     if (this.multipleSelection.length) {
 
-      if(params == 'remove'){
-        this.handleRemove(this.multipleSelection)
+      if(params === 'remove'){
+        this.handleMultipleDataToJson(this.multipleSelection)
+        this.showDeleteDialog = true;
 
-      }else if(params == 'duplicate'){
+      }else if(params === 'duplicate'){
 
         if(this.multipleSelection.length == 1){
-          //this.duplicate(this.multipleSelection[0])
           this.countries.push({ 
             name: this.multipleSelection[0].name, 
             code: this.multipleSelection[0].code, 
             currencyId: this.multipleSelection[0].currencyId,
+            currencyName: this.multipleSelection[0].currencyName,
+            edit: true,
+            duplicate: true
           })
-          console.log(`${this.multipleSelection[0].name} - oke, dapet value, tapi belum selesai`)
+          //console.log(`${this.multipleSelection[0].name} - oke, get value`)
 
         }else{
           this.$notify({
@@ -335,23 +340,13 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     
   }
 
-  public handleRemove(params: any) {
-      const filterVal = ['id', 'code', 'name', 'currencyId', 'currencyCode']
+  public handleMultipleDataToJson(params: any) {
+      const filterVal = ['id', 'code', 'name', 'currencyCode']
       const data = formatJson(filterVal, params)
 
       this.getId = data;
-      this.showDeleteDialog = true;
+      //this.showDeleteDialog = true;
   }
-
-  /*
-  public handleDuplicate(params: any) {
-    const filterVal = ['id', 'code', 'name', 'currencyId', 'currencyCode']
-    const data = formatJson(filterVal, params)
-
-    this.getId = data;
-    console.log(this.getId[0])
-  }
-  */
 
   public removeCountry(): void {
     //console.log(this.multipleSelection.length)
@@ -369,7 +364,8 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
             duration: 3000
           });
           this.getId[i] = null;
-          this.retrieveAllCountries();
+          //this.retrieveAllCountries();
+          this.retrieveAndClearSelectionRow()
           this.closeDialog();
         })
         .catch(()=>{
@@ -380,26 +376,62 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
             type: 'error',
             duration: 3000
           });
-          this.getId[i] = null;
-          this.retrieveAllCountries();
           this.closeDialog();
         });
-        //karena code country sudah digunakan oleh region & city
+        //error karena code country sudah digunakan oleh region & city
     }
-    this.retrieveAllCountries();
   }
 
   public handleDownload() {
-    //console.log(this.listTypeBook.code);
     this.bookType = this.listTypeBook.type;
     this.filename = this.listTypeBook.name;
     this.downloadLoading = true
+
     const tHeader = ['Id', 'Code', 'Name', 'Currency']
     const filterVal = ['id', 'code', 'name', 'currencyCode']
-    const countries = this.countries
-    const data = formatJson(filterVal, countries)
+    var countries: any = ''
+    var data: any = ''
+
+    if(this.checkSelected == true){
+      
+      if(this.multipleSelection.length >= 1){
+        for (let i = 0; i < this.multipleSelection.length; i++) {
+          countries = this.countries[i]
+          data = formatJson(filterVal, this.multipleSelection)
+        }
+      }
+    }else{
+      countries = this.countries
+      data = formatJson(filterVal, countries)
+    }
     exportJson2Excel(tHeader, data, this.filename !== '' ? this.filename : undefined, undefined, undefined, this.autoWidth, this.bookType)
     this.downloadLoading = false
+  }
+
+  public handleDownloadSelection(){
+    
+    if(this.checkSelected == true){
+      //console.log('cek true checked')
+
+      if(this.multipleSelection.length >= 1){
+        
+        this.buttonDisable = false
+        
+      }else{
+        
+        this.buttonDisable = true
+        this.$notify({
+          title: 'Warning',
+          message: "Please select at least one item",
+          type: 'warning',
+          duration: 3000
+        });
+
+      }
+    }else{
+      this.buttonDisable = false
+    }
+
   }
 
   public sort(): Array<any> {
@@ -419,17 +451,47 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
 
   public handleSizeChange(size: number) {
     this.itemsPerPage = size;
-    this.retrieveAllCountries();
+    //this.retrieveAllCountries();
+    this.retrieveAndClearSelectionRow();
   }
 
-  public handleSelectionChange(value: any) {
+  public handleSelectionChangeAll(value: any) {
+    this.multipleSelectionCheckbox.splice(0)
+  }
+
+  public handleSelectionChange(value: any, o: any) {
+
     this.multipleSelection = value
+
+    this.countries.forEach((r,i) => {
+      
+      if(r.id === o.id) {
+        if(this.multipleSelectionCheckbox.indexOf(i) === -1) {
+          this.multipleSelectionCheckbox.push(i)
+        } else {
+          this.multipleSelectionCheckbox.splice(this.multipleSelectionCheckbox.indexOf(i), 1)
+        } 
+      }
+    })
+
+  }
+
+  tableRowClassName({row, rowIndex}) {
+    let color = ''
+    this.multipleSelectionCheckbox.forEach((r,i) => {
+      if (rowIndex === r) {
+        color =  'warning-row';
+      }
+    })
+    return color;
   }
 
   public transition(): void {
-    this.retrieveAllCountries();
+    //this.retrieveAllCountries();
+    this.retrieveAndClearSelectionRow();
   }
 /*
+  //select single row
   public changeClassificationSelection(currentRow: ICountry) {
     console.log('Selected classification#%d', currentRow.id);
   }
@@ -462,8 +524,6 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     row.edit = false
     row.originalName = row.name
 
-    console.log(`${row.id} - ${row.code} - ${row.name} - ${row.currencyId}`)
-
     if (row.id) {
       this.countryService()
         .update(row)
@@ -471,7 +531,8 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
           this.isSaving = false;
           //this.$router.go(-1);
           const message = this.$t('opusWebApp.country.updated', { param: param.id });
-          this.retrieveAllCountries();
+          //this.retrieveAllCountries();
+          this.retrieveAndClearSelectionRow();
           //CrudEventBus.$emit('country-update-success')
           this.$notify({
             title: 'Success',
@@ -503,6 +564,40 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     })*/
   }
 
+  public cancelDuplicate(item, index){
+    this.countries.splice(this.countries.findIndex(e => e === index), 1)
+    //console.log(index)
+  }
+
+  public confirmDuplicate(row: any){
+
+    this.countryService()
+      .create(row)
+      .then(param => {
+        this.isSaving = false;
+        const message = this.$t('opusWebApp.country.created', { param: param.id });
+        //this.retrieveAllCountries();
+        this.retrieveAndClearSelectionRow();
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        });
+      })
+      .catch(()=>{
+        const message = "Error, data already exist/ .........";
+        this.$notify({
+          title: 'Error',
+          message: message.toString(),
+          type: 'error',
+          duration: 3000
+        });
+        this.isSaving = false;
+      });
+
+  }
+
   public checkActive(row: any) {
     console.log(row.id)
   }
@@ -528,6 +623,11 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   public handleModalVisible(param: string) {
     if(param==='downloadDoc'){
       this.showDownloadDoc = true;
+      if(this.multipleSelection.length === 0){
+        this.buttonDisable = true
+      }else{
+        this.buttonDisable = false
+      }
     }else if(param==='visibleColumn'){
       this.showVisibleColumn = true;
     }else if(param==='filterRecord'){
