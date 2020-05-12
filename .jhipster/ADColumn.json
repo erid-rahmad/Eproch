@@ -33,6 +33,18 @@
             "fieldValues": "STRING,INTEGER,LONG,BIG_DECIMAL,FLOAT,DOUBLE,BOOLEAN,LOCAL_DATE,ZONED_DATE_TIME,DURATION,INSTANT"
         },
         {
+            "fieldName": "foreignKey",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "importedTable",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "importedColumn",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "mandatory",
             "fieldType": "Boolean"
         },

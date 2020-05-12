@@ -92,6 +92,24 @@ describe('ADColumn e2e test', () => {
       await selectLastOption(updatePage.typeSelect);
 
 
+      const selectedForeignKey = await updatePage.foreignKeyInput.isSelected();
+      if (selectedForeignKey) {
+        await updatePage.foreignKeyInput.click();
+        expect(await updatePage.foreignKeyInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.foreignKeyInput.click();
+        expect(await updatePage.foreignKeyInput.isSelected()).to.be.true;
+      }
+
+
+      await updatePage.importedTableInput.sendKeys('importedTable');
+      expect(await updatePage.importedTableInput.getAttribute('value')).to.match(/importedTable/);
+
+
+      await updatePage.importedColumnInput.sendKeys('importedColumn');
+      expect(await updatePage.importedColumnInput.getAttribute('value')).to.match(/importedColumn/);
+
+
       const selectedMandatory = await updatePage.mandatoryInput.isSelected();
       if (selectedMandatory) {
         await updatePage.mandatoryInput.click();
@@ -243,6 +261,23 @@ describe('ADColumn e2e test', () => {
             await updatePage.keyInput.click();
             expect(await updatePage.keyInput.isSelected()).to.be.true;
           }
+
+          const selectedForeignKey = await updatePage.foreignKeyInput.isSelected();
+          if (selectedForeignKey) {
+            await updatePage.foreignKeyInput.click();
+            expect(await updatePage.foreignKeyInput.isSelected()).to.be.false;
+          } else {
+            await updatePage.foreignKeyInput.click();
+            expect(await updatePage.foreignKeyInput.isSelected()).to.be.true;
+          }
+
+          await updatePage.importedTableInput.clear();
+          await updatePage.importedTableInput.sendKeys('modified');
+          expect(await updatePage.importedTableInput.getAttribute('value')).to.match(/modified/);
+
+          await updatePage.importedColumnInput.clear();
+          await updatePage.importedColumnInput.sendKeys('modified');
+          expect(await updatePage.importedColumnInput.getAttribute('value')).to.match(/modified/);
 
           const selectedMandatory = await updatePage.mandatoryInput.isSelected();
           if (selectedMandatory) {

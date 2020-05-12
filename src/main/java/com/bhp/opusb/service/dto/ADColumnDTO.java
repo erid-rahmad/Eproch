@@ -29,6 +29,12 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     private ADColumnType type;
 
+    private Boolean foreignKey;
+
+    private String importedTable;
+
+    private String importedColumn;
+
     private Boolean mandatory;
 
     private String mandatoryLogic;
@@ -114,6 +120,30 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     public void setType(ADColumnType type) {
         this.type = type;
+    }
+
+    public Boolean isForeignKey() {
+        return foreignKey;
+    }
+
+    public void setForeignKey(Boolean foreignKey) {
+        this.foreignKey = foreignKey;
+    }
+
+    public String getImportedTable() {
+        return importedTable;
+    }
+
+    public void setImportedTable(String importedTable) {
+        this.importedTable = importedTable;
+    }
+
+    public String getImportedColumn() {
+        return importedColumn;
+    }
+
+    public void setImportedColumn(String importedColumn) {
+        this.importedColumn = importedColumn;
     }
 
     public Boolean isMandatory() {
@@ -267,6 +297,9 @@ public class ADColumnDTO extends AbstractAuditingDTO {
             ", fieldLength=" + getFieldLength() +
             ", key='" + isKey() + "'" +
             ", type='" + getType() + "'" +
+            ", foreignKey='" + isForeignKey() + "'" +
+            ", importedTable='" + getImportedTable() + "'" +
+            ", importedColumn='" + getImportedColumn() + "'" +
             ", mandatory='" + isMandatory() + "'" +
             ", mandatoryLogic='" + getMandatoryLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +

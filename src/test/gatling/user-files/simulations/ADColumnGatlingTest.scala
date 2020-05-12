@@ -78,6 +78,9 @@ class ADColumnGatlingTest extends Simulation {
                 , "fieldLength":null
                 , "key":null
                 , "type":"STRING"
+                , "foreignKey":null
+                , "importedTable":"SAMPLE_TEXT"
+                , "importedColumn":"SAMPLE_TEXT"
                 , "mandatory":null
                 , "mandatoryLogic":"SAMPLE_TEXT"
                 , "readOnlyLogic":"SAMPLE_TEXT"

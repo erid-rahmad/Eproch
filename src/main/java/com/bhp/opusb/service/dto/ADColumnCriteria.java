@@ -57,6 +57,12 @@ public class ADColumnCriteria implements Serializable, Criteria {
 
     private ADColumnTypeFilter type;
 
+    private BooleanFilter foreignKey;
+
+    private StringFilter importedTable;
+
+    private StringFilter importedColumn;
+
     private BooleanFilter mandatory;
 
     private StringFilter mandatoryLogic;
@@ -98,6 +104,9 @@ public class ADColumnCriteria implements Serializable, Criteria {
         this.fieldLength = other.fieldLength == null ? null : other.fieldLength.copy();
         this.key = other.key == null ? null : other.key.copy();
         this.type = other.type == null ? null : other.type.copy();
+        this.foreignKey = other.foreignKey == null ? null : other.foreignKey.copy();
+        this.importedTable = other.importedTable == null ? null : other.importedTable.copy();
+        this.importedColumn = other.importedColumn == null ? null : other.importedColumn.copy();
         this.mandatory = other.mandatory == null ? null : other.mandatory.copy();
         this.mandatoryLogic = other.mandatoryLogic == null ? null : other.mandatoryLogic.copy();
         this.readOnlyLogic = other.readOnlyLogic == null ? null : other.readOnlyLogic.copy();
@@ -174,6 +183,30 @@ public class ADColumnCriteria implements Serializable, Criteria {
 
     public void setType(ADColumnTypeFilter type) {
         this.type = type;
+    }
+
+    public BooleanFilter getForeignKey() {
+        return foreignKey;
+    }
+
+    public void setForeignKey(BooleanFilter foreignKey) {
+        this.foreignKey = foreignKey;
+    }
+
+    public StringFilter getImportedTable() {
+        return importedTable;
+    }
+
+    public void setImportedTable(StringFilter importedTable) {
+        this.importedTable = importedTable;
+    }
+
+    public StringFilter getImportedColumn() {
+        return importedColumn;
+    }
+
+    public void setImportedColumn(StringFilter importedColumn) {
+        this.importedColumn = importedColumn;
     }
 
     public BooleanFilter getMandatory() {
@@ -314,6 +347,9 @@ public class ADColumnCriteria implements Serializable, Criteria {
             Objects.equals(fieldLength, that.fieldLength) &&
             Objects.equals(key, that.key) &&
             Objects.equals(type, that.type) &&
+            Objects.equals(foreignKey, that.foreignKey) &&
+            Objects.equals(importedTable, that.importedTable) &&
+            Objects.equals(importedColumn, that.importedColumn) &&
             Objects.equals(mandatory, that.mandatory) &&
             Objects.equals(mandatoryLogic, that.mandatoryLogic) &&
             Objects.equals(readOnlyLogic, that.readOnlyLogic) &&
@@ -341,6 +377,9 @@ public class ADColumnCriteria implements Serializable, Criteria {
         fieldLength,
         key,
         type,
+        foreignKey,
+        importedTable,
+        importedColumn,
         mandatory,
         mandatoryLogic,
         readOnlyLogic,
@@ -369,6 +408,9 @@ public class ADColumnCriteria implements Serializable, Criteria {
                 (fieldLength != null ? "fieldLength=" + fieldLength + ", " : "") +
                 (key != null ? "key=" + key + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
+                (foreignKey != null ? "foreignKey=" + foreignKey + ", " : "") +
+                (importedTable != null ? "importedTable=" + importedTable + ", " : "") +
+                (importedColumn != null ? "importedColumn=" + importedColumn + ", " : "") +
                 (mandatory != null ? "mandatory=" + mandatory + ", " : "") +
                 (mandatoryLogic != null ? "mandatoryLogic=" + mandatoryLogic + ", " : "") +
                 (readOnlyLogic != null ? "readOnlyLogic=" + readOnlyLogic + ", " : "") +

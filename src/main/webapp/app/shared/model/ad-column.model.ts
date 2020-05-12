@@ -20,6 +20,9 @@ export interface IADColumn {
   fieldLength?: number;
   key?: boolean;
   type?: ADColumnType;
+  foreignKey?: boolean;
+  importedTable?: string;
+  importedColumn?: string;
   mandatory?: boolean;
   mandatoryLogic?: string;
   readOnlyLogic?: string;
@@ -46,6 +49,9 @@ export class ADColumn implements IADColumn {
     public fieldLength?: number,
     public key?: boolean,
     public type?: ADColumnType,
+    public foreignKey?: boolean,
+    public importedTable?: string,
+    public importedColumn?: string,
     public mandatory?: boolean,
     public mandatoryLogic?: string,
     public readOnlyLogic?: string,
@@ -63,6 +69,7 @@ export class ADColumn implements IADColumn {
     public adTableId?: number
   ) {
     this.key = this.key || false;
+    this.foreignKey = this.foreignKey || false;
     this.mandatory = this.mandatory || false;
     this.updatable = this.updatable || false;
     this.active = this.active || false;

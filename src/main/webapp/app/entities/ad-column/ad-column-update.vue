@@ -61,6 +61,21 @@
                         </select>
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.foreignKey')" for="ad-column-foreignKey">Foreign Key</label>
+                        <input type="checkbox" class="form-check" name="foreignKey" id="ad-column-foreignKey"
+                            :class="{'valid': !$v.aDColumn.foreignKey.$invalid, 'invalid': $v.aDColumn.foreignKey.$invalid }" v-model="$v.aDColumn.foreignKey.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.importedTable')" for="ad-column-importedTable">Imported Table</label>
+                        <input type="text" class="form-control" name="importedTable" id="ad-column-importedTable"
+                            :class="{'valid': !$v.aDColumn.importedTable.$invalid, 'invalid': $v.aDColumn.importedTable.$invalid }" v-model="$v.aDColumn.importedTable.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.importedColumn')" for="ad-column-importedColumn">Imported Column</label>
+                        <input type="text" class="form-control" name="importedColumn" id="ad-column-importedColumn"
+                            :class="{'valid': !$v.aDColumn.importedColumn.$invalid, 'invalid': $v.aDColumn.importedColumn.$invalid }" v-model="$v.aDColumn.importedColumn.$model" />
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.mandatory')" for="ad-column-mandatory">Mandatory</label>
                         <input type="checkbox" class="form-check" name="mandatory" id="ad-column-mandatory"
                             :class="{'valid': !$v.aDColumn.mandatory.$invalid, 'invalid': $v.aDColumn.mandatory.$invalid }" v-model="$v.aDColumn.mandatory.$model" />

@@ -41,6 +41,24 @@
                         <span v-text="$t('opusWebApp.ADColumnType.' + aDColumn.type)">{{aDColumn.type}}</span>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.foreignKey')">Foreign Key</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.foreignKey}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.importedTable')">Imported Table</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.importedTable}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.importedColumn')">Imported Column</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.importedColumn}}</span>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDColumn.mandatory')">Mandatory</span>
                     </dt>
                     <dd>

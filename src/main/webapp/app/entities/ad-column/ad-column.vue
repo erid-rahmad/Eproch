@@ -31,6 +31,9 @@
                     <th v-on:click="changeOrder('fieldLength')"><span v-text="$t('opusWebApp.aDColumn.fieldLength')">Field Length</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'fieldLength'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('key')"><span v-text="$t('opusWebApp.aDColumn.key')">Key</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'key'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('type')"><span v-text="$t('opusWebApp.aDColumn.type')">Type</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'type'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('foreignKey')"><span v-text="$t('opusWebApp.aDColumn.foreignKey')">Foreign Key</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'foreignKey'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('importedTable')"><span v-text="$t('opusWebApp.aDColumn.importedTable')">Imported Table</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'importedTable'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('importedColumn')"><span v-text="$t('opusWebApp.aDColumn.importedColumn')">Imported Column</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'importedColumn'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('mandatory')"><span v-text="$t('opusWebApp.aDColumn.mandatory')">Mandatory</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'mandatory'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('mandatoryLogic')"><span v-text="$t('opusWebApp.aDColumn.mandatoryLogic')">Mandatory Logic</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'mandatoryLogic'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('readOnlyLogic')"><span v-text="$t('opusWebApp.aDColumn.readOnlyLogic')">Read Only Logic</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'readOnlyLogic'"></jhi-sort-indicator></th>
@@ -61,6 +64,9 @@
                     <td>{{aDColumn.fieldLength}}</td>
                     <td>{{aDColumn.key}}</td>
                     <td v-text="$t('opusWebApp.ADColumnType.' + aDColumn.type)">{{aDColumn.type}}</td>
+                    <td>{{aDColumn.foreignKey}}</td>
+                    <td>{{aDColumn.importedTable}}</td>
+                    <td>{{aDColumn.importedColumn}}</td>
                     <td>{{aDColumn.mandatory}}</td>
                     <td>{{aDColumn.mandatoryLogic}}</td>
                     <td>{{aDColumn.readOnlyLogic}}</td>

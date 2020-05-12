@@ -16,22 +16,47 @@ entity ADTable {
 	active Boolean
 }
 entity ADColumn {
+	// The JPA entity field name (usually in a camelCased format).
 	name String required
+
+	// The native database column name (usually in a kebab_cased format).
 	sqlName String required
+
 	description String
 	fieldLength Long
+
+	// Whether it is a primary key column.
 	key Boolean
 	type ADColumnType
+
+	// Whether it is a foreign key column.
+	foreignKey Boolean
+
+	// The name of the linked primary key table if foreignKey is true.
+	importedTable String
+
+	// The column name of the linked primary key if foreignKey is true.
+	importedColumn String
+
 	mandatory Boolean
 	mandatoryLogic String
 	readOnlyLogic String
 	updatable Boolean
 	defaultValue String
 	formatPattern String
+
+	// The minimum character length of the String column.
 	minLength Integer
+
+	// The maximum character length of the String column.
 	maxLength Integer
+
+	// The minimum number value of the numeric column.
 	minValue Long
+
+	// The minimum number value of the numeric column.
 	maxValue Long
+
 	active Boolean
 }
 entity ADWindow {

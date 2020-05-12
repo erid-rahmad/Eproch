@@ -20,6 +20,12 @@ export default class ADColumnUpdatePage extends AlertPage {
 
   typeSelect = element(by.css('select#ad-column-type'));
 
+  foreignKeyInput: ElementFinder = element(by.css('input#ad-column-foreignKey'));
+
+  importedTableInput: ElementFinder = element(by.css('input#ad-column-importedTable'));
+
+  importedColumnInput: ElementFinder = element(by.css('input#ad-column-importedColumn'));
+
   mandatoryInput: ElementFinder = element(by.css('input#ad-column-mandatory'));
 
   mandatoryLogicInput: ElementFinder = element(by.css('input#ad-column-mandatoryLogic'));

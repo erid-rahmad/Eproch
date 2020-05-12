@@ -56,6 +56,15 @@ public class ADColumn extends AbstractAuditingEntity {
     @Column(name = "type")
     private ADColumnType type;
 
+    @Column(name = "foreign_key")
+    private Boolean foreignKey;
+
+    @Column(name = "imported_table")
+    private String importedTable;
+
+    @Column(name = "imported_column")
+    private String importedColumn;
+
     @Column(name = "mandatory")
     private Boolean mandatory;
 
@@ -201,6 +210,45 @@ public class ADColumn extends AbstractAuditingEntity {
 
     public void setType(ADColumnType type) {
         this.type = type;
+    }
+
+    public Boolean isForeignKey() {
+        return foreignKey;
+    }
+
+    public ADColumn foreignKey(Boolean foreignKey) {
+        this.foreignKey = foreignKey;
+        return this;
+    }
+
+    public void setForeignKey(Boolean foreignKey) {
+        this.foreignKey = foreignKey;
+    }
+
+    public String getImportedTable() {
+        return importedTable;
+    }
+
+    public ADColumn importedTable(String importedTable) {
+        this.importedTable = importedTable;
+        return this;
+    }
+
+    public void setImportedTable(String importedTable) {
+        this.importedTable = importedTable;
+    }
+
+    public String getImportedColumn() {
+        return importedColumn;
+    }
+
+    public ADColumn importedColumn(String importedColumn) {
+        this.importedColumn = importedColumn;
+        return this;
+    }
+
+    public void setImportedColumn(String importedColumn) {
+        this.importedColumn = importedColumn;
     }
 
     public Boolean isMandatory() {
@@ -426,6 +474,9 @@ public class ADColumn extends AbstractAuditingEntity {
             ", fieldLength=" + getFieldLength() +
             ", key='" + isKey() + "'" +
             ", type='" + getType() + "'" +
+            ", foreignKey='" + isForeignKey() + "'" +
+            ", importedTable='" + getImportedTable() + "'" +
+            ", importedColumn='" + getImportedColumn() + "'" +
             ", mandatory='" + isMandatory() + "'" +
             ", mandatoryLogic='" + getMandatoryLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +

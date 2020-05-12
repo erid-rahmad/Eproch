@@ -59,6 +59,15 @@ public class ADColumnResourceIT {
     private static final ADColumnType DEFAULT_TYPE = ADColumnType.STRING;
     private static final ADColumnType UPDATED_TYPE = ADColumnType.INTEGER;
 
+    private static final Boolean DEFAULT_FOREIGN_KEY = false;
+    private static final Boolean UPDATED_FOREIGN_KEY = true;
+
+    private static final String DEFAULT_IMPORTED_TABLE = "AAAAAAAAAA";
+    private static final String UPDATED_IMPORTED_TABLE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_IMPORTED_COLUMN = "AAAAAAAAAA";
+    private static final String UPDATED_IMPORTED_COLUMN = "BBBBBBBBBB";
+
     private static final Boolean DEFAULT_MANDATORY = false;
     private static final Boolean UPDATED_MANDATORY = true;
 
@@ -130,6 +139,9 @@ public class ADColumnResourceIT {
             .fieldLength(DEFAULT_FIELD_LENGTH)
             .key(DEFAULT_KEY)
             .type(DEFAULT_TYPE)
+            .foreignKey(DEFAULT_FOREIGN_KEY)
+            .importedTable(DEFAULT_IMPORTED_TABLE)
+            .importedColumn(DEFAULT_IMPORTED_COLUMN)
             .mandatory(DEFAULT_MANDATORY)
             .mandatoryLogic(DEFAULT_MANDATORY_LOGIC)
             .readOnlyLogic(DEFAULT_READ_ONLY_LOGIC)
@@ -187,6 +199,9 @@ public class ADColumnResourceIT {
             .fieldLength(UPDATED_FIELD_LENGTH)
             .key(UPDATED_KEY)
             .type(UPDATED_TYPE)
+            .foreignKey(UPDATED_FOREIGN_KEY)
+            .importedTable(UPDATED_IMPORTED_TABLE)
+            .importedColumn(UPDATED_IMPORTED_COLUMN)
             .mandatory(UPDATED_MANDATORY)
             .mandatoryLogic(UPDATED_MANDATORY_LOGIC)
             .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
@@ -258,6 +273,9 @@ public class ADColumnResourceIT {
         assertThat(testADColumn.getFieldLength()).isEqualTo(DEFAULT_FIELD_LENGTH);
         assertThat(testADColumn.isKey()).isEqualTo(DEFAULT_KEY);
         assertThat(testADColumn.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testADColumn.isForeignKey()).isEqualTo(DEFAULT_FOREIGN_KEY);
+        assertThat(testADColumn.getImportedTable()).isEqualTo(DEFAULT_IMPORTED_TABLE);
+        assertThat(testADColumn.getImportedColumn()).isEqualTo(DEFAULT_IMPORTED_COLUMN);
         assertThat(testADColumn.isMandatory()).isEqualTo(DEFAULT_MANDATORY);
         assertThat(testADColumn.getMandatoryLogic()).isEqualTo(DEFAULT_MANDATORY_LOGIC);
         assertThat(testADColumn.getReadOnlyLogic()).isEqualTo(DEFAULT_READ_ONLY_LOGIC);
@@ -347,6 +365,9 @@ public class ADColumnResourceIT {
             .andExpect(jsonPath("$.[*].fieldLength").value(hasItem(DEFAULT_FIELD_LENGTH.intValue())))
             .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY.booleanValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].foreignKey").value(hasItem(DEFAULT_FOREIGN_KEY.booleanValue())))
+            .andExpect(jsonPath("$.[*].importedTable").value(hasItem(DEFAULT_IMPORTED_TABLE)))
+            .andExpect(jsonPath("$.[*].importedColumn").value(hasItem(DEFAULT_IMPORTED_COLUMN)))
             .andExpect(jsonPath("$.[*].mandatory").value(hasItem(DEFAULT_MANDATORY.booleanValue())))
             .andExpect(jsonPath("$.[*].mandatoryLogic").value(hasItem(DEFAULT_MANDATORY_LOGIC)))
             .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
@@ -377,6 +398,9 @@ public class ADColumnResourceIT {
             .andExpect(jsonPath("$.fieldLength").value(DEFAULT_FIELD_LENGTH.intValue()))
             .andExpect(jsonPath("$.key").value(DEFAULT_KEY.booleanValue()))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
+            .andExpect(jsonPath("$.foreignKey").value(DEFAULT_FOREIGN_KEY.booleanValue()))
+            .andExpect(jsonPath("$.importedTable").value(DEFAULT_IMPORTED_TABLE))
+            .andExpect(jsonPath("$.importedColumn").value(DEFAULT_IMPORTED_COLUMN))
             .andExpect(jsonPath("$.mandatory").value(DEFAULT_MANDATORY.booleanValue()))
             .andExpect(jsonPath("$.mandatoryLogic").value(DEFAULT_MANDATORY_LOGIC))
             .andExpect(jsonPath("$.readOnlyLogic").value(DEFAULT_READ_ONLY_LOGIC))
@@ -852,6 +876,214 @@ public class ADColumnResourceIT {
         // Get all the aDColumnList where type is null
         defaultADColumnShouldNotBeFound("type.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByForeignKeyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where foreignKey equals to DEFAULT_FOREIGN_KEY
+        defaultADColumnShouldBeFound("foreignKey.equals=" + DEFAULT_FOREIGN_KEY);
+
+        // Get all the aDColumnList where foreignKey equals to UPDATED_FOREIGN_KEY
+        defaultADColumnShouldNotBeFound("foreignKey.equals=" + UPDATED_FOREIGN_KEY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByForeignKeyIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where foreignKey not equals to DEFAULT_FOREIGN_KEY
+        defaultADColumnShouldNotBeFound("foreignKey.notEquals=" + DEFAULT_FOREIGN_KEY);
+
+        // Get all the aDColumnList where foreignKey not equals to UPDATED_FOREIGN_KEY
+        defaultADColumnShouldBeFound("foreignKey.notEquals=" + UPDATED_FOREIGN_KEY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByForeignKeyIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where foreignKey in DEFAULT_FOREIGN_KEY or UPDATED_FOREIGN_KEY
+        defaultADColumnShouldBeFound("foreignKey.in=" + DEFAULT_FOREIGN_KEY + "," + UPDATED_FOREIGN_KEY);
+
+        // Get all the aDColumnList where foreignKey equals to UPDATED_FOREIGN_KEY
+        defaultADColumnShouldNotBeFound("foreignKey.in=" + UPDATED_FOREIGN_KEY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByForeignKeyIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where foreignKey is not null
+        defaultADColumnShouldBeFound("foreignKey.specified=true");
+
+        // Get all the aDColumnList where foreignKey is null
+        defaultADColumnShouldNotBeFound("foreignKey.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByImportedTableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedTable equals to DEFAULT_IMPORTED_TABLE
+        defaultADColumnShouldBeFound("importedTable.equals=" + DEFAULT_IMPORTED_TABLE);
+
+        // Get all the aDColumnList where importedTable equals to UPDATED_IMPORTED_TABLE
+        defaultADColumnShouldNotBeFound("importedTable.equals=" + UPDATED_IMPORTED_TABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByImportedTableIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedTable not equals to DEFAULT_IMPORTED_TABLE
+        defaultADColumnShouldNotBeFound("importedTable.notEquals=" + DEFAULT_IMPORTED_TABLE);
+
+        // Get all the aDColumnList where importedTable not equals to UPDATED_IMPORTED_TABLE
+        defaultADColumnShouldBeFound("importedTable.notEquals=" + UPDATED_IMPORTED_TABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByImportedTableIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedTable in DEFAULT_IMPORTED_TABLE or UPDATED_IMPORTED_TABLE
+        defaultADColumnShouldBeFound("importedTable.in=" + DEFAULT_IMPORTED_TABLE + "," + UPDATED_IMPORTED_TABLE);
+
+        // Get all the aDColumnList where importedTable equals to UPDATED_IMPORTED_TABLE
+        defaultADColumnShouldNotBeFound("importedTable.in=" + UPDATED_IMPORTED_TABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByImportedTableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedTable is not null
+        defaultADColumnShouldBeFound("importedTable.specified=true");
+
+        // Get all the aDColumnList where importedTable is null
+        defaultADColumnShouldNotBeFound("importedTable.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllADColumnsByImportedTableContainsSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedTable contains DEFAULT_IMPORTED_TABLE
+        defaultADColumnShouldBeFound("importedTable.contains=" + DEFAULT_IMPORTED_TABLE);
+
+        // Get all the aDColumnList where importedTable contains UPDATED_IMPORTED_TABLE
+        defaultADColumnShouldNotBeFound("importedTable.contains=" + UPDATED_IMPORTED_TABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByImportedTableNotContainsSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedTable does not contain DEFAULT_IMPORTED_TABLE
+        defaultADColumnShouldNotBeFound("importedTable.doesNotContain=" + DEFAULT_IMPORTED_TABLE);
+
+        // Get all the aDColumnList where importedTable does not contain UPDATED_IMPORTED_TABLE
+        defaultADColumnShouldBeFound("importedTable.doesNotContain=" + UPDATED_IMPORTED_TABLE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByImportedColumnIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedColumn equals to DEFAULT_IMPORTED_COLUMN
+        defaultADColumnShouldBeFound("importedColumn.equals=" + DEFAULT_IMPORTED_COLUMN);
+
+        // Get all the aDColumnList where importedColumn equals to UPDATED_IMPORTED_COLUMN
+        defaultADColumnShouldNotBeFound("importedColumn.equals=" + UPDATED_IMPORTED_COLUMN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByImportedColumnIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedColumn not equals to DEFAULT_IMPORTED_COLUMN
+        defaultADColumnShouldNotBeFound("importedColumn.notEquals=" + DEFAULT_IMPORTED_COLUMN);
+
+        // Get all the aDColumnList where importedColumn not equals to UPDATED_IMPORTED_COLUMN
+        defaultADColumnShouldBeFound("importedColumn.notEquals=" + UPDATED_IMPORTED_COLUMN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByImportedColumnIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedColumn in DEFAULT_IMPORTED_COLUMN or UPDATED_IMPORTED_COLUMN
+        defaultADColumnShouldBeFound("importedColumn.in=" + DEFAULT_IMPORTED_COLUMN + "," + UPDATED_IMPORTED_COLUMN);
+
+        // Get all the aDColumnList where importedColumn equals to UPDATED_IMPORTED_COLUMN
+        defaultADColumnShouldNotBeFound("importedColumn.in=" + UPDATED_IMPORTED_COLUMN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByImportedColumnIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedColumn is not null
+        defaultADColumnShouldBeFound("importedColumn.specified=true");
+
+        // Get all the aDColumnList where importedColumn is null
+        defaultADColumnShouldNotBeFound("importedColumn.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllADColumnsByImportedColumnContainsSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedColumn contains DEFAULT_IMPORTED_COLUMN
+        defaultADColumnShouldBeFound("importedColumn.contains=" + DEFAULT_IMPORTED_COLUMN);
+
+        // Get all the aDColumnList where importedColumn contains UPDATED_IMPORTED_COLUMN
+        defaultADColumnShouldNotBeFound("importedColumn.contains=" + UPDATED_IMPORTED_COLUMN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByImportedColumnNotContainsSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where importedColumn does not contain DEFAULT_IMPORTED_COLUMN
+        defaultADColumnShouldNotBeFound("importedColumn.doesNotContain=" + DEFAULT_IMPORTED_COLUMN);
+
+        // Get all the aDColumnList where importedColumn does not contain UPDATED_IMPORTED_COLUMN
+        defaultADColumnShouldBeFound("importedColumn.doesNotContain=" + UPDATED_IMPORTED_COLUMN);
+    }
+
 
     @Test
     @Transactional
@@ -1822,6 +2054,9 @@ public class ADColumnResourceIT {
             .andExpect(jsonPath("$.[*].fieldLength").value(hasItem(DEFAULT_FIELD_LENGTH.intValue())))
             .andExpect(jsonPath("$.[*].key").value(hasItem(DEFAULT_KEY.booleanValue())))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].foreignKey").value(hasItem(DEFAULT_FOREIGN_KEY.booleanValue())))
+            .andExpect(jsonPath("$.[*].importedTable").value(hasItem(DEFAULT_IMPORTED_TABLE)))
+            .andExpect(jsonPath("$.[*].importedColumn").value(hasItem(DEFAULT_IMPORTED_COLUMN)))
             .andExpect(jsonPath("$.[*].mandatory").value(hasItem(DEFAULT_MANDATORY.booleanValue())))
             .andExpect(jsonPath("$.[*].mandatoryLogic").value(hasItem(DEFAULT_MANDATORY_LOGIC)))
             .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
@@ -1886,6 +2121,9 @@ public class ADColumnResourceIT {
             .fieldLength(UPDATED_FIELD_LENGTH)
             .key(UPDATED_KEY)
             .type(UPDATED_TYPE)
+            .foreignKey(UPDATED_FOREIGN_KEY)
+            .importedTable(UPDATED_IMPORTED_TABLE)
+            .importedColumn(UPDATED_IMPORTED_COLUMN)
             .mandatory(UPDATED_MANDATORY)
             .mandatoryLogic(UPDATED_MANDATORY_LOGIC)
             .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
@@ -1914,6 +2152,9 @@ public class ADColumnResourceIT {
         assertThat(testADColumn.getFieldLength()).isEqualTo(UPDATED_FIELD_LENGTH);
         assertThat(testADColumn.isKey()).isEqualTo(UPDATED_KEY);
         assertThat(testADColumn.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testADColumn.isForeignKey()).isEqualTo(UPDATED_FOREIGN_KEY);
+        assertThat(testADColumn.getImportedTable()).isEqualTo(UPDATED_IMPORTED_TABLE);
+        assertThat(testADColumn.getImportedColumn()).isEqualTo(UPDATED_IMPORTED_COLUMN);
         assertThat(testADColumn.isMandatory()).isEqualTo(UPDATED_MANDATORY);
         assertThat(testADColumn.getMandatoryLogic()).isEqualTo(UPDATED_MANDATORY_LOGIC);
         assertThat(testADColumn.getReadOnlyLogic()).isEqualTo(UPDATED_READ_ONLY_LOGIC);

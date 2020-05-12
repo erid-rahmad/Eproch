@@ -109,6 +109,15 @@ public class ADColumnQueryService extends QueryService<ADColumn> {
             if (criteria.getType() != null) {
                 specification = specification.and(buildSpecification(criteria.getType(), ADColumn_.type));
             }
+            if (criteria.getForeignKey() != null) {
+                specification = specification.and(buildSpecification(criteria.getForeignKey(), ADColumn_.foreignKey));
+            }
+            if (criteria.getImportedTable() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getImportedTable(), ADColumn_.importedTable));
+            }
+            if (criteria.getImportedColumn() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getImportedColumn(), ADColumn_.importedColumn));
+            }
             if (criteria.getMandatory() != null) {
                 specification = specification.and(buildSpecification(criteria.getMandatory(), ADColumn_.mandatory));
             }
