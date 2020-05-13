@@ -4,6 +4,7 @@ import Vue, { DirectiveOptions } from 'vue';
 import 'normalize.css';
 import ElementUI from 'element-ui';
 import SvgIcon from 'vue-svgicon';
+import VueShortkey from "vue-shortkey";
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
@@ -40,6 +41,7 @@ import ConfigurationService from '@/admin/configuration/configuration.service';
 import TrackerService from './admin/tracker/tracker.service';
 /* tslint:disable */
 
+import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import CountryService from '@/entities/country/country.service';
 import CurrencyService from '@/entities/currency/currency.service';
 import LocationService from '@/entities/location/location.service';
@@ -95,6 +97,8 @@ Vue.use(SvgIcon, {
   defaultHeight: '1em'
 });
 
+Vue.use(VueShortkey);
+
 // Register global directives
 Object.keys(directives).forEach(key => {
   Vue.directive(key, (directives as { [key: string]: DirectiveOptions })[key]);
@@ -135,6 +139,7 @@ new Vue({
     logsService: () => new LogsService(),
     metricsService: () => new MetricsService(),
     trackerService: () => trackerService,
+    dynamicWindowService: (baseApiUrl: string) => new DynamicWindowService(baseApiUrl),
     alertService: () => alertService,
     translationService: () => translationService,
     countryService: () => new CountryService(),

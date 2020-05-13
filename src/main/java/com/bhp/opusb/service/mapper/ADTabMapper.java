@@ -15,6 +15,7 @@ public interface ADTabMapper extends EntityMapper<ADTabDTO, ADTab> {
     @Mapping(source = "adClient.id", target = "adClientId")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adTable.id", target = "adTableId")
+    @Mapping(source = "adTable.name", target = "adTableName")
     @Mapping(source = "parentColumn.id", target = "parentColumnId")
     @Mapping(source = "foreignColumn.id", target = "foreignColumnId")
     @Mapping(source = "adWindow.id", target = "adWindowId")

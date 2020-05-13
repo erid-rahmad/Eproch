@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export default function buildCriteriaQueryString(options: Array<string> | object) {
+export default function buildCriteriaQueryString(options: any) {
   if (options) {
     let query = '';
 
@@ -13,7 +13,10 @@ export default function buildCriteriaQueryString(options: Array<string> | object
       }
     } else if (_.isArray(options)) {
       query = options.filter(option => option !== null).join('&');
+    } else if (_.isString(options)) {
+      query = options;
     }
+
     return query;
   }
   return '';

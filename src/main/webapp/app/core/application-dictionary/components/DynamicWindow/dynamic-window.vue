@@ -1,10 +1,7 @@
 <template>
   <div class="app-container">
-    <h2>{{ title }}</h2>
-    <action-toolbar
-      @toggle-view="switchView"
-      @new-record="prepareNew"
-    />
+    <h3>{{ title }}</h3>
+    <action-toolbar @toggle-view="switchView" />
     <splitpanes
       class="default-theme"
       horizontal
@@ -31,8 +28,16 @@
         size="30"
         style="position: relative"
         v-if="hasChildTabs">
-        <el-tabs class="tab-container" type="border-card">
-          <el-tab-pane v-for="tab in childTabs" :key="tab.id">
+        <el-tabs
+          class="tab-container"
+          type="border-card"
+          v-model="currentTab"
+        >
+          <el-tab-pane
+            v-for="(tab, index) in childTabs"
+            :key="tab.id"
+            :name="'' + index"
+          >
             <span slot="label">
               <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
             </span>
@@ -41,6 +46,8 @@
               :base-api-url="tab.targetEndpoint"
               :fields="tab.adfields"
               :filter-query="tab.filterQuery"
+              :parent-id="tab.parentId"
+              lazy-load
             />
           </el-tab-pane>
         </el-tabs>

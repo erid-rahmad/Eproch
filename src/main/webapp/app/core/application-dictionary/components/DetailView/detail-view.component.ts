@@ -1,5 +1,5 @@
 import Component from 'vue-class-component';
-import { Vue, InjectReactive } from 'vue-property-decorator';
+import { Vue, Inject } from 'vue-property-decorator';
 import VueFormJsonSchema from 'vue-form-json-schema'
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 
@@ -11,7 +11,7 @@ import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 export default class DetailView extends Vue {
   private baseApiUrl: string = '';
 
-  @InjectReactive()
+  @Inject('dynamicWindowService')
   private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
   
   model = {};

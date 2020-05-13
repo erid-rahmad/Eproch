@@ -9,6 +9,7 @@ import DynamicWindowService from './dynamic-window.service'
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
 import { IADTab } from '@/shared/model/ad-tab.model';
 import buildCriteriaQueryString from '@/shared/filter/filters';
+import ADColumnService from '@/entities/ad-column/ad-column.service';
 
 @Component({
   components: {
@@ -25,13 +26,20 @@ export default class DynamicWindow extends Vue {
   public gridView = true;
   public mainTab;
   public childTabs = [];
+  public currentTab: string = '';
   public mainTabBaseApiUrl: string = null;
-
-  @ProvideReactive()
-  public dynamicWindowService = (baseApiUrl: string) => new DynamicWindowService(baseApiUrl);
+  public parentId: number = 0;
 
   @Inject('aDTabService')
   private aDTabService: () => ADTabService;
+
+  @Inject('aDColumnService')
+  private aDColumnService: () => ADColumnService;
+
+  @Watch('currentTab')
+  currentTabChanged(tabName) {
+    console.log('tab changed to %s', tabName);
+  }
 
   created() {
     this.windowId = this.$route.meta.windowId;
@@ -65,14 +73,44 @@ export default class DynamicWindow extends Vue {
     }
   }
 
-  public loadChildTab(parent) {
-    console.log('loadChildTab. parent: %O', parent);
+  private async buildChildTabFilterQuery(tab: any, index: number, parentId: number): Promise<void> {
+    // Transient fields.
+    tab.foreignColumnName = await this.getForeignColumn(tab.adTableId);
+    tab.parentId = parentId;
+
+    tab.filterQuery = buildCriteriaQueryString([
+      `${tab.foreignColumnName}.equals=${parentId}`,
+      tab.filterQuery
+    ]);
   }
 
   /**
-   * Retrieve header/main tab which has no parent ID.
+   * This method is called once the parent tab record row changed.
+   * @param parent parent tab record.
    */
-  private retrieveTabs(parentTabId: number): void {
+  public async loadChildTab(parent: any) {
+    if (this.childTabs.length === 0) {
+      this.retrieveTabs(this.mainTab.id, (tab, index) => {
+        this.buildChildTabFilterQuery(tab, index, parent.id);
+      });
+    } else {
+      const index = parseInt(this.currentTab);
+      let tab = this.childTabs[index];
+      tab.parentId = parent.id;
+      tab.filterQuery = buildCriteriaQueryString([
+        `${tab.foreignColumnName}.equals=${parent.id}`
+      ]);
+
+      // Use Vue.$set to notify array update.
+      this.$set(this.childTabs, index, tab);
+    }
+  }
+
+  /**
+   * Retrieve tab(s).
+   * @param parentTabId Main/header tab don't have it.
+   */
+  private retrieveTabs(parentTabId: number, callback?: (tab: IADTab, index: number) => void): void {
     let params = {
       'adWindowId.equals': this.windowId,
     };
@@ -87,19 +125,30 @@ export default class DynamicWindow extends Vue {
       .retrieveWithFilter(params)
       .then((res) => {
         const tabs = res.data;
-        for (let tab of tabs) {
-          if (parentTabId === null) {
-            this.mainTab = tab;
-            this.mainTabBaseApiUrl = tab.targetEndpoint
-            this.retrieveTabs(tab.id)
-          } else {
-            tab.filterQuery = buildCriteriaQueryString([
-              `parentTabId.equals=${this.mainTab.id}`,
-              tab.filterQuery
-            ])
+        for (let [index, tab] of tabs.entries()) {
+          if (parentTabId) {
+            // Child always has parent.
+            if (callback) callback(tab, index);
+            if (index === 0) {
+              this.currentTab = '' + index;
+            }
             this.childTabs.push(tab);
+          } else {
+            this.mainTab = tab;
+            this.mainTabBaseApiUrl = tab.targetEndpoint;
           }
         }
       });
+  }
+
+  private async getForeignColumn(tableId: number) {
+    const response = await this.aDColumnService()
+      .retrieveWithFilter({
+        'foreignKey.equals': true,
+        'importedTable.equals': this.mainTab.adTableName,
+        'adTableId.equals': tableId
+      });
+
+    return response?.data[0]?.name;
   }
 }

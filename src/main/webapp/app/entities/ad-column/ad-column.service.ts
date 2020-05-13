@@ -3,6 +3,7 @@ import axios from 'axios';
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 
 import { IADColumn } from '@/shared/model/ad-column.model';
+import buildCriteriaQueryString from '@/shared/filter/filters';
 
 const baseApiUrl = 'api/ad-columns';
 
@@ -24,6 +25,22 @@ export default class ADColumnService {
     return new Promise<any>((resolve, reject) => {
       axios
         .get(baseApiUrl + `?${buildPaginationQueryOpts(paginationQuery)}`)
+        .then(function(res) {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public retrieveWithFilter(criteriaQuery: any, paginationQuery?: any): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      let criteria = buildCriteriaQueryString(criteriaQuery);
+      const pagination = buildPaginationQueryOpts(paginationQuery);
+      const separator = pagination.length ? '&' : '';
+      axios
+        .get(baseApiUrl + `?${criteria}${separator}${pagination}`)
         .then(function(res) {
           resolve(res);
         })

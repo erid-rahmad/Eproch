@@ -8,28 +8,17 @@
 
     
     <!--
-        Added the entity ADColumn.
+        Updated the entity ADColumn.
     -->
-    <changeSet id="20200506150500-1" author="jhipster">
-        <dropColumn tableName="ad_column" columnName="min_value" />
-        <dropColumn tableName="ad_column" columnName="max_value" />
+    <changeSet id="20200429152800-1" author="jhipster">
         <addColumn tableName="ad_column">
-            <column name="sql_name" type="varchar(255)">
+            <column name="foreign_key" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="field_length" type="bigint">
+            <column name="imported_table" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="min_length" type="integer">
-                <constraints nullable="true" />
-            </column>
-            <column name="max_length" type="integer">
-                <constraints nullable="true" />
-            </column>
-            <column name="min_value" type="bigint">
-                <constraints nullable="true" />
-            </column>
-            <column name="max_value" type="bigint">
+            <column name="imported_column" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
         </addColumn>

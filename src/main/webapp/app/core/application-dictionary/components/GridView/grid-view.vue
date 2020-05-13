@@ -3,33 +3,68 @@
     class="grid-view"
   >
     <el-table
+      v-loading="isFetching"
       ref="grid"
       highlight-current-row
       :height="height"
       size="small"
       style="width: 100%"
+      stripe
       :data="gridData"
       :default-sort="gridSchema.defaultSort"
       :empty-text="gridSchema.emptyText"
       @current-change="changeCurrentRow"
       @sort-change="changeOrder"
       @selection-change="changeRowSelection"
+      @row-dblclick="activateInlineEditing"
     >
       <el-table-column
+        fixed
         type="selection"
-        width="55">
+        width="42">
       </el-table-column>
       <el-table-column
         v-for="field in gridFields"
+        :fixed="isFixed(field)"
         :key="field.id"
         :prop="field.adColumn.name"
         :label="field.name"
+        :width="getFieldWidth(field)"
+        min-width="144"
         sortable
-      />
-      <el-table-column fixed="right" width="96">
+      >
+        <template slot-scope="scope">
+          <el-switch
+            v-if="isActiveStatusField(scope.column)"
+            v-model="scope.row[scope.column.property]"
+            :disabled="!scope.row.editing"
+          />
+          <el-checkbox
+            v-else-if="isBooleanField(field)"
+            v-model="scope.row[scope.column.property]"
+            :disabled="!scope.row.editing"
+          />
+          <el-input
+            v-else-if="scope.row.editing && isStringField(field)"
+            v-model="scope.row[scope.column.property]"
+            size="small"
+            clearable
+          />
+          <el-input-number
+            v-else-if="scope.row.editing && isNumericField(field)"
+            v-model="scope.row[scope.column.property]"
+            controls-position="right"
+            size="small"
+            :min="getMinValue(field)"
+            :max="getMaxValue(field)"
+          />
+          <span v-else>{{ getFieldValue(scope.row, scope.column.property) }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column fixed="left" width="66">
         <template slot-scope="scope">
           <el-button
-            @click="edit(scope.row)"
+            @click="activateInlineEditing(scope.row)"
             type="primary"
             size="mini"
             icon="el-icon-edit"

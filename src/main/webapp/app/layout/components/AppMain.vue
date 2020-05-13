@@ -4,7 +4,7 @@
       name="fade-transform"
       mode="out-in"
     >
-      <keep-alive :include="cachedViews">
+      <keep-alive>
         <router-view :key="key" />
       </keep-alive>
     </transition>
@@ -24,7 +24,7 @@ export default class extends Vue {
   }
 
   get key() {
-    return this.$route.path
+    return this.$route.fullPath
   }
 }
 </script>

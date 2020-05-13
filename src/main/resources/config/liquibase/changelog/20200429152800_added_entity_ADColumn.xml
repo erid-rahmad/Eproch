@@ -27,15 +27,6 @@
             <column name="type" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="foreign_key" type="boolean">
-                <constraints nullable="true" />
-            </column>
-            <column name="imported_table" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="imported_column" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="mandatory" type="boolean">
                 <constraints nullable="true" />
             </column>
@@ -116,9 +107,6 @@
             <column name="description" type="string"/>
             <column name="key" type="boolean"/>
             <column name="type" type="string"/>
-            <column name="foreign_key" type="boolean"/>
-            <column name="imported_table" type="string"/>
-            <column name="imported_column" type="string"/>
             <column name="mandatory" type="boolean"/>
             <column name="mandatory_logic" type="string"/>
             <column name="read_only_logic" type="string"/>
