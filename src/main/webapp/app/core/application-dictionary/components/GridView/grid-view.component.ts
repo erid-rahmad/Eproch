@@ -3,10 +3,12 @@ import { Vue, Watch, Inject } from 'vue-property-decorator';
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import { ElTable } from 'element-ui/types/table';
 import { IADField } from '@/shared/model/ad-field.model';
-import { ADColumnType } from "@/shared/model/ad-column.model";
+import { ADColumnType } from '@/shared/model/ad-column.model';
+import { ActionToolbarEventBus } from '../ActionToolbar/action-toolbar-event-bus';
 
 const GridViewProps = Vue.extend({
   props: {
+    tabName: String,
     baseApiUrl: String,
     filterQuery: String,
     orderQuery: String,
@@ -30,7 +32,7 @@ const GridViewProps = Vue.extend({
 export default class GridView extends GridViewProps {
   @Inject('dynamicWindowService')
   private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
-  
+
   height: string | number = 'auto';
   gridSchema = {
     defaultSort: {},
@@ -45,7 +47,7 @@ export default class GridView extends GridViewProps {
   totalItems = 0;
   isFetching = false;
   gridData: Array<any> = [];
-  gridFields: Array<IADField> = [];
+  gridFields: Array<any> = [];
 
   @Watch('baseApiUrl')
   onBaseApiUrlChange(url: string) {
@@ -57,7 +59,9 @@ export default class GridView extends GridViewProps {
 
   @Watch('parentId')
   onParentIdChange(id: any) {
-    this.retrieveAllRecords();
+    if (id) {
+      this.retrieveAllRecords();
+    }
   }
 
   @Watch('fields')
@@ -68,6 +72,11 @@ export default class GridView extends GridViewProps {
   created() {
     this.onFieldsChange(this.fields);
     this.onBaseApiUrlChange(this.baseApiUrl);
+    ActionToolbarEventBus.$on('add-record', this.addBlankRow);
+  }
+
+  beforeDestroy() {
+    ActionToolbarEventBus.$off('add-record', this.addBlankRow);
   }
 
   public clear(): void {
@@ -76,7 +85,7 @@ export default class GridView extends GridViewProps {
   }
 
   changeCurrentRow(row: any) {
-    this.$emit('current-row-change', row)
+    this.$emit('current-row-change', row);
   }
 
   changeRowSelection(rows: Array<any>) {
@@ -98,10 +107,10 @@ export default class GridView extends GridViewProps {
       .then(
         res => {
           this.gridData = res.data.map((item: any) => {
-            this.$set(item, 'editing', false)
+            this.$set(item, 'editing', false);
             return item;
           });
-          
+
           this.totalItems = Number(res.headers['x-total-count']);
           this.queryCount = this.totalItems;
           this.isFetching = false;
@@ -179,20 +188,21 @@ export default class GridView extends GridViewProps {
   }
 
   public isStringField(field: any) {
-    return field.adColumn.type === ADColumnType.STRING
+    return field.adColumn.type === ADColumnType.STRING;
   }
 
   public isNumericField(field: any) {
-    return field.adColumn.type === ADColumnType.BIG_DECIMAL
-      || field.adColumn.type === ADColumnType.DOUBLE
-      || field.adColumn.type === ADColumnType.FLOAT
-      || field.adColumn.type === ADColumnType.INTEGER
-      || field.adColumn.type === ADColumnType.LONG;
+    return (
+      field.adColumn.type === ADColumnType.BIG_DECIMAL ||
+      field.adColumn.type === ADColumnType.DOUBLE ||
+      field.adColumn.type === ADColumnType.FLOAT ||
+      field.adColumn.type === ADColumnType.INTEGER ||
+      field.adColumn.type === ADColumnType.LONG
+    );
   }
 
   public isDateField(field: any) {
-    return field.adColumn.type === ADColumnType.LOCAL_DATE
-      || field.adColumn.type === ADColumnType.ZONED_DATE_TIME;
+    return field.adColumn.type === ADColumnType.LOCAL_DATE || field.adColumn.type === ADColumnType.ZONED_DATE_TIME;
   }
 
   public isDateTimeField(field: any) {
@@ -208,6 +218,13 @@ export default class GridView extends GridViewProps {
   }
 
   public isActiveStatusField(column: any) {
-    return column.property === 'active'
+    return column.property === 'active';
+  }
+
+  private addBlankRow() {
+    console.log('gridFields: %O', this.gridFields);
+    /* for (const field of this.gridFields) {
+      console.log('prop: %s', field.adColumn.name);
+    } */
   }
 }

@@ -39,3 +39,19 @@ id;name;description;hint;static_text;static_field;label_only;show_label;show_in_
 38;Order Query;Default order for sorting records;;;false;false;true;true;true;;;;true;2;8;true;1;1;5558;4
 39;Table;The linked table;;;false;false;true;true;true;;;;true;1;4;true;1;1;5560;4
 40;Parent Tab;The parent tab;;;false;false;true;true;true;;;;true;1;4;true;1;1;5551;4
+41;Name;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5432;5
+42;Description;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5434;5
+43;Hint;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5436;5
+44;Static Text;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5437;5
+45;Display Logic;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5438;5
+46;Is Static Field;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5439;5
+47;Label Only;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5442;5
+48;Active;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5443;5
+49;Show Label;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5444;5
+50;Show on Grid;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5445;5
+51;Show on Detail;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5448;5
+52;Grid Sequence;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5501;5
+53;Detail Sequence;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5446;5
+54;Reference Key;;;;false;false;true;true;true;;;;true;1;4;true;1;1;7208;5
+55;Column;;;;false;false;true;true;true;;;;true;1;4;true;1;1;7210;5
+56;Writable;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5447;4

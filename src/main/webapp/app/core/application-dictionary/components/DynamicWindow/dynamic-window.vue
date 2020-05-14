@@ -1,22 +1,29 @@
 <template>
   <div class="app-container">
     <h3>{{ title }}</h3>
-    <action-toolbar @toggle-view="switchView" />
+    <action-toolbar
+      @toggle-view="switchView"
+      :at-window-root="tabStack.length <= 1"
+      :at-last-tab="childTabs.length === 0"
+    />
     <splitpanes
       class="default-theme"
       horizontal
       style="height: calc(100% - 96px)"
       @ready="updateHeight"
-      @resize="updateHeight"
-      @pane-maximize="updateHeight">
+      @resized="updateHeight"
+    >
       <pane ref="mainPane">
         <transition name="fade" mode="out-in">
           <keep-alive>
             <grid-view
-              ref="mainGrid"
               v-if="gridView"
-              :base-api-url="mainTabBaseApiUrl"
-              :fields="mainTabFields()"
+              ref="mainGrid"
+              :base-api-url="mainTab.targetEndpoint"
+              :fields="mainTab.adfields"
+              :filter-query="mainTab.filterQuery"
+              :parent-id="parentRecordId()"
+              :tab-name="mainTab.name"
               @current-row-change="loadChildTab"
             />
             <detail-view v-else/>
@@ -24,19 +31,26 @@
         </transition>
       </pane>
       <pane
+        v-if="hasChildTabs"
         ref="linePane"
         size="30"
         style="position: relative"
-        v-if="hasChildTabs">
+      >
         <el-tabs
+          v-model="currentTab"
           class="tab-container"
           type="border-card"
-          v-model="currentTab"
+          @tab-click="handleTabClick"
         >
           <el-tab-pane
             v-for="(tab, index) in childTabs"
             :key="tab.id"
+            ref="tabPane"
             :name="'' + index"
+            :data-tab-id="tab.id"
+            :data-parent-tab-id="tab.parentTabId"
+            :data-parent-record-id="tab.parentId"
+            :data-parent-table-name="mainTab.adTableName"
           >
             <span slot="label">
               <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
@@ -47,6 +61,7 @@
               :fields="tab.adfields"
               :filter-query="tab.filterQuery"
               :parent-id="tab.parentId"
+              :tab-name="tab.name"
               lazy-load
             />
           </el-tab-pane>

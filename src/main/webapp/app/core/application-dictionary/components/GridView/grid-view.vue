@@ -5,12 +5,12 @@
     <el-table
       v-loading="isFetching"
       ref="grid"
+      :data="gridData"
       highlight-current-row
       :height="height"
       size="small"
       style="width: 100%"
       stripe
-      :data="gridData"
       :default-sort="gridSchema.defaultSort"
       :empty-text="gridSchema.emptyText"
       @current-change="changeCurrentRow"
@@ -25,8 +25,8 @@
       </el-table-column>
       <el-table-column
         v-for="field in gridFields"
-        :fixed="isFixed(field)"
         :key="field.id"
+        :fixed="isFixed(field)"
         :prop="field.adColumn.name"
         :label="field.name"
         :width="getFieldWidth(field)"

@@ -4,9 +4,9 @@ declare module '*.vue' {
 }
 
 declare module '*.gif' {
-  export const gif: any
+  export const gif: any;
 }
 
-declare module 'vue-shortkey'
-declare module 'vue-form-json-schema'
-declare module 'splitpanes'
+declare module 'vue-shortkey';
+declare module 'vue-form-json-schema';
+declare module 'splitpanes';
