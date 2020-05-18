@@ -1,6 +1,8 @@
 package com.bhp.opusb.service.dto;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
@@ -26,6 +28,8 @@ public class ADReferenceDTO extends AbstractAuditingDTO {
     private ADReferenceType referenceType;
 
     private Boolean active;
+
+    private Set<ADReferenceListDTO> aDReferenceLists = new HashSet<>();
 
     
     public Long getId() {
@@ -74,6 +78,14 @@ public class ADReferenceDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Set<ADReferenceListDTO> getADReferenceLists() {
+        return aDReferenceLists;
+    }
+
+    public void setADReferenceLists(Set<ADReferenceListDTO> aDReferenceLists) {
+        this.aDReferenceLists = aDReferenceLists;
     }
 
     @Override

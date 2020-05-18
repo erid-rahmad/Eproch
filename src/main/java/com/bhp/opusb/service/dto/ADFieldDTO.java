@@ -46,7 +46,6 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
-
     private Long adClientId;
 
     private Long adOrganizationId;
@@ -57,6 +56,10 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     private Long adTabId;
     
+    private ADReferenceDTO adReference;
+
+    private ADColumnDTO adColumn;
+
     public Long getId() {
         return id;
     }
@@ -231,6 +234,22 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     public void setAdTabId(Long aDTabId) {
         this.adTabId = aDTabId;
+    }
+
+    public ADReferenceDTO getAdReference() {
+        return adReference;
+    }
+
+    public void setAdReference(ADReferenceDTO adReference) {
+        this.adReference = adReference;
+    }
+
+    public ADColumnDTO getAdColumn() {
+        return adColumn;
+    }
+
+    public void setAdColumn(ADColumnDTO adColumn) {
+        this.adColumn = adColumn;
     }
 
     @Override

@@ -6,9 +6,6 @@ import java.util.Set;
 
 import javax.validation.constraints.NotNull;
 
-import com.bhp.opusb.domain.ADField;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADTab} entity.
  */
@@ -53,8 +50,7 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     private Long parentTabId;
     
-    @JsonProperty("adFields")
-    private Set<ADField> aDFields = new HashSet<>();
+    private Set<ADFieldDTO> aDFields = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -200,11 +196,11 @@ public class ADTabDTO extends AbstractAuditingDTO {
         this.parentTabId = aDTabId;
     }
 
-    public Set<ADField> getADFields() {
+    public Set<ADFieldDTO> getADFields() {
         return aDFields;
     }
 
-    public void setADFields(Set<ADField> aDFields) {
+    public void setADFields(Set<ADFieldDTO> aDFields) {
         this.aDFields = aDFields;
     }
 

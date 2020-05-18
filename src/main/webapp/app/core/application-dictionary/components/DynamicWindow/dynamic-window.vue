@@ -25,6 +25,7 @@
               :parent-id="parentRecordId()"
               :tab-name="mainTab.name"
               @current-row-change="loadChildTab"
+              main-tab
             />
             <detail-view v-else/>
           </keep-alive>

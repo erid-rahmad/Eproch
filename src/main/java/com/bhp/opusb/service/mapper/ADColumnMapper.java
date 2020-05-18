@@ -15,13 +15,11 @@ public interface ADColumnMapper extends EntityMapper<ADColumnDTO, ADColumn> {
 
     @Mapping(source = "adClient.id", target = "adClientId")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
-    @Mapping(source = "adReference.id", target = "adReferenceId")
     @Mapping(source = "adTable.id", target = "adTableId")
     ADColumnDTO toDto(ADColumn aDColumn);
 
     @Mapping(source = "adClientId", target = "adClient")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
-    @Mapping(source = "adReferenceId", target = "adReference")
     @Mapping(source = "adTableId", target = "adTable")
     ADColumn toEntity(ADColumnDTO aDColumnDTO);
 

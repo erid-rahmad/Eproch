@@ -31,6 +31,7 @@
         :label="field.name"
         :width="getFieldWidth(field)"
         min-width="144"
+        show-overflow-tooltip
         sortable
       >
         <template slot-scope="scope">
@@ -44,6 +45,19 @@
             v-model="scope.row[scope.column.property]"
             :disabled="!scope.row.editing"
           />
+          <el-select
+            v-else-if="scope.row.editing && hasReferenceList(field)"
+            v-model="scope.row[scope.column.property]"
+            size="small"
+            filterable
+          >
+            <el-option
+              v-for="item in getReferenceList(field)"
+              :key="item.value"
+              :label="item.name"
+              :value="item.value"
+            />
+          </el-select>
           <el-input
             v-else-if="scope.row.editing && isStringField(field)"
             v-model="scope.row[scope.column.property]"

@@ -5,9 +5,16 @@ import { ElTable } from 'element-ui/types/table';
 import { IADField } from '@/shared/model/ad-field.model';
 import { ADColumnType } from '@/shared/model/ad-column.model';
 import { ActionToolbarEventBus } from '../ActionToolbar/action-toolbar-event-bus';
+import schema from 'async-validator';
+import { getValidatorType } from '@/utils/validate';
+import { ADReferenceType } from '@/shared/model/ad-reference.model';
 
 const GridViewProps = Vue.extend({
   props: {
+    mainTab: {
+      type: Boolean,
+      default: false
+    },
     tabName: String,
     baseApiUrl: String,
     filterQuery: String,
@@ -49,6 +56,11 @@ export default class GridView extends GridViewProps {
   gridData: Array<any> = [];
   gridFields: Array<any> = [];
 
+  // Inline editing mode needs these data.
+  currentRecord: object = {};
+  validationRule: object = {};
+  editing = false;
+
   @Watch('baseApiUrl')
   onBaseApiUrlChange(url: string) {
     // Immediatelly load records if it is orphan tab.
@@ -66,6 +78,8 @@ export default class GridView extends GridViewProps {
 
   @Watch('fields')
   onFieldsChange(fields: Array<IADField>) {
+    if (this.mainTab)
+      console.log('fields: %O', fields.map((field: any) => field.adColumn));
     this.gridFields = fields.filter(field => field.showInGrid);
   }
 
@@ -73,10 +87,12 @@ export default class GridView extends GridViewProps {
     this.onFieldsChange(this.fields);
     this.onBaseApiUrlChange(this.baseApiUrl);
     ActionToolbarEventBus.$on('add-record', this.addBlankRow);
+    ActionToolbarEventBus.$on('save-record', this.saveRecord);
   }
 
   beforeDestroy() {
     ActionToolbarEventBus.$off('add-record', this.addBlankRow);
+    ActionToolbarEventBus.$off('save-record', this.saveRecord);
   }
 
   public clear(): void {
@@ -84,12 +100,48 @@ export default class GridView extends GridViewProps {
     this.retrieveAllRecords();
   }
 
-  changeCurrentRow(row: any) {
+  public changeCurrentRow(row: any) {
+    this.editing = false;
+    this.currentRecord['editing'] = this.editing;
+    this.currentRecord = row;
     this.$emit('current-row-change', row);
   }
 
-  changeRowSelection(rows: Array<any>) {
+  public changeRowSelection(rows: Array<any>) {
     this.$emit('row-selection-change', rows);
+  }
+
+  public activateInlineEditing(row: any) {
+    if (this.editing && row === this.currentRecord){
+      return;
+    }
+    row.editing = !row.editing;
+    this.editing = row.editing;
+  }
+
+  private addBlankRow() {
+    if (this.mainTab) {
+      this.currentRecord['editing'] = true;
+      for (const field of this.fields) {
+        const column = field.adColumn;
+        console.log('prop: %O', column);
+        this.currentRecord[column.name] = null;
+        this.validationRule[column.name] = {
+          type: getValidatorType(column.type),
+          required: column.mandatory
+        }
+      }
+      console.log('current record: %O', this.currentRecord);
+    }
+  }
+
+  private saveRecord() {
+    if (this.mainTab) {
+      setTimeout(() => {
+        this.editing = false;
+        this.currentRecord['editing'] = this.editing;
+      }, 1000)
+    }
   }
 
   public retrieveAllRecords(): void {
@@ -160,10 +212,6 @@ export default class GridView extends GridViewProps {
     return result;
   }
 
-  public activateInlineEditing(row: any) {
-    row.editing = !row.editing;
-  }
-
   public isFixed(field: any) {
     if (field.adColumn.name === 'active') {
       return 'right';
@@ -185,6 +233,15 @@ export default class GridView extends GridViewProps {
 
   public getMaxValue(field: any) {
     return field.adColumn.maxValue || Infinity;
+  }
+
+  public getReferenceList(field: any) {
+    return field?.adReference?.adreferenceLists || field.adColumn.adReference.adreferenceLists;
+  }
+
+  public hasReferenceList(field: any) {
+    return field.adReference?.referenceType === ADReferenceType.LIST
+      || field.adColumn.adReference?.referenceType === ADReferenceType.LIST;
   }
 
   public isStringField(field: any) {
@@ -219,12 +276,5 @@ export default class GridView extends GridViewProps {
 
   public isActiveStatusField(column: any) {
     return column.property === 'active';
-  }
-
-  private addBlankRow() {
-    console.log('gridFields: %O', this.gridFields);
-    /* for (const field of this.gridFields) {
-      console.log('prop: %s', field.adColumn.name);
-    } */
   }
 }

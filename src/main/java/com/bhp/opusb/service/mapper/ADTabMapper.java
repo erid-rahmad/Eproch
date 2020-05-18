@@ -1,6 +1,5 @@
 package com.bhp.opusb.service.mapper;
 
-
 import com.bhp.opusb.domain.*;
 import com.bhp.opusb.service.dto.ADTabDTO;
 
@@ -9,7 +8,8 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ADTab} and its DTO {@link ADTabDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADClientMapper.class, ADOrganizationMapper.class, ADTableMapper.class, ADColumnMapper.class, ADWindowMapper.class})
+@Mapper(componentModel = "spring", uses = { ADClientMapper.class, ADOrganizationMapper.class, ADTableMapper.class,
+        ADColumnMapper.class, ADFieldMapper.class, ADWindowMapper.class })
 public interface ADTabMapper extends EntityMapper<ADTabDTO, ADTab> {
 
     @Mapping(source = "adClient.id", target = "adClientId")

@@ -3,15 +3,15 @@ package com.bhp.opusb.service.mapper;
 
 import com.bhp.opusb.domain.*;
 import com.bhp.opusb.service.dto.ADReferenceDTO;
+import com.bhp.opusb.service.dto.ADReferenceListDTO;
 
 import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link ADReference} and its DTO {@link ADReferenceDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = { ADReferenceListDTO.class })
 public interface ADReferenceMapper extends EntityMapper<ADReferenceDTO, ADReference> {
-
 
     @Mapping(target = "aDReferenceLists", ignore = true)
     @Mapping(target = "removeADReferenceList", ignore = true)

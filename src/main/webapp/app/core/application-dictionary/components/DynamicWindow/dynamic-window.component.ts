@@ -41,8 +41,12 @@ export default class DynamicWindow extends Vue {
    */
   public tabStack: any[] = [];
 
+  /**
+   * Prevents load the same child tabs multiple times.
+   */
   private loadingChildTabs = false;
 
+  // Start of computed properties.
   get mainTab() {
     if (this.tabStack.length === 0) {
       return new ADTab();
@@ -54,12 +58,13 @@ export default class DynamicWindow extends Vue {
   get hasChildTabs() {
     return this.childTabs.length > 0;
   }
+  // End of computed properties.
 
   @Watch('currentTab')
   currentTabChanged(tabName) {
   }
 
-  // LIFECYCLE EVENTS
+  // Start of lifecycle events.
   created() {
     this.windowId = this.$route.meta.windowId;
     this.title = this.$t(`route.${this.$route.meta.title}`).toString();
@@ -73,7 +78,9 @@ export default class DynamicWindow extends Vue {
   beforeDestroy() {
     ActionToolbarEventBus.$off('tab-navigate', this.navigateTab);
   }
+  // End of lifecycle events.
 
+  // Start of reactive methods.
   public mainTabName() {
     return this.mainTab?.name;
   }
@@ -89,13 +96,21 @@ export default class DynamicWindow extends Vue {
   public parentRecordId() {
     return this.mainTab?.parentId || 0;
   }
+  // End of reactive methods.
 
+  /**
+   * Switch between grid and detail view of the main tab.
+   * @param value Either true for grid view or false for detail view.
+   */
   public switchView(value: boolean) {
     this.gridView = value;
   }
 
+  /**
+   * grid-view's height need to be updated to maintain its fixed header position.
+   */
   public updateHeight() {
-    (<any>this.$refs.mainGrid).syncHeight();
+    (<any>this.$refs.mainGrid)?.syncHeight();
 
     if (this.hasChildTabs) {
       (<Array<any>>this.$refs.lineGrid).forEach(grid => {
@@ -104,7 +119,12 @@ export default class DynamicWindow extends Vue {
     }
   }
 
-  private navigateTab(value) {
+  /**
+   * Navigate between parent and child tab.
+   * @param value The direction of tab navigation,
+   *              negative value to go to parent tab, otherwise go to children tab.
+   */
+  private navigateTab(value: number) {
     if (value < 0 && this.tabStack.length > 1) {
       this.childTabs = [];
       this.currentTab = '';
@@ -117,10 +137,6 @@ export default class DynamicWindow extends Vue {
     }
   }
 
-  public handleMaximizedPane(pane: any) {
-    this.updateHeight();
-  }
-
   public handleTabClick(tab: any) {
     const data = tab.$el.dataset;
     const tabId = parseInt(data.tabId);
@@ -129,7 +145,6 @@ export default class DynamicWindow extends Vue {
     const parentTableName = data.parentTableName;
     this.childTabs = [];
     this.currentTab = '';
-    // this.mainTab = null;
     this.mainTabBaseApiUrl = null;
     this.retrieveTabs(parentTabId, tabId, (tab, index) => {
       this.buildChildTabFilterQuery(tab, index, parentRecordId, parentTableName);
@@ -234,8 +249,6 @@ export default class DynamicWindow extends Vue {
             }
             this.childTabs.push(tab);
           } else {
-            // this.mainTab = tab;
-            // this.mainTabBaseApiUrl = tab.targetEndpoint;
             this.tabStack.push(tab);
           }
         }
