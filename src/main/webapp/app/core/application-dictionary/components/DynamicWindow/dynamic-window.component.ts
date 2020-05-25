@@ -10,7 +10,6 @@ import { IADTab, ADTab } from '@/shared/model/ad-tab.model';
 import buildCriteriaQueryString from '@/shared/filter/filters';
 import ADColumnService from '@/entities/ad-column/ad-column.service';
 import _ from 'lodash';
-import { ActionToolbarEventBus } from '../ActionToolbar/action-toolbar-event-bus';
 
 @Component({
   components: {
@@ -34,10 +33,11 @@ export default class DynamicWindow extends Vue {
   public childTabs = [];
   public currentTab: string = '';
   public mainTabBaseApiUrl: string = null;
+  private mainToolbarEventBus = new Vue();
 
   /**
    * Stack of the main tab. The last item in the stack
-   * is considered main tab.
+   * is considered as main tab.
    */
   public tabStack: any[] = [];
 
@@ -64,19 +64,19 @@ export default class DynamicWindow extends Vue {
   currentTabChanged(tabName) {
   }
 
-  // Start of lifecycle events.
   created() {
+    console.log('window created with route: %O', this.$route);
     this.windowId = this.$route.meta.windowId;
     this.title = this.$t(`route.${this.$route.meta.title}`).toString();
     this.retrieveTabs(null);
   }
 
   mounted() {
-    ActionToolbarEventBus.$on('tab-navigate', this.navigateTab);
+    this.mainToolbarEventBus.$on('tab-navigate', this.navigateTab);
   }
 
   beforeDestroy() {
-    ActionToolbarEventBus.$off('tab-navigate', this.navigateTab);
+    this.mainToolbarEventBus.$off('tab-navigate', this.navigateTab);
   }
   // End of lifecycle events.
 
@@ -156,6 +156,7 @@ export default class DynamicWindow extends Vue {
     tab.foreignColumnName = await this.getForeignColumn(tab.adTableId, parentTableName);
     tab.parentId = parentId;
 
+    // Ensure to link the child tab with exactly its parent.
     tab.filterQuery = buildCriteriaQueryString([
       `${tab.foreignColumnName}.equals=${parentId}`,
       tab.filterQuery
@@ -252,10 +253,17 @@ export default class DynamicWindow extends Vue {
             this.tabStack.push(tab);
           }
         }
+      })
+      .finally(() => {
         this.loadingChildTabs = false;
       });
   }
 
+  /**
+   * Retrieve the foreign key column name.
+   * @param tableId Identifier of the table to inspect
+   * @param parentTableName The imported parent table name or the main tab's table name if empty.
+   */
   private async getForeignColumn(tableId: number, parentTableName?: string) {
     const response = await this.aDColumnService()
       .retrieveWithFilter({

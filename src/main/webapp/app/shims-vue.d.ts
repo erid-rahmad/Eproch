@@ -9,5 +9,5 @@ declare module '*.gif' {
 
 declare module 'async-validator';
 declare module 'splitpanes';
-declare module 'vue-shortkey';
+declare module 'v-hotkey';
 declare module 'vue-form-json-schema';

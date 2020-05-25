@@ -31,48 +31,90 @@
         :label="field.name"
         :width="getFieldWidth(field)"
         min-width="144"
-        show-overflow-tooltip
-        sortable
+        :show-overflow-tooltip="!editing"
+        sortable="custom"
       >
         <template slot-scope="scope">
           <el-switch
             v-if="isActiveStatusField(scope.column)"
+            :ref="scope.column.property"
             v-model="scope.row[scope.column.property]"
             :disabled="!scope.row.editing"
           />
           <el-checkbox
             v-else-if="isBooleanField(field)"
+            :ref="scope.column.property"
             v-model="scope.row[scope.column.property]"
             :disabled="!scope.row.editing"
           />
-          <el-select
-            v-else-if="scope.row.editing && hasReferenceList(field)"
-            v-model="scope.row[scope.column.property]"
-            size="small"
-            filterable
-          >
-            <el-option
-              v-for="item in getReferenceList(field)"
-              :key="item.value"
-              :label="item.name"
-              :value="item.value"
-            />
-          </el-select>
-          <el-input
-            v-else-if="scope.row.editing && isStringField(field)"
+          <span v-else-if="!scope.row.editing">
+            {{ getFieldValue(scope.row, field) }}
+          </span>
+          <!-- <el-input
+            v-else-if="isTableDirectLink(field)"
             v-model="scope.row[scope.column.property]"
             size="small"
             clearable
-          />
-          <el-input-number
-            v-else-if="scope.row.editing && isNumericField(field)"
-            v-model="scope.row[scope.column.property]"
-            controls-position="right"
-            size="small"
-            :min="getMinValue(field)"
-            :max="getMaxValue(field)"
-          />
-          <span v-else>{{ getFieldValue(scope.row, scope.column.property) }}</span>
+          >
+            <i
+              slot="prefix"
+              class="el-input__icon el-icon-search"
+              @click="openSearchWindow"
+            />
+          </el-input> -->
+          <el-tooltip
+            v-else
+            :disabled="!hasError(field)"
+            :content="getErrorMessage(field)"
+          >
+            <el-select
+              v-if="isTableDirectLink(field)"
+              :ref="scope.column.property"
+              v-model="scope.row[scope.column.property]"
+              :remote="true"
+              :remote-method="fetchTableDirectData"
+              size="small"
+              filterable
+              @focus="setTableDirectReference(field)"
+            >
+              <el-option
+                v-for="item in getTableDirectReferences(field)"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
+            <el-select
+              v-else-if="hasReferenceList(field)"
+              :ref="scope.column.property"
+              v-model="scope.row[scope.column.property]"
+              size="small"
+              filterable
+            >
+              <el-option
+                v-for="item in getReferenceList(field)"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              />
+            </el-select>
+            <el-input
+              v-else-if="isStringField(field)"
+              :ref="scope.column.property"
+              v-model="scope.row[scope.column.property]"
+              size="small"
+              clearable
+            />
+            <el-input-number
+              v-else-if="isNumericField(field)"
+              :ref="scope.column.property"
+              v-model="scope.row[scope.column.property]"
+              controls-position="right"
+              size="small"
+              :min="getMinValue(field)"
+              :max="getMaxValue(field)"
+            />
+          </el-tooltip>
         </template>
       </el-table-column>
       <el-table-column fixed="left" width="66">
@@ -104,6 +146,11 @@
 
 <script lang="ts" src="./grid-view.component.ts"></script>
 
+<style>
+.grid-view .el-table .is-error .el-input__inner {
+  border-color: #ff4949;
+}
+</style>
 <style lang="scss" scoped>
 .grid-view {
   display: flex;

@@ -12,6 +12,12 @@ const ActionToolbarProps = Vue.extend({
     atLastTab: {
       type: Boolean,
       default: true
+    },
+    eventBus: {
+      type: Object,
+      default: () => {
+        return null;
+      }
     }
   }
 });
@@ -21,37 +27,69 @@ export default class ActionToolbar extends ActionToolbarProps {
   dynamicWindowService: DynamicWindowService = null;
   gridView = true;
   authorities: Set<string> = accountStore.authorities;
+  private editing: boolean = false;
+
+  get isEditing() {
+    return this.editing;
+  }
+
+  get keymap() {
+    return {
+      'alt+g': this.switchView,
+      'alt+up': this.goToParentTab,
+      'alt+down': this.goToChildTab,
+      'alt+r': this.refreshData,
+      'alt+f': this.openSearchWindow,
+      'alt+n': this.addRecord,
+      'alt+c': this.copyRecord,
+      'alt+s': this.saveRecord,
+      'alt+del': this.deleteRecord,
+      'esc': this.cancelOperation
+    };
+  }
 
   created() {
-
+    this.eventBus.$on('inline-editing', this.onInlineEditing);
+    this.eventBus.$on('record-saved', this.onSaveSuccess);
   }
 
   beforeDestroy() {
+    this.eventBus.$off('inline-editing', this.onInlineEditing);
+    this.eventBus.$off('record-saved', this.onSaveSuccess);
+  }
 
+  private onInlineEditing(active: boolean) {
+    this.editing = active;
+  }
+
+  private onSaveSuccess() {
+    this.editing = false;
   }
 
   public refreshData() {
-    ActionToolbarEventBus.$emit('refresh-data');
+    this.eventBus.$emit('refresh-data');
   }
 
   public openSearchWindow() {
-    ActionToolbarEventBus.$emit('open-search-window');
+    this.eventBus.$emit('open-search-window');
   }
 
   public addRecord() {
-    ActionToolbarEventBus.$emit('add-record');
+    this.editing = true;
+    this.eventBus.$emit('add-record');
   }
 
   public copyRecord() {
-    ActionToolbarEventBus.$emit('copy-record');
+    this.editing = true;
+    this.eventBus.$emit('copy-record');
   }
 
   public saveRecord() {
-    ActionToolbarEventBus.$emit('save-record');
+    this.eventBus.$emit('save-record');
   }
 
   public deleteRecord() {
-    ActionToolbarEventBus.$emit('delete-record');
+    this.eventBus.$emit('delete-record');
   }
 
   public switchView() {
@@ -59,11 +97,16 @@ export default class ActionToolbar extends ActionToolbarProps {
   }
 
   public goToParentTab() {
-    ActionToolbarEventBus.$emit('tab-navigate', -1);
+    this.eventBus.$emit('tab-navigate', -1);
   }
 
   public goToChildTab() {
-    ActionToolbarEventBus.$emit('tab-navigate', 1);
+    this.eventBus.$emit('tab-navigate', 1);
+  }
+
+  public cancelOperation() {
+    this.editing = false;
+    this.eventBus.$emit('cancel-operation');
   }
 
   /**

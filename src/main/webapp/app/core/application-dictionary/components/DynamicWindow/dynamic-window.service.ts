@@ -4,6 +4,17 @@ import buildCriteriaQueryString from '@/shared/filter/filters';
 
 const delay: number = 0;
 
+interface IPaginationQuery {
+  page: number;
+  size: number;
+  sort: string[];
+}
+
+interface IRetrieveParameter {
+  criteriaQuery?: string | string[] | object;
+  paginationQuery?: IPaginationQuery
+}
+
 export default class DynamicWindowService {
   
   constructor(
@@ -23,12 +34,15 @@ export default class DynamicWindowService {
     });
   }
 
-  public retrieve({criteriaQuery, paginationQuery}): Promise<any> {
+  public retrieve(query?: IRetrieveParameter): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      let queryParams = buildPaginationQueryOpts(paginationQuery);
+      let queryParams = buildPaginationQueryOpts(query?.paginationQuery);
 
-      if (criteriaQuery) {
-        queryParams += '&' + buildCriteriaQueryString(criteriaQuery);
+      if (query?.criteriaQuery) {
+        if (queryParams.length) {
+          queryParams += '&';
+        }
+        queryParams += buildCriteriaQueryString(query.criteriaQuery);
       }
 
       axios

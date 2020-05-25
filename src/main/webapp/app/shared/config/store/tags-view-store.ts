@@ -18,7 +18,7 @@ class TagsViewStore extends VuexModule implements ITagsViewState {
 
   @Mutation
   private ADD_VISITED_VIEW(view: ITagViewState) {
-    if (this.visitedViews.some(v => v.path === view.path)) return
+    if (this.visitedViews.some(v => v.fullPath === view.fullPath)) return
     this.visitedViews.push(
       Object.assign({}, view, {
         title: view.meta.title || 'no-name'
@@ -28,16 +28,18 @@ class TagsViewStore extends VuexModule implements ITagsViewState {
 
   @Mutation
   private ADD_CACHED_VIEW(view: ITagViewState) {
-    if (this.cachedViews.includes(view.name)) return
+    if (this.cachedViews.includes(view.fullPath)) return
     if (!view.meta.noCache) {
-      this.cachedViews.push(view.name)
+      this.cachedViews.push(view.fullPath)
     }
   }
 
   @Mutation
   private DEL_VISITED_VIEW(view: ITagViewState) {
+    console.log('DEL_VISITED_VIEW %O', view);
     for (const [i, v] of this.visitedViews.entries()) {
-      if (v.path === view.path) {
+      if (v.fullPath === view.fullPath) {
+        console.log('v.fullPath: %s', v.fullPath);
         this.visitedViews.splice(i, 1)
         break
       }
@@ -46,6 +48,7 @@ class TagsViewStore extends VuexModule implements ITagsViewState {
 
   @Mutation
   private DEL_CACHED_VIEW(view: ITagViewState) {
+    console.log('DEL_VISITED_VIEW %O', view);
     const index = this.cachedViews.indexOf(view.name)
     index > -1 && this.cachedViews.splice(index, 1)
   }
@@ -53,7 +56,7 @@ class TagsViewStore extends VuexModule implements ITagsViewState {
   @Mutation
   private DEL_OTHERS_VISITED_VIEWS(view: ITagViewState) {
     this.visitedViews = this.visitedViews.filter(v => {
-      return v.meta.affix || v.path === view.path
+      return v.meta.affix || v.fullPath === view.fullPath
     })
   }
 
@@ -83,7 +86,7 @@ class TagsViewStore extends VuexModule implements ITagsViewState {
   @Mutation
   private UPDATE_VISITED_VIEW(view: ITagViewState) {
     for (let v of this.visitedViews) {
-      if (v.path === view.path) {
+      if (v.fullPath === view.fullPath) {
         v = Object.assign(v, view)
         break
       }

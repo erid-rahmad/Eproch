@@ -35,20 +35,27 @@ public class ADTabDTO extends AbstractAuditingDTO {
     private Boolean active;
 
     private Long adClientId;
+    private String adClientName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long adTableId;
-
     private String adTableName;
 
     private Long parentColumnId;
+    private String parentColumnName;
+    private String parentColumnSqlName;
 
     private Long foreignColumnId;
+    private String foreignColumnName;
+    private String foreignColumnSqlName;
 
     private Long adWindowId;
+    private String adWindowName;
 
     private Long parentTabId;
+    private String parentTabName;
     
     private Set<ADFieldDTO> aDFields = new HashSet<>();
 
@@ -140,12 +147,28 @@ public class ADTabDTO extends AbstractAuditingDTO {
         this.adClientId = aDClientId;
     }
 
+    public String getAdClientName() {
+        return adClientName;
+    }
+
+    public void setAdClientName(String adClientName) {
+        this.adClientName = adClientName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     public Long getAdTableId() {
@@ -172,12 +195,44 @@ public class ADTabDTO extends AbstractAuditingDTO {
         this.parentColumnId = aDColumnId;
     }
 
+    public String getParentColumnName() {
+        return parentColumnName;
+    }
+
+    public void setParentColumnName(String parentColumnName) {
+        this.parentColumnName = parentColumnName;
+    }
+
+    public String getParentColumnSqlName() {
+        return parentColumnSqlName;
+    }
+
+    public void setParentColumnSqlName(String parentColumnSqlName) {
+        this.parentColumnSqlName = parentColumnSqlName;
+    }
+
     public Long getForeignColumnId() {
         return foreignColumnId;
     }
 
     public void setForeignColumnId(Long aDColumnId) {
         this.foreignColumnId = aDColumnId;
+    }
+
+    public String getForeignColumnName() {
+        return foreignColumnName;
+    }
+
+    public void setForeignColumnName(String foreignColumnName) {
+        this.foreignColumnName = foreignColumnName;
+    }
+
+    public String getForeignColumnSqlName() {
+        return foreignColumnSqlName;
+    }
+
+    public void setForeignColumnSqlName(String foreignColumnSqlName) {
+        this.foreignColumnSqlName = foreignColumnSqlName;
     }
 
     public Long getAdWindowId() {
@@ -188,12 +243,28 @@ public class ADTabDTO extends AbstractAuditingDTO {
         this.adWindowId = aDWindowId;
     }
 
+    public String getAdWindowName() {
+        return adWindowName;
+    }
+
+    public void setAdWindowName(String adWindowName) {
+        this.adWindowName = adWindowName;
+    }
+
     public Long getParentTabId() {
         return parentTabId;
     }
 
     public void setParentTabId(Long aDTabId) {
         this.parentTabId = aDTabId;
+    }
+
+    public String getParentTabName() {
+        return parentTabName;
+    }
+
+    public void setParentTabName(String parentTabName) {
+        this.parentTabName = parentTabName;
     }
 
     public Set<ADFieldDTO> getADFields() {

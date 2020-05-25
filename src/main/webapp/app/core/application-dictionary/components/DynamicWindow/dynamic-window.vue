@@ -5,6 +5,7 @@
       @toggle-view="switchView"
       :at-window-root="tabStack.length <= 1"
       :at-last-tab="childTabs.length === 0"
+      :event-bus="mainToolbarEventBus"
     />
     <splitpanes
       class="default-theme"
@@ -24,6 +25,7 @@
               :filter-query="mainTab.filterQuery"
               :parent-id="parentRecordId()"
               :tab-name="mainTab.name"
+              :toolbar-event-bus="mainToolbarEventBus"
               @current-row-change="loadChildTab"
               main-tab
             />

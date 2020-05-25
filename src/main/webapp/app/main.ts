@@ -4,7 +4,7 @@ import Vue, { DirectiveOptions } from 'vue';
 import 'normalize.css';
 import ElementUI from 'element-ui';
 import SvgIcon from 'vue-svgicon';
-import VueShortkey from 'vue-shortkey';
+import VueHotkey from "v-hotkey";
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
@@ -97,7 +97,7 @@ Vue.use(SvgIcon, {
   defaultHeight: '1em'
 });
 
-Vue.use(VueShortkey);
+Vue.use(VueHotkey);
 
 // Register global directives
 Object.keys(directives).forEach(key => {

@@ -13,7 +13,9 @@ import org.mapstruct.*;
 public interface ADWindowMapper extends EntityMapper<ADWindowDTO, ADWindow> {
 
     @Mapping(source = "adClient.id", target = "adClientId")
+    @Mapping(source = "adClient.name", target = "adClientName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     ADWindowDTO toDto(ADWindow aDWindow);
 
     @Mapping(target = "aDTabs", ignore = true)

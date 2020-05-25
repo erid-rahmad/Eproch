@@ -1,13 +1,11 @@
 <template>
-  <div class="action-toolbar">
+  <div class="action-toolbar" v-hotkey="keymap">
     <el-button-group>
       <el-button
         type="primary"
         size="small"
         icon="el-icon-s-grid"
         title="Toggle Grid"
-        v-shortkey="['alt', 'g']"
-        @shortkey="switchView"
         @click="switchView"
         :plain="!gridView"
       />
@@ -17,8 +15,6 @@
         icon="el-icon-arrow-up"
         title="Go to Parent Tab"
         :disabled="atWindowRoot"
-        v-shortkey="['alt', 'up']"
-        @shortkey="goToParentTab"
         @click="goToParentTab"
       />
       <el-button
@@ -27,8 +23,6 @@
         icon="el-icon-arrow-down"
         title="Go to Child Tab"
         :disabled="atLastTab"
-        v-shortkey="['alt', 'down']"
-        @shortkey="goToChildTab"
         @click="goToChildTab"
       />
     </el-button-group>
@@ -38,8 +32,6 @@
         size="small"
         icon="el-icon-refresh"
         title="Refresh"
-        v-shortkey="['alt', 'r']"
-        @shortkey="refreshData"
         @click="refreshData"
       />
       <el-button 
@@ -47,8 +39,6 @@
         size="small"
         icon="el-icon-search"
         title="Search"
-        v-shortkey="['alt', 'f']"
-        @shortkey="openSearchWindow"
         @click="openSearchWindow"
       />
     </el-button-group>
@@ -58,8 +48,7 @@
         size="small"
         icon="el-icon-plus"
         title="New"
-        v-shortkey="['alt', 'n']"
-        @shortkey="addRecord"
+        :disabled="isEditing"
         @click="addRecord"
       />
       <el-button
@@ -67,8 +56,7 @@
         size="small"
         icon="el-icon-document-copy"
         title="Copy"
-        v-shortkey="['alt', 'c']"
-        @shortkey="copyRecord"
+        :disabled="isEditing"
         @click="copyRecord"
       />
     </el-button-group>
@@ -78,17 +66,15 @@
         size="small"
         icon="el-icon-check"
         title="Save"
-        v-shortkey="['alt', 's']"
-        @shortkey="saveRecord"
+        :disabled="!isEditing"
         @click="saveRecord"
       />
       <el-button
-        type="primary"
+        type="danger"
         size="small"
         icon="el-icon-delete"
         title="Delete"
-        v-shortkey="['alt', 'del']"
-        @shortkey="deleteRecord"
+        :disabled="isEditing"
         @click="deleteRecord"
       />
     </el-button-group>

@@ -13,7 +13,9 @@ import org.mapstruct.*;
 public interface ADTableMapper extends EntityMapper<ADTableDTO, ADTable> {
 
     @Mapping(source = "adClient.id", target = "adClientId")
+    @Mapping(source = "adClient.name", target = "adClientName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     ADTableDTO toDto(ADTable aDTable);
 
     @Mapping(target = "aDColumns", ignore = true)

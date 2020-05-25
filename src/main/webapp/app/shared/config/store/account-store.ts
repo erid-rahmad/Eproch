@@ -19,6 +19,12 @@ class AccountStore extends VuexModule implements IAccountState {
   public activeProfiles = [];
   public authorities = new Set<string>();
 
+  // TODO Get the client and organization ID from the userIdentity.
+  public properties = new Map<string, any>([
+    ['#adClientId', 1],
+    ['#adOrganizationId', 1]
+  ]);
+
   public get account() {
     return this.userIdentity;
   }

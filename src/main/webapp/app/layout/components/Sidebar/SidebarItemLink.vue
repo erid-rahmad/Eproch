@@ -7,12 +7,12 @@
   >
     <slot />
   </a>
-  <router-link
+  <div
     v-else
-    :to="to"
+    @click="pushPath"
   >
     <slot />
-  </router-link>
+  </div>
 </template>
 
 <script lang="ts">
@@ -26,5 +26,14 @@ export default class extends Vue {
   @Prop({ required: true }) private to!: string
 
   private isExternal = isExternal
+
+  private pushPath() {
+    this.$router.push({
+      path: this.to,
+      query: {
+        t: '' + Date.now()
+      }
+    })
+  }
 }
 </script>

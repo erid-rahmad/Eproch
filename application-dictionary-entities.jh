@@ -125,7 +125,7 @@ enum ADWindowType {
 	MAINTAIN, QUERY, TRANSACTION
 }
 enum ADReferenceType {
-	LIST, TABLE
+	LIST, TABLE, DATATYPE
 }
 /**
  * Both side will reference each other.

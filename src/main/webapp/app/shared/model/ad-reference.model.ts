@@ -1,6 +1,7 @@
 import { IADReferenceList } from '@/shared/model/ad-reference-list.model';
 
 export const enum ADReferenceType {
+  DATATYPE = 'DATATYPE',
   LIST = 'LIST',
   TABLE = 'TABLE'
 }

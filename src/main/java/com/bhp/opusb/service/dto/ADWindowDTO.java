@@ -24,11 +24,10 @@ public class ADWindowDTO extends AbstractAuditingDTO {
     private ADWindowType type;
 
     private Boolean active;
-
-
     private Long adClientId;
-
+    private String adClientName;
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -78,12 +77,28 @@ public class ADWindowDTO extends AbstractAuditingDTO {
         this.adClientId = aDClientId;
     }
 
+    public String getAdClientName() {
+        return adClientName;
+    }
+
+    public void setAdClientName(String adClientName) {
+        this.adClientName = adClientName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override
