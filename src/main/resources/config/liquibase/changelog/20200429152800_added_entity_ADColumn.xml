@@ -18,13 +18,28 @@
             <column name="name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
+            <column name="sql_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="field_length" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="key" type="boolean">
                 <constraints nullable="true" />
             </column>
             <column name="type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="foreign_key" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="imported_table" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="imported_column" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="mandatory" type="boolean">
@@ -45,10 +60,16 @@
             <column name="format_pattern" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="min_value" type="integer">
+            <column name="min_length" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="max_value" type="integer">
+            <column name="max_length" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="min_value" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="max_value" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="active" type="boolean">

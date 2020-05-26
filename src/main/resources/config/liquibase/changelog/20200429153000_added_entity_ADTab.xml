@@ -24,9 +24,6 @@
             <column name="target_endpoint" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="level" type="integer">
-                <constraints nullable="true" />
-            </column>
             <column name="writable" type="boolean">
                 <constraints nullable="true" />
             </column>
@@ -56,6 +53,15 @@
             </column>
             <column name="ad_window_id" type="bigint">
                 <constraints nullable="false" />
+            </column>
+            <column name="parent_tab_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="parent_column_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="foreign_column_id" type="bigint">
+                <constraints nullable="true" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>

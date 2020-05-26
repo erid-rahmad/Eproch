@@ -38,5 +38,17 @@
                                  referencedColumnNames="id"
                                  referencedTableName="ad_tab"/>
 
+        <addForeignKeyConstraint baseColumnNames="parent_column_id"
+                                 baseTableName="ad_tab"
+                                 constraintName="fk_ad_tab_parent_column_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_column"/>
+
+        <addForeignKeyConstraint baseColumnNames="foreign_column_id"
+                                 baseTableName="ad_tab"
+                                 constraintName="fk_ad_tab_foreign_column_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_column"/>
+
     </changeSet>
 </databaseChangeLog>
