@@ -311,6 +311,7 @@ export default class GridView extends GridViewProps {
           if (record.id) {
             this.updateRecord(record);
           } else {
+            delete record.id;
             this.createRecord(record);
           }
           this.newRecord = false;

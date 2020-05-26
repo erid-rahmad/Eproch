@@ -20,5 +20,23 @@
                                  referencedColumnNames="id"
                                  referencedTableName="ad_organization"/>
 
+        <addForeignKeyConstraint baseColumnNames="ad_reference_id"
+                                 baseTableName="ad_field"
+                                 constraintName="fk_ad_field_ad_reference_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_reference"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_tab_id"
+                                 baseTableName="ad_field"
+                                 constraintName="fk_ad_field_ad_tab_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_tab"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_column_id"
+                                 baseTableName="ad_field"
+                                 constraintName="fk_ad_field_ad_column_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_column"/>
+
     </changeSet>
 </databaseChangeLog>
