@@ -1,57 +1,57 @@
-id;name;description;hint;static_text;static_field;label_only;show_label;show_in_grid;show_in_detail;grid_sequence;detail_sequence;display_logic;writable;column_no;column_span;active;ad_client_id;ad_organization_id;ad_column_id;ad_tab_id
-1;Active;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5566;1
-2;Client;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5567;1
-3;Organization;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5568;1
-4;Name;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5564;1
-5;Is View;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5565;1
-6;Active;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5416;2
-7;Client;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5418;2
-8;Organization;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5429;2
-9;Name;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5410;2
-10;Description;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5412;2
-11;Is Key;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5414;2
-12;Type;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5417;2
-13;Is Mandatory;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5420;2
-14;Mandatory Logic;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5421;2
-15;Readonly Logic;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5422;2
-16;Updatable;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5423;2
-17;Default Value;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5424;2
-18;Format Pattern;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5430;2
-19;Min Value;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5431;2
-20;Max Value;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5428;2
-21;Reference;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5415;2
-22;Active;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5578;3
-23;Client;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5573;3
-24;Organization;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5579;3
-25;Name;Window name;;;false;false;true;true;true;;;;true;1;4;true;1;1;5575;3
-26;Description;Window description;;;false;false;true;true;true;;;;true;1;4;true;1;1;5576;3
-27;Type;Window type;The window type includes Maintain, Transaction, and Query;;false;false;true;true;true;;;;true;1;4;true;1;1;5577;3
-28;Active;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5561;4
-29;Client;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5562;4
-30;Organization;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5555;4
-31;Name;Tab name;;;false;false;true;true;true;;;;true;1;4;true;1;1;5547;4
-32;Description;Tab description;;;false;false;true;true;true;;;;true;1;4;true;1;1;5548;4
-33;Target Endpoint;Target API endpoint;The base URL of the RESTful API endpoint;;false;false;true;false;true;;;;true;1;8;true;1;1;5549;4
-34;Writable;Writable option;Whether or not this tab is writable;;false;false;true;true;true;;;;true;1;4;true;1;1;5544;4
-35;Display Logic;Tab visibility condition;;;false;false;true;true;true;;;;true;1;8;true;1;1;5554;4
-36;Readonly Logic;Tab read only condition;;;false;false;true;true;true;;;;true;1;8;true;1;1;5556;4
-37;Filter Query;Default filter for fetching records;;;false;false;true;true;true;;;;true;1;8;true;1;1;5557;4
-38;Order Query;Default order for sorting records;;;false;false;true;true;true;;;;true;2;8;true;1;1;5558;4
-39;Table;The linked table;;;false;false;true;true;true;;;;true;1;4;true;1;1;5560;4
-40;Parent Tab;The parent tab;;;false;false;true;true;true;;;;true;1;4;true;1;1;5551;4
-41;Name;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5432;5
-42;Description;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5434;5
-43;Hint;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5436;5
-44;Static Text;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5437;5
-45;Display Logic;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5438;5
-46;Is Static Field;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5439;5
-47;Label Only;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5442;5
-48;Active;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5443;5
-49;Show Label;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5444;5
-50;Show on Grid;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5445;5
-51;Show on Detail;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5448;5
-52;Grid Sequence;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5501;5
-53;Detail Sequence;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5446;5
-54;Reference Key;;;;false;false;true;true;true;;;;true;1;4;true;1;1;7208;5
-55;Column;;;;false;false;true;true;true;;;;true;1;4;true;1;1;7210;5
-56;Writable;;;;false;false;true;true;true;;;;true;1;4;true;1;1;5447;4
+id,name,description,hint,static_text,static_field,label_only,show_label,show_in_grid,show_in_detail,grid_sequence,detail_sequence,display_logic,writable,column_no,column_span,active,ad_client_id,ad_organization_id,ad_reference_id,ad_tab_id,ad_column_id
+1,Active,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,1,5566
+2,Client,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,1,5567
+3,Organization,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,1,5568
+4,Name,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,1,5564
+5,"Is View",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,1,5565
+6,Active,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5416
+7,Client,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5418
+8,Organization,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5429
+9,Name,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5410
+10,Description,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5412
+11,"Is Key",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5414
+12,Type,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5417
+13,"Is Mandatory",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5420
+14,"Mandatory Logic",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5421
+15,"Readonly Logic",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5422
+16,Updatable,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5423
+17,"Default Value",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5424
+18,"Format Pattern",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5430
+19,"Min Value",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5431
+20,"Max Value",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5428
+21,Reference,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,2,5415
+22,Active,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,3,5578
+23,Client,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,3,5573
+24,Organization,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,3,5579
+25,Name,"Window name",,,0,0,1,1,1,,,,1,1,4,1,1,1,,3,5575
+26,Description,"Window description",,,0,0,1,1,1,,,,1,1,4,1,1,1,,3,5576
+27,Type,"Window type","The window type includes Maintain, Transaction, and Query",,0,0,1,1,1,,,,1,1,4,1,1,1,,3,5577
+28,Active,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,4,5561
+29,Client,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,4,5562
+30,Organization,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,4,5555
+31,Name,"Tab name",,,0,0,1,1,1,,,,1,1,4,1,1,1,,4,5547
+32,Description,"Tab description",,,0,0,1,1,1,,,,1,1,4,1,1,1,,4,5548
+33,"Target Endpoint","Target API endpoint","The base URL of the RESTful API endpoint",,0,0,1,0,1,,,,1,1,8,1,1,1,,4,5549
+34,Writable,"Writable option","Whether or not this tab is writable",,0,0,1,1,1,,,,1,1,4,1,1,1,,4,5544
+35,"Display Logic","Tab visibility condition",,,0,0,1,1,1,,,,1,1,8,1,1,1,,4,5554
+36,"Readonly Logic","Tab read only condition",,,0,0,1,1,1,,,,1,1,8,1,1,1,,4,5556
+37,"Filter Query","Default filter for fetching records",,,0,0,1,1,1,,,,1,1,8,1,1,1,,4,5557
+38,"Order Query","Default order for sorting records",,,0,0,1,1,1,,,,1,2,8,1,1,1,,4,5558
+39,Table,"The linked table",,,0,0,1,1,1,,,,1,1,4,1,1,1,,4,5560
+40,"Parent Tab","The parent tab",,,0,0,1,1,1,,,,1,1,4,1,1,1,,4,5551
+41,Name,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5432
+42,Description,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5434
+43,Hint,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5436
+44,"Static Text",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5437
+45,"Display Logic",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5438
+46,"Is Static Field",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5439
+47,"Label Only",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5442
+48,Active,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5443
+49,"Show Label",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5444
+50,"Show on Grid",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5445
+51,"Show on Detail",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5448
+52,"Grid Sequence",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5501
+53,"Detail Sequence",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,5446
+54,"Reference Key",,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,7208
+55,Column,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,5,7210
+56,Writable,,,,0,0,1,1,1,,,,1,1,4,1,1,1,,4,5447

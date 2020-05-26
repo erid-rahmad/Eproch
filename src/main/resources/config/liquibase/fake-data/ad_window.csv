@@ -1,3 +1,3 @@
-id;name;description;type;active;ad_client_id;ad_organization_id
-1;Table and Columns;Table and Columns window;MAINTAIN;true;1;1
-2;Window and Tabs;Window and Tabs window;MAINTAIN;true;1;1
+id,name,description,type,active,ad_client_id,ad_organization_id
+1,Table and Columns,Table and Columns window,MAINTAIN,1,1,1
+2,Window and Tabs,"Window, Tabs, and Field window",MAINTAIN,1,1,1
