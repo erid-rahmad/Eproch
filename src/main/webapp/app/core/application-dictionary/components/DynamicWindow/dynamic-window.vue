@@ -1,76 +1,84 @@
 <template>
   <div class="app-container">
     <h3>{{ title }}</h3>
-    <action-toolbar
-      @toggle-view="switchView"
-      :at-window-root="tabStack.length <= 1"
-      :at-last-tab="childTabs.length === 0"
-      :event-bus="mainToolbarEventBus"
-    />
-    <splitpanes
-      class="default-theme"
-      horizontal
-      style="height: calc(100% - 96px)"
-      @ready="updateHeight"
-      @resized="updateHeight"
-    >
-      <pane ref="mainPane">
-        <transition name="fade" mode="out-in">
-          <keep-alive>
-            <grid-view
-              v-if="gridView"
-              ref="mainGrid"
-              :base-api-url="mainTab.targetEndpoint"
-              :fields="mainTab.adfields"
-              :filter-query="mainTab.filterQuery"
-              :parent-id="parentRecordId()"
-              :tab-name="mainTab.name"
-              :toolbar-event-bus="mainToolbarEventBus"
-              @current-row-change="loadChildTab"
-              main-tab
-            />
-            <detail-view v-else/>
-          </keep-alive>
-        </transition>
-      </pane>
-      <pane
-        v-if="hasChildTabs"
-        ref="linePane"
-        size="30"
-        style="position: relative"
+    <div class="window-content">
+      <action-toolbar
+        @toggle-view="switchView"
+        :at-window-root="tabStack.length <= 1"
+        :at-last-tab="childTabs.length === 0"
+        :event-bus="mainToolbarEventBus"
+      />
+      <splitpanes
+        class="default-theme"
+        horizontal
+        style="height: 100%"
+        @ready="updateHeight"
+        @resized="updateHeight"
       >
-        <el-tabs
-          v-model="currentTab"
-          class="tab-container"
-          type="border-card"
-          @tab-click="handleTabClick"
+        <pane ref="mainPane">
+          <transition name="fade" mode="out-in">
+            <keep-alive>
+              <grid-view
+                v-if="gridView"
+                ref="mainGrid"
+                :base-api-url="mainTab.targetEndpoint"
+                :fields="mainTab.adfields"
+                :filter-query="mainTab.filterQuery"
+                :parent-id="parentRecordId()"
+                :search-panel-event-bus="searchPanelEventBus"
+                :tab-name="mainTab.name"
+                :toolbar-event-bus="mainToolbarEventBus"
+                @current-row-change="loadChildTab"
+                main-tab
+              />
+              <detail-view v-else/>
+            </keep-alive>
+          </transition>
+        </pane>
+        <pane
+          v-if="hasChildTabs"
+          ref="linePane"
+          size="30"
+          style="position: relative"
         >
-          <el-tab-pane
-            v-for="(tab, index) in childTabs"
-            :key="tab.id"
-            ref="tabPane"
-            :name="'' + index"
-            :data-tab-id="tab.id"
-            :data-parent-tab-id="tab.parentTabId"
-            :data-parent-record-id="tab.parentId"
-            :data-parent-table-name="mainTab.adTableName"
+          <el-tabs
+            v-model="currentTab"
+            class="tab-container"
+            type="border-card"
+            @tab-click="handleTabClick"
           >
-            <span slot="label">
-              <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
-            </span>
-            <grid-view
-              ref="lineGrid"
-              :base-api-url="tab.targetEndpoint"
-              :fields="tab.adfields"
-              :filter-query="tab.filterQuery"
-              :parent-id="tab.parentId"
-              :tab-name="tab.name"
-              lazy-load
-            />
-          </el-tab-pane>
-        </el-tabs>
-      </pane>
-    </splitpanes>
+            <el-tab-pane
+              v-for="(tab, index) in childTabs"
+              :key="tab.id"
+              ref="tabPane"
+              :name="'' + index"
+              :data-tab-id="tab.id"
+              :data-parent-tab-id="tab.parentTabId"
+              :data-parent-record-id="tab.parentId"
+              :data-parent-table-name="mainTab.adTableName"
+            >
+              <span slot="label">
+                <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
+              </span>
+              <grid-view
+                ref="lineGrid"
+                :base-api-url="tab.targetEndpoint"
+                :fields="tab.adfields"
+                :filter-query="tab.filterQuery"
+                :parent-id="tab.parentId"
+                :tab-name="tab.name"
+                lazy-load
+              />
+            </el-tab-pane>
+          </el-tabs>
+        </pane>
+      </splitpanes>
+      <search-panel
+        :visible.sync="searchPanelActive"
+        :event-bus="searchPanelEventBus"
+        :fields="mainTab.adfields"
+      />
+    </div>
   </div>
 </template>
 
@@ -79,6 +87,10 @@
 <style lang="scss">
 .el-tabs--border-card > .el-tabs__content {
   height: calc(100% - 30px);
+}
+.window-content {
+  position: relative;
+  height: calc(100% - 96px);
 }
 </style>
 <style lang="scss" scoped>

@@ -42,6 +42,12 @@ const GridViewProps = Vue.extend({
       default: () => {
         return null;
       }
+    },
+    searchPanelEventBus: {
+      type: Object,
+      default: () => {
+        return null;
+      }
     }
   }
 });
@@ -118,6 +124,8 @@ export default class GridView extends GridViewProps {
   created() {
     this.onFieldsChange(this.fields);
     this.onBaseApiUrlChange(this.baseApiUrl);
+    this.searchPanelEventBus?.$on('filter-updated', this.filterRecord);
+    
     this.toolbarEventBus?.$on('add-record', this.addBlankRow);
     this.toolbarEventBus?.$on('copy-record', this.copyRow);
     this.toolbarEventBus?.$on('save-record', this.saveRecord);
@@ -125,6 +133,8 @@ export default class GridView extends GridViewProps {
   }
 
   beforeDestroy() {
+    this.searchPanelEventBus?.$off('filter-updated', this.filterRecord);
+
     this.toolbarEventBus?.$off('add-record', this.addBlankRow);
     this.toolbarEventBus?.$off('copy-record', this.copyRow);
     this.toolbarEventBus?.$off('save-record', this.saveRecord);
@@ -207,6 +217,10 @@ export default class GridView extends GridViewProps {
     row.editing = !row.editing;
     this.editing = row.editing;
     this.toolbarEventBus.$emit('inline-editing', true);
+  }
+
+  private filterRecord(query) {
+    console.log('Filter query: %O', query);
   }
 
   /**

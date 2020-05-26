@@ -1,9 +1,10 @@
-import { Component, Vue, ProvideReactive, Inject, Watch } from 'vue-property-decorator'
-import { Splitpanes, Pane } from 'splitpanes'
-import 'splitpanes/dist/splitpanes.css'
-import ActionToolbar from '../ActionToolbar/action-toolbar.vue'
+import { Component, Vue, Inject, Watch } from 'vue-property-decorator';
+import { Splitpanes, Pane } from 'splitpanes';
+import 'splitpanes/dist/splitpanes.css';
+import ActionToolbar from '../ActionToolbar/action-toolbar.vue';
 import DetailView from "../DetailView/detail-view.vue";
 import GridView from "../GridView/grid-view.vue";
+import SearchPanel from "../SearchPanel/search-panel.vue";
 
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
 import { IADTab, ADTab } from '@/shared/model/ad-tab.model';
@@ -17,7 +18,8 @@ import _ from 'lodash';
     Pane,
     ActionToolbar,
     DetailView,
-    GridView
+    GridView,
+    SearchPanel
   }
 })
 export default class DynamicWindow extends Vue {
@@ -34,6 +36,8 @@ export default class DynamicWindow extends Vue {
   public currentTab: string = '';
   public mainTabBaseApiUrl: string = null;
   private mainToolbarEventBus = new Vue();
+  private searchPanelEventBus = new Vue();
+  private searchPanelActive: boolean = false;
 
   /**
    * Stack of the main tab. The last item in the stack
@@ -65,7 +69,6 @@ export default class DynamicWindow extends Vue {
   }
 
   created() {
-    console.log('window created with route: %O', this.$route);
     this.windowId = this.$route.meta.windowId;
     this.title = this.$t(`route.${this.$route.meta.title}`).toString();
     this.retrieveTabs(null);
@@ -73,10 +76,14 @@ export default class DynamicWindow extends Vue {
 
   mounted() {
     this.mainToolbarEventBus.$on('tab-navigate', this.navigateTab);
+    this.mainToolbarEventBus.$on('open-search-window', this.openSearchPanel);
+    this.mainToolbarEventBus?.$on('cancel-operation', this.cancelOperation);
   }
 
   beforeDestroy() {
     this.mainToolbarEventBus.$off('tab-navigate', this.navigateTab);
+    this.mainToolbarEventBus.$off('open-search-window', this.openSearchPanel);
+    this.mainToolbarEventBus?.$off('cancel-operation', this.cancelOperation);
   }
   // End of lifecycle events.
 
@@ -135,6 +142,14 @@ export default class DynamicWindow extends Vue {
       const tab = this.$refs.tabPane[index];
       this.handleTabClick(tab);
     }
+  }
+
+  private openSearchPanel() {
+    this.searchPanelActive = true;
+  }
+
+  private cancelOperation() {
+    this.searchPanelActive = false;
   }
 
   public handleTabClick(tab: any) {
