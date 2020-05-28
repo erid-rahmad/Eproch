@@ -75,7 +75,7 @@ public class ADColumn extends AbstractAuditingEntity {
     private String readOnlyLogic;
 
     @Column(name = "updatable")
-    private Boolean updatable;
+    private Boolean updatable = true;
 
     @Column(name = "default_value")
     private String defaultValue;
@@ -96,7 +96,7 @@ public class ADColumn extends AbstractAuditingEntity {
     private Long maxValue;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @ManyToOne(optional = false)
     @NotNull

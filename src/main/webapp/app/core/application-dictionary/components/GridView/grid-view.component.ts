@@ -11,6 +11,9 @@ import { ADReferenceType } from '@/shared/model/ad-reference.model';
 import { kebabCase } from "lodash";
 import pluralize from "pluralize";
 import { AccountStoreModule } from '@/shared/config/store/account-store';
+import { IADTab } from '@/shared/model/ad-tab.model';
+import { create } from 'domain';
+import _ from 'lodash';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -18,25 +21,18 @@ const GridViewProps = Vue.extend({
       type: Boolean,
       default: false
     },
-    tabName: String,
-    baseApiUrl: String,
-    filterQuery: String,
+    tab: {
+      type: Object,
+      default: () => {
+        return null;
+      }
+    },
     orderQuery: String,
 
     /**
      * Record will be loaded once the parentId changed.
      */
     lazyLoad: Boolean,
-    parentId: {
-      type: Number,
-      default: 0
-    },
-    fields: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
     toolbarEventBus: {
       type: Object,
       default: () => {
@@ -78,6 +74,7 @@ export default class GridView extends GridViewProps {
   selectedRows: any = [];
 
   // Inline editing mode needs these data.
+  originalRecord: any = {};
   currentRecord: any = {};
   validationRule: any = {};
   editing = false;
@@ -90,6 +87,12 @@ export default class GridView extends GridViewProps {
   private errors = new Map();
   private errorTimestamp = Date.now();
 
+  private tabName: string = '';
+  private fields: any[] = [];
+  private baseApiUrl: string = '';
+  private filterQuery: string = '';
+  private parentId: number = 0;
+
   getTableDirectReferences(field: any): any[] {
     if (field == null) {
       return [];
@@ -99,17 +102,27 @@ export default class GridView extends GridViewProps {
       && this.tableDirectReferenceMap.get(key);
   }
 
-  @Watch('baseApiUrl')
-  onBaseApiUrlChange(url: string) {
-    // Immediatelly load records if it is orphan tab.
-    if (url && !this.lazyLoad) {
-      this.retrieveAllRecords();
-    }
+  get observableTabProperties() {
+    const { name, adfields, targetEndpoint, filterQuery, parentId, promoted } = this.tab;
+    return { name, adfields, targetEndpoint, filterQuery, parentId, promoted };
   }
 
-  @Watch('parentId')
-  onParentIdChange(id: any) {
-    if (id) {
+  @Watch('observableTabProperties')
+  onDependantPropertiesChange(tab: any) {
+    // Reset the pagination.
+    this.page = 1;
+    this.propOrder = 'id';
+    this.reverse = false;
+
+    this.tabName = tab.name;
+    this.fields = tab.adfields;
+    this.baseApiUrl = tab.targetEndpoint;
+    this.filterQuery = tab.filterQuery;
+    this.parentId = tab.parentId || 0;
+
+    if (this.lazyLoad && this.parentId) {
+      this.retrieveAllRecords();
+    } else if (!this.lazyLoad) {
       this.retrieveAllRecords();
     }
   }
@@ -118,17 +131,24 @@ export default class GridView extends GridViewProps {
   onFieldsChange(fields: Array<IADField>) {
     this.tableDirectReferenceMap.clear();
     this.gridFields = fields.filter(field => field.showInGrid);
+    this.validationRule = {};
+    for (let field of this.fields) {
+      const column = field.adColumn;
+      this.validationRule[column.name] = {
+        type: getValidatorType(column.type),
+        required: column.mandatory
+      }
+    }
   }
 
   // Start of lifecycle events.
   created() {
     this.onFieldsChange(this.fields);
-    this.onBaseApiUrlChange(this.baseApiUrl);
     this.searchPanelEventBus?.$on('filter-updated', this.filterRecord);
     
     this.toolbarEventBus?.$on('add-record', this.addBlankRow);
     this.toolbarEventBus?.$on('copy-record', this.copyRow);
-    this.toolbarEventBus?.$on('save-record', this.saveRecord);
+    this.toolbarEventBus?.$on('save-record', this.save);
     this.toolbarEventBus?.$on('cancel-operation', this.cancelOperation);
   }
 
@@ -137,7 +157,7 @@ export default class GridView extends GridViewProps {
 
     this.toolbarEventBus?.$off('add-record', this.addBlankRow);
     this.toolbarEventBus?.$off('copy-record', this.copyRow);
-    this.toolbarEventBus?.$off('save-record', this.saveRecord);
+    this.toolbarEventBus?.$off('save-record', this.save);
     this.toolbarEventBus?.$off('cancel-operation', this.cancelOperation);
   }
   // End of lifecycle events.
@@ -161,11 +181,21 @@ export default class GridView extends GridViewProps {
     }
 
     if (this.editing) {
-      this.toolbarEventBus.$emit('inline-editing', false);
-      this.editing = false;
-      if (this.currentRecord !== null) {
-        this.$set(this.currentRecord, 'editing', this.editing);
-      }
+      const noChanges = _.isEqual(this.originalRecord, this.currentRecord);
+      console.log('noChanges: %s', noChanges);
+      const reset = () => {
+        this.toolbarEventBus.$emit('inline-editing', false);
+        this.editing = false;
+        if (this.currentRecord !== null) {
+          this.$set(this.currentRecord, 'editing', this.editing);
+        }
+      };
+
+      if (noChanges) {
+        reset();
+      } else {
+        this.save(reset);
+      }    
     }
 
     this.currentRecord = row;
@@ -197,7 +227,12 @@ export default class GridView extends GridViewProps {
         this.gridData.splice(index, 1);
       })
     } else {
-      this.currentRecord.editing = this.editing;
+      if (!_.isEqual(this.originalRecord, this.currentRecord)) {
+        for (let key in this.currentRecord) {
+          this.currentRecord[key] = this.originalRecord[key];
+        }
+      }
+      this.$set(this.currentRecord, 'editing', this.editing);
     }
   }
 
@@ -212,9 +247,12 @@ export default class GridView extends GridViewProps {
     if (this.editing && row === this.currentRecord)
       return;
 
+    this.originalRecord = {...this.currentRecord};
+    console.log('original: %O, current: %O', this.originalRecord, this.currentRecord);
     this.prepareFormAndValidation(row, false);
     await this.initRelationships(row);
     row.editing = !row.editing;
+    this.originalRecord.editing = row.editing;
     this.editing = row.editing;
     this.toolbarEventBus.$emit('inline-editing', true);
   }
@@ -229,16 +267,15 @@ export default class GridView extends GridViewProps {
   private async addBlankRow() {
     if (this.mainTab) {
       let record = {
-        id: 0,
-        editing: true
+        id: 0
       };
       this.prepareFormAndValidation(record);
       await this.initRelationships(record);
       this.gridData.splice(0, 0, record);
       this.$nextTick(() => {
         (<ElTable>this.$refs.grid).setCurrentRow(record);
+        this.activateInlineEditing(record);
         this.newRecord = true;
-        this.editing = record.editing;
       });
     }
   }
@@ -254,8 +291,8 @@ export default class GridView extends GridViewProps {
       this.gridData.splice(currentIndex + 1, 0, record);
       this.$nextTick(() => {
         (<ElTable>this.$refs.grid).setCurrentRow(record);
+        this.activateInlineEditing(record);
         this.newRecord = true;
-        this.editing = record.editing;
       });
     }
   }
@@ -266,7 +303,6 @@ export default class GridView extends GridViewProps {
 
       if (newRecord) {
         let defaultValue = column.defaultValue?.match(/\{([\#]?[\w]+)\}/);
-        console.log('defaultValue: %s', defaultValue);
         if (defaultValue) {
           defaultValue = AccountStoreModule.properties.get(defaultValue[1]);
         } else {
@@ -288,14 +324,10 @@ export default class GridView extends GridViewProps {
         }
         row[column.name] = defaultValue;
       }
-      this.validationRule[column.name] = {
-        type: getValidatorType(column.type),
-        required: column.mandatory
-      }
     }
   }
 
-  private saveRecord() {
+  private save(callback?: (record?: any) => void) {
     if (this.mainTab) {
       const {
         editing,
@@ -315,82 +347,52 @@ export default class GridView extends GridViewProps {
             (<any> this.$refs[error.field][0])?.$el.classList.add('is-error');
           }
         } else {
-          console.log('saving record %O', record);
           for (let field in record) {
             if (this.$refs[field])
               (<any> this.$refs[field][0])?.$el.classList.remove('is-error');
           }
           
           this.isSaving = true;
-          if (record.id) {
-            this.updateRecord(record);
-          } else {
-            delete record.id;
-            this.createRecord(record);
-          }
-          this.newRecord = false;
-          this.editing = false;
-          this.$set(this.currentRecord, 'editing', this.editing);
-          this.validationRule = {};
+          this.saveRecord(record, callback);
         }
       });
     }
   }
 
-  private createRecord(record: any) {
-    this.dynamicWindowService(this.baseApiUrl)
-      .create(record)
-      .then(param => {
-        this.retrieveAllRecords();
-        const message = this.$t('opusWebApp.country.created', { param: param.id });
-        this.toolbarEventBus.$emit('record-saved');
-        this.$notify({
-          title: 'Success',
-          message: message.toString(),
-          type: 'success',
-          duration: 3000
-        });
-      })
-      .catch(()=>{
-        const message = "Error, data already exist/ .........";
-        this.$notify({
-          title: 'Error',
-          message: message.toString(),
-          type: 'error',
-          duration: 3000
-        });
-      })
-      .finally(() => {
-        this.isSaving = false;
+  private saveRecord(record: any, callback?: (record?: any) => void) {
+    const update: boolean = record.id > 0;
+    const service = this.dynamicWindowService(this.baseApiUrl);
+    const saveState = update ? service.update(record) : service.create(record);
+    saveState.then(data => {
+      this.retrieveAllRecords();
+      callback && callback(data);
+      const message = this.$t(`opusWebApp.applicationDictionary.${update ? 'updated' : 'created'}`, {
+        tabName: this.tabName,
+        param: data.id
       });
-  }
-
-  private updateRecord(record: any) {
-    this.dynamicWindowService(this.baseApiUrl)
-      .update(record)
-      .then(param => {
-        this.retrieveAllRecords();
-        const message = this.$t('opusWebApp.country.updated', { param: param.id });
-        this.toolbarEventBus.$emit('record-saved');
-        this.$notify({
-          title: 'Success',
-          message: message.toString(),
-          type: 'success',
-          duration: 3000
-        });
-      })
-      .catch(()=>{
-        const message = "Error, data already exist/ .........";
-        this.$notify({
-          title: 'Error',
-          message: message.toString(),
-          type: 'error',
-          duration: 3000
-        });
-      })
-      .finally(() => {
-        this.isSaving = false;
+      this.toolbarEventBus.$emit('record-saved');
+      this.$notify({
+        title: 'Success',
+        message: message.toString(),
+        type: 'success',
+        duration: 3000
       });
+    })
+    .catch((err) => {
+      console.error('Error saving the record! %O', err);
+      const message = `Error saving the record`;
+      this.$notify({
+        title: 'Error',
+        message: message.toString(),
+        type: 'error',
+        duration: 3000
+      });
+    })
+    .finally(() => {
+      this.newRecord = false;
+      this.editing = false;
+      this.isSaving = false;
+    });
   }
 
   public retrieveAllRecords(): void {
@@ -405,23 +407,21 @@ export default class GridView extends GridViewProps {
         criteriaQuery: this.filterQuery,
         paginationQuery
       })
-      .then(
-        res => {
-          this.gridData = res.data.map((item: any) => {
-            item.editing = false;
-            return item;
-          });
+      .then(res => {
+        this.gridData = res.data.map((item: any) => {
+          item.editing = false;
+          return item;
+        });
 
-          this.totalItems = Number(res.headers['x-total-count']);
-          this.queryCount = this.totalItems;
-          if (this.gridData.length) {
-            (<ElTable>this.$refs.grid).setCurrentRow(this.gridData[0]);
-          }
-        },
-        err => {
-          console.error('Failed getting the record. %O', err);
+        this.totalItems = Number(res.headers['x-total-count']);
+        this.queryCount = this.totalItems;
+        if (this.gridData.length) {
+          (<ElTable>this.$refs.grid).setCurrentRow(this.gridData[0]);
         }
-      )
+      }).
+      catch((err) => {
+        console.error('Failed getting the record. %O', err);
+      })
       .finally(() => {
         this.isFetching = false;
       });
@@ -507,11 +507,16 @@ export default class GridView extends GridViewProps {
       this.tableDirectTimestamp = Date.now();
   }
 
-  public isFixed(field: any) {
+  public isFixed(field: any): boolean | string {
     if (field.adColumn.name === 'active') {
       return 'right';
     }
     return false;
+  }
+
+  public isReadonly(row: any, field: any): boolean {
+    const newRecord: boolean = row.id > 0;
+    return !field.writable || (!newRecord && !field.adColumn.updatable) || !field.adColumn.updatable;
   }
 
   public getFieldWidth(field: any) {
@@ -541,7 +546,7 @@ export default class GridView extends GridViewProps {
 
   public isTableDirectLink(field: any): boolean {
     const column = field.adColumn;
-    const reference = column.adReference;
+    const reference = field.adReference || column.adReference;
     return column.foreignKey && (reference?.referenceType === ADReferenceType.DATATYPE || reference?.value === 'direct' || reference?.value === 'table');
   }
 

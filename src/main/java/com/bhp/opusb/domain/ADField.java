@@ -51,13 +51,13 @@ public class ADField extends AbstractAuditingEntity {
     private Boolean labelOnly;
 
     @Column(name = "show_label")
-    private Boolean showLabel;
+    private Boolean showLabel = true;
 
     @Column(name = "show_in_grid")
-    private Boolean showInGrid;
+    private Boolean showInGrid = true;
 
     @Column(name = "show_in_detail")
-    private Boolean showInDetail;
+    private Boolean showInDetail = true;
 
     @Column(name = "grid_sequence")
     private Integer gridSequence;
@@ -69,7 +69,7 @@ public class ADField extends AbstractAuditingEntity {
     private String displayLogic;
 
     @Column(name = "writable")
-    private Boolean writable;
+    private Boolean writable = true;
 
     @Column(name = "column_no")
     private Integer columnNo;
@@ -78,7 +78,7 @@ public class ADField extends AbstractAuditingEntity {
     private Integer columnSpan;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @ManyToOne(optional = false)
     @NotNull

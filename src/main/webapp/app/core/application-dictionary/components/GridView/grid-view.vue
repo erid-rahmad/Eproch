@@ -39,13 +39,13 @@
             v-if="isActiveStatusField(scope.column)"
             :ref="scope.column.property"
             v-model="scope.row[scope.column.property]"
-            :disabled="!scope.row.editing"
+            :disabled="!scope.row.editing || isReadonly(scope.row, field)"
           />
           <el-checkbox
             v-else-if="isBooleanField(field)"
             :ref="scope.column.property"
             v-model="scope.row[scope.column.property]"
-            :disabled="!scope.row.editing"
+            :disabled="!scope.row.editing || isReadonly(scope.row, field)"
           />
           <span v-else-if="!scope.row.editing">
             {{ getFieldValue(scope.row, field) }}
@@ -75,6 +75,7 @@
               :remote-method="fetchTableDirectData"
               size="small"
               filterable
+              :disabled="isReadonly(scope.row, field)"
               @focus="setTableDirectReference(field)"
             >
               <el-option
@@ -90,6 +91,7 @@
               v-model="scope.row[scope.column.property]"
               size="small"
               filterable
+              :disabled="isReadonly(scope.row, field)"
             >
               <el-option
                 v-for="item in getReferenceList(field)"
@@ -104,6 +106,7 @@
               v-model="scope.row[scope.column.property]"
               size="small"
               clearable
+              :disabled="isReadonly(scope.row, field)"
             />
             <el-input-number
               v-else-if="isNumericField(field)"
@@ -113,6 +116,7 @@
               size="small"
               :min="getMinValue(field)"
               :max="getMaxValue(field)"
+              :disabled="isReadonly(scope.row, field)"
             />
           </el-tooltip>
         </template>

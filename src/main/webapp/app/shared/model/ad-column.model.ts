@@ -71,7 +71,7 @@ export class ADColumn implements IADColumn {
     this.key = this.key || false;
     this.foreignKey = this.foreignKey || false;
     this.mandatory = this.mandatory || false;
-    this.updatable = this.updatable || false;
-    this.active = this.active || false;
+    this.updatable = this.updatable || true;
+    this.active = this.active || true;
   }
 }

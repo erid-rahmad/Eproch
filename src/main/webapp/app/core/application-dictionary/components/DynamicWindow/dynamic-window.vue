@@ -21,12 +21,8 @@
               <grid-view
                 v-if="gridView"
                 ref="mainGrid"
-                :base-api-url="mainTab.targetEndpoint"
-                :fields="mainTab.adfields"
-                :filter-query="mainTab.filterQuery"
-                :parent-id="parentRecordId()"
+                :tab="mainTab"
                 :search-panel-event-bus="searchPanelEventBus"
-                :tab-name="mainTab.name"
                 :toolbar-event-bus="mainToolbarEventBus"
                 @current-row-change="loadChildTab"
                 main-tab
@@ -52,21 +48,13 @@
               :key="tab.id"
               ref="tabPane"
               :name="'' + index"
-              :data-tab-id="tab.id"
-              :data-parent-tab-id="tab.parentTabId"
-              :data-parent-record-id="tab.parentId"
-              :data-parent-table-name="mainTab.adTableName"
             >
               <span slot="label">
                 <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
               </span>
               <grid-view
                 ref="lineGrid"
-                :base-api-url="tab.targetEndpoint"
-                :fields="tab.adfields"
-                :filter-query="tab.filterQuery"
-                :parent-id="tab.parentId"
-                :tab-name="tab.name"
+                :tab="tab"
                 lazy-load
               />
             </el-tab-pane>

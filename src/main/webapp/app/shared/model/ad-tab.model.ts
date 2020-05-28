@@ -44,7 +44,7 @@ export class ADTab implements IADTab {
     public adWindowId?: number,
     public parentTabId?: number
   ) {
-    this.writable = this.writable || false;
-    this.active = this.active || false;
+    this.writable = this.writable || true;
+    this.active = this.active || true;
   }
 }

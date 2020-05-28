@@ -47,13 +47,14 @@ public class ADFieldDTO extends AbstractAuditingDTO {
     private Boolean active;
 
     private Long adClientId;
-
+    private String adClientName;
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long adReferenceId;
-
+    private String adReferenceName;
     private Long adColumnId;
-
+    private String adColumnName;
     private Long adTabId;
     
     private ADReferenceDTO adReference;
@@ -204,6 +205,14 @@ public class ADFieldDTO extends AbstractAuditingDTO {
         this.adClientId = aDClientId;
     }
 
+    public String getAdClientName() {
+        return adClientName;
+    }
+
+    public void setAdClientName(String adClientName) {
+        this.adClientName = adClientName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -212,12 +221,28 @@ public class ADFieldDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getAdReferenceId() {
         return adReferenceId;
     }
 
     public void setAdReferenceId(Long aDReferenceId) {
         this.adReferenceId = aDReferenceId;
+    }
+
+    public String getAdReferenceName() {
+        return adReferenceName;
+    }
+
+    public void setAdReferenceName(String adReferenceName) {
+        this.adReferenceName = adReferenceName;
     }
 
     public Long getAdColumnId() {
@@ -250,6 +275,14 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     public void setAdColumn(ADColumnDTO adColumn) {
         this.adColumn = adColumn;
+    }
+
+    public String getAdColumnName() {
+        return adColumnName;
+    }
+
+    public void setAdColumnName(String adColumnName) {
+        this.adColumnName = adColumnName;
     }
 
     @Override

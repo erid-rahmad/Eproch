@@ -34,7 +34,6 @@ export default class DynamicWindow extends Vue {
   public gridView = true;
   public childTabs = [];
   public currentTab: string = '';
-  public mainTabBaseApiUrl: string = null;
   private mainToolbarEventBus = new Vue();
   private searchPanelEventBus = new Vue();
   private searchPanelActive: boolean = false;
@@ -55,7 +54,6 @@ export default class DynamicWindow extends Vue {
     if (this.tabStack.length === 0) {
       return new ADTab();
     }
-
     return this.tabStack[this.tabStack.length - 1];
   }
 
@@ -72,18 +70,18 @@ export default class DynamicWindow extends Vue {
     this.windowId = this.$route.meta.windowId;
     this.title = this.$t(`route.${this.$route.meta.title}`).toString();
     this.retrieveTabs(null);
+    this.mainToolbarEventBus.$on('tab-navigate', this.navigateTab);
+    this.mainToolbarEventBus.$on('open-search-window', this.openSearchPanel);
+    this.mainToolbarEventBus.$on('cancel-operation', this.cancelOperation);
   }
 
   mounted() {
-    this.mainToolbarEventBus.$on('tab-navigate', this.navigateTab);
-    this.mainToolbarEventBus.$on('open-search-window', this.openSearchPanel);
-    this.mainToolbarEventBus?.$on('cancel-operation', this.cancelOperation);
   }
 
   beforeDestroy() {
     this.mainToolbarEventBus.$off('tab-navigate', this.navigateTab);
     this.mainToolbarEventBus.$off('open-search-window', this.openSearchPanel);
-    this.mainToolbarEventBus?.$off('cancel-operation', this.cancelOperation);
+    this.mainToolbarEventBus.$off('cancel-operation', this.cancelOperation);
   }
   // End of lifecycle events.
 
@@ -153,16 +151,12 @@ export default class DynamicWindow extends Vue {
   }
 
   public handleTabClick(tab: any) {
-    const data = tab.$el.dataset;
-    const tabId = parseInt(data.tabId);
-    const parentTabId = parseInt(data.parentTabId);
-    const parentRecordId = parseInt(data.parentRecordId);
-    const parentTableName = data.parentTableName;
+    const { id, parentTabId, parentId, parentTableName } = tab.$children[0].tab;
     this.childTabs = [];
     this.currentTab = '';
-    this.mainTabBaseApiUrl = null;
-    this.retrieveTabs(parentTabId, tabId, (tab, index) => {
-      this.buildChildTabFilterQuery(tab, index, parentRecordId, parentTableName);
+    this.retrieveTabs(parentTabId, id, async (tab: any, index: number) => {
+      tab.promoted = true;
+      await this.buildChildTabFilterQuery(tab, index, parentId, parentTableName);
     });
   }
 
@@ -185,8 +179,8 @@ export default class DynamicWindow extends Vue {
   public async loadChildTab(parent: any) {
     if (this.childTabs.length === 0 && !this.loadingChildTabs) {
       this.loadingChildTabs = true;
-      this.retrieveTabs(this.mainTab.id, (tab, index) => {
-        this.buildChildTabFilterQuery(tab, index, parent.id);
+      this.retrieveTabs(this.mainTab.id, (tab: any, index: number) => {
+        this.buildChildTabFilterQuery(tab, index, parent?.id);
       });
     } else {
       if (!this.currentTab.length) {
@@ -252,11 +246,11 @@ export default class DynamicWindow extends Vue {
 
     this.aDTabService()
       .retrieveWithFilter(params)
-      .then((res) => {
-        const tabs = res.data;
+      .then(async (res) => {
+        let tabs = res.data;
         for (let [index, tab] of tabs.entries()) {
           if (callback) {
-            callback(tab, index);
+            await callback(tab, index);
           }
           if (parentTabId && !tabId) {
             // Child always has parent.

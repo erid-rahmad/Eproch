@@ -46,7 +46,7 @@ public class ADTab extends AbstractAuditingEntity {
     private String targetEndpoint;
 
     @Column(name = "writable")
-    private Boolean writable;
+    private Boolean writable = true;
 
     @Column(name = "display_logic")
     private String displayLogic;
@@ -61,7 +61,7 @@ public class ADTab extends AbstractAuditingEntity {
     private String orderQuery;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "parentTab")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)

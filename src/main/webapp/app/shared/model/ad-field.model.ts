@@ -50,10 +50,10 @@ export class ADField implements IADField {
   ) {
     this.staticField = this.staticField || false;
     this.labelOnly = this.labelOnly || false;
-    this.showLabel = this.showLabel || false;
-    this.showInGrid = this.showInGrid || false;
-    this.showInDetail = this.showInDetail || false;
-    this.writable = this.writable || false;
-    this.active = this.active || false;
+    this.showLabel = this.showLabel || true;
+    this.showInGrid = this.showInGrid || true;
+    this.showInDetail = this.showInDetail || true;
+    this.writable = this.writable || true;
+    this.active = this.active || true;
   }
 }

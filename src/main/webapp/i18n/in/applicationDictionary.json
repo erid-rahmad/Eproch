@@ -1,0 +1,17 @@
+{
+  "opusWebApp": {
+    "applicationDictionary": {
+      "grid": {
+        "createLabel": "New {{ tabName }}",
+        "createOrEditLabel": "Edit {{ tabName }}",
+        "notFound": "No records found"
+      },
+      "created": "A new {{ tabName }} is created with identifier {{ param }}",
+      "updated": "A {{ tabName }} is updated with identifier {{ param }}",
+      "deleted": "A {{ tabName }} is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete {{ tabName }} {{ id }}?"
+      }
+    }
+  }
+}
