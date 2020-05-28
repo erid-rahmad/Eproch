@@ -121,18 +121,22 @@ public class DatabaseMetadataRepository {
 
       while (columns.next()) {
         String columnName = columns.getString("COLUMN_NAME");
+        String camelCasedName = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_CAMEL, columnName);
         int dataType = columns.getInt("DATA_TYPE");
         // String typeName = columns.getString("TYPE_NAME");
         long columnSize = columns.getInt("COLUMN_SIZE");
         // int decimalDigits = columns.getInt("DECIMAL_DIGITS");
         boolean nullable = columns.getString("IS_NULLABLE").equals("YES");
         boolean foreignKey = foreignColumns.contains(columnName);
-        ADColumn column = new ADColumn().sqlName(columnName);
+        ADColumn column = new ADColumn().name(camelCasedName).sqlName(columnName);
 
         // This is the existing table.
         if (table.getId() != null) {
           Optional<ADColumn> existingColumn = table.getADColumns().stream()
-            .filter((col) -> col.getSqlName().equals(columnName))
+            .filter((col) -> {
+              return (col.getName() != null && col.getName().equals(camelCasedName))
+                || (col.getSqlName() != null && col.getSqlName().equals(columnName));
+            })
             .findFirst();
 
           if (existingColumn.isPresent()) {

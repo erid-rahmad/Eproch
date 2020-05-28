@@ -72,7 +72,7 @@
     </changeSet>
     
     <!-- Added the entity audit columns -->
-    <changeSet id="20200420194526-audit-1" author="jhipster-entity-audit">
+    <changeSet id="20200429153000-audit-1" author="jhipster-entity-audit">
         <addColumn tableName="ad_tab">
             <column name="created_by" type="varchar(50)" defaultValue="system">
                 <constraints nullable="false"/>
@@ -97,7 +97,7 @@
     <changeSet id="20200429153000-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/fake-data/ad_tab.csv"
-                  separator=";"
+                  separator=","
                   tableName="ad_tab">
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
@@ -113,6 +113,9 @@
             <column name="ad_organization_id" type="numeric"/>
             <column name="ad_table_id" type="numeric"/>
             <column name="ad_window_id" type="numeric"/>
+            <column name="parent_tab_id" type="numeric"/>
+            <column name="parent_column_id" type="numeric"/>
+            <column name="foreign_column_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

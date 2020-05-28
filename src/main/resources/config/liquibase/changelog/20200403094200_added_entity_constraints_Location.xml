@@ -14,11 +14,5 @@
                                  referencedColumnNames="id"
                                  referencedTableName="city"/>
 
-        <addForeignKeyConstraint baseColumnNames="vendor_id"
-                                 baseTableName="location"
-                                 constraintName="fk_location_vendor_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="vendor"/>
-
     </changeSet>
 </databaseChangeLog>

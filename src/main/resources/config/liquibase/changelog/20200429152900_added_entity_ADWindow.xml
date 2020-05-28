@@ -42,7 +42,7 @@
     </changeSet>
     
     <!-- Added the entity audit columns -->
-    <changeSet id="20200420194526-audit-1" author="jhipster-entity-audit">
+    <changeSet id="20200429152900-audit-1" author="jhipster-entity-audit">
         <addColumn tableName="ad_window">
             <column name="created_by" type="varchar(50)" defaultValue="system">
                 <constraints nullable="false"/>
@@ -67,7 +67,7 @@
     <changeSet id="20200429152900-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/fake-data/ad_window.csv"
-                  separator=";"
+                  separator=","
                   tableName="ad_window">
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
