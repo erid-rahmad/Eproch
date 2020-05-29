@@ -12,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link Country}.
@@ -43,6 +45,13 @@ public class CountryService {
         Country country = countryMapper.toEntity(countryDTO);
         country = countryRepository.save(country);
         return countryMapper.toDto(country);
+    }
+
+    public List<Country> saveAll(List<CountryDTO> countries) {
+        log.debug("Request to save all Country from import from csv : {}", countries);
+        List<Country> country = countries.stream().map(c -> countryMapper.toEntity(c)).collect(Collectors.toList());
+
+        return countryRepository.saveAll(country);
     }
 
     /**

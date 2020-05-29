@@ -8,7 +8,8 @@
         "notFound": "No Countries found",
         "filterRecord": "Filter Record",
         "visibleColumn": "Visible Column",
-        "downloadDocument": "Download Excel",
+        "export": "Export Country",
+        "import": "Import Country",
         "refresh": "Refresh"
       },
       "created": "A new Country is created with identifier {{ param }}",

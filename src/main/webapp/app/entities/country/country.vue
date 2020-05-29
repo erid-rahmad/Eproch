@@ -41,26 +41,26 @@
                     @click="clear()"
                 />
                 <el-button 
-                    :loading="downloadLoading"
+                    :loading="isLoading"
                     style="margin-left: 0px;"
                     size="mini"
                     type="primary" 
                     icon="el-icon-download" 
-                    @click="handleModalVisible('downloadDoc')"
-                    :title="$t('opusWebApp.country.home.downloadDocument')"/>
-                    <!--@click="handleDownload"-->
+                    @click="handleModalVisible('export')"
+                    :title="$t('opusWebApp.country.home.export')"/>
+                    <!--@click="handleExport"-->
 
                 <el-button 
-                    :loading="downloadLoading"
+                    :loading="isLoading"
                     style="margin-left: 0px;"
                     size="mini"
                     type="primary" 
                     icon="el-icon-upload2" 
-                    disabled
-                    :title="$t('opusWebApp.country.home.upload')"/>
+                    @click="handleModalVisible('import')"
+                    :title="$t('opusWebApp.country.home.import')"/>
                     
                 <el-button 
-                    :loading="downloadLoading"
+                    :loading="isLoading"
                     style="margin-left: 0px;"
                     size="mini"
                     type="primary" 
@@ -101,7 +101,8 @@
                 fit
                 max-height="560px"
                 style="width: 100%"
-                :row-class-name="tableRowClassName"
+                ref="tableCheck"
+                :row-class-name="rowClassName"
                 :data="countries"
                 :default-sort="{prop: 'name', order: 'ascending'}"
                 :empty-text="$t('opusWebApp.country.home.notFound')"
@@ -204,8 +205,13 @@
                     :label="$t('opusWebApp.country.active')"
                 >
                     <template slot-scope="scope">
-                        <el-checkbox
+                        <!--<el-checkbox
                             v-bind:checked="checkedActive"
+                            @change="checkActive(scope.row)"
+                            align="center"
+                            />-->
+                        <el-switch 
+                            v-model="scope.row.checkedActive" 
                             @change="checkActive(scope.row)"
                             align="center"
                             />
@@ -283,25 +289,26 @@
             </el-table>
             <el-pagination
                 background
+                layout="total, sizes, prev, pager, next, jumper"
                 @size-change="handleSizeChange"
                 @current-change="loadPage"
                 :current-page.sync="page"
                 :page-sizes="[10, 20, 50, 100]"
                 :page-size="itemsPerPage"
-                layout="total, sizes, prev, pager, next, jumper"
                 :total="queryCount">
             </el-pagination>
         </div>
 
         <el-dialog
+            width="35%"
             :visible.sync="showDeleteDialog"
-            width="30%"
             :title="$t('entity.delete.title')"
         >
             <template>
                 <span>{{ $t('opusWebApp.country.delete.question', {'id': ""}) }}</span>
                 <div slot="footer">
                     <el-button 
+                        style="margin-left: 0px;"
                         size="mini"
                         icon="el-icon-delete" 
                         type="danger" 
@@ -309,6 +316,7 @@
                         {{ $t('entity.action.delete') }}
                     </el-button>
                     <el-button 
+                        style="margin-left: 0px;"
                         size="mini"
                         icon="el-icon-close" 
                         @click="closeDialog()">
@@ -320,8 +328,8 @@
         </el-dialog>
 
         <el-dialog
-            :visible.sync="showFilterRecord"
             width="50%"
+            :visible.sync="showFilterRecord"
             :title="$t('opusWebApp.country.home.filterRecord')"
             >
             <template>
@@ -329,7 +337,7 @@
                     <el-tab-pane label="Lookup Record" name="first">
                         
                         <el-form label-width="100px" size="mini">
-                            <el-form-item label="Name">
+                            <el-form-item label="Name:">
                                 <el-input 
                                     v-model="listQuery.name"
                                     placeholder="Name" 
@@ -337,7 +345,7 @@
                                     size="mini"
                                     @keyup.enter.native="handleBasicFilter" />
                             </el-form-item>
-                            <el-form-item label="Code">
+                            <el-form-item label="Code:">
                                 <el-input 
                                     v-model="listQuery.code"
                                     placeholder="Code" 
@@ -345,7 +353,7 @@
                                     size="mini"
                                     @keyup.enter.native="handleBasicFilter" />
                             </el-form-item>
-                            <el-form-item label="Currency">
+                            <el-form-item label="Currency:">
                                 <el-select
                                     size="mini"
                                     filterable
@@ -366,8 +374,8 @@
                                     size="mini"
                                     type="primary" 
                                     icon="el-icon-search"
-                                    :loading="isSaving"
                                     @click="handleBasicFilter"
+                                    :loading="isSaving"
                                     :title="$t('opusWebApp.country.home.search')">
                                     Search
                                 </el-button>
@@ -520,7 +528,7 @@
         </el-dialog>
 
         <el-dialog
-            width="30%"
+            width="35%"
             :visible.sync="showVisibleColumn"
             :title="$t('opusWebApp.country.home.visibleColumn')"
         >
@@ -556,16 +564,16 @@
         </el-dialog>
 
         <el-dialog
-            width="30%"
-            :visible.sync="showDownloadDoc"
-            :title="$t('opusWebApp.country.home.downloadDocument')"
+            width="35%"
+            :visible.sync="showExport"
+            :title="$t('opusWebApp.country.home.export')"
         >
             <template>
-                <el-form label-width="100px" size="mini">
+                <el-form label-width="110px" size="mini">
                     
-                    <el-form-item label="Name">
+                    <el-form-item label="Name:">
                         <el-input 
-                            v-model="listTypeBook.name"
+                            v-model="formExport.name"
                             placeholder="Name" 
                             style="width: 200px;"
                             size="mini" />
@@ -574,29 +582,48 @@
                     <el-form-item label="Files of Type:">
                         <el-select
                             size="mini"
-                            v-model="listTypeBook.type"
-                            placeholder="Select Type Excel"
+                            v-model="formExport.type"
+                            placeholder="Select Type"
                         >
                             <el-option
-                                v-for="typeBook in chooseBookType"
+                                v-for="typeBook in chooseBookTypeExport"
                                 :key="typeBook.type"
-                                :label="typeBook.type"
+                                :label="typeBook.name"
                                 :value="typeBook.type"
                             />
                         </el-select>
                     </el-form-item>
 
                     <el-form-item >
-                        <el-checkbox
+                        <!--<el-checkbox
                             v-model="checkSelected"
-                            @change="handleDownloadSelection"
+                            @change="handleExportSelection"
                             align="center"
                             label="Export current row only?"
-                            >
-                            
-                        </el-checkbox>
+                        />-->
+                        <el-switch
+                            v-model="checkSelected"
+                            @change="handleExportSelection"
+                            active-text="Export current row only?"
+                        />
                     </el-form-item>
-                    
+
+                    <el-form-item label="Select Tab:">
+                        <el-checkbox-group 
+                            v-model="tabChild" 
+                            size="mini" 
+                        >
+                            <el-checkbox-button 
+                                v-for="tab in multipleTab" 
+                                :key="tab.key"
+                                :label="tab.key" 
+                                :value="tab.key"
+                            >
+                                {{tab.name}}
+                            </el-checkbox-button>
+                        </el-checkbox-group>
+                    </el-form-item>
+
                 </el-form>
                 <div slot="footer">
                     <el-button 
@@ -604,13 +631,14 @@
                         size="mini"
                         type="primary" 
                         icon="el-icon-download"
-                        v-bind:disabled="buttonDisable"
-                        :loading="listLoading"
-                        @click="handleDownload"
-                        :title="$t('opusWebApp.country.home.search')">
-                        Download
+                        :disabled="buttonDisableExport"
+                        :loading="isLoading"
+                        @click="handleExport"
+                        :title="$t('opusWebApp.country.home.export')">
+                        Export
                     </el-button>
                     <el-button 
+                        style="margin-left: 0px;"
                         icon="el-icon-close" 
                         size="mini"
                         type="default" 
@@ -622,17 +650,81 @@
             
         </el-dialog>
 
+        <el-dialog
+            width="35%"
+            :visible.sync="showImport"
+            :title="$t('opusWebApp.country.home.import')"
+        >
+            <template>
+                <el-form label-width="110px" size="mini">
+                        
+                    <el-form-item label="Files of Type:">
+                        <el-select
+                            size="mini"
+                            v-model="bookType"
+                            @change="changeBookType"
+                            placeholder="Select Type"
+                        >
+                            <el-option
+                                v-for="typeBook in chooseBookTypeImport"
+                                :key="typeBook.type"
+                                :label="typeBook.name"
+                                :value="typeBook.type"
+                            />
+                        </el-select>
+                    </el-form-item>
+
+                    <el-form-item>
+
+                        <el-upload
+                            :accept="bookType"
+                            ref="import"
+                            action="/api/import-csv-file"
+                            :on-success="successImport"
+                            :on-error="errorImport"
+                            :disabled="buttonDisableImport"
+                            :headers="importHeaders"
+                            :auto-upload="false"
+                            :before-upload="beforeImport"
+                            :limit="1"
+                            :on-exceed="handleExceed">
+                            <el-button 
+                                :disabled="buttonDisableImport"
+                                style="margin-left: 0px;"
+                                size="mini"
+                                type="primary" 
+                                icon="el-icon-search"
+                                slot="trigger">Select File</el-button>
+                            <el-button 
+                                :disabled="buttonDisableImport"
+                                style="margin-left: 0px;"
+                                size="mini" 
+                                type="success" 
+                                icon="el-icon-upload2"
+                                @click="submitImport">Import</el-button>
+                            
+                            <div class="el-upload__tip" slot="tip">csv files with a size less than ...kb</div>
+                        </el-upload>
+
+                    </el-form-item>
+                    
+                </el-form>
+                
+            </template>
+
+        </el-dialog>
+
     </div>
 </template>
 
 <style>
-  .el-table .primary-row {
-    background: #F5F7FA;
-  }
+    .el-table .primary-row {
+        background: #F5F7FA;
+    }
 
-  .el-table .warning-row {
-    background: oldlace;
-  }
+    .el-table .warning-row {
+        background: oldlace;
+    }
 </style>
 
 <script lang="ts" src="./country.component.ts">
