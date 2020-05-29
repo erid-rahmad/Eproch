@@ -46,9 +46,9 @@
                     size="mini"
                     type="primary" 
                     icon="el-icon-download" 
-                    @click="handleModalVisible('downloadDoc')"
-                    :title="$t('opusWebApp.country.home.downloadDocument')"/>
-                    <!--@click="handleDownload"-->
+                    @click="handleModalVisible('export')"
+                    :title="$t('opusWebApp.country.home.export')"/>
+                    <!--@click="handleExport"-->
 
                 <el-button 
                     :loading="isLoading"
@@ -56,8 +56,8 @@
                     size="mini"
                     type="primary" 
                     icon="el-icon-upload2" 
-                    @click="handleModalVisible('uploadDoc')"
-                    :title="$t('opusWebApp.country.home.uploadDocument')"/>
+                    @click="handleModalVisible('import')"
+                    :title="$t('opusWebApp.country.home.import')"/>
                     
                 <el-button 
                     :loading="isLoading"
@@ -102,7 +102,7 @@
                 max-height="560px"
                 style="width: 100%"
                 ref="tableCheck"
-                :row-class-name="tableRowClassName"
+                :row-class-name="rowClassName"
                 :data="countries"
                 :default-sort="{prop: 'name', order: 'ascending'}"
                 :empty-text="$t('opusWebApp.country.home.notFound')"
@@ -337,7 +337,7 @@
                     <el-tab-pane label="Lookup Record" name="first">
                         
                         <el-form label-width="100px" size="mini">
-                            <el-form-item label="Name">
+                            <el-form-item label="Name:">
                                 <el-input 
                                     v-model="listQuery.name"
                                     placeholder="Name" 
@@ -345,7 +345,7 @@
                                     size="mini"
                                     @keyup.enter.native="handleBasicFilter" />
                             </el-form-item>
-                            <el-form-item label="Code">
+                            <el-form-item label="Code:">
                                 <el-input 
                                     v-model="listQuery.code"
                                     placeholder="Code" 
@@ -353,7 +353,7 @@
                                     size="mini"
                                     @keyup.enter.native="handleBasicFilter" />
                             </el-form-item>
-                            <el-form-item label="Currency">
+                            <el-form-item label="Currency:">
                                 <el-select
                                     size="mini"
                                     filterable
@@ -565,15 +565,15 @@
 
         <el-dialog
             width="35%"
-            :visible.sync="showDownloadDoc"
-            :title="$t('opusWebApp.country.home.downloadDocument')"
+            :visible.sync="showExport"
+            :title="$t('opusWebApp.country.home.export')"
         >
             <template>
                 <el-form label-width="110px" size="mini">
                     
-                    <el-form-item label="Name">
+                    <el-form-item label="Name:">
                         <el-input 
-                            v-model="formDownload.name"
+                            v-model="formExport.name"
                             placeholder="Name" 
                             style="width: 200px;"
                             size="mini" />
@@ -582,11 +582,11 @@
                     <el-form-item label="Files of Type:">
                         <el-select
                             size="mini"
-                            v-model="formDownload.type"
+                            v-model="formExport.type"
                             placeholder="Select Type"
                         >
                             <el-option
-                                v-for="typeBook in chooseBookTypeDownload"
+                                v-for="typeBook in chooseBookTypeExport"
                                 :key="typeBook.type"
                                 :label="typeBook.name"
                                 :value="typeBook.type"
@@ -595,16 +595,35 @@
                     </el-form-item>
 
                     <el-form-item >
-                        <el-checkbox
+                        <!--<el-checkbox
                             v-model="checkSelected"
-                            @change="handleDownloadSelection"
+                            @change="handleExportSelection"
                             align="center"
                             label="Export current row only?"
-                            >
-                            
-                        </el-checkbox>
+                        />-->
+                        <el-switch
+                            v-model="checkSelected"
+                            @change="handleExportSelection"
+                            active-text="Export current row only?"
+                        />
                     </el-form-item>
-                    
+
+                    <el-form-item label="Select Tab:">
+                        <el-checkbox-group 
+                            v-model="tabChild" 
+                            size="mini" 
+                        >
+                            <el-checkbox-button 
+                                v-for="tab in multipleTab" 
+                                :key="tab.key"
+                                :label="tab.key" 
+                                :value="tab.key"
+                            >
+                                {{tab.name}}
+                            </el-checkbox-button>
+                        </el-checkbox-group>
+                    </el-form-item>
+
                 </el-form>
                 <div slot="footer">
                     <el-button 
@@ -614,9 +633,9 @@
                         icon="el-icon-download"
                         :disabled="buttonDisableExport"
                         :loading="isLoading"
-                        @click="handleDownload"
-                        :title="$t('opusWebApp.country.home.downloadDocument')">
-                        Download
+                        @click="handleExport"
+                        :title="$t('opusWebApp.country.home.export')">
+                        Export
                     </el-button>
                     <el-button 
                         style="margin-left: 0px;"
@@ -633,22 +652,21 @@
 
         <el-dialog
             width="35%"
-            :visible.sync="showUploadDoc"
-            :title="$t('opusWebApp.country.home.uploadDocument')"
+            :visible.sync="showImport"
+            :title="$t('opusWebApp.country.home.import')"
         >
-            
             <template>
                 <el-form label-width="110px" size="mini">
                         
                     <el-form-item label="Files of Type:">
                         <el-select
                             size="mini"
-                            v-model="formUpload.bookType"
+                            v-model="bookType"
                             @change="changeBookType"
                             placeholder="Select Type"
                         >
                             <el-option
-                                v-for="typeBook in chooseBookTypeUpload"
+                                v-for="typeBook in chooseBookTypeImport"
                                 :key="typeBook.type"
                                 :label="typeBook.name"
                                 :value="typeBook.type"
@@ -659,16 +677,15 @@
                     <el-form-item>
 
                         <el-upload
-                            :accept="formUpload.bookType"
-                            class="upload-demo"
-                            ref="upload"
-                            action="/api/upload-csv-file"
-                            :on-success="successUpload"
-                            :on-error="errorUpload"
+                            :accept="bookType"
+                            ref="import"
+                            action="/api/import-csv-file"
+                            :on-success="successImport"
+                            :on-error="errorImport"
                             :disabled="buttonDisableImport"
-                            :headers="uploadHeaders"
+                            :headers="importHeaders"
                             :auto-upload="false"
-                            :before-upload="beforeUpload"
+                            :before-upload="beforeImport"
                             :limit="1"
                             :on-exceed="handleExceed">
                             <el-button 
@@ -684,7 +701,7 @@
                                 size="mini" 
                                 type="success" 
                                 icon="el-icon-upload2"
-                                @click="submitUpload">Upload</el-button>
+                                @click="submitImport">Import</el-button>
                             
                             <div class="el-upload__tip" slot="tip">csv files with a size less than ...kb</div>
                         </el-upload>

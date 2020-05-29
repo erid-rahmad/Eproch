@@ -39,8 +39,8 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
 
   public showDeleteDialog: boolean = false;
   public showVisibleColumn: boolean = false;
-  public showDownloadDoc: boolean = false;
-  public showUploadDoc: boolean = false;
+  public showExport: boolean = false;
+  public showImport: boolean = false;
   public showFilterRecord: boolean = false;
   public checkedActive: boolean = true;
   public checkSelected: boolean = true;
@@ -76,32 +76,44 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   public listLoading = true;
   public isSaving = false;
 
-  //download file excel
+  //export file excel
   public isLoading = false;
   public filename = 'Country List';
   public autoWidth = true;
-  public bookType = 'csv';
-  public uploadHeaders = {}
+  public bookType = '';
+  public importHeaders = {}
 
-  public formDownload = {
+  public formExport = {
     id: undefined,
     name: undefined,
     type: undefined
   }
 
-  public chooseBookTypeDownload = [
+  public tabChild = [];
+  public multipleTab = [
+    { id:'1', key:'region', name:'Region'},
+    { id:'3', key:'translation', name:'Translation'},
+    //{ id:'3', key:'countryGroup', name:'Country Group'},
+  ];
+
+  public chooseBookTypeExport = [
     { id: '1', type: 'csv', name: "CSV" },
     { id: '2', type: 'xlsx', name: "XLSX" },
     { id: '3', type: 'xls', name: "XLS" },
   ]
 
-  public chooseBookTypeUpload = [
+  public chooseBookTypeImport = [
     { id: '1', type: '.csv', name: "CSV" },
+    { id: '2', type: '.xls', name: "XLS" },
   ]
 
-  public formUpload = {
+  public selectTabToExport = [
+    { id: '1', entity: 'region', name: "Region" },
+  ]
+
+  /*public formImport = {
     bookType: undefined,
-  }
+  }*/
 
   //filter query
   public changeColumnOptionType = '';
@@ -116,14 +128,20 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   }
 
   //sample itemListQueryAdvance
-  public itemListQueryAdvance= [
-    { column: '', query: '', queryValue: ''},
-  ]
+  public itemListQueryAdvance= [{
+    column: '', 
+    query: '', 
+    queryValue: ''
+  }]
   public addFilterAdvance(): void {
-    this.itemListQueryAdvance.push({ column: '', query: '', queryValue: '' })
+    this.itemListQueryAdvance.push({ 
+      column: '', 
+      query: '', 
+      queryValue: '' 
+    });
   }
   public removeFilterAdvance(item, index) {
-    this.itemListQueryAdvance.splice(index, 1)
+    this.itemListQueryAdvance.splice(index, 1);
   }
 
   public activeTabsSearch = {
@@ -158,33 +176,31 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
 
   created() {
     const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
-    this.uploadHeaders['Authorization'] = `Bearer ${token}`;
+    this.importHeaders['Authorization'] = `Bearer ${token}`;
   }
 
   public mounted(): void {
-    //this.retrieveAllCountries();
-    this.checkedActive = true;
-    this.retrieveAndClearSelectionRow();
+    this.clear();
     CrudEventBus.$on('country-update-success', this.clear);
     this.initRelationships();
   }
 
   public clear(): void {
     this.page = 1;
-    this.filterQuery = ''
-    this.filterQueryCode = ''
-    this.filterQueryName = ''
-    this.filterQueryCurrency = ''
-    this.tempMultipleSelectionFilterAdvance = ''
-    this.listQuery.code = ''
-    this.listQuery.name = ''
-    this.listQuery.currencyId = ''
-    //this.retrieveAllCountries();
+    this.filterQuery = '';
+    this.filterQueryCode = '';
+    this.filterQueryName = '';
+    this.filterQueryCurrency = '';
+    this.tempMultipleSelectionFilterAdvance = '';
+    this.multipleSelection = [];
+    this.listQuery.code = '';
+    this.listQuery.name = '';
+    this.listQuery.currencyId = '';
     this.retrieveAndClearSelectionRow();
   }
 
   public retrieveAndClearSelectionRow(): void{
-    this.multipleSelectionCheckbox.splice(0)
+    this.multipleSelectionCheckbox.splice(0);
     this.retrieveAllCountries();
   }
 
@@ -193,18 +209,17 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   }
 
   columnOptionType(key: any) {
-    this.changeColumnOptionType = key.type
-    //console.log(key.type)
+    this.changeColumnOptionType = key.type;
   }
   
   public handleSelectionChangeFilterAdvance(value: any) {
-    this.multipleSelectionFilterAdvance = value
+    this.multipleSelectionFilterAdvance = value;
   }
 
   public executeFilterAdvance(): void{
     
     if(this.multipleSelectionFilterAdvance.length){
-      this.tempMultipleSelectionFilterAdvance = ''
+      this.tempMultipleSelectionFilterAdvance = '';
       for (let i = 0; i < this.multipleSelectionFilterAdvance.length; i++) {
 
         this.tempMultipleSelectionFilterAdvanceColumn = this.multipleSelectionFilterAdvance[i].column.code;
@@ -213,10 +228,9 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
         
         this.tempMultipleSelectionFilterAdvance += `&${this.tempMultipleSelectionFilterAdvanceColumn}.${this.tempMultipleSelectionFilterAdvanceQuery}=${this.tempMultipleSelectionFilterAdvanceQueryValue}`;
       }
-      this.filterQuery = ''
-      this.filterQuery = this.tempMultipleSelectionFilterAdvance
-      //this.retrieveAllCountries()
-      this.retrieveAndClearSelectionRow()
+      this.filterQuery = '';
+      this.filterQuery = this.tempMultipleSelectionFilterAdvance;
+      this.retrieveAndClearSelectionRow();
 
     }else{
       this.$notify({
@@ -229,42 +243,35 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   }
 
   public handleBasicFilter() {
-    //this.listQuery.page = 1
-    //if((this.listQuery.search != undefined)&&(this.listQuery.option != '')&&(this.listQuery.option != undefined)){
       if(this.listQuery.code){
-        this.filterQueryCode = `&code.contains=${this.listQuery.code}`
+        this.filterQueryCode = `&code.contains=${this.listQuery.code}`;
       }else{
-        this.filterQueryCode = ''
+        this.filterQueryCode = '';
       }
+
       if(this.listQuery.name){
-        this.filterQueryName = `&name.contains=${this.listQuery.name}`
+        this.filterQueryName = `&name.contains=${this.listQuery.name}`;
       }else{
-        this.filterQueryName = ''
+        this.filterQueryName = '';
       }
+
       if(this.listQuery.currencyId){
-        this.filterQueryCurrency = `&currencyId.equals=${this.listQuery.currencyId}`
+        this.filterQueryCurrency = `&currencyId.equals=${this.listQuery.currencyId}`;
       }else{
-        this.filterQueryCurrency = ''
+        this.filterQueryCurrency = '';
       }
-      this.filterQuery = this.filterQueryCode + this.filterQueryName + this.filterQueryCurrency
-      //this.retrieveAllCountries()
-      this.retrieveAndClearSelectionRow()
-    /*}else{
-      this.$notify({
-        title: 'Warning',
-        message: "Please input filter",
-        type: 'warning',
-        duration: 3000
-      });
-    }*/
+
+      this.filterQuery = this.filterQueryCode + this.filterQueryName + this.filterQueryCurrency;
+      this.retrieveAndClearSelectionRow();
+
   }
 
   get operators(){
-    return this.query.filter(query=>query.type===this.changeColumnOptionType)
+    return this.query.filter(query=>query.type===this.changeColumnOptionType);
   }
   
   public retrieveAllCountries(): void {
-    this.listLoading = true
+    this.listLoading = true;
     this.isFetching = true;
     this.isSaving = true;
 
@@ -335,7 +342,6 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
             edit: true,
             duplicate: true
           })
-          //console.log(`${this.multipleSelection[0].name} - oke, get value`)
 
         }else{
           this.$notify({
@@ -361,16 +367,14 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   }
 
   public handleMultipleDataToJson(params: any) {
-      const filterVal = ['id', 'code', 'name', 'currencyCode']
-      const data = formatJson(filterVal, params)
+      const filterVal = ['id', 'code', 'name', 'currencyCode'];
+      const data = formatJson(filterVal, params);
 
       this.getId = data;
       //this.showDeleteDialog = true;
   }
 
   public removeCountry(): void {
-    //console.log(this.multipleSelection.length)
-    
     for (let i = 0; i < this.multipleSelection.length; i++) {
       //console.log(this.removeId[i][0])
       this.countryService()
@@ -384,9 +388,9 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
             duration: 3000
           });
           this.getId[i] = null;
-          //this.retrieveAllCountries();
-          this.retrieveAndClearSelectionRow()
+          this.clear();
           this.closeDialog();
+
         })
         .catch(()=>{
           const message = "Error, already used in region or city/ ........";
@@ -397,51 +401,54 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
             duration: 3000
           });
           this.closeDialog();
+
         });
         //error because code country used region & city
     }
   }
 
-  public async handleDownload() {
-    this.bookType = this.formDownload.type;
-    this.filename = this.formDownload.name;
+  public async handleExport() {
+    this.bookType = this.formExport.type;
+    this.filename = this.formExport.name;
     this.isLoading = true;
 
-    const tHeader = ['Id', 'Code', 'Name', 'Currency']
-    const filterVal = ['id', 'code', 'name', 'currencyCode']
-    var countries: any = ''
-    var data: any = ''
+    const tHeader = ['Id', 'Code', 'Name', 'Currency', 'Currency Name'];
+    const filterVal = ['id', 'code', 'name', 'currencyCode', 'currencyName'];
+    var countries: any = '';
+    var data: any = '';
 
     if(this.checkSelected == true){
-      
+      //selected export row
       if(this.multipleSelection.length >= 1){
         for (let i = 0; i < this.multipleSelection.length; i++) {
-          countries = this.countries[i]
-          data = formatJson(filterVal, this.multipleSelection)
+          countries = this.countries[i];
+          data = formatJson(filterVal, this.multipleSelection);
         }
       }
+
     }else{
-      //countries = this.countries
+      //export all
       const res = await this.countryService().retrieve();
+      // this.query.filter(query=>query.type===this.changeColumnOptionType);
       countries = res.data;
-      
-      data = formatJson(filterVal, countries)
+      data = formatJson(filterVal, countries);
     }
-    exportJson2Excel(tHeader, data, this.filename !== '' ? this.filename : undefined, undefined, undefined, this.autoWidth, this.bookType)
+
+    
+    console.log(this.tabChild);
+    console.log(data);
+    console.log(this.regions);
+    exportJson2Excel(tHeader, data, this.filename !== '' ? this.filename : undefined, undefined, undefined, this.autoWidth, this.bookType);
     this.isLoading = false;
   }
 
-  public handleDownloadSelection(){
-    
+  public handleExportSelection(){
     if(this.checkSelected == true){
-      //console.log('cek true checked')
 
       if(this.multipleSelection.length >= 1){
-        
         this.buttonDisableExport = false;
         
       }else{
-        
         this.buttonDisableExport = true;
         this.$notify({
           title: 'Warning',
@@ -451,8 +458,10 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
         });
 
       }
+
     }else{
       this.buttonDisableExport = false
+
     }
 
   }
@@ -474,14 +483,13 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
 
   public handleSizeChange(size: number) {
     this.itemsPerPage = size;
-    //this.retrieveAllCountries();
     this.retrieveAndClearSelectionRow();
   }
 
   public handleSelectionChangeAll(value: any) {
-    this.multipleSelectionCheckbox.splice(0);
-    console.log(value.length);
-    
+    //this.multipleSelectionCheckbox.splice(0);
+    //console.log(value.length);
+    this.multipleSelection = value;
     if(value.length === 0){
       this.buttonDisableExport = true;
     }else{
@@ -499,7 +507,7 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     }
 
     this.countries.forEach((r,i) => {
-      
+      //highlight selection
       if(r.id === o.id) {
         if(this.multipleSelectionCheckbox.indexOf(i) === -1) {
           this.multipleSelectionCheckbox.push(i)
@@ -512,10 +520,11 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   }
   
   rowClassName({row, rowIndex}) {
-    //return this.$refs.tableCheck.selection.find(element => element.id == row.id) ? 'warning-row' : ''
+    //highlight all
+    return (<any>this.$refs.tableCheck).selection.find(element => element.id == row.id) ? 'warning-row' : '';
   }
 
-  tableRowClassName({row, rowIndex}) {
+  /*tableRowClassName({row, rowIndex}) {
     let color = ''
     this.multipleSelectionCheckbox.forEach((r,i) => {
       if (rowIndex === r) {
@@ -523,10 +532,9 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
       }
     })
     return color;
-  }
+  }*/
 
   public transition(): void {
-    //this.retrieveAllCountries();
     this.retrieveAndClearSelectionRow();
   }
 /*
@@ -542,10 +550,11 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
   }
 
   public closeDialog(): void {
+    this.showFilterRecord = false;
     this.showDeleteDialog = false;
     this.showVisibleColumn = false;
-    this.showDownloadDoc = false;
-    this.showUploadDoc = false;
+    this.showExport = false;
+    this.showImport = false;
   }
 
   public openDetails(instance: ICountry) {
@@ -569,10 +578,8 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
         .update(row)
         .then(param => {
           this.isSaving = false;
-          //this.$router.go(-1);
           const message = this.$t('opusWebApp.country.updated', { param: param.id });
-          //this.retrieveAllCountries();
-          this.retrieveAndClearSelectionRow();
+          this.clear();
           //CrudEventBus.$emit('country-update-success')
           this.$notify({
             title: 'Success',
@@ -606,7 +613,6 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
 
   public cancelDuplicate(item, index){
     this.countries.splice(this.countries.findIndex(e => e === index), 1)
-    //console.log(index)
   }
 
   public confirmDuplicate(row: any){
@@ -616,8 +622,7 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
       .then(param => {
         this.isSaving = false;
         const message = this.$t('opusWebApp.country.created', { param: param.id });
-        //this.retrieveAllCountries();
-        this.retrieveAndClearSelectionRow();
+        this.clear();
         this.$notify({
           title: 'Success',
           message: message.toString(),
@@ -661,12 +666,13 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
       });
   }
 
+  //show modal
   public handleModalVisible(param: string) {
-    if(param === 'downloadDoc'){
-      this.showDownloadDoc = true;
+    if(param === 'export'){
+      this.showExport = true;
       
-    }else if(param === 'uploadDoc'){
-      this.showUploadDoc = true;
+    }else if(param === 'import'){
+      this.showImport = true;
 
     }else if(param === 'visibleColumn'){
       this.showVisibleColumn = true;
@@ -677,20 +683,18 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
     }
   }
 
+  //attribute import csv
   changeBookType(key: any){
     if(key){
       this.buttonDisableImport = false;
     }
   }
-  submitUpload() {
-    //console.log(this.formUpload.bookType);
-    //console.log(this.$refs.upload);
-    (<any>this.$refs.upload).submit();
+  submitImport() {
+    (<any>this.$refs.import).submit();
 
   }
   handleExceed(files, fileList) {
     //this.$message.warning(`The limit is 1, you selected ${files.length} files this time, add up to ${files.length + fileList.length} totally`);
-    //console.log(files);
     const message = "The limit is 1 file";
     this.$notify({
       title: 'Warning',
@@ -699,8 +703,7 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
       duration: 3000
     });
   }
-  beforeUpload(file) {
-    //console.log(file);
+  beforeImport(file) {
     const isCSV = file.type === 'application/vnd.ms-excel';
     if (!isCSV) {
       const message = "Document must be CSV format!";
@@ -714,8 +717,7 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
 
     return isCSV;
   }
-  successUpload(res, file, fileList){
-    //console.log(res);
+  successImport(res, file, fileList){
     const message = "Import data success";
     this.$notify({
       title: 'Success',
@@ -723,10 +725,9 @@ export default class Country extends mixins(Vue2Filters.mixin, AlertMixin) {
       type: 'success',
       duration: 3000
     });
-    this.retrieveAndClearSelectionRow();
+    this.clear();
   }
-  errorUpload(err, file, fileList){
-    //console.log(err);
+  errorImport(err, file, fileList){
     const message = "Import data error";
     this.$notify({
       title: 'Error',

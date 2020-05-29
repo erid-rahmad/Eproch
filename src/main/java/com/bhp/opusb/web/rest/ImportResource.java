@@ -37,12 +37,12 @@ public class ImportResource {
   @Autowired
   private CountryService countryService;
 
-  @PostMapping("/upload-csv-file")
+  @PostMapping("/import-csv-file")
   @ResponseBody
   public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file, Model model) throws URISyntaxException {
      
     if (file.isEmpty()) {
-      model.addAttribute("message", "Please select a CSV file to upload.");
+      model.addAttribute("message", "Please select a CSV file to import.");
       model.addAttribute("status", false);
     } else {
       // parse CSV file to create a list of `User` objects
