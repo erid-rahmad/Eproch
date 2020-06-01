@@ -77,6 +77,12 @@
                         <span>{{aDField.displayLogic}}</span>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDField.readOnlyLogic')">Read Only Logic</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDField.readOnlyLogic}}</span>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDField.writable')">Writable</span>
                     </dt>
                     <dd>
@@ -95,18 +101,40 @@
                         <span>{{aDField.columnSpan}}</span>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDField.updatable')">Updatable</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDField.updatable}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDField.alwaysUpdatable')">Always Updatable</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDField.alwaysUpdatable}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDField.copyable')">Copyable</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDField.copyable}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDField.defaultValue')">Default Value</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDField.defaultValue}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDField.formatPattern')">Format Pattern</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDField.formatPattern}}</span>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDField.active')">Active</span>
                     </dt>
                     <dd>
                         <span>{{aDField.active}}</span>
-                    </dd>
-                    <dt>
-                        <span v-text="$t('opusWebApp.aDField.adClient')">Ad Client</span>
-                    </dt>
-                    <dd>
-                        <div v-if="aDField.adClientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDField.adClientId}}">{{aDField.adClientId}}</router-link>
-                        </div>
                     </dd>
                     <dt>
                         <span v-text="$t('opusWebApp.aDField.adOrganization')">Ad Organization</span>
@@ -130,6 +158,14 @@
                     <dd>
                         <div v-if="aDField.adColumnId">
                             <router-link :to="{name: 'ADColumnView', params: {aDColumnId: aDField.adColumnId}}">{{aDField.adColumnId}}</router-link>
+                        </div>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDField.adValidationRule')">Ad Validation Rule</span>
+                    </dt>
+                    <dd>
+                        <div v-if="aDField.adValidationRuleId">
+                            <router-link :to="{name: 'AdValidationRuleView', params: {adValidationRuleId: aDField.adValidationRuleId}}">{{aDField.adValidationRuleId}}</router-link>
                         </div>
                     </dd>
                     <dt>

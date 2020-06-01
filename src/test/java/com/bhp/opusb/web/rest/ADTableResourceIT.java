@@ -3,7 +3,6 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADTable;
 import com.bhp.opusb.domain.ADColumn;
-import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.ADTableRepository;
 import com.bhp.opusb.service.ADTableService;
@@ -79,16 +78,6 @@ public class ADTableResourceIT {
             .view(DEFAULT_VIEW)
             .active(DEFAULT_ACTIVE);
         // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDTable.setAdClient(aDClient);
-        // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
             aDOrganization = ADOrganizationResourceIT.createEntity(em);
@@ -111,16 +100,6 @@ public class ADTableResourceIT {
             .name(UPDATED_NAME)
             .view(UPDATED_VIEW)
             .active(UPDATED_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createUpdatedEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDTable.setAdClient(aDClient);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -451,22 +430,6 @@ public class ADTableResourceIT {
 
         // Get all the aDTableList where aDColumn equals to aDColumnId + 1
         defaultADTableShouldNotBeFound("aDColumnId.equals=" + (aDColumnId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllADTablesByAdClientIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        ADClient adClient = aDTable.getAdClient();
-        aDTableRepository.saveAndFlush(aDTable);
-        Long adClientId = adClient.getId();
-
-        // Get all the aDTableList where adClient equals to adClientId
-        defaultADTableShouldBeFound("adClientId.equals=" + adClientId);
-
-        // Get all the aDTableList where adClient equals to adClientId + 1
-        defaultADTableShouldNotBeFound("adClientId.equals=" + (adClientId + 1));
     }
 
 

@@ -1,6 +1,5 @@
 package com.bhp.opusb.domain;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -45,6 +44,9 @@ public class ADWindow extends AbstractAuditingEntity {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "title_logic")
+    private String titleLogic;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
@@ -56,11 +58,6 @@ public class ADWindow extends AbstractAuditingEntity {
     @OneToMany(mappedBy = "adWindow")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ADTab> aDTabs = new HashSet<>();
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("aDWindows")
-    private ADClient adClient;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -100,6 +97,19 @@ public class ADWindow extends AbstractAuditingEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTitleLogic() {
+        return titleLogic;
+    }
+
+    public ADWindow titleLogic(String titleLogic) {
+        this.titleLogic = titleLogic;
+        return this;
+    }
+
+    public void setTitleLogic(String titleLogic) {
+        this.titleLogic = titleLogic;
     }
 
     public ADWindowType getType() {
@@ -153,19 +163,6 @@ public class ADWindow extends AbstractAuditingEntity {
         this.aDTabs = aDTabs;
     }
 
-    public ADClient getAdClient() {
-        return adClient;
-    }
-
-    public ADWindow adClient(ADClient aDClient) {
-        this.adClient = aDClient;
-        return this;
-    }
-
-    public void setAdClient(ADClient aDClient) {
-        this.adClient = aDClient;
-    }
-
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -202,6 +199,7 @@ public class ADWindow extends AbstractAuditingEntity {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", titleLogic='" + getTitleLogic() + "'" +
             ", type='" + getType() + "'" +
             ", active='" + isActive() + "'" +
             "}";

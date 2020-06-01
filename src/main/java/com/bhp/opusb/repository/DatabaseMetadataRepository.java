@@ -14,7 +14,6 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADTable;
@@ -49,9 +48,7 @@ public class DatabaseMetadataRepository {
     try {
       metaData = sessionImplementor.connection().getMetaData();
       try (ResultSet rs = metaData.getTables(null, null, null, new String[] { "TABLE", "VIEW" })) {
-        ADClient client = new ADClient();
         ADOrganization organization = new ADOrganization();
-        client.setId(1L);
         organization.setId(1L);
         while (rs.next()) {
           String tableName = rs.getString("TABLE_NAME");
@@ -65,7 +62,7 @@ public class DatabaseMetadataRepository {
           if (record.isEmpty()) {
             log.debug("table doesn't exists");
             String type = rs.getString("TABLE_TYPE");
-            table.adClient(client).adOrganization(organization).view(type.equals("VIEW")).active(true);
+            table.adOrganization(organization).view(type.equals("VIEW")).active(true);
             synchronizeColumns(table, metaData);
             adTableRepository.save(table);
             adColumnRepository.saveAll(table.getADColumns());
@@ -177,7 +174,7 @@ public class DatabaseMetadataRepository {
 
   private void initColumn(ADTable table, ADColumn column) {
     table.addADColumn(column);
-    column.adClient(table.getAdClient()).adOrganization(table.getAdOrganization())
+    column.adOrganization(table.getAdOrganization())
         .name(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_CAMEL, column.getSqlName()));
   }
 

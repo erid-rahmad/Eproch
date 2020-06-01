@@ -71,6 +71,10 @@ describe('ADTab e2e test', () => {
       expect(await updatePage.descriptionInput.getAttribute('value')).to.match(/description/);
 
 
+      await updatePage.iconNameInput.sendKeys('iconName');
+      expect(await updatePage.iconNameInput.getAttribute('value')).to.match(/iconName/);
+
+
       await updatePage.targetEndpointInput.sendKeys('targetEndpoint');
       expect(await updatePage.targetEndpointInput.getAttribute('value')).to.match(/targetEndpoint/);
 
@@ -101,6 +105,10 @@ describe('ADTab e2e test', () => {
       expect(await updatePage.orderQueryInput.getAttribute('value')).to.match(/orderQuery/);
 
 
+      await updatePage.tabSequenceInput.sendKeys('5');
+      expect(await updatePage.tabSequenceInput.getAttribute('value')).to.eq('5');
+
+
       const selectedActive = await updatePage.activeInput.isSelected();
       if (selectedActive) {
         await updatePage.activeInput.click();
@@ -110,7 +118,6 @@ describe('ADTab e2e test', () => {
         expect(await updatePage.activeInput.isSelected()).to.be.true;
       }
 
-      // await  selectLastOption(updatePage.adClientSelect);
       // await  selectLastOption(updatePage.adOrganizationSelect);
       // await  selectLastOption(updatePage.adTableSelect);
       // await  selectLastOption(updatePage.parentColumnSelect);
@@ -187,6 +194,10 @@ describe('ADTab e2e test', () => {
           await updatePage.descriptionInput.sendKeys('modified');
           expect(await updatePage.descriptionInput.getAttribute('value')).to.match(/modified/);
 
+          await updatePage.iconNameInput.clear();
+          await updatePage.iconNameInput.sendKeys('modified');
+          expect(await updatePage.iconNameInput.getAttribute('value')).to.match(/modified/);
+
           await updatePage.targetEndpointInput.clear();
           await updatePage.targetEndpointInput.sendKeys('modified');
           expect(await updatePage.targetEndpointInput.getAttribute('value')).to.match(/modified/);
@@ -215,6 +226,10 @@ describe('ADTab e2e test', () => {
           await updatePage.orderQueryInput.clear();
           await updatePage.orderQueryInput.sendKeys('modified');
           expect(await updatePage.orderQueryInput.getAttribute('value')).to.match(/modified/);
+
+          await clear(updatePage.tabSequenceInput);
+          await updatePage.tabSequenceInput.sendKeys('6');
+          expect(await updatePage.tabSequenceInput.getAttribute('value')).to.eq('6');
 
           const selectedActive = await updatePage.activeInput.isSelected();
           if (selectedActive) {

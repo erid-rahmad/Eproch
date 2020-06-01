@@ -16,7 +16,6 @@ import javax.validation.constraints.NotNull;
 import com.bhp.opusb.domain.enumeration.ADColumnType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -71,11 +70,20 @@ public class ADColumn extends AbstractAuditingEntity {
     @Column(name = "mandatory_logic")
     private String mandatoryLogic;
 
+    @Column(name = "display_logic")
+    private String displayLogic;
+
     @Column(name = "read_only_logic")
     private String readOnlyLogic;
 
     @Column(name = "updatable")
     private Boolean updatable = true;
+
+    @Column(name = "always_updatable")
+    private Boolean alwaysUpdatable;
+
+    @Column(name = "copyable")
+    private Boolean copyable;
 
     @Column(name = "default_value")
     private String defaultValue;
@@ -95,13 +103,17 @@ public class ADColumn extends AbstractAuditingEntity {
     @Column(name = "max_value")
     private Long maxValue;
 
+    @Column(name = "identifier")
+    private Boolean identifier;
+
+    @Column(name = "default_selection")
+    private Boolean defaultSelection;
+
+    @Column(name = "selection_sequence")
+    private Integer selectionSequence;
+
     @Column(name = "active")
     private Boolean active = true;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("aDColumns")
-    private ADClient adClient;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -111,6 +123,10 @@ public class ADColumn extends AbstractAuditingEntity {
     @ManyToOne
     @JsonIgnoreProperties("aDColumns")
     private ADReference adReference;
+
+    @ManyToOne
+    @JsonIgnoreProperties("aDColumns")
+    private AdValidationRule adValidationRule;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -277,6 +293,19 @@ public class ADColumn extends AbstractAuditingEntity {
         this.mandatoryLogic = mandatoryLogic;
     }
 
+    public String getDisplayLogic() {
+        return displayLogic;
+    }
+
+    public ADColumn displayLogic(String displayLogic) {
+        this.displayLogic = displayLogic;
+        return this;
+    }
+
+    public void setDisplayLogic(String displayLogic) {
+        this.displayLogic = displayLogic;
+    }
+
     public String getReadOnlyLogic() {
         return readOnlyLogic;
     }
@@ -301,6 +330,32 @@ public class ADColumn extends AbstractAuditingEntity {
 
     public void setUpdatable(Boolean updatable) {
         this.updatable = updatable;
+    }
+
+    public Boolean isAlwaysUpdatable() {
+        return alwaysUpdatable;
+    }
+
+    public ADColumn alwaysUpdatable(Boolean alwaysUpdatable) {
+        this.alwaysUpdatable = alwaysUpdatable;
+        return this;
+    }
+
+    public void setAlwaysUpdatable(Boolean alwaysUpdatable) {
+        this.alwaysUpdatable = alwaysUpdatable;
+    }
+
+    public Boolean isCopyable() {
+        return copyable;
+    }
+
+    public ADColumn copyable(Boolean copyable) {
+        this.copyable = copyable;
+        return this;
+    }
+
+    public void setCopyable(Boolean copyable) {
+        this.copyable = copyable;
     }
 
     public String getDefaultValue() {
@@ -381,6 +436,45 @@ public class ADColumn extends AbstractAuditingEntity {
         this.maxValue = maxValue;
     }
 
+    public Boolean isIdentifier() {
+        return identifier;
+    }
+
+    public ADColumn identifier(Boolean identifier) {
+        this.identifier = identifier;
+        return this;
+    }
+
+    public void setIdentifier(Boolean identifier) {
+        this.identifier = identifier;
+    }
+
+    public Boolean isDefaultSelection() {
+        return defaultSelection;
+    }
+
+    public ADColumn defaultSelection(Boolean defaultSelection) {
+        this.defaultSelection = defaultSelection;
+        return this;
+    }
+
+    public void setDefaultSelection(Boolean defaultSelection) {
+        this.defaultSelection = defaultSelection;
+    }
+
+    public Integer getSelectionSequence() {
+        return selectionSequence;
+    }
+
+    public ADColumn selectionSequence(Integer selectionSequence) {
+        this.selectionSequence = selectionSequence;
+        return this;
+    }
+
+    public void setSelectionSequence(Integer selectionSequence) {
+        this.selectionSequence = selectionSequence;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -392,19 +486,6 @@ public class ADColumn extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public ADClient getAdClient() {
-        return adClient;
-    }
-
-    public ADColumn adClient(ADClient aDClient) {
-        this.adClient = aDClient;
-        return this;
-    }
-
-    public void setAdClient(ADClient aDClient) {
-        this.adClient = aDClient;
     }
 
     public ADOrganization getAdOrganization() {
@@ -431,6 +512,19 @@ public class ADColumn extends AbstractAuditingEntity {
 
     public void setAdReference(ADReference aDReference) {
         this.adReference = aDReference;
+    }
+
+    public AdValidationRule getAdValidationRule() {
+        return adValidationRule;
+    }
+
+    public ADColumn adValidationRule(AdValidationRule adValidationRule) {
+        this.adValidationRule = adValidationRule;
+        return this;
+    }
+
+    public void setAdValidationRule(AdValidationRule adValidationRule) {
+        this.adValidationRule = adValidationRule;
     }
 
     public ADTable getAdTable() {
@@ -479,14 +573,20 @@ public class ADColumn extends AbstractAuditingEntity {
             ", importedColumn='" + getImportedColumn() + "'" +
             ", mandatory='" + isMandatory() + "'" +
             ", mandatoryLogic='" + getMandatoryLogic() + "'" +
+            ", displayLogic='" + getDisplayLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +
             ", updatable='" + isUpdatable() + "'" +
+            ", alwaysUpdatable='" + isAlwaysUpdatable() + "'" +
+            ", copyable='" + isCopyable() + "'" +
             ", defaultValue='" + getDefaultValue() + "'" +
             ", formatPattern='" + getFormatPattern() + "'" +
             ", minLength=" + getMinLength() +
             ", maxLength=" + getMaxLength() +
             ", minValue=" + getMinValue() +
             ", maxValue=" + getMaxValue() +
+            ", identifier='" + isIdentifier() + "'" +
+            ", defaultSelection='" + isDefaultSelection() + "'" +
+            ", selectionSequence=" + getSelectionSequence() +
             ", active='" + isActive() + "'" +
             "}";
     }

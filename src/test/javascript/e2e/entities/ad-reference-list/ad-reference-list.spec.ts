@@ -84,6 +84,7 @@ describe('ADReferenceList e2e test', () => {
         expect(await updatePage.activeInput.isSelected()).to.be.true;
       }
 
+      // await  selectLastOption(updatePage.adOrganizationSelect);
       // await  selectLastOption(updatePage.adReferenceSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;

@@ -26,7 +26,7 @@ describe('ADOrganization e2e test', () => {
   let updatePage: ADOrganizationUpdatePage;
   let detailsPage: ADOrganizationDetailsPage;
   let listPage: ADOrganizationComponentsPage;
-  /*let deleteDialog: ADOrganizationDeleteDialog;*/
+  let deleteDialog: ADOrganizationDeleteDialog;
   let beforeRecordsCount = 0;
 
   before(async () => {
@@ -61,19 +61,15 @@ describe('ADOrganization e2e test', () => {
       expect(await updatePage.title.getAttribute('id')).to.match(/opusWebApp.aDOrganization.home.createOrEditLabel/);
     });
 
-    /* it('should create and save ADOrganizations', async () => {
-
+    it('should create and save ADOrganizations', async () => {
       await updatePage.nameInput.sendKeys('name');
       expect(await updatePage.nameInput.getAttribute('value')).to.match(/name/);
-
 
       await updatePage.codeInput.sendKeys('code');
       expect(await updatePage.codeInput.getAttribute('value')).to.match(/code/);
 
-
       await updatePage.descriptionInput.sendKeys('description');
       expect(await updatePage.descriptionInput.getAttribute('value')).to.match(/description/);
-
 
       const selectedActive = await updatePage.activeInput.isSelected();
       if (selectedActive) {
@@ -83,8 +79,6 @@ describe('ADOrganization e2e test', () => {
         await updatePage.activeInput.click();
         expect(await updatePage.activeInput.isSelected()).to.be.true;
       }
-
-      // await  selectLastOption(updatePage.adClientSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
       await updatePage.saveButton.click();
@@ -97,13 +91,10 @@ describe('ADOrganization e2e test', () => {
 
       await waitUntilCount(listPage.records, beforeRecordsCount + 1);
       expect(await listPage.records.count()).to.eq(beforeRecordsCount + 1);
-    });*/
+    });
 
-    /*
     describe('Details, Update, Delete flow', () => {
-
       after(async () => {
-
         const deleteButton = listPage.getDeleteButton(listPage.records.first());
         await click(deleteButton);
 
@@ -123,7 +114,6 @@ describe('ADOrganization e2e test', () => {
       });
 
       it('should load details ADOrganization page and fetch data', async () => {
-
         const detailsButton = listPage.getDetailsButton(listPage.records.first());
         await click(detailsButton);
 
@@ -139,7 +129,6 @@ describe('ADOrganization e2e test', () => {
       });
 
       it('should load edit ADOrganization page, fetch data and update', async () => {
-
         const editButton = listPage.getEditButton(listPage.records.first());
         await click(editButton);
 
@@ -147,27 +136,26 @@ describe('ADOrganization e2e test', () => {
 
         expect(await updatePage.title.getText()).not.to.be.empty;
 
-          await updatePage.nameInput.clear();
-          await updatePage.nameInput.sendKeys('modified');
-          expect(await updatePage.nameInput.getAttribute('value')).to.match(/modified/);
+        await updatePage.nameInput.clear();
+        await updatePage.nameInput.sendKeys('modified');
+        expect(await updatePage.nameInput.getAttribute('value')).to.match(/modified/);
 
-          await updatePage.codeInput.clear();
-          await updatePage.codeInput.sendKeys('modified');
-          expect(await updatePage.codeInput.getAttribute('value')).to.match(/modified/);
+        await updatePage.codeInput.clear();
+        await updatePage.codeInput.sendKeys('modified');
+        expect(await updatePage.codeInput.getAttribute('value')).to.match(/modified/);
 
-          await updatePage.descriptionInput.clear();
-          await updatePage.descriptionInput.sendKeys('modified');
-          expect(await updatePage.descriptionInput.getAttribute('value')).to.match(/modified/);
+        await updatePage.descriptionInput.clear();
+        await updatePage.descriptionInput.sendKeys('modified');
+        expect(await updatePage.descriptionInput.getAttribute('value')).to.match(/modified/);
 
-          const selectedActive = await updatePage.activeInput.isSelected();
-          if (selectedActive) {
-            await updatePage.activeInput.click();
-            expect(await updatePage.activeInput.isSelected()).to.be.false;
-          } else {
-            await updatePage.activeInput.click();
-            expect(await updatePage.activeInput.isSelected()).to.be.true;
-          }
-
+        const selectedActive = await updatePage.activeInput.isSelected();
+        if (selectedActive) {
+          await updatePage.activeInput.click();
+          expect(await updatePage.activeInput.isSelected()).to.be.false;
+        } else {
+          await updatePage.activeInput.click();
+          expect(await updatePage.activeInput.isSelected()).to.be.true;
+        }
 
         await updatePage.saveButton.click();
 
@@ -178,6 +166,5 @@ describe('ADOrganization e2e test', () => {
         await waitUntilCount(listPage.records, beforeRecordsCount + 1);
       });
     });
-    */
   });
 });

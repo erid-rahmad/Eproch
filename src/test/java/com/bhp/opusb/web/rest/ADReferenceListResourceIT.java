@@ -1,14 +1,28 @@
 package com.bhp.opusb.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import com.bhp.opusb.OpusWebApp;
-import com.bhp.opusb.domain.ADReferenceList;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADReference;
+import com.bhp.opusb.domain.ADReferenceList;
 import com.bhp.opusb.repository.ADReferenceListRepository;
+import com.bhp.opusb.service.ADReferenceListQueryService;
 import com.bhp.opusb.service.ADReferenceListService;
 import com.bhp.opusb.service.dto.ADReferenceListDTO;
 import com.bhp.opusb.service.mapper.ADReferenceListMapper;
-import com.bhp.opusb.service.dto.ADReferenceListCriteria;
-import com.bhp.opusb.service.ADReferenceListQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,13 +33,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import javax.persistence.EntityManager;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link ADReferenceListResource} REST controller.
@@ -81,6 +88,16 @@ public class ADReferenceListResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .active(DEFAULT_ACTIVE);
         // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        aDReferenceList.setAdOrganization(aDOrganization);
+        // Add required entity
         ADReference aDReference;
         if (TestUtil.findAll(em, ADReference.class).isEmpty()) {
             aDReference = ADReferenceResourceIT.createEntity(em);
@@ -104,6 +121,16 @@ public class ADReferenceListResourceIT {
             .value(UPDATED_VALUE)
             .description(UPDATED_DESCRIPTION)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        aDReferenceList.setAdOrganization(aDOrganization);
         // Add required entity
         ADReference aDReference;
         if (TestUtil.findAll(em, ADReference.class).isEmpty()) {
@@ -542,6 +569,22 @@ public class ADReferenceListResourceIT {
         // Get all the aDReferenceListList where active is null
         defaultADReferenceListShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllADReferenceListsByAdOrganizationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADOrganization adOrganization = aDReferenceList.getAdOrganization();
+        aDReferenceListRepository.saveAndFlush(aDReferenceList);
+        Long adOrganizationId = adOrganization.getId();
+
+        // Get all the aDReferenceListList where adOrganization equals to adOrganizationId
+        defaultADReferenceListShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
+
+        // Get all the aDReferenceListList where adOrganization equals to adOrganizationId + 1
+        defaultADReferenceListShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
 
     @Test
     @Transactional

@@ -2,10 +2,10 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADField;
-import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADReference;
 import com.bhp.opusb.domain.ADColumn;
+import com.bhp.opusb.domain.AdValidationRule;
 import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.repository.ADFieldRepository;
 import com.bhp.opusb.service.ADFieldService;
@@ -78,6 +78,9 @@ public class ADFieldResourceIT {
     private static final String DEFAULT_DISPLAY_LOGIC = "AAAAAAAAAA";
     private static final String UPDATED_DISPLAY_LOGIC = "BBBBBBBBBB";
 
+    private static final String DEFAULT_READ_ONLY_LOGIC = "AAAAAAAAAA";
+    private static final String UPDATED_READ_ONLY_LOGIC = "BBBBBBBBBB";
+
     private static final Boolean DEFAULT_WRITABLE = false;
     private static final Boolean UPDATED_WRITABLE = true;
 
@@ -88,6 +91,21 @@ public class ADFieldResourceIT {
     private static final Integer DEFAULT_COLUMN_SPAN = 1;
     private static final Integer UPDATED_COLUMN_SPAN = 2;
     private static final Integer SMALLER_COLUMN_SPAN = 1 - 1;
+
+    private static final Boolean DEFAULT_UPDATABLE = false;
+    private static final Boolean UPDATED_UPDATABLE = true;
+
+    private static final Boolean DEFAULT_ALWAYS_UPDATABLE = false;
+    private static final Boolean UPDATED_ALWAYS_UPDATABLE = true;
+
+    private static final Boolean DEFAULT_COPYABLE = false;
+    private static final Boolean UPDATED_COPYABLE = true;
+
+    private static final String DEFAULT_DEFAULT_VALUE = "AAAAAAAAAA";
+    private static final String UPDATED_DEFAULT_VALUE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_FORMAT_PATTERN = "AAAAAAAAAA";
+    private static final String UPDATED_FORMAT_PATTERN = "BBBBBBBBBB";
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -132,20 +150,16 @@ public class ADFieldResourceIT {
             .gridSequence(DEFAULT_GRID_SEQUENCE)
             .detailSequence(DEFAULT_DETAIL_SEQUENCE)
             .displayLogic(DEFAULT_DISPLAY_LOGIC)
+            .readOnlyLogic(DEFAULT_READ_ONLY_LOGIC)
             .writable(DEFAULT_WRITABLE)
             .columnNo(DEFAULT_COLUMN_NO)
             .columnSpan(DEFAULT_COLUMN_SPAN)
+            .updatable(DEFAULT_UPDATABLE)
+            .alwaysUpdatable(DEFAULT_ALWAYS_UPDATABLE)
+            .copyable(DEFAULT_COPYABLE)
+            .defaultValue(DEFAULT_DEFAULT_VALUE)
+            .formatPattern(DEFAULT_FORMAT_PATTERN)
             .active(DEFAULT_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDField.setAdClient(aDClient);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -198,20 +212,16 @@ public class ADFieldResourceIT {
             .gridSequence(UPDATED_GRID_SEQUENCE)
             .detailSequence(UPDATED_DETAIL_SEQUENCE)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
+            .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
             .writable(UPDATED_WRITABLE)
             .columnNo(UPDATED_COLUMN_NO)
             .columnSpan(UPDATED_COLUMN_SPAN)
+            .updatable(UPDATED_UPDATABLE)
+            .alwaysUpdatable(UPDATED_ALWAYS_UPDATABLE)
+            .copyable(UPDATED_COPYABLE)
+            .defaultValue(UPDATED_DEFAULT_VALUE)
+            .formatPattern(UPDATED_FORMAT_PATTERN)
             .active(UPDATED_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createUpdatedEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDField.setAdClient(aDClient);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -278,9 +288,15 @@ public class ADFieldResourceIT {
         assertThat(testADField.getGridSequence()).isEqualTo(DEFAULT_GRID_SEQUENCE);
         assertThat(testADField.getDetailSequence()).isEqualTo(DEFAULT_DETAIL_SEQUENCE);
         assertThat(testADField.getDisplayLogic()).isEqualTo(DEFAULT_DISPLAY_LOGIC);
+        assertThat(testADField.getReadOnlyLogic()).isEqualTo(DEFAULT_READ_ONLY_LOGIC);
         assertThat(testADField.isWritable()).isEqualTo(DEFAULT_WRITABLE);
         assertThat(testADField.getColumnNo()).isEqualTo(DEFAULT_COLUMN_NO);
         assertThat(testADField.getColumnSpan()).isEqualTo(DEFAULT_COLUMN_SPAN);
+        assertThat(testADField.isUpdatable()).isEqualTo(DEFAULT_UPDATABLE);
+        assertThat(testADField.isAlwaysUpdatable()).isEqualTo(DEFAULT_ALWAYS_UPDATABLE);
+        assertThat(testADField.isCopyable()).isEqualTo(DEFAULT_COPYABLE);
+        assertThat(testADField.getDefaultValue()).isEqualTo(DEFAULT_DEFAULT_VALUE);
+        assertThat(testADField.getFormatPattern()).isEqualTo(DEFAULT_FORMAT_PATTERN);
         assertThat(testADField.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -347,9 +363,15 @@ public class ADFieldResourceIT {
             .andExpect(jsonPath("$.[*].gridSequence").value(hasItem(DEFAULT_GRID_SEQUENCE)))
             .andExpect(jsonPath("$.[*].detailSequence").value(hasItem(DEFAULT_DETAIL_SEQUENCE)))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
+            .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
             .andExpect(jsonPath("$.[*].writable").value(hasItem(DEFAULT_WRITABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].columnNo").value(hasItem(DEFAULT_COLUMN_NO)))
             .andExpect(jsonPath("$.[*].columnSpan").value(hasItem(DEFAULT_COLUMN_SPAN)))
+            .andExpect(jsonPath("$.[*].updatable").value(hasItem(DEFAULT_UPDATABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].alwaysUpdatable").value(hasItem(DEFAULT_ALWAYS_UPDATABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].copyable").value(hasItem(DEFAULT_COPYABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].defaultValue").value(hasItem(DEFAULT_DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].formatPattern").value(hasItem(DEFAULT_FORMAT_PATTERN)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -376,9 +398,15 @@ public class ADFieldResourceIT {
             .andExpect(jsonPath("$.gridSequence").value(DEFAULT_GRID_SEQUENCE))
             .andExpect(jsonPath("$.detailSequence").value(DEFAULT_DETAIL_SEQUENCE))
             .andExpect(jsonPath("$.displayLogic").value(DEFAULT_DISPLAY_LOGIC))
+            .andExpect(jsonPath("$.readOnlyLogic").value(DEFAULT_READ_ONLY_LOGIC))
             .andExpect(jsonPath("$.writable").value(DEFAULT_WRITABLE.booleanValue()))
             .andExpect(jsonPath("$.columnNo").value(DEFAULT_COLUMN_NO))
             .andExpect(jsonPath("$.columnSpan").value(DEFAULT_COLUMN_SPAN))
+            .andExpect(jsonPath("$.updatable").value(DEFAULT_UPDATABLE.booleanValue()))
+            .andExpect(jsonPath("$.alwaysUpdatable").value(DEFAULT_ALWAYS_UPDATABLE.booleanValue()))
+            .andExpect(jsonPath("$.copyable").value(DEFAULT_COPYABLE.booleanValue()))
+            .andExpect(jsonPath("$.defaultValue").value(DEFAULT_DEFAULT_VALUE))
+            .andExpect(jsonPath("$.formatPattern").value(DEFAULT_FORMAT_PATTERN))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -1264,6 +1292,84 @@ public class ADFieldResourceIT {
 
     @Test
     @Transactional
+    public void getAllADFieldsByReadOnlyLogicIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where readOnlyLogic equals to DEFAULT_READ_ONLY_LOGIC
+        defaultADFieldShouldBeFound("readOnlyLogic.equals=" + DEFAULT_READ_ONLY_LOGIC);
+
+        // Get all the aDFieldList where readOnlyLogic equals to UPDATED_READ_ONLY_LOGIC
+        defaultADFieldShouldNotBeFound("readOnlyLogic.equals=" + UPDATED_READ_ONLY_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByReadOnlyLogicIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where readOnlyLogic not equals to DEFAULT_READ_ONLY_LOGIC
+        defaultADFieldShouldNotBeFound("readOnlyLogic.notEquals=" + DEFAULT_READ_ONLY_LOGIC);
+
+        // Get all the aDFieldList where readOnlyLogic not equals to UPDATED_READ_ONLY_LOGIC
+        defaultADFieldShouldBeFound("readOnlyLogic.notEquals=" + UPDATED_READ_ONLY_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByReadOnlyLogicIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where readOnlyLogic in DEFAULT_READ_ONLY_LOGIC or UPDATED_READ_ONLY_LOGIC
+        defaultADFieldShouldBeFound("readOnlyLogic.in=" + DEFAULT_READ_ONLY_LOGIC + "," + UPDATED_READ_ONLY_LOGIC);
+
+        // Get all the aDFieldList where readOnlyLogic equals to UPDATED_READ_ONLY_LOGIC
+        defaultADFieldShouldNotBeFound("readOnlyLogic.in=" + UPDATED_READ_ONLY_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByReadOnlyLogicIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where readOnlyLogic is not null
+        defaultADFieldShouldBeFound("readOnlyLogic.specified=true");
+
+        // Get all the aDFieldList where readOnlyLogic is null
+        defaultADFieldShouldNotBeFound("readOnlyLogic.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllADFieldsByReadOnlyLogicContainsSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where readOnlyLogic contains DEFAULT_READ_ONLY_LOGIC
+        defaultADFieldShouldBeFound("readOnlyLogic.contains=" + DEFAULT_READ_ONLY_LOGIC);
+
+        // Get all the aDFieldList where readOnlyLogic contains UPDATED_READ_ONLY_LOGIC
+        defaultADFieldShouldNotBeFound("readOnlyLogic.contains=" + UPDATED_READ_ONLY_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByReadOnlyLogicNotContainsSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where readOnlyLogic does not contain DEFAULT_READ_ONLY_LOGIC
+        defaultADFieldShouldNotBeFound("readOnlyLogic.doesNotContain=" + DEFAULT_READ_ONLY_LOGIC);
+
+        // Get all the aDFieldList where readOnlyLogic does not contain UPDATED_READ_ONLY_LOGIC
+        defaultADFieldShouldBeFound("readOnlyLogic.doesNotContain=" + UPDATED_READ_ONLY_LOGIC);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADFieldsByWritableIsEqualToSomething() throws Exception {
         // Initialize the database
         aDFieldRepository.saveAndFlush(aDField);
@@ -1526,6 +1632,318 @@ public class ADFieldResourceIT {
 
     @Test
     @Transactional
+    public void getAllADFieldsByUpdatableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where updatable equals to DEFAULT_UPDATABLE
+        defaultADFieldShouldBeFound("updatable.equals=" + DEFAULT_UPDATABLE);
+
+        // Get all the aDFieldList where updatable equals to UPDATED_UPDATABLE
+        defaultADFieldShouldNotBeFound("updatable.equals=" + UPDATED_UPDATABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByUpdatableIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where updatable not equals to DEFAULT_UPDATABLE
+        defaultADFieldShouldNotBeFound("updatable.notEquals=" + DEFAULT_UPDATABLE);
+
+        // Get all the aDFieldList where updatable not equals to UPDATED_UPDATABLE
+        defaultADFieldShouldBeFound("updatable.notEquals=" + UPDATED_UPDATABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByUpdatableIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where updatable in DEFAULT_UPDATABLE or UPDATED_UPDATABLE
+        defaultADFieldShouldBeFound("updatable.in=" + DEFAULT_UPDATABLE + "," + UPDATED_UPDATABLE);
+
+        // Get all the aDFieldList where updatable equals to UPDATED_UPDATABLE
+        defaultADFieldShouldNotBeFound("updatable.in=" + UPDATED_UPDATABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByUpdatableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where updatable is not null
+        defaultADFieldShouldBeFound("updatable.specified=true");
+
+        // Get all the aDFieldList where updatable is null
+        defaultADFieldShouldNotBeFound("updatable.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByAlwaysUpdatableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where alwaysUpdatable equals to DEFAULT_ALWAYS_UPDATABLE
+        defaultADFieldShouldBeFound("alwaysUpdatable.equals=" + DEFAULT_ALWAYS_UPDATABLE);
+
+        // Get all the aDFieldList where alwaysUpdatable equals to UPDATED_ALWAYS_UPDATABLE
+        defaultADFieldShouldNotBeFound("alwaysUpdatable.equals=" + UPDATED_ALWAYS_UPDATABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByAlwaysUpdatableIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where alwaysUpdatable not equals to DEFAULT_ALWAYS_UPDATABLE
+        defaultADFieldShouldNotBeFound("alwaysUpdatable.notEquals=" + DEFAULT_ALWAYS_UPDATABLE);
+
+        // Get all the aDFieldList where alwaysUpdatable not equals to UPDATED_ALWAYS_UPDATABLE
+        defaultADFieldShouldBeFound("alwaysUpdatable.notEquals=" + UPDATED_ALWAYS_UPDATABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByAlwaysUpdatableIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where alwaysUpdatable in DEFAULT_ALWAYS_UPDATABLE or UPDATED_ALWAYS_UPDATABLE
+        defaultADFieldShouldBeFound("alwaysUpdatable.in=" + DEFAULT_ALWAYS_UPDATABLE + "," + UPDATED_ALWAYS_UPDATABLE);
+
+        // Get all the aDFieldList where alwaysUpdatable equals to UPDATED_ALWAYS_UPDATABLE
+        defaultADFieldShouldNotBeFound("alwaysUpdatable.in=" + UPDATED_ALWAYS_UPDATABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByAlwaysUpdatableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where alwaysUpdatable is not null
+        defaultADFieldShouldBeFound("alwaysUpdatable.specified=true");
+
+        // Get all the aDFieldList where alwaysUpdatable is null
+        defaultADFieldShouldNotBeFound("alwaysUpdatable.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByCopyableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where copyable equals to DEFAULT_COPYABLE
+        defaultADFieldShouldBeFound("copyable.equals=" + DEFAULT_COPYABLE);
+
+        // Get all the aDFieldList where copyable equals to UPDATED_COPYABLE
+        defaultADFieldShouldNotBeFound("copyable.equals=" + UPDATED_COPYABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByCopyableIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where copyable not equals to DEFAULT_COPYABLE
+        defaultADFieldShouldNotBeFound("copyable.notEquals=" + DEFAULT_COPYABLE);
+
+        // Get all the aDFieldList where copyable not equals to UPDATED_COPYABLE
+        defaultADFieldShouldBeFound("copyable.notEquals=" + UPDATED_COPYABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByCopyableIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where copyable in DEFAULT_COPYABLE or UPDATED_COPYABLE
+        defaultADFieldShouldBeFound("copyable.in=" + DEFAULT_COPYABLE + "," + UPDATED_COPYABLE);
+
+        // Get all the aDFieldList where copyable equals to UPDATED_COPYABLE
+        defaultADFieldShouldNotBeFound("copyable.in=" + UPDATED_COPYABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByCopyableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where copyable is not null
+        defaultADFieldShouldBeFound("copyable.specified=true");
+
+        // Get all the aDFieldList where copyable is null
+        defaultADFieldShouldNotBeFound("copyable.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByDefaultValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where defaultValue equals to DEFAULT_DEFAULT_VALUE
+        defaultADFieldShouldBeFound("defaultValue.equals=" + DEFAULT_DEFAULT_VALUE);
+
+        // Get all the aDFieldList where defaultValue equals to UPDATED_DEFAULT_VALUE
+        defaultADFieldShouldNotBeFound("defaultValue.equals=" + UPDATED_DEFAULT_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByDefaultValueIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where defaultValue not equals to DEFAULT_DEFAULT_VALUE
+        defaultADFieldShouldNotBeFound("defaultValue.notEquals=" + DEFAULT_DEFAULT_VALUE);
+
+        // Get all the aDFieldList where defaultValue not equals to UPDATED_DEFAULT_VALUE
+        defaultADFieldShouldBeFound("defaultValue.notEquals=" + UPDATED_DEFAULT_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByDefaultValueIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where defaultValue in DEFAULT_DEFAULT_VALUE or UPDATED_DEFAULT_VALUE
+        defaultADFieldShouldBeFound("defaultValue.in=" + DEFAULT_DEFAULT_VALUE + "," + UPDATED_DEFAULT_VALUE);
+
+        // Get all the aDFieldList where defaultValue equals to UPDATED_DEFAULT_VALUE
+        defaultADFieldShouldNotBeFound("defaultValue.in=" + UPDATED_DEFAULT_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByDefaultValueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where defaultValue is not null
+        defaultADFieldShouldBeFound("defaultValue.specified=true");
+
+        // Get all the aDFieldList where defaultValue is null
+        defaultADFieldShouldNotBeFound("defaultValue.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllADFieldsByDefaultValueContainsSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where defaultValue contains DEFAULT_DEFAULT_VALUE
+        defaultADFieldShouldBeFound("defaultValue.contains=" + DEFAULT_DEFAULT_VALUE);
+
+        // Get all the aDFieldList where defaultValue contains UPDATED_DEFAULT_VALUE
+        defaultADFieldShouldNotBeFound("defaultValue.contains=" + UPDATED_DEFAULT_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByDefaultValueNotContainsSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where defaultValue does not contain DEFAULT_DEFAULT_VALUE
+        defaultADFieldShouldNotBeFound("defaultValue.doesNotContain=" + DEFAULT_DEFAULT_VALUE);
+
+        // Get all the aDFieldList where defaultValue does not contain UPDATED_DEFAULT_VALUE
+        defaultADFieldShouldBeFound("defaultValue.doesNotContain=" + UPDATED_DEFAULT_VALUE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByFormatPatternIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where formatPattern equals to DEFAULT_FORMAT_PATTERN
+        defaultADFieldShouldBeFound("formatPattern.equals=" + DEFAULT_FORMAT_PATTERN);
+
+        // Get all the aDFieldList where formatPattern equals to UPDATED_FORMAT_PATTERN
+        defaultADFieldShouldNotBeFound("formatPattern.equals=" + UPDATED_FORMAT_PATTERN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByFormatPatternIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where formatPattern not equals to DEFAULT_FORMAT_PATTERN
+        defaultADFieldShouldNotBeFound("formatPattern.notEquals=" + DEFAULT_FORMAT_PATTERN);
+
+        // Get all the aDFieldList where formatPattern not equals to UPDATED_FORMAT_PATTERN
+        defaultADFieldShouldBeFound("formatPattern.notEquals=" + UPDATED_FORMAT_PATTERN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByFormatPatternIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where formatPattern in DEFAULT_FORMAT_PATTERN or UPDATED_FORMAT_PATTERN
+        defaultADFieldShouldBeFound("formatPattern.in=" + DEFAULT_FORMAT_PATTERN + "," + UPDATED_FORMAT_PATTERN);
+
+        // Get all the aDFieldList where formatPattern equals to UPDATED_FORMAT_PATTERN
+        defaultADFieldShouldNotBeFound("formatPattern.in=" + UPDATED_FORMAT_PATTERN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByFormatPatternIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where formatPattern is not null
+        defaultADFieldShouldBeFound("formatPattern.specified=true");
+
+        // Get all the aDFieldList where formatPattern is null
+        defaultADFieldShouldNotBeFound("formatPattern.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllADFieldsByFormatPatternContainsSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where formatPattern contains DEFAULT_FORMAT_PATTERN
+        defaultADFieldShouldBeFound("formatPattern.contains=" + DEFAULT_FORMAT_PATTERN);
+
+        // Get all the aDFieldList where formatPattern contains UPDATED_FORMAT_PATTERN
+        defaultADFieldShouldNotBeFound("formatPattern.contains=" + UPDATED_FORMAT_PATTERN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByFormatPatternNotContainsSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where formatPattern does not contain DEFAULT_FORMAT_PATTERN
+        defaultADFieldShouldNotBeFound("formatPattern.doesNotContain=" + DEFAULT_FORMAT_PATTERN);
+
+        // Get all the aDFieldList where formatPattern does not contain UPDATED_FORMAT_PATTERN
+        defaultADFieldShouldBeFound("formatPattern.doesNotContain=" + UPDATED_FORMAT_PATTERN);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADFieldsByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         aDFieldRepository.saveAndFlush(aDField);
@@ -1575,22 +1993,6 @@ public class ADFieldResourceIT {
         // Get all the aDFieldList where active is null
         defaultADFieldShouldNotBeFound("active.specified=false");
     }
-
-    @Test
-    @Transactional
-    public void getAllADFieldsByAdClientIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        ADClient adClient = aDField.getAdClient();
-        aDFieldRepository.saveAndFlush(aDField);
-        Long adClientId = adClient.getId();
-
-        // Get all the aDFieldList where adClient equals to adClientId
-        defaultADFieldShouldBeFound("adClientId.equals=" + adClientId);
-
-        // Get all the aDFieldList where adClient equals to adClientId + 1
-        defaultADFieldShouldNotBeFound("adClientId.equals=" + (adClientId + 1));
-    }
-
 
     @Test
     @Transactional
@@ -1646,6 +2048,26 @@ public class ADFieldResourceIT {
 
     @Test
     @Transactional
+    public void getAllADFieldsByAdValidationRuleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+        AdValidationRule adValidationRule = AdValidationRuleResourceIT.createEntity(em);
+        em.persist(adValidationRule);
+        em.flush();
+        aDField.setAdValidationRule(adValidationRule);
+        aDFieldRepository.saveAndFlush(aDField);
+        Long adValidationRuleId = adValidationRule.getId();
+
+        // Get all the aDFieldList where adValidationRule equals to adValidationRuleId
+        defaultADFieldShouldBeFound("adValidationRuleId.equals=" + adValidationRuleId);
+
+        // Get all the aDFieldList where adValidationRule equals to adValidationRuleId + 1
+        defaultADFieldShouldNotBeFound("adValidationRuleId.equals=" + (adValidationRuleId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADFieldsByAdTabIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADTab adTab = aDField.getAdTab();
@@ -1679,9 +2101,15 @@ public class ADFieldResourceIT {
             .andExpect(jsonPath("$.[*].gridSequence").value(hasItem(DEFAULT_GRID_SEQUENCE)))
             .andExpect(jsonPath("$.[*].detailSequence").value(hasItem(DEFAULT_DETAIL_SEQUENCE)))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
+            .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
             .andExpect(jsonPath("$.[*].writable").value(hasItem(DEFAULT_WRITABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].columnNo").value(hasItem(DEFAULT_COLUMN_NO)))
             .andExpect(jsonPath("$.[*].columnSpan").value(hasItem(DEFAULT_COLUMN_SPAN)))
+            .andExpect(jsonPath("$.[*].updatable").value(hasItem(DEFAULT_UPDATABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].alwaysUpdatable").value(hasItem(DEFAULT_ALWAYS_UPDATABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].copyable").value(hasItem(DEFAULT_COPYABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].defaultValue").value(hasItem(DEFAULT_DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].formatPattern").value(hasItem(DEFAULT_FORMAT_PATTERN)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -1742,9 +2170,15 @@ public class ADFieldResourceIT {
             .gridSequence(UPDATED_GRID_SEQUENCE)
             .detailSequence(UPDATED_DETAIL_SEQUENCE)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
+            .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
             .writable(UPDATED_WRITABLE)
             .columnNo(UPDATED_COLUMN_NO)
             .columnSpan(UPDATED_COLUMN_SPAN)
+            .updatable(UPDATED_UPDATABLE)
+            .alwaysUpdatable(UPDATED_ALWAYS_UPDATABLE)
+            .copyable(UPDATED_COPYABLE)
+            .defaultValue(UPDATED_DEFAULT_VALUE)
+            .formatPattern(UPDATED_FORMAT_PATTERN)
             .active(UPDATED_ACTIVE);
         ADFieldDTO aDFieldDTO = aDFieldMapper.toDto(updatedADField);
 
@@ -1769,9 +2203,15 @@ public class ADFieldResourceIT {
         assertThat(testADField.getGridSequence()).isEqualTo(UPDATED_GRID_SEQUENCE);
         assertThat(testADField.getDetailSequence()).isEqualTo(UPDATED_DETAIL_SEQUENCE);
         assertThat(testADField.getDisplayLogic()).isEqualTo(UPDATED_DISPLAY_LOGIC);
+        assertThat(testADField.getReadOnlyLogic()).isEqualTo(UPDATED_READ_ONLY_LOGIC);
         assertThat(testADField.isWritable()).isEqualTo(UPDATED_WRITABLE);
         assertThat(testADField.getColumnNo()).isEqualTo(UPDATED_COLUMN_NO);
         assertThat(testADField.getColumnSpan()).isEqualTo(UPDATED_COLUMN_SPAN);
+        assertThat(testADField.isUpdatable()).isEqualTo(UPDATED_UPDATABLE);
+        assertThat(testADField.isAlwaysUpdatable()).isEqualTo(UPDATED_ALWAYS_UPDATABLE);
+        assertThat(testADField.isCopyable()).isEqualTo(UPDATED_COPYABLE);
+        assertThat(testADField.getDefaultValue()).isEqualTo(UPDATED_DEFAULT_VALUE);
+        assertThat(testADField.getFormatPattern()).isEqualTo(UPDATED_FORMAT_PATTERN);
         assertThat(testADField.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

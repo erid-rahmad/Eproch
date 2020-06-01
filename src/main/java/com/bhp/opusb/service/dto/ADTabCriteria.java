@@ -30,6 +30,8 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
+    private StringFilter iconName;
+
     private StringFilter targetEndpoint;
 
     private BooleanFilter writable;
@@ -42,13 +44,13 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     private StringFilter orderQuery;
 
+    private IntegerFilter tabSequence;
+
     private BooleanFilter active;
 
     private LongFilter aDTabId;
 
     private LongFilter aDFieldId;
-
-    private LongFilter adClientId;
 
     private LongFilter adOrganizationId;
 
@@ -69,16 +71,17 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.iconName = other.iconName == null ? null : other.iconName.copy();
         this.targetEndpoint = other.targetEndpoint == null ? null : other.targetEndpoint.copy();
         this.writable = other.writable == null ? null : other.writable.copy();
         this.displayLogic = other.displayLogic == null ? null : other.displayLogic.copy();
         this.readOnlyLogic = other.readOnlyLogic == null ? null : other.readOnlyLogic.copy();
         this.filterQuery = other.filterQuery == null ? null : other.filterQuery.copy();
         this.orderQuery = other.orderQuery == null ? null : other.orderQuery.copy();
+        this.tabSequence = other.tabSequence == null ? null : other.tabSequence.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.aDTabId = other.aDTabId == null ? null : other.aDTabId.copy();
         this.aDFieldId = other.aDFieldId == null ? null : other.aDFieldId.copy();
-        this.adClientId = other.adClientId == null ? null : other.adClientId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adTableId = other.adTableId == null ? null : other.adTableId.copy();
         this.parentColumnId = other.parentColumnId == null ? null : other.parentColumnId.copy();
@@ -114,6 +117,14 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     public void setDescription(StringFilter description) {
         this.description = description;
+    }
+
+    public StringFilter getIconName() {
+        return iconName;
+    }
+
+    public void setIconName(StringFilter iconName) {
+        this.iconName = iconName;
     }
 
     public StringFilter getTargetEndpoint() {
@@ -164,6 +175,14 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.orderQuery = orderQuery;
     }
 
+    public IntegerFilter getTabSequence() {
+        return tabSequence;
+    }
+
+    public void setTabSequence(IntegerFilter tabSequence) {
+        this.tabSequence = tabSequence;
+    }
+
     public BooleanFilter getActive() {
         return active;
     }
@@ -186,14 +205,6 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     public void setADFieldId(LongFilter aDFieldId) {
         this.aDFieldId = aDFieldId;
-    }
-
-    public LongFilter getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(LongFilter adClientId) {
-        this.adClientId = adClientId;
     }
 
     public LongFilter getAdOrganizationId() {
@@ -258,16 +269,17 @@ public class ADTabCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(iconName, that.iconName) &&
             Objects.equals(targetEndpoint, that.targetEndpoint) &&
             Objects.equals(writable, that.writable) &&
             Objects.equals(displayLogic, that.displayLogic) &&
             Objects.equals(readOnlyLogic, that.readOnlyLogic) &&
             Objects.equals(filterQuery, that.filterQuery) &&
             Objects.equals(orderQuery, that.orderQuery) &&
+            Objects.equals(tabSequence, that.tabSequence) &&
             Objects.equals(active, that.active) &&
             Objects.equals(aDTabId, that.aDTabId) &&
             Objects.equals(aDFieldId, that.aDFieldId) &&
-            Objects.equals(adClientId, that.adClientId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adTableId, that.adTableId) &&
             Objects.equals(parentColumnId, that.parentColumnId) &&
@@ -282,16 +294,17 @@ public class ADTabCriteria implements Serializable, Criteria {
         id,
         name,
         description,
+        iconName,
         targetEndpoint,
         writable,
         displayLogic,
         readOnlyLogic,
         filterQuery,
         orderQuery,
+        tabSequence,
         active,
         aDTabId,
         aDFieldId,
-        adClientId,
         adOrganizationId,
         adTableId,
         parentColumnId,
@@ -307,16 +320,17 @@ public class ADTabCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (iconName != null ? "iconName=" + iconName + ", " : "") +
                 (targetEndpoint != null ? "targetEndpoint=" + targetEndpoint + ", " : "") +
                 (writable != null ? "writable=" + writable + ", " : "") +
                 (displayLogic != null ? "displayLogic=" + displayLogic + ", " : "") +
                 (readOnlyLogic != null ? "readOnlyLogic=" + readOnlyLogic + ", " : "") +
                 (filterQuery != null ? "filterQuery=" + filterQuery + ", " : "") +
                 (orderQuery != null ? "orderQuery=" + orderQuery + ", " : "") +
+                (tabSequence != null ? "tabSequence=" + tabSequence + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (aDTabId != null ? "aDTabId=" + aDTabId + ", " : "") +
                 (aDFieldId != null ? "aDFieldId=" + aDFieldId + ", " : "") +
-                (adClientId != null ? "adClientId=" + adClientId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adTableId != null ? "adTableId=" + adTableId + ", " : "") +
                 (parentColumnId != null ? "parentColumnId=" + parentColumnId + ", " : "") +

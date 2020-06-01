@@ -30,7 +30,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new ADWindowService();
 
-      elemDefault = new ADWindow(0, 'AAAAAAA', 'AAAAAAA', ADWindowType.MAINTAIN, false);
+      elemDefault = new ADWindow(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', ADWindowType.MAINTAIN, false);
     });
 
     describe('Service methods', () => {
@@ -84,6 +84,7 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             description: 'BBBBBB',
+            titleLogic: 'BBBBBB',
             type: 'BBBBBB',
             active: true
           },
@@ -114,6 +115,7 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             description: 'BBBBBB',
+            titleLogic: 'BBBBBB',
             type: 'BBBBBB',
             active: true
           },

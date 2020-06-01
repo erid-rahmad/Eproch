@@ -11,8 +11,6 @@ import ADWindowService from '@/entities/ad-window/ad-window.service';
 
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
 
-import ADClientService from '@/entities/ad-client/ad-client.service';
-
 import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
 
 const localVue = createLocalVue();
@@ -43,8 +41,6 @@ describe('Component Tests', () => {
           aDWindowService: () => aDWindowServiceStub,
 
           aDTabService: () => new ADTabService(),
-
-          aDClientService: () => new ADClientService(),
 
           aDOrganizationService: () => new ADOrganizationService()
         }

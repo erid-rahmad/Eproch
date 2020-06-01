@@ -32,8 +32,6 @@ public class ADTableCriteria implements Serializable, Criteria {
 
     private LongFilter aDColumnId;
 
-    private LongFilter adClientId;
-
     private LongFilter adOrganizationId;
 
     public ADTableCriteria() {
@@ -45,7 +43,6 @@ public class ADTableCriteria implements Serializable, Criteria {
         this.view = other.view == null ? null : other.view.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.aDColumnId = other.aDColumnId == null ? null : other.aDColumnId.copy();
-        this.adClientId = other.adClientId == null ? null : other.adClientId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
@@ -94,14 +91,6 @@ public class ADTableCriteria implements Serializable, Criteria {
         this.aDColumnId = aDColumnId;
     }
 
-    public LongFilter getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(LongFilter adClientId) {
-        this.adClientId = adClientId;
-    }
-
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -126,7 +115,6 @@ public class ADTableCriteria implements Serializable, Criteria {
             Objects.equals(view, that.view) &&
             Objects.equals(active, that.active) &&
             Objects.equals(aDColumnId, that.aDColumnId) &&
-            Objects.equals(adClientId, that.adClientId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
@@ -138,7 +126,6 @@ public class ADTableCriteria implements Serializable, Criteria {
         view,
         active,
         aDColumnId,
-        adClientId,
         adOrganizationId
         );
     }
@@ -151,7 +138,6 @@ public class ADTableCriteria implements Serializable, Criteria {
                 (view != null ? "view=" + view + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (aDColumnId != null ? "aDColumnId=" + aDColumnId + ", " : "") +
-                (adClientId != null ? "adClientId=" + adClientId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }

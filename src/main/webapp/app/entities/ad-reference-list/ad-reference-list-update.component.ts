@@ -2,6 +2,9 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
 
+import ADOrganizationService from '../ad-organization/ad-organization.service';
+import { IADOrganization } from '@/shared/model/ad-organization.model';
+
 import ADReferenceService from '../ad-reference/ad-reference.service';
 import { IADReference } from '@/shared/model/ad-reference.model';
 
@@ -19,6 +22,9 @@ const validations: any = {
     },
     description: {},
     active: {},
+    adOrganizationId: {
+      required
+    },
     adReferenceId: {
       required
     }
@@ -32,6 +38,10 @@ export default class ADReferenceListUpdate extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
   @Inject('aDReferenceListService') private aDReferenceListService: () => ADReferenceListService;
   public aDReferenceList: IADReferenceList = new ADReferenceList();
+
+  @Inject('aDOrganizationService') private aDOrganizationService: () => ADOrganizationService;
+
+  public aDOrganizations: IADOrganization[] = [];
 
   @Inject('aDReferenceService') private aDReferenceService: () => ADReferenceService;
 
@@ -83,6 +93,11 @@ export default class ADReferenceListUpdate extends Vue {
   }
 
   public initRelationships(): void {
+    this.aDOrganizationService()
+      .retrieve()
+      .then(res => {
+        this.aDOrganizations = res.data;
+      });
     this.aDReferenceService()
       .retrieve()
       .then(res => {

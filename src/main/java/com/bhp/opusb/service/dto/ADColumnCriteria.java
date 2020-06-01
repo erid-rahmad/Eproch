@@ -67,9 +67,15 @@ public class ADColumnCriteria implements Serializable, Criteria {
 
     private StringFilter mandatoryLogic;
 
+    private StringFilter displayLogic;
+
     private StringFilter readOnlyLogic;
 
     private BooleanFilter updatable;
+
+    private BooleanFilter alwaysUpdatable;
+
+    private BooleanFilter copyable;
 
     private StringFilter defaultValue;
 
@@ -83,13 +89,19 @@ public class ADColumnCriteria implements Serializable, Criteria {
 
     private LongFilter maxValue;
 
-    private BooleanFilter active;
+    private BooleanFilter identifier;
 
-    private LongFilter adClientId;
+    private BooleanFilter defaultSelection;
+
+    private IntegerFilter selectionSequence;
+
+    private BooleanFilter active;
 
     private LongFilter adOrganizationId;
 
     private LongFilter adReferenceId;
+
+    private LongFilter adValidationRuleId;
 
     private LongFilter adTableId;
 
@@ -109,18 +121,24 @@ public class ADColumnCriteria implements Serializable, Criteria {
         this.importedColumn = other.importedColumn == null ? null : other.importedColumn.copy();
         this.mandatory = other.mandatory == null ? null : other.mandatory.copy();
         this.mandatoryLogic = other.mandatoryLogic == null ? null : other.mandatoryLogic.copy();
+        this.displayLogic = other.displayLogic == null ? null : other.displayLogic.copy();
         this.readOnlyLogic = other.readOnlyLogic == null ? null : other.readOnlyLogic.copy();
         this.updatable = other.updatable == null ? null : other.updatable.copy();
+        this.alwaysUpdatable = other.alwaysUpdatable == null ? null : other.alwaysUpdatable.copy();
+        this.copyable = other.copyable == null ? null : other.copyable.copy();
         this.defaultValue = other.defaultValue == null ? null : other.defaultValue.copy();
         this.formatPattern = other.formatPattern == null ? null : other.formatPattern.copy();
         this.minLength = other.minLength == null ? null : other.minLength.copy();
         this.maxLength = other.maxLength == null ? null : other.maxLength.copy();
         this.minValue = other.minValue == null ? null : other.minValue.copy();
         this.maxValue = other.maxValue == null ? null : other.maxValue.copy();
+        this.identifier = other.identifier == null ? null : other.identifier.copy();
+        this.defaultSelection = other.defaultSelection == null ? null : other.defaultSelection.copy();
+        this.selectionSequence = other.selectionSequence == null ? null : other.selectionSequence.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.adClientId = other.adClientId == null ? null : other.adClientId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
+        this.adValidationRuleId = other.adValidationRuleId == null ? null : other.adValidationRuleId.copy();
         this.adTableId = other.adTableId == null ? null : other.adTableId.copy();
     }
 
@@ -225,6 +243,14 @@ public class ADColumnCriteria implements Serializable, Criteria {
         this.mandatoryLogic = mandatoryLogic;
     }
 
+    public StringFilter getDisplayLogic() {
+        return displayLogic;
+    }
+
+    public void setDisplayLogic(StringFilter displayLogic) {
+        this.displayLogic = displayLogic;
+    }
+
     public StringFilter getReadOnlyLogic() {
         return readOnlyLogic;
     }
@@ -239,6 +265,22 @@ public class ADColumnCriteria implements Serializable, Criteria {
 
     public void setUpdatable(BooleanFilter updatable) {
         this.updatable = updatable;
+    }
+
+    public BooleanFilter getAlwaysUpdatable() {
+        return alwaysUpdatable;
+    }
+
+    public void setAlwaysUpdatable(BooleanFilter alwaysUpdatable) {
+        this.alwaysUpdatable = alwaysUpdatable;
+    }
+
+    public BooleanFilter getCopyable() {
+        return copyable;
+    }
+
+    public void setCopyable(BooleanFilter copyable) {
+        this.copyable = copyable;
     }
 
     public StringFilter getDefaultValue() {
@@ -289,20 +331,36 @@ public class ADColumnCriteria implements Serializable, Criteria {
         this.maxValue = maxValue;
     }
 
+    public BooleanFilter getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(BooleanFilter identifier) {
+        this.identifier = identifier;
+    }
+
+    public BooleanFilter getDefaultSelection() {
+        return defaultSelection;
+    }
+
+    public void setDefaultSelection(BooleanFilter defaultSelection) {
+        this.defaultSelection = defaultSelection;
+    }
+
+    public IntegerFilter getSelectionSequence() {
+        return selectionSequence;
+    }
+
+    public void setSelectionSequence(IntegerFilter selectionSequence) {
+        this.selectionSequence = selectionSequence;
+    }
+
     public BooleanFilter getActive() {
         return active;
     }
 
     public void setActive(BooleanFilter active) {
         this.active = active;
-    }
-
-    public LongFilter getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(LongFilter adClientId) {
-        this.adClientId = adClientId;
     }
 
     public LongFilter getAdOrganizationId() {
@@ -319,6 +377,14 @@ public class ADColumnCriteria implements Serializable, Criteria {
 
     public void setAdReferenceId(LongFilter adReferenceId) {
         this.adReferenceId = adReferenceId;
+    }
+
+    public LongFilter getAdValidationRuleId() {
+        return adValidationRuleId;
+    }
+
+    public void setAdValidationRuleId(LongFilter adValidationRuleId) {
+        this.adValidationRuleId = adValidationRuleId;
     }
 
     public LongFilter getAdTableId() {
@@ -352,18 +418,24 @@ public class ADColumnCriteria implements Serializable, Criteria {
             Objects.equals(importedColumn, that.importedColumn) &&
             Objects.equals(mandatory, that.mandatory) &&
             Objects.equals(mandatoryLogic, that.mandatoryLogic) &&
+            Objects.equals(displayLogic, that.displayLogic) &&
             Objects.equals(readOnlyLogic, that.readOnlyLogic) &&
             Objects.equals(updatable, that.updatable) &&
+            Objects.equals(alwaysUpdatable, that.alwaysUpdatable) &&
+            Objects.equals(copyable, that.copyable) &&
             Objects.equals(defaultValue, that.defaultValue) &&
             Objects.equals(formatPattern, that.formatPattern) &&
             Objects.equals(minLength, that.minLength) &&
             Objects.equals(maxLength, that.maxLength) &&
             Objects.equals(minValue, that.minValue) &&
             Objects.equals(maxValue, that.maxValue) &&
+            Objects.equals(identifier, that.identifier) &&
+            Objects.equals(defaultSelection, that.defaultSelection) &&
+            Objects.equals(selectionSequence, that.selectionSequence) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(adClientId, that.adClientId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adReferenceId, that.adReferenceId) &&
+            Objects.equals(adValidationRuleId, that.adValidationRuleId) &&
             Objects.equals(adTableId, that.adTableId);
     }
 
@@ -382,18 +454,24 @@ public class ADColumnCriteria implements Serializable, Criteria {
         importedColumn,
         mandatory,
         mandatoryLogic,
+        displayLogic,
         readOnlyLogic,
         updatable,
+        alwaysUpdatable,
+        copyable,
         defaultValue,
         formatPattern,
         minLength,
         maxLength,
         minValue,
         maxValue,
+        identifier,
+        defaultSelection,
+        selectionSequence,
         active,
-        adClientId,
         adOrganizationId,
         adReferenceId,
+        adValidationRuleId,
         adTableId
         );
     }
@@ -413,18 +491,24 @@ public class ADColumnCriteria implements Serializable, Criteria {
                 (importedColumn != null ? "importedColumn=" + importedColumn + ", " : "") +
                 (mandatory != null ? "mandatory=" + mandatory + ", " : "") +
                 (mandatoryLogic != null ? "mandatoryLogic=" + mandatoryLogic + ", " : "") +
+                (displayLogic != null ? "displayLogic=" + displayLogic + ", " : "") +
                 (readOnlyLogic != null ? "readOnlyLogic=" + readOnlyLogic + ", " : "") +
                 (updatable != null ? "updatable=" + updatable + ", " : "") +
+                (alwaysUpdatable != null ? "alwaysUpdatable=" + alwaysUpdatable + ", " : "") +
+                (copyable != null ? "copyable=" + copyable + ", " : "") +
                 (defaultValue != null ? "defaultValue=" + defaultValue + ", " : "") +
                 (formatPattern != null ? "formatPattern=" + formatPattern + ", " : "") +
                 (minLength != null ? "minLength=" + minLength + ", " : "") +
                 (maxLength != null ? "maxLength=" + maxLength + ", " : "") +
                 (minValue != null ? "minValue=" + minValue + ", " : "") +
                 (maxValue != null ? "maxValue=" + maxValue + ", " : "") +
+                (identifier != null ? "identifier=" + identifier + ", " : "") +
+                (defaultSelection != null ? "defaultSelection=" + defaultSelection + ", " : "") +
+                (selectionSequence != null ? "selectionSequence=" + selectionSequence + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (adClientId != null ? "adClientId=" + adClientId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
+                (adValidationRuleId != null ? "adValidationRuleId=" + adValidationRuleId + ", " : "") +
                 (adTableId != null ? "adTableId=" + adTableId + ", " : "") +
             "}";
     }

@@ -75,6 +75,11 @@
                             :class="{'valid': !$v.aDField.displayLogic.$invalid, 'invalid': $v.aDField.displayLogic.$invalid }" v-model="$v.aDField.displayLogic.$model" />
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.readOnlyLogic')" for="ad-field-readOnlyLogic">Read Only Logic</label>
+                        <input type="text" class="form-control" name="readOnlyLogic" id="ad-field-readOnlyLogic"
+                            :class="{'valid': !$v.aDField.readOnlyLogic.$invalid, 'invalid': $v.aDField.readOnlyLogic.$invalid }" v-model="$v.aDField.readOnlyLogic.$model" />
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDField.writable')" for="ad-field-writable">Writable</label>
                         <input type="checkbox" class="form-check" name="writable" id="ad-field-writable"
                             :class="{'valid': !$v.aDField.writable.$invalid, 'invalid': $v.aDField.writable.$invalid }" v-model="$v.aDField.writable.$model" />
@@ -90,21 +95,34 @@
                             :class="{'valid': !$v.aDField.columnSpan.$invalid, 'invalid': $v.aDField.columnSpan.$invalid }" v-model.number="$v.aDField.columnSpan.$model" />
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.updatable')" for="ad-field-updatable">Updatable</label>
+                        <input type="checkbox" class="form-check" name="updatable" id="ad-field-updatable"
+                            :class="{'valid': !$v.aDField.updatable.$invalid, 'invalid': $v.aDField.updatable.$invalid }" v-model="$v.aDField.updatable.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.alwaysUpdatable')" for="ad-field-alwaysUpdatable">Always Updatable</label>
+                        <input type="checkbox" class="form-check" name="alwaysUpdatable" id="ad-field-alwaysUpdatable"
+                            :class="{'valid': !$v.aDField.alwaysUpdatable.$invalid, 'invalid': $v.aDField.alwaysUpdatable.$invalid }" v-model="$v.aDField.alwaysUpdatable.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.copyable')" for="ad-field-copyable">Copyable</label>
+                        <input type="checkbox" class="form-check" name="copyable" id="ad-field-copyable"
+                            :class="{'valid': !$v.aDField.copyable.$invalid, 'invalid': $v.aDField.copyable.$invalid }" v-model="$v.aDField.copyable.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.defaultValue')" for="ad-field-defaultValue">Default Value</label>
+                        <input type="text" class="form-control" name="defaultValue" id="ad-field-defaultValue"
+                            :class="{'valid': !$v.aDField.defaultValue.$invalid, 'invalid': $v.aDField.defaultValue.$invalid }" v-model="$v.aDField.defaultValue.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.formatPattern')" for="ad-field-formatPattern">Format Pattern</label>
+                        <input type="text" class="form-control" name="formatPattern" id="ad-field-formatPattern"
+                            :class="{'valid': !$v.aDField.formatPattern.$invalid, 'invalid': $v.aDField.formatPattern.$invalid }" v-model="$v.aDField.formatPattern.$model" />
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDField.active')" for="ad-field-active">Active</label>
                         <input type="checkbox" class="form-check" name="active" id="ad-field-active"
                             :class="{'valid': !$v.aDField.active.$invalid, 'invalid': $v.aDField.active.$invalid }" v-model="$v.aDField.active.$model" />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.adClient')" for="ad-field-adClient">Ad Client</label>
-                        <select class="form-control" id="ad-field-adClient" name="adClient" v-model="$v.aDField.adClientId.$model" required>
-                            <option v-if="!aDField.adClientId" v-bind:value="null" selected></option>
-                            <option v-bind:value="aDClientOption.id" v-for="aDClientOption in aDClients" :key="aDClientOption.id">{{aDClientOption.id}}</option>
-                        </select>
-                    </div>
-                    <div v-if="$v.aDField.adClientId.$anyDirty && $v.aDField.adClientId.$invalid">
-                        <small class="form-text text-danger" v-if="!$v.aDField.adClientId.required" v-text="$t('entity.validation.required')">
-                            This field is required.
-                        </small>
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDField.adOrganization')" for="ad-field-adOrganization">Ad Organization</label>
@@ -136,6 +154,13 @@
                         <small class="form-text text-danger" v-if="!$v.aDField.adColumnId.required" v-text="$t('entity.validation.required')">
                             This field is required.
                         </small>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDField.adValidationRule')" for="ad-field-adValidationRule">Ad Validation Rule</label>
+                        <select class="form-control" id="ad-field-adValidationRule" name="adValidationRule" v-model="aDField.adValidationRuleId">
+                            <option v-bind:value="null"></option>
+                            <option v-bind:value="adValidationRuleOption.id" v-for="adValidationRuleOption in adValidationRules" :key="adValidationRuleOption.id">{{adValidationRuleOption.id}}</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDField.adTab')" for="ad-field-adTab">Ad Tab</label>

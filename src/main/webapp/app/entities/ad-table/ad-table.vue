@@ -28,7 +28,6 @@
                     <th v-on:click="changeOrder('name')"><span v-text="$t('opusWebApp.aDTable.name')">Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('view')"><span v-text="$t('opusWebApp.aDTable.view')">View</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'view'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.aDTable.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('adClientId')"><span v-text="$t('opusWebApp.aDTable.adClient')">Ad Client</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adClientId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adOrganizationId')"><span v-text="$t('opusWebApp.aDTable.adOrganization')">Ad Organization</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adOrganizationId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
@@ -42,11 +41,6 @@
                     <td>{{aDTable.name}}</td>
                     <td>{{aDTable.view}}</td>
                     <td>{{aDTable.active}}</td>
-                    <td>
-                        <div v-if="aDTable.adClientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDTable.adClientId}}">{{aDTable.adClientId}}</router-link>
-                        </div>
-                    </td>
                     <td>
                         <div v-if="aDTable.adOrganizationId">
                             <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: aDTable.adOrganizationId}}">{{aDTable.adOrganizationId}}</router-link>

@@ -24,6 +24,8 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
     private Boolean active;
 
 
+    private Long adOrganizationId;
+
     private Long adReferenceId;
     
     public Long getId() {
@@ -66,6 +68,14 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
+    }
+
     public Long getAdReferenceId() {
         return adReferenceId;
     }
@@ -103,6 +113,7 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
             ", value='" + getValue() + "'" +
             ", description='" + getDescription() + "'" +
             ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
             ", adReferenceId=" + getAdReferenceId() +
             "}";
     }

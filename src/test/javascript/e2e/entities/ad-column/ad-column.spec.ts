@@ -124,6 +124,10 @@ describe('ADColumn e2e test', () => {
       expect(await updatePage.mandatoryLogicInput.getAttribute('value')).to.match(/mandatoryLogic/);
 
 
+      await updatePage.displayLogicInput.sendKeys('displayLogic');
+      expect(await updatePage.displayLogicInput.getAttribute('value')).to.match(/displayLogic/);
+
+
       await updatePage.readOnlyLogicInput.sendKeys('readOnlyLogic');
       expect(await updatePage.readOnlyLogicInput.getAttribute('value')).to.match(/readOnlyLogic/);
 
@@ -135,6 +139,26 @@ describe('ADColumn e2e test', () => {
       } else {
         await updatePage.updatableInput.click();
         expect(await updatePage.updatableInput.isSelected()).to.be.true;
+      }
+
+
+      const selectedAlwaysUpdatable = await updatePage.alwaysUpdatableInput.isSelected();
+      if (selectedAlwaysUpdatable) {
+        await updatePage.alwaysUpdatableInput.click();
+        expect(await updatePage.alwaysUpdatableInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.alwaysUpdatableInput.click();
+        expect(await updatePage.alwaysUpdatableInput.isSelected()).to.be.true;
+      }
+
+
+      const selectedCopyable = await updatePage.copyableInput.isSelected();
+      if (selectedCopyable) {
+        await updatePage.copyableInput.click();
+        expect(await updatePage.copyableInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.copyableInput.click();
+        expect(await updatePage.copyableInput.isSelected()).to.be.true;
       }
 
 
@@ -162,6 +186,30 @@ describe('ADColumn e2e test', () => {
       expect(await updatePage.maxValueInput.getAttribute('value')).to.eq('5');
 
 
+      const selectedIdentifier = await updatePage.identifierInput.isSelected();
+      if (selectedIdentifier) {
+        await updatePage.identifierInput.click();
+        expect(await updatePage.identifierInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.identifierInput.click();
+        expect(await updatePage.identifierInput.isSelected()).to.be.true;
+      }
+
+
+      const selectedDefaultSelection = await updatePage.defaultSelectionInput.isSelected();
+      if (selectedDefaultSelection) {
+        await updatePage.defaultSelectionInput.click();
+        expect(await updatePage.defaultSelectionInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.defaultSelectionInput.click();
+        expect(await updatePage.defaultSelectionInput.isSelected()).to.be.true;
+      }
+
+
+      await updatePage.selectionSequenceInput.sendKeys('5');
+      expect(await updatePage.selectionSequenceInput.getAttribute('value')).to.eq('5');
+
+
       const selectedActive = await updatePage.activeInput.isSelected();
       if (selectedActive) {
         await updatePage.activeInput.click();
@@ -171,9 +219,9 @@ describe('ADColumn e2e test', () => {
         expect(await updatePage.activeInput.isSelected()).to.be.true;
       }
 
-      // await  selectLastOption(updatePage.adClientSelect);
       // await  selectLastOption(updatePage.adOrganizationSelect);
       // await  selectLastOption(updatePage.adReferenceSelect);
+      // await  selectLastOption(updatePage.adValidationRuleSelect);
       // await  selectLastOption(updatePage.adTableSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
@@ -292,6 +340,10 @@ describe('ADColumn e2e test', () => {
           await updatePage.mandatoryLogicInput.sendKeys('modified');
           expect(await updatePage.mandatoryLogicInput.getAttribute('value')).to.match(/modified/);
 
+          await updatePage.displayLogicInput.clear();
+          await updatePage.displayLogicInput.sendKeys('modified');
+          expect(await updatePage.displayLogicInput.getAttribute('value')).to.match(/modified/);
+
           await updatePage.readOnlyLogicInput.clear();
           await updatePage.readOnlyLogicInput.sendKeys('modified');
           expect(await updatePage.readOnlyLogicInput.getAttribute('value')).to.match(/modified/);
@@ -303,6 +355,24 @@ describe('ADColumn e2e test', () => {
           } else {
             await updatePage.updatableInput.click();
             expect(await updatePage.updatableInput.isSelected()).to.be.true;
+          }
+
+          const selectedAlwaysUpdatable = await updatePage.alwaysUpdatableInput.isSelected();
+          if (selectedAlwaysUpdatable) {
+            await updatePage.alwaysUpdatableInput.click();
+            expect(await updatePage.alwaysUpdatableInput.isSelected()).to.be.false;
+          } else {
+            await updatePage.alwaysUpdatableInput.click();
+            expect(await updatePage.alwaysUpdatableInput.isSelected()).to.be.true;
+          }
+
+          const selectedCopyable = await updatePage.copyableInput.isSelected();
+          if (selectedCopyable) {
+            await updatePage.copyableInput.click();
+            expect(await updatePage.copyableInput.isSelected()).to.be.false;
+          } else {
+            await updatePage.copyableInput.click();
+            expect(await updatePage.copyableInput.isSelected()).to.be.true;
           }
 
           await updatePage.defaultValueInput.clear();
@@ -328,6 +398,28 @@ describe('ADColumn e2e test', () => {
           await clear(updatePage.maxValueInput);
           await updatePage.maxValueInput.sendKeys('6');
           expect(await updatePage.maxValueInput.getAttribute('value')).to.eq('6');
+
+          const selectedIdentifier = await updatePage.identifierInput.isSelected();
+          if (selectedIdentifier) {
+            await updatePage.identifierInput.click();
+            expect(await updatePage.identifierInput.isSelected()).to.be.false;
+          } else {
+            await updatePage.identifierInput.click();
+            expect(await updatePage.identifierInput.isSelected()).to.be.true;
+          }
+
+          const selectedDefaultSelection = await updatePage.defaultSelectionInput.isSelected();
+          if (selectedDefaultSelection) {
+            await updatePage.defaultSelectionInput.click();
+            expect(await updatePage.defaultSelectionInput.isSelected()).to.be.false;
+          } else {
+            await updatePage.defaultSelectionInput.click();
+            expect(await updatePage.defaultSelectionInput.isSelected()).to.be.true;
+          }
+
+          await clear(updatePage.selectionSequenceInput);
+          await updatePage.selectionSequenceInput.sendKeys('6');
+          expect(await updatePage.selectionSequenceInput.getAttribute('value')).to.eq('6');
 
           const selectedActive = await updatePage.activeInput.isSelected();
           if (selectedActive) {

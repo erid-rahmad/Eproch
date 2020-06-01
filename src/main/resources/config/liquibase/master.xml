@@ -25,6 +25,7 @@
     <include file="config/liquibase/changelog/20200429153000_added_entity_ADTab.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200429153100_added_entity_ADField.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200429153200_added_entity_ADFieldGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200601164200_added_entity_AdValidationRule.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -33,5 +34,7 @@
     <include file="config/liquibase/changelog/20200429152900_added_entity_constraints_ADWindow.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200429153000_added_entity_constraints_ADTab.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200429153100_added_entity_constraints_ADField.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200415082500_added_entity_constraints_ADReference.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200601164200_added_entity_constraints_AdValidationRule.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

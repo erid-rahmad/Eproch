@@ -48,10 +48,19 @@
             <column name="mandatory_logic" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="display_logic" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="read_only_logic" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="updatable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="always_updatable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="copyable" type="boolean">
                 <constraints nullable="true" />
             </column>
             <column name="default_value" type="varchar(255)">
@@ -72,16 +81,25 @@
             <column name="max_value" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="active" type="boolean">
+            <column name="identifier" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="ad_client_id" type="bigint">
-                <constraints nullable="false" />
+            <column name="default_selection" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="selection_sequence" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="true" />
             </column>
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <column name="ad_reference_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_validation_rule_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="ad_table_id" type="bigint">
@@ -130,12 +148,21 @@
             <column name="type" type="string"/>
             <column name="mandatory" type="boolean"/>
             <column name="mandatory_logic" type="string"/>
+            <column name="display_logic" type="string"/>
             <column name="read_only_logic" type="string"/>
             <column name="updatable" type="boolean"/>
+            <column name="always_updatable" type="boolean"/>
+            <column name="copyable" type="boolean"/>
             <column name="default_value" type="string"/>
             <column name="format_pattern" type="string"/>
+            <column name="min_length" type="numeric"/>
+            <column name="max_length" type="numeric"/>
+            <column name="min_value" type="numeric"/>
+            <column name="max_value" type="numeric"/>
+            <column name="identifier" type="boolean"/>
+            <column name="default_selection" type="boolean"/>
+            <column name="selection_sequence" type="numeric"/>
             <column name="active" type="boolean"/>
-            <column name="ad_client_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="ad_reference_id" type="numeric"/>
             <column name="ad_table_id" type="numeric"/>

@@ -32,6 +32,8 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter adOrganizationId;
+
     private LongFilter adReferenceId;
 
     public ADReferenceListCriteria() {
@@ -43,6 +45,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
         this.value = other.value == null ? null : other.value.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
     }
 
@@ -91,6 +94,14 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+
     public LongFilter getAdReferenceId() {
         return adReferenceId;
     }
@@ -115,6 +126,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
             Objects.equals(value, that.value) &&
             Objects.equals(description, that.description) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adReferenceId, that.adReferenceId);
     }
 
@@ -126,6 +138,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
         value,
         description,
         active,
+        adOrganizationId,
         adReferenceId
         );
     }
@@ -138,6 +151,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
                 (value != null ? "value=" + value + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
             "}";
     }

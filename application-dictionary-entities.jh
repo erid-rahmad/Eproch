@@ -40,8 +40,11 @@ entity ADColumn {
 
 	mandatory Boolean
 	mandatoryLogic String
+	displayLogic String
 	readOnlyLogic String
 	updatable Boolean
+	alwaysUpdatable Boolean
+	copyable Boolean
 	defaultValue String
 	formatPattern String
 
@@ -57,17 +60,22 @@ entity ADColumn {
 	// The minimum number value of the numeric column.
 	maxValue Long
 
+	identifier Boolean
+	defaultSelection Boolean
+	selectionSequence Integer
 	active Boolean
 }
 entity ADWindow {
 	name String required
 	description String
+	titleLogic String
 	type ADWindowType required
 	active Boolean
 }
 entity ADTab {
 	name String required
 	description String
+	iconName String
 
 	// Target API endpoint for the CRUD operations.
 	targetEndpoint String
@@ -77,6 +85,7 @@ entity ADTab {
 	readOnlyLogic String
 	filterQuery String
 	orderQuery String
+	tabSequence Integer
 	active Boolean
 }
 entity ADField {
@@ -92,9 +101,18 @@ entity ADField {
 	gridSequence Integer
 	detailSequence Integer
 	displayLogic String
+	readOnlyLogic String
 	writable Boolean
 	columnNo Integer
 	columnSpan Integer
+
+	// Overriding AdColumn metadata.
+	updatable Boolean
+	alwaysUpdatable Boolean
+	copyable Boolean
+	defaultValue String
+	formatPattern String
+
 	active Boolean
 }
 entity ADFieldGroup {
@@ -116,6 +134,14 @@ entity ADReferenceList {
 	description String
 	active Boolean
 }
+entity AdValidationRule {
+	// Is required for import or export data
+	uid UUID required
+
+	name String required unique
+	description String
+	query String
+}
 enum ADColumnType {
 	STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE,
 	BOOLEAN, LOCAL_DATE, ZONED_DATE_TIME, DURATION,
@@ -132,7 +158,6 @@ enum ADReferenceType {
  */
 relationship OneToMany {
 	// Application Dictionaries.
-	ADClient to ADOrganization{adClient required}
 	ADTable to ADColumn{adTable required}
 	ADWindow to ADTab{adWindow required}
 	ADTab to ADTab{parentTab}
@@ -144,26 +169,27 @@ relationship OneToMany {
  */
 relationship ManyToOne {
 	// Application Dictionaries.
-	ADTable{adClient required} to ADClient
 	ADTable{adOrganization required} to ADOrganization
 
-	ADColumn{adClient required} to ADClient
 	ADColumn{adOrganization required} to ADOrganization
 	ADColumn{adReference} to ADReference
+	ADColumn{adValidationRule} to AdValidationRule
 
-	ADWindow{adClient required} to ADClient
 	ADWindow{adOrganization required} to ADOrganization
 	
-	ADTab{adClient required} to ADClient
 	ADTab{adOrganization required} to ADOrganization
 	ADTab{adTable required} to ADTable
 	ADTab{parentColumn} to ADColumn
 	ADTab{foreignColumn} to ADColumn
 	
-	ADField{adClient required} to ADClient
 	ADField{adOrganization required} to ADOrganization
 	ADField{adReference} to ADReference
 	ADField{adColumn required} to ADColumn
+	ADField{adValidationRule} to AdValidationRule
+
+	ADReference{adOrganization required} to ADOrganization
+	ADReferenceList{adOrganization required} to ADOrganization
+	AdValidationRule{adOrganization required} to ADOrganization
 }
 // Allow filtering to all entities.
 filter *

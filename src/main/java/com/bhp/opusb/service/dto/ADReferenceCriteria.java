@@ -26,6 +26,8 @@ public class ADReferenceCriteria implements Serializable, Criteria {
      */
     public static class ADReferenceTypeFilter extends Filter<ADReferenceType> {
 
+        private static final long serialVersionUID = 1L;
+
         public ADReferenceTypeFilter() {
         }
 
@@ -56,6 +58,8 @@ public class ADReferenceCriteria implements Serializable, Criteria {
 
     private LongFilter aDReferenceListId;
 
+    private LongFilter adOrganizationId;
+
     public ADReferenceCriteria() {
     }
 
@@ -67,6 +71,7 @@ public class ADReferenceCriteria implements Serializable, Criteria {
         this.referenceType = other.referenceType == null ? null : other.referenceType.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.aDReferenceListId = other.aDReferenceListId == null ? null : other.aDReferenceListId.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
     @Override
@@ -130,6 +135,14 @@ public class ADReferenceCriteria implements Serializable, Criteria {
         this.aDReferenceListId = aDReferenceListId;
     }
 
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -147,7 +160,8 @@ public class ADReferenceCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(referenceType, that.referenceType) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(aDReferenceListId, that.aDReferenceListId);
+            Objects.equals(aDReferenceListId, that.aDReferenceListId) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
     @Override
@@ -159,7 +173,8 @@ public class ADReferenceCriteria implements Serializable, Criteria {
         description,
         referenceType,
         active,
-        aDReferenceListId
+        aDReferenceListId,
+        adOrganizationId
         );
     }
 
@@ -173,6 +188,7 @@ public class ADReferenceCriteria implements Serializable, Criteria {
                 (referenceType != null ? "referenceType=" + referenceType + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (aDReferenceListId != null ? "aDReferenceListId=" + aDReferenceListId + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }
 

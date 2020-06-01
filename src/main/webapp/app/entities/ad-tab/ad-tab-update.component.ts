@@ -5,9 +5,6 @@ import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vue
 import ADFieldService from '../ad-field/ad-field.service';
 import { IADField } from '@/shared/model/ad-field.model';
 
-import ADClientService from '../ad-client/ad-client.service';
-import { IADClient } from '@/shared/model/ad-client.model';
-
 import ADOrganizationService from '../ad-organization/ad-organization.service';
 import { IADOrganization } from '@/shared/model/ad-organization.model';
 
@@ -30,16 +27,15 @@ const validations: any = {
       required
     },
     description: {},
+    iconName: {},
     targetEndpoint: {},
     writable: {},
     displayLogic: {},
     readOnlyLogic: {},
     filterQuery: {},
     orderQuery: {},
+    tabSequence: {},
     active: {},
-    adClientId: {
-      required
-    },
     adOrganizationId: {
       required
     },
@@ -65,10 +61,6 @@ export default class ADTabUpdate extends Vue {
   @Inject('aDFieldService') private aDFieldService: () => ADFieldService;
 
   public aDFields: IADField[] = [];
-
-  @Inject('aDClientService') private aDClientService: () => ADClientService;
-
-  public aDClients: IADClient[] = [];
 
   @Inject('aDOrganizationService') private aDOrganizationService: () => ADOrganizationService;
 
@@ -142,11 +134,6 @@ export default class ADTabUpdate extends Vue {
       .then(res => {
         this.aDFields = res.data;
       });
-    this.aDClientService()
-      .retrieve()
-      .then(res => {
-        this.aDClients = res.data;
-      });
     this.aDOrganizationService()
       .retrieve()
       .then(res => {
@@ -162,10 +149,20 @@ export default class ADTabUpdate extends Vue {
       .then(res => {
         this.aDColumns = res.data;
       });
+    this.aDColumnService()
+      .retrieve()
+      .then(res => {
+        this.aDColumns = res.data;
+      });
     this.aDWindowService()
       .retrieve()
       .then(res => {
         this.aDWindows = res.data;
+      });
+    this.aDTabService()
+      .retrieve()
+      .then(res => {
+        this.aDTabs = res.data;
       });
   }
 }

@@ -37,6 +37,7 @@
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDReference.referenceType')" for="ad-reference-referenceType">Reference Type</label>
                         <select class="form-control" name="referenceType" :class="{'valid': !$v.aDReference.referenceType.$invalid, 'invalid': $v.aDReference.referenceType.$invalid }" v-model="$v.aDReference.referenceType.$model" id="ad-reference-referenceType" >
+                            <option value="DATATYPE" v-bind:label="$t('opusWebApp.ADReferenceType.DATATYPE')">DATATYPE</option>
                             <option value="LIST" v-bind:label="$t('opusWebApp.ADReferenceType.LIST')">LIST</option>
                             <option value="TABLE" v-bind:label="$t('opusWebApp.ADReferenceType.TABLE')">TABLE</option>
                         </select>
@@ -45,6 +46,18 @@
                         <label class="form-control-label" v-text="$t('opusWebApp.aDReference.active')" for="ad-reference-active">Active</label>
                         <input type="checkbox" class="form-check" name="active" id="ad-reference-active"
                             :class="{'valid': !$v.aDReference.active.$invalid, 'invalid': $v.aDReference.active.$invalid }" v-model="$v.aDReference.active.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDReference.adOrganization')" for="ad-reference-adOrganization">Ad Organization</label>
+                        <select class="form-control" id="ad-reference-adOrganization" name="adOrganization" v-model="$v.aDReference.adOrganizationId.$model" required>
+                            <option v-if="!aDReference.adOrganizationId" v-bind:value="null" selected></option>
+                            <option v-bind:value="aDOrganizationOption.id" v-for="aDOrganizationOption in aDOrganizations" :key="aDOrganizationOption.id">{{aDOrganizationOption.id}}</option>
+                        </select>
+                    </div>
+                    <div v-if="$v.aDReference.adOrganizationId.$anyDirty && $v.aDReference.adOrganizationId.$invalid">
+                        <small class="form-text text-danger" v-if="!$v.aDReference.adOrganizationId.required" v-text="$t('entity.validation.required')">
+                            This field is required.
+                        </small>
                     </div>
                 </div>
                 <div>

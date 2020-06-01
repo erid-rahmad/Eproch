@@ -37,14 +37,20 @@
                     <th v-on:click="changeOrder('gridSequence')"><span v-text="$t('opusWebApp.aDField.gridSequence')">Grid Sequence</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'gridSequence'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('detailSequence')"><span v-text="$t('opusWebApp.aDField.detailSequence')">Detail Sequence</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'detailSequence'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('displayLogic')"><span v-text="$t('opusWebApp.aDField.displayLogic')">Display Logic</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'displayLogic'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('readOnlyLogic')"><span v-text="$t('opusWebApp.aDField.readOnlyLogic')">Read Only Logic</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'readOnlyLogic'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('writable')"><span v-text="$t('opusWebApp.aDField.writable')">Writable</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'writable'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('columnNo')"><span v-text="$t('opusWebApp.aDField.columnNo')">Column No</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'columnNo'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('columnSpan')"><span v-text="$t('opusWebApp.aDField.columnSpan')">Column Span</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'columnSpan'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('updatable')"><span v-text="$t('opusWebApp.aDField.updatable')">Updatable</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'updatable'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('alwaysUpdatable')"><span v-text="$t('opusWebApp.aDField.alwaysUpdatable')">Always Updatable</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'alwaysUpdatable'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('copyable')"><span v-text="$t('opusWebApp.aDField.copyable')">Copyable</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'copyable'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('defaultValue')"><span v-text="$t('opusWebApp.aDField.defaultValue')">Default Value</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'defaultValue'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('formatPattern')"><span v-text="$t('opusWebApp.aDField.formatPattern')">Format Pattern</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'formatPattern'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.aDField.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('adClientId')"><span v-text="$t('opusWebApp.aDField.adClient')">Ad Client</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adClientId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adOrganizationId')"><span v-text="$t('opusWebApp.aDField.adOrganization')">Ad Organization</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adOrganizationId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adReferenceId')"><span v-text="$t('opusWebApp.aDField.adReference')">Ad Reference</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adReferenceId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adColumnId')"><span v-text="$t('opusWebApp.aDField.adColumn')">Ad Column</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adColumnId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('adValidationRuleId')"><span v-text="$t('opusWebApp.aDField.adValidationRule')">Ad Validation Rule</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adValidationRuleId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adTabId')"><span v-text="$t('opusWebApp.aDField.adTab')">Ad Tab</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adTabId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
@@ -67,15 +73,16 @@
                     <td>{{aDField.gridSequence}}</td>
                     <td>{{aDField.detailSequence}}</td>
                     <td>{{aDField.displayLogic}}</td>
+                    <td>{{aDField.readOnlyLogic}}</td>
                     <td>{{aDField.writable}}</td>
                     <td>{{aDField.columnNo}}</td>
                     <td>{{aDField.columnSpan}}</td>
+                    <td>{{aDField.updatable}}</td>
+                    <td>{{aDField.alwaysUpdatable}}</td>
+                    <td>{{aDField.copyable}}</td>
+                    <td>{{aDField.defaultValue}}</td>
+                    <td>{{aDField.formatPattern}}</td>
                     <td>{{aDField.active}}</td>
-                    <td>
-                        <div v-if="aDField.adClientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDField.adClientId}}">{{aDField.adClientId}}</router-link>
-                        </div>
-                    </td>
                     <td>
                         <div v-if="aDField.adOrganizationId">
                             <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: aDField.adOrganizationId}}">{{aDField.adOrganizationId}}</router-link>
@@ -89,6 +96,11 @@
                     <td>
                         <div v-if="aDField.adColumnId">
                             <router-link :to="{name: 'ADColumnView', params: {aDColumnId: aDField.adColumnId}}">{{aDField.adColumnId}}</router-link>
+                        </div>
+                    </td>
+                    <td>
+                        <div v-if="aDField.adValidationRuleId">
+                            <router-link :to="{name: 'AdValidationRuleView', params: {adValidationRuleId: aDField.adValidationRuleId}}">{{aDField.adValidationRuleId}}</router-link>
                         </div>
                     </td>
                     <td>

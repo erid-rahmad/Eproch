@@ -1,14 +1,29 @@
 package com.bhp.opusb.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import com.bhp.opusb.OpusWebApp;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADReference;
 import com.bhp.opusb.domain.ADReferenceList;
+import com.bhp.opusb.domain.enumeration.ADReferenceType;
 import com.bhp.opusb.repository.ADReferenceRepository;
+import com.bhp.opusb.service.ADReferenceQueryService;
 import com.bhp.opusb.service.ADReferenceService;
 import com.bhp.opusb.service.dto.ADReferenceDTO;
 import com.bhp.opusb.service.mapper.ADReferenceMapper;
-import com.bhp.opusb.service.dto.ADReferenceCriteria;
-import com.bhp.opusb.service.ADReferenceQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,15 +34,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import javax.persistence.EntityManager;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import com.bhp.opusb.domain.enumeration.ADReferenceType;
 /**
  * Integration tests for the {@link ADReferenceResource} REST controller.
  */
@@ -46,8 +52,8 @@ public class ADReferenceResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final ADReferenceType DEFAULT_REFERENCE_TYPE = ADReferenceType.LIST;
-    private static final ADReferenceType UPDATED_REFERENCE_TYPE = ADReferenceType.TABLE;
+    private static final ADReferenceType DEFAULT_REFERENCE_TYPE = ADReferenceType.DATATYPE;
+    private static final ADReferenceType UPDATED_REFERENCE_TYPE = ADReferenceType.LIST;
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -85,6 +91,16 @@ public class ADReferenceResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .referenceType(DEFAULT_REFERENCE_TYPE)
             .active(DEFAULT_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        aDReference.setAdOrganization(aDOrganization);
         return aDReference;
     }
     /**
@@ -100,6 +116,16 @@ public class ADReferenceResourceIT {
             .description(UPDATED_DESCRIPTION)
             .referenceType(UPDATED_REFERENCE_TYPE)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        aDReference.setAdOrganization(aDOrganization);
         return aDReference;
     }
 
@@ -601,6 +627,22 @@ public class ADReferenceResourceIT {
 
         // Get all the aDReferenceList where aDReferenceList equals to aDReferenceListId + 1
         defaultADReferenceShouldNotBeFound("aDReferenceListId.equals=" + (aDReferenceListId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADReferencesByAdOrganizationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADOrganization adOrganization = aDReference.getAdOrganization();
+        aDReferenceRepository.saveAndFlush(aDReference);
+        Long adOrganizationId = adOrganization.getId();
+
+        // Get all the aDReferenceList where adOrganization equals to adOrganizationId
+        defaultADReferenceShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
+
+        // Get all the aDReferenceList where adOrganization equals to adOrganizationId + 1
+        defaultADReferenceShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
     }
 
     /**

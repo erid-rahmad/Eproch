@@ -8,12 +8,10 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ADTab} and its DTO {@link ADTabDTO}.
  */
-@Mapper(componentModel = "spring", uses = { ADClientMapper.class, ADOrganizationMapper.class, ADTableMapper.class,
+@Mapper(componentModel = "spring", uses = { ADOrganizationMapper.class, ADTableMapper.class,
         ADColumnMapper.class, ADFieldMapper.class, ADWindowMapper.class })
 public interface ADTabMapper extends EntityMapper<ADTabDTO, ADTab> {
 
-    @Mapping(source = "adClient.id", target = "adClientId")
-    @Mapping(source = "adClient.name", target = "adClientName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "adTable.id", target = "adTableId")
@@ -34,7 +32,6 @@ public interface ADTabMapper extends EntityMapper<ADTabDTO, ADTab> {
     @Mapping(target = "removeADTab", ignore = true)
     @Mapping(target = "aDFields", ignore = true)
     @Mapping(target = "removeADField", ignore = true)
-    @Mapping(source = "adClientId", target = "adClient")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "adTableId", target = "adTable")
     @Mapping(source = "parentColumnId", target = "parentColumn")

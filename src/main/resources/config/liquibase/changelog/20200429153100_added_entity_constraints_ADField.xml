@@ -8,12 +8,6 @@
     -->
     <changeSet id="20200429153100-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="ad_client_id"
-                                 baseTableName="ad_field"
-                                 constraintName="fk_ad_field_ad_client_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="ad_client"/>
-
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="ad_field"
                                  constraintName="fk_ad_field_ad_organization_id"
@@ -25,6 +19,12 @@
                                  constraintName="fk_ad_field_ad_reference_id"
                                  referencedColumnNames="id"
                                  referencedTableName="ad_reference"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_validation_rule_id"
+                                 baseTableName="ad_field"
+                                 constraintName="fk_ad_field_ad_validation_rule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_validation_rule"/>
 
         <addForeignKeyConstraint baseColumnNames="ad_tab_id"
                                  baseTableName="ad_field"

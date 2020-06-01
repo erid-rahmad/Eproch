@@ -86,6 +86,11 @@
                             :class="{'valid': !$v.aDColumn.mandatoryLogic.$invalid, 'invalid': $v.aDColumn.mandatoryLogic.$invalid }" v-model="$v.aDColumn.mandatoryLogic.$model" />
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.displayLogic')" for="ad-column-displayLogic">Display Logic</label>
+                        <input type="text" class="form-control" name="displayLogic" id="ad-column-displayLogic"
+                            :class="{'valid': !$v.aDColumn.displayLogic.$invalid, 'invalid': $v.aDColumn.displayLogic.$invalid }" v-model="$v.aDColumn.displayLogic.$model" />
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.readOnlyLogic')" for="ad-column-readOnlyLogic">Read Only Logic</label>
                         <input type="text" class="form-control" name="readOnlyLogic" id="ad-column-readOnlyLogic"
                             :class="{'valid': !$v.aDColumn.readOnlyLogic.$invalid, 'invalid': $v.aDColumn.readOnlyLogic.$invalid }" v-model="$v.aDColumn.readOnlyLogic.$model" />
@@ -94,6 +99,16 @@
                         <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.updatable')" for="ad-column-updatable">Updatable</label>
                         <input type="checkbox" class="form-check" name="updatable" id="ad-column-updatable"
                             :class="{'valid': !$v.aDColumn.updatable.$invalid, 'invalid': $v.aDColumn.updatable.$invalid }" v-model="$v.aDColumn.updatable.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.alwaysUpdatable')" for="ad-column-alwaysUpdatable">Always Updatable</label>
+                        <input type="checkbox" class="form-check" name="alwaysUpdatable" id="ad-column-alwaysUpdatable"
+                            :class="{'valid': !$v.aDColumn.alwaysUpdatable.$invalid, 'invalid': $v.aDColumn.alwaysUpdatable.$invalid }" v-model="$v.aDColumn.alwaysUpdatable.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.copyable')" for="ad-column-copyable">Copyable</label>
+                        <input type="checkbox" class="form-check" name="copyable" id="ad-column-copyable"
+                            :class="{'valid': !$v.aDColumn.copyable.$invalid, 'invalid': $v.aDColumn.copyable.$invalid }" v-model="$v.aDColumn.copyable.$model" />
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.defaultValue')" for="ad-column-defaultValue">Default Value</label>
@@ -126,21 +141,24 @@
                             :class="{'valid': !$v.aDColumn.maxValue.$invalid, 'invalid': $v.aDColumn.maxValue.$invalid }" v-model.number="$v.aDColumn.maxValue.$model" />
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.identifier')" for="ad-column-identifier">Identifier</label>
+                        <input type="checkbox" class="form-check" name="identifier" id="ad-column-identifier"
+                            :class="{'valid': !$v.aDColumn.identifier.$invalid, 'invalid': $v.aDColumn.identifier.$invalid }" v-model="$v.aDColumn.identifier.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.defaultSelection')" for="ad-column-defaultSelection">Default Selection</label>
+                        <input type="checkbox" class="form-check" name="defaultSelection" id="ad-column-defaultSelection"
+                            :class="{'valid': !$v.aDColumn.defaultSelection.$invalid, 'invalid': $v.aDColumn.defaultSelection.$invalid }" v-model="$v.aDColumn.defaultSelection.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.selectionSequence')" for="ad-column-selectionSequence">Selection Sequence</label>
+                        <input type="number" class="form-control" name="selectionSequence" id="ad-column-selectionSequence"
+                            :class="{'valid': !$v.aDColumn.selectionSequence.$invalid, 'invalid': $v.aDColumn.selectionSequence.$invalid }" v-model.number="$v.aDColumn.selectionSequence.$model" />
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.active')" for="ad-column-active">Active</label>
                         <input type="checkbox" class="form-check" name="active" id="ad-column-active"
                             :class="{'valid': !$v.aDColumn.active.$invalid, 'invalid': $v.aDColumn.active.$invalid }" v-model="$v.aDColumn.active.$model" />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.adClient')" for="ad-column-adClient">Ad Client</label>
-                        <select class="form-control" id="ad-column-adClient" name="adClient" v-model="$v.aDColumn.adClientId.$model" required>
-                            <option v-if="!aDColumn.adClientId" v-bind:value="null" selected></option>
-                            <option v-bind:value="aDClientOption.id" v-for="aDClientOption in aDClients" :key="aDClientOption.id">{{aDClientOption.id}}</option>
-                        </select>
-                    </div>
-                    <div v-if="$v.aDColumn.adClientId.$anyDirty && $v.aDColumn.adClientId.$invalid">
-                        <small class="form-text text-danger" v-if="!$v.aDColumn.adClientId.required" v-text="$t('entity.validation.required')">
-                            This field is required.
-                        </small>
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.adOrganization')" for="ad-column-adOrganization">Ad Organization</label>
@@ -159,6 +177,13 @@
                         <select class="form-control" id="ad-column-adReference" name="adReference" v-model="aDColumn.adReferenceId">
                             <option v-bind:value="null"></option>
                             <option v-bind:value="aDReferenceOption.id" v-for="aDReferenceOption in aDReferences" :key="aDReferenceOption.id">{{aDReferenceOption.id}}</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDColumn.adValidationRule')" for="ad-column-adValidationRule">Ad Validation Rule</label>
+                        <select class="form-control" id="ad-column-adValidationRule" name="adValidationRule" v-model="aDColumn.adValidationRuleId">
+                            <option v-bind:value="null"></option>
+                            <option v-bind:value="adValidationRuleOption.id" v-for="adValidationRuleOption in adValidationRules" :key="adValidationRuleOption.id">{{adValidationRuleOption.id}}</option>
                         </select>
                     </div>
                     <div class="form-group">

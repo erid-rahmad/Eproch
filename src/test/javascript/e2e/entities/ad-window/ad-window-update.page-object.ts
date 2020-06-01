@@ -12,10 +12,10 @@ export default class ADWindowUpdatePage extends AlertPage {
 
   descriptionInput: ElementFinder = element(by.css('input#ad-window-description'));
 
+  titleLogicInput: ElementFinder = element(by.css('input#ad-window-titleLogic'));
+
   typeSelect = element(by.css('select#ad-window-type'));
 
   activeInput: ElementFinder = element(by.css('input#ad-window-active'));
-  adClientSelect = element(by.css('select#ad-window-adClient'));
-
   adOrganizationSelect = element(by.css('select#ad-window-adOrganization'));
 }

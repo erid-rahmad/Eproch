@@ -71,6 +71,10 @@ describe('ADWindow e2e test', () => {
       expect(await updatePage.descriptionInput.getAttribute('value')).to.match(/description/);
 
 
+      await updatePage.titleLogicInput.sendKeys('titleLogic');
+      expect(await updatePage.titleLogicInput.getAttribute('value')).to.match(/titleLogic/);
+
+
       await selectLastOption(updatePage.typeSelect);
 
 
@@ -83,7 +87,6 @@ describe('ADWindow e2e test', () => {
         expect(await updatePage.activeInput.isSelected()).to.be.true;
       }
 
-      // await  selectLastOption(updatePage.adClientSelect);
       // await  selectLastOption(updatePage.adOrganizationSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
@@ -154,6 +157,10 @@ describe('ADWindow e2e test', () => {
           await updatePage.descriptionInput.clear();
           await updatePage.descriptionInput.sendKeys('modified');
           expect(await updatePage.descriptionInput.getAttribute('value')).to.match(/modified/);
+
+          await updatePage.titleLogicInput.clear();
+          await updatePage.titleLogicInput.sendKeys('modified');
+          expect(await updatePage.titleLogicInput.getAttribute('value')).to.match(/modified/);
 
           const selectedActive = await updatePage.activeInput.isSelected();
           if (selectedActive) {

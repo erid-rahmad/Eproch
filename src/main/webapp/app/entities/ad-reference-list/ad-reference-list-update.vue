@@ -40,6 +40,18 @@
                             :class="{'valid': !$v.aDReferenceList.active.$invalid, 'invalid': $v.aDReferenceList.active.$invalid }" v-model="$v.aDReferenceList.active.$model" />
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDReferenceList.adOrganization')" for="ad-reference-list-adOrganization">Ad Organization</label>
+                        <select class="form-control" id="ad-reference-list-adOrganization" name="adOrganization" v-model="$v.aDReferenceList.adOrganizationId.$model" required>
+                            <option v-if="!aDReferenceList.adOrganizationId" v-bind:value="null" selected></option>
+                            <option v-bind:value="aDOrganizationOption.id" v-for="aDOrganizationOption in aDOrganizations" :key="aDOrganizationOption.id">{{aDOrganizationOption.id}}</option>
+                        </select>
+                    </div>
+                    <div v-if="$v.aDReferenceList.adOrganizationId.$anyDirty && $v.aDReferenceList.adOrganizationId.$invalid">
+                        <small class="form-text text-danger" v-if="!$v.aDReferenceList.adOrganizationId.required" v-text="$t('entity.validation.required')">
+                            This field is required.
+                        </small>
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDReferenceList.adReference')" for="ad-reference-list-adReference">Ad Reference</label>
                         <select class="form-control" id="ad-reference-list-adReference" name="adReference" v-model="$v.aDReferenceList.adReferenceId.$model" required>
                             <option v-if="!aDReferenceList.adReferenceId" v-bind:value="null" selected></option>

@@ -25,18 +25,24 @@ export interface IADColumn {
   importedColumn?: string;
   mandatory?: boolean;
   mandatoryLogic?: string;
+  displayLogic?: string;
   readOnlyLogic?: string;
   updatable?: boolean;
+  alwaysUpdatable?: boolean;
+  copyable?: boolean;
   defaultValue?: string;
   formatPattern?: string;
   minLength?: number;
   maxLength?: number;
   minValue?: number;
   maxValue?: number;
+  identifier?: boolean;
+  defaultSelection?: boolean;
+  selectionSequence?: number;
   active?: boolean;
-  adClientId?: number;
   adOrganizationId?: number;
   adReferenceId?: number;
+  adValidationRuleId?: number;
   adTableId?: number;
 }
 
@@ -54,18 +60,24 @@ export class ADColumn implements IADColumn {
     public importedColumn?: string,
     public mandatory?: boolean,
     public mandatoryLogic?: string,
+    public displayLogic?: string,
     public readOnlyLogic?: string,
     public updatable?: boolean,
+    public alwaysUpdatable?: boolean,
+    public copyable?: boolean,
     public defaultValue?: string,
     public formatPattern?: string,
     public minLength?: number,
     public maxLength?: number,
     public minValue?: number,
     public maxValue?: number,
+    public identifier?: boolean,
+    public defaultSelection?: boolean,
+    public selectionSequence?: number,
     public active?: boolean,
-    public adClientId?: number,
     public adOrganizationId?: number,
     public adReferenceId?: number,
+    public adValidationRuleId?: number,
     public adTableId?: number
   ) {
     this.key = this.key || false;
@@ -73,5 +85,9 @@ export class ADColumn implements IADColumn {
     this.mandatory = this.mandatory || false;
     this.updatable = this.updatable || true;
     this.active = this.active || true;
+    this.alwaysUpdatable = this.alwaysUpdatable || false;
+    this.copyable = this.copyable || true;
+    this.identifier = this.identifier || false;
+    this.defaultSelection = this.defaultSelection || false;
   }
 }

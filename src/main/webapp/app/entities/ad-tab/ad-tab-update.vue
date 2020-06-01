@@ -25,6 +25,11 @@
                             :class="{'valid': !$v.aDTab.description.$invalid, 'invalid': $v.aDTab.description.$invalid }" v-model="$v.aDTab.description.$model" />
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDTab.iconName')" for="ad-tab-iconName">Icon Name</label>
+                        <input type="text" class="form-control" name="iconName" id="ad-tab-iconName"
+                            :class="{'valid': !$v.aDTab.iconName.$invalid, 'invalid': $v.aDTab.iconName.$invalid }" v-model="$v.aDTab.iconName.$model" />
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDTab.targetEndpoint')" for="ad-tab-targetEndpoint">Target Endpoint</label>
                         <input type="text" class="form-control" name="targetEndpoint" id="ad-tab-targetEndpoint"
                             :class="{'valid': !$v.aDTab.targetEndpoint.$invalid, 'invalid': $v.aDTab.targetEndpoint.$invalid }" v-model="$v.aDTab.targetEndpoint.$model" />
@@ -55,21 +60,14 @@
                             :class="{'valid': !$v.aDTab.orderQuery.$invalid, 'invalid': $v.aDTab.orderQuery.$invalid }" v-model="$v.aDTab.orderQuery.$model" />
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDTab.tabSequence')" for="ad-tab-tabSequence">Tab Sequence</label>
+                        <input type="number" class="form-control" name="tabSequence" id="ad-tab-tabSequence"
+                            :class="{'valid': !$v.aDTab.tabSequence.$invalid, 'invalid': $v.aDTab.tabSequence.$invalid }" v-model.number="$v.aDTab.tabSequence.$model" />
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDTab.active')" for="ad-tab-active">Active</label>
                         <input type="checkbox" class="form-check" name="active" id="ad-tab-active"
                             :class="{'valid': !$v.aDTab.active.$invalid, 'invalid': $v.aDTab.active.$invalid }" v-model="$v.aDTab.active.$model" />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.aDTab.adClient')" for="ad-tab-adClient">Ad Client</label>
-                        <select class="form-control" id="ad-tab-adClient" name="adClient" v-model="$v.aDTab.adClientId.$model" required>
-                            <option v-if="!aDTab.adClientId" v-bind:value="null" selected></option>
-                            <option v-bind:value="aDClientOption.id" v-for="aDClientOption in aDClients" :key="aDClientOption.id">{{aDClientOption.id}}</option>
-                        </select>
-                    </div>
-                    <div v-if="$v.aDTab.adClientId.$anyDirty && $v.aDTab.adClientId.$invalid">
-                        <small class="form-text text-danger" v-if="!$v.aDTab.adClientId.required" v-text="$t('entity.validation.required')">
-                            This field is required.
-                        </small>
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDTab.adOrganization')" for="ad-tab-adOrganization">Ad Organization</label>

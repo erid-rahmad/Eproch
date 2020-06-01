@@ -5,6 +5,9 @@ import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vue
 import ADReferenceListService from '../ad-reference-list/ad-reference-list.service';
 import { IADReferenceList } from '@/shared/model/ad-reference-list.model';
 
+import ADOrganizationService from '../ad-organization/ad-organization.service';
+import { IADOrganization } from '@/shared/model/ad-organization.model';
+
 import AlertService from '@/shared/alert/alert.service';
 import { IADReference, ADReference } from '@/shared/model/ad-reference.model';
 import ADReferenceService from './ad-reference.service';
@@ -19,7 +22,10 @@ const validations: any = {
     },
     description: {},
     referenceType: {},
-    active: {}
+    active: {},
+    adOrganizationId: {
+      required
+    }
   }
 };
 
@@ -34,6 +40,10 @@ export default class ADReferenceUpdate extends Vue {
   @Inject('aDReferenceListService') private aDReferenceListService: () => ADReferenceListService;
 
   public aDReferenceLists: IADReferenceList[] = [];
+
+  @Inject('aDOrganizationService') private aDOrganizationService: () => ADOrganizationService;
+
+  public aDOrganizations: IADOrganization[] = [];
   public isSaving = false;
 
   beforeRouteEnter(to, from, next) {
@@ -85,6 +95,11 @@ export default class ADReferenceUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.aDReferenceLists = res.data;
+      });
+    this.aDOrganizationService()
+      .retrieve()
+      .then(res => {
+        this.aDOrganizations = res.data;
       });
   }
 }

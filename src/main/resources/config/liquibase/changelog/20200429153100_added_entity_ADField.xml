@@ -51,6 +51,9 @@
             <column name="display_logic" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="read_only_logic" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="writable" type="boolean">
                 <constraints nullable="true" />
             </column>
@@ -60,11 +63,23 @@
             <column name="column_span" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="active" type="boolean">
+            <column name="updatable" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="ad_client_id" type="bigint">
-                <constraints nullable="false" />
+            <column name="always_updatable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="copyable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="default_value" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="format_pattern" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="true" />
             </column>
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
@@ -78,6 +93,9 @@
             <column name="ad_column_id" type="bigint">
                 <constraints nullable="false" />
             </column>
+            <column name="ad_validation_rule_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
     </changeSet>
@@ -87,7 +105,7 @@
     </changeSet>
     
     <!-- Added the entity audit columns -->
-    <changeSet id="20200420194526-audit-1" author="jhipster-entity-audit">
+    <changeSet id="20200429153100-audit-1" author="jhipster-entity-audit">
         <addColumn tableName="ad_field">
             <column name="created_by" type="varchar(50)" defaultValue="system">
                 <constraints nullable="false"/>
@@ -127,11 +145,16 @@
             <column name="grid_sequence" type="numeric"/>
             <column name="detail_sequence" type="numeric"/>
             <column name="display_logic" type="string"/>
+            <column name="read_only_logic" type="string"/>
             <column name="writable" type="boolean"/>
             <column name="column_no" type="numeric"/>
             <column name="column_span" type="numeric"/>
+            <column name="updatable" type="boolean"/>
+            <column name="always_updatable" type="boolean"/>
+            <column name="copyable" type="boolean"/>
+            <column name="default_value" type="string"/>
+            <column name="format_pattern" type="string"/>
             <column name="active" type="boolean"/>
-            <column name="ad_client_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="ad_reference_id" type="numeric"/>
             <column name="ad_tab_id" type="numeric"/>

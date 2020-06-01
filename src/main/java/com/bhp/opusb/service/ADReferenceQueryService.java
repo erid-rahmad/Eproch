@@ -110,6 +110,10 @@ public class ADReferenceQueryService extends QueryService<ADReference> {
                 specification = specification.and(buildSpecification(criteria.getADReferenceListId(),
                     root -> root.join(ADReference_.aDReferenceLists, JoinType.LEFT).get(ADReferenceList_.id)));
             }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(ADReference_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
+            }
         }
         return specification;
     }

@@ -20,9 +20,6 @@ public class ADTableDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
-
-    private Long adClientId;
-    private String adClientName;
     private Long adOrganizationId;
     private String adOrganizationName;
     
@@ -56,22 +53,6 @@ public class ADTableDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Long getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(Long aDClientId) {
-        this.adClientId = aDClientId;
-    }
-
-    public String getAdClientName() {
-        return adClientName;
-    }
-
-    public void setAdClientName(String adClientName) {
-        this.adClientName = adClientName;
     }
 
     public Long getAdOrganizationId() {
@@ -118,7 +99,6 @@ public class ADTableDTO extends AbstractAuditingDTO {
             ", name='" + getName() + "'" +
             ", view='" + isView() + "'" +
             ", active='" + isActive() + "'" +
-            ", adClientId=" + getAdClientId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";
     }

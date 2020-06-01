@@ -34,6 +34,14 @@
                     <dd>
                         <span>{{aDReference.active}}</span>
                     </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDReference.adOrganization')">Ad Organization</span>
+                    </dt>
+                    <dd>
+                        <div v-if="aDReference.adOrganizationId">
+                            <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: aDReference.adOrganizationId}}">{{aDReference.adOrganizationId}}</router-link>
+                        </div>
+                    </dd>
                 </dl>
                 <button type="submit"
                         v-on:click.prevent="previousState()"

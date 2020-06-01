@@ -5,9 +5,6 @@ import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vue
 import ADColumnService from '../ad-column/ad-column.service';
 import { IADColumn } from '@/shared/model/ad-column.model';
 
-import ADClientService from '../ad-client/ad-client.service';
-import { IADClient } from '@/shared/model/ad-client.model';
-
 import ADOrganizationService from '../ad-organization/ad-organization.service';
 import { IADOrganization } from '@/shared/model/ad-organization.model';
 
@@ -22,9 +19,6 @@ const validations: any = {
     },
     view: {},
     active: {},
-    adClientId: {
-      required
-    },
     adOrganizationId: {
       required
     }
@@ -42,10 +36,6 @@ export default class ADTableUpdate extends Vue {
   @Inject('aDColumnService') private aDColumnService: () => ADColumnService;
 
   public aDColumns: IADColumn[] = [];
-
-  @Inject('aDClientService') private aDClientService: () => ADClientService;
-
-  public aDClients: IADClient[] = [];
 
   @Inject('aDOrganizationService') private aDOrganizationService: () => ADOrganizationService;
 
@@ -101,11 +91,6 @@ export default class ADTableUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.aDColumns = res.data;
-      });
-    this.aDClientService()
-      .retrieve()
-      .then(res => {
-        this.aDClients = res.data;
       });
     this.aDOrganizationService()
       .retrieve()

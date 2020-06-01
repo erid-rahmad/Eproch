@@ -5,7 +5,6 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,11 +51,6 @@ public class ADTable extends AbstractAuditingEntity {
     private Set<ADColumn> aDColumns = new HashSet<>();
 
     @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("aDTables")
-    private ADClient adClient;
-
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @NotNull
     @JsonIgnoreProperties("aDTables")
     private ADOrganization adOrganization;
@@ -139,19 +133,6 @@ public class ADTable extends AbstractAuditingEntity {
 
     public void setADColumns(Set<ADColumn> aDColumns) {
         this.aDColumns = aDColumns;
-    }
-
-    public ADClient getAdClient() {
-        return adClient;
-    }
-
-    public ADTable adClient(ADClient aDClient) {
-        this.adClient = aDClient;
-        return this;
-    }
-
-    public void setAdClient(ADClient aDClient) {
-        this.adClient = aDClient;
     }
 
     public ADOrganization getAdOrganization() {

@@ -1,0 +1,26 @@
+{
+  "opusWebApp": {
+    "adValidationRule": {
+      "home": {
+        "title": "Ad Validation Rules",
+        "createLabel": "Create a new Ad Validation Rule",
+        "createOrEditLabel": "Create or edit a Ad Validation Rule",
+        "notFound": "No Ad Validation Rules found"
+      },
+      "created": "A new Ad Validation Rule is created with identifier {{ param }}",
+      "updated": "A Ad Validation Rule is updated with identifier {{ param }}",
+      "deleted": "A Ad Validation Rule is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Ad Validation Rule {{ id }}?"
+      },
+      "detail": {
+        "title": "Ad Validation Rule"
+      },
+      "uid": "Uid",
+      "name": "Name",
+      "description": "Description",
+      "query": "Query",
+      "adValidationRule": "Ad Validation Rule"
+    }
+  }
+}

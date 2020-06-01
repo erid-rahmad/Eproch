@@ -83,14 +83,20 @@ class ADColumnGatlingTest extends Simulation {
                 , "importedColumn":"SAMPLE_TEXT"
                 , "mandatory":null
                 , "mandatoryLogic":"SAMPLE_TEXT"
+                , "displayLogic":"SAMPLE_TEXT"
                 , "readOnlyLogic":"SAMPLE_TEXT"
                 , "updatable":null
+                , "alwaysUpdatable":null
+                , "copyable":null
                 , "defaultValue":"SAMPLE_TEXT"
                 , "formatPattern":"SAMPLE_TEXT"
                 , "minLength":"0"
                 , "maxLength":"0"
                 , "minValue":null
                 , "maxValue":null
+                , "identifier":null
+                , "defaultSelection":null
+                , "selectionSequence":"0"
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

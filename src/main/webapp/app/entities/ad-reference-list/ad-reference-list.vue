@@ -29,6 +29,7 @@
                     <th v-on:click="changeOrder('value')"><span v-text="$t('opusWebApp.aDReferenceList.value')">Value</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'value'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('description')"><span v-text="$t('opusWebApp.aDReferenceList.description')">Description</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'description'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.aDReferenceList.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('adOrganizationId')"><span v-text="$t('opusWebApp.aDReferenceList.adOrganization')">Ad Organization</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adOrganizationId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adReferenceId')"><span v-text="$t('opusWebApp.aDReferenceList.adReference')">Ad Reference</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adReferenceId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
@@ -43,6 +44,11 @@
                     <td>{{aDReferenceList.value}}</td>
                     <td>{{aDReferenceList.description}}</td>
                     <td>{{aDReferenceList.active}}</td>
+                    <td>
+                        <div v-if="aDReferenceList.adOrganizationId">
+                            <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: aDReferenceList.adOrganizationId}}">{{aDReferenceList.adOrganizationId}}</router-link>
+                        </div>
+                    </td>
                     <td>
                         <div v-if="aDReferenceList.adReferenceId">
                             <router-link :to="{name: 'ADReferenceView', params: {aDReferenceId: aDReferenceList.adReferenceId}}">{{aDReferenceList.adReferenceId}}</router-link>

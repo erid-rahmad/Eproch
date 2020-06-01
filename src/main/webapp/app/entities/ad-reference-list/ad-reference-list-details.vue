@@ -29,6 +29,14 @@
                         <span>{{aDReferenceList.active}}</span>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDReferenceList.adOrganization')">Ad Organization</span>
+                    </dt>
+                    <dd>
+                        <div v-if="aDReferenceList.adOrganizationId">
+                            <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: aDReferenceList.adOrganizationId}}">{{aDReferenceList.adOrganizationId}}</router-link>
+                        </div>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDReferenceList.adReference')">Ad Reference</span>
                     </dt>
                     <dd>

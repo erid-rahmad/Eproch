@@ -32,20 +32,32 @@ export default class ADFieldUpdatePage extends AlertPage {
 
   displayLogicInput: ElementFinder = element(by.css('input#ad-field-displayLogic'));
 
+  readOnlyLogicInput: ElementFinder = element(by.css('input#ad-field-readOnlyLogic'));
+
   writableInput: ElementFinder = element(by.css('input#ad-field-writable'));
 
   columnNoInput: ElementFinder = element(by.css('input#ad-field-columnNo'));
 
   columnSpanInput: ElementFinder = element(by.css('input#ad-field-columnSpan'));
 
-  activeInput: ElementFinder = element(by.css('input#ad-field-active'));
-  adClientSelect = element(by.css('select#ad-field-adClient'));
+  updatableInput: ElementFinder = element(by.css('input#ad-field-updatable'));
 
+  alwaysUpdatableInput: ElementFinder = element(by.css('input#ad-field-alwaysUpdatable'));
+
+  copyableInput: ElementFinder = element(by.css('input#ad-field-copyable'));
+
+  defaultValueInput: ElementFinder = element(by.css('input#ad-field-defaultValue'));
+
+  formatPatternInput: ElementFinder = element(by.css('input#ad-field-formatPattern'));
+
+  activeInput: ElementFinder = element(by.css('input#ad-field-active'));
   adOrganizationSelect = element(by.css('select#ad-field-adOrganization'));
 
   adReferenceSelect = element(by.css('select#ad-field-adReference'));
 
   adColumnSelect = element(by.css('select#ad-field-adColumn'));
+
+  adValidationRuleSelect = element(by.css('select#ad-field-adValidationRule'));
 
   adTabSelect = element(by.css('select#ad-field-adTab'));
 }

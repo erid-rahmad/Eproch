@@ -20,6 +20,8 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     private String description;
 
+    private String iconName;
+
     private String targetEndpoint;
 
     private Boolean writable;
@@ -32,10 +34,9 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     private String orderQuery;
 
-    private Boolean active;
+    private Integer tabSequence;
 
-    private Long adClientId;
-    private String adClientName;
+    private Boolean active;
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -81,6 +82,14 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getIconName() {
+        return iconName;
+    }
+
+    public void setIconName(String iconName) {
+        this.iconName = iconName;
     }
 
     public String getTargetEndpoint() {
@@ -131,28 +140,20 @@ public class ADTabDTO extends AbstractAuditingDTO {
         this.orderQuery = orderQuery;
     }
 
+    public Integer getTabSequence() {
+        return tabSequence;
+    }
+
+    public void setTabSequence(Integer tabSequence) {
+        this.tabSequence = tabSequence;
+    }
+
     public Boolean isActive() {
         return active;
     }
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Long getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(Long aDClientId) {
-        this.adClientId = aDClientId;
-    }
-
-    public String getAdClientName() {
-        return adClientName;
-    }
-
-    public void setAdClientName(String adClientName) {
-        this.adClientName = adClientName;
     }
 
     public Long getAdOrganizationId() {
@@ -302,14 +303,15 @@ public class ADTabDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", iconName='" + getIconName() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
             ", writable='" + isWritable() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +
             ", filterQuery='" + getFilterQuery() + "'" +
             ", orderQuery='" + getOrderQuery() + "'" +
+            ", tabSequence=" + getTabSequence() +
             ", active='" + isActive() + "'" +
-            ", adClientId=" + getAdClientId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adTableId=" + getAdTableId() +
             ", parentColumnId=" + getParentColumnId() +

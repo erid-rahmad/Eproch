@@ -3,7 +3,6 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADWindow;
 import com.bhp.opusb.domain.ADTab;
-import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.ADWindowRepository;
 import com.bhp.opusb.service.ADWindowService;
@@ -45,6 +44,9 @@ public class ADWindowResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_TITLE_LOGIC = "AAAAAAAAAA";
+    private static final String UPDATED_TITLE_LOGIC = "BBBBBBBBBB";
+
     private static final ADWindowType DEFAULT_TYPE = ADWindowType.MAINTAIN;
     private static final ADWindowType UPDATED_TYPE = ADWindowType.QUERY;
 
@@ -81,18 +83,9 @@ public class ADWindowResourceIT {
         ADWindow aDWindow = new ADWindow()
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
+            .titleLogic(DEFAULT_TITLE_LOGIC)
             .type(DEFAULT_TYPE)
             .active(DEFAULT_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDWindow.setAdClient(aDClient);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -115,18 +108,9 @@ public class ADWindowResourceIT {
         ADWindow aDWindow = new ADWindow()
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .titleLogic(UPDATED_TITLE_LOGIC)
             .type(UPDATED_TYPE)
             .active(UPDATED_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createUpdatedEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDWindow.setAdClient(aDClient);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -163,6 +147,7 @@ public class ADWindowResourceIT {
         ADWindow testADWindow = aDWindowList.get(aDWindowList.size() - 1);
         assertThat(testADWindow.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADWindow.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testADWindow.getTitleLogic()).isEqualTo(DEFAULT_TITLE_LOGIC);
         assertThat(testADWindow.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testADWindow.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -239,6 +224,7 @@ public class ADWindowResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDWindow.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].titleLogic").value(hasItem(DEFAULT_TITLE_LOGIC)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -256,6 +242,7 @@ public class ADWindowResourceIT {
             .andExpect(jsonPath("$.id").value(aDWindow.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.titleLogic").value(DEFAULT_TITLE_LOGIC))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -438,6 +425,84 @@ public class ADWindowResourceIT {
 
     @Test
     @Transactional
+    public void getAllADWindowsByTitleLogicIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where titleLogic equals to DEFAULT_TITLE_LOGIC
+        defaultADWindowShouldBeFound("titleLogic.equals=" + DEFAULT_TITLE_LOGIC);
+
+        // Get all the aDWindowList where titleLogic equals to UPDATED_TITLE_LOGIC
+        defaultADWindowShouldNotBeFound("titleLogic.equals=" + UPDATED_TITLE_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByTitleLogicIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where titleLogic not equals to DEFAULT_TITLE_LOGIC
+        defaultADWindowShouldNotBeFound("titleLogic.notEquals=" + DEFAULT_TITLE_LOGIC);
+
+        // Get all the aDWindowList where titleLogic not equals to UPDATED_TITLE_LOGIC
+        defaultADWindowShouldBeFound("titleLogic.notEquals=" + UPDATED_TITLE_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByTitleLogicIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where titleLogic in DEFAULT_TITLE_LOGIC or UPDATED_TITLE_LOGIC
+        defaultADWindowShouldBeFound("titleLogic.in=" + DEFAULT_TITLE_LOGIC + "," + UPDATED_TITLE_LOGIC);
+
+        // Get all the aDWindowList where titleLogic equals to UPDATED_TITLE_LOGIC
+        defaultADWindowShouldNotBeFound("titleLogic.in=" + UPDATED_TITLE_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByTitleLogicIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where titleLogic is not null
+        defaultADWindowShouldBeFound("titleLogic.specified=true");
+
+        // Get all the aDWindowList where titleLogic is null
+        defaultADWindowShouldNotBeFound("titleLogic.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllADWindowsByTitleLogicContainsSomething() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where titleLogic contains DEFAULT_TITLE_LOGIC
+        defaultADWindowShouldBeFound("titleLogic.contains=" + DEFAULT_TITLE_LOGIC);
+
+        // Get all the aDWindowList where titleLogic contains UPDATED_TITLE_LOGIC
+        defaultADWindowShouldNotBeFound("titleLogic.contains=" + UPDATED_TITLE_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByTitleLogicNotContainsSomething() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where titleLogic does not contain DEFAULT_TITLE_LOGIC
+        defaultADWindowShouldNotBeFound("titleLogic.doesNotContain=" + DEFAULT_TITLE_LOGIC);
+
+        // Get all the aDWindowList where titleLogic does not contain UPDATED_TITLE_LOGIC
+        defaultADWindowShouldBeFound("titleLogic.doesNotContain=" + UPDATED_TITLE_LOGIC);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADWindowsByTypeIsEqualToSomething() throws Exception {
         // Initialize the database
         aDWindowRepository.saveAndFlush(aDWindow);
@@ -562,22 +627,6 @@ public class ADWindowResourceIT {
 
     @Test
     @Transactional
-    public void getAllADWindowsByAdClientIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        ADClient adClient = aDWindow.getAdClient();
-        aDWindowRepository.saveAndFlush(aDWindow);
-        Long adClientId = adClient.getId();
-
-        // Get all the aDWindowList where adClient equals to adClientId
-        defaultADWindowShouldBeFound("adClientId.equals=" + adClientId);
-
-        // Get all the aDWindowList where adClient equals to adClientId + 1
-        defaultADWindowShouldNotBeFound("adClientId.equals=" + (adClientId + 1));
-    }
-
-
-    @Test
-    @Transactional
     public void getAllADWindowsByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = aDWindow.getAdOrganization();
@@ -601,6 +650,7 @@ public class ADWindowResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDWindow.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].titleLogic").value(hasItem(DEFAULT_TITLE_LOGIC)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -652,6 +702,7 @@ public class ADWindowResourceIT {
         updatedADWindow
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .titleLogic(UPDATED_TITLE_LOGIC)
             .type(UPDATED_TYPE)
             .active(UPDATED_ACTIVE);
         ADWindowDTO aDWindowDTO = aDWindowMapper.toDto(updatedADWindow);
@@ -667,6 +718,7 @@ public class ADWindowResourceIT {
         ADWindow testADWindow = aDWindowList.get(aDWindowList.size() - 1);
         assertThat(testADWindow.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADWindow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testADWindow.getTitleLogic()).isEqualTo(UPDATED_TITLE_LOGIC);
         assertThat(testADWindow.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testADWindow.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

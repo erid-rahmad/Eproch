@@ -21,6 +21,9 @@
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="icon_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
             <column name="target_endpoint" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
@@ -39,11 +42,11 @@
             <column name="order_query" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="active" type="boolean">
+            <column name="tab_sequence" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="ad_client_id" type="bigint">
-                <constraints nullable="false" />
+            <column name="active" type="boolean">
+                <constraints nullable="true" />
             </column>
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
@@ -102,14 +105,15 @@
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
             <column name="description" type="string"/>
+            <column name="icon_name" type="string"/>
             <column name="target_endpoint" type="string"/>
             <column name="writable" type="boolean"/>
             <column name="display_logic" type="string"/>
             <column name="read_only_logic" type="string"/>
             <column name="filter_query" type="string"/>
             <column name="order_query" type="string"/>
+            <column name="tab_sequence" type="numeric"/>
             <column name="active" type="boolean"/>
-            <column name="ad_client_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="ad_table_id" type="numeric"/>
             <column name="ad_window_id" type="numeric"/>

@@ -33,6 +33,7 @@
         "adFieldGroup": "AD Field Group",
         "adReference": "AD Reference",
         "adReferenceList": "AD Reference List",
+        "adValidationRule": "Ad Validation Rule",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

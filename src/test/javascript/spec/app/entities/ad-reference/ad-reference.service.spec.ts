@@ -30,7 +30,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new ADReferenceService();
 
-      elemDefault = new ADReference(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', ADReferenceType.LIST, false);
+      elemDefault = new ADReference(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', ADReferenceType.DATATYPE, false);
     });
 
     describe('Service methods', () => {

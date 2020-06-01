@@ -6,7 +6,6 @@ export interface IADTable {
   view?: boolean;
   active?: boolean;
   aDColumns?: IADColumn[];
-  adClientId?: number;
   adOrganizationId?: number;
 }
 
@@ -17,7 +16,6 @@ export class ADTable implements IADTable {
     public view?: boolean,
     public active?: boolean,
     public aDColumns?: IADColumn[],
-    public adClientId?: number,
     public adOrganizationId?: number
   ) {
     this.view = this.view || false;

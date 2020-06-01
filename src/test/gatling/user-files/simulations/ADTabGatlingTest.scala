@@ -74,12 +74,14 @@ class ADTabGatlingTest extends Simulation {
                 "id":null
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
+                , "iconName":"SAMPLE_TEXT"
                 , "targetEndpoint":"SAMPLE_TEXT"
                 , "writable":null
                 , "displayLogic":"SAMPLE_TEXT"
                 , "readOnlyLogic":"SAMPLE_TEXT"
                 , "filterQuery":"SAMPLE_TEXT"
                 , "orderQuery":"SAMPLE_TEXT"
+                , "tabSequence":"0"
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

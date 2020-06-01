@@ -12,14 +12,20 @@ export interface IADField {
   gridSequence?: number;
   detailSequence?: number;
   displayLogic?: string;
+  readOnlyLogic?: string;
   writable?: boolean;
   columnNo?: number;
   columnSpan?: number;
+  updatable?: boolean;
+  alwaysUpdatable?: boolean;
+  copyable?: boolean;
+  defaultValue?: string;
+  formatPattern?: string;
   active?: boolean;
-  adClientId?: number;
   adOrganizationId?: number;
   adReferenceId?: number;
   adColumnId?: number;
+  adValidationRuleId?: number;
   adTabId?: number;
 }
 
@@ -38,14 +44,20 @@ export class ADField implements IADField {
     public gridSequence?: number,
     public detailSequence?: number,
     public displayLogic?: string,
+    public readOnlyLogic?: string,
     public writable?: boolean,
     public columnNo?: number,
     public columnSpan?: number,
+    public updatable?: boolean,
+    public alwaysUpdatable?: boolean,
+    public copyable?: boolean,
+    public defaultValue?: string,
+    public formatPattern?: string,
     public active?: boolean,
-    public adClientId?: number,
     public adOrganizationId?: number,
     public adReferenceId?: number,
     public adColumnId?: number,
+    public adValidationRuleId?: number,
     public adTabId?: number
   ) {
     this.staticField = this.staticField || false;
@@ -55,5 +67,11 @@ export class ADField implements IADField {
     this.showInDetail = this.showInDetail || true;
     this.writable = this.writable || true;
     this.active = this.active || true;
+    this.showLabel = this.showLabel || false;
+    this.showInGrid = this.showInGrid || false;
+    this.showInDetail = this.showInDetail || false;
+    this.updatable = this.updatable || false;
+    this.alwaysUpdatable = this.alwaysUpdatable || false;
+    this.copyable = this.copyable || false;
   }
 }

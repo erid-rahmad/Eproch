@@ -1,19 +1,21 @@
+import { IADTab } from '@/shared/model/ad-tab.model';
 import { IADField } from '@/shared/model/ad-field.model';
 
 export interface IADTab {
   id?: number;
   name?: string;
   description?: string;
+  iconName?: string;
   targetEndpoint?: string;
   writable?: boolean;
   displayLogic?: string;
   readOnlyLogic?: string;
   filterQuery?: string;
   orderQuery?: string;
+  tabSequence?: number;
   active?: boolean;
   aDTabs?: IADTab[];
   aDFields?: IADField[];
-  adClientId?: number;
   adOrganizationId?: number;
   adTableId?: number;
   parentColumnId?: number;
@@ -27,16 +29,17 @@ export class ADTab implements IADTab {
     public id?: number,
     public name?: string,
     public description?: string,
+    public iconName?: string,
     public targetEndpoint?: string,
     public writable?: boolean,
     public displayLogic?: string,
     public readOnlyLogic?: string,
     public filterQuery?: string,
     public orderQuery?: string,
+    public tabSequence?: number,
     public active?: boolean,
     public aDTabs?: IADTab[],
     public aDFields?: IADField[],
-    public adClientId?: number,
     public adOrganizationId?: number,
     public adTableId?: number,
     public parentColumnId?: number,

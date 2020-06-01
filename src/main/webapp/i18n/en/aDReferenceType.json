@@ -2,6 +2,7 @@
   "opusWebApp": {
     "ADReferenceType": {
       "null": "",
+      "DATATYPE": "DATATYPE",
       "LIST": "LIST",
       "TABLE": "TABLE"
     }

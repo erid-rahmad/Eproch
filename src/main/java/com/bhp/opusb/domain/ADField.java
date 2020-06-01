@@ -68,6 +68,9 @@ public class ADField extends AbstractAuditingEntity {
     @Column(name = "display_logic")
     private String displayLogic;
 
+    @Column(name = "read_only_logic")
+    private String readOnlyLogic;
+
     @Column(name = "writable")
     private Boolean writable = true;
 
@@ -77,13 +80,23 @@ public class ADField extends AbstractAuditingEntity {
     @Column(name = "column_span")
     private Integer columnSpan;
 
+    @Column(name = "updatable")
+    private Boolean updatable;
+
+    @Column(name = "always_updatable")
+    private Boolean alwaysUpdatable;
+
+    @Column(name = "copyable")
+    private Boolean copyable;
+
+    @Column(name = "default_value")
+    private String defaultValue;
+
+    @Column(name = "format_pattern")
+    private String formatPattern;
+
     @Column(name = "active")
     private Boolean active = true;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("aDFields")
-    private ADClient adClient;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -98,6 +111,10 @@ public class ADField extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("aDFields")
     private ADColumn adColumn;
+
+    @ManyToOne
+    @JsonIgnoreProperties("aDFields")
+    private AdValidationRule adValidationRule;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -270,6 +287,19 @@ public class ADField extends AbstractAuditingEntity {
         this.displayLogic = displayLogic;
     }
 
+    public String getReadOnlyLogic() {
+        return readOnlyLogic;
+    }
+
+    public ADField readOnlyLogic(String readOnlyLogic) {
+        this.readOnlyLogic = readOnlyLogic;
+        return this;
+    }
+
+    public void setReadOnlyLogic(String readOnlyLogic) {
+        this.readOnlyLogic = readOnlyLogic;
+    }
+
     public Boolean isWritable() {
         return writable;
     }
@@ -309,6 +339,71 @@ public class ADField extends AbstractAuditingEntity {
         this.columnSpan = columnSpan;
     }
 
+    public Boolean isUpdatable() {
+        return updatable;
+    }
+
+    public ADField updatable(Boolean updatable) {
+        this.updatable = updatable;
+        return this;
+    }
+
+    public void setUpdatable(Boolean updatable) {
+        this.updatable = updatable;
+    }
+
+    public Boolean isAlwaysUpdatable() {
+        return alwaysUpdatable;
+    }
+
+    public ADField alwaysUpdatable(Boolean alwaysUpdatable) {
+        this.alwaysUpdatable = alwaysUpdatable;
+        return this;
+    }
+
+    public void setAlwaysUpdatable(Boolean alwaysUpdatable) {
+        this.alwaysUpdatable = alwaysUpdatable;
+    }
+
+    public Boolean isCopyable() {
+        return copyable;
+    }
+
+    public ADField copyable(Boolean copyable) {
+        this.copyable = copyable;
+        return this;
+    }
+
+    public void setCopyable(Boolean copyable) {
+        this.copyable = copyable;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public ADField defaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+        return this;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public String getFormatPattern() {
+        return formatPattern;
+    }
+
+    public ADField formatPattern(String formatPattern) {
+        this.formatPattern = formatPattern;
+        return this;
+    }
+
+    public void setFormatPattern(String formatPattern) {
+        this.formatPattern = formatPattern;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -320,19 +415,6 @@ public class ADField extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public ADClient getAdClient() {
-        return adClient;
-    }
-
-    public ADField adClient(ADClient aDClient) {
-        this.adClient = aDClient;
-        return this;
-    }
-
-    public void setAdClient(ADClient aDClient) {
-        this.adClient = aDClient;
     }
 
     public ADOrganization getAdOrganization() {
@@ -372,6 +454,19 @@ public class ADField extends AbstractAuditingEntity {
 
     public void setAdColumn(ADColumn aDColumn) {
         this.adColumn = aDColumn;
+    }
+
+    public AdValidationRule getAdValidationRule() {
+        return adValidationRule;
+    }
+
+    public ADField adValidationRule(AdValidationRule adValidationRule) {
+        this.adValidationRule = adValidationRule;
+        return this;
+    }
+
+    public void setAdValidationRule(AdValidationRule adValidationRule) {
+        this.adValidationRule = adValidationRule;
     }
 
     public ADTab getAdTab() {
@@ -420,9 +515,15 @@ public class ADField extends AbstractAuditingEntity {
             ", gridSequence=" + getGridSequence() +
             ", detailSequence=" + getDetailSequence() +
             ", displayLogic='" + getDisplayLogic() + "'" +
+            ", readOnlyLogic='" + getReadOnlyLogic() + "'" +
             ", writable='" + isWritable() + "'" +
             ", columnNo=" + getColumnNo() +
             ", columnSpan=" + getColumnSpan() +
+            ", updatable='" + isUpdatable() + "'" +
+            ", alwaysUpdatable='" + isAlwaysUpdatable() + "'" +
+            ", copyable='" + isCopyable() + "'" +
+            ", defaultValue='" + getDefaultValue() + "'" +
+            ", formatPattern='" + getFormatPattern() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

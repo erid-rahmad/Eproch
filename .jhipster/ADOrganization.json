@@ -25,16 +25,7 @@
             "fieldType": "Boolean"
         }
     ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDClient",
-            "otherEntityRelationshipName": "aDOrganization",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adClient",
-            "otherEntityField": "id"
-        }
-    ],
+    "relationships": [],
     "changelogDate": "20200420192000",
     "entityTableName": "ad_organization",
     "dto": "mapstruct",
