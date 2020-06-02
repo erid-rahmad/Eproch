@@ -1,4 +1,3 @@
-import { IADTab } from '@/shared/model/ad-tab.model';
 import { IADField } from '@/shared/model/ad-field.model';
 
 export interface IADTab {

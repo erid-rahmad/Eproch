@@ -27,7 +27,7 @@
             <column name="query" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="ad_validation_rule_id" type="bigint">
+            <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
@@ -40,7 +40,7 @@
     
     <!-- Added the entity audit columns -->
     <changeSet id="20200601164200-audit-1" author="jhipster-entity-audit">
-        <addColumn tableName="ad_tab">
+        <addColumn tableName="ad_validation_rule">
             <column name="created_by" type="varchar(50)" defaultValue="system">
                 <constraints nullable="false"/>
             </column>
@@ -71,7 +71,7 @@
             <column name="name" type="string"/>
             <column name="description" type="string"/>
             <column name="query" type="string"/>
-            <column name="ad_validation_rule_id" type="numeric"/>
+            <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

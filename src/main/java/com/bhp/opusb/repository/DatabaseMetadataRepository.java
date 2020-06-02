@@ -118,7 +118,7 @@ public class DatabaseMetadataRepository {
 
       while (columns.next()) {
         String columnName = columns.getString("COLUMN_NAME");
-        String camelCasedName = CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_CAMEL, columnName);
+        String camelCasedName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, columnName);
         int dataType = columns.getInt("DATA_TYPE");
         // String typeName = columns.getString("TYPE_NAME");
         long columnSize = columns.getInt("COLUMN_SIZE");
@@ -137,19 +137,27 @@ public class DatabaseMetadataRepository {
             .findFirst();
 
           if (existingColumn.isPresent()) {
-            log.debug("Update existing column {}", columnName);
+            log.debug("Update existing column {} ({})", columnName, camelCasedName);
             column = existingColumn.get();
+
+            if (!column.getName().equals(camelCasedName)) {
+              column.setName(camelCasedName);
+            }
+
+            if (!column.getSqlName().equals(columnName)) {
+              column.setSqlName(columnName);
+            }
 
             if (!foreignKey) {
               column.foreignKey(false).importedTable(null).importedColumn(null);
             }
           } else {
-            log.debug("Add column {} into existing table {}", columnName, table.getName());
+            log.debug("Add column {} ({}) into existing table {}", columnName, camelCasedName, table.getName());
             initColumn(table, column);
             adColumnRepository.save(column);
           }
         } else {
-          log.debug("Add column {} into table {}", columnName, table.getName());
+          log.debug("Add column {} ({}) into table {}", columnName, camelCasedName, table.getName());
           initColumn(table, column);
         }
         
@@ -175,7 +183,7 @@ public class DatabaseMetadataRepository {
   private void initColumn(ADTable table, ADColumn column) {
     table.addADColumn(column);
     column.adOrganization(table.getAdOrganization())
-        .name(CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_CAMEL, column.getSqlName()));
+        .name(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, column.getSqlName()));
   }
 
 }

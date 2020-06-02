@@ -8,6 +8,12 @@
     -->
     <changeSet id="20200429153000-2" author="jhipster">
         
+        <addForeignKeyConstraint baseColumnNames="ad_client_id"
+                                 baseTableName="ad_tab"
+                                 constraintName="fk_ad_tab_ad_client_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_client"/>
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="ad_tab"
                                  constraintName="fk_ad_tab_ad_organization_id"

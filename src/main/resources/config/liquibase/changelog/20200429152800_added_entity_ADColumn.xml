@@ -48,19 +48,10 @@
             <column name="mandatory_logic" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="display_logic" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
             <column name="read_only_logic" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
             <column name="updatable" type="boolean">
-                <constraints nullable="true" />
-            </column>
-            <column name="always_updatable" type="boolean">
-                <constraints nullable="true" />
-            </column>
-            <column name="copyable" type="boolean">
                 <constraints nullable="true" />
             </column>
             <column name="default_value" type="varchar(255)">
@@ -81,25 +72,16 @@
             <column name="max_value" type="bigint">
                 <constraints nullable="true" />
             </column>
-            <column name="identifier" type="boolean">
-                <constraints nullable="true" />
-            </column>
-            <column name="default_selection" type="boolean">
-                <constraints nullable="true" />
-            </column>
-            <column name="selection_sequence" type="integer">
-                <constraints nullable="true" />
-            </column>
             <column name="active" type="boolean">
                 <constraints nullable="true" />
+            </column>
+            <column name="ad_client_id" type="bigint">
+                <constraints nullable="false" />
             </column>
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <column name="ad_reference_id" type="bigint">
-                <constraints nullable="true" />
-            </column>
-            <column name="ad_validation_rule_id" type="bigint">
                 <constraints nullable="true" />
             </column>
             <column name="ad_table_id" type="bigint">

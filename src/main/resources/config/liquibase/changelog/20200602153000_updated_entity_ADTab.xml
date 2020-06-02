@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    
+    <!--
+        Updated the entity ADTab.
+    -->
+    <changeSet id="20200602153000-1" author="jhipster">
+        <addColumn tableName="ad_tab">
+            <column name="icon_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="tab_sequence" type="integer">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+        <dropColumn tableName="ad_tab" columnName="ad_client_id" />
+    </changeSet>
+
+</databaseChangeLog>
