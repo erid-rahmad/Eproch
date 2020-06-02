@@ -27,14 +27,6 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "aDClient",
-            "otherEntityRelationshipName": "aDTable",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adClient",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
             "otherEntityRelationshipName": "aDTable",
             "relationshipValidateRules": "required",

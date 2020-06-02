@@ -20,6 +20,7 @@
       "value": "Value",
       "description": "Description",
       "active": "Active",
+      "adOrganization": "Ad Organization",
       "adReference": "Ad Reference"
     }
   }

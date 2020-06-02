@@ -1,14 +1,16 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
 
 /**
  * A ADOrganization.
@@ -16,7 +18,7 @@ import java.util.Objects;
 @Entity
 @Table(name = "ad_organization")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ADOrganization extends AbstractAuditingEntity implements Serializable {
+public class ADOrganization extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -38,11 +40,6 @@ public class ADOrganization extends AbstractAuditingEntity implements Serializab
 
     @Column(name = "active")
     private Boolean active;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("aDOrganizations")
-    private ADClient adClient;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -103,19 +100,6 @@ public class ADOrganization extends AbstractAuditingEntity implements Serializab
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public ADClient getAdClient() {
-        return adClient;
-    }
-
-    public ADOrganization adClient(ADClient aDClient) {
-        this.adClient = aDClient;
-        return this;
-    }
-
-    public void setAdClient(ADClient aDClient) {
-        this.adClient = aDClient;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

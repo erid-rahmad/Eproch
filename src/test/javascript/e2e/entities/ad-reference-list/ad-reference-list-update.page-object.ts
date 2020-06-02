@@ -15,5 +15,7 @@ export default class ADReferenceListUpdatePage extends AlertPage {
   descriptionInput: ElementFinder = element(by.css('input#ad-reference-list-description'));
 
   activeInput: ElementFinder = element(by.css('input#ad-reference-list-active'));
+  adOrganizationSelect = element(by.css('select#ad-reference-list-adOrganization'));
+
   adReferenceSelect = element(by.css('select#ad-reference-list-adReference'));
 }

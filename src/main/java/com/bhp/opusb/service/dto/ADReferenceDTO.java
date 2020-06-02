@@ -31,6 +31,7 @@ public class ADReferenceDTO extends AbstractAuditingDTO {
 
     private Set<ADReferenceListDTO> aDReferenceLists = new HashSet<>();
 
+    private Long adOrganizationId;
     
     public Long getId() {
         return id;
@@ -87,6 +88,14 @@ public class ADReferenceDTO extends AbstractAuditingDTO {
     public void setADReferenceLists(Set<ADReferenceListDTO> aDReferenceLists) {
         this.aDReferenceLists = aDReferenceLists;
     }
+    
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -118,6 +127,7 @@ public class ADReferenceDTO extends AbstractAuditingDTO {
             ", description='" + getDescription() + "'" +
             ", referenceType='" + getReferenceType() + "'" +
             ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
             "}";
     }
 }

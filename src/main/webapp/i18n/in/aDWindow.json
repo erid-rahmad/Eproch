@@ -18,10 +18,10 @@
       },
       "name": "Name",
       "description": "Description",
+      "titleLogic": "Title Logic",
       "type": "Type",
       "active": "Active",
       "aDTab": "A D Tab",
-      "adClient": "Ad Client",
       "adOrganization": "Ad Organization"
     }
   }

@@ -23,8 +23,6 @@ public class ADOrganizationDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
-
-    private Long adClientId;
     
     public Long getId() {
         return id;
@@ -66,14 +64,6 @@ public class ADOrganizationDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
-    public Long getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(Long aDClientId) {
-        this.adClientId = aDClientId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -103,7 +93,6 @@ public class ADOrganizationDTO extends AbstractAuditingDTO {
             ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +
             ", active='" + isActive() + "'" +
-            ", adClientId=" + getAdClientId() +
             "}";
     }
 }

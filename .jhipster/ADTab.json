@@ -13,6 +13,10 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "iconName",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "targetEndpoint",
             "fieldType": "String"
         },
@@ -37,6 +41,10 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "tabSequence",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "active",
             "fieldType": "Boolean"
         }
@@ -53,14 +61,6 @@
             "otherEntityName": "aDField",
             "otherEntityRelationshipName": "adTab",
             "relationshipName": "aDField"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDClient",
-            "otherEntityRelationshipName": "aDTab",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adClient",
-            "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",

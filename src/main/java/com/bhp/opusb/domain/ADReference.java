@@ -10,12 +10,14 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.ADReferenceType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -56,6 +58,11 @@ public class ADReference extends AbstractAuditingEntity {
     @OneToMany(mappedBy = "adReference")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<ADReferenceList> aDReferenceLists = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("aDReferences")
+    private ADOrganization adOrganization;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -154,6 +161,19 @@ public class ADReference extends AbstractAuditingEntity {
 
     public void setADReferenceLists(Set<ADReferenceList> aDReferenceLists) {
         this.aDReferenceLists = aDReferenceLists;
+    }
+
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
+    }
+
+    public ADReference adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+        return this;
+    }
+
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

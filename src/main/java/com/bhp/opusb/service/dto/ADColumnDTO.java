@@ -39,9 +39,15 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     private String mandatoryLogic;
 
+    private String displayLogic;
+
     private String readOnlyLogic;
 
     private Boolean updatable;
+
+    private Boolean alwaysUpdatable;
+
+    private Boolean copyable;
 
     private String defaultValue;
 
@@ -55,15 +61,22 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     private Long maxValue;
 
+    private Boolean identifier;
+
+    private Boolean defaultSelection;
+
+    private Integer selectionSequence;
+
     private Boolean active;
 
-    private Long adClientId;
-    private String adClientName;
+
     private Long adOrganizationId;
     private String adOrganizationName;
 
     private Long adReferenceId;
     private String adReferenceName;
+
+    private Long adValidationRuleId;
 
     private Long adTableId;
     
@@ -165,6 +178,14 @@ public class ADColumnDTO extends AbstractAuditingDTO {
         this.mandatoryLogic = mandatoryLogic;
     }
 
+    public String getDisplayLogic() {
+        return displayLogic;
+    }
+
+    public void setDisplayLogic(String displayLogic) {
+        this.displayLogic = displayLogic;
+    }
+
     public String getReadOnlyLogic() {
         return readOnlyLogic;
     }
@@ -179,6 +200,22 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     public void setUpdatable(Boolean updatable) {
         this.updatable = updatable;
+    }
+
+    public Boolean isAlwaysUpdatable() {
+        return alwaysUpdatable;
+    }
+
+    public void setAlwaysUpdatable(Boolean alwaysUpdatable) {
+        this.alwaysUpdatable = alwaysUpdatable;
+    }
+
+    public Boolean isCopyable() {
+        return copyable;
+    }
+
+    public void setCopyable(Boolean copyable) {
+        this.copyable = copyable;
     }
 
     public String getDefaultValue() {
@@ -229,28 +266,36 @@ public class ADColumnDTO extends AbstractAuditingDTO {
         this.maxValue = maxValue;
     }
 
+    public Boolean isIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(Boolean identifier) {
+        this.identifier = identifier;
+    }
+
+    public Boolean isDefaultSelection() {
+        return defaultSelection;
+    }
+
+    public void setDefaultSelection(Boolean defaultSelection) {
+        this.defaultSelection = defaultSelection;
+    }
+
+    public Integer getSelectionSequence() {
+        return selectionSequence;
+    }
+
+    public void setSelectionSequence(Integer selectionSequence) {
+        this.selectionSequence = selectionSequence;
+    }
+
     public Boolean isActive() {
         return active;
     }
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Long getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(Long aDClientId) {
-        this.adClientId = aDClientId;
-    }
-
-    public String getAdClientName() {
-        return adClientName;
-    }
-
-    public void setAdClientName(String adClientName) {
-        this.adClientName = adClientName;
     }
 
     public Long getAdOrganizationId() {
@@ -283,6 +328,14 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     public void setAdReferenceName(String adReferenceName) {
         this.adReferenceName = adReferenceName;
+    }
+    
+    public Long getAdValidationRuleId() {
+        return adValidationRuleId;
+    }
+
+    public void setAdValidationRuleId(Long adValidationRuleId) {
+        this.adValidationRuleId = adValidationRuleId;
     }
 
     public Long getAdTableId() {
@@ -337,18 +390,24 @@ public class ADColumnDTO extends AbstractAuditingDTO {
             ", importedColumn='" + getImportedColumn() + "'" +
             ", mandatory='" + isMandatory() + "'" +
             ", mandatoryLogic='" + getMandatoryLogic() + "'" +
+            ", displayLogic='" + getDisplayLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +
             ", updatable='" + isUpdatable() + "'" +
+            ", alwaysUpdatable='" + isAlwaysUpdatable() + "'" +
+            ", copyable='" + isCopyable() + "'" +
             ", defaultValue='" + getDefaultValue() + "'" +
             ", formatPattern='" + getFormatPattern() + "'" +
             ", minLength=" + getMinLength() +
             ", maxLength=" + getMaxLength() +
             ", minValue=" + getMinValue() +
             ", maxValue=" + getMaxValue() +
+            ", identifier='" + isIdentifier() + "'" +
+            ", defaultSelection='" + isDefaultSelection() + "'" +
+            ", selectionSequence=" + getSelectionSequence() +
             ", active='" + isActive() + "'" +
-            ", adClientId=" + getAdClientId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adReferenceId=" + getAdReferenceId() +
+            ", adValidationRuleId=" + getAdValidationRuleId() +
             ", adTableId=" + getAdTableId() +
             "}";
     }

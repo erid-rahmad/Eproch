@@ -27,14 +27,15 @@
                     <th v-on:click="changeOrder('id')"><span v-text="$t('global.field.id')">ID</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('name')"><span v-text="$t('opusWebApp.aDTab.name')">Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('description')"><span v-text="$t('opusWebApp.aDTab.description')">Description</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'description'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('iconName')"><span v-text="$t('opusWebApp.aDTab.iconName')">Icon Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'iconName'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('targetEndpoint')"><span v-text="$t('opusWebApp.aDTab.targetEndpoint')">Target Endpoint</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'targetEndpoint'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('writable')"><span v-text="$t('opusWebApp.aDTab.writable')">Writable</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'writable'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('displayLogic')"><span v-text="$t('opusWebApp.aDTab.displayLogic')">Display Logic</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'displayLogic'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('readOnlyLogic')"><span v-text="$t('opusWebApp.aDTab.readOnlyLogic')">Read Only Logic</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'readOnlyLogic'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('filterQuery')"><span v-text="$t('opusWebApp.aDTab.filterQuery')">Filter Query</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'filterQuery'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('orderQuery')"><span v-text="$t('opusWebApp.aDTab.orderQuery')">Order Query</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'orderQuery'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('tabSequence')"><span v-text="$t('opusWebApp.aDTab.tabSequence')">Tab Sequence</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'tabSequence'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.aDTab.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('adClientId')"><span v-text="$t('opusWebApp.aDTab.adClient')">Ad Client</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adClientId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adOrganizationId')"><span v-text="$t('opusWebApp.aDTab.adOrganization')">Ad Organization</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adOrganizationId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adTableId')"><span v-text="$t('opusWebApp.aDTab.adTable')">Ad Table</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adTableId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('parentColumnId')"><span v-text="$t('opusWebApp.aDTab.parentColumn')">Parent Column</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'parentColumnId'"></jhi-sort-indicator></th>
@@ -52,18 +53,15 @@
                     </td>
                     <td>{{aDTab.name}}</td>
                     <td>{{aDTab.description}}</td>
+                    <td>{{aDTab.iconName}}</td>
                     <td>{{aDTab.targetEndpoint}}</td>
                     <td>{{aDTab.writable}}</td>
                     <td>{{aDTab.displayLogic}}</td>
                     <td>{{aDTab.readOnlyLogic}}</td>
                     <td>{{aDTab.filterQuery}}</td>
                     <td>{{aDTab.orderQuery}}</td>
+                    <td>{{aDTab.tabSequence}}</td>
                     <td>{{aDTab.active}}</td>
-                    <td>
-                        <div v-if="aDTab.adClientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDTab.adClientId}}">{{aDTab.adClientId}}</router-link>
-                        </div>
-                    </td>
                     <td>
                         <div v-if="aDTab.adOrganizationId">
                             <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: aDTab.adOrganizationId}}">{{aDTab.adOrganizationId}}</router-link>

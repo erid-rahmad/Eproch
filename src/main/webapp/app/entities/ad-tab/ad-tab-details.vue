@@ -17,6 +17,12 @@
                         <span>{{aDTab.description}}</span>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDTab.iconName')">Icon Name</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDTab.iconName}}</span>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDTab.targetEndpoint')">Target Endpoint</span>
                     </dt>
                     <dd>
@@ -53,18 +59,16 @@
                         <span>{{aDTab.orderQuery}}</span>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDTab.tabSequence')">Tab Sequence</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDTab.tabSequence}}</span>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDTab.active')">Active</span>
                     </dt>
                     <dd>
                         <span>{{aDTab.active}}</span>
-                    </dd>
-                    <dt>
-                        <span v-text="$t('opusWebApp.aDTab.adClient')">Ad Client</span>
-                    </dt>
-                    <dd>
-                        <div v-if="aDTab.adClientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDTab.adClientId}}">{{aDTab.adClientId}}</router-link>
-                        </div>
                     </dd>
                     <dt>
                         <span v-text="$t('opusWebApp.aDTab.adOrganization')">Ad Organization</span>

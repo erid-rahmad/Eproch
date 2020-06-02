@@ -44,9 +44,15 @@ describe('Service Tests', () => {
         0,
         0,
         'AAAAAAA',
+        'AAAAAAA',
         false,
         0,
         0,
+        false,
+        false,
+        false,
+        'AAAAAAA',
+        'AAAAAAA',
         false
       );
     });
@@ -112,9 +118,15 @@ describe('Service Tests', () => {
             gridSequence: 1,
             detailSequence: 1,
             displayLogic: 'BBBBBB',
+            readOnlyLogic: 'BBBBBB',
             writable: true,
             columnNo: 1,
             columnSpan: 1,
+            updatable: true,
+            alwaysUpdatable: true,
+            copyable: true,
+            defaultValue: 'BBBBBB',
+            formatPattern: 'BBBBBB',
             active: true
           },
           elemDefault
@@ -154,9 +166,15 @@ describe('Service Tests', () => {
             gridSequence: 1,
             detailSequence: 1,
             displayLogic: 'BBBBBB',
+            readOnlyLogic: 'BBBBBB',
             writable: true,
             columnNo: 1,
             columnSpan: 1,
+            updatable: true,
+            alwaysUpdatable: true,
+            copyable: true,
+            defaultValue: 'BBBBBB',
+            formatPattern: 'BBBBBB',
             active: true
           },
           elemDefault

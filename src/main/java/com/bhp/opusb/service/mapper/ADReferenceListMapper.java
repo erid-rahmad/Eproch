@@ -9,12 +9,14 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link ADReferenceList} and its DTO {@link ADReferenceListDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADReferenceMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, ADReferenceMapper.class})
 public interface ADReferenceListMapper extends EntityMapper<ADReferenceListDTO, ADReferenceList> {
 
+    @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adReference.id", target = "adReferenceId")
     ADReferenceListDTO toDto(ADReferenceList aDReferenceList);
 
+    @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "adReferenceId", target = "adReference")
     ADReferenceList toEntity(ADReferenceListDTO aDReferenceListDTO);
 

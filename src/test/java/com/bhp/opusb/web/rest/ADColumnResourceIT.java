@@ -2,9 +2,9 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADColumn;
-import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADReference;
+import com.bhp.opusb.domain.AdValidationRule;
 import com.bhp.opusb.domain.ADTable;
 import com.bhp.opusb.repository.ADColumnRepository;
 import com.bhp.opusb.service.ADColumnService;
@@ -74,11 +74,20 @@ public class ADColumnResourceIT {
     private static final String DEFAULT_MANDATORY_LOGIC = "AAAAAAAAAA";
     private static final String UPDATED_MANDATORY_LOGIC = "BBBBBBBBBB";
 
+    private static final String DEFAULT_DISPLAY_LOGIC = "AAAAAAAAAA";
+    private static final String UPDATED_DISPLAY_LOGIC = "BBBBBBBBBB";
+
     private static final String DEFAULT_READ_ONLY_LOGIC = "AAAAAAAAAA";
     private static final String UPDATED_READ_ONLY_LOGIC = "BBBBBBBBBB";
 
     private static final Boolean DEFAULT_UPDATABLE = false;
     private static final Boolean UPDATED_UPDATABLE = true;
+
+    private static final Boolean DEFAULT_ALWAYS_UPDATABLE = false;
+    private static final Boolean UPDATED_ALWAYS_UPDATABLE = true;
+
+    private static final Boolean DEFAULT_COPYABLE = false;
+    private static final Boolean UPDATED_COPYABLE = true;
 
     private static final String DEFAULT_DEFAULT_VALUE = "AAAAAAAAAA";
     private static final String UPDATED_DEFAULT_VALUE = "BBBBBBBBBB";
@@ -101,6 +110,16 @@ public class ADColumnResourceIT {
     private static final Long DEFAULT_MAX_VALUE = 1L;
     private static final Long UPDATED_MAX_VALUE = 2L;
     private static final Long SMALLER_MAX_VALUE = 1L - 1L;
+
+    private static final Boolean DEFAULT_IDENTIFIER = false;
+    private static final Boolean UPDATED_IDENTIFIER = true;
+
+    private static final Boolean DEFAULT_DEFAULT_SELECTION = false;
+    private static final Boolean UPDATED_DEFAULT_SELECTION = true;
+
+    private static final Integer DEFAULT_SELECTION_SEQUENCE = 1;
+    private static final Integer UPDATED_SELECTION_SEQUENCE = 2;
+    private static final Integer SMALLER_SELECTION_SEQUENCE = 1 - 1;
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -144,25 +163,21 @@ public class ADColumnResourceIT {
             .importedColumn(DEFAULT_IMPORTED_COLUMN)
             .mandatory(DEFAULT_MANDATORY)
             .mandatoryLogic(DEFAULT_MANDATORY_LOGIC)
+            .displayLogic(DEFAULT_DISPLAY_LOGIC)
             .readOnlyLogic(DEFAULT_READ_ONLY_LOGIC)
             .updatable(DEFAULT_UPDATABLE)
+            .alwaysUpdatable(DEFAULT_ALWAYS_UPDATABLE)
+            .copyable(DEFAULT_COPYABLE)
             .defaultValue(DEFAULT_DEFAULT_VALUE)
             .formatPattern(DEFAULT_FORMAT_PATTERN)
             .minLength(DEFAULT_MIN_LENGTH)
             .maxLength(DEFAULT_MAX_LENGTH)
             .minValue(DEFAULT_MIN_VALUE)
             .maxValue(DEFAULT_MAX_VALUE)
+            .identifier(DEFAULT_IDENTIFIER)
+            .defaultSelection(DEFAULT_DEFAULT_SELECTION)
+            .selectionSequence(DEFAULT_SELECTION_SEQUENCE)
             .active(DEFAULT_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDColumn.setAdClient(aDClient);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -204,25 +219,21 @@ public class ADColumnResourceIT {
             .importedColumn(UPDATED_IMPORTED_COLUMN)
             .mandatory(UPDATED_MANDATORY)
             .mandatoryLogic(UPDATED_MANDATORY_LOGIC)
+            .displayLogic(UPDATED_DISPLAY_LOGIC)
             .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
             .updatable(UPDATED_UPDATABLE)
+            .alwaysUpdatable(UPDATED_ALWAYS_UPDATABLE)
+            .copyable(UPDATED_COPYABLE)
             .defaultValue(UPDATED_DEFAULT_VALUE)
             .formatPattern(UPDATED_FORMAT_PATTERN)
             .minLength(UPDATED_MIN_LENGTH)
             .maxLength(UPDATED_MAX_LENGTH)
             .minValue(UPDATED_MIN_VALUE)
             .maxValue(UPDATED_MAX_VALUE)
+            .identifier(UPDATED_IDENTIFIER)
+            .defaultSelection(UPDATED_DEFAULT_SELECTION)
+            .selectionSequence(UPDATED_SELECTION_SEQUENCE)
             .active(UPDATED_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createUpdatedEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDColumn.setAdClient(aDClient);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -278,14 +289,20 @@ public class ADColumnResourceIT {
         assertThat(testADColumn.getImportedColumn()).isEqualTo(DEFAULT_IMPORTED_COLUMN);
         assertThat(testADColumn.isMandatory()).isEqualTo(DEFAULT_MANDATORY);
         assertThat(testADColumn.getMandatoryLogic()).isEqualTo(DEFAULT_MANDATORY_LOGIC);
+        assertThat(testADColumn.getDisplayLogic()).isEqualTo(DEFAULT_DISPLAY_LOGIC);
         assertThat(testADColumn.getReadOnlyLogic()).isEqualTo(DEFAULT_READ_ONLY_LOGIC);
         assertThat(testADColumn.isUpdatable()).isEqualTo(DEFAULT_UPDATABLE);
+        assertThat(testADColumn.isAlwaysUpdatable()).isEqualTo(DEFAULT_ALWAYS_UPDATABLE);
+        assertThat(testADColumn.isCopyable()).isEqualTo(DEFAULT_COPYABLE);
         assertThat(testADColumn.getDefaultValue()).isEqualTo(DEFAULT_DEFAULT_VALUE);
         assertThat(testADColumn.getFormatPattern()).isEqualTo(DEFAULT_FORMAT_PATTERN);
         assertThat(testADColumn.getMinLength()).isEqualTo(DEFAULT_MIN_LENGTH);
         assertThat(testADColumn.getMaxLength()).isEqualTo(DEFAULT_MAX_LENGTH);
         assertThat(testADColumn.getMinValue()).isEqualTo(DEFAULT_MIN_VALUE);
         assertThat(testADColumn.getMaxValue()).isEqualTo(DEFAULT_MAX_VALUE);
+        assertThat(testADColumn.isIdentifier()).isEqualTo(DEFAULT_IDENTIFIER);
+        assertThat(testADColumn.isDefaultSelection()).isEqualTo(DEFAULT_DEFAULT_SELECTION);
+        assertThat(testADColumn.getSelectionSequence()).isEqualTo(DEFAULT_SELECTION_SEQUENCE);
         assertThat(testADColumn.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -370,14 +387,20 @@ public class ADColumnResourceIT {
             .andExpect(jsonPath("$.[*].importedColumn").value(hasItem(DEFAULT_IMPORTED_COLUMN)))
             .andExpect(jsonPath("$.[*].mandatory").value(hasItem(DEFAULT_MANDATORY.booleanValue())))
             .andExpect(jsonPath("$.[*].mandatoryLogic").value(hasItem(DEFAULT_MANDATORY_LOGIC)))
+            .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
             .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
             .andExpect(jsonPath("$.[*].updatable").value(hasItem(DEFAULT_UPDATABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].alwaysUpdatable").value(hasItem(DEFAULT_ALWAYS_UPDATABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].copyable").value(hasItem(DEFAULT_COPYABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].defaultValue").value(hasItem(DEFAULT_DEFAULT_VALUE)))
             .andExpect(jsonPath("$.[*].formatPattern").value(hasItem(DEFAULT_FORMAT_PATTERN)))
             .andExpect(jsonPath("$.[*].minLength").value(hasItem(DEFAULT_MIN_LENGTH)))
             .andExpect(jsonPath("$.[*].maxLength").value(hasItem(DEFAULT_MAX_LENGTH)))
             .andExpect(jsonPath("$.[*].minValue").value(hasItem(DEFAULT_MIN_VALUE.intValue())))
             .andExpect(jsonPath("$.[*].maxValue").value(hasItem(DEFAULT_MAX_VALUE.intValue())))
+            .andExpect(jsonPath("$.[*].identifier").value(hasItem(DEFAULT_IDENTIFIER.booleanValue())))
+            .andExpect(jsonPath("$.[*].defaultSelection").value(hasItem(DEFAULT_DEFAULT_SELECTION.booleanValue())))
+            .andExpect(jsonPath("$.[*].selectionSequence").value(hasItem(DEFAULT_SELECTION_SEQUENCE)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -403,14 +426,20 @@ public class ADColumnResourceIT {
             .andExpect(jsonPath("$.importedColumn").value(DEFAULT_IMPORTED_COLUMN))
             .andExpect(jsonPath("$.mandatory").value(DEFAULT_MANDATORY.booleanValue()))
             .andExpect(jsonPath("$.mandatoryLogic").value(DEFAULT_MANDATORY_LOGIC))
+            .andExpect(jsonPath("$.displayLogic").value(DEFAULT_DISPLAY_LOGIC))
             .andExpect(jsonPath("$.readOnlyLogic").value(DEFAULT_READ_ONLY_LOGIC))
             .andExpect(jsonPath("$.updatable").value(DEFAULT_UPDATABLE.booleanValue()))
+            .andExpect(jsonPath("$.alwaysUpdatable").value(DEFAULT_ALWAYS_UPDATABLE.booleanValue()))
+            .andExpect(jsonPath("$.copyable").value(DEFAULT_COPYABLE.booleanValue()))
             .andExpect(jsonPath("$.defaultValue").value(DEFAULT_DEFAULT_VALUE))
             .andExpect(jsonPath("$.formatPattern").value(DEFAULT_FORMAT_PATTERN))
             .andExpect(jsonPath("$.minLength").value(DEFAULT_MIN_LENGTH))
             .andExpect(jsonPath("$.maxLength").value(DEFAULT_MAX_LENGTH))
             .andExpect(jsonPath("$.minValue").value(DEFAULT_MIN_VALUE.intValue()))
             .andExpect(jsonPath("$.maxValue").value(DEFAULT_MAX_VALUE.intValue()))
+            .andExpect(jsonPath("$.identifier").value(DEFAULT_IDENTIFIER.booleanValue()))
+            .andExpect(jsonPath("$.defaultSelection").value(DEFAULT_DEFAULT_SELECTION.booleanValue()))
+            .andExpect(jsonPath("$.selectionSequence").value(DEFAULT_SELECTION_SEQUENCE))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -1217,6 +1246,84 @@ public class ADColumnResourceIT {
 
     @Test
     @Transactional
+    public void getAllADColumnsByDisplayLogicIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where displayLogic equals to DEFAULT_DISPLAY_LOGIC
+        defaultADColumnShouldBeFound("displayLogic.equals=" + DEFAULT_DISPLAY_LOGIC);
+
+        // Get all the aDColumnList where displayLogic equals to UPDATED_DISPLAY_LOGIC
+        defaultADColumnShouldNotBeFound("displayLogic.equals=" + UPDATED_DISPLAY_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByDisplayLogicIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where displayLogic not equals to DEFAULT_DISPLAY_LOGIC
+        defaultADColumnShouldNotBeFound("displayLogic.notEquals=" + DEFAULT_DISPLAY_LOGIC);
+
+        // Get all the aDColumnList where displayLogic not equals to UPDATED_DISPLAY_LOGIC
+        defaultADColumnShouldBeFound("displayLogic.notEquals=" + UPDATED_DISPLAY_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByDisplayLogicIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where displayLogic in DEFAULT_DISPLAY_LOGIC or UPDATED_DISPLAY_LOGIC
+        defaultADColumnShouldBeFound("displayLogic.in=" + DEFAULT_DISPLAY_LOGIC + "," + UPDATED_DISPLAY_LOGIC);
+
+        // Get all the aDColumnList where displayLogic equals to UPDATED_DISPLAY_LOGIC
+        defaultADColumnShouldNotBeFound("displayLogic.in=" + UPDATED_DISPLAY_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByDisplayLogicIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where displayLogic is not null
+        defaultADColumnShouldBeFound("displayLogic.specified=true");
+
+        // Get all the aDColumnList where displayLogic is null
+        defaultADColumnShouldNotBeFound("displayLogic.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllADColumnsByDisplayLogicContainsSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where displayLogic contains DEFAULT_DISPLAY_LOGIC
+        defaultADColumnShouldBeFound("displayLogic.contains=" + DEFAULT_DISPLAY_LOGIC);
+
+        // Get all the aDColumnList where displayLogic contains UPDATED_DISPLAY_LOGIC
+        defaultADColumnShouldNotBeFound("displayLogic.contains=" + UPDATED_DISPLAY_LOGIC);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByDisplayLogicNotContainsSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where displayLogic does not contain DEFAULT_DISPLAY_LOGIC
+        defaultADColumnShouldNotBeFound("displayLogic.doesNotContain=" + DEFAULT_DISPLAY_LOGIC);
+
+        // Get all the aDColumnList where displayLogic does not contain UPDATED_DISPLAY_LOGIC
+        defaultADColumnShouldBeFound("displayLogic.doesNotContain=" + UPDATED_DISPLAY_LOGIC);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADColumnsByReadOnlyLogicIsEqualToSomething() throws Exception {
         // Initialize the database
         aDColumnRepository.saveAndFlush(aDColumn);
@@ -1343,6 +1450,110 @@ public class ADColumnResourceIT {
 
         // Get all the aDColumnList where updatable is null
         defaultADColumnShouldNotBeFound("updatable.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByAlwaysUpdatableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where alwaysUpdatable equals to DEFAULT_ALWAYS_UPDATABLE
+        defaultADColumnShouldBeFound("alwaysUpdatable.equals=" + DEFAULT_ALWAYS_UPDATABLE);
+
+        // Get all the aDColumnList where alwaysUpdatable equals to UPDATED_ALWAYS_UPDATABLE
+        defaultADColumnShouldNotBeFound("alwaysUpdatable.equals=" + UPDATED_ALWAYS_UPDATABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByAlwaysUpdatableIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where alwaysUpdatable not equals to DEFAULT_ALWAYS_UPDATABLE
+        defaultADColumnShouldNotBeFound("alwaysUpdatable.notEquals=" + DEFAULT_ALWAYS_UPDATABLE);
+
+        // Get all the aDColumnList where alwaysUpdatable not equals to UPDATED_ALWAYS_UPDATABLE
+        defaultADColumnShouldBeFound("alwaysUpdatable.notEquals=" + UPDATED_ALWAYS_UPDATABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByAlwaysUpdatableIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where alwaysUpdatable in DEFAULT_ALWAYS_UPDATABLE or UPDATED_ALWAYS_UPDATABLE
+        defaultADColumnShouldBeFound("alwaysUpdatable.in=" + DEFAULT_ALWAYS_UPDATABLE + "," + UPDATED_ALWAYS_UPDATABLE);
+
+        // Get all the aDColumnList where alwaysUpdatable equals to UPDATED_ALWAYS_UPDATABLE
+        defaultADColumnShouldNotBeFound("alwaysUpdatable.in=" + UPDATED_ALWAYS_UPDATABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByAlwaysUpdatableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where alwaysUpdatable is not null
+        defaultADColumnShouldBeFound("alwaysUpdatable.specified=true");
+
+        // Get all the aDColumnList where alwaysUpdatable is null
+        defaultADColumnShouldNotBeFound("alwaysUpdatable.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByCopyableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where copyable equals to DEFAULT_COPYABLE
+        defaultADColumnShouldBeFound("copyable.equals=" + DEFAULT_COPYABLE);
+
+        // Get all the aDColumnList where copyable equals to UPDATED_COPYABLE
+        defaultADColumnShouldNotBeFound("copyable.equals=" + UPDATED_COPYABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByCopyableIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where copyable not equals to DEFAULT_COPYABLE
+        defaultADColumnShouldNotBeFound("copyable.notEquals=" + DEFAULT_COPYABLE);
+
+        // Get all the aDColumnList where copyable not equals to UPDATED_COPYABLE
+        defaultADColumnShouldBeFound("copyable.notEquals=" + UPDATED_COPYABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByCopyableIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where copyable in DEFAULT_COPYABLE or UPDATED_COPYABLE
+        defaultADColumnShouldBeFound("copyable.in=" + DEFAULT_COPYABLE + "," + UPDATED_COPYABLE);
+
+        // Get all the aDColumnList where copyable equals to UPDATED_COPYABLE
+        defaultADColumnShouldNotBeFound("copyable.in=" + UPDATED_COPYABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByCopyableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where copyable is not null
+        defaultADColumnShouldBeFound("copyable.specified=true");
+
+        // Get all the aDColumnList where copyable is null
+        defaultADColumnShouldNotBeFound("copyable.specified=false");
     }
 
     @Test
@@ -1923,6 +2134,215 @@ public class ADColumnResourceIT {
 
     @Test
     @Transactional
+    public void getAllADColumnsByIdentifierIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where identifier equals to DEFAULT_IDENTIFIER
+        defaultADColumnShouldBeFound("identifier.equals=" + DEFAULT_IDENTIFIER);
+
+        // Get all the aDColumnList where identifier equals to UPDATED_IDENTIFIER
+        defaultADColumnShouldNotBeFound("identifier.equals=" + UPDATED_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByIdentifierIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where identifier not equals to DEFAULT_IDENTIFIER
+        defaultADColumnShouldNotBeFound("identifier.notEquals=" + DEFAULT_IDENTIFIER);
+
+        // Get all the aDColumnList where identifier not equals to UPDATED_IDENTIFIER
+        defaultADColumnShouldBeFound("identifier.notEquals=" + UPDATED_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByIdentifierIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where identifier in DEFAULT_IDENTIFIER or UPDATED_IDENTIFIER
+        defaultADColumnShouldBeFound("identifier.in=" + DEFAULT_IDENTIFIER + "," + UPDATED_IDENTIFIER);
+
+        // Get all the aDColumnList where identifier equals to UPDATED_IDENTIFIER
+        defaultADColumnShouldNotBeFound("identifier.in=" + UPDATED_IDENTIFIER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByIdentifierIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where identifier is not null
+        defaultADColumnShouldBeFound("identifier.specified=true");
+
+        // Get all the aDColumnList where identifier is null
+        defaultADColumnShouldNotBeFound("identifier.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByDefaultSelectionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where defaultSelection equals to DEFAULT_DEFAULT_SELECTION
+        defaultADColumnShouldBeFound("defaultSelection.equals=" + DEFAULT_DEFAULT_SELECTION);
+
+        // Get all the aDColumnList where defaultSelection equals to UPDATED_DEFAULT_SELECTION
+        defaultADColumnShouldNotBeFound("defaultSelection.equals=" + UPDATED_DEFAULT_SELECTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByDefaultSelectionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where defaultSelection not equals to DEFAULT_DEFAULT_SELECTION
+        defaultADColumnShouldNotBeFound("defaultSelection.notEquals=" + DEFAULT_DEFAULT_SELECTION);
+
+        // Get all the aDColumnList where defaultSelection not equals to UPDATED_DEFAULT_SELECTION
+        defaultADColumnShouldBeFound("defaultSelection.notEquals=" + UPDATED_DEFAULT_SELECTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByDefaultSelectionIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where defaultSelection in DEFAULT_DEFAULT_SELECTION or UPDATED_DEFAULT_SELECTION
+        defaultADColumnShouldBeFound("defaultSelection.in=" + DEFAULT_DEFAULT_SELECTION + "," + UPDATED_DEFAULT_SELECTION);
+
+        // Get all the aDColumnList where defaultSelection equals to UPDATED_DEFAULT_SELECTION
+        defaultADColumnShouldNotBeFound("defaultSelection.in=" + UPDATED_DEFAULT_SELECTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByDefaultSelectionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where defaultSelection is not null
+        defaultADColumnShouldBeFound("defaultSelection.specified=true");
+
+        // Get all the aDColumnList where defaultSelection is null
+        defaultADColumnShouldNotBeFound("defaultSelection.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySelectionSequenceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where selectionSequence equals to DEFAULT_SELECTION_SEQUENCE
+        defaultADColumnShouldBeFound("selectionSequence.equals=" + DEFAULT_SELECTION_SEQUENCE);
+
+        // Get all the aDColumnList where selectionSequence equals to UPDATED_SELECTION_SEQUENCE
+        defaultADColumnShouldNotBeFound("selectionSequence.equals=" + UPDATED_SELECTION_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySelectionSequenceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where selectionSequence not equals to DEFAULT_SELECTION_SEQUENCE
+        defaultADColumnShouldNotBeFound("selectionSequence.notEquals=" + DEFAULT_SELECTION_SEQUENCE);
+
+        // Get all the aDColumnList where selectionSequence not equals to UPDATED_SELECTION_SEQUENCE
+        defaultADColumnShouldBeFound("selectionSequence.notEquals=" + UPDATED_SELECTION_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySelectionSequenceIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where selectionSequence in DEFAULT_SELECTION_SEQUENCE or UPDATED_SELECTION_SEQUENCE
+        defaultADColumnShouldBeFound("selectionSequence.in=" + DEFAULT_SELECTION_SEQUENCE + "," + UPDATED_SELECTION_SEQUENCE);
+
+        // Get all the aDColumnList where selectionSequence equals to UPDATED_SELECTION_SEQUENCE
+        defaultADColumnShouldNotBeFound("selectionSequence.in=" + UPDATED_SELECTION_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySelectionSequenceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where selectionSequence is not null
+        defaultADColumnShouldBeFound("selectionSequence.specified=true");
+
+        // Get all the aDColumnList where selectionSequence is null
+        defaultADColumnShouldNotBeFound("selectionSequence.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySelectionSequenceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where selectionSequence is greater than or equal to DEFAULT_SELECTION_SEQUENCE
+        defaultADColumnShouldBeFound("selectionSequence.greaterThanOrEqual=" + DEFAULT_SELECTION_SEQUENCE);
+
+        // Get all the aDColumnList where selectionSequence is greater than or equal to UPDATED_SELECTION_SEQUENCE
+        defaultADColumnShouldNotBeFound("selectionSequence.greaterThanOrEqual=" + UPDATED_SELECTION_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySelectionSequenceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where selectionSequence is less than or equal to DEFAULT_SELECTION_SEQUENCE
+        defaultADColumnShouldBeFound("selectionSequence.lessThanOrEqual=" + DEFAULT_SELECTION_SEQUENCE);
+
+        // Get all the aDColumnList where selectionSequence is less than or equal to SMALLER_SELECTION_SEQUENCE
+        defaultADColumnShouldNotBeFound("selectionSequence.lessThanOrEqual=" + SMALLER_SELECTION_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySelectionSequenceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where selectionSequence is less than DEFAULT_SELECTION_SEQUENCE
+        defaultADColumnShouldNotBeFound("selectionSequence.lessThan=" + DEFAULT_SELECTION_SEQUENCE);
+
+        // Get all the aDColumnList where selectionSequence is less than UPDATED_SELECTION_SEQUENCE
+        defaultADColumnShouldBeFound("selectionSequence.lessThan=" + UPDATED_SELECTION_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsBySelectionSequenceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where selectionSequence is greater than DEFAULT_SELECTION_SEQUENCE
+        defaultADColumnShouldNotBeFound("selectionSequence.greaterThan=" + DEFAULT_SELECTION_SEQUENCE);
+
+        // Get all the aDColumnList where selectionSequence is greater than SMALLER_SELECTION_SEQUENCE
+        defaultADColumnShouldBeFound("selectionSequence.greaterThan=" + SMALLER_SELECTION_SEQUENCE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADColumnsByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         aDColumnRepository.saveAndFlush(aDColumn);
@@ -1975,22 +2395,6 @@ public class ADColumnResourceIT {
 
     @Test
     @Transactional
-    public void getAllADColumnsByAdClientIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        ADClient adClient = aDColumn.getAdClient();
-        aDColumnRepository.saveAndFlush(aDColumn);
-        Long adClientId = adClient.getId();
-
-        // Get all the aDColumnList where adClient equals to adClientId
-        defaultADColumnShouldBeFound("adClientId.equals=" + adClientId);
-
-        // Get all the aDColumnList where adClient equals to adClientId + 1
-        defaultADColumnShouldNotBeFound("adClientId.equals=" + (adClientId + 1));
-    }
-
-
-    @Test
-    @Transactional
     public void getAllADColumnsByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = aDColumn.getAdOrganization();
@@ -2022,6 +2426,26 @@ public class ADColumnResourceIT {
 
         // Get all the aDColumnList where adReference equals to adReferenceId + 1
         defaultADColumnShouldNotBeFound("adReferenceId.equals=" + (adReferenceId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByAdValidationRuleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+        AdValidationRule adValidationRule = AdValidationRuleResourceIT.createEntity(em);
+        em.persist(adValidationRule);
+        em.flush();
+        aDColumn.setAdValidationRule(adValidationRule);
+        aDColumnRepository.saveAndFlush(aDColumn);
+        Long adValidationRuleId = adValidationRule.getId();
+
+        // Get all the aDColumnList where adValidationRule equals to adValidationRuleId
+        defaultADColumnShouldBeFound("adValidationRuleId.equals=" + adValidationRuleId);
+
+        // Get all the aDColumnList where adValidationRule equals to adValidationRuleId + 1
+        defaultADColumnShouldNotBeFound("adValidationRuleId.equals=" + (adValidationRuleId + 1));
     }
 
 
@@ -2059,14 +2483,20 @@ public class ADColumnResourceIT {
             .andExpect(jsonPath("$.[*].importedColumn").value(hasItem(DEFAULT_IMPORTED_COLUMN)))
             .andExpect(jsonPath("$.[*].mandatory").value(hasItem(DEFAULT_MANDATORY.booleanValue())))
             .andExpect(jsonPath("$.[*].mandatoryLogic").value(hasItem(DEFAULT_MANDATORY_LOGIC)))
+            .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
             .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
             .andExpect(jsonPath("$.[*].updatable").value(hasItem(DEFAULT_UPDATABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].alwaysUpdatable").value(hasItem(DEFAULT_ALWAYS_UPDATABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].copyable").value(hasItem(DEFAULT_COPYABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].defaultValue").value(hasItem(DEFAULT_DEFAULT_VALUE)))
             .andExpect(jsonPath("$.[*].formatPattern").value(hasItem(DEFAULT_FORMAT_PATTERN)))
             .andExpect(jsonPath("$.[*].minLength").value(hasItem(DEFAULT_MIN_LENGTH)))
             .andExpect(jsonPath("$.[*].maxLength").value(hasItem(DEFAULT_MAX_LENGTH)))
             .andExpect(jsonPath("$.[*].minValue").value(hasItem(DEFAULT_MIN_VALUE.intValue())))
             .andExpect(jsonPath("$.[*].maxValue").value(hasItem(DEFAULT_MAX_VALUE.intValue())))
+            .andExpect(jsonPath("$.[*].identifier").value(hasItem(DEFAULT_IDENTIFIER.booleanValue())))
+            .andExpect(jsonPath("$.[*].defaultSelection").value(hasItem(DEFAULT_DEFAULT_SELECTION.booleanValue())))
+            .andExpect(jsonPath("$.[*].selectionSequence").value(hasItem(DEFAULT_SELECTION_SEQUENCE)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -2126,14 +2556,20 @@ public class ADColumnResourceIT {
             .importedColumn(UPDATED_IMPORTED_COLUMN)
             .mandatory(UPDATED_MANDATORY)
             .mandatoryLogic(UPDATED_MANDATORY_LOGIC)
+            .displayLogic(UPDATED_DISPLAY_LOGIC)
             .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
             .updatable(UPDATED_UPDATABLE)
+            .alwaysUpdatable(UPDATED_ALWAYS_UPDATABLE)
+            .copyable(UPDATED_COPYABLE)
             .defaultValue(UPDATED_DEFAULT_VALUE)
             .formatPattern(UPDATED_FORMAT_PATTERN)
             .minLength(UPDATED_MIN_LENGTH)
             .maxLength(UPDATED_MAX_LENGTH)
             .minValue(UPDATED_MIN_VALUE)
             .maxValue(UPDATED_MAX_VALUE)
+            .identifier(UPDATED_IDENTIFIER)
+            .defaultSelection(UPDATED_DEFAULT_SELECTION)
+            .selectionSequence(UPDATED_SELECTION_SEQUENCE)
             .active(UPDATED_ACTIVE);
         ADColumnDTO aDColumnDTO = aDColumnMapper.toDto(updatedADColumn);
 
@@ -2157,14 +2593,20 @@ public class ADColumnResourceIT {
         assertThat(testADColumn.getImportedColumn()).isEqualTo(UPDATED_IMPORTED_COLUMN);
         assertThat(testADColumn.isMandatory()).isEqualTo(UPDATED_MANDATORY);
         assertThat(testADColumn.getMandatoryLogic()).isEqualTo(UPDATED_MANDATORY_LOGIC);
+        assertThat(testADColumn.getDisplayLogic()).isEqualTo(UPDATED_DISPLAY_LOGIC);
         assertThat(testADColumn.getReadOnlyLogic()).isEqualTo(UPDATED_READ_ONLY_LOGIC);
         assertThat(testADColumn.isUpdatable()).isEqualTo(UPDATED_UPDATABLE);
+        assertThat(testADColumn.isAlwaysUpdatable()).isEqualTo(UPDATED_ALWAYS_UPDATABLE);
+        assertThat(testADColumn.isCopyable()).isEqualTo(UPDATED_COPYABLE);
         assertThat(testADColumn.getDefaultValue()).isEqualTo(UPDATED_DEFAULT_VALUE);
         assertThat(testADColumn.getFormatPattern()).isEqualTo(UPDATED_FORMAT_PATTERN);
         assertThat(testADColumn.getMinLength()).isEqualTo(UPDATED_MIN_LENGTH);
         assertThat(testADColumn.getMaxLength()).isEqualTo(UPDATED_MAX_LENGTH);
         assertThat(testADColumn.getMinValue()).isEqualTo(UPDATED_MIN_VALUE);
         assertThat(testADColumn.getMaxValue()).isEqualTo(UPDATED_MAX_VALUE);
+        assertThat(testADColumn.isIdentifier()).isEqualTo(UPDATED_IDENTIFIER);
+        assertThat(testADColumn.isDefaultSelection()).isEqualTo(UPDATED_DEFAULT_SELECTION);
+        assertThat(testADColumn.getSelectionSequence()).isEqualTo(UPDATED_SELECTION_SEQUENCE);
         assertThat(testADColumn.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

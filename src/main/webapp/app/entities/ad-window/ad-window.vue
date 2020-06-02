@@ -27,9 +27,9 @@
                     <th v-on:click="changeOrder('id')"><span v-text="$t('global.field.id')">ID</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('name')"><span v-text="$t('opusWebApp.aDWindow.name')">Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('description')"><span v-text="$t('opusWebApp.aDWindow.description')">Description</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'description'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('titleLogic')"><span v-text="$t('opusWebApp.aDWindow.titleLogic')">Title Logic</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'titleLogic'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('type')"><span v-text="$t('opusWebApp.aDWindow.type')">Type</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'type'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.aDWindow.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('adClientId')"><span v-text="$t('opusWebApp.aDWindow.adClient')">Ad Client</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adClientId'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('adOrganizationId')"><span v-text="$t('opusWebApp.aDWindow.adOrganization')">Ad Organization</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adOrganizationId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
@@ -42,13 +42,9 @@
                     </td>
                     <td>{{aDWindow.name}}</td>
                     <td>{{aDWindow.description}}</td>
+                    <td>{{aDWindow.titleLogic}}</td>
                     <td v-text="$t('opusWebApp.ADWindowType.' + aDWindow.type)">{{aDWindow.type}}</td>
                     <td>{{aDWindow.active}}</td>
-                    <td>
-                        <div v-if="aDWindow.adClientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDWindow.adClientId}}">{{aDWindow.adClientId}}</router-link>
-                        </div>
-                    </td>
                     <td>
                         <div v-if="aDWindow.adOrganizationId">
                             <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: aDWindow.adOrganizationId}}">{{aDWindow.adOrganizationId}}</router-link>

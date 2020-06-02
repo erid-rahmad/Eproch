@@ -48,13 +48,13 @@ public class ADWindowCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
+    private StringFilter titleLogic;
+
     private ADWindowTypeFilter type;
 
     private BooleanFilter active;
 
     private LongFilter aDTabId;
-
-    private LongFilter adClientId;
 
     private LongFilter adOrganizationId;
 
@@ -65,10 +65,10 @@ public class ADWindowCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.titleLogic = other.titleLogic == null ? null : other.titleLogic.copy();
         this.type = other.type == null ? null : other.type.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.aDTabId = other.aDTabId == null ? null : other.aDTabId.copy();
-        this.adClientId = other.adClientId == null ? null : other.adClientId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
@@ -101,6 +101,14 @@ public class ADWindowCriteria implements Serializable, Criteria {
         this.description = description;
     }
 
+    public StringFilter getTitleLogic() {
+        return titleLogic;
+    }
+
+    public void setTitleLogic(StringFilter titleLogic) {
+        this.titleLogic = titleLogic;
+    }
+
     public ADWindowTypeFilter getType() {
         return type;
     }
@@ -125,14 +133,6 @@ public class ADWindowCriteria implements Serializable, Criteria {
         this.aDTabId = aDTabId;
     }
 
-    public LongFilter getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(LongFilter adClientId) {
-        this.adClientId = adClientId;
-    }
-
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -155,10 +155,10 @@ public class ADWindowCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(titleLogic, that.titleLogic) &&
             Objects.equals(type, that.type) &&
             Objects.equals(active, that.active) &&
             Objects.equals(aDTabId, that.aDTabId) &&
-            Objects.equals(adClientId, that.adClientId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
@@ -168,10 +168,10 @@ public class ADWindowCriteria implements Serializable, Criteria {
         id,
         name,
         description,
+        titleLogic,
         type,
         active,
         aDTabId,
-        adClientId,
         adOrganizationId
         );
     }
@@ -182,10 +182,10 @@ public class ADWindowCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (titleLogic != null ? "titleLogic=" + titleLogic + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (aDTabId != null ? "aDTabId=" + aDTabId + ", " : "") +
-                (adClientId != null ? "adClientId=" + adClientId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }

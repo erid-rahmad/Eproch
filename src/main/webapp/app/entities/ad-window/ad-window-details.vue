@@ -17,6 +17,12 @@
                         <span>{{aDWindow.description}}</span>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDWindow.titleLogic')">Title Logic</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDWindow.titleLogic}}</span>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDWindow.type')">Type</span>
                     </dt>
                     <dd>
@@ -27,14 +33,6 @@
                     </dt>
                     <dd>
                         <span>{{aDWindow.active}}</span>
-                    </dd>
-                    <dt>
-                        <span v-text="$t('opusWebApp.aDWindow.adClient')">Ad Client</span>
-                    </dt>
-                    <dd>
-                        <div v-if="aDWindow.adClientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDWindow.adClientId}}">{{aDWindow.adClientId}}</router-link>
-                        </div>
                     </dd>
                     <dt>
                         <span v-text="$t('opusWebApp.aDWindow.adOrganization')">Ad Organization</span>

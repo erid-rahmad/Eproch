@@ -10,10 +10,10 @@ export interface IADWindow {
   id?: number;
   name?: string;
   description?: string;
+  titleLogic?: string;
   type?: ADWindowType;
   active?: boolean;
   aDTabs?: IADTab[];
-  adClientId?: number;
   adOrganizationId?: number;
 }
 
@@ -22,10 +22,10 @@ export class ADWindow implements IADWindow {
     public id?: number,
     public name?: string,
     public description?: string,
+    public titleLogic?: string,
     public type?: ADWindowType,
     public active?: boolean,
     public aDTabs?: IADTab[],
-    public adClientId?: number,
     public adOrganizationId?: number
   ) {
     this.active = this.active || false;

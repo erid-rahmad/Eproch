@@ -127,6 +127,9 @@ public class ADFieldQueryService extends QueryService<ADField> {
             if (criteria.getDisplayLogic() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDisplayLogic(), ADField_.displayLogic));
             }
+            if (criteria.getReadOnlyLogic() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getReadOnlyLogic(), ADField_.readOnlyLogic));
+            }
             if (criteria.getWritable() != null) {
                 specification = specification.and(buildSpecification(criteria.getWritable(), ADField_.writable));
             }
@@ -136,12 +139,23 @@ public class ADFieldQueryService extends QueryService<ADField> {
             if (criteria.getColumnSpan() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getColumnSpan(), ADField_.columnSpan));
             }
+            if (criteria.getUpdatable() != null) {
+                specification = specification.and(buildSpecification(criteria.getUpdatable(), ADField_.updatable));
+            }
+            if (criteria.getAlwaysUpdatable() != null) {
+                specification = specification.and(buildSpecification(criteria.getAlwaysUpdatable(), ADField_.alwaysUpdatable));
+            }
+            if (criteria.getCopyable() != null) {
+                specification = specification.and(buildSpecification(criteria.getCopyable(), ADField_.copyable));
+            }
+            if (criteria.getDefaultValue() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDefaultValue(), ADField_.defaultValue));
+            }
+            if (criteria.getFormatPattern() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFormatPattern(), ADField_.formatPattern));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADField_.active));
-            }
-            if (criteria.getAdClientId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAdClientId(),
-                    root -> root.join(ADField_.adClient, JoinType.LEFT).get(ADClient_.id)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
@@ -154,6 +168,10 @@ public class ADFieldQueryService extends QueryService<ADField> {
             if (criteria.getAdColumnId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdColumnId(),
                     root -> root.join(ADField_.adColumn, JoinType.LEFT).get(ADColumn_.id)));
+            }
+            if (criteria.getAdValidationRuleId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdValidationRuleId(),
+                    root -> root.join(ADField_.adValidationRule, JoinType.LEFT).get(AdValidationRule_.id)));
             }
             if (criteria.getAdTabId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdTabId(),

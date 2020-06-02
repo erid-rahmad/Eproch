@@ -2,14 +2,14 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 
 import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vuelidate/lib/validators';
 
-import ADClientService from '../ad-client/ad-client.service';
-import { IADClient } from '@/shared/model/ad-client.model';
-
 import ADOrganizationService from '../ad-organization/ad-organization.service';
 import { IADOrganization } from '@/shared/model/ad-organization.model';
 
 import ADReferenceService from '../ad-reference/ad-reference.service';
 import { IADReference } from '@/shared/model/ad-reference.model';
+
+import AdValidationRuleService from '../ad-validation-rule/ad-validation-rule.service';
+import { IAdValidationRule } from '@/shared/model/ad-validation-rule.model';
 
 import ADTableService from '../ad-table/ad-table.service';
 import { IADTable } from '@/shared/model/ad-table.model';
@@ -35,18 +35,21 @@ const validations: any = {
     importedColumn: {},
     mandatory: {},
     mandatoryLogic: {},
+    displayLogic: {},
     readOnlyLogic: {},
     updatable: {},
+    alwaysUpdatable: {},
+    copyable: {},
     defaultValue: {},
     formatPattern: {},
     minLength: {},
     maxLength: {},
     minValue: {},
     maxValue: {},
+    identifier: {},
+    defaultSelection: {},
+    selectionSequence: {},
     active: {},
-    adClientId: {
-      required
-    },
     adOrganizationId: {
       required
     },
@@ -64,10 +67,6 @@ export default class ADColumnUpdate extends Vue {
   @Inject('aDColumnService') private aDColumnService: () => ADColumnService;
   public aDColumn: IADColumn = new ADColumn();
 
-  @Inject('aDClientService') private aDClientService: () => ADClientService;
-
-  public aDClients: IADClient[] = [];
-
   @Inject('aDOrganizationService') private aDOrganizationService: () => ADOrganizationService;
 
   public aDOrganizations: IADOrganization[] = [];
@@ -75,6 +74,10 @@ export default class ADColumnUpdate extends Vue {
   @Inject('aDReferenceService') private aDReferenceService: () => ADReferenceService;
 
   public aDReferences: IADReference[] = [];
+
+  @Inject('adValidationRuleService') private adValidationRuleService: () => AdValidationRuleService;
+
+  public adValidationRules: IAdValidationRule[] = [];
 
   @Inject('aDTableService') private aDTableService: () => ADTableService;
 
@@ -126,11 +129,6 @@ export default class ADColumnUpdate extends Vue {
   }
 
   public initRelationships(): void {
-    this.aDClientService()
-      .retrieve()
-      .then(res => {
-        this.aDClients = res.data;
-      });
     this.aDOrganizationService()
       .retrieve()
       .then(res => {
@@ -140,6 +138,11 @@ export default class ADColumnUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.aDReferences = res.data;
+      });
+    this.adValidationRuleService()
+      .retrieve()
+      .then(res => {
+        this.adValidationRules = res.data;
       });
     this.aDTableService()
       .retrieve()

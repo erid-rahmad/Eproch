@@ -15,5 +15,4 @@ export default class ADOrganizationUpdatePage extends AlertPage {
   descriptionInput: ElementFinder = element(by.css('input#ad-organization-description'));
 
   activeInput: ElementFinder = element(by.css('input#ad-organization-active'));
-  adClientSelect = element(by.css('select#ad-organization-adClient'));
 }

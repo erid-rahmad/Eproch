@@ -1,14 +1,26 @@
 package com.bhp.opusb.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.ADClient;
 import com.bhp.opusb.repository.ADOrganizationRepository;
+import com.bhp.opusb.service.ADOrganizationQueryService;
 import com.bhp.opusb.service.ADOrganizationService;
 import com.bhp.opusb.service.dto.ADOrganizationDTO;
 import com.bhp.opusb.service.mapper.ADOrganizationMapper;
-import com.bhp.opusb.service.dto.ADOrganizationCriteria;
-import com.bhp.opusb.service.ADOrganizationQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,13 +31,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import javax.persistence.EntityManager;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link ADOrganizationResource} REST controller.
@@ -80,16 +85,6 @@ public class ADOrganizationResourceIT {
             .code(DEFAULT_CODE)
             .description(DEFAULT_DESCRIPTION)
             .active(DEFAULT_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDOrganization.setAdClient(aDClient);
         return aDOrganization;
     }
     /**
@@ -104,16 +99,6 @@ public class ADOrganizationResourceIT {
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
             .active(UPDATED_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createUpdatedEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDOrganization.setAdClient(aDClient);
         return aDOrganization;
     }
 
@@ -542,22 +527,6 @@ public class ADOrganizationResourceIT {
         // Get all the aDOrganizationList where active is null
         defaultADOrganizationShouldNotBeFound("active.specified=false");
     }
-
-    @Test
-    @Transactional
-    public void getAllADOrganizationsByAdClientIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        ADClient adClient = aDOrganization.getAdClient();
-        aDOrganizationRepository.saveAndFlush(aDOrganization);
-        Long adClientId = adClient.getId();
-
-        // Get all the aDOrganizationList where adClient equals to adClientId
-        defaultADOrganizationShouldBeFound("adClientId.equals=" + adClientId);
-
-        // Get all the aDOrganizationList where adClient equals to adClientId + 1
-        defaultADOrganizationShouldNotBeFound("adClientId.equals=" + (adClientId + 1));
-    }
-
     /**
      * Executes the search, and checks that the default entity is returned.
      */

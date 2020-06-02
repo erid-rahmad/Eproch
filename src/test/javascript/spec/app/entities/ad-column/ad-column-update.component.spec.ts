@@ -9,11 +9,11 @@ import ADColumnUpdateComponent from '@/entities/ad-column/ad-column-update.vue';
 import ADColumnClass from '@/entities/ad-column/ad-column-update.component';
 import ADColumnService from '@/entities/ad-column/ad-column.service';
 
-import ADClientService from '@/entities/ad-client/ad-client.service';
-
 import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
 
 import ADReferenceService from '@/entities/ad-reference/ad-reference.service';
+
+import AdValidationRuleService from '@/entities/ad-validation-rule/ad-validation-rule.service';
 
 import ADTableService from '@/entities/ad-table/ad-table.service';
 
@@ -44,11 +44,11 @@ describe('Component Tests', () => {
           alertService: () => new AlertService(store),
           aDColumnService: () => aDColumnServiceStub,
 
-          aDClientService: () => new ADClientService(),
-
           aDOrganizationService: () => new ADOrganizationService(),
 
           aDReferenceService: () => new ADReferenceService(),
+
+          adValidationRuleService: () => new AdValidationRuleService(),
 
           aDTableService: () => new ADTableService()
         }

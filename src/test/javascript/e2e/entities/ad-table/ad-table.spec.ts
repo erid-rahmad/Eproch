@@ -86,7 +86,6 @@ describe('ADTable e2e test', () => {
         expect(await updatePage.activeInput.isSelected()).to.be.true;
       }
 
-      // await  selectLastOption(updatePage.adClientSelect);
       // await  selectLastOption(updatePage.adOrganizationSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;

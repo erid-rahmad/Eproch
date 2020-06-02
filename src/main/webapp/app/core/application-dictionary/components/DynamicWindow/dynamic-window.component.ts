@@ -2,6 +2,7 @@ import { Component, Vue, Inject, Watch } from 'vue-property-decorator';
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import ActionToolbar from '../ActionToolbar/action-toolbar.vue';
+import TabToolbar from "../ActionToolbar/tab-toolbar.vue";
 import DetailView from "../DetailView/detail-view.vue";
 import GridView from "../GridView/grid-view.vue";
 import SearchPanel from "../SearchPanel/search-panel.vue";
@@ -17,6 +18,7 @@ import _ from 'lodash';
     Splitpanes,
     Pane,
     ActionToolbar,
+    TabToolbar,
     DetailView,
     GridView,
     SearchPanel
@@ -35,6 +37,7 @@ export default class DynamicWindow extends Vue {
   public childTabs = [];
   public currentTab: string = '';
   private mainToolbarEventBus = new Vue();
+  private secondaryToolbarEventBus = new Vue();
   private searchPanelEventBus = new Vue();
   private searchPanelActive: boolean = false;
 
@@ -151,7 +154,7 @@ export default class DynamicWindow extends Vue {
   }
 
   public handleTabClick(tab: any) {
-    const { id, parentTabId, parentId, parentTableName } = tab.$children[0].tab;
+    const { id, parentTabId, parentId, parentTableName } = tab.$children[1].tab;
     this.childTabs = [];
     this.currentTab = '';
     this.retrieveTabs(parentTabId, id, async (tab: any, index: number) => {
@@ -183,7 +186,7 @@ export default class DynamicWindow extends Vue {
         this.buildChildTabFilterQuery(tab, index, parent?.id);
       });
     } else {
-      if (!this.currentTab.length) {
+      if (!this.currentTab.length || parent === null) {
         return;
       }
       const index = parseInt(this.currentTab);

@@ -42,6 +42,9 @@ public class ADTab extends AbstractAuditingEntity {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "icon_name")
+    private String iconName;
+
     @Column(name = "target_endpoint")
     private String targetEndpoint;
 
@@ -60,6 +63,9 @@ public class ADTab extends AbstractAuditingEntity {
     @Column(name = "order_query")
     private String orderQuery;
 
+    @Column(name = "tab_sequence")
+    private Integer tabSequence;
+
     @Column(name = "active")
     private Boolean active = true;
 
@@ -71,11 +77,6 @@ public class ADTab extends AbstractAuditingEntity {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonManagedReference
     private Set<ADField> aDFields = new HashSet<>();
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("aDTabs")
-    private ADClient adClient;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -137,6 +138,19 @@ public class ADTab extends AbstractAuditingEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getIconName() {
+        return iconName;
+    }
+
+    public ADTab iconName(String iconName) {
+        this.iconName = iconName;
+        return this;
+    }
+
+    public void setIconName(String iconName) {
+        this.iconName = iconName;
     }
 
     public String getTargetEndpoint() {
@@ -217,6 +231,19 @@ public class ADTab extends AbstractAuditingEntity {
         this.orderQuery = orderQuery;
     }
 
+    public Integer getTabSequence() {
+        return tabSequence;
+    }
+
+    public ADTab tabSequence(Integer tabSequence) {
+        this.tabSequence = tabSequence;
+        return this;
+    }
+
+    public void setTabSequence(Integer tabSequence) {
+        this.tabSequence = tabSequence;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -278,19 +305,6 @@ public class ADTab extends AbstractAuditingEntity {
 
     public void setADFields(Set<ADField> aDFields) {
         this.aDFields = aDFields;
-    }
-
-    public ADClient getAdClient() {
-        return adClient;
-    }
-
-    public ADTab adClient(ADClient aDClient) {
-        this.adClient = aDClient;
-        return this;
-    }
-
-    public void setAdClient(ADClient aDClient) {
-        this.adClient = aDClient;
     }
 
     public ADOrganization getAdOrganization() {
@@ -394,12 +408,14 @@ public class ADTab extends AbstractAuditingEntity {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", iconName='" + getIconName() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
             ", writable='" + isWritable() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +
             ", filterQuery='" + getFilterQuery() + "'" +
             ", orderQuery='" + getOrderQuery() + "'" +
+            ", tabSequence=" + getTabSequence() +
             ", active='" + isActive() + "'" +
             "}";
     }

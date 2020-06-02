@@ -20,12 +20,13 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     private String description;
 
+    private String titleLogic;
+
     @NotNull
     private ADWindowType type;
 
     private Boolean active;
-    private Long adClientId;
-    private String adClientName;
+
     private Long adOrganizationId;
     private String adOrganizationName;
     
@@ -53,6 +54,14 @@ public class ADWindowDTO extends AbstractAuditingDTO {
         this.description = description;
     }
 
+    public String getTitleLogic() {
+        return titleLogic;
+    }
+
+    public void setTitleLogic(String titleLogic) {
+        this.titleLogic = titleLogic;
+    }
+
     public ADWindowType getType() {
         return type;
     }
@@ -67,22 +76,6 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Long getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(Long aDClientId) {
-        this.adClientId = aDClientId;
-    }
-
-    public String getAdClientName() {
-        return adClientName;
-    }
-
-    public void setAdClientName(String adClientName) {
-        this.adClientName = adClientName;
     }
 
     public Long getAdOrganizationId() {
@@ -128,9 +121,9 @@ public class ADWindowDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", titleLogic='" + getTitleLogic() + "'" +
             ", type='" + getType() + "'" +
             ", active='" + isActive() + "'" +
-            ", adClientId=" + getAdClientId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";
     }

@@ -124,11 +124,20 @@ public class ADColumnQueryService extends QueryService<ADColumn> {
             if (criteria.getMandatoryLogic() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getMandatoryLogic(), ADColumn_.mandatoryLogic));
             }
+            if (criteria.getDisplayLogic() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDisplayLogic(), ADColumn_.displayLogic));
+            }
             if (criteria.getReadOnlyLogic() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getReadOnlyLogic(), ADColumn_.readOnlyLogic));
             }
             if (criteria.getUpdatable() != null) {
                 specification = specification.and(buildSpecification(criteria.getUpdatable(), ADColumn_.updatable));
+            }
+            if (criteria.getAlwaysUpdatable() != null) {
+                specification = specification.and(buildSpecification(criteria.getAlwaysUpdatable(), ADColumn_.alwaysUpdatable));
+            }
+            if (criteria.getCopyable() != null) {
+                specification = specification.and(buildSpecification(criteria.getCopyable(), ADColumn_.copyable));
             }
             if (criteria.getDefaultValue() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDefaultValue(), ADColumn_.defaultValue));
@@ -148,12 +157,17 @@ public class ADColumnQueryService extends QueryService<ADColumn> {
             if (criteria.getMaxValue() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getMaxValue(), ADColumn_.maxValue));
             }
+            if (criteria.getIdentifier() != null) {
+                specification = specification.and(buildSpecification(criteria.getIdentifier(), ADColumn_.identifier));
+            }
+            if (criteria.getDefaultSelection() != null) {
+                specification = specification.and(buildSpecification(criteria.getDefaultSelection(), ADColumn_.defaultSelection));
+            }
+            if (criteria.getSelectionSequence() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getSelectionSequence(), ADColumn_.selectionSequence));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADColumn_.active));
-            }
-            if (criteria.getAdClientId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAdClientId(),
-                    root -> root.join(ADColumn_.adClient, JoinType.LEFT).get(ADClient_.id)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
@@ -162,6 +176,10 @@ public class ADColumnQueryService extends QueryService<ADColumn> {
             if (criteria.getAdReferenceId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdReferenceId(),
                     root -> root.join(ADColumn_.adReference, JoinType.LEFT).get(ADReference_.id)));
+            }
+            if (criteria.getAdValidationRuleId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdValidationRuleId(),
+                    root -> root.join(ADColumn_.adValidationRule, JoinType.LEFT).get(AdValidationRule_.id)));
             }
             if (criteria.getAdTableId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdTableId(),

@@ -30,7 +30,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new ADTabService();
 
-      elemDefault = new ADTab(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', false, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', false);
+      elemDefault = new ADTab(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', false, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 0, false);
     });
 
     describe('Service methods', () => {
@@ -84,12 +84,14 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             description: 'BBBBBB',
+            iconName: 'BBBBBB',
             targetEndpoint: 'BBBBBB',
             writable: true,
             displayLogic: 'BBBBBB',
             readOnlyLogic: 'BBBBBB',
             filterQuery: 'BBBBBB',
             orderQuery: 'BBBBBB',
+            tabSequence: 1,
             active: true
           },
           elemDefault
@@ -119,12 +121,14 @@ describe('Service Tests', () => {
           {
             name: 'BBBBBB',
             description: 'BBBBBB',
+            iconName: 'BBBBBB',
             targetEndpoint: 'BBBBBB',
             writable: true,
             displayLogic: 'BBBBBB',
             readOnlyLogic: 'BBBBBB',
             filterQuery: 'BBBBBB',
             orderQuery: 'BBBBBB',
+            tabSequence: 1,
             active: true
           },
           elemDefault

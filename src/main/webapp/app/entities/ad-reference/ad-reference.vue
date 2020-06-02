@@ -30,6 +30,7 @@
                     <th v-on:click="changeOrder('description')"><span v-text="$t('opusWebApp.aDReference.description')">Description</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'description'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('referenceType')"><span v-text="$t('opusWebApp.aDReference.referenceType')">Reference Type</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'referenceType'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.aDReference.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('adOrganizationId')"><span v-text="$t('opusWebApp.aDReference.adOrganization')">Ad Organization</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adOrganizationId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -44,6 +45,11 @@
                     <td>{{aDReference.description}}</td>
                     <td v-text="$t('opusWebApp.ADReferenceType.' + aDReference.referenceType)">{{aDReference.referenceType}}</td>
                     <td>{{aDReference.active}}</td>
+                    <td>
+                        <div v-if="aDReference.adOrganizationId">
+                            <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: aDReference.adOrganizationId}}">{{aDReference.adOrganizationId}}</router-link>
+                        </div>
+                    </td>
                     <td class="text-right">
                         <div class="btn-group">
                             <router-link :to="{name: 'ADReferenceView', params: {aDReferenceId: aDReference.id}}" tag="button" class="btn btn-info btn-sm details">

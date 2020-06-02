@@ -53,11 +53,23 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "displayLogic",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "readOnlyLogic",
             "fieldType": "String"
         },
         {
             "fieldName": "updatable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "alwaysUpdatable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "copyable",
             "fieldType": "Boolean"
         },
         {
@@ -85,19 +97,23 @@
             "fieldType": "Long"
         },
         {
+            "fieldName": "identifier",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "defaultSelection",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "selectionSequence",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "active",
             "fieldType": "Boolean"
         }
     ],
     "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDClient",
-            "otherEntityRelationshipName": "aDColumn",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adClient",
-            "otherEntityField": "id"
-        },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
@@ -111,6 +127,13 @@
             "otherEntityName": "aDReference",
             "otherEntityRelationshipName": "aDColumn",
             "relationshipName": "adReference",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adValidationRule",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipName": "adValidationRule",
             "otherEntityField": "id"
         },
         {

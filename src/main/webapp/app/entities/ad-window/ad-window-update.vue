@@ -25,6 +25,11 @@
                             :class="{'valid': !$v.aDWindow.description.$invalid, 'invalid': $v.aDWindow.description.$invalid }" v-model="$v.aDWindow.description.$model" />
                     </div>
                     <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.aDWindow.titleLogic')" for="ad-window-titleLogic">Title Logic</label>
+                        <input type="text" class="form-control" name="titleLogic" id="ad-window-titleLogic"
+                            :class="{'valid': !$v.aDWindow.titleLogic.$invalid, 'invalid': $v.aDWindow.titleLogic.$invalid }" v-model="$v.aDWindow.titleLogic.$model" />
+                    </div>
+                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDWindow.type')" for="ad-window-type">Type</label>
                         <select class="form-control" name="type" :class="{'valid': !$v.aDWindow.type.$invalid, 'invalid': $v.aDWindow.type.$invalid }" v-model="$v.aDWindow.type.$model" id="ad-window-type"  required>
                             <option value="MAINTAIN" v-bind:label="$t('opusWebApp.ADWindowType.MAINTAIN')">MAINTAIN</option>
@@ -41,18 +46,6 @@
                         <label class="form-control-label" v-text="$t('opusWebApp.aDWindow.active')" for="ad-window-active">Active</label>
                         <input type="checkbox" class="form-check" name="active" id="ad-window-active"
                             :class="{'valid': !$v.aDWindow.active.$invalid, 'invalid': $v.aDWindow.active.$invalid }" v-model="$v.aDWindow.active.$model" />
-                    </div>
-                    <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.aDWindow.adClient')" for="ad-window-adClient">Ad Client</label>
-                        <select class="form-control" id="ad-window-adClient" name="adClient" v-model="$v.aDWindow.adClientId.$model" required>
-                            <option v-if="!aDWindow.adClientId" v-bind:value="null" selected></option>
-                            <option v-bind:value="aDClientOption.id" v-for="aDClientOption in aDClients" :key="aDClientOption.id">{{aDClientOption.id}}</option>
-                        </select>
-                    </div>
-                    <div v-if="$v.aDWindow.adClientId.$anyDirty && $v.aDWindow.adClientId.$invalid">
-                        <small class="form-text text-danger" v-if="!$v.aDWindow.adClientId.required" v-text="$t('entity.validation.required')">
-                            This field is required.
-                        </small>
                     </div>
                     <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDWindow.adOrganization')" for="ad-window-adOrganization">Ad Organization</label>

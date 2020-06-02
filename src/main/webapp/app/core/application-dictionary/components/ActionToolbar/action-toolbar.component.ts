@@ -1,7 +1,6 @@
 import { Component, Prop, Vue } from "vue-property-decorator";
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
-import { ActionToolbarEventBus } from './action-toolbar-event-bus';
 
 const ActionToolbarProps = Vue.extend({
   props: {

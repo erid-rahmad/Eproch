@@ -47,6 +47,11 @@ public class ADReferenceList extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("aDReferenceLists")
+    private ADOrganization adOrganization;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("aDReferenceLists")
     private ADReference adReference;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -108,6 +113,19 @@ public class ADReferenceList extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
+    }
+
+    public ADReferenceList adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+        return this;
+    }
+
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
     }
 
     public ADReference getAdReference() {

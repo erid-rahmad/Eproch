@@ -1,8 +1,8 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.NotNull;
-
 import java.util.Objects;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADField} entity.
@@ -38,16 +38,27 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     private String displayLogic;
 
+    private String readOnlyLogic;
+
     private Boolean writable;
 
     private Integer columnNo;
 
     private Integer columnSpan;
 
+    private Boolean updatable;
+
+    private Boolean alwaysUpdatable;
+
+    private Boolean copyable;
+
+    private String defaultValue;
+
+    private String formatPattern;
+
     private Boolean active;
 
-    private Long adClientId;
-    private String adClientName;
+
     private Long adOrganizationId;
     private String adOrganizationName;
 
@@ -55,6 +66,9 @@ public class ADFieldDTO extends AbstractAuditingDTO {
     private String adReferenceName;
     private Long adColumnId;
     private String adColumnName;
+
+    private Long adValidationRuleId;
+
     private Long adTabId;
     
     private ADReferenceDTO adReference;
@@ -165,6 +179,14 @@ public class ADFieldDTO extends AbstractAuditingDTO {
         this.displayLogic = displayLogic;
     }
 
+    public String getReadOnlyLogic() {
+        return readOnlyLogic;
+    }
+
+    public void setReadOnlyLogic(String readOnlyLogic) {
+        this.readOnlyLogic = readOnlyLogic;
+    }
+
     public Boolean isWritable() {
         return writable;
     }
@@ -189,28 +211,52 @@ public class ADFieldDTO extends AbstractAuditingDTO {
         this.columnSpan = columnSpan;
     }
 
+    public Boolean isUpdatable() {
+        return updatable;
+    }
+
+    public void setUpdatable(Boolean updatable) {
+        this.updatable = updatable;
+    }
+
+    public Boolean isAlwaysUpdatable() {
+        return alwaysUpdatable;
+    }
+
+    public void setAlwaysUpdatable(Boolean alwaysUpdatable) {
+        this.alwaysUpdatable = alwaysUpdatable;
+    }
+
+    public Boolean isCopyable() {
+        return copyable;
+    }
+
+    public void setCopyable(Boolean copyable) {
+        this.copyable = copyable;
+    }
+
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(String defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public String getFormatPattern() {
+        return formatPattern;
+    }
+
+    public void setFormatPattern(String formatPattern) {
+        this.formatPattern = formatPattern;
+    }
+
     public Boolean isActive() {
         return active;
     }
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Long getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(Long aDClientId) {
-        this.adClientId = aDClientId;
-    }
-
-    public String getAdClientName() {
-        return adClientName;
-    }
-
-    public void setAdClientName(String adClientName) {
-        this.adClientName = adClientName;
     }
 
     public Long getAdOrganizationId() {
@@ -251,6 +297,14 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     public void setAdColumnId(Long aDColumnId) {
         this.adColumnId = aDColumnId;
+    }
+
+    public Long getAdValidationRuleId() {
+        return adValidationRuleId;
+    }
+
+    public void setAdValidationRuleId(Long adValidationRuleId) {
+        this.adValidationRuleId = adValidationRuleId;
     }
 
     public Long getAdTabId() {
@@ -322,14 +376,20 @@ public class ADFieldDTO extends AbstractAuditingDTO {
             ", gridSequence=" + getGridSequence() +
             ", detailSequence=" + getDetailSequence() +
             ", displayLogic='" + getDisplayLogic() + "'" +
+            ", readOnlyLogic='" + getReadOnlyLogic() + "'" +
             ", writable='" + isWritable() + "'" +
             ", columnNo=" + getColumnNo() +
             ", columnSpan=" + getColumnSpan() +
+            ", updatable='" + isUpdatable() + "'" +
+            ", alwaysUpdatable='" + isAlwaysUpdatable() + "'" +
+            ", copyable='" + isCopyable() + "'" +
+            ", defaultValue='" + getDefaultValue() + "'" +
+            ", formatPattern='" + getFormatPattern() + "'" +
             ", active='" + isActive() + "'" +
-            ", adClientId=" + getAdClientId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adReferenceId=" + getAdReferenceId() +
             ", adColumnId=" + getAdColumnId() +
+            ", adValidationRuleId=" + getAdValidationRuleId() +
             ", adTabId=" + getAdTabId() +
             "}";
     }

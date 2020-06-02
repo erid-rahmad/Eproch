@@ -1,20 +1,31 @@
 package com.bhp.opusb.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
 import com.bhp.opusb.OpusWebApp;
-import com.bhp.opusb.domain.ADTab;
-import com.bhp.opusb.domain.ADTab;
-import com.bhp.opusb.domain.ADField;
-import com.bhp.opusb.domain.ADClient;
-import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.ADTable;
 import com.bhp.opusb.domain.ADColumn;
+import com.bhp.opusb.domain.ADField;
+import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.ADTab;
+import com.bhp.opusb.domain.ADTable;
 import com.bhp.opusb.domain.ADWindow;
 import com.bhp.opusb.repository.ADTabRepository;
+import com.bhp.opusb.service.ADTabQueryService;
 import com.bhp.opusb.service.ADTabService;
 import com.bhp.opusb.service.dto.ADTabDTO;
 import com.bhp.opusb.service.mapper.ADTabMapper;
-import com.bhp.opusb.service.dto.ADTabCriteria;
-import com.bhp.opusb.service.ADTabQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,13 +36,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import javax.persistence.EntityManager;
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link ADTabResource} REST controller.
@@ -47,6 +51,9 @@ public class ADTabResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ICON_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_ICON_NAME = "BBBBBBBBBB";
 
     private static final String DEFAULT_TARGET_ENDPOINT = "AAAAAAAAAA";
     private static final String UPDATED_TARGET_ENDPOINT = "BBBBBBBBBB";
@@ -65,6 +72,10 @@ public class ADTabResourceIT {
 
     private static final String DEFAULT_ORDER_QUERY = "AAAAAAAAAA";
     private static final String UPDATED_ORDER_QUERY = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_TAB_SEQUENCE = 1;
+    private static final Integer UPDATED_TAB_SEQUENCE = 2;
+    private static final Integer SMALLER_TAB_SEQUENCE = 1 - 1;
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -99,23 +110,15 @@ public class ADTabResourceIT {
         ADTab aDTab = new ADTab()
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
+            .iconName(DEFAULT_ICON_NAME)
             .targetEndpoint(DEFAULT_TARGET_ENDPOINT)
             .writable(DEFAULT_WRITABLE)
             .displayLogic(DEFAULT_DISPLAY_LOGIC)
             .readOnlyLogic(DEFAULT_READ_ONLY_LOGIC)
             .filterQuery(DEFAULT_FILTER_QUERY)
             .orderQuery(DEFAULT_ORDER_QUERY)
+            .tabSequence(DEFAULT_TAB_SEQUENCE)
             .active(DEFAULT_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDTab.setAdClient(aDClient);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -158,23 +161,15 @@ public class ADTabResourceIT {
         ADTab aDTab = new ADTab()
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .iconName(UPDATED_ICON_NAME)
             .targetEndpoint(UPDATED_TARGET_ENDPOINT)
             .writable(UPDATED_WRITABLE)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
             .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
             .filterQuery(UPDATED_FILTER_QUERY)
             .orderQuery(UPDATED_ORDER_QUERY)
+            .tabSequence(UPDATED_TAB_SEQUENCE)
             .active(UPDATED_ACTIVE);
-        // Add required entity
-        ADClient aDClient;
-        if (TestUtil.findAll(em, ADClient.class).isEmpty()) {
-            aDClient = ADClientResourceIT.createUpdatedEntity(em);
-            em.persist(aDClient);
-            em.flush();
-        } else {
-            aDClient = TestUtil.findAll(em, ADClient.class).get(0);
-        }
-        aDTab.setAdClient(aDClient);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -231,12 +226,14 @@ public class ADTabResourceIT {
         ADTab testADTab = aDTabList.get(aDTabList.size() - 1);
         assertThat(testADTab.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADTab.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testADTab.getIconName()).isEqualTo(DEFAULT_ICON_NAME);
         assertThat(testADTab.getTargetEndpoint()).isEqualTo(DEFAULT_TARGET_ENDPOINT);
         assertThat(testADTab.isWritable()).isEqualTo(DEFAULT_WRITABLE);
         assertThat(testADTab.getDisplayLogic()).isEqualTo(DEFAULT_DISPLAY_LOGIC);
         assertThat(testADTab.getReadOnlyLogic()).isEqualTo(DEFAULT_READ_ONLY_LOGIC);
         assertThat(testADTab.getFilterQuery()).isEqualTo(DEFAULT_FILTER_QUERY);
         assertThat(testADTab.getOrderQuery()).isEqualTo(DEFAULT_ORDER_QUERY);
+        assertThat(testADTab.getTabSequence()).isEqualTo(DEFAULT_TAB_SEQUENCE);
         assertThat(testADTab.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -293,12 +290,14 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDTab.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].iconName").value(hasItem(DEFAULT_ICON_NAME)))
             .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
             .andExpect(jsonPath("$.[*].writable").value(hasItem(DEFAULT_WRITABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
             .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
             .andExpect(jsonPath("$.[*].filterQuery").value(hasItem(DEFAULT_FILTER_QUERY)))
             .andExpect(jsonPath("$.[*].orderQuery").value(hasItem(DEFAULT_ORDER_QUERY)))
+            .andExpect(jsonPath("$.[*].tabSequence").value(hasItem(DEFAULT_TAB_SEQUENCE)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -315,12 +314,14 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.id").value(aDTab.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.iconName").value(DEFAULT_ICON_NAME))
             .andExpect(jsonPath("$.targetEndpoint").value(DEFAULT_TARGET_ENDPOINT))
             .andExpect(jsonPath("$.writable").value(DEFAULT_WRITABLE.booleanValue()))
             .andExpect(jsonPath("$.displayLogic").value(DEFAULT_DISPLAY_LOGIC))
             .andExpect(jsonPath("$.readOnlyLogic").value(DEFAULT_READ_ONLY_LOGIC))
             .andExpect(jsonPath("$.filterQuery").value(DEFAULT_FILTER_QUERY))
             .andExpect(jsonPath("$.orderQuery").value(DEFAULT_ORDER_QUERY))
+            .andExpect(jsonPath("$.tabSequence").value(DEFAULT_TAB_SEQUENCE))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -497,6 +498,84 @@ public class ADTabResourceIT {
 
         // Get all the aDTabList where description does not contain UPDATED_DESCRIPTION
         defaultADTabShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADTabsByIconNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where iconName equals to DEFAULT_ICON_NAME
+        defaultADTabShouldBeFound("iconName.equals=" + DEFAULT_ICON_NAME);
+
+        // Get all the aDTabList where iconName equals to UPDATED_ICON_NAME
+        defaultADTabShouldNotBeFound("iconName.equals=" + UPDATED_ICON_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByIconNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where iconName not equals to DEFAULT_ICON_NAME
+        defaultADTabShouldNotBeFound("iconName.notEquals=" + DEFAULT_ICON_NAME);
+
+        // Get all the aDTabList where iconName not equals to UPDATED_ICON_NAME
+        defaultADTabShouldBeFound("iconName.notEquals=" + UPDATED_ICON_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByIconNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where iconName in DEFAULT_ICON_NAME or UPDATED_ICON_NAME
+        defaultADTabShouldBeFound("iconName.in=" + DEFAULT_ICON_NAME + "," + UPDATED_ICON_NAME);
+
+        // Get all the aDTabList where iconName equals to UPDATED_ICON_NAME
+        defaultADTabShouldNotBeFound("iconName.in=" + UPDATED_ICON_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByIconNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where iconName is not null
+        defaultADTabShouldBeFound("iconName.specified=true");
+
+        // Get all the aDTabList where iconName is null
+        defaultADTabShouldNotBeFound("iconName.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllADTabsByIconNameContainsSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where iconName contains DEFAULT_ICON_NAME
+        defaultADTabShouldBeFound("iconName.contains=" + DEFAULT_ICON_NAME);
+
+        // Get all the aDTabList where iconName contains UPDATED_ICON_NAME
+        defaultADTabShouldNotBeFound("iconName.contains=" + UPDATED_ICON_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByIconNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where iconName does not contain DEFAULT_ICON_NAME
+        defaultADTabShouldNotBeFound("iconName.doesNotContain=" + DEFAULT_ICON_NAME);
+
+        // Get all the aDTabList where iconName does not contain UPDATED_ICON_NAME
+        defaultADTabShouldBeFound("iconName.doesNotContain=" + UPDATED_ICON_NAME);
     }
 
 
@@ -944,6 +1023,111 @@ public class ADTabResourceIT {
 
     @Test
     @Transactional
+    public void getAllADTabsByTabSequenceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where tabSequence equals to DEFAULT_TAB_SEQUENCE
+        defaultADTabShouldBeFound("tabSequence.equals=" + DEFAULT_TAB_SEQUENCE);
+
+        // Get all the aDTabList where tabSequence equals to UPDATED_TAB_SEQUENCE
+        defaultADTabShouldNotBeFound("tabSequence.equals=" + UPDATED_TAB_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByTabSequenceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where tabSequence not equals to DEFAULT_TAB_SEQUENCE
+        defaultADTabShouldNotBeFound("tabSequence.notEquals=" + DEFAULT_TAB_SEQUENCE);
+
+        // Get all the aDTabList where tabSequence not equals to UPDATED_TAB_SEQUENCE
+        defaultADTabShouldBeFound("tabSequence.notEquals=" + UPDATED_TAB_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByTabSequenceIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where tabSequence in DEFAULT_TAB_SEQUENCE or UPDATED_TAB_SEQUENCE
+        defaultADTabShouldBeFound("tabSequence.in=" + DEFAULT_TAB_SEQUENCE + "," + UPDATED_TAB_SEQUENCE);
+
+        // Get all the aDTabList where tabSequence equals to UPDATED_TAB_SEQUENCE
+        defaultADTabShouldNotBeFound("tabSequence.in=" + UPDATED_TAB_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByTabSequenceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where tabSequence is not null
+        defaultADTabShouldBeFound("tabSequence.specified=true");
+
+        // Get all the aDTabList where tabSequence is null
+        defaultADTabShouldNotBeFound("tabSequence.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByTabSequenceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where tabSequence is greater than or equal to DEFAULT_TAB_SEQUENCE
+        defaultADTabShouldBeFound("tabSequence.greaterThanOrEqual=" + DEFAULT_TAB_SEQUENCE);
+
+        // Get all the aDTabList where tabSequence is greater than or equal to UPDATED_TAB_SEQUENCE
+        defaultADTabShouldNotBeFound("tabSequence.greaterThanOrEqual=" + UPDATED_TAB_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByTabSequenceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where tabSequence is less than or equal to DEFAULT_TAB_SEQUENCE
+        defaultADTabShouldBeFound("tabSequence.lessThanOrEqual=" + DEFAULT_TAB_SEQUENCE);
+
+        // Get all the aDTabList where tabSequence is less than or equal to SMALLER_TAB_SEQUENCE
+        defaultADTabShouldNotBeFound("tabSequence.lessThanOrEqual=" + SMALLER_TAB_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByTabSequenceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where tabSequence is less than DEFAULT_TAB_SEQUENCE
+        defaultADTabShouldNotBeFound("tabSequence.lessThan=" + DEFAULT_TAB_SEQUENCE);
+
+        // Get all the aDTabList where tabSequence is less than UPDATED_TAB_SEQUENCE
+        defaultADTabShouldBeFound("tabSequence.lessThan=" + UPDATED_TAB_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByTabSequenceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where tabSequence is greater than DEFAULT_TAB_SEQUENCE
+        defaultADTabShouldNotBeFound("tabSequence.greaterThan=" + DEFAULT_TAB_SEQUENCE);
+
+        // Get all the aDTabList where tabSequence is greater than SMALLER_TAB_SEQUENCE
+        defaultADTabShouldBeFound("tabSequence.greaterThan=" + SMALLER_TAB_SEQUENCE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADTabsByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         aDTabRepository.saveAndFlush(aDTab);
@@ -1031,22 +1215,6 @@ public class ADTabResourceIT {
 
         // Get all the aDTabList where aDField equals to aDFieldId + 1
         defaultADTabShouldNotBeFound("aDFieldId.equals=" + (aDFieldId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllADTabsByAdClientIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        ADClient adClient = aDTab.getAdClient();
-        aDTabRepository.saveAndFlush(aDTab);
-        Long adClientId = adClient.getId();
-
-        // Get all the aDTabList where adClient equals to adClientId
-        defaultADTabShouldBeFound("adClientId.equals=" + adClientId);
-
-        // Get all the aDTabList where adClient equals to adClientId + 1
-        defaultADTabShouldNotBeFound("adClientId.equals=" + (adClientId + 1));
     }
 
 
@@ -1167,12 +1335,14 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDTab.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].iconName").value(hasItem(DEFAULT_ICON_NAME)))
             .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
             .andExpect(jsonPath("$.[*].writable").value(hasItem(DEFAULT_WRITABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
             .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
             .andExpect(jsonPath("$.[*].filterQuery").value(hasItem(DEFAULT_FILTER_QUERY)))
             .andExpect(jsonPath("$.[*].orderQuery").value(hasItem(DEFAULT_ORDER_QUERY)))
+            .andExpect(jsonPath("$.[*].tabSequence").value(hasItem(DEFAULT_TAB_SEQUENCE)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -1223,12 +1393,14 @@ public class ADTabResourceIT {
         updatedADTab
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .iconName(UPDATED_ICON_NAME)
             .targetEndpoint(UPDATED_TARGET_ENDPOINT)
             .writable(UPDATED_WRITABLE)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
             .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
             .filterQuery(UPDATED_FILTER_QUERY)
             .orderQuery(UPDATED_ORDER_QUERY)
+            .tabSequence(UPDATED_TAB_SEQUENCE)
             .active(UPDATED_ACTIVE);
         ADTabDTO aDTabDTO = aDTabMapper.toDto(updatedADTab);
 
@@ -1243,12 +1415,14 @@ public class ADTabResourceIT {
         ADTab testADTab = aDTabList.get(aDTabList.size() - 1);
         assertThat(testADTab.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADTab.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testADTab.getIconName()).isEqualTo(UPDATED_ICON_NAME);
         assertThat(testADTab.getTargetEndpoint()).isEqualTo(UPDATED_TARGET_ENDPOINT);
         assertThat(testADTab.isWritable()).isEqualTo(UPDATED_WRITABLE);
         assertThat(testADTab.getDisplayLogic()).isEqualTo(UPDATED_DISPLAY_LOGIC);
         assertThat(testADTab.getReadOnlyLogic()).isEqualTo(UPDATED_READ_ONLY_LOGIC);
         assertThat(testADTab.getFilterQuery()).isEqualTo(UPDATED_FILTER_QUERY);
         assertThat(testADTab.getOrderQuery()).isEqualTo(UPDATED_ORDER_QUERY);
+        assertThat(testADTab.getTabSequence()).isEqualTo(UPDATED_TAB_SEQUENCE);
         assertThat(testADTab.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

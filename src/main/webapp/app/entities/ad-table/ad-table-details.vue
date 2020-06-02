@@ -23,14 +23,6 @@
                         <span>{{aDTable.active}}</span>
                     </dd>
                     <dt>
-                        <span v-text="$t('opusWebApp.aDTable.adClient')">Ad Client</span>
-                    </dt>
-                    <dd>
-                        <div v-if="aDTable.adClientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDTable.adClientId}}">{{aDTable.adClientId}}</router-link>
-                        </div>
-                    </dd>
-                    <dt>
                         <span v-text="$t('opusWebApp.aDTable.adOrganization')">Ad Organization</span>
                     </dt>
                     <dd>

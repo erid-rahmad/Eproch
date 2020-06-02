@@ -30,9 +30,15 @@ export default class ADColumnUpdatePage extends AlertPage {
 
   mandatoryLogicInput: ElementFinder = element(by.css('input#ad-column-mandatoryLogic'));
 
+  displayLogicInput: ElementFinder = element(by.css('input#ad-column-displayLogic'));
+
   readOnlyLogicInput: ElementFinder = element(by.css('input#ad-column-readOnlyLogic'));
 
   updatableInput: ElementFinder = element(by.css('input#ad-column-updatable'));
+
+  alwaysUpdatableInput: ElementFinder = element(by.css('input#ad-column-alwaysUpdatable'));
+
+  copyableInput: ElementFinder = element(by.css('input#ad-column-copyable'));
 
   defaultValueInput: ElementFinder = element(by.css('input#ad-column-defaultValue'));
 
@@ -46,12 +52,18 @@ export default class ADColumnUpdatePage extends AlertPage {
 
   maxValueInput: ElementFinder = element(by.css('input#ad-column-maxValue'));
 
-  activeInput: ElementFinder = element(by.css('input#ad-column-active'));
-  adClientSelect = element(by.css('select#ad-column-adClient'));
+  identifierInput: ElementFinder = element(by.css('input#ad-column-identifier'));
 
+  defaultSelectionInput: ElementFinder = element(by.css('input#ad-column-defaultSelection'));
+
+  selectionSequenceInput: ElementFinder = element(by.css('input#ad-column-selectionSequence'));
+
+  activeInput: ElementFinder = element(by.css('input#ad-column-active'));
   adOrganizationSelect = element(by.css('select#ad-column-adOrganization'));
 
   adReferenceSelect = element(by.css('select#ad-column-adReference'));
+
+  adValidationRuleSelect = element(by.css('select#ad-column-adValidationRule'));
 
   adTableSelect = element(by.css('select#ad-column-adTable'));
 }

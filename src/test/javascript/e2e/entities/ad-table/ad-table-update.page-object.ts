@@ -13,7 +13,5 @@ export default class ADTableUpdatePage extends AlertPage {
   viewInput: ElementFinder = element(by.css('input#ad-table-view'));
 
   activeInput: ElementFinder = element(by.css('input#ad-table-active'));
-  adClientSelect = element(by.css('select#ad-table-adClient'));
-
   adOrganizationSelect = element(by.css('select#ad-table-adOrganization'));
 }

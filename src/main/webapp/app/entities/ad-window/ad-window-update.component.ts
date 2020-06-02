@@ -5,9 +5,6 @@ import { numeric, required, minLength, maxLength, minValue, maxValue } from 'vue
 import ADTabService from '../ad-tab/ad-tab.service';
 import { IADTab } from '@/shared/model/ad-tab.model';
 
-import ADClientService from '../ad-client/ad-client.service';
-import { IADClient } from '@/shared/model/ad-client.model';
-
 import ADOrganizationService from '../ad-organization/ad-organization.service';
 import { IADOrganization } from '@/shared/model/ad-organization.model';
 
@@ -21,13 +18,11 @@ const validations: any = {
       required
     },
     description: {},
+    titleLogic: {},
     type: {
       required
     },
     active: {},
-    adClientId: {
-      required
-    },
     adOrganizationId: {
       required
     }
@@ -45,10 +40,6 @@ export default class ADWindowUpdate extends Vue {
   @Inject('aDTabService') private aDTabService: () => ADTabService;
 
   public aDTabs: IADTab[] = [];
-
-  @Inject('aDClientService') private aDClientService: () => ADClientService;
-
-  public aDClients: IADClient[] = [];
 
   @Inject('aDOrganizationService') private aDOrganizationService: () => ADOrganizationService;
 
@@ -104,11 +95,6 @@ export default class ADWindowUpdate extends Vue {
       .retrieve()
       .then(res => {
         this.aDTabs = res.data;
-      });
-    this.aDClientService()
-      .retrieve()
-      .then(res => {
-        this.aDClients = res.data;
       });
     this.aDOrganizationService()
       .retrieve()

@@ -28,6 +28,14 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "aDReferenceList",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "aDReference",
             "otherEntityRelationshipName": "aDReferenceList",
             "relationshipValidateRules": "required",

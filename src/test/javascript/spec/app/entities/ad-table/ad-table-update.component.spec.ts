@@ -11,8 +11,6 @@ import ADTableService from '@/entities/ad-table/ad-table.service';
 
 import ADColumnService from '@/entities/ad-column/ad-column.service';
 
-import ADClientService from '@/entities/ad-client/ad-client.service';
-
 import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
 
 const localVue = createLocalVue();
@@ -43,8 +41,6 @@ describe('Component Tests', () => {
           aDTableService: () => aDTableServiceStub,
 
           aDColumnService: () => new ADColumnService(),
-
-          aDClientService: () => new ADClientService(),
 
           aDOrganizationService: () => new ADOrganizationService()
         }

@@ -104,10 +104,6 @@ public class ADTableQueryService extends QueryService<ADTable> {
                 specification = specification.and(buildSpecification(criteria.getADColumnId(),
                     root -> root.join(ADTable_.aDColumns, JoinType.LEFT).get(ADColumn_.id)));
             }
-            if (criteria.getAdClientId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAdClientId(),
-                    root -> root.join(ADTable_.adClient, JoinType.LEFT).get(ADClient_.id)));
-            }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(ADTable_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));

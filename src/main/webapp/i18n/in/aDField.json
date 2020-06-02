@@ -28,14 +28,20 @@
       "gridSequence": "Grid Sequence",
       "detailSequence": "Detail Sequence",
       "displayLogic": "Display Logic",
+      "readOnlyLogic": "Read Only Logic",
       "writable": "Writable",
       "columnNo": "Column No",
       "columnSpan": "Column Span",
+      "updatable": "Updatable",
+      "alwaysUpdatable": "Always Updatable",
+      "copyable": "Copyable",
+      "defaultValue": "Default Value",
+      "formatPattern": "Format Pattern",
       "active": "Active",
-      "adClient": "Ad Client",
       "adOrganization": "Ad Organization",
       "adReference": "Ad Reference",
       "adColumn": "Ad Column",
+      "adValidationRule": "Ad Validation Rule",
       "adTab": "Ad Tab"
     }
   }

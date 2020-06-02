@@ -2,7 +2,13 @@ package com.bhp.opusb.service;
 
 import java.util.List;
 
-import javax.persistence.criteria.JoinType;
+// for static metamodels
+import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.ADOrganization_;
+import com.bhp.opusb.repository.ADOrganizationRepository;
+import com.bhp.opusb.service.dto.ADOrganizationCriteria;
+import com.bhp.opusb.service.dto.ADOrganizationDTO;
+import com.bhp.opusb.service.mapper.ADOrganizationMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
-
-import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.*; // for static metamodels
-import com.bhp.opusb.repository.ADOrganizationRepository;
-import com.bhp.opusb.service.dto.ADOrganizationCriteria;
-import com.bhp.opusb.service.dto.ADOrganizationDTO;
-import com.bhp.opusb.service.mapper.ADOrganizationMapper;
 
 /**
  * Service for executing complex queries for {@link ADOrganization} entities in the database.
@@ -102,10 +101,6 @@ public class ADOrganizationQueryService extends QueryService<ADOrganization> {
             }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADOrganization_.active));
-            }
-            if (criteria.getAdClientId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAdClientId(),
-                    root -> root.join(ADOrganization_.adClient, JoinType.LEFT).get(ADClient_.id)));
             }
         }
         return specification;

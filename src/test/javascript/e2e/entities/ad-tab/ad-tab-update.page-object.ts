@@ -12,6 +12,8 @@ export default class ADTabUpdatePage extends AlertPage {
 
   descriptionInput: ElementFinder = element(by.css('input#ad-tab-description'));
 
+  iconNameInput: ElementFinder = element(by.css('input#ad-tab-iconName'));
+
   targetEndpointInput: ElementFinder = element(by.css('input#ad-tab-targetEndpoint'));
 
   writableInput: ElementFinder = element(by.css('input#ad-tab-writable'));
@@ -24,9 +26,9 @@ export default class ADTabUpdatePage extends AlertPage {
 
   orderQueryInput: ElementFinder = element(by.css('input#ad-tab-orderQuery'));
 
-  activeInput: ElementFinder = element(by.css('input#ad-tab-active'));
-  adClientSelect = element(by.css('select#ad-tab-adClient'));
+  tabSequenceInput: ElementFinder = element(by.css('input#ad-tab-tabSequence'));
 
+  activeInput: ElementFinder = element(by.css('input#ad-tab-active'));
   adOrganizationSelect = element(by.css('select#ad-tab-adOrganization'));
 
   adTableSelect = element(by.css('select#ad-tab-adTable'));

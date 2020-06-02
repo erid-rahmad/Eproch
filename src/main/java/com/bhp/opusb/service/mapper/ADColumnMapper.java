@@ -1,5 +1,6 @@
 package com.bhp.opusb.service.mapper;
 
+
 import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.service.dto.ADColumnDTO;
 
@@ -9,19 +10,19 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link ADColumn} and its DTO {@link ADColumnDTO}.
  */
-@Mapper(componentModel = "spring", uses = { ADClientMapper.class, ADOrganizationMapper.class, ADReferenceMapper.class,
-        ADTableMapper.class })
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, ADReferenceMapper.class, AdValidationRuleMapper.class, ADTableMapper.class})
 public interface ADColumnMapper extends EntityMapper<ADColumnDTO, ADColumn> {
 
-    @Mapping(source = "adClient.id", target = "adClientId")
-    @Mapping(source = "adClient.name", target = "adClientName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
+    @Mapping(source = "adReference.id", target = "adReferenceId")
+    @Mapping(source = "adValidationRule.id", target = "adValidationRuleId")
     @Mapping(source = "adTable.id", target = "adTableId")
     ADColumnDTO toDto(ADColumn aDColumn);
 
-    @Mapping(source = "adClientId", target = "adClient")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
+    @Mapping(source = "adReferenceId", target = "adReference")
+    @Mapping(source = "adValidationRuleId", target = "adValidationRule")
     @Mapping(source = "adTableId", target = "adTable")
     ADColumn toEntity(ADColumnDTO aDColumnDTO);
 

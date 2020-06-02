@@ -97,6 +97,9 @@ public class ADTabQueryService extends QueryService<ADTab> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), ADTab_.description));
             }
+            if (criteria.getIconName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getIconName(), ADTab_.iconName));
+            }
             if (criteria.getTargetEndpoint() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTargetEndpoint(), ADTab_.targetEndpoint));
             }
@@ -115,6 +118,9 @@ public class ADTabQueryService extends QueryService<ADTab> {
             if (criteria.getOrderQuery() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getOrderQuery(), ADTab_.orderQuery));
             }
+            if (criteria.getTabSequence() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getTabSequence(), ADTab_.tabSequence));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADTab_.active));
             }
@@ -125,10 +131,6 @@ public class ADTabQueryService extends QueryService<ADTab> {
             if (criteria.getADFieldId() != null) {
                 specification = specification.and(buildSpecification(criteria.getADFieldId(),
                     root -> root.join(ADTab_.aDFields, JoinType.LEFT).get(ADField_.id)));
-            }
-            if (criteria.getAdClientId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAdClientId(),
-                    root -> root.join(ADTab_.adClient, JoinType.LEFT).get(ADClient_.id)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),

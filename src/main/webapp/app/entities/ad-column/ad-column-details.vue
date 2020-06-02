@@ -71,6 +71,12 @@
                         <span>{{aDColumn.mandatoryLogic}}</span>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.displayLogic')">Display Logic</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.displayLogic}}</span>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDColumn.readOnlyLogic')">Read Only Logic</span>
                     </dt>
                     <dd>
@@ -81,6 +87,18 @@
                     </dt>
                     <dd>
                         <span>{{aDColumn.updatable}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.alwaysUpdatable')">Always Updatable</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.alwaysUpdatable}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.copyable')">Copyable</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.copyable}}</span>
                     </dd>
                     <dt>
                         <span v-text="$t('opusWebApp.aDColumn.defaultValue')">Default Value</span>
@@ -119,18 +137,28 @@
                         <span>{{aDColumn.maxValue}}</span>
                     </dd>
                     <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.identifier')">Identifier</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.identifier}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.defaultSelection')">Default Selection</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.defaultSelection}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.selectionSequence')">Selection Sequence</span>
+                    </dt>
+                    <dd>
+                        <span>{{aDColumn.selectionSequence}}</span>
+                    </dd>
+                    <dt>
                         <span v-text="$t('opusWebApp.aDColumn.active')">Active</span>
                     </dt>
                     <dd>
                         <span>{{aDColumn.active}}</span>
-                    </dd>
-                    <dt>
-                        <span v-text="$t('opusWebApp.aDColumn.adClient')">Ad Client</span>
-                    </dt>
-                    <dd>
-                        <div v-if="aDColumn.adClientId">
-                            <router-link :to="{name: 'ADClientView', params: {aDClientId: aDColumn.adClientId}}">{{aDColumn.adClientId}}</router-link>
-                        </div>
                     </dd>
                     <dt>
                         <span v-text="$t('opusWebApp.aDColumn.adOrganization')">Ad Organization</span>
@@ -146,6 +174,14 @@
                     <dd>
                         <div v-if="aDColumn.adReferenceId">
                             <router-link :to="{name: 'ADReferenceView', params: {aDReferenceId: aDColumn.adReferenceId}}">{{aDColumn.adReferenceId}}</router-link>
+                        </div>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.aDColumn.adValidationRule')">Ad Validation Rule</span>
+                    </dt>
+                    <dd>
+                        <div v-if="aDColumn.adValidationRuleId">
+                            <router-link :to="{name: 'AdValidationRuleView', params: {adValidationRuleId: aDColumn.adValidationRuleId}}">{{aDColumn.adValidationRuleId}}</router-link>
                         </div>
                     </dd>
                     <dt>

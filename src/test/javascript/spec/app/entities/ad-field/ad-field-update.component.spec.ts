@@ -9,13 +9,13 @@ import ADFieldUpdateComponent from '@/entities/ad-field/ad-field-update.vue';
 import ADFieldClass from '@/entities/ad-field/ad-field-update.component';
 import ADFieldService from '@/entities/ad-field/ad-field.service';
 
-import ADClientService from '@/entities/ad-client/ad-client.service';
-
 import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
 
 import ADReferenceService from '@/entities/ad-reference/ad-reference.service';
 
 import ADColumnService from '@/entities/ad-column/ad-column.service';
+
+import AdValidationRuleService from '@/entities/ad-validation-rule/ad-validation-rule.service';
 
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
 
@@ -46,13 +46,13 @@ describe('Component Tests', () => {
           alertService: () => new AlertService(store),
           aDFieldService: () => aDFieldServiceStub,
 
-          aDClientService: () => new ADClientService(),
-
           aDOrganizationService: () => new ADOrganizationService(),
 
           aDReferenceService: () => new ADReferenceService(),
 
           aDColumnService: () => new ADColumnService(),
+
+          adValidationRuleService: () => new AdValidationRuleService(),
 
           aDTabService: () => new ADTabService()
         }

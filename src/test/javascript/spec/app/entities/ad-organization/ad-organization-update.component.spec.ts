@@ -9,8 +9,6 @@ import ADOrganizationUpdateComponent from '@/entities/ad-organization/ad-organiz
 import ADOrganizationClass from '@/entities/ad-organization/ad-organization-update.component';
 import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
 
-import ADClientService from '@/entities/ad-client/ad-client.service';
-
 const localVue = createLocalVue();
 
 config.initVueApp(localVue);
@@ -36,9 +34,7 @@ describe('Component Tests', () => {
         router,
         provide: {
           alertService: () => new AlertService(store),
-          aDOrganizationService: () => aDOrganizationServiceStub,
-
-          aDClientService: () => new ADClientService()
+          aDOrganizationService: () => aDOrganizationServiceStub
         }
       });
       comp = wrapper.vm;

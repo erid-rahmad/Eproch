@@ -97,6 +97,9 @@ public class ADWindowQueryService extends QueryService<ADWindow> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), ADWindow_.description));
             }
+            if (criteria.getTitleLogic() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getTitleLogic(), ADWindow_.titleLogic));
+            }
             if (criteria.getType() != null) {
                 specification = specification.and(buildSpecification(criteria.getType(), ADWindow_.type));
             }
@@ -106,10 +109,6 @@ public class ADWindowQueryService extends QueryService<ADWindow> {
             if (criteria.getADTabId() != null) {
                 specification = specification.and(buildSpecification(criteria.getADTabId(),
                     root -> root.join(ADWindow_.aDTabs, JoinType.LEFT).get(ADTab_.id)));
-            }
-            if (criteria.getAdClientId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAdClientId(),
-                    root -> root.join(ADWindow_.adClient, JoinType.LEFT).get(ADClient_.id)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),

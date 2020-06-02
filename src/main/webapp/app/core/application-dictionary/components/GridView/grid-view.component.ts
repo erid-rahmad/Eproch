@@ -4,15 +4,12 @@ import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import { ElTable } from 'element-ui/types/table';
 import { IADField } from '@/shared/model/ad-field.model';
 import { ADColumnType } from '@/shared/model/ad-column.model';
-import { ActionToolbarEventBus } from '../ActionToolbar/action-toolbar-event-bus';
 import schema from 'async-validator';
 import { getValidatorType } from '@/utils/validate';
 import { ADReferenceType } from '@/shared/model/ad-reference.model';
 import { kebabCase } from "lodash";
 import pluralize from "pluralize";
 import { AccountStoreModule } from '@/shared/config/store/account-store';
-import { IADTab } from '@/shared/model/ad-tab.model';
-import { create } from 'domain';
 import _ from 'lodash';
 
 const GridViewProps = Vue.extend({
@@ -94,7 +91,7 @@ export default class GridView extends GridViewProps {
   private parentId: number = 0;
 
   getTableDirectReferences(field: any): any[] {
-    if (field == null) {
+    if (this.currentRecord === null || field == null) {
       return [];
     }
     const key = `${this.currentRecord.id}-${field.adColumn.name}`;
@@ -108,7 +105,7 @@ export default class GridView extends GridViewProps {
   }
 
   @Watch('observableTabProperties')
-  onDependantPropertiesChange(tab: any) {
+  onObservableTabPropertiesChange(tab: any) {
     // Reset the pagination.
     this.page = 1;
     this.propOrder = 'id';
@@ -146,19 +143,19 @@ export default class GridView extends GridViewProps {
     this.onFieldsChange(this.fields);
     this.searchPanelEventBus?.$on('filter-updated', this.filterRecord);
     
-    this.toolbarEventBus?.$on('add-record', this.addBlankRow);
-    this.toolbarEventBus?.$on('copy-record', this.copyRow);
-    this.toolbarEventBus?.$on('save-record', this.save);
-    this.toolbarEventBus?.$on('cancel-operation', this.cancelOperation);
+    this.toolbarEventBus.$on('add-record', this.addBlankRow);
+    this.toolbarEventBus.$on('copy-record', this.copyRow);
+    this.toolbarEventBus.$on('save-record', this.save);
+    this.toolbarEventBus.$on('cancel-operation', this.cancelOperation);
   }
 
   beforeDestroy() {
     this.searchPanelEventBus?.$off('filter-updated', this.filterRecord);
 
-    this.toolbarEventBus?.$off('add-record', this.addBlankRow);
-    this.toolbarEventBus?.$off('copy-record', this.copyRow);
-    this.toolbarEventBus?.$off('save-record', this.save);
-    this.toolbarEventBus?.$off('cancel-operation', this.cancelOperation);
+    this.toolbarEventBus.$off('add-record', this.addBlankRow);
+    this.toolbarEventBus.$off('copy-record', this.copyRow);
+    this.toolbarEventBus.$off('save-record', this.save);
+    this.toolbarEventBus.$off('cancel-operation', this.cancelOperation);
   }
   // End of lifecycle events.
 
@@ -212,26 +209,25 @@ export default class GridView extends GridViewProps {
   }
 
   public cancelOperation() {
-    // Canceling additional row.
-    this.editing = false;
-
     // New blank row and duplicate row are considered new record.
     if (this.newRecord) {
       const index = this.gridData.indexOf(this.currentRecord);
       this.newRecord = false;
       this.currentRecord = null;
+      this.editing = false;
       if (this.gridData.length > 1) {
-        (<ElTable>this.$refs.grid).setCurrentRow(this.gridData[index > 0 ? index - 1 : 1]);
+        this.setRow(this.gridData[index > 0 ? index - 1 : 1]);
       }
       this.$nextTick(() => {
         this.gridData.splice(index, 1);
       })
-    } else {
+    } else if (this.editing) {
       if (!_.isEqual(this.originalRecord, this.currentRecord)) {
         for (let key in this.currentRecord) {
           this.currentRecord[key] = this.originalRecord[key];
         }
       }
+      this.editing = false;
       this.$set(this.currentRecord, 'editing', this.editing);
     }
   }
@@ -269,11 +265,14 @@ export default class GridView extends GridViewProps {
       let record = {
         id: 0
       };
+      if (this.parentId) {
+        record[this.tab.foreignColumnName] = this.parentId;
+      }
       this.prepareFormAndValidation(record);
       await this.initRelationships(record);
       this.gridData.splice(0, 0, record);
       this.$nextTick(() => {
-        (<ElTable>this.$refs.grid).setCurrentRow(record);
+        this.setRow(record);
         this.activateInlineEditing(record);
         this.newRecord = true;
       });
@@ -290,7 +289,7 @@ export default class GridView extends GridViewProps {
       await this.initRelationships(record);
       this.gridData.splice(currentIndex + 1, 0, record);
       this.$nextTick(() => {
-        (<ElTable>this.$refs.grid).setCurrentRow(record);
+        this.setRow(record);
         this.activateInlineEditing(record);
         this.newRecord = true;
       });
@@ -302,6 +301,7 @@ export default class GridView extends GridViewProps {
       const column = field.adColumn;
 
       if (newRecord) {
+        // TODO Set the default value based on the field/column definition. 
         let defaultValue = column.defaultValue?.match(/\{([\#]?[\w]+)\}/);
         if (defaultValue) {
           defaultValue = AccountStoreModule.properties.get(defaultValue[1]);
@@ -361,6 +361,11 @@ export default class GridView extends GridViewProps {
 
   private saveRecord(record: any, callback?: (record?: any) => void) {
     const update: boolean = record.id > 0;
+
+    if (!update) {
+      delete record.id;
+    }
+
     const service = this.dynamicWindowService(this.baseApiUrl);
     const saveState = update ? service.update(record) : service.create(record);
     saveState.then(data => {
@@ -416,7 +421,7 @@ export default class GridView extends GridViewProps {
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
         if (this.gridData.length) {
-          (<ElTable>this.$refs.grid).setCurrentRow(this.gridData[0]);
+          this.setRow(this.gridData[0]);
         }
       }).
       catch((err) => {
@@ -470,6 +475,10 @@ export default class GridView extends GridViewProps {
     this.height = grid.clientHeight;
   }
 
+  private setRow(record: any) {
+    (<ElTable>this.$refs.grid).setCurrentRow(record);
+  }
+
   private transition(): void {
     this.retrieveAllRecords();
   }
@@ -515,8 +524,8 @@ export default class GridView extends GridViewProps {
   }
 
   public isReadonly(row: any, field: any): boolean {
-    const newRecord: boolean = row.id > 0;
-    return !field.writable || (!newRecord && !field.adColumn.updatable) || !field.adColumn.updatable;
+    const newRecord: boolean = !row.id;
+    return !this.tab.writable || !field.writable || (!newRecord && !field.adColumn.updatable);
   }
 
   public getFieldWidth(field: any) {

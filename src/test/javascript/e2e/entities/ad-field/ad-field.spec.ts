@@ -141,6 +141,10 @@ describe('ADField e2e test', () => {
       expect(await updatePage.displayLogicInput.getAttribute('value')).to.match(/displayLogic/);
 
 
+      await updatePage.readOnlyLogicInput.sendKeys('readOnlyLogic');
+      expect(await updatePage.readOnlyLogicInput.getAttribute('value')).to.match(/readOnlyLogic/);
+
+
       const selectedWritable = await updatePage.writableInput.isSelected();
       if (selectedWritable) {
         await updatePage.writableInput.click();
@@ -159,6 +163,44 @@ describe('ADField e2e test', () => {
       expect(await updatePage.columnSpanInput.getAttribute('value')).to.eq('5');
 
 
+      const selectedUpdatable = await updatePage.updatableInput.isSelected();
+      if (selectedUpdatable) {
+        await updatePage.updatableInput.click();
+        expect(await updatePage.updatableInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.updatableInput.click();
+        expect(await updatePage.updatableInput.isSelected()).to.be.true;
+      }
+
+
+      const selectedAlwaysUpdatable = await updatePage.alwaysUpdatableInput.isSelected();
+      if (selectedAlwaysUpdatable) {
+        await updatePage.alwaysUpdatableInput.click();
+        expect(await updatePage.alwaysUpdatableInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.alwaysUpdatableInput.click();
+        expect(await updatePage.alwaysUpdatableInput.isSelected()).to.be.true;
+      }
+
+
+      const selectedCopyable = await updatePage.copyableInput.isSelected();
+      if (selectedCopyable) {
+        await updatePage.copyableInput.click();
+        expect(await updatePage.copyableInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.copyableInput.click();
+        expect(await updatePage.copyableInput.isSelected()).to.be.true;
+      }
+
+
+      await updatePage.defaultValueInput.sendKeys('defaultValue');
+      expect(await updatePage.defaultValueInput.getAttribute('value')).to.match(/defaultValue/);
+
+
+      await updatePage.formatPatternInput.sendKeys('formatPattern');
+      expect(await updatePage.formatPatternInput.getAttribute('value')).to.match(/formatPattern/);
+
+
       const selectedActive = await updatePage.activeInput.isSelected();
       if (selectedActive) {
         await updatePage.activeInput.click();
@@ -168,10 +210,10 @@ describe('ADField e2e test', () => {
         expect(await updatePage.activeInput.isSelected()).to.be.true;
       }
 
-      // await  selectLastOption(updatePage.adClientSelect);
       // await  selectLastOption(updatePage.adOrganizationSelect);
       // await  selectLastOption(updatePage.adReferenceSelect);
       // await  selectLastOption(updatePage.adColumnSelect);
+      // await  selectLastOption(updatePage.adValidationRuleSelect);
       // await  selectLastOption(updatePage.adTabSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
@@ -308,6 +350,10 @@ describe('ADField e2e test', () => {
           await updatePage.displayLogicInput.sendKeys('modified');
           expect(await updatePage.displayLogicInput.getAttribute('value')).to.match(/modified/);
 
+          await updatePage.readOnlyLogicInput.clear();
+          await updatePage.readOnlyLogicInput.sendKeys('modified');
+          expect(await updatePage.readOnlyLogicInput.getAttribute('value')).to.match(/modified/);
+
           const selectedWritable = await updatePage.writableInput.isSelected();
           if (selectedWritable) {
             await updatePage.writableInput.click();
@@ -324,6 +370,41 @@ describe('ADField e2e test', () => {
           await clear(updatePage.columnSpanInput);
           await updatePage.columnSpanInput.sendKeys('6');
           expect(await updatePage.columnSpanInput.getAttribute('value')).to.eq('6');
+
+          const selectedUpdatable = await updatePage.updatableInput.isSelected();
+          if (selectedUpdatable) {
+            await updatePage.updatableInput.click();
+            expect(await updatePage.updatableInput.isSelected()).to.be.false;
+          } else {
+            await updatePage.updatableInput.click();
+            expect(await updatePage.updatableInput.isSelected()).to.be.true;
+          }
+
+          const selectedAlwaysUpdatable = await updatePage.alwaysUpdatableInput.isSelected();
+          if (selectedAlwaysUpdatable) {
+            await updatePage.alwaysUpdatableInput.click();
+            expect(await updatePage.alwaysUpdatableInput.isSelected()).to.be.false;
+          } else {
+            await updatePage.alwaysUpdatableInput.click();
+            expect(await updatePage.alwaysUpdatableInput.isSelected()).to.be.true;
+          }
+
+          const selectedCopyable = await updatePage.copyableInput.isSelected();
+          if (selectedCopyable) {
+            await updatePage.copyableInput.click();
+            expect(await updatePage.copyableInput.isSelected()).to.be.false;
+          } else {
+            await updatePage.copyableInput.click();
+            expect(await updatePage.copyableInput.isSelected()).to.be.true;
+          }
+
+          await updatePage.defaultValueInput.clear();
+          await updatePage.defaultValueInput.sendKeys('modified');
+          expect(await updatePage.defaultValueInput.getAttribute('value')).to.match(/modified/);
+
+          await updatePage.formatPatternInput.clear();
+          await updatePage.formatPatternInput.sendKeys('modified');
+          expect(await updatePage.formatPatternInput.getAttribute('value')).to.match(/modified/);
 
           const selectedActive = await updatePage.activeInput.isSelected();
           if (selectedActive) {

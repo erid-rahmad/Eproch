@@ -52,9 +52,14 @@
               <span slot="label">
                 <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
               </span>
+              <tab-toolbar
+                :tabName="'' + index"
+                :event-bus="secondaryToolbarEventBus"
+              />
               <grid-view
                 ref="lineGrid"
                 :tab="tab"
+                :toolbar-event-bus="secondaryToolbarEventBus"
                 lazy-load
               />
             </el-tab-pane>

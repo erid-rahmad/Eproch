@@ -2,11 +2,10 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -50,21 +49,33 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     private StringFilter displayLogic;
 
+    private StringFilter readOnlyLogic;
+
     private BooleanFilter writable;
 
     private IntegerFilter columnNo;
 
     private IntegerFilter columnSpan;
 
-    private BooleanFilter active;
+    private BooleanFilter updatable;
 
-    private LongFilter adClientId;
+    private BooleanFilter alwaysUpdatable;
+
+    private BooleanFilter copyable;
+
+    private StringFilter defaultValue;
+
+    private StringFilter formatPattern;
+
+    private BooleanFilter active;
 
     private LongFilter adOrganizationId;
 
     private LongFilter adReferenceId;
 
     private LongFilter adColumnId;
+
+    private LongFilter adValidationRuleId;
 
     private LongFilter adTabId;
 
@@ -85,14 +96,20 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.gridSequence = other.gridSequence == null ? null : other.gridSequence.copy();
         this.detailSequence = other.detailSequence == null ? null : other.detailSequence.copy();
         this.displayLogic = other.displayLogic == null ? null : other.displayLogic.copy();
+        this.readOnlyLogic = other.readOnlyLogic == null ? null : other.readOnlyLogic.copy();
         this.writable = other.writable == null ? null : other.writable.copy();
         this.columnNo = other.columnNo == null ? null : other.columnNo.copy();
         this.columnSpan = other.columnSpan == null ? null : other.columnSpan.copy();
+        this.updatable = other.updatable == null ? null : other.updatable.copy();
+        this.alwaysUpdatable = other.alwaysUpdatable == null ? null : other.alwaysUpdatable.copy();
+        this.copyable = other.copyable == null ? null : other.copyable.copy();
+        this.defaultValue = other.defaultValue == null ? null : other.defaultValue.copy();
+        this.formatPattern = other.formatPattern == null ? null : other.formatPattern.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.adClientId = other.adClientId == null ? null : other.adClientId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
         this.adColumnId = other.adColumnId == null ? null : other.adColumnId.copy();
+        this.adValidationRuleId = other.adValidationRuleId == null ? null : other.adValidationRuleId.copy();
         this.adTabId = other.adTabId == null ? null : other.adTabId.copy();
     }
 
@@ -205,6 +222,14 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.displayLogic = displayLogic;
     }
 
+    public StringFilter getReadOnlyLogic() {
+        return readOnlyLogic;
+    }
+
+    public void setReadOnlyLogic(StringFilter readOnlyLogic) {
+        this.readOnlyLogic = readOnlyLogic;
+    }
+
     public BooleanFilter getWritable() {
         return writable;
     }
@@ -229,20 +254,52 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.columnSpan = columnSpan;
     }
 
+    public BooleanFilter getUpdatable() {
+        return updatable;
+    }
+
+    public void setUpdatable(BooleanFilter updatable) {
+        this.updatable = updatable;
+    }
+
+    public BooleanFilter getAlwaysUpdatable() {
+        return alwaysUpdatable;
+    }
+
+    public void setAlwaysUpdatable(BooleanFilter alwaysUpdatable) {
+        this.alwaysUpdatable = alwaysUpdatable;
+    }
+
+    public BooleanFilter getCopyable() {
+        return copyable;
+    }
+
+    public void setCopyable(BooleanFilter copyable) {
+        this.copyable = copyable;
+    }
+
+    public StringFilter getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(StringFilter defaultValue) {
+        this.defaultValue = defaultValue;
+    }
+
+    public StringFilter getFormatPattern() {
+        return formatPattern;
+    }
+
+    public void setFormatPattern(StringFilter formatPattern) {
+        this.formatPattern = formatPattern;
+    }
+
     public BooleanFilter getActive() {
         return active;
     }
 
     public void setActive(BooleanFilter active) {
         this.active = active;
-    }
-
-    public LongFilter getAdClientId() {
-        return adClientId;
-    }
-
-    public void setAdClientId(LongFilter adClientId) {
-        this.adClientId = adClientId;
     }
 
     public LongFilter getAdOrganizationId() {
@@ -267,6 +324,14 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     public void setAdColumnId(LongFilter adColumnId) {
         this.adColumnId = adColumnId;
+    }
+
+    public LongFilter getAdValidationRuleId() {
+        return adValidationRuleId;
+    }
+
+    public void setAdValidationRuleId(LongFilter adValidationRuleId) {
+        this.adValidationRuleId = adValidationRuleId;
     }
 
     public LongFilter getAdTabId() {
@@ -301,14 +366,20 @@ public class ADFieldCriteria implements Serializable, Criteria {
             Objects.equals(gridSequence, that.gridSequence) &&
             Objects.equals(detailSequence, that.detailSequence) &&
             Objects.equals(displayLogic, that.displayLogic) &&
+            Objects.equals(readOnlyLogic, that.readOnlyLogic) &&
             Objects.equals(writable, that.writable) &&
             Objects.equals(columnNo, that.columnNo) &&
             Objects.equals(columnSpan, that.columnSpan) &&
+            Objects.equals(updatable, that.updatable) &&
+            Objects.equals(alwaysUpdatable, that.alwaysUpdatable) &&
+            Objects.equals(copyable, that.copyable) &&
+            Objects.equals(defaultValue, that.defaultValue) &&
+            Objects.equals(formatPattern, that.formatPattern) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(adClientId, that.adClientId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adReferenceId, that.adReferenceId) &&
             Objects.equals(adColumnId, that.adColumnId) &&
+            Objects.equals(adValidationRuleId, that.adValidationRuleId) &&
             Objects.equals(adTabId, that.adTabId);
     }
 
@@ -328,14 +399,20 @@ public class ADFieldCriteria implements Serializable, Criteria {
         gridSequence,
         detailSequence,
         displayLogic,
+        readOnlyLogic,
         writable,
         columnNo,
         columnSpan,
+        updatable,
+        alwaysUpdatable,
+        copyable,
+        defaultValue,
+        formatPattern,
         active,
-        adClientId,
         adOrganizationId,
         adReferenceId,
         adColumnId,
+        adValidationRuleId,
         adTabId
         );
     }
@@ -356,14 +433,20 @@ public class ADFieldCriteria implements Serializable, Criteria {
                 (gridSequence != null ? "gridSequence=" + gridSequence + ", " : "") +
                 (detailSequence != null ? "detailSequence=" + detailSequence + ", " : "") +
                 (displayLogic != null ? "displayLogic=" + displayLogic + ", " : "") +
+                (readOnlyLogic != null ? "readOnlyLogic=" + readOnlyLogic + ", " : "") +
                 (writable != null ? "writable=" + writable + ", " : "") +
                 (columnNo != null ? "columnNo=" + columnNo + ", " : "") +
                 (columnSpan != null ? "columnSpan=" + columnSpan + ", " : "") +
+                (updatable != null ? "updatable=" + updatable + ", " : "") +
+                (alwaysUpdatable != null ? "alwaysUpdatable=" + alwaysUpdatable + ", " : "") +
+                (copyable != null ? "copyable=" + copyable + ", " : "") +
+                (defaultValue != null ? "defaultValue=" + defaultValue + ", " : "") +
+                (formatPattern != null ? "formatPattern=" + formatPattern + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (adClientId != null ? "adClientId=" + adClientId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
                 (adColumnId != null ? "adColumnId=" + adColumnId + ", " : "") +
+                (adValidationRuleId != null ? "adValidationRuleId=" + adValidationRuleId + ", " : "") +
                 (adTabId != null ? "adTabId=" + adTabId + ", " : "") +
             "}";
     }

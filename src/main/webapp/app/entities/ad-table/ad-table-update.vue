@@ -30,18 +30,6 @@
                             :class="{'valid': !$v.aDTable.active.$invalid, 'invalid': $v.aDTable.active.$invalid }" v-model="$v.aDTable.active.$model" />
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.aDTable.adClient')" for="ad-table-adClient">Ad Client</label>
-                        <select class="form-control" id="ad-table-adClient" name="adClient" v-model="$v.aDTable.adClientId.$model" required>
-                            <option v-if="!aDTable.adClientId" v-bind:value="null" selected></option>
-                            <option v-bind:value="aDClientOption.id" v-for="aDClientOption in aDClients" :key="aDClientOption.id">{{aDClientOption.id}}</option>
-                        </select>
-                    </div>
-                    <div v-if="$v.aDTable.adClientId.$anyDirty && $v.aDTable.adClientId.$invalid">
-                        <small class="form-text text-danger" v-if="!$v.aDTable.adClientId.required" v-text="$t('entity.validation.required')">
-                            This field is required.
-                        </small>
-                    </div>
-                    <div class="form-group">
                         <label class="form-control-label" v-text="$t('opusWebApp.aDTable.adOrganization')" for="ad-table-adOrganization">Ad Organization</label>
                         <select class="form-control" id="ad-table-adOrganization" name="adOrganization" v-model="$v.aDTable.adOrganizationId.$model" required>
                             <option v-if="!aDTable.adOrganizationId" v-bind:value="null" selected></option>

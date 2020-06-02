@@ -11,8 +11,6 @@ import ADTabService from '@/entities/ad-tab/ad-tab.service';
 
 import ADFieldService from '@/entities/ad-field/ad-field.service';
 
-import ADClientService from '@/entities/ad-client/ad-client.service';
-
 import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
 
 import ADTableService from '@/entities/ad-table/ad-table.service';
@@ -49,8 +47,6 @@ describe('Component Tests', () => {
           aDTabService: () => aDTabServiceStub,
 
           aDFieldService: () => new ADFieldService(),
-
-          aDClientService: () => new ADClientService(),
 
           aDOrganizationService: () => new ADOrganizationService(),
 
