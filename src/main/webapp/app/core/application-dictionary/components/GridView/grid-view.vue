@@ -15,12 +15,14 @@
       :empty-text="gridSchema.emptyText"
       @current-change="changeCurrentRow"
       @sort-change="changeOrder"
+      @select="changeMultipleRowSelection"
       @selection-change="changeRowSelection"
       @row-dblclick="activateInlineEditing"
     >
       <el-table-column
         fixed
         type="selection"
+        align="center"
         width="42">
       </el-table-column>
       <el-table-column
@@ -145,6 +147,36 @@
       layout="total, sizes, prev, pager, next, jumper"
       :total="queryCount"
     />
+
+        <el-dialog
+            width="35%"
+            :visible.sync="showDeleteDialog"
+            :title="$t('entity.delete.title')"
+        >
+            <template>
+                <!--<span>{{ $t('opusWebApp.country.delete.question', {'id': ""}) }}</span>-->
+                <span>Are you sure you want to delete row?</span>
+                <div slot="footer">
+                    <el-button 
+                        style="margin-left: 0px;"
+                        size="mini"
+                        icon="el-icon-delete" 
+                        type="danger" 
+                        @click="removeCountry()">
+                        {{ $t('entity.action.delete') }}
+                    </el-button>
+                    <el-button 
+                        style="margin-left: 0px;"
+                        size="mini"
+                        icon="el-icon-close" 
+                        @click="closeDialog()">
+                        {{ $t('entity.action.cancel') }}
+                    </el-button>
+                </div>
+            </template>
+
+        </el-dialog>
+
   </div>
 </template>
 

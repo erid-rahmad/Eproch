@@ -69,6 +69,12 @@ export default class GridView extends GridViewProps {
 
   // Multiple row selection.
   selectedRows: any = [];
+  multipleSelectedRowCheckbox: any = [];
+  multipleSelectedRow: any = [];
+  filterVal: any = [];
+
+  //Dialog
+  showDeleteDialog: boolean = false;
 
   // Inline editing mode needs these data.
   originalRecord: any = {};
@@ -89,6 +95,7 @@ export default class GridView extends GridViewProps {
   private baseApiUrl: string = '';
   private filterQuery: string = '';
   private parentId: number = 0;
+  private getId: any = null;
 
   getTableDirectReferences(field: any): any[] {
     if (this.currentRecord === null || field == null) {
@@ -143,19 +150,23 @@ export default class GridView extends GridViewProps {
     this.onFieldsChange(this.fields);
     this.searchPanelEventBus?.$on('filter-updated', this.filterRecord);
     
-    this.toolbarEventBus.$on('add-record', this.addBlankRow);
-    this.toolbarEventBus.$on('copy-record', this.copyRow);
-    this.toolbarEventBus.$on('save-record', this.save);
-    this.toolbarEventBus.$on('cancel-operation', this.cancelOperation);
+    this.toolbarEventBus?.$on('add-record', this.addBlankRow);
+    this.toolbarEventBus?.$on('copy-record', this.copyRow);
+    this.toolbarEventBus?.$on('save-record', this.save);
+    this.toolbarEventBus?.$on('cancel-operation', this.cancelOperation);
+    this.toolbarEventBus?.$on('delete-record', this.deleteRow);
+    this.toolbarEventBus?.$on('refresh-data', this.refreshData);
   }
 
   beforeDestroy() {
     this.searchPanelEventBus?.$off('filter-updated', this.filterRecord);
 
-    this.toolbarEventBus.$off('add-record', this.addBlankRow);
-    this.toolbarEventBus.$off('copy-record', this.copyRow);
-    this.toolbarEventBus.$off('save-record', this.save);
-    this.toolbarEventBus.$off('cancel-operation', this.cancelOperation);
+    this.toolbarEventBus?.$off('add-record', this.addBlankRow);
+    this.toolbarEventBus?.$off('copy-record', this.copyRow);
+    this.toolbarEventBus?.$off('save-record', this.save);
+    this.toolbarEventBus?.$off('cancel-operation', this.cancelOperation);
+    this.toolbarEventBus?.$off('delete-record', this.deleteRow);
+    this.toolbarEventBus?.$off('refresh-data', this.refreshData);
   }
   // End of lifecycle events.
 
@@ -202,6 +213,68 @@ export default class GridView extends GridViewProps {
   public changeRowSelection(rows: Array<any>) {
     this.selectedRows = rows;
     this.$emit('row-selection-change', rows);
+  }
+
+  public changeMultipleRowSelection(value: any, o: any) {
+
+    this.multipleSelectedRow = value;
+    
+  }
+  
+  public handleMultipleDataToJson(params: any) {
+    this.gridFields.forEach((r, i)=>{
+      this.filterVal.push(this.gridFields[i].adColumn.name);
+    })
+
+    this.getId = params;
+  }
+
+  public removeCountry(): void {
+    for (let i = 0; i < this.multipleSelectedRow.length; i++) {
+      const service = this.dynamicWindowService(this.baseApiUrl);
+      const saveState = service.delete(this.getId[i].id);
+      saveState.then(data => {
+        this.retrieveAllRecords();
+        const message = this.$t(`opusWebApp.applicationDictionary.deleted`, {
+          tabName: this.tabName,
+          param: data.id
+        });
+        this.toolbarEventBus.$emit('record-saved');
+        
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        });
+
+        this.getId[i] = null;
+        this.multipleSelectedRow = [];
+        this.closeDialog();
+      })
+    }
+  }
+
+  public closeDialog(): void {
+    this.showDeleteDialog = false;
+  }
+
+  private deleteRow(){
+    if (this.multipleSelectedRow.length) {
+        this.handleMultipleDataToJson(this.multipleSelectedRow);
+        this.showDeleteDialog = true;
+    }else{
+      this.$notify({
+        title: 'Warning',
+        message: "Please select at least one item",
+        type: 'warning',
+        duration: 3000
+      });
+    }
+  }
+
+  private refreshData(){
+    this.clear();
   }
 
   public setTableDirectReference(field: any): void {
@@ -586,6 +659,7 @@ export default class GridView extends GridViewProps {
   }
 
   public getFieldValue(row: any, field: any) {
+    //console.log('row:%O,field:%O', row,field)
     if (this.isTableDirectLink(field)) {
       const propName = field.adColumn.name.replace(/Id$/, 'Name');
       return row[propName] || row[field.adColumn.name];
