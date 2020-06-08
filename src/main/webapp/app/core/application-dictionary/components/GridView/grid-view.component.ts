@@ -229,7 +229,7 @@ export default class GridView extends GridViewProps {
     this.getId = params;
   }
 
-  public removeCountry(): void {
+  public actionDelete(): void {
     for (let i = 0; i < this.multipleSelectedRow.length; i++) {
       const service = this.dynamicWindowService(this.baseApiUrl);
       const saveState = service.delete(this.getId[i].id);
@@ -327,7 +327,9 @@ export default class GridView extends GridViewProps {
   }
 
   private filterRecord(query) {
-    console.log('Filter query: %O', query);
+    //console.log('Filter query: %O', query);
+    this.filterQuery = query;
+    this.retrieveAllRecords();
   }
 
   /**

@@ -33,7 +33,7 @@ export default class SearchPanel extends SearchPanelProps {
 
   @Watch('fields')
   onFieldsChange(fields: Array<IADField>) {
-    console.log('Fields updated. %O', fields);
+    //console.log('Fields updated. %O', fields);
   }
 
   created() {
@@ -42,8 +42,9 @@ export default class SearchPanel extends SearchPanelProps {
   beforeDestroy() {
   }
 
-  private onBasicSearch() {
+  private onBasicSearch(params: any) {
     // TODO build basic search filter query.
+    this.filterQuery = params;
     this.eventBus.$emit('filter-updated', this.filterQuery);
   }
 
@@ -53,11 +54,15 @@ export default class SearchPanel extends SearchPanelProps {
   }
 
   private onClear() {
-
+    this.eventBus.$emit('close-search-window');
+    this.eventBus.$emit('filter-updated', "");
   }
 
   private onTabClick() {
 
   }
 
+  private onClosePanel(){
+    this.eventBus.$emit('close-search-window');
+  }
 }

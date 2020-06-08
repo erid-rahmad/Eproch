@@ -154,7 +154,6 @@
             :title="$t('entity.delete.title')"
         >
             <template>
-                <!--<span>{{ $t('opusWebApp.country.delete.question', {'id': ""}) }}</span>-->
                 <span>Are you sure you want to delete row?</span>
                 <div slot="footer">
                     <el-button 
@@ -162,7 +161,7 @@
                         size="mini"
                         icon="el-icon-delete" 
                         type="danger" 
-                        @click="removeCountry()">
+                        @click="actionDelete()">
                         {{ $t('entity.action.delete') }}
                     </el-button>
                     <el-button 
