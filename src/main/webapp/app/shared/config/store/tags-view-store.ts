@@ -9,12 +9,14 @@ export interface ITagViewState extends Partial<Route> {
 export interface ITagsViewState {
   visitedViews: ITagViewState[]
   cachedViews: (string | undefined)[]
+  deletedViews: string[]
 }
 
 @Module({ dynamic: true, store, name: 'tagsViewStore', namespaced: true })
 class TagsViewStore extends VuexModule implements ITagsViewState {
   public visitedViews: ITagViewState[] = []
   public cachedViews: (string | undefined)[] = []
+  public deletedViews: string[] = [];
 
   @Mutation
   private ADD_VISITED_VIEW(view: ITagViewState) {
@@ -36,19 +38,17 @@ class TagsViewStore extends VuexModule implements ITagsViewState {
 
   @Mutation
   private DEL_VISITED_VIEW(view: ITagViewState) {
-    console.log('DEL_VISITED_VIEW %O', view);
     for (const [i, v] of this.visitedViews.entries()) {
       if (v.fullPath === view.fullPath) {
-        console.log('v.fullPath: %s', v.fullPath);
-        this.visitedViews.splice(i, 1)
-        break
+        this.visitedViews.splice(i, 1);
+        this.deletedViews.push(view.fullPath);
+        break;
       }
     }
   }
 
   @Mutation
   private DEL_CACHED_VIEW(view: ITagViewState) {
-    console.log('DEL_VISITED_VIEW %O', view);
     const index = this.cachedViews.indexOf(view.name)
     index > -1 && this.cachedViews.splice(index, 1)
   }
@@ -56,8 +56,11 @@ class TagsViewStore extends VuexModule implements ITagsViewState {
   @Mutation
   private DEL_OTHERS_VISITED_VIEWS(view: ITagViewState) {
     this.visitedViews = this.visitedViews.filter(v => {
-      return v.meta.affix || v.fullPath === view.fullPath
-    })
+      if (v.fullPath === view.fullPath) {
+        this.deletedViews.push(view.fullPath);
+      }
+      return v.meta.affix || v.fullPath === view.fullPath;
+    });
   }
 
   @Mutation
@@ -73,9 +76,12 @@ class TagsViewStore extends VuexModule implements ITagsViewState {
 
   @Mutation
   private DEL_ALL_VISITED_VIEWS() {
+    this.deletedViews = this.visitedViews
+      .filter(tag => !tag.meta.affix)
+      .map(tag => tag.fullPath);
+
     // keep affix tags
-    const affixTags = this.visitedViews.filter(tag => tag.meta.affix)
-    this.visitedViews = affixTags
+    this.visitedViews = this.visitedViews.filter(tag => tag.meta.affix);
   }
 
   @Mutation

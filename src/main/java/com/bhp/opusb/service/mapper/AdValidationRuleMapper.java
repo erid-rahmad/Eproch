@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface AdValidationRuleMapper extends EntityMapper<AdValidationRuleDTO, AdValidationRule> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     AdValidationRuleDTO toDto(AdValidationRule adValidationRule);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

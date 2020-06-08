@@ -1,4 +1,5 @@
-import { Component, Vue, Inject, Watch } from 'vue-property-decorator';
+import { Component, Vue, Inject, Watch, Mixins } from 'vue-property-decorator';
+import ContextVariableAccessor from "../ContextVariableAccessor";
 import { Splitpanes, Pane } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import ActionToolbar from '../ActionToolbar/action-toolbar.vue';
@@ -11,7 +12,9 @@ import ADTabService from '@/entities/ad-tab/ad-tab.service';
 import { IADTab, ADTab } from '@/shared/model/ad-tab.model';
 import buildCriteriaQueryString from '@/shared/filter/filters';
 import ADColumnService from '@/entities/ad-column/ad-column.service';
+import { TagsViewStoreModule as tagsViewStore } from "@/shared/config/store/tags-view-store";
 import _ from 'lodash';
+import { mapActions } from 'vuex';
 
 @Component({
   components: {
@@ -22,9 +25,15 @@ import _ from 'lodash';
     DetailView,
     GridView,
     SearchPanel
+  },
+
+  methods: {
+    ...mapActions({
+      removeWindowState: 'windowStore/removeWindow'
+    })
   }
 })
-export default class DynamicWindow extends Vue {
+export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   @Inject('aDTabService')
   private aDTabService: () => ADTabService;
 
@@ -40,6 +49,10 @@ export default class DynamicWindow extends Vue {
   private secondaryToolbarEventBus = new Vue();
   private searchPanelEventBus = new Vue();
   private searchPanelActive: boolean = false;
+  private fullPath: string = '';
+  private unwatchStore: Function;
+
+  removeWindowState!: (path: string) => Promise<void>;
 
   /**
    * Stack of the main tab. The last item in the stack
@@ -70,21 +83,31 @@ export default class DynamicWindow extends Vue {
   }
 
   created() {
+    this.fullPath = this.$route.fullPath;
     this.windowId = this.$route.meta.windowId;
     this.title = this.$t(`route.${this.$route.meta.title}`).toString();
-    this.retrieveTabs(null);
+    this.unwatchStore = this.$store.watch(
+      (state) => state.tagsViewStore.deletedViews,
+      (views: string) => {
+        if (views.includes(this.fullPath)) {
+          this.$destroy();
+        }
+      }
+    );
+
     this.mainToolbarEventBus.$on('tab-navigate', this.navigateTab);
     this.mainToolbarEventBus.$on('open-search-window', this.openSearchPanel);
     this.mainToolbarEventBus.$on('cancel-operation', this.cancelOperation);
-  }
 
-  mounted() {
+    this.retrieveTabs(null);
   }
 
   beforeDestroy() {
     this.mainToolbarEventBus.$off('tab-navigate', this.navigateTab);
     this.mainToolbarEventBus.$off('open-search-window', this.openSearchPanel);
     this.mainToolbarEventBus.$off('cancel-operation', this.cancelOperation);
+    this.removeWindowState(this.fullPath);
+    this.unwatchStore();
   }
   // End of lifecycle events.
 
@@ -110,8 +133,8 @@ export default class DynamicWindow extends Vue {
    * Switch between grid and detail view of the main tab.
    * @param value Either true for grid view or false for detail view.
    */
-  public switchView(value: boolean) {
-    this.gridView = value;
+  public switchView(options: any) {
+    this.gridView = options.gridView;
   }
 
   /**
@@ -132,8 +155,8 @@ export default class DynamicWindow extends Vue {
    * @param value The direction of tab navigation,
    *              negative value to go to parent tab, otherwise go to children tab.
    */
-  private navigateTab(value: number) {
-    if (value < 0 && this.tabStack.length > 1) {
+  private navigateTab(options: any) {
+    if (options.direction < 0 && this.tabStack.length > 1) {
       this.childTabs = [];
       this.currentTab = '';
       this.tabStack.splice(-1, 1);

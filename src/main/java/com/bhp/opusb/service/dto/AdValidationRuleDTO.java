@@ -25,6 +25,7 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
     private String query;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -72,6 +73,14 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override

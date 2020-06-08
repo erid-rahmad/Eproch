@@ -85,48 +85,6 @@ const Permission = () => import('../entities/permission/permission.vue');
 const PermissionUpdate = () => import('../entities/permission/permission-update.vue');
 // prettier-ignore
 const PermissionDetails = () => import('../entities/permission/permission-details.vue');
-// prettier-ignore
-const ADReference = () => import('../entities/ad-reference/ad-reference.vue');
-// prettier-ignore
-const ADReferenceUpdate = () => import('../entities/ad-reference/ad-reference-update.vue');
-// prettier-ignore
-const ADReferenceDetails = () => import('../entities/ad-reference/ad-reference-details.vue');
-// prettier-ignore
-const ADReferenceList = () => import('../entities/ad-reference-list/ad-reference-list.vue');
-// prettier-ignore
-const ADReferenceListUpdate = () => import('../entities/ad-reference-list/ad-reference-list-update.vue');
-// prettier-ignore
-const ADReferenceListDetails = () => import('../entities/ad-reference-list/ad-reference-list-details.vue');
-// prettier-ignore
-const ADTable = () => import('../entities/ad-table/ad-table.vue');
-// prettier-ignore
-const ADTableUpdate = () => import('../entities/ad-table/ad-table-update.vue');
-// prettier-ignore
-const ADTableDetails = () => import('../entities/ad-table/ad-table-details.vue');
-// prettier-ignore
-const ADColumn = () => import('../entities/ad-column/ad-column.vue');
-// prettier-ignore
-const ADColumnUpdate = () => import('../entities/ad-column/ad-column-update.vue');
-// prettier-ignore
-const ADColumnDetails = () => import('../entities/ad-column/ad-column-details.vue');
-// prettier-ignore
-const ADWindow = () => import('../entities/ad-window/ad-window.vue');
-// prettier-ignore
-const ADWindowUpdate = () => import('../entities/ad-window/ad-window-update.vue');
-// prettier-ignore
-const ADWindowDetails = () => import('../entities/ad-window/ad-window-details.vue');
-// prettier-ignore
-const ADTab = () => import('../entities/ad-tab/ad-tab.vue');
-// prettier-ignore
-const ADTabUpdate = () => import('../entities/ad-tab/ad-tab-update.vue');
-// prettier-ignore
-const ADTabDetails = () => import('../entities/ad-tab/ad-tab-details.vue');
-// prettier-ignore
-const ADField = () => import('../entities/ad-field/ad-field.vue');
-// prettier-ignore
-const ADFieldUpdate = () => import('../entities/ad-field/ad-field-update.vue');
-// prettier-ignore
-const ADFieldDetails = () => import('../entities/ad-field/ad-field-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 Vue.use(Router);
@@ -386,7 +344,6 @@ export const constantRoutes: RouteConfig[] = [
         meta: {
           title: 'applicationDictionary.table',
           authorities: [Authority.ADMIN],
-          baseApiUrl: '/api/ad-tables',
           schemaId: 'table',
           windowId: 1
         }
@@ -398,9 +355,19 @@ export const constantRoutes: RouteConfig[] = [
         meta: {
           title: 'applicationDictionary.window',
           authorities: [Authority.ADMIN],
-          baseApiUrl: '/api/ad-windows',
           schemaId: 'window',
           windowId: 2
+        }
+      },
+      {
+        path: 'reference',
+        name: 'References',
+        component: DynamicWindow,
+        meta: {
+          title: 'applicationDictionary.reference',
+          authorities: [Authority.ADMIN],
+          schemaId: 'reference',
+          windowId: 1051
         }
       }
     ]

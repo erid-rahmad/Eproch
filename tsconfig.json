@@ -13,7 +13,7 @@
     "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true,
     "outDir": "target/classes/static/app",
-    "lib": ["es2018", "dom", "dom.iterable", "scripthost"],
+    "lib": ["es2018", "es2020.string", "es2020.promise", "dom", "dom.iterable", "scripthost"],
     "typeRoots": ["node_modules/@types"],
     "baseUrl": "./",
     "paths": {

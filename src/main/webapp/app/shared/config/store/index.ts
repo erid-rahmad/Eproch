@@ -1,15 +1,16 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { IAppState } from '@/shared/config/store/app-store';
-import { IUserState } from '@/shared/config/store/user-store';
-import { ITagsViewState } from '@/shared/config/store/tags-view-store';
-import { IErrorLogState } from '@/shared/config/store/error-log-store';
-import { IPermissionState } from '@/shared/config/store/permission-store';
-import { ISettingsState } from '@/shared/config/store/settings-store';
-import { IAccountState } from '@/shared/config/store/account-store';
-import { IAlertState } from '@/shared/config/store/alert-store';
-import { ITranslationState } from '@/shared/config/store/translation-store';
+import { IAppState } from './app-store';
+import { IUserState } from './user-store';
+import { ITagsViewState } from './tags-view-store';
+import { IErrorLogState } from './error-log-store';
+import { IPermissionState } from './permission-store';
+import { ISettingsState } from './settings-store';
+import { IAccountState } from './account-store';
+import { IAlertState } from './alert-store';
+import { ITranslationState } from './translation-store';
 import { IRegistrationState } from './registration-store';
+import { IWindowState } from "./window-store";
 
 Vue.use(Vuex);
 
@@ -24,6 +25,7 @@ export interface IRootState {
   settingsStore: ISettingsState;
   alertStore: IAlertState;
   registrationStore: IRegistrationState;
+  windowStore: IWindowState;
 }
 
 // Declare empty store first, dynamically register all modules later.

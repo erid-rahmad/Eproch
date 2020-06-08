@@ -77,10 +77,11 @@ public class ADColumnDTO extends AbstractAuditingDTO {
     private String adReferenceName;
 
     private Long adValidationRuleId;
-
+    private String adValidationRuleName;
     private Long adTableId;
     
     private ADReferenceDTO adReference;
+    private AdValidationRuleDTO adValidationRule;
 
     public Long getId() {
         return id;
@@ -338,6 +339,14 @@ public class ADColumnDTO extends AbstractAuditingDTO {
         this.adValidationRuleId = adValidationRuleId;
     }
 
+    public String getAdValidationRuleName() {
+        return adValidationRuleName;
+    }
+
+    public void setAdValidationRuleName(String adValidationRuleName) {
+        this.adValidationRuleName = adValidationRuleName;
+    }
+
     public Long getAdTableId() {
         return adTableId;
     }
@@ -352,6 +361,14 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     public void setAdReference(ADReferenceDTO adReference) {
         this.adReference = adReference;
+    }
+
+    public AdValidationRuleDTO getAdValidationRule() {
+        return adValidationRule;
+    }
+
+    public void setAdValidationRule(AdValidationRuleDTO adValidationRule) {
+        this.adValidationRule = adValidationRule;
     }
 
     @Override

@@ -16,7 +16,9 @@ public interface ADColumnMapper extends EntityMapper<ADColumnDTO, ADColumn> {
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "adReference.id", target = "adReferenceId")
+    @Mapping(source = "adReference.name", target = "adReferenceName")
     @Mapping(source = "adValidationRule.id", target = "adValidationRuleId")
+    @Mapping(source = "adValidationRule.name", target = "adValidationRuleName")
     @Mapping(source = "adTable.id", target = "adTableId")
     ADColumnDTO toDto(ADColumn aDColumn);
 
