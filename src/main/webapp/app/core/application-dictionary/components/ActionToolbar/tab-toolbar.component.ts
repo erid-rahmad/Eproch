@@ -4,7 +4,7 @@ import { AccountStoreModule as accountStore } from "@/shared/config/store/accoun
 
 const TabToolbarProps = Vue.extend({
   props: {
-    tabName: String,
+    tabId: String,
     eventBus: {
       type: Object,
       default: () => {
@@ -18,22 +18,25 @@ const TabToolbarProps = Vue.extend({
 export default class TabToolbar extends TabToolbarProps {
   authorities: Set<string> = accountStore.authorities;
   private editing: boolean = false;
+  private fullPath: string = '';
 
   get isEditing() {
     return this.editing;
   }
 
+  // TODO Handles accidental/multiple key invocation.
   get keymap() {
     return {
       'shift+alt+n': this.addRecord,
       'shift+alt+c': this.copyRecord,
       'shift+alt+s': this.saveRecord,
       'shift+alt+del': this.deleteRecord,
-      'esc': this.cancelOperation
+      'shift+alt+z': this.cancelOperation
     };
   }
 
   created() {
+    this.fullPath = this.$route.fullPath;
     this.eventBus?.$on('inline-editing', this.onInlineEditing);
     this.eventBus?.$on('record-saved', this.onSaveSuccess);
   }
@@ -52,25 +55,44 @@ export default class TabToolbar extends TabToolbarProps {
   }
 
   public addRecord() {
+    if (!this.activeWindow) return;
     this.editing = true;
-    this.eventBus?.$emit('add-record');
+    this.eventBus?.$emit('add-record', {
+      tabId: this.tabId
+    });
   }
 
   public copyRecord() {
+    if (!this.activeWindow) return;
     this.editing = true;
-    this.eventBus?.$emit('copy-record');
+    this.eventBus?.$emit('copy-record', {
+      tabId: this.tabId
+    });
   }
 
   public saveRecord() {
-    this.eventBus?.$emit('save-record');
+    if (!this.activeWindow) return;
+    this.eventBus?.$emit('save-record', {
+      tabId: this.tabId
+    });
   }
 
   public deleteRecord() {
-    this.eventBus?.$emit('delete-record');
+    if (!this.activeWindow) return;
+    this.eventBus?.$emit('delete-record', {
+      tabId: this.tabId
+    });
   }
 
   public cancelOperation() {
+    if (!this.activeWindow) return;
     this.editing = false;
-    this.eventBus?.$emit('cancel-operation');
+    this.eventBus?.$emit('cancel-operation', {
+      tabId: this.tabId
+    });
+  }
+
+  private get activeWindow() {
+    return this.fullPath === this.$route.fullPath;
   }
 }

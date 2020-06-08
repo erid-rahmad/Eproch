@@ -48,8 +48,9 @@ export default class SearchPanel extends SearchPanelProps {
     this.eventBus.$emit('filter-updated', this.filterQuery);
   }
 
-  private onAdvanceSearch() {
+  private onAdvanceSearch(params: any) {
     // TODO build advance search filter query.
+    this.filterQuery = params;
     this.eventBus.$emit('filter-updated', this.filterQuery);
   }
 

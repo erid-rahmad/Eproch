@@ -118,7 +118,7 @@ export default class BasicSearch extends BasicSearchProps {
 
   public fetchTableDirectData(query: string) {
     const field = this.activeTableDirectField;
-    if (query.trim() !== '') {
+    //if (query.trim() !== '') {
       const column = field.adColumn;
       const resourceName = pluralize.plural(
         kebabCase(column.importedTable)
@@ -133,10 +133,10 @@ export default class BasicSearch extends BasicSearchProps {
             .set(`${this.currentRecord.id}-${field.adColumn.name}`, res.data);
           this.tableDirectTimestamp = Date.now();
         });
-    }
+    //}
   }
   
-  /*
+  
   public isFixed(field: any): boolean | string {
     if (field.adColumn.name === 'active') {
       return 'right';
@@ -152,7 +152,7 @@ export default class BasicSearch extends BasicSearchProps {
 
     return '';
   }
-*/
+
   public getMinValue(field: any) {
     return field.adColumn.minValue || -Infinity;
   }

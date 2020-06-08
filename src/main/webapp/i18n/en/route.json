@@ -8,7 +8,8 @@
       "default": "Application Dictionary",
       "menu": "Menu",
       "table": "Table",
-      "window": "Window"
+      "window": "Window",
+      "reference": "References"
     },
     "admin": {
       "default": "System Administration",

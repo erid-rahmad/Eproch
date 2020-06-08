@@ -101,7 +101,7 @@ export default class extends Vue {
   }
 
   private isActive(route: ITagViewState) {
-    return route.path === this.$route.path
+    return route.fullPath === this.$route.fullPath
   }
 
   private isAffix(tag: ITagViewState) {

@@ -64,15 +64,16 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     private Long adReferenceId;
     private String adReferenceName;
+    private Long adValidationRuleId;
+    private String adValidationRuleName;
     private Long adColumnId;
     private String adColumnName;
 
-    private Long adValidationRuleId;
-
     private Long adTabId;
+    private String adTabName;
     
     private ADReferenceDTO adReference;
-
+    private AdValidationRuleDTO adValidationRule;
     private ADColumnDTO adColumn;
 
     public Long getId() {
@@ -305,6 +306,30 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     public void setAdValidationRuleId(Long adValidationRuleId) {
         this.adValidationRuleId = adValidationRuleId;
+    }
+
+    public String getAdValidationRuleName() {
+        return adValidationRuleName;
+    }
+
+    public void setAdValidationRuleName(String adValidationRuleName) {
+        this.adValidationRuleName = adValidationRuleName;
+    }
+
+    public String getAdTabName() {
+        return adTabName;
+    }
+
+    public void setAdTabName(String adTabName) {
+        this.adTabName = adTabName;
+    }
+
+    public AdValidationRuleDTO getAdValidationRule() {
+        return adValidationRule;
+    }
+
+    public void setAdValidationRule(AdValidationRuleDTO adValidationRule) {
+        this.adValidationRule = adValidationRule;
     }
 
     public Long getAdTabId() {

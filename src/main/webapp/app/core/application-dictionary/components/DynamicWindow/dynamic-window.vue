@@ -34,7 +34,8 @@
         <pane
           v-if="hasChildTabs"
           ref="linePane"
-          size="30"
+          size="40"
+          class="child-pane"
           style="position: relative"
         >
           <el-tabs
@@ -53,12 +54,13 @@
                 <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
               </span>
               <tab-toolbar
-                :tabName="'' + index"
+                :tab-id="'' + index"
                 :event-bus="secondaryToolbarEventBus"
               />
               <grid-view
                 ref="lineGrid"
                 :tab="tab"
+                :tab-id="'' + index"
                 :toolbar-event-bus="secondaryToolbarEventBus"
                 lazy-load
               />
@@ -84,6 +86,14 @@
 .window-content {
   position: relative;
   height: calc(100% - 96px);
+
+  .splitpanes .el-tabs__content {
+    overflow: auto;
+
+    .grid-view {
+      height: calc(100% - 48px);
+    }
+  }
 }
 </style>
 <style lang="scss" scoped>

@@ -9,6 +9,8 @@
               v-for="field in listFields"
               :key="field.id"
               :prop="field.adColumn.name"
+              :fixed="isFixed(field)"
+              :width="getFieldWidth(field)"
               :label="field.name">
                 
               

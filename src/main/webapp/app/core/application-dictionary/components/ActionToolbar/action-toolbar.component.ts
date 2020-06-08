@@ -27,6 +27,7 @@ export default class ActionToolbar extends ActionToolbarProps {
   gridView = true;
   authorities: Set<string> = accountStore.authorities;
   private editing: boolean = false;
+  private fullPath: string = '';
 
   get isEditing() {
     return this.editing;
@@ -43,11 +44,12 @@ export default class ActionToolbar extends ActionToolbarProps {
       'alt+c': this.copyRecord,
       'alt+s': this.saveRecord,
       'alt+del': this.deleteRecord,
-      'esc': this.cancelOperation
+      'alt+z': this.cancelOperation
     };
   }
 
   created() {
+    this.fullPath = this.$route.fullPath;
     this.eventBus.$on('inline-editing', this.onInlineEditing);
     this.eventBus.$on('record-saved', this.onSaveSuccess);
   }
@@ -66,28 +68,34 @@ export default class ActionToolbar extends ActionToolbarProps {
   }
 
   public refreshData() {
+    if (!this.activeWindow) return;
     this.eventBus.$emit('refresh-data');
   }
 
   public openSearchWindow() {
+    if (!this.activeWindow) return;
     this.eventBus.$emit('open-search-window');
   }
 
   public addRecord() {
+    if (!this.activeWindow) return;
     this.editing = true;
     this.eventBus.$emit('add-record');
   }
 
   public copyRecord() {
+    if (!this.activeWindow) return;
     this.editing = true;
     this.eventBus.$emit('copy-record');
   }
 
   public saveRecord() {
+    if (!this.activeWindow) return;
     this.eventBus.$emit('save-record');
   }
 
   public deleteRecord() {
+    if (!this.activeWindow) return;
     this.eventBus.$emit('delete-record');
   }
 
@@ -96,14 +104,21 @@ export default class ActionToolbar extends ActionToolbarProps {
   }
 
   public goToParentTab() {
-    this.eventBus.$emit('tab-navigate', -1);
+    if (!this.activeWindow) return;
+    this.eventBus.$emit('tab-navigate', {
+      direction: -1
+    });
   }
 
   public goToChildTab() {
-    this.eventBus.$emit('tab-navigate', 1);
+    if (!this.activeWindow) return;
+    this.eventBus.$emit('tab-navigate', {
+      direction: 1
+    });
   }
 
   public cancelOperation() {
+    if (!this.activeWindow) return;
     this.editing = false;
     this.eventBus.$emit('cancel-operation');
   }
@@ -113,7 +128,14 @@ export default class ActionToolbar extends ActionToolbarProps {
    * @param gridView Is grid mode.
    */
   private toggleView(gridView: boolean) {
+    if (!this.activeWindow) return;
     this.gridView = gridView;
-    this.$emit('toggle-view', gridView);
+    this.$emit('toggle-view', {
+      gridView
+    });
+  }
+
+  private get activeWindow() {
+    return this.fullPath === this.$route.fullPath;
   }
 }

@@ -1,16 +1,16 @@
-import Component from 'vue-class-component';
-import { Vue, Watch, Inject } from 'vue-property-decorator';
+import { Component, Vue, Watch, Inject, Mixins } from 'vue-property-decorator';
+import ContextVariableAccessor from "../ContextVariableAccessor";
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import { ElTable } from 'element-ui/types/table';
-import { IADField } from '@/shared/model/ad-field.model';
 import { ADColumnType } from '@/shared/model/ad-column.model';
 import schema from 'async-validator';
 import { getValidatorType } from '@/utils/validate';
 import { ADReferenceType } from '@/shared/model/ad-reference.model';
 import { kebabCase } from "lodash";
 import pluralize from "pluralize";
-import { AccountStoreModule } from '@/shared/config/store/account-store';
 import _ from 'lodash';
+import { mapActions } from 'vuex';
+import { RegisterTabParameter } from '@/shared/config/store/window-store';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -24,7 +24,11 @@ const GridViewProps = Vue.extend({
         return null;
       }
     },
-    orderQuery: String,
+
+    /**
+     * The identifier of a child tab.
+     */
+    tabId: String,
 
     /**
      * Record will be loaded once the parentId changed.
@@ -45,8 +49,14 @@ const GridViewProps = Vue.extend({
   }
 });
 
-@Component
-export default class GridView extends GridViewProps {
+@Component({
+  methods: {
+    ...mapActions({
+      registerTabState: 'windowStore/registerTab'
+    })
+  }
+})
+export default class GridView extends Mixins(ContextVariableAccessor, GridViewProps) {
   @Inject('dynamicWindowService')
   private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
 
@@ -70,7 +80,7 @@ export default class GridView extends GridViewProps {
   // Multiple row selection.
   selectedRows: any = [];
   multipleSelectedRowCheckbox: any = [];
-  multipleSelectedRow: any = [];
+  multipleSelectedRow: Array<any> = [];
   filterVal: any = [];
 
   //Dialog
@@ -79,12 +89,13 @@ export default class GridView extends GridViewProps {
   // Inline editing mode needs these data.
   originalRecord: any = {};
   currentRecord: any = {};
-  validationRule: any = {};
+  validationSchema: any = {};
   editing = false;
   tableDirectTimestamp: number = Date.now();
   private newRecord: boolean = false;
   private tableDirectReferenceMap = new Map();
   private activeTableDirectField: any = null;
+  private referenceFilterQueries: Map<number, string> = new Map();
 
   // Error messages.
   private errors = new Map();
@@ -97,8 +108,11 @@ export default class GridView extends GridViewProps {
   private parentId: number = 0;
   private getId: any = null;
 
+  private registerTabState!: (options: RegisterTabParameter) => Promise<void>
+
+  // TODO Find another alternatives than using tableDirectTimestamp.
   getTableDirectReferences(field: any): any[] {
-    if (this.currentRecord === null || field == null) {
+    if (this.currentRecord === null || field == null || !this.isTableDirectLink(field)) {
       return [];
     }
     const key = `${this.currentRecord.id}-${field.adColumn.name}`;
@@ -132,13 +146,30 @@ export default class GridView extends GridViewProps {
   }
 
   @Watch('fields')
-  onFieldsChange(fields: Array<IADField>) {
+  onFieldsChange(fields: any[]) {
     this.tableDirectReferenceMap.clear();
-    this.gridFields = fields.filter(field => field.showInGrid);
-    this.validationRule = {};
+    this.gridFields = fields
+      .filter(field => {
+        if (field.showInGrid) {
+          this.updateReferenceQueries(field);
+          return true;
+        }
+
+        return false;
+      })
+      .sort((a, b) => {
+        if (a.gridSequence !== null) {
+          return b.gridSequence !== null ? a.gridSequence - b.gridSequence : -1;
+        }
+
+        return b.gridSequence !== null ? 1 : -1;
+      });
+
+    // Prepare the form validation schema.
+    this.validationSchema = {};
     for (let field of this.fields) {
       const column = field.adColumn;
-      this.validationRule[column.name] = {
+      this.validationSchema[column.name] = {
         type: getValidatorType(column.type),
         required: column.mandatory
       }
@@ -152,7 +183,7 @@ export default class GridView extends GridViewProps {
     
     this.toolbarEventBus?.$on('add-record', this.addBlankRow);
     this.toolbarEventBus?.$on('copy-record', this.copyRow);
-    this.toolbarEventBus?.$on('save-record', this.save);
+    this.toolbarEventBus?.$on('save-record', this.beforeSave);
     this.toolbarEventBus?.$on('cancel-operation', this.cancelOperation);
     this.toolbarEventBus?.$on('delete-record', this.deleteRow);
     this.toolbarEventBus?.$on('refresh-data', this.refreshData);
@@ -163,7 +194,7 @@ export default class GridView extends GridViewProps {
 
     this.toolbarEventBus?.$off('add-record', this.addBlankRow);
     this.toolbarEventBus?.$off('copy-record', this.copyRow);
-    this.toolbarEventBus?.$off('save-record', this.save);
+    this.toolbarEventBus?.$off('save-record', this.beforeSave);
     this.toolbarEventBus?.$off('cancel-operation', this.cancelOperation);
     this.toolbarEventBus?.$off('delete-record', this.deleteRow);
     this.toolbarEventBus?.$off('refresh-data', this.refreshData);
@@ -190,22 +221,23 @@ export default class GridView extends GridViewProps {
 
     if (this.editing) {
       const noChanges = _.isEqual(this.originalRecord, this.currentRecord);
-      console.log('noChanges: %s', noChanges);
-      const reset = () => {
-        this.toolbarEventBus.$emit('inline-editing', false);
-        this.editing = false;
-        if (this.currentRecord !== null) {
-          this.$set(this.currentRecord, 'editing', this.editing);
-        }
-      };
 
       if (noChanges) {
-        reset();
+        this.reset();
       } else {
-        this.save(reset);
+        this.save(this.reset);
       }    
     }
 
+    this.gridFields.forEach(field => {
+      this.updateReferenceQueries(field);
+    })
+
+    this.registerTabState({
+      path: this.$route.fullPath,
+      tabId: this.tabName,
+      data: row
+    });
     this.currentRecord = row;
     this.$emit('current-row-change', row);
   }
@@ -216,9 +248,7 @@ export default class GridView extends GridViewProps {
   }
 
   public changeMultipleRowSelection(value: any, o: any) {
-
     this.multipleSelectedRow = value;
-    
   }
   
   public handleMultipleDataToJson(params: any) {
@@ -230,40 +260,52 @@ export default class GridView extends GridViewProps {
   }
 
   public actionDelete(): void {
-    for (let i = 0; i < this.multipleSelectedRow.length; i++) {
-      const service = this.dynamicWindowService(this.baseApiUrl);
-      const saveState = service.delete(this.getId[i].id);
-      saveState.then(data => {
-        this.retrieveAllRecords();
-        const message = this.$t(`opusWebApp.applicationDictionary.deleted`, {
-          tabName: this.tabName,
-          param: data.id
-        });
-        this.toolbarEventBus.$emit('record-saved');
-        
-        this.$notify({
-          title: 'Success',
-          message: message.toString(),
-          type: 'success',
-          duration: 3000
-        });
+    Promise.allSettled(this.multipleSelectedRow.map((row: any) => {
+      return this.dynamicWindowService(this.baseApiUrl).delete(row.id);
+    })).then((results) => {
+      const deletedCount = results.filter(res => res.status === 'fulfilled').length
+      const message = this.$t(`opusWebApp.applicationDictionary.recordsDeleted`, {
+        tabName: this.tabName,
+        count: deletedCount
+      });
 
-        this.getId[i] = null;
-        this.multipleSelectedRow = [];
-        this.closeDialog();
-      })
-    }
+      this.retrieveAllRecords();
+      this.toolbarEventBus.$emit('record-saved');
+      this.$notify({
+        title: 'Success',
+        message: message.toString(),
+        type: 'success',
+        duration: 3000
+      });
+    }).finally(() => {
+      this.multipleSelectedRow = [];
+      this.closeDialog();
+    });
   }
 
   public closeDialog(): void {
     this.showDeleteDialog = false;
   }
 
-  private deleteRow(){
+  private updateReferenceQueries(field: any) {
+    if (this.isTableDirectLink(field)) {
+      // Parse the validation rule which is used to filter the reference key records.
+      const column = field.adColumn;
+      const validationRule = field.adValidationRule || column.adValidationRule;
+      const referenceFilter = this.parseContextVariable(validationRule?.query);
+      console.log('tabName: %s. referenceFilter: %s', this.tabName, referenceFilter);
+      this.referenceFilterQueries.set(field.id, referenceFilter);
+    }
+  }
+
+  private deleteRow(data?: any) {
+    if (!this.mainTab && data?.tabId !== this.tabId)
+      return;
+
     if (this.multipleSelectedRow.length) {
         this.handleMultipleDataToJson(this.multipleSelectedRow);
         this.showDeleteDialog = true;
-    }else{
+    } else {
       this.$notify({
         title: 'Warning',
         message: "Please select at least one item",
@@ -273,15 +315,18 @@ export default class GridView extends GridViewProps {
     }
   }
 
-  private refreshData(){
-    this.clear();
+  private refreshData() {
+    if (this.mainTab) this.clear();
   }
 
   public setTableDirectReference(field: any): void {
     this.activeTableDirectField = field;
   }
 
-  public cancelOperation() {
+  public cancelOperation(data?: any) {
+    if (!this.mainTab && data?.tabId !== this.tabId)
+      return;
+
     // New blank row and duplicate row are considered new record.
     if (this.newRecord) {
       const index = this.gridData.indexOf(this.currentRecord);
@@ -317,8 +362,6 @@ export default class GridView extends GridViewProps {
       return;
 
     this.originalRecord = {...this.currentRecord};
-    console.log('original: %O, current: %O', this.originalRecord, this.currentRecord);
-    this.prepareFormAndValidation(row, false);
     await this.initRelationships(row);
     row.editing = !row.editing;
     this.originalRecord.editing = row.editing;
@@ -332,57 +375,61 @@ export default class GridView extends GridViewProps {
     this.retrieveAllRecords();
   }
 
+  private reset() {
+    this.toolbarEventBus.$emit('inline-editing', false);
+    this.editing = false;
+    if (this.currentRecord !== null) {
+      this.$set(this.currentRecord, 'editing', this.editing);
+    }
+  }
+
   /**
    * Triggered when user is going to add a new record.
    */
-  private async addBlankRow() {
-    if (this.mainTab) {
-      let record = {
-        id: 0
-      };
-      if (this.parentId) {
-        record[this.tab.foreignColumnName] = this.parentId;
-      }
-      this.prepareFormAndValidation(record);
-      await this.initRelationships(record);
-      this.gridData.splice(0, 0, record);
-      this.$nextTick(() => {
-        this.setRow(record);
-        this.activateInlineEditing(record);
-        this.newRecord = true;
-      });
+  private async addBlankRow(data?: any) {
+    if (!this.mainTab && data?.tabId !== this.tabId)
+      return;
+
+    let record = {
+      id: 0
+    };
+    if (this.parentId) {
+      record[this.tab.foreignColumnName] = this.parentId;
     }
+    this.prepareForm(record);
+    // await this.initRelationships(record);
+    this.gridData.splice(0, 0, record);
+    this.$nextTick(() => {
+      this.setRow(record);
+      this.activateInlineEditing(record);
+      this.newRecord = true;
+    });
   }
 
-  private async copyRow() {
-    if (this.mainTab) {
-      const currentIndex = this.gridData.indexOf(this.currentRecord);
-      let record = {...this.currentRecord};
-      record.id = 0;
-      record.editing = true;
-      this.prepareFormAndValidation(record, false);
-      await this.initRelationships(record);
-      this.gridData.splice(currentIndex + 1, 0, record);
-      this.$nextTick(() => {
-        this.setRow(record);
-        this.activateInlineEditing(record);
-        this.newRecord = true;
-      });
-    }
+  private async copyRow(data?: any) {
+    if (!this.mainTab && data?.tabId !== this.tabId)
+      return;
+
+    const currentIndex = this.gridData.indexOf(this.currentRecord);
+    let record = {...this.currentRecord};
+    record.id = 0;
+    this.prepareForm(record, false);
+    // await this.initRelationships(record);
+    this.gridData.splice(currentIndex + 1, 0, record);
+    this.$nextTick(() => {
+      this.setRow(record);
+      this.activateInlineEditing(record);
+      this.newRecord = true;
+    });
   }
 
-  private prepareFormAndValidation(row: any, newRecord: boolean = true) {
+  private prepareForm(row: any, newRecord: boolean = true) {
     for (const field of this.fields) {
       const column = field.adColumn;
 
       if (newRecord) {
         // TODO Set the default value based on the field/column definition. 
-        let defaultValue = column.defaultValue?.match(/\{([\#]?[\w]+)\}/);
-        if (defaultValue) {
-          defaultValue = AccountStoreModule.properties.get(defaultValue[1]);
-        } else {
-          defaultValue = column.defaultValue;
-        }
+        let defaultValue = this.getContext(field.defaultValue || column.defaultValue);
 
         if (!defaultValue) {
           if (column.name === 'active') {
@@ -402,36 +449,40 @@ export default class GridView extends GridViewProps {
     }
   }
 
-  private save(callback?: (record?: any) => void) {
-    if (this.mainTab) {
-      const {
-        editing,
-        createdBy,
-        createdDate,
-        lastModifiedBy,
-        lastModifiedDate,
-        ...record
-      } = this.currentRecord;
-      const validator = new schema(this.validationRule);
+  private beforeSave(data?: any) {
+    if (this.mainTab || data?.tabId === this.tabId)
+      this.save(this.reset);
+  }
 
-      validator.validate(record, (errors: any[], fields: any) => {
-        if (errors) {
-          for (let error of errors) {
-            this.errors.set(error.field, error.message);
-            this.errorTimestamp = Date.now();
-            (<any> this.$refs[error.field][0])?.$el.classList.add('is-error');
-          }
-        } else {
-          for (let field in record) {
-            if (this.$refs[field])
-              (<any> this.$refs[field][0])?.$el.classList.remove('is-error');
-          }
-          
-          this.isSaving = true;
-          this.saveRecord(record, callback);
+  private save(callback?: (record?: any) => void) {
+    const {
+      editing,
+      createdBy,
+      createdDate,
+      lastModifiedBy,
+      lastModifiedDate,
+      ...record
+    } = this.currentRecord;
+    const validator = new schema(this.validationSchema);
+
+    validator.validate(record, (errors: any[], fields: any) => {
+      if (errors) {
+        for (let error of errors) {
+          this.errors.set(error.field, error.message);
+          (<any> this.$refs[error.field][0])?.$el.classList.add('is-error');
         }
-      });
-    }
+        this.errorTimestamp = Date.now();
+      } else {
+        for (let field in record) {
+          this.errors.delete(field);
+          if (this.$refs[field])
+            (<any> this.$refs[field][0])?.$el.classList.remove('is-error');
+        }
+        
+        this.isSaving = true;
+        this.saveRecord(record, callback);
+      }
+    });
   }
 
   private saveRecord(record: any, callback?: (record?: any) => void) {
@@ -567,28 +618,32 @@ export default class GridView extends GridViewProps {
   }
 
   private async initRelationships(row: any) {
-    let needUpdate = false;
+    // let needUpdate = false;
     for (let field of this.gridFields) {
       const column = field.adColumn;
-      const reference = column.adReference;
+
       if (column.foreignKey) {
         const resourceName = pluralize.plural(kebabCase(column.importedTable));
         const api = `/api/${resourceName}`;
+        const filterQuery = this.referenceFilterQueries.get(field.id);
 
-        if (reference?.referenceType === 'DATATYPE' || reference?.value === 'direct' || reference?.value === 'table') {
-          let criteriaQuery = row[column.name] == null ? null : `id.equals=${row[column.name]}`;
-          const res = await this.dynamicWindowService(api)
-            .retrieve({ criteriaQuery });
-          this.tableDirectReferenceMap
-            .set(`${row.id}-${column.name}`, res.data);
-          this.tableDirectTimestamp = Date.now();
-          needUpdate = true;
+        if (this.isTableDirectLink(field)) {
+          let criteriaQuery: string[] = row[column.name] == null ? [] : [`id.equals=${row[column.name]}`];
+
+          if (filterQuery) {
+            criteriaQuery.push(filterQuery);
+          }
+
+          // console.log('update tableDirectReferenceMap for field: %s', field.name);
+          const res = await this.dynamicWindowService(api).retrieve({ criteriaQuery });
+          this.tableDirectReferenceMap.set(`${row.id}-${column.name}`, res.data);
+          // needUpdate = true;
         }
       }
     }
 
-    if (needUpdate)
-      this.tableDirectTimestamp = Date.now();
+    // if (needUpdate)
+    //   this.tableDirectTimestamp = Date.now();
   }
 
   public isFixed(field: any): boolean | string {
@@ -620,6 +675,7 @@ export default class GridView extends GridViewProps {
   }
 
   public getReferenceList(field: any) {
+    console.log('getReferenceList field: %O', field);
     return field?.adReference?.adreferenceLists || field.adColumn.adReference.adreferenceLists;
   }
 
@@ -661,7 +717,6 @@ export default class GridView extends GridViewProps {
   }
 
   public getFieldValue(row: any, field: any) {
-    //console.log('row:%O,field:%O', row,field)
     if (this.isTableDirectLink(field)) {
       const propName = field.adColumn.name.replace(/Id$/, 'Name');
       return row[propName] || row[field.adColumn.name];

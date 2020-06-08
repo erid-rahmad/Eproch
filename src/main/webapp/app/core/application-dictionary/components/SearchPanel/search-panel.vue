@@ -14,7 +14,9 @@
       <el-tab-pane label="Advanced" name="advance">
         <advance-search 
           :event-bus="eventBus" 
-          :fields="fields" />
+          :fields="fields"
+          @submit-advance-search="onAdvanceSearch" 
+          @clear-search="onClear" />
       </el-tab-pane>
     </el-tabs>
 
