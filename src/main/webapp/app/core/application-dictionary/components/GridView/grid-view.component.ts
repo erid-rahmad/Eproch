@@ -93,7 +93,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   editing = false;
   tableDirectTimestamp: number = Date.now();
   private newRecord: boolean = false;
-  private tableDirectReferenceMap = new Map();
+  private referenceItemsMap = new Map();
   private activeTableDirectField: any = null;
   private referenceFilterQueries: Map<number, string> = new Map();
 
@@ -110,14 +110,25 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
   private registerTabState!: (options: RegisterTabParameter) => Promise<void>
 
-  // TODO Find another alternatives than using tableDirectTimestamp.
-  getTableDirectReferences(field: any): any[] {
-    if (this.currentRecord === null || field == null || !this.isTableDirectLink(field)) {
-      return [];
+  get referenceListItems() {
+    return (field: any): any[] => {
+      if (this.currentRecord === null || field == null) {
+        return [];
+      }
+      return this.referenceItemsMap.get(field.adColumn.name);
     }
-    const key = `${this.currentRecord.id}-${field.adColumn.name}`;
-    return field && this.tableDirectTimestamp
-      && this.tableDirectReferenceMap.get(key);
+  }
+
+  // TODO Find another alternatives than using tableDirectTimestamp.
+  get tableDirectReferences() {
+    return (field: any): any[] => {
+      if (this.currentRecord === null || field == null) {
+        return [];
+      }
+      const key = `${this.currentRecord.id}-${field.adColumn.name}`;
+      return this.tableDirectTimestamp
+        && this.referenceItemsMap.get(key);
+    }
   }
 
   get observableTabProperties() {
@@ -147,16 +158,9 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
   @Watch('fields')
   onFieldsChange(fields: any[]) {
-    this.tableDirectReferenceMap.clear();
+    this.referenceItemsMap.clear();
     this.gridFields = fields
-      .filter(field => {
-        if (field.showInGrid) {
-          this.updateReferenceQueries(field);
-          return true;
-        }
-
-        return false;
-      })
+      .filter(field => field.showInGrid)
       .sort((a, b) => {
         if (a.gridSequence !== null) {
           return b.gridSequence !== null ? a.gridSequence - b.gridSequence : -1;
@@ -214,7 +218,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.retrieveAllRecords();
   }
 
-  public changeCurrentRow(row: any) {
+  public async changeCurrentRow(row: any) {
     if (this.newRecord) {
       return;
     }
@@ -229,15 +233,16 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       }    
     }
 
-    this.gridFields.forEach(field => {
-      this.updateReferenceQueries(field);
-    })
-
-    this.registerTabState({
+    await this.registerTabState({
       path: this.$route.fullPath,
       tabId: this.tabName,
       data: row
     });
+
+    this.gridFields.forEach(field => {
+      this.updateReferenceQueries(field);
+    })
+
     this.currentRecord = row;
     this.$emit('current-row-change', row);
   }
@@ -287,13 +292,17 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.showDeleteDialog = false;
   }
 
+  /**
+   * Update the validation rule for a specific field. Triggered when the window
+   * context is just updated.
+   * @param field 
+   */
   private updateReferenceQueries(field: any) {
     if (this.isTableDirectLink(field)) {
       // Parse the validation rule which is used to filter the reference key records.
       const column = field.adColumn;
       const validationRule = field.adValidationRule || column.adValidationRule;
       const referenceFilter = this.parseContextVariable(validationRule?.query);
-      console.log('tabName: %s. referenceFilter: %s', this.tabName, referenceFilter);
       this.referenceFilterQueries.set(field.id, referenceFilter);
     }
   }
@@ -574,6 +583,11 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.retrieveAllRecords();
   }
 
+  /**
+   * This method is invoked each time user typing in el-select component
+   * with remote attribute enabled.
+   * @param query 
+   */
   public fetchTableDirectData(query: string) {
     const field = this.activeTableDirectField;
     if (query.trim() !== '') {
@@ -587,7 +601,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
           criteriaQuery: `name.contains=${query}`
         })
         .then(res => {
-          this.tableDirectReferenceMap
+          this.referenceItemsMap
             .set(`${this.currentRecord.id}-${field.adColumn.name}`, res.data);
           this.tableDirectTimestamp = Date.now();
         });
@@ -616,16 +630,28 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   private async initRelationships(row: any) {
-    // let needUpdate = false;
     for (let field of this.gridFields) {
       const column = field.adColumn;
 
-      if (column.foreignKey) {
-        const resourceName = pluralize.plural(kebabCase(column.importedTable));
-        const api = `/api/${resourceName}`;
+      if (field.adReferenceId || column.adReferenceId) {
         const filterQuery = this.referenceFilterQueries.get(field.id);
 
-        if (this.isTableDirectLink(field)) {
+        // Get the item list of Reference Key[LIST].
+        if (this.hasReferenceList(field) && this.referenceItemsMap.get(column.name) === void 0) {
+          const referenceId = field.adReferenceId || field.adColumn.adReferenceId;
+          const res = await this.dynamicWindowService('/api/ad-reference-lists').retrieve({
+            criteriaQuery: [
+              `adReferenceId.equals=${referenceId}`,
+              filterQuery
+            ]
+          });
+          this.referenceItemsMap.set(`${column.name}`, res.data);
+        }
+
+        // Get the item list of Reference Key[DATATYPE|table|direct].
+        else if (this.isTableDirectLink(field)) {
+          const resourceName = pluralize.plural(kebabCase(column.importedTable));
+          const api = `/api/${resourceName}`;
           let criteriaQuery: string[] = row[column.name] == null ? [] : [`id.equals=${row[column.name]}`];
 
           if (filterQuery) {
@@ -634,14 +660,10 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
           // console.log('update tableDirectReferenceMap for field: %s', field.name);
           const res = await this.dynamicWindowService(api).retrieve({ criteriaQuery });
-          this.tableDirectReferenceMap.set(`${row.id}-${column.name}`, res.data);
-          // needUpdate = true;
+          this.referenceItemsMap.set(`${row.id}-${column.name}`, res.data);
         }
       }
     }
-
-    // if (needUpdate)
-    //   this.tableDirectTimestamp = Date.now();
   }
 
   public isFixed(field: any): boolean | string {
@@ -685,7 +707,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   public isTableDirectLink(field: any): boolean {
     const column = field.adColumn;
     const reference = field.adReference || column.adReference;
-    return column.foreignKey && (reference?.referenceType === ADReferenceType.DATATYPE || reference?.value === 'direct' || reference?.value === 'table');
+    return column.foreignKey && (reference?.value === 'direct' || reference?.value === 'table');
   }
 
   public isStringField(field: any) {
