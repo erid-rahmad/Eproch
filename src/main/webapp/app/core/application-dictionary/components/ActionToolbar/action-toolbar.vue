@@ -72,6 +72,15 @@
       <el-button
         type="danger"
         size="small"
+        plain
+        icon="el-icon-close"
+        title="Cancel"
+        :disabled="!isEditing"
+        @click="cancelOperation"
+      />
+      <el-button
+        type="danger"
+        size="small"
         icon="el-icon-delete"
         title="Delete"
         :disabled="isEditing"

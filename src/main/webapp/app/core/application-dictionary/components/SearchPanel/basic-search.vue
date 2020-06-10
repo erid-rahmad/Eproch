@@ -99,11 +99,8 @@
                     style="margin-left: 0px;"
                     size="mini"
                     type="default" 
-                    icon="el-icon-back"
-                    @click="back"
-                    title="Back">
-                    Back
-                </el-button>
+                    icon="el-icon-close"
+                    @click="close"/>
                 
             </el-form-item>
 

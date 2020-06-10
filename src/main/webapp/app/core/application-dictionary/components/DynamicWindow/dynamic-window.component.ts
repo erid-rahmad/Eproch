@@ -98,6 +98,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.mainToolbarEventBus.$on('tab-navigate', this.navigateTab);
     this.mainToolbarEventBus.$on('open-search-window', this.openSearchPanel);
     this.mainToolbarEventBus.$on('cancel-operation', this.cancelOperation);
+    this.searchPanelEventBus.$on('close-search-window', this.cancelOperation);
 
     this.retrieveTabs(null);
   }
@@ -106,6 +107,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.mainToolbarEventBus.$off('tab-navigate', this.navigateTab);
     this.mainToolbarEventBus.$off('open-search-window', this.openSearchPanel);
     this.mainToolbarEventBus.$off('cancel-operation', this.cancelOperation);
+    this.searchPanelEventBus.$off('close-search-window', this.cancelOperation);
     this.removeWindowState(this.fullPath);
     this.unwatchStore();
   }

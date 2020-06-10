@@ -45,15 +45,7 @@ export default class BasicSearch extends BasicSearchProps {
     
     this.listFields = fields.filter(field => field.showInGrid);
     this.row = {};
-    
-    for (let field of this.listFields) {
-      const column = field.adColumn;
-      //this.row[column.name] = "";
-      this.$set(this.row, column.name, "");
-    }
-    
   }
-
   // Start of lifecycle events.
   created() {
     this.onFieldsChange(this.fields);
@@ -94,7 +86,7 @@ export default class BasicSearch extends BasicSearchProps {
     this.eventBus.$emit('close-search-window');
   }
 
-  public back(){
+  public close(){
     this.eventBus.$emit('close-search-window');
   }
 
@@ -190,12 +182,6 @@ export default class BasicSearch extends BasicSearchProps {
     );
   }
 
-  /*
-  public isDateField(field: any) {
-    return field.adColumn.type === ADColumnType.LOCAL_DATE || field.adColumn.type === ADColumnType.ZONED_DATE_TIME;
-  }
-  */
-
   public isDateTimeField(field: any) {
     return field.adColumn.type === ADColumnType.INSTANT;
   }
@@ -204,18 +190,7 @@ export default class BasicSearch extends BasicSearchProps {
     return field.adColumn.type === ADColumnType.BOOLEAN;
   }
 
-  /*public getFieldValue(row: any, field: any) {
-    //console.log('row:%O,field:%O', row,field)
-    if (this.isTableDirectLink(field)) {
-      const propName = field.adColumn.name.replace(/Id$/, 'Name');
-      return row[propName] || row[field.adColumn.name];
-    }
-    return row[field.adColumn.name];
-  }*/
-
   public isActiveStatusField(column: any) {
-    return column.property === 'active';
-    //ko engga nemu comumn -> property ya?
-    //apakah yg dimaksud column disini adalah field?
+    return column.adColumn.name === 'active';
   }
 }
