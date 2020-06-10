@@ -81,7 +81,7 @@
               @focus="setTableDirectReference(field)"
             >
               <el-option
-                v-for="item in getTableDirectReferences(field)"
+                v-for="item in tableDirectReferences(field)"
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
@@ -96,7 +96,7 @@
               :disabled="isReadonly(scope.row, field)"
             >
               <el-option
-                v-for="item in getReferenceList(field)"
+                v-for="item in referenceListItems(field)"
                 :key="item.value"
                 :label="item.name"
                 :value="item.value"
