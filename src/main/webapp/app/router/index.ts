@@ -106,7 +106,7 @@ export const constantRoutes: RouteConfig[] = [
     children: [
       {
         path: '/register',
-        component: () => import(/* webpackChunkName: "register" */ '@/account/register/steps-form.vue')
+        component: () => import(/* webpackChunkName: "register" */ '@/account/register/register.vue')
       }
     ]
   },
