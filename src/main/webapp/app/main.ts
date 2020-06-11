@@ -42,21 +42,6 @@ import TrackerService from './admin/tracker/tracker.service';
 /* tslint:disable */
 
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
-import CountryService from '@/entities/country/country.service';
-import CurrencyService from '@/entities/currency/currency.service';
-import LocationService from '@/entities/location/location.service';
-import VendorService from '@/entities/vendor/vendor.service';
-import BusinessCategoryService from '@/entities/business-category/business-category.service';
-import SupportingDocumentService from '@/entities/supporting-document/supporting-document.service';
-import DocumentTypeService from '@/entities/document-type/document-type.service';
-import DocumentTypeBusinessCategoryService from '@/entities/document-type-business-category/document-type-business-category.service';
-import PersonInChargeService from '@/entities/person-in-charge/person-in-charge.service';
-import CompanyFunctionaryService from '@/entities/company-functionary/company-functionary.service';
-import ReferenceService from '@/entities/reference/reference.service';
-import ReferenceListService from '@/entities/reference-list/reference-list.service';
-import RegionService from '@/entities/region/region.service';
-import CityService from '@/entities/city/city.service';
-import PermissionService from '@/entities/permission/permission.service';
 import ADReferenceService from '@/entities/ad-reference/ad-reference.service';
 import ADReferenceListService from '@/entities/ad-reference-list/ad-reference-list.service';
 import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
@@ -144,21 +129,8 @@ new Vue({
     dynamicWindowService: (baseApiUrl: string) => new DynamicWindowService(baseApiUrl),
     alertService: () => alertService,
     translationService: () => translationService,
-    countryService: () => new CountryService(),
-    currencyService: () => new CurrencyService(),
-    locationService: () => new LocationService(),
-    vendorService: () => new VendorService(),
-    businessCategoryService: () => new BusinessCategoryService(),
-    supportingDocumentService: () => new SupportingDocumentService(),
-    documentTypeService: () => new DocumentTypeService(),
-    documentTypeBusinessCategoryService: () => new DocumentTypeBusinessCategoryService(),
-    personInChargeService: () => new PersonInChargeService(),
-    companyFunctionaryService: () => new CompanyFunctionaryService(),
-    referenceService: () => new ReferenceService(),
-    referenceListService: () => new ReferenceListService(),
-    regionService: () => new RegionService(),
-    cityService: () => new CityService(),
-    permissionService: () => new PermissionService(),
+    // End of jhipster default services.
+
     aDReferenceService: () => new ADReferenceService(),
     aDReferenceListService: () => new ADReferenceListService(),
     aDOrganizationService: () => new ADOrganizationService(),

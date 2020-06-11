@@ -74,7 +74,10 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   totalItems = 0;
   isFetching = false;
   gridData: Array<any> = [];
+
+  // The displayed fields.
   gridFields: Array<any> = [];
+
   isSaving: boolean = false;
 
   // Multiple row selection.
@@ -89,9 +92,9 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   // Inline editing mode needs these data.
   originalRecord: any = {};
   currentRecord: any = {};
-  validationSchema: any = {};
-  editing = false;
-  tableDirectTimestamp: number = Date.now();
+  private validationSchema: any = {};
+  private editing = false;
+  private tableDirectTimestamp: number = Date.now();
   private newRecord: boolean = false;
   private referenceItemsMap = new Map();
   private activeTableDirectField: any = null;
@@ -149,9 +152,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.filterQuery = tab.filterQuery;
     this.parentId = tab.parentId || 0;
 
-    if (this.lazyLoad && this.parentId) {
-      this.retrieveAllRecords();
-    } else if (!this.lazyLoad) {
+    if (!this.lazyLoad || this.parentId) {
       this.retrieveAllRecords();
     }
   }
@@ -570,6 +571,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   public changeOrder(propOrder): void {
     this.propOrder = propOrder.prop;
     this.reverse = propOrder.order === 'ascending';
+    const {propOrder: property, reverse} = this;
+    this.$emit('order-changed', { property, reverse });
     this.transition();
   }
 
