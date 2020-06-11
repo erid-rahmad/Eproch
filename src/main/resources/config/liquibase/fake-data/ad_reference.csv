@@ -1,0 +1,9 @@
+id,name,description,reference_type,value,active
+1,Column Type,Reference for Column Type,LIST,columnType,1
+2,Window Type,Reference for Window Type,LIST,windowType,1
+3,Reference Type,Reference for Reference Type,LIST,referenceType,1
+4,Vendor Type,Reference for Vendor Type,LIST,vendorType,1
+5,Payment Category,Reference for Payment Category,LIST,paymentCategory,1
+6,Vendor Approval Status,Reference for Vendor Approval Status,LIST,vendorApprovalStatus,1
+7,Table,Table,DATATYPE,table,1
+8,Direct,Direct,DATATYPE,direct,1

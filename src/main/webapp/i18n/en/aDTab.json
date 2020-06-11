@@ -1,0 +1,40 @@
+{
+  "opusWebApp": {
+    "aDTab": {
+      "home": {
+        "title": "AD Tabs",
+        "createLabel": "Create a new AD Tab",
+        "createOrEditLabel": "Create or edit a AD Tab",
+        "notFound": "No AD Tabs found"
+      },
+      "created": "A new AD Tab is created with identifier {{ param }}",
+      "updated": "A AD Tab is updated with identifier {{ param }}",
+      "deleted": "A AD Tab is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete AD Tab {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Tab"
+      },
+      "name": "Name",
+      "description": "Description",
+      "iconName": "Icon Name",
+      "targetEndpoint": "Target Endpoint",
+      "writable": "Writable",
+      "displayLogic": "Display Logic",
+      "readOnlyLogic": "Read Only Logic",
+      "filterQuery": "Filter Query",
+      "orderQuery": "Order Query",
+      "tabSequence": "Tab Sequence",
+      "active": "Active",
+      "aDTab": "A D Tab",
+      "aDField": "A D Field",
+      "adOrganization": "Ad Organization",
+      "adTable": "Ad Table",
+      "parentColumn": "Parent Column",
+      "foreignColumn": "Foreign Column",
+      "adWindow": "Ad Window",
+      "parentTab": "Parent Tab"
+    }
+  }
+}

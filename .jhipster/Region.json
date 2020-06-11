@@ -1,0 +1,40 @@
+{
+    "name": "Region",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "city",
+            "otherEntityRelationshipName": "region",
+            "relationshipName": "city"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "country",
+            "otherEntityRelationshipName": "region",
+            "relationshipValidateRules": "required",
+            "relationshipName": "country",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200405155200",
+    "entityTableName": "region",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

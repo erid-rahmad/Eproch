@@ -1,22 +1,33 @@
-import { Module } from 'vuex';
+import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators'
+import store from '@/shared/config/store'
 
-export const translationStore: Module<any, any> = {
-  state: {
-    currentLanguage: localStorage.getItem('currentLanguage') || 'en',
-    languages: {
-      en: { name: 'English' },
-      in: { name: 'Bahasa Indonesia' }
-      // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
-    }
-  },
-  getters: {
-    currentLanguage: state => state.currentLanguage,
-    languages: state => state.languages
-  },
-  mutations: {
-    currentLanguage(state, newLanguage) {
-      state.currentLanguage = newLanguage;
-      localStorage.setItem('currentLanguage', newLanguage);
-    }
+export interface ITranslationState {
+  currentLanguage: string
+  languages: object
+}
+
+@Module({ dynamic: true, store, name: 'translationStore', namespaced: true })
+class TranslationStore extends VuexModule implements ITranslationState {
+  currentLanguage = localStorage.getItem('currentLanguage') || 'en';
+  languages = {
+    en: { name: 'English' },
+    in: { name: 'Bahasa Indonesia' }
+    // jhipster-needle-i18n-language-key-pipe - JHipster will add/remove languages in this object
+  };
+
+  public get language() { return this.currentLanguage }
+  public get allLanguages() { return this.languages }
+
+  @Mutation
+  private SET_LANGUAGE(language: string) {
+    this.currentLanguage = language
+    localStorage.setItem('currentLanguage', language)
   }
-};
+
+  @Action
+  public setLanguage(language) {
+    this.SET_LANGUAGE(language)
+  }
+}
+
+export const TranslationStoreModule = getModule(TranslationStore)

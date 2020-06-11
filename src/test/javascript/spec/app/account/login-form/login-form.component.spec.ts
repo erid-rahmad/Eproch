@@ -54,13 +54,13 @@ describe('LoginForm Component', () => {
 
   it('should not store token if authentication is KO', async () => {
     // GIVEN
-    loginForm.login = 'login';
-    loginForm.password = 'pwd';
-    loginForm.rememberMe = true;
+    loginForm.loginForm.username = 'login';
+    loginForm.loginForm.password = 'pwd';
+    loginForm.loginForm.rememberMe = true;
     mockedAxios.post.mockReturnValue(Promise.reject());
 
     // WHEN
-    loginForm.doLogin();
+    loginForm.handleLogin();
     await loginForm.$nextTick();
 
     // THEN
@@ -75,14 +75,14 @@ describe('LoginForm Component', () => {
 
   it('should store token if authentication is OK', async () => {
     // GIVEN
-    loginForm.login = 'login';
-    loginForm.password = 'pwd';
-    loginForm.rememberMe = true;
+    loginForm.loginForm.username = 'login';
+    loginForm.loginForm.password = 'pwd';
+    loginForm.loginForm.rememberMe = true;
     const jwtSecret = 'jwt-secret';
     mockedAxios.post.mockReturnValue(Promise.resolve({ headers: { authorization: 'Bearer ' + jwtSecret } }));
 
     // WHEN
-    loginForm.doLogin();
+    loginForm.handleLogin();
     await loginForm.$nextTick();
 
     // THEN

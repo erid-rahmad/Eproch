@@ -1,6 +1,7 @@
 import Component from 'vue-class-component';
 import { Inject, Vue } from 'vue-property-decorator';
 import LoginService from '@/account/login.service';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
 @Component
 export default class Home extends Vue {
@@ -12,10 +13,10 @@ export default class Home extends Vue {
   }
 
   public get authenticated(): boolean {
-    return this.$store.getters.authenticated;
+    return accountStore.authenticated;
   }
 
   public get username(): string {
-    return this.$store.getters.account ? this.$store.getters.account.login : '';
+    return accountStore.userIdentity ? accountStore.userIdentity.login : '';
   }
 }

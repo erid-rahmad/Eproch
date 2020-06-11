@@ -18,6 +18,7 @@ logging:
     ROOT: DEBUG
     io.github.jhipster: DEBUG
     com.bhp.opusb: DEBUG
+    org.apache.kafka.clients.NetworkClient: ERROR
 
 spring:
   profiles:
@@ -39,7 +40,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/OpusWebApp
     username: OpusWebApp
-    password:
+    password: 
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -58,7 +59,7 @@ spring:
       hibernate.cache.hazelcast.use_lite_member: true
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
-    contexts: dev, faker
+    contexts: dev
   mail:
     host: localhost
     port: 25

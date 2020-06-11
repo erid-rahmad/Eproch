@@ -1,0 +1,51 @@
+{
+  "opusWebApp": {
+    "aDColumn": {
+      "home": {
+        "title": "AD Columns",
+        "createLabel": "Create a new AD Column",
+        "createOrEditLabel": "Create or edit a AD Column",
+        "notFound": "No AD Columns found"
+      },
+      "created": "A new AD Column is created with identifier {{ param }}",
+      "updated": "A AD Column is updated with identifier {{ param }}",
+      "deleted": "A AD Column is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete AD Column {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Column"
+      },
+      "name": "Name",
+      "sqlName": "Sql Name",
+      "description": "Description",
+      "fieldLength": "Field Length",
+      "key": "Key",
+      "type": "Type",
+      "foreignKey": "Foreign Key",
+      "importedTable": "Imported Table",
+      "importedColumn": "Imported Column",
+      "mandatory": "Mandatory",
+      "mandatoryLogic": "Mandatory Logic",
+      "displayLogic": "Display Logic",
+      "readOnlyLogic": "Read Only Logic",
+      "updatable": "Updatable",
+      "alwaysUpdatable": "Always Updatable",
+      "copyable": "Copyable",
+      "defaultValue": "Default Value",
+      "formatPattern": "Format Pattern",
+      "minLength": "Min Length",
+      "maxLength": "Max Length",
+      "minValue": "Min Value",
+      "maxValue": "Max Value",
+      "identifier": "Identifier",
+      "defaultSelection": "Default Selection",
+      "selectionSequence": "Selection Sequence",
+      "active": "Active",
+      "adOrganization": "Ad Organization",
+      "adReference": "Ad Reference",
+      "adValidationRule": "Ad Validation Rule",
+      "adTable": "Ad Table"
+    }
+  }
+}

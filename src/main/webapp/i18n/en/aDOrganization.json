@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "aDOrganization": {
+      "home": {
+        "title": "AD Organizations",
+        "createLabel": "Create a new AD Organization",
+        "createOrEditLabel": "Create or edit a AD Organization",
+        "notFound": "No AD Organizations found"
+      },
+      "created": "A new AD Organization is created with identifier {{ param }}",
+      "updated": "A AD Organization is updated with identifier {{ param }}",
+      "deleted": "A AD Organization is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete AD Organization {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Organization"
+      },
+      "name": "Name",
+      "code": "Code",
+      "description": "Description",
+      "active": "Active"
+    }
+  }
+}

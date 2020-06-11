@@ -3,6 +3,7 @@ import { mixins } from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
 import UserManagementService from './user-management.service';
 import AlertMixin from '@/shared/alert/alert.mixin';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
 @Component
 export default class JhiUserManagementComponent extends mixins(Vue2Filters.mixin, AlertMixin) {
@@ -105,6 +106,6 @@ export default class JhiUserManagementComponent extends mixins(Vue2Filters.mixin
   }
 
   public get username(): string {
-    return this.$store.getters.account ? this.$store.getters.account.login : '';
+    return accountStore.account ? accountStore.account.login : '';
   }
 }

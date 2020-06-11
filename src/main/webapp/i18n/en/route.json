@@ -1,0 +1,75 @@
+{
+  "route": {
+    "home": "Home",
+    "myAccount": "My Account",
+    "changePassword": "Change Password",
+    "settings": "Settings",
+    "applicationDictionary": {
+      "default": "Application Dictionary",
+      "menu": "Menu",
+      "table": "Table",
+      "window": "Window",
+      "reference": "References"
+    },
+    "admin": {
+      "default": "System Administration",
+      "userManagement": "Users",
+      "api": "API References",
+      "audits": "Audits",
+      "health": "Health",
+      "logs": "Logs",
+      "metrics": "Metrics",
+      "config": "Configuration",
+      "tracker": "User Tracker"
+    },
+    "country": {
+      "default": "Countries",
+      "list": "Countries",
+      "add": "Add Country",
+      "edit": "Edit Country",
+      "view": "Country Details"
+    },
+    "currency": {
+      "default": "Currencies",
+      "list": "Currencies",
+      "add": "Add Currency",
+      "edit": "Edit Currency",
+      "view": "Currency Details"
+    },
+    "region": {
+      "default": "Regions",
+      "list": "Regions",
+      "add": "Add Region",
+      "edit": "Edit Region",
+      "view": "Region Details"
+    },
+    "city": {
+      "default": "Cities",
+      "list": "Cities",
+      "add": "Add City",
+      "edit": "Edit City",
+      "view": "City Details"
+    },
+    "business-category": {
+      "default": "Business Categories",
+      "list": "Business Categories",
+      "add": "Add Business Category",
+      "edit": "Edit Business Category",
+      "view": "Business Category Details"
+    },
+    "supporting-document": {
+      "default": "Supporting Documents",
+      "list": "Supporting Documents",
+      "add": "Add Supporting Document",
+      "edit": "Edit Supporting Document",
+      "view": "Supporting Document Details"
+    },
+    "document-type": {
+      "default": "Document Types",
+      "list": "Document Types",
+      "add": "Add Document Type",
+      "edit": "Edit Document Type",
+      "view": "Document Type Details"
+    }
+  }
+}

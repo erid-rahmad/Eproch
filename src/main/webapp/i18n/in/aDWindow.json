@@ -1,0 +1,28 @@
+{
+  "opusWebApp": {
+    "aDWindow": {
+      "home": {
+        "title": "AD Windows",
+        "createLabel": "Buat AD Window baru",
+        "createOrEditLabel": "Buat atau edit AD Window",
+        "notFound": "No AD Windows found"
+      },
+      "created": "AD Window dengan id {{ param }} telah dibuat",
+      "updated": "AD Window dengan id {{ param }} telah diperbaharui",
+      "deleted": "AD Window dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus AD Window {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Window"
+      },
+      "name": "Name",
+      "description": "Description",
+      "titleLogic": "Title Logic",
+      "type": "Type",
+      "active": "Active",
+      "aDTab": "A D Tab",
+      "adOrganization": "Ad Organization"
+    }
+  }
+}

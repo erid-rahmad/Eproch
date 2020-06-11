@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    
+    <!--
+        Updated the entity ADTab.
+    -->
+    <changeSet id="20200502222800-1" author="jhipster">
+        <addColumn tableName="ad_tab">
+            <column name="parent_column_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="foreign_column_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+        <addForeignKeyConstraint baseColumnNames="parent_column_id"
+                                 baseTableName="ad_tab"
+                                 constraintName="fk_ad_tab_parent_column_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_column"/>
+
+        <addForeignKeyConstraint baseColumnNames="foreign_column_id"
+                                 baseTableName="ad_tab"
+                                 constraintName="fk_ad_tab_foreign_column_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_column"/>
+
+    </changeSet>
+</databaseChangeLog>

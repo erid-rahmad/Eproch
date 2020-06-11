@@ -1,0 +1,26 @@
+{
+  "opusWebApp": {
+    "adValidationRule": {
+      "home": {
+        "title": "Ad Validation Rules",
+        "createLabel": "Buat Ad Validation Rule baru",
+        "createOrEditLabel": "Buat atau edit Ad Validation Rule",
+        "notFound": "No Ad Validation Rules found"
+      },
+      "created": "Ad Validation Rule dengan id {{ param }} telah dibuat",
+      "updated": "Ad Validation Rule dengan id {{ param }} telah diperbaharui",
+      "deleted": "Ad Validation Rule dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Ad Validation Rule {{ id }}?"
+      },
+      "detail": {
+        "title": "Ad Validation Rule"
+      },
+      "uid": "Uid",
+      "name": "Name",
+      "description": "Description",
+      "query": "Query",
+      "adValidationRule": "Ad Validation Rule"
+    }
+  }
+}

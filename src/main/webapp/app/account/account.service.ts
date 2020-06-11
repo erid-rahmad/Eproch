@@ -1,9 +1,12 @@
 import axios from 'axios';
 import { Store } from 'vuex';
 import VueRouter from 'vue-router';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store';
 import TranslationService from '@/locale/translation.service';
 
 import TrackerService from '@/admin/tracker/tracker.service';
+import { PermissionStoreModule as permissionStore } from '@/shared/config/store/permission-store';
 
 export default class AccountService {
   constructor(
@@ -17,7 +20,7 @@ export default class AccountService {
 
   public init(): void {
     const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
-    if (!this.store.getters.account && !this.store.getters.logon && token) {
+    if (!accountStore.userIdentity && !accountStore.logon && token) {
       this.retrieveAccount();
     }
     this.retrieveProfiles();
@@ -26,63 +29,63 @@ export default class AccountService {
   public retrieveProfiles(): void {
     axios.get('management/info').then(res => {
       if (res.data && res.data.activeProfiles) {
-        this.store.commit('setRibbonOnProfiles', res.data['display-ribbon-on-profiles']);
-        this.store.commit('setActiveProfiles', res.data['activeProfiles']);
+        accountStore.setRibbonOnProfiles(res.data['display-ribbon-on-profiles']);
+        accountStore.setActiveProfiles(res.data['activeProfiles']);
       }
     });
   }
 
-  public retrieveAccount(): void {
-    this.store.commit('authenticate');
+  public async retrieveAccount(): Promise<void> {
+    accountStore.authenticate();
     axios
       .get('api/account')
       .then(response => {
         const account = response.data;
         if (account) {
-          this.store.commit('authenticated', account);
-          if (this.store.getters.currentLanguage !== account.langKey) {
-            this.store.commit('currentLanguage', account.langKey);
+          accountStore.setAuthenticated(account);
+          if (translationStore.language !== account.langKey) {
+            translationStore.setLanguage(account.langKey);
           }
           if (sessionStorage.getItem('requested-url')) {
             this.router.replace(sessionStorage.getItem('requested-url'));
             sessionStorage.removeItem('requested-url');
           }
-          this.trackerService.connect();
+          permissionStore.generateRoutes(new Set<string>(account.authorities));
+          this.router.addRoutes(permissionStore.dynamicRoutes);
+          // this.trackerService.connect();
         } else {
-          this.store.commit('logout');
+          accountStore.logout();
           this.router.push('/');
           sessionStorage.removeItem('requested-url');
         }
-        this.translationService.refreshTranslation(this.store.getters.currentLanguage);
+        this.translationService.refreshTranslation(translationStore.language);
       })
       .catch(() => {
-        this.store.commit('logout');
+        accountStore.logout();
         this.router.push('/');
       });
   }
 
+  /**
+   * Checks whether a user has any authority accessing a route.
+   * @param authorities Route meta authorities.
+   */
   public hasAnyAuthority(authorities: any): boolean {
-    if (typeof authorities === 'string') {
-      authorities = [authorities];
-    }
     if (!this.authenticated || !this.userAuthorities) {
       return false;
     }
 
-    for (let i = 0; i < authorities.length; i++) {
-      if (this.userAuthorities.includes(authorities[i])) {
-        return true;
-      }
+    if (typeof authorities === 'string') {
+      authorities = [authorities];
     }
-
-    return false;
+    return authorities.some((authority: string) => this.userAuthorities.has(authority));
   }
 
   public get authenticated(): boolean {
-    return this.store.getters.authenticated;
+    return accountStore.authenticated;
   }
 
-  public get userAuthorities(): any {
-    return this.store.getters.account.authorities;
+  public get userAuthorities(): Set<string> {
+    return accountStore.authorities;
   }
 }

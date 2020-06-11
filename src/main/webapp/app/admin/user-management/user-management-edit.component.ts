@@ -3,6 +3,7 @@ import { Component, Inject, Vue } from 'vue-property-decorator';
 import UserManagementService from './user-management.service';
 import { IUser, User } from '@/shared/model/user.model';
 import AlertService from '@/shared/alert/alert.service';
+import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store';
 
 const loginValidator = (value: string) => {
   if (!value) {
@@ -42,7 +43,7 @@ export default class JhiUserManagementEdit extends Vue {
   public userAccount: IUser;
   public isSaving = false;
   public authorities: any[] = [];
-  public languages: any = this.$store.getters.languages;
+  public languages: any = translationStore.languages;
 
   beforeRouteEnter(to, from, next) {
     next(vm => {

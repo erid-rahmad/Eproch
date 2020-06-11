@@ -117,6 +117,7 @@ Desktop.ini
 ######################
 /bin/
 /deploy/
+/.history/
 
 ######################
 # Logs
@@ -130,6 +131,8 @@ Desktop.ini
 *.*~
 *~
 .merge_file*
+eproc-entities.png
+application-dictionary-entities.png
 
 ######################
 # Gradle Wrapper
@@ -145,3 +148,4 @@ Desktop.ini
 # ESLint
 ######################
 .eslintcache
+eproc-entities.png

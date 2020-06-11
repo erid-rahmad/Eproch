@@ -1,0 +1,27 @@
+{
+  "opusWebApp": {
+    "aDReferenceList": {
+      "home": {
+        "title": "AD Reference Lists",
+        "createLabel": "Create a new AD Reference List",
+        "createOrEditLabel": "Create or edit a AD Reference List",
+        "notFound": "No AD Reference Lists found"
+      },
+      "created": "A new AD Reference List is created with identifier {{ param }}",
+      "updated": "A AD Reference List is updated with identifier {{ param }}",
+      "deleted": "A AD Reference List is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete AD Reference List {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Reference List"
+      },
+      "name": "Name",
+      "value": "Value",
+      "description": "Description",
+      "active": "Active",
+      "adOrganization": "Ad Organization",
+      "adReference": "Ad Reference"
+    }
+  }
+}

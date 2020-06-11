@@ -1,0 +1,10 @@
+{
+  "opusWebApp": {
+    "ADWindowType": {
+      "null": "",
+      "MAINTAIN": "MAINTAIN",
+      "QUERY": "QUERY",
+      "TRANSACTION": "TRANSACTION"
+    }
+  }
+}

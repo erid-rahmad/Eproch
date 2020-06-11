@@ -4,6 +4,7 @@ import { required, minLength, maxLength, helpers, email } from 'vuelidate/lib/va
 import LoginService from '@/account/login.service';
 import RegisterService from '@/account/register/register.service';
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
+import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store';
 
 const loginPattern = helpers.regex('alpha', /^[_.@A-Za-z0-9-]*$/);
 const validations: any = {
@@ -58,7 +59,7 @@ export default class Register extends Vue {
       this.error = null;
       this.errorUserExists = null;
       this.errorEmailExists = null;
-      this.registerAccount.langKey = this.$store.getters.currentLanguage;
+      this.registerAccount.langKey = translationStore.language;
       this.registerService()
         .processRegistration(this.registerAccount)
         .then(() => {

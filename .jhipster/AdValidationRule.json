@@ -1,0 +1,49 @@
+{
+    "name": "AdValidationRule",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "query",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "adValidationRule",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adValidationRule",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200601164200",
+    "entityTableName": "ad_validation_rule",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

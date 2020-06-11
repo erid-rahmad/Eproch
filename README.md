@@ -16,10 +16,36 @@ You will only need to run this command when dependencies change in [package.json
 
 We use npm scripts and [Webpack][] as our build system.
 
+### Apply Liquibase Change Logs
+
+You need to apply Liquibase change log before starting the application. But, if you are sure that it's already synced with the database, just run the application.
+
+To see the current synchronization status of the change log, run the following command:
+
+    ./mvnw liquibase:status
+
+If there is no error, you can proceed to update the change log manually or leave the application to apply the changes automatically. Manual update by invoking the `./mvnw liquibase:update` command.
+
+### Sample Application Dictionary Metadata
+
+In order to make the dynamic window component to working properly, you need to import some CSV files. These files are located in `src/main/resources/config/liquibase/fake-data`. Import the following files in sequence:
+
+1. `ad_client`
+2. `ad_organization`
+3. `ad_reference`
+4. `ad_reference_list`
+5. `ad_table`
+6. `ad_column`
+7. `ad_window`
+8. `ad_tab`
+9. `ad_field`
+
+### Running the Application
+
 Run the following commands in two separate terminals to create a blissful development experience where your browser
 auto-refreshes when files change on your hard drive.
 
-    ./mvnw
+    ./mvnw -P-webpack
     npm start
 
 Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by

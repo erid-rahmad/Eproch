@@ -1,0 +1,58 @@
+{
+    "name": "BusinessCategory",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "businessCategory",
+            "otherEntityRelationshipName": "parentCategory",
+            "relationshipName": "businessCategory"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "documentTypeBusinessCategory",
+            "otherEntityRelationshipName": "businessCategory",
+            "relationshipName": "documentTypeBusinessCategory"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "businessCategory",
+            "otherEntityRelationshipName": "businessCategory",
+            "relationshipName": "parentCategory",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-many",
+            "otherEntityName": "vendor",
+            "otherEntityRelationshipName": "businessCategory",
+            "relationshipName": "vendor",
+            "otherEntityField": "id",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20200403094400",
+    "entityTableName": "business_category",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

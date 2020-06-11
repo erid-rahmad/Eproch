@@ -3,6 +3,7 @@ import Ribbon from '@/core/ribbon/ribbon.vue';
 import RibbonClass from '@/core/ribbon/ribbon.component';
 
 import * as config from '@/shared/config/config';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store'
 
 const localVue = createLocalVue();
 config.initVueApp(localVue);
@@ -24,8 +25,8 @@ describe('Ribbon', () => {
     await ribbon.$nextTick();
   };
 
-  beforeEach(() => {
-    store.commit('setRibbonOnProfiles', null);
+  beforeEach(async () => {
+    await accountStore.setRibbonOnProfiles(null)
   });
 
   it('should be a Vue instance', async () => {
@@ -40,15 +41,15 @@ describe('Ribbon', () => {
 
   it('should have ribbonEnabled set to value in store', async () => {
     const profile = 'dev';
-    store.commit('setActiveProfiles', ['foo', profile, 'bar']);
-    store.commit('setRibbonOnProfiles', profile);
+    await accountStore.setActiveProfiles(['foo', profile, 'bar'])
+    await accountStore.setRibbonOnProfiles(profile)
     expect(ribbon.ribbonEnabled).toBeTruthy();
   });
 
   it('should not have ribbonEnabled when profile not activated', async () => {
     const profile = 'dev';
-    store.commit('setActiveProfiles', ['foo', 'bar']);
-    store.commit('setRibbonOnProfiles', profile);
+    await accountStore.setActiveProfiles(['foo', 'bar'])
+    await accountStore.setRibbonOnProfiles(profile)
     expect(ribbon.ribbonEnabled).toBeFalsy();
   });
 });

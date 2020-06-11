@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "aDOrganization": {
+      "home": {
+        "title": "AD Organizations",
+        "createLabel": "Buat AD Organization baru",
+        "createOrEditLabel": "Buat atau edit AD Organization",
+        "notFound": "No AD Organizations found"
+      },
+      "created": "AD Organization dengan id {{ param }} telah dibuat",
+      "updated": "AD Organization dengan id {{ param }} telah diperbaharui",
+      "deleted": "AD Organization dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus AD Organization {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Organization"
+      },
+      "name": "Name",
+      "code": "Code",
+      "description": "Description",
+      "active": "Active"
+    }
+  }
+}

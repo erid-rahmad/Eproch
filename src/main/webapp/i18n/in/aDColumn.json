@@ -1,0 +1,51 @@
+{
+  "opusWebApp": {
+    "aDColumn": {
+      "home": {
+        "title": "AD Columns",
+        "createLabel": "Buat AD Column baru",
+        "createOrEditLabel": "Buat atau edit AD Column",
+        "notFound": "No AD Columns found"
+      },
+      "created": "AD Column dengan id {{ param }} telah dibuat",
+      "updated": "AD Column dengan id {{ param }} telah diperbaharui",
+      "deleted": "AD Column dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus AD Column {{ id }}?"
+      },
+      "detail": {
+        "title": "AD Column"
+      },
+      "name": "Name",
+      "sqlName": "Sql Name",
+      "description": "Description",
+      "fieldLength": "Field Length",
+      "key": "Key",
+      "type": "Type",
+      "foreignKey": "Foreign Key",
+      "importedTable": "Imported Table",
+      "importedColumn": "Imported Column",
+      "mandatory": "Mandatory",
+      "mandatoryLogic": "Mandatory Logic",
+      "displayLogic": "Display Logic",
+      "readOnlyLogic": "Read Only Logic",
+      "updatable": "Updatable",
+      "alwaysUpdatable": "Always Updatable",
+      "copyable": "Copyable",
+      "defaultValue": "Default Value",
+      "formatPattern": "Format Pattern",
+      "minLength": "Min Length",
+      "maxLength": "Max Length",
+      "minValue": "Min Value",
+      "maxValue": "Max Value",
+      "identifier": "Identifier",
+      "defaultSelection": "Default Selection",
+      "selectionSequence": "Selection Sequence",
+      "active": "Active",
+      "adOrganization": "Ad Organization",
+      "adReference": "Ad Reference",
+      "adValidationRule": "Ad Validation Rule",
+      "adTable": "Ad Table"
+    }
+  }
+}

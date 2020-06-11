@@ -2,7 +2,9 @@ import { Component, Inject, Vue } from 'vue-property-decorator';
 import { VERSION } from '@/constants';
 import LoginService from '@/account/login.service';
 import AccountService from '@/account/account.service';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store'
 import TranslationService from '@/locale/translation.service';
+import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store'
 
 @Component
 export default class JhiNavbar extends Vue {
@@ -12,8 +14,8 @@ export default class JhiNavbar extends Vue {
 
   @Inject('accountService') private accountService: () => AccountService;
   public version = VERSION ? 'v' + VERSION : '';
-  private currentLanguage = this.$store.getters.currentLanguage;
-  private languages: any = this.$store.getters.languages;
+  private currentLanguage = translationStore.language;
+  private languages: any = translationStore.languages;
 
   created() {
     this.translationService().refreshTranslation(this.currentLanguage);
@@ -31,14 +33,15 @@ export default class JhiNavbar extends Vue {
   }
 
   public isActiveLanguage(key: string): boolean {
-    return key === this.$store.getters.currentLanguage;
+    return key === translationStore.currentLanguage;
   }
 
   public logout(): void {
     localStorage.removeItem('jhi-authenticationToken');
     sessionStorage.removeItem('jhi-authenticationToken');
-    this.$store.commit('logout');
-    this.$router.push('/');
+    accountStore.logout().then(() => {
+      this.$router.push('/');
+    })
   }
 
   public openLogin(): void {
@@ -46,7 +49,7 @@ export default class JhiNavbar extends Vue {
   }
 
   public get authenticated(): boolean {
-    return this.$store.getters.authenticated;
+    return accountStore.authenticated;
   }
 
   public hasAnyAuthority(authorities: any): boolean {
@@ -54,10 +57,10 @@ export default class JhiNavbar extends Vue {
   }
 
   public get swaggerEnabled(): boolean {
-    return this.$store.getters.activeProfiles.indexOf('swagger') > -1;
+    return accountStore.activeProfiles.indexOf('swagger') > -1;
   }
 
   public get inProduction(): boolean {
-    return this.$store.getters.activeProfiles.indexOf('prod') > -1;
+    return accountStore.activeProfiles.indexOf('prod') > -1;
   }
 }

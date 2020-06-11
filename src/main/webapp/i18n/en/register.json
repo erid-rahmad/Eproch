@@ -1,8 +1,41 @@
 {
   "register": {
-    "title": "Registration",
+    "title": "Supplier Registration",
+    "document": {
+      "mandatory": {
+        "title": "Mandatory Documents",
+        "description": "Please provide the required documents"
+      },
+      "additional": {
+        "title": "Additional Documents",
+        "description": "Please provide additional documents, if any"
+      }
+    },
+    "pic": {
+      "contact": {
+        "title": "Contact Persons"
+      },
+      "functionary": {
+        "title": "Company Functionaries"
+      },
+      "name": "Name",
+      "position": "Position",
+      "phone": "Phone No.",
+      "email": "Email Address",
+      "subcategory": "Sub-category",
+      "username": "Username"
+    },
     "form": {
-      "button": "Register"
+      "button": "Register",
+      "document": {
+        "title.edit": "Edit Document"
+      },
+      "contact": {
+        "title.edit": "Edit Contact"
+      },
+      "functionary": {
+        "title.edit": "Edit Functionary"
+      }
     },
     "messages": {
       "validate": {

@@ -7,6 +7,33 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entitas",
+        "country": "Country",
+        "currency": "Currency",
+        "location": "Location",
+        "vendor": "Vendor",
+        "businessCategory": "Business Category",
+        "supportingDocument": "Supporting Document",
+        "documentType": "Document Type",
+        "documentTypeBusinessCategory": "Document Type Business Category",
+        "personInCharge": "Person In Charge",
+        "companyFunctionary": "Company Functionary",
+        "reference": "Reference",
+        "referenceList": "Reference List",
+        "region": "Region",
+        "city": "City",
+        "permission": "Permission",
+        "adClient": "AD Client",
+        "adOrganization": "AD Organization",
+        "cBank": "C Bank",
+        "adTable": "AD Table",
+        "adColumn": "AD Column",
+        "adWindow": "AD Window",
+        "adTab": "AD Tab",
+        "adField": "AD Field",
+        "adFieldGroup": "AD Field Group",
+        "adReference": "AD Reference",
+        "adReferenceList": "AD Reference List",
+        "adValidationRule": "Ad Validation Rule",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
@@ -29,6 +56,7 @@
         "audits": "Audit",
         "apidocs": "API",
         "database": "Database",
+        "entity-audit": "Entity Audit",
         "jhipster-needle-menu-add-admin-element": "JHipster will add additional menu entries here (do not translate!)"
       },
       "language": "Bahasa"
@@ -135,5 +163,11 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "Ini bagian footer"
+  "footer": "Ini bagian footer",
+  "tagsView": {
+    "refresh": "Muat Ulang",
+    "close": "Tutup",
+    "closeOthers": "Tutup Lainnya",
+    "closeAll": "Tutup Semua"
+  }
 }

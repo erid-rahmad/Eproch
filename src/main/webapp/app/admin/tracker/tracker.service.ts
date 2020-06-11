@@ -1,4 +1,4 @@
-import * as SockJS from 'sockjs-client';
+import SockJS from 'sockjs-client';
 import * as Stomp from 'webstomp-client';
 import { Observable, Observer } from 'rxjs';
 import VueRouter from 'vue-router';

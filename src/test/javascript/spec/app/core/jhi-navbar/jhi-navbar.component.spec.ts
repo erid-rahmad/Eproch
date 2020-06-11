@@ -2,6 +2,8 @@ import { createLocalVue, shallowMount, Wrapper } from '@vue/test-utils';
 import JhiNavbar from '@/core/jhi-navbar/jhi-navbar.vue';
 import JhiNavbarClass from '@/core/jhi-navbar/jhi-navbar.component';
 import * as config from '@/shared/config/config';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store'
+import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store'
 import router from '@/router';
 
 const localVue = createLocalVue();
@@ -53,15 +55,13 @@ describe('JhiNavbar', () => {
     expect(jhiNavbar.inProduction).toBeFalsy();
   });
 
-  it('should have user data set after authentication', () => {
-    store.commit('authenticated', { login: 'test' });
-
+  it('should have user data set after authentication', async () => {
+    await accountStore.setAuthenticated({ login: 'test' })
     expect(jhiNavbar.authenticated).toBeTruthy();
   });
 
-  it('should have profile info set after info retrieved', () => {
-    store.commit('setActiveProfiles', ['prod', 'swagger']);
-
+  it('should have profile info set after info retrieved', async () => {
+    await accountStore.setActiveProfiles(['prod', 'swagger'])
     expect(jhiNavbar.swaggerEnabled).toBeTruthy();
     expect(jhiNavbar.inProduction).toBeTruthy();
   });
@@ -77,8 +77,8 @@ describe('JhiNavbar', () => {
     expect(accountService.hasAnyAuthority).toHaveBeenCalled();
   });
 
-  it('logout should clear credentials', () => {
-    store.commit('authenticated', { login: 'test' });
+  it('logout should clear credentials', async () => {
+    await accountStore.setAuthenticated({ login: 'test' })
     jhiNavbar.logout();
 
     expect(jhiNavbar.authenticated).toBeFalsy();
@@ -99,8 +99,7 @@ describe('JhiNavbar', () => {
   });
 
   it('should check for correct language', () => {
-    store.commit('currentLanguage', 'fr');
-
+    translationStore.setLanguage('fr')
     expect(jhiNavbar.isActiveLanguage('en')).toBeFalsy();
     expect(jhiNavbar.isActiveLanguage('fr')).toBeTruthy();
   });

@@ -1,0 +1,160 @@
+{
+    "name": "ADColumn",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "sqlName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "fieldLength",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "key",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "ADColumnType",
+            "fieldValues": "STRING,INTEGER,LONG,BIG_DECIMAL,FLOAT,DOUBLE,BOOLEAN,LOCAL_DATE,ZONED_DATE_TIME,DURATION,INSTANT"
+        },
+        {
+            "fieldName": "foreignKey",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "importedTable",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "importedColumn",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mandatory",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "mandatoryLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "displayLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "readOnlyLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "updatable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "alwaysUpdatable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "copyable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "defaultValue",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "formatPattern",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "minLength",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "maxLength",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "minValue",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "maxValue",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "identifier",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "defaultSelection",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "selectionSequence",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDReference",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipName": "adReference",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adValidationRule",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipName": "adValidationRule",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDTable",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTable",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200429152800",
+    "entityTableName": "ad_column",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true
+}

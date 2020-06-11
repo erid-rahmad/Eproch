@@ -1,4 +1,3 @@
-import Vuex from 'vuex';
 import VueI18n from 'vue-i18n';
 import JhiFormatter from './formatter';
 import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
@@ -43,10 +42,8 @@ import VueCookie from 'vue-cookie';
 import Vuelidate from 'vuelidate';
 import Vue2Filters from 'vue2-filters';
 
+import store from '@/shared/config/store';
 import * as filters from '@/shared/date/filters';
-import { accountStore } from '@/shared/config/store/account-store';
-import { alertStore } from '@/shared/config/store/alert-store';
-import { translationStore } from '@/shared/config/store/translation-store';
 
 const dateTimeFormats = {
   en: {
@@ -159,12 +156,5 @@ export function initI18N(vue) {
 }
 
 export function initVueXStore(vue) {
-  vue.use(Vuex);
-  return new Vuex.Store({
-    modules: {
-      accountStore,
-      alertStore,
-      translationStore
-    }
-  });
+  return store;
 }

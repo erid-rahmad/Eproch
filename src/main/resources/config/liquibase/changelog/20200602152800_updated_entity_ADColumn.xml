@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    
+    <!--
+        Added the entity ADColumn.
+    -->
+    <changeSet id="20200602152800-1" author="jhipster">
+        <addColumn tableName="ad_column">
+            <column name="display_logic" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="always_updatable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="copyable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="identifier" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="default_selection" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="selection_sequence" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_validation_rule_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </addColumn>
+
+        <dropColumn tableName="ad_column" columnName="ad_client_id" />
+
+        <addForeignKeyConstraint baseColumnNames="ad_validation_rule_id"
+                                 baseTableName="ad_column"
+                                 constraintName="fk_ad_column_ad_validation_rule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_validation_rule"/>
+
+    </changeSet>
+
+</databaseChangeLog>
