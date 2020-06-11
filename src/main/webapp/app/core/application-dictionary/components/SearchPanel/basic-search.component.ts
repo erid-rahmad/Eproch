@@ -90,6 +90,11 @@ export default class BasicSearch extends BasicSearchProps {
     this.eventBus.$emit('close-search-window');
   }
 
+  public booleanOption = [
+    { value: '', label: '*' },
+    { value: 'true', label: 'true' },
+    { value: 'false', label: 'false' },
+  ]
 
 
 
@@ -192,5 +197,9 @@ export default class BasicSearch extends BasicSearchProps {
 
   public isActiveStatusField(column: any) {
     return column.adColumn.name === 'active';
+  }
+
+  public getqueryValueByColumnBoolean(row: any) {
+    return row && row.adColumn.type === "BOOLEAN";
   }
 }

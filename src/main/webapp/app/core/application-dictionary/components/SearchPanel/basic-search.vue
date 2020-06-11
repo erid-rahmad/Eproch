@@ -13,20 +13,22 @@
               :width="getFieldWidth(field)"
               :label="field.name">
                 
-              
-                <el-switch
-                  v-if="isActiveStatusField(field)"
+                <el-select
+                  v-if="getqueryValueByColumnBoolean(field)"
                   v-model="row[field.adColumn.name]"
-                />
-                <el-checkbox
-                  v-else-if="isBooleanField(field)"
-                  v-model="row[field.adColumn.name]"
-                />
-               
-                
+                  size="small"
+                  filterable
+                >
+                  <el-option
+                    v-for="item in booleanOption"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value"
+                  />
+                </el-select>
                 
                 <el-select
-                  v-if="isTableDirectLink(field)"
+                  v-else-if="isTableDirectLink(field)"
                   v-model="row[field.adColumn.name]"
                   :remote="true"
                   :remote-method="fetchTableDirectData"

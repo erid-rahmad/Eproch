@@ -129,7 +129,7 @@ export default class AdvanceSearch extends AdvanceSearchProps {
       this.tempMultipleSelectionFilterAdvance = '';
       
         for (let i = 0; i < this.multipleSelectionFilterAdvance.length; i++) {
-          if((this.multipleSelectionFilterAdvance[i].column !== "")&&(this.multipleSelectionFilterAdvance[i].query !== "")&&(this.multipleSelectionFilterAdvance[i].queryValue !== "")){
+          if((this.multipleSelectionFilterAdvance[i].column !== "")&&(this.multipleSelectionFilterAdvance[i].query !== "")){
           
             this.tempMultipleSelectionFilterAdvanceColumn = this.multipleSelectionFilterAdvance[i].column.adColumn.name;
             this.tempMultipleSelectionFilterAdvanceQuery = this.multipleSelectionFilterAdvance[i].query;
@@ -168,6 +168,12 @@ export default class AdvanceSearch extends AdvanceSearchProps {
     }
     this.$emit('clear-search', "");
     this.eventBus.$emit('close-search-window');
+
+    this.gridData = [{
+      column: '', 
+      query: '', 
+      queryValue: ''
+    }]
   }
 
   public close(){
@@ -180,7 +186,7 @@ export default class AdvanceSearch extends AdvanceSearchProps {
       ['contains', 'doesNotContain', 'equals', 'notEquals']
     ],[
       'BOOLEAN',
-      ['equals', 'specified']
+      ['equals']
     ],[
       'ARRAY',
       ['in', 'sort']
@@ -201,6 +207,12 @@ export default class AdvanceSearch extends AdvanceSearchProps {
       ['equals', 'notEquals', 'greaterThan', 'greaterThanOrEqual', 'lessThan', 'lessThanOrEqual']
     ],
   ])
+
+  public booleanOption = [
+    { value: '', label: '*' },
+    { value: 'true', label: 'true' },
+    { value: 'false', label: 'false' },
+  ]
 
   get operators(){
     return (index)=>this.operatorMap[index];

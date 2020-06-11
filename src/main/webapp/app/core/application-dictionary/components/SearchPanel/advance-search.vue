@@ -122,10 +122,19 @@
 
           <template slot-scope="scope">
               
-              <el-switch
+              <el-select
                 v-if="getqueryValueByColumnBoolean(scope.row)"
                 v-model="scope.row.queryValue"
-              />
+                size="small"
+                filterable
+              >
+                <el-option
+                  v-for="item in booleanOption"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
 
               <el-input
                 v-else
