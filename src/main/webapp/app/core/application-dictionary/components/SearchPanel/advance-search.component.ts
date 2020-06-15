@@ -164,7 +164,8 @@ export default class AdvanceSearch extends AdvanceSearchProps {
   public clear(){
     for (let field of this.fields) {
       const column = field.adColumn;
-      this.row[column.name] = "";
+      //this.row[column.name] = "";
+      this.$set(this.row, column.name, "");
     }
     this.$emit('clear-search', "");
     this.eventBus.$emit('close-search-window');

@@ -56,7 +56,7 @@ export default class SearchPanel extends SearchPanelProps {
 
   private onClear() {
     this.eventBus.$emit('close-search-window');
-    this.eventBus.$emit('filter-updated', "");
+    this.eventBus.$emit('filter-updated', "clear");
   }
 
   private onTabClick() {
