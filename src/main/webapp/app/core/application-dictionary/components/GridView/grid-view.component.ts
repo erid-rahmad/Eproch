@@ -108,6 +108,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   private fields: any[] = [];
   private baseApiUrl: string = '';
   private filterQuery: string = '';
+  private filterQueryOrigin: string = '';
   private parentId: number = 0;
   private getId: any = null;
 
@@ -381,7 +382,32 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
   private filterRecord(query) {
     //console.log('Filter query: %O', query);
-    this.filterQuery = query;
+    
+    if((this.filterQueryOrigin === "")||(this.filterQueryOrigin === null)){
+      this.filterQueryOrigin = this.filterQuery;
+    }
+    
+    if((this.filterQuery === null)||(this.filterQuery === "")){
+      this.filterQuery = query;
+    }else{
+
+      const child = this.filterQuery.match("^adTableId");
+      
+      if(child){
+        this.filterQuery = this.filterQueryOrigin + query;
+        if(query === "clear"){
+          this.filterQuery = this.filterQueryOrigin;
+        }
+      }else{
+        this.filterQuery = query;
+        this.filterQueryOrigin = "";
+        if(query === "clear"){
+          this.filterQuery = "";
+        }
+      }
+      
+    }
+    
     this.retrieveAllRecords();
   }
 
