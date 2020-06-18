@@ -15,6 +15,7 @@ import ADColumnService from '@/entities/ad-column/ad-column.service';
 import { TagsViewStoreModule as tagsViewStore } from "@/shared/config/store/tags-view-store";
 import _ from 'lodash';
 import { mapActions } from 'vuex';
+import { ElPagination } from 'element-ui/types/pagination';
 
 @Component({
   components: {
@@ -45,12 +46,18 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   public gridView = true;
   public childTabs = [];
   public currentTab: string = '';
+
+  // Event buses.
   private mainToolbarEventBus = new Vue();
   private secondaryToolbarEventBus = new Vue();
   private searchPanelEventBus = new Vue();
+  
   private searchPanelActive: boolean = false;
   private fullPath: string = '';
   private unwatchStore: Function;
+
+  private totalRecords: number = 0;
+  private currentRecordNo: number = 1;
 
   removeWindowState!: (path: string) => Promise<void>;
 
@@ -139,6 +146,14 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.gridView = options.gridView;
   }
 
+  public onCurrentRecordChange(no: number) {
+    (<any>this.$refs.mainGrid)?.setSelectedRecordNo(no);
+  }
+
+  public onTotalCountChange(count: number) {
+    this.totalRecords = count;
+  }
+
   /**
    * grid-view's height need to be updated to maintain its fixed header position.
    */
@@ -204,21 +219,22 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
    * This method is called once the parent tab record row changed.
    * @param parent parent tab record.
    */
-  public async loadChildTab(parent: any) {
+  public async loadChildTab({data, recordNo}) {
+    this.currentRecordNo = recordNo;
     if (this.childTabs.length === 0 && !this.loadingChildTabs) {
       this.loadingChildTabs = true;
       this.retrieveTabs(this.mainTab.id, (tab: any, index: number) => {
-        this.buildChildTabFilterQuery(tab, index, parent?.id);
+        this.buildChildTabFilterQuery(tab, index, data?.id);
       });
     } else {
-      if (!this.currentTab.length || parent === null) {
+      if (!this.currentTab.length || data === null) {
         return;
       }
       const index = parseInt(this.currentTab);
       let tab = this.childTabs[index];
-      tab.parentId = parent.id;
+      tab.parentId = data.id;
       tab.filterQuery = buildCriteriaQueryString([
-        `${tab.foreignColumnName}.equals=${parent.id}`
+        `${tab.foreignColumnName}.equals=${data.id}`
       ]);
 
       // Use Vue.$set to notify array update.

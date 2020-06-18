@@ -1,13 +1,27 @@
 <template>
   <div class="app-container">
     <h3>{{ title }}</h3>
-    <div class="window-content">
+    <div
+      class="window-content"
+      :class="{'detailed-view': !gridView}"
+    >
       <action-toolbar
         @toggle-view="switchView"
         :at-window-root="tabStack.length <= 1"
         :at-last-tab="childTabs.length === 0"
         :event-bus="mainToolbarEventBus"
       />
+      <div>
+        <el-pagination
+          ref="toolbarPagination"
+          layout="prev, jumper, total, next"
+          :current-page.sync="currentRecordNo"
+          :page-size="1"
+          small
+          :total="totalRecords"
+          @current-change="onCurrentRecordChange"
+        />
+      </div>
       <splitpanes
         class="default-theme"
         horizontal
@@ -25,9 +39,18 @@
                 :search-panel-event-bus="searchPanelEventBus"
                 :toolbar-event-bus="mainToolbarEventBus"
                 @current-row-change="loadChildTab"
+                @total-count-changed="onTotalCountChange"
                 main-tab
               />
-              <detail-view v-else/>
+              <detail-view
+                v-else
+                ref="mainForm"
+                :tab="mainTab"
+                :page="currentRecordNo"
+                :search-panel-event-bus="searchPanelEventBus"
+                :toolbar-event-bus="mainToolbarEventBus"
+                @total-count-changed="onTotalCountChange"
+              />
             </keep-alive>
           </transition>
         </pane>
@@ -85,7 +108,11 @@
 }
 .window-content {
   position: relative;
-  height: calc(100% - 96px);
+  height: calc(100% - 134px);
+
+  &.detailed-view .splitpanes__pane {
+    overflow-y: auto;
+  }
 
   .splitpanes .el-tabs__content {
     overflow: auto;

@@ -11,6 +11,7 @@ import pluralize from "pluralize";
 import _ from 'lodash';
 import { mapActions } from 'vuex';
 import { RegisterTabParameter } from '@/shared/config/store/window-store';
+import { watch } from 'fs';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -23,6 +24,10 @@ const GridViewProps = Vue.extend({
       default: () => {
         return null;
       }
+    },
+    active: {
+      type: Boolean,
+      default: true
     },
 
     /**
@@ -65,6 +70,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     defaultSort: {},
     emptyText: 'No Records Found'
   };
+  selectedRowNo = 1;
   itemsPerPage = 10;
   queryCount: number = null;
   page = 1;
@@ -140,24 +146,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     return { name, adfields, targetEndpoint, filterQuery, parentId, promoted };
   }
 
-  @Watch('observableTabProperties')
-  onObservableTabPropertiesChange(tab: any) {
-    // Reset the pagination.
-    this.page = 1;
-    this.propOrder = 'id';
-    this.reverse = false;
-
-    this.tabName = tab.name;
-    this.fields = tab.adfields;
-    this.baseApiUrl = tab.targetEndpoint;
-    this.filterQuery = tab.filterQuery;
-    this.parentId = tab.parentId || 0;
-
-    if (!this.lazyLoad || this.parentId) {
-      this.retrieveAllRecords();
-    }
-  }
-
   @Watch('fields')
   onFieldsChange(fields: any[]) {
     this.referenceItemsMap.clear();
@@ -179,6 +167,32 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         type: getValidatorType(column.type),
         required: column.mandatory
       }
+    }
+  }
+
+  @Watch('observableTabProperties')
+  onObservableTabPropertiesChange(tab: any) {
+    // Reset the pagination.
+    this.page = 1;
+    this.propOrder = 'id';
+    this.reverse = false;
+
+    this.tabName = tab.name;
+    this.fields = tab.adfields;
+    this.baseApiUrl = tab.targetEndpoint;
+    this.filterQuery = tab.filterQuery;
+    this.parentId = tab.parentId || 0;
+
+    if (!this.lazyLoad || this.parentId) {
+      this.retrieveAllRecords();
+    }
+  }
+
+  @Watch('page')
+  onPageChange(page: number) {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.transition();
     }
   }
 
@@ -220,6 +234,14 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.retrieveAllRecords();
   }
 
+  public setSelectedRecordNo(no: number) {
+    const {pageNo, rowNo} = this.getPageAndRowNo(this.itemsPerPage, no);
+    this.page = pageNo;
+    if (this.mainTab) {
+      this.setRow(this.gridData[rowNo - 1]);
+    }
+  }
+
   public async changeCurrentRow(row: any) {
     if (this.newRecord) {
       return;
@@ -241,12 +263,19 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       data: row
     });
 
-    this.gridFields.forEach(field => {
+    this.fields.forEach(field => {
       this.updateReferenceQueries(field);
     })
 
     this.currentRecord = row;
-    this.$emit('current-row-change', row);
+    this.selectedRowNo = this.gridData.indexOf(row) + 1;
+    if (this.mainTab) {
+      const recordNo = this.getRecordNo(this.page, this.itemsPerPage, this.selectedRowNo);
+      this.$emit('current-row-change', {
+        data: row,
+        recordNo
+      });
+    }
   }
 
   public changeRowSelection(rows: Array<any>) {
@@ -300,7 +329,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
    * @param field 
    */
   private updateReferenceQueries(field: any) {
-    if (this.isTableDirectLink(field)) {
+    if (this.hasReferenceList(field) || this.isTableDirectLink(field)) {
       // Parse the validation rule which is used to filter the reference key records.
       const column = field.adColumn;
       const validationRule = field.adValidationRule || column.adValidationRule;
@@ -310,7 +339,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   private deleteRow(data?: any) {
-    if (!this.mainTab && data?.tabId !== this.tabId)
+    if (!data.isGridView && !this.mainTab && data?.tabId !== this.tabId)
       return;
 
     if (this.multipleSelectedRow.length) {
@@ -380,6 +409,15 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.toolbarEventBus.$emit('inline-editing', true);
   }
 
+  private getRecordNo = (page: number, size: number, row: number) => (page - 1) * size + row;
+
+  private getPageAndRowNo = (size: number, recordNo: number) => {
+    return {
+      rowNo: recordNo % size || recordNo,
+      pageNo: Math.floor(((recordNo - 1) / size) + 1)
+    };
+  }
+
   private filterRecord(query) {
     //console.log('Filter query: %O', query);
     
@@ -422,13 +460,12 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   /**
    * Triggered when user is going to add a new record.
    */
-  private async addBlankRow(data?: any) {
-    if (!this.mainTab && data?.tabId !== this.tabId)
+  private addBlankRow(data?: any) {
+    console.log('gridView: %s, mainTab: %s, tabId: %s', data.isGridView, this.mainTab, data.tabId);
+    if (!data.isGridView && !this.mainTab && data?.tabId !== this.tabId){
       return;
-
-    let record = {
-      id: 0
-    };
+    }
+    let record = { id: 0 };
     if (this.parentId) {
       record[this.tab.foreignColumnName] = this.parentId;
     }
@@ -442,14 +479,14 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     });
   }
 
-  private async copyRow(data?: any) {
-    if (!this.mainTab && data?.tabId !== this.tabId)
+  private copyRow(data?: any) {
+    if (!data.isGridView && !this.mainTab && data?.tabId !== this.tabId)
       return;
 
     const currentIndex = this.gridData.indexOf(this.currentRecord);
     let record = {...this.currentRecord};
     record.id = 0;
-    this.prepareForm(record, false);
+    // this.prepareForm(record, false);
     // await this.initRelationships(record);
     this.gridData.splice(currentIndex + 1, 0, record);
     this.$nextTick(() => {
@@ -486,7 +523,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   private beforeSave(data?: any) {
-    if (this.mainTab || data?.tabId === this.tabId)
+    if (data.isGridView && this.mainTab || data?.tabId === this.tabId)
       this.save(this.reset);
   }
 
@@ -582,6 +619,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
+        this.$emit('total-count-changed', this.queryCount);
         if (this.gridData.length) {
           this.setRow(this.gridData[0]);
         }
@@ -600,13 +638,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     const {propOrder: property, reverse} = this;
     this.$emit('order-changed', { property, reverse });
     this.transition();
-  }
-
-  public loadPage(page: number): void {
-    if (page !== this.previousPage) {
-      this.previousPage = page;
-      this.transition();
-    }
   }
 
   public changePageSize(size: number) {

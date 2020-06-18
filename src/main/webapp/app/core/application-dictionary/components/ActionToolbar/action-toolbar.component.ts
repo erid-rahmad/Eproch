@@ -74,29 +74,39 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   public openSearchWindow() {
     if (!this.activeWindow) return;
-    this.eventBus.$emit('open-search-window');
+    this.eventBus.$emit('open-search-window', {
+      isGridView: this.gridView
+    });
   }
 
   public addRecord() {
     if (!this.activeWindow) return;
     this.editing = true;
-    this.eventBus.$emit('add-record');
+    this.eventBus.$emit('add-record', {
+      isGridView: this.gridView
+    });
   }
 
   public copyRecord() {
     if (!this.activeWindow) return;
     this.editing = true;
-    this.eventBus.$emit('copy-record');
+    this.eventBus.$emit('copy-record', {
+      isGridView: this.gridView
+    });
   }
 
   public saveRecord() {
     if (!this.activeWindow) return;
-    this.eventBus.$emit('save-record');
+    this.eventBus.$emit('save-record', {
+      isGridView: this.gridView
+    });
   }
 
   public deleteRecord() {
     if (!this.activeWindow) return;
-    this.eventBus.$emit('delete-record');
+    this.eventBus.$emit('delete-record', {
+      isGridView: this.gridView
+    });
   }
 
   public switchView() {
@@ -120,7 +130,9 @@ export default class ActionToolbar extends ActionToolbarProps {
   public cancelOperation() {
     if (!this.activeWindow) return;
     this.editing = false;
-    this.eventBus.$emit('cancel-operation');
+    this.eventBus.$emit('cancel-operation', {
+      isGridView: this.gridView
+    });
   }
 
   /**

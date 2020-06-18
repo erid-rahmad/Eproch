@@ -1,3 +1,6 @@
+import { ADReferenceType } from '@/shared/model/ad-reference.model'
+import { ADColumnType } from '@/shared/model/ad-column.model'
+
 export const isValidUsername = (str: string) => ['admin', 'editor'].indexOf(str.trim()) >= 0
 
 export const isExternal = (path: string) => /^(https?:|mailto:|tel:)/.test(path)
@@ -27,10 +30,66 @@ validatorTypes.set('ZONED_DATE_TIME', 'date');
 validatorTypes.set('INSTANT', 'date');
 validatorTypes.set('DURATION', 'string');
 
+const jsonSchemaTypes = new Map<string, string>();
+jsonSchemaTypes.set('STRING', 'string');
+jsonSchemaTypes.set('BIG_DECIMAL', 'number');
+jsonSchemaTypes.set('DOUBLE', 'float');
+jsonSchemaTypes.set('FLOAT', 'float');
+jsonSchemaTypes.set('INTEGER', 'integer');
+jsonSchemaTypes.set('LONG', 'number');
+jsonSchemaTypes.set('BOOLEAN', 'boolean');
+jsonSchemaTypes.set('LOCAL_DATE', 'string');
+jsonSchemaTypes.set('ZONED_DATE_TIME', 'string');
+jsonSchemaTypes.set('INSTANT', 'string');
+jsonSchemaTypes.set('DURATION', 'string');
+
 export const getValidatorType = (columnType: string) => {
   const type = validatorTypes.get(columnType);
-  if (type !== undefined) {
-    return type;
-  }
-  return 'any';
+  return type || 'string';
+}
+
+export const getJsonSchemaType = (columnType: string) => {
+  const type = jsonSchemaTypes.get(columnType);
+  return type || 'string';
+}
+
+export const isTableDirectLink = (field: any): boolean => {
+  const column = field.adColumn;
+  const reference = field.adReference || column.adReference;
+  return column.foreignKey && (reference?.value === 'direct' || reference?.value === 'table');
+}
+
+export const hasReferenceList = (field: any) => {
+  return field.adReference?.referenceType === ADReferenceType.LIST
+    || field.adColumn.adReference?.referenceType === ADReferenceType.LIST;
+}
+
+export const isStringField = (field: any) => {
+  return field.adColumn.type === ADColumnType.STRING;
+}
+
+export const isNumericField = (field: any) => {
+  return (
+    field.adColumn.type === ADColumnType.BIG_DECIMAL ||
+    field.adColumn.type === ADColumnType.DOUBLE ||
+    field.adColumn.type === ADColumnType.FLOAT ||
+    field.adColumn.type === ADColumnType.INTEGER ||
+    field.adColumn.type === ADColumnType.LONG
+  );
+}
+
+export const isDateField = (field: any) => {
+  return field.adColumn.type === ADColumnType.LOCAL_DATE || field.adColumn.type === ADColumnType.ZONED_DATE_TIME;
+}
+
+export const isDateTimeField = (field: any) => {
+  return field.adColumn.type === ADColumnType.INSTANT;
+}
+
+export const isBooleanField = (field: any) => {
+  return field.adColumn.type === ADColumnType.BOOLEAN;
+}
+
+export const isActiveStatusField = (field: any) => {
+  return field.adColumn.name === 'active';
 }

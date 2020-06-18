@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="grid-view"
-  >
+  <div class="grid-view">
     <el-table
       v-loading="isFetching"
       ref="grid"
@@ -140,7 +138,6 @@
       ref="pagination"
       background
       @size-change="changePageSize"
-      @current-change="loadPage"
       :current-page.sync="page"
       :page-sizes="[10, 20, 50, 100]"
       :page-size="itemsPerPage"
