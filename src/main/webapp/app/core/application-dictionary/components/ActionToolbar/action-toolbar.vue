@@ -4,50 +4,8 @@
       <el-button
         type="primary"
         size="small"
-        icon="el-icon-s-grid"
-        title="Toggle Grid"
-        @click="switchView"
-        :plain="!gridView"
-      />
-      <el-button
-        type="primary"
-        size="small"
-        icon="el-icon-arrow-up"
-        title="Go to Parent Tab"
-        :disabled="atWindowRoot"
-        @click="goToParentTab"
-      />
-      <el-button
-        type="primary"
-        size="small"
-        icon="el-icon-arrow-down"
-        title="Go to Child Tab"
-        :disabled="atLastTab"
-        @click="goToChildTab"
-      />
-    </el-button-group>
-    <el-button-group>
-      <el-button
-        type="primary"
-        size="small"
-        icon="el-icon-refresh"
-        title="Refresh"
-        @click="refreshData"
-      />
-      <el-button 
-        type="primary"
-        size="small"
-        icon="el-icon-search"
-        title="Search"
-        @click="openSearchWindow"
-      />
-    </el-button-group>
-    <el-button-group>
-      <el-button
-        type="primary"
-        size="small"
         icon="el-icon-plus"
-        title="New"
+        title="New (alt + n)"
         :disabled="isEditing"
         @click="addRecord"
       />
@@ -55,7 +13,7 @@
         type="primary"
         size="small"
         icon="el-icon-document-copy"
-        title="Copy"
+        title="Copy (alt + c)"
         :disabled="isEditing"
         @click="copyRecord"
       />
@@ -65,26 +23,66 @@
         type="primary"
         size="small"
         icon="el-icon-check"
-        title="Save"
+        title="Save (alt + s)"
         :disabled="!isEditing"
         @click="saveRecord"
       />
       <el-button
-        type="danger"
         size="small"
-        plain
         icon="el-icon-close"
-        title="Cancel"
+        title="Cancel (alt + z)"
         :disabled="!isEditing"
         @click="cancelOperation"
       />
       <el-button
+        v-show="!isEditing"
         type="danger"
         size="small"
         icon="el-icon-delete"
-        title="Delete"
-        :disabled="isEditing"
+        title="Delete (alt + del)"
         @click="deleteRecord"
+      />
+    </el-button-group>
+    <el-button-group v-show="!isEditing">
+      <el-button
+        type="primary"
+        size="small"
+        icon="el-icon-refresh"
+        title="Refresh (alt + r)"
+        @click="refreshData"
+      />
+      <el-button 
+        type="primary"
+        size="small"
+        icon="el-icon-search"
+        title="Search (alt + f)"
+        @click="openSearchWindow"
+      />
+    </el-button-group>
+    <el-button-group v-show="!isEditing">
+      <el-button
+        type="primary"
+        size="small"
+        icon="el-icon-s-grid"
+        title="Toggle Layout (alt + g)"
+        @click="switchView"
+        :plain="!gridView"
+      />
+      <el-button
+        type="primary"
+        size="small"
+        icon="el-icon-arrow-up"
+        title="Go to Parent Tab (alt + up)"
+        :disabled="atWindowRoot"
+        @click="goToParentTab"
+      />
+      <el-button
+        type="primary"
+        size="small"
+        icon="el-icon-arrow-down"
+        title="Go to Child Tab (alt + down)"
+        :disabled="atLastTab"
+        @click="goToChildTab"
       />
     </el-button-group>
   </div>

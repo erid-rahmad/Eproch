@@ -6,15 +6,18 @@
       :class="{'detailed-view': !gridView}"
     >
       <action-toolbar
-        @toggle-view="switchView"
         :at-window-root="tabStack.length <= 1"
         :at-last-tab="childTabs.length === 0"
         :event-bus="mainToolbarEventBus"
+        @edit-mode-change="onEditModeChange"
+        @toggle-view="switchView"
       />
       <div>
         <el-pagination
           ref="toolbarPagination"
           layout="prev, jumper, total, next"
+          class="record-navigator"
+          :class="{'invisible': isEditing}"
           :current-page.sync="currentRecordNo"
           :page-size="1"
           small
@@ -49,6 +52,7 @@
                 :page="currentRecordNo"
                 :search-panel-event-bus="searchPanelEventBus"
                 :toolbar-event-bus="mainToolbarEventBus"
+                @current-page-change="loadChildTab"
                 @total-count-changed="onTotalCountChange"
               />
             </keep-alive>
@@ -104,7 +108,7 @@
 
 <style lang="scss">
 .el-tabs--border-card > .el-tabs__content {
-  height: calc(100% - 30px);
+  height: calc(100% - 38px);
 }
 .window-content {
   position: relative;
@@ -134,6 +138,14 @@
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+.record-navigator {
+  opacity: 1;
+  transition: opacity .25s ease-in-out;
+
+  &.invisible {
+    opacity: 0;
+  }
 }
 .tab-container {
   position: absolute;

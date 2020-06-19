@@ -2,7 +2,7 @@
   <div class="detail-view">
     <el-form
       ref="mainForm"
-      v-loading="isFetching"
+      v-loading="isLoading"
       :model="model"
       :rules="validationSchema"
       label-width="128px"
@@ -91,15 +91,34 @@
         </el-col>
       </el-row>
     </el-form>
-    <!-- <vue-form-json-schema
-      v-if="!isFetching"
-      v-model="model"
-      :schema="schema"
-      :ui-schema="uiSchema"
-      :options="options"
-      @state-change="onChangeState"
-      @validated="onValidated"
-    /> -->
+    <el-dialog
+        width="35%"
+        :visible.sync="showDeleteDialog"
+        :title="$t('entity.delete.title')"
+    >
+      <template>
+        <span>Are you sure to delete the record?</span>
+        <div slot="footer">
+          <el-button 
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-delete" 
+            type="danger" 
+            @click="doDelete"
+          >
+            {{ $t('entity.action.delete') }}
+          </el-button>
+          <el-button 
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-close" 
+            @click="closeDeleteDialog"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" src="./detail-view.component.ts"></script>

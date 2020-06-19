@@ -4,7 +4,7 @@ import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import ContextVariableAccessor from '../ContextVariableAccessor';
 import { getValidatorType, isStringField, isNumericField, isDateField, isDateTimeField, isBooleanField, isActiveStatusField, hasReferenceList, isTableDirectLink } from '@/utils/validate';
 import { ADColumnType } from '@/shared/model/ad-column.model';
-import { kebabCase, isEmpty } from 'lodash';
+import { debounce, kebabCase, isEmpty, isEqual } from 'lodash';
 import pluralize from 'pluralize';
 import { ADReferenceType } from '@/shared/model/ad-reference.model';
 import { ElForm } from 'element-ui/types/form';
@@ -59,7 +59,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
   @Inject('dynamicWindowService')
   private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
   
-  private isFetching: boolean = false;
+  private isLoading: boolean = false;
   private queryCount: number = null;
   private propOrder = 'id';
   private reverse = false;
@@ -72,6 +72,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
 
   private baseApiUrl: string = '';
   private filterQuery: string = '';
+  private filterQueryTmp: string;
   private parentId: number = 0;
 
   private referenceItemsUpdateTimestamp: number = Date.now();
@@ -83,6 +84,15 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
   private model: any = {};
   private validationSchema: any = {};
   private rows: any[] = [];
+  private modelLocked: boolean = false;
+  private showDeleteDialog: boolean = false;
+
+  private debouncedCheckEditMode: (record: object, prevRecord: object) => void;
+  private debouncedUpdatePage: () => void;
+
+  get isEditing() {
+    return !this.modelLocked && this.originalData !== null;
+  }
 
   get observableTabProperties() {
     const { name, adfields, targetEndpoint, filterQuery, parentId, promoted } = this.tab;
@@ -103,36 +113,25 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
     return result;
   }
 
-  @Watch('model', {deep: true})
-  onDataChange(data: object, old: object) {
-    console.log('model changed, original: %O, new: %O, old: %O', this.originalData, data, old);
-    if (isEmpty(old))
-      return;
-
-    /* if (!this.originalData && old) {
-      this.originalData = {...data};
-      this.toolbarEventBus.$emit('inline-editing', true);
-    } else if (_.isEqual(this.originalData, data)) {
-      this.originalData = null;
-      this.toolbarEventBus.$emit('inline-editing', false);
-    } */
+  @Watch('model', { deep: true })
+  onDataChange(record: object, prevRecord: object) {
+    this.debouncedCheckEditMode(record, prevRecord);
   }
 
   @Watch('observableTabProperties')
   onObservableTabPropertiesChange(tab: any) {
-    console.log('detail-view tab change: %O', tab);
     this.tabName = tab.name;
     this.fields = tab.adfields;
     this.baseApiUrl = tab.targetEndpoint;
     this.filterQuery = tab.filterQuery;
     this.parentId = tab.parentId || 0;
 
-    this.retrieveAllRecords();
+    this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
   }
 
   @Watch('page')
-  onPageChange() {
-    this.retrieveAllRecords();
+  onPageChange(page: number) {
+    this.debouncedUpdatePage();
   }
 
   @Watch('fields')
@@ -220,6 +219,8 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
     this.toolbarEventBus.$on('cancel-operation', this.cancelOperation);
     this.toolbarEventBus.$on('delete-record', this.deleteRecord);
     this.toolbarEventBus.$on('refresh-data', this.refreshData);
+    this.debouncedUpdatePage = debounce(this.updatePage, 500);
+    this.debouncedCheckEditMode = debounce(this.checkEditMode, 500);
     this.onObservableTabPropertiesChange(this.observableTabProperties);
   }
 
@@ -233,22 +234,41 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
     this.toolbarEventBus.$off('refresh-data', this.refreshData);
   }
 
-  private filterRecord() {
-    console.log('detail-view filterQuery: %s', this.filterQuery);
+  private reset() {
+    this.originalData = null;
+    this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
+    this.toolbarEventBus.$emit('inline-editing', false);
+  }
+
+  private filterRecord(query: string) {
+    if (!query) {
+      this.filterQuery = this.filterQueryTmp || this.filterQuery;
+      this.filterQueryTmp = null;
+    } else {
+      if (this.filterQueryTmp === null) {
+        this.filterQueryTmp = this.filterQuery;
+      }
+      this.filterQuery = `${this.filterQueryTmp}&${query}`;
+    }
   }
 
   private newRecord(data: any) {
-    console.log('detail-view newRecord? isGridView: %s', data.isGridView);
     if (data.isGridView) return;
     
     const form = (<ElForm>this.$refs.mainForm);
-    this.originalData = {...this.model};
+    
+    if (!isEmpty(this.model)) {
+      this.originalData = {...this.model};
+    }
+
     let record = { id: 0 };
     if (this.parentId) {
       record[this.tab.foreignColumnName] = this.parentId;
     }
     this.prepareForm(record);
+    this.modelLocked = false;
     this.model = record;
+    this.initRelationships(this.model);
     this.$nextTick(() => {
       form.clearValidate();
     });
@@ -257,27 +277,97 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
   private copyRecord(data: any) {
     if (data.isGridView) return;
     this.originalData = {...this.model};
+    this.modelLocked = false;
     this.model.id = 0;
-    // this.prepareForm(record, false);
   }
 
   private beforeSave(data: any) {
-    if (data.isGridView)
-      console.log('Before save record. model: %O', this.model);
+    if (!data.isGridView)
+      this.save(this.reset);
   }
   
   private cancelOperation() {
-    this.model = {...this.originalData};
-    this.originalData = null;
+    if (this.originalData) {
+      this.modelLocked = true;
+      this.model = {...this.originalData};
+      this.originalData = null;
+    }
   }
 
   private deleteRecord(data: any) {
     if (data.isGridView) return;
-    console.log('Delete record is not implemented yet');
+    this.showDeleteDialog = true;
   }
 
-  private refreshData() {
-    console.log('Refresh record is not implemented yet');
+  public closeDeleteDialog(): void {
+    this.showDeleteDialog = false;
+  }
+
+  public doDelete() {
+    this.dynamicWindowService(this.baseApiUrl)
+      .delete(this.model.id)
+      .then(() => {
+        const message = this.$t(`opusWebApp.applicationDictionary.deleted`, {
+          tabName: this.tabName,
+          param: this.model.id
+        });
+  
+        this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        });
+      })
+      .finally(() => {
+        this.closeDeleteDialog();
+      })
+  }
+
+  private refreshData(data: any) {
+    if (!data.isGridView)
+      this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
+  }
+
+  private checkEditMode(record: object, prevRecord: object): void {
+    if (this.isEditing) {
+      if (isEqual(this.originalData, record)) {
+        // this.originalData = null;
+        this.toolbarEventBus.$emit('inline-editing', false);
+      } else {
+        this.toolbarEventBus.$emit('inline-editing', true);
+      }
+    } else if (this.modelLocked) {
+      this.modelLocked = false;
+    }
+  }
+
+  private updatePage(): void {
+    if (this.originalData) {
+      if (!isEqual(this.originalData, this.model)) {
+        this.save(() => {
+          this.originalData = null;
+          this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
+        });
+        return;
+      } else {
+        this.originalData = null;
+      }
+    }
+
+    this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
+  }
+
+  /**
+   * Send an event to trigger child tab reload.
+   * @param record The active page record
+   */
+  private sendCurrentPageChangeEvent(record: any) {
+    this.$emit('current-page-change', {
+      data: record,
+      recordNo: this.page
+    });
   }
 
   private prepareForm(row: any, newRecord: boolean = true) {
@@ -332,22 +422,26 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
    */
   public fetchTableDirectData(query: string) {
     const field = this.activeTableDirectField;
-    if (query.trim() !== '') {
-      const column = field.adColumn;
-      const resourceName = pluralize.plural(
-        kebabCase(column.importedTable)
-      );
-      const api = `/api/${resourceName}`;
-      this.dynamicWindowService(api)
-        .retrieve({
-          criteriaQuery: `name.contains=${query}`
-        })
-        .then(res => {
-          this.referenceItemsMap
-            .set(field.adColumn.name, res.data);
-          this.referenceItemsUpdateTimestamp = Date.now();
-        });
+    const column = field.adColumn;
+    const filterQuery = this.referenceFilterQueries.get(field.id);
+    const resourceName = pluralize.plural(
+      kebabCase(column.importedTable)
+    );
+    const api = `/api/${resourceName}`;
+    const criteriaQuery: string[] = query ? [`name.contains=${query}`] : [];
+
+    // Append additional query from the cached validation rule query, if any.
+    if (filterQuery) {
+      criteriaQuery.push(filterQuery);
     }
+
+    this.dynamicWindowService(api)
+      .retrieve({ criteriaQuery })
+      .then(res => {
+        this.referenceItemsMap
+          .set(field.adColumn.name, res.data);
+        this.referenceItemsUpdateTimestamp = Date.now();
+      });
   }
 
   private async initRelationships(row: any) {
@@ -383,13 +477,14 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
         else if (this.isTableDirectLink(field)) {
           const resourceName = pluralize.plural(kebabCase(column.importedTable));
           const api = `/api/${resourceName}`;
-          let criteriaQuery: string[] = row[column.name] === null ? [] : [`id.equals=${row[column.name]}`];
+          const linkedFieldValue = row[column.name];
+          const criteriaQuery: string[] = linkedFieldValue ? [`id.equals=${linkedFieldValue}`] : [];
 
+          // Append additional query from the cached validation rule query, if any.
           if (filterQuery) {
             criteriaQuery.push(filterQuery);
           }
 
-          // console.log('update tableDirectReferenceMap for field: %s', field.name);
           const res = await this.dynamicWindowService(api).retrieve({ criteriaQuery });
           this.referenceItemsMap.set(column.name, res.data);
           updated = true;
@@ -401,13 +496,14 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
       this.referenceItemsUpdateTimestamp = Date.now();
   }
 
-  private retrieveAllRecords(): void {
-    this.isFetching = true;
+  private retrieveAllRecords(callback: (record: any) => void): void {
+    this.isLoading = true;
     const paginationQuery = {
       page: this.page - 1,
       size: 1,
       sort: this.sort
     };
+
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
         criteriaQuery: this.filterQuery,
@@ -415,18 +511,86 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
       })
       .then(res => {
         // TODO Create new record with empty model if data is empty.
-        this.model = res.data.length ? res.data[0] : {};
-        this.initRelationships(this.model);
+        if (res.data.length) {
+          this.modelLocked = true;
+          this.model = res.data[0];
+          this.originalData = {...this.model};
+          this.initRelationships(this.model);
+        } else {
+          this.newRecord({ isGridView: false });
+        }
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
         this.$emit('total-count-changed', this.queryCount);
+        callback && callback(this.model);
       })
       .catch((err) => {
-        console.error('Failed getting the record. %O', err);
+        const message = `Failed getting the record. ${err}`;
+        this.$notify({
+          title: 'Error',
+          message: message.toString(),
+          type: 'error',
+          duration: 3000
+        });
       })
       .finally(() => {
-        this.isFetching = false;
+        this.isLoading = false;
       });
+  }
+
+  private save(callback?: (record: any) => void) {
+    const {
+      editing,
+      createdBy,
+      createdDate,
+      lastModifiedBy,
+      lastModifiedDate,
+      ...record
+    } = this.model;
+
+    (<ElForm>this.$refs.mainForm).validate(valid => {
+      if (valid)
+        this.saveRecord(record, callback);
+    });
+  }
+
+  private saveRecord(record: any, callback?: (record: any) => void) {
+    const update: boolean = record.id > 0;
+
+    if (!update) {
+      delete record.id;
+    }
+
+    this.isLoading = true;
+    const service = this.dynamicWindowService(this.baseApiUrl);
+    const saveState = update ? service.update(record) : service.create(record);
+    saveState.then(data => {
+      callback && callback(data);
+      !callback && this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
+      const message = this.$t(`opusWebApp.applicationDictionary.${update ? 'updated' : 'created'}`, {
+        tabName: this.tabName,
+        param: data.id
+      });
+      this.toolbarEventBus.$emit('record-saved');
+      this.$notify({
+        title: 'Success',
+        message: message.toString(),
+        type: 'success',
+        duration: 3000
+      });
+    })
+    .catch((err) => {
+      const message = `Error saving the record`;
+      this.$notify({
+        title: 'Error',
+        message: message.toString(),
+        type: 'error',
+        duration: 3000
+      });
+    })
+    .finally(() => {
+      this.isLoading = false;
+    });
   }
 
   public getMinLength(field: any) {
@@ -446,7 +610,6 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
   }
 
   public getReferenceList(field: any) {
-    console.log('getReferenceList field: %O', field);
     return field?.adReference?.adreferenceLists || field.adColumn.adReference.adreferenceLists;
   }
 

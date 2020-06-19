@@ -11,7 +11,6 @@ import pluralize from "pluralize";
 import _ from 'lodash';
 import { mapActions } from 'vuex';
 import { RegisterTabParameter } from '@/shared/config/store/window-store';
-import { watch } from 'fs';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -116,7 +115,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   private filterQuery: string = '';
   private filterQueryOrigin: string = '';
   private parentId: number = 0;
-  private getId: any = null;
 
   private registerTabState!: (options: RegisterTabParameter) => Promise<void>
 
@@ -283,7 +281,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.$emit('row-selection-change', rows);
   }
 
-  public changeMultipleRowSelection(value: any, o: any) {
+  public changeMultipleRowSelection(value: any) {
     this.multipleSelectedRow = value;
   }
   
@@ -292,7 +290,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       this.filterVal.push(this.gridFields[i].adColumn.name);
     })
 
-    this.getId = params;
   }
 
   public actionDelete(): void {
@@ -306,7 +303,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       });
 
       this.retrieveAllRecords();
-      this.toolbarEventBus.$emit('record-saved');
       this.$notify({
         title: 'Success',
         message: message.toString(),
@@ -339,7 +335,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   private deleteRow(data?: any) {
-    if (!data.isGridView && !this.mainTab && data?.tabId !== this.tabId)
+    if (!data.isGridView || (!this.mainTab && data?.tabId !== this.tabId))
       return;
 
     if (this.multipleSelectedRow.length) {
@@ -355,8 +351,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     }
   }
 
-  private refreshData() {
-    if (this.mainTab) this.clear();
+  private refreshData(data?: any) {
+    if (this.mainTab && data.isGridView) this.clear();
   }
 
   public setTableDirectReference(field: any): void {
@@ -461,10 +457,9 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
    * Triggered when user is going to add a new record.
    */
   private addBlankRow(data?: any) {
-    console.log('gridView: %s, mainTab: %s, tabId: %s', data.isGridView, this.mainTab, data.tabId);
-    if (!data.isGridView && !this.mainTab && data?.tabId !== this.tabId){
+    if (!data.isGridView || (!this.mainTab && data?.tabId !== this.tabId))
       return;
-    }
+
     let record = { id: 0 };
     if (this.parentId) {
       record[this.tab.foreignColumnName] = this.parentId;
@@ -480,7 +475,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   private copyRow(data?: any) {
-    if (!data.isGridView && !this.mainTab && data?.tabId !== this.tabId)
+    if (!data.isGridView || (!this.mainTab && data?.tabId !== this.tabId))
       return;
 
     const currentIndex = this.gridData.indexOf(this.currentRecord);
@@ -523,7 +518,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   private beforeSave(data?: any) {
-    if (data.isGridView && this.mainTab || data?.tabId === this.tabId)
+    if (data.isGridView && (this.mainTab || data?.tabId === this.tabId))
       this.save(this.reset);
   }
 
@@ -538,7 +533,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     } = this.currentRecord;
     const validator = new schema(this.validationSchema);
 
-    validator.validate(record, (errors: any[], fields: any) => {
+    validator.validate(record, (errors: any[]) => {
       if (errors) {
         for (let error of errors) {
           this.errors.set(error.field, error.message);
@@ -652,22 +647,29 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
    */
   public fetchTableDirectData(query: string) {
     const field = this.activeTableDirectField;
-    if (query.trim() !== '') {
-      const column = field.adColumn;
-      const resourceName = pluralize.plural(
-        kebabCase(column.importedTable)
-      );
-      const api = `/api/${resourceName}`;
-      this.dynamicWindowService(api)
-        .retrieve({
-          criteriaQuery: `name.contains=${query}`
-        })
-        .then(res => {
-          this.referenceItemsMap
-            .set(`${this.currentRecord.id}-${field.adColumn.name}`, res.data);
-          this.tableDirectTimestamp = Date.now();
-        });
+    const column = field.adColumn;
+    const filterQuery = this.referenceFilterQueries.get(field.id);
+    const resourceName = pluralize.plural(
+      kebabCase(column.importedTable)
+    );
+    const api = `/api/${resourceName}`;
+    const criteriaQuery: string[] = query ? [`name.contains=${query}`] : [];
+
+    // Append additional query from the cached validation rule query, if any.
+    if (filterQuery) {
+      criteriaQuery.push(filterQuery);
     }
+
+    console.log('api: %s, record: %O, column: %s', api, this.currentRecord, column.name);
+    console.log('linkedFieldValue: %s, criteriaQuery: %O', filterQuery, criteriaQuery);
+    
+    this.dynamicWindowService(api)
+      .retrieve({ criteriaQuery })
+      .then(res => {
+        this.referenceItemsMap
+          .set(`${this.currentRecord.id}-${field.adColumn.name}`, res.data);
+        this.tableDirectTimestamp = Date.now();
+      });
   }
 
   public syncHeight() {
@@ -714,13 +716,14 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         else if (this.isTableDirectLink(field)) {
           const resourceName = pluralize.plural(kebabCase(column.importedTable));
           const api = `/api/${resourceName}`;
-          let criteriaQuery: string[] = row[column.name] == null ? [] : [`id.equals=${row[column.name]}`];
+          const linkedFieldValue = row[column.name];
+          const criteriaQuery: string[] = linkedFieldValue ? [`id.equals=${linkedFieldValue}`] : [];
 
+          // Append additional query from the cached validation rule query, if any.
           if (filterQuery) {
             criteriaQuery.push(filterQuery);
           }
 
-          // console.log('update tableDirectReferenceMap for field: %s', field.name);
           const res = await this.dynamicWindowService(api).retrieve({ criteriaQuery });
           this.referenceItemsMap.set(`${row.id}-${column.name}`, res.data);
         }

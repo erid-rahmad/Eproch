@@ -145,33 +145,34 @@
       :total="queryCount"
     />
 
-        <el-dialog
-            width="35%"
-            :visible.sync="showDeleteDialog"
-            :title="$t('entity.delete.title')"
-        >
-            <template>
-                <span>Are you sure you want to delete row?</span>
-                <div slot="footer">
-                    <el-button 
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-delete" 
-                        type="danger" 
-                        @click="actionDelete()">
-                        {{ $t('entity.action.delete') }}
-                    </el-button>
-                    <el-button 
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-close" 
-                        @click="closeDialog()">
-                        {{ $t('entity.action.cancel') }}
-                    </el-button>
-                </div>
-            </template>
-
-        </el-dialog>
+    <el-dialog
+        width="35%"
+        :visible.sync="showDeleteDialog"
+        :title="$t('entity.delete.title')"
+    >
+      <template>
+        <span>Are you sure to delete the selected records?</span>
+        <div slot="footer">
+          <el-button 
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-delete" 
+            type="danger" 
+            @click="actionDelete()"
+          >
+            {{ $t('entity.action.delete') }}
+          </el-button>
+          <el-button 
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-close" 
+            @click="closeDialog()"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
 
   </div>
 </template>

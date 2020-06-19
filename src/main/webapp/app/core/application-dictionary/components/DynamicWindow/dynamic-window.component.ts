@@ -58,6 +58,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
   private totalRecords: number = 0;
   private currentRecordNo: number = 1;
+  isEditing: boolean = false;
 
   removeWindowState!: (path: string) => Promise<void>;
 
@@ -148,6 +149,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
   public onCurrentRecordChange(no: number) {
     (<any>this.$refs.mainGrid)?.setSelectedRecordNo(no);
+  }
+
+  public onEditModeChange(isEditing: boolean) {
+    this.isEditing = isEditing;
   }
 
   public onTotalCountChange(count: number) {
