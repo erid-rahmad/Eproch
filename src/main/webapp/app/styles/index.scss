@@ -213,3 +213,15 @@ aside {
     }
   }
 }
+
+.el-form--label-left .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label{
+  &::before {
+    content: '';
+    margin-right: 0;
+  }
+  &::after {
+    content: '*';
+    color: #ff4949;
+    margin-left: 4px;
+  }
+}

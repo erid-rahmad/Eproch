@@ -1,13 +1,30 @@
 <template>
   <div class="app-container">
     <h3>{{ title }}</h3>
-    <div class="window-content">
+    <div
+      class="window-content"
+      :class="{'detailed-view': !gridView}"
+    >
       <action-toolbar
-        @toggle-view="switchView"
         :at-window-root="tabStack.length <= 1"
         :at-last-tab="childTabs.length === 0"
         :event-bus="mainToolbarEventBus"
+        @edit-mode-change="onEditModeChange"
+        @toggle-view="switchView"
       />
+      <div>
+        <el-pagination
+          ref="toolbarPagination"
+          layout="prev, jumper, total, next"
+          class="record-navigator"
+          :class="{'invisible': isEditing}"
+          :current-page.sync="currentRecordNo"
+          :page-size="1"
+          small
+          :total="totalRecords"
+          @current-change="onCurrentRecordChange"
+        />
+      </div>
       <splitpanes
         class="default-theme"
         horizontal
@@ -25,9 +42,19 @@
                 :search-panel-event-bus="searchPanelEventBus"
                 :toolbar-event-bus="mainToolbarEventBus"
                 @current-row-change="loadChildTab"
+                @total-count-changed="onTotalCountChange"
                 main-tab
               />
-              <detail-view v-else/>
+              <detail-view
+                v-else
+                ref="mainForm"
+                :tab="mainTab"
+                :page="currentRecordNo"
+                :search-panel-event-bus="searchPanelEventBus"
+                :toolbar-event-bus="mainToolbarEventBus"
+                @current-page-change="loadChildTab"
+                @total-count-changed="onTotalCountChange"
+              />
             </keep-alive>
           </transition>
         </pane>
@@ -81,11 +108,15 @@
 
 <style lang="scss">
 .el-tabs--border-card > .el-tabs__content {
-  height: calc(100% - 30px);
+  height: calc(100% - 38px);
 }
 .window-content {
   position: relative;
-  height: calc(100% - 96px);
+  height: calc(100% - 134px);
+
+  &.detailed-view .splitpanes__pane {
+    overflow-y: auto;
+  }
 
   .splitpanes .el-tabs__content {
     overflow: auto;
@@ -107,6 +138,14 @@
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
+}
+.record-navigator {
+  opacity: 1;
+  transition: opacity .25s ease-in-out;
+
+  &.invisible {
+    opacity: 0;
+  }
 }
 .tab-container {
   position: absolute;
