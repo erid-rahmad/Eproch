@@ -1,5 +1,7 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
 import store from '@/shared/config/store';
+import { TagsViewStoreModule as tagsViewStore } from "@/shared/config/store/tags-view-store";
+import { resetRouter } from '@/router';
 
 export interface IAccountState {
   logon: boolean;
@@ -47,7 +49,10 @@ class AccountStore extends VuexModule implements IAccountState {
 
   @Mutation
   private SET_LOGOUT() {
+    resetRouter();
+    tagsViewStore.delAllViews();
     this.userIdentity = null;
+    this.authorities.clear();
     this.authenticated = false;
     this.logon = false;
   }
@@ -63,7 +68,7 @@ class AccountStore extends VuexModule implements IAccountState {
   }
 
   @Action
-  public authenticate() {
+  public async authenticate() {
     this.INIT_AUTHENTICATION();
   }
 
@@ -74,7 +79,7 @@ class AccountStore extends VuexModule implements IAccountState {
 
   @Action
   public async logout() {
-    this.SET_LOGOUT;
+    this.SET_LOGOUT();
   }
 
   @Action

@@ -44,8 +44,8 @@ class PermissionStore extends VuexModule implements IPermissionState {
   }
 
   @Action
-  public generateRoutes(roles: Set<string>) {
-    let accessedRoutes;
+  public async generateRoutes(roles: Set<string>) {
+    let accessedRoutes: RouteConfig[];
     if (roles.has(Authority.ADMIN)) {
       accessedRoutes = asyncRoutes;
     } else {

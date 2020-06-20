@@ -160,6 +160,13 @@ export const constantRoutes: RouteConfig[] = [
       }
     ]
   },
+];
+
+/**
+ * asyncRoutes
+ * the routes that need to be dynamically loaded based on user authorities
+ */
+export const asyncRoutes: RouteConfig[] = [
   {
     path: '/admin',
     component: Layout,
@@ -328,12 +335,6 @@ export const constantRoutes: RouteConfig[] = [
     meta: { hidden: true }
   }
 ];
-
-/**
- * asyncRoutes
- * the routes that need to be dynamically loaded based on user authorities
- */
-export const asyncRoutes: RouteConfig[] = [];
 
 // prettier-ignore
 const createRouter = () => new Router({

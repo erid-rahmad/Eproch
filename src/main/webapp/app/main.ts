@@ -52,6 +52,8 @@ import ADTabService from '@/entities/ad-tab/ad-tab.service';
 import ADFieldService from '@/entities/ad-field/ad-field.service';
 import ADFieldGroupService from '@/entities/ad-field-group/ad-field-group.service';
 import AdValidationRuleService from '@/entities/ad-validation-rule/ad-validation-rule.service';
+import RouterValidation from './permission';
+import { Route } from 'vue-router';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -72,6 +74,7 @@ const trackerService = new TrackerService(router);
 const translationService = new TranslationService(store, i18n);
 const loginService = new LoginService();
 const accountService = new AccountService(store, translationService, trackerService, router);
+const routerValidation = new RouterValidation(router, i18n, accountService);
 
 Vue.use(ElementUI, {
   size: appStore.size, // Set element-ui default size
@@ -92,22 +95,12 @@ Object.keys(directives).forEach(key => {
 });
 
 router.beforeEach((to, from, next) => {
-  if (!to.matched.length) {
-    next('/not-found');
-  }
-
-  if (to.meta && to.meta.authorities && to.meta.authorities.length > 0) {
-    if (!accountService.hasAnyAuthority(to.meta.authorities)) {
-      sessionStorage.setItem('requested-url', to.fullPath);
-      next('/forbidden');
-    } else {
-      next();
-    }
-  } else {
-    // no authorities, so just proceed
-    next();
-  }
+  routerValidation.runBeforeEachHook(to, from, next);
 });
+
+router.afterEach((to: Route) => {
+  routerValidation.runAfterEachHook(to);
+})
 
 /* tslint:disable */
 new Vue({
