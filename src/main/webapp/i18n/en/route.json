@@ -9,7 +9,8 @@
       "menu": "Menu",
       "table": "Table",
       "window": "Window",
-      "reference": "References"
+      "reference": "References",
+      "validationRule": "Validation Rule"
     },
     "admin": {
       "default": "System Administration",

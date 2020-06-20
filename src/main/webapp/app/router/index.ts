@@ -307,6 +307,16 @@ export const constantRoutes: RouteConfig[] = [
           authorities: [Authority.ADMIN],
           windowId: 1051
         }
+      },
+      {
+        path: 'validation-rule',
+        name: 'ValidationRule',
+        component: DynamicWindow,
+        meta: {
+          title: 'applicationDictionary.validationRule',
+          authorities: [Authority.ADMIN],
+          windowId: 3001
+        }
       }
     ]
   },

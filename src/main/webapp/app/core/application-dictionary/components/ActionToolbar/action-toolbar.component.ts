@@ -1,4 +1,4 @@
-import { Component, Prop, Vue } from "vue-property-decorator";
+import { Component, Prop, Vue, Watch } from "vue-property-decorator";
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
 
@@ -48,6 +48,11 @@ export default class ActionToolbar extends ActionToolbarProps {
     };
   }
 
+  @Watch('editing')
+  onEditingChange(editing: boolean) {
+    this.$emit('edit-mode-change', editing);
+  }
+
   created() {
     this.fullPath = this.$route.fullPath;
     this.eventBus.$on('inline-editing', this.onInlineEditing);
@@ -69,34 +74,46 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   public refreshData() {
     if (!this.activeWindow) return;
-    this.eventBus.$emit('refresh-data');
+    this.eventBus.$emit('refresh-data', {
+      isGridView: this.gridView
+    });
   }
 
   public openSearchWindow() {
     if (!this.activeWindow) return;
-    this.eventBus.$emit('open-search-window');
+    this.eventBus.$emit('open-search-window', {
+      isGridView: this.gridView
+    });
   }
 
   public addRecord() {
-    if (!this.activeWindow) return;
+    if (!this.activeWindow || this.editing) return;
     this.editing = true;
-    this.eventBus.$emit('add-record');
+    this.eventBus.$emit('add-record', {
+      isGridView: this.gridView
+    });
   }
 
   public copyRecord() {
-    if (!this.activeWindow) return;
+    if (!this.activeWindow || this.editing) return;
     this.editing = true;
-    this.eventBus.$emit('copy-record');
+    this.eventBus.$emit('copy-record', {
+      isGridView: this.gridView
+    });
   }
 
   public saveRecord() {
-    if (!this.activeWindow) return;
-    this.eventBus.$emit('save-record');
+    if (!this.activeWindow || !this.editing) return;
+    this.eventBus.$emit('save-record', {
+      isGridView: this.gridView
+    });
   }
 
   public deleteRecord() {
     if (!this.activeWindow) return;
-    this.eventBus.$emit('delete-record');
+    this.eventBus.$emit('delete-record', {
+      isGridView: this.gridView
+    });
   }
 
   public switchView() {
@@ -104,14 +121,14 @@ export default class ActionToolbar extends ActionToolbarProps {
   }
 
   public goToParentTab() {
-    if (!this.activeWindow) return;
+    if (!this.activeWindow || this.atWindowRoot || this.editing) return;
     this.eventBus.$emit('tab-navigate', {
       direction: -1
     });
   }
 
   public goToChildTab() {
-    if (!this.activeWindow) return;
+    if (!this.activeWindow || this.atLastTab || this.editing) return;
     this.eventBus.$emit('tab-navigate', {
       direction: 1
     });
@@ -120,7 +137,9 @@ export default class ActionToolbar extends ActionToolbarProps {
   public cancelOperation() {
     if (!this.activeWindow) return;
     this.editing = false;
-    this.eventBus.$emit('cancel-operation');
+    this.eventBus.$emit('cancel-operation', {
+      isGridView: this.gridView
+    });
   }
 
   /**
@@ -128,7 +147,7 @@ export default class ActionToolbar extends ActionToolbarProps {
    * @param gridView Is grid mode.
    */
   private toggleView(gridView: boolean) {
-    if (!this.activeWindow) return;
+    if (!this.activeWindow || this.editing) return;
     this.gridView = gridView;
     this.$emit('toggle-view', {
       gridView

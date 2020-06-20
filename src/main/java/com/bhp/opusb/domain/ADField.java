@@ -78,7 +78,7 @@ public class ADField extends AbstractAuditingEntity {
     private Integer columnNo;
 
     @Column(name = "column_span")
-    private Integer columnSpan;
+    private Integer columnSpan = 6;
 
     @Column(name = "updatable")
     private Boolean updatable;
