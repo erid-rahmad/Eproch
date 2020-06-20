@@ -55,24 +55,27 @@ export default class TabToolbar extends TabToolbarProps {
   }
 
   public addRecord() {
-    if (!this.activeWindow) return;
+    if (!this.activeWindow || this.editing) return;
     this.editing = true;
     this.eventBus?.$emit('add-record', {
+      isGridView: true,
       tabId: this.tabId
     });
   }
 
   public copyRecord() {
-    if (!this.activeWindow) return;
+    if (!this.activeWindow || this.editing) return;
     this.editing = true;
     this.eventBus?.$emit('copy-record', {
+      isGridView: true,
       tabId: this.tabId
     });
   }
 
   public saveRecord() {
-    if (!this.activeWindow) return;
+    if (!this.activeWindow && !this.editing) return;
     this.eventBus?.$emit('save-record', {
+      isGridView: true,
       tabId: this.tabId
     });
   }
@@ -80,12 +83,13 @@ export default class TabToolbar extends TabToolbarProps {
   public deleteRecord() {
     if (!this.activeWindow) return;
     this.eventBus?.$emit('delete-record', {
+      isGridView: true,
       tabId: this.tabId
     });
   }
 
   public cancelOperation() {
-    if (!this.activeWindow) return;
+    if (!this.activeWindow && !this.editing) return;
     this.editing = false;
     this.eventBus?.$emit('cancel-operation', {
       tabId: this.tabId
