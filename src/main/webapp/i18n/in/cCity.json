@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "cCity": {
+      "home": {
+        "title": "C Cities",
+        "createLabel": "Buat C City baru",
+        "createOrEditLabel": "Buat atau edit C City",
+        "notFound": "No C Cities found"
+      },
+      "created": "C City dengan id {{ param }} telah dibuat",
+      "updated": "C City dengan id {{ param }} telah diperbaharui",
+      "deleted": "C City dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus C City {{ id }}?"
+      },
+      "detail": {
+        "title": "C City"
+      },
+      "name": "Name",
+      "active": "Active",
+      "country": "Country",
+      "region": "Region"
+    }
+  }
+}

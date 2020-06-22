@@ -1,0 +1,45 @@
+{
+    "name": "CLocation",
+    "fields": [
+        {
+            "fieldName": "streetAddress",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "postalCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "taxInvoiceAddress",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCity",
+            "otherEntityRelationshipName": "cLocation",
+            "relationshipValidateRules": "required",
+            "relationshipName": "city",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200619072800",
+    "entityTableName": "c_location",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

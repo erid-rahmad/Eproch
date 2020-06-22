@@ -23,9 +23,46 @@ const JhiLogsComponent = () => import('../admin/logs/logs.vue');
 const JhiAuditsComponent = () => import('../admin/audits/audits.vue');
 const JhiMetricsComponent = () => import('../admin/metrics/metrics.vue');
 const JhiTrackerComponent = () => import('../admin/tracker/tracker.vue');
-const DynamicWindow = () => import(/* webpackChunkName: "dynamicWindow" */ '@/core/application-dictionary/components/DynamicWindow/dynamic-window.vue');
+const DynamicWindow = () =>
+  import(/* webpackChunkName: "dynamicWindow" */ '@/core/application-dictionary/components/DynamicWindow/dynamic-window.vue');
 /* tslint:disable */
 // prettier-ignore
+// prettier-ignore
+const CCountry = () => import('../entities/c-country/c-country.vue');
+// prettier-ignore
+const CCountryUpdate = () => import('../entities/c-country/c-country-update.vue');
+// prettier-ignore
+const CCountryDetails = () => import('../entities/c-country/c-country-details.vue');
+// prettier-ignore
+const CCurrency = () => import('../entities/c-currency/c-currency.vue');
+// prettier-ignore
+const CCurrencyUpdate = () => import('../entities/c-currency/c-currency-update.vue');
+// prettier-ignore
+const CCurrencyDetails = () => import('../entities/c-currency/c-currency-details.vue');
+// prettier-ignore
+const CRegion = () => import('../entities/c-region/c-region.vue');
+// prettier-ignore
+const CRegionUpdate = () => import('../entities/c-region/c-region-update.vue');
+// prettier-ignore
+const CRegionDetails = () => import('../entities/c-region/c-region-details.vue');
+// prettier-ignore
+const CCity = () => import('../entities/c-city/c-city.vue');
+// prettier-ignore
+const CCityUpdate = () => import('../entities/c-city/c-city-update.vue');
+// prettier-ignore
+const CCityDetails = () => import('../entities/c-city/c-city-details.vue');
+// prettier-ignore
+const CLocation = () => import('../entities/c-location/c-location.vue');
+// prettier-ignore
+const CLocationUpdate = () => import('../entities/c-location/c-location-update.vue');
+// prettier-ignore
+const CLocationDetails = () => import('../entities/c-location/c-location-details.vue');
+// prettier-ignore
+const CBank = () => import('../entities/c-bank/c-bank.vue');
+// prettier-ignore
+const CBankUpdate = () => import('../entities/c-bank/c-bank-update.vue');
+// prettier-ignore
+const CBankDetails = () => import('../entities/c-bank/c-bank-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 Vue.use(Router);
@@ -316,6 +353,58 @@ export const constantRoutes: RouteConfig[] = [
           title: 'applicationDictionary.validationRule',
           authorities: [Authority.ADMIN],
           windowId: 3001
+        }
+
+      }
+    ]
+  },
+  {
+    path: '/master-data',
+    component: Layout,
+    redirect: 'master-data/currency',
+    meta: {
+      title: 'masterData.default',
+      authorities: [Authority.ADMIN]
+    },
+    children: [
+      {
+        path: 'currency',
+        name: 'Currency',
+        component: DynamicWindow,
+        meta: {
+          title: 'currency.list',
+          authorities: [Authority.ADMIN],
+          windowId: 3651
+        }
+      },
+      {
+        path: 'country',
+        name: 'Country',
+        component: DynamicWindow,
+        meta: {
+          title: 'country.list',
+          authorities: [Authority.ADMIN],
+          windowId: 3901
+        }
+      },
+      {
+        path: 'location',
+        name: 'Location',
+        component: DynamicWindow,
+        meta: {
+          title: 'location.list',
+          authorities: [Authority.ADMIN],
+          windowId: 4651
+        }
+      },
+      {
+        path: 'bank',
+        name: 'Bank',
+        component: DynamicWindow,
+        meta: {
+          title: 'bank.list',
+          authorities: [Authority.ADMIN],
+          windowId: 4251
         }
       }
     ]

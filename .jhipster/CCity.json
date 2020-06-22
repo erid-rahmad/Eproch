@@ -1,0 +1,43 @@
+{
+    "name": "CCity",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCountry",
+            "otherEntityRelationshipName": "cCity",
+            "relationshipName": "country",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cRegion",
+            "otherEntityRelationshipName": "cCity",
+            "relationshipName": "region",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200619072700",
+    "entityTableName": "c_city",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

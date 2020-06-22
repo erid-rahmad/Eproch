@@ -34,6 +34,11 @@
         "adReference": "AD Reference",
         "adReferenceList": "AD Reference List",
         "adValidationRule": "Ad Validation Rule",
+        "cCountry": "C Country",
+        "cCurrency": "C Currency",
+        "cRegion": "C Region",
+        "cCity": "C City",
+        "cLocation": "C Location",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

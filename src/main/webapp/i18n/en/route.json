@@ -12,6 +12,9 @@
       "reference": "References",
       "validationRule": "Validation Rule"
     },
+    "masterData": {
+      "default": "Master Data"
+    },
     "admin": {
       "default": "System Administration",
       "userManagement": "Users",
@@ -71,6 +74,20 @@
       "add": "Add Document Type",
       "edit": "Edit Document Type",
       "view": "Document Type Details"
+    },
+    "location": {
+      "default": "Locations",
+      "list": "Locations",
+      "add": "Add Location",
+      "edit": "Edit Location",
+      "view": "Location Details"
+    },
+    "bank": {
+      "default": "Banks",
+      "list": "Banks",
+      "add": "Add Bank",
+      "edit": "Edit Bank",
+      "view": "Bank Details"
     }
   }
 }

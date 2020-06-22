@@ -4,7 +4,7 @@ import Vue, { DirectiveOptions } from 'vue';
 import 'normalize.css';
 import ElementUI from 'element-ui';
 import SvgIcon from 'vue-svgicon';
-import VueHotkey from "v-hotkey";
+import VueHotkey from 'v-hotkey';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
@@ -52,6 +52,12 @@ import ADTabService from '@/entities/ad-tab/ad-tab.service';
 import ADFieldService from '@/entities/ad-field/ad-field.service';
 import ADFieldGroupService from '@/entities/ad-field-group/ad-field-group.service';
 import AdValidationRuleService from '@/entities/ad-validation-rule/ad-validation-rule.service';
+import CCountryService from '@/entities/c-country/c-country.service';
+import CCurrencyService from '@/entities/c-currency/c-currency.service';
+import CRegionService from '@/entities/c-region/c-region.service';
+import CCityService from '@/entities/c-city/c-city.service';
+import CLocationService from '@/entities/c-location/c-location.service';
+import CBankService from '@/entities/c-bank/c-bank.service';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -141,6 +147,12 @@ new Vue({
     aDFieldService: () => new ADFieldService(),
     aDFieldGroupService: () => new ADFieldGroupService(),
     adValidationRuleService: () => new AdValidationRuleService(),
+    cCountryService: () => new CCountryService(),
+    cCurrencyService: () => new CCurrencyService(),
+    cRegionService: () => new CRegionService(),
+    cCityService: () => new CCityService(),
+    cLocationService: () => new CLocationService(),
+    cBankService: () => new CBankService(),
     // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
     accountService: () => accountService
   },

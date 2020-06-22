@@ -1,0 +1,27 @@
+{
+  "opusWebApp": {
+    "cBank": {
+      "home": {
+        "title": "C Banks",
+        "createLabel": "Buat C Bank baru",
+        "createOrEditLabel": "Buat atau edit C Bank",
+        "notFound": "No C Banks found"
+      },
+      "created": "C Bank dengan id {{ param }} telah dibuat",
+      "updated": "C Bank dengan id {{ param }} telah diperbaharui",
+      "deleted": "C Bank dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus C Bank {{ id }}?"
+      },
+      "detail": {
+        "title": "C Bank"
+      },
+      "name": "Name",
+      "value": "Value",
+      "shortName": "Short Name",
+      "description": "Description",
+      "swiftCode": "Swift Code",
+      "active": "Active"
+    }
+  }
+}

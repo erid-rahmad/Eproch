@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "cCity": {
+      "home": {
+        "title": "C Cities",
+        "createLabel": "Create a new C City",
+        "createOrEditLabel": "Create or edit a C City",
+        "notFound": "No C Cities found"
+      },
+      "created": "A new C City is created with identifier {{ param }}",
+      "updated": "A C City is updated with identifier {{ param }}",
+      "deleted": "A C City is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete C City {{ id }}?"
+      },
+      "detail": {
+        "title": "C City"
+      },
+      "name": "Name",
+      "active": "Active",
+      "country": "Country",
+      "region": "Region"
+    }
+  }
+}
