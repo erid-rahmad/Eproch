@@ -17,6 +17,7 @@
           <el-form-item label="">
             <el-switch
               v-model="model.active"
+              active-text="Active"
               inactive-color="#ff4949"
             />
           </el-form-item>

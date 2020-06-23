@@ -29,12 +29,6 @@ const DetailViewProps = Vue.extend({
       default: () => {
         return null;
       }
-    },
-    searchPanelEventBus: {
-      type: Object,
-      default: () => {
-        return null;
-      }
     }
   }
 });
@@ -72,7 +66,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
 
   private baseApiUrl: string = '';
   private filterQuery: string = '';
-  private filterQueryTmp: string;
+  private filterQueryTmp: string = null;
   private parentId: number = 0;
 
   private referenceItemsUpdateTimestamp: number = Date.now();
@@ -212,7 +206,6 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
 
   // Start of lifecycle events.
   created() {
-    this.searchPanelEventBus.$on('filter-updated', this.filterRecord);
     this.toolbarEventBus.$on('add-record', this.newRecord);
     this.toolbarEventBus.$on('copy-record', this.copyRecord);
     this.toolbarEventBus.$on('save-record', this.beforeSave);
@@ -225,7 +218,6 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
   }
 
   beforeDestroyed() {
-    this.searchPanelEventBus.$off('filter-updated', this.filterRecord);
     this.toolbarEventBus.$off('add-record', this.newRecord);
     this.toolbarEventBus.$off('copy-record', this.copyRecord);
     this.toolbarEventBus.$off('save-record', this.beforeSave);
@@ -240,16 +232,19 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
     this.toolbarEventBus.$emit('inline-editing', false);
   }
 
-  private filterRecord(query: string) {
+  public filterRecord(query: string) {
     if (!query) {
-      this.filterQuery = this.filterQueryTmp || this.filterQuery;
+      this.filterQuery = this.filterQueryTmp || '';
       this.filterQueryTmp = null;
     } else {
       if (this.filterQueryTmp === null) {
         this.filterQueryTmp = this.filterQuery;
       }
-      this.filterQuery = `${this.filterQueryTmp}&${query}`;
+
+      this.filterQuery = this.filterQueryTmp ? `${this.filterQueryTmp}&${query}` : query;
     }
+    this.originalData = null;
+    this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
   }
 
   private newRecord(data: any) {
