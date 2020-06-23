@@ -43,12 +43,6 @@ const GridViewProps = Vue.extend({
       default: () => {
         return null;
       }
-    },
-    searchPanelEventBus: {
-      type: Object,
-      default: () => {
-        return null;
-      }
     }
   }
 });
@@ -113,7 +107,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   private fields: any[] = [];
   private baseApiUrl: string = '';
   private filterQuery: string = '';
-  private filterQueryOrigin: string = '';
+  private filterQueryTmp: string = null;
   private parentId: number = 0;
 
   private registerTabState!: (options: RegisterTabParameter) => Promise<void>
@@ -197,8 +191,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   // Start of lifecycle events.
   created() {
     this.onFieldsChange(this.fields);
-    this.searchPanelEventBus?.$on('filter-updated', this.filterRecord);
-    
     this.toolbarEventBus?.$on('add-record', this.addBlankRow);
     this.toolbarEventBus?.$on('copy-record', this.copyRow);
     this.toolbarEventBus?.$on('save-record', this.beforeSave);
@@ -208,8 +200,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   beforeDestroy() {
-    this.searchPanelEventBus?.$off('filter-updated', this.filterRecord);
-
     this.toolbarEventBus?.$off('add-record', this.addBlankRow);
     this.toolbarEventBus?.$off('copy-record', this.copyRow);
     this.toolbarEventBus?.$off('save-record', this.beforeSave);
@@ -414,34 +404,21 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     };
   }
 
-  private filterRecord(query) {
-    //console.log('Filter query: %O', query);
-    
-    if((this.filterQueryOrigin === "")||(this.filterQueryOrigin === null)){
-      this.filterQueryOrigin = this.filterQuery;
-    }
-    
-    if((this.filterQuery === null)||(this.filterQuery === "")){
-      this.filterQuery = query;
-    }else{
-
-      const child = this.filterQuery.match("^adTableId");
-      
-      if(child){
-        this.filterQuery = this.filterQueryOrigin + query;
-        if(query === "clear"){
-          this.filterQuery = this.filterQueryOrigin;
-        }
-      }else{
-        this.filterQuery = query;
-        this.filterQueryOrigin = "";
-        if(query === "clear"){
-          this.filterQuery = "";
-        }
+  public filterRecord(query: string) {
+    console.log('[grid-view] Input query: %s', query);
+    if (!query) {
+      console.log('input: %s', query);
+      this.filterQuery = this.filterQueryTmp || this.filterQuery;
+      this.filterQueryTmp = null;
+    } else {
+      if (this.filterQueryTmp === null) {
+        this.filterQueryTmp = this.filterQuery;
+        console.log('[grid-view] Original query saved. %s', this.filterQuery);
       }
-      
+
+      this.filterQuery = this.filterQueryTmp ? `${this.filterQueryTmp}&${query}` : query;
     }
-    
+    console.log('[grid-view] Filter query updated. %s', this.filterQuery);
     this.retrieveAllRecords();
   }
 

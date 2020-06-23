@@ -53,11 +53,7 @@ export default class AdvanceSearch extends AdvanceSearchProps {
   
   // Multiple row selection.
   filterQuery = '';
-  multipleSelectionFilterAdvance: Array<any> = [];
-  tempMultipleSelectionFilterAdvance = '';
-  tempMultipleSelectionFilterAdvanceColumn = '';
-  tempMultipleSelectionFilterAdvanceQuery = '';
-  tempMultipleSelectionFilterAdvanceQueryValue = '';
+  selectedRows: Array<any> = [];
   operatorMap: any = {};
 
   //get form after choose get column
@@ -120,23 +116,18 @@ export default class AdvanceSearch extends AdvanceSearchProps {
   }
 
   public handleSelectionChangeFilterAdvance(value: any) {
-    this.multipleSelectionFilterAdvance = value;
-    //console.log(value);
+    this.selectedRows = value;
   }
 
-  public filterAdvance(){
-    if(this.multipleSelectionFilterAdvance.length){
-      this.tempMultipleSelectionFilterAdvance = '';
+  public filterAdvance() {
+    if (this.selectedRows.length) {
+      let query = '';
       
-        for (let i = 0; i < this.multipleSelectionFilterAdvance.length; i++) {
-          if((this.multipleSelectionFilterAdvance[i].column !== "")&&(this.multipleSelectionFilterAdvance[i].query !== "")){
-          
-            this.tempMultipleSelectionFilterAdvanceColumn = this.multipleSelectionFilterAdvance[i].column.adColumn.name;
-            this.tempMultipleSelectionFilterAdvanceQuery = this.multipleSelectionFilterAdvance[i].query;
-            this.tempMultipleSelectionFilterAdvanceQueryValue = this.multipleSelectionFilterAdvance[i].queryValue;
-            
-            this.tempMultipleSelectionFilterAdvance += `&${this.tempMultipleSelectionFilterAdvanceColumn}.${this.tempMultipleSelectionFilterAdvanceQuery}=${this.tempMultipleSelectionFilterAdvanceQueryValue}`;
-          }else{
+        for (let row of this.selectedRows) {
+          if ((row.column !== "") && (row.query !== "")) {
+            const filter = `${row.column.adColumn.name}.${row.query}=${row.queryValue}`;
+            query += query.length ? `&${filter}` : filter;
+          } else {
             this.$notify({
               title: 'Warning',
               message: "Please select filter row",
@@ -147,8 +138,7 @@ export default class AdvanceSearch extends AdvanceSearchProps {
           }
         }
 
-        this.$emit('submit-advance-search', this.tempMultipleSelectionFilterAdvance);
-        this.eventBus.$emit('close-search-window');
+        this.$emit('submit', query);
       
     }else{
       this.$notify({
@@ -161,14 +151,13 @@ export default class AdvanceSearch extends AdvanceSearchProps {
 
   }
 
-  public clear(){
+  public clear() {
     for (let field of this.fields) {
       const column = field.adColumn;
       //this.row[column.name] = "";
       this.$set(this.row, column.name, "");
     }
-    this.$emit('clear-search', "");
-    this.eventBus.$emit('close-search-window');
+    this.$emit('clear');
 
     this.gridData = [{
       column: '', 
@@ -177,8 +166,8 @@ export default class AdvanceSearch extends AdvanceSearchProps {
     }]
   }
 
-  public close(){
-    this.eventBus.$emit('close-search-window');
+  public close() {
+    this.$emit('close');
   }
 
   public query = new Map([
