@@ -42,28 +42,16 @@ export default class SearchPanel extends SearchPanelProps {
   beforeDestroy() {
   }
 
-  private onBasicSearch(params: any) {
-    // TODO build basic search filter query.
+  public onSearch(params: any) {
     this.filterQuery = params;
-    this.eventBus.$emit('filter-updated', this.filterQuery);
+    this.$emit('submit', this.filterQuery);
   }
 
-  private onAdvanceSearch(params: any) {
-    // TODO build advance search filter query.
-    this.filterQuery = params;
-    this.eventBus.$emit('filter-updated', this.filterQuery);
+  public onClear() {
+    this.$emit('clear');
   }
 
-  private onClear() {
-    this.eventBus.$emit('close-search-window');
-    this.eventBus.$emit('filter-updated', "clear");
-  }
-
-  private onTabClick() {
-
-  }
-
-  private onClosePanel(){
-    this.eventBus.$emit('close-search-window');
+  public onClose(){
+    this.$emit('close');
   }
 }

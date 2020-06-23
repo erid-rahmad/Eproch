@@ -106,7 +106,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.mainToolbarEventBus.$on('tab-navigate', this.navigateTab);
     this.mainToolbarEventBus.$on('open-search-window', this.openSearchPanel);
     this.mainToolbarEventBus.$on('cancel-operation', this.cancelOperation);
-    this.searchPanelEventBus.$on('close-search-window', this.cancelOperation);
 
     this.retrieveTabs(null);
   }
@@ -115,7 +114,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.mainToolbarEventBus.$off('tab-navigate', this.navigateTab);
     this.mainToolbarEventBus.$off('open-search-window', this.openSearchPanel);
     this.mainToolbarEventBus.$off('cancel-operation', this.cancelOperation);
-    this.searchPanelEventBus.$off('close-search-window', this.cancelOperation);
     this.removeWindowState(this.fullPath);
     this.unwatchStore();
   }
@@ -194,8 +192,26 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.searchPanelActive = true;
   }
 
-  private cancelOperation() {
+  private closeSearchPanel() {
     this.searchPanelActive = false;
+  }
+
+  private cancelOperation() {
+    this.closeSearchPanel();
+  }
+
+  public applyFilter(query: string) {
+    if (this.gridView) {
+      (<any>this.$refs.mainGrid).filterRecord(query);
+    } else {
+      this.currentRecordNo = 1;
+      (<any>this.$refs.mainForm).filterRecord(query);
+    }
+    this.closeSearchPanel();
+  }
+
+  public clearFilter() {
+    this.applyFilter('');
   }
 
   public handleTabClick(tab: any) {
@@ -216,7 +232,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     // Ensure to link the child tab with exactly its parent.
     tab.filterQuery = buildCriteriaQueryString([
       `${tab.foreignColumnName}.equals=${parentId}`,
-      tab.filterQuery
+      tab.filterQuery // Include current query.
     ]);
   }
 
@@ -238,8 +254,11 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       const index = parseInt(this.currentTab);
       let tab = this.childTabs[index];
       tab.parentId = data.id;
+
+    // Ensure to link the child tab with exactly its parent.
       tab.filterQuery = buildCriteriaQueryString([
-        `${tab.foreignColumnName}.equals=${data.id}`
+        `${tab.foreignColumnName}.equals=${data.id}`,
+        tab.filterQuery // Include current query.
       ]);
 
       // Use Vue.$set to notify array update.
