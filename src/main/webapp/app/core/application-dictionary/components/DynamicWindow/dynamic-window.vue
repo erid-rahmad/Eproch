@@ -39,7 +39,6 @@
                 v-if="gridView"
                 ref="mainGrid"
                 :tab="mainTab"
-                :search-panel-event-bus="searchPanelEventBus"
                 :toolbar-event-bus="mainToolbarEventBus"
                 @current-row-change="loadChildTab"
                 @total-count-changed="onTotalCountChange"
@@ -50,7 +49,6 @@
                 ref="mainForm"
                 :tab="mainTab"
                 :page="currentRecordNo"
-                :search-panel-event-bus="searchPanelEventBus"
                 :toolbar-event-bus="mainToolbarEventBus"
                 @current-page-change="loadChildTab"
                 @total-count-changed="onTotalCountChange"
@@ -99,6 +97,9 @@
         :visible.sync="searchPanelActive"
         :event-bus="searchPanelEventBus"
         :fields="mainTab.adfields"
+        @submit="applyFilter"
+        @clear="clearFilter"
+        @close="closeSearchPanel"
       />
     </div>
   </div>

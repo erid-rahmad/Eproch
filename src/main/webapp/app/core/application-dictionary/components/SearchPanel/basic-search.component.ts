@@ -9,12 +9,6 @@ import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 
 const BasicSearchProps = Vue.extend({
   props: {
-    eventBus: {
-      type: Object,
-      default: () => {
-        return null;
-      }
-    },
     fields: {
       type: Array,
       default: () => {
@@ -31,8 +25,6 @@ export default class BasicSearch extends BasicSearchProps {
   
   listFields: Array<any> = [];
   row: any = {};
-  rowQuery: any = {};
-  rowQueryTemp: any = {};
   currentRecord: any = {};
   tableDirectTimestamp: number = Date.now();
   private newRecord: boolean = false;
@@ -54,41 +46,43 @@ export default class BasicSearch extends BasicSearchProps {
 
 
 
-  public filterBasic(){
-    this.rowQueryTemp = "";
+  public filterBasic() {
+    let rowQueryTemp = "";
     for (let field of this.fields) {
       const column = field.adColumn;
       
-      let queryName = this.row[column.name];
-      let queryNameParam = column.name;
-      let queryTypeParam = column.type;
+      const queryName = this.row[column.name];
+      if (!queryName)
+        continue;
       
-      if(queryName){
-        if(queryTypeParam === "STRING"){
-          this.rowQuery = `&${queryNameParam}.contains=${queryName}`;
-        }else if((queryTypeParam === "INTEGER")||(queryTypeParam === "BIG_DECIMAL")||(queryTypeParam === "BOOLEAN")){
-          this.rowQuery = `&${queryNameParam}.equals=${queryName}`;
-        }
-        this.rowQueryTemp += this.rowQuery;
+      const queryNameParam = column.name;
+      const queryTypeParam = column.type;
+      
+      let rowQuery: string;
+      if (queryTypeParam === "STRING") {
+        rowQuery = `${queryNameParam}.contains=${queryName}`;
+      } else if((queryTypeParam === "INTEGER") || (queryTypeParam === "BIG_DECIMAL") || (queryTypeParam === "BOOLEAN")) {
+        rowQuery = `${queryNameParam}.equals=${queryName}`;
       }
+
+      if (rowQuery)
+        rowQueryTemp += rowQueryTemp.length ? `&${rowQuery}` : rowQuery;
     }
 
-    this.$emit('submit-basic-search', this.rowQueryTemp);
-    this.eventBus.$emit('close-search-window');
+    this.$emit('submit', rowQueryTemp);
   }
 
-  public clear(){
+  public clear() {
     for (let field of this.fields) {
       const column = field.adColumn;
-      //this.row[column.name] = "";
+      // TODO Set the value depending on the column data type.
       this.$set(this.row, column.name, "");
     }
-    this.$emit('clear-search', "");
-    this.eventBus.$emit('close-search-window');
+    this.$emit('clear');
   }
 
-  public close(){
-    this.eventBus.$emit('close-search-window');
+  public close() {
+    this.$emit('close');
   }
 
   public booleanOption = [
