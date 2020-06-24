@@ -374,7 +374,7 @@ export const constantRoutes: RouteConfig[] = [
         meta: {
           title: 'currency.list',
           authorities: [Authority.ADMIN],
-          windowId: 3651
+          windowId: 3851
         }
       },
       {
@@ -384,7 +384,7 @@ export const constantRoutes: RouteConfig[] = [
         meta: {
           title: 'country.list',
           authorities: [Authority.ADMIN],
-          windowId: 3901
+          windowId: 3852
         }
       },
       {
@@ -394,7 +394,7 @@ export const constantRoutes: RouteConfig[] = [
         meta: {
           title: 'location.list',
           authorities: [Authority.ADMIN],
-          windowId: 4651
+          windowId: 3853
         }
       },
       {
@@ -404,7 +404,7 @@ export const constantRoutes: RouteConfig[] = [
         meta: {
           title: 'bank.list',
           authorities: [Authority.ADMIN],
-          windowId: 4251
+          windowId: 3854
         }
       }
     ]
