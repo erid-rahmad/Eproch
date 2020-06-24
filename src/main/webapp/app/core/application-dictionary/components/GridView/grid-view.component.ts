@@ -405,20 +405,35 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public filterRecord(query: string) {
-    console.log('[grid-view] Input query: %s', query);
-    if (!query) {
-      console.log('input: %s', query);
-      this.filterQuery = this.filterQueryTmp || this.filterQuery;
-      this.filterQueryTmp = null;
-    } else {
-      if (this.filterQueryTmp === null) {
+    
+    //console.log('query 1 : %s', query);
+    if (query) {
+      if (this.filterQueryTmp === "") {
         this.filterQueryTmp = this.filterQuery;
-        console.log('[grid-view] Original query saved. %s', this.filterQuery);
+        //console.log('filterQuery 1 : %s', this.filterQuery);
+        //console.log('filterQueryTmp 1 : %s', this.filterQueryTmp);
       }
 
-      this.filterQuery = this.filterQueryTmp ? `${this.filterQueryTmp}&${query}` : query;
+      if(this.parentId!=0){
+        this.filterQuery = this.filterQueryTmp ? this.filterQueryTmp + query : query;
+      }else{
+        this.filterQuery = query;
+        this.filterQueryTmp = "";
+      }
+      
+    } else {
+      
+      if(this.parentId!=0){
+        this.filterQuery = this.filterQueryTmp || this.filterQuery;   // error disini
+      }else{
+        this.filterQuery = "";
+      }
+      
+      this.filterQueryTmp = "";
     }
-    console.log('[grid-view] Filter query updated. %s', this.filterQuery);
+    //console.log('filterQuery 2 : %s', this.filterQuery);
+    //console.log('filterQueryTmp 2 : %s', this.filterQueryTmp);  
+    //console.log('= AKHIR =');
     this.retrieveAllRecords();
   }
 
