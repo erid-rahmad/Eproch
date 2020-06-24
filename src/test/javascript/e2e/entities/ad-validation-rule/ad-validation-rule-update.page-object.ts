@@ -16,5 +16,6 @@ export default class AdValidationRuleUpdatePage extends AlertPage {
 
   queryInput: ElementFinder = element(by.css('input#ad-validation-rule-query'));
 
-  adValidationRuleSelect = element(by.css('select#ad-validation-rule-adValidationRule'));
+  activeInput: ElementFinder = element(by.css('input#ad-validation-rule-active'));
+  adOrganizationSelect = element(by.css('select#ad-validation-rule-adOrganization'));
 }

@@ -4,7 +4,7 @@ import Vue, { DirectiveOptions } from 'vue';
 import 'normalize.css';
 import ElementUI from 'element-ui';
 import SvgIcon from 'vue-svgicon';
-import VueHotkey from "v-hotkey";
+import VueHotkey from 'v-hotkey';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './app.vue';

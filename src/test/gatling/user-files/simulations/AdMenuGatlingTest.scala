@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the AdValidationRule entity.
+ * Performance test for the AdMenu entity.
  */
-class AdValidationRuleGatlingTest extends Simulation {
+class AdMenuGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class AdValidationRuleGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the AdValidationRule entity")
+    val scn = scenario("Test the AdMenu entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,33 +62,34 @@ class AdValidationRuleGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all adValidationRules")
-            .get("/api/ad-validation-rules")
+            exec(http("Get all adMenus")
+            .get("/api/ad-menus")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new adValidationRule")
-            .post("/api/ad-validation-rules")
+            .exec(http("Create new adMenu")
+            .post("/api/ad-menus")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
                 , "uid":null
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
-                , "query":"SAMPLE_TEXT"
-                , "active":null
+                , "path":"SAMPLE_TEXT"
+                , "action":"WINDOW"
+                , "icon":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_adValidationRule_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_adMenu_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created adValidationRule")
-                .get("${new_adValidationRule_url}")
+                exec(http("Get created adMenu")
+                .get("${new_adMenu_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created adValidationRule")
-            .delete("${new_adValidationRule_url}")
+            .exec(http("Delete created adMenu")
+            .delete("${new_adMenu_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

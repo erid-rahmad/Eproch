@@ -1,9 +1,3 @@
-entity ADClient {
-	name String required
-	code String required unique
-	description String
-	active Boolean
-}
 entity ADOrganization {
 	name String required
 	code String required unique
@@ -141,7 +135,19 @@ entity AdValidationRule {
 	name String required unique
 	description String
 	query String
+	active Boolean
 }
+
+@skipClient
+entity AdMenu {
+	uid UUID required
+	name String required
+	description String
+	path String required
+	action AdMenuAction
+	icon String
+}
+
 enum ADColumnType {
 	STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE,
 	BOOLEAN, LOCAL_DATE, ZONED_DATE_TIME, DURATION,
@@ -153,6 +159,9 @@ enum ADWindowType {
 enum ADReferenceType {
 	DATATYPE, LIST, TABLE
 }
+enum AdMenuAction {
+	WINDOW
+}
 /**
  * Both side will reference each other.
  */
@@ -163,6 +172,7 @@ relationship OneToMany {
 	ADTab to ADTab{parentTab}
 	ADTab to ADField{adTab required}
 	ADReference to ADReferenceList{adReference required}
+	AdMenu to AdMenu{parentMenu}
 }
 /**
  * The left side entity won't be included in the right side entity.
@@ -190,6 +200,9 @@ relationship ManyToOne {
 	ADReference{adOrganization required} to ADOrganization
 	ADReferenceList{adOrganization required} to ADOrganization
 	AdValidationRule{adOrganization required} to ADOrganization
+
+	AdMenu{adWindow} to ADWindow
+	AdMenu{adOrganization required} to ADOrganization
 }
 // Allow filtering to all entities.
 filter *

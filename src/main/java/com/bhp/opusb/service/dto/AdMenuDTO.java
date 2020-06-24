@@ -5,10 +5,12 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import com.bhp.opusb.domain.enumeration.AdMenuAction;
+
 /**
- * A DTO for the {@link com.bhp.opusb.domain.AdValidationRule} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.AdMenu} entity.
  */
-public class AdValidationRuleDTO extends AbstractAuditingDTO {
+public class AdMenuDTO extends AbstractAuditingDTO {
     
     private static final long serialVersionUID = 1L;
 
@@ -22,13 +24,20 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
 
     private String description;
 
-    private String query;
+    @NotNull
+    private String path;
 
-    private Boolean active;
+    private AdMenuAction action;
 
+    private String icon;
+
+
+    private Long adWindowId;
 
     private Long adOrganizationId;
     private String adOrganizationName;
+
+    private Long parentMenuId;
     
     public Long getId() {
         return id;
@@ -62,20 +71,36 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
         this.description = description;
     }
 
-    public String getQuery() {
-        return query;
+    public String getPath() {
+        return path;
     }
 
-    public void setQuery(String query) {
-        this.query = query;
+    public void setPath(String path) {
+        this.path = path;
     }
 
-    public Boolean isActive() {
-        return active;
+    public AdMenuAction getAction() {
+        return action;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setAction(AdMenuAction action) {
+        this.action = action;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public Long getAdWindowId() {
+        return adWindowId;
+    }
+
+    public void setAdWindowId(Long aDWindowId) {
+        this.adWindowId = aDWindowId;
     }
 
     public Long getAdOrganizationId() {
@@ -94,6 +119,14 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public Long getParentMenuId() {
+        return parentMenuId;
+    }
+
+    public void setParentMenuId(Long adMenuId) {
+        this.parentMenuId = adMenuId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -103,11 +136,11 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        AdValidationRuleDTO adValidationRuleDTO = (AdValidationRuleDTO) o;
-        if (adValidationRuleDTO.getId() == null || getId() == null) {
+        AdMenuDTO adMenuDTO = (AdMenuDTO) o;
+        if (adMenuDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), adValidationRuleDTO.getId());
+        return Objects.equals(getId(), adMenuDTO.getId());
     }
 
     @Override
@@ -117,15 +150,17 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "AdValidationRuleDTO{" +
+        return "AdMenuDTO{" +
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", query='" + getQuery() + "'" +
-            ", active='" + isActive() + "'" +
+            ", path='" + getPath() + "'" +
+            ", action='" + getAction() + "'" +
+            ", icon='" + getIcon() + "'" +
+            ", adWindowId=" + getAdWindowId() +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
+            ", parentMenuId=" + getParentMenuId() +
             "}";
     }
 }

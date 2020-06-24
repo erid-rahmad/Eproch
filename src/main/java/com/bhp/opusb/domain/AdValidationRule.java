@@ -46,6 +46,9 @@ public class AdValidationRule extends AbstractAuditingEntity {
     @Column(name = "query")
     private String query;
 
+    @Column(name = "active")
+    private Boolean active;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("adValidationRules")
@@ -112,6 +115,19 @@ public class AdValidationRule extends AbstractAuditingEntity {
         this.query = query;
     }
 
+    public Boolean isActive() {
+        return active;
+    }
+
+    public AdValidationRule active(Boolean active) {
+        this.active = active;
+        return this;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -150,6 +166,7 @@ public class AdValidationRule extends AbstractAuditingEntity {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", query='" + getQuery() + "'" +
+            ", active='" + isActive() + "'" +
             "}";
     }
 }
