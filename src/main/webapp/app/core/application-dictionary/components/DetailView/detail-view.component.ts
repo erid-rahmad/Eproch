@@ -10,6 +10,7 @@ import { ADReferenceType } from '@/shared/model/ad-reference.model';
 import { ElForm } from 'element-ui/types/form';
 import { mapActions } from 'vuex';
 import { RegisterTabParameter } from '@/shared/config/store/window-store';
+import { nullifyField } from '@/utils/form';
 
 const DetailViewProps = Vue.extend({
   props: {
@@ -234,7 +235,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
 
   public filterRecord(query: string) {
     if (!query) {
-      this.filterQuery = this.filterQueryTmp || '';
+      this.filterQuery = this.filterQueryTmp || this.filterQuery;
       this.filterQueryTmp = null;
     } else {
       if (this.filterQueryTmp === null) {
@@ -542,6 +543,10 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
       lastModifiedDate,
       ...record
     } = this.model;
+
+    this.formFields.forEach(field => {
+      nullifyField(record, field);
+    });
 
     (<ElForm>this.$refs.mainForm).validate(valid => {
       if (valid)

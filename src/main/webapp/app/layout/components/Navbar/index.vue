@@ -99,15 +99,13 @@ export default class extends Vue {
   }
 
   private toggleSideBar() {
-    appStore.ToggleSideBar(false)
+    appStore.ToggleSideBar(false);
   }
 
-  private async logout() {
+  private logout() {
     localStorage.removeItem('jhi-authenticationToken');
     sessionStorage.removeItem('jhi-authenticationToken');
-    accountStore.logout().then(() => {
-      this.$router.push('/')
-    })
+    accountStore.logout();
   }
 }
 </script>

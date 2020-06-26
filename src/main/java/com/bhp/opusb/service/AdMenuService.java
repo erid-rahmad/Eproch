@@ -6,7 +6,7 @@ import com.bhp.opusb.service.dto.AdMenuDTO;
 import com.bhp.opusb.service.mapper.AdMenuMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,6 +38,7 @@ public class AdMenuService {
      * @param adMenuDTO the entity to save.
      * @return the persisted entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.AdMenu.adMenus", allEntries = true)
     public AdMenuDTO save(AdMenuDTO adMenuDTO) {
         log.debug("Request to save AdMenu : {}", adMenuDTO);
         AdMenu adMenu = adMenuMapper.toEntity(adMenuDTO);
@@ -76,6 +77,7 @@ public class AdMenuService {
      *
      * @param id the id of the entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.AdMenu.adMenus", allEntries = true)
     public void delete(Long id) {
         log.debug("Request to delete AdMenu : {}", id);
         adMenuRepository.deleteById(id);

@@ -14,9 +14,11 @@ import org.mapstruct.Mapping;
 public interface AdMenuMapper extends EntityMapper<AdMenuDTO, AdMenu> {
 
     @Mapping(source = "adWindow.id", target = "adWindowId")
+    @Mapping(source = "adWindow.name", target = "adWindowName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "parentMenu.id", target = "parentMenuId")
+    @Mapping(source = "parentMenu.name", target = "parentMenuName")
     AdMenuDTO toDto(AdMenu adMenu);
 
     @Mapping(target = "adMenus", ignore = true)
