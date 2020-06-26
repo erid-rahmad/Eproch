@@ -74,6 +74,7 @@
               :remote="true"
               :remote-method="fetchTableDirectData"
               size="small"
+              clearable
               filterable
               :disabled="isReadonly(scope.row, field)"
               @focus="setTableDirectReference(field)"
@@ -90,6 +91,7 @@
               :ref="scope.column.property"
               v-model="scope.row[scope.column.property]"
               size="small"
+              clearable
               filterable
               :disabled="isReadonly(scope.row, field)"
             >

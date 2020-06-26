@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -32,6 +33,8 @@ public class AdValidationRuleCriteria implements Serializable, Criteria {
 
     private StringFilter query;
 
+    private BooleanFilter active;
+
     private LongFilter adOrganizationId;
 
     public AdValidationRuleCriteria() {
@@ -43,6 +46,7 @@ public class AdValidationRuleCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.query = other.query == null ? null : other.query.copy();
+        this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
@@ -91,12 +95,20 @@ public class AdValidationRuleCriteria implements Serializable, Criteria {
         this.query = query;
     }
 
-    public LongFilter getOrganizationId() {
+    public BooleanFilter getActive() {
+        return active;
+    }
+
+    public void setActive(BooleanFilter active) {
+        this.active = active;
+    }
+
+    public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
 
-    public void setAdOrganizationId(LongFilter adValidationRuleId) {
-        this.adOrganizationId = adValidationRuleId;
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
     }
 
 
@@ -115,6 +127,7 @@ public class AdValidationRuleCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(query, that.query) &&
+            Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
@@ -126,6 +139,7 @@ public class AdValidationRuleCriteria implements Serializable, Criteria {
         name,
         description,
         query,
+        active,
         adOrganizationId
         );
     }
@@ -138,6 +152,7 @@ public class AdValidationRuleCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (query != null ? "query=" + query + ", " : "") +
+                (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }

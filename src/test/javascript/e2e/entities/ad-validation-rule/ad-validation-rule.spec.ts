@@ -78,7 +78,17 @@ describe('AdValidationRule e2e test', () => {
       await updatePage.queryInput.sendKeys('query');
       expect(await updatePage.queryInput.getAttribute('value')).to.match(/query/);
 
-      // await  selectLastOption(updatePage.adValidationRuleSelect);
+
+      const selectedActive = await updatePage.activeInput.isSelected();
+      if (selectedActive) {
+        await updatePage.activeInput.click();
+        expect(await updatePage.activeInput.isSelected()).to.be.false;
+      } else {
+        await updatePage.activeInput.click();
+        expect(await updatePage.activeInput.isSelected()).to.be.true;
+      }
+
+      // await  selectLastOption(updatePage.adOrganizationSelect);
 
       expect(await updatePage.saveButton.isEnabled()).to.be.true;
       await updatePage.saveButton.click();
@@ -156,6 +166,15 @@ describe('AdValidationRule e2e test', () => {
           await updatePage.queryInput.clear();
           await updatePage.queryInput.sendKeys('modified');
           expect(await updatePage.queryInput.getAttribute('value')).to.match(/modified/);
+
+          const selectedActive = await updatePage.activeInput.isSelected();
+          if (selectedActive) {
+            await updatePage.activeInput.click();
+            expect(await updatePage.activeInput.isSelected()).to.be.false;
+          } else {
+            await updatePage.activeInput.click();
+            expect(await updatePage.activeInput.isSelected()).to.be.true;
+          }
 
 
         await updatePage.saveButton.click();

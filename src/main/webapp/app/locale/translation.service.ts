@@ -26,8 +26,8 @@ export default class TranslationService {
           const message = {...res.data, ...elementUiLocale};
           this.i18n.setLocaleMessage(currentLanguage, message);
           this.i18n.locale = currentLanguage;
-          ElementLocale.i18n((key, value) => this.i18n.t(key, value));
-          translationStore.setLanguage(currentLanguage)
+          ElementLocale.i18n((key: string, value: VueI18n.Values) => this.i18n.t(key, value));
+          translationStore.setLanguage(currentLanguage);
         }
       });
     } else if (this.i18n) {

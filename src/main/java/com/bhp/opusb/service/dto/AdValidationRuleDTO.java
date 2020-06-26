@@ -14,7 +14,6 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    @NotNull
     private UUID uid;
 
     @NotNull
@@ -23,6 +22,9 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
     private String description;
 
     private String query;
+
+    private Boolean active;
+
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -65,6 +67,14 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
 
     public void setQuery(String query) {
         this.query = query;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Long getAdOrganizationId() {
@@ -112,7 +122,9 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", query='" + getQuery() + "'" +
-            ", adValidationRuleId=" + getAdOrganizationId() +
+            ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
 }

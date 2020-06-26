@@ -1,3 +1,5 @@
+import { isStringField } from "@/utils/validate";
+
 export const buildCascaderOptions = source => {
   let parents = new Map();
   let children = new Map();
@@ -50,3 +52,15 @@ export const buildCascaderOptions = source => {
 
   return result;
 };
+
+export const nullifyField = (record: Record<string, any>, field: any) => {
+  const fieldName: string = field.adColumn.name;
+  const isForeignKey = fieldName.endsWith('Id');
+  if (!field.adColumn.mandatory) {
+    const value = record[fieldName];
+    const shouldNullify = (isForeignKey && value === 0) || (isStringField(field) && value?.trim() === '');
+    if (shouldNullify) {
+      record[fieldName] = null;
+    }
+  }
+}

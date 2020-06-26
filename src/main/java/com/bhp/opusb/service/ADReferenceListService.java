@@ -6,7 +6,7 @@ import com.bhp.opusb.service.dto.ADReferenceListDTO;
 import com.bhp.opusb.service.mapper.ADReferenceListMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,6 +38,7 @@ public class ADReferenceListService {
      * @param aDReferenceListDTO the entity to save.
      * @return the persisted entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADReference.aDReferenceLists", allEntries = true)
     public ADReferenceListDTO save(ADReferenceListDTO aDReferenceListDTO) {
         log.debug("Request to save ADReferenceList : {}", aDReferenceListDTO);
         ADReferenceList aDReferenceList = aDReferenceListMapper.toEntity(aDReferenceListDTO);
@@ -76,6 +77,7 @@ public class ADReferenceListService {
      *
      * @param id the id of the entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADReference.aDReferenceLists", allEntries = true)
     public void delete(Long id) {
         log.debug("Request to delete ADReferenceList : {}", id);
         aDReferenceListRepository.deleteById(id);

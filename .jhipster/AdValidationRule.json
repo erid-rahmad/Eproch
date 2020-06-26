@@ -23,6 +23,10 @@
         {
             "fieldName": "query",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [
@@ -31,7 +35,7 @@
             "otherEntityName": "aDOrganization",
             "otherEntityRelationshipName": "adValidationRule",
             "relationshipValidateRules": "required",
-            "relationshipName": "adValidationRule",
+            "relationshipName": "adOrganization",
             "otherEntityField": "id"
         }
     ],
@@ -45,5 +49,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "enableEntityAudit": true
 }

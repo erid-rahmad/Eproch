@@ -1,0 +1,82 @@
+{
+    "name": "AdMenu",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "path",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "action",
+            "fieldType": "AdMenuAction",
+            "fieldValues": "WINDOW"
+        },
+        {
+            "fieldName": "icon",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "adMenu",
+            "otherEntityRelationshipName": "parentMenu",
+            "relationshipName": "adMenu"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDWindow",
+            "otherEntityRelationshipName": "adMenu",
+            "relationshipName": "adWindow",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "adMenu",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adMenu",
+            "otherEntityRelationshipName": "adMenu",
+            "relationshipName": "parentMenu",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200624083100",
+    "entityTableName": "ad_menu",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true,
+    "enableEntityAudit": true
+}
