@@ -4,13 +4,13 @@ import buildCriteriaQueryString from '@/shared/filter/filters';
 
 const delay: number = 0;
 
-interface IPaginationQuery {
+export interface IPaginationQuery {
   page: number;
   size: number;
   sort: string[];
 }
 
-interface IRetrieveParameter {
+export interface IRetrieveParameter {
   criteriaQuery?: string | string[] | object;
   paginationQuery?: IPaginationQuery
 }
@@ -93,174 +93,5 @@ export default class DynamicWindowService {
           reject(err);
         });
     });
-  }
-  
-  public getSchemaFromAPI(schemaId: string) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (schemaId === 'table') {
-          resolve({
-            type: 'object',
-            required: ['name'],
-            properties: {
-              name: {
-                type: 'string'
-              },
-              view: {
-                type: 'boolean'
-              },
-              active: {
-                type: 'boolean'
-              }
-            }
-          });
-        } else {
-          resolve({
-            type: "object",
-            required: ["firstName"],
-            properties: {
-              firstName: {
-                type: "string"
-              },
-              lastName: {
-                type: "string"
-              }
-            }
-          });
-        }
-      }, delay)
-    })
-  }
-
-  public getUiSchemaFromAPI(schemaId: string) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve([
-          {
-            component: 'el-form',
-            model: 'data',
-            fieldOptions: {
-              attrs: {
-                'label-width': '128px',
-                'label-position': 'left',
-                size: 'small'
-              }
-            },
-            children: [
-              {
-                component: 'el-form-item',
-                fieldOptions: {
-                  props: {
-                    label: 'Name'
-                  }
-                },
-                children: [
-                  {
-                    component: 'el-row',
-                    fieldOptions: {
-                      props: {
-                        gutter: 10
-                      }
-                    },
-                    children: [
-                      {
-                        component: 'el-col',
-                        fieldOptions: {
-                          props: {
-                            span: 8
-                          }
-                        },
-                        children: [
-                          {
-                            component: 'el-input',
-                            model: 'data.name',
-                            fieldOptions: {
-                              on: ['input'],
-                              attrs: {
-                                placeholder: 'Please enter table name'
-                              }
-                            }
-                          }
-                        ]
-                      },
-                      {
-                        component: 'el-col',
-                        fieldOptions: {
-                          props: {
-                            span: 4
-                          }
-                        },
-                        children: [
-                          {
-                            component: 'el-checkbox',
-                            model: 'data.view',
-                            fieldOptions: {
-                              on: ['change'],
-                              attrs: {
-                                label: 'Is Table View'
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                component: 'el-form-item',
-                fieldOptions: {
-                  props: {
-                    label: 'Active'
-                  }
-                },
-                children: [
-                  {
-                    component: 'el-col',
-                    fieldOptions: {
-                      props: {
-                        span: 4
-                      }
-                    },
-                    children: [
-                      {
-                        component: 'el-switch',
-                        model: 'data.active',
-                        fieldOptions: {
-                          on: ['change']
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        ])
-      }, delay)
-    })
-  }
-
-  public getDataFromAPI(schemaId: string) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (schemaId === 'table') {
-          resolve({
-            data: {
-              name: '',
-              view: false,
-              active: true
-            }
-          });
-        } else {
-          resolve({
-            data: {
-              firstName: "Ananta",
-              lastName: "Aryadewa"
-            }
-          });
-        }
-      }, delay)
-    })
   }
 }

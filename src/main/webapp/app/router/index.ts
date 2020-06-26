@@ -163,6 +163,17 @@ export const constantRoutes: RouteConfig[] = [
 ];
 
 /**
+ * This route should be placed in the end of the route list.
+ */
+export const notFoundRoute: RouteConfig[] = [
+  {
+    path: '*',
+    redirect: '/404',
+    meta: { hidden: true }
+  }
+];
+
+/**
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user authorities
  */
@@ -275,7 +286,7 @@ export const asyncRoutes: RouteConfig[] = [
         }
       }
     ]
-  },
+  }/* ,
   {
     path: '/application-dictionary',
     component: Layout,
@@ -326,14 +337,8 @@ export const asyncRoutes: RouteConfig[] = [
         }
       }
     ]
-  },
+  } */
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
-  
-  {
-    path: '*',
-    redirect: '/404',
-    meta: { hidden: true }
-  }
 ];
 
 // prettier-ignore
@@ -359,3 +364,5 @@ export function resetRouter() {
 }
 
 export default router;
+export const defaultLayout = Layout;
+export const dynamicWindow = DynamicWindow;

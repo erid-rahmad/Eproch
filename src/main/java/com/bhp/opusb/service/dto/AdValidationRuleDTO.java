@@ -14,7 +14,6 @@ public class AdValidationRuleDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    @NotNull
     private UUID uid;
 
     @NotNull

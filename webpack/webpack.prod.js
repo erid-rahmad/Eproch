@@ -8,12 +8,22 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const jhiUtils = require('./utils.js');
 
 const env = require('../config/prod.env');
+const minimizerPlugin = new TerserPlugin({
+  terserOptions: {
+    warnings: false
+  },
+  exclude: ['LICENSE.txt'],
+  sourceMap: config.build.productionSourceMap,
+  parallel: true
+});
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
+  cache: true,
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
@@ -32,6 +42,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: 'app/[id].[hash].chunk.js'
   },
   optimization: {
+    minimize: true,
+    minimizer: [minimizerPlugin],
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -47,13 +59,14 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    new UglifyJsPlugin({
+    minimizerPlugin,
+    /* new UglifyJsPlugin({
       uglifyOptions: {
         warnings: false
       },
       sourceMap: config.build.productionSourceMap,
       parallel: true
-    }),
+    }), */
     // extract css into its own file
     new MiniCssExtractPlugin({
       filename: '[name].[contenthash].css',

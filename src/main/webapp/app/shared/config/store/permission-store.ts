@@ -1,6 +1,6 @@
 import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-decorators';
 import { RouteConfig } from 'vue-router';
-import { asyncRoutes, constantRoutes } from '@/router';
+import { asyncRoutes, constantRoutes, notFoundRoute } from '@/router';
 import store from '@/shared/config/store';
 import { Authority } from '@/shared/security/authority';
 
@@ -51,7 +51,14 @@ class PermissionStore extends VuexModule implements IPermissionState {
     } else {
       accessedRoutes = filterAsyncRoutes(asyncRoutes, roles);
     }
+
+    accessedRoutes = accessedRoutes.concat(notFoundRoute);
     this.SET_ROUTES(accessedRoutes);
+  }
+
+  @Action
+  public async updateRoutes(routes: any[]) {
+    this.SET_ROUTES(asyncRoutes.concat(routes).concat(notFoundRoute));
   }
 }
 

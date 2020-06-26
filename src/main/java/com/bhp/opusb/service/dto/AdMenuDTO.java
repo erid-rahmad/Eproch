@@ -1,6 +1,8 @@
 package com.bhp.opusb.service.dto;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -16,7 +18,6 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    @NotNull
     private UUID uid;
 
     @NotNull
@@ -31,14 +32,17 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     private String icon;
 
-
     private Long adWindowId;
+    private String adWindowName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
     private Long parentMenuId;
+    private String parentMenuName;
     
+    private Set<AdMenuDTO> adMenus = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -103,6 +107,14 @@ public class AdMenuDTO extends AbstractAuditingDTO {
         this.adWindowId = aDWindowId;
     }
 
+    public String getAdWindowName() {
+        return adWindowName;
+    }
+
+    public void setAdWindowName(String adWindowName) {
+        this.adWindowName = adWindowName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -125,6 +137,22 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     public void setParentMenuId(Long adMenuId) {
         this.parentMenuId = adMenuId;
+    }
+
+    public String getParentMenuName() {
+        return parentMenuName;
+    }
+
+    public void setParentMenuName(String parentMenuName) {
+        this.parentMenuName = parentMenuName;
+    }
+
+    public Set<AdMenuDTO> getAdMenus() {
+        return adMenus;
+    }
+
+    public void setAdMenus(Set<AdMenuDTO> adMenus) {
+        this.adMenus = adMenus;
     }
 
     @Override

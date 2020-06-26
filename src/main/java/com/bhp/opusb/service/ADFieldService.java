@@ -1,18 +1,19 @@
 package com.bhp.opusb.service;
 
+import java.util.Optional;
+
 import com.bhp.opusb.domain.ADField;
 import com.bhp.opusb.repository.ADFieldRepository;
 import com.bhp.opusb.service.dto.ADFieldDTO;
 import com.bhp.opusb.service.mapper.ADFieldMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link ADField}.
@@ -38,6 +39,7 @@ public class ADFieldService {
      * @param aDFieldDTO the entity to save.
      * @return the persisted entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADTab.aDFields", allEntries = true)
     public ADFieldDTO save(ADFieldDTO aDFieldDTO) {
         log.debug("Request to save ADField : {}", aDFieldDTO);
         ADField aDField = aDFieldMapper.toEntity(aDFieldDTO);
@@ -76,6 +78,7 @@ public class ADFieldService {
      *
      * @param id the id of the entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADTab.aDFields", allEntries = true)
     public void delete(Long id) {
         log.debug("Request to delete ADField : {}", id);
         aDFieldRepository.deleteById(id);

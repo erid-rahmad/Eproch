@@ -53,7 +53,9 @@ import ADFieldService from '@/entities/ad-field/ad-field.service';
 import ADFieldGroupService from '@/entities/ad-field-group/ad-field-group.service';
 import AdValidationRuleService from '@/entities/ad-validation-rule/ad-validation-rule.service';
 import RouterValidation from './permission';
-import { Route } from 'vue-router';
+import VueRouter, { Route } from 'vue-router';
+import AdMenuService from './core/application-dictionary/components/Menu/menu.service';
+import { Store } from 'vuex';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
@@ -73,70 +75,90 @@ const alertService = new AlertService(store);
 const trackerService = new TrackerService(router);
 const translationService = new TranslationService(store, i18n);
 const loginService = new LoginService();
-const accountService = new AccountService(store, translationService, trackerService, router);
-const routerValidation = new RouterValidation(router, i18n, accountService);
+const menuService = new AdMenuService();
 
-Vue.use(ElementUI, {
-  size: appStore.size, // Set element-ui default size
-  i18n: (key: string, value: string) => i18n.t(key, value)
+const accountServiceInitiator = (async (
+  store: Store<any>,
+  translationService: TranslationService,
+  trackerService: TrackerService,
+  menuService: AdMenuService,
+  router: VueRouter
+) => {
+  const service = new AccountService(store, translationService, trackerService, menuService, router);
+  await service.init();
+  return service;
 });
 
-Vue.use(SvgIcon, {
-  tagName: 'svg-icon',
-  defaultWidth: '1em',
-  defaultHeight: '1em'
-});
+accountServiceInitiator(store, translationService, trackerService, menuService, router)
+  .then((service) => {
+    const accountService = service;
+    const routerValidation = new RouterValidation(router, i18n, accountService);
 
-Vue.use(VueHotkey);
+    Vue.use(ElementUI, {
+      size: appStore.size, // Set element-ui default size
+      i18n: (key: string, value: string) => i18n.t(key, value)
+    });
 
-// Register global directives
-Object.keys(directives).forEach(key => {
-  Vue.directive(key, (directives as { [key: string]: DirectiveOptions })[key]);
-});
+    Vue.use(SvgIcon, {
+      tagName: 'svg-icon',
+      defaultWidth: '1em',
+      defaultHeight: '1em'
+    });
 
-router.beforeEach((to, from, next) => {
-  routerValidation.runBeforeEachHook(to, from, next);
-});
+    Vue.use(VueHotkey);
 
-router.afterEach((to: Route) => {
-  routerValidation.runAfterEachHook(to);
-})
+    // Register global directives
+    Object.keys(directives).forEach(key => {
+      Vue.directive(key, (directives as { [key: string]: DirectiveOptions })[key]);
+    });
 
-/* tslint:disable */
-new Vue({
-  el: '#app',
-  components: { App },
-  template: '<App/>',
-  router,
-  provide: {
-    loginService: () => loginService,
-    activateService: () => new ActivateService(),
-    registerService: () => new RegisterService(),
-    userService: () => new UserManagementService(),
-    auditsService: () => new AuditsService(),
-    healthService: () => new HealthService(),
-    configurationService: () => new ConfigurationService(),
-    logsService: () => new LogsService(),
-    metricsService: () => new MetricsService(),
-    trackerService: () => trackerService,
-    dynamicWindowService: (baseApiUrl: string) => new DynamicWindowService(baseApiUrl),
-    alertService: () => alertService,
-    translationService: () => translationService,
-    // End of jhipster default services.
+    router.beforeEach((to, from, next) => {
+      routerValidation.runBeforeEachHook(to, from, next);
+    });
 
-    aDReferenceService: () => new ADReferenceService(),
-    aDReferenceListService: () => new ADReferenceListService(),
-    aDOrganizationService: () => new ADOrganizationService(),
-    aDTableService: () => new ADTableService(),
-    aDColumnService: () => new ADColumnService(),
-    aDWindowService: () => new ADWindowService(),
-    aDTabService: () => new ADTabService(),
-    aDFieldService: () => new ADFieldService(),
-    aDFieldGroupService: () => new ADFieldGroupService(),
-    adValidationRuleService: () => new AdValidationRuleService(),
-    // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
-    accountService: () => accountService
-  },
-  i18n,
-  store
-});
+    router.afterEach((to: Route) => {
+      routerValidation.runAfterEachHook(to);
+    })
+
+    /* tslint:disable */
+    new Vue({
+      el: '#app',
+      components: { App },
+      template: '<App/>',
+      router,
+      provide: {
+        loginService: () => loginService,
+        activateService: () => new ActivateService(),
+        registerService: () => new RegisterService(),
+        userService: () => new UserManagementService(),
+        auditsService: () => new AuditsService(),
+        healthService: () => new HealthService(),
+        configurationService: () => new ConfigurationService(),
+        logsService: () => new LogsService(),
+        metricsService: () => new MetricsService(),
+        trackerService: () => trackerService,
+        dynamicWindowService: (baseApiUrl: string) => new DynamicWindowService(baseApiUrl),
+        alertService: () => alertService,
+        translationService: () => translationService,
+        // End of jhipster default services.
+
+        aDReferenceService: () => new ADReferenceService(),
+        aDReferenceListService: () => new ADReferenceListService(),
+        aDOrganizationService: () => new ADOrganizationService(),
+        aDTableService: () => new ADTableService(),
+        aDColumnService: () => new ADColumnService(),
+        aDWindowService: () => new ADWindowService(),
+        aDTabService: () => new ADTabService(),
+        aDFieldService: () => new ADFieldService(),
+        aDFieldGroupService: () => new ADFieldGroupService(),
+        adValidationRuleService: () => new AdValidationRuleService(),
+        // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
+        accountService: () => accountService
+      },
+      i18n,
+      store
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to initialize Vue. ', err);
+  });

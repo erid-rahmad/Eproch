@@ -129,8 +129,8 @@ entity ADReferenceList {
 	active Boolean
 }
 entity AdValidationRule {
-	// Is required for import or export data
-	uid UUID required
+	// Is needed for import or export data
+	uid UUID
 
 	name String required unique
 	description String
@@ -140,12 +140,15 @@ entity AdValidationRule {
 
 @skipClient
 entity AdMenu {
-	uid UUID required
+	uid UUID
 	name String required
+	value String
 	description String
 	path String required
 	action AdMenuAction
 	icon String
+	redirect String
+	translationKey String required
 }
 
 enum ADColumnType {

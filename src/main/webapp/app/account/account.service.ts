@@ -1,27 +1,27 @@
 import axios from 'axios';
 import { Store } from 'vuex';
-import VueRouter from 'vue-router';
+import VueRouter, { RouteConfig } from 'vue-router';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store';
 import TranslationService from '@/locale/translation.service';
 
 import TrackerService from '@/admin/tracker/tracker.service';
 import { PermissionStoreModule as permissionStore } from '@/shared/config/store/permission-store';
+import AdMenuService from '@/core/application-dictionary/components/Menu/menu.service';
 
 export default class AccountService {
   constructor(
     private store: Store<any>,
     private translationService: TranslationService,
     private trackerService: TrackerService,
+    private menuService: AdMenuService,
     private router: VueRouter
-  ) {
-    this.init();
-  }
+  ) {}
 
-  public init(): void {
+  public async init(): Promise<void> {
     const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
     if (!accountStore.userIdentity && !accountStore.logon && token) {
-      this.retrieveAccount();
+      await this.retrieveAccount();
     }
     this.retrieveProfiles();
   }
@@ -43,7 +43,11 @@ export default class AccountService {
       const account = response.data;
       if (account) {
         accountStore.setAuthenticated(account);
-        await permissionStore.generateRoutes(new Set<string>(account.authorities));
+        const routes = await this.menuService.retrieve({
+          criteriaQuery: 'parentMenuId.specified=false'
+        });
+        
+        await permissionStore.updateRoutes(routes.data);
         this.router.addRoutes(permissionStore.dynamicRoutes);
 
         if (translationStore.language !== account.langKey) {
