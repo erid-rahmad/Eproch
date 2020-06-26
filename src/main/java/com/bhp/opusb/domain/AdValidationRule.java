@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -32,7 +33,6 @@ public class AdValidationRule extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
     @Column(name = "uid", nullable = false)
     private UUID uid;
 
@@ -45,6 +45,9 @@ public class AdValidationRule extends AbstractAuditingEntity {
 
     @Column(name = "query")
     private String query;
+
+    @Column(name = "active")
+    private Boolean active;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -112,6 +115,19 @@ public class AdValidationRule extends AbstractAuditingEntity {
         this.query = query;
     }
 
+    public Boolean isActive() {
+        return active;
+    }
+
+    public AdValidationRule active(Boolean active) {
+        this.active = active;
+        return this;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -125,6 +141,11 @@ public class AdValidationRule extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -150,6 +171,7 @@ public class AdValidationRule extends AbstractAuditingEntity {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", query='" + getQuery() + "'" +
+            ", active='" + isActive() + "'" +
             "}";
     }
 }

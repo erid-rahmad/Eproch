@@ -110,5 +110,8 @@ export default class LoginForm extends Vue {
       .catch(() => {
         this.authenticationError = true
       })
+      .finally(() => {
+        this.loading = false;
+      })
   }
 }

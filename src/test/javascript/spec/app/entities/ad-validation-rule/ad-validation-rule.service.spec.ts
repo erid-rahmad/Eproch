@@ -30,7 +30,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new AdValidationRuleService();
 
-      elemDefault = new AdValidationRule(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA');
+      elemDefault = new AdValidationRule(0, 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', 'AAAAAAA', false);
     });
 
     describe('Service methods', () => {
@@ -85,7 +85,8 @@ describe('Service Tests', () => {
             uid: 'BBBBBB',
             name: 'BBBBBB',
             description: 'BBBBBB',
-            query: 'BBBBBB'
+            query: 'BBBBBB',
+            active: true
           },
           elemDefault
         );
@@ -115,7 +116,8 @@ describe('Service Tests', () => {
             uid: 'BBBBBB',
             name: 'BBBBBB',
             description: 'BBBBBB',
-            query: 'BBBBBB'
+            query: 'BBBBBB',
+            active: true
           },
           elemDefault
         );

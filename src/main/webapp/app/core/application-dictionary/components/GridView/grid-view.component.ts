@@ -11,6 +11,7 @@ import pluralize from "pluralize";
 import _ from 'lodash';
 import { mapActions } from 'vuex';
 import { RegisterTabParameter } from '@/shared/config/store/window-store';
+import { nullifyField } from '@/utils/form';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -405,35 +406,16 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public filterRecord(query: string) {
-    
-    //console.log('query 1 : %s', query);
-    if (query) {
-      if (this.filterQueryTmp === "") {
+    if (!query) {
+      this.filterQuery = this.filterQueryTmp || this.filterQuery;
+      this.filterQueryTmp = null;
+    } else {
+      if (this.filterQueryTmp === null) {
         this.filterQueryTmp = this.filterQuery;
-        //console.log('filterQuery 1 : %s', this.filterQuery);
-        //console.log('filterQueryTmp 1 : %s', this.filterQueryTmp);
       }
 
-      if(this.parentId!=0){
-        this.filterQuery = this.filterQueryTmp ? this.filterQueryTmp + query : query;
-      }else{
-        this.filterQuery = query;
-        this.filterQueryTmp = "";
-      }
-      
-    } else {
-      
-      if(this.parentId!=0){
-        this.filterQuery = this.filterQueryTmp || this.filterQuery;   // error disini
-      }else{
-        this.filterQuery = "";
-      }
-      
-      this.filterQueryTmp = "";
+      this.filterQuery = this.filterQueryTmp ? `${this.filterQueryTmp}&${query}` : query;
     }
-    //console.log('filterQuery 2 : %s', this.filterQuery);
-    //console.log('filterQueryTmp 2 : %s', this.filterQueryTmp);  
-    //console.log('= AKHIR =');
     this.retrieveAllRecords();
   }
 
@@ -524,6 +506,10 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       ...record
     } = this.currentRecord;
     const validator = new schema(this.validationSchema);
+
+    this.gridFields.forEach(field => {
+      nullifyField(record, field);
+    });
 
     validator.validate(record, (errors: any[]) => {
       if (errors) {
@@ -652,9 +638,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       criteriaQuery.push(filterQuery);
     }
 
-    console.log('api: %s, record: %O, column: %s', api, this.currentRecord, column.name);
-    console.log('linkedFieldValue: %s, criteriaQuery: %O', filterQuery, criteriaQuery);
-    
     this.dynamicWindowService(api)
       .retrieve({ criteriaQuery })
       .then(res => {
@@ -752,7 +735,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public getReferenceList(field: any) {
-    console.log('getReferenceList field: %O', field);
     return field?.adReference?.adreferenceLists || field.adColumn.adReference.adreferenceLists;
   }
 

@@ -34,6 +34,7 @@
     <include file="config/liquibase/changelog/20200619072700_added_entity_CCity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200619072800_added_entity_CLocation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200619072900_added_entity_CBank.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200624083100_added_entity_AdMenu.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -48,6 +49,7 @@
     <include file="config/liquibase/changelog/20200619072600_added_entity_constraints_CRegion.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200619072700_added_entity_constraints_CCity.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200619072800_added_entity_constraints_CLocation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200624083100_added_entity_constraints_AdMenu.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 
     <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>

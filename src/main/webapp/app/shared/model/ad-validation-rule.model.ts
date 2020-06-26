@@ -4,7 +4,8 @@ export interface IAdValidationRule {
   name?: string;
   description?: string;
   query?: string;
-  adValidationRuleId?: number;
+  active?: boolean;
+  adOrganizationId?: number;
 }
 
 export class AdValidationRule implements IAdValidationRule {
@@ -14,6 +15,9 @@ export class AdValidationRule implements IAdValidationRule {
     public name?: string,
     public description?: string,
     public query?: string,
-    public adValidationRuleId?: number
-  ) {}
+    public active?: boolean,
+    public adOrganizationId?: number
+  ) {
+    this.active = this.active || false;
+  }
 }

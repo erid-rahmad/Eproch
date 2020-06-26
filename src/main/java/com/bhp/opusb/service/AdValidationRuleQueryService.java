@@ -103,8 +103,11 @@ public class AdValidationRuleQueryService extends QueryService<AdValidationRule>
             if (criteria.getQuery() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getQuery(), AdValidationRule_.query));
             }
-            if (criteria.getOrganizationId() != null) {
-                specification = specification.and(buildSpecification(criteria.getOrganizationId(),
+            if (criteria.getActive() != null) {
+                specification = specification.and(buildSpecification(criteria.getActive(), AdValidationRule_.active));
+            }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(AdValidationRule_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
         }

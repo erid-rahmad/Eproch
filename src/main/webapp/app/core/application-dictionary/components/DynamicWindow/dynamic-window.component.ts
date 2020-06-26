@@ -42,7 +42,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   private aDColumnService: () => ADColumnService;
 
   public windowId: number = 0;
-  public title: string = null;
   public gridView = true;
   public childTabs = [];
   public currentTab: string = '';
@@ -84,6 +83,12 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   get hasChildTabs() {
     return this.childTabs.length > 0;
   }
+
+  get title() {
+    const text: string = this.$route.meta.title;
+    const translationKey = `route.${text}`;
+    return this.$te(translationKey) ? this.$t(translationKey) : text;
+  }
   // End of computed properties.
 
   @Watch('currentTab')
@@ -93,7 +98,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   created() {
     this.fullPath = this.$route.fullPath;
     this.windowId = this.$route.meta.windowId;
-    this.title = this.$t(`route.${this.$route.meta.title}`).toString();
     this.unwatchStore = this.$store.watch(
       (state) => state.tagsViewStore.deletedViews,
       (views: string) => {
@@ -161,13 +165,15 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
    * grid-view's height need to be updated to maintain its fixed header position.
    */
   public updateHeight() {
-    (<any>this.$refs.mainGrid)?.syncHeight();
+    this.$nextTick(() => {
+      (<any>this.$refs.mainGrid)?.syncHeight();
 
-    if (this.hasChildTabs) {
-      (<Array<any>>this.$refs.lineGrid).forEach(grid => {
-        grid.syncHeight();
-      });
-    }
+      if (this.hasChildTabs) {
+        (<Array<any>>this.$refs.lineGrid).forEach(grid => {
+          grid.syncHeight();
+        });
+      }
+    });
   }
 
   /**
@@ -230,9 +236,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     tab.parentId = parentId;
 
     // Ensure to link the child tab with exactly its parent.
+    tab.nativeFilterQuery = tab.filterQuery;
     tab.filterQuery = buildCriteriaQueryString([
       `${tab.foreignColumnName}.equals=${parentId}`,
-      tab.filterQuery // Include current query.
+      tab.nativeFilterQuery // Include current query.
     ]);
   }
 
@@ -255,10 +262,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       let tab = this.childTabs[index];
       tab.parentId = data.id;
 
-    // Ensure to link the child tab with exactly its parent.
+      // Ensure to link the child tab with exactly its parent.
       tab.filterQuery = buildCriteriaQueryString([
         `${tab.foreignColumnName}.equals=${data.id}`,
-        tab.filterQuery // Include current query.
+        tab.nativeFilterQuery
       ]);
 
       // Use Vue.$set to notify array update.

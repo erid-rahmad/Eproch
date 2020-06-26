@@ -40,14 +40,19 @@
                             :class="{'valid': !$v.adValidationRule.query.$invalid, 'invalid': $v.adValidationRule.query.$invalid }" v-model="$v.adValidationRule.query.$model" />
                     </div>
                     <div class="form-group">
-                        <label class="form-control-label" v-text="$t('opusWebApp.adValidationRule.adValidationRule')" for="ad-validation-rule-adValidationRule">Ad Validation Rule</label>
-                        <select class="form-control" id="ad-validation-rule-adValidationRule" name="adValidationRule" v-model="$v.adValidationRule.adValidationRuleId.$model" required>
-                            <option v-if="!adValidationRule.adValidationRuleId" v-bind:value="null" selected></option>
+                        <label class="form-control-label" v-text="$t('opusWebApp.adValidationRule.active')" for="ad-validation-rule-active">Active</label>
+                        <input type="checkbox" class="form-check" name="active" id="ad-validation-rule-active"
+                            :class="{'valid': !$v.adValidationRule.active.$invalid, 'invalid': $v.adValidationRule.active.$invalid }" v-model="$v.adValidationRule.active.$model" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-control-label" v-text="$t('opusWebApp.adValidationRule.adOrganization')" for="ad-validation-rule-adOrganization">Ad Organization</label>
+                        <select class="form-control" id="ad-validation-rule-adOrganization" name="adOrganization" v-model="$v.adValidationRule.adOrganizationId.$model" required>
+                            <option v-if="!adValidationRule.adOrganizationId" v-bind:value="null" selected></option>
                             <option v-bind:value="aDOrganizationOption.id" v-for="aDOrganizationOption in aDOrganizations" :key="aDOrganizationOption.id">{{aDOrganizationOption.id}}</option>
                         </select>
                     </div>
-                    <div v-if="$v.adValidationRule.adValidationRuleId.$anyDirty && $v.adValidationRule.adValidationRuleId.$invalid">
-                        <small class="form-text text-danger" v-if="!$v.adValidationRule.adValidationRuleId.required" v-text="$t('entity.validation.required')">
+                    <div v-if="$v.adValidationRule.adOrganizationId.$anyDirty && $v.adValidationRule.adOrganizationId.$invalid">
+                        <small class="form-text text-danger" v-if="!$v.adValidationRule.adOrganizationId.required" v-text="$t('entity.validation.required')">
                             This field is required.
                         </small>
                     </div>

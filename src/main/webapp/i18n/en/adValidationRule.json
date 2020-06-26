@@ -20,7 +20,8 @@
       "name": "Name",
       "description": "Description",
       "query": "Query",
-      "adValidationRule": "Ad Validation Rule"
+      "active": "Active",
+      "adOrganization": "Ad Organization"
     }
   }
 }
