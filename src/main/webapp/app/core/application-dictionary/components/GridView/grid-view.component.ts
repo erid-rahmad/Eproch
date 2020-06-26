@@ -11,6 +11,7 @@ import pluralize from "pluralize";
 import _ from 'lodash';
 import { mapActions } from 'vuex';
 import { RegisterTabParameter } from '@/shared/config/store/window-store';
+import { nullifyField } from '@/utils/form';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -405,20 +406,16 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public filterRecord(query: string) {
-    console.log('[grid-view] Input query: %s', query);
     if (!query) {
-      console.log('input: %s', query);
       this.filterQuery = this.filterQueryTmp || this.filterQuery;
       this.filterQueryTmp = null;
     } else {
       if (this.filterQueryTmp === null) {
         this.filterQueryTmp = this.filterQuery;
-        console.log('[grid-view] Original query saved. %s', this.filterQuery);
       }
 
       this.filterQuery = this.filterQueryTmp ? `${this.filterQueryTmp}&${query}` : query;
     }
-    console.log('[grid-view] Filter query updated. %s', this.filterQuery);
     this.retrieveAllRecords();
   }
 
@@ -509,6 +506,10 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       ...record
     } = this.currentRecord;
     const validator = new schema(this.validationSchema);
+
+    this.gridFields.forEach(field => {
+      nullifyField(record, field);
+    });
 
     validator.validate(record, (errors: any[]) => {
       if (errors) {
@@ -637,9 +638,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       criteriaQuery.push(filterQuery);
     }
 
-    console.log('api: %s, record: %O, column: %s', api, this.currentRecord, column.name);
-    console.log('linkedFieldValue: %s, criteriaQuery: %O', filterQuery, criteriaQuery);
-    
     this.dynamicWindowService(api)
       .retrieve({ criteriaQuery })
       .then(res => {
@@ -737,7 +735,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public getReferenceList(field: any) {
-    console.log('getReferenceList field: %O', field);
     return field?.adReference?.adreferenceLists || field.adColumn.adReference.adreferenceLists;
   }
 

@@ -76,6 +76,7 @@ class AdValidationRuleGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "query":"SAMPLE_TEXT"
+                , "active":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_adValidationRule_url"))).exitHereIfFailed

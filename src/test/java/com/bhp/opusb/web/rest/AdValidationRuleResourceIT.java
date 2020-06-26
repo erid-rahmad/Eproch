@@ -49,6 +49,9 @@ public class AdValidationRuleResourceIT {
     private static final String DEFAULT_QUERY = "AAAAAAAAAA";
     private static final String UPDATED_QUERY = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_ACTIVE = false;
+    private static final Boolean UPDATED_ACTIVE = true;
+
     @Autowired
     private AdValidationRuleRepository adValidationRuleRepository;
 
@@ -80,7 +83,8 @@ public class AdValidationRuleResourceIT {
             .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
-            .query(DEFAULT_QUERY);
+            .query(DEFAULT_QUERY)
+            .active(DEFAULT_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -104,7 +108,8 @@ public class AdValidationRuleResourceIT {
             .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .query(UPDATED_QUERY);
+            .query(UPDATED_QUERY)
+            .active(UPDATED_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -143,6 +148,7 @@ public class AdValidationRuleResourceIT {
         assertThat(testAdValidationRule.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testAdValidationRule.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testAdValidationRule.getQuery()).isEqualTo(DEFAULT_QUERY);
+        assertThat(testAdValidationRule.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
     @Test
@@ -218,7 +224,8 @@ public class AdValidationRuleResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].query").value(hasItem(DEFAULT_QUERY)));
+            .andExpect(jsonPath("$.[*].query").value(hasItem(DEFAULT_QUERY)))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
     @Test
@@ -235,7 +242,8 @@ public class AdValidationRuleResourceIT {
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.query").value(DEFAULT_QUERY));
+            .andExpect(jsonPath("$.query").value(DEFAULT_QUERY))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
 
@@ -546,16 +554,68 @@ public class AdValidationRuleResourceIT {
 
     @Test
     @Transactional
-    public void getAllAdValidationRulesByAdValidationRuleIsEqualToSomething() throws Exception {
+    public void getAllAdValidationRulesByActiveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adValidationRuleRepository.saveAndFlush(adValidationRule);
+
+        // Get all the adValidationRuleList where active equals to DEFAULT_ACTIVE
+        defaultAdValidationRuleShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
+
+        // Get all the adValidationRuleList where active equals to UPDATED_ACTIVE
+        defaultAdValidationRuleShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdValidationRulesByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adValidationRuleRepository.saveAndFlush(adValidationRule);
+
+        // Get all the adValidationRuleList where active not equals to DEFAULT_ACTIVE
+        defaultAdValidationRuleShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the adValidationRuleList where active not equals to UPDATED_ACTIVE
+        defaultAdValidationRuleShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdValidationRulesByActiveIsInShouldWork() throws Exception {
+        // Initialize the database
+        adValidationRuleRepository.saveAndFlush(adValidationRule);
+
+        // Get all the adValidationRuleList where active in DEFAULT_ACTIVE or UPDATED_ACTIVE
+        defaultAdValidationRuleShouldBeFound("active.in=" + DEFAULT_ACTIVE + "," + UPDATED_ACTIVE);
+
+        // Get all the adValidationRuleList where active equals to UPDATED_ACTIVE
+        defaultAdValidationRuleShouldNotBeFound("active.in=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdValidationRulesByActiveIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adValidationRuleRepository.saveAndFlush(adValidationRule);
+
+        // Get all the adValidationRuleList where active is not null
+        defaultAdValidationRuleShouldBeFound("active.specified=true");
+
+        // Get all the adValidationRuleList where active is null
+        defaultAdValidationRuleShouldNotBeFound("active.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdValidationRulesByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = adValidationRule.getAdOrganization();
         adValidationRuleRepository.saveAndFlush(adValidationRule);
         Long adOrganizationId = adOrganization.getId();
 
-        // Get all the adValidationRuleList where adValidationRule equals to adValidationRuleId
+        // Get all the adValidationRuleList where adOrganization equals to adOrganizationId
         defaultAdValidationRuleShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
 
-        // Get all the adValidationRuleList where adValidationRule equals to adValidationRuleId + 1
+        // Get all the adValidationRuleList where adOrganization equals to adOrganizationId + 1
         defaultAdValidationRuleShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
     }
 
@@ -570,7 +630,8 @@ public class AdValidationRuleResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].query").value(hasItem(DEFAULT_QUERY)));
+            .andExpect(jsonPath("$.[*].query").value(hasItem(DEFAULT_QUERY)))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
         restAdValidationRuleMockMvc.perform(get("/api/ad-validation-rules/count?sort=id,desc&" + filter))
@@ -621,7 +682,8 @@ public class AdValidationRuleResourceIT {
             .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
-            .query(UPDATED_QUERY);
+            .query(UPDATED_QUERY)
+            .active(UPDATED_ACTIVE);
         AdValidationRuleDTO adValidationRuleDTO = adValidationRuleMapper.toDto(updatedAdValidationRule);
 
         restAdValidationRuleMockMvc.perform(put("/api/ad-validation-rules")
@@ -637,6 +699,7 @@ public class AdValidationRuleResourceIT {
         assertThat(testAdValidationRule.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testAdValidationRule.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAdValidationRule.getQuery()).isEqualTo(UPDATED_QUERY);
+        assertThat(testAdValidationRule.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 
     @Test

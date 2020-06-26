@@ -29,11 +29,17 @@
                         <span>{{adValidationRule.query}}</span>
                     </dd>
                     <dt>
-                        <span v-text="$t('opusWebApp.adValidationRule.adValidationRule')">Ad Validation Rule</span>
+                        <span v-text="$t('opusWebApp.adValidationRule.active')">Active</span>
                     </dt>
                     <dd>
-                        <div v-if="adValidationRule.adValidationRuleId">
-                            <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: adValidationRule.adValidationRuleId}}">{{adValidationRule.adValidationRuleId}}</router-link>
+                        <span>{{adValidationRule.active}}</span>
+                    </dd>
+                    <dt>
+                        <span v-text="$t('opusWebApp.adValidationRule.adOrganization')">Ad Organization</span>
+                    </dt>
+                    <dd>
+                        <div v-if="adValidationRule.adOrganizationId">
+                            <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: adValidationRule.adOrganizationId}}">{{adValidationRule.adOrganizationId}}</router-link>
                         </div>
                     </dd>
                 </dl>

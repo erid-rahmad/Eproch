@@ -48,6 +48,7 @@
               v-model="model[col.name]"
               :remote="true"
               :remote-method="fetchTableDirectData"
+              clearable
               filterable
               :disabled="isReadonly(col.field)"
               @focus="setTableDirectReference(col.field)"
@@ -62,6 +63,7 @@
             <el-select
               v-else-if="hasReferenceList(col.field)"
               v-model="model[col.name]"
+              clearable
               filterable
               :disabled="isReadonly(col.field)"
             >

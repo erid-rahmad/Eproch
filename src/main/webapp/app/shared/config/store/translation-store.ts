@@ -25,7 +25,7 @@ class TranslationStore extends VuexModule implements ITranslationState {
   }
 
   @Action
-  public setLanguage(language) {
+  public async setLanguage(language) {
     this.SET_LANGUAGE(language)
   }
 }

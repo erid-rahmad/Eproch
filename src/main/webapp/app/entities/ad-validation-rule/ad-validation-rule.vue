@@ -29,7 +29,8 @@
                     <th v-on:click="changeOrder('name')"><span v-text="$t('opusWebApp.adValidationRule.name')">Name</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'name'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('description')"><span v-text="$t('opusWebApp.adValidationRule.description')">Description</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'description'"></jhi-sort-indicator></th>
                     <th v-on:click="changeOrder('query')"><span v-text="$t('opusWebApp.adValidationRule.query')">Query</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'query'"></jhi-sort-indicator></th>
-                    <th v-on:click="changeOrder('adValidationRuleId')"><span v-text="$t('opusWebApp.adValidationRule.adValidationRule')">Ad Validation Rule</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adValidationRuleId'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('active')"><span v-text="$t('opusWebApp.adValidationRule.active')">Active</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator></th>
+                    <th v-on:click="changeOrder('adOrganizationId')"><span v-text="$t('opusWebApp.adValidationRule.adOrganization')">Ad Organization</span> <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'adOrganizationId'"></jhi-sort-indicator></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -43,9 +44,10 @@
                     <td>{{adValidationRule.name}}</td>
                     <td>{{adValidationRule.description}}</td>
                     <td>{{adValidationRule.query}}</td>
+                    <td>{{adValidationRule.active}}</td>
                     <td>
-                        <div v-if="adValidationRule.adValidationRuleId">
-                            <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: adValidationRule.adValidationRuleId}}">{{adValidationRule.adValidationRuleId}}</router-link>
+                        <div v-if="adValidationRule.adOrganizationId">
+                            <router-link :to="{name: 'ADOrganizationView', params: {aDOrganizationId: adValidationRule.adOrganizationId}}">{{adValidationRule.adOrganizationId}}</router-link>
                         </div>
                     </td>
                     <td class="text-right">

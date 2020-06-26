@@ -19,7 +19,8 @@ const validations: any = {
     },
     description: {},
     query: {},
-    adValidationRuleId: {
+    active: {},
+    adOrganizationId: {
       required
     }
   }
