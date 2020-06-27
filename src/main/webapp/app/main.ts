@@ -89,23 +89,23 @@ const accountServiceInitiator = (async (
   return service;
 });
 
+Vue.use(ElementUI, {
+  size: appStore.size, // Set element-ui default size
+  i18n: (key: string, value: string) => i18n.t(key, value)
+});
+
+Vue.use(SvgIcon, {
+  tagName: 'svg-icon',
+  defaultWidth: '1em',
+  defaultHeight: '1em'
+});
+
+Vue.use(VueHotkey);
+
 accountServiceInitiator(store, translationService, trackerService, menuService, router)
   .then((service) => {
     const accountService = service;
     const routerValidation = new RouterValidation(router, i18n, accountService);
-
-    Vue.use(ElementUI, {
-      size: appStore.size, // Set element-ui default size
-      i18n: (key: string, value: string) => i18n.t(key, value)
-    });
-
-    Vue.use(SvgIcon, {
-      tagName: 'svg-icon',
-      defaultWidth: '1em',
-      defaultHeight: '1em'
-    });
-
-    Vue.use(VueHotkey);
 
     // Register global directives
     Object.keys(directives).forEach(key => {

@@ -1,5 +1,11 @@
 <template>
-  <el-dialog :title="$t('login.title')" :visible="visible" @opened="onLoginFormOpened">
+  <el-dialog
+    :title="$t('login.title')"
+    :visible="visible"
+    :append-to-body="true"
+    @opened="onLoginFormOpened"
+    @close="onHide"
+  >
     <div class="login-container">
       <el-row :gutter="16">
         <el-col :span="12" :offset="6">
