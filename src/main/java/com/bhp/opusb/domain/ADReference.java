@@ -2,6 +2,7 @@ package com.bhp.opusb.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,6 +39,9 @@ public class ADReference extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "uid")
+    private UUID uid;
+
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
@@ -54,7 +58,7 @@ public class ADReference extends AbstractAuditingEntity {
     private ADReferenceType referenceType;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "adReference", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -72,6 +76,19 @@ public class ADReference extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public ADReference uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -198,6 +215,7 @@ public class ADReference extends AbstractAuditingEntity {
     public String toString() {
         return "ADReference{" +
             "id=" + getId() +
+            ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", value='" + getValue() + "'" +
             ", description='" + getDescription() + "'" +

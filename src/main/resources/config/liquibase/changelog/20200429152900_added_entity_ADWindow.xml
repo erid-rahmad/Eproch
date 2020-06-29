@@ -67,17 +67,30 @@
     <changeSet id="20200429152900-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/fake-data/ad_window.csv"
-                  separator=","
+                  separator=";"
                   tableName="ad_window">
             <column name="id" type="numeric"/>
+            <column name="uid" type="${uuidType}"/>
             <column name="name" type="string"/>
             <column name="description" type="string"/>
+            <column name="title_logic" type="string"/>
             <column name="type" type="string"/>
+            <column name="tree_view" type="boolean"/>
             <column name="active" type="boolean"/>
-            <column name="ad_client_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200629110000" author="Ananta Aryadewa">
+        <addColumn tableName="ad_window">
+            <column name="uid" type="${uuidType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="tree_view" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

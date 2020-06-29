@@ -8,6 +8,7 @@ import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.ADOrganization} entity. This class is used
@@ -24,6 +25,8 @@ public class ADOrganizationCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private UUIDFilter uid;
+
     private StringFilter name;
 
     private StringFilter code;
@@ -37,6 +40,7 @@ public class ADOrganizationCriteria implements Serializable, Criteria {
 
     public ADOrganizationCriteria(ADOrganizationCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.code = other.code == null ? null : other.code.copy();
         this.description = other.description == null ? null : other.description.copy();
@@ -54,6 +58,14 @@ public class ADOrganizationCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
     }
 
     public StringFilter getName() {
@@ -100,6 +112,7 @@ public class ADOrganizationCriteria implements Serializable, Criteria {
         final ADOrganizationCriteria that = (ADOrganizationCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(uid, that.uid) &&
             Objects.equals(name, that.name) &&
             Objects.equals(code, that.code) &&
             Objects.equals(description, that.description) &&
@@ -110,6 +123,7 @@ public class ADOrganizationCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        uid,
         name,
         code,
         description,
@@ -121,6 +135,7 @@ public class ADOrganizationCriteria implements Serializable, Criteria {
     public String toString() {
         return "ADOrganizationCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (code != null ? "code=" + code + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +

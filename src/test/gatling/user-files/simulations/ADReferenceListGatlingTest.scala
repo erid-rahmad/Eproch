@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the ADField entity.
+ * Performance test for the ADReferenceList entity.
  */
-class ADFieldGatlingTest extends Simulation {
+class ADReferenceListGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class ADFieldGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the ADField entity")
+    val scn = scenario("Test the ADReferenceList entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,51 +62,33 @@ class ADFieldGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all aDFields")
-            .get("/api/ad-fields")
+            exec(http("Get all aDReferenceLists")
+            .get("/api/ad-reference-lists")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new aDField")
-            .post("/api/ad-fields")
+            .exec(http("Create new aDReferenceList")
+            .post("/api/ad-reference-lists")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
                 , "uid":null
                 , "name":"SAMPLE_TEXT"
+                , "value":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
-                , "hint":"SAMPLE_TEXT"
-                , "staticText":"SAMPLE_TEXT"
-                , "staticField":null
-                , "labelOnly":null
-                , "showLabel":null
-                , "showInGrid":null
-                , "showInDetail":null
-                , "gridSequence":"0"
-                , "detailSequence":"0"
-                , "displayLogic":"SAMPLE_TEXT"
-                , "readOnlyLogic":"SAMPLE_TEXT"
-                , "writable":null
-                , "columnNo":"0"
-                , "columnSpan":"0"
-                , "updatable":null
-                , "alwaysUpdatable":null
-                , "copyable":null
-                , "defaultValue":"SAMPLE_TEXT"
-                , "formatPattern":"SAMPLE_TEXT"
                 , "active":null
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_aDField_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_aDReferenceList_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created aDField")
-                .get("${new_aDField_url}")
+                exec(http("Get created aDReferenceList")
+                .get("${new_aDReferenceList_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created aDField")
-            .delete("${new_aDField_url}")
+            .exec(http("Delete created aDReferenceList")
+            .delete("${new_aDReferenceList_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

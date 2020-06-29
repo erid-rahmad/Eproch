@@ -1,15 +1,20 @@
 entity ADOrganization {
+	uid UUID
 	name String required
 	code String required unique
 	description String
 	active Boolean
 }
+
 entity ADTable {
+	uid UUID
 	name String required unique
 	view Boolean
 	active Boolean
 }
+
 entity ADColumn {
+	uid UUID
 	// The JPA entity field name (usually in a camelCased format).
 	name String required
 
@@ -59,14 +64,19 @@ entity ADColumn {
 	selectionSequence Integer
 	active Boolean
 }
+
 entity ADWindow {
+	uid UUID
 	name String required
 	description String
 	titleLogic String
 	type ADWindowType required
+	treeView Boolean
 	active Boolean
 }
+
 entity ADTab {
+	uid UUID
 	name String required
 	description String
 	iconName String
@@ -82,7 +92,9 @@ entity ADTab {
 	tabSequence Integer
 	active Boolean
 }
+
 entity ADField {
+	uid UUID
 	name String required
 	description String
 	hint String
@@ -109,25 +121,32 @@ entity ADField {
 
 	active Boolean
 }
+
 entity ADFieldGroup {
+	uid UUID
 	name String required
 	collapsible Boolean
 	collapseByDefault Boolean
 	active Boolean
 }
+
 entity ADReference {
+	uid UUID
 	name String required
 	value String required unique
 	description String
 	referenceType ADReferenceType
 	active Boolean
 }
+
 entity ADReferenceList {
+	uid UUID
 	name String required
 	value String required unique
 	description String
 	active Boolean
 }
+
 entity AdValidationRule {
 	// Is needed for import or export data
 	uid UUID
@@ -138,17 +157,17 @@ entity AdValidationRule {
 	active Boolean
 }
 
-@skipClient
 entity AdMenu {
 	uid UUID
 	name String required
 	value String
+	translationKey String
 	description String
 	path String required
 	action AdMenuAction
 	icon String
 	redirect String
-	translationKey String required
+	active Boolean
 }
 
 enum ADColumnType {
@@ -215,3 +234,5 @@ paginate * with pagination
 dto * with mapstruct
 // Set service options to all except few
 service * with serviceClass
+
+skipClient *

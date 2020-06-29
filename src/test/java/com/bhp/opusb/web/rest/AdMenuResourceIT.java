@@ -46,6 +46,12 @@ public class AdMenuResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_VALUE = "AAAAAAAAAA";
+    private static final String UPDATED_VALUE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_TRANSLATION_KEY = "AAAAAAAAAA";
+    private static final String UPDATED_TRANSLATION_KEY = "BBBBBBBBBB";
+
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
@@ -57,6 +63,12 @@ public class AdMenuResourceIT {
 
     private static final String DEFAULT_ICON = "AAAAAAAAAA";
     private static final String UPDATED_ICON = "BBBBBBBBBB";
+
+    private static final String DEFAULT_REDIRECT = "AAAAAAAAAA";
+    private static final String UPDATED_REDIRECT = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_ACTIVE = false;
+    private static final Boolean UPDATED_ACTIVE = true;
 
     @Autowired
     private AdMenuRepository adMenuRepository;
@@ -88,10 +100,14 @@ public class AdMenuResourceIT {
         AdMenu adMenu = new AdMenu()
             .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
+            .value(DEFAULT_VALUE)
+            .translationKey(DEFAULT_TRANSLATION_KEY)
             .description(DEFAULT_DESCRIPTION)
             .path(DEFAULT_PATH)
             .action(DEFAULT_ACTION)
-            .icon(DEFAULT_ICON);
+            .icon(DEFAULT_ICON)
+            .redirect(DEFAULT_REDIRECT)
+            .active(DEFAULT_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -114,10 +130,14 @@ public class AdMenuResourceIT {
         AdMenu adMenu = new AdMenu()
             .uid(UPDATED_UID)
             .name(UPDATED_NAME)
+            .value(UPDATED_VALUE)
+            .translationKey(UPDATED_TRANSLATION_KEY)
             .description(UPDATED_DESCRIPTION)
             .path(UPDATED_PATH)
             .action(UPDATED_ACTION)
-            .icon(UPDATED_ICON);
+            .icon(UPDATED_ICON)
+            .redirect(UPDATED_REDIRECT)
+            .active(UPDATED_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -154,10 +174,14 @@ public class AdMenuResourceIT {
         AdMenu testAdMenu = adMenuList.get(adMenuList.size() - 1);
         assertThat(testAdMenu.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testAdMenu.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testAdMenu.getValue()).isEqualTo(DEFAULT_VALUE);
+        assertThat(testAdMenu.getTranslationKey()).isEqualTo(DEFAULT_TRANSLATION_KEY);
         assertThat(testAdMenu.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testAdMenu.getPath()).isEqualTo(DEFAULT_PATH);
         assertThat(testAdMenu.getAction()).isEqualTo(DEFAULT_ACTION);
         assertThat(testAdMenu.getIcon()).isEqualTo(DEFAULT_ICON);
+        assertThat(testAdMenu.getRedirect()).isEqualTo(DEFAULT_REDIRECT);
+        assertThat(testAdMenu.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
     @Test
@@ -180,25 +204,6 @@ public class AdMenuResourceIT {
         assertThat(adMenuList).hasSize(databaseSizeBeforeCreate);
     }
 
-
-    @Test
-    @Transactional
-    public void checkUidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = adMenuRepository.findAll().size();
-        // set the field null
-        adMenu.setUid(null);
-
-        // Create the AdMenu, which fails.
-        AdMenuDTO adMenuDTO = adMenuMapper.toDto(adMenu);
-
-        restAdMenuMockMvc.perform(post("/api/ad-menus")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(adMenuDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<AdMenu> adMenuList = adMenuRepository.findAll();
-        assertThat(adMenuList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     @Transactional
@@ -251,10 +256,14 @@ public class AdMenuResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(adMenu.getId().intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].translationKey").value(hasItem(DEFAULT_TRANSLATION_KEY)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].path").value(hasItem(DEFAULT_PATH)))
             .andExpect(jsonPath("$.[*].action").value(hasItem(DEFAULT_ACTION.toString())))
-            .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)));
+            .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)))
+            .andExpect(jsonPath("$.[*].redirect").value(hasItem(DEFAULT_REDIRECT)))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
     @Test
@@ -270,10 +279,14 @@ public class AdMenuResourceIT {
             .andExpect(jsonPath("$.id").value(adMenu.getId().intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
+            .andExpect(jsonPath("$.translationKey").value(DEFAULT_TRANSLATION_KEY))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.path").value(DEFAULT_PATH))
             .andExpect(jsonPath("$.action").value(DEFAULT_ACTION.toString()))
-            .andExpect(jsonPath("$.icon").value(DEFAULT_ICON));
+            .andExpect(jsonPath("$.icon").value(DEFAULT_ICON))
+            .andExpect(jsonPath("$.redirect").value(DEFAULT_REDIRECT))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
 
@@ -423,6 +436,162 @@ public class AdMenuResourceIT {
 
         // Get all the adMenuList where name does not contain UPDATED_NAME
         defaultAdMenuShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where value equals to DEFAULT_VALUE
+        defaultAdMenuShouldBeFound("value.equals=" + DEFAULT_VALUE);
+
+        // Get all the adMenuList where value equals to UPDATED_VALUE
+        defaultAdMenuShouldNotBeFound("value.equals=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByValueIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where value not equals to DEFAULT_VALUE
+        defaultAdMenuShouldNotBeFound("value.notEquals=" + DEFAULT_VALUE);
+
+        // Get all the adMenuList where value not equals to UPDATED_VALUE
+        defaultAdMenuShouldBeFound("value.notEquals=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByValueIsInShouldWork() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where value in DEFAULT_VALUE or UPDATED_VALUE
+        defaultAdMenuShouldBeFound("value.in=" + DEFAULT_VALUE + "," + UPDATED_VALUE);
+
+        // Get all the adMenuList where value equals to UPDATED_VALUE
+        defaultAdMenuShouldNotBeFound("value.in=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByValueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where value is not null
+        defaultAdMenuShouldBeFound("value.specified=true");
+
+        // Get all the adMenuList where value is null
+        defaultAdMenuShouldNotBeFound("value.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllAdMenusByValueContainsSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where value contains DEFAULT_VALUE
+        defaultAdMenuShouldBeFound("value.contains=" + DEFAULT_VALUE);
+
+        // Get all the adMenuList where value contains UPDATED_VALUE
+        defaultAdMenuShouldNotBeFound("value.contains=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByValueNotContainsSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where value does not contain DEFAULT_VALUE
+        defaultAdMenuShouldNotBeFound("value.doesNotContain=" + DEFAULT_VALUE);
+
+        // Get all the adMenuList where value does not contain UPDATED_VALUE
+        defaultAdMenuShouldBeFound("value.doesNotContain=" + UPDATED_VALUE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByTranslationKeyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where translationKey equals to DEFAULT_TRANSLATION_KEY
+        defaultAdMenuShouldBeFound("translationKey.equals=" + DEFAULT_TRANSLATION_KEY);
+
+        // Get all the adMenuList where translationKey equals to UPDATED_TRANSLATION_KEY
+        defaultAdMenuShouldNotBeFound("translationKey.equals=" + UPDATED_TRANSLATION_KEY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByTranslationKeyIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where translationKey not equals to DEFAULT_TRANSLATION_KEY
+        defaultAdMenuShouldNotBeFound("translationKey.notEquals=" + DEFAULT_TRANSLATION_KEY);
+
+        // Get all the adMenuList where translationKey not equals to UPDATED_TRANSLATION_KEY
+        defaultAdMenuShouldBeFound("translationKey.notEquals=" + UPDATED_TRANSLATION_KEY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByTranslationKeyIsInShouldWork() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where translationKey in DEFAULT_TRANSLATION_KEY or UPDATED_TRANSLATION_KEY
+        defaultAdMenuShouldBeFound("translationKey.in=" + DEFAULT_TRANSLATION_KEY + "," + UPDATED_TRANSLATION_KEY);
+
+        // Get all the adMenuList where translationKey equals to UPDATED_TRANSLATION_KEY
+        defaultAdMenuShouldNotBeFound("translationKey.in=" + UPDATED_TRANSLATION_KEY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByTranslationKeyIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where translationKey is not null
+        defaultAdMenuShouldBeFound("translationKey.specified=true");
+
+        // Get all the adMenuList where translationKey is null
+        defaultAdMenuShouldNotBeFound("translationKey.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllAdMenusByTranslationKeyContainsSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where translationKey contains DEFAULT_TRANSLATION_KEY
+        defaultAdMenuShouldBeFound("translationKey.contains=" + DEFAULT_TRANSLATION_KEY);
+
+        // Get all the adMenuList where translationKey contains UPDATED_TRANSLATION_KEY
+        defaultAdMenuShouldNotBeFound("translationKey.contains=" + UPDATED_TRANSLATION_KEY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByTranslationKeyNotContainsSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where translationKey does not contain DEFAULT_TRANSLATION_KEY
+        defaultAdMenuShouldNotBeFound("translationKey.doesNotContain=" + DEFAULT_TRANSLATION_KEY);
+
+        // Get all the adMenuList where translationKey does not contain UPDATED_TRANSLATION_KEY
+        defaultAdMenuShouldBeFound("translationKey.doesNotContain=" + UPDATED_TRANSLATION_KEY);
     }
 
 
@@ -714,6 +883,136 @@ public class AdMenuResourceIT {
 
     @Test
     @Transactional
+    public void getAllAdMenusByRedirectIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where redirect equals to DEFAULT_REDIRECT
+        defaultAdMenuShouldBeFound("redirect.equals=" + DEFAULT_REDIRECT);
+
+        // Get all the adMenuList where redirect equals to UPDATED_REDIRECT
+        defaultAdMenuShouldNotBeFound("redirect.equals=" + UPDATED_REDIRECT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByRedirectIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where redirect not equals to DEFAULT_REDIRECT
+        defaultAdMenuShouldNotBeFound("redirect.notEquals=" + DEFAULT_REDIRECT);
+
+        // Get all the adMenuList where redirect not equals to UPDATED_REDIRECT
+        defaultAdMenuShouldBeFound("redirect.notEquals=" + UPDATED_REDIRECT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByRedirectIsInShouldWork() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where redirect in DEFAULT_REDIRECT or UPDATED_REDIRECT
+        defaultAdMenuShouldBeFound("redirect.in=" + DEFAULT_REDIRECT + "," + UPDATED_REDIRECT);
+
+        // Get all the adMenuList where redirect equals to UPDATED_REDIRECT
+        defaultAdMenuShouldNotBeFound("redirect.in=" + UPDATED_REDIRECT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByRedirectIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where redirect is not null
+        defaultAdMenuShouldBeFound("redirect.specified=true");
+
+        // Get all the adMenuList where redirect is null
+        defaultAdMenuShouldNotBeFound("redirect.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllAdMenusByRedirectContainsSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where redirect contains DEFAULT_REDIRECT
+        defaultAdMenuShouldBeFound("redirect.contains=" + DEFAULT_REDIRECT);
+
+        // Get all the adMenuList where redirect contains UPDATED_REDIRECT
+        defaultAdMenuShouldNotBeFound("redirect.contains=" + UPDATED_REDIRECT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByRedirectNotContainsSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where redirect does not contain DEFAULT_REDIRECT
+        defaultAdMenuShouldNotBeFound("redirect.doesNotContain=" + DEFAULT_REDIRECT);
+
+        // Get all the adMenuList where redirect does not contain UPDATED_REDIRECT
+        defaultAdMenuShouldBeFound("redirect.doesNotContain=" + UPDATED_REDIRECT);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByActiveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where active equals to DEFAULT_ACTIVE
+        defaultAdMenuShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
+
+        // Get all the adMenuList where active equals to UPDATED_ACTIVE
+        defaultAdMenuShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where active not equals to DEFAULT_ACTIVE
+        defaultAdMenuShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the adMenuList where active not equals to UPDATED_ACTIVE
+        defaultAdMenuShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByActiveIsInShouldWork() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where active in DEFAULT_ACTIVE or UPDATED_ACTIVE
+        defaultAdMenuShouldBeFound("active.in=" + DEFAULT_ACTIVE + "," + UPDATED_ACTIVE);
+
+        // Get all the adMenuList where active equals to UPDATED_ACTIVE
+        defaultAdMenuShouldNotBeFound("active.in=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByActiveIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where active is not null
+        defaultAdMenuShouldBeFound("active.specified=true");
+
+        // Get all the adMenuList where active is null
+        defaultAdMenuShouldNotBeFound("active.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllAdMenusByAdMenuIsEqualToSomething() throws Exception {
         // Initialize the database
         adMenuRepository.saveAndFlush(adMenu);
@@ -797,10 +1096,14 @@ public class AdMenuResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(adMenu.getId().intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].translationKey").value(hasItem(DEFAULT_TRANSLATION_KEY)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].path").value(hasItem(DEFAULT_PATH)))
             .andExpect(jsonPath("$.[*].action").value(hasItem(DEFAULT_ACTION.toString())))
-            .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)));
+            .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)))
+            .andExpect(jsonPath("$.[*].redirect").value(hasItem(DEFAULT_REDIRECT)))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
         restAdMenuMockMvc.perform(get("/api/ad-menus/count?sort=id,desc&" + filter))
@@ -850,10 +1153,14 @@ public class AdMenuResourceIT {
         updatedAdMenu
             .uid(UPDATED_UID)
             .name(UPDATED_NAME)
+            .value(UPDATED_VALUE)
+            .translationKey(UPDATED_TRANSLATION_KEY)
             .description(UPDATED_DESCRIPTION)
             .path(UPDATED_PATH)
             .action(UPDATED_ACTION)
-            .icon(UPDATED_ICON);
+            .icon(UPDATED_ICON)
+            .redirect(UPDATED_REDIRECT)
+            .active(UPDATED_ACTIVE);
         AdMenuDTO adMenuDTO = adMenuMapper.toDto(updatedAdMenu);
 
         restAdMenuMockMvc.perform(put("/api/ad-menus")
@@ -867,10 +1174,14 @@ public class AdMenuResourceIT {
         AdMenu testAdMenu = adMenuList.get(adMenuList.size() - 1);
         assertThat(testAdMenu.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testAdMenu.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testAdMenu.getValue()).isEqualTo(UPDATED_VALUE);
+        assertThat(testAdMenu.getTranslationKey()).isEqualTo(UPDATED_TRANSLATION_KEY);
         assertThat(testAdMenu.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAdMenu.getPath()).isEqualTo(UPDATED_PATH);
         assertThat(testAdMenu.getAction()).isEqualTo(UPDATED_ACTION);
         assertThat(testAdMenu.getIcon()).isEqualTo(UPDATED_ICON);
+        assertThat(testAdMenu.getRedirect()).isEqualTo(UPDATED_REDIRECT);
+        assertThat(testAdMenu.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 
     @Test

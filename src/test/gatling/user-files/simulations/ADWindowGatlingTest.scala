@@ -72,10 +72,12 @@ class ADWindowGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "uid":null
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "titleLogic":"SAMPLE_TEXT"
                 , "type":"MAINTAIN"
+                , "treeView":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

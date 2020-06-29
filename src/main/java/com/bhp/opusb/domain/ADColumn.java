@@ -1,10 +1,11 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotNull;
 import com.bhp.opusb.domain.enumeration.ADColumnType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -33,6 +35,9 @@ public class ADColumn extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @Column(name = "uid")
+    private UUID uid;
 
     @NotNull
     @Column(name = "name", nullable = false)
@@ -83,7 +88,7 @@ public class ADColumn extends AbstractAuditingEntity {
     private Boolean alwaysUpdatable;
 
     @Column(name = "copyable")
-    private Boolean copyable;
+    private Boolean copyable = true;
 
     @Column(name = "default_value")
     private String defaultValue;
@@ -148,6 +153,19 @@ public class ADColumn extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public ADColumn uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -562,6 +580,7 @@ public class ADColumn extends AbstractAuditingEntity {
     public String toString() {
         return "ADColumn{" +
             "id=" + getId() +
+            ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", sqlName='" + getSqlName() + "'" +
             ", description='" + getDescription() + "'" +

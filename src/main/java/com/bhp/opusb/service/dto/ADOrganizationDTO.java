@@ -1,6 +1,7 @@
 package com.bhp.opusb.service.dto;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,6 +13,8 @@ public class ADOrganizationDTO extends AbstractAuditingDTO {
     private static final long serialVersionUID = 1L;
 
     private Long id;
+
+    private UUID uid;
 
     @NotNull
     private String name;
@@ -30,6 +33,14 @@ public class ADOrganizationDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -89,6 +100,7 @@ public class ADOrganizationDTO extends AbstractAuditingDTO {
     public String toString() {
         return "ADOrganizationDTO{" +
             "id=" + getId() +
+            ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +

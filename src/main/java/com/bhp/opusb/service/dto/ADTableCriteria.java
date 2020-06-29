@@ -8,6 +8,7 @@ import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.ADTable} entity. This class is used
@@ -24,6 +25,8 @@ public class ADTableCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private UUIDFilter uid;
+
     private StringFilter name;
 
     private BooleanFilter view;
@@ -39,6 +42,7 @@ public class ADTableCriteria implements Serializable, Criteria {
 
     public ADTableCriteria(ADTableCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.view = other.view == null ? null : other.view.copy();
         this.active = other.active == null ? null : other.active.copy();
@@ -57,6 +61,14 @@ public class ADTableCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
     }
 
     public StringFilter getName() {
@@ -111,6 +123,7 @@ public class ADTableCriteria implements Serializable, Criteria {
         final ADTableCriteria that = (ADTableCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(uid, that.uid) &&
             Objects.equals(name, that.name) &&
             Objects.equals(view, that.view) &&
             Objects.equals(active, that.active) &&
@@ -122,6 +135,7 @@ public class ADTableCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        uid,
         name,
         view,
         active,
@@ -134,6 +148,7 @@ public class ADTableCriteria implements Serializable, Criteria {
     public String toString() {
         return "ADTableCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (view != null ? "view=" + view + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +

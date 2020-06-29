@@ -23,6 +23,10 @@ public class AdMenuDTO extends AbstractAuditingDTO {
     @NotNull
     private String name;
 
+    private String value;
+
+    private String translationKey;
+
     private String description;
 
     @NotNull
@@ -31,6 +35,11 @@ public class AdMenuDTO extends AbstractAuditingDTO {
     private AdMenuAction action;
 
     private String icon;
+
+    private String redirect;
+
+    private Boolean active;
+
 
     private Long adWindowId;
     private String adWindowName;
@@ -67,6 +76,22 @@ public class AdMenuDTO extends AbstractAuditingDTO {
         this.name = name;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getTranslationKey() {
+        return translationKey;
+    }
+
+    public void setTranslationKey(String translationKey) {
+        this.translationKey = translationKey;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -97,6 +122,22 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getRedirect() {
+        return redirect;
+    }
+
+    public void setRedirect(String redirect) {
+        this.redirect = redirect;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Long getAdWindowId() {
@@ -182,10 +223,14 @@ public class AdMenuDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
+            ", value='" + getValue() + "'" +
+            ", translationKey='" + getTranslationKey() + "'" +
             ", description='" + getDescription() + "'" +
             ", path='" + getPath() + "'" +
             ", action='" + getAction() + "'" +
             ", icon='" + getIcon() + "'" +
+            ", redirect='" + getRedirect() + "'" +
+            ", active='" + isActive() + "'" +
             ", adWindowId=" + getAdWindowId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", parentMenuId=" + getParentMenuId() +

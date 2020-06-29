@@ -3,10 +3,7 @@
     "fields": [
         {
             "fieldName": "uid",
-            "fieldType": "UUID",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "UUID"
         },
         {
             "fieldName": "name",
@@ -50,5 +47,6 @@
     "embedded": false,
     "clientRootFolder": "",
     "applications": "*",
-    "enableEntityAudit": true
+    "enableEntityAudit": true,
+    "skipClient": true
 }

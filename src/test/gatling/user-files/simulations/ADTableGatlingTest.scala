@@ -72,6 +72,7 @@ class ADTableGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "uid":null
                 , "name":"SAMPLE_TEXT"
                 , "view":null
                 , "active":null

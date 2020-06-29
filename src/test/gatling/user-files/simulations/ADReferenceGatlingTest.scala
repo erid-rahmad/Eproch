@@ -72,6 +72,7 @@ class ADReferenceGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "uid":null
                 , "name":"SAMPLE_TEXT"
                 , "value":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"

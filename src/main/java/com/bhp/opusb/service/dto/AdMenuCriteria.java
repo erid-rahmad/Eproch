@@ -6,6 +6,7 @@ import java.util.Objects;
 import com.bhp.opusb.domain.enumeration.AdMenuAction;
 
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -50,6 +51,10 @@ public class AdMenuCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
+    private StringFilter value;
+
+    private StringFilter translationKey;
+
     private StringFilter description;
 
     private StringFilter path;
@@ -57,6 +62,10 @@ public class AdMenuCriteria implements Serializable, Criteria {
     private AdMenuActionFilter action;
 
     private StringFilter icon;
+
+    private StringFilter redirect;
+
+    private BooleanFilter active;
 
     private LongFilter adMenuId;
 
@@ -73,10 +82,14 @@ public class AdMenuCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.value = other.value == null ? null : other.value.copy();
+        this.translationKey = other.translationKey == null ? null : other.translationKey.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.path = other.path == null ? null : other.path.copy();
         this.action = other.action == null ? null : other.action.copy();
         this.icon = other.icon == null ? null : other.icon.copy();
+        this.redirect = other.redirect == null ? null : other.redirect.copy();
+        this.active = other.active == null ? null : other.active.copy();
         this.adMenuId = other.adMenuId == null ? null : other.adMenuId.copy();
         this.adWindowId = other.adWindowId == null ? null : other.adWindowId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -112,6 +125,22 @@ public class AdMenuCriteria implements Serializable, Criteria {
         this.name = name;
     }
 
+    public StringFilter getValue() {
+        return value;
+    }
+
+    public void setValue(StringFilter value) {
+        this.value = value;
+    }
+
+    public StringFilter getTranslationKey() {
+        return translationKey;
+    }
+
+    public void setTranslationKey(StringFilter translationKey) {
+        this.translationKey = translationKey;
+    }
+
     public StringFilter getDescription() {
         return description;
     }
@@ -142,6 +171,22 @@ public class AdMenuCriteria implements Serializable, Criteria {
 
     public void setIcon(StringFilter icon) {
         this.icon = icon;
+    }
+
+    public StringFilter getRedirect() {
+        return redirect;
+    }
+
+    public void setRedirect(StringFilter redirect) {
+        this.redirect = redirect;
+    }
+
+    public BooleanFilter getActive() {
+        return active;
+    }
+
+    public void setActive(BooleanFilter active) {
+        this.active = active;
     }
 
     public LongFilter getAdMenuId() {
@@ -190,10 +235,14 @@ public class AdMenuCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(value, that.value) &&
+            Objects.equals(translationKey, that.translationKey) &&
             Objects.equals(description, that.description) &&
             Objects.equals(path, that.path) &&
             Objects.equals(action, that.action) &&
             Objects.equals(icon, that.icon) &&
+            Objects.equals(redirect, that.redirect) &&
+            Objects.equals(active, that.active) &&
             Objects.equals(adMenuId, that.adMenuId) &&
             Objects.equals(adWindowId, that.adWindowId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -206,10 +255,14 @@ public class AdMenuCriteria implements Serializable, Criteria {
         id,
         uid,
         name,
+        value,
+        translationKey,
         description,
         path,
         action,
         icon,
+        redirect,
+        active,
         adMenuId,
         adWindowId,
         adOrganizationId,
@@ -223,10 +276,14 @@ public class AdMenuCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (value != null ? "value=" + value + ", " : "") +
+                (translationKey != null ? "translationKey=" + translationKey + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (path != null ? "path=" + path + ", " : "") +
                 (action != null ? "action=" + action + ", " : "") +
                 (icon != null ? "icon=" + icon + ", " : "") +
+                (redirect != null ? "redirect=" + redirect + ", " : "") +
+                (active != null ? "active=" + active + ", " : "") +
                 (adMenuId != null ? "adMenuId=" + adMenuId + ", " : "") +
                 (adWindowId != null ? "adWindowId=" + adWindowId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

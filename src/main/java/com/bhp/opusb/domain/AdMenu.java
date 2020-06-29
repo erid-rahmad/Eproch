@@ -39,12 +39,18 @@ public class AdMenu extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "uid", nullable = false)
+    @Column(name = "uid")
     private UUID uid;
 
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "value")
+    private String value;
+
+    @Column(name = "translation_key")
+    private String translationKey;
 
     @Column(name = "description")
     private String description;
@@ -59,6 +65,12 @@ public class AdMenu extends AbstractAuditingEntity {
 
     @Column(name = "icon")
     private String icon;
+
+    @Column(name = "redirect")
+    private String redirect;
+
+    @Column(name = "active")
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "parentMenu")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -112,6 +124,32 @@ public class AdMenu extends AbstractAuditingEntity {
         this.name = name;
     }
 
+    public String getValue() {
+        return value;
+    }
+
+    public AdMenu value(String value) {
+        this.value = value;
+        return this;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getTranslationKey() {
+        return translationKey;
+    }
+
+    public AdMenu translationKey(String translationKey) {
+        this.translationKey = translationKey;
+        return this;
+    }
+
+    public void setTranslationKey(String translationKey) {
+        this.translationKey = translationKey;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -162,6 +200,32 @@ public class AdMenu extends AbstractAuditingEntity {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getRedirect() {
+        return redirect;
+    }
+
+    public AdMenu redirect(String redirect) {
+        this.redirect = redirect;
+        return this;
+    }
+
+    public void setRedirect(String redirect) {
+        this.redirect = redirect;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public AdMenu active(Boolean active) {
+        this.active = active;
+        return this;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Set<AdMenu> getAdMenus() {
@@ -256,10 +320,14 @@ public class AdMenu extends AbstractAuditingEntity {
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
+            ", value='" + getValue() + "'" +
+            ", translationKey='" + getTranslationKey() + "'" +
             ", description='" + getDescription() + "'" +
             ", path='" + getPath() + "'" +
             ", action='" + getAction() + "'" +
             ", icon='" + getIcon() + "'" +
+            ", redirect='" + getRedirect() + "'" +
+            ", active='" + isActive() + "'" +
             "}";
     }
 }
