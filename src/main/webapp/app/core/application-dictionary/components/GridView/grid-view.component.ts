@@ -2,7 +2,7 @@ import { Component, Vue, Watch, Inject, Mixins } from 'vue-property-decorator';
 import ContextVariableAccessor from "../ContextVariableAccessor";
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import { ElTable } from 'element-ui/types/table';
-import { ADColumnType } from '@/shared/model/ad-column.model';
+import { ADColumnType, ADColumn } from '@/shared/model/ad-column.model';
 import schema from 'async-validator';
 import { getValidatorType } from '@/utils/validate';
 import { ADReferenceType } from '@/shared/model/ad-reference.model';
@@ -12,6 +12,8 @@ import _ from 'lodash';
 import { mapActions } from 'vuex';
 import { RegisterTabParameter } from '@/shared/config/store/window-store';
 import { nullifyField } from '@/utils/form';
+import { exportJson2Excel } from '@/utils/excel';
+import { formatJson } from '@/utils';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -88,6 +90,24 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
   //Dialog
   showDeleteDialog: boolean = false;
+  showExportDialog: boolean = false;
+  checkCurrentRow: boolean = false;
+  buttonExport: boolean = false;
+
+  //download file excel
+  filename:string = '';
+  autoWidth:boolean = true;
+  bookType:string = '';
+
+  formExport = {
+    name: "",
+    type: ""
+  }
+  chooseBookType = [
+    { type: 'csv' },
+    { type: 'xls' },
+    { type: 'xlsx' },
+  ]
 
   // Inline editing mode needs these data.
   originalRecord: any = {};
@@ -197,6 +217,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.toolbarEventBus?.$on('save-record', this.beforeSave);
     this.toolbarEventBus?.$on('cancel-operation', this.cancelOperation);
     this.toolbarEventBus?.$on('delete-record', this.deleteRow);
+    this.toolbarEventBus?.$on('export-record', this.exportRecord);
     this.toolbarEventBus?.$on('refresh-data', this.refreshData);
   }
 
@@ -206,6 +227,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.toolbarEventBus?.$off('save-record', this.beforeSave);
     this.toolbarEventBus?.$off('cancel-operation', this.cancelOperation);
     this.toolbarEventBus?.$off('delete-record', this.deleteRow);
+    this.toolbarEventBus?.$off('export-record', this.exportRecord);
     this.toolbarEventBus?.$off('refresh-data', this.refreshData);
   }
   // End of lifecycle events.
@@ -306,8 +328,60 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     });
   }
 
+  public handleCheckCurrentRow(){
+    if(this.checkCurrentRow == true){
+      if(this.multipleSelectedRow.length >= 1){
+        this.buttonExport = false;
+      }else{
+        this.buttonExport = true;
+        this.$notify({
+          title: 'Warning',
+          message: "Please select at least one item",
+          type: 'warning',
+          duration: 3000
+        });
+      }
+    }else{
+      this.buttonExport = false;
+    }
+  }
+
+  public actionExport(): void {
+    this.bookType = this.formExport.type;
+    this.filename = this.formExport.name;
+
+    let tHeaderTmp, tDataTemp;
+    let tHeader:Array<any> = [];
+    let filterVal:Array<any> = [];
+    var service: any = '';
+    var data: any = '';
+
+    for (let i = 0; i < this.fields.length; i++) {
+      tHeaderTmp = this.fields[i].name;
+      tDataTemp = this.fields[i].adColumn.name;
+
+      tHeader.push(tHeaderTmp);
+      filterVal.push(tDataTemp);
+    }
+    
+    if(this.checkCurrentRow == true){
+      if(this.multipleSelectedRow.length >= 1){
+        for (let i = 0; i < this.multipleSelectedRow.length; i++) {
+          service = this.gridData[i];
+          data = formatJson(filterVal, this.multipleSelectedRow);
+          console.log(i + " record");
+        }
+      }
+    }else{
+      service = this.gridData;
+      data = formatJson(filterVal, service);
+    }
+    exportJson2Excel(tHeader, data, this.filename!==''?this.filename:'excel-list', undefined, undefined, this.autoWidth, this.bookType!==''?this.bookType:"csv");
+  }
+
   public closeDialog(): void {
     this.showDeleteDialog = false;
+    this.showExportDialog = false;
   }
 
   /**
@@ -340,6 +414,13 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         duration: 3000
       });
     }
+  }
+
+  private exportRecord(data?: any) {
+    if (!data.isGridView || (!this.mainTab && data?.tabId !== this.tabId))
+      return;
+      
+      this.showExportDialog = true;
   }
 
   private refreshData(data?: any) {

@@ -116,6 +116,13 @@ export default class ActionToolbar extends ActionToolbarProps {
     });
   }
 
+  public exportRecord() {
+    if (!this.activeWindow) return;
+    this.eventBus.$emit('export-record', {
+      isGridView: this.gridView
+    });
+  }
+
   public switchView() {
     this.toggleView(!this.gridView);
   }

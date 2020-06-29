@@ -58,6 +58,13 @@
         title="Search (alt + f)"
         @click="openSearchWindow"
       />
+      <el-button 
+        type="primary"
+        size="small"
+        icon="el-icon-download"
+        title="Export"
+        @click="exportRecord"
+      />
     </el-button-group>
     <el-button-group v-show="!isEditing">
       <el-button
