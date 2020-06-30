@@ -6,6 +6,7 @@ import ActionToolbar from '../ActionToolbar/action-toolbar.vue';
 import TabToolbar from "../ActionToolbar/tab-toolbar.vue";
 import DetailView from "../DetailView/detail-view.vue";
 import GridView from "../GridView/grid-view.vue";
+import TreeView from '../TreeView/tree-view.vue'
 import SearchPanel from "../SearchPanel/search-panel.vue";
 
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
@@ -16,6 +17,7 @@ import { TagsViewStoreModule as tagsViewStore } from "@/shared/config/store/tags
 import _ from 'lodash';
 import { mapActions } from 'vuex';
 import { ElPagination } from 'element-ui/types/pagination';
+import ADWindowService from '@/entities/ad-window/ad-window.service';
 
 @Component({
   components: {
@@ -25,6 +27,7 @@ import { ElPagination } from 'element-ui/types/pagination';
     TabToolbar,
     DetailView,
     GridView,
+    TreeView,
     SearchPanel
   },
 
@@ -35,6 +38,9 @@ import { ElPagination } from 'element-ui/types/pagination';
   }
 })
 export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
+  @Inject('aDWindowService')
+  private aDWindowService: () => ADWindowService;
+  
   @Inject('aDTabService')
   private aDTabService: () => ADTabService;
 
@@ -42,7 +48,9 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   private aDColumnService: () => ADColumnService;
 
   public windowId: number = 0;
+  private windowType = null;
   public gridView = true;
+  public treeView = false;
   public childTabs = [];
   public currentTab: string = '';
 
@@ -73,6 +81,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   private loadingChildTabs = false;
 
   // Start of computed properties.
+  get firstTab() {
+    return this.tabStack[0] || new ADTab();
+  }
+
   get mainTab() {
     if (this.tabStack.length === 0) {
       return new ADTab();
@@ -110,8 +122,13 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.mainToolbarEventBus.$on('tab-navigate', this.navigateTab);
     this.mainToolbarEventBus.$on('open-search-window', this.openSearchPanel);
     this.mainToolbarEventBus.$on('cancel-operation', this.cancelOperation);
-
-    this.retrieveTabs(null);
+    
+    this.retrieveWindowDetail()
+      .then((res) => {
+        this.windowType = res.type;
+        this.treeView = res.treeView;
+        this.retrieveTabs(null);
+      });
   }
 
   beforeDestroy() {
@@ -206,6 +223,17 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.closeSearchPanel();
   }
 
+  public refreshWindow({isGridView}) {
+    if (this.treeView) {
+      (<any>this.$refs.treeView).reload();
+    }
+    if (isGridView) {
+      (<any>this.$refs.mainGrid).clear();
+    } else {
+      (<any>this.$refs.mainForm).reload();
+    }
+  }
+
   public applyFilter(query: string) {
     if (this.gridView) {
       (<any>this.$refs.mainGrid).filterRecord(query);
@@ -271,6 +299,21 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       // Use Vue.$set to notify array update.
       this.$set(this.childTabs, index, tab);
     }
+  }
+
+  private async retrieveWindowDetail(): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      this.aDWindowService()
+        .find(this.windowId)
+        .then(res => {
+          console.log('Window detail: %O', res);
+          resolve(res);
+        })
+        .catch(err => {
+          console.error('Failed getting window detail. ', err);
+          reject(err);
+        })
+    });
   }
 
   /**

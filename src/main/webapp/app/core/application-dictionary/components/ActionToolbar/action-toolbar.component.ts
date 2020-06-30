@@ -74,13 +74,16 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   public refreshData() {
     if (!this.activeWindow) return;
-    this.eventBus.$emit('refresh-data', {
+    this.$emit('refresh', {
       isGridView: this.gridView
     });
   }
 
   public openSearchWindow() {
     if (!this.activeWindow) return;
+    this.$emit('open-search-panel', {
+      isGridView: this.gridView
+    });
     this.eventBus.$emit('open-search-window', {
       isGridView: this.gridView
     });
@@ -89,6 +92,9 @@ export default class ActionToolbar extends ActionToolbarProps {
   public addRecord() {
     if (!this.activeWindow || this.editing) return;
     this.editing = true;
+    this.$emit('add-record', {
+      isGridView: this.gridView
+    });
     this.eventBus.$emit('add-record', {
       isGridView: this.gridView
     });
@@ -97,6 +103,9 @@ export default class ActionToolbar extends ActionToolbarProps {
   public copyRecord() {
     if (!this.activeWindow || this.editing) return;
     this.editing = true;
+    this.$emit('copy-record', {
+      isGridView: this.gridView
+    });
     this.eventBus.$emit('copy-record', {
       isGridView: this.gridView
     });
@@ -104,6 +113,9 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   public saveRecord() {
     if (!this.activeWindow || !this.editing) return;
+    this.$emit('save', {
+      isGridView: this.gridView
+    });
     this.eventBus.$emit('save-record', {
       isGridView: this.gridView
     });
@@ -111,6 +123,9 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   public deleteRecord() {
     if (!this.activeWindow) return;
+    this.$emit('delete', {
+      isGridView: this.gridView
+    });
     this.eventBus.$emit('delete-record', {
       isGridView: this.gridView
     });
@@ -129,6 +144,9 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   public goToParentTab() {
     if (!this.activeWindow || this.atWindowRoot || this.editing) return;
+    this.$emit('tab-navigate', {
+      direction: -1
+    });
     this.eventBus.$emit('tab-navigate', {
       direction: -1
     });
@@ -136,6 +154,9 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   public goToChildTab() {
     if (!this.activeWindow || this.atLastTab || this.editing) return;
+    this.$emit('tab-navigate', {
+      direction: 1
+    });
     this.eventBus.$emit('tab-navigate', {
       direction: 1
     });
