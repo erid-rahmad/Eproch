@@ -90,6 +90,9 @@ public class ADOrganizationQueryService extends QueryService<ADOrganization> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), ADOrganization_.id));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), ADOrganization_.uid));
+            }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), ADOrganization_.name));
             }

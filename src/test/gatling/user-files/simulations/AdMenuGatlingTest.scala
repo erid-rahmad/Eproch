@@ -74,10 +74,16 @@ class AdMenuGatlingTest extends Simulation {
                 "id":null
                 , "uid":null
                 , "name":"SAMPLE_TEXT"
+                , "value":"SAMPLE_TEXT"
+                , "translationKey":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "path":"SAMPLE_TEXT"
                 , "action":"WINDOW"
                 , "icon":"SAMPLE_TEXT"
+                , "redirect":"SAMPLE_TEXT"
+                , "sequence":"0"
+                , "alwaysShow":null
+                , "active":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_adMenu_url"))).exitHereIfFailed

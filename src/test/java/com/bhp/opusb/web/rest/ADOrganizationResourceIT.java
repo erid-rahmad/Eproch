@@ -1,26 +1,13 @@
 package com.bhp.opusb.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.ADOrganizationRepository;
-import com.bhp.opusb.service.ADOrganizationQueryService;
 import com.bhp.opusb.service.ADOrganizationService;
 import com.bhp.opusb.service.dto.ADOrganizationDTO;
 import com.bhp.opusb.service.mapper.ADOrganizationMapper;
+import com.bhp.opusb.service.dto.ADOrganizationCriteria;
+import com.bhp.opusb.service.ADOrganizationQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,6 +18,14 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link ADOrganizationResource} REST controller.
@@ -40,6 +35,9 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 public class ADOrganizationResourceIT {
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -81,6 +79,7 @@ public class ADOrganizationResourceIT {
      */
     public static ADOrganization createEntity(EntityManager em) {
         ADOrganization aDOrganization = new ADOrganization()
+            .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .code(DEFAULT_CODE)
             .description(DEFAULT_DESCRIPTION)
@@ -95,6 +94,7 @@ public class ADOrganizationResourceIT {
      */
     public static ADOrganization createUpdatedEntity(EntityManager em) {
         ADOrganization aDOrganization = new ADOrganization()
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
@@ -123,6 +123,7 @@ public class ADOrganizationResourceIT {
         List<ADOrganization> aDOrganizationList = aDOrganizationRepository.findAll();
         assertThat(aDOrganizationList).hasSize(databaseSizeBeforeCreate + 1);
         ADOrganization testADOrganization = aDOrganizationList.get(aDOrganizationList.size() - 1);
+        assertThat(testADOrganization.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testADOrganization.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADOrganization.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testADOrganization.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
@@ -199,6 +200,7 @@ public class ADOrganizationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDOrganization.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
@@ -216,6 +218,7 @@ public class ADOrganizationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aDOrganization.getId().intValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
@@ -241,6 +244,58 @@ public class ADOrganizationResourceIT {
         defaultADOrganizationShouldNotBeFound("id.lessThan=" + id);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllADOrganizationsByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDOrganizationRepository.saveAndFlush(aDOrganization);
+
+        // Get all the aDOrganizationList where uid equals to DEFAULT_UID
+        defaultADOrganizationShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the aDOrganizationList where uid equals to UPDATED_UID
+        defaultADOrganizationShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADOrganizationsByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDOrganizationRepository.saveAndFlush(aDOrganization);
+
+        // Get all the aDOrganizationList where uid not equals to DEFAULT_UID
+        defaultADOrganizationShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the aDOrganizationList where uid not equals to UPDATED_UID
+        defaultADOrganizationShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADOrganizationsByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDOrganizationRepository.saveAndFlush(aDOrganization);
+
+        // Get all the aDOrganizationList where uid in DEFAULT_UID or UPDATED_UID
+        defaultADOrganizationShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the aDOrganizationList where uid equals to UPDATED_UID
+        defaultADOrganizationShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADOrganizationsByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDOrganizationRepository.saveAndFlush(aDOrganization);
+
+        // Get all the aDOrganizationList where uid is not null
+        defaultADOrganizationShouldBeFound("uid.specified=true");
+
+        // Get all the aDOrganizationList where uid is null
+        defaultADOrganizationShouldNotBeFound("uid.specified=false");
+    }
 
     @Test
     @Transactional
@@ -535,6 +590,7 @@ public class ADOrganizationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDOrganization.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
@@ -586,6 +642,7 @@ public class ADOrganizationResourceIT {
         // Disconnect from session so that the updates on updatedADOrganization are not directly saved in db
         em.detach(updatedADOrganization);
         updatedADOrganization
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION)
@@ -601,6 +658,7 @@ public class ADOrganizationResourceIT {
         List<ADOrganization> aDOrganizationList = aDOrganizationRepository.findAll();
         assertThat(aDOrganizationList).hasSize(databaseSizeBeforeUpdate);
         ADOrganization testADOrganization = aDOrganizationList.get(aDOrganizationList.size() - 1);
+        assertThat(testADOrganization.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testADOrganization.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADOrganization.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testADOrganization.getDescription()).isEqualTo(UPDATED_DESCRIPTION);

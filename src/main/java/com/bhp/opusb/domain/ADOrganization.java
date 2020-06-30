@@ -1,5 +1,7 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,6 +29,9 @@ public class ADOrganization extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "uid")
+    private UUID uid;
+
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
@@ -39,7 +44,7 @@ public class ADOrganization extends AbstractAuditingEntity {
     private String description;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -48,6 +53,19 @@ public class ADOrganization extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public ADOrganization uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -123,6 +141,7 @@ public class ADOrganization extends AbstractAuditingEntity {
     public String toString() {
         return "ADOrganization{" +
             "id=" + getId() +
+            ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", code='" + getCode() + "'" +
             ", description='" + getDescription() + "'" +

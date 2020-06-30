@@ -1,6 +1,7 @@
 package com.bhp.opusb.service.dto;
 
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +16,8 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     private Long id;
 
+    private UUID uid;
+
     @NotNull
     private String name;
 
@@ -24,6 +27,8 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     @NotNull
     private ADWindowType type;
+
+    private Boolean treeView;
 
     private Boolean active;
 
@@ -36,6 +41,14 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -68,6 +81,14 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     public void setType(ADWindowType type) {
         this.type = type;
+    }
+
+    public Boolean isTreeView() {
+        return treeView;
+    }
+
+    public void setTreeView(Boolean treeView) {
+        this.treeView = treeView;
     }
 
     public Boolean isActive() {
@@ -119,10 +140,12 @@ public class ADWindowDTO extends AbstractAuditingDTO {
     public String toString() {
         return "ADWindowDTO{" +
             "id=" + getId() +
+            ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", titleLogic='" + getTitleLogic() + "'" +
             ", type='" + getType() + "'" +
+            ", treeView='" + isTreeView() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";

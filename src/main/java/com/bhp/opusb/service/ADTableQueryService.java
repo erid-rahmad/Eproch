@@ -91,6 +91,9 @@ public class ADTableQueryService extends QueryService<ADTable> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), ADTable_.id));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), ADTable_.uid));
+            }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), ADTable_.name));
             }

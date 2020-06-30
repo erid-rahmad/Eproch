@@ -58,7 +58,7 @@ export const nullifyField = (record: Record<string, any>, field: any) => {
   const isForeignKey = fieldName.endsWith('Id');
   if (!field.adColumn.mandatory) {
     const value = record[fieldName];
-    const shouldNullify = (isForeignKey && value === 0) || (isStringField(field) && value?.trim() === '');
+    const shouldNullify = (isForeignKey && !value) || (isStringField(field) && value?.trim() === '');
     if (shouldNullify) {
       record[fieldName] = null;
     }

@@ -91,6 +91,9 @@ public class ADReferenceQueryService extends QueryService<ADReference> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), ADReference_.id));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), ADReference_.uid));
+            }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), ADReference_.name));
             }

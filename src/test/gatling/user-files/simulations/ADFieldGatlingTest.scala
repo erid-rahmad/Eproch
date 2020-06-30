@@ -72,6 +72,7 @@ class ADFieldGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "uid":null
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "hint":"SAMPLE_TEXT"

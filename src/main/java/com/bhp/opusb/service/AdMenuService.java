@@ -12,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link AdMenu}.
@@ -44,6 +46,17 @@ public class AdMenuService {
         AdMenu adMenu = adMenuMapper.toEntity(adMenuDTO);
         adMenu = adMenuRepository.save(adMenu);
         return adMenuMapper.toDto(adMenu);
+    }
+
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.AdMenu.adMenus", allEntries = true)
+    public List<AdMenuDTO> saveAll(List<AdMenuDTO> adMenuDTOs) {
+        List<AdMenu> adMenus = adMenuDTOs.stream()
+            .map(dto -> adMenuMapper.toEntity(dto))
+            .collect(Collectors.toList());
+        
+        return adMenuRepository.saveAll(adMenus).stream()
+            .map(entity -> adMenuMapper.toDto(entity))
+            .collect(Collectors.toList());
     }
 
     /**

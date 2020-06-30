@@ -212,7 +212,6 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
     this.toolbarEventBus.$on('save-record', this.beforeSave);
     this.toolbarEventBus.$on('cancel-operation', this.cancelOperation);
     this.toolbarEventBus.$on('delete-record', this.deleteRecord);
-    this.toolbarEventBus.$on('refresh-data', this.refreshData);
     this.debouncedUpdatePage = debounce(this.updatePage, 500);
     this.debouncedCheckEditMode = debounce(this.checkEditMode, 500);
     this.onObservableTabPropertiesChange(this.observableTabProperties);
@@ -224,7 +223,6 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
     this.toolbarEventBus.$off('save-record', this.beforeSave);
     this.toolbarEventBus.$off('cancel-operation', this.cancelOperation);
     this.toolbarEventBus.$off('delete-record', this.deleteRecord);
-    this.toolbarEventBus.$off('refresh-data', this.refreshData);
   }
 
   private reset() {
@@ -321,9 +319,8 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
       })
   }
 
-  private refreshData(data: any) {
-    if (!data.isGridView)
-      this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
+  public reload() {
+    this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
   }
 
   private checkEditMode(record: object, prevRecord: object): void {

@@ -33,7 +33,7 @@ public class AdValidationRule extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "uid", nullable = false)
+    @Column(name = "uid")
     private UUID uid;
 
     @NotNull
@@ -47,7 +47,7 @@ public class AdValidationRule extends AbstractAuditingEntity {
     private String query;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @ManyToOne(optional = false)
     @NotNull

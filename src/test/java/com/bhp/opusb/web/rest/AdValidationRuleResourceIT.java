@@ -174,25 +174,6 @@ public class AdValidationRuleResourceIT {
 
     @Test
     @Transactional
-    public void checkUidIsRequired() throws Exception {
-        int databaseSizeBeforeTest = adValidationRuleRepository.findAll().size();
-        // set the field null
-        adValidationRule.setUid(null);
-
-        // Create the AdValidationRule, which fails.
-        AdValidationRuleDTO adValidationRuleDTO = adValidationRuleMapper.toDto(adValidationRule);
-
-        restAdValidationRuleMockMvc.perform(post("/api/ad-validation-rules")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(adValidationRuleDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<AdValidationRule> adValidationRuleList = adValidationRuleRepository.findAll();
-        assertThat(adValidationRuleList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = adValidationRuleRepository.findAll().size();
         // set the field null

@@ -2,6 +2,10 @@
     "name": "ADWindow",
     "fields": [
         {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -23,6 +27,10 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "treeView",
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "active",
@@ -56,5 +64,6 @@
     "embedded": false,
     "clientRootFolder": "",
     "applications": "*",
-    "enableEntityAudit": true
+    "enableEntityAudit": true,
+    "skipClient": true
 }
