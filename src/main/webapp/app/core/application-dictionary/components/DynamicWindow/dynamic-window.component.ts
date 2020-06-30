@@ -174,6 +174,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.isEditing = isEditing;
   }
 
+  public quitEditMode() {
+    (<any>this.$refs.mainToolbar).editMode = false;
+  }
+
   public onTotalCountChange(count: number) {
     this.totalRecords = count;
   }
@@ -224,13 +228,18 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   public refreshWindow({isGridView}) {
-    if (this.treeView) {
-      (<any>this.$refs.treeView).reload();
-    }
+    this.reloadTreeView();
+    
     if (isGridView) {
       (<any>this.$refs.mainGrid).clear();
     } else {
       (<any>this.$refs.mainForm).reload();
+    }
+  }
+
+  public reloadTreeView() {
+    if (this.treeView) {
+      (<any>this.$refs.treeView).reload();
     }
   }
 

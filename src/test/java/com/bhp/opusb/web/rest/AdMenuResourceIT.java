@@ -67,6 +67,13 @@ public class AdMenuResourceIT {
     private static final String DEFAULT_REDIRECT = "AAAAAAAAAA";
     private static final String UPDATED_REDIRECT = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_SEQUENCE = 1;
+    private static final Integer UPDATED_SEQUENCE = 2;
+    private static final Integer SMALLER_SEQUENCE = 1 - 1;
+
+    private static final Boolean DEFAULT_ALWAYS_SHOW = false;
+    private static final Boolean UPDATED_ALWAYS_SHOW = true;
+
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
 
@@ -107,6 +114,8 @@ public class AdMenuResourceIT {
             .action(DEFAULT_ACTION)
             .icon(DEFAULT_ICON)
             .redirect(DEFAULT_REDIRECT)
+            .sequence(DEFAULT_SEQUENCE)
+            .alwaysShow(DEFAULT_ALWAYS_SHOW)
             .active(DEFAULT_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
@@ -137,6 +146,8 @@ public class AdMenuResourceIT {
             .action(UPDATED_ACTION)
             .icon(UPDATED_ICON)
             .redirect(UPDATED_REDIRECT)
+            .sequence(UPDATED_SEQUENCE)
+            .alwaysShow(UPDATED_ALWAYS_SHOW)
             .active(UPDATED_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
@@ -181,6 +192,8 @@ public class AdMenuResourceIT {
         assertThat(testAdMenu.getAction()).isEqualTo(DEFAULT_ACTION);
         assertThat(testAdMenu.getIcon()).isEqualTo(DEFAULT_ICON);
         assertThat(testAdMenu.getRedirect()).isEqualTo(DEFAULT_REDIRECT);
+        assertThat(testAdMenu.getSequence()).isEqualTo(DEFAULT_SEQUENCE);
+        assertThat(testAdMenu.isAlwaysShow()).isEqualTo(DEFAULT_ALWAYS_SHOW);
         assertThat(testAdMenu.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -263,6 +276,8 @@ public class AdMenuResourceIT {
             .andExpect(jsonPath("$.[*].action").value(hasItem(DEFAULT_ACTION.toString())))
             .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)))
             .andExpect(jsonPath("$.[*].redirect").value(hasItem(DEFAULT_REDIRECT)))
+            .andExpect(jsonPath("$.[*].sequence").value(hasItem(DEFAULT_SEQUENCE)))
+            .andExpect(jsonPath("$.[*].alwaysShow").value(hasItem(DEFAULT_ALWAYS_SHOW.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -286,6 +301,8 @@ public class AdMenuResourceIT {
             .andExpect(jsonPath("$.action").value(DEFAULT_ACTION.toString()))
             .andExpect(jsonPath("$.icon").value(DEFAULT_ICON))
             .andExpect(jsonPath("$.redirect").value(DEFAULT_REDIRECT))
+            .andExpect(jsonPath("$.sequence").value(DEFAULT_SEQUENCE))
+            .andExpect(jsonPath("$.alwaysShow").value(DEFAULT_ALWAYS_SHOW.booleanValue()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -961,6 +978,163 @@ public class AdMenuResourceIT {
 
     @Test
     @Transactional
+    public void getAllAdMenusBySequenceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where sequence equals to DEFAULT_SEQUENCE
+        defaultAdMenuShouldBeFound("sequence.equals=" + DEFAULT_SEQUENCE);
+
+        // Get all the adMenuList where sequence equals to UPDATED_SEQUENCE
+        defaultAdMenuShouldNotBeFound("sequence.equals=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusBySequenceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where sequence not equals to DEFAULT_SEQUENCE
+        defaultAdMenuShouldNotBeFound("sequence.notEquals=" + DEFAULT_SEQUENCE);
+
+        // Get all the adMenuList where sequence not equals to UPDATED_SEQUENCE
+        defaultAdMenuShouldBeFound("sequence.notEquals=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusBySequenceIsInShouldWork() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where sequence in DEFAULT_SEQUENCE or UPDATED_SEQUENCE
+        defaultAdMenuShouldBeFound("sequence.in=" + DEFAULT_SEQUENCE + "," + UPDATED_SEQUENCE);
+
+        // Get all the adMenuList where sequence equals to UPDATED_SEQUENCE
+        defaultAdMenuShouldNotBeFound("sequence.in=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusBySequenceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where sequence is not null
+        defaultAdMenuShouldBeFound("sequence.specified=true");
+
+        // Get all the adMenuList where sequence is null
+        defaultAdMenuShouldNotBeFound("sequence.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusBySequenceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where sequence is greater than or equal to DEFAULT_SEQUENCE
+        defaultAdMenuShouldBeFound("sequence.greaterThanOrEqual=" + DEFAULT_SEQUENCE);
+
+        // Get all the adMenuList where sequence is greater than or equal to UPDATED_SEQUENCE
+        defaultAdMenuShouldNotBeFound("sequence.greaterThanOrEqual=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusBySequenceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where sequence is less than or equal to DEFAULT_SEQUENCE
+        defaultAdMenuShouldBeFound("sequence.lessThanOrEqual=" + DEFAULT_SEQUENCE);
+
+        // Get all the adMenuList where sequence is less than or equal to SMALLER_SEQUENCE
+        defaultAdMenuShouldNotBeFound("sequence.lessThanOrEqual=" + SMALLER_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusBySequenceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where sequence is less than DEFAULT_SEQUENCE
+        defaultAdMenuShouldNotBeFound("sequence.lessThan=" + DEFAULT_SEQUENCE);
+
+        // Get all the adMenuList where sequence is less than UPDATED_SEQUENCE
+        defaultAdMenuShouldBeFound("sequence.lessThan=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusBySequenceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where sequence is greater than DEFAULT_SEQUENCE
+        defaultAdMenuShouldNotBeFound("sequence.greaterThan=" + DEFAULT_SEQUENCE);
+
+        // Get all the adMenuList where sequence is greater than SMALLER_SEQUENCE
+        defaultAdMenuShouldBeFound("sequence.greaterThan=" + SMALLER_SEQUENCE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByAlwaysShowIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where alwaysShow equals to DEFAULT_ALWAYS_SHOW
+        defaultAdMenuShouldBeFound("alwaysShow.equals=" + DEFAULT_ALWAYS_SHOW);
+
+        // Get all the adMenuList where alwaysShow equals to UPDATED_ALWAYS_SHOW
+        defaultAdMenuShouldNotBeFound("alwaysShow.equals=" + UPDATED_ALWAYS_SHOW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByAlwaysShowIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where alwaysShow not equals to DEFAULT_ALWAYS_SHOW
+        defaultAdMenuShouldNotBeFound("alwaysShow.notEquals=" + DEFAULT_ALWAYS_SHOW);
+
+        // Get all the adMenuList where alwaysShow not equals to UPDATED_ALWAYS_SHOW
+        defaultAdMenuShouldBeFound("alwaysShow.notEquals=" + UPDATED_ALWAYS_SHOW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByAlwaysShowIsInShouldWork() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where alwaysShow in DEFAULT_ALWAYS_SHOW or UPDATED_ALWAYS_SHOW
+        defaultAdMenuShouldBeFound("alwaysShow.in=" + DEFAULT_ALWAYS_SHOW + "," + UPDATED_ALWAYS_SHOW);
+
+        // Get all the adMenuList where alwaysShow equals to UPDATED_ALWAYS_SHOW
+        defaultAdMenuShouldNotBeFound("alwaysShow.in=" + UPDATED_ALWAYS_SHOW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByAlwaysShowIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where alwaysShow is not null
+        defaultAdMenuShouldBeFound("alwaysShow.specified=true");
+
+        // Get all the adMenuList where alwaysShow is null
+        defaultAdMenuShouldNotBeFound("alwaysShow.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllAdMenusByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         adMenuRepository.saveAndFlush(adMenu);
@@ -1103,6 +1277,8 @@ public class AdMenuResourceIT {
             .andExpect(jsonPath("$.[*].action").value(hasItem(DEFAULT_ACTION.toString())))
             .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)))
             .andExpect(jsonPath("$.[*].redirect").value(hasItem(DEFAULT_REDIRECT)))
+            .andExpect(jsonPath("$.[*].sequence").value(hasItem(DEFAULT_SEQUENCE)))
+            .andExpect(jsonPath("$.[*].alwaysShow").value(hasItem(DEFAULT_ALWAYS_SHOW.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -1160,6 +1336,8 @@ public class AdMenuResourceIT {
             .action(UPDATED_ACTION)
             .icon(UPDATED_ICON)
             .redirect(UPDATED_REDIRECT)
+            .sequence(UPDATED_SEQUENCE)
+            .alwaysShow(UPDATED_ALWAYS_SHOW)
             .active(UPDATED_ACTIVE);
         AdMenuDTO adMenuDTO = adMenuMapper.toDto(updatedAdMenu);
 
@@ -1181,6 +1359,8 @@ public class AdMenuResourceIT {
         assertThat(testAdMenu.getAction()).isEqualTo(UPDATED_ACTION);
         assertThat(testAdMenu.getIcon()).isEqualTo(UPDATED_ICON);
         assertThat(testAdMenu.getRedirect()).isEqualTo(UPDATED_REDIRECT);
+        assertThat(testAdMenu.getSequence()).isEqualTo(UPDATED_SEQUENCE);
+        assertThat(testAdMenu.isAlwaysShow()).isEqualTo(UPDATED_ALWAYS_SHOW);
         assertThat(testAdMenu.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

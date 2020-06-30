@@ -21,7 +21,6 @@ public interface ADFieldMapper extends EntityMapper<ADFieldDTO, ADField> {
     @Mapping(source = "adTab.name", target = "adTabName")
     @Mapping(source = "adColumn.id", target = "adColumnId")
     @Mapping(source = "adColumn.name", target = "adColumnName")
-    @Mapping(source = "adColumn.sqlName", target = "adColumnName")
     @Mapping(source = "adReference.id", target = "adReferenceId")
     @Mapping(source = "adReference.name", target = "adReferenceName")
     ADFieldDTO toDto(ADField aDField);

@@ -495,7 +495,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   private reset() {
-    this.toolbarEventBus.$emit('inline-editing', false);
+    this.$emit('quit-edit-mode')
     this.editing = false;
     if (this.currentRecord !== null) {
       this.$set(this.currentRecord, 'editing', this.editing);
@@ -622,6 +622,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         tabName: this.tabName,
         param: data.id
       });
+      this.$emit('record-saved');
       this.toolbarEventBus.$emit('record-saved');
       this.$notify({
         title: 'Success',

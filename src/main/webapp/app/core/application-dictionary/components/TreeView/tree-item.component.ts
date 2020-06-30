@@ -4,6 +4,7 @@ import SubmenuItem from "./submenu-item.vue";
 
 const TreeItemProps = Vue.extend({
   props: {
+    baseApiUrl: String,
     model: {
       type: Object,
       default: () => {

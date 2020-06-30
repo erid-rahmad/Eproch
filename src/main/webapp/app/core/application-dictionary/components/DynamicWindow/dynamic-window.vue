@@ -6,6 +6,7 @@
       :class="{'detailed-view': !gridView}"
     >
       <action-toolbar
+        ref="mainToolbar"
         :at-window-root="tabStack.length <= 1"
         :at-last-tab="childTabs.length === 0"
         :event-bus="mainToolbarEventBus"
@@ -57,6 +58,8 @@
                     :tab="mainTab"
                     :toolbar-event-bus="mainToolbarEventBus"
                     @current-row-change="loadChildTab"
+                    @quit-edit-mode="quitEditMode"
+                    @record-saved="reloadTreeView"
                     @total-count-changed="onTotalCountChange"
                     main-tab
                   />

@@ -88,6 +88,8 @@
             <column name="action" type="string"/>
             <column name="icon" type="string"/>
             <column name="redirect" type="string"/>
+            <column name="sequence" type="numeric"/>
+            <column name="always_show" type="boolean"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
@@ -107,6 +109,17 @@
                 <constraints nullable="true" />
             </column>
             <column name="active" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200630105500" author="Ananta Aryadewa">
+        <addColumn tableName="ad_menu">
+            <column name="sequence" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="always_show" type="boolean">
                 <constraints nullable="true" />
             </column>
         </addColumn>

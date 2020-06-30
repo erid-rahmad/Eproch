@@ -94,4 +94,17 @@ export default class DynamicWindowService {
         });
     });
   }
+
+  public updateList(entities: any[]): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .put(`${this.baseApiUrl}`, entities)
+        .then(function(res) {
+          resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
 }

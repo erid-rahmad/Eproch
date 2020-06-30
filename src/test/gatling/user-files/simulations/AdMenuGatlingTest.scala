@@ -81,6 +81,8 @@ class AdMenuGatlingTest extends Simulation {
                 , "action":"WINDOW"
                 , "icon":"SAMPLE_TEXT"
                 , "redirect":"SAMPLE_TEXT"
+                , "sequence":"0"
+                , "alwaysShow":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

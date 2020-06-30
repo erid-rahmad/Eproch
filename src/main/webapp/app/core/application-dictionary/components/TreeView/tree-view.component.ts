@@ -51,19 +51,18 @@ export default class TreeView extends TreeViewProps {
   }
 
   onInsert(event: any) {
-    console.log('tree-view.onInsert(). event: %O', event);
     let item = event.data;
     item.parentMenuId = null;
     this.list.splice(event.index, 0, event.data);
+    this.updateSequence();
   }
 
   onReorder(event: any) {
-    console.log('tree-view.onReorder(). event: %O', event);
     event.apply(this.list);
+    this.updateSequence();
   }
 
   remove(item: any) {
-    console.log('tree-view.remove(). event: %O', item);
     let index = this.list.indexOf(item);
     this.list.splice(index, 1);
   }
@@ -87,6 +86,27 @@ export default class TreeView extends TreeViewProps {
       .finally(() => {
         this.loading = false;
       });
+  }
+
+  private updateSequence() {
+    this.list.forEach((item: any, index: number) => {
+      item.sequence = index + 1;
+    });
+    this.dynamicWindowService(`${this.baseApiUrl}/sequence`)
+      .updateList(this.list)
+      .then((res) => {
+        console.log('Sequence updated. %O', res.data);
+        this.$notify({
+          title: 'Success',
+          message: 'Menu item sequence updated',
+          type: 'success',
+          duration: 3000
+        });
+      })
+      .catch(err => {
+        console.error('Failed updating menu sequence. ', err);
+      });
+
   }
 
 }

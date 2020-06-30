@@ -69,6 +69,12 @@ public class AdMenu extends AbstractAuditingEntity {
     @Column(name = "redirect")
     private String redirect;
 
+    @Column(name = "sequence")
+    private Integer sequence;
+
+    @Column(name = "always_show")
+    private Boolean alwaysShow;
+
     @Column(name = "active")
     private Boolean active = true;
 
@@ -215,6 +221,32 @@ public class AdMenu extends AbstractAuditingEntity {
         this.redirect = redirect;
     }
 
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public AdMenu sequence(Integer sequence) {
+        this.sequence = sequence;
+        return this;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
+    }
+
+    public Boolean isAlwaysShow() {
+        return alwaysShow;
+    }
+
+    public AdMenu alwaysShow(Boolean alwaysShow) {
+        this.alwaysShow = alwaysShow;
+        return this;
+    }
+
+    public void setAlwaysShow(Boolean alwaysShow) {
+        this.alwaysShow = alwaysShow;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -327,6 +359,8 @@ public class AdMenu extends AbstractAuditingEntity {
             ", action='" + getAction() + "'" +
             ", icon='" + getIcon() + "'" +
             ", redirect='" + getRedirect() + "'" +
+            ", sequence=" + getSequence() +
+            ", alwaysShow='" + isAlwaysShow() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

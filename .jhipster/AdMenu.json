@@ -45,6 +45,14 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "sequence",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "alwaysShow",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "active",
             "fieldType": "Boolean"
         }

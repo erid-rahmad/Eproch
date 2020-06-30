@@ -48,6 +48,14 @@ export default class ActionToolbar extends ActionToolbarProps {
     };
   }
 
+  public get editMode() {
+    return this.editing;
+  }
+
+  public set editMode(editing) {
+    this.editing = editing;
+  }
+
   @Watch('editing')
   onEditingChange(editing: boolean) {
     this.$emit('edit-mode-change', editing);

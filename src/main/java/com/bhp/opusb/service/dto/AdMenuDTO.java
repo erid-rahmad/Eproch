@@ -38,6 +38,10 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     private String redirect;
 
+    private Integer sequence;
+
+    private Boolean alwaysShow;
+
     private Boolean active;
 
 
@@ -130,6 +134,22 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     public void setRedirect(String redirect) {
         this.redirect = redirect;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
+    }
+
+    public Boolean isAlwaysShow() {
+        return alwaysShow;
+    }
+
+    public void setAlwaysShow(Boolean alwaysShow) {
+        this.alwaysShow = alwaysShow;
     }
 
     public Boolean isActive() {
@@ -230,6 +250,8 @@ public class AdMenuDTO extends AbstractAuditingDTO {
             ", action='" + getAction() + "'" +
             ", icon='" + getIcon() + "'" +
             ", redirect='" + getRedirect() + "'" +
+            ", sequence=" + getSequence() +
+            ", alwaysShow='" + isAlwaysShow() + "'" +
             ", active='" + isActive() + "'" +
             ", adWindowId=" + getAdWindowId() +
             ", adOrganizationId=" + getAdOrganizationId() +

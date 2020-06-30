@@ -1,8 +1,10 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Inject } from 'vue-property-decorator';
 import { Drag, DropList } from "vue-easy-dnd";
+import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 
 const SubmenuItemProps = Vue.extend({
   props: {
+    baseApiUrl: String,
     model: {
       type: Object,
       default: () => {
@@ -29,20 +31,19 @@ const SubmenuItemProps = Vue.extend({
   }
 })
 export default class SubmenuItem extends SubmenuItemProps {
+  @Inject('dynamicWindowService')
+  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
+  
   onInsert(event: any) {
     let item = event.data;
     item.parentMenuId = this.model.id;
-    
     this.list.splice(event.index, 0, event.data);
-
-    // Update the sequence.
-    this.list.forEach((item: any, index: number) => {
-      item.sequence = index + 1;
-    });
+    this.updateSequence();
   }
 
   onReorder(event: any) {
     event.apply(this.list);
+    this.updateSequence();
   }
 
   remove(item: any) {
@@ -53,5 +54,25 @@ export default class SubmenuItem extends SubmenuItemProps {
   printTitle({name, translationKey}) {
     const key = `route.${translationKey || name}`;
     return this.$te(key) ? this.$t(key) : name;
+  }
+
+  private updateSequence() {
+    this.list.forEach((item: any, index: number) => {
+      item.sequence = index + 1;
+    });
+    this.dynamicWindowService(`${this.baseApiUrl}/sequence`)
+      .updateList(this.list)
+      .then((res) => {
+        console.log('Sequence updated. %O', res.data);
+        this.$notify({
+          title: 'Success',
+          message: 'Menu item sequence updated',
+          type: 'success',
+          duration: 3000
+        });
+      })
+      .catch(err => {
+        console.error('Failed updating menu sequence. ', err);
+      });
   }
 }

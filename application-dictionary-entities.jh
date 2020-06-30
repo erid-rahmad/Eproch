@@ -167,6 +167,11 @@ entity AdMenu {
 	action AdMenuAction
 	icon String
 	redirect String
+	sequence Integer
+
+	// Always show the root menu. By default the first level is
+	// hidden if there is only a child menu.
+	alwaysShow Boolean
 	active Boolean
 }
 
