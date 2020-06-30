@@ -97,6 +97,12 @@ public class AdMenuResource {
             .body(result);
     }
 
+    @PutMapping("/ad-menus/sequence")
+    public ResponseEntity<List<AdMenuDTO>> updateSequence(@Valid @RequestBody List<AdMenuDTO> adMenuDTOs) throws URISyntaxException {
+        List<AdMenuDTO> result = adMenuService.saveAll(adMenuDTOs);
+        return ResponseEntity.ok().body(result);
+    }
+
     /**
      * {@code GET  /ad-menus} : get all the adMenus.
      *

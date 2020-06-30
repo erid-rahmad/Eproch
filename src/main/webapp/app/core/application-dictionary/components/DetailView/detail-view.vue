@@ -125,3 +125,8 @@
   </div>
 </template>
 <script lang="ts" src="./detail-view.component.ts"></script>
+<style lang="scss">
+.detail-view {
+  padding: 8px 24px;
+}
+</style>

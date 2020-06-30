@@ -1,5 +1,7 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -30,6 +32,9 @@ public class ADReferenceList extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "uid")
+    private UUID uid;
+
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
@@ -42,7 +47,7 @@ public class ADReferenceList extends AbstractAuditingEntity {
     private String description;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -61,6 +66,19 @@ public class ADReferenceList extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public ADReferenceList uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -162,6 +180,7 @@ public class ADReferenceList extends AbstractAuditingEntity {
     public String toString() {
         return "ADReferenceList{" +
             "id=" + getId() +
+            ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", value='" + getValue() + "'" +
             ", description='" + getDescription() + "'" +

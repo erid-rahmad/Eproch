@@ -85,4 +85,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20200629112000" author="Ananta Aryadewa">
+        <dropNotNullConstraint tableName="ad_validation_rule" columnName="uid" />
+    </changeSet>
+
 </databaseChangeLog>

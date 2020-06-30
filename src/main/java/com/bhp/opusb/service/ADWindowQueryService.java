@@ -91,6 +91,9 @@ public class ADWindowQueryService extends QueryService<ADWindow> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), ADWindow_.id));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), ADWindow_.uid));
+            }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), ADWindow_.name));
             }
@@ -102,6 +105,9 @@ public class ADWindowQueryService extends QueryService<ADWindow> {
             }
             if (criteria.getType() != null) {
                 specification = specification.and(buildSpecification(criteria.getType(), ADWindow_.type));
+            }
+            if (criteria.getTreeView() != null) {
+                specification = specification.and(buildSpecification(criteria.getTreeView(), ADWindow_.treeView));
             }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADWindow_.active));

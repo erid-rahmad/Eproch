@@ -2,15 +2,16 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-import io.github.jhipster.service.Criteria;
+
 import com.bhp.opusb.domain.enumeration.ADColumnType;
+
+import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.ADColumn} entity. This class is used
@@ -26,6 +27,8 @@ public class ADColumnCriteria implements Serializable, Criteria {
      * Class for filtering ADColumnType
      */
     public static class ADColumnTypeFilter extends Filter<ADColumnType> {
+
+        private static final long serialVersionUID = 1L;
 
         public ADColumnTypeFilter() {
         }
@@ -44,6 +47,8 @@ public class ADColumnCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
+
+    private UUIDFilter uid;
 
     private StringFilter name;
 
@@ -110,6 +115,7 @@ public class ADColumnCriteria implements Serializable, Criteria {
 
     public ADColumnCriteria(ADColumnCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.sqlName = other.sqlName == null ? null : other.sqlName.copy();
         this.description = other.description == null ? null : other.description.copy();
@@ -153,6 +159,14 @@ public class ADColumnCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
     }
 
     public StringFilter getName() {
@@ -407,6 +421,7 @@ public class ADColumnCriteria implements Serializable, Criteria {
         final ADColumnCriteria that = (ADColumnCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(uid, that.uid) &&
             Objects.equals(name, that.name) &&
             Objects.equals(sqlName, that.sqlName) &&
             Objects.equals(description, that.description) &&
@@ -443,6 +458,7 @@ public class ADColumnCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        uid,
         name,
         sqlName,
         description,
@@ -480,6 +496,7 @@ public class ADColumnCriteria implements Serializable, Criteria {
     public String toString() {
         return "ADColumnCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (sqlName != null ? "sqlName=" + sqlName + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +

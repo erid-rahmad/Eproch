@@ -2,6 +2,7 @@ package com.bhp.opusb.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,6 +36,9 @@ public class ADTable extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "uid")
+    private UUID uid;
+
     @NotNull
     @Column(name = "name", nullable = false, unique = true)
     private String name;
@@ -43,7 +47,7 @@ public class ADTable extends AbstractAuditingEntity {
     private Boolean view;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "adTable")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -69,6 +73,19 @@ public class ADTable extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public ADTable uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -169,6 +186,7 @@ public class ADTable extends AbstractAuditingEntity {
     public String toString() {
         return "ADTable{" +
             "id=" + getId() +
+            ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", view='" + isView() + "'" +
             ", active='" + isActive() + "'" +

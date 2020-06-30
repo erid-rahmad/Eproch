@@ -1,31 +1,19 @@
 package com.bhp.opusb.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.bhp.opusb.OpusWebApp;
-import com.bhp.opusb.domain.ADColumn;
+import com.bhp.opusb.domain.ADTab;
+import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.domain.ADField;
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.domain.ADTable;
+import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.domain.ADWindow;
 import com.bhp.opusb.repository.ADTabRepository;
-import com.bhp.opusb.service.ADTabQueryService;
 import com.bhp.opusb.service.ADTabService;
 import com.bhp.opusb.service.dto.ADTabDTO;
 import com.bhp.opusb.service.mapper.ADTabMapper;
+import com.bhp.opusb.service.dto.ADTabCriteria;
+import com.bhp.opusb.service.ADTabQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,6 +24,14 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link ADTabResource} REST controller.
@@ -45,6 +41,9 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 public class ADTabResourceIT {
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -108,6 +107,7 @@ public class ADTabResourceIT {
      */
     public static ADTab createEntity(EntityManager em) {
         ADTab aDTab = new ADTab()
+            .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .iconName(DEFAULT_ICON_NAME)
@@ -159,6 +159,7 @@ public class ADTabResourceIT {
      */
     public static ADTab createUpdatedEntity(EntityManager em) {
         ADTab aDTab = new ADTab()
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .iconName(UPDATED_ICON_NAME)
@@ -224,6 +225,7 @@ public class ADTabResourceIT {
         List<ADTab> aDTabList = aDTabRepository.findAll();
         assertThat(aDTabList).hasSize(databaseSizeBeforeCreate + 1);
         ADTab testADTab = aDTabList.get(aDTabList.size() - 1);
+        assertThat(testADTab.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testADTab.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADTab.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testADTab.getIconName()).isEqualTo(DEFAULT_ICON_NAME);
@@ -288,6 +290,7 @@ public class ADTabResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDTab.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].iconName").value(hasItem(DEFAULT_ICON_NAME)))
@@ -312,6 +315,7 @@ public class ADTabResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aDTab.getId().intValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.iconName").value(DEFAULT_ICON_NAME))
@@ -344,6 +348,58 @@ public class ADTabResourceIT {
         defaultADTabShouldNotBeFound("id.lessThan=" + id);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllADTabsByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where uid equals to DEFAULT_UID
+        defaultADTabShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the aDTabList where uid equals to UPDATED_UID
+        defaultADTabShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where uid not equals to DEFAULT_UID
+        defaultADTabShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the aDTabList where uid not equals to UPDATED_UID
+        defaultADTabShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where uid in DEFAULT_UID or UPDATED_UID
+        defaultADTabShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the aDTabList where uid equals to UPDATED_UID
+        defaultADTabShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where uid is not null
+        defaultADTabShouldBeFound("uid.specified=true");
+
+        // Get all the aDTabList where uid is null
+        defaultADTabShouldNotBeFound("uid.specified=false");
+    }
 
     @Test
     @Transactional
@@ -1333,6 +1389,7 @@ public class ADTabResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDTab.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].iconName").value(hasItem(DEFAULT_ICON_NAME)))
@@ -1391,6 +1448,7 @@ public class ADTabResourceIT {
         // Disconnect from session so that the updates on updatedADTab are not directly saved in db
         em.detach(updatedADTab);
         updatedADTab
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .iconName(UPDATED_ICON_NAME)
@@ -1413,6 +1471,7 @@ public class ADTabResourceIT {
         List<ADTab> aDTabList = aDTabRepository.findAll();
         assertThat(aDTabList).hasSize(databaseSizeBeforeUpdate);
         ADTab testADTab = aDTabList.get(aDTabList.size() - 1);
+        assertThat(testADTab.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testADTab.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADTab.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testADTab.getIconName()).isEqualTo(UPDATED_ICON_NAME);

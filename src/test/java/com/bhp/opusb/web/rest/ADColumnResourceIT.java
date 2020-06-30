@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -39,6 +40,9 @@ import com.bhp.opusb.domain.enumeration.ADColumnType;
 @AutoConfigureMockMvc
 @WithMockUser
 public class ADColumnResourceIT {
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -152,6 +156,7 @@ public class ADColumnResourceIT {
      */
     public static ADColumn createEntity(EntityManager em) {
         ADColumn aDColumn = new ADColumn()
+            .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .sqlName(DEFAULT_SQL_NAME)
             .description(DEFAULT_DESCRIPTION)
@@ -208,6 +213,7 @@ public class ADColumnResourceIT {
      */
     public static ADColumn createUpdatedEntity(EntityManager em) {
         ADColumn aDColumn = new ADColumn()
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .sqlName(UPDATED_SQL_NAME)
             .description(UPDATED_DESCRIPTION)
@@ -278,6 +284,7 @@ public class ADColumnResourceIT {
         List<ADColumn> aDColumnList = aDColumnRepository.findAll();
         assertThat(aDColumnList).hasSize(databaseSizeBeforeCreate + 1);
         ADColumn testADColumn = aDColumnList.get(aDColumnList.size() - 1);
+        assertThat(testADColumn.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testADColumn.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADColumn.getSqlName()).isEqualTo(DEFAULT_SQL_NAME);
         assertThat(testADColumn.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
@@ -376,6 +383,7 @@ public class ADColumnResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDColumn.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].sqlName").value(hasItem(DEFAULT_SQL_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
@@ -415,6 +423,7 @@ public class ADColumnResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aDColumn.getId().intValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.sqlName").value(DEFAULT_SQL_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
@@ -462,6 +471,58 @@ public class ADColumnResourceIT {
         defaultADColumnShouldNotBeFound("id.lessThan=" + id);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where uid equals to DEFAULT_UID
+        defaultADColumnShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the aDColumnList where uid equals to UPDATED_UID
+        defaultADColumnShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where uid not equals to DEFAULT_UID
+        defaultADColumnShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the aDColumnList where uid not equals to UPDATED_UID
+        defaultADColumnShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where uid in DEFAULT_UID or UPDATED_UID
+        defaultADColumnShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the aDColumnList where uid equals to UPDATED_UID
+        defaultADColumnShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADColumnsByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+
+        // Get all the aDColumnList where uid is not null
+        defaultADColumnShouldBeFound("uid.specified=true");
+
+        // Get all the aDColumnList where uid is null
+        defaultADColumnShouldNotBeFound("uid.specified=false");
+    }
 
     @Test
     @Transactional
@@ -2472,6 +2533,7 @@ public class ADColumnResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDColumn.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].sqlName").value(hasItem(DEFAULT_SQL_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
@@ -2545,6 +2607,7 @@ public class ADColumnResourceIT {
         // Disconnect from session so that the updates on updatedADColumn are not directly saved in db
         em.detach(updatedADColumn);
         updatedADColumn
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .sqlName(UPDATED_SQL_NAME)
             .description(UPDATED_DESCRIPTION)
@@ -2582,6 +2645,7 @@ public class ADColumnResourceIT {
         List<ADColumn> aDColumnList = aDColumnRepository.findAll();
         assertThat(aDColumnList).hasSize(databaseSizeBeforeUpdate);
         ADColumn testADColumn = aDColumnList.get(aDColumnList.size() - 1);
+        assertThat(testADColumn.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testADColumn.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADColumn.getSqlName()).isEqualTo(UPDATED_SQL_NAME);
         assertThat(testADColumn.getDescription()).isEqualTo(UPDATED_DESCRIPTION);

@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -38,6 +39,9 @@ import com.bhp.opusb.domain.enumeration.ADWindowType;
 @WithMockUser
 public class ADWindowResourceIT {
 
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -49,6 +53,9 @@ public class ADWindowResourceIT {
 
     private static final ADWindowType DEFAULT_TYPE = ADWindowType.MAINTAIN;
     private static final ADWindowType UPDATED_TYPE = ADWindowType.QUERY;
+
+    private static final Boolean DEFAULT_TREE_VIEW = false;
+    private static final Boolean UPDATED_TREE_VIEW = true;
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -81,10 +88,12 @@ public class ADWindowResourceIT {
      */
     public static ADWindow createEntity(EntityManager em) {
         ADWindow aDWindow = new ADWindow()
+            .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .titleLogic(DEFAULT_TITLE_LOGIC)
             .type(DEFAULT_TYPE)
+            .treeView(DEFAULT_TREE_VIEW)
             .active(DEFAULT_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
@@ -106,10 +115,12 @@ public class ADWindowResourceIT {
      */
     public static ADWindow createUpdatedEntity(EntityManager em) {
         ADWindow aDWindow = new ADWindow()
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .titleLogic(UPDATED_TITLE_LOGIC)
             .type(UPDATED_TYPE)
+            .treeView(UPDATED_TREE_VIEW)
             .active(UPDATED_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
@@ -145,10 +156,12 @@ public class ADWindowResourceIT {
         List<ADWindow> aDWindowList = aDWindowRepository.findAll();
         assertThat(aDWindowList).hasSize(databaseSizeBeforeCreate + 1);
         ADWindow testADWindow = aDWindowList.get(aDWindowList.size() - 1);
+        assertThat(testADWindow.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testADWindow.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADWindow.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testADWindow.getTitleLogic()).isEqualTo(DEFAULT_TITLE_LOGIC);
         assertThat(testADWindow.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testADWindow.isTreeView()).isEqualTo(DEFAULT_TREE_VIEW);
         assertThat(testADWindow.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -222,10 +235,12 @@ public class ADWindowResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDWindow.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].titleLogic").value(hasItem(DEFAULT_TITLE_LOGIC)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].treeView").value(hasItem(DEFAULT_TREE_VIEW.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -240,10 +255,12 @@ public class ADWindowResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aDWindow.getId().intValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.titleLogic").value(DEFAULT_TITLE_LOGIC))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
+            .andExpect(jsonPath("$.treeView").value(DEFAULT_TREE_VIEW.booleanValue()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -266,6 +283,58 @@ public class ADWindowResourceIT {
         defaultADWindowShouldNotBeFound("id.lessThan=" + id);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where uid equals to DEFAULT_UID
+        defaultADWindowShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the aDWindowList where uid equals to UPDATED_UID
+        defaultADWindowShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where uid not equals to DEFAULT_UID
+        defaultADWindowShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the aDWindowList where uid not equals to UPDATED_UID
+        defaultADWindowShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where uid in DEFAULT_UID or UPDATED_UID
+        defaultADWindowShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the aDWindowList where uid equals to UPDATED_UID
+        defaultADWindowShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where uid is not null
+        defaultADWindowShouldBeFound("uid.specified=true");
+
+        // Get all the aDWindowList where uid is null
+        defaultADWindowShouldNotBeFound("uid.specified=false");
+    }
 
     @Test
     @Transactional
@@ -555,6 +624,58 @@ public class ADWindowResourceIT {
 
     @Test
     @Transactional
+    public void getAllADWindowsByTreeViewIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where treeView equals to DEFAULT_TREE_VIEW
+        defaultADWindowShouldBeFound("treeView.equals=" + DEFAULT_TREE_VIEW);
+
+        // Get all the aDWindowList where treeView equals to UPDATED_TREE_VIEW
+        defaultADWindowShouldNotBeFound("treeView.equals=" + UPDATED_TREE_VIEW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByTreeViewIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where treeView not equals to DEFAULT_TREE_VIEW
+        defaultADWindowShouldNotBeFound("treeView.notEquals=" + DEFAULT_TREE_VIEW);
+
+        // Get all the aDWindowList where treeView not equals to UPDATED_TREE_VIEW
+        defaultADWindowShouldBeFound("treeView.notEquals=" + UPDATED_TREE_VIEW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByTreeViewIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where treeView in DEFAULT_TREE_VIEW or UPDATED_TREE_VIEW
+        defaultADWindowShouldBeFound("treeView.in=" + DEFAULT_TREE_VIEW + "," + UPDATED_TREE_VIEW);
+
+        // Get all the aDWindowList where treeView equals to UPDATED_TREE_VIEW
+        defaultADWindowShouldNotBeFound("treeView.in=" + UPDATED_TREE_VIEW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByTreeViewIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where treeView is not null
+        defaultADWindowShouldBeFound("treeView.specified=true");
+
+        // Get all the aDWindowList where treeView is null
+        defaultADWindowShouldNotBeFound("treeView.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllADWindowsByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         aDWindowRepository.saveAndFlush(aDWindow);
@@ -648,10 +769,12 @@ public class ADWindowResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDWindow.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].titleLogic").value(hasItem(DEFAULT_TITLE_LOGIC)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
+            .andExpect(jsonPath("$.[*].treeView").value(hasItem(DEFAULT_TREE_VIEW.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -700,10 +823,12 @@ public class ADWindowResourceIT {
         // Disconnect from session so that the updates on updatedADWindow are not directly saved in db
         em.detach(updatedADWindow);
         updatedADWindow
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .titleLogic(UPDATED_TITLE_LOGIC)
             .type(UPDATED_TYPE)
+            .treeView(UPDATED_TREE_VIEW)
             .active(UPDATED_ACTIVE);
         ADWindowDTO aDWindowDTO = aDWindowMapper.toDto(updatedADWindow);
 
@@ -716,10 +841,12 @@ public class ADWindowResourceIT {
         List<ADWindow> aDWindowList = aDWindowRepository.findAll();
         assertThat(aDWindowList).hasSize(databaseSizeBeforeUpdate);
         ADWindow testADWindow = aDWindowList.get(aDWindowList.size() - 1);
+        assertThat(testADWindow.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testADWindow.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADWindow.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testADWindow.getTitleLogic()).isEqualTo(UPDATED_TITLE_LOGIC);
         assertThat(testADWindow.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testADWindow.isTreeView()).isEqualTo(UPDATED_TREE_VIEW);
         assertThat(testADWindow.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

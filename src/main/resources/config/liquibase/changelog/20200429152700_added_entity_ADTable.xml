@@ -64,16 +64,24 @@
     <changeSet id="20200429152700-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/fake-data/ad_table.csv"
-                  separator=","
+                  separator=";"
                   tableName="ad_table">
             <column name="id" type="numeric"/>
+            <column name="uid" type="${uuidType}"/>
             <column name="name" type="string"/>
             <column name="view" type="boolean"/>
             <column name="active" type="boolean"/>
-            <column name="ad_client_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200629110300" author="Ananta Aryadewa">
+        <addColumn tableName="ad_table">
+            <column name="uid" type="${uuidType}">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

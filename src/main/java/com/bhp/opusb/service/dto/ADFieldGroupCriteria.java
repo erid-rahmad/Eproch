@@ -8,6 +8,7 @@ import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.ADFieldGroup} entity. This class is used
@@ -24,6 +25,8 @@ public class ADFieldGroupCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private UUIDFilter uid;
+
     private StringFilter name;
 
     private BooleanFilter collapsible;
@@ -37,6 +40,7 @@ public class ADFieldGroupCriteria implements Serializable, Criteria {
 
     public ADFieldGroupCriteria(ADFieldGroupCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.collapsible = other.collapsible == null ? null : other.collapsible.copy();
         this.collapseByDefault = other.collapseByDefault == null ? null : other.collapseByDefault.copy();
@@ -54,6 +58,14 @@ public class ADFieldGroupCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
     }
 
     public StringFilter getName() {
@@ -100,6 +112,7 @@ public class ADFieldGroupCriteria implements Serializable, Criteria {
         final ADFieldGroupCriteria that = (ADFieldGroupCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(uid, that.uid) &&
             Objects.equals(name, that.name) &&
             Objects.equals(collapsible, that.collapsible) &&
             Objects.equals(collapseByDefault, that.collapseByDefault) &&
@@ -110,6 +123,7 @@ public class ADFieldGroupCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        uid,
         name,
         collapsible,
         collapseByDefault,
@@ -121,6 +135,7 @@ public class ADFieldGroupCriteria implements Serializable, Criteria {
     public String toString() {
         return "ADFieldGroupCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (collapsible != null ? "collapsible=" + collapsible + ", " : "") +
                 (collapseByDefault != null ? "collapseByDefault=" + collapseByDefault + ", " : "") +

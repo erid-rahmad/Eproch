@@ -22,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -36,6 +37,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 public class ADTableResourceIT {
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -74,6 +78,7 @@ public class ADTableResourceIT {
      */
     public static ADTable createEntity(EntityManager em) {
         ADTable aDTable = new ADTable()
+            .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .view(DEFAULT_VIEW)
             .active(DEFAULT_ACTIVE);
@@ -97,6 +102,7 @@ public class ADTableResourceIT {
      */
     public static ADTable createUpdatedEntity(EntityManager em) {
         ADTable aDTable = new ADTable()
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .view(UPDATED_VIEW)
             .active(UPDATED_ACTIVE);
@@ -134,6 +140,7 @@ public class ADTableResourceIT {
         List<ADTable> aDTableList = aDTableRepository.findAll();
         assertThat(aDTableList).hasSize(databaseSizeBeforeCreate + 1);
         ADTable testADTable = aDTableList.get(aDTableList.size() - 1);
+        assertThat(testADTable.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testADTable.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADTable.isView()).isEqualTo(DEFAULT_VIEW);
         assertThat(testADTable.isActive()).isEqualTo(DEFAULT_ACTIVE);
@@ -190,6 +197,7 @@ public class ADTableResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDTable.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].view").value(hasItem(DEFAULT_VIEW.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -206,6 +214,7 @@ public class ADTableResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aDTable.getId().intValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.view").value(DEFAULT_VIEW.booleanValue()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
@@ -230,6 +239,58 @@ public class ADTableResourceIT {
         defaultADTableShouldNotBeFound("id.lessThan=" + id);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllADTablesByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where uid equals to DEFAULT_UID
+        defaultADTableShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the aDTableList where uid equals to UPDATED_UID
+        defaultADTableShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTablesByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where uid not equals to DEFAULT_UID
+        defaultADTableShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the aDTableList where uid not equals to UPDATED_UID
+        defaultADTableShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTablesByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where uid in DEFAULT_UID or UPDATED_UID
+        defaultADTableShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the aDTableList where uid equals to UPDATED_UID
+        defaultADTableShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTablesByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where uid is not null
+        defaultADTableShouldBeFound("uid.specified=true");
+
+        // Get all the aDTableList where uid is null
+        defaultADTableShouldNotBeFound("uid.specified=false");
+    }
 
     @Test
     @Transactional
@@ -456,6 +517,7 @@ public class ADTableResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDTable.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].view").value(hasItem(DEFAULT_VIEW.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -506,6 +568,7 @@ public class ADTableResourceIT {
         // Disconnect from session so that the updates on updatedADTable are not directly saved in db
         em.detach(updatedADTable);
         updatedADTable
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .view(UPDATED_VIEW)
             .active(UPDATED_ACTIVE);
@@ -520,6 +583,7 @@ public class ADTableResourceIT {
         List<ADTable> aDTableList = aDTableRepository.findAll();
         assertThat(aDTableList).hasSize(databaseSizeBeforeUpdate);
         ADTable testADTable = aDTableList.get(aDTableList.size() - 1);
+        assertThat(testADTable.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testADTable.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADTable.isView()).isEqualTo(UPDATED_VIEW);
         assertThat(testADTable.isActive()).isEqualTo(UPDATED_ACTIVE);

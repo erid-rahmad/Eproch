@@ -218,7 +218,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.toolbarEventBus?.$on('cancel-operation', this.cancelOperation);
     this.toolbarEventBus?.$on('delete-record', this.deleteRow);
     this.toolbarEventBus?.$on('export-record', this.exportRecord);
-    this.toolbarEventBus?.$on('refresh-data', this.refreshData);
   }
 
   beforeDestroy() {
@@ -228,7 +227,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.toolbarEventBus?.$off('cancel-operation', this.cancelOperation);
     this.toolbarEventBus?.$off('delete-record', this.deleteRow);
     this.toolbarEventBus?.$off('export-record', this.exportRecord);
-    this.toolbarEventBus?.$off('refresh-data', this.refreshData);
   }
   // End of lifecycle events.
 
@@ -423,10 +421,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       this.showExportDialog = true;
   }
 
-  private refreshData(data?: any) {
-    if (this.mainTab && data.isGridView) this.clear();
-  }
-
   public setTableDirectReference(field: any): void {
     this.activeTableDirectField = field;
   }
@@ -501,7 +495,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   private reset() {
-    this.toolbarEventBus.$emit('inline-editing', false);
+    this.$emit('quit-edit-mode')
     this.editing = false;
     if (this.currentRecord !== null) {
       this.$set(this.currentRecord, 'editing', this.editing);
@@ -628,6 +622,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         tabName: this.tabName,
         param: data.id
       });
+      this.$emit('record-saved');
       this.toolbarEventBus.$emit('record-saved');
       this.$notify({
         title: 'Success',

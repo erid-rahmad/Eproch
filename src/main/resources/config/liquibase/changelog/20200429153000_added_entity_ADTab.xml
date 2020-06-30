@@ -97,27 +97,34 @@
     <changeSet id="20200429153000-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/fake-data/ad_tab.csv"
-                  separator=","
+                  separator=";"
                   tableName="ad_tab">
             <column name="id" type="numeric"/>
+            <column name="uid" type="${uuidType}"/>
             <column name="name" type="string"/>
             <column name="description" type="string"/>
+            <column name="icon_name" type="string"/>
             <column name="target_endpoint" type="string"/>
             <column name="writable" type="boolean"/>
             <column name="display_logic" type="string"/>
             <column name="read_only_logic" type="string"/>
             <column name="filter_query" type="string"/>
             <column name="order_query" type="string"/>
+            <column name="tab_sequence" type="numeric"/>
             <column name="active" type="boolean"/>
-            <column name="ad_client_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="ad_table_id" type="numeric"/>
             <column name="ad_window_id" type="numeric"/>
-            <column name="parent_tab_id" type="numeric"/>
-            <column name="parent_column_id" type="numeric"/>
-            <column name="foreign_column_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200629111500" author="Ananta Aryadewa">
+        <addColumn tableName="ad_tab">
+            <column name="uid" type="${uuidType}">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

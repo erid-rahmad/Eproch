@@ -91,6 +91,9 @@ public class ADFieldGroupQueryService extends QueryService<ADFieldGroup> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), ADFieldGroup_.id));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), ADFieldGroup_.uid));
+            }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), ADFieldGroup_.name));
             }

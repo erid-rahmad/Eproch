@@ -29,13 +29,11 @@ export default class LoginForm extends Vue {
   }
 
   mounted() {
-    console.log('login form mounted')
     DialogEventBus.$on('show-login', this.onShow)
     DialogEventBus.$on('hide-login', this.onHide)
   }
 
   beforeDestroy() {
-    console.log('login form beforeDestroy')
     DialogEventBus.$off('show-login', this.onShow)
     DialogEventBus.$off('hide-login', this.onHide)
   }
@@ -49,7 +47,6 @@ export default class LoginForm extends Vue {
   }
 
   public onLoginFormOpened() {
-    console.log('login form opened')
     this.focusField();
   }
 

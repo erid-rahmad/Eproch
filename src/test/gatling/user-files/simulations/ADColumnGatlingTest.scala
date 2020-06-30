@@ -72,6 +72,7 @@ class ADColumnGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "uid":null
                 , "name":"SAMPLE_TEXT"
                 , "sqlName":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
