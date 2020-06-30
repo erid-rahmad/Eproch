@@ -79,7 +79,7 @@
     </changeSet>
 
     <changeSet id="20200629110600" author="Ananta Aryadewa">
-        <addColumn tableName="ad_reference_list">
+        <addColumn tableName="ad_reference">
             <column name="uid" type="${uuidType}">
                 <constraints nullable="true" />
             </column>
