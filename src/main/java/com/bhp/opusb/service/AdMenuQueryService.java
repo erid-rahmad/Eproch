@@ -97,6 +97,12 @@ public class AdMenuQueryService extends QueryService<AdMenu> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), AdMenu_.name));
             }
+            if (criteria.getValue() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getValue(), AdMenu_.value));
+            }
+            if (criteria.getTranslationKey() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getTranslationKey(), AdMenu_.translationKey));
+            }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), AdMenu_.description));
             }
@@ -108,6 +114,18 @@ public class AdMenuQueryService extends QueryService<AdMenu> {
             }
             if (criteria.getIcon() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getIcon(), AdMenu_.icon));
+            }
+            if (criteria.getRedirect() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getRedirect(), AdMenu_.redirect));
+            }
+            if (criteria.getSequence() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getSequence(), AdMenu_.sequence));
+            }
+            if (criteria.getAlwaysShow() != null) {
+                specification = specification.and(buildSpecification(criteria.getAlwaysShow(), AdMenu_.alwaysShow));
+            }
+            if (criteria.getActive() != null) {
+                specification = specification.and(buildSpecification(criteria.getActive(), AdMenu_.active));
             }
             if (criteria.getAdMenuId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdMenuId(),

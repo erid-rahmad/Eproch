@@ -7,6 +7,9 @@ export default class Redirect extends Vue {
     const { params, query } = this.$route
     const { path } = params
     this.$router.replace({ path: '/' + path, query })
+      .then(() => {
+        this.$destroy();
+      });
   }
 
   render() {

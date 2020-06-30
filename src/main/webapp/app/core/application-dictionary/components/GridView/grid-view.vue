@@ -176,6 +176,68 @@
       </template>
     </el-dialog>
 
+    <el-dialog
+        width="35%"
+        :visible.sync="showExportDialog"
+        title="Export"
+    >
+        <template>
+            <el-form label-width="100px" size="mini">
+                
+                <el-form-item label="Name">
+                    <el-input 
+                        v-model="formExport.name"
+                        placeholder="Name" 
+                        style="width: 200px;"
+                        size="mini" />
+                </el-form-item>
+
+                <el-form-item label="Files of Type:">
+                    <el-select
+                        size="mini"
+                        v-model="formExport.type"
+                        placeholder="Select Type Excel">
+                        <el-option
+                            v-for="bookType in chooseBookType"
+                            :key="bookType.type"
+                            :label="bookType.type"
+                            :value="bookType.type"
+                        />
+                    </el-select>
+                </el-form-item>
+
+                <el-form-item >
+                    <el-checkbox
+                        v-model="checkCurrentRow"
+                        @change="handleCheckCurrentRow"
+                        align="center"
+                        label="Export current row only?"/>
+                </el-form-item>
+                
+            </el-form>
+            <div slot="footer">
+                <el-button 
+                    style="margin-left: 0px;"
+                    size="mini"
+                    type="primary" 
+                    icon="el-icon-download"
+                    title="Export"
+                    v-bind:disabled="buttonExport"
+                    @click="actionExport">
+                    Export
+                </el-button>
+                <el-button 
+                    icon="el-icon-close" 
+                    size="mini"
+                    type="default" 
+                    @click="closeDialog()">
+                    {{ $t('entity.action.cancel') }}
+                </el-button>
+            </div>
+        </template>
+        
+    </el-dialog>
+
   </div>
 </template>
 

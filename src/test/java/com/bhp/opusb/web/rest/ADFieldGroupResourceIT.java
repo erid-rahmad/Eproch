@@ -20,6 +20,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -34,6 +35,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 public class ADFieldGroupResourceIT {
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -75,6 +79,7 @@ public class ADFieldGroupResourceIT {
      */
     public static ADFieldGroup createEntity(EntityManager em) {
         ADFieldGroup aDFieldGroup = new ADFieldGroup()
+            .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .collapsible(DEFAULT_COLLAPSIBLE)
             .collapseByDefault(DEFAULT_COLLAPSE_BY_DEFAULT)
@@ -89,6 +94,7 @@ public class ADFieldGroupResourceIT {
      */
     public static ADFieldGroup createUpdatedEntity(EntityManager em) {
         ADFieldGroup aDFieldGroup = new ADFieldGroup()
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .collapsible(UPDATED_COLLAPSIBLE)
             .collapseByDefault(UPDATED_COLLAPSE_BY_DEFAULT)
@@ -117,6 +123,7 @@ public class ADFieldGroupResourceIT {
         List<ADFieldGroup> aDFieldGroupList = aDFieldGroupRepository.findAll();
         assertThat(aDFieldGroupList).hasSize(databaseSizeBeforeCreate + 1);
         ADFieldGroup testADFieldGroup = aDFieldGroupList.get(aDFieldGroupList.size() - 1);
+        assertThat(testADFieldGroup.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testADFieldGroup.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADFieldGroup.isCollapsible()).isEqualTo(DEFAULT_COLLAPSIBLE);
         assertThat(testADFieldGroup.isCollapseByDefault()).isEqualTo(DEFAULT_COLLAPSE_BY_DEFAULT);
@@ -174,6 +181,7 @@ public class ADFieldGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDFieldGroup.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].collapsible").value(hasItem(DEFAULT_COLLAPSIBLE.booleanValue())))
             .andExpect(jsonPath("$.[*].collapseByDefault").value(hasItem(DEFAULT_COLLAPSE_BY_DEFAULT.booleanValue())))
@@ -191,6 +199,7 @@ public class ADFieldGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aDFieldGroup.getId().intValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.collapsible").value(DEFAULT_COLLAPSIBLE.booleanValue()))
             .andExpect(jsonPath("$.collapseByDefault").value(DEFAULT_COLLAPSE_BY_DEFAULT.booleanValue()))
@@ -216,6 +225,58 @@ public class ADFieldGroupResourceIT {
         defaultADFieldGroupShouldNotBeFound("id.lessThan=" + id);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllADFieldGroupsByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldGroupRepository.saveAndFlush(aDFieldGroup);
+
+        // Get all the aDFieldGroupList where uid equals to DEFAULT_UID
+        defaultADFieldGroupShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the aDFieldGroupList where uid equals to UPDATED_UID
+        defaultADFieldGroupShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldGroupsByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldGroupRepository.saveAndFlush(aDFieldGroup);
+
+        // Get all the aDFieldGroupList where uid not equals to DEFAULT_UID
+        defaultADFieldGroupShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the aDFieldGroupList where uid not equals to UPDATED_UID
+        defaultADFieldGroupShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldGroupsByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDFieldGroupRepository.saveAndFlush(aDFieldGroup);
+
+        // Get all the aDFieldGroupList where uid in DEFAULT_UID or UPDATED_UID
+        defaultADFieldGroupShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the aDFieldGroupList where uid equals to UPDATED_UID
+        defaultADFieldGroupShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldGroupsByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDFieldGroupRepository.saveAndFlush(aDFieldGroup);
+
+        // Get all the aDFieldGroupList where uid is not null
+        defaultADFieldGroupShouldBeFound("uid.specified=true");
+
+        // Get all the aDFieldGroupList where uid is null
+        defaultADFieldGroupShouldNotBeFound("uid.specified=false");
+    }
 
     @Test
     @Transactional
@@ -458,6 +519,7 @@ public class ADFieldGroupResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDFieldGroup.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].collapsible").value(hasItem(DEFAULT_COLLAPSIBLE.booleanValue())))
             .andExpect(jsonPath("$.[*].collapseByDefault").value(hasItem(DEFAULT_COLLAPSE_BY_DEFAULT.booleanValue())))
@@ -509,6 +571,7 @@ public class ADFieldGroupResourceIT {
         // Disconnect from session so that the updates on updatedADFieldGroup are not directly saved in db
         em.detach(updatedADFieldGroup);
         updatedADFieldGroup
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .collapsible(UPDATED_COLLAPSIBLE)
             .collapseByDefault(UPDATED_COLLAPSE_BY_DEFAULT)
@@ -524,6 +587,7 @@ public class ADFieldGroupResourceIT {
         List<ADFieldGroup> aDFieldGroupList = aDFieldGroupRepository.findAll();
         assertThat(aDFieldGroupList).hasSize(databaseSizeBeforeUpdate);
         ADFieldGroup testADFieldGroup = aDFieldGroupList.get(aDFieldGroupList.size() - 1);
+        assertThat(testADFieldGroup.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testADFieldGroup.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADFieldGroup.isCollapsible()).isEqualTo(UPDATED_COLLAPSIBLE);
         assertThat(testADFieldGroup.isCollapseByDefault()).isEqualTo(UPDATED_COLLAPSE_BY_DEFAULT);

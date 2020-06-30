@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -39,6 +40,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 public class ADFieldResourceIT {
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -138,6 +142,7 @@ public class ADFieldResourceIT {
      */
     public static ADField createEntity(EntityManager em) {
         ADField aDField = new ADField()
+            .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .hint(DEFAULT_HINT)
@@ -200,6 +205,7 @@ public class ADFieldResourceIT {
      */
     public static ADField createUpdatedEntity(EntityManager em) {
         ADField aDField = new ADField()
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .hint(UPDATED_HINT)
@@ -276,6 +282,7 @@ public class ADFieldResourceIT {
         List<ADField> aDFieldList = aDFieldRepository.findAll();
         assertThat(aDFieldList).hasSize(databaseSizeBeforeCreate + 1);
         ADField testADField = aDFieldList.get(aDFieldList.size() - 1);
+        assertThat(testADField.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testADField.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADField.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testADField.getHint()).isEqualTo(DEFAULT_HINT);
@@ -351,6 +358,7 @@ public class ADFieldResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDField.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].hint").value(hasItem(DEFAULT_HINT)))
@@ -386,6 +394,7 @@ public class ADFieldResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aDField.getId().intValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.hint").value(DEFAULT_HINT))
@@ -429,6 +438,58 @@ public class ADFieldResourceIT {
         defaultADFieldShouldNotBeFound("id.lessThan=" + id);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where uid equals to DEFAULT_UID
+        defaultADFieldShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the aDFieldList where uid equals to UPDATED_UID
+        defaultADFieldShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where uid not equals to DEFAULT_UID
+        defaultADFieldShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the aDFieldList where uid not equals to UPDATED_UID
+        defaultADFieldShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where uid in DEFAULT_UID or UPDATED_UID
+        defaultADFieldShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the aDFieldList where uid equals to UPDATED_UID
+        defaultADFieldShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+
+        // Get all the aDFieldList where uid is not null
+        defaultADFieldShouldBeFound("uid.specified=true");
+
+        // Get all the aDFieldList where uid is null
+        defaultADFieldShouldNotBeFound("uid.specified=false");
+    }
 
     @Test
     @Transactional
@@ -2089,6 +2150,7 @@ public class ADFieldResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDField.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].hint").value(hasItem(DEFAULT_HINT)))
@@ -2158,6 +2220,7 @@ public class ADFieldResourceIT {
         // Disconnect from session so that the updates on updatedADField are not directly saved in db
         em.detach(updatedADField);
         updatedADField
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .hint(UPDATED_HINT)
@@ -2191,6 +2254,7 @@ public class ADFieldResourceIT {
         List<ADField> aDFieldList = aDFieldRepository.findAll();
         assertThat(aDFieldList).hasSize(databaseSizeBeforeUpdate);
         ADField testADField = aDFieldList.get(aDFieldList.size() - 1);
+        assertThat(testADField.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testADField.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADField.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testADField.getHint()).isEqualTo(UPDATED_HINT);

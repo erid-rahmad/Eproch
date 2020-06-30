@@ -79,8 +79,12 @@ export default class RouterValidation {
         next();
       } else {
         // Other pages that do not have permission to access are redirected to the login page.
+        sessionStorage.setItem('requested-url', to.fullPath);
         console.log('Forbidden!');
         next(`/forbidden`);
+        if (!this.accountService.hasToken()) {
+          DialogEventBus.$emit('show-login');
+        }
         NProgress.done();
       }
     }

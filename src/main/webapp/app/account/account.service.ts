@@ -26,6 +26,10 @@ export default class AccountService {
     this.retrieveProfiles();
   }
 
+  public hasToken() {
+    return localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+  }
+
   public retrieveProfiles(): void {
     axios.get('management/info').then(res => {
       if (res.data && res.data.activeProfiles) {
@@ -42,7 +46,6 @@ export default class AccountService {
       const response = await axios.get('api/account');
       const account = response.data;
       if (account) {
-        accountStore.setAuthenticated(account);
         const routes = await this.menuService.retrieve({
           criteriaQuery: 'parentMenuId.specified=false'
         });
@@ -54,21 +57,26 @@ export default class AccountService {
           await translationStore.setLanguage(account.langKey);
         }
 
+        accountStore.setAuthenticated(account);
         const requestedUrl = sessionStorage.getItem('requested-url');
         if (requestedUrl) {
+          console.log('Open the last requested url');
           this.router.replace(requestedUrl);
           sessionStorage.removeItem('requested-url');
+        } else {
+          // console.log('Redirecting to home page');
+          // this.router.replace('/redirect/account/settings');
         }
         // this.trackerService.connect();
       } else {
-        accountStore.logout();
         this.router.replace('/redirect/');
         sessionStorage.removeItem('requested-url');
+        accountStore.logout();
       }
       this.translationService.refreshTranslation(translationStore.language);
     } catch (err) {
-      accountStore.logout();
       this.router.replace('/redirect/');
+      accountStore.logout();
     };
   }
 

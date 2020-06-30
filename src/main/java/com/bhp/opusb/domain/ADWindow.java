@@ -2,6 +2,7 @@ package com.bhp.opusb.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -37,6 +38,9 @@ public class ADWindow extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "uid")
+    private UUID uid;
+
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
@@ -52,8 +56,11 @@ public class ADWindow extends AbstractAuditingEntity {
     @Column(name = "type", nullable = false)
     private ADWindowType type;
 
+    @Column(name = "tree_view")
+    private Boolean treeView;
+
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @OneToMany(mappedBy = "adWindow")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -71,6 +78,19 @@ public class ADWindow extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public ADWindow uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -123,6 +143,19 @@ public class ADWindow extends AbstractAuditingEntity {
 
     public void setType(ADWindowType type) {
         this.type = type;
+    }
+
+    public Boolean isTreeView() {
+        return treeView;
+    }
+
+    public ADWindow treeView(Boolean treeView) {
+        this.treeView = treeView;
+        return this;
+    }
+
+    public void setTreeView(Boolean treeView) {
+        this.treeView = treeView;
     }
 
     public Boolean isActive() {
@@ -197,10 +230,12 @@ public class ADWindow extends AbstractAuditingEntity {
     public String toString() {
         return "ADWindow{" +
             "id=" + getId() +
+            ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", titleLogic='" + getTitleLogic() + "'" +
             ", type='" + getType() + "'" +
+            ", treeView='" + isTreeView() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

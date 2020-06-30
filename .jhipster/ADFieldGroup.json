@@ -2,6 +2,10 @@
     "name": "ADFieldGroup",
     "fields": [
         {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
@@ -33,5 +37,6 @@
     "embedded": false,
     "clientRootFolder": "",
     "applications": "*",
-    "enableEntityAudit": true
+    "enableEntityAudit": true,
+    "skipClient": true
 }
