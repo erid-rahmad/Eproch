@@ -8,6 +8,7 @@ import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.ADReferenceList} entity. This class is used
@@ -23,6 +24,8 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
+
+    private UUIDFilter uid;
 
     private StringFilter name;
 
@@ -41,6 +44,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
 
     public ADReferenceListCriteria(ADReferenceListCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.value = other.value == null ? null : other.value.copy();
         this.description = other.description == null ? null : other.description.copy();
@@ -60,6 +64,14 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
     }
 
     public StringFilter getName() {
@@ -122,6 +134,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
         final ADReferenceListCriteria that = (ADReferenceListCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(uid, that.uid) &&
             Objects.equals(name, that.name) &&
             Objects.equals(value, that.value) &&
             Objects.equals(description, that.description) &&
@@ -134,6 +147,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        uid,
         name,
         value,
         description,
@@ -147,6 +161,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
     public String toString() {
         return "ADReferenceListCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (value != null ? "value=" + value + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +

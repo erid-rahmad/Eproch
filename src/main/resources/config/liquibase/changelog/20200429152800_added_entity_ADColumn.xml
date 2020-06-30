@@ -94,20 +94,6 @@
     <changeSet id="20200429152800-1-relations" author="jhipster">
 
     </changeSet>
-    
-    <!-- Added the entity audit columns -->
-    <changeSet id="20200429152800-audit-1" author="jhipster-entity-audit">
-        <addColumn tableName="ad_column">
-            <column name="created_by" type="varchar(50)" defaultValue="system">
-                <constraints nullable="false"/>
-            </column>
-            <column name="created_date" type="timestamp" defaultValueDate="${now}">
-                <constraints nullable="false"/>
-            </column>
-            <column name="last_modified_by" type="varchar(50)"/>
-            <column name="last_modified_date" type="timestamp"/>
-        </addColumn>
-    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -121,13 +107,19 @@
     <changeSet id="20200429152800-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/fake-data/ad_column.csv"
-                  separator=","
+                  separator=";"
                   tableName="ad_column">
             <column name="id" type="numeric"/>
+            <column name="uid" type="${uuidType}"/>
             <column name="name" type="string"/>
+            <column name="sql_name" type="string"/>
             <column name="description" type="string"/>
+            <column name="field_length" type="numeric"/>
             <column name="key" type="boolean"/>
             <column name="type" type="string"/>
+            <column name="foreign_key" type="boolean"/>
+            <column name="imported_table" type="string"/>
+            <column name="imported_column" type="string"/>
             <column name="mandatory" type="boolean"/>
             <column name="mandatory_logic" type="string"/>
             <column name="display_logic" type="string"/>
@@ -146,19 +138,18 @@
             <column name="selection_sequence" type="numeric"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
-            <column name="ad_reference_id" type="numeric"/>
             <column name="ad_table_id" type="numeric"/>
-            <column name="sql_name" type="numeric"/>
-            <column name="field_length" type="numeric"/>
-            <column name="min_length" type="numeric"/>
-            <column name="max_length" type="numeric"/>
-            <column name="min_value" type="numeric"/>
-            <column name="max_value" type="numeric"/>
-            <column name="foreign_key" type="boolean"/>
-            <column name="imported_table" type="string"/>
-            <column name="imported_column" type="string"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200629111200" author="Ananta Aryadewa">
+        <addNotNullConstraint tableName="ad_column" columnName="sql_name"/>
+        <addColumn tableName="ad_column">
+            <column name="uid" type="${uuidType}">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

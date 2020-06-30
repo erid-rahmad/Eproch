@@ -2,6 +2,7 @@ package com.bhp.opusb.domain;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,6 +36,9 @@ public class ADTab extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @Column(name = "uid")
+    private UUID uid;
 
     @NotNull
     @Column(name = "name", nullable = false)
@@ -113,6 +117,19 @@ public class ADTab extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public ADTab uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public String getName() {
@@ -407,6 +424,7 @@ public class ADTab extends AbstractAuditingEntity {
     public String toString() {
         return "ADTab{" +
             "id=" + getId() +
+            ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", iconName='" + getIconName() + "'" +

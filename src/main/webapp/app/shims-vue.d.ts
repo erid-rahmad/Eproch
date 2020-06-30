@@ -11,3 +11,4 @@ declare module 'async-validator';
 declare module 'splitpanes';
 declare module 'v-hotkey';
 declare module 'vue-form-json-schema';
+declare module 'vue-easy-dnd';

@@ -2,14 +2,14 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.ADTab} entity. This class is used
@@ -25,6 +25,8 @@ public class ADTabCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
+
+    private UUIDFilter uid;
 
     private StringFilter name;
 
@@ -69,6 +71,7 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     public ADTabCriteria(ADTabCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.iconName = other.iconName == null ? null : other.iconName.copy();
@@ -101,6 +104,14 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
     }
 
     public StringFilter getName() {
@@ -267,6 +278,7 @@ public class ADTabCriteria implements Serializable, Criteria {
         final ADTabCriteria that = (ADTabCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(uid, that.uid) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(iconName, that.iconName) &&
@@ -292,6 +304,7 @@ public class ADTabCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        uid,
         name,
         description,
         iconName,
@@ -318,6 +331,7 @@ public class ADTabCriteria implements Serializable, Criteria {
     public String toString() {
         return "ADTabCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (iconName != null ? "iconName=" + iconName + ", " : "") +

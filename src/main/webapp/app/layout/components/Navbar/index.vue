@@ -103,9 +103,14 @@ export default class extends Vue {
   }
 
   private logout() {
-    localStorage.removeItem('jhi-authenticationToken');
-    sessionStorage.removeItem('jhi-authenticationToken');
-    accountStore.logout();
+    this.$router.replace({
+      path: '/redirect/'
+    });
+    this.$nextTick(() => {
+      localStorage.removeItem('jhi-authenticationToken');
+      sessionStorage.removeItem('jhi-authenticationToken');
+      accountStore.logout();
+    });
   }
 }
 </script>

@@ -6,10 +6,12 @@
       :class="{'detailed-view': !gridView}"
     >
       <action-toolbar
+        ref="mainToolbar"
         :at-window-root="tabStack.length <= 1"
         :at-last-tab="childTabs.length === 0"
         :event-bus="mainToolbarEventBus"
         @edit-mode-change="onEditModeChange"
+        @refresh="refreshWindow"
         @toggle-view="switchView"
       />
       <div>
@@ -27,70 +29,89 @@
       </div>
       <splitpanes
         class="default-theme"
-        horizontal
-        style="height: 100%"
-        @ready="updateHeight"
-        @resized="updateHeight"
       >
-        <pane ref="mainPane">
-          <transition name="fade" mode="out-in">
-            <keep-alive>
-              <grid-view
-                v-if="gridView"
-                ref="mainGrid"
-                :tab="mainTab"
-                :toolbar-event-bus="mainToolbarEventBus"
-                @current-row-change="loadChildTab"
-                @total-count-changed="onTotalCountChange"
-                main-tab
-              />
-              <detail-view
-                v-else
-                ref="mainForm"
-                :tab="mainTab"
-                :page="currentRecordNo"
-                :toolbar-event-bus="mainToolbarEventBus"
-                @current-page-change="loadChildTab"
-                @total-count-changed="onTotalCountChange"
-              />
-            </keep-alive>
-          </transition>
-        </pane>
         <pane
-          v-if="hasChildTabs"
-          ref="linePane"
-          size="40"
-          class="child-pane"
-          style="position: relative"
+          v-if="treeView"
+          ref="treePane"
+          min-size="10"
+          max-size="30"
+          size="20"
         >
-          <el-tabs
-            v-model="currentTab"
-            class="tab-container"
-            type="border-card"
-            @tab-click="handleTabClick"
+          <tree-view
+            ref="treeView"
+            :tab="firstTab"
+          />
+        </pane>
+        <pane>
+          <splitpanes
+            horizontal
+            style="height: 100%"
+            @ready="updateHeight"
+            @resized="updateHeight"
           >
-            <el-tab-pane
-              v-for="(tab, index) in childTabs"
-              :key="tab.id"
-              ref="tabPane"
-              :name="'' + index"
+            <pane ref="mainPane">
+              <transition name="fade" mode="out-in">
+                <keep-alive>
+                  <grid-view
+                    v-if="gridView"
+                    ref="mainGrid"
+                    :tab="mainTab"
+                    :toolbar-event-bus="mainToolbarEventBus"
+                    @current-row-change="loadChildTab"
+                    @quit-edit-mode="quitEditMode"
+                    @record-saved="reloadTreeView"
+                    @total-count-changed="onTotalCountChange"
+                    main-tab
+                  />
+                  <detail-view
+                    v-else
+                    ref="mainForm"
+                    :tab="mainTab"
+                    :page="currentRecordNo"
+                    :toolbar-event-bus="mainToolbarEventBus"
+                    @current-page-change="loadChildTab"
+                    @total-count-changed="onTotalCountChange"
+                  />
+                </keep-alive>
+              </transition>
+            </pane>
+            <pane
+              v-if="hasChildTabs"
+              ref="linePane"
+              size="40"
+              class="child-pane"
+              style="position: relative"
             >
-              <span slot="label">
-                <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
-              </span>
-              <tab-toolbar
-                :tab-id="'' + index"
-                :event-bus="secondaryToolbarEventBus"
-              />
-              <grid-view
-                ref="lineGrid"
-                :tab="tab"
-                :tab-id="'' + index"
-                :toolbar-event-bus="secondaryToolbarEventBus"
-                lazy-load
-              />
-            </el-tab-pane>
-          </el-tabs>
+              <el-tabs
+                v-model="currentTab"
+                class="tab-container"
+                type="border-card"
+                @tab-click="handleTabClick"
+              >
+                <el-tab-pane
+                  v-for="(tab, index) in childTabs"
+                  :key="tab.id"
+                  ref="tabPane"
+                  :name="'' + index"
+                >
+                  <span slot="label">
+                    <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
+                  </span>
+                  <tab-toolbar
+                    :tab-id="'' + index"
+                    :event-bus="secondaryToolbarEventBus"
+                  />
+                  <grid-view
+                    ref="lineGrid"
+                    :tab="tab"
+                    :tab-id="'' + index"
+                    :toolbar-event-bus="secondaryToolbarEventBus"
+                    lazy-load
+                  />
+                </el-tab-pane>
+              </el-tabs>
+            </pane>
+          </splitpanes>
         </pane>
       </splitpanes>
       <search-panel

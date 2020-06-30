@@ -11,11 +11,11 @@
         <span
           v-if="item.redirect === 'noredirect' || index === breadcrumbs.length-1"
           class="no-redirect"
-        >{{ $t('route.' + item.meta.title) }}</span>
+        >{{ printTitle(item.meta.title) }}</span>
         <a
           v-else
           @click.prevent="handleLink(item)"
-        >{{ $t('route.' + item.meta.title) }}</a>
+        >{{ printTitle(item.meta.title) }}</a>
       </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
@@ -43,6 +43,11 @@ export default class extends Vue {
 
   created() {
     this.getBreadcrumb()
+  }
+
+  public printTitle(text: string) {
+    const translationKey = `route.${text}`;
+    return this.$te(translationKey) ? this.$t(translationKey) : text;
   }
 
   private getBreadcrumb() {

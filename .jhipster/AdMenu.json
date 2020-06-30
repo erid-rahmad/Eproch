@@ -3,10 +3,7 @@
     "fields": [
         {
             "fieldName": "uid",
-            "fieldType": "UUID",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "UUID"
         },
         {
             "fieldName": "name",
@@ -14,6 +11,14 @@
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "value",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "translationKey",
+            "fieldType": "String"
         },
         {
             "fieldName": "description",
@@ -34,6 +39,22 @@
         {
             "fieldName": "icon",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "redirect",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "sequence",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "alwaysShow",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [

@@ -9,6 +9,7 @@ import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.ADField} entity. This class is used
@@ -24,6 +25,8 @@ public class ADFieldCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
+
+    private UUIDFilter uid;
 
     private StringFilter name;
 
@@ -84,6 +87,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     public ADFieldCriteria(ADFieldCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.hint = other.hint == null ? null : other.hint.copy();
@@ -124,6 +128,14 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
     }
 
     public StringFilter getName() {
@@ -354,6 +366,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
         final ADFieldCriteria that = (ADFieldCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(uid, that.uid) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(hint, that.hint) &&
@@ -387,6 +400,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        uid,
         name,
         description,
         hint,
@@ -421,6 +435,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
     public String toString() {
         return "ADFieldCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (hint != null ? "hint=" + hint + ", " : "") +

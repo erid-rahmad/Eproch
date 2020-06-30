@@ -1,28 +1,15 @@
 package com.bhp.opusb.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import com.bhp.opusb.OpusWebApp;
+import com.bhp.opusb.domain.ADReferenceList;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADReference;
-import com.bhp.opusb.domain.ADReferenceList;
 import com.bhp.opusb.repository.ADReferenceListRepository;
-import com.bhp.opusb.service.ADReferenceListQueryService;
 import com.bhp.opusb.service.ADReferenceListService;
 import com.bhp.opusb.service.dto.ADReferenceListDTO;
 import com.bhp.opusb.service.mapper.ADReferenceListMapper;
+import com.bhp.opusb.service.dto.ADReferenceListCriteria;
+import com.bhp.opusb.service.ADReferenceListQueryService;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,6 +20,14 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link ADReferenceListResource} REST controller.
@@ -42,6 +37,9 @@ import org.springframework.transaction.annotation.Transactional;
 @AutoConfigureMockMvc
 @WithMockUser
 public class ADReferenceListResourceIT {
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -83,6 +81,7 @@ public class ADReferenceListResourceIT {
      */
     public static ADReferenceList createEntity(EntityManager em) {
         ADReferenceList aDReferenceList = new ADReferenceList()
+            .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .value(DEFAULT_VALUE)
             .description(DEFAULT_DESCRIPTION)
@@ -117,6 +116,7 @@ public class ADReferenceListResourceIT {
      */
     public static ADReferenceList createUpdatedEntity(EntityManager em) {
         ADReferenceList aDReferenceList = new ADReferenceList()
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .value(UPDATED_VALUE)
             .description(UPDATED_DESCRIPTION)
@@ -165,6 +165,7 @@ public class ADReferenceListResourceIT {
         List<ADReferenceList> aDReferenceListList = aDReferenceListRepository.findAll();
         assertThat(aDReferenceListList).hasSize(databaseSizeBeforeCreate + 1);
         ADReferenceList testADReferenceList = aDReferenceListList.get(aDReferenceListList.size() - 1);
+        assertThat(testADReferenceList.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testADReferenceList.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADReferenceList.getValue()).isEqualTo(DEFAULT_VALUE);
         assertThat(testADReferenceList.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
@@ -241,6 +242,7 @@ public class ADReferenceListResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDReferenceList.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
@@ -258,6 +260,7 @@ public class ADReferenceListResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(aDReferenceList.getId().intValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
@@ -283,6 +286,58 @@ public class ADReferenceListResourceIT {
         defaultADReferenceListShouldNotBeFound("id.lessThan=" + id);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllADReferenceListsByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDReferenceListRepository.saveAndFlush(aDReferenceList);
+
+        // Get all the aDReferenceListList where uid equals to DEFAULT_UID
+        defaultADReferenceListShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the aDReferenceListList where uid equals to UPDATED_UID
+        defaultADReferenceListShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADReferenceListsByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDReferenceListRepository.saveAndFlush(aDReferenceList);
+
+        // Get all the aDReferenceListList where uid not equals to DEFAULT_UID
+        defaultADReferenceListShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the aDReferenceListList where uid not equals to UPDATED_UID
+        defaultADReferenceListShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADReferenceListsByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDReferenceListRepository.saveAndFlush(aDReferenceList);
+
+        // Get all the aDReferenceListList where uid in DEFAULT_UID or UPDATED_UID
+        defaultADReferenceListShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the aDReferenceListList where uid equals to UPDATED_UID
+        defaultADReferenceListShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADReferenceListsByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDReferenceListRepository.saveAndFlush(aDReferenceList);
+
+        // Get all the aDReferenceListList where uid is not null
+        defaultADReferenceListShouldBeFound("uid.specified=true");
+
+        // Get all the aDReferenceListList where uid is null
+        defaultADReferenceListShouldNotBeFound("uid.specified=false");
+    }
 
     @Test
     @Transactional
@@ -609,6 +664,7 @@ public class ADReferenceListResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(aDReferenceList.getId().intValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
@@ -660,6 +716,7 @@ public class ADReferenceListResourceIT {
         // Disconnect from session so that the updates on updatedADReferenceList are not directly saved in db
         em.detach(updatedADReferenceList);
         updatedADReferenceList
+            .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .value(UPDATED_VALUE)
             .description(UPDATED_DESCRIPTION)
@@ -675,6 +732,7 @@ public class ADReferenceListResourceIT {
         List<ADReferenceList> aDReferenceListList = aDReferenceListRepository.findAll();
         assertThat(aDReferenceListList).hasSize(databaseSizeBeforeUpdate);
         ADReferenceList testADReferenceList = aDReferenceListList.get(aDReferenceListList.size() - 1);
+        assertThat(testADReferenceList.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testADReferenceList.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADReferenceList.getValue()).isEqualTo(UPDATED_VALUE);
         assertThat(testADReferenceList.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
