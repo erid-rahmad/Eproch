@@ -1,32 +1,25 @@
 <template>
   <div class="app-container">
-    <h3>{{ title }}</h3>
+    <el-row :gutter="0">
+      <el-col :span="12">
+        <h4>{{ title }}</h4>
+      </el-col>
+      <el-col :span="12">
+        <action-toolbar
+          ref="mainToolbar"
+          :at-window-root="tabStack.length <= 1"
+          :at-last-tab="childTabs.length === 0"
+          :event-bus="mainToolbarEventBus"
+          @edit-mode-change="onEditModeChange"
+          @refresh="refreshWindow"
+          @toggle-view="switchView"
+        />
+      </el-col>
+    </el-row>
     <div
       class="window-content"
       :class="{'detailed-view': !gridView}"
     >
-      <action-toolbar
-        ref="mainToolbar"
-        :at-window-root="tabStack.length <= 1"
-        :at-last-tab="childTabs.length === 0"
-        :event-bus="mainToolbarEventBus"
-        @edit-mode-change="onEditModeChange"
-        @refresh="refreshWindow"
-        @toggle-view="switchView"
-      />
-      <div>
-        <el-pagination
-          ref="toolbarPagination"
-          layout="prev, jumper, total, next"
-          class="record-navigator"
-          :class="{'invisible': isEditing}"
-          :current-page.sync="currentRecordNo"
-          :page-size="1"
-          small
-          :total="totalRecords"
-          @current-change="onCurrentRecordChange"
-        />
-      </div>
       <splitpanes
         class="default-theme"
       >
@@ -49,7 +42,7 @@
             @ready="updateHeight"
             @resized="updateHeight"
           >
-            <pane ref="mainPane">
+            <pane class="mainPane" ref="mainPane">
               <transition name="fade" mode="out-in">
                 <keep-alive>
                   <grid-view
@@ -74,6 +67,21 @@
                   />
                 </keep-alive>
               </transition>
+              
+              <div>
+                <el-pagination
+                  ref="toolbarPagination"
+                  layout="prev, jumper, total, next"
+                  class="record-navigator"
+                  :class="{'invisible': isEditing}"
+                  :current-page.sync="currentRecordNo"
+                  :page-size="1"
+                  small
+                  @current-change="onCurrentRecordChange"
+                />
+                <!-- :total="totalRecords" -->
+              </div>
+
             </pane>
             <pane
               v-if="hasChildTabs"
@@ -130,11 +138,30 @@
 
 <style lang="scss">
 .el-tabs--border-card > .el-tabs__content {
-  height: calc(100% - 38px);
+  height: calc(100% - 15px);
+  padding: 0px;
 }
+.el-tabs__item {
+  line-height: 30px;
+}
+.el-tabs__nav-scroll{
+  height: 30px;
+}
+.el-tabs--top.el-tabs--border-card > .el-tabs__header .el-tabs__item:last-child{
+  padding: 0px 10px 0px 10px;
+  height: 30px;
+}
+/*
+.el-pagination__jump {
+  display: none;
+}
+.el-pagination__jump:before {
+  content: "row";
+}
+*/
 .window-content {
   position: relative;
-  height: calc(100% - 134px);
+  height: calc(100% - 40px);
 
   &.detailed-view .splitpanes__pane {
     overflow-y: auto;
@@ -151,7 +178,10 @@
 </style>
 <style lang="scss" scoped>
 .action-toolbar {
-  padding-bottom: 20px;
+  padding-top: 2px;
+  padding-bottom: 0px;
+  padding-right: 4px;
+  text-align: right;
 }
 .fade-enter-active,
 .fade-leave-active {
