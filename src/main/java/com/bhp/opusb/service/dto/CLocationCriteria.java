@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.CLocation} entity. This class is used
@@ -32,10 +33,15 @@ public class CLocationCriteria implements Serializable, Criteria {
 
     private BooleanFilter taxInvoiceAddress;
 
+    private UUIDFilter uid;
+
     private BooleanFilter active;
 
     private LongFilter cityId;
     private StringFilter cityName;
+
+    private LongFilter adOrganizationId;
+    private StringFilter adOrganizationName;
 
     public CLocationCriteria() {
     }
@@ -45,9 +51,12 @@ public class CLocationCriteria implements Serializable, Criteria {
         this.streetAddress = other.streetAddress == null ? null : other.streetAddress.copy();
         this.postalCode = other.postalCode == null ? null : other.postalCode.copy();
         this.taxInvoiceAddress = other.taxInvoiceAddress == null ? null : other.taxInvoiceAddress.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.cityId = other.cityId == null ? null : other.cityId.copy();
         this.cityName = other.cityName == null ? null : other.cityName.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
     }
 
     @Override
@@ -87,6 +96,14 @@ public class CLocationCriteria implements Serializable, Criteria {
         this.taxInvoiceAddress = taxInvoiceAddress;
     }
 
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
+    }
+
     public BooleanFilter getActive() {
         return active;
     }
@@ -111,6 +128,21 @@ public class CLocationCriteria implements Serializable, Criteria {
         this.cityName = cityName;
     }
 
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+
+    public StringFilter getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(StringFilter adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -126,9 +158,12 @@ public class CLocationCriteria implements Serializable, Criteria {
             Objects.equals(streetAddress, that.streetAddress) &&
             Objects.equals(postalCode, that.postalCode) &&
             Objects.equals(taxInvoiceAddress, that.taxInvoiceAddress) &&
+            Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(cityId, that.cityId) &&
-            Objects.equals(cityName, that.cityName);
+            Objects.equals(cityName, that.cityName) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adOrganizationName, that.adOrganizationName);
     }
 
     @Override
@@ -138,9 +173,12 @@ public class CLocationCriteria implements Serializable, Criteria {
         streetAddress,
         postalCode,
         taxInvoiceAddress,
+        uid,
         active,
         cityId,
-        cityName
+        cityName,
+        adOrganizationId,
+        adOrganizationName
         );
     }
 
@@ -151,9 +189,12 @@ public class CLocationCriteria implements Serializable, Criteria {
                 (streetAddress != null ? "streetAddress=" + streetAddress + ", " : "") +
                 (postalCode != null ? "postalCode=" + postalCode + ", " : "") +
                 (taxInvoiceAddress != null ? "taxInvoiceAddress=" + taxInvoiceAddress + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (cityId != null ? "cityId=" + cityId + ", " : "") +
                 (cityName != null ? "cityName=" + cityName + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
             "}";
     }
 

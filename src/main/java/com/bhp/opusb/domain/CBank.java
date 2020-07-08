@@ -1,5 +1,6 @@
 package com.bhp.opusb.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -8,6 +9,7 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A CBank.
@@ -43,8 +45,16 @@ public class CBank extends AbstractAuditingEntity {
     @Column(name = "swift_code", unique = true)
     private String swiftCode;
 
+    @Column(name = "uid")
+    private UUID uid;
+
     @Column(name = "active")
     private Boolean active;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cBanks")
+    private ADOrganization adOrganization;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -120,6 +130,19 @@ public class CBank extends AbstractAuditingEntity {
         this.swiftCode = swiftCode;
     }
 
+    public UUID getUid() {
+        return uid;
+    }
+
+    public CBank uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -132,8 +155,26 @@ public class CBank extends AbstractAuditingEntity {
     public void setActive(Boolean active) {
         this.active = active;
     }
+
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
+    }
+
+    public CBank adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+        return this;
+    }
+
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -159,6 +200,7 @@ public class CBank extends AbstractAuditingEntity {
             ", shortName='" + getShortName() + "'" +
             ", description='" + getDescription() + "'" +
             ", swiftCode='" + getSwiftCode() + "'" +
+            ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

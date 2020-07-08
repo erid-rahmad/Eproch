@@ -77,6 +77,7 @@ class CBankGatlingTest extends Simulation {
                 , "shortName":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "swiftCode":"SAMPLE_TEXT"
+                , "uid":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

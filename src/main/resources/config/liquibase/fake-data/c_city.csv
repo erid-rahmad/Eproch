@@ -1,11 +1,11 @@
-id;name;active
-1;Summit;true
-2;redundant payment;true
-3;Awesome Cambridgeshire deposit;true
-4;Persevering bandwidth;true
-5;Frozen District;true
-6;Buckinghamshire connecting;false
-7;programming Road Nepalese Rupee;false
-8;Bedfordshire Optional Lesotho;true
-9;connecting connecting redefine;false
-10;Cote d'Ivoire solution-oriented;false
+id;name;uid;active;ad_organization_id
+1;Summit;c7c6a9fc-188f-4a0a-8396-af61fe7b67bd;true;1
+2;Internal Central;ba91c843-887a-4fd8-985f-1a834d38c3f3;true;2
+3;eyeballs Developer Investment Account;c57827b9-1186-42c5-b1f0-7803cf2f76a2;true;3
+4;Plaza Keyboard;13f78f0b-9f6e-464d-8350-7620e8dbb507;false;4
+5;forecast primary;613eb8a5-7867-47e6-ac23-efef23a94617;false;5
+6;Fish homogeneous Borders;ae3c54a0-d3cd-4234-99b9-e0e93e6c7fe6;false;6
+7;deposit Developer;1f57f1ee-1ba1-454d-b8f6-47575a59af6c;false;7
+8;Tasty Metal Car Saint Kitts and Nevis;a96272ae-f85e-4a88-afe3-871cc2f984aa;false;8
+9;mobile Berkshire;a73f851c-d8a2-4c32-a4bc-fff6c6d2d69c;true;9
+10;dynamic Communications Villages;c1fd8bce-6007-4304-a2be-9a114553ccbb;false;10

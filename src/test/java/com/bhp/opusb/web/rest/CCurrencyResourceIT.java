@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CCurrency;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.CCurrencyRepository;
 import com.bhp.opusb.service.CCurrencyService;
 import com.bhp.opusb.service.dto.CCurrencyDTO;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -35,14 +37,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class CCurrencyResourceIT {
 
-    private static final String DEFAULT_CODE = "ZEB";
-    private static final String UPDATED_CODE = "UCO";
+    private static final String DEFAULT_CODE = "KBO";
+    private static final String UPDATED_CODE = "CHT";
 
     private static final String DEFAULT_SYMBOL = "AAAAAAAAAA";
     private static final String UPDATED_SYMBOL = "BBBBBBBBBB";
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -78,7 +83,18 @@ public class CCurrencyResourceIT {
             .code(DEFAULT_CODE)
             .symbol(DEFAULT_SYMBOL)
             .name(DEFAULT_NAME)
+            .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cCurrency.setAdOrganization(aDOrganization);
         return cCurrency;
     }
     /**
@@ -92,7 +108,18 @@ public class CCurrencyResourceIT {
             .code(UPDATED_CODE)
             .symbol(UPDATED_SYMBOL)
             .name(UPDATED_NAME)
+            .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cCurrency.setAdOrganization(aDOrganization);
         return cCurrency;
     }
 
@@ -120,6 +147,7 @@ public class CCurrencyResourceIT {
         assertThat(testCCurrency.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCCurrency.getSymbol()).isEqualTo(DEFAULT_SYMBOL);
         assertThat(testCCurrency.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testCCurrency.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCCurrency.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -215,6 +243,7 @@ public class CCurrencyResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].symbol").value(hasItem(DEFAULT_SYMBOL)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -232,6 +261,7 @@ public class CCurrencyResourceIT {
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.symbol").value(DEFAULT_SYMBOL))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -491,6 +521,58 @@ public class CCurrencyResourceIT {
 
     @Test
     @Transactional
+    public void getAllCCurrenciesByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cCurrencyRepository.saveAndFlush(cCurrency);
+
+        // Get all the cCurrencyList where uid equals to DEFAULT_UID
+        defaultCCurrencyShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the cCurrencyList where uid equals to UPDATED_UID
+        defaultCCurrencyShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCurrenciesByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cCurrencyRepository.saveAndFlush(cCurrency);
+
+        // Get all the cCurrencyList where uid not equals to DEFAULT_UID
+        defaultCCurrencyShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the cCurrencyList where uid not equals to UPDATED_UID
+        defaultCCurrencyShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCurrenciesByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        cCurrencyRepository.saveAndFlush(cCurrency);
+
+        // Get all the cCurrencyList where uid in DEFAULT_UID or UPDATED_UID
+        defaultCCurrencyShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the cCurrencyList where uid equals to UPDATED_UID
+        defaultCCurrencyShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCurrenciesByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cCurrencyRepository.saveAndFlush(cCurrency);
+
+        // Get all the cCurrencyList where uid is not null
+        defaultCCurrencyShouldBeFound("uid.specified=true");
+
+        // Get all the cCurrencyList where uid is null
+        defaultCCurrencyShouldNotBeFound("uid.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllCCurrenciesByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         cCurrencyRepository.saveAndFlush(cCurrency);
@@ -540,6 +622,22 @@ public class CCurrencyResourceIT {
         // Get all the cCurrencyList where active is null
         defaultCCurrencyShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllCCurrenciesByAdOrganizationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADOrganization adOrganization = cCurrency.getAdOrganization();
+        cCurrencyRepository.saveAndFlush(cCurrency);
+        Long adOrganizationId = adOrganization.getId();
+
+        // Get all the cCurrencyList where adOrganization equals to adOrganizationId
+        defaultCCurrencyShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
+
+        // Get all the cCurrencyList where adOrganization equals to adOrganizationId + 1
+        defaultCCurrencyShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -551,6 +649,7 @@ public class CCurrencyResourceIT {
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].symbol").value(hasItem(DEFAULT_SYMBOL)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -602,6 +701,7 @@ public class CCurrencyResourceIT {
             .code(UPDATED_CODE)
             .symbol(UPDATED_SYMBOL)
             .name(UPDATED_NAME)
+            .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CCurrencyDTO cCurrencyDTO = cCurrencyMapper.toDto(updatedCCurrency);
 
@@ -617,6 +717,7 @@ public class CCurrencyResourceIT {
         assertThat(testCCurrency.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCCurrency.getSymbol()).isEqualTo(UPDATED_SYMBOL);
         assertThat(testCCurrency.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testCCurrency.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCCurrency.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

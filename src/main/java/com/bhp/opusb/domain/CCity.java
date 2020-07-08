@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A CCity.
@@ -29,8 +30,16 @@ public class CCity extends AbstractAuditingEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "uid")
+    private UUID uid;
+
     @Column(name = "active")
     private Boolean active;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cCities")
+    private ADOrganization adOrganization;
 
     @ManyToOne
     @JsonIgnoreProperties("cCities")
@@ -62,6 +71,19 @@ public class CCity extends AbstractAuditingEntity {
         this.name = name;
     }
 
+    public UUID getUid() {
+        return uid;
+    }
+
+    public CCity uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -73,6 +95,19 @@ public class CCity extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
+    }
+
+    public CCity adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+        return this;
+    }
+
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
     }
 
     public CCountry getCountry() {
@@ -102,6 +137,11 @@ public class CCity extends AbstractAuditingEntity {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -123,6 +163,7 @@ public class CCity extends AbstractAuditingEntity {
         return "CCity{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

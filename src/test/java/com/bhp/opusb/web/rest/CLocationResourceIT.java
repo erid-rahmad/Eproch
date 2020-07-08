@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CLocation;
 import com.bhp.opusb.domain.CCity;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.CLocationRepository;
 import com.bhp.opusb.service.CLocationService;
 import com.bhp.opusb.service.dto.CLocationDTO;
@@ -21,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -44,6 +46,9 @@ public class CLocationResourceIT {
 
     private static final Boolean DEFAULT_TAX_INVOICE_ADDRESS = false;
     private static final Boolean UPDATED_TAX_INVOICE_ADDRESS = true;
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -79,6 +84,7 @@ public class CLocationResourceIT {
             .streetAddress(DEFAULT_STREET_ADDRESS)
             .postalCode(DEFAULT_POSTAL_CODE)
             .taxInvoiceAddress(DEFAULT_TAX_INVOICE_ADDRESS)
+            .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
         CCity cCity;
@@ -90,6 +96,16 @@ public class CLocationResourceIT {
             cCity = TestUtil.findAll(em, CCity.class).get(0);
         }
         cLocation.setCity(cCity);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cLocation.setAdOrganization(aDOrganization);
         return cLocation;
     }
     /**
@@ -103,6 +119,7 @@ public class CLocationResourceIT {
             .streetAddress(UPDATED_STREET_ADDRESS)
             .postalCode(UPDATED_POSTAL_CODE)
             .taxInvoiceAddress(UPDATED_TAX_INVOICE_ADDRESS)
+            .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
         CCity cCity;
@@ -114,6 +131,16 @@ public class CLocationResourceIT {
             cCity = TestUtil.findAll(em, CCity.class).get(0);
         }
         cLocation.setCity(cCity);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cLocation.setAdOrganization(aDOrganization);
         return cLocation;
     }
 
@@ -141,6 +168,7 @@ public class CLocationResourceIT {
         assertThat(testCLocation.getStreetAddress()).isEqualTo(DEFAULT_STREET_ADDRESS);
         assertThat(testCLocation.getPostalCode()).isEqualTo(DEFAULT_POSTAL_CODE);
         assertThat(testCLocation.isTaxInvoiceAddress()).isEqualTo(DEFAULT_TAX_INVOICE_ADDRESS);
+        assertThat(testCLocation.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCLocation.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -198,6 +226,7 @@ public class CLocationResourceIT {
             .andExpect(jsonPath("$.[*].streetAddress").value(hasItem(DEFAULT_STREET_ADDRESS)))
             .andExpect(jsonPath("$.[*].postalCode").value(hasItem(DEFAULT_POSTAL_CODE)))
             .andExpect(jsonPath("$.[*].taxInvoiceAddress").value(hasItem(DEFAULT_TAX_INVOICE_ADDRESS.booleanValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -215,6 +244,7 @@ public class CLocationResourceIT {
             .andExpect(jsonPath("$.streetAddress").value(DEFAULT_STREET_ADDRESS))
             .andExpect(jsonPath("$.postalCode").value(DEFAULT_POSTAL_CODE))
             .andExpect(jsonPath("$.taxInvoiceAddress").value(DEFAULT_TAX_INVOICE_ADDRESS.booleanValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -448,6 +478,58 @@ public class CLocationResourceIT {
 
     @Test
     @Transactional
+    public void getAllCLocationsByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where uid equals to DEFAULT_UID
+        defaultCLocationShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the cLocationList where uid equals to UPDATED_UID
+        defaultCLocationShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where uid not equals to DEFAULT_UID
+        defaultCLocationShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the cLocationList where uid not equals to UPDATED_UID
+        defaultCLocationShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where uid in DEFAULT_UID or UPDATED_UID
+        defaultCLocationShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the cLocationList where uid equals to UPDATED_UID
+        defaultCLocationShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where uid is not null
+        defaultCLocationShouldBeFound("uid.specified=true");
+
+        // Get all the cLocationList where uid is null
+        defaultCLocationShouldNotBeFound("uid.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllCLocationsByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         cLocationRepository.saveAndFlush(cLocation);
@@ -513,6 +595,22 @@ public class CLocationResourceIT {
         defaultCLocationShouldNotBeFound("cityId.equals=" + (cityId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAdOrganizationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADOrganization adOrganization = cLocation.getAdOrganization();
+        cLocationRepository.saveAndFlush(cLocation);
+        Long adOrganizationId = adOrganization.getId();
+
+        // Get all the cLocationList where adOrganization equals to adOrganizationId
+        defaultCLocationShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
+
+        // Get all the cLocationList where adOrganization equals to adOrganizationId + 1
+        defaultCLocationShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -524,6 +622,7 @@ public class CLocationResourceIT {
             .andExpect(jsonPath("$.[*].streetAddress").value(hasItem(DEFAULT_STREET_ADDRESS)))
             .andExpect(jsonPath("$.[*].postalCode").value(hasItem(DEFAULT_POSTAL_CODE)))
             .andExpect(jsonPath("$.[*].taxInvoiceAddress").value(hasItem(DEFAULT_TAX_INVOICE_ADDRESS.booleanValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -575,6 +674,7 @@ public class CLocationResourceIT {
             .streetAddress(UPDATED_STREET_ADDRESS)
             .postalCode(UPDATED_POSTAL_CODE)
             .taxInvoiceAddress(UPDATED_TAX_INVOICE_ADDRESS)
+            .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CLocationDTO cLocationDTO = cLocationMapper.toDto(updatedCLocation);
 
@@ -590,6 +690,7 @@ public class CLocationResourceIT {
         assertThat(testCLocation.getStreetAddress()).isEqualTo(UPDATED_STREET_ADDRESS);
         assertThat(testCLocation.getPostalCode()).isEqualTo(UPDATED_POSTAL_CODE);
         assertThat(testCLocation.isTaxInvoiceAddress()).isEqualTo(UPDATED_TAX_INVOICE_ADDRESS);
+        assertThat(testCLocation.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCLocation.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

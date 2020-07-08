@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.CBank} entity. This class is used
@@ -36,7 +37,12 @@ public class CBankCriteria implements Serializable, Criteria {
 
     private StringFilter swiftCode;
 
+    private UUIDFilter uid;
+
     private BooleanFilter active;
+
+    private LongFilter adOrganizationId;
+    private StringFilter adOrganizationName;
 
     public CBankCriteria() {
     }
@@ -48,7 +54,10 @@ public class CBankCriteria implements Serializable, Criteria {
         this.shortName = other.shortName == null ? null : other.shortName.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.swiftCode = other.swiftCode == null ? null : other.swiftCode.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
     }
 
     @Override
@@ -104,6 +113,14 @@ public class CBankCriteria implements Serializable, Criteria {
         this.swiftCode = swiftCode;
     }
 
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
+    }
+
     public BooleanFilter getActive() {
         return active;
     }
@@ -112,7 +129,22 @@ public class CBankCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
+    }
 
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+
+    public StringFilter getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(StringFilter adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -129,7 +161,10 @@ public class CBankCriteria implements Serializable, Criteria {
             Objects.equals(shortName, that.shortName) &&
             Objects.equals(description, that.description) &&
             Objects.equals(swiftCode, that.swiftCode) &&
-            Objects.equals(active, that.active);
+            Objects.equals(uid, that.uid) &&
+            Objects.equals(active, that.active) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adOrganizationName, that.adOrganizationName);
     }
 
     @Override
@@ -141,7 +176,10 @@ public class CBankCriteria implements Serializable, Criteria {
         shortName,
         description,
         swiftCode,
-        active
+        uid,
+        active,
+        adOrganizationId,
+        adOrganizationName
         );
     }
 
@@ -154,7 +192,10 @@ public class CBankCriteria implements Serializable, Criteria {
                 (shortName != null ? "shortName=" + shortName + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (swiftCode != null ? "swiftCode=" + swiftCode + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
             "}";
     }
 

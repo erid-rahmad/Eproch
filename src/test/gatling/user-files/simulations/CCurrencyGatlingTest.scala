@@ -75,6 +75,7 @@ class CCurrencyGatlingTest extends Simulation {
                 , "code":"SAMPLE_TEXT"
                 , "symbol":"SAMPLE_TEXT"
                 , "name":"SAMPLE_TEXT"
+                , "uid":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

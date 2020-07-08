@@ -1,5 +1,6 @@
 package com.bhp.opusb.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -10,6 +11,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * A CCountry.
@@ -38,6 +40,9 @@ public class CCountry extends AbstractAuditingEntity {
     @Column(name = "with_region")
     private Boolean withRegion;
 
+    @Column(name = "uid")
+    private UUID uid;
+
     @Column(name = "active")
     private Boolean active;
 
@@ -53,6 +58,11 @@ public class CCountry extends AbstractAuditingEntity {
     @OneToMany(mappedBy = "country")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<CCity> cCities = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cCountries")
+    private ADOrganization adOrganization;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -100,6 +110,19 @@ public class CCountry extends AbstractAuditingEntity {
 
     public void setWithRegion(Boolean withRegion) {
         this.withRegion = withRegion;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public CCountry uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public Boolean isActive() {
@@ -177,8 +200,26 @@ public class CCountry extends AbstractAuditingEntity {
     public void setCCities(Set<CCity> cCities) {
         this.cCities = cCities;
     }
+
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
+    }
+
+    public CCountry adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+        return this;
+    }
+
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -202,6 +243,7 @@ public class CCountry extends AbstractAuditingEntity {
             ", name='" + getName() + "'" +
             ", code='" + getCode() + "'" +
             ", withRegion='" + isWithRegion() + "'" +
+            ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

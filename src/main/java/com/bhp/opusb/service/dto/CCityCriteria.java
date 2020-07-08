@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.CCity} entity. This class is used
@@ -28,7 +29,12 @@ public class CCityCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
+    private UUIDFilter uid;
+
     private BooleanFilter active;
+
+    private LongFilter adOrganizationId;
+    private StringFilter adOrganizationName;
 
     private LongFilter countryId;
     private StringFilter countryName;
@@ -42,7 +48,10 @@ public class CCityCriteria implements Serializable, Criteria {
     public CCityCriteria(CCityCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
         this.countryId = other.countryId == null ? null : other.countryId.copy();
         this.countryName = other.countryName == null ? null : other.countryName.copy();
         this.regionId = other.regionId == null ? null : other.regionId.copy();
@@ -70,12 +79,36 @@ public class CCityCriteria implements Serializable, Criteria {
         this.name = name;
     }
 
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
+    }
+
     public BooleanFilter getActive() {
         return active;
     }
 
     public void setActive(BooleanFilter active) {
         this.active = active;
+    }
+
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+
+    public StringFilter getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(StringFilter adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     public LongFilter getCountryId() {
@@ -127,7 +160,10 @@ public class CCityCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adOrganizationName, that.adOrganizationName) &&
             Objects.equals(countryId, that.countryId) &&
             Objects.equals(countryName, that.countryName) &&
             Objects.equals(regionId, that.regionId) &&
@@ -139,7 +175,10 @@ public class CCityCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         name,
+        uid,
         active,
+        adOrganizationId,
+        adOrganizationName,
         countryId,
         countryName,
         regionId,
@@ -152,7 +191,10 @@ public class CCityCriteria implements Serializable, Criteria {
         return "CCityCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
                 (countryId != null ? "countryId=" + countryId + ", " : "") +
                 (countryName != null ? "countryName=" + countryName + ", " : "") +
                 (regionId != null ? "regionId=" + regionId + ", " : "") +

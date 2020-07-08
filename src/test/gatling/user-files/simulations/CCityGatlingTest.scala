@@ -73,6 +73,7 @@ class CCityGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "name":"SAMPLE_TEXT"
+                , "uid":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

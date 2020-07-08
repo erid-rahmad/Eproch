@@ -75,6 +75,7 @@ class CLocationGatlingTest extends Simulation {
                 , "streetAddress":"SAMPLE_TEXT"
                 , "postalCode":"SAMPLE_TEXT"
                 , "taxInvoiceAddress":null
+                , "uid":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

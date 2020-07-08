@@ -100,12 +100,19 @@ public class CLocationQueryService extends QueryService<CLocation> {
             if (criteria.getTaxInvoiceAddress() != null) {
                 specification = specification.and(buildSpecification(criteria.getTaxInvoiceAddress(), CLocation_.taxInvoiceAddress));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), CLocation_.uid));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), CLocation_.active));
             }
             if (criteria.getCityId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCityId(),
                     root -> root.join(CLocation_.city, JoinType.LEFT).get(CCity_.id)));
+            }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(CLocation_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
         }
         return specification;

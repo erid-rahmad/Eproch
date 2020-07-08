@@ -9,10 +9,15 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link CCurrency} and its DTO {@link CCurrencyDTO}.
  */
-@Mapper(componentModel = "spring", uses = {})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class})
 public interface CCurrencyMapper extends EntityMapper<CCurrencyDTO, CCurrency> {
 
+    @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
+    CCurrencyDTO toDto(CCurrency cCurrency);
 
+    @Mapping(source = "adOrganizationId", target = "adOrganization")
+    CCurrency toEntity(CCurrencyDTO cCurrencyDTO);
 
     default CCurrency fromId(Long id) {
         if (id == null) {

@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface ADReferenceListMapper extends EntityMapper<ADReferenceListDTO, ADReferenceList> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "adReference.id", target = "adReferenceId")
     ADReferenceListDTO toDto(ADReferenceList aDReferenceList);
 

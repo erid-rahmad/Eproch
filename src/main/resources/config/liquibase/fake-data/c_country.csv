@@ -1,11 +1,11 @@
-id;name;code;with_region;active;currency_id
-1;Saint Helena Metrics Botswana;"SL";true;false;1
-2;programming matrices;"RZ";false;false;2
-3;action-items Trinidad and Tobago;"XW";true;false;3
-4;National;"FW";false;true;4
-5;ROI;"PT";true;true;5
-6;feed Honduras target;"XO";true;false;6
-7;invoice calculating;"JD";true;false;7
-8;orchid;"CV";false;false;8
-9;Buckinghamshire bandwidth;"UZ";true;false;9
-10;Product International sensor;"SE";true;false;10
+id;name;code;with_region;uid;active;currency_id;ad_organization_id
+1;Saint Helena Metrics Botswana;"SL";true;6ade591b-64af-4325-a58e-8ff938ed921e;false;1;1
+2;Savings Account intranet Borders;"VE";false;45c509b9-fcbb-4866-b363-7e8b36afdbfc;true;2;2
+3;Industrial;"JD";true;01397987-2e1d-4168-bbb1-7af2c4cff6ce;false;3;3
+4;Sudanese Pound Village firewall;"BF";true;d86cf9c4-88b7-41ae-b2bf-4efde9137789;true;4;4
+5;Handmade Iraqi Dinar utilisation;"RQ";false;5ec37f58-607d-4a56-86e9-5199b3d9763a;true;5;5
+6;pixel Graphical User Interface Cotton;"CA";true;dee5c74e-99f0-46d4-9048-015cec31aba4;false;6;6
+7;Fantastic Sleek;"JL";true;970681fe-d967-4a2b-aad2-e73224d772d1;true;7;7
+8;Ergonomic deposit;"BQ";true;5a89eefe-f4c8-4450-925e-f77f13350f67;false;8;8
+9;XSS responsive web-readiness;"RM";false;5e74746f-319a-4360-8730-debc35a8d88b;true;9;9
+10;redundant Metrics;"UQ";true;9864b777-98f6-4048-a418-afd141e3c761;false;10;10

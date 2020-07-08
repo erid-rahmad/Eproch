@@ -26,11 +26,24 @@
             ]
         },
         {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
             "fieldName": "active",
             "fieldType": "Boolean"
         }
     ],
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cCurrency",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
     "changelogDate": "20200619072500",
     "entityTableName": "c_currency",
     "dto": "mapstruct",
@@ -41,5 +54,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "skipClient": true
 }

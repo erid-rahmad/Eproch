@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 /**
  * A CRegion.
@@ -31,12 +32,20 @@ public class CRegion extends AbstractAuditingEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @Column(name = "uid")
+    private UUID uid;
+
     @Column(name = "active")
     private Boolean active;
 
     @OneToMany(mappedBy = "region")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<CCity> cCities = new HashSet<>();
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cRegions")
+    private ADOrganization adOrganization;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -63,6 +72,19 @@ public class CRegion extends AbstractAuditingEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public CRegion uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
     }
 
     public Boolean isActive() {
@@ -103,6 +125,19 @@ public class CRegion extends AbstractAuditingEntity {
         this.cCities = cCities;
     }
 
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
+    }
+
+    public CRegion adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+        return this;
+    }
+
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+    }
+
     public CCountry getCountry() {
         return country;
     }
@@ -116,6 +151,11 @@ public class CRegion extends AbstractAuditingEntity {
         this.country = cCountry;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -138,6 +178,7 @@ public class CRegion extends AbstractAuditingEntity {
         return "CRegion{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

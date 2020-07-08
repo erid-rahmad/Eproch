@@ -3,6 +3,7 @@ package com.bhp.opusb.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CCity} entity.
@@ -14,8 +15,13 @@ public class CCityDTO extends AbstractAuditingDTO {
     @NotNull
     private String name;
 
+    private UUID uid;
+
     private Boolean active;
 
+
+    private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long countryId;
     private String countryName;
@@ -39,12 +45,36 @@ public class CCityDTO extends AbstractAuditingDTO {
         this.name = name;
     }
 
+    public UUID getUid() {
+        return uid;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
+    }
+
     public Boolean isActive() {
         return active;
     }
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     public Long getCountryId() {
@@ -109,11 +139,14 @@ public class CCityDTO extends AbstractAuditingDTO {
         return "CCityDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationName='" + getAdOrganizationName() + "'" +
             ", countryId=" + getCountryId() +
-            ", countryName=" + getCountryName() +
+            ", countryName='" + getCountryName() + "'" +
             ", regionId=" + getRegionId() +
-            ", regionName=" + getRegionName() +
+            ", regionName='" + getRegionName() + "'" +
             "}";
     }
 

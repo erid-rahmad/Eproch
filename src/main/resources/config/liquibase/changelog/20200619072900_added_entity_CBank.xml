@@ -75,9 +75,22 @@
             <column name="short_name" type="string"/>
             <column name="description" type="string"/>
             <column name="swift_code" type="string"/>
+            <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
+            <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200619072900-1-add-column" author="dian-tri-budianto">
+        <addColumn tableName="c_bank">
+            <column name="uid" type="${uuidType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_organization_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

@@ -14,5 +14,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_currency"/>
 
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="c_country"
+                                 constraintName="fk_c_country_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
     </changeSet>
 </databaseChangeLog>

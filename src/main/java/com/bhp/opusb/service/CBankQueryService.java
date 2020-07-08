@@ -106,8 +106,15 @@ public class CBankQueryService extends QueryService<CBank> {
             if (criteria.getSwiftCode() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getSwiftCode(), CBank_.swiftCode));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), CBank_.uid));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), CBank_.active));
+            }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(CBank_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
         }
         return specification;

@@ -100,6 +100,9 @@ public class CCountryQueryService extends QueryService<CCountry> {
             if (criteria.getWithRegion() != null) {
                 specification = specification.and(buildSpecification(criteria.getWithRegion(), CCountry_.withRegion));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), CCountry_.uid));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), CCountry_.active));
             }
@@ -114,6 +117,10 @@ public class CCountryQueryService extends QueryService<CCountry> {
             if (criteria.getCCityId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCCityId(),
                     root -> root.join(CCountry_.cCities, JoinType.LEFT).get(CCity_.id)));
+            }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(CCountry_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
         }
         return specification;

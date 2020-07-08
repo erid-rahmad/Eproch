@@ -75,6 +75,7 @@ class CCountryGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "code":"SAMPLE_TEXT"
                 , "withRegion":null
+                , "uid":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

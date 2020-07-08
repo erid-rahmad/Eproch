@@ -36,6 +36,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
     private BooleanFilter active;
 
     private LongFilter adOrganizationId;
+    private StringFilter adOrganizationName;
 
     private LongFilter adReferenceId;
 
@@ -50,6 +51,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
         this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
     }
 
@@ -114,6 +116,14 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public StringFilter getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(StringFilter adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public LongFilter getAdReferenceId() {
         return adReferenceId;
     }
@@ -140,6 +150,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adOrganizationName, that.adOrganizationName) &&
             Objects.equals(adReferenceId, that.adReferenceId);
     }
 
@@ -153,6 +164,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
         description,
         active,
         adOrganizationId,
+        adOrganizationName,
         adReferenceId
         );
     }
@@ -167,6 +179,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
                 (description != null ? "description=" + description + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
                 (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
             "}";
     }

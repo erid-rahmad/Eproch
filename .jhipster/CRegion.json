@@ -9,6 +9,10 @@
             ]
         },
         {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
             "fieldName": "active",
             "fieldType": "Boolean"
         }
@@ -19,6 +23,14 @@
             "otherEntityName": "cCity",
             "otherEntityRelationshipName": "region",
             "relationshipName": "cCity"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cRegion",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
@@ -39,5 +51,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "skipClient": true
 }

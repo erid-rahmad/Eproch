@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.CCountry} entity. This class is used
@@ -32,6 +33,8 @@ public class CCountryCriteria implements Serializable, Criteria {
 
     private BooleanFilter withRegion;
 
+    private UUIDFilter uid;
+
     private BooleanFilter active;
 
     private LongFilter currencyId;
@@ -41,6 +44,8 @@ public class CCountryCriteria implements Serializable, Criteria {
 
     private LongFilter cCityId;
 
+    private LongFilter adOrganizationId;
+
     public CCountryCriteria() {
     }
 
@@ -49,11 +54,13 @@ public class CCountryCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.code = other.code == null ? null : other.code.copy();
         this.withRegion = other.withRegion == null ? null : other.withRegion.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
         this.currencyName = other.currencyName == null ? null : other.currencyName.copy();
         this.cRegionId = other.cRegionId == null ? null : other.cRegionId.copy();
         this.cCityId = other.cCityId == null ? null : other.cCityId.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
     @Override
@@ -91,6 +98,14 @@ public class CCountryCriteria implements Serializable, Criteria {
 
     public void setWithRegion(BooleanFilter withRegion) {
         this.withRegion = withRegion;
+    }
+
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
     }
 
     public BooleanFilter getActive() {
@@ -137,7 +152,14 @@ public class CCountryCriteria implements Serializable, Criteria {
         this.cCityId = cCityId;
     }
 
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
+    }
 
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -152,11 +174,13 @@ public class CCountryCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(code, that.code) &&
             Objects.equals(withRegion, that.withRegion) &&
+            Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(currencyName, that.currencyName) &&
             Objects.equals(cRegionId, that.cRegionId) &&
-            Objects.equals(cCityId, that.cCityId);
+            Objects.equals(cCityId, that.cCityId) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
     @Override
@@ -166,11 +190,13 @@ public class CCountryCriteria implements Serializable, Criteria {
         name,
         code,
         withRegion,
+        uid,
         active,
         currencyId,
         currencyName,
         cRegionId,
-        cCityId
+        cCityId,
+        adOrganizationId
         );
     }
 
@@ -181,11 +207,13 @@ public class CCountryCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (code != null ? "code=" + code + ", " : "") +
                 (withRegion != null ? "withRegion=" + withRegion + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
                 (currencyName != null ? "currencyName=" + currencyName + ", " : "") +
                 (cRegionId != null ? "cRegionId=" + cRegionId + ", " : "") +
                 (cCityId != null ? "cCityId=" + cCityId + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }
 

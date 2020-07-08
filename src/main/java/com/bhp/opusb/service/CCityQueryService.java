@@ -94,8 +94,15 @@ public class CCityQueryService extends QueryService<CCity> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CCity_.name));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), CCity_.uid));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), CCity_.active));
+            }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(CCity_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
             if (criteria.getCountryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCountryId(),

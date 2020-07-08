@@ -3,6 +3,7 @@ package com.bhp.opusb.service.dto;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CCountry} entity.
@@ -20,11 +21,16 @@ public class CCountryDTO extends AbstractAuditingDTO {
 
     private Boolean withRegion;
 
+    private UUID uid;
+
     private Boolean active;
 
 
     private Long currencyId;
     private String currencyName;
+    
+    private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -58,6 +64,14 @@ public class CCountryDTO extends AbstractAuditingDTO {
         this.withRegion = withRegion;
     }
 
+    public UUID getUid() {
+        return uid;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -80,6 +94,22 @@ public class CCountryDTO extends AbstractAuditingDTO {
 
     public void setCurrencyName(String currencyName) {
         this.currencyName = currencyName;
+    }
+
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override
@@ -110,11 +140,16 @@ public class CCountryDTO extends AbstractAuditingDTO {
             ", name='" + getName() + "'" +
             ", code='" + getCode() + "'" +
             ", withRegion='" + isWithRegion() + "'" +
+            ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", currencyId='" + getCurrencyId() + "'" +
-            ", currencyName=" + getCurrencyName() +
+            ", currencyName='" + getCurrencyName() + "'" +
+            ", adOrganizationId='" + getAdOrganizationId() + "'" +
+            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
+
+    
 
     
 }

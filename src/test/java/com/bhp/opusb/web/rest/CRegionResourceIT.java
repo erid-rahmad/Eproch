@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CRegion;
 import com.bhp.opusb.domain.CCity;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCountry;
 import com.bhp.opusb.repository.CRegionRepository;
 import com.bhp.opusb.service.CRegionService;
@@ -22,6 +23,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -39,6 +41,9 @@ public class CRegionResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -72,7 +77,18 @@ public class CRegionResourceIT {
     public static CRegion createEntity(EntityManager em) {
         CRegion cRegion = new CRegion()
             .name(DEFAULT_NAME)
+            .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cRegion.setAdOrganization(aDOrganization);
         // Add required entity
         CCountry cCountry;
         if (TestUtil.findAll(em, CCountry.class).isEmpty()) {
@@ -94,7 +110,18 @@ public class CRegionResourceIT {
     public static CRegion createUpdatedEntity(EntityManager em) {
         CRegion cRegion = new CRegion()
             .name(UPDATED_NAME)
+            .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cRegion.setAdOrganization(aDOrganization);
         // Add required entity
         CCountry cCountry;
         if (TestUtil.findAll(em, CCountry.class).isEmpty()) {
@@ -130,6 +157,7 @@ public class CRegionResourceIT {
         assertThat(cRegionList).hasSize(databaseSizeBeforeCreate + 1);
         CRegion testCRegion = cRegionList.get(cRegionList.size() - 1);
         assertThat(testCRegion.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testCRegion.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCRegion.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -185,6 +213,7 @@ public class CRegionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cRegion.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -200,6 +229,7 @@ public class CRegionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cRegion.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -303,6 +333,58 @@ public class CRegionResourceIT {
 
     @Test
     @Transactional
+    public void getAllCRegionsByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cRegionRepository.saveAndFlush(cRegion);
+
+        // Get all the cRegionList where uid equals to DEFAULT_UID
+        defaultCRegionShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the cRegionList where uid equals to UPDATED_UID
+        defaultCRegionShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCRegionsByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cRegionRepository.saveAndFlush(cRegion);
+
+        // Get all the cRegionList where uid not equals to DEFAULT_UID
+        defaultCRegionShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the cRegionList where uid not equals to UPDATED_UID
+        defaultCRegionShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCRegionsByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        cRegionRepository.saveAndFlush(cRegion);
+
+        // Get all the cRegionList where uid in DEFAULT_UID or UPDATED_UID
+        defaultCRegionShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the cRegionList where uid equals to UPDATED_UID
+        defaultCRegionShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCRegionsByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cRegionRepository.saveAndFlush(cRegion);
+
+        // Get all the cRegionList where uid is not null
+        defaultCRegionShouldBeFound("uid.specified=true");
+
+        // Get all the cRegionList where uid is null
+        defaultCRegionShouldNotBeFound("uid.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllCRegionsByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         cRegionRepository.saveAndFlush(cRegion);
@@ -375,6 +457,22 @@ public class CRegionResourceIT {
 
     @Test
     @Transactional
+    public void getAllCRegionsByAdOrganizationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADOrganization adOrganization = cRegion.getAdOrganization();
+        cRegionRepository.saveAndFlush(cRegion);
+        Long adOrganizationId = adOrganization.getId();
+
+        // Get all the cRegionList where adOrganization equals to adOrganizationId
+        defaultCRegionShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
+
+        // Get all the cRegionList where adOrganization equals to adOrganizationId + 1
+        defaultCRegionShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllCRegionsByCountryIsEqualToSomething() throws Exception {
         // Get already existing entity
         CCountry country = cRegion.getCountry();
@@ -397,6 +495,7 @@ public class CRegionResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cRegion.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -446,6 +545,7 @@ public class CRegionResourceIT {
         em.detach(updatedCRegion);
         updatedCRegion
             .name(UPDATED_NAME)
+            .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CRegionDTO cRegionDTO = cRegionMapper.toDto(updatedCRegion);
 
@@ -459,6 +559,7 @@ public class CRegionResourceIT {
         assertThat(cRegionList).hasSize(databaseSizeBeforeUpdate);
         CRegion testCRegion = cRegionList.get(cRegionList.size() - 1);
         assertThat(testCRegion.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testCRegion.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCRegion.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

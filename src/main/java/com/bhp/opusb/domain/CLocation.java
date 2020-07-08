@@ -9,6 +9,7 @@ import javax.validation.constraints.*;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A CLocation.
@@ -35,6 +36,9 @@ public class CLocation extends AbstractAuditingEntity {
     @Column(name = "tax_invoice_address")
     private Boolean taxInvoiceAddress;
 
+    @Column(name = "uid")
+    private UUID uid;
+
     @Column(name = "active")
     private Boolean active;
 
@@ -42,6 +46,11 @@ public class CLocation extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("cLocations")
     private CCity city;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cLocations")
+    private ADOrganization adOrganization;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -91,6 +100,19 @@ public class CLocation extends AbstractAuditingEntity {
         this.taxInvoiceAddress = taxInvoiceAddress;
     }
 
+    public UUID getUid() {
+        return uid;
+    }
+
+    public CLocation uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -116,7 +138,25 @@ public class CLocation extends AbstractAuditingEntity {
     public void setCity(CCity cCity) {
         this.city = cCity;
     }
+
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
+    }
+
+    public CLocation adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+        return this;
+    }
+
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -141,6 +181,7 @@ public class CLocation extends AbstractAuditingEntity {
             ", streetAddress='" + getStreetAddress() + "'" +
             ", postalCode='" + getPostalCode() + "'" +
             ", taxInvoiceAddress='" + isTaxInvoiceAddress() + "'" +
+            ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

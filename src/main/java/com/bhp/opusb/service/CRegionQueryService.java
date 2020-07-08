@@ -94,12 +94,19 @@ public class CRegionQueryService extends QueryService<CRegion> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CRegion_.name));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), CRegion_.uid));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), CRegion_.active));
             }
             if (criteria.getCCityId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCCityId(),
                     root -> root.join(CRegion_.cCities, JoinType.LEFT).get(CCity_.id)));
+            }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(CRegion_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
             if (criteria.getCountryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCountryId(),

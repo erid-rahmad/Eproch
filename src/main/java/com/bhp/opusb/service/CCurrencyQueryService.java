@@ -100,8 +100,15 @@ public class CCurrencyQueryService extends QueryService<CCurrency> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CCurrency_.name));
             }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), CCurrency_.uid));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), CCurrency_.active));
+            }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(CCurrency_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
         }
         return specification;

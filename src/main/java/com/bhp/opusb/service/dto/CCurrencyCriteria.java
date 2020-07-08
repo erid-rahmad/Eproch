@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.CCurrency} entity. This class is used
@@ -32,7 +33,12 @@ public class CCurrencyCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
+    private UUIDFilter uid;
+
     private BooleanFilter active;
+
+    private LongFilter adOrganizationId;
+    private StringFilter adOrganizationName;
 
     public CCurrencyCriteria() {
     }
@@ -42,7 +48,10 @@ public class CCurrencyCriteria implements Serializable, Criteria {
         this.code = other.code == null ? null : other.code.copy();
         this.symbol = other.symbol == null ? null : other.symbol.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
     }
 
     @Override
@@ -82,6 +91,14 @@ public class CCurrencyCriteria implements Serializable, Criteria {
         this.name = name;
     }
 
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
+    }
+
     public BooleanFilter getActive() {
         return active;
     }
@@ -90,6 +107,21 @@ public class CCurrencyCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+
+    public StringFilter getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(StringFilter adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -105,7 +137,10 @@ public class CCurrencyCriteria implements Serializable, Criteria {
             Objects.equals(code, that.code) &&
             Objects.equals(symbol, that.symbol) &&
             Objects.equals(name, that.name) &&
-            Objects.equals(active, that.active);
+            Objects.equals(uid, that.uid) &&
+            Objects.equals(active, that.active) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adOrganizationName, that.adOrganizationName);
     }
 
     @Override
@@ -115,7 +150,10 @@ public class CCurrencyCriteria implements Serializable, Criteria {
         code,
         symbol,
         name,
-        active
+        uid,
+        active,
+        adOrganizationId,
+        adOrganizationName
         );
     }
 
@@ -126,7 +164,10 @@ public class CCurrencyCriteria implements Serializable, Criteria {
                 (code != null ? "code=" + code + ", " : "") +
                 (symbol != null ? "symbol=" + symbol + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
             "}";
     }
 

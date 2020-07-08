@@ -1,6 +1,9 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
@@ -18,11 +21,16 @@ public class CLocationDTO extends AbstractAuditingDTO {
 
     private Boolean taxInvoiceAddress;
 
+    private UUID uid;
+
     private Boolean active;
 
 
     private Long cityId;
     private String cityName;
+    
+    private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -56,6 +64,14 @@ public class CLocationDTO extends AbstractAuditingDTO {
         this.taxInvoiceAddress = taxInvoiceAddress;
     }
 
+    public UUID getUid() {
+        return uid;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -78,6 +94,22 @@ public class CLocationDTO extends AbstractAuditingDTO {
 
     public void setCityName(String cityName) {
         this.cityName = cityName;
+    }
+
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override
@@ -108,9 +140,12 @@ public class CLocationDTO extends AbstractAuditingDTO {
             ", streetAddress='" + getStreetAddress() + "'" +
             ", postalCode='" + getPostalCode() + "'" +
             ", taxInvoiceAddress='" + isTaxInvoiceAddress() + "'" +
+            ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", cityId='" + getCityId() + "'" +
-            ", cityName=" + getCityName() +
+            ", cityName='" + getCityName() + "'" +
+            ", adOrganizationId='" + getAdOrganizationId() + "'" +
+            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
 

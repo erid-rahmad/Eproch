@@ -1,11 +1,11 @@
-id;street_address;postal_code;tax_invoice_address;active;city_id
-1;Creek solid state;Rubber Investor Wallis and Futuna;true;false;1
-2;Wooden;RAM Sausages Legacy;false;true;2
-3;frame Steel;Awesome;false;true;3
-4;infomediaries Steel bypass;Nakfa;true;false;4
-5;Innovative focus group;Face to face next-generation deposit;false;false;5
-6;e-markets Rest action-items;Senior models repurpose;false;true;6
-7;leverage;Product proactive;true;false;7
-8;Australia;Savings Account Dynamic Investor;false;false;8
-9;Cambridgeshire;invoice Missouri;false;false;9
-10;turn-key solution Group;Product;true;true;10
+id;street_address;postal_code;tax_invoice_address;uid;active;city_id;ad_organization_id
+1;Creek solid state;Rubber Investor Wallis and Futuna;true;2112ed12-eec6-4c94-9202-1958b6b10c14;true;1;1
+2;bypass;Innovative focus group;true;345da253-c697-4b65-9e06-b6b3c1598e45;false;2;2
+3;green Australia;Savings Account Dynamic Investor;false;448faaf9-775a-45a4-9e61-e4eeca614047;false;3;3
+4;Moroccan Dirham interface Mouse;Refined Granite system;true;69beb878-399e-4fe7-9535-180b434cc13a;true;4;4
+5;program;Turks and Caicos Islands Interactions;true;480196d7-d1b1-4601-b763-d2d9a50eae67;true;5;5
+6;Trinidad and Tobago Dollar;Quality;true;9f34f579-d0e9-4d95-994b-863a4a70dc4f;false;6;6
+7;Points Solomon Islands Generic Fresh Towels;payment Lane;true;e9e6b452-df64-4589-b006-d370bf8e6d44;false;7;7
+8;Assurance;New Jersey program Representative;true;93a0275d-7275-4589-b537-722c15a72818;false;8;8
+9;Incredible Soft Chair;engage;false;a252fcff-8b25-4a5d-b142-5264b697499e;true;9;9
+10;cyan architect Gorgeous;Licensed Cotton Shoes bandwidth;false;1a73cb1c-fc72-4fc1-9821-89b6e2908422;true;10;10

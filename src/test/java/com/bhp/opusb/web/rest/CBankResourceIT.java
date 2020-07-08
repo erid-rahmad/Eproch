@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CBank;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.CBankRepository;
 import com.bhp.opusb.service.CBankService;
 import com.bhp.opusb.service.dto.CBankDTO;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -47,8 +49,11 @@ public class CBankResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_SWIFT_CODE = "ADGBHAEPZIQ";
-    private static final String UPDATED_SWIFT_CODE = "SJBLWJ61G6U";
+    private static final String DEFAULT_SWIFT_CODE = "UJLKPC0PMN2";
+    private static final String UPDATED_SWIFT_CODE = "JZWMLW6T";
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -86,7 +91,18 @@ public class CBankResourceIT {
             .shortName(DEFAULT_SHORT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .swiftCode(DEFAULT_SWIFT_CODE)
+            .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cBank.setAdOrganization(aDOrganization);
         return cBank;
     }
     /**
@@ -102,7 +118,18 @@ public class CBankResourceIT {
             .shortName(UPDATED_SHORT_NAME)
             .description(UPDATED_DESCRIPTION)
             .swiftCode(UPDATED_SWIFT_CODE)
+            .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cBank.setAdOrganization(aDOrganization);
         return cBank;
     }
 
@@ -132,6 +159,7 @@ public class CBankResourceIT {
         assertThat(testCBank.getShortName()).isEqualTo(DEFAULT_SHORT_NAME);
         assertThat(testCBank.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCBank.getSwiftCode()).isEqualTo(DEFAULT_SWIFT_CODE);
+        assertThat(testCBank.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCBank.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -229,6 +257,7 @@ public class CBankResourceIT {
             .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].swiftCode").value(hasItem(DEFAULT_SWIFT_CODE)))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -248,6 +277,7 @@ public class CBankResourceIT {
             .andExpect(jsonPath("$.shortName").value(DEFAULT_SHORT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.swiftCode").value(DEFAULT_SWIFT_CODE))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -663,6 +693,58 @@ public class CBankResourceIT {
 
     @Test
     @Transactional
+    public void getAllCBanksByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cBankRepository.saveAndFlush(cBank);
+
+        // Get all the cBankList where uid equals to DEFAULT_UID
+        defaultCBankShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the cBankList where uid equals to UPDATED_UID
+        defaultCBankShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBanksByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cBankRepository.saveAndFlush(cBank);
+
+        // Get all the cBankList where uid not equals to DEFAULT_UID
+        defaultCBankShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the cBankList where uid not equals to UPDATED_UID
+        defaultCBankShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBanksByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        cBankRepository.saveAndFlush(cBank);
+
+        // Get all the cBankList where uid in DEFAULT_UID or UPDATED_UID
+        defaultCBankShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the cBankList where uid equals to UPDATED_UID
+        defaultCBankShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBanksByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cBankRepository.saveAndFlush(cBank);
+
+        // Get all the cBankList where uid is not null
+        defaultCBankShouldBeFound("uid.specified=true");
+
+        // Get all the cBankList where uid is null
+        defaultCBankShouldNotBeFound("uid.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllCBanksByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         cBankRepository.saveAndFlush(cBank);
@@ -712,6 +794,22 @@ public class CBankResourceIT {
         // Get all the cBankList where active is null
         defaultCBankShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllCBanksByAdOrganizationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADOrganization adOrganization = cBank.getAdOrganization();
+        cBankRepository.saveAndFlush(cBank);
+        Long adOrganizationId = adOrganization.getId();
+
+        // Get all the cBankList where adOrganization equals to adOrganizationId
+        defaultCBankShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
+
+        // Get all the cBankList where adOrganization equals to adOrganizationId + 1
+        defaultCBankShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -725,6 +823,7 @@ public class CBankResourceIT {
             .andExpect(jsonPath("$.[*].shortName").value(hasItem(DEFAULT_SHORT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].swiftCode").value(hasItem(DEFAULT_SWIFT_CODE)))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -778,6 +877,7 @@ public class CBankResourceIT {
             .shortName(UPDATED_SHORT_NAME)
             .description(UPDATED_DESCRIPTION)
             .swiftCode(UPDATED_SWIFT_CODE)
+            .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CBankDTO cBankDTO = cBankMapper.toDto(updatedCBank);
 
@@ -795,6 +895,7 @@ public class CBankResourceIT {
         assertThat(testCBank.getShortName()).isEqualTo(UPDATED_SHORT_NAME);
         assertThat(testCBank.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCBank.getSwiftCode()).isEqualTo(UPDATED_SWIFT_CODE);
+        assertThat(testCBank.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCBank.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

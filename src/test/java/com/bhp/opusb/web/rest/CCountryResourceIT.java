@@ -5,6 +5,7 @@ import com.bhp.opusb.domain.CCountry;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CRegion;
 import com.bhp.opusb.domain.CCity;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.CCountryRepository;
 import com.bhp.opusb.service.CCountryService;
 import com.bhp.opusb.service.dto.CCountryDTO;
@@ -23,6 +24,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -41,11 +43,14 @@ public class CCountryResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_CODE = "XV";
-    private static final String UPDATED_CODE = "KU";
+    private static final String DEFAULT_CODE = "ZK";
+    private static final String UPDATED_CODE = "NS";
 
     private static final Boolean DEFAULT_WITH_REGION = false;
     private static final Boolean UPDATED_WITH_REGION = true;
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -81,6 +86,7 @@ public class CCountryResourceIT {
             .name(DEFAULT_NAME)
             .code(DEFAULT_CODE)
             .withRegion(DEFAULT_WITH_REGION)
+            .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
         CCurrency cCurrency;
@@ -92,6 +98,16 @@ public class CCountryResourceIT {
             cCurrency = TestUtil.findAll(em, CCurrency.class).get(0);
         }
         cCountry.setCurrency(cCurrency);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cCountry.setAdOrganization(aDOrganization);
         return cCountry;
     }
     /**
@@ -105,6 +121,7 @@ public class CCountryResourceIT {
             .name(UPDATED_NAME)
             .code(UPDATED_CODE)
             .withRegion(UPDATED_WITH_REGION)
+            .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
         CCurrency cCurrency;
@@ -116,6 +133,16 @@ public class CCountryResourceIT {
             cCurrency = TestUtil.findAll(em, CCurrency.class).get(0);
         }
         cCountry.setCurrency(cCurrency);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cCountry.setAdOrganization(aDOrganization);
         return cCountry;
     }
 
@@ -143,6 +170,7 @@ public class CCountryResourceIT {
         assertThat(testCCountry.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCCountry.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCCountry.isWithRegion()).isEqualTo(DEFAULT_WITH_REGION);
+        assertThat(testCCountry.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCCountry.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -219,6 +247,7 @@ public class CCountryResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].withRegion").value(hasItem(DEFAULT_WITH_REGION.booleanValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -236,6 +265,7 @@ public class CCountryResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.withRegion").value(DEFAULT_WITH_REGION.booleanValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -469,6 +499,58 @@ public class CCountryResourceIT {
 
     @Test
     @Transactional
+    public void getAllCCountriesByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where uid equals to DEFAULT_UID
+        defaultCCountryShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the cCountryList where uid equals to UPDATED_UID
+        defaultCCountryShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where uid not equals to DEFAULT_UID
+        defaultCCountryShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the cCountryList where uid not equals to UPDATED_UID
+        defaultCCountryShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where uid in DEFAULT_UID or UPDATED_UID
+        defaultCCountryShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the cCountryList where uid equals to UPDATED_UID
+        defaultCCountryShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where uid is not null
+        defaultCCountryShouldBeFound("uid.specified=true");
+
+        // Get all the cCountryList where uid is null
+        defaultCCountryShouldNotBeFound("uid.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllCCountriesByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         cCountryRepository.saveAndFlush(cCountry);
@@ -574,6 +656,22 @@ public class CCountryResourceIT {
         defaultCCountryShouldNotBeFound("cCityId.equals=" + (cCityId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByAdOrganizationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADOrganization adOrganization = cCountry.getAdOrganization();
+        cCountryRepository.saveAndFlush(cCountry);
+        Long adOrganizationId = adOrganization.getId();
+
+        // Get all the cCountryList where adOrganization equals to adOrganizationId
+        defaultCCountryShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
+
+        // Get all the cCountryList where adOrganization equals to adOrganizationId + 1
+        defaultCCountryShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -585,6 +683,7 @@ public class CCountryResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].withRegion").value(hasItem(DEFAULT_WITH_REGION.booleanValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -636,6 +735,7 @@ public class CCountryResourceIT {
             .name(UPDATED_NAME)
             .code(UPDATED_CODE)
             .withRegion(UPDATED_WITH_REGION)
+            .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CCountryDTO cCountryDTO = cCountryMapper.toDto(updatedCCountry);
 
@@ -651,6 +751,7 @@ public class CCountryResourceIT {
         assertThat(testCCountry.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCCountry.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCCountry.isWithRegion()).isEqualTo(UPDATED_WITH_REGION);
+        assertThat(testCCountry.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCCountry.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

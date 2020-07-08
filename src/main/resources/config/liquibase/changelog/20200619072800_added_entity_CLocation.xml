@@ -70,10 +70,23 @@
             <column name="street_address" type="string"/>
             <column name="postal_code" type="string"/>
             <column name="tax_invoice_address" type="boolean"/>
+            <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="city_id" type="numeric"/>
+            <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200619072800-1-add-column" author="dian-tri-budianto">
+        <addColumn tableName="c_location">
+            <column name="uid" type="${uuidType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_organization_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>
