@@ -6,6 +6,7 @@ import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADReference;
 import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.domain.AdValidationRule;
+import com.bhp.opusb.domain.AdButton;
 import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.repository.ADFieldRepository;
 import com.bhp.opusb.service.ADFieldService;
@@ -2124,6 +2125,26 @@ public class ADFieldResourceIT {
 
         // Get all the aDFieldList where adValidationRule equals to adValidationRuleId + 1
         defaultADFieldShouldNotBeFound("adValidationRuleId.equals=" + (adValidationRuleId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByAdButtonIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+        AdButton adButton = AdButtonResourceIT.createEntity(em);
+        em.persist(adButton);
+        em.flush();
+        aDField.setAdButton(adButton);
+        aDFieldRepository.saveAndFlush(aDField);
+        Long adButtonId = adButton.getId();
+
+        // Get all the aDFieldList where adButton equals to adButtonId
+        defaultADFieldShouldBeFound("adButtonId.equals=" + adButtonId);
+
+        // Get all the aDFieldList where adButton equals to adButtonId + 1
+        defaultADFieldShouldNotBeFound("adButtonId.equals=" + (adButtonId + 1));
     }
 
 

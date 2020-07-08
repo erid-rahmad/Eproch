@@ -1,0 +1,91 @@
+{
+    "name": "AdTriggerParam",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "mandatory",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "mandatoryLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "displayLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "readOnlyLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "defaultValue",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "formatPattern",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "minLength",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "maxLength",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "minValue",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "maxValue",
+            "fieldType": "Long"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "adTriggerParam",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adTrigger",
+            "otherEntityRelationshipName": "adTriggerParam",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTrigger",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200707181700",
+    "entityTableName": "ad_trigger_param",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true,
+    "skipClient": true
+}

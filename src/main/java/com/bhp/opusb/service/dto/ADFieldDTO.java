@@ -67,10 +67,15 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     private Long adReferenceId;
     private String adReferenceName;
-    private Long adValidationRuleId;
-    private String adValidationRuleName;
+
     private Long adColumnId;
     private String adColumnName;
+
+    private Long adValidationRuleId;
+    private String adValidationRuleName;
+
+    private Long adButtonId;
+    private String adButtonName;
 
     private Long adTabId;
     private String adTabName;
@@ -78,7 +83,6 @@ public class ADFieldDTO extends AbstractAuditingDTO {
     private ADReferenceDTO adReference;
     private AdValidationRuleDTO adValidationRule;
     private ADColumnDTO adColumn;
-
     public Long getId() {
         return id;
     }
@@ -311,6 +315,14 @@ public class ADFieldDTO extends AbstractAuditingDTO {
         this.adColumnId = aDColumnId;
     }
 
+    public String getAdColumnName() {
+        return adColumnName;
+    }
+
+    public void setAdColumnName(String adColumnName) {
+        this.adColumnName = adColumnName;
+    }
+
     public Long getAdValidationRuleId() {
         return adValidationRuleId;
     }
@@ -325,6 +337,30 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     public void setAdValidationRuleName(String adValidationRuleName) {
         this.adValidationRuleName = adValidationRuleName;
+    }
+
+    public Long getAdButtonId() {
+        return adButtonId;
+    }
+
+    public void setAdButtonId(Long adButtonId) {
+        this.adButtonId = adButtonId;
+    }
+
+    public String getAdButtonName() {
+        return adButtonName;
+    }
+
+    public void setAdButtonName(String adButtonName) {
+        this.adButtonName = adButtonName;
+    }
+
+    public Long getAdTabId() {
+        return adTabId;
+    }
+
+    public void setAdTabId(Long aDTabId) {
+        this.adTabId = aDTabId;
     }
 
     public String getAdTabName() {
@@ -343,14 +379,6 @@ public class ADFieldDTO extends AbstractAuditingDTO {
         this.adValidationRule = adValidationRule;
     }
 
-    public Long getAdTabId() {
-        return adTabId;
-    }
-
-    public void setAdTabId(Long aDTabId) {
-        this.adTabId = aDTabId;
-    }
-
     public ADReferenceDTO getAdReference() {
         return adReference;
     }
@@ -361,18 +389,6 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     public ADColumnDTO getAdColumn() {
         return adColumn;
-    }
-
-    public void setAdColumn(ADColumnDTO adColumn) {
-        this.adColumn = adColumn;
-    }
-
-    public String getAdColumnName() {
-        return adColumnName;
-    }
-
-    public void setAdColumnName(String adColumnName) {
-        this.adColumnName = adColumnName;
     }
 
     @Override
@@ -427,6 +443,7 @@ public class ADFieldDTO extends AbstractAuditingDTO {
             ", adReferenceId=" + getAdReferenceId() +
             ", adColumnId=" + getAdColumnId() +
             ", adValidationRuleId=" + getAdValidationRuleId() +
+            ", adButtonId=" + getAdButtonId() +
             ", adTabId=" + getAdTabId() +
             "}";
     }

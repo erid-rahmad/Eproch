@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -403,6 +404,11 @@ public class ADTab extends AbstractAuditingEntity {
         this.parentTab = aDTab;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
 
     @Override
     public boolean equals(Object o) {

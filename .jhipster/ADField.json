@@ -130,6 +130,13 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "adButton",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipName": "adButton",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "aDTab",
             "otherEntityRelationshipName": "aDField",
             "relationshipValidateRules": "required",
