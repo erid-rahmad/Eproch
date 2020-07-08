@@ -54,6 +54,9 @@ public class ADTab extends AbstractAuditingEntity {
     @Column(name = "target_endpoint")
     private String targetEndpoint;
 
+    @Column(name = "deletable")
+    private Boolean deletable;
+
     @Column(name = "writable")
     private Boolean writable = true;
 
@@ -183,6 +186,19 @@ public class ADTab extends AbstractAuditingEntity {
 
     public void setTargetEndpoint(String targetEndpoint) {
         this.targetEndpoint = targetEndpoint;
+    }
+
+    public Boolean isDeletable() {
+        return deletable;
+    }
+
+    public ADTab deletable(Boolean deletable) {
+        this.deletable = deletable;
+        return this;
+    }
+
+    public void setDeletable(Boolean deletable) {
+        this.deletable = deletable;
     }
 
     public Boolean isWritable() {
@@ -435,6 +451,7 @@ public class ADTab extends AbstractAuditingEntity {
             ", description='" + getDescription() + "'" +
             ", iconName='" + getIconName() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
+            ", deletable='" + isDeletable() + "'" +
             ", writable='" + isWritable() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +

@@ -1,9 +1,9 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADTable} entity.
@@ -21,7 +21,10 @@ public class ADTableDTO extends AbstractAuditingDTO {
 
     private Boolean view;
 
+    private String targetEndpoint;
+
     private Boolean active;
+
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -56,6 +59,14 @@ public class ADTableDTO extends AbstractAuditingDTO {
 
     public void setView(Boolean view) {
         this.view = view;
+    }
+
+    public String getTargetEndpoint() {
+        return targetEndpoint;
+    }
+
+    public void setTargetEndpoint(String targetEndpoint) {
+        this.targetEndpoint = targetEndpoint;
     }
 
     public Boolean isActive() {
@@ -110,6 +121,7 @@ public class ADTableDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", view='" + isView() + "'" +
+            ", targetEndpoint='" + getTargetEndpoint() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";

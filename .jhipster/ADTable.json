@@ -18,6 +18,10 @@
             "fieldType": "Boolean"
         },
         {
+            "fieldName": "targetEndpoint",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "active",
             "fieldType": "Boolean"
         }

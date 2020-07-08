@@ -47,6 +47,9 @@ public class ADTable extends AbstractAuditingEntity {
     @Column(name = "view")
     private Boolean view;
 
+    @Column(name = "target_endpoint")
+    private String targetEndpoint;
+
     @Column(name = "active")
     private Boolean active = true;
 
@@ -113,6 +116,19 @@ public class ADTable extends AbstractAuditingEntity {
 
     public void setView(Boolean view) {
         this.view = view;
+    }
+
+    public String getTargetEndpoint() {
+        return targetEndpoint;
+    }
+
+    public ADTable targetEndpoint(String targetEndpoint) {
+        this.targetEndpoint = targetEndpoint;
+        return this;
+    }
+
+    public void setTargetEndpoint(String targetEndpoint) {
+        this.targetEndpoint = targetEndpoint;
     }
 
     public Boolean isActive() {
@@ -195,6 +211,7 @@ public class ADTable extends AbstractAuditingEntity {
             ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", view='" + isView() + "'" +
+            ", targetEndpoint='" + getTargetEndpoint() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

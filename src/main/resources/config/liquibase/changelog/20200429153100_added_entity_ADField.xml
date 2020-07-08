@@ -161,4 +161,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20200708094900" author="Ananta Aryadewa">
+        <dropNotNullConstraint tableName="ad_field" columnName="ad_column_id" />
+    </changeSet>
+
 </databaseChangeLog>

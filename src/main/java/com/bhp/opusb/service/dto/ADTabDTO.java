@@ -27,6 +27,8 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     private String targetEndpoint;
 
+    private Boolean deletable;
+
     private Boolean writable;
 
     private String displayLogic;
@@ -40,6 +42,7 @@ public class ADTabDTO extends AbstractAuditingDTO {
     private Integer tabSequence;
 
     private Boolean active;
+
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -109,6 +112,14 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     public void setTargetEndpoint(String targetEndpoint) {
         this.targetEndpoint = targetEndpoint;
+    }
+
+    public Boolean isDeletable() {
+        return deletable;
+    }
+
+    public void setDeletable(Boolean deletable) {
+        this.deletable = deletable;
     }
 
     public Boolean isWritable() {
@@ -317,6 +328,7 @@ public class ADTabDTO extends AbstractAuditingDTO {
             ", description='" + getDescription() + "'" +
             ", iconName='" + getIconName() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
+            ", deletable='" + isDeletable() + "'" +
             ", writable='" + isWritable() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +

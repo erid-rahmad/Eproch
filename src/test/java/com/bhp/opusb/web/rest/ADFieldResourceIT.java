@@ -177,16 +177,6 @@ public class ADFieldResourceIT {
         }
         aDField.setAdOrganization(aDOrganization);
         // Add required entity
-        ADColumn aDColumn;
-        if (TestUtil.findAll(em, ADColumn.class).isEmpty()) {
-            aDColumn = ADColumnResourceIT.createEntity(em);
-            em.persist(aDColumn);
-            em.flush();
-        } else {
-            aDColumn = TestUtil.findAll(em, ADColumn.class).get(0);
-        }
-        aDField.setAdColumn(aDColumn);
-        // Add required entity
         ADTab aDTab;
         if (TestUtil.findAll(em, ADTab.class).isEmpty()) {
             aDTab = ADTabResourceIT.createEntity(em);
@@ -239,16 +229,6 @@ public class ADFieldResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         aDField.setAdOrganization(aDOrganization);
-        // Add required entity
-        ADColumn aDColumn;
-        if (TestUtil.findAll(em, ADColumn.class).isEmpty()) {
-            aDColumn = ADColumnResourceIT.createUpdatedEntity(em);
-            em.persist(aDColumn);
-            em.flush();
-        } else {
-            aDColumn = TestUtil.findAll(em, ADColumn.class).get(0);
-        }
-        aDField.setAdColumn(aDColumn);
         // Add required entity
         ADTab aDTab;
         if (TestUtil.findAll(em, ADTab.class).isEmpty()) {
@@ -2095,8 +2075,12 @@ public class ADFieldResourceIT {
     @Test
     @Transactional
     public void getAllADFieldsByAdColumnIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        ADColumn adColumn = aDField.getAdColumn();
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+        ADColumn adColumn = ADColumnResourceIT.createEntity(em);
+        em.persist(adColumn);
+        em.flush();
+        aDField.setAdColumn(adColumn);
         aDFieldRepository.saveAndFlush(aDField);
         Long adColumnId = adColumn.getId();
 
