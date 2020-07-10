@@ -12,6 +12,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -42,6 +43,11 @@ public class AdTaskApplication extends AbstractAuditingEntity {
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
+
+    @NotNull
+    @Pattern(regexp = "^[a-zA-Z_\\-]+$")
+    @Column(name = "value", nullable = false)
+    private String value;
 
     @NotNull
     @Column(name = "uri", nullable = false)
@@ -109,6 +115,19 @@ public class AdTaskApplication extends AbstractAuditingEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public AdTaskApplication value(String value) {
+        this.value = value;
+        return this;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 
     public String getUri() {
@@ -218,6 +237,7 @@ public class AdTaskApplication extends AbstractAuditingEntity {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
+            ", value='" + getValue() + "'" +
             ", uri='" + getUri() + "'" +
             ", metadataUri='" + getMetadataUri() + "'" +
             ", version='" + getVersion() + "'" +

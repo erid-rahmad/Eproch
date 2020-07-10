@@ -79,4 +79,8 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20200708171400" author="Ananta Aryadewa">
+        <addUniqueConstraint tableName="ad_task" columnNames="value" constraintName="ux_ad_task_value"/>
+    </changeSet>
+
 </databaseChangeLog>

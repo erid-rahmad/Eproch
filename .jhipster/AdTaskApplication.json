@@ -17,6 +17,15 @@
             ]
         },
         {
+            "fieldName": "value",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "pattern"
+            ],
+            "fieldValidateRulesPattern": "^[a-zA-Z_\\-]+$"
+        },
+        {
             "fieldName": "uri",
             "fieldType": "String",
             "fieldValidateRules": [

@@ -37,7 +37,7 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
     private String adOrganizationName;
 
     private Long adTaskId;
-    private Long adTaskName;
+    private String adTaskName;
     
     public Long getId() {
         return id;
@@ -127,11 +127,11 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
         this.adTaskId = adTaskId;
     }
 
-    public Long getAdTaskName() {
+    public String getAdTaskName() {
         return adTaskName;
     }
 
-    public void setAdTaskName(Long adTaskName) {
+    public void setAdTaskName(String adTaskName) {
         this.adTaskName = adTaskName;
     }
 

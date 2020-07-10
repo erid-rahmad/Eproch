@@ -79,6 +79,7 @@
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="name" type="string"/>
+            <column name="value" type="string"/>
             <column name="uri" type="string"/>
             <column name="metadata_uri" type="string"/>
             <column name="version" type="string"/>
@@ -92,6 +93,14 @@
         <addColumn tableName="ad_task_application">
             <column name="deployed" type="boolean">
                 <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200708171700" author="Ananta Aryadewa">
+        <addColumn tableName="ad_task_application">
+            <column name="value" type="varchar(255)">
+                <constraints nullable="false" />
             </column>
         </addColumn>
     </changeSet>

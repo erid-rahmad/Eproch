@@ -33,6 +33,8 @@ public class AdTaskApplicationCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
+    private StringFilter value;
+
     private StringFilter uri;
 
     private StringFilter metadataUri;
@@ -53,6 +55,7 @@ public class AdTaskApplicationCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.value = other.value == null ? null : other.value.copy();
         this.uri = other.uri == null ? null : other.uri.copy();
         this.metadataUri = other.metadataUri == null ? null : other.metadataUri.copy();
         this.version = other.version == null ? null : other.version.copy();
@@ -96,6 +99,14 @@ public class AdTaskApplicationCriteria implements Serializable, Criteria {
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getValue() {
+        return value;
+    }
+
+    public void setValue(StringFilter value) {
+        this.value = value;
     }
 
     public StringFilter getUri() {
@@ -161,6 +172,7 @@ public class AdTaskApplicationCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(value, that.value) &&
             Objects.equals(uri, that.uri) &&
             Objects.equals(metadataUri, that.metadataUri) &&
             Objects.equals(version, that.version) &&
@@ -176,6 +188,7 @@ public class AdTaskApplicationCriteria implements Serializable, Criteria {
         uid,
         active,
         name,
+        value,
         uri,
         metadataUri,
         version,
@@ -192,6 +205,7 @@ public class AdTaskApplicationCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (value != null ? "value=" + value + ", " : "") +
                 (uri != null ? "uri=" + uri + ", " : "") +
                 (metadataUri != null ? "metadataUri=" + metadataUri + ", " : "") +
                 (version != null ? "version=" + version + ", " : "") +

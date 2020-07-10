@@ -83,6 +83,8 @@ public class ADFieldDTO extends AbstractAuditingDTO {
     private ADReferenceDTO adReference;
     private AdValidationRuleDTO adValidationRule;
     private ADColumnDTO adColumn;
+    private AdButtonDTO adButton;
+    
     public Long getId() {
         return id;
     }
@@ -389,6 +391,18 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     public ADColumnDTO getAdColumn() {
         return adColumn;
+    }
+
+    public void setAdColumn(ADColumnDTO adColumn) {
+        this.adColumn = adColumn;
+    }
+
+    public AdButtonDTO getAdButton() {
+        return adButton;
+    }
+
+    public void setAdButton(AdButtonDTO adButton) {
+        this.adButton = adButton;
     }
 
     @Override

@@ -1,10 +1,11 @@
 package com.bhp.opusb.domain;
 
-import java.io.Serializable;
 import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -14,6 +15,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.bhp.opusb.domain.enumeration.ADColumnType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
@@ -25,7 +27,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "ad_trigger_param")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class AdTriggerParam implements Serializable {
+public class AdTriggerParam extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -43,6 +45,15 @@ public class AdTriggerParam implements Serializable {
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
+
+    @NotNull
+    @Column(name = "value", nullable = false)
+    private String value;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type", nullable = false)
+    private ADColumnType type;
 
     @Column(name = "mandatory")
     private Boolean mandatory;
@@ -78,6 +89,14 @@ public class AdTriggerParam implements Serializable {
     @NotNull
     @JsonIgnoreProperties("adTriggerParams")
     private ADOrganization adOrganization;
+
+    @ManyToOne
+    @JsonIgnoreProperties("adTriggerParams")
+    private ADReference adReference;
+
+    @ManyToOne
+    @JsonIgnoreProperties("adTriggerParams")
+    private AdValidationRule adValidationRule;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -130,6 +149,32 @@ public class AdTriggerParam implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public AdTriggerParam value(String value) {
+        this.value = value;
+        return this;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public ADColumnType getType() {
+        return type;
+    }
+
+    public AdTriggerParam type(ADColumnType type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(ADColumnType type) {
+        this.type = type;
     }
 
     public Boolean isMandatory() {
@@ -275,6 +320,32 @@ public class AdTriggerParam implements Serializable {
         this.adOrganization = aDOrganization;
     }
 
+    public ADReference getAdReference() {
+        return adReference;
+    }
+
+    public AdTriggerParam adReference(ADReference aDReference) {
+        this.adReference = aDReference;
+        return this;
+    }
+
+    public void setAdReference(ADReference aDReference) {
+        this.adReference = aDReference;
+    }
+
+    public AdValidationRule getAdValidationRule() {
+        return adValidationRule;
+    }
+
+    public AdTriggerParam adValidationRule(AdValidationRule adValidationRule) {
+        this.adValidationRule = adValidationRule;
+        return this;
+    }
+
+    public void setAdValidationRule(AdValidationRule adValidationRule) {
+        this.adValidationRule = adValidationRule;
+    }
+
     public AdTrigger getAdTrigger() {
         return adTrigger;
     }
@@ -317,6 +388,8 @@ public class AdTriggerParam implements Serializable {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
+            ", value='" + getValue() + "'" +
+            ", type='" + getType() + "'" +
             ", mandatory='" + isMandatory() + "'" +
             ", mandatoryLogic='" + getMandatoryLogic() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +

@@ -30,10 +30,15 @@ public class AdButtonDTO extends AbstractAuditingDTO {
     private String icon;
 
     private Long adOrganizationId;
-    private Long adOrganizationName;
+    private String adOrganizationName;
+
+    private Long adTabId;
+    private String adTabName;
 
     private Long adTriggerId;
-    private Long adTriggerName;
+    private String adTriggerName;
+
+    private AdTriggerDTO adTrigger;
     
     public Long getId() {
         return id;
@@ -107,12 +112,28 @@ public class AdButtonDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public Long getAdOrganizationName() {
+    public String getAdOrganizationName() {
         return adOrganizationName;
     }
 
-    public void setAdOrganizationName(Long adOrganizationName) {
+    public void setAdOrganizationName(String adOrganizationName) {
         this.adOrganizationName = adOrganizationName;
+    }
+
+    public Long getAdTabId() {
+        return adTabId;
+    }
+
+    public void setAdTabId(Long aDTabId) {
+        this.adTabId = aDTabId;
+    }
+
+    public String getAdTabName() {
+        return adTabName;
+    }
+
+    public void setAdTabName(String adTabName) {
+        this.adTabName = adTabName;
     }
 
     public Long getAdTriggerId() {
@@ -123,12 +144,20 @@ public class AdButtonDTO extends AbstractAuditingDTO {
         this.adTriggerId = adTriggerId;
     }
 
-    public Long getAdTriggerName() {
+    public String getAdTriggerName() {
         return adTriggerName;
     }
 
-    public void setAdTriggerName(Long adTriggerName) {
+    public void setAdTriggerName(String adTriggerName) {
         this.adTriggerName = adTriggerName;
+    }
+
+    public AdTriggerDTO getAdTrigger() {
+        return adTrigger;
+    }
+
+    public void setAdTrigger(AdTriggerDTO adTrigger) {
+        this.adTrigger = adTrigger;
     }
 
     @Override
@@ -164,6 +193,7 @@ public class AdButtonDTO extends AbstractAuditingDTO {
             ", toolbar='" + isToolbar() + "'" +
             ", icon='" + getIcon() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adTabId=" + getAdTabId() +
             ", adTriggerId=" + getAdTriggerId() +
             "}";
     }

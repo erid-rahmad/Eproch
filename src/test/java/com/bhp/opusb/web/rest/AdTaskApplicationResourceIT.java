@@ -46,6 +46,9 @@ public class AdTaskApplicationResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_VALUE = "AAAAAAAAAA";
+    private static final String UPDATED_VALUE = "BBBBBBBBBB";
+
     private static final String DEFAULT_URI = "AAAAAAAAAA";
     private static final String UPDATED_URI = "BBBBBBBBBB";
 
@@ -92,6 +95,7 @@ public class AdTaskApplicationResourceIT {
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE)
             .name(DEFAULT_NAME)
+            .value(DEFAULT_VALUE)
             .uri(DEFAULT_URI)
             .metadataUri(DEFAULT_METADATA_URI)
             .version(DEFAULT_VERSION)
@@ -110,6 +114,7 @@ public class AdTaskApplicationResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
             .name(UPDATED_NAME)
+            .value(UPDATED_VALUE)
             .uri(UPDATED_URI)
             .metadataUri(UPDATED_METADATA_URI)
             .version(UPDATED_VERSION)
@@ -142,6 +147,7 @@ public class AdTaskApplicationResourceIT {
         assertThat(testAdTaskApplication.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testAdTaskApplication.isActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testAdTaskApplication.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testAdTaskApplication.getValue()).isEqualTo(DEFAULT_VALUE);
         assertThat(testAdTaskApplication.getUri()).isEqualTo(DEFAULT_URI);
         assertThat(testAdTaskApplication.getMetadataUri()).isEqualTo(DEFAULT_METADATA_URI);
         assertThat(testAdTaskApplication.getVersion()).isEqualTo(DEFAULT_VERSION);
@@ -191,6 +197,25 @@ public class AdTaskApplicationResourceIT {
 
     @Test
     @Transactional
+    public void checkValueIsRequired() throws Exception {
+        int databaseSizeBeforeTest = adTaskApplicationRepository.findAll().size();
+        // set the field null
+        adTaskApplication.setValue(null);
+
+        // Create the AdTaskApplication, which fails.
+        AdTaskApplicationDTO adTaskApplicationDTO = adTaskApplicationMapper.toDto(adTaskApplication);
+
+        restAdTaskApplicationMockMvc.perform(post("/api/ad-task-applications")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(adTaskApplicationDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<AdTaskApplication> adTaskApplicationList = adTaskApplicationRepository.findAll();
+        assertThat(adTaskApplicationList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void checkUriIsRequired() throws Exception {
         int databaseSizeBeforeTest = adTaskApplicationRepository.findAll().size();
         // set the field null
@@ -222,6 +247,7 @@ public class AdTaskApplicationResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
             .andExpect(jsonPath("$.[*].uri").value(hasItem(DEFAULT_URI)))
             .andExpect(jsonPath("$.[*].metadataUri").value(hasItem(DEFAULT_METADATA_URI)))
             .andExpect(jsonPath("$.[*].version").value(hasItem(DEFAULT_VERSION)))
@@ -243,6 +269,7 @@ public class AdTaskApplicationResourceIT {
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
             .andExpect(jsonPath("$.uri").value(DEFAULT_URI))
             .andExpect(jsonPath("$.metadataUri").value(DEFAULT_METADATA_URI))
             .andExpect(jsonPath("$.version").value(DEFAULT_VERSION))
@@ -449,6 +476,84 @@ public class AdTaskApplicationResourceIT {
 
         // Get all the adTaskApplicationList where name does not contain UPDATED_NAME
         defaultAdTaskApplicationShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdTaskApplicationsByValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adTaskApplicationRepository.saveAndFlush(adTaskApplication);
+
+        // Get all the adTaskApplicationList where value equals to DEFAULT_VALUE
+        defaultAdTaskApplicationShouldBeFound("value.equals=" + DEFAULT_VALUE);
+
+        // Get all the adTaskApplicationList where value equals to UPDATED_VALUE
+        defaultAdTaskApplicationShouldNotBeFound("value.equals=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskApplicationsByValueIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adTaskApplicationRepository.saveAndFlush(adTaskApplication);
+
+        // Get all the adTaskApplicationList where value not equals to DEFAULT_VALUE
+        defaultAdTaskApplicationShouldNotBeFound("value.notEquals=" + DEFAULT_VALUE);
+
+        // Get all the adTaskApplicationList where value not equals to UPDATED_VALUE
+        defaultAdTaskApplicationShouldBeFound("value.notEquals=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskApplicationsByValueIsInShouldWork() throws Exception {
+        // Initialize the database
+        adTaskApplicationRepository.saveAndFlush(adTaskApplication);
+
+        // Get all the adTaskApplicationList where value in DEFAULT_VALUE or UPDATED_VALUE
+        defaultAdTaskApplicationShouldBeFound("value.in=" + DEFAULT_VALUE + "," + UPDATED_VALUE);
+
+        // Get all the adTaskApplicationList where value equals to UPDATED_VALUE
+        defaultAdTaskApplicationShouldNotBeFound("value.in=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskApplicationsByValueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adTaskApplicationRepository.saveAndFlush(adTaskApplication);
+
+        // Get all the adTaskApplicationList where value is not null
+        defaultAdTaskApplicationShouldBeFound("value.specified=true");
+
+        // Get all the adTaskApplicationList where value is null
+        defaultAdTaskApplicationShouldNotBeFound("value.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllAdTaskApplicationsByValueContainsSomething() throws Exception {
+        // Initialize the database
+        adTaskApplicationRepository.saveAndFlush(adTaskApplication);
+
+        // Get all the adTaskApplicationList where value contains DEFAULT_VALUE
+        defaultAdTaskApplicationShouldBeFound("value.contains=" + DEFAULT_VALUE);
+
+        // Get all the adTaskApplicationList where value contains UPDATED_VALUE
+        defaultAdTaskApplicationShouldNotBeFound("value.contains=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskApplicationsByValueNotContainsSomething() throws Exception {
+        // Initialize the database
+        adTaskApplicationRepository.saveAndFlush(adTaskApplication);
+
+        // Get all the adTaskApplicationList where value does not contain DEFAULT_VALUE
+        defaultAdTaskApplicationShouldNotBeFound("value.doesNotContain=" + DEFAULT_VALUE);
+
+        // Get all the adTaskApplicationList where value does not contain UPDATED_VALUE
+        defaultAdTaskApplicationShouldBeFound("value.doesNotContain=" + UPDATED_VALUE);
     }
 
 
@@ -820,6 +925,7 @@ public class AdTaskApplicationResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
             .andExpect(jsonPath("$.[*].uri").value(hasItem(DEFAULT_URI)))
             .andExpect(jsonPath("$.[*].metadataUri").value(hasItem(DEFAULT_METADATA_URI)))
             .andExpect(jsonPath("$.[*].version").value(hasItem(DEFAULT_VERSION)))
@@ -875,6 +981,7 @@ public class AdTaskApplicationResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
             .name(UPDATED_NAME)
+            .value(UPDATED_VALUE)
             .uri(UPDATED_URI)
             .metadataUri(UPDATED_METADATA_URI)
             .version(UPDATED_VERSION)
@@ -894,6 +1001,7 @@ public class AdTaskApplicationResourceIT {
         assertThat(testAdTaskApplication.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testAdTaskApplication.isActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testAdTaskApplication.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testAdTaskApplication.getValue()).isEqualTo(UPDATED_VALUE);
         assertThat(testAdTaskApplication.getUri()).isEqualTo(UPDATED_URI);
         assertThat(testAdTaskApplication.getMetadataUri()).isEqualTo(UPDATED_METADATA_URI);
         assertThat(testAdTaskApplication.getVersion()).isEqualTo(UPDATED_VERSION);

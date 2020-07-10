@@ -43,6 +43,8 @@ public class AdButtonCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
+    private LongFilter adTabId;
+
     private LongFilter adTriggerId;
 
     public AdButtonCriteria() {
@@ -58,6 +60,7 @@ public class AdButtonCriteria implements Serializable, Criteria {
         this.toolbar = other.toolbar == null ? null : other.toolbar.copy();
         this.icon = other.icon == null ? null : other.icon.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adTabId = other.adTabId == null ? null : other.adTabId.copy();
         this.adTriggerId = other.adTriggerId == null ? null : other.adTriggerId.copy();
     }
 
@@ -138,6 +141,14 @@ public class AdButtonCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getAdTabId() {
+        return adTabId;
+    }
+
+    public void setAdTabId(LongFilter adTabId) {
+        this.adTabId = adTabId;
+    }
+
     public LongFilter getAdTriggerId() {
         return adTriggerId;
     }
@@ -166,6 +177,7 @@ public class AdButtonCriteria implements Serializable, Criteria {
             Objects.equals(toolbar, that.toolbar) &&
             Objects.equals(icon, that.icon) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adTabId, that.adTabId) &&
             Objects.equals(adTriggerId, that.adTriggerId);
     }
 
@@ -181,6 +193,7 @@ public class AdButtonCriteria implements Serializable, Criteria {
         toolbar,
         icon,
         adOrganizationId,
+        adTabId,
         adTriggerId
         );
     }
@@ -197,6 +210,7 @@ public class AdButtonCriteria implements Serializable, Criteria {
                 (toolbar != null ? "toolbar=" + toolbar + ", " : "") +
                 (icon != null ? "icon=" + icon + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adTabId != null ? "adTabId=" + adTabId + ", " : "") +
                 (adTriggerId != null ? "adTriggerId=" + adTriggerId + ", " : "") +
             "}";
     }

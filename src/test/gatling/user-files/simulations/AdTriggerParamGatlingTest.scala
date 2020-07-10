@@ -75,6 +75,8 @@ class AdTriggerParamGatlingTest extends Simulation {
                 , "uid":null
                 , "active":null
                 , "name":"SAMPLE_TEXT"
+                , "value":"SAMPLE_TEXT"
+                , "type":"STRING"
                 , "mandatory":null
                 , "mandatoryLogic":"SAMPLE_TEXT"
                 , "displayLogic":"SAMPLE_TEXT"

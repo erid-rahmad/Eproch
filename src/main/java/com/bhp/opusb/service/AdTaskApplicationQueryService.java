@@ -100,6 +100,9 @@ public class AdTaskApplicationQueryService extends QueryService<AdTaskApplicatio
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), AdTaskApplication_.name));
             }
+            if (criteria.getValue() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getValue(), AdTaskApplication_.value));
+            }
             if (criteria.getUri() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getUri(), AdTaskApplication_.uri));
             }

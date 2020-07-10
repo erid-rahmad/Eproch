@@ -21,4 +21,14 @@
                                  referencedTableName="ad_trigger"/>
 
     </changeSet>
+
+    <changeSet id="20200708171800-2" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="ad_tab_id"
+                                 baseTableName="ad_button"
+                                 constraintName="fk_ad_button_ad_tab_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_tab"/>
+
+    </changeSet>
 </databaseChangeLog>

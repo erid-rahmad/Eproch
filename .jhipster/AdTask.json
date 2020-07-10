@@ -21,7 +21,8 @@
             "fieldType": "String",
             "fieldValidateRules": [
                 "required",
-                "pattern"
+                "pattern",
+                "unique"
             ],
             "fieldValidateRulesPattern": "^[a-zA-Z_\\-]+$"
         },

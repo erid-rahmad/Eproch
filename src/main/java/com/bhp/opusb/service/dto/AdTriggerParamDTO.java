@@ -5,6 +5,10 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import com.bhp.opusb.domain.ADReference;
+import com.bhp.opusb.domain.AdValidationRule;
+import com.bhp.opusb.domain.enumeration.ADColumnType;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.AdTriggerParam} entity.
  */
@@ -20,6 +24,12 @@ public class AdTriggerParamDTO extends AbstractAuditingDTO {
 
     @NotNull
     private String name;
+
+    @NotNull
+    private String value;
+
+    @NotNull
+    private ADColumnType type;
 
     private Boolean mandatory;
 
@@ -43,10 +53,19 @@ public class AdTriggerParamDTO extends AbstractAuditingDTO {
 
 
     private Long adOrganizationId;
-    private Long adOrganizationName;
+    private String adOrganizationName;
+
+    private Long adReferenceId;
+    private String adReferenceName;
+
+    private Long adValidationRuleId;
+    private String adValidationRuleName;
 
     private Long adTriggerId;
-    private Long adTriggerName;
+    private String adTriggerName;
+
+    private ADReference adReference;
+    private AdValidationRule adValidationRule;
     
     public Long getId() {
         return id;
@@ -78,6 +97,22 @@ public class AdTriggerParamDTO extends AbstractAuditingDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public ADColumnType getType() {
+        return type;
+    }
+
+    public void setType(ADColumnType type) {
+        this.type = type;
     }
 
     public Boolean isMandatory() {
@@ -168,12 +203,44 @@ public class AdTriggerParamDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public Long getAdOrganizationName() {
+    public String getAdOrganizationName() {
         return adOrganizationName;
     }
 
-    public void setAdOrganizationName(Long adOrganizationName) {
+    public void setAdOrganizationName(String adOrganizationName) {
         this.adOrganizationName = adOrganizationName;
+    }
+
+    public Long getAdReferenceId() {
+        return adReferenceId;
+    }
+
+    public void setAdReferenceId(Long aDReferenceId) {
+        this.adReferenceId = aDReferenceId;
+    }
+
+    public String getAdReferenceName() {
+        return adReferenceName;
+    }
+
+    public void setAdReferenceName(String adReferenceName) {
+        this.adReferenceName = adReferenceName;
+    }
+
+    public Long getAdValidationRuleId() {
+        return adValidationRuleId;
+    }
+
+    public void setAdValidationRuleId(Long adValidationRuleId) {
+        this.adValidationRuleId = adValidationRuleId;
+    }
+
+    public String getAdValidationRuleName() {
+        return adValidationRuleName;
+    }
+
+    public void setAdValidationRuleName(String adValidationRuleName) {
+        this.adValidationRuleName = adValidationRuleName;
     }
 
     public Long getAdTriggerId() {
@@ -184,12 +251,28 @@ public class AdTriggerParamDTO extends AbstractAuditingDTO {
         this.adTriggerId = adTriggerId;
     }
 
-    public Long getAdTriggerName() {
+    public String getAdTriggerName() {
         return adTriggerName;
     }
 
-    public void setAdTriggerName(Long adTriggerName) {
+    public void setAdTriggerName(String adTriggerName) {
         this.adTriggerName = adTriggerName;
+    }
+
+    public ADReference getAdReference() {
+        return adReference;
+    }
+
+    public void setAdReference(ADReference adReference) {
+        this.adReference = adReference;
+    }
+
+    public AdValidationRule getAdValidationRule() {
+        return adValidationRule;
+    }
+
+    public void setAdValidationRule(AdValidationRule adValidationRule) {
+        this.adValidationRule = adValidationRule;
     }
 
     @Override
@@ -220,6 +303,8 @@ public class AdTriggerParamDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
+            ", value='" + getValue() + "'" +
+            ", type='" + getType() + "'" +
             ", mandatory='" + isMandatory() + "'" +
             ", mandatoryLogic='" + getMandatoryLogic() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +
@@ -231,6 +316,8 @@ public class AdTriggerParamDTO extends AbstractAuditingDTO {
             ", minValue=" + getMinValue() +
             ", maxValue=" + getMaxValue() +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adReferenceId=" + getAdReferenceId() +
+            ", adValidationRuleId=" + getAdValidationRuleId() +
             ", adTriggerId=" + getAdTriggerId() +
             "}";
     }

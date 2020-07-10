@@ -87,8 +87,17 @@
             <column name="toolbar" type="boolean"/>
             <column name="icon" type="string"/>
             <column name="ad_organization_id" type="numeric"/>
+            <column name="ad_tab_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200708171800-1" author="Ananta Aryadewa">
+        <addColumn tableName="ad_button">
+            <column name="ad_tab_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

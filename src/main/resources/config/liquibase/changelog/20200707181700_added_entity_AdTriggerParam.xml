@@ -100,6 +100,8 @@
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="name" type="string"/>
+            <column name="value" type="string"/>
+            <column name="type" type="string"/>
             <column name="mandatory" type="boolean"/>
             <column name="mandatory_logic" type="string"/>
             <column name="display_logic" type="string"/>
@@ -114,6 +116,28 @@
             <column name="ad_trigger_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200709141900-1" author="Ananta Aryadewa">
+        <addColumn tableName="ad_trigger_param">
+            <column name="type" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="ad_reference_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_validation_rule_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200709151600" author="Ananta Aryadewa">
+        <addColumn tableName="ad_trigger_param">
+            <column name="value" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

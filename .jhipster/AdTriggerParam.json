@@ -17,6 +17,21 @@
             ]
         },
         {
+            "fieldName": "value",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "ADColumnType",
+            "fieldValues": "STRING,INTEGER,LONG,BIG_DECIMAL,FLOAT,DOUBLE,BOOLEAN,LOCAL_DATE,ZONED_DATE_TIME,DURATION,INSTANT",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "mandatory",
             "fieldType": "Boolean"
         },
@@ -64,6 +79,20 @@
             "otherEntityRelationshipName": "adTriggerParam",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDReference",
+            "otherEntityRelationshipName": "adTriggerParam",
+            "relationshipName": "adReference",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adValidationRule",
+            "otherEntityRelationshipName": "adTriggerParam",
+            "relationshipName": "adValidationRule",
             "otherEntityField": "id"
         },
         {

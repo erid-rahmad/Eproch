@@ -10,6 +10,10 @@ entity ADTable {
 	uid UUID
 	name String required unique
 	view Boolean
+
+	// Target API endpoint for the CRUD operations.
+	targetEndpoint String
+
 	active Boolean
 }
 
@@ -82,8 +86,10 @@ entity ADTab {
 	iconName String
 
 	// Target API endpoint for the CRUD operations.
+	// Override the same property in AdTable.
 	targetEndpoint String
 
+	deletable Boolean
 	writable Boolean
 	displayLogic String
 	readOnlyLogic String
@@ -181,7 +187,7 @@ entity AdTask {
 	name String required
 
 	// The value will be used as the task name in SCDF.
-	value String required pattern(/^[a-zA-Z_\-]+$/)
+	value String required pattern(/^[a-zA-Z_\-]+$/) unique
 
 	// Is it an async or synchronous process?
 	async Boolean
@@ -191,6 +197,7 @@ entity AdTaskApplication {
 	uid UUID
 	active Boolean
 	name String required
+	value String required pattern(/^[a-zA-Z_\-]+$/)
 	uri String required
 	metadataUri String
 	version String
@@ -228,6 +235,8 @@ entity AdTriggerParam {
 	uid UUID
 	active Boolean
 	name String required
+	value String required
+	type ADColumnType required
 	mandatory Boolean
 	mandatoryLogic String
 	displayLogic String
@@ -318,7 +327,7 @@ relationship ManyToOne {
 	
 	ADField{adOrganization required} to ADOrganization
 	ADField{adReference} to ADReference
-	ADField{adColumn required} to ADColumn
+	ADField{adColumn} to ADColumn
 	ADField{adValidationRule} to AdValidationRule
 	ADField{adButton} to AdButton
 
@@ -338,7 +347,10 @@ relationship ManyToOne {
 
 	AdTrigger{adOrganization required} to ADOrganization
 	AdTriggerParam{adOrganization required} to ADOrganization
+	AdTriggerParam{adReference} to ADReference
+	AdTriggerParam{adValidationRule} to AdValidationRule
 	AdButton{adOrganization required} to ADOrganization
+	AdButton{adTab required} to ADTab
 	AdButton{adTrigger} to AdTrigger
 }
 

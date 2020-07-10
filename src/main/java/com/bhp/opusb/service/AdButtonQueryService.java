@@ -116,6 +116,10 @@ public class AdButtonQueryService extends QueryService<AdButton> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(AdButton_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getAdTabId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdTabId(),
+                    root -> root.join(AdButton_.adTab, JoinType.LEFT).get(ADTab_.id)));
+            }
             if (criteria.getAdTriggerId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdTriggerId(),
                     root -> root.join(AdButton_.adTrigger, JoinType.LEFT).get(AdTrigger_.id)));

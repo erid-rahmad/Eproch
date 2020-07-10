@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.AdButton;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.domain.AdTrigger;
 import com.bhp.opusb.repository.AdButtonRepository;
 import com.bhp.opusb.service.AdButtonService;
@@ -104,6 +105,16 @@ public class AdButtonResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         adButton.setAdOrganization(aDOrganization);
+        // Add required entity
+        ADTab aDTab;
+        if (TestUtil.findAll(em, ADTab.class).isEmpty()) {
+            aDTab = ADTabResourceIT.createEntity(em);
+            em.persist(aDTab);
+            em.flush();
+        } else {
+            aDTab = TestUtil.findAll(em, ADTab.class).get(0);
+        }
+        adButton.setAdTab(aDTab);
         return adButton;
     }
     /**
@@ -131,6 +142,16 @@ public class AdButtonResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         adButton.setAdOrganization(aDOrganization);
+        // Add required entity
+        ADTab aDTab;
+        if (TestUtil.findAll(em, ADTab.class).isEmpty()) {
+            aDTab = ADTabResourceIT.createUpdatedEntity(em);
+            em.persist(aDTab);
+            em.flush();
+        } else {
+            aDTab = TestUtil.findAll(em, ADTab.class).get(0);
+        }
+        adButton.setAdTab(aDTab);
         return adButton;
     }
 
@@ -745,6 +766,22 @@ public class AdButtonResourceIT {
 
         // Get all the adButtonList where adOrganization equals to adOrganizationId + 1
         defaultAdButtonShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdButtonsByAdTabIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADTab adTab = adButton.getAdTab();
+        adButtonRepository.saveAndFlush(adButton);
+        Long adTabId = adTab.getId();
+
+        // Get all the adButtonList where adTab equals to adTabId
+        defaultAdButtonShouldBeFound("adTabId.equals=" + adTabId);
+
+        // Get all the adButtonList where adTab equals to adTabId + 1
+        defaultAdButtonShouldNotBeFound("adTabId.equals=" + (adTabId + 1));
     }
 
 

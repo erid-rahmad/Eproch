@@ -49,7 +49,7 @@ public class AdTask extends AbstractAuditingEntity {
 
     @NotNull
     @Pattern(regexp = "^[a-zA-Z_\\-]+$")
-    @Column(name = "value", nullable = false)
+    @Column(name = "value", nullable = false, unique = true)
     private String value;
 
     @Column(name = "async")

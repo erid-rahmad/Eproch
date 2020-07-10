@@ -60,6 +60,11 @@ public class AdButton extends AbstractAuditingEntity {
     @JsonIgnoreProperties("adButtons")
     private ADOrganization adOrganization;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("adButtons")
+    private ADTab adTab;
+
     @ManyToOne
     @JsonIgnoreProperties("adButtons")
     private AdTrigger adTrigger;
@@ -175,6 +180,19 @@ public class AdButton extends AbstractAuditingEntity {
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
+    }
+
+    public ADTab getAdTab() {
+        return adTab;
+    }
+
+    public AdButton adTab(ADTab aDTab) {
+        this.adTab = aDTab;
+        return this;
+    }
+
+    public void setAdTab(ADTab aDTab) {
+        this.adTab = aDTab;
     }
 
     public AdTrigger getAdTrigger() {

@@ -75,6 +75,7 @@ class AdTaskApplicationGatlingTest extends Simulation {
                 , "uid":null
                 , "active":null
                 , "name":"SAMPLE_TEXT"
+                , "value":"SAMPLE_TEXT"
                 , "uri":"SAMPLE_TEXT"
                 , "metadataUri":"SAMPLE_TEXT"
                 , "version":"SAMPLE_TEXT"

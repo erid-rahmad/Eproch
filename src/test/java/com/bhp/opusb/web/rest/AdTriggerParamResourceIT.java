@@ -3,6 +3,8 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.AdTriggerParam;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.ADReference;
+import com.bhp.opusb.domain.AdValidationRule;
 import com.bhp.opusb.domain.AdTrigger;
 import com.bhp.opusb.repository.AdTriggerParamRepository;
 import com.bhp.opusb.service.AdTriggerParamService;
@@ -29,6 +31,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.bhp.opusb.domain.enumeration.ADColumnType;
 /**
  * Integration tests for the {@link AdTriggerParamResource} REST controller.
  */
@@ -46,6 +49,12 @@ public class AdTriggerParamResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_VALUE = "AAAAAAAAAA";
+    private static final String UPDATED_VALUE = "BBBBBBBBBB";
+
+    private static final ADColumnType DEFAULT_TYPE = ADColumnType.STRING;
+    private static final ADColumnType UPDATED_TYPE = ADColumnType.INTEGER;
 
     private static final Boolean DEFAULT_MANDATORY = false;
     private static final Boolean UPDATED_MANDATORY = true;
@@ -112,6 +121,8 @@ public class AdTriggerParamResourceIT {
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE)
             .name(DEFAULT_NAME)
+            .value(DEFAULT_VALUE)
+            .type(DEFAULT_TYPE)
             .mandatory(DEFAULT_MANDATORY)
             .mandatoryLogic(DEFAULT_MANDATORY_LOGIC)
             .displayLogic(DEFAULT_DISPLAY_LOGIC)
@@ -155,6 +166,8 @@ public class AdTriggerParamResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
             .name(UPDATED_NAME)
+            .value(UPDATED_VALUE)
+            .type(UPDATED_TYPE)
             .mandatory(UPDATED_MANDATORY)
             .mandatoryLogic(UPDATED_MANDATORY_LOGIC)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
@@ -212,6 +225,8 @@ public class AdTriggerParamResourceIT {
         assertThat(testAdTriggerParam.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testAdTriggerParam.isActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testAdTriggerParam.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testAdTriggerParam.getValue()).isEqualTo(DEFAULT_VALUE);
+        assertThat(testAdTriggerParam.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testAdTriggerParam.isMandatory()).isEqualTo(DEFAULT_MANDATORY);
         assertThat(testAdTriggerParam.getMandatoryLogic()).isEqualTo(DEFAULT_MANDATORY_LOGIC);
         assertThat(testAdTriggerParam.getDisplayLogic()).isEqualTo(DEFAULT_DISPLAY_LOGIC);
@@ -266,6 +281,44 @@ public class AdTriggerParamResourceIT {
 
     @Test
     @Transactional
+    public void checkValueIsRequired() throws Exception {
+        int databaseSizeBeforeTest = adTriggerParamRepository.findAll().size();
+        // set the field null
+        adTriggerParam.setValue(null);
+
+        // Create the AdTriggerParam, which fails.
+        AdTriggerParamDTO adTriggerParamDTO = adTriggerParamMapper.toDto(adTriggerParam);
+
+        restAdTriggerParamMockMvc.perform(post("/api/ad-trigger-params")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(adTriggerParamDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<AdTriggerParam> adTriggerParamList = adTriggerParamRepository.findAll();
+        assertThat(adTriggerParamList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = adTriggerParamRepository.findAll().size();
+        // set the field null
+        adTriggerParam.setType(null);
+
+        // Create the AdTriggerParam, which fails.
+        AdTriggerParamDTO adTriggerParamDTO = adTriggerParamMapper.toDto(adTriggerParam);
+
+        restAdTriggerParamMockMvc.perform(post("/api/ad-trigger-params")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(adTriggerParamDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<AdTriggerParam> adTriggerParamList = adTriggerParamRepository.findAll();
+        assertThat(adTriggerParamList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllAdTriggerParams() throws Exception {
         // Initialize the database
         adTriggerParamRepository.saveAndFlush(adTriggerParam);
@@ -278,6 +331,8 @@ public class AdTriggerParamResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].mandatory").value(hasItem(DEFAULT_MANDATORY.booleanValue())))
             .andExpect(jsonPath("$.[*].mandatoryLogic").value(hasItem(DEFAULT_MANDATORY_LOGIC)))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
@@ -304,6 +359,8 @@ public class AdTriggerParamResourceIT {
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.mandatory").value(DEFAULT_MANDATORY.booleanValue()))
             .andExpect(jsonPath("$.mandatoryLogic").value(DEFAULT_MANDATORY_LOGIC))
             .andExpect(jsonPath("$.displayLogic").value(DEFAULT_DISPLAY_LOGIC))
@@ -517,6 +574,136 @@ public class AdTriggerParamResourceIT {
         defaultAdTriggerParamShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllAdTriggerParamsByValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+
+        // Get all the adTriggerParamList where value equals to DEFAULT_VALUE
+        defaultAdTriggerParamShouldBeFound("value.equals=" + DEFAULT_VALUE);
+
+        // Get all the adTriggerParamList where value equals to UPDATED_VALUE
+        defaultAdTriggerParamShouldNotBeFound("value.equals=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTriggerParamsByValueIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+
+        // Get all the adTriggerParamList where value not equals to DEFAULT_VALUE
+        defaultAdTriggerParamShouldNotBeFound("value.notEquals=" + DEFAULT_VALUE);
+
+        // Get all the adTriggerParamList where value not equals to UPDATED_VALUE
+        defaultAdTriggerParamShouldBeFound("value.notEquals=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTriggerParamsByValueIsInShouldWork() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+
+        // Get all the adTriggerParamList where value in DEFAULT_VALUE or UPDATED_VALUE
+        defaultAdTriggerParamShouldBeFound("value.in=" + DEFAULT_VALUE + "," + UPDATED_VALUE);
+
+        // Get all the adTriggerParamList where value equals to UPDATED_VALUE
+        defaultAdTriggerParamShouldNotBeFound("value.in=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTriggerParamsByValueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+
+        // Get all the adTriggerParamList where value is not null
+        defaultAdTriggerParamShouldBeFound("value.specified=true");
+
+        // Get all the adTriggerParamList where value is null
+        defaultAdTriggerParamShouldNotBeFound("value.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllAdTriggerParamsByValueContainsSomething() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+
+        // Get all the adTriggerParamList where value contains DEFAULT_VALUE
+        defaultAdTriggerParamShouldBeFound("value.contains=" + DEFAULT_VALUE);
+
+        // Get all the adTriggerParamList where value contains UPDATED_VALUE
+        defaultAdTriggerParamShouldNotBeFound("value.contains=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTriggerParamsByValueNotContainsSomething() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+
+        // Get all the adTriggerParamList where value does not contain DEFAULT_VALUE
+        defaultAdTriggerParamShouldNotBeFound("value.doesNotContain=" + DEFAULT_VALUE);
+
+        // Get all the adTriggerParamList where value does not contain UPDATED_VALUE
+        defaultAdTriggerParamShouldBeFound("value.doesNotContain=" + UPDATED_VALUE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdTriggerParamsByTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+
+        // Get all the adTriggerParamList where type equals to DEFAULT_TYPE
+        defaultAdTriggerParamShouldBeFound("type.equals=" + DEFAULT_TYPE);
+
+        // Get all the adTriggerParamList where type equals to UPDATED_TYPE
+        defaultAdTriggerParamShouldNotBeFound("type.equals=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTriggerParamsByTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+
+        // Get all the adTriggerParamList where type not equals to DEFAULT_TYPE
+        defaultAdTriggerParamShouldNotBeFound("type.notEquals=" + DEFAULT_TYPE);
+
+        // Get all the adTriggerParamList where type not equals to UPDATED_TYPE
+        defaultAdTriggerParamShouldBeFound("type.notEquals=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTriggerParamsByTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+
+        // Get all the adTriggerParamList where type in DEFAULT_TYPE or UPDATED_TYPE
+        defaultAdTriggerParamShouldBeFound("type.in=" + DEFAULT_TYPE + "," + UPDATED_TYPE);
+
+        // Get all the adTriggerParamList where type equals to UPDATED_TYPE
+        defaultAdTriggerParamShouldNotBeFound("type.in=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTriggerParamsByTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+
+        // Get all the adTriggerParamList where type is not null
+        defaultAdTriggerParamShouldBeFound("type.specified=true");
+
+        // Get all the adTriggerParamList where type is null
+        defaultAdTriggerParamShouldNotBeFound("type.specified=false");
+    }
 
     @Test
     @Transactional
@@ -1398,6 +1585,46 @@ public class AdTriggerParamResourceIT {
 
     @Test
     @Transactional
+    public void getAllAdTriggerParamsByAdReferenceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+        ADReference adReference = ADReferenceResourceIT.createEntity(em);
+        em.persist(adReference);
+        em.flush();
+        adTriggerParam.setAdReference(adReference);
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+        Long adReferenceId = adReference.getId();
+
+        // Get all the adTriggerParamList where adReference equals to adReferenceId
+        defaultAdTriggerParamShouldBeFound("adReferenceId.equals=" + adReferenceId);
+
+        // Get all the adTriggerParamList where adReference equals to adReferenceId + 1
+        defaultAdTriggerParamShouldNotBeFound("adReferenceId.equals=" + (adReferenceId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdTriggerParamsByAdValidationRuleIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+        AdValidationRule adValidationRule = AdValidationRuleResourceIT.createEntity(em);
+        em.persist(adValidationRule);
+        em.flush();
+        adTriggerParam.setAdValidationRule(adValidationRule);
+        adTriggerParamRepository.saveAndFlush(adTriggerParam);
+        Long adValidationRuleId = adValidationRule.getId();
+
+        // Get all the adTriggerParamList where adValidationRule equals to adValidationRuleId
+        defaultAdTriggerParamShouldBeFound("adValidationRuleId.equals=" + adValidationRuleId);
+
+        // Get all the adTriggerParamList where adValidationRule equals to adValidationRuleId + 1
+        defaultAdTriggerParamShouldNotBeFound("adValidationRuleId.equals=" + (adValidationRuleId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllAdTriggerParamsByAdTriggerIsEqualToSomething() throws Exception {
         // Get already existing entity
         AdTrigger adTrigger = adTriggerParam.getAdTrigger();
@@ -1422,6 +1649,8 @@ public class AdTriggerParamResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].mandatory").value(hasItem(DEFAULT_MANDATORY.booleanValue())))
             .andExpect(jsonPath("$.[*].mandatoryLogic").value(hasItem(DEFAULT_MANDATORY_LOGIC)))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
@@ -1482,6 +1711,8 @@ public class AdTriggerParamResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
             .name(UPDATED_NAME)
+            .value(UPDATED_VALUE)
+            .type(UPDATED_TYPE)
             .mandatory(UPDATED_MANDATORY)
             .mandatoryLogic(UPDATED_MANDATORY_LOGIC)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
@@ -1506,6 +1737,8 @@ public class AdTriggerParamResourceIT {
         assertThat(testAdTriggerParam.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testAdTriggerParam.isActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testAdTriggerParam.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testAdTriggerParam.getValue()).isEqualTo(UPDATED_VALUE);
+        assertThat(testAdTriggerParam.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testAdTriggerParam.isMandatory()).isEqualTo(UPDATED_MANDATORY);
         assertThat(testAdTriggerParam.getMandatoryLogic()).isEqualTo(UPDATED_MANDATORY_LOGIC);
         assertThat(testAdTriggerParam.getDisplayLogic()).isEqualTo(UPDATED_DISPLAY_LOGIC);

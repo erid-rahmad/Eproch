@@ -24,10 +24,10 @@ public class AdTaskProcessDTO extends AbstractAuditingDTO {
     private String adOrganizationName;
 
     private Long adTaskApplicationId;
-    private Long adTaskApplicationName;
+    private String adTaskApplicationName;
 
     private Long adTaskId;
-    private Long adTaskName;
+    private String adTaskName;
     
     public Long getId() {
         return id;
@@ -93,11 +93,11 @@ public class AdTaskProcessDTO extends AbstractAuditingDTO {
         this.adTaskApplicationId = adTaskApplicationId;
     }
 
-    public Long getAdTaskApplicationName() {
+    public String getAdTaskApplicationName() {
         return adTaskApplicationName;
     }
 
-    public void setAdTaskApplicationName(Long adTaskApplicationName) {
+    public void setAdTaskApplicationName(String adTaskApplicationName) {
         this.adTaskApplicationName = adTaskApplicationName;
     }
 
@@ -109,11 +109,11 @@ public class AdTaskProcessDTO extends AbstractAuditingDTO {
         this.adTaskId = adTaskId;
     }
 
-    public Long getAdTaskName() {
+    public String getAdTaskName() {
         return adTaskName;
     }
 
-    public void setAdTaskName(Long adTaskName) {
+    public void setAdTaskName(String adTaskName) {
         this.adTaskName = adTaskName;
     }
 

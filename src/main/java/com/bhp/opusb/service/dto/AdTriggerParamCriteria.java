@@ -3,6 +3,7 @@ package com.bhp.opusb.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
+import com.bhp.opusb.domain.enumeration.ADColumnType;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -22,6 +23,24 @@ import io.github.jhipster.service.filter.UUIDFilter;
  * fix type specific filters.
  */
 public class AdTriggerParamCriteria implements Serializable, Criteria {
+    /**
+     * Class for filtering ADColumnType
+     */
+    public static class ADColumnTypeFilter extends Filter<ADColumnType> {
+
+        public ADColumnTypeFilter() {
+        }
+
+        public ADColumnTypeFilter(ADColumnTypeFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public ADColumnTypeFilter copy() {
+            return new ADColumnTypeFilter(this);
+        }
+
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -32,6 +51,10 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
     private BooleanFilter active;
 
     private StringFilter name;
+
+    private StringFilter value;
+
+    private ADColumnTypeFilter type;
 
     private BooleanFilter mandatory;
 
@@ -55,6 +78,10 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
+    private LongFilter adReferenceId;
+
+    private LongFilter adValidationRuleId;
+
     private LongFilter adTriggerId;
 
     public AdTriggerParamCriteria() {
@@ -65,6 +92,8 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.value = other.value == null ? null : other.value.copy();
+        this.type = other.type == null ? null : other.type.copy();
         this.mandatory = other.mandatory == null ? null : other.mandatory.copy();
         this.mandatoryLogic = other.mandatoryLogic == null ? null : other.mandatoryLogic.copy();
         this.displayLogic = other.displayLogic == null ? null : other.displayLogic.copy();
@@ -76,6 +105,8 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
         this.minValue = other.minValue == null ? null : other.minValue.copy();
         this.maxValue = other.maxValue == null ? null : other.maxValue.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
+        this.adValidationRuleId = other.adValidationRuleId == null ? null : other.adValidationRuleId.copy();
         this.adTriggerId = other.adTriggerId == null ? null : other.adTriggerId.copy();
     }
 
@@ -114,6 +145,22 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getValue() {
+        return value;
+    }
+
+    public void setValue(StringFilter value) {
+        this.value = value;
+    }
+
+    public ADColumnTypeFilter getType() {
+        return type;
+    }
+
+    public void setType(ADColumnTypeFilter type) {
+        this.type = type;
     }
 
     public BooleanFilter getMandatory() {
@@ -204,6 +251,22 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getAdReferenceId() {
+        return adReferenceId;
+    }
+
+    public void setAdReferenceId(LongFilter adReferenceId) {
+        this.adReferenceId = adReferenceId;
+    }
+
+    public LongFilter getAdValidationRuleId() {
+        return adValidationRuleId;
+    }
+
+    public void setAdValidationRuleId(LongFilter adValidationRuleId) {
+        this.adValidationRuleId = adValidationRuleId;
+    }
+
     public LongFilter getAdTriggerId() {
         return adTriggerId;
     }
@@ -227,6 +290,8 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(value, that.value) &&
+            Objects.equals(type, that.type) &&
             Objects.equals(mandatory, that.mandatory) &&
             Objects.equals(mandatoryLogic, that.mandatoryLogic) &&
             Objects.equals(displayLogic, that.displayLogic) &&
@@ -238,6 +303,8 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
             Objects.equals(minValue, that.minValue) &&
             Objects.equals(maxValue, that.maxValue) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adReferenceId, that.adReferenceId) &&
+            Objects.equals(adValidationRuleId, that.adValidationRuleId) &&
             Objects.equals(adTriggerId, that.adTriggerId);
     }
 
@@ -248,6 +315,8 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
         uid,
         active,
         name,
+        value,
+        type,
         mandatory,
         mandatoryLogic,
         displayLogic,
@@ -259,6 +328,8 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
         minValue,
         maxValue,
         adOrganizationId,
+        adReferenceId,
+        adValidationRuleId,
         adTriggerId
         );
     }
@@ -270,6 +341,8 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (value != null ? "value=" + value + ", " : "") +
+                (type != null ? "type=" + type + ", " : "") +
                 (mandatory != null ? "mandatory=" + mandatory + ", " : "") +
                 (mandatoryLogic != null ? "mandatoryLogic=" + mandatoryLogic + ", " : "") +
                 (displayLogic != null ? "displayLogic=" + displayLogic + ", " : "") +
@@ -281,6 +354,8 @@ public class AdTriggerParamCriteria implements Serializable, Criteria {
                 (minValue != null ? "minValue=" + minValue + ", " : "") +
                 (maxValue != null ? "maxValue=" + maxValue + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
+                (adValidationRuleId != null ? "adValidationRuleId=" + adValidationRuleId + ", " : "") +
                 (adTriggerId != null ? "adTriggerId=" + adTriggerId + ", " : "") +
             "}";
     }

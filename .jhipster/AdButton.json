@@ -44,6 +44,14 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "aDTab",
+            "otherEntityRelationshipName": "adButton",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTab",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "adTrigger",
             "otherEntityRelationshipName": "adButton",
             "relationshipName": "adTrigger",

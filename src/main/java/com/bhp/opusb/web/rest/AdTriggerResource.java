@@ -24,6 +24,7 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -141,4 +142,26 @@ public class AdTriggerResource {
         adTriggerService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+  /**
+   * {@code post  /process-trigger} : Execute a process.
+   *
+   * @param serviceName the process name to execute.
+   * @param params the process parameters.
+   * @return the {@link ResponseEntity} with status {@code 200 (ok)} and with
+   *         body 1, or with status {@code 400 (bad request)} if
+   *         the name is not provided.
+   * @throws URISyntaxException if the location uri syntax is incorrect.
+   */
+  @PostMapping("/ad-triggers/process")
+  public ResponseEntity<Integer> runProcess(@RequestParam String serviceName, @RequestBody Map<String, Object> params)
+      throws URISyntaxException {
+    log.debug("REST request to run process: {}", serviceName);
+    if (serviceName == null) {
+      throw new BadRequestAlertException("Service name is not defined", "ProcessTrigger", "serviceNameUndefined");
+    }
+
+    adTriggerService.executeProcess(serviceName, params);
+    return ResponseEntity.ok().body(1);
+  }
 }

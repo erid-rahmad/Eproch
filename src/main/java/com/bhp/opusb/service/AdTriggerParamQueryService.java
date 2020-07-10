@@ -100,6 +100,12 @@ public class AdTriggerParamQueryService extends QueryService<AdTriggerParam> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), AdTriggerParam_.name));
             }
+            if (criteria.getValue() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getValue(), AdTriggerParam_.value));
+            }
+            if (criteria.getType() != null) {
+                specification = specification.and(buildSpecification(criteria.getType(), AdTriggerParam_.type));
+            }
             if (criteria.getMandatory() != null) {
                 specification = specification.and(buildSpecification(criteria.getMandatory(), AdTriggerParam_.mandatory));
             }
@@ -133,6 +139,14 @@ public class AdTriggerParamQueryService extends QueryService<AdTriggerParam> {
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(AdTriggerParam_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
+            }
+            if (criteria.getAdReferenceId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdReferenceId(),
+                    root -> root.join(AdTriggerParam_.adReference, JoinType.LEFT).get(ADReference_.id)));
+            }
+            if (criteria.getAdValidationRuleId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdValidationRuleId(),
+                    root -> root.join(AdTriggerParam_.adValidationRule, JoinType.LEFT).get(AdValidationRule_.id)));
             }
             if (criteria.getAdTriggerId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdTriggerId(),

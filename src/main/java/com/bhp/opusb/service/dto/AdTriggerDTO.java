@@ -1,11 +1,14 @@
 package com.bhp.opusb.service.dto;
 
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+import com.bhp.opusb.domain.AdTriggerParam;
 import com.bhp.opusb.domain.enumeration.AdTriggerType;
 
 /**
@@ -35,6 +38,8 @@ public class AdTriggerDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
     private String adOrganizationName;
+
+    private Set<AdTriggerParam> adTriggerParams = new HashSet<>();
     
     public Long getId() {
         return id;
@@ -106,6 +111,14 @@ public class AdTriggerDTO extends AbstractAuditingDTO {
 
     public void setAdOrganizationName(String adOrganizationName) {
         this.adOrganizationName = adOrganizationName;
+    }
+
+    public Set<AdTriggerParam> getAdTriggerParams() {
+        return adTriggerParams;
+    }
+
+    public void setAdTriggerParams(Set<AdTriggerParam> adTriggerParams) {
+        this.adTriggerParams = adTriggerParams;
     }
 
     @Override
