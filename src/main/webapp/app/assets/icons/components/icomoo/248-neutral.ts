@@ -1,0 +1,12 @@
+/* eslint-disable */
+/* tslint:disable */
+// @ts-ignore
+import icon from 'vue-svgicon'
+icon.register({
+  'icomoo/248-neutral': {
+    width: 16,
+    height: 16,
+    viewBox: '0 0 16 16',
+    data: '<path pid="0" d="M8 16A8 8 0 108 0a8 8 0 000 16zM8 1.5a6.5 6.5 0 110 13 6.5 6.5 0 010-13zM4 5a1 1 0 102 0 1 1 0 00-2 0zm6 0a1 1 0 102 0 1 1 0 00-2 0zm-4 6h4v1H6v-1z"/>'
+  }
+})

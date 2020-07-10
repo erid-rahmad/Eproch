@@ -12,6 +12,12 @@ const ActionToolbarProps = Vue.extend({
       type: Boolean,
       default: true
     },
+    buttons: {
+      type: Array,
+      default: () => {
+        return [];
+      }
+    },
     eventBus: {
       type: Object,
       default: () => {
@@ -28,6 +34,14 @@ export default class ActionToolbar extends ActionToolbarProps {
   authorities: Set<string> = accountStore.authorities;
   private editing: boolean = false;
   private fullPath: string = '';
+
+  runProcess(triggerDef: any) {
+    this.$emit('run-trigger', triggerDef);
+  }
+
+  runCallback(eventName, processName) {
+    this.$emit(eventName, processName);
+  }
 
   get isEditing() {
     return this.editing;

@@ -29,6 +29,13 @@
     <include file="config/liquibase/changelog/20200601164200_added_entity_AdValidationRule.xml" relativeToChangelogFile="false"/>
 
     <include file="config/liquibase/changelog/20200624083100_added_entity_AdMenu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200706060700_added_entity_AdTask.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200706060800_added_entity_AdTaskApplication.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200706060900_added_entity_AdTaskProcess.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200706061000_added_entity_AdTaskScheduler.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707181600_added_entity_AdTrigger.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707181700_added_entity_AdTriggerParam.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707181800_added_entity_AdButton.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -40,6 +47,13 @@
     <include file="config/liquibase/changelog/20200415082500_added_entity_constraints_ADReference.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200601164200_added_entity_constraints_AdValidationRule.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200624083100_added_entity_constraints_AdMenu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200706060700_added_entity_constraints_AdTask.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200706060800_added_entity_constraints_AdTaskApplication.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200706060900_added_entity_constraints_AdTaskProcess.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200706061000_added_entity_constraints_AdTaskScheduler.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707181600_added_entity_constraints_AdTrigger.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707181700_added_entity_constraints_AdTriggerParam.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707181800_added_entity_constraints_AdButton.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 
     <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>

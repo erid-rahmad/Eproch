@@ -31,6 +31,8 @@ public class ADTableCriteria implements Serializable, Criteria {
 
     private BooleanFilter view;
 
+    private StringFilter targetEndpoint;
+
     private BooleanFilter active;
 
     private LongFilter aDColumnId;
@@ -45,6 +47,7 @@ public class ADTableCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.view = other.view == null ? null : other.view.copy();
+        this.targetEndpoint = other.targetEndpoint == null ? null : other.targetEndpoint.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.aDColumnId = other.aDColumnId == null ? null : other.aDColumnId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -87,6 +90,14 @@ public class ADTableCriteria implements Serializable, Criteria {
         this.view = view;
     }
 
+    public StringFilter getTargetEndpoint() {
+        return targetEndpoint;
+    }
+
+    public void setTargetEndpoint(StringFilter targetEndpoint) {
+        this.targetEndpoint = targetEndpoint;
+    }
+
     public BooleanFilter getActive() {
         return active;
     }
@@ -126,6 +137,7 @@ public class ADTableCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(name, that.name) &&
             Objects.equals(view, that.view) &&
+            Objects.equals(targetEndpoint, that.targetEndpoint) &&
             Objects.equals(active, that.active) &&
             Objects.equals(aDColumnId, that.aDColumnId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
@@ -138,6 +150,7 @@ public class ADTableCriteria implements Serializable, Criteria {
         uid,
         name,
         view,
+        targetEndpoint,
         active,
         aDColumnId,
         adOrganizationId
@@ -151,6 +164,7 @@ public class ADTableCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (view != null ? "view=" + view + ", " : "") +
+                (targetEndpoint != null ? "targetEndpoint=" + targetEndpoint + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (aDColumnId != null ? "aDColumnId=" + aDColumnId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

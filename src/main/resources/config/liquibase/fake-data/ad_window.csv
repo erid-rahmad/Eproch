@@ -1,3 +1,11 @@
-id,name,description,type,active,ad_client_id,ad_organization_id
-1,Table and Columns,Table and Columns window,MAINTAIN,1,1,1
-2,Window and Tabs,"Window, Tabs, and Field window",MAINTAIN,1,1,1
+id;uid;name;description;title_logic;type;tree_view;active;ad_organization_id
+1;6c35340b-0c5a-427d-923e-ea1da9bcaf30;Hawaii;Brand Berkshire communities;core Tasty Cotton Pants Checking Account;QUERY;false;false;1
+2;438cea96-28e5-4d9e-8d2e-034e17af6eb9;Savings Account payment;Ball hybrid Music;Regional;MAINTAIN;false;false;2
+3;6cd9ea9e-191a-4e6a-a4b3-0888bf3a8785;Trinidad and Tobago directional deposit;Oregon architectures Gloves;transmitting US Dollar SQL;MAINTAIN;false;true;3
+4;ddbeb968-ebc1-4334-9946-45a6867ad963;Configurable Chicken bandwidth;Paradigm repurpose;next-generation parse Handcrafted Cotton Chips;MAINTAIN;false;false;4
+5;d56d4c30-b3fe-4952-b4c0-fcdd96ff4424;sky blue Zimbabwe Dollar Money Market Account;Movies disintermediate Chips;Beauty;MAINTAIN;false;false;5
+6;7e1fd917-f4a5-47d3-89da-4dfde8206bb1;synthesizing;optimize withdrawal Wooden;Response;MAINTAIN;true;false;6
+7;cef83a26-368f-471e-b289-9c48ac3f706c;Stravenue Manor Maine;navigate National;Investment Account analyzing;MAINTAIN;true;true;7
+8;0f803af8-dfeb-4c5b-957a-faacc5db15f1;Money Market Account Intuitive;web services paradigms;Dynamic New York;MAINTAIN;false;true;8
+9;9b45a4ea-8017-4ac8-a711-d36066731c57;Gorgeous Cotton Cheese Credit Card Account Diverse;Grocery Sports AGP;disintermediate Nevada;QUERY;true;false;9
+10;5ec1afa1-f5b0-4967-bb6d-90b2993f638d;synergies back up Internal;focus group;Costa Rica;MAINTAIN;false;false;10

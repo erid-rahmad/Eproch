@@ -1,0 +1,60 @@
+{
+    "name": "AdTaskProcess",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "runSequence",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "parallel",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "adTaskProcess",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adTaskApplication",
+            "otherEntityRelationshipName": "adTaskProcess",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTaskApplication",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adTask",
+            "otherEntityRelationshipName": "adTaskProcess",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTask",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200706060900",
+    "entityTableName": "ad_task_process",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true,
+    "skipClient": true
+}

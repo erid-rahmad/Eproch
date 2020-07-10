@@ -100,6 +100,9 @@ public class ADTableQueryService extends QueryService<ADTable> {
             if (criteria.getView() != null) {
                 specification = specification.and(buildSpecification(criteria.getView(), ADTable_.view));
             }
+            if (criteria.getTargetEndpoint() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getTargetEndpoint(), ADTable_.targetEndpoint));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADTable_.active));
             }

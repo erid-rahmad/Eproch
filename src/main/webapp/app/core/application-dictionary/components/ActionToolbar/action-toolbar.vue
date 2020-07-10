@@ -66,6 +66,28 @@
         @click="exportRecord"
       />
     </el-button-group>
+    <el-dropdown
+      v-if="buttons.length"
+      size="small"
+      @command="runProcess"
+    >
+      <el-button
+        type="primary"
+        size="small"
+      >
+        <font-awesome-icon :icon="['fas', 'bolt']"/>
+      </el-button>
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item
+          v-for="button in buttons"
+          :key="button.id"
+          :command="button.adTrigger"
+          :title="button.tooltip"
+        >
+          {{ button.name }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
     <el-button-group v-show="!isEditing">
       <el-button
         type="primary"
@@ -96,7 +118,9 @@
 </template>
 <script lang="ts" src="./action-toolbar.component.ts"></script>
 <style lang="scss" scoped>
-  .el-button-group + .el-button-group {
+  .el-button-group + .el-button-group,
+  .el-button-group + .el-dropdown,
+  .el-dropdown + .el-button-group {
     padding-left: 8px;
   }
 </style>

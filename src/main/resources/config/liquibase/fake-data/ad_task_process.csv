@@ -1,0 +1,11 @@
+id;uid;active;run_sequence;parallel;ad_organization_id;ad_task_application_id;ad_task_id
+1;bd2c425b-63f4-40e2-a49d-bee7c23d9f1e;true;52267;true;1;1;1
+2;208b6d02-db13-4597-92cc-22c11d4771a8;true;13882;true;2;2;2
+3;e140e773-c574-44de-a76f-37392150f1c8;false;81927;true;3;3;3
+4;0257b954-cecb-4acc-adf9-4e11ba58e005;true;98856;false;4;4;4
+5;23a7ddee-12d5-43d1-ad46-db2836f0295a;false;48080;false;5;5;5
+6;b4adbae9-b870-438e-b7d8-8b9594940e51;true;88706;false;6;6;6
+7;f2a99ad2-4bc3-4935-857e-34c064482088;true;56269;false;7;7;7
+8;8fb4d55d-b97c-40dc-bbe8-f392da2c9c5e;true;42671;false;8;8;8
+9;7b708fcf-d776-4cee-8626-a2df7e27c3b3;true;3703;false;9;9;9
+10;c6e4b049-47c3-4b83-aa5a-cc810e7eebad;true;64439;false;10;10;10

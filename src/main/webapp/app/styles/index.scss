@@ -225,3 +225,34 @@ aside {
     margin-left: 4px;
   }
 }
+
+.compact {
+  .app-container {
+    height: 100%;
+    padding: 5px 10px;
+  }
+
+  .mainPane{
+    position: relative;
+  }
+
+  .record-navigator {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+  }
+
+  .el-table {
+    th{
+      padding: 0px;
+    }
+
+    td{
+      padding: 0px;
+    }
+  }
+
+  button{
+    padding: 5px 10px;
+  }
+}

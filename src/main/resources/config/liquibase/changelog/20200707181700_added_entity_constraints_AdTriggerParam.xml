@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity AdTriggerParam.
+    -->
+    <changeSet id="20200707181700-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="ad_trigger_param"
+                                 constraintName="fk_ad_trigger_param_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_trigger_id"
+                                 baseTableName="ad_trigger_param"
+                                 constraintName="fk_ad_trigger_param_ad_trigger_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_trigger"/>
+
+    </changeSet>
+
+    <changeSet id="20200709141900-2" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="ad_reference_id"
+                                 baseTableName="ad_trigger_param"
+                                 constraintName="fk_ad_trigger_param_ad_reference_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_reference"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_validation_rule_id"
+                                 baseTableName="ad_trigger_param"
+                                 constraintName="fk_ad_trigger_param_ad_validation_rule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_validation_rule"/>
+
+    </changeSet>
+</databaseChangeLog>

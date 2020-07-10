@@ -1,25 +1,11 @@
-id,name,description,value,active,ad_reference_id
-1,String,String,STRING,1,1
-2,Integer,Integer,INTEGER,1,1
-3,Long,Long,LONG,1,1
-4,Big Decimal,Big Decimal,BIG_DECIMAL,1,1
-5,Float,Float,FLOAT,1,1
-6,Double,Double,DOUBLE,1,1
-7,Boolean,Boolean,BOOLEAN,1,1
-8,Local Date,Local Date,LOCAL_DATE,1,1
-9,Zoned Date Time,Zoned Date Time,ZONED_DATE_TIME,1,1
-10,Duration,Duration,DURATION,1,1
-11,Instant,Instant,INSTANT,1,1
-12,Maintain,Maintain,MAINTAIN,1,2
-13,Query,Query,QUERY,1,2
-14,Transaction,Transaction,TRANSACTION,1,2
-15,List,List,LIST,1,3
-16,Table,Table,TABLE,1,3
-17,Data Type,Data Type,DATATYPE,1,3
-18,Company,Company,COMPANY,1,4
-19,Professional,Professional,PROFESSIONAL,1,4
-20,Red,Red,RED,1,5
-21,Green,Green,GREEN,1,5
-22,Pending,Pending,PENDING,1,6
-23,Rejected,Rejected,REJECTED,1,6
-24,Approved,Approved,APPROVED,1,6
+id;uid;name;value;description;active;ad_organization_id;ad_reference_id
+1;bcb07c8b-dc73-4c95-bf31-1b527475d7e5;5th generation Antarctica (the territory South of 60 deg S);Mouse Gloves violet;Denmark Down-sized;true;1;1
+2;4dd589bb-d166-4807-a4fa-fffbe2385ee2;French Polynesia;networks;Small back-end;false;2;2
+3;af0c36cf-0580-4b86-9706-3a86316efe05;South Carolina;reintermediate parsing AI;didactic;true;3;3
+4;1d38d99c-c76f-4ea8-83bb-6102d10b7895;Soft;monitor installation Producer;Vanuatu;false;4;4
+5;3f107bc6-406e-4c2c-be16-0b906268fbfe;Tasty Frozen Fish;Practical;Auto Loan Account Montana;true;5;5
+6;f7860117-870d-4500-a505-81d23bbdbde0;matrix pink;Sleek;withdrawal XML;false;6;6
+7;ac2dbdba-75ed-4996-9622-6a7215d6bcd5;International Assistant calculate;Auto Loan Account platforms;implement users;false;7;7
+8;8dab436e-2719-407e-8587-7544e3adf0f9;Bahamian Dollar;Executive Steel Fantastic Concrete Gloves;Investment Account;true;8;8
+9;f643a58a-af20-4869-9c0a-c482554ae715;Libyan Dinar CSS;support;value-added Zloty;false;9;9
+10;a44df714-9642-4e09-a42a-4905ac3bc051;Mayotte;Customer Cove moratorium;Towels Incredible;false;10;10
