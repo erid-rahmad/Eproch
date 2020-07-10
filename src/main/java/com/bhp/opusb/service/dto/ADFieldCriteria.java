@@ -2,10 +2,11 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -80,6 +81,8 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     private LongFilter adValidationRuleId;
 
+    private LongFilter adButtonId;
+
     private LongFilter adTabId;
 
     public ADFieldCriteria() {
@@ -114,6 +117,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
         this.adColumnId = other.adColumnId == null ? null : other.adColumnId.copy();
         this.adValidationRuleId = other.adValidationRuleId == null ? null : other.adValidationRuleId.copy();
+        this.adButtonId = other.adButtonId == null ? null : other.adButtonId.copy();
         this.adTabId = other.adTabId == null ? null : other.adTabId.copy();
     }
 
@@ -346,6 +350,14 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.adValidationRuleId = adValidationRuleId;
     }
 
+    public LongFilter getAdButtonId() {
+        return adButtonId;
+    }
+
+    public void setAdButtonId(LongFilter adButtonId) {
+        this.adButtonId = adButtonId;
+    }
+
     public LongFilter getAdTabId() {
         return adTabId;
     }
@@ -393,6 +405,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
             Objects.equals(adReferenceId, that.adReferenceId) &&
             Objects.equals(adColumnId, that.adColumnId) &&
             Objects.equals(adValidationRuleId, that.adValidationRuleId) &&
+            Objects.equals(adButtonId, that.adButtonId) &&
             Objects.equals(adTabId, that.adTabId);
     }
 
@@ -427,6 +440,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
         adReferenceId,
         adColumnId,
         adValidationRuleId,
+        adButtonId,
         adTabId
         );
     }
@@ -462,6 +476,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
                 (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
                 (adColumnId != null ? "adColumnId=" + adColumnId + ", " : "") +
                 (adValidationRuleId != null ? "adValidationRuleId=" + adValidationRuleId + ", " : "") +
+                (adButtonId != null ? "adButtonId=" + adButtonId + ", " : "") +
                 (adTabId != null ? "adTabId=" + adTabId + ", " : "") +
             "}";
     }

@@ -1,16 +1,14 @@
-import Component from 'vue-class-component';
-import { Vue, Inject, Mixins, Watch } from 'vue-property-decorator';
-import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
-import ContextVariableAccessor from '../ContextVariableAccessor';
-import { getValidatorType, isStringField, isNumericField, isDateField, isDateTimeField, isBooleanField, isActiveStatusField, hasReferenceList, isTableDirectLink } from '@/utils/validate';
-import { ADColumnType } from '@/shared/model/ad-column.model';
-import { debounce, kebabCase, isEmpty, isEqual } from 'lodash';
-import pluralize from 'pluralize';
-import { ADReferenceType } from '@/shared/model/ad-reference.model';
-import { ElForm } from 'element-ui/types/form';
-import { mapActions } from 'vuex';
 import { RegisterTabParameter } from '@/shared/config/store/window-store';
 import { nullifyField } from '@/utils/form';
+import { getValidatorType, hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isStringField, isTableDirectLink } from '@/utils/validate';
+import { ElForm } from 'element-ui/types/form';
+import { debounce, isEmpty, isEqual, kebabCase } from 'lodash';
+import pluralize from 'pluralize';
+import Component from 'vue-class-component';
+import { Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
+import { mapActions } from 'vuex';
+import ContextVariableAccessor from '../ContextVariableAccessor';
+import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 
 const DetailViewProps = Vue.extend({
   props: {
@@ -225,6 +223,10 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
     this.toolbarEventBus.$off('delete-record', this.deleteRecord);
   }
 
+  public showLabel(field: any) {
+    return (!isBooleanField(field) && field.showLabel) ? field.name : '';
+  }
+
   private reset() {
     this.originalData = null;
     this.retrieveAllRecords(this.sendCurrentPageChangeEvent);
@@ -399,8 +401,8 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
       // Parse the validation rule which is used to filter the reference key records.
       const column = field.adColumn;
       const validationRule = field.adValidationRule || column.adValidationRule;
-      const referenceFilter = this.parseContextVariable(validationRule?.query);
-      this.referenceFilterQueries.set(field.id, referenceFilter);
+      const referenceFilter = this.getContext(validationRule?.query);
+      this.referenceFilterQueries.set(field.id, <string>referenceFilter);
     }
   }
 

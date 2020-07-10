@@ -1,9 +1,11 @@
-id,name,description,reference_type,value,active
-1,Column Type,Reference for Column Type,LIST,columnType,1
-2,Window Type,Reference for Window Type,LIST,windowType,1
-3,Reference Type,Reference for Reference Type,LIST,referenceType,1
-4,Vendor Type,Reference for Vendor Type,LIST,vendorType,1
-5,Payment Category,Reference for Payment Category,LIST,paymentCategory,1
-6,Vendor Approval Status,Reference for Vendor Approval Status,LIST,vendorApprovalStatus,1
-7,Table,Table,DATATYPE,table,1
-8,Direct,Direct,DATATYPE,direct,1
+id;uid;name;value;description;reference_type;active;ad_organization_id
+1;b0ffa25e-6904-4ad3-b2c3-39b2298ec04a;Granite;Practical Fresh Shoes withdrawal;olive driver matrix;TABLE;false;1
+2;3e26e2d1-e08c-4fa8-9fb9-eeb5df5a71ef;Awesome Wooden Shirt Realigned National;empower;Refined Florida magenta;DATATYPE;false;2
+3;5630fafc-0173-497f-a3aa-0a2bade9a9bf;generate Gorgeous;Checking Account Democratic People's Republic of Korea;sensor;TABLE;false;3
+4;4d3bd97e-7b65-441d-bb10-af6e334b8d88;Fully-configurable intuitive schemas;bypassing;Practical Associate;TABLE;false;4
+5;87aa04e5-68b5-411b-8790-b475db54dfb6;Horizontal Riel Indiana;application Handcrafted Fresh Ball;generating;DATATYPE;true;5
+6;4bb8be7b-184c-4592-abb2-95c35585c074;Buckinghamshire Grass-roots;Pine;success Croatian Kuna;TABLE;false;6
+7;6ed44c22-7775-45db-8153-8b9aace9ac39;engineer mint green Future;calculate Quality-focused;Turkish Lira;DATATYPE;true;7
+8;dcc0d081-7bc2-4c19-87d9-51fb8456a45f;Steel;sky blue;Grass-roots;LIST;false;8
+9;be139917-a0a5-493a-b477-33ac9309b27b;Home;Ball transmitting Shoes;Personal Loan Account channels matrix;TABLE;true;9
+10;827c721b-ab4f-42ee-b7ab-279fe18a901b;North Dakota Rubber;SSL cultivate Program;Berkshire;TABLE;true;10

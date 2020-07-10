@@ -6,6 +6,7 @@ import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADReference;
 import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.domain.AdValidationRule;
+import com.bhp.opusb.domain.AdButton;
 import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.repository.ADFieldRepository;
 import com.bhp.opusb.service.ADFieldService;
@@ -176,16 +177,6 @@ public class ADFieldResourceIT {
         }
         aDField.setAdOrganization(aDOrganization);
         // Add required entity
-        ADColumn aDColumn;
-        if (TestUtil.findAll(em, ADColumn.class).isEmpty()) {
-            aDColumn = ADColumnResourceIT.createEntity(em);
-            em.persist(aDColumn);
-            em.flush();
-        } else {
-            aDColumn = TestUtil.findAll(em, ADColumn.class).get(0);
-        }
-        aDField.setAdColumn(aDColumn);
-        // Add required entity
         ADTab aDTab;
         if (TestUtil.findAll(em, ADTab.class).isEmpty()) {
             aDTab = ADTabResourceIT.createEntity(em);
@@ -238,16 +229,6 @@ public class ADFieldResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         aDField.setAdOrganization(aDOrganization);
-        // Add required entity
-        ADColumn aDColumn;
-        if (TestUtil.findAll(em, ADColumn.class).isEmpty()) {
-            aDColumn = ADColumnResourceIT.createUpdatedEntity(em);
-            em.persist(aDColumn);
-            em.flush();
-        } else {
-            aDColumn = TestUtil.findAll(em, ADColumn.class).get(0);
-        }
-        aDField.setAdColumn(aDColumn);
         // Add required entity
         ADTab aDTab;
         if (TestUtil.findAll(em, ADTab.class).isEmpty()) {
@@ -2094,8 +2075,12 @@ public class ADFieldResourceIT {
     @Test
     @Transactional
     public void getAllADFieldsByAdColumnIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        ADColumn adColumn = aDField.getAdColumn();
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+        ADColumn adColumn = ADColumnResourceIT.createEntity(em);
+        em.persist(adColumn);
+        em.flush();
+        aDField.setAdColumn(adColumn);
         aDFieldRepository.saveAndFlush(aDField);
         Long adColumnId = adColumn.getId();
 
@@ -2124,6 +2109,26 @@ public class ADFieldResourceIT {
 
         // Get all the aDFieldList where adValidationRule equals to adValidationRuleId + 1
         defaultADFieldShouldNotBeFound("adValidationRuleId.equals=" + (adValidationRuleId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByAdButtonIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+        AdButton adButton = AdButtonResourceIT.createEntity(em);
+        em.persist(adButton);
+        em.flush();
+        aDField.setAdButton(adButton);
+        aDFieldRepository.saveAndFlush(aDField);
+        Long adButtonId = adButton.getId();
+
+        // Get all the aDFieldList where adButton equals to adButtonId
+        defaultADFieldShouldBeFound("adButtonId.equals=" + adButtonId);
+
+        // Get all the aDFieldList where adButton equals to adButtonId + 1
+        defaultADFieldShouldNotBeFound("adButtonId.equals=" + (adButtonId + 1));
     }
 
 

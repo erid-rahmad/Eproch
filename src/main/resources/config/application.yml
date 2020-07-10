@@ -58,6 +58,10 @@ management:
             enabled: true
 
 spring:
+  cloud:
+    dataflow:
+      client:
+        server-uri: http://localhost:9393/
   autoconfigure:
     exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
   application:
@@ -83,7 +87,7 @@ spring:
       hibernate.cache.use_query_cache: false
       hibernate.generate_statistics: false
       # modify batch size as necessary
-      hibernate.jdbc.batch_size: 25
+      hibernate.jdbc.batch_size: 100
       hibernate.order_inserts: true
       hibernate.order_updates: true
       hibernate.query.fail_on_pagination_over_collection_fetch: true
@@ -163,7 +167,7 @@ jhipster:
     license:
     license-url:
 kafka:
-  bootstrap-servers: localhost:9092
+  bootstrap-servers: 0.0.0.0:9092
   consumer:
     key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
     value.deserializer: org.apache.kafka.common.serialization.StringDeserializer

@@ -25,6 +25,10 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "deletable",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "writable",
             "fieldType": "Boolean"
         },

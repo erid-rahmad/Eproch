@@ -10,9 +10,11 @@
           :at-window-root="tabStack.length <= 1"
           :at-last-tab="childTabs.length === 0"
           :event-bus="mainToolbarEventBus"
+          :buttons="mainTab.toolbarButtons"
           @edit-mode-change="onEditModeChange"
           @refresh="refreshWindow"
           @toggle-view="switchView"
+          @run-trigger="runTrigger"
         />
       </el-col>
     </el-row>
@@ -50,7 +52,7 @@
                     ref="mainGrid"
                     :tab="mainTab"
                     :toolbar-event-bus="mainToolbarEventBus"
-                    @current-row-change="loadChildTab"
+                    @current-row-change="onMainRecordChange"
                     @quit-edit-mode="quitEditMode"
                     @record-saved="reloadTreeView"
                     @total-count-changed="onTotalCountChange"
@@ -62,7 +64,7 @@
                     :tab="mainTab"
                     :page="currentRecordNo"
                     :toolbar-event-bus="mainToolbarEventBus"
-                    @current-page-change="loadChildTab"
+                    @current-page-change="onMainRecordChange"
                     @total-count-changed="onTotalCountChange"
                   />
                 </keep-alive>
@@ -103,7 +105,7 @@
                   :name="'' + index"
                 >
                   <span slot="label">
-                    <i :class="`el-icon-${tab.icon}`" v-if="tab.icon"> </i>{{ tab.name }}
+                    <i v-if="tab.icon" :class="`${tab.icon}`"> </i>{{ tab.name }}
                   </span>
                   <tab-toolbar
                     :tab-id="'' + index"
@@ -129,6 +131,10 @@
         @submit="applyFilter"
         @clear="clearFilter"
         @close="closeSearchPanel"
+      />
+      <trigger-parameter-form
+        ref="triggerForm"
+        :data="triggerModel"
       />
     </div>
   </div>
@@ -178,9 +184,7 @@
 </style>
 <style lang="scss" scoped>
 .action-toolbar {
-  padding-top: 2px;
-  padding-bottom: 0px;
-  padding-right: 4px;
+  padding: 4px;
   text-align: right;
 }
 .fade-enter-active,

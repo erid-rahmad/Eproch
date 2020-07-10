@@ -1,0 +1,72 @@
+{
+    "name": "AdTaskScheduler",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "trigger",
+            "fieldType": "AdSchedulerTrigger",
+            "fieldValues": "CRON,PERIODIC",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "cronExpression",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "periodicCount",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "periodicUnit",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "adTaskScheduler",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adTask",
+            "otherEntityRelationshipName": "adTaskScheduler",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTask",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200706061000",
+    "entityTableName": "ad_task_scheduler",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true,
+    "skipClient": true
+}
