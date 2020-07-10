@@ -367,7 +367,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         for (let i = 0; i < this.multipleSelectedRow.length; i++) {
           service = this.gridData[i];
           data = formatJson(filterVal, this.multipleSelectedRow);
-          console.log(i + " record");
         }
       }
     }else{
@@ -392,8 +391,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       // Parse the validation rule which is used to filter the reference key records.
       const column = field.adColumn;
       const validationRule = field.adValidationRule || column.adValidationRule;
-      const referenceFilter = this.parseContextVariable(validationRule?.query);
-      this.referenceFilterQueries.set(field.id, referenceFilter);
+      const referenceFilter = this.getContext(validationRule?.query);
+      this.referenceFilterQueries.set(field.id, <string>referenceFilter);
     }
   }
 
@@ -482,7 +481,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
   public filterRecord(query: string) {
     if (!query) {
-      this.filterQuery = this.filterQueryTmp || this.filterQuery;
+      this.filterQuery = this.filterQueryTmp || this.tab.nativeFilterQuery;
       this.filterQueryTmp = null;
     } else {
       if (this.filterQueryTmp === null) {

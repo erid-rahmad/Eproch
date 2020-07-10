@@ -1,0 +1,72 @@
+<template>
+  <el-dialog
+    class="trigger-parameter-form"
+    :title="data.name"
+    :visible="visible"
+    @open="onOpen"
+    @close="onClose"
+  >
+    <el-form :model="parameter">
+      <el-form-item
+        v-for="field in data.adTriggerParams"
+        :key="field.id"
+        :label="field.name"
+        :prop="field.value"
+        size="small"
+      >
+        <el-checkbox
+          v-if="isBooleanField(field)"
+          v-model="parameter[field.value]"
+          :label="field.name"
+        />
+        <el-select
+          v-else-if="isTableDirectLink(field)"
+          v-model="parameter[field.value]"
+          :remote="true"
+          :remote-method="fetchTableDirectData"
+          clearable
+          filterable
+          @focus="setTableDirectReference(field)"
+        >
+          <el-option
+            v-for="item in referenceListItems(field)"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+        <el-select
+          v-else-if="hasReferenceList(field)"
+          v-model="parameter[field.value]"
+          clearable
+          filterable
+        >
+          <el-option
+            v-for="item in referenceListItems(field)"
+            :key="item.value"
+            :label="item.name"
+            :value="item.value"
+          />
+        </el-select>
+        <el-input
+          v-else-if="isStringField(field.type)"
+          v-model="parameter[field.value]"
+          clearable
+          :minlength="getMinLength(field)"
+          :maxlength="getMaxLength(field)"
+        />
+        <el-input-number
+          v-else-if="isNumericField(field.type)"
+          v-model="parameter[field.value]"
+          controls-position="right"
+          :min="getMinValue(field)"
+          :max="getMaxValue(field)"
+        />
+      </el-form-item>
+    </el-form>
+    <span slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
+    </span>
+  </el-dialog>
+</template>
+<script lang="ts" src="./trigger-parameter-form.component.ts"></script>

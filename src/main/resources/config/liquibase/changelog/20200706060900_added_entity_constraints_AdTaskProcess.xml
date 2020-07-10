@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity AdTaskProcess.
+    -->
+    <changeSet id="20200706060900-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="ad_task_process"
+                                 constraintName="fk_ad_task_process_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_task_id"
+                                 baseTableName="ad_task_process"
+                                 constraintName="fk_ad_task_process_ad_task_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_task"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_task_application_id"
+                                 baseTableName="ad_task_process"
+                                 constraintName="fk_ad_task_process_ad_task_application_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_task_application"/>
+
+    </changeSet>
+</databaseChangeLog>

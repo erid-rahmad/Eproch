@@ -153,4 +153,16 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20200708010300-1" author="Ananta Aryadewa">
+        <addColumn tableName="ad_field">
+            <column name="ad_button_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200708094900" author="Ananta Aryadewa">
+        <dropNotNullConstraint tableName="ad_field" columnName="ad_column_id" />
+    </changeSet>
+
 </databaseChangeLog>
