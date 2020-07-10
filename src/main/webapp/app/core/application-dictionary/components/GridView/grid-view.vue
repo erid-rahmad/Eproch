@@ -3,12 +3,12 @@
     <el-table
       v-loading="isFetching"
       ref="grid"
-      :data="gridData"
-      highlight-current-row
-      :height="height"
-      size="small"
+      size="mini"
       style="width: 100%"
+      highlight-current-row
       stripe
+      :data="gridData"
+      :height="height"
       :default-sort="gridSchema.defaultSort"
       :empty-text="gridSchema.emptyText"
       @current-change="changeCurrentRow"
@@ -73,7 +73,7 @@
               v-model="scope.row[scope.column.property]"
               :remote="true"
               :remote-method="fetchTableDirectData"
-              size="small"
+              size="mini"
               clearable
               filterable
               :disabled="isReadonly(scope.row, field)"
@@ -90,7 +90,7 @@
               v-else-if="hasReferenceList(field)"
               :ref="scope.column.property"
               v-model="scope.row[scope.column.property]"
-              size="small"
+              size="mini"
               clearable
               filterable
               :disabled="isReadonly(scope.row, field)"
@@ -106,7 +106,7 @@
               v-else-if="isStringField(field)"
               :ref="scope.column.property"
               v-model="scope.row[scope.column.property]"
-              size="small"
+              size="mini"
               clearable
               :disabled="isReadonly(scope.row, field)"
             />
@@ -115,7 +115,7 @@
               :ref="scope.column.property"
               v-model="scope.row[scope.column.property]"
               controls-position="right"
-              size="small"
+              size="mini"
               :min="getMinValue(field)"
               :max="getMaxValue(field)"
               :disabled="isReadonly(scope.row, field)"
@@ -137,6 +137,7 @@
       </el-table-column>
     </el-table>
     <el-pagination
+      small
       ref="pagination"
       background
       @size-change="changePageSize"

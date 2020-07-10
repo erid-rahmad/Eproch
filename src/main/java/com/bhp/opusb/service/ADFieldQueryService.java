@@ -176,6 +176,10 @@ public class ADFieldQueryService extends QueryService<ADField> {
                 specification = specification.and(buildSpecification(criteria.getAdValidationRuleId(),
                     root -> root.join(ADField_.adValidationRule, JoinType.LEFT).get(AdValidationRule_.id)));
             }
+            if (criteria.getAdButtonId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdButtonId(),
+                    root -> root.join(ADField_.adButton, JoinType.LEFT).get(AdButton_.id)));
+            }
             if (criteria.getAdTabId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdTabId(),
                     root -> root.join(ADField_.adTab, JoinType.LEFT).get(ADTab_.id)));

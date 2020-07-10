@@ -47,6 +47,9 @@ public class ADTableResourceIT {
     private static final Boolean DEFAULT_VIEW = false;
     private static final Boolean UPDATED_VIEW = true;
 
+    private static final String DEFAULT_TARGET_ENDPOINT = "AAAAAAAAAA";
+    private static final String UPDATED_TARGET_ENDPOINT = "BBBBBBBBBB";
+
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
 
@@ -81,6 +84,7 @@ public class ADTableResourceIT {
             .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .view(DEFAULT_VIEW)
+            .targetEndpoint(DEFAULT_TARGET_ENDPOINT)
             .active(DEFAULT_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
@@ -105,6 +109,7 @@ public class ADTableResourceIT {
             .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .view(UPDATED_VIEW)
+            .targetEndpoint(UPDATED_TARGET_ENDPOINT)
             .active(UPDATED_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
@@ -143,6 +148,7 @@ public class ADTableResourceIT {
         assertThat(testADTable.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testADTable.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADTable.isView()).isEqualTo(DEFAULT_VIEW);
+        assertThat(testADTable.getTargetEndpoint()).isEqualTo(DEFAULT_TARGET_ENDPOINT);
         assertThat(testADTable.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -200,6 +206,7 @@ public class ADTableResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].view").value(hasItem(DEFAULT_VIEW.booleanValue())))
+            .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -217,6 +224,7 @@ public class ADTableResourceIT {
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.view").value(DEFAULT_VIEW.booleanValue()))
+            .andExpect(jsonPath("$.targetEndpoint").value(DEFAULT_TARGET_ENDPOINT))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -424,6 +432,84 @@ public class ADTableResourceIT {
 
     @Test
     @Transactional
+    public void getAllADTablesByTargetEndpointIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where targetEndpoint equals to DEFAULT_TARGET_ENDPOINT
+        defaultADTableShouldBeFound("targetEndpoint.equals=" + DEFAULT_TARGET_ENDPOINT);
+
+        // Get all the aDTableList where targetEndpoint equals to UPDATED_TARGET_ENDPOINT
+        defaultADTableShouldNotBeFound("targetEndpoint.equals=" + UPDATED_TARGET_ENDPOINT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTablesByTargetEndpointIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where targetEndpoint not equals to DEFAULT_TARGET_ENDPOINT
+        defaultADTableShouldNotBeFound("targetEndpoint.notEquals=" + DEFAULT_TARGET_ENDPOINT);
+
+        // Get all the aDTableList where targetEndpoint not equals to UPDATED_TARGET_ENDPOINT
+        defaultADTableShouldBeFound("targetEndpoint.notEquals=" + UPDATED_TARGET_ENDPOINT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTablesByTargetEndpointIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where targetEndpoint in DEFAULT_TARGET_ENDPOINT or UPDATED_TARGET_ENDPOINT
+        defaultADTableShouldBeFound("targetEndpoint.in=" + DEFAULT_TARGET_ENDPOINT + "," + UPDATED_TARGET_ENDPOINT);
+
+        // Get all the aDTableList where targetEndpoint equals to UPDATED_TARGET_ENDPOINT
+        defaultADTableShouldNotBeFound("targetEndpoint.in=" + UPDATED_TARGET_ENDPOINT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTablesByTargetEndpointIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where targetEndpoint is not null
+        defaultADTableShouldBeFound("targetEndpoint.specified=true");
+
+        // Get all the aDTableList where targetEndpoint is null
+        defaultADTableShouldNotBeFound("targetEndpoint.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllADTablesByTargetEndpointContainsSomething() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where targetEndpoint contains DEFAULT_TARGET_ENDPOINT
+        defaultADTableShouldBeFound("targetEndpoint.contains=" + DEFAULT_TARGET_ENDPOINT);
+
+        // Get all the aDTableList where targetEndpoint contains UPDATED_TARGET_ENDPOINT
+        defaultADTableShouldNotBeFound("targetEndpoint.contains=" + UPDATED_TARGET_ENDPOINT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTablesByTargetEndpointNotContainsSomething() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where targetEndpoint does not contain DEFAULT_TARGET_ENDPOINT
+        defaultADTableShouldNotBeFound("targetEndpoint.doesNotContain=" + DEFAULT_TARGET_ENDPOINT);
+
+        // Get all the aDTableList where targetEndpoint does not contain UPDATED_TARGET_ENDPOINT
+        defaultADTableShouldBeFound("targetEndpoint.doesNotContain=" + UPDATED_TARGET_ENDPOINT);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADTablesByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         aDTableRepository.saveAndFlush(aDTable);
@@ -520,6 +606,7 @@ public class ADTableResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].view").value(hasItem(DEFAULT_VIEW.booleanValue())))
+            .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -571,6 +658,7 @@ public class ADTableResourceIT {
             .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .view(UPDATED_VIEW)
+            .targetEndpoint(UPDATED_TARGET_ENDPOINT)
             .active(UPDATED_ACTIVE);
         ADTableDTO aDTableDTO = aDTableMapper.toDto(updatedADTable);
 
@@ -586,6 +674,7 @@ public class ADTableResourceIT {
         assertThat(testADTable.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testADTable.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADTable.isView()).isEqualTo(UPDATED_VIEW);
+        assertThat(testADTable.getTargetEndpoint()).isEqualTo(UPDATED_TARGET_ENDPOINT);
         assertThat(testADTable.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

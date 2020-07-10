@@ -7,7 +7,7 @@ export default class ContextVariableAccessor extends Vue {
 
   static contextRegex = new RegExp(/\{((([\w\s]+)\|)|(\#|\$))?(\w+)\}/, 'g');
 
-  protected parseContextVariable(text: string) {
+  protected getContext(text: string): string | number | boolean {
     if (!text)
       return '';
 
@@ -24,20 +24,15 @@ export default class ContextVariableAccessor extends Vue {
       }
     }
 
+    if (text === 'true' || text === 'false') {
+      return text === 'true';
+    }
+
+    if (text && !isNaN(text as any)) {
+      return parseFloat(text);
+    }
+
     return text;
-  }
-
-  protected getContext(key: string) {
-    if (!key) {
-      return null;
-    }
-
-    const matches: string[] = key.match(ContextVariableAccessor.contextRegex);
-    if (matches) {
-      return this.parseMatches(matches);
-    }
-
-    return key;
   }
 
   /**

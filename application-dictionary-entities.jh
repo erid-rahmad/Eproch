@@ -10,6 +10,10 @@ entity ADTable {
 	uid UUID
 	name String required unique
 	view Boolean
+
+	// Target API endpoint for the CRUD operations.
+	targetEndpoint String
+
 	active Boolean
 }
 
@@ -82,8 +86,10 @@ entity ADTab {
 	iconName String
 
 	// Target API endpoint for the CRUD operations.
+	// Override the same property in AdTable.
 	targetEndpoint String
 
+	deletable Boolean
 	writable Boolean
 	displayLogic String
 	readOnlyLogic String
@@ -175,20 +181,118 @@ entity AdMenu {
 	active Boolean
 }
 
+entity AdTask {
+	uid UUID
+	active Boolean
+	name String required
+
+	// The value will be used as the task name in SCDF.
+	value String required pattern(/^[a-zA-Z_\-]+$/) unique
+
+	// Is it an async or synchronous process?
+	async Boolean
+}
+
+entity AdTaskApplication {
+	uid UUID
+	active Boolean
+	name String required
+	value String required pattern(/^[a-zA-Z_\-]+$/)
+	uri String required
+	metadataUri String
+	version String
+	overrideExisting Boolean
+	deployed Boolean
+}
+
+entity AdTaskProcess {
+	uid UUID
+	active Boolean
+	runSequence Integer
+	parallel Boolean
+}
+
+entity AdTaskScheduler {
+	uid UUID
+	active Boolean
+	name String required unique
+	trigger AdSchedulerTrigger required
+	cronExpression String
+	periodicCount Integer
+	periodicUnit String
+}
+
+entity AdTrigger {
+	uid UUID
+	active Boolean
+	name String required
+	value String required pattern(/^[a-zA-Z]+$/)
+	description String
+	type AdTriggerType
+}
+
+entity AdTriggerParam {
+	uid UUID
+	active Boolean
+	name String required
+	value String required
+	type ADColumnType required
+	mandatory Boolean
+	mandatoryLogic String
+	displayLogic String
+	readOnlyLogic String
+	defaultValue String
+	formatPattern String
+
+	// The minimum character length of the String column.
+	minLength Integer
+
+	// The maximum character length of the String column.
+	maxLength Integer
+
+	// The minimum number value of the numeric column.
+	minValue Long
+
+	// The minimum number value of the numeric column.
+	maxValue Long
+}
+
+entity AdButton {
+	uid UUID
+	active Boolean
+	name String required
+	tooltip String
+	description String
+	toolbar Boolean
+	icon String
+}
+
 enum ADColumnType {
 	STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE,
 	BOOLEAN, LOCAL_DATE, ZONED_DATE_TIME, DURATION,
 	INSTANT
 }
+
 enum ADWindowType {
 	MAINTAIN, QUERY, TRANSACTION
 }
+
 enum ADReferenceType {
 	DATATYPE, LIST, TABLE
 }
+
 enum AdMenuAction {
 	WINDOW
 }
+
+enum AdSchedulerTrigger {
+	CRON, PERIODIC
+}
+
+enum AdTriggerType {
+	PROCESS, REPORT, WORKFLOW
+}
+
 /**
  * Both side will reference each other.
  */
@@ -200,6 +304,8 @@ relationship OneToMany {
 	ADTab to ADField{adTab required}
 	ADReference to ADReferenceList{adReference required}
 	AdMenu to AdMenu{parentMenu}
+	AdTask to AdTaskProcess{adTask required}
+	AdTrigger to AdTriggerParam{adTrigger required}
 }
 /**
  * The left side entity won't be included in the right side entity.
@@ -221,8 +327,9 @@ relationship ManyToOne {
 	
 	ADField{adOrganization required} to ADOrganization
 	ADField{adReference} to ADReference
-	ADField{adColumn required} to ADColumn
+	ADField{adColumn} to ADColumn
 	ADField{adValidationRule} to AdValidationRule
+	ADField{adButton} to AdButton
 
 	ADReference{adOrganization required} to ADOrganization
 	ADReferenceList{adOrganization required} to ADOrganization
@@ -230,13 +337,32 @@ relationship ManyToOne {
 
 	AdMenu{adWindow} to ADWindow
 	AdMenu{adOrganization required} to ADOrganization
+
+	AdTask{adOrganization} to ADOrganization
+	AdTaskApplication{adOrganization} to ADOrganization
+	AdTaskProcess{adOrganization required} to ADOrganization
+	AdTaskProcess{adTaskApplication required} to AdTaskApplication
+	AdTaskScheduler{adOrganization required} to ADOrganization
+	AdTaskScheduler{adTask required} to AdTask
+
+	AdTrigger{adOrganization required} to ADOrganization
+	AdTriggerParam{adOrganization required} to ADOrganization
+	AdTriggerParam{adReference} to ADReference
+	AdTriggerParam{adValidationRule} to AdValidationRule
+	AdButton{adOrganization required} to ADOrganization
+	AdButton{adTab required} to ADTab
+	AdButton{adTrigger} to AdTrigger
 }
+
 // Allow filtering to all entities.
 filter *
+
 // Set pagination options.
 paginate * with pagination
+
 // Use Data Transfert Objects (DTO)
 dto * with mapstruct
+
 // Set service options to all except few
 service * with serviceClass
 

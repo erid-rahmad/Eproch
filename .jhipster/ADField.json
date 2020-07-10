@@ -117,7 +117,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "aDColumn",
             "otherEntityRelationshipName": "aDField",
-            "relationshipValidateRules": "required",
             "relationshipName": "adColumn",
             "otherEntityField": "id"
         },
@@ -126,6 +125,13 @@
             "otherEntityName": "adValidationRule",
             "otherEntityRelationshipName": "aDField",
             "relationshipName": "adValidationRule",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adButton",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipName": "adButton",
             "otherEntityField": "id"
         },
         {

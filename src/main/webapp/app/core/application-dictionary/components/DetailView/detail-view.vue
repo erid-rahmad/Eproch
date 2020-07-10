@@ -34,7 +34,7 @@
           :span="col.span"
         >
           <el-form-item
-            :label="col.field.name"
+            :label="showLabel(col.field)"
             :prop="col.name"
           >
             <el-checkbox

@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -52,6 +53,9 @@ public class ADTab extends AbstractAuditingEntity {
 
     @Column(name = "target_endpoint")
     private String targetEndpoint;
+
+    @Column(name = "deletable")
+    private Boolean deletable;
 
     @Column(name = "writable")
     private Boolean writable = true;
@@ -182,6 +186,19 @@ public class ADTab extends AbstractAuditingEntity {
 
     public void setTargetEndpoint(String targetEndpoint) {
         this.targetEndpoint = targetEndpoint;
+    }
+
+    public Boolean isDeletable() {
+        return deletable;
+    }
+
+    public ADTab deletable(Boolean deletable) {
+        this.deletable = deletable;
+        return this;
+    }
+
+    public void setDeletable(Boolean deletable) {
+        this.deletable = deletable;
     }
 
     public Boolean isWritable() {
@@ -404,6 +421,11 @@ public class ADTab extends AbstractAuditingEntity {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -429,6 +451,7 @@ public class ADTab extends AbstractAuditingEntity {
             ", description='" + getDescription() + "'" +
             ", iconName='" + getIconName() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
+            ", deletable='" + isDeletable() + "'" +
             ", writable='" + isWritable() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +

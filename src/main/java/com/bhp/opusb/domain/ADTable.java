@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -45,6 +46,9 @@ public class ADTable extends AbstractAuditingEntity {
 
     @Column(name = "view")
     private Boolean view;
+
+    @Column(name = "target_endpoint")
+    private String targetEndpoint;
 
     @Column(name = "active")
     private Boolean active = true;
@@ -114,6 +118,19 @@ public class ADTable extends AbstractAuditingEntity {
         this.view = view;
     }
 
+    public String getTargetEndpoint() {
+        return targetEndpoint;
+    }
+
+    public ADTable targetEndpoint(String targetEndpoint) {
+        this.targetEndpoint = targetEndpoint;
+        return this;
+    }
+
+    public void setTargetEndpoint(String targetEndpoint) {
+        this.targetEndpoint = targetEndpoint;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -166,6 +183,11 @@ public class ADTable extends AbstractAuditingEntity {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -189,6 +211,7 @@ public class ADTable extends AbstractAuditingEntity {
             ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", view='" + isView() + "'" +
+            ", targetEndpoint='" + getTargetEndpoint() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

@@ -5,7 +5,7 @@
         type="primary"
         size="mini"
         icon="el-icon-plus"
-        title="New"
+        title="New (shift + alt + n)"
         :disabled="isEditing"
         @click="addRecord"
       />
@@ -13,7 +13,7 @@
         type="primary"
         size="mini"
         icon="el-icon-document-copy"
-        title="Copy"
+        title="Copy (shift + alt + c)"
         :disabled="isEditing"
         @click="copyRecord"
       />
@@ -23,15 +23,22 @@
         type="primary"
         size="mini"
         icon="el-icon-check"
-        title="Save"
+        title="Save (shift + alt + s)"
         :disabled="!isEditing"
         @click="saveRecord"
+      />
+      <el-button
+        size="small"
+        icon="el-icon-close"
+        title="Cancel (shift + alt + z)"
+        :disabled="!isEditing"
+        @click="cancelOperation"
       />
       <el-button
         type="danger"
         size="mini"
         icon="el-icon-delete"
-        title="Delete"
+        title="Delete (shift + alt + del)"
         :disabled="isEditing"
         @click="deleteRecord"
       />

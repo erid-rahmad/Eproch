@@ -2,10 +2,11 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -35,6 +36,8 @@ public class ADTabCriteria implements Serializable, Criteria {
     private StringFilter iconName;
 
     private StringFilter targetEndpoint;
+
+    private BooleanFilter deletable;
 
     private BooleanFilter writable;
 
@@ -76,6 +79,7 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.iconName = other.iconName == null ? null : other.iconName.copy();
         this.targetEndpoint = other.targetEndpoint == null ? null : other.targetEndpoint.copy();
+        this.deletable = other.deletable == null ? null : other.deletable.copy();
         this.writable = other.writable == null ? null : other.writable.copy();
         this.displayLogic = other.displayLogic == null ? null : other.displayLogic.copy();
         this.readOnlyLogic = other.readOnlyLogic == null ? null : other.readOnlyLogic.copy();
@@ -144,6 +148,14 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     public void setTargetEndpoint(StringFilter targetEndpoint) {
         this.targetEndpoint = targetEndpoint;
+    }
+
+    public BooleanFilter getDeletable() {
+        return deletable;
+    }
+
+    public void setDeletable(BooleanFilter deletable) {
+        this.deletable = deletable;
     }
 
     public BooleanFilter getWritable() {
@@ -283,6 +295,7 @@ public class ADTabCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(iconName, that.iconName) &&
             Objects.equals(targetEndpoint, that.targetEndpoint) &&
+            Objects.equals(deletable, that.deletable) &&
             Objects.equals(writable, that.writable) &&
             Objects.equals(displayLogic, that.displayLogic) &&
             Objects.equals(readOnlyLogic, that.readOnlyLogic) &&
@@ -309,6 +322,7 @@ public class ADTabCriteria implements Serializable, Criteria {
         description,
         iconName,
         targetEndpoint,
+        deletable,
         writable,
         displayLogic,
         readOnlyLogic,
@@ -336,6 +350,7 @@ public class ADTabCriteria implements Serializable, Criteria {
                 (description != null ? "description=" + description + ", " : "") +
                 (iconName != null ? "iconName=" + iconName + ", " : "") +
                 (targetEndpoint != null ? "targetEndpoint=" + targetEndpoint + ", " : "") +
+                (deletable != null ? "deletable=" + deletable + ", " : "") +
                 (writable != null ? "writable=" + writable + ", " : "") +
                 (displayLogic != null ? "displayLogic=" + displayLogic + ", " : "") +
                 (readOnlyLogic != null ? "readOnlyLogic=" + readOnlyLogic + ", " : "") +

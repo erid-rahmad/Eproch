@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -120,6 +121,10 @@ public class ADField extends AbstractAuditingEntity {
     @ManyToOne
     @JsonIgnoreProperties("aDFields")
     private AdValidationRule adValidationRule;
+
+    @ManyToOne
+    @JsonIgnoreProperties("aDFields")
+    private AdButton adButton;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -487,6 +492,19 @@ public class ADField extends AbstractAuditingEntity {
         this.adValidationRule = adValidationRule;
     }
 
+    public AdButton getAdButton() {
+        return adButton;
+    }
+
+    public ADField adButton(AdButton adButton) {
+        this.adButton = adButton;
+        return this;
+    }
+
+    public void setAdButton(AdButton adButton) {
+        this.adButton = adButton;
+    }
+
     public ADTab getAdTab() {
         return adTab;
     }
@@ -500,6 +518,11 @@ public class ADField extends AbstractAuditingEntity {
         this.adTab = aDTab;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
 
     @Override
     public boolean equals(Object o) {

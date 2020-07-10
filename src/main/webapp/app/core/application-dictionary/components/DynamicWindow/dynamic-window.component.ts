@@ -8,16 +8,18 @@ import DetailView from "../DetailView/detail-view.vue";
 import GridView from "../GridView/grid-view.vue";
 import TreeView from '../TreeView/tree-view.vue'
 import SearchPanel from "../SearchPanel/search-panel.vue";
+import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
 
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
 import { IADTab, ADTab } from '@/shared/model/ad-tab.model';
 import buildCriteriaQueryString from '@/shared/filter/filters';
 import ADColumnService from '@/entities/ad-column/ad-column.service';
 import { TagsViewStoreModule as tagsViewStore } from "@/shared/config/store/tags-view-store";
-import _ from 'lodash';
+import _, { debounce } from 'lodash';
 import { mapActions } from 'vuex';
 import { ElPagination } from 'element-ui/types/pagination';
 import ADWindowService from '@/entities/ad-window/ad-window.service';
+import DynamicWindowService from './dynamic-window.service';
 
 @Component({
   components: {
@@ -28,7 +30,8 @@ import ADWindowService from '@/entities/ad-window/ad-window.service';
     DetailView,
     GridView,
     TreeView,
-    SearchPanel
+    SearchPanel,
+    TriggerParameterForm
   },
 
   methods: {
@@ -47,12 +50,20 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   @Inject('aDColumnService')
   private aDColumnService: () => ADColumnService;
 
+  @Inject('dynamicWindowService')
+  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
+
+  private removeWindowState!: (path: string) => Promise<void>;
+  private debouncedUpdateChildTabs: (data: any) => void;
+
   public windowId: number = 0;
   private windowType = null;
   public gridView = true;
   public treeView = false;
   public childTabs = [];
   public currentTab: string = '';
+  public previousTab: string = '';
+  public triggerModel: any = {};
 
   // Event buses.
   private mainToolbarEventBus = new Vue();
@@ -66,8 +77,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   private totalRecords: number = 0;
   private currentRecordNo: number = 1;
   isEditing: boolean = false;
-
-  removeWindowState!: (path: string) => Promise<void>;
 
   /**
    * Stack of the main tab. The last item in the stack
@@ -107,6 +116,13 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   currentTabChanged(tabName) {
   }
 
+  @Watch('mainTab')
+  mainTabChanged(tab) {
+    if (!tab.toolbarButtons) {
+      this.retrieveButtons(tab);
+    }
+  }
+
   created() {
     this.fullPath = this.$route.fullPath;
     this.windowId = this.$route.meta.windowId;
@@ -122,6 +138,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.mainToolbarEventBus.$on('tab-navigate', this.navigateTab);
     this.mainToolbarEventBus.$on('open-search-window', this.openSearchPanel);
     this.mainToolbarEventBus.$on('cancel-operation', this.cancelOperation);
+    this.debouncedUpdateChildTabs = debounce(this.updateChildTabs, 500);
     
     this.retrieveWindowDetail()
       .then((res) => {
@@ -237,6 +254,16 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     }
   }
 
+  public runTrigger(model: any) {
+    this.triggerModel = model;
+    (<any> this.$refs.triggerForm).displayed = true;
+    /* this.dynamicWindowService(`/api/ad-triggers/process?name=${service}`)
+      .create(params)
+      .then((res) => {
+        console.log('Process %s triggered with status: %O', service, res);
+      }); */
+  }
+
   public reloadTreeView() {
     if (this.treeView) {
       (<any>this.$refs.treeView).reload();
@@ -258,6 +285,18 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   public handleTabClick(tab: any) {
+    if (tab.name !== this.previousTab) {
+      this.previousTab = tab.name;
+      if (this.hasChildTabs) {
+        this.$nextTick(() => {
+          const grid = (<Array<any>>this.$refs.lineGrid)[tab.index];
+          grid.syncHeight();
+        });
+      }
+      return;
+    }
+
+    // Push the current child tab to the main tab.
     const { id, parentTabId, parentId, parentTableName } = tab.$children[1].tab;
     this.childTabs = [];
     this.currentTab = '';
@@ -281,11 +320,16 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   /**
+   * TODO need to debounce the long running function.
    * This method is called once the parent tab record row changed.
    * @param parent parent tab record.
    */
-  public async loadChildTab({data, recordNo}) {
+  public async onMainRecordChange({data, recordNo}) {
     this.currentRecordNo = recordNo;
+    this.debouncedUpdateChildTabs(data);
+  }
+
+  private updateChildTabs(data: any) {
     if (this.childTabs.length === 0 && !this.loadingChildTabs) {
       this.loadingChildTabs = true;
       this.retrieveTabs(this.mainTab.id, (tab: any, index: number) => {
@@ -296,17 +340,18 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
         return;
       }
       const index = parseInt(this.currentTab);
-      let tab = this.childTabs[index];
-      tab.parentId = data.id;
+      this.childTabs.forEach((tab, index) => {
+        tab.parentId = data.id;
 
-      // Ensure to link the child tab with exactly its parent.
-      tab.filterQuery = buildCriteriaQueryString([
-        `${tab.foreignColumnName}.equals=${data.id}`,
-        tab.nativeFilterQuery
-      ]);
+        // Ensure to link each child tab with exactly its parent.
+        tab.filterQuery = buildCriteriaQueryString([
+          `${tab.foreignColumnName}.equals=${data.id}`,
+          tab.nativeFilterQuery
+        ]);
 
-      // Use Vue.$set to notify array update.
-      this.$set(this.childTabs, index, tab);
+        // Use Vue.$set to notify array update.
+        this.$set(this.childTabs, index, tab);
+      });
     }
   }
 
@@ -315,11 +360,9 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       this.aDWindowService()
         .find(this.windowId)
         .then(res => {
-          console.log('Window detail: %O', res);
           resolve(res);
         })
         .catch(err => {
-          console.error('Failed getting window detail. ', err);
           reject(err);
         })
     });
@@ -383,6 +426,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
             // Child always has parent.
             if (index === 0) {
               this.currentTab = '' + index;
+              this.previousTab = this.currentTab;
             }
             this.childTabs.push(tab);
           } else {
@@ -393,6 +437,21 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       .finally(() => {
         this.loadingChildTabs = false;
       });
+  }
+
+  private retrieveButtons(tab: any) {
+    this.dynamicWindowService('/api/ad-buttons')
+      .retrieve({
+        criteriaQuery: [
+          `adTabId.equals=${tab.id}`,
+          'toolbar.equals=true',
+          'active.equals=true'
+        ]
+      })
+      .then((res) => {
+        tab.toolbarButtons = res.data;
+      })
+
   }
 
   /**
