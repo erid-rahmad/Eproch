@@ -1,0 +1,75 @@
+{
+    "name": "CRegistrationDocType",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "hasExpirationDate",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "mandatoryBusinessCategories",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "additionalBusinessCategories",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mandatoryForCompany",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "additionalForCompany",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "mandatoryForProfessional",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "additionalForProfessional",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cRegistrationDocType",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200707051400",
+    "entityTableName": "c_registration_doc_type",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

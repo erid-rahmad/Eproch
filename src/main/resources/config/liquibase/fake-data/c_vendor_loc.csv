@@ -1,0 +1,11 @@
+id;uid;mandatory;active;ad_organization_id
+1;8b1cd085-2512-4121-8c16-9aa240c35781;false;true;1
+2;bde0d2ce-3d20-480d-bba9-96535c29c7ea;false;true;2
+3;2da2ca7c-0c66-4bc9-b793-49d8115b9558;false;true;3
+4;4027bea9-a0ad-4d82-aa52-c26bfa6df9f9;false;true;4
+5;b7ad24ed-ba26-4392-a6f0-1c915b39ec77;true;true;5
+6;d62f4150-5328-44b1-9fe9-7b604d251fca;false;false;6
+7;304dfda2-14dd-463a-bca6-66a66a3600d5;true;true;7
+8;988107fc-55b2-4ee3-ab26-e87c5b50d892;true;false;8
+9;733a5818-e20d-4816-b28b-90761c2452bc;false;false;9
+10;6e52cd52-851f-499d-90f5-719eb0ee5529;true;false;10
