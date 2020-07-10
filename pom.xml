@@ -5,7 +5,7 @@
 
     <groupId>com.bhp.opusb</groupId>
     <artifactId>opus-web-app</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
     <packaging>jar</packaging>
     <name>Opus Web App</name>
 
@@ -637,7 +637,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>0.0.0.0:5000/opuswebapp:latest</image>
+                            <image>0.0.0.0:5000/opuswebapp:0.1.5</image>
                         </to>
                         <container>
                             <entrypoint>
