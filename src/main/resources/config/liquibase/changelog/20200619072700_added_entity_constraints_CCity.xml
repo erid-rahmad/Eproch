@@ -7,12 +7,6 @@
         Added the constraints for entity CCity.
     -->
     <changeSet id="20200619072700-2" author="jhipster">
-        
-        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
-                                 baseTableName="c_city"
-                                 constraintName="fk_c_city_ad_organization_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="ad_organization"/>
 
         <addForeignKeyConstraint baseColumnNames="country_id"
                                  baseTableName="c_city"
@@ -25,6 +19,16 @@
                                  constraintName="fk_c_city_region_id"
                                  referencedColumnNames="id"
                                  referencedTableName="c_region"/>
+
+    </changeSet>
+
+    <changeSet id="20200710161500" author="Dian">
+
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="c_city"
+                                 constraintName="fk_c_city_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
 
     </changeSet>
 </databaseChangeLog>

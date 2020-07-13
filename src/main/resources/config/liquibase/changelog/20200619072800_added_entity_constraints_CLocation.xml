@@ -14,6 +14,10 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_city"/>
 
+    </changeSet>
+
+    <changeSet id="20200710164100" author="Dian">
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="c_location"
                                  constraintName="fk_c_location_ad_organization_id"

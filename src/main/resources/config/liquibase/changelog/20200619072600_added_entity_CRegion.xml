@@ -76,9 +76,13 @@
                 <constraints nullable="true" />
             </column>
             <column name="ad_organization_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20200710174004" author="Ananta Aryadewa">
+        <addNotNullConstraint tableName="c_region" columnName="ad_organization_id" />
     </changeSet>
 
 </databaseChangeLog>

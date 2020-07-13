@@ -7,12 +7,16 @@
         Added the constraints for entity CCountry.
     -->
     <changeSet id="20200619072400-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="currency_id"
                                  baseTableName="c_country"
                                  constraintName="fk_c_country_currency_id"
                                  referencedColumnNames="id"
                                  referencedTableName="c_currency"/>
+
+    </changeSet>
+
+    <changeSet id="20200710160700" author="Dian">
 
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="c_country"
