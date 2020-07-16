@@ -2,12 +2,12 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-import io.github.jhipster.service.Criteria;
+
 import com.bhp.opusb.domain.enumeration.AdSchedulerTrigger;
+
+import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -27,6 +27,8 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
      * Class for filtering AdSchedulerTrigger
      */
     public static class AdSchedulerTriggerFilter extends Filter<AdSchedulerTrigger> {
+
+        private static final long serialVersionUID = 1L;
 
         public AdSchedulerTriggerFilter() {
         }
@@ -52,6 +54,10 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
+    private StringFilter value;
+
+    private StringFilter description;
+
     private AdSchedulerTriggerFilter trigger;
 
     private StringFilter cronExpression;
@@ -64,6 +70,8 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
 
     private LongFilter adTaskId;
 
+    private LongFilter groupId;
+
     public AdTaskSchedulerCriteria() {
     }
 
@@ -72,12 +80,15 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.value = other.value == null ? null : other.value.copy();
+        this.description = other.description == null ? null : other.description.copy();
         this.trigger = other.trigger == null ? null : other.trigger.copy();
         this.cronExpression = other.cronExpression == null ? null : other.cronExpression.copy();
         this.periodicCount = other.periodicCount == null ? null : other.periodicCount.copy();
         this.periodicUnit = other.periodicUnit == null ? null : other.periodicUnit.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adTaskId = other.adTaskId == null ? null : other.adTaskId.copy();
+        this.groupId = other.groupId == null ? null : other.groupId.copy();
     }
 
     @Override
@@ -115,6 +126,22 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getValue() {
+        return value;
+    }
+
+    public void setValue(StringFilter value) {
+        this.value = value;
+    }
+
+    public StringFilter getDescription() {
+        return description;
+    }
+
+    public void setDescription(StringFilter description) {
+        this.description = description;
     }
 
     public AdSchedulerTriggerFilter getTrigger() {
@@ -165,6 +192,14 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
         this.adTaskId = adTaskId;
     }
 
+    public LongFilter getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(LongFilter groupId) {
+        this.groupId = groupId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -180,12 +215,15 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(value, that.value) &&
+            Objects.equals(description, that.description) &&
             Objects.equals(trigger, that.trigger) &&
             Objects.equals(cronExpression, that.cronExpression) &&
             Objects.equals(periodicCount, that.periodicCount) &&
             Objects.equals(periodicUnit, that.periodicUnit) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(adTaskId, that.adTaskId);
+            Objects.equals(adTaskId, that.adTaskId) &&
+            Objects.equals(groupId, that.groupId);
     }
 
     @Override
@@ -195,12 +233,15 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
         uid,
         active,
         name,
+        value,
+        description,
         trigger,
         cronExpression,
         periodicCount,
         periodicUnit,
         adOrganizationId,
-        adTaskId
+        adTaskId,
+        groupId
         );
     }
 
@@ -211,12 +252,15 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (value != null ? "value=" + value + ", " : "") +
+                (description != null ? "description=" + description + ", " : "") +
                 (trigger != null ? "trigger=" + trigger + ", " : "") +
                 (cronExpression != null ? "cronExpression=" + cronExpression + ", " : "") +
                 (periodicCount != null ? "periodicCount=" + periodicCount + ", " : "") +
                 (periodicUnit != null ? "periodicUnit=" + periodicUnit + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adTaskId != null ? "adTaskId=" + adTaskId + ", " : "") +
+                (groupId != null ? "groupId=" + groupId + ", " : "") +
             "}";
     }
 

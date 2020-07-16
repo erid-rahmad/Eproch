@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.ADColumnType;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
@@ -101,6 +102,7 @@ public class AdTriggerParam extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("adTriggerParams")
+    @JsonBackReference
     private AdTrigger adTrigger;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

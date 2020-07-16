@@ -21,4 +21,14 @@
                                  referencedTableName="ad_task"/>
 
     </changeSet>
+
+    <changeSet id="20200715091700-2" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="group_id"
+                                 baseTableName="ad_task_scheduler"
+                                 constraintName="fk_ad_task_scheduler_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_task_scheduler_group"/>
+
+    </changeSet>
 </databaseChangeLog>

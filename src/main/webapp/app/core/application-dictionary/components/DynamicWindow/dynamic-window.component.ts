@@ -440,6 +440,8 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   private retrieveButtons(tab: any) {
+    const tabIndex = this.tabStack.indexOf(tab);
+
     this.dynamicWindowService('/api/ad-buttons')
       .retrieve({
         criteriaQuery: [
@@ -450,6 +452,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       })
       .then((res) => {
         tab.toolbarButtons = res.data;
+        this.$set(this.tabStack, tabIndex, tab);
       })
 
   }

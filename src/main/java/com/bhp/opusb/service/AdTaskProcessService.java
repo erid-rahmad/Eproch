@@ -1,18 +1,19 @@
 package com.bhp.opusb.service;
 
+import java.util.Optional;
+
 import com.bhp.opusb.domain.AdTaskProcess;
 import com.bhp.opusb.repository.AdTaskProcessRepository;
 import com.bhp.opusb.service.dto.AdTaskProcessDTO;
 import com.bhp.opusb.service.mapper.AdTaskProcessMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link AdTaskProcess}.
@@ -38,6 +39,7 @@ public class AdTaskProcessService {
      * @param adTaskProcessDTO the entity to save.
      * @return the persisted entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.AdTask.adTaskProcesses", allEntries = true)
     public AdTaskProcessDTO save(AdTaskProcessDTO adTaskProcessDTO) {
         log.debug("Request to save AdTaskProcess : {}", adTaskProcessDTO);
         AdTaskProcess adTaskProcess = adTaskProcessMapper.toEntity(adTaskProcessDTO);
@@ -76,6 +78,7 @@ public class AdTaskProcessService {
      *
      * @param id the id of the entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.AdTask.adTaskProcesses", allEntries = true)
     public void delete(Long id) {
         log.debug("Request to delete AdTaskProcess : {}", id);
         adTaskProcessRepository.deleteById(id);

@@ -47,6 +47,7 @@ export default class TriggerParameterForm extends Mixins(ContextVariableAccessor
   private referenceFilterQueries: Map<number, string> = new Map();
   private referenceItemsUpdateTimestamp: number = Date.now();
   private parameter: any = {};
+  processing: boolean = false;
 
   onOpen() {
     this.parameter = {};
@@ -71,6 +72,32 @@ export default class TriggerParameterForm extends Mixins(ContextVariableAccessor
 
   onClose() {
     this.visible = false;
+  }
+
+  runTask() {
+    this.processing = true;
+    this.dynamicWindowService(`/api/ad-triggers/process/${this.data.value}`)
+      .create(this.parameter)
+      .then(res => {
+        this.$notify({
+          title: 'Success',
+          message: 'Task has been successfully deployed',
+          type: 'success',
+          duration: 3000
+        });
+      })
+      .catch(err => {
+        this.$notify({
+          title: 'Error',
+          message: err,
+          type: 'error',
+          duration: 5000
+        });
+      })
+      .finally(() => {
+        this.processing = false;
+        this.visible = false;
+      })
   }
 
   get referenceListItems() {

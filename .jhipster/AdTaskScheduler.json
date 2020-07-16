@@ -18,6 +18,18 @@
             ]
         },
         {
+            "fieldName": "value",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "trigger",
             "fieldType": "AdSchedulerTrigger",
             "fieldValues": "CRON,PERIODIC",
@@ -53,6 +65,13 @@
             "otherEntityRelationshipName": "adTaskScheduler",
             "relationshipValidateRules": "required",
             "relationshipName": "adTask",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adTaskSchedulerGroup",
+            "otherEntityRelationshipName": "adTaskScheduler",
+            "relationshipName": "group",
             "otherEntityField": "id"
         }
     ],
