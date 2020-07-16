@@ -153,8 +153,8 @@ public class AdTriggerResource {
    *         the name is not provided.
    * @throws URISyntaxException if the location uri syntax is incorrect.
    */
-  @PostMapping("/ad-triggers/process")
-  public ResponseEntity<Integer> runProcess(@RequestParam String serviceName, @RequestBody Map<String, Object> params)
+  @PostMapping("/ad-triggers/process/{serviceName}")
+  public ResponseEntity<Integer> runProcess(@PathVariable String serviceName, @RequestBody Map<String, Object> params)
       throws URISyntaxException {
     log.debug("REST request to run process: {}", serviceName);
     if (serviceName == null) {

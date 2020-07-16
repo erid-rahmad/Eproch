@@ -6,15 +6,17 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 /**
- * A DTO for the {@link com.bhp.opusb.domain.ADReferenceList} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.AdTaskSchedulerGroup} entity.
  */
-public class ADReferenceListDTO extends AbstractAuditingDTO {
+public class AdTaskSchedulerGroupDTO extends AbstractAuditingDTO {
     
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
     private UUID uid;
+
+    private Boolean active;
 
     @NotNull
     private String name;
@@ -24,14 +26,9 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
 
     private String description;
 
-    private Boolean active;
-
 
     private Long adOrganizationId;
     private String adOrganizationName;
-
-    private Long adReferenceId;
-    private String adReferenceName;
     
     public Long getId() {
         return id;
@@ -47,6 +44,14 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
 
     public void setUid(UUID uid) {
         this.uid = uid;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public String getName() {
@@ -73,14 +78,6 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
         this.description = description;
     }
 
-    public Boolean isActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
-    }
-
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -97,22 +94,6 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getAdReferenceId() {
-        return adReferenceId;
-    }
-
-    public void setAdReferenceId(Long aDReferenceId) {
-        this.adReferenceId = aDReferenceId;
-    }
-
-    public String getAdReferenceName() {
-        return adReferenceName;
-    }
-
-    public void setAdReferenceName(String adReferenceName) {
-        this.adReferenceName = adReferenceName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -122,11 +103,11 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        ADReferenceListDTO aDReferenceListDTO = (ADReferenceListDTO) o;
-        if (aDReferenceListDTO.getId() == null || getId() == null) {
+        AdTaskSchedulerGroupDTO adTaskSchedulerGroupDTO = (AdTaskSchedulerGroupDTO) o;
+        if (adTaskSchedulerGroupDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), aDReferenceListDTO.getId());
+        return Objects.equals(getId(), adTaskSchedulerGroupDTO.getId());
     }
 
     @Override
@@ -136,15 +117,14 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "ADReferenceListDTO{" +
+        return "AdTaskSchedulerGroupDTO{" +
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
             ", value='" + getValue() + "'" +
             ", description='" + getDescription() + "'" +
-            ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adReferenceId=" + getAdReferenceId() +
             "}";
     }
 }
