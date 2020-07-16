@@ -1,7 +1,7 @@
 package com.bhp.opusb.domain;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -13,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -80,7 +81,8 @@ public class AdMenu extends AbstractAuditingEntity {
 
     @OneToMany(mappedBy = "parentMenu")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<AdMenu> adMenus = new HashSet<>();
+    @OrderBy("sequence ASC")
+    private List<AdMenu> adMenus = new ArrayList<>();
 
     @ManyToOne
     @JsonIgnoreProperties("adMenus")
@@ -260,11 +262,11 @@ public class AdMenu extends AbstractAuditingEntity {
         this.active = active;
     }
 
-    public Set<AdMenu> getAdMenus() {
+    public List<AdMenu> getAdMenus() {
         return adMenus;
     }
 
-    public AdMenu adMenus(Set<AdMenu> adMenus) {
+    public AdMenu adMenus(List<AdMenu> adMenus) {
         this.adMenus = adMenus;
         return this;
     }
@@ -281,7 +283,7 @@ public class AdMenu extends AbstractAuditingEntity {
         return this;
     }
 
-    public void setAdMenus(Set<AdMenu> adMenus) {
+    public void setAdMenus(List<AdMenu> adMenus) {
         this.adMenus = adMenus;
     }
 
