@@ -216,10 +216,20 @@ entity AdTaskScheduler {
 	uid UUID
 	active Boolean
 	name String required unique
+	value String required unique
+	description String
 	trigger AdSchedulerTrigger required
 	cronExpression String
 	periodicCount Integer
 	periodicUnit String
+}
+
+entity AdTaskSchedulerGroup {
+	uid UUID
+	active Boolean
+	name String required
+	value String required unique
+	description String
 }
 
 entity AdTrigger {
@@ -306,6 +316,7 @@ relationship OneToMany {
 	AdMenu to AdMenu{parentMenu}
 	AdTask to AdTaskProcess{adTask required}
 	AdTrigger to AdTriggerParam{adTrigger required}
+	AdTaskSchedulerGroup to AdTaskScheduler{group}
 }
 /**
  * The left side entity won't be included in the right side entity.
@@ -344,6 +355,7 @@ relationship ManyToOne {
 	AdTaskProcess{adTaskApplication required} to AdTaskApplication
 	AdTaskScheduler{adOrganization required} to ADOrganization
 	AdTaskScheduler{adTask required} to AdTask
+	AdTaskSchedulerGroup{adOrganization required} to ADOrganization
 
 	AdTrigger{adOrganization required} to ADOrganization
 	AdTriggerParam{adOrganization required} to ADOrganization

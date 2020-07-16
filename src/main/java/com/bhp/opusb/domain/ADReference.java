@@ -21,6 +21,7 @@ import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.ADReferenceType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -63,6 +64,7 @@ public class ADReference extends AbstractAuditingEntity {
 
     @OneToMany(mappedBy = "adReference", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonManagedReference
     private Set<ADReferenceList> aDReferenceLists = new HashSet<>();
 
     @ManyToOne(optional = false)

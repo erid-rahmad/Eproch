@@ -24,6 +24,11 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
     private String name;
 
     @NotNull
+    private String value;
+
+    private String description;
+
+    @NotNull
     private AdSchedulerTrigger trigger;
 
     private String cronExpression;
@@ -38,6 +43,9 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
 
     private Long adTaskId;
     private String adTaskName;
+
+    private Long groupId;
+    private String groupName;
     
     public Long getId() {
         return id;
@@ -69,6 +77,22 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public AdSchedulerTrigger getTrigger() {
@@ -134,6 +158,22 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
     public void setAdTaskName(String adTaskName) {
         this.adTaskName = adTaskName;
     }
+    
+    public Long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Long adTaskSchedulerGroupId) {
+        this.groupId = adTaskSchedulerGroupId;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -163,12 +203,15 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
+            ", value='" + getValue() + "'" +
+            ", description='" + getDescription() + "'" +
             ", trigger='" + getTrigger() + "'" +
             ", cronExpression='" + getCronExpression() + "'" +
             ", periodicCount=" + getPeriodicCount() +
             ", periodicUnit='" + getPeriodicUnit() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adTaskId=" + getAdTaskId() +
+            ", groupId=" + getGroupId() +
             "}";
     }
 }

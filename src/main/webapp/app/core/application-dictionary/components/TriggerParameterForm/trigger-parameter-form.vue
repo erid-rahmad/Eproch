@@ -6,7 +6,11 @@
     @open="onOpen"
     @close="onClose"
   >
-    <el-form :model="parameter">
+    <el-form
+      label-width="128px"
+      label-position="left"
+      :model="parameter"
+    >
       <el-form-item
         v-for="field in data.adTriggerParams"
         :key="field.id"
@@ -65,7 +69,7 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="dialogFormVisible = false">Confirm</el-button>
+      <el-button type="primary" @click="runTask" :disabled="processing">Confirm</el-button>
     </span>
   </el-dialog>
 </template>
