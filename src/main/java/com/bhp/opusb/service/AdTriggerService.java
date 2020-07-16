@@ -7,7 +7,7 @@ import com.bhp.opusb.service.dto.AdTriggerDTO;
 import com.bhp.opusb.service.mapper.AdTriggerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -31,9 +31,11 @@ public class AdTriggerService {
 
     private ProcessTriggerFactory processTriggerFactory;
 
-    public AdTriggerService(AdTriggerRepository adTriggerRepository, AdTriggerMapper adTriggerMapper) {
+    @Autowired
+    public AdTriggerService(AdTriggerRepository adTriggerRepository, AdTriggerMapper adTriggerMapper, ProcessTriggerFactory processTriggerFactory) {
         this.adTriggerRepository = adTriggerRepository;
         this.adTriggerMapper = adTriggerMapper;
+        this.processTriggerFactory = processTriggerFactory;
     }
 
     /**
@@ -85,6 +87,11 @@ public class AdTriggerService {
         adTriggerRepository.deleteById(id);
     }
 
+    /**
+     * Execute a process with the given Spring bean name.
+     * @param serviceName
+     * @param params
+     */
     public void executeProcess(String serviceName, Map<String, Object> params) {
         if (log.isDebugEnabled()) {
             params.entrySet().stream().forEach((entry) -> {

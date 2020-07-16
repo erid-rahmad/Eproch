@@ -5,12 +5,10 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
-import com.bhp.opusb.domain.enumeration.AdSchedulerTrigger;
-
 /**
- * A DTO for the {@link com.bhp.opusb.domain.AdTaskScheduler} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.AdTaskSchedulerGroup} entity.
  */
-public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
+public class AdTaskSchedulerGroupDTO extends AbstractAuditingDTO {
     
     private static final long serialVersionUID = 1L;
 
@@ -28,24 +26,9 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
 
     private String description;
 
-    @NotNull
-    private AdSchedulerTrigger trigger;
-
-    private String cronExpression;
-
-    private Integer periodicCount;
-
-    private String periodicUnit;
-
 
     private Long adOrganizationId;
     private String adOrganizationName;
-
-    private Long adTaskId;
-    private String adTaskName;
-
-    private Long groupId;
-    private String groupName;
     
     public Long getId() {
         return id;
@@ -95,38 +78,6 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
         this.description = description;
     }
 
-    public AdSchedulerTrigger getTrigger() {
-        return trigger;
-    }
-
-    public void setTrigger(AdSchedulerTrigger trigger) {
-        this.trigger = trigger;
-    }
-
-    public String getCronExpression() {
-        return cronExpression;
-    }
-
-    public void setCronExpression(String cronExpression) {
-        this.cronExpression = cronExpression;
-    }
-
-    public Integer getPeriodicCount() {
-        return periodicCount;
-    }
-
-    public void setPeriodicCount(Integer periodicCount) {
-        this.periodicCount = periodicCount;
-    }
-
-    public String getPeriodicUnit() {
-        return periodicUnit;
-    }
-
-    public void setPeriodicUnit(String periodicUnit) {
-        this.periodicUnit = periodicUnit;
-    }
-
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -143,38 +94,6 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getAdTaskId() {
-        return adTaskId;
-    }
-
-    public void setAdTaskId(Long adTaskId) {
-        this.adTaskId = adTaskId;
-    }
-
-    public String getAdTaskName() {
-        return adTaskName;
-    }
-
-    public void setAdTaskName(String adTaskName) {
-        this.adTaskName = adTaskName;
-    }
-    
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long adTaskSchedulerGroupId) {
-        this.groupId = adTaskSchedulerGroupId;
-    }
-
-    public String getGroupName() {
-        return groupName;
-    }
-
-    public void setGroupName(String groupName) {
-        this.groupName = groupName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -184,11 +103,11 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        AdTaskSchedulerDTO adTaskSchedulerDTO = (AdTaskSchedulerDTO) o;
-        if (adTaskSchedulerDTO.getId() == null || getId() == null) {
+        AdTaskSchedulerGroupDTO adTaskSchedulerGroupDTO = (AdTaskSchedulerGroupDTO) o;
+        if (adTaskSchedulerGroupDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), adTaskSchedulerDTO.getId());
+        return Objects.equals(getId(), adTaskSchedulerGroupDTO.getId());
     }
 
     @Override
@@ -198,20 +117,14 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "AdTaskSchedulerDTO{" +
+        return "AdTaskSchedulerGroupDTO{" +
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
             ", value='" + getValue() + "'" +
             ", description='" + getDescription() + "'" +
-            ", trigger='" + getTrigger() + "'" +
-            ", cronExpression='" + getCronExpression() + "'" +
-            ", periodicCount=" + getPeriodicCount() +
-            ", periodicUnit='" + getPeriodicUnit() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adTaskId=" + getAdTaskId() +
-            ", groupId=" + getGroupId() +
             "}";
     }
 }

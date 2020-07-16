@@ -31,6 +31,7 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
     private String adOrganizationName;
 
     private Long adReferenceId;
+    private String adReferenceName;
     
     public Long getId() {
         return id;
@@ -102,6 +103,14 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
 
     public void setAdReferenceId(Long aDReferenceId) {
         this.adReferenceId = aDReferenceId;
+    }
+
+    public String getAdReferenceName() {
+        return adReferenceName;
+    }
+
+    public void setAdReferenceName(String adReferenceName) {
+        this.adReferenceName = adReferenceName;
     }
 
     @Override
