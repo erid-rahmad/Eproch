@@ -5,7 +5,12 @@ import java.util.List;
 import javax.persistence.criteria.JoinType;
 
 // for static metamodels
+import com.bhp.opusb.domain.ADOrganization_;
+// for static metamodels
 import com.bhp.opusb.domain.AdTaskScheduler;
+import com.bhp.opusb.domain.AdTaskSchedulerGroup_;
+import com.bhp.opusb.domain.AdTaskScheduler_;
+import com.bhp.opusb.domain.AdTask_;
 import com.bhp.opusb.repository.AdTaskSchedulerRepository;
 import com.bhp.opusb.service.dto.AdTaskSchedulerCriteria;
 import com.bhp.opusb.service.dto.AdTaskSchedulerDTO;
