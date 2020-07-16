@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.AdTaskScheduler;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.AdTask;
+import com.bhp.opusb.domain.AdTaskSchedulerGroup;
 import com.bhp.opusb.repository.AdTaskSchedulerRepository;
 import com.bhp.opusb.service.AdTaskSchedulerService;
 import com.bhp.opusb.service.dto.AdTaskSchedulerDTO;
@@ -47,6 +48,12 @@ public class AdTaskSchedulerResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_VALUE = "AAAAAAAAAA";
+    private static final String UPDATED_VALUE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     private static final AdSchedulerTrigger DEFAULT_TRIGGER = AdSchedulerTrigger.CRON;
     private static final AdSchedulerTrigger UPDATED_TRIGGER = AdSchedulerTrigger.PERIODIC;
@@ -92,6 +99,8 @@ public class AdTaskSchedulerResourceIT {
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE)
             .name(DEFAULT_NAME)
+            .value(DEFAULT_VALUE)
+            .description(DEFAULT_DESCRIPTION)
             .trigger(DEFAULT_TRIGGER)
             .cronExpression(DEFAULT_CRON_EXPRESSION)
             .periodicCount(DEFAULT_PERIODIC_COUNT)
@@ -129,6 +138,8 @@ public class AdTaskSchedulerResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
             .name(UPDATED_NAME)
+            .value(UPDATED_VALUE)
+            .description(UPDATED_DESCRIPTION)
             .trigger(UPDATED_TRIGGER)
             .cronExpression(UPDATED_CRON_EXPRESSION)
             .periodicCount(UPDATED_PERIODIC_COUNT)
@@ -180,6 +191,8 @@ public class AdTaskSchedulerResourceIT {
         assertThat(testAdTaskScheduler.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testAdTaskScheduler.isActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testAdTaskScheduler.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testAdTaskScheduler.getValue()).isEqualTo(DEFAULT_VALUE);
+        assertThat(testAdTaskScheduler.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testAdTaskScheduler.getTrigger()).isEqualTo(DEFAULT_TRIGGER);
         assertThat(testAdTaskScheduler.getCronExpression()).isEqualTo(DEFAULT_CRON_EXPRESSION);
         assertThat(testAdTaskScheduler.getPeriodicCount()).isEqualTo(DEFAULT_PERIODIC_COUNT);
@@ -228,6 +241,25 @@ public class AdTaskSchedulerResourceIT {
 
     @Test
     @Transactional
+    public void checkValueIsRequired() throws Exception {
+        int databaseSizeBeforeTest = adTaskSchedulerRepository.findAll().size();
+        // set the field null
+        adTaskScheduler.setValue(null);
+
+        // Create the AdTaskScheduler, which fails.
+        AdTaskSchedulerDTO adTaskSchedulerDTO = adTaskSchedulerMapper.toDto(adTaskScheduler);
+
+        restAdTaskSchedulerMockMvc.perform(post("/api/ad-task-schedulers")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(adTaskSchedulerDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<AdTaskScheduler> adTaskSchedulerList = adTaskSchedulerRepository.findAll();
+        assertThat(adTaskSchedulerList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void checkTriggerIsRequired() throws Exception {
         int databaseSizeBeforeTest = adTaskSchedulerRepository.findAll().size();
         // set the field null
@@ -259,6 +291,8 @@ public class AdTaskSchedulerResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].trigger").value(hasItem(DEFAULT_TRIGGER.toString())))
             .andExpect(jsonPath("$.[*].cronExpression").value(hasItem(DEFAULT_CRON_EXPRESSION)))
             .andExpect(jsonPath("$.[*].periodicCount").value(hasItem(DEFAULT_PERIODIC_COUNT)))
@@ -279,6 +313,8 @@ public class AdTaskSchedulerResourceIT {
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.value").value(DEFAULT_VALUE))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.trigger").value(DEFAULT_TRIGGER.toString()))
             .andExpect(jsonPath("$.cronExpression").value(DEFAULT_CRON_EXPRESSION))
             .andExpect(jsonPath("$.periodicCount").value(DEFAULT_PERIODIC_COUNT))
@@ -484,6 +520,162 @@ public class AdTaskSchedulerResourceIT {
 
         // Get all the adTaskSchedulerList where name does not contain UPDATED_NAME
         defaultAdTaskSchedulerShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByValueIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where value equals to DEFAULT_VALUE
+        defaultAdTaskSchedulerShouldBeFound("value.equals=" + DEFAULT_VALUE);
+
+        // Get all the adTaskSchedulerList where value equals to UPDATED_VALUE
+        defaultAdTaskSchedulerShouldNotBeFound("value.equals=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByValueIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where value not equals to DEFAULT_VALUE
+        defaultAdTaskSchedulerShouldNotBeFound("value.notEquals=" + DEFAULT_VALUE);
+
+        // Get all the adTaskSchedulerList where value not equals to UPDATED_VALUE
+        defaultAdTaskSchedulerShouldBeFound("value.notEquals=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByValueIsInShouldWork() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where value in DEFAULT_VALUE or UPDATED_VALUE
+        defaultAdTaskSchedulerShouldBeFound("value.in=" + DEFAULT_VALUE + "," + UPDATED_VALUE);
+
+        // Get all the adTaskSchedulerList where value equals to UPDATED_VALUE
+        defaultAdTaskSchedulerShouldNotBeFound("value.in=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByValueIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where value is not null
+        defaultAdTaskSchedulerShouldBeFound("value.specified=true");
+
+        // Get all the adTaskSchedulerList where value is null
+        defaultAdTaskSchedulerShouldNotBeFound("value.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByValueContainsSomething() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where value contains DEFAULT_VALUE
+        defaultAdTaskSchedulerShouldBeFound("value.contains=" + DEFAULT_VALUE);
+
+        // Get all the adTaskSchedulerList where value contains UPDATED_VALUE
+        defaultAdTaskSchedulerShouldNotBeFound("value.contains=" + UPDATED_VALUE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByValueNotContainsSomething() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where value does not contain DEFAULT_VALUE
+        defaultAdTaskSchedulerShouldNotBeFound("value.doesNotContain=" + DEFAULT_VALUE);
+
+        // Get all the adTaskSchedulerList where value does not contain UPDATED_VALUE
+        defaultAdTaskSchedulerShouldBeFound("value.doesNotContain=" + UPDATED_VALUE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where description equals to DEFAULT_DESCRIPTION
+        defaultAdTaskSchedulerShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the adTaskSchedulerList where description equals to UPDATED_DESCRIPTION
+        defaultAdTaskSchedulerShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where description not equals to DEFAULT_DESCRIPTION
+        defaultAdTaskSchedulerShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the adTaskSchedulerList where description not equals to UPDATED_DESCRIPTION
+        defaultAdTaskSchedulerShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultAdTaskSchedulerShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the adTaskSchedulerList where description equals to UPDATED_DESCRIPTION
+        defaultAdTaskSchedulerShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where description is not null
+        defaultAdTaskSchedulerShouldBeFound("description.specified=true");
+
+        // Get all the adTaskSchedulerList where description is null
+        defaultAdTaskSchedulerShouldNotBeFound("description.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where description contains DEFAULT_DESCRIPTION
+        defaultAdTaskSchedulerShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
+
+        // Get all the adTaskSchedulerList where description contains UPDATED_DESCRIPTION
+        defaultAdTaskSchedulerShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+
+        // Get all the adTaskSchedulerList where description does not contain DEFAULT_DESCRIPTION
+        defaultAdTaskSchedulerShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
+
+        // Get all the adTaskSchedulerList where description does not contain UPDATED_DESCRIPTION
+        defaultAdTaskSchedulerShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
     }
 
 
@@ -831,6 +1023,26 @@ public class AdTaskSchedulerResourceIT {
         defaultAdTaskSchedulerShouldNotBeFound("adTaskId.equals=" + (adTaskId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByGroupIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+        AdTaskSchedulerGroup group = AdTaskSchedulerGroupResourceIT.createEntity(em);
+        em.persist(group);
+        em.flush();
+        adTaskScheduler.setGroup(group);
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+        Long groupId = group.getId();
+
+        // Get all the adTaskSchedulerList where group equals to groupId
+        defaultAdTaskSchedulerShouldBeFound("groupId.equals=" + groupId);
+
+        // Get all the adTaskSchedulerList where group equals to groupId + 1
+        defaultAdTaskSchedulerShouldNotBeFound("groupId.equals=" + (groupId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -842,6 +1054,8 @@ public class AdTaskSchedulerResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].value").value(hasItem(DEFAULT_VALUE)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].trigger").value(hasItem(DEFAULT_TRIGGER.toString())))
             .andExpect(jsonPath("$.[*].cronExpression").value(hasItem(DEFAULT_CRON_EXPRESSION)))
             .andExpect(jsonPath("$.[*].periodicCount").value(hasItem(DEFAULT_PERIODIC_COUNT)))
@@ -896,6 +1110,8 @@ public class AdTaskSchedulerResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
             .name(UPDATED_NAME)
+            .value(UPDATED_VALUE)
+            .description(UPDATED_DESCRIPTION)
             .trigger(UPDATED_TRIGGER)
             .cronExpression(UPDATED_CRON_EXPRESSION)
             .periodicCount(UPDATED_PERIODIC_COUNT)
@@ -914,6 +1130,8 @@ public class AdTaskSchedulerResourceIT {
         assertThat(testAdTaskScheduler.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testAdTaskScheduler.isActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testAdTaskScheduler.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testAdTaskScheduler.getValue()).isEqualTo(UPDATED_VALUE);
+        assertThat(testAdTaskScheduler.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testAdTaskScheduler.getTrigger()).isEqualTo(UPDATED_TRIGGER);
         assertThat(testAdTaskScheduler.getCronExpression()).isEqualTo(UPDATED_CRON_EXPRESSION);
         assertThat(testAdTaskScheduler.getPeriodicCount()).isEqualTo(UPDATED_PERIODIC_COUNT);

@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.AdSchedulerTrigger;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
@@ -47,6 +48,13 @@ public class AdTaskScheduler extends AbstractAuditingEntity {
     private String name;
 
     @NotNull
+    @Column(name = "value", nullable = false, unique = true)
+    private String value;
+
+    @Column(name = "description")
+    private String description;
+
+    @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "trigger", nullable = false)
     private AdSchedulerTrigger trigger;
@@ -70,7 +78,23 @@ public class AdTaskScheduler extends AbstractAuditingEntity {
     @JsonIgnoreProperties("adTaskSchedulers")
     private AdTask adTask;
 
+    @ManyToOne
+    @JsonIgnoreProperties("adTaskSchedulers")
+    @JsonBackReference
+    private AdTaskSchedulerGroup group;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
+    public AdTaskScheduler() {}
+
+    public AdTaskScheduler(Boolean active, AdSchedulerTrigger trigger, String cronExpression, Integer periodicCount, String periodicUnit) {
+        this.active = active;
+        this.trigger = trigger;
+        this.cronExpression = cronExpression;
+        this.periodicCount = periodicCount;
+        this.periodicUnit = periodicUnit;
+    }
+
     public Long getId() {
         return id;
     }
@@ -116,6 +140,32 @@ public class AdTaskScheduler extends AbstractAuditingEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public AdTaskScheduler value(String value) {
+        this.value = value;
+        return this;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public AdTaskScheduler description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public AdSchedulerTrigger getTrigger() {
@@ -195,6 +245,19 @@ public class AdTaskScheduler extends AbstractAuditingEntity {
     public void setAdTask(AdTask adTask) {
         this.adTask = adTask;
     }
+
+    public AdTaskSchedulerGroup getGroup() {
+        return group;
+    }
+
+    public AdTaskScheduler group(AdTaskSchedulerGroup adTaskSchedulerGroup) {
+        this.group = adTaskSchedulerGroup;
+        return this;
+    }
+
+    public void setGroup(AdTaskSchedulerGroup adTaskSchedulerGroup) {
+        this.group = adTaskSchedulerGroup;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
@@ -225,6 +288,8 @@ public class AdTaskScheduler extends AbstractAuditingEntity {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
+            ", value='" + getValue() + "'" +
+            ", description='" + getDescription() + "'" +
             ", trigger='" + getTrigger() + "'" +
             ", cronExpression='" + getCronExpression() + "'" +
             ", periodicCount=" + getPeriodicCount() +

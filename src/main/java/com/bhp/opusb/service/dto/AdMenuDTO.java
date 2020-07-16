@@ -1,8 +1,8 @@
 package com.bhp.opusb.service.dto;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
@@ -54,7 +54,7 @@ public class AdMenuDTO extends AbstractAuditingDTO {
     private Long parentMenuId;
     private String parentMenuName;
     
-    private Set<AdMenuDTO> adMenus = new HashSet<>();
+    private List<AdMenuDTO> adMenus = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -208,11 +208,11 @@ public class AdMenuDTO extends AbstractAuditingDTO {
         this.parentMenuName = parentMenuName;
     }
 
-    public Set<AdMenuDTO> getAdMenus() {
+    public List<AdMenuDTO> getAdMenus() {
         return adMenus;
     }
 
-    public void setAdMenus(Set<AdMenuDTO> adMenus) {
+    public void setAdMenus(List<AdMenuDTO> adMenus) {
         this.adMenus = adMenus;
     }
 

@@ -1,7 +1,7 @@
 package com.bhp.opusb.domain;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -11,12 +11,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -25,12 +23,12 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A AdTask.
+ * A AdTaskSchedulerGroup.
  */
 @Entity
-@Table(name = "ad_task")
+@Table(name = "ad_task_scheduler_group")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class AdTask extends AbstractAuditingEntity {
+public class AdTaskSchedulerGroup extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -50,30 +48,23 @@ public class AdTask extends AbstractAuditingEntity {
     private String name;
 
     @NotNull
-    @Pattern(regexp = "^[a-zA-Z_\\-]+$")
     @Column(name = "value", nullable = false, unique = true)
     private String value;
 
-    @Column(name = "async")
-    private Boolean async;
+    @Column(name = "description")
+    private String description;
 
-    @OneToMany(mappedBy = "adTask")
+    @OneToMany(mappedBy = "group")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @OrderBy("runSequence ASC, id ASC")
     @JsonManagedReference
-    private List<AdTaskProcess> adTaskProcesses = new ArrayList<>();
+    private Set<AdTaskScheduler> adTaskSchedulers = new HashSet<>();
 
-    @ManyToOne
-    @JsonIgnoreProperties("adTasks")
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("adTaskSchedulerGroups")
     private ADOrganization adOrganization;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-
-    public AdTask() {}
-    public AdTask(Long id) {
-        this.id = id;
-    }
-    
     public Long getId() {
         return id;
     }
@@ -86,7 +77,7 @@ public class AdTask extends AbstractAuditingEntity {
         return uid;
     }
 
-    public AdTask uid(UUID uid) {
+    public AdTaskSchedulerGroup uid(UUID uid) {
         this.uid = uid;
         return this;
     }
@@ -99,7 +90,7 @@ public class AdTask extends AbstractAuditingEntity {
         return active;
     }
 
-    public AdTask active(Boolean active) {
+    public AdTaskSchedulerGroup active(Boolean active) {
         this.active = active;
         return this;
     }
@@ -112,7 +103,7 @@ public class AdTask extends AbstractAuditingEntity {
         return name;
     }
 
-    public AdTask name(String name) {
+    public AdTaskSchedulerGroup name(String name) {
         this.name = name;
         return this;
     }
@@ -125,7 +116,7 @@ public class AdTask extends AbstractAuditingEntity {
         return value;
     }
 
-    public AdTask value(String value) {
+    public AdTaskSchedulerGroup value(String value) {
         this.value = value;
         return this;
     }
@@ -134,49 +125,49 @@ public class AdTask extends AbstractAuditingEntity {
         this.value = value;
     }
 
-    public Boolean isAsync() {
-        return async;
+    public String getDescription() {
+        return description;
     }
 
-    public AdTask async(Boolean async) {
-        this.async = async;
+    public AdTaskSchedulerGroup description(String description) {
+        this.description = description;
         return this;
     }
 
-    public void setAsync(Boolean async) {
-        this.async = async;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public List<AdTaskProcess> getAdTaskProcesses() {
-        return adTaskProcesses;
+    public Set<AdTaskScheduler> getAdTaskSchedulers() {
+        return adTaskSchedulers;
     }
 
-    public AdTask adTaskProcesses(List<AdTaskProcess> adTaskProcesses) {
-        this.adTaskProcesses = adTaskProcesses;
+    public AdTaskSchedulerGroup adTaskSchedulers(Set<AdTaskScheduler> adTaskSchedulers) {
+        this.adTaskSchedulers = adTaskSchedulers;
         return this;
     }
 
-    public AdTask addAdTaskProcess(AdTaskProcess adTaskProcess) {
-        this.adTaskProcesses.add(adTaskProcess);
-        adTaskProcess.setAdTask(this);
+    public AdTaskSchedulerGroup addAdTaskScheduler(AdTaskScheduler adTaskScheduler) {
+        this.adTaskSchedulers.add(adTaskScheduler);
+        adTaskScheduler.setGroup(this);
         return this;
     }
 
-    public AdTask removeAdTaskProcess(AdTaskProcess adTaskProcess) {
-        this.adTaskProcesses.remove(adTaskProcess);
-        adTaskProcess.setAdTask(null);
+    public AdTaskSchedulerGroup removeAdTaskScheduler(AdTaskScheduler adTaskScheduler) {
+        this.adTaskSchedulers.remove(adTaskScheduler);
+        adTaskScheduler.setGroup(null);
         return this;
     }
 
-    public void setAdTaskProcesses(List<AdTaskProcess> adTaskProcesses) {
-        this.adTaskProcesses = adTaskProcesses;
+    public void setAdTaskSchedulers(Set<AdTaskScheduler> adTaskSchedulers) {
+        this.adTaskSchedulers = adTaskSchedulers;
     }
 
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
 
-    public AdTask adOrganization(ADOrganization aDOrganization) {
+    public AdTaskSchedulerGroup adOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
         return this;
     }
@@ -196,10 +187,10 @@ public class AdTask extends AbstractAuditingEntity {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof AdTask)) {
+        if (!(o instanceof AdTaskSchedulerGroup)) {
             return false;
         }
-        return id != null && id.equals(((AdTask) o).id);
+        return id != null && id.equals(((AdTaskSchedulerGroup) o).id);
     }
 
     @Override
@@ -209,13 +200,13 @@ public class AdTask extends AbstractAuditingEntity {
 
     @Override
     public String toString() {
-        return "AdTask{" +
+        return "AdTaskSchedulerGroup{" +
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
             ", value='" + getValue() + "'" +
-            ", async='" + isAsync() + "'" +
+            ", description='" + getDescription() + "'" +
             "}";
     }
 }

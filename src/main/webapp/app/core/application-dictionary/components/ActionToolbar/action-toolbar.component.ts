@@ -39,10 +39,6 @@ export default class ActionToolbar extends ActionToolbarProps {
     this.$emit('run-trigger', triggerDef);
   }
 
-  runCallback(eventName, processName) {
-    this.$emit(eventName, processName);
-  }
-
   get isEditing() {
     return this.editing;
   }

@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the AdTaskScheduler entity.
+ * Performance test for the AdTaskSchedulerGroup entity.
  */
-class AdTaskSchedulerGatlingTest extends Simulation {
+class AdTaskSchedulerGroupGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class AdTaskSchedulerGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the AdTaskScheduler entity")
+    val scn = scenario("Test the AdTaskSchedulerGroup entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,13 +62,13 @@ class AdTaskSchedulerGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all adTaskSchedulers")
-            .get("/api/ad-task-schedulers")
+            exec(http("Get all adTaskSchedulerGroups")
+            .get("/api/ad-task-scheduler-groups")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new adTaskScheduler")
-            .post("/api/ad-task-schedulers")
+            .exec(http("Create new adTaskSchedulerGroup")
+            .post("/api/ad-task-scheduler-groups")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
@@ -77,22 +77,18 @@ class AdTaskSchedulerGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "value":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
-                , "trigger":"CRON"
-                , "cronExpression":"SAMPLE_TEXT"
-                , "periodicCount":"0"
-                , "periodicUnit":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_adTaskScheduler_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_adTaskSchedulerGroup_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created adTaskScheduler")
-                .get("${new_adTaskScheduler_url}")
+                exec(http("Get created adTaskSchedulerGroup")
+                .get("${new_adTaskSchedulerGroup_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created adTaskScheduler")
-            .delete("${new_adTaskScheduler_url}")
+            .exec(http("Delete created adTaskSchedulerGroup")
+            .delete("${new_adTaskSchedulerGroup_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

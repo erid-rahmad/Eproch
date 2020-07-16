@@ -22,6 +22,7 @@ import javax.validation.constraints.Pattern;
 
 import com.bhp.opusb.domain.enumeration.AdTriggerType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -65,6 +66,7 @@ public class AdTrigger implements Serializable {
 
     @OneToMany(mappedBy = "adTrigger")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonManagedReference
     private Set<AdTriggerParam> adTriggerParams = new HashSet<>();
 
     @ManyToOne(optional = false)
