@@ -58,6 +58,10 @@ management:
             enabled: true
 
 spring:
+  cloud:
+    dataflow:
+      client:
+        server-uri: http://localhost:9393
   autoconfigure:
     exclude: org.springframework.boot.actuate.autoconfigure.metrics.jdbc.DataSourcePoolMetricsAutoConfiguration
   application:
