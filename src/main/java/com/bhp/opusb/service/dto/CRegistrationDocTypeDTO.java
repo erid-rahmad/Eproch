@@ -1,13 +1,16 @@
 package com.bhp.opusb.service.dto;
 
+import io.swagger.annotations.ApiModel;
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+import com.bhp.opusb.domain.enumeration.BusinessCategorySelection;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CRegistrationDocType} entity.
  */
+@ApiModel(description = "The Registration Document Type entity.")
 public class CRegistrationDocTypeDTO extends AbstractAuditingDTO {
     
     private Long id;
@@ -19,9 +22,11 @@ public class CRegistrationDocTypeDTO extends AbstractAuditingDTO {
 
     private Boolean hasExpirationDate;
 
-    private String mandatoryBusinessCategories;
+    @NotNull
+    private BusinessCategorySelection mandatoryBusinessCategories;
 
-    private String additionalBusinessCategories;
+    @NotNull
+    private BusinessCategorySelection additionalBusinessCategories;
 
     private Boolean mandatoryForCompany;
 
@@ -37,6 +42,7 @@ public class CRegistrationDocTypeDTO extends AbstractAuditingDTO {
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -70,19 +76,19 @@ public class CRegistrationDocTypeDTO extends AbstractAuditingDTO {
         this.hasExpirationDate = hasExpirationDate;
     }
 
-    public String getMandatoryBusinessCategories() {
+    public BusinessCategorySelection getMandatoryBusinessCategories() {
         return mandatoryBusinessCategories;
     }
 
-    public void setMandatoryBusinessCategories(String mandatoryBusinessCategories) {
+    public void setMandatoryBusinessCategories(BusinessCategorySelection mandatoryBusinessCategories) {
         this.mandatoryBusinessCategories = mandatoryBusinessCategories;
     }
 
-    public String getAdditionalBusinessCategories() {
+    public BusinessCategorySelection getAdditionalBusinessCategories() {
         return additionalBusinessCategories;
     }
 
-    public void setAdditionalBusinessCategories(String additionalBusinessCategories) {
+    public void setAdditionalBusinessCategories(BusinessCategorySelection additionalBusinessCategories) {
         this.additionalBusinessCategories = additionalBusinessCategories;
     }
 
@@ -142,6 +148,14 @@ public class CRegistrationDocTypeDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -178,7 +192,8 @@ public class CRegistrationDocTypeDTO extends AbstractAuditingDTO {
             ", additionalForProfessional='" + isAdditionalForProfessional() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationId='" + getAdOrganizationId() + "'" +
+            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
 }

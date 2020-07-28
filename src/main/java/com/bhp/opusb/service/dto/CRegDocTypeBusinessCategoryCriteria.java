@@ -36,8 +36,10 @@ public class CRegDocTypeBusinessCategoryCriteria implements Serializable, Criter
     private LongFilter documentTypeId;
 
     private LongFilter businessCategoryId;
+    private StringFilter businessCategoryName;
 
     private LongFilter adOrganizationId;
+    private StringFilter adOrganizationName;
 
     public CRegDocTypeBusinessCategoryCriteria() {
     }
@@ -49,7 +51,9 @@ public class CRegDocTypeBusinessCategoryCriteria implements Serializable, Criter
         this.active = other.active == null ? null : other.active.copy();
         this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
         this.businessCategoryId = other.businessCategoryId == null ? null : other.businessCategoryId.copy();
+        this.businessCategoryName = other.businessCategoryName == null ? null : other.businessCategoryName.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
     }
 
     @Override
@@ -105,12 +109,28 @@ public class CRegDocTypeBusinessCategoryCriteria implements Serializable, Criter
         this.businessCategoryId = businessCategoryId;
     }
 
+    public StringFilter getBusinessCategoryName() {
+        return businessCategoryName;
+    }
+
+    public void setBusinessCategoryName(StringFilter businessCategoryName) {
+        this.businessCategoryName = businessCategoryName;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(LongFilter adOrganizationId) {
         this.adOrganizationId = adOrganizationId;
+    }
+
+    public StringFilter getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(StringFilter adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
 
@@ -130,7 +150,9 @@ public class CRegDocTypeBusinessCategoryCriteria implements Serializable, Criter
             Objects.equals(active, that.active) &&
             Objects.equals(documentTypeId, that.documentTypeId) &&
             Objects.equals(businessCategoryId, that.businessCategoryId) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(businessCategoryName, that.businessCategoryName) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adOrganizationName, that.adOrganizationName);
     }
 
     @Override
@@ -142,7 +164,9 @@ public class CRegDocTypeBusinessCategoryCriteria implements Serializable, Criter
         active,
         documentTypeId,
         businessCategoryId,
-        adOrganizationId
+        businessCategoryName,
+        adOrganizationId,
+        adOrganizationName
         );
     }
 
@@ -155,8 +179,12 @@ public class CRegDocTypeBusinessCategoryCriteria implements Serializable, Criter
                 (active != null ? "active=" + active + ", " : "") +
                 (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
                 (businessCategoryId != null ? "businessCategoryId=" + businessCategoryId + ", " : "") +
+                (businessCategoryName != null ? "businessCategoryName=" + businessCategoryName + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
             "}";
     }
+
+    
 
 }

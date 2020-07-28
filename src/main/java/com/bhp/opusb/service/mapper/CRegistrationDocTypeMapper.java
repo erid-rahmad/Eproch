@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface CRegistrationDocTypeMapper extends EntityMapper<CRegistrationDocTypeDTO, CRegistrationDocType> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     CRegistrationDocTypeDTO toDto(CRegistrationDocType cRegistrationDocType);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

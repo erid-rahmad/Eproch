@@ -14,7 +14,9 @@ public interface CRegDocTypeBusinessCategoryMapper extends EntityMapper<CRegDocT
 
     @Mapping(source = "documentType.id", target = "documentTypeId")
     @Mapping(source = "businessCategory.id", target = "businessCategoryId")
+    @Mapping(source = "businessCategory.name", target = "businessCategoryName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     CRegDocTypeBusinessCategoryDTO toDto(CRegDocTypeBusinessCategory cRegDocTypeBusinessCategory);
 
     @Mapping(source = "documentTypeId", target = "documentType")

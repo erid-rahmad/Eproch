@@ -120,6 +120,15 @@
               :max="getMaxValue(field)"
               :disabled="isReadonly(scope.row, field)"
             />
+            <el-date-picker
+              v-else-if="isDateField(field)"
+              :ref="scope.column.property"
+              v-model="scope.row[scope.column.property]"
+              size="mini"
+              type="date"
+              format="yyyy/MM/dd"
+              :disabled="isReadonly(scope.row, field)"
+            />
           </el-tooltip>
         </template>
       </el-table-column>

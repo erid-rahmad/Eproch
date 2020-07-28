@@ -22,8 +22,10 @@ public class CRegDocTypeBusinessCategoryDTO extends AbstractAuditingDTO {
     private Long documentTypeId;
 
     private Long businessCategoryId;
+    private String businessCategoryName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -73,12 +75,28 @@ public class CRegDocTypeBusinessCategoryDTO extends AbstractAuditingDTO {
         this.businessCategoryId = cBusinessCategoryId;
     }
 
+    public String getBusinessCategoryName() {
+        return businessCategoryName;
+    }
+
+    public void setBusinessCategoryName(String businessCategoryName) {
+        this.businessCategoryName = businessCategoryName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+    
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override
@@ -111,7 +129,11 @@ public class CRegDocTypeBusinessCategoryDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", documentTypeId=" + getDocumentTypeId() +
             ", businessCategoryId=" + getBusinessCategoryId() +
+            ", businessCategoryName=" + getBusinessCategoryName() +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
+
+    
 }

@@ -72,6 +72,7 @@
         </loadData>
     </changeSet>
 
+<!--
     <changeSet id="20200619072700-1-add-column" author="dian-tri-budianto">
         <addColumn tableName="c_city">
             <column name="uid" type="${uuidType}">
@@ -87,4 +88,5 @@
         <addNotNullConstraint tableName="c_city" columnName="ad_organization_id" />
     </changeSet>
 
+-->
 </databaseChangeLog>

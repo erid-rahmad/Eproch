@@ -3,6 +3,8 @@ package com.bhp.opusb.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
+import com.bhp.opusb.domain.enumeration.BusinessCategorySelection;
+import com.bhp.opusb.domain.enumeration.BusinessCategorySelection;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -22,6 +24,24 @@ import io.github.jhipster.service.filter.UUIDFilter;
  * fix type specific filters.
  */
 public class CRegistrationDocTypeCriteria implements Serializable, Criteria {
+    /**
+     * Class for filtering BusinessCategorySelection
+     */
+    public static class BusinessCategorySelectionFilter extends Filter<BusinessCategorySelection> {
+
+        public BusinessCategorySelectionFilter() {
+        }
+
+        public BusinessCategorySelectionFilter(BusinessCategorySelectionFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public BusinessCategorySelectionFilter copy() {
+            return new BusinessCategorySelectionFilter(this);
+        }
+
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -33,9 +53,9 @@ public class CRegistrationDocTypeCriteria implements Serializable, Criteria {
 
     private BooleanFilter hasExpirationDate;
 
-    private StringFilter mandatoryBusinessCategories;
+    private BusinessCategorySelectionFilter mandatoryBusinessCategories;
 
-    private StringFilter additionalBusinessCategories;
+    private BusinessCategorySelectionFilter additionalBusinessCategories;
 
     private BooleanFilter mandatoryForCompany;
 
@@ -50,6 +70,7 @@ public class CRegistrationDocTypeCriteria implements Serializable, Criteria {
     private BooleanFilter active;
 
     private LongFilter adOrganizationId;
+    private StringFilter adOrganizationName;
 
     public CRegistrationDocTypeCriteria() {
     }
@@ -68,6 +89,7 @@ public class CRegistrationDocTypeCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
     }
 
     @Override
@@ -107,19 +129,19 @@ public class CRegistrationDocTypeCriteria implements Serializable, Criteria {
         this.hasExpirationDate = hasExpirationDate;
     }
 
-    public StringFilter getMandatoryBusinessCategories() {
+    public BusinessCategorySelectionFilter getMandatoryBusinessCategories() {
         return mandatoryBusinessCategories;
     }
 
-    public void setMandatoryBusinessCategories(StringFilter mandatoryBusinessCategories) {
+    public void setMandatoryBusinessCategories(BusinessCategorySelectionFilter mandatoryBusinessCategories) {
         this.mandatoryBusinessCategories = mandatoryBusinessCategories;
     }
 
-    public StringFilter getAdditionalBusinessCategories() {
+    public BusinessCategorySelectionFilter getAdditionalBusinessCategories() {
         return additionalBusinessCategories;
     }
 
-    public void setAdditionalBusinessCategories(StringFilter additionalBusinessCategories) {
+    public void setAdditionalBusinessCategories(BusinessCategorySelectionFilter additionalBusinessCategories) {
         this.additionalBusinessCategories = additionalBusinessCategories;
     }
 
@@ -179,6 +201,14 @@ public class CRegistrationDocTypeCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public StringFilter getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(StringFilter adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -202,7 +232,8 @@ public class CRegistrationDocTypeCriteria implements Serializable, Criteria {
             Objects.equals(additionalForProfessional, that.additionalForProfessional) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(adOrganizationName, that.adOrganizationName);
     }
 
     @Override
@@ -220,7 +251,8 @@ public class CRegistrationDocTypeCriteria implements Serializable, Criteria {
         additionalForProfessional,
         uid,
         active,
-        adOrganizationId
+        adOrganizationId,
+        adOrganizationName
         );
     }
 
@@ -240,7 +272,10 @@ public class CRegistrationDocTypeCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
             "}";
     }
+
+    
 
 }

@@ -15,7 +15,7 @@ import java.util.UUID;
  * A CRegDocTypeBusinessCategory.
  */
 @Entity
-@Table(name = "c_vendor_loc")
+@Table(name = "c_regdoctype_businesses")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class CRegDocTypeBusinessCategory extends AbstractAuditingEntity {
 

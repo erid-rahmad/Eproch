@@ -75,8 +75,8 @@ class CRegistrationDocTypeGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "hasExpirationDate":null
-                , "mandatoryBusinessCategories":"SAMPLE_TEXT"
-                , "additionalBusinessCategories":"SAMPLE_TEXT"
+                , "mandatoryBusinessCategories":"ALL"
+                , "additionalBusinessCategories":"ALL"
                 , "mandatoryForCompany":null
                 , "additionalForCompany":null
                 , "mandatoryForProfessional":null

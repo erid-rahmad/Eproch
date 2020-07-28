@@ -25,10 +25,10 @@
                 <constraints nullable="true" />
             </column>
             <column name="mandatory_business_categories" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="additional_business_categories" type="varchar(255)">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="mandatory_for_company" type="boolean">
                 <constraints nullable="true" />

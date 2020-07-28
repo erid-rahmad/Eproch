@@ -28,6 +28,8 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import com.bhp.opusb.domain.enumeration.BusinessCategorySelection;
+import com.bhp.opusb.domain.enumeration.BusinessCategorySelection;
 /**
  * Integration tests for the {@link CRegistrationDocTypeResource} REST controller.
  */
@@ -46,11 +48,11 @@ public class CRegistrationDocTypeResourceIT {
     private static final Boolean DEFAULT_HAS_EXPIRATION_DATE = false;
     private static final Boolean UPDATED_HAS_EXPIRATION_DATE = true;
 
-    private static final String DEFAULT_MANDATORY_BUSINESS_CATEGORIES = "AAAAAAAAAA";
-    private static final String UPDATED_MANDATORY_BUSINESS_CATEGORIES = "BBBBBBBBBB";
+    private static final BusinessCategorySelection DEFAULT_MANDATORY_BUSINESS_CATEGORIES = BusinessCategorySelection.ALL;
+    private static final BusinessCategorySelection UPDATED_MANDATORY_BUSINESS_CATEGORIES = BusinessCategorySelection.SELECTED;
 
-    private static final String DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES = "AAAAAAAAAA";
-    private static final String UPDATED_ADDITIONAL_BUSINESS_CATEGORIES = "BBBBBBBBBB";
+    private static final BusinessCategorySelection DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES = BusinessCategorySelection.ALL;
+    private static final BusinessCategorySelection UPDATED_ADDITIONAL_BUSINESS_CATEGORIES = BusinessCategorySelection.SELECTED;
 
     private static final Boolean DEFAULT_MANDATORY_FOR_COMPANY = false;
     private static final Boolean UPDATED_MANDATORY_FOR_COMPANY = true;
@@ -229,6 +231,44 @@ public class CRegistrationDocTypeResourceIT {
 
     @Test
     @Transactional
+    public void checkMandatoryBusinessCategoriesIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cRegistrationDocTypeRepository.findAll().size();
+        // set the field null
+        cRegistrationDocType.setMandatoryBusinessCategories(null);
+
+        // Create the CRegistrationDocType, which fails.
+        CRegistrationDocTypeDTO cRegistrationDocTypeDTO = cRegistrationDocTypeMapper.toDto(cRegistrationDocType);
+
+        restCRegistrationDocTypeMockMvc.perform(post("/api/c-registration-doc-types")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(cRegistrationDocTypeDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CRegistrationDocType> cRegistrationDocTypeList = cRegistrationDocTypeRepository.findAll();
+        assertThat(cRegistrationDocTypeList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkAdditionalBusinessCategoriesIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cRegistrationDocTypeRepository.findAll().size();
+        // set the field null
+        cRegistrationDocType.setAdditionalBusinessCategories(null);
+
+        // Create the CRegistrationDocType, which fails.
+        CRegistrationDocTypeDTO cRegistrationDocTypeDTO = cRegistrationDocTypeMapper.toDto(cRegistrationDocType);
+
+        restCRegistrationDocTypeMockMvc.perform(post("/api/c-registration-doc-types")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(cRegistrationDocTypeDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CRegistrationDocType> cRegistrationDocTypeList = cRegistrationDocTypeRepository.findAll();
+        assertThat(cRegistrationDocTypeList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllCRegistrationDocTypes() throws Exception {
         // Initialize the database
         cRegistrationDocTypeRepository.saveAndFlush(cRegistrationDocType);
@@ -241,8 +281,8 @@ public class CRegistrationDocTypeResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].hasExpirationDate").value(hasItem(DEFAULT_HAS_EXPIRATION_DATE.booleanValue())))
-            .andExpect(jsonPath("$.[*].mandatoryBusinessCategories").value(hasItem(DEFAULT_MANDATORY_BUSINESS_CATEGORIES)))
-            .andExpect(jsonPath("$.[*].additionalBusinessCategories").value(hasItem(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES)))
+            .andExpect(jsonPath("$.[*].mandatoryBusinessCategories").value(hasItem(DEFAULT_MANDATORY_BUSINESS_CATEGORIES.toString())))
+            .andExpect(jsonPath("$.[*].additionalBusinessCategories").value(hasItem(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES.toString())))
             .andExpect(jsonPath("$.[*].mandatoryForCompany").value(hasItem(DEFAULT_MANDATORY_FOR_COMPANY.booleanValue())))
             .andExpect(jsonPath("$.[*].additionalForCompany").value(hasItem(DEFAULT_ADDITIONAL_FOR_COMPANY.booleanValue())))
             .andExpect(jsonPath("$.[*].mandatoryForProfessional").value(hasItem(DEFAULT_MANDATORY_FOR_PROFESSIONAL.booleanValue())))
@@ -265,8 +305,8 @@ public class CRegistrationDocTypeResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.hasExpirationDate").value(DEFAULT_HAS_EXPIRATION_DATE.booleanValue()))
-            .andExpect(jsonPath("$.mandatoryBusinessCategories").value(DEFAULT_MANDATORY_BUSINESS_CATEGORIES))
-            .andExpect(jsonPath("$.additionalBusinessCategories").value(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES))
+            .andExpect(jsonPath("$.mandatoryBusinessCategories").value(DEFAULT_MANDATORY_BUSINESS_CATEGORIES.toString()))
+            .andExpect(jsonPath("$.additionalBusinessCategories").value(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES.toString()))
             .andExpect(jsonPath("$.mandatoryForCompany").value(DEFAULT_MANDATORY_FOR_COMPANY.booleanValue()))
             .andExpect(jsonPath("$.additionalForCompany").value(DEFAULT_ADDITIONAL_FOR_COMPANY.booleanValue()))
             .andExpect(jsonPath("$.mandatoryForProfessional").value(DEFAULT_MANDATORY_FOR_PROFESSIONAL.booleanValue()))
@@ -554,32 +594,6 @@ public class CRegistrationDocTypeResourceIT {
         // Get all the cRegistrationDocTypeList where mandatoryBusinessCategories is null
         defaultCRegistrationDocTypeShouldNotBeFound("mandatoryBusinessCategories.specified=false");
     }
-                @Test
-    @Transactional
-    public void getAllCRegistrationDocTypesByMandatoryBusinessCategoriesContainsSomething() throws Exception {
-        // Initialize the database
-        cRegistrationDocTypeRepository.saveAndFlush(cRegistrationDocType);
-
-        // Get all the cRegistrationDocTypeList where mandatoryBusinessCategories contains DEFAULT_MANDATORY_BUSINESS_CATEGORIES
-        defaultCRegistrationDocTypeShouldBeFound("mandatoryBusinessCategories.contains=" + DEFAULT_MANDATORY_BUSINESS_CATEGORIES);
-
-        // Get all the cRegistrationDocTypeList where mandatoryBusinessCategories contains UPDATED_MANDATORY_BUSINESS_CATEGORIES
-        defaultCRegistrationDocTypeShouldNotBeFound("mandatoryBusinessCategories.contains=" + UPDATED_MANDATORY_BUSINESS_CATEGORIES);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCRegistrationDocTypesByMandatoryBusinessCategoriesNotContainsSomething() throws Exception {
-        // Initialize the database
-        cRegistrationDocTypeRepository.saveAndFlush(cRegistrationDocType);
-
-        // Get all the cRegistrationDocTypeList where mandatoryBusinessCategories does not contain DEFAULT_MANDATORY_BUSINESS_CATEGORIES
-        defaultCRegistrationDocTypeShouldNotBeFound("mandatoryBusinessCategories.doesNotContain=" + DEFAULT_MANDATORY_BUSINESS_CATEGORIES);
-
-        // Get all the cRegistrationDocTypeList where mandatoryBusinessCategories does not contain UPDATED_MANDATORY_BUSINESS_CATEGORIES
-        defaultCRegistrationDocTypeShouldBeFound("mandatoryBusinessCategories.doesNotContain=" + UPDATED_MANDATORY_BUSINESS_CATEGORIES);
-    }
-
 
     @Test
     @Transactional
@@ -632,32 +646,6 @@ public class CRegistrationDocTypeResourceIT {
         // Get all the cRegistrationDocTypeList where additionalBusinessCategories is null
         defaultCRegistrationDocTypeShouldNotBeFound("additionalBusinessCategories.specified=false");
     }
-                @Test
-    @Transactional
-    public void getAllCRegistrationDocTypesByAdditionalBusinessCategoriesContainsSomething() throws Exception {
-        // Initialize the database
-        cRegistrationDocTypeRepository.saveAndFlush(cRegistrationDocType);
-
-        // Get all the cRegistrationDocTypeList where additionalBusinessCategories contains DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES
-        defaultCRegistrationDocTypeShouldBeFound("additionalBusinessCategories.contains=" + DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES);
-
-        // Get all the cRegistrationDocTypeList where additionalBusinessCategories contains UPDATED_ADDITIONAL_BUSINESS_CATEGORIES
-        defaultCRegistrationDocTypeShouldNotBeFound("additionalBusinessCategories.contains=" + UPDATED_ADDITIONAL_BUSINESS_CATEGORIES);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCRegistrationDocTypesByAdditionalBusinessCategoriesNotContainsSomething() throws Exception {
-        // Initialize the database
-        cRegistrationDocTypeRepository.saveAndFlush(cRegistrationDocType);
-
-        // Get all the cRegistrationDocTypeList where additionalBusinessCategories does not contain DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES
-        defaultCRegistrationDocTypeShouldNotBeFound("additionalBusinessCategories.doesNotContain=" + DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES);
-
-        // Get all the cRegistrationDocTypeList where additionalBusinessCategories does not contain UPDATED_ADDITIONAL_BUSINESS_CATEGORIES
-        defaultCRegistrationDocTypeShouldBeFound("additionalBusinessCategories.doesNotContain=" + UPDATED_ADDITIONAL_BUSINESS_CATEGORIES);
-    }
-
 
     @Test
     @Transactional
@@ -997,8 +985,8 @@ public class CRegistrationDocTypeResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].hasExpirationDate").value(hasItem(DEFAULT_HAS_EXPIRATION_DATE.booleanValue())))
-            .andExpect(jsonPath("$.[*].mandatoryBusinessCategories").value(hasItem(DEFAULT_MANDATORY_BUSINESS_CATEGORIES)))
-            .andExpect(jsonPath("$.[*].additionalBusinessCategories").value(hasItem(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES)))
+            .andExpect(jsonPath("$.[*].mandatoryBusinessCategories").value(hasItem(DEFAULT_MANDATORY_BUSINESS_CATEGORIES.toString())))
+            .andExpect(jsonPath("$.[*].additionalBusinessCategories").value(hasItem(DEFAULT_ADDITIONAL_BUSINESS_CATEGORIES.toString())))
             .andExpect(jsonPath("$.[*].mandatoryForCompany").value(hasItem(DEFAULT_MANDATORY_FOR_COMPANY.booleanValue())))
             .andExpect(jsonPath("$.[*].additionalForCompany").value(hasItem(DEFAULT_ADDITIONAL_FOR_COMPANY.booleanValue())))
             .andExpect(jsonPath("$.[*].mandatoryForProfessional").value(hasItem(DEFAULT_MANDATORY_FOR_PROFESSIONAL.booleanValue())))

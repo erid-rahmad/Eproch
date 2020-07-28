@@ -11,8 +11,10 @@ import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.bhp.opusb.domain.enumeration.BusinessCategorySelection;
+
 /**
- * A CRegistrationDocType.
+ * The Registration Document Type entity.
  */
 @Entity
 @Table(name = "c_registration_doc_type")
@@ -36,11 +38,15 @@ public class CRegistrationDocType extends AbstractAuditingEntity {
     @Column(name = "has_expiration_date")
     private Boolean hasExpirationDate;
 
-    @Column(name = "mandatory_business_categories")
-    private String mandatoryBusinessCategories;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "mandatory_business_categories", nullable = false)
+    private BusinessCategorySelection mandatoryBusinessCategories;
 
-    @Column(name = "additional_business_categories")
-    private String additionalBusinessCategories;
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "additional_business_categories", nullable = false)
+    private BusinessCategorySelection additionalBusinessCategories;
 
     @Column(name = "mandatory_for_company")
     private Boolean mandatoryForCompany;
@@ -113,29 +119,29 @@ public class CRegistrationDocType extends AbstractAuditingEntity {
         this.hasExpirationDate = hasExpirationDate;
     }
 
-    public String getMandatoryBusinessCategories() {
+    public BusinessCategorySelection getMandatoryBusinessCategories() {
         return mandatoryBusinessCategories;
     }
 
-    public CRegistrationDocType mandatoryBusinessCategories(String mandatoryBusinessCategories) {
+    public CRegistrationDocType mandatoryBusinessCategories(BusinessCategorySelection mandatoryBusinessCategories) {
         this.mandatoryBusinessCategories = mandatoryBusinessCategories;
         return this;
     }
 
-    public void setMandatoryBusinessCategories(String mandatoryBusinessCategories) {
+    public void setMandatoryBusinessCategories(BusinessCategorySelection mandatoryBusinessCategories) {
         this.mandatoryBusinessCategories = mandatoryBusinessCategories;
     }
 
-    public String getAdditionalBusinessCategories() {
+    public BusinessCategorySelection getAdditionalBusinessCategories() {
         return additionalBusinessCategories;
     }
 
-    public CRegistrationDocType additionalBusinessCategories(String additionalBusinessCategories) {
+    public CRegistrationDocType additionalBusinessCategories(BusinessCategorySelection additionalBusinessCategories) {
         this.additionalBusinessCategories = additionalBusinessCategories;
         return this;
     }
 
-    public void setAdditionalBusinessCategories(String additionalBusinessCategories) {
+    public void setAdditionalBusinessCategories(BusinessCategorySelection additionalBusinessCategories) {
         this.additionalBusinessCategories = additionalBusinessCategories;
     }
 

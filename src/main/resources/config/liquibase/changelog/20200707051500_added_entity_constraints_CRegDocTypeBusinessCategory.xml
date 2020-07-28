@@ -9,20 +9,20 @@
     <changeSet id="20200707051500-2" author="jhipster">
         
         <addForeignKeyConstraint baseColumnNames="document_type_id"
-                                 baseTableName="c_vendor_loc"
-                                 constraintName="fk_c_vendor_loc_document_type_id"
+                                 baseTableName="c_regdoctype_businesses"
+                                 constraintName="fk_c_regdoctype_businesses_document_type_id"
                                  referencedColumnNames="id"
                                  referencedTableName="c_registration_doc_type"/>
 
         <addForeignKeyConstraint baseColumnNames="business_category_id"
-                                 baseTableName="c_vendor_loc"
-                                 constraintName="fk_c_vendor_loc_business_category_id"
+                                 baseTableName="c_regdoctype_businesses"
+                                 constraintName="fk_c_regdoctype_businesses_business_category_id"
                                  referencedColumnNames="id"
                                  referencedTableName="c_business_category"/>
 
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
-                                 baseTableName="c_vendor_loc"
-                                 constraintName="fk_c_vendor_loc_ad_organization_id"
+                                 baseTableName="c_regdoctype_businesses"
+                                 constraintName="fk_c_regdoctype_businesses_ad_organization_id"
                                  referencedColumnNames="id"
                                  referencedTableName="ad_organization"/>
 

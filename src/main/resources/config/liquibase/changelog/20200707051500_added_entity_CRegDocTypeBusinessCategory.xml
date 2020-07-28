@@ -11,7 +11,7 @@
         Added the entity CRegDocTypeBusinessCategory.
     -->
     <changeSet id="20200707051500-1" author="jhipster">
-        <createTable tableName="c_vendor_loc">
+        <createTable tableName="c_regdoctype_businesses">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
@@ -43,7 +43,7 @@
 
     <!-- Added the entity audit columns -->
     <changeSet id="20200707051500-audit-1" author="jhipster-entity-audit">
-        <addColumn tableName="c_vendor_loc">
+        <addColumn tableName="c_regdoctype_businesses">
             <column name="created_by" type="varchar(50)" defaultValue="system">
                 <constraints nullable="false"/>
             </column>
@@ -66,9 +66,9 @@
     -->
     <changeSet id="20200707051500-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/c_vendor_loc.csv"
+                  file="config/liquibase/fake-data/c_regdoctype_businesses.csv"
                   separator=";"
-                  tableName="c_vendor_loc">
+                  tableName="c_regdoctype_businesses">
             <column name="id" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="mandatory" type="boolean"/>

@@ -1,0 +1,70 @@
+{
+    "name": "CTaxRate",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "rate",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "validFrom",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "orderType",
+            "fieldType": "CTaxOrderType",
+            "fieldValues": "SALES,PURCHASE,BOTH",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cTaxRate",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTaxCategory",
+            "otherEntityRelationshipName": "cTaxRate",
+            "relationshipValidateRules": "required",
+            "relationshipName": "taxCategory",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200722020000",
+    "entityTableName": "c_tax_rate",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

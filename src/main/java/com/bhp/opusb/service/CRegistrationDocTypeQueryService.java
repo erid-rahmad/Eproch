@@ -101,10 +101,10 @@ public class CRegistrationDocTypeQueryService extends QueryService<CRegistration
                 specification = specification.and(buildSpecification(criteria.getHasExpirationDate(), CRegistrationDocType_.hasExpirationDate));
             }
             if (criteria.getMandatoryBusinessCategories() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getMandatoryBusinessCategories(), CRegistrationDocType_.mandatoryBusinessCategories));
+                specification = specification.and(buildSpecification(criteria.getMandatoryBusinessCategories(), CRegistrationDocType_.mandatoryBusinessCategories));
             }
             if (criteria.getAdditionalBusinessCategories() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getAdditionalBusinessCategories(), CRegistrationDocType_.additionalBusinessCategories));
+                specification = specification.and(buildSpecification(criteria.getAdditionalBusinessCategories(), CRegistrationDocType_.additionalBusinessCategories));
             }
             if (criteria.getMandatoryForCompany() != null) {
                 specification = specification.and(buildSpecification(criteria.getMandatoryForCompany(), CRegistrationDocType_.mandatoryForCompany));
