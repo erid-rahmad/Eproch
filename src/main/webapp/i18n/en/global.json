@@ -131,6 +131,10 @@
       "edit": "Edit",
       "open": "Open",
       "save": "Save",
+      "add": "Add",
+      "get": "Get",
+      "filter": "Filter",
+      "submit": "Submit",
       "view": "View"
     },
     "detail": {

@@ -1,22 +1,74 @@
 {
   "register": {
     "title": "Supplier Registration",
+    "login": {
+      "title": "Login Detail",
+      "form": {
+        "username": "Username",
+        "email": "Email",
+        "password": "Password",
+        "passwordConfirm": "Password Confirm"
+      }
+    },
+    "basic": {
+      "basic": {
+        "title": "Basic Information",
+        "name": "Name",
+        "npwp": "NPWP",
+        "npwpName": "NPWP Name",
+        "type": "Type",
+        "branch": "Branch"
+      },
+      "address": {
+        "title": "Address Information",
+        "address": "Address",
+        "country": "Country",
+        "region": "Region",
+        "city": "City",
+        "postCode": "Postal Code",
+        "npwpAddress": "NPWP Address",
+        "npwpCountry": "NPWP Country",
+        "npwpRegion": "NPWP Region",
+        "npwpCity": "NPWP City",
+        "npwpPostCode": "NPWP Postal Code"
+      },
+      "contact": {
+        "title": "Contact Information",
+        "phone": "Phone",
+        "fax": "Fax",
+        "email": "Email",
+        "website": "Website"
+      }
+    },
+    "business": {
+      "title": "Business Categories"
+    },
     "document": {
+      "title": "Supporting Documents",
       "mandatory": {
         "title": "Mandatory Documents",
         "description": "Please provide the required documents"
       },
       "additional": {
         "title": "Additional Documents",
-        "description": "Please provide additional documents, if any"
+        "description": "Please provide additional documents"
+      },
+      "form": {
+        "documentType": "Document Type",
+        "documentNo": "Document No.",
+        "expirationDate": "Expiration Date",
+        "file": "File"
       }
     },
     "pic": {
+      "title": "PIC",
       "contact": {
-        "title": "Contact Persons"
+        "title": "Contact Persons",
+        "description": "Please provide PIC"
       },
       "functionary": {
-        "title": "Company Functionaries"
+        "title": "Company Functionaries",
+        "description": "Please provide PIC Functionaries"
       },
       "name": "Name",
       "position": "Position",
@@ -25,8 +77,41 @@
       "subcategory": "Sub-category",
       "username": "Username"
     },
+    "payment": {
+      "title": "Payment Information",
+      "description": "Please provide the payment information",
+      "bank": "Bank",
+      "branch": "Branch",
+      "currency": "Currency",
+      "account": "Account No.",
+      "supportingfile": "Supporting File"
+    },
+    "tax": {
+      "header": {
+        "title": "Tax Information",
+        "description": "If you have e-faktur select YES"
+      },
+      "body": {
+        "title": "Tax",
+        "description": "Please provide the tax rates"
+      },
+      "efaktur": "E-Faktur",
+      "pkp": "Pengusaha Kena Pajak (PKP)",
+      "withholdingType": "Withholding Type",
+      "taxRateName": "Tax Rate Name",
+      "transactionType": "Transaction Type",
+      "rate": "Rate"
+    },
     "form": {
       "button": "Register",
+      "operation": "Operation",
+      "select": "Select",
+      "datePicker": "Pick a day",
+      "summary": "Summary Registration",
+      "submit": {
+        "title": "Submit Document",
+        "info": "I have by declare all information provided is true and correct. I also understand that any will full dishonesty may render for refusal of this application and can be prosecuted legally."
+      },
       "document": {
         "title.edit": "Edit Document"
       },
@@ -35,6 +120,12 @@
       },
       "functionary": {
         "title.edit": "Edit Functionary"
+      },
+      "payment": {
+        "title.edit": "Edit Payment Information"
+      },
+      "tax": {
+        "title.edit": "Edit Tax Information"
       }
     },
     "messages": {
