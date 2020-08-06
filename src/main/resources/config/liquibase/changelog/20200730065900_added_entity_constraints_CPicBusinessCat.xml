@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity CPicBusinessCat.
+    -->
+    <changeSet id="20200730065900-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="contact_id"
+                                 baseTableName="c_pic_business_cat"
+                                 constraintName="fk_c_pic_business_cat_contact_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_person_in_charge"/>
+
+        <addForeignKeyConstraint baseColumnNames="business_category_id"
+                                 baseTableName="c_pic_business_cat"
+                                 constraintName="fk_c_pic_business_cat_business_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_business_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="c_pic_business_cat"
+                                 constraintName="fk_c_pic_business_cat_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+    </changeSet>
+</databaseChangeLog>

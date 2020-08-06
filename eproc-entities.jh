@@ -145,6 +145,32 @@ entity CVendorLocation {
   	active Boolean
 }
 
+entity CVendorBusinessCat {
+	uid UUID
+	active Boolean
+}
+
+entity CPicBusinessCat {
+	uid UUID
+	active Boolean
+}
+
+entity CVendorBankAcct {
+	accountNo String required
+	name String
+	branch String
+	uid UUID
+	active Boolean
+}
+
+entity CVendorTax {
+	isFaktur Boolean
+	isPkp Boolean
+	rate String
+	uid UUID
+	active Boolean
+}
+
 enum VendorType {
 	COMPANY, PROFESSIONAL
 }
@@ -219,6 +245,25 @@ relationship ManyToOne {
 	CRegistrationDocType{adOrganization required} to ADOrganization
 	
 	CVendor{adOrganization required} to ADOrganization
+	
+	CVendorBusinessCat{vendor required} to CVendor
+	CVendorBusinessCat{businessCategory required} to CBusinessCategory
+	CVendorBusinessCat{adOrganization required} to ADOrganization
+
+	CPicBusinessCat{contact required} to CPersonInCharge
+	CPicBusinessCat{businessCategory required} to CBusinessCategory
+	CPicBusinessCat{adOrganization required} to ADOrganization
+	
+	CVendorBankAcct{vendor required} to CVendor
+	CVendorBankAcct{bank required} to CBank
+	CVendorBankAcct{currency required} to CCurrency
+	CVendorBankAcct{file required} to CAttachment
+	CVendorBankAcct{adOrganization required} to ADOrganization
+
+	CVendorTax{vendor required} to CVendor
+	CVendorTax{taxCategory required} to CTaxCategory
+	CVendorTax{taxRate required} to CTaxRate
+	CVendorTax{adOrganization required} to ADOrganization
 }
 
 // Allow filtering to all entities.

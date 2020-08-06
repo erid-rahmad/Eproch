@@ -1,0 +1,11 @@
+id;is_faktur;is_pkp;rate;uid;active;vendor_id;tax_category_id;tax_rate_id;ad_organization_id
+1;true;false;Lek;d228af99-2868-44e9-8f05-ae45a549750e;true;1;1;1;1
+2;false;false;Buckinghamshire;74488eae-53ea-4f8a-9fba-2473062b2ede;true;2;2;2;2
+3;true;false;Hryvnia;4c0006ea-0017-4b6b-a116-81675dbde44f;true;3;3;3;3
+4;true;false;National SQL Curve;cb9db0fa-a88d-45ba-b510-baf3409028fe;true;4;4;4;4
+5;true;false;Supervisor;42c9ba38-a105-4338-afcf-dd54a6055263;false;5;5;5;5
+6;false;true;Ouguiya back-end;db947fc6-8c5e-4e83-aa57-184b2f5d789b;true;6;6;6;6
+7;true;true;scale;98d8eac0-ae73-4315-a5ae-c398b897a96f;true;7;7;7;7
+8;false;true;Intelligent Tools tan;ea559ef0-4b64-46bd-a096-d5de9d4d17ea;true;8;8;8;8
+9;false;true;generate Creative De-engineered;916c6ced-2a2a-43fc-971b-f4cdab8d0bba;false;9;9;9;9
+10;true;false;Investment Account Lights ROI;fa33427a-8ec5-4fb9-81a8-09d9caf3e200;true;10;10;10;10
