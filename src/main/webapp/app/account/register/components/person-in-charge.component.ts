@@ -87,12 +87,12 @@ export default class PersonInCharge extends PICProps {
 
     private printBusinessCategory(row: any){
 
-        if(row.businessCategories){
+        if(row.valueBusinessCategories){
             let i, value, key;
             let stringArray = [];
-            for (i=0; i<row.businessCategories.length; i++) {
-                key = parseInt(row.businessCategories[i].substring( 0, row.businessCategories[i].indexOf('_')));
-                value = row.businessCategories[i].substring(row.businessCategories[i].indexOf('_') + 1, row.businessCategories[i].length);
+            for (i=0; i<row.valueBusinessCategories.length; i++) {
+                key = parseInt(row.valueBusinessCategories[i].substring( 0, row.valueBusinessCategories[i].indexOf('_')));
+                value = row.valueBusinessCategories[i].substring(row.valueBusinessCategories[i].indexOf('_') + 1, row.valueBusinessCategories[i].length);
                 stringArray.push(value);
             }
             return stringArray?.join(', ') || "";
@@ -100,9 +100,36 @@ export default class PersonInCharge extends PICProps {
         
     }
 
-    private savePerson(person) {
-        //console.log(person.index);
+    private printKeyBusinessCategory(row: any){
+
+        if(row.valueBusinessCategories){
+            let i, value, key;
+            let stringArray = [];
+            for (i=0; i<row.valueBusinessCategories.length; i++) {
+                key = parseInt(row.valueBusinessCategories[i].substring( 0, row.valueBusinessCategories[i].indexOf('_')));
+                value = row.valueBusinessCategories[i].substring(row.valueBusinessCategories[i].indexOf('_') + 1, row.valueBusinessCategories[i].length);
+                stringArray.push(key);
+            }
+            return stringArray;
+        }
         
+    }
+
+    private printKeyByParam(row: any){
+        if(row){
+            let value, key;
+            key = parseInt(row.substring( 0, row.indexOf('_')));
+            return key;
+        }
+    }
+
+    private savePerson(person) {
+        console.log(person);
+        
+        //payment.currencyId = this.printKeyByParam(payment.currency);
+        //payment.accountNo = payment.account;
+
+        person.businessCategories = this.printKeyBusinessCategory(person);
         if(person.index !== undefined){
             this[this.editingForm].splice(person.index, 1, person);
         }else{
@@ -132,7 +159,7 @@ export default class PersonInCharge extends PICProps {
                     .map(item => item.name)
                     .join(', ');
                 */
-                passed = false;
+                passed = true;
                 this.errors.functionaries = 'Your company must have at least a functionary from component';
                 this.errors.type = 'error';
                 

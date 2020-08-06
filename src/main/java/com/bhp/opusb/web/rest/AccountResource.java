@@ -3,9 +3,11 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.domain.User;
 import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.security.SecurityUtils;
+import com.bhp.opusb.service.CVendorService;
 import com.bhp.opusb.service.MailService;
 import com.bhp.opusb.service.UserService;
 import com.bhp.opusb.service.dto.PasswordChangeDTO;
+import com.bhp.opusb.service.dto.RegistrationDTO;
 import com.bhp.opusb.service.dto.UserDTO;
 import com.bhp.opusb.web.rest.errors.*;
 import com.bhp.opusb.web.rest.vm.KeyAndPasswordVM;
@@ -39,13 +41,15 @@ public class AccountResource {
     private final UserRepository userRepository;
 
     private final UserService userService;
+    private final CVendorService cVendorService;
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, UserService userService, CVendorService cVendorService, MailService mailService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
+        this.cVendorService = cVendorService;
         this.mailService = mailService;
     }
 
@@ -59,13 +63,18 @@ public class AccountResource {
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        if (!checkPasswordLength(managedUserVM.getPassword())) {
-            throw new InvalidPasswordException();
-        }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
+    public void registerAccount(@Valid @RequestBody RegistrationDTO registrationDTO) {
+        cVendorService.registerVendor(registrationDTO);
     }
+    /**
+     * public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+     *  if (!checkPasswordLength(managedUserVM.getPassword())) {
+     *      throw new InvalidPasswordException();
+     *  }
+     *  User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+     *  mailService.sendActivationEmail(user);
+     * }
+     */
 
     /**
      * {@code GET  /activate} : activate the registered user.

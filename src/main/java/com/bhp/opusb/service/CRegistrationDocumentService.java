@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -80,4 +81,10 @@ public class CRegistrationDocumentService {
         log.debug("Request to delete CRegistrationDocument : {}", id);
         cRegistrationDocumentRepository.deleteById(id);
     }
+
+    public void saveAll(List<CRegistrationDocumentDTO> registrationDocument) {
+        log.debug("Request to save CRegistrationDocument : {}", registrationDocument);
+        List<CRegistrationDocument> cRegistrationDocument = cRegistrationDocumentMapper.toEntity(registrationDocument);
+        cRegistrationDocument = cRegistrationDocumentRepository.saveAll(cRegistrationDocument);
+	}
 }

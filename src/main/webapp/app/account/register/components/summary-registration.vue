@@ -62,18 +62,18 @@
                             </el-form-item>
                             <el-form-item :label="$t('register.basic.basic.type')" prop="type" required>
                                 <el-row type="flex">
-                                    <el-col :span="12">
+                                    <el-col :span="20">
                                         <el-input class="form-input" v-model="company.type" :disabled="true" />
                                     </el-col>
-                                    <el-col :span="8">
-                                        <el-switch
-                                            style="padding-left: 20px;"
-                                            v-model="company.branch"
-                                            :disabled="true"
-                                            :active-text="$t('register.basic.basic.branch')"
-                                        />
-                                    </el-col>
                                 </el-row>
+                            </el-form-item>
+                            <el-form-item required>
+                                <el-switch
+                                    style="padding-left: 20px;"
+                                    v-model="company.branch"
+                                    :disabled="true"
+                                    :active-text="$t('register.basic.basic.branch')"
+                                />
                             </el-form-item>
                         </el-col>
                         
@@ -83,6 +83,9 @@
                             </el-form-item>
                             <el-form-item :label="$t('register.basic.basic.npwpName')" prop="npwpName" required>
                                 <el-input class="form-input" v-model="company.npwpName" :disabled="true" />
+                            </el-form-item>
+                            <el-form-item :label="$t('register.basic.basic.npwpFile')" prop="file">
+                                <span v-if="company.file">{{ company.file.name }}</span>
                             </el-form-item>
                         </el-col>
                     </el-row>

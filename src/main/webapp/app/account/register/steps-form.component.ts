@@ -11,6 +11,8 @@ import SummaryRegistration from './components/summary-registration.vue'
 import { Inject } from 'vue-property-decorator'
 import RegisterService from './register.service'
 import { LOGIN_ALREADY_USED_TYPE, EMAIL_ALREADY_USED_TYPE } from '@/constants'
+import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store';
+import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service'
 
 @Component({
   components: {
@@ -26,7 +28,9 @@ import { LOGIN_ALREADY_USED_TYPE, EMAIL_ALREADY_USED_TYPE } from '@/constants'
 })
 
 export default class StepsForm extends Vue {
-
+  @Inject('dynamicWindowService')
+  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
+  
   @Inject('registerService') private registerService: () => RegisterService;
   
   submitAgree: boolean = false;
@@ -41,32 +45,35 @@ export default class StepsForm extends Vue {
   eventBus = new Vue();
   registration = {
     loginDetails: {
-      login: 'budi',
-      email: 'budi@gmail.com',
-      password: 'budi',
-      passwordConfirmation: 'budi'
+      login: 'user12',
+      email: 'user12@gmail.com',
+      password: 'user',
+      passwordConfirmation: 'user'
     },
     companyProfile: {
       name: 'PT. Terbaik',
-      npwp: '928291918290001',
-      npwpName: 'John',
-      npwpAddress: 'Jl. Pemuda',
-      npwpCountry: 'INDONESIA',
-      npwpRegion: 'DKI JAKARTA',
-      npwpCity: 'JAKARTA SELATAN',
-      npwpPostalCode: '',
-      type: 'C',
+      type: 'COMPANY',
       branch: false,
-      address: 'Jl. Sudirman',
-      country: 'INDONESIA',
-      region: 'DKI JAKARTA',
-      city: 'JAKARTA SELATAN',
-      postalCode: '',
       phone: '303030',
       fax: '',
       email: 'cs@terbaik.com',
-      website: ''
+      website: '',
+
+      npwp: '928291918290001',
+      npwpName: 'John',
+      npwpAddress: 'Jl. Pemuda',
+      npwpCountry: '',
+      npwpRegion: '',
+      npwpCity: '',
+      npwpPostalCode: '',
+      
+      address: 'Jl. Sudirman',
+      country: '',
+      region: '',
+      city: '',
+      postalCode: ''
     },
+    businesses: [],
     businessCategories: {
       values: []
     },
@@ -95,7 +102,6 @@ export default class StepsForm extends Vue {
       --this.active;
     }else if(this.active === 3){
       --this.active;
-      //this.registration.mainDocuments = [];
       //this.registration.additionalDocuments = [];
       
     }
@@ -116,19 +122,34 @@ export default class StepsForm extends Vue {
     return index !== this.active ? 'hide' : '';
   }
 
+  retrieveBusinessCategory() {
+    const businessCategory = Array.from(registrationStore.businessCategories);
+    this.registration.businesses = businessCategory;
+    /*
+    this.dynamicWindowService('/api/c-business-categories')
+        .retrieve({
+            criteriaQuery: [`sector.equals=TERTIARY`]
+            .concat(businessCategory.map(id => `id.in=${id}`))
+        })
+        .then(res=>{
+            this.registration.businesses = res.data;
+        });
+    */
+  }
+
   submit(){
     
       if(this.submitAgree){
-        console.log(this.registration);
+          this.retrieveBusinessCategory();
+          console.log(this.registration);
         
-        /*
           this.doNotMatch = null;
           this.error = null;
           //this.errorUserExists = null;
           //this.errorEmailExists = null;
           //this.registerAccount.langKey = translationStore.language;
           this.registerService()
-          .processRegistration(this.registration.loginDetails)
+          .processRegistration(this.registration)
           .then(() => {
             this.success = true;
             this.$notify({
@@ -157,7 +178,7 @@ export default class StepsForm extends Vue {
               duration: 3000
             });
           });
-        */
+        
         
       }else{
         this.$notify({

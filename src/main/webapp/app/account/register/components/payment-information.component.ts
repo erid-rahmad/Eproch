@@ -78,7 +78,12 @@ export default class PaymentInformation extends PaymentInformationProps {
     }
 
     private savePayment(payment) {
-        //console.log(payment);        
+        //console.log(payment);
+        payment.bankId = this.printKeyByParam(payment.bank);
+        payment.name = this.printValueByParam(payment.bank);
+        payment.currencyId = this.printKeyByParam(payment.currency);
+        payment.accountNo = payment.account;
+
         if(payment.index !== undefined){
             this.payments.splice(payment.index, 1, payment);
         }else{
@@ -102,6 +107,14 @@ export default class PaymentInformation extends PaymentInformationProps {
         }
     }
 
+    private printKeyByParam(row: any){
+        if(row){
+            let value, key;
+            key = parseInt(row.substring( 0, row.indexOf('_')));
+            return key;
+        }
+    }
+
     saveDocument() {
         this.loading = true;
         this.eventBus.$emit('save-payment');
@@ -117,7 +130,7 @@ export default class PaymentInformation extends PaymentInformationProps {
                     .map(item => item.name)
                     .join(', ');
                 */
-                passed = false;
+                passed = true;
                 this.errors.payment = `Your company must have at least a payment`;
                 this.errors.type = 'error';
                 

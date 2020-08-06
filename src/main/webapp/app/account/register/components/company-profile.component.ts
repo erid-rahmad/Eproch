@@ -45,11 +45,11 @@ export default class CompanyProfile extends CompanyProps {
   private typeOptions = [
     {
       value: 'Company',
-      key: 'C'
+      key: 'COMPANY'
     }, 
     {
       value: 'Professional',
-      key: 'P'
+      key: 'PROFESSIONAL'
     }
   ]
 
@@ -145,6 +145,29 @@ export default class CompanyProfile extends CompanyProps {
         }else{
           this.cityOptionsNpwp = city;
         }
+    });
+  }
+
+  get fileList() {
+    if ( ! this.company.file) return [];
+    return [this.company.file];
+  }
+
+  getFile(file, fileList) {
+    this.company.file = file;
+  }
+
+  handleRemove(files, fileList) {
+    this.company.file = "";
+    //console.log("remove");
+  }
+
+  handleExceed(files, fileList) {
+    this.$notify({
+        title: 'Warning',
+        message: "The limit file is 1",
+        type: 'warning',
+        duration: 3000
     });
   }
 }

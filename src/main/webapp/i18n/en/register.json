@@ -16,6 +16,7 @@
         "name": "Name",
         "npwp": "NPWP",
         "npwpName": "NPWP Name",
+        "npwpFile": "NPWP File",
         "type": "Type",
         "branch": "Branch"
       },

@@ -41,7 +41,7 @@
         </el-form-item>
         <el-form-item
             :label="$t('register.pic.subcategory')"
-            prop="businessCategories"
+            prop="valueBusinessCategories"
             required
             v-if="contact"
         >
@@ -49,7 +49,7 @@
                 filterable
                 style="width:100%"
                 multiple
-                v-model="person.businessCategories"
+                v-model="person.valueBusinessCategories"
                 :placeholder="$t('register.form.select')">
                 <el-option
                     v-for="item in businessCategories"

@@ -98,4 +98,13 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
         this.pay.supportingfile = file;
     }
 
+    handleExceed(files, fileList) {
+        this.$notify({
+            title: 'Warning',
+            message: "The limit file is 1",
+            type: 'warning',
+            duration: 3000
+        });
+    }
+
 }

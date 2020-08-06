@@ -52,11 +52,11 @@ export default class TaxInformationUpdate extends TaxInformationUpdateProps {
     private getTax(scope: any){
         this.loading = true;
 
-        setTimeout(() => {
+        //setTimeout(() => {
             const data = { ...scope };
             this.eventBus.$emit('push-tax', data);
             this.reset();
-        }, 1000);
+        //}, 1000);
     }
 
 }

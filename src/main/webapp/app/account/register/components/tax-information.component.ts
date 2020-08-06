@@ -81,6 +81,8 @@ export default class TaxInformation extends TaxInformationProps {
     }
 
     private saveTax(tax) {
+        tax.taxRateId = tax.id;
+        delete tax.id;
         this.taxRates.push(tax);
 
         if (this.taxRates.length > 0) {
@@ -104,7 +106,7 @@ export default class TaxInformation extends TaxInformationProps {
                     .map(item => item.name)
                     .join(', ');
                 */
-                passed = false;
+                passed = true;
                 this.errors.tax = `Your company must have at least a tax rate`;
                 this.errors.type = 'error';
             } else {

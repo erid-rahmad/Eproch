@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -80,4 +81,12 @@ public class CTaxRateService {
         log.debug("Request to delete CTaxRate : {}", id);
         cTaxRateRepository.deleteById(id);
     }
+
+    public void saveAll(List<CTaxRateDTO> cTaxRateDTO) {
+        log.debug("Request to save CTaxRate : {}", cTaxRateDTO);
+        List<CTaxRate> cTaxRate = cTaxRateMapper.toEntity(cTaxRateDTO);
+        cTaxRate = cTaxRateRepository.saveAll(cTaxRate);
+    }
+    
+    
 }

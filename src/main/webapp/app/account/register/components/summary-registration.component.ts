@@ -88,12 +88,12 @@ export default class SummaryRegistration extends SummaryRegistrationProps {
   }
 
   private printBusinessCategory(row: any){
-    if(row.businessCategories){
+    if(row.valueBusinessCategories){
         let i, value, key;
         let stringArray = [];
-        for (i=0; i<row.businessCategories.length; i++) {
-            key = parseInt(row.businessCategories[i].substring( 0, row.businessCategories[i].indexOf('_')));
-            value = row.businessCategories[i].substring(row.businessCategories[i].indexOf('_') + 1, row.businessCategories[i].length);
+        for (i=0; i<row.valueBusinessCategories.length; i++) {
+            key = parseInt(row.valueBusinessCategories[i].substring( 0, row.valueBusinessCategories[i].indexOf('_')));
+            value = row.valueBusinessCategories[i].substring(row.valueBusinessCategories[i].indexOf('_') + 1, row.valueBusinessCategories[i].length);
             stringArray.push(value);
         }
         return stringArray?.join(', ') || "";

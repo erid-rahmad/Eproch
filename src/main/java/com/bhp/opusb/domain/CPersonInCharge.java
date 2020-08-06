@@ -22,8 +22,8 @@ public class CPersonInCharge extends AbstractAuditingEntity {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    //@SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
     @Column(name = "uid")
@@ -46,6 +46,7 @@ public class CPersonInCharge extends AbstractAuditingEntity {
     @OneToOne(optional = false)
     @NotNull
     @JoinColumn(unique = true)
+    @MapsId
     private User user;
 
     @ManyToOne

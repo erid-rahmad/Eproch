@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -80,4 +81,11 @@ public class CPersonInChargeService {
         log.debug("Request to delete CPersonInCharge : {}", id);
         cPersonInChargeRepository.deleteById(id);
     }
+
+    public void saveAll(List<CPersonInChargeDTO> cPersonInChargeDTO) {
+        log.debug("Request to save CPersonInCharge : {}", cPersonInChargeDTO);
+        List<CPersonInCharge> cPersonInCharge = cPersonInChargeMapper.toEntity(cPersonInChargeDTO);
+        cPersonInCharge = cPersonInChargeRepository.saveAll(cPersonInCharge);
+    }
+    
 }

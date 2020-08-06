@@ -2,12 +2,16 @@ package com.bhp.opusb.service;
 
 import com.bhp.opusb.config.Constants;
 import com.bhp.opusb.domain.Authority;
+import com.bhp.opusb.domain.CPersonInCharge;
 import com.bhp.opusb.domain.User;
 import com.bhp.opusb.repository.AuthorityRepository;
+import com.bhp.opusb.repository.CPersonInChargeRepository;
 import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.security.AuthoritiesConstants;
 import com.bhp.opusb.security.SecurityUtils;
+import com.bhp.opusb.service.dto.CPersonInChargeDTO;
 import com.bhp.opusb.service.dto.UserDTO;
+import com.bhp.opusb.service.mapper.CPersonInChargeMapper;
 
 import io.github.jhipster.security.RandomUtil;
 
@@ -36,6 +40,7 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
+    private final CPersonInChargeRepository cPersonInChargeRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -43,11 +48,19 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    private final CPersonInChargeMapper cPersonInChargeMapper;
+
+    public UserService(
+        UserRepository userRepository, CPersonInChargeRepository cPersonInChargeRepository,
+        PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager,
+        CPersonInChargeMapper cPersonInChargeMapper) {
+
         this.userRepository = userRepository;
+        this.cPersonInChargeRepository = cPersonInChargeRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.cPersonInChargeMapper = cPersonInChargeMapper;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -87,31 +100,31 @@ public class UserService {
             });
     }
 
-    public User registerUser(UserDTO userDTO, String password) {
-        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+    public User registerUser(CPersonInChargeDTO cPersonInChargeDTO) {
+        userRepository.findOneByLogin(cPersonInChargeDTO.getLogin()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new UsernameAlreadyUsedException();
             }
         });
-        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+        userRepository.findOneByEmailIgnoreCase(cPersonInChargeDTO.getEmail()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new EmailAlreadyUsedException();
             }
         });
         User newUser = new User();
-        String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
+        String encryptedPassword = passwordEncoder.encode(cPersonInChargeDTO.getPassword());
+        newUser.setLogin(cPersonInChargeDTO.getLogin());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
-        if (userDTO.getEmail() != null) {
-            newUser.setEmail(userDTO.getEmail().toLowerCase());
+        newUser.setFirstName(cPersonInChargeDTO.getName());
+        //newUser.setLastName("");
+        if (cPersonInChargeDTO.getEmail() != null) {
+            newUser.setEmail(cPersonInChargeDTO.getEmail());
         }
-        newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
+        newUser.setImageUrl("");
+        newUser.setLangKey("en");
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -122,6 +135,15 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+
+        // Create and save the UserExtra entity
+        CPersonInCharge pic = cPersonInChargeMapper.toEntity(cPersonInChargeDTO);
+        
+        pic.setUser(newUser);
+        //pic.setId((long) 48938);
+        cPersonInChargeRepository.save(pic);
+        log.debug("Created Information for UserExtra: {}", cPersonInChargeDTO);
+
         return newUser;
     }
 

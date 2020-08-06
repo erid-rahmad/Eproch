@@ -18,7 +18,7 @@
         <el-form-item :label="$t('register.basic.basic.type')" prop="type" required>
           
           <el-row type="flex">
-            <el-col :span="12">
+            <el-col :span="20">
               <el-select
                 class="form-input"
                 clearable
@@ -35,15 +35,15 @@
                 />
               </el-select>
             </el-col>
-            <el-col :span="8">
-              <el-switch
-                style="padding-left: 20px;"
-                v-model="company.branch"
-                :active-text="$t('register.basic.basic.branch')"
-              />
-            </el-col>
           </el-row>
 
+        </el-form-item>
+        <el-form-item required>
+          <el-switch
+            style="padding-left: 20px;"
+            v-model="company.branch"
+            :active-text="$t('register.basic.basic.branch')"
+          />
         </el-form-item>
       </el-col>
       
@@ -59,6 +59,21 @@
             class="form-input" 
             clearable
             v-model="company.npwpName" />
+        </el-form-item>
+        <el-form-item :label="$t('register.basic.basic.npwpFile')" prop="file">
+          <el-upload
+            :limit="1"
+            class="upload-demo"
+            ref="upload"
+            action=""
+            :on-change="getFile"
+            :on-exceed="handleExceed"
+            :on-remove="handleRemove"
+            :auto-upload="false">
+              <el-button slot="trigger" type="primary" icon="el-icon-search">select file</el-button>
+              <!--<el-button type="success" @click="submitUpload">upload to server</el-button>-->
+              <span style="margin-left: 10px;" class="el-upload__tip" slot="tip">files with a size less than 500kb</span>
+          </el-upload>
         </el-form-item>
       </el-col>
     </el-row>

@@ -3,6 +3,7 @@ package com.bhp.opusb.service.dto;
 import io.swagger.annotations.ApiModel;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -28,6 +29,19 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
 
 
     private Long userId;
+
+    public static final int PASSWORD_MIN_LENGTH = 4;
+    public static final int PASSWORD_MAX_LENGTH = 100;
+    @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
+    private String password;
+    
+    private String email;
+
+    private String name;
+    
+    private String login;
+
+    List<Long> businessCategories;
 
     private String userLogin;
 
@@ -91,6 +105,38 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
         this.userId = userId;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
     public String getUserLogin() {
         return userLogin;
     }
@@ -113,6 +159,14 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public List<Long> getBusinessCategories() {
+        return businessCategories;
+    }
+
+    public void setBusinessCategories(List<Long> businessCategories) {
+        this.businessCategories = businessCategories;
     }
 
     @Override
