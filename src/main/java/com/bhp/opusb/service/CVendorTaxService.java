@@ -1,5 +1,7 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CVendorTax;
 import com.bhp.opusb.repository.CVendorTaxRepository;
 import com.bhp.opusb.service.dto.CVendorTaxDTO;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link CVendorTax}.
@@ -44,6 +47,23 @@ public class CVendorTaxService {
         CVendorTax cVendorTax = cVendorTaxMapper.toEntity(cVendorTaxDTO);
         cVendorTax = cVendorTaxRepository.save(cVendorTax);
         return cVendorTaxMapper.toDto(cVendorTax);
+    }
+
+    public List<CVendorTaxDTO> saveAll(List<CVendorTaxDTO> cVendorTaxDTOs, CVendor vendor, ADOrganization organization) {
+        log.debug("Request to save CVendorTaxes. List size: {}", cVendorTaxDTOs.size());
+        List<CVendorTax> vendorTaxes = cVendorTaxDTOs.stream()
+            .map(vendorTax
+                -> cVendorTaxMapper.toEntity(vendorTax)
+                    .active(true)
+                    .adOrganization(organization)
+                    .vendor(vendor)
+            )
+            .collect(Collectors.toList());
+
+        return cVendorTaxRepository.saveAll(vendorTaxes)
+            .stream()
+            .map(cVendorTaxMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -81,10 +101,4 @@ public class CVendorTaxService {
         log.debug("Request to delete CVendorTax : {}", id);
         cVendorTaxRepository.deleteById(id);
     }
-
-    public void saveAll(List<CVendorTaxDTO> cVendorTaxDTO) {
-        log.debug("Request to save CVendorTax : {}", cVendorTaxDTO);
-        List<CVendorTax> cVendorTax = cVendorTaxMapper.toEntity(cVendorTaxDTO);
-        cVendorTax = cVendorTaxRepository.saveAll(cVendorTax);
-	}
 }

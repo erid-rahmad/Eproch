@@ -97,9 +97,9 @@ public class CPicBusinessCatQueryService extends QueryService<CPicBusinessCat> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), CPicBusinessCat_.active));
             }
-            if (criteria.getContactId() != null) {
-                specification = specification.and(buildSpecification(criteria.getContactId(),
-                    root -> root.join(CPicBusinessCat_.contact, JoinType.LEFT).get(CPersonInCharge_.id)));
+            if (criteria.getPicId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPicId(),
+                    root -> root.join(CPicBusinessCat_.pic, JoinType.LEFT).get(CPersonInCharge_.id)));
             }
             if (criteria.getBusinessCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBusinessCategoryId(),

@@ -106,10 +106,6 @@ public class CTaxCategoryQueryService extends QueryService<CTaxCategory> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), CTaxCategory_.active));
             }
-            if (criteria.getCTaxRateId() != null) {
-                specification = specification.and(buildSpecification(criteria.getCTaxRateId(),
-                    root -> root.join(CTaxCategory_.cTaxRates, JoinType.LEFT).get(CTaxRate_.id)));
-            }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(CTaxCategory_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));

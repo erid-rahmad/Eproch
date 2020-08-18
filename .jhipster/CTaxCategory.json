@@ -27,12 +27,6 @@
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "cTaxRate",
-            "otherEntityRelationshipName": "taxCategory",
-            "relationshipName": "cTaxRate"
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
             "otherEntityRelationshipName": "cTaxCategory",

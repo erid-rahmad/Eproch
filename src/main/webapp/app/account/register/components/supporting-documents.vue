@@ -36,6 +36,7 @@
                 <el-table-column
                     prop="documentNo"
                     :label="$t('register.document.form.documentNo')"
+                    show-overflow-tooltip
                 />
                 <el-table-column
                     prop="expirationDate"
@@ -44,6 +45,7 @@
                 <el-table-column
                     prop="file.name"
                     :label="$t('register.document.form.file')"
+                    show-overflow-tooltip
                 />
                 <el-table-column
                     fixed="right"
@@ -103,6 +105,7 @@
                 <el-table-column
                     prop="documentNo"
                     :label="$t('register.document.form.documentNo')"
+                    show-overflow-tooltip
                 />
                 <el-table-column
                     prop="expirationDate"
@@ -111,6 +114,7 @@
                 <el-table-column
                     prop="file.name"
                     :label="$t('register.document.form.file')"
+                    show-overflow-tooltip
                 />
                    
                 <el-table-column

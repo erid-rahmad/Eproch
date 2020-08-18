@@ -1,4 +1,4 @@
-id;uid;active;contact_id;business_category_id;ad_organization_id
+id;uid;active;pic_id;business_category_id;ad_organization_id
 1;0a254b25-ce0a-40b4-a29b-ba2df669dabc;false;1;1;1
 2;b5b6f451-0990-4244-aebc-9b013c51a393;false;2;2;2
 3;dac63259-530f-4f64-aa62-23338d121e22;false;3;3;3

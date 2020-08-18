@@ -1,15 +1,22 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * The PIC entity.
@@ -22,8 +29,6 @@ public class CPersonInCharge extends AbstractAuditingEntity {
     private static final long serialVersionUID = 1L;
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    //@SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
     @Column(name = "uid")
@@ -36,9 +41,6 @@ public class CPersonInCharge extends AbstractAuditingEntity {
     @NotNull
     @Column(name = "phone", nullable = false)
     private String phone;
-
-    @Column(name = "functionary")
-    private Boolean functionary;
 
     @Column(name = "active")
     private Boolean active;
@@ -104,19 +106,6 @@ public class CPersonInCharge extends AbstractAuditingEntity {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Boolean isFunctionary() {
-        return functionary;
-    }
-
-    public CPersonInCharge functionary(Boolean functionary) {
-        this.functionary = functionary;
-        return this;
-    }
-
-    public void setFunctionary(Boolean functionary) {
-        this.functionary = functionary;
     }
 
     public Boolean isActive() {
@@ -200,7 +189,6 @@ public class CPersonInCharge extends AbstractAuditingEntity {
             ", uid='" + getUid() + "'" +
             ", position='" + getPosition() + "'" +
             ", phone='" + getPhone() + "'" +
-            ", functionary='" + isFunctionary() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

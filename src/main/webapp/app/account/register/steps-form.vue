@@ -56,8 +56,6 @@
           class="step-panel"
           v-if="active === 6"
           :event-bus="eventBus"
-          :taxInformations="registration.taxInformations"
-          :taxRates="registration.taxRates"
         />
         <summary-registration
           class="step-panel"
@@ -71,8 +69,6 @@
           :contacts="registration.contacts"
           :functionaries="registration.functionaries"
           :payments="registration.payments"
-          :taxInformations="registration.taxInformations"
-          :taxRates="registration.taxRates"
         />
       </keep-alive>
     </div>
@@ -80,7 +76,7 @@
     <p>
       <el-switch
           v-if="active === 7"
-          v-model="submitAgree"
+          v-model="agreementAccepted"
           required
           :active-text="$t('register.form.submit.info')">
       </el-switch>
@@ -115,7 +111,7 @@
         v-if="active != 7"
         @click="next"
       >
-        Next <i class="el-icon-arrow-right" />
+        Next <em class="el-icon-arrow-right"></em>
       </el-button>
 
       <el-button
@@ -123,11 +119,11 @@
         type="success"
         style="margin-bottom: 12px;"
         v-if="active === 7"
-        :disabled="active != 7"
+        :disabled="! agreementAccepted"
         :loading="loading"
         @click="submit"
       >
-        Submit <i class="el-icon-arrow-right" />
+        Submit <em class="el-icon-arrow-right"></em>
       </el-button>
 
     </el-container>

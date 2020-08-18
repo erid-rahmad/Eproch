@@ -1,7 +1,5 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -10,6 +8,8 @@ import java.util.UUID;
  */
 public class CAttachmentDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     private String fileName;

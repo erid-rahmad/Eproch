@@ -48,9 +48,6 @@ public class CPersonInChargeResourceIT {
     private static final String DEFAULT_PHONE = "AAAAAAAAAA";
     private static final String UPDATED_PHONE = "BBBBBBBBBB";
 
-    private static final Boolean DEFAULT_FUNCTIONARY = false;
-    private static final Boolean UPDATED_FUNCTIONARY = true;
-
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
 
@@ -85,7 +82,6 @@ public class CPersonInChargeResourceIT {
             .uid(DEFAULT_UID)
             .position(DEFAULT_POSITION)
             .phone(DEFAULT_PHONE)
-            .functionary(DEFAULT_FUNCTIONARY)
             .active(DEFAULT_ACTIVE);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
@@ -115,7 +111,6 @@ public class CPersonInChargeResourceIT {
             .uid(UPDATED_UID)
             .position(UPDATED_POSITION)
             .phone(UPDATED_PHONE)
-            .functionary(UPDATED_FUNCTIONARY)
             .active(UPDATED_ACTIVE);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
@@ -159,7 +154,6 @@ public class CPersonInChargeResourceIT {
         assertThat(testCPersonInCharge.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCPersonInCharge.getPosition()).isEqualTo(DEFAULT_POSITION);
         assertThat(testCPersonInCharge.getPhone()).isEqualTo(DEFAULT_PHONE);
-        assertThat(testCPersonInCharge.isFunctionary()).isEqualTo(DEFAULT_FUNCTIONARY);
         assertThat(testCPersonInCharge.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -236,7 +230,6 @@ public class CPersonInChargeResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].position").value(hasItem(DEFAULT_POSITION)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
-            .andExpect(jsonPath("$.[*].functionary").value(hasItem(DEFAULT_FUNCTIONARY.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -254,7 +247,6 @@ public class CPersonInChargeResourceIT {
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.position").value(DEFAULT_POSITION))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
-            .andExpect(jsonPath("$.functionary").value(DEFAULT_FUNCTIONARY.booleanValue()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -488,58 +480,6 @@ public class CPersonInChargeResourceIT {
 
     @Test
     @Transactional
-    public void getAllCPersonInChargesByFunctionaryIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cPersonInChargeRepository.saveAndFlush(cPersonInCharge);
-
-        // Get all the cPersonInChargeList where functionary equals to DEFAULT_FUNCTIONARY
-        defaultCPersonInChargeShouldBeFound("functionary.equals=" + DEFAULT_FUNCTIONARY);
-
-        // Get all the cPersonInChargeList where functionary equals to UPDATED_FUNCTIONARY
-        defaultCPersonInChargeShouldNotBeFound("functionary.equals=" + UPDATED_FUNCTIONARY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCPersonInChargesByFunctionaryIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        cPersonInChargeRepository.saveAndFlush(cPersonInCharge);
-
-        // Get all the cPersonInChargeList where functionary not equals to DEFAULT_FUNCTIONARY
-        defaultCPersonInChargeShouldNotBeFound("functionary.notEquals=" + DEFAULT_FUNCTIONARY);
-
-        // Get all the cPersonInChargeList where functionary not equals to UPDATED_FUNCTIONARY
-        defaultCPersonInChargeShouldBeFound("functionary.notEquals=" + UPDATED_FUNCTIONARY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCPersonInChargesByFunctionaryIsInShouldWork() throws Exception {
-        // Initialize the database
-        cPersonInChargeRepository.saveAndFlush(cPersonInCharge);
-
-        // Get all the cPersonInChargeList where functionary in DEFAULT_FUNCTIONARY or UPDATED_FUNCTIONARY
-        defaultCPersonInChargeShouldBeFound("functionary.in=" + DEFAULT_FUNCTIONARY + "," + UPDATED_FUNCTIONARY);
-
-        // Get all the cPersonInChargeList where functionary equals to UPDATED_FUNCTIONARY
-        defaultCPersonInChargeShouldNotBeFound("functionary.in=" + UPDATED_FUNCTIONARY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCPersonInChargesByFunctionaryIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        cPersonInChargeRepository.saveAndFlush(cPersonInCharge);
-
-        // Get all the cPersonInChargeList where functionary is not null
-        defaultCPersonInChargeShouldBeFound("functionary.specified=true");
-
-        // Get all the cPersonInChargeList where functionary is null
-        defaultCPersonInChargeShouldNotBeFound("functionary.specified=false");
-    }
-
-    @Test
-    @Transactional
     public void getAllCPersonInChargesByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         cPersonInChargeRepository.saveAndFlush(cPersonInCharge);
@@ -652,7 +592,6 @@ public class CPersonInChargeResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].position").value(hasItem(DEFAULT_POSITION)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
-            .andExpect(jsonPath("$.[*].functionary").value(hasItem(DEFAULT_FUNCTIONARY.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -704,7 +643,6 @@ public class CPersonInChargeResourceIT {
             .uid(UPDATED_UID)
             .position(UPDATED_POSITION)
             .phone(UPDATED_PHONE)
-            .functionary(UPDATED_FUNCTIONARY)
             .active(UPDATED_ACTIVE);
         CPersonInChargeDTO cPersonInChargeDTO = cPersonInChargeMapper.toDto(updatedCPersonInCharge);
 
@@ -720,7 +658,6 @@ public class CPersonInChargeResourceIT {
         assertThat(testCPersonInCharge.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCPersonInCharge.getPosition()).isEqualTo(UPDATED_POSITION);
         assertThat(testCPersonInCharge.getPhone()).isEqualTo(UPDATED_PHONE);
-        assertThat(testCPersonInCharge.isFunctionary()).isEqualTo(UPDATED_FUNCTIONARY);
         assertThat(testCPersonInCharge.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

@@ -1,11 +1,25 @@
 package com.bhp.opusb.service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.bhp.opusb.config.Constants;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.Authority;
+import com.bhp.opusb.domain.CBusinessCategory;
 import com.bhp.opusb.domain.CPersonInCharge;
+import com.bhp.opusb.domain.CPicBusinessCat;
+import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.User;
 import com.bhp.opusb.repository.AuthorityRepository;
 import com.bhp.opusb.repository.CPersonInChargeRepository;
+import com.bhp.opusb.repository.CPicBusinessCatRepository;
 import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.security.AuthoritiesConstants;
 import com.bhp.opusb.security.SecurityUtils;
@@ -13,8 +27,10 @@ import com.bhp.opusb.service.dto.CPersonInChargeDTO;
 import com.bhp.opusb.service.dto.UserDTO;
 import com.bhp.opusb.service.mapper.CPersonInChargeMapper;
 
-import io.github.jhipster.security.RandomUtil;
-
+import org.passay.CharacterData;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -25,10 +41,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.stream.Collectors;
+import io.github.jhipster.security.RandomUtil;
 
 /**
  * Service class for managing users.
@@ -40,7 +53,6 @@ public class UserService {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
-    private final CPersonInChargeRepository cPersonInChargeRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -48,12 +60,14 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final CPersonInChargeRepository cPersonInChargeRepository;
     private final CPersonInChargeMapper cPersonInChargeMapper;
+    private final CPicBusinessCatRepository cPicBusinessCatRepository;
 
     public UserService(
         UserRepository userRepository, CPersonInChargeRepository cPersonInChargeRepository,
         PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager,
-        CPersonInChargeMapper cPersonInChargeMapper) {
+        CPersonInChargeMapper cPersonInChargeMapper, CPicBusinessCatRepository cPicBusinessCatRepository) {
 
         this.userRepository = userRepository;
         this.cPersonInChargeRepository = cPersonInChargeRepository;
@@ -61,6 +75,7 @@ public class UserService {
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
         this.cPersonInChargeMapper = cPersonInChargeMapper;
+        this.cPicBusinessCatRepository = cPicBusinessCatRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -100,7 +115,9 @@ public class UserService {
             });
     }
 
-    public User registerUser(CPersonInChargeDTO cPersonInChargeDTO) {
+    public User registerUser(CPersonInChargeDTO cPersonInChargeDTO, CVendor vendor, ADOrganization organization) {
+        User newUser = null;
+
         userRepository.findOneByLogin(cPersonInChargeDTO.getLogin()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
@@ -113,18 +130,31 @@ public class UserService {
                 throw new EmailAlreadyUsedException();
             }
         });
-        User newUser = new User();
+
+        String fullName = cPersonInChargeDTO.getName().trim();
+        int spaceIndex = fullName.indexOf(" ");
+        newUser = new User();
+
+        if (spaceIndex > 0) {
+            newUser.setFirstName(fullName.substring(0, spaceIndex));
+            newUser.setLastName(fullName.substring(spaceIndex + 1));
+        } else {
+            newUser.setFirstName(fullName);
+        }
+
+        if (cPersonInChargeDTO.getPassword() == null) {
+            cPersonInChargeDTO.setPassword(generatePassword());
+        }
+
         String encryptedPassword = passwordEncoder.encode(cPersonInChargeDTO.getPassword());
         newUser.setLogin(cPersonInChargeDTO.getLogin());
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(cPersonInChargeDTO.getName());
-        //newUser.setLastName("");
+
         if (cPersonInChargeDTO.getEmail() != null) {
             newUser.setEmail(cPersonInChargeDTO.getEmail());
         }
-        newUser.setImageUrl("");
-        newUser.setLangKey("en");
+
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -137,14 +167,66 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
 
         // Create and save the UserExtra entity
-        CPersonInCharge pic = cPersonInChargeMapper.toEntity(cPersonInChargeDTO);
-        
-        pic.setUser(newUser);
-        //pic.setId((long) 48938);
+        CPersonInCharge pic = cPersonInChargeMapper.toEntity(cPersonInChargeDTO)
+            .active(true)
+            .adOrganization(organization)
+            .phone(cPersonInChargeDTO.getPhone())
+            .position(cPersonInChargeDTO.getPosition())
+            .user(newUser)
+            .vendor(vendor);
+
         cPersonInChargeRepository.save(pic);
-        log.debug("Created Information for UserExtra: {}", cPersonInChargeDTO);
+        log.debug("Created Information for Contact/Functionary: {}", pic);
+
+        List<CPicBusinessCat> categories = cPersonInChargeDTO.getBusinessCategories()
+            .stream()
+            .map((business -> {
+                CPicBusinessCat picBusiness = new CPicBusinessCat();
+                CBusinessCategory category = new CBusinessCategory();
+
+                category.setId(business);
+                return picBusiness.active(true)
+                    .adOrganization(organization)
+                    .pic(pic)
+                    .businessCategory(category);
+            }))
+            .collect(Collectors.toList());
+
+        cPicBusinessCatRepository.saveAll(categories);
+        log.debug("Created Information for Contact/Functionary business sector: {}", categories);
 
         return newUser;
+    }
+
+    private String generatePassword() {
+        PasswordGenerator gen = new PasswordGenerator();
+        CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
+        CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
+        lowerCaseRule.setNumberOfCharacters(2);
+     
+        CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
+        CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
+        upperCaseRule.setNumberOfCharacters(2);
+     
+        CharacterData digitChars = EnglishCharacterData.Digit;
+        CharacterRule digitRule = new CharacterRule(digitChars);
+        digitRule.setNumberOfCharacters(2);
+     
+        CharacterData specialChars = new CharacterData() {
+            public String getErrorCode() {
+                return "PassGenFail";
+            }
+     
+            public String getCharacters() {
+                return "!@#$%^&*()_+";
+            }
+        };
+        CharacterRule splCharRule = new CharacterRule(specialChars);
+        splCharRule.setNumberOfCharacters(2);
+     
+        String password = gen.generatePassword(10, splCharRule, lowerCaseRule, 
+          upperCaseRule, digitRule);
+        return password;
     }
 
     private boolean removeNonActivatedUser(User existingUser) {

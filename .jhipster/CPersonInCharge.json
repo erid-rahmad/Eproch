@@ -20,10 +20,6 @@
             ]
         },
         {
-            "fieldName": "functionary",
-            "fieldType": "Boolean"
-        },
-        {
             "fieldName": "active",
             "fieldType": "Boolean"
         }
@@ -35,7 +31,7 @@
             "otherEntityRelationshipName": "cPersonInCharge",
             "relationshipValidateRules": "required",
             "relationshipName": "user",
-            "otherEntityField": "login",
+            "otherEntityField": "id",
             "ownerSide": true
         },
         {

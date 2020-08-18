@@ -16,7 +16,7 @@
             "otherEntityName": "cPersonInCharge",
             "otherEntityRelationshipName": "cPicBusinessCat",
             "relationshipValidateRules": "required",
-            "relationshipName": "contact",
+            "relationshipName": "pic",
             "otherEntityField": "id"
         },
         {

@@ -1,17 +1,22 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 /**
  * The Tax Category entity.
@@ -43,10 +48,6 @@ public class CTaxCategory extends AbstractAuditingEntity {
 
     @Column(name = "active")
     private Boolean active;
-
-    @OneToMany(mappedBy = "taxCategory")
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    private Set<CTaxRate> cTaxRates = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -127,31 +128,6 @@ public class CTaxCategory extends AbstractAuditingEntity {
         this.active = active;
     }
 
-    public Set<CTaxRate> getCTaxRates() {
-        return cTaxRates;
-    }
-
-    public CTaxCategory cTaxRates(Set<CTaxRate> cTaxRates) {
-        this.cTaxRates = cTaxRates;
-        return this;
-    }
-
-    public CTaxCategory addCTaxRate(CTaxRate cTaxRate) {
-        this.cTaxRates.add(cTaxRate);
-        cTaxRate.setTaxCategory(this);
-        return this;
-    }
-
-    public CTaxCategory removeCTaxRate(CTaxRate cTaxRate) {
-        this.cTaxRates.remove(cTaxRate);
-        cTaxRate.setTaxCategory(null);
-        return this;
-    }
-
-    public void setCTaxRates(Set<CTaxRate> cTaxRates) {
-        this.cTaxRates = cTaxRates;
-    }
-
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -170,7 +146,7 @@ public class CTaxCategory extends AbstractAuditingEntity {
     public void assignUUID() {
         this.uid = UUID.randomUUID();
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

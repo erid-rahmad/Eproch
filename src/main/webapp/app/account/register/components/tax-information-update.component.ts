@@ -1,62 +1,44 @@
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import { ElForm } from 'element-ui/types/form'
-import { Inject, Watch } from 'vue-property-decorator'
-import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store';
+import Vue from 'vue';
+import Component from 'vue-class-component';
+import { Inject } from 'vue-property-decorator';
 import DynamicWindowService from '../../../core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 
 const TaxInformationUpdateProps = Vue.extend({
-    props: {
-        eventBus: {
-            type: Object,
-            default: () => {}
-        },
-        
-    }
+  props: {
+    eventBus: {
+      type: Object,
+      default: () => {}
+    },
+
+  }
 })
 
 @Component
 export default class TaxInformationUpdate extends TaxInformationUpdateProps {
 
-    @Inject('dynamicWindowService')
-    private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
+  @Inject('dynamicWindowService')
+  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
 
-    loading = false;
-    columnSpacing = 32;
-    editDialogVisible = false;
-    public tax:any = [];
-    
-    mounted() {
-        this.retrieveTax();
-        this.eventBus.$on('reset-tax-form', this.reset);
-    }
+  loading = false;
+  columnSpacing = 32;
+  editDialogVisible = false;
+  public taxes: any[] = [];
+  public selectedTaxes: any[] = [];
 
-    beforeDestroy() {
-        this.eventBus.$off('reset-tax-form', this.reset);
-    }
+  created() {
+    this.retrieveTax();
+  }
 
-    private reset() {
-        this.loading = false;
-    }
-    
-    private retrieveTax() {
-        
-        this.dynamicWindowService('/api/c-tax-rates')
-            .retrieve()
-            .then(res=>{
-                this.tax = res.data;
-                //console.log(this.tax);
-            });
-    }
+  public onSelectionChanged(rows: any[]) {
+    this.selectedTaxes = rows;
+    console.log('Selected taxes: %O', rows);
+  }
 
-    private getTax(scope: any){
-        this.loading = true;
-
-        //setTimeout(() => {
-            const data = { ...scope };
-            this.eventBus.$emit('push-tax', data);
-            this.reset();
-        //}, 1000);
-    }
-
+  private retrieveTax() {
+    this.dynamicWindowService('/api/c-taxes')
+      .retrieve()
+      .then(res => {
+        this.taxes = res.data;
+      });
+  }
 }

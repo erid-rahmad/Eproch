@@ -10,36 +10,27 @@
             </el-alert>
         </p>
         <el-form
-            ref="taxInformations"
-            label-position="right"
+            label-position="left"
             size="mini"
             label-width="256px"
-            :model="taxInformations"
-            :rules="rules">
-        
-            <el-form-item
-                :label="$t('register.tax.efaktur')"
-                prop="efaktur"
-                required>
-                <el-radio-group v-model="taxInformations.efaktur" size="mini">
-                    <el-radio label="true">Yes</el-radio>
-                    <el-radio label="false">No</el-radio>
-                </el-radio-group>
+        >
+            <el-form-item :label="$t('register.tax.efaktur')">
+                <el-checkbox
+                    v-model="eInvoice"
+                    @change="onEInvoiceChanged"
+                />
             </el-form-item>
-            
-            <el-form-item 
-                :label="$t('register.tax.pkp')" 
-                prop="pkp" 
-                required>
-                <el-radio-group v-model="taxInformations.pkp" size="mini">
-                    <el-radio label="true">Yes</el-radio>
-                    <el-radio label="false">No</el-radio>
-                </el-radio-group>
+            <el-form-item :label="$t('register.tax.pkp')">
+                <el-checkbox
+                    v-model="taxableEmployers"
+                    @change="onTaxableEmployersChanged"
+                />
             </el-form-item>
-            
         </el-form>
 
-        <el-divider content-position="left"><h4>{{ $t('register.tax.body.title') }}</h4></el-divider>
+        <el-divider content-position="left">
+            <h4>{{ $t('register.tax.body.title') }}</h4>
+        </el-divider>
         <p>
             <el-alert
                 :title="$t('register.tax.body.description')"
@@ -53,48 +44,51 @@
                 <el-button
                     type="primary"
                     icon="el-icon-plus"
-                    @click.native.prevent="addTax()">
+                    @click.native.prevent="showTaxList()">
                     {{ $t('entity.action.add') }}
                 </el-button>
             </div>
             
             <el-table
-                ref="taxRates"
                 max-height="250"
                 style="width: 100%"
-                :data="taxRates">
+                :data="taxes"
+            >
                 <el-table-column
                     fixed
                     min-width="128"
                     prop="name"
-                    :label="$t('register.tax.taxRateName')"/>
+                    :label="$t('register.tax.taxRateName')"
+                />
                 <el-table-column
-                    prop="orderType"
+                    prop="transactionType"
                     min-width="128"
-                    :label="$t('register.tax.transactionType')"/>
+                    :label="$t('register.tax.transactionType')"
+                />
                 <el-table-column
                     prop="rate"
                     min-width="128"
-                    :label="$t('register.tax.rate')"/>
-                
+                    :label="$t('register.tax.rate')"
+                />
                 <el-table-column
                     fixed="right"
                     align="center"
                     :label="$t('register.form.operation')"
-                    width="128">
+                    width="128"
+                >
                     
                     <template slot-scope="scope">
-                        
                         <el-button
-                            @click="prepareRemove(scope.row)"
+                            v-loading="applying"
+                            @click="deleteTax(scope.row)"
                             type="danger"
                             size="mini"
                             icon="el-icon-delete"
                             plain
-                            :title="$t('entity.action.delete')">
+                            :title="$t('entity.action.delete')"
+                        >
                             {{ $t('entity.action.delete') }}
                         </el-button>
-
                     </template>
                 </el-table-column>
             </el-table>
@@ -103,15 +97,15 @@
         <el-dialog
             :title="$t('register.form.tax[\'title.edit\']')"
             :visible.sync="editDialogVisible"
-            @closed="hideDialog">
-            <el-row :gutter="16">
-                <el-col :span="24" :offset="0">
-                    <tax-information-update
-                        ref="dialogBody"
-                        :event-bus="eventBus"/>
-                </el-col>
-            </el-row>
-            
+        >
+            <tax-information-update
+                ref="taxSelectionList"
+                :event-bus="eventBus"
+            />
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="editDialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="onTaxesApplied">Add</el-button>
+            </span>
         </el-dialog>
 
     </div>

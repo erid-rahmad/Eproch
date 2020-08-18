@@ -69,11 +69,15 @@
             <column name="id" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
-            <column name="contact_id" type="numeric"/>
+            <column name="pic_user_id" type="numeric"/>
             <column name="business_category_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200818011200-1" author="Ananta Aryadewa">
+        <renameColumn tableName="c_pic_business_cat" oldColumnName="contact_id" newColumnName="pic_user_id"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -16,8 +16,6 @@ public interface CTaxCategoryMapper extends EntityMapper<CTaxCategoryDTO, CTaxCa
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     CTaxCategoryDTO toDto(CTaxCategory cTaxCategory);
 
-    @Mapping(target = "cTaxRates", ignore = true)
-    @Mapping(target = "removeCTaxRate", ignore = true)
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     CTaxCategory toEntity(CTaxCategoryDTO cTaxCategoryDTO);
 

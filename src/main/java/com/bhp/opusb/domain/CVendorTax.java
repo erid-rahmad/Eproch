@@ -1,15 +1,23 @@
 package com.bhp.opusb.domain;
 
+import java.math.BigDecimal;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * A CVendorTax.
@@ -26,14 +34,14 @@ public class CVendorTax extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "is_faktur")
-    private Boolean isFaktur;
+    @Column(name = "e_invoice")
+    private Boolean eInvoice;
 
-    @Column(name = "is_pkp")
-    private Boolean isPkp;
+    @Column(name = "taxable_employers")
+    private Boolean taxableEmployers;
 
-    @Column(name = "rate")
-    private String rate;
+    @Column(name = "rate", precision = 21, scale = 2)
+    private BigDecimal rate;
 
     @Column(name = "uid")
     private UUID uid;
@@ -49,12 +57,7 @@ public class CVendorTax extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("cVendorTaxes")
-    private CTaxCategory taxCategory;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("cVendorTaxes")
-    private CTaxRate taxRate;
+    private CTax tax;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -70,42 +73,42 @@ public class CVendorTax extends AbstractAuditingEntity {
         this.id = id;
     }
 
-    public Boolean isIsFaktur() {
-        return isFaktur;
+    public Boolean isEInvoice() {
+        return eInvoice;
     }
 
-    public CVendorTax isFaktur(Boolean isFaktur) {
-        this.isFaktur = isFaktur;
+    public CVendorTax eInvoice(Boolean eInvoice) {
+        this.eInvoice = eInvoice;
         return this;
     }
 
-    public void setIsFaktur(Boolean isFaktur) {
-        this.isFaktur = isFaktur;
+    public void setEInvoice(Boolean eInvoice) {
+        this.eInvoice = eInvoice;
     }
 
-    public Boolean isIsPkp() {
-        return isPkp;
+    public Boolean isTaxableEmployers() {
+        return taxableEmployers;
     }
 
-    public CVendorTax isPkp(Boolean isPkp) {
-        this.isPkp = isPkp;
+    public CVendorTax taxableEmployers(Boolean taxableEmployers) {
+        this.taxableEmployers = taxableEmployers;
         return this;
     }
 
-    public void setIsPkp(Boolean isPkp) {
-        this.isPkp = isPkp;
+    public void setTaxableEmployers(Boolean taxableEmployers) {
+        this.taxableEmployers = taxableEmployers;
     }
 
-    public String getRate() {
+    public BigDecimal getRate() {
         return rate;
     }
 
-    public CVendorTax rate(String rate) {
+    public CVendorTax rate(BigDecimal rate) {
         this.rate = rate;
         return this;
     }
 
-    public void setRate(String rate) {
+    public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
 
@@ -148,30 +151,17 @@ public class CVendorTax extends AbstractAuditingEntity {
         this.vendor = cVendor;
     }
 
-    public CTaxCategory getTaxCategory() {
-        return taxCategory;
+    public CTax getTax() {
+        return tax;
     }
 
-    public CVendorTax taxCategory(CTaxCategory cTaxCategory) {
-        this.taxCategory = cTaxCategory;
+    public CVendorTax tax(CTax cTax) {
+        this.tax = cTax;
         return this;
     }
 
-    public void setTaxCategory(CTaxCategory cTaxCategory) {
-        this.taxCategory = cTaxCategory;
-    }
-
-    public CTaxRate getTaxRate() {
-        return taxRate;
-    }
-
-    public CVendorTax taxRate(CTaxRate cTaxRate) {
-        this.taxRate = cTaxRate;
-        return this;
-    }
-
-    public void setTaxRate(CTaxRate cTaxRate) {
-        this.taxRate = cTaxRate;
+    public void setTax(CTax cTax) {
+        this.tax = cTax;
     }
 
     public ADOrganization getAdOrganization() {
@@ -213,9 +203,9 @@ public class CVendorTax extends AbstractAuditingEntity {
     public String toString() {
         return "CVendorTax{" +
             "id=" + getId() +
-            ", isFaktur='" + isIsFaktur() + "'" +
-            ", isPkp='" + isIsPkp() + "'" +
-            ", rate='" + getRate() + "'" +
+            ", eInvoice='" + isEInvoice() + "'" +
+            ", taxableEmployers='" + isTaxableEmployers() + "'" +
+            ", rate=" + getRate() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

@@ -1,18 +1,24 @@
 package com.bhp.opusb.service.dto;
 
-import io.swagger.annotations.ApiModel;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.bhp.opusb.web.rest.vm.ManagedUserVM;
+
+import io.swagger.annotations.ApiModel;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CPersonInCharge} entity.
  */
 @ApiModel(description = "The PIC entity.")
 public class CPersonInChargeDTO extends AbstractAuditingDTO {
-    
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     private UUID uid;
@@ -23,32 +29,27 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
     @NotNull
     private String phone;
 
-    private Boolean functionary;
-
     private Boolean active;
-
 
     private Long userId;
 
-    public static final int PASSWORD_MIN_LENGTH = 4;
-    public static final int PASSWORD_MAX_LENGTH = 100;
-    @Size(min = PASSWORD_MIN_LENGTH, max = PASSWORD_MAX_LENGTH)
+    @Size(min = ManagedUserVM.PASSWORD_MIN_LENGTH, max = ManagedUserVM.PASSWORD_MAX_LENGTH)
     private String password;
-    
+
     private String email;
 
     private String name;
-    
+
     private String login;
 
-    List<Long> businessCategories;
+    private List<Long> businessCategories;
 
     private String userLogin;
 
     private Long vendorId;
 
     private Long adOrganizationId;
-    
+
     public Long getId() {
         return id;
     }
@@ -79,14 +80,6 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Boolean isFunctionary() {
-        return functionary;
-    }
-
-    public void setFunctionary(Boolean functionary) {
-        this.functionary = functionary;
     }
 
     public Boolean isActive() {
@@ -192,17 +185,9 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "CPersonInChargeDTO{" +
-            "id=" + getId() +
-            ", uid='" + getUid() + "'" +
-            ", position='" + getPosition() + "'" +
-            ", phone='" + getPhone() + "'" +
-            ", functionary='" + isFunctionary() + "'" +
-            ", active='" + isActive() + "'" +
-            ", userId=" + getUserId() +
-            ", userLogin='" + getUserLogin() + "'" +
-            ", vendorId=" + getVendorId() +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            "}";
+        return "CPersonInChargeDTO{" + "id=" + getId() + ", uid='" + getUid() + "'" + ", position='" + getPosition()
+                + "'" + ", phone='" + getPhone() + "'" + ", active='" + isActive() + "'" + ", userId=" + getUserId()
+                + ", userLogin='" + getUserLogin() + "'" + ", vendorId=" + getVendorId() + ", adOrganizationId="
+                + getAdOrganizationId() + "}";
     }
 }

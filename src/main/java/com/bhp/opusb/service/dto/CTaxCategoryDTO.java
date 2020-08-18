@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.dto;
 
-import io.swagger.annotations.ApiModel;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.ApiModel;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CTaxCategory} entity.
@@ -12,6 +13,8 @@ import java.util.UUID;
 @ApiModel(description = "The Tax Category entity.")
 public class CTaxCategoryDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -24,7 +27,6 @@ public class CTaxCategoryDTO extends AbstractAuditingDTO {
     private UUID uid;
 
     private Boolean active;
-
 
     private Long adOrganizationId;
     private String adOrganizationName;

@@ -33,4 +33,15 @@
                                  referencedTableName="ad_organization"/>
 
     </changeSet>
+
+    <changeSet id="20200818021200" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="c_vendor_tax" constraintName="fk_c_vendor_tax_tax_rate_id"/>
+
+        <addForeignKeyConstraint baseColumnNames="tax_id"
+                                 baseTableName="c_vendor_tax"
+                                 constraintName="fk_c_vendor_tax_tax_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_tax"/>
+
+    </changeSet>
 </databaseChangeLog>

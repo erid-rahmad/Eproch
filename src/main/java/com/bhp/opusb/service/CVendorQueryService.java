@@ -95,7 +95,7 @@ public class CVendorQueryService extends QueryService<CVendor> {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CVendor_.name));
             }
             if (criteria.getTaxIdNo() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getTaxIdNo(), CVendor_.taxIdNo));
+                specification = specification.and(buildStringSpecification(criteria.getTaxIdNo(), CVendor_.taxIdNo));
             }
             if (criteria.getTaxIdName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTaxIdName(), CVendor_.taxIdName));

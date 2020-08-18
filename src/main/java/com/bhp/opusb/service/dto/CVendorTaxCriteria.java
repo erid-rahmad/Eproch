@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -27,11 +28,11 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private BooleanFilter isFaktur;
+    private BooleanFilter eInvoice;
 
-    private BooleanFilter isPkp;
+    private BooleanFilter taxableEmployers;
 
-    private StringFilter rate;
+    private BigDecimalFilter rate;
 
     private UUIDFilter uid;
 
@@ -39,9 +40,7 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
 
     private LongFilter vendorId;
 
-    private LongFilter taxCategoryId;
-
-    private LongFilter taxRateId;
+    private LongFilter taxId;
 
     private LongFilter adOrganizationId;
 
@@ -50,14 +49,13 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
 
     public CVendorTaxCriteria(CVendorTaxCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.isFaktur = other.isFaktur == null ? null : other.isFaktur.copy();
-        this.isPkp = other.isPkp == null ? null : other.isPkp.copy();
+        this.eInvoice = other.eInvoice == null ? null : other.eInvoice.copy();
+        this.taxableEmployers = other.taxableEmployers == null ? null : other.taxableEmployers.copy();
         this.rate = other.rate == null ? null : other.rate.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
-        this.taxCategoryId = other.taxCategoryId == null ? null : other.taxCategoryId.copy();
-        this.taxRateId = other.taxRateId == null ? null : other.taxRateId.copy();
+        this.taxId = other.taxId == null ? null : other.taxId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
@@ -74,27 +72,27 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public BooleanFilter getIsFaktur() {
-        return isFaktur;
+    public BooleanFilter geteInvoice() {
+        return eInvoice;
     }
 
-    public void setIsFaktur(BooleanFilter isFaktur) {
-        this.isFaktur = isFaktur;
+    public void seteInvoice(BooleanFilter eInvoice) {
+        this.eInvoice = eInvoice;
     }
 
-    public BooleanFilter getIsPkp() {
-        return isPkp;
+    public BooleanFilter getTaxableEmployers() {
+        return taxableEmployers;
     }
 
-    public void setIsPkp(BooleanFilter isPkp) {
-        this.isPkp = isPkp;
+    public void setTaxableEmployers(BooleanFilter taxableEmployers) {
+        this.taxableEmployers = taxableEmployers;
     }
 
-    public StringFilter getRate() {
+    public BigDecimalFilter getRate() {
         return rate;
     }
 
-    public void setRate(StringFilter rate) {
+    public void setRate(BigDecimalFilter rate) {
         this.rate = rate;
     }
 
@@ -122,20 +120,12 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
         this.vendorId = vendorId;
     }
 
-    public LongFilter getTaxCategoryId() {
-        return taxCategoryId;
+    public LongFilter getTaxId() {
+        return taxId;
     }
 
-    public void setTaxCategoryId(LongFilter taxCategoryId) {
-        this.taxCategoryId = taxCategoryId;
-    }
-
-    public LongFilter getTaxRateId() {
-        return taxRateId;
-    }
-
-    public void setTaxRateId(LongFilter taxRateId) {
-        this.taxRateId = taxRateId;
+    public void setTaxId(LongFilter taxId) {
+        this.taxId = taxId;
     }
 
     public LongFilter getAdOrganizationId() {
@@ -158,14 +148,13 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
         final CVendorTaxCriteria that = (CVendorTaxCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(isFaktur, that.isFaktur) &&
-            Objects.equals(isPkp, that.isPkp) &&
+            Objects.equals(eInvoice, that.eInvoice) &&
+            Objects.equals(taxableEmployers, that.taxableEmployers) &&
             Objects.equals(rate, that.rate) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(vendorId, that.vendorId) &&
-            Objects.equals(taxCategoryId, that.taxCategoryId) &&
-            Objects.equals(taxRateId, that.taxRateId) &&
+            Objects.equals(taxId, that.taxId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
@@ -173,14 +162,13 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
-        isFaktur,
-        isPkp,
+        eInvoice,
+        taxableEmployers,
         rate,
         uid,
         active,
         vendorId,
-        taxCategoryId,
-        taxRateId,
+        taxId,
         adOrganizationId
         );
     }
@@ -189,14 +177,13 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
     public String toString() {
         return "CVendorTaxCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (isFaktur != null ? "isFaktur=" + isFaktur + ", " : "") +
-                (isPkp != null ? "isPkp=" + isPkp + ", " : "") +
+                (eInvoice != null ? "eInvoice=" + eInvoice + ", " : "") +
+                (taxableEmployers != null ? "taxableEmployers=" + taxableEmployers + ", " : "") +
                 (rate != null ? "rate=" + rate + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
-                (taxCategoryId != null ? "taxCategoryId=" + taxCategoryId + ", " : "") +
-                (taxRateId != null ? "taxRateId=" + taxRateId + ", " : "") +
+                (taxId != null ? "taxId=" + taxId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }

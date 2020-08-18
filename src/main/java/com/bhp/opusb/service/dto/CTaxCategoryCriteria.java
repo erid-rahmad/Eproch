@@ -37,10 +37,7 @@ public class CTaxCategoryCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
-    private LongFilter cTaxRateId;
-
     private LongFilter adOrganizationId;
-    private StringFilter adOrganizationName;
 
     public CTaxCategoryCriteria() {
     }
@@ -52,9 +49,7 @@ public class CTaxCategoryCriteria implements Serializable, Criteria {
         this.isWithholding = other.isWithholding == null ? null : other.isWithholding.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.cTaxRateId = other.cTaxRateId == null ? null : other.cTaxRateId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
     }
 
     @Override
@@ -110,28 +105,12 @@ public class CTaxCategoryCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
-    public LongFilter getCTaxRateId() {
-        return cTaxRateId;
-    }
-
-    public void setCTaxRateId(LongFilter cTaxRateId) {
-        this.cTaxRateId = cTaxRateId;
-    }
-
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(LongFilter adOrganizationId) {
         this.adOrganizationId = adOrganizationId;
-    }
-
-    public StringFilter getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(StringFilter adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
     }
 
 
@@ -151,9 +130,7 @@ public class CTaxCategoryCriteria implements Serializable, Criteria {
             Objects.equals(isWithholding, that.isWithholding) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(cTaxRateId, that.cTaxRateId) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(adOrganizationName, that.adOrganizationName);
+            Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
     @Override
@@ -165,9 +142,7 @@ public class CTaxCategoryCriteria implements Serializable, Criteria {
         isWithholding,
         uid,
         active,
-        cTaxRateId,
-        adOrganizationId,
-        adOrganizationName
+        adOrganizationId
         );
     }
 
@@ -180,10 +155,8 @@ public class CTaxCategoryCriteria implements Serializable, Criteria {
                 (isWithholding != null ? "isWithholding=" + isWithholding + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (cTaxRateId != null ? "cTaxRateId=" + cTaxRateId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
             "}";
     }
-    
+
 }

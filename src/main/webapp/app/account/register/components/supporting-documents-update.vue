@@ -52,18 +52,15 @@
             >
             
             <el-upload
-                :limit="1"
-                :on-exceed="handleExceed"
-                :file-list="fileList"
-                class="upload-file"
-                v-model="document.file"
                 ref="upload"
-                action=""
-                :on-error="errorGetFile"
-                :on-change="getFile"
-                :auto-upload="false">
-                <el-button slot="trigger" type="primary" icon="el-icon-search">select file</el-button>
-                <!--<el-button type="success" @click="submitUpload">upload to server</el-button>-->
+                v-model="document.file"
+                action="/api/c-attachments/upload"
+                :file-list="fileList"
+                :limit="1"
+                :on-change="onUploadChange"
+                :on-error="onUploadError"
+                :on-success="onUploadSuccess">
+                <el-button slot="trigger" type="primary" icon="el-icon-search">Select file</el-button>
                 <div class="el-upload__tip" slot="tip">files with a size less than 500kb</div>
             </el-upload>
 

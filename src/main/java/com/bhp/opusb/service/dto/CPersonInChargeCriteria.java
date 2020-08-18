@@ -33,8 +33,6 @@ public class CPersonInChargeCriteria implements Serializable, Criteria {
 
     private StringFilter phone;
 
-    private BooleanFilter functionary;
-
     private BooleanFilter active;
 
     private LongFilter userId;
@@ -51,7 +49,6 @@ public class CPersonInChargeCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.position = other.position == null ? null : other.position.copy();
         this.phone = other.phone == null ? null : other.phone.copy();
-        this.functionary = other.functionary == null ? null : other.functionary.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
@@ -93,14 +90,6 @@ public class CPersonInChargeCriteria implements Serializable, Criteria {
 
     public void setPhone(StringFilter phone) {
         this.phone = phone;
-    }
-
-    public BooleanFilter getFunctionary() {
-        return functionary;
-    }
-
-    public void setFunctionary(BooleanFilter functionary) {
-        this.functionary = functionary;
     }
 
     public BooleanFilter getActive() {
@@ -150,7 +139,6 @@ public class CPersonInChargeCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(position, that.position) &&
             Objects.equals(phone, that.phone) &&
-            Objects.equals(functionary, that.functionary) &&
             Objects.equals(active, that.active) &&
             Objects.equals(userId, that.userId) &&
             Objects.equals(vendorId, that.vendorId) &&
@@ -164,7 +152,6 @@ public class CPersonInChargeCriteria implements Serializable, Criteria {
         uid,
         position,
         phone,
-        functionary,
         active,
         userId,
         vendorId,
@@ -179,7 +166,6 @@ public class CPersonInChargeCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (position != null ? "position=" + position + ", " : "") +
                 (phone != null ? "phone=" + phone + ", " : "") +
-                (functionary != null ? "functionary=" + functionary + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +

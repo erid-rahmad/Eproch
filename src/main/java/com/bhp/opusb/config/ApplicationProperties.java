@@ -10,4 +10,22 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
+
+  private final Attachment attachment = new Attachment();
+
+  public Attachment getAttachment() {
+    return attachment;
+  }
+
+  public static final class Attachment {
+    private String uploadDir = "/opt/data/attachment";
+
+    public String getUploadDir() {
+      return uploadDir;
+    }
+
+    public void setUploadDir(String uploadDir) {
+      this.uploadDir = uploadDir;
+    }
+  }
 }

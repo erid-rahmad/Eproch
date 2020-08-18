@@ -1,9 +1,10 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
 import com.bhp.opusb.domain.enumeration.VendorType;
 
 /**
@@ -11,13 +12,15 @@ import com.bhp.opusb.domain.enumeration.VendorType;
  */
 public class CVendorDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
     private String name;
 
     @NotNull
-    private Long taxIdNo;
+    private String taxIdNo;
 
     @NotNull
     private String taxIdName;
@@ -68,11 +71,11 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.name = name;
     }
 
-    public Long getTaxIdNo() {
+    public String getTaxIdNo() {
         return taxIdNo;
     }
 
-    public void setTaxIdNo(Long taxIdNo) {
+    public void setTaxIdNo(String taxIdNo) {
         this.taxIdNo = taxIdNo;
     }
 
@@ -206,7 +209,7 @@ public class CVendorDTO extends AbstractAuditingDTO {
         return "CVendorDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", taxIdNo=" + getTaxIdNo() +
+            ", taxIdNo='" + getTaxIdNo() + "'" +
             ", taxIdName='" + getTaxIdName() + "'" +
             ", branch='" + isBranch() + "'" +
             ", email='" + getEmail() + "'" +

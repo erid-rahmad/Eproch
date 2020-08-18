@@ -2,7 +2,6 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CTaxCategory;
-import com.bhp.opusb.domain.CTaxRate;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.CTaxCategoryRepository;
 import com.bhp.opusb.service.CTaxCategoryService;
@@ -559,26 +558,6 @@ public class CTaxCategoryResourceIT {
         // Get all the cTaxCategoryList where active is null
         defaultCTaxCategoryShouldNotBeFound("active.specified=false");
     }
-
-    @Test
-    @Transactional
-    public void getAllCTaxCategoriesByCTaxRateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cTaxCategoryRepository.saveAndFlush(cTaxCategory);
-        CTaxRate cTaxRate = CTaxRateResourceIT.createEntity(em);
-        em.persist(cTaxRate);
-        em.flush();
-        cTaxCategory.addCTaxRate(cTaxRate);
-        cTaxCategoryRepository.saveAndFlush(cTaxCategory);
-        Long cTaxRateId = cTaxRate.getId();
-
-        // Get all the cTaxCategoryList where cTaxRate equals to cTaxRateId
-        defaultCTaxCategoryShouldBeFound("cTaxRateId.equals=" + cTaxRateId);
-
-        // Get all the cTaxCategoryList where cTaxRate equals to cTaxRateId + 1
-        defaultCTaxCategoryShouldNotBeFound("cTaxRateId.equals=" + (cTaxRateId + 1));
-    }
-
 
     @Test
     @Transactional

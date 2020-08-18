@@ -3,74 +3,108 @@ package com.bhp.opusb.service.dto;
 import java.util.List;
 import java.util.Map;
 
-import com.bhp.opusb.domain.CCity;
 import com.bhp.opusb.domain.enumeration.VendorType;
 
 public class RegistrationDTO {
-    LoginDetail loginDetail;
     CompanyProfile companyProfile;
     List<Long> businesses;
-    List<CRegistrationDocumentDTO> mainDocument;
-    List<CRegistrationDocumentDTO> additionalDocument;
+    List<CRegistrationDocumentDTO> mainDocuments;
+    List<CRegistrationDocumentDTO> additionalDocuments;
     List<CPersonInChargeDTO> contacts;
-    List<CPersonInChargeDTO> functionaries;
+    List<CFunctionaryDTO> functionaries;
     List<CVendorBankAcctDTO> payments;
-    List<CVendorTaxDTO> taxRates;
+    List<CVendorTaxDTO> taxes;
     Map<String, Boolean> taxInformations;
 
-    public class LoginDetail{
-        String login;
-        String email;
-        String password;
-
-        public String getLogin() {
-            return login;
-        }
-
-        public void setLogin(String login) {
-            this.login = login;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public void setPassword(String password) {
-            this.password = password;
-        }
-
-        
+    public CompanyProfile getCompanyProfile() {
+        return companyProfile;
     }
 
-    public class CompanyProfile{
-        String name;
-        VendorType type;
-        Boolean branch;
-        String phone;
-        String fax;
-        String email;
-        String website;
-        Long npwp;
-        String npwpName;
+    public void setCompanyProfile(CompanyProfile companyProfile) {
+        this.companyProfile = companyProfile;
+    }
 
-        String npwpAddress;
-        Long npwpCountry;
-        Long npwpRegion;
-        Long npwpCity;
-        String npwpPostalCode;
-        String address;
-        Long country;
-        Long region;
-        Long city;
-        String postalCode;
+    public List<Long> getBusinesses() {
+        return businesses;
+    }
+
+    public void setBusinesses(List<Long> businesses) {
+        this.businesses = businesses;
+    }
+
+    public List<CRegistrationDocumentDTO> getMainDocuments() {
+        return mainDocuments;
+    }
+
+    public void setMainDocuments(List<CRegistrationDocumentDTO> mainDocuments) {
+        this.mainDocuments = mainDocuments;
+    }
+
+    public List<CRegistrationDocumentDTO> getAdditionalDocuments() {
+        return additionalDocuments;
+    }
+
+    public void setAdditionalDocuments(List<CRegistrationDocumentDTO> additionalDocuments) {
+        this.additionalDocuments = additionalDocuments;
+    }
+
+    public List<CPersonInChargeDTO> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<CPersonInChargeDTO> contacts) {
+        this.contacts = contacts;
+    }
+
+    public List<CFunctionaryDTO> getFunctionaries() {
+        return functionaries;
+    }
+
+    public void setFunctionaries(List<CFunctionaryDTO> functionaries) {
+        this.functionaries = functionaries;
+    }
+
+    public List<CVendorBankAcctDTO> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<CVendorBankAcctDTO> payments) {
+        this.payments = payments;
+    }
+
+    public List<CVendorTaxDTO> getTaxes() {
+        return taxes;
+    }
+
+    public void setTaxes(List<CVendorTaxDTO> taxes) {
+        this.taxes = taxes;
+    }
+
+    public Map<String, Boolean> getTaxInformations() {
+        return taxInformations;
+    }
+
+    public void setTaxInformations(Map<String, Boolean> taxInformations) {
+        this.taxInformations = taxInformations;
+    }
+
+    public class CompanyProfile {
+        private String name;
+        private VendorType type;
+        private Boolean branch;
+        private String phone;
+        private String fax;
+        private String email;
+        private String website;
+        private String npwp;
+        private String npwpName;
+        private String npwpAddress;
+        private Long npwpCity;
+        private String npwpPostalCode;
+        private String address;
+        private Long city;
+        private String postalCode;
+        private Long taxIdAttachmentId;
 
         public String getName() {
             return name;
@@ -128,11 +162,11 @@ public class RegistrationDTO {
             this.website = website;
         }
 
-        public Long getNpwp() {
+        public String getNpwp() {
             return npwp;
         }
 
-        public void setNpwp(Long npwp) {
+        public void setNpwp(String npwp) {
             this.npwp = npwp;
         }
 
@@ -150,22 +184,6 @@ public class RegistrationDTO {
 
         public void setNpwpAddress(String npwpAddress) {
             this.npwpAddress = npwpAddress;
-        }
-
-        public Long getNpwpCountry() {
-            return npwpCountry;
-        }
-
-        public void setNpwpCountry(Long npwpCountry) {
-            this.npwpCountry = npwpCountry;
-        }
-
-        public Long getNpwpRegion() {
-            return npwpRegion;
-        }
-
-        public void setNpwpRegion(Long npwpRegion) {
-            this.npwpRegion = npwpRegion;
         }
 
         public Long getNpwpCity() {
@@ -192,22 +210,6 @@ public class RegistrationDTO {
             this.address = address;
         }
 
-        public Long getCountry() {
-            return country;
-        }
-
-        public void setCountry(Long country) {
-            this.country = country;
-        }
-
-        public Long getRegion() {
-            return region;
-        }
-
-        public void setRegion(Long region) {
-            this.region = region;
-        }
-
         public Long getCity() {
             return city;
         }
@@ -223,89 +225,14 @@ public class RegistrationDTO {
         public void setPostalCode(String postalCode) {
             this.postalCode = postalCode;
         }
+
+        public Long getTaxIdAttachmentId() {
+            return taxIdAttachmentId;
+        }
+
+        public void setTaxIdAttachmentId(Long taxIdAttachmentId) {
+            this.taxIdAttachmentId = taxIdAttachmentId;
+        }
     }
 
-    public LoginDetail getLoginDetail() {
-        return loginDetail;
-    }
-
-    public void setLoginDetail(LoginDetail loginDetail) {
-        this.loginDetail = loginDetail;
-    }
-
-    public CompanyProfile getCompanyProfile() {
-        return companyProfile;
-    }
-
-    public void setCompanyProfile(CompanyProfile companyProfile) {
-        this.companyProfile = companyProfile;
-    }
-
-    public List<Long> getBusinesses() {
-        return businesses;
-    }
-
-    public void setBusinesses(List<Long> businesses) {
-        this.businesses = businesses;
-    }
-
-    public List<CRegistrationDocumentDTO> getMainDocument() {
-        return mainDocument;
-    }
-
-    public void setMainDocument(List<CRegistrationDocumentDTO> mainDocument) {
-        this.mainDocument = mainDocument;
-    }
-
-    public List<CRegistrationDocumentDTO> getAdditionalDocument() {
-        return additionalDocument;
-    }
-
-    public void setAdditionalDocument(List<CRegistrationDocumentDTO> additionalDocument) {
-        this.additionalDocument = additionalDocument;
-    }
-
-    public List<CPersonInChargeDTO> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<CPersonInChargeDTO> contacts) {
-        this.contacts = contacts;
-    }
-
-    public List<CPersonInChargeDTO> getFunctionaries() {
-        return functionaries;
-    }
-
-    public void setFunctionaries(List<CPersonInChargeDTO> functionaries) {
-        this.functionaries = functionaries;
-    }
-
-    public List<CVendorBankAcctDTO> getPayments() {
-        return payments;
-    }
-
-    public void setPayments(List<CVendorBankAcctDTO> payments) {
-        this.payments = payments;
-    }
-
-    public List<CVendorTaxDTO> getTaxRates() {
-        return taxRates;
-    }
-
-    public void setTaxRates(List<CVendorTaxDTO> taxRates) {
-        this.taxRates = taxRates;
-    }
-
-    public Map<String, Boolean> getTaxInformations() {
-        return taxInformations;
-    }
-
-    public void setTaxInformations(Map<String, Boolean> taxInformations) {
-        this.taxInformations = taxInformations;
-    }
-
-    
-
-    
 }

@@ -30,10 +30,11 @@ import DynamicWindowService from '@/core/application-dictionary/components/Dynam
 export default class StepsForm extends Vue {
   @Inject('dynamicWindowService')
   private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
-  
-  @Inject('registerService') private registerService: () => RegisterService;
-  
-  submitAgree: boolean = false;
+
+  @Inject('registerService')
+  private registerService: () => RegisterService;
+
+  agreementAccepted: boolean = false;
   doNotMatch = '';
   error = '';
   errorEmailExists = '';
@@ -66,7 +67,7 @@ export default class StepsForm extends Vue {
       npwpRegion: '',
       npwpCity: '',
       npwpPostalCode: '',
-      
+
       address: 'Jl. Sudirman',
       country: '',
       region: '',
@@ -82,13 +83,9 @@ export default class StepsForm extends Vue {
     contacts: [],
     functionaries: [],
     payments: [],
-    taxInformations: {
-      efaktur: '',
-      pkp: '',
-    },
-    taxRates: []
+    taxes: []
   }
-  
+
   mounted() {
     this.eventBus.$on('step-validated', this.proceedNext);
   }
@@ -98,20 +95,14 @@ export default class StepsForm extends Vue {
   }
 
   previous() {
-    if ((this.active < 3)||(this.active > 3)) {
-      --this.active;
-    }else if(this.active === 3){
-      --this.active;
-      //this.registration.additionalDocuments = [];
-      
-    }
+    --this.active;
   }
 
   next() {
     // Trigger the validation of the current form.
     this.eventBus.$emit('validate-form', this.active);
   }
-  
+
   proceedNext(validationState) {
     if (validationState.passed && this.active <= 7) {
       ++this.active;
@@ -137,60 +128,50 @@ export default class StepsForm extends Vue {
     */
   }
 
-  submit(){
-    
-      if(this.submitAgree){
-          this.retrieveBusinessCategory();
-          console.log(this.registration);
-        
-          this.doNotMatch = null;
-          this.error = null;
-          //this.errorUserExists = null;
-          //this.errorEmailExists = null;
-          //this.registerAccount.langKey = translationStore.language;
-          this.registerService()
-          .processRegistration(this.registration)
-          .then(() => {
-            this.success = true;
-            this.$notify({
-              title: 'Success',
-              dangerouslyUseHTMLString: true,
-              message: '<strong>Registration saved!</strong> Please check your email for confirmation.',
-              type: 'success',
-              duration: 3000
-            });
-          })
-          .catch(error => {
-            this.success = null;
-            if (error.response.status === 400 && error.response.data.type === LOGIN_ALREADY_USED_TYPE) {
-              this.error = '<strong>Login name already registered!</strong> Please choose another one.';
-            } else if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
-              this.error = '<strong>Email is already in use!</strong> Please choose another one.';
-            } else {
-              this.error = '<strong>Registration failed!</strong> Please try again later.';
-            }
-
-            this.$notify({
-              title: 'Error',
-              dangerouslyUseHTMLString: true,
-              message: this.error,
-              type: 'error',
-              duration: 3000
-            });
-          });
-        
-        
-      }else{
+  submit() {
+    // Set the tax details and strip out the ID of each tax.
+    this.registration.taxes = registrationStore.taxes;
+    this.registration.taxes.forEach(tax => { delete tax.id });
+    console.log('Submitting registration data. ', this.registration);
+    this.loading = true;
+    this.doNotMatch = null;
+    this.error = null;
+    //this.errorUserExists = null;
+    //this.errorEmailExists = null;
+    //this.registerAccount.langKey = translationStore.language;
+    this.registerService()
+      .processRegistration(this.registration)
+      .then(() => {
+        this.success = true;
         this.$notify({
-          title: 'Warning',
-          message: "please check agreement",
-          type: 'warning',
+          title: 'Success',
+          dangerouslyUseHTMLString: true,
+          message: '<strong>Registration saved!</strong> Please check your email for confirmation.',
+          type: 'success',
           duration: 3000
         });
-      }
-    
-    this.loading = false;
-    
+      })
+      .catch(error => {
+        this.success = null;
+        if (error.response.status === 400 && error.response.data.type === LOGIN_ALREADY_USED_TYPE) {
+          this.error = '<strong>Login name already registered!</strong> Please choose another one.';
+        } else if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+          this.error = '<strong>Email is already in use!</strong> Please choose another one.';
+        } else {
+          this.error = '<strong>Registration failed!</strong> Please try again later.';
+        }
+
+        this.$notify({
+          title: 'Error',
+          dangerouslyUseHTMLString: true,
+          message: this.error,
+          type: 'error',
+          duration: 3000
+        });
+      })
+      .finally(() => {
+        this.loading = false;
+      });
   }
-  
+
 }

@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Component from 'vue-class-component'
-import { ElForm } from 'element-ui/types/form'
 import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store'
 import DynamicWindowService from '../../../core/application-dictionary/components/DynamicWindow/dynamic-window.service'
 import { Inject } from 'vue-property-decorator'
@@ -53,18 +52,7 @@ const SummaryRegistrationProps = Vue.extend({
     payments: {
       type: Array,
       default: () => []
-    },
-    taxRates: {
-      type: Array,
-      default: () => []
-    },
-    taxInformations: {
-      type: Object,
-      default: () => {
-        return null;
-      }
-    },
-    
+    }
   }
 })
 
@@ -78,13 +66,20 @@ export default class SummaryRegistration extends SummaryRegistrationProps {
   public businessCategoryValues = []; 
   public businessCategoryOptions = [];
 
-  mounted() {
-    //console.log(this.businessCategory);
-    this.retrieveBusinessCategories();
+  get eInvoice() {
+    return registrationStore.eInvoice;
   }
 
-  handleChange(val) {
-    //console.log(val);
+  get taxableEmployers() {
+    return registrationStore.taxableEmployers;
+  }
+
+  get taxes() {
+    return registrationStore.taxes;
+  }
+
+  created() {
+    this.retrieveBusinessCategories();
   }
 
   private printBusinessCategory(row: any){

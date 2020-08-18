@@ -79,12 +79,23 @@
             <column name="uid" type="${uuidType}"/>
             <column name="position" type="string"/>
             <column name="phone" type="string"/>
-            <column name="functionary" type="boolean"/>
             <column name="active" type="boolean"/>
             <column name="user_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200818003300-1" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="c_pic_business_cat"
+                                  constraintName="fk_c_pic_business_cat_contact_id"/>
+        
+        <dropColumn tableName="c_person_in_charge" columnName="id"/>
+        <addPrimaryKey tableName="c_person_in_charge" columnNames="user_id"/>
+    </changeSet>
+
+    <changeSet id="20200818015900" author="Ananta Aryadewa">
+        <dropColumn tableName="c_person_in_charge" columnName="functionary"/>
     </changeSet>
 
 </databaseChangeLog>

@@ -10,7 +10,7 @@
         },
         {
             "fieldName": "taxIdNo",
-            "fieldType": "Long",
+            "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]

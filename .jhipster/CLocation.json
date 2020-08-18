@@ -13,10 +13,6 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "taxInvoiceAddress",
-            "fieldType": "Boolean"
-        },
-        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

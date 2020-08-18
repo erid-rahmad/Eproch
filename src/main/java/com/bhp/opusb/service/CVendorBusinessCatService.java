@@ -1,19 +1,23 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.CBusinessCategory;
+import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CVendorBusinessCat;
 import com.bhp.opusb.repository.CVendorBusinessCatRepository;
 import com.bhp.opusb.service.dto.CVendorBusinessCatDTO;
 import com.bhp.opusb.service.mapper.CVendorBusinessCatMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link CVendorBusinessCat}.
@@ -44,6 +48,28 @@ public class CVendorBusinessCatService {
         CVendorBusinessCat cVendorBusinessCat = cVendorBusinessCatMapper.toEntity(cVendorBusinessCatDTO);
         cVendorBusinessCat = cVendorBusinessCatRepository.save(cVendorBusinessCat);
         return cVendorBusinessCatMapper.toDto(cVendorBusinessCat);
+    }
+
+    public List<CVendorBusinessCatDTO> saveAll(List<Long> businessCategoryIds, CVendor vendor, ADOrganization organization) {
+        log.debug("Request to save CVendorBusinessCats. List size: {}", businessCategoryIds.size());
+        List<CVendorBusinessCat> businessCategories = businessCategoryIds
+            .stream()
+            .map(id -> {
+                CBusinessCategory businessCategory = new CBusinessCategory();
+                businessCategory.setId(id);
+                
+                return new CVendorBusinessCat()
+                    .active(true)
+                    .adOrganization(organization)
+                    .vendor(vendor)
+                    .businessCategory(businessCategory);
+            })
+            .collect(Collectors.toList());
+
+        return cVendorBusinessCatRepository.saveAll(businessCategories)
+            .stream()
+            .map(cVendorBusinessCatMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -81,10 +107,4 @@ public class CVendorBusinessCatService {
         log.debug("Request to delete CVendorBusinessCat : {}", id);
         cVendorBusinessCatRepository.deleteById(id);
     }
-
-	public void saveAll(List<CVendorBusinessCatDTO> vendorBusinesses) {
-        log.debug("Request to save CVendorBusinessCat : {}", vendorBusinesses);
-        List<CVendorBusinessCat> cVendorBusinessCat = cVendorBusinessCatMapper.toEntity(vendorBusinesses);
-        cVendorBusinessCat = cVendorBusinessCatRepository.saveAll(cVendorBusinessCat);
-	}
 }

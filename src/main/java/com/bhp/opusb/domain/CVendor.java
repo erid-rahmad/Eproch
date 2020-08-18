@@ -1,17 +1,27 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.bhp.opusb.domain.enumeration.VendorType;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A CVendor.
@@ -34,7 +44,7 @@ public class CVendor extends AbstractAuditingEntity {
 
     @NotNull
     @Column(name = "tax_id_no", nullable = false)
-    private Long taxIdNo;
+    private String taxIdNo;
 
     @NotNull
     @Column(name = "tax_id_name", nullable = false)
@@ -107,16 +117,16 @@ public class CVendor extends AbstractAuditingEntity {
         this.name = name;
     }
 
-    public Long getTaxIdNo() {
+    public String getTaxIdNo() {
         return taxIdNo;
     }
 
-    public CVendor taxIdNo(Long taxIdNo) {
+    public CVendor taxIdNo(String taxIdNo) {
         this.taxIdNo = taxIdNo;
         return this;
     }
 
-    public void setTaxIdNo(Long taxIdNo) {
+    public void setTaxIdNo(String taxIdNo) {
         this.taxIdNo = taxIdNo;
     }
 
@@ -316,7 +326,7 @@ public class CVendor extends AbstractAuditingEntity {
         return "CVendor{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", taxIdNo=" + getTaxIdNo() +
+            ", taxIdNo='" + getTaxIdNo() + "'" +
             ", taxIdName='" + getTaxIdName() + "'" +
             ", branch='" + isBranch() + "'" +
             ", email='" + getEmail() + "'" +

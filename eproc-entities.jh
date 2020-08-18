@@ -32,7 +32,6 @@ entity CCity {
 entity CLocation {
 	streetAddress String required
 	postalCode String
-	taxInvoiceAddress Boolean
 	uid UUID
 	active Boolean
 }
@@ -55,12 +54,12 @@ entity CBusinessCategory {
 }
 
 entity CAttachment {
-  	fileName String
-  	mimeType String
-  	documentType String
-  	uploadDir String
-  	uid UUID
-  	active Boolean
+	fileName String
+	mimeType String
+	documentType String
+	uploadDir String
+	uid UUID
+	active Boolean
 }
 
 entity CRegistrationDocument {
@@ -102,12 +101,13 @@ entity CTaxCategory {
 	uid UUID
 	active Boolean
 }
-entity CTaxRate {
+
+entity CTax {
 	name String required
 	description String
-	rate String
+	rate BigDecimal
 	validFrom LocalDate
-	orderType CTaxOrderType required
+	transactionType CTaxTransactionType required
 	uid UUID
 	active Boolean
 }
@@ -119,14 +119,22 @@ entity CPersonInCharge {
 	uid UUID
 	position String required
 	phone String required
-	functionary Boolean
+	active Boolean
+}
+
+entity CFunctionary {
+	name String required
+	position String required
+	phone String required
+	email String required
+	uid UUID
 	active Boolean
 }
 
 entity CVendor {
 	name String required
-	taxIdNo Long required
-  	taxIdName String required
+	taxIdNo String required
+	taxIdName String required
 	branch Boolean
 	email String required
 	phone String required
@@ -140,9 +148,9 @@ entity CVendor {
 }
 
 entity CVendorLocation {
-  	taxInvoiceAddress Boolean
-  	uid UUID
-  	active Boolean
+	taxInvoiceAddress Boolean
+	uid UUID
+	active Boolean
 }
 
 entity CVendorBusinessCat {
@@ -164,9 +172,9 @@ entity CVendorBankAcct {
 }
 
 entity CVendorTax {
-	isFaktur Boolean
-	isPkp Boolean
-	rate String
+	eInvoice Boolean
+	taxableEmployers Boolean
+	rate BigDecimal
 	uid UUID
 	active Boolean
 }
@@ -176,11 +184,11 @@ enum VendorType {
 }
 
 enum CBusinessCategorySector {
-  	PRIMARY, SECONDARY, TERTIARY
+	PRIMARY, SECONDARY, TERTIARY
 }
 
-enum CTaxOrderType {
-  	SALES, PURCHASE, BOTH
+enum CTaxTransactionType {
+	SALES, PURCHASE, BOTH
 }
 
 enum BusinessCategorySelection {
@@ -189,8 +197,8 @@ enum BusinessCategorySelection {
 
 relationship OneToOne {
 	CCountry{currency required} to CCurrency
-	CPersonInCharge{user(login) required} to User
-  	CVendor{taxIdFile} to CAttachment
+	CPersonInCharge{user required} to User
+	CVendor{taxIdFile} to CAttachment
 }
 /**
  * Both side will reference each other.
@@ -201,7 +209,6 @@ relationship OneToMany {
 	// For city without region.
 	CCountry to CCity{country}
 
-	CTaxCategory to CTaxRate{taxCategory required}
 	// For city with region.
 	CRegion to CCity{region}
 	CBusinessCategory to CBusinessCategory{parentCategory}
@@ -214,20 +221,23 @@ relationship ManyToOne {
 	CLocation{city required} to CCity
 
 	CRegistrationDocument{type required} to CRegistrationDocType
-  	CRegistrationDocument{file required} to CAttachment
-  	CRegistrationDocument{vendor} to CVendor
+	CRegistrationDocument{file required} to CAttachment
+	CRegistrationDocument{vendor} to CVendor
 	CRegistrationDocument{adOrganization required} to ADOrganization
 
-  	CRegDocTypeBusinessCategory{documentType} to CRegistrationDocType
-  	CRegDocTypeBusinessCategory{businessCategory} to CBusinessCategory
+	CRegDocTypeBusinessCategory{documentType} to CRegistrationDocType
+	CRegDocTypeBusinessCategory{businessCategory} to CBusinessCategory
 	CRegDocTypeBusinessCategory{adOrganization required} to ADOrganization
 
-  	CVendorLocation{vendor} to CVendor
-  	CVendorLocation{location} to CLocation
-  	CVendorLocation{adOrganization required} to ADOrganization
+	CVendorLocation{vendor} to CVendor
+	CVendorLocation{location} to CLocation
+	CVendorLocation{adOrganization required} to ADOrganization
 
-  	CPersonInCharge{vendor} to CVendor
+	CPersonInCharge{vendor} to CVendor
 	CPersonInCharge{adOrganization required} to ADOrganization
+
+	CFunctionary{adOrganization required} to ADOrganization
+	CFunctionary{vendor} to CVendor
 
 	CCountry{adOrganization required} to ADOrganization
 	CCurrency{adOrganization required} to ADOrganization
@@ -237,7 +247,8 @@ relationship ManyToOne {
 	CBank{adOrganization required} to ADOrganization
 
 	CTaxCategory{adOrganization required} to ADOrganization
-	CTaxRate{adOrganization required} to ADOrganization
+	CTax{adOrganization required} to ADOrganization
+	CTax{taxCategory required} to CTaxCategory
 
 	CBusinessCategory{adOrganization required} to ADOrganization
 	
@@ -250,7 +261,7 @@ relationship ManyToOne {
 	CVendorBusinessCat{businessCategory required} to CBusinessCategory
 	CVendorBusinessCat{adOrganization required} to ADOrganization
 
-	CPicBusinessCat{contact required} to CPersonInCharge
+	CPicBusinessCat{pic required} to CPersonInCharge
 	CPicBusinessCat{businessCategory required} to CBusinessCategory
 	CPicBusinessCat{adOrganization required} to ADOrganization
 	
@@ -261,8 +272,7 @@ relationship ManyToOne {
 	CVendorBankAcct{adOrganization required} to ADOrganization
 
 	CVendorTax{vendor required} to CVendor
-	CVendorTax{taxCategory required} to CTaxCategory
-	CVendorTax{taxRate required} to CTaxRate
+	CVendorTax{tax required} to CTax
 	CVendorTax{adOrganization required} to ADOrganization
 }
 

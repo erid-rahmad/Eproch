@@ -15,6 +15,7 @@ public interface CTaxRateMapper extends EntityMapper<CTaxRateDTO, CTaxRate> {
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "taxCategory.id", target = "taxCategoryId")
+    @Mapping(source = "taxCategory.name", target = "taxCategoryName")
     CTaxRateDTO toDto(CTaxRate cTaxRate);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

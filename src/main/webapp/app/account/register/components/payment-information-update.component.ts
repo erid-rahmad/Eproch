@@ -61,11 +61,9 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
     private save() {
         (<ElForm>this.$refs.pay).validate((passed, errors) => {
             if (passed) {
-                setTimeout(() => {
-                    const data = { ...this.pay };
-                    this.eventBus.$emit('push-payment', data);
-                    this.reset();
-                }, 1000);
+                const data = { ...this.pay };
+                this.eventBus.$emit('push-payment', data);
+                this.reset();
             } else {
                 this.eventBus.$emit('payment-validation-failed', {passed, errors});
             }
@@ -94,8 +92,17 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
         return [this.pay.supportingfile];
     }
 
-    getFile(file, fileList) {
+    onUploadChange(file: any) {
         this.pay.supportingfile = file;
+    }
+
+    onUploadError(err: any) {
+        console.log('Failed uploading a file ', err);
+    }
+
+    onUploadSuccess(response: any) {
+        console.log('File uploaded successfully ', response);
+        this.pay.fileId = response.attachment.id;
     }
 
     handleExceed(files, fileList) {

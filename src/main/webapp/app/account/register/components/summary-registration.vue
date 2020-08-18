@@ -2,7 +2,7 @@
     <div class='summary'>
         <el-divider content-position="left"><h4>{{ $t('register.form.summary') }}</h4></el-divider>
         
-        <el-collapse :model="activeNames" @change="handleChange" accordion>
+        <el-collapse :model="activeNames" accordion>
             <el-collapse-item :title="'1. '+$t('register.login.title')" name="1">
 
                 <el-divider content-position="left"><h4>{{ $t('register.login.title') }}</h4></el-divider>
@@ -379,44 +379,39 @@
                 <el-divider content-position="left"><h4>{{ $t('register.tax.header.title') }}</h4></el-divider>
                 <el-form
                     ref="taxInformations"
-                    label-position="right"
+                    label-position="left"
                     size="mini"
                     label-width="256px"
-                    :model="taxInformations">
-                    <el-form-item
-                        :label="$t('register.tax.efaktur')"
-                        prop="efaktur"
-                        required>
-                        <el-radio-group v-model="taxInformations.efaktur" size="mini">
-                            <el-radio :disabled="true" label="true">Yes</el-radio>
-                            <el-radio :disabled="true" label="false">No</el-radio>
-                        </el-radio-group>
+                >
+                    <el-form-item :label="$t('register.tax.efaktur')">
+                        <el-checkbox
+                            v-model="eInvoice"
+                            disabled
+                            size="mini"
+                        />
                     </el-form-item>
-                    <el-form-item 
-                        :label="$t('register.tax.pkp')" 
-                        prop="pkp" 
-                        required>
-                        <el-radio-group v-model="taxInformations.pkp" size="mini">
-                            <el-radio :disabled="true" label="true">Yes</el-radio>
-                            <el-radio :disabled="true" label="false">No</el-radio>
-                        </el-radio-group>
+                    <el-form-item :label="$t('register.tax.pkp')">
+                        <el-checkbox
+                            v-model="taxableEmployers"
+                            disabled
+                            size="mini"
+                        />
                     </el-form-item>
                 </el-form>
 
                 <el-divider content-position="left"><h4>{{ $t('register.tax.body.title') }}</h4></el-divider>
                 <div class="table-container">
                     <el-table
-                        ref="taxRates"
                         max-height="250"
                         style="width: 100%"
-                        :data="taxRates">
+                        :data="taxes">
                         <el-table-column
                             fixed
                             min-width="128"
                             prop="name"
                             :label="$t('register.tax.taxRateName')"/>
                         <el-table-column
-                            prop="orderType"
+                            prop="transactionType"
                             min-width="128"
                             :label="$t('register.tax.transactionType')"/>
                         <el-table-column

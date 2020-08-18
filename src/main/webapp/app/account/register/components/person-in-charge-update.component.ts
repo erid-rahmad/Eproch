@@ -67,11 +67,9 @@ export default class PersonInChargeUpdate extends PersonInChargeUpdateProps {
     private save() {
         (<ElForm>this.$refs.person).validate((passed, errors) => {
             if (passed) {
-                setTimeout(() => {
-                    const data = { ...this.person };
-                    this.eventBus.$emit('push-person', data);
-                    this.reset();
-                }, 1000);
+                const data = { ...this.person };
+                this.eventBus.$emit('push-person', data);
+                this.reset();
             } else {
                 this.eventBus.$emit('person-validation-failed', {passed, errors});
             }

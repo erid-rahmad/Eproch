@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.dto;
 
 import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
 import com.bhp.opusb.domain.enumeration.CTaxOrderType;
 
 /**
@@ -12,6 +13,8 @@ import com.bhp.opusb.domain.enumeration.CTaxOrderType;
  */
 public class CTaxRateDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -35,6 +38,7 @@ public class CTaxRateDTO extends AbstractAuditingDTO {
     private String adOrganizationName;
 
     private Long taxCategoryId;
+    private String taxCategoryName;
     
     public Long getId() {
         return id;
@@ -124,6 +128,14 @@ public class CTaxRateDTO extends AbstractAuditingDTO {
         this.taxCategoryId = cTaxCategoryId;
     }
 
+    public String getTaxCategoryName() {
+        return taxCategoryName;
+    }
+
+    public void setTaxCategoryName(String taxCategoryName) {
+        this.taxCategoryName = taxCategoryName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -161,6 +173,4 @@ public class CTaxRateDTO extends AbstractAuditingDTO {
             ", taxCategoryId=" + getTaxCategoryId() +
             "}";
     }
-
-    
 }

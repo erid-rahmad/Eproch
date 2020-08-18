@@ -1,16 +1,18 @@
 package com.bhp.opusb.service.dto;
 
 import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CRegistrationDocument} entity.
  */
 public class CRegistrationDocumentDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -28,8 +30,10 @@ public class CRegistrationDocumentDTO extends AbstractAuditingDTO {
     private Long fileId;
 
     private Long vendorId;
+    private String vendorName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -95,12 +99,28 @@ public class CRegistrationDocumentDTO extends AbstractAuditingDTO {
         this.vendorId = cVendorId;
     }
 
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override

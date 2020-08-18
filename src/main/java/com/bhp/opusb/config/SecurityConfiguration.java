@@ -93,8 +93,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/api/c-person-in-charges",
                 "/api/c-banks",
                 "/api/c-currencies",
-                "/api/c-tax-rates"
-            ).permitAll()
+                "/api/c-taxes"
+            ).anonymous()
+            .antMatchers(
+                HttpMethod.POST,
+                "/api/c-attachments/upload"
+            ).anonymous()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()

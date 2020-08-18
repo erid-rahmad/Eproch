@@ -91,14 +91,14 @@ public class CVendorTaxQueryService extends QueryService<CVendorTax> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CVendorTax_.id));
             }
-            if (criteria.getIsFaktur() != null) {
-                specification = specification.and(buildSpecification(criteria.getIsFaktur(), CVendorTax_.isFaktur));
+            if (criteria.geteInvoice() != null) {
+                specification = specification.and(buildSpecification(criteria.geteInvoice(), CVendorTax_.eInvoice));
             }
-            if (criteria.getIsPkp() != null) {
-                specification = specification.and(buildSpecification(criteria.getIsPkp(), CVendorTax_.isPkp));
+            if (criteria.getTaxableEmployers() != null) {
+                specification = specification.and(buildSpecification(criteria.getTaxableEmployers(), CVendorTax_.taxableEmployers));
             }
             if (criteria.getRate() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getRate(), CVendorTax_.rate));
+                specification = specification.and(buildRangeSpecification(criteria.getRate(), CVendorTax_.rate));
             }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CVendorTax_.uid));
@@ -110,13 +110,9 @@ public class CVendorTaxQueryService extends QueryService<CVendorTax> {
                 specification = specification.and(buildSpecification(criteria.getVendorId(),
                     root -> root.join(CVendorTax_.vendor, JoinType.LEFT).get(CVendor_.id)));
             }
-            if (criteria.getTaxCategoryId() != null) {
-                specification = specification.and(buildSpecification(criteria.getTaxCategoryId(),
-                    root -> root.join(CVendorTax_.taxCategory, JoinType.LEFT).get(CTaxCategory_.id)));
-            }
-            if (criteria.getTaxRateId() != null) {
-                specification = specification.and(buildSpecification(criteria.getTaxRateId(),
-                    root -> root.join(CVendorTax_.taxRate, JoinType.LEFT).get(CTaxRate_.id)));
+            if (criteria.getTaxId() != null) {
+                specification = specification.and(buildSpecification(criteria.getTaxId(),
+                    root -> root.join(CVendorTax_.tax, JoinType.LEFT).get(CTax_.id)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),

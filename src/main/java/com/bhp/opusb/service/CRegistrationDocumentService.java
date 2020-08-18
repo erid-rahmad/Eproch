@@ -1,19 +1,23 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CRegistrationDocument;
+import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.repository.CRegistrationDocumentRepository;
 import com.bhp.opusb.service.dto.CRegistrationDocumentDTO;
+import com.bhp.opusb.service.mapper.CAttachmentMapper;
 import com.bhp.opusb.service.mapper.CRegistrationDocumentMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link CRegistrationDocument}.
@@ -27,10 +31,15 @@ public class CRegistrationDocumentService {
     private final CRegistrationDocumentRepository cRegistrationDocumentRepository;
 
     private final CRegistrationDocumentMapper cRegistrationDocumentMapper;
+    private final CAttachmentMapper cAttachmentMapper;
 
-    public CRegistrationDocumentService(CRegistrationDocumentRepository cRegistrationDocumentRepository, CRegistrationDocumentMapper cRegistrationDocumentMapper) {
+    public CRegistrationDocumentService(CRegistrationDocumentRepository cRegistrationDocumentRepository,
+        CRegistrationDocumentMapper cRegistrationDocumentMapper,
+        CAttachmentMapper cAttachmentMapper
+    ) {
         this.cRegistrationDocumentRepository = cRegistrationDocumentRepository;
         this.cRegistrationDocumentMapper = cRegistrationDocumentMapper;
+        this.cAttachmentMapper = cAttachmentMapper;
     }
 
     /**
@@ -44,6 +53,24 @@ public class CRegistrationDocumentService {
         CRegistrationDocument cRegistrationDocument = cRegistrationDocumentMapper.toEntity(cRegistrationDocumentDTO);
         cRegistrationDocument = cRegistrationDocumentRepository.save(cRegistrationDocument);
         return cRegistrationDocumentMapper.toDto(cRegistrationDocument);
+    }
+
+    public List<CRegistrationDocumentDTO> saveAll(List<CRegistrationDocumentDTO> documents, CVendor vendor, ADOrganization organization) {
+        log.debug("Request to save all CRegistrationDocuments. List size: {}", documents.size());
+        List<CRegistrationDocument> registrationDocuments = documents.stream()
+            .map(document
+                -> cRegistrationDocumentMapper.toEntity(document)
+                    .active(true)
+                    .adOrganization(organization)
+                    .file(cAttachmentMapper.fromId(document.getFileId()))
+                    .vendor(vendor)
+            )
+            .collect(Collectors.toList());
+
+        return cRegistrationDocumentRepository.saveAll(registrationDocuments)
+            .stream()
+            .map(cRegistrationDocumentMapper::toDto)
+            .collect(Collectors.toList());
     }
 
     /**
@@ -81,10 +108,4 @@ public class CRegistrationDocumentService {
         log.debug("Request to delete CRegistrationDocument : {}", id);
         cRegistrationDocumentRepository.deleteById(id);
     }
-
-    public void saveAll(List<CRegistrationDocumentDTO> registrationDocument) {
-        log.debug("Request to save CRegistrationDocument : {}", registrationDocument);
-        List<CRegistrationDocument> cRegistrationDocument = cRegistrationDocumentMapper.toEntity(registrationDocument);
-        cRegistrationDocument = cRegistrationDocumentRepository.saveAll(cRegistrationDocument);
-	}
 }

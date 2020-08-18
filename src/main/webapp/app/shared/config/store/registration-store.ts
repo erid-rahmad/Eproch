@@ -13,6 +13,9 @@ export interface IRegistrationState {
   businessCategories: Set<number>;
   mandatoryDocumentTypes: Array<object>;
   additionalDocumentTypes: Array<object>;
+  eInvoice: boolean;
+  taxableEmployers: boolean;
+  taxes: any[];
 }
 
 @Module({ dynamic: true, store, name: 'registrationStore', namespaced: true })
@@ -22,6 +25,9 @@ class RegistrationStore extends VuexModule implements IRegistrationState {
   public businessCategories = new Set<number>();
   public mandatoryDocumentTypes = [];
   public additionalDocumentTypes = [];
+  public eInvoice: boolean = false;
+  public taxableEmployers: boolean = false;
+  public taxes: any[] = [];
 
   @Mutation
   private SET_LOGIN_DETAILS(loginDetails: ILoginDetails) {
@@ -53,6 +59,33 @@ class RegistrationStore extends VuexModule implements IRegistrationState {
     this.additionalDocumentTypes = documentTypes;
   }
 
+  @Mutation
+  private SET_EINVOICE(eInvoice: boolean) {
+    this.eInvoice = eInvoice;
+    this.taxes.forEach(tax => {
+      tax.eInvoice = eInvoice;
+    });
+  }
+
+  @Mutation
+  private SET_TAXABLE_EMPLOYERS(taxableEmployers: boolean) {
+    this.taxableEmployers = taxableEmployers;
+    this.taxes.forEach(tax => {
+      tax.taxableEmployers = taxableEmployers;
+    });
+  }
+
+  @Mutation
+  private SET_TAXES(taxes: any) {
+    console.log('Set taxes ', taxes);
+    this.taxes = taxes;
+  }
+
+  @Mutation
+  private REMOVE_TAX(index: number) {
+    this.taxes.splice(index, 1);
+  }
+
   @Action
   public setLoginDetails(loginDetails: ILoginDetails) {
     this.SET_LOGIN_DETAILS(loginDetails);
@@ -80,6 +113,27 @@ class RegistrationStore extends VuexModule implements IRegistrationState {
     } else {
       this.SET_ADDITIONAL_DOCUMENT_TYPES(payload.documentTypes);
     }
+  }
+
+  @Action
+  public setEInvoice(eInvoice: boolean) {
+    this.SET_EINVOICE(eInvoice);
+  }
+
+  @Action
+  public setTaxableEmployers(taxableEmployers: boolean) {
+    this.SET_TAXABLE_EMPLOYERS(taxableEmployers);
+  }
+
+  @Action
+  public setTaxes(taxes: any): Promise<void> {
+    return new Promise(resolve => resolve(this.SET_TAXES(taxes)));
+  }
+
+  @Action
+  public removeTax(tax: any) {
+    const index = this.taxes.indexOf(tax);
+    index > -1 && this.REMOVE_TAX(index);
   }
 }
 

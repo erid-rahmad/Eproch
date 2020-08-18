@@ -1,15 +1,22 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * A CPicBusinessCat.
@@ -17,7 +24,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "c_pic_business_cat")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CPicBusinessCat implements Serializable {
+public class CPicBusinessCat extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,7 +42,7 @@ public class CPicBusinessCat implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("cPicBusinessCats")
-    private CPersonInCharge contact;
+    private CPersonInCharge pic;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -82,17 +89,17 @@ public class CPicBusinessCat implements Serializable {
         this.active = active;
     }
 
-    public CPersonInCharge getContact() {
-        return contact;
+    public CPersonInCharge getPic() {
+        return pic;
     }
 
-    public CPicBusinessCat contact(CPersonInCharge cPersonInCharge) {
-        this.contact = cPersonInCharge;
+    public CPicBusinessCat pic(CPersonInCharge cPersonInCharge) {
+        this.pic = cPersonInCharge;
         return this;
     }
 
-    public void setContact(CPersonInCharge cPersonInCharge) {
-        this.contact = cPersonInCharge;
+    public void setPic(CPersonInCharge cPersonInCharge) {
+        this.pic = cPersonInCharge;
     }
 
     public CBusinessCategory getBusinessCategory() {
@@ -122,6 +129,11 @@ public class CPicBusinessCat implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {

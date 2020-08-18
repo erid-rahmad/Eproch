@@ -31,7 +31,7 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
-    private LongFilter contactId;
+    private LongFilter picId;
 
     private LongFilter businessCategoryId;
 
@@ -44,7 +44,7 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.contactId = other.contactId == null ? null : other.contactId.copy();
+        this.picId = other.picId == null ? null : other.picId.copy();
         this.businessCategoryId = other.businessCategoryId == null ? null : other.businessCategoryId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
@@ -78,12 +78,12 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
-    public LongFilter getContactId() {
-        return contactId;
+    public LongFilter getPicId() {
+        return picId;
     }
 
-    public void setContactId(LongFilter contactId) {
-        this.contactId = contactId;
+    public void setPicId(LongFilter picId) {
+        this.picId = picId;
     }
 
     public LongFilter getBusinessCategoryId() {
@@ -116,7 +116,7 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(contactId, that.contactId) &&
+            Objects.equals(picId, that.picId) &&
             Objects.equals(businessCategoryId, that.businessCategoryId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
     }
@@ -127,7 +127,7 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
         id,
         uid,
         active,
-        contactId,
+        picId,
         businessCategoryId,
         adOrganizationId
         );
@@ -139,7 +139,7 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (contactId != null ? "contactId=" + contactId + ", " : "") +
+                (picId != null ? "picId=" + picId + ", " : "") +
                 (businessCategoryId != null ? "businessCategoryId=" + businessCategoryId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";

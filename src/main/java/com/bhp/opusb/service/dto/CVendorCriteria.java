@@ -48,7 +48,7 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
-    private LongFilter taxIdNo;
+    private StringFilter taxIdNo;
 
     private StringFilter taxIdName;
 
@@ -119,11 +119,11 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.name = name;
     }
 
-    public LongFilter getTaxIdNo() {
+    public StringFilter getTaxIdNo() {
         return taxIdNo;
     }
 
-    public void setTaxIdNo(LongFilter taxIdNo) {
+    public void setTaxIdNo(StringFilter taxIdNo) {
         this.taxIdNo = taxIdNo;
     }
 

@@ -95,12 +95,10 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
     private save() {
         (<ElForm>this.$refs.document).validate((passed, errors) => {
             if (passed) {
-                setTimeout(() => {
-                    const data = { ...this.document };
-                    
-                    this.eventBus.$emit('push-document', data);
-                    this.reset();
-                }, 1000);
+                const data = { ...this.document };
+                
+                this.eventBus.$emit('push-document', data);
+                this.reset();
             } else {
                 this.eventBus.$emit('document-validation-failed', {passed, errors});
             }
@@ -110,24 +108,18 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
     get fileList() {        
         if ( ! this.document.file) return [];
         return [this.document.file];
-        
-        //return [...this.pay.supportingfile].map(file => file);
-        //return Array.from(this.pay.supportingfile).map(file => file);
     }
 
-    getFile(file, fileList) {
+    onUploadChange(file: any) {
         this.document.file = file;
     }
-    errorGetFile(err, file, fileList) {
-        console.log('err: ', err);
+
+    onUploadError(err: any) {
+        console.log('Failed uploading a file ', err);
     }
 
-    handleExceed(files, fileList) {
-        this.$notify({
-            title: 'Warning',
-            message: "The limit file is 1",
-            type: 'warning',
-            duration: 3000
-        });
+    onUploadSuccess(response: any) {
+        console.log('File uploaded successfully ', response);
+        this.document.fileId = response.attachment.id;
     }
 }

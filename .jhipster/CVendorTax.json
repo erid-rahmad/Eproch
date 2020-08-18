@@ -2,16 +2,16 @@
     "name": "CVendorTax",
     "fields": [
         {
-            "fieldName": "isFaktur",
+            "fieldName": "eInvoice",
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "isPkp",
+            "fieldName": "taxableEmployers",
             "fieldType": "Boolean"
         },
         {
             "fieldName": "rate",
-            "fieldType": "String"
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "uid",
@@ -33,18 +33,10 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cTaxCategory",
+            "otherEntityName": "cTax",
             "otherEntityRelationshipName": "cVendorTax",
             "relationshipValidateRules": "required",
-            "relationshipName": "taxCategory",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cTaxRate",
-            "otherEntityRelationshipName": "cVendorTax",
-            "relationshipValidateRules": "required",
-            "relationshipName": "taxRate",
+            "relationshipName": "tax",
             "otherEntityField": "id"
         },
         {

@@ -1,7 +1,6 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -10,26 +9,28 @@ import java.util.UUID;
  */
 public class CVendorTaxDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
-    private Boolean isFaktur;
+    private Boolean eInvoice;
 
-    private Boolean isPkp;
+    private Boolean taxableEmployers;
 
-    private String rate;
+    private BigDecimal rate;
 
     private UUID uid;
 
     private Boolean active;
 
-
     private Long vendorId;
+    private String vendorName;
 
-    private Long taxCategoryId;
-
-    private Long taxRateId;
+    private Long taxId;
+    private String taxName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -39,27 +40,27 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
-    public Boolean isIsFaktur() {
-        return isFaktur;
+    public Boolean isEInvoice() {
+        return eInvoice;
     }
 
-    public void setIsFaktur(Boolean isFaktur) {
-        this.isFaktur = isFaktur;
+    public void setEInvoice(Boolean eInvoice) {
+        this.eInvoice = eInvoice;
     }
 
-    public Boolean isIsPkp() {
-        return isPkp;
+    public Boolean isTaxableEmployers() {
+        return taxableEmployers;
     }
 
-    public void setIsPkp(Boolean isPkp) {
-        this.isPkp = isPkp;
+    public void setTaxableEmployers(Boolean taxableEmployers) {
+        this.taxableEmployers = taxableEmployers;
     }
 
-    public String getRate() {
+    public BigDecimal getRate() {
         return rate;
     }
 
-    public void setRate(String rate) {
+    public void setRate(BigDecimal rate) {
         this.rate = rate;
     }
 
@@ -87,20 +88,28 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
         this.vendorId = cVendorId;
     }
 
-    public Long getTaxCategoryId() {
-        return taxCategoryId;
+    public String getVendorName() {
+        return vendorName;
     }
 
-    public void setTaxCategoryId(Long cTaxCategoryId) {
-        this.taxCategoryId = cTaxCategoryId;
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
     }
 
-    public Long getTaxRateId() {
-        return taxRateId;
+    public Long getTaxId() {
+        return taxId;
     }
 
-    public void setTaxRateId(Long cTaxRateId) {
-        this.taxRateId = cTaxRateId;
+    public void setTaxId(Long cTaxId) {
+        this.taxId = cTaxId;
+    }
+
+    public String getTaxName() {
+        return taxName;
+    }
+
+    public void setTaxName(String taxName) {
+        this.taxName = taxName;
     }
 
     public Long getAdOrganizationId() {
@@ -109,6 +118,14 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override
@@ -136,14 +153,13 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
     public String toString() {
         return "CVendorTaxDTO{" +
             "id=" + getId() +
-            ", isFaktur='" + isIsFaktur() + "'" +
-            ", isPkp='" + isIsPkp() + "'" +
-            ", rate='" + getRate() + "'" +
+            ", eInvoice='" + isEInvoice() + "'" +
+            ", taxableEmployers='" + isTaxableEmployers() + "'" +
+            ", rate=" + getRate() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", vendorId=" + getVendorId() +
-            ", taxCategoryId=" + getTaxCategoryId() +
-            ", taxRateId=" + getTaxRateId() +
+            ", taxId=" + getTaxId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";
     }

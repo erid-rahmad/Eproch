@@ -16,8 +16,7 @@
 
     </changeSet>
 
-<!--
-    <changeSet id="20200710164100" author="Dian">
+    <!-- <changeSet id="20200710164100" author="Dian">
 
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="c_location"
@@ -25,6 +24,5 @@
                                  referencedColumnNames="id"
                                  referencedTableName="ad_organization"/>
 
-    </changeSet>
--->
+    </changeSet> -->
 </databaseChangeLog>

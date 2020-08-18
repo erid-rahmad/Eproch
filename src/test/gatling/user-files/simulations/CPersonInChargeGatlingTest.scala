@@ -75,7 +75,6 @@ class CPersonInChargeGatlingTest extends Simulation {
                 , "uid":null
                 , "position":"SAMPLE_TEXT"
                 , "phone":"SAMPLE_TEXT"
-                , "functionary":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

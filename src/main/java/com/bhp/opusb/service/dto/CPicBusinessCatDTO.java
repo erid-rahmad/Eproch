@@ -1,15 +1,15 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CPicBusinessCat} entity.
  */
-public class CPicBusinessCatDTO implements Serializable {
+public class CPicBusinessCatDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     private UUID uid;
@@ -17,11 +17,14 @@ public class CPicBusinessCatDTO implements Serializable {
     private Boolean active;
 
 
-    private Long contactId;
+    private Long picUserId;
+    private String picUserLogin;
 
     private Long businessCategoryId;
+    private String businessCategoryName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -47,12 +50,20 @@ public class CPicBusinessCatDTO implements Serializable {
         this.active = active;
     }
 
-    public Long getContactId() {
-        return contactId;
+    public Long getPicUserId() {
+        return picUserId;
     }
 
-    public void setContactId(Long cPersonInChargeId) {
-        this.contactId = cPersonInChargeId;
+    public void setPicUserId(Long picUserId) {
+        this.picUserId = picUserId;
+    }
+
+    public String getPicUserLogin() {
+        return picUserLogin;
+    }
+
+    public void setPicUserLogin(String picUserLogin) {
+        this.picUserLogin = picUserLogin;
     }
 
     public Long getBusinessCategoryId() {
@@ -63,12 +74,28 @@ public class CPicBusinessCatDTO implements Serializable {
         this.businessCategoryId = cBusinessCategoryId;
     }
 
+    public String getBusinessCategoryName() {
+        return businessCategoryName;
+    }
+
+    public void setBusinessCategoryName(String businessCategoryName) {
+        this.businessCategoryName = businessCategoryName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override
@@ -98,7 +125,7 @@ public class CPicBusinessCatDTO implements Serializable {
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", contactId=" + getContactId() +
+            ", picUserId=" + getPicUserId() +
             ", businessCategoryId=" + getBusinessCategoryId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";

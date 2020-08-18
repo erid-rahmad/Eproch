@@ -72,9 +72,9 @@ class CVendorTaxGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "isFaktur":null
-                , "isPkp":null
-                , "rate":"SAMPLE_TEXT"
+                , "eInvoice":null
+                , "taxableEmployers":null
+                , "rate":"0"
                 , "uid":null
                 , "active":null
                 }""")).asJson

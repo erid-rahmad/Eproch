@@ -97,9 +97,6 @@ public class CLocationQueryService extends QueryService<CLocation> {
             if (criteria.getPostalCode() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPostalCode(), CLocation_.postalCode));
             }
-            if (criteria.getTaxInvoiceAddress() != null) {
-                specification = specification.and(buildSpecification(criteria.getTaxInvoiceAddress(), CLocation_.taxInvoiceAddress));
-            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CLocation_.uid));
             }

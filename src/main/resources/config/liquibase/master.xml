@@ -56,6 +56,8 @@
     <include file="config/liquibase/changelog/20200729152600_added_entity_CVendorBankAcct.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200729152700_added_entity_CVendorTax.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200730065900_added_entity_CPicBusinessCat.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200813110800_added_entity_CFunctionary.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200817184800_added_entity_CTax.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -95,6 +97,8 @@
     <include file="config/liquibase/changelog/20200729152600_added_entity_constraints_CVendorBankAcct.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200729152700_added_entity_constraints_CVendorTax.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200730065900_added_entity_constraints_CPicBusinessCat.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200813110800_added_entity_constraints_CFunctionary.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200817184800_added_entity_constraints_CTax.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 
     <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>

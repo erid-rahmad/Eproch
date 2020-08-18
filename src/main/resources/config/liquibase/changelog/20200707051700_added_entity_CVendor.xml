@@ -98,7 +98,7 @@
                   tableName="c_vendor">
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
-            <column name="tax_id_no" type="numeric"/>
+            <column name="tax_id_no" type="string"/>
             <column name="tax_id_name" type="string"/>
             <column name="branch" type="boolean"/>
             <column name="email" type="string"/>
@@ -113,6 +113,10 @@
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200810230300" author="Ananta Aryadewa">
+        <modifyDataType tableName="c_vendor" columnName="tax_id_no" newDataType="varchar(255)" />
     </changeSet>
 
 </databaseChangeLog>

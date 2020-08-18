@@ -84,7 +84,7 @@ public class CPicBusinessCatResourceIT {
         } else {
             cPersonInCharge = TestUtil.findAll(em, CPersonInCharge.class).get(0);
         }
-        cPicBusinessCat.setContact(cPersonInCharge);
+        cPicBusinessCat.setPic(cPersonInCharge);
         // Add required entity
         CBusinessCategory cBusinessCategory;
         if (TestUtil.findAll(em, CBusinessCategory.class).isEmpty()) {
@@ -126,7 +126,7 @@ public class CPicBusinessCatResourceIT {
         } else {
             cPersonInCharge = TestUtil.findAll(em, CPersonInCharge.class).get(0);
         }
-        cPicBusinessCat.setContact(cPersonInCharge);
+        cPicBusinessCat.setPic(cPersonInCharge);
         // Add required entity
         CBusinessCategory cBusinessCategory;
         if (TestUtil.findAll(em, CBusinessCategory.class).isEmpty()) {
@@ -352,17 +352,17 @@ public class CPicBusinessCatResourceIT {
 
     @Test
     @Transactional
-    public void getAllCPicBusinessCatsByContactIsEqualToSomething() throws Exception {
+    public void getAllCPicBusinessCatsByPicIsEqualToSomething() throws Exception {
         // Get already existing entity
-        CPersonInCharge contact = cPicBusinessCat.getContact();
+        CPersonInCharge pic = cPicBusinessCat.getPic();
         cPicBusinessCatRepository.saveAndFlush(cPicBusinessCat);
-        Long contactId = contact.getId();
+        Long picId = pic.getId();
 
-        // Get all the cPicBusinessCatList where contact equals to contactId
-        defaultCPicBusinessCatShouldBeFound("contactId.equals=" + contactId);
+        // Get all the cPicBusinessCatList where pic equals to picId
+        defaultCPicBusinessCatShouldBeFound("picId.equals=" + picId);
 
-        // Get all the cPicBusinessCatList where contact equals to contactId + 1
-        defaultCPicBusinessCatShouldNotBeFound("contactId.equals=" + (contactId + 1));
+        // Get all the cPicBusinessCatList where pic equals to picId + 1
+        defaultCPicBusinessCatShouldNotBeFound("picId.equals=" + (picId + 1));
     }
 
 

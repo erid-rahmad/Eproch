@@ -1,15 +1,22 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * A CLocation.
@@ -32,9 +39,6 @@ public class CLocation extends AbstractAuditingEntity {
 
     @Column(name = "postal_code")
     private String postalCode;
-
-    @Column(name = "tax_invoice_address")
-    private Boolean taxInvoiceAddress;
 
     @Column(name = "uid")
     private UUID uid;
@@ -85,19 +89,6 @@ public class CLocation extends AbstractAuditingEntity {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
-
-    public Boolean isTaxInvoiceAddress() {
-        return taxInvoiceAddress;
-    }
-
-    public CLocation taxInvoiceAddress(Boolean taxInvoiceAddress) {
-        this.taxInvoiceAddress = taxInvoiceAddress;
-        return this;
-    }
-
-    public void setTaxInvoiceAddress(Boolean taxInvoiceAddress) {
-        this.taxInvoiceAddress = taxInvoiceAddress;
     }
 
     public UUID getUid() {
@@ -180,7 +171,6 @@ public class CLocation extends AbstractAuditingEntity {
             "id=" + getId() +
             ", streetAddress='" + getStreetAddress() + "'" +
             ", postalCode='" + getPostalCode() + "'" +
-            ", taxInvoiceAddress='" + isTaxInvoiceAddress() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

@@ -1,18 +1,29 @@
 package com.bhp.opusb.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.Optional;
+
+import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CAttachment;
 import com.bhp.opusb.repository.CAttachmentRepository;
 import com.bhp.opusb.service.dto.CAttachmentDTO;
 import com.bhp.opusb.service.mapper.CAttachmentMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Service Implementation for managing {@link CAttachment}.
@@ -27,9 +38,52 @@ public class CAttachmentService {
 
     private final CAttachmentMapper cAttachmentMapper;
 
-    public CAttachmentService(CAttachmentRepository cAttachmentRepository, CAttachmentMapper cAttachmentMapper) {
+    private final Path uploadPath;
+
+    private final ApplicationProperties.Attachment attachment;
+
+    public CAttachmentService(CAttachmentRepository cAttachmentRepository, CAttachmentMapper cAttachmentMapper, ApplicationProperties applicationProperties) {
         this.cAttachmentRepository = cAttachmentRepository;
         this.cAttachmentMapper = cAttachmentMapper;
+
+        attachment = applicationProperties.getAttachment();
+        uploadPath = Paths.get(attachment.getUploadDir()).toAbsolutePath().normalize();
+
+        try {
+            Files.createDirectory(uploadPath);
+        } catch (IOException e) {
+            log.error("Error creating directory", e);
+        }
+    }
+
+    public CAttachmentDTO storeFile(MultipartFile file) {
+        String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
+        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
+        try {
+            File tmpFile = File.createTempFile("bhp", fileExtension, null);
+            String fileName = tmpFile.getName();
+            tmpFile.delete();
+
+            Path targetLocation = this.uploadPath.resolve(tmpFile.getName());
+            Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
+
+            ADOrganization organization = new ADOrganization();
+            CAttachment attachment = new CAttachment();
+
+            organization.setId(1L);
+            attachment.active(true)
+                .adOrganization(organization)
+                .fileName(fileName)
+                .documentType(file.getContentType())
+                .mimeType(file.getContentType());
+
+            cAttachmentRepository.save(attachment);
+            return cAttachmentMapper.toDto(attachment);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     /**

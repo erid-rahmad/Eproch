@@ -42,9 +42,8 @@ public class CVendorResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final Long DEFAULT_TAX_ID_NO = 1L;
-    private static final Long UPDATED_TAX_ID_NO = 2L;
-    private static final Long SMALLER_TAX_ID_NO = 1L - 1L;
+    private static final String DEFAULT_TAX_ID_NO = "AAAAAAAAAA";
+    private static final String UPDATED_TAX_ID_NO = "BBBBBBBBBB";
 
     private static final String DEFAULT_TAX_ID_NAME = "AAAAAAAAAA";
     private static final String UPDATED_TAX_ID_NAME = "BBBBBBBBBB";
@@ -387,7 +386,7 @@ public class CVendorResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendor.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].taxIdNo").value(hasItem(DEFAULT_TAX_ID_NO.intValue())))
+            .andExpect(jsonPath("$.[*].taxIdNo").value(hasItem(DEFAULT_TAX_ID_NO)))
             .andExpect(jsonPath("$.[*].taxIdName").value(hasItem(DEFAULT_TAX_ID_NAME)))
             .andExpect(jsonPath("$.[*].branch").value(hasItem(DEFAULT_BRANCH.booleanValue())))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))
@@ -413,7 +412,7 @@ public class CVendorResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cVendor.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.taxIdNo").value(DEFAULT_TAX_ID_NO.intValue()))
+            .andExpect(jsonPath("$.taxIdNo").value(DEFAULT_TAX_ID_NO))
             .andExpect(jsonPath("$.taxIdName").value(DEFAULT_TAX_ID_NAME))
             .andExpect(jsonPath("$.branch").value(DEFAULT_BRANCH.booleanValue()))
             .andExpect(jsonPath("$.email").value(DEFAULT_EMAIL))
@@ -576,57 +575,30 @@ public class CVendorResourceIT {
         // Get all the cVendorList where taxIdNo is null
         defaultCVendorShouldNotBeFound("taxIdNo.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
-    public void getAllCVendorsByTaxIdNoIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllCVendorsByTaxIdNoContainsSomething() throws Exception {
         // Initialize the database
         cVendorRepository.saveAndFlush(cVendor);
 
-        // Get all the cVendorList where taxIdNo is greater than or equal to DEFAULT_TAX_ID_NO
-        defaultCVendorShouldBeFound("taxIdNo.greaterThanOrEqual=" + DEFAULT_TAX_ID_NO);
+        // Get all the cVendorList where taxIdNo contains DEFAULT_TAX_ID_NO
+        defaultCVendorShouldBeFound("taxIdNo.contains=" + DEFAULT_TAX_ID_NO);
 
-        // Get all the cVendorList where taxIdNo is greater than or equal to UPDATED_TAX_ID_NO
-        defaultCVendorShouldNotBeFound("taxIdNo.greaterThanOrEqual=" + UPDATED_TAX_ID_NO);
+        // Get all the cVendorList where taxIdNo contains UPDATED_TAX_ID_NO
+        defaultCVendorShouldNotBeFound("taxIdNo.contains=" + UPDATED_TAX_ID_NO);
     }
 
     @Test
     @Transactional
-    public void getAllCVendorsByTaxIdNoIsLessThanOrEqualToSomething() throws Exception {
+    public void getAllCVendorsByTaxIdNoNotContainsSomething() throws Exception {
         // Initialize the database
         cVendorRepository.saveAndFlush(cVendor);
 
-        // Get all the cVendorList where taxIdNo is less than or equal to DEFAULT_TAX_ID_NO
-        defaultCVendorShouldBeFound("taxIdNo.lessThanOrEqual=" + DEFAULT_TAX_ID_NO);
+        // Get all the cVendorList where taxIdNo does not contain DEFAULT_TAX_ID_NO
+        defaultCVendorShouldNotBeFound("taxIdNo.doesNotContain=" + DEFAULT_TAX_ID_NO);
 
-        // Get all the cVendorList where taxIdNo is less than or equal to SMALLER_TAX_ID_NO
-        defaultCVendorShouldNotBeFound("taxIdNo.lessThanOrEqual=" + SMALLER_TAX_ID_NO);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorsByTaxIdNoIsLessThanSomething() throws Exception {
-        // Initialize the database
-        cVendorRepository.saveAndFlush(cVendor);
-
-        // Get all the cVendorList where taxIdNo is less than DEFAULT_TAX_ID_NO
-        defaultCVendorShouldNotBeFound("taxIdNo.lessThan=" + DEFAULT_TAX_ID_NO);
-
-        // Get all the cVendorList where taxIdNo is less than UPDATED_TAX_ID_NO
-        defaultCVendorShouldBeFound("taxIdNo.lessThan=" + UPDATED_TAX_ID_NO);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorsByTaxIdNoIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        cVendorRepository.saveAndFlush(cVendor);
-
-        // Get all the cVendorList where taxIdNo is greater than DEFAULT_TAX_ID_NO
-        defaultCVendorShouldNotBeFound("taxIdNo.greaterThan=" + DEFAULT_TAX_ID_NO);
-
-        // Get all the cVendorList where taxIdNo is greater than SMALLER_TAX_ID_NO
-        defaultCVendorShouldBeFound("taxIdNo.greaterThan=" + SMALLER_TAX_ID_NO);
+        // Get all the cVendorList where taxIdNo does not contain UPDATED_TAX_ID_NO
+        defaultCVendorShouldBeFound("taxIdNo.doesNotContain=" + UPDATED_TAX_ID_NO);
     }
 
 
@@ -1428,7 +1400,7 @@ public class CVendorResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendor.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].taxIdNo").value(hasItem(DEFAULT_TAX_ID_NO.intValue())))
+            .andExpect(jsonPath("$.[*].taxIdNo").value(hasItem(DEFAULT_TAX_ID_NO)))
             .andExpect(jsonPath("$.[*].taxIdName").value(hasItem(DEFAULT_TAX_ID_NAME)))
             .andExpect(jsonPath("$.[*].branch").value(hasItem(DEFAULT_BRANCH.booleanValue())))
             .andExpect(jsonPath("$.[*].email").value(hasItem(DEFAULT_EMAIL)))

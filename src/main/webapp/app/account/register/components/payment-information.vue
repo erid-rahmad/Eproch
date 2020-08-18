@@ -50,11 +50,13 @@
                     prop="account"
                     min-width="128"
                     :label="$t('register.payment.account')"
+                    show-overflow-tooltip
                 />
                 <el-table-column
                     prop="supportingfile.name"
                     min-width="128"
                     :label="$t('register.payment.supportingfile')"
+                    show-overflow-tooltip
                 />
                 <el-table-column
                     fixed="right"

@@ -62,15 +62,14 @@
             prop="supportingfile">
             
             <el-upload
-                :limit="1"
-                :file-list="fileList"
-                class="upload-demo"
                 ref="upload"
-                action=""
-                :on-change="getFile"
-                :auto-upload="false">
+                action="/api/c-attachments/upload"
+                :file-list="fileList"
+                :limit="1"
+                :on-change="onUploadChange"
+                :on-error="onUploadError"
+                :on-success="onUploadSuccess">
                 <el-button slot="trigger" type="primary" icon="el-icon-search">select file</el-button>
-                <!--<el-button type="success" @click="submitUpload">upload to server</el-button>-->
                 <div class="el-upload__tip" slot="tip">files with a size less than 500kb</div>
             </el-upload>
 

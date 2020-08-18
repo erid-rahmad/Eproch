@@ -100,9 +100,6 @@ public class CPersonInChargeQueryService extends QueryService<CPersonInCharge> {
             if (criteria.getPhone() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPhone(), CPersonInCharge_.phone));
             }
-            if (criteria.getFunctionary() != null) {
-                specification = specification.and(buildSpecification(criteria.getFunctionary(), CPersonInCharge_.functionary));
-            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), CPersonInCharge_.active));
             }

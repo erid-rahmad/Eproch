@@ -25,10 +25,10 @@
                 <constraints nullable="true" />
             </column>
             <column name="mandatory_business_categories" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
             <column name="additional_business_categories" type="varchar(255)">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
             <column name="mandatory_for_company" type="boolean">
                 <constraints nullable="true" />
@@ -102,6 +102,11 @@
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200810212400" author="Ananta Aryadewa">
+        <addNotNullConstraint tableName="c_registration_doc_type" columnName="mandatory_business_categories" />
+        <addNotNullConstraint tableName="c_registration_doc_type" columnName="additional_business_categories" />
     </changeSet>
 
 </databaseChangeLog>

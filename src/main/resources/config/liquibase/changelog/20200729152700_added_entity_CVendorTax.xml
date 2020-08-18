@@ -79,17 +79,36 @@
                   separator=";"
                   tableName="c_vendor_tax">
             <column name="id" type="numeric"/>
-            <column name="is_faktur" type="boolean"/>
-            <column name="is_pkp" type="boolean"/>
-            <column name="rate" type="string"/>
+            <column name="e_invoice" type="boolean"/>
+            <column name="taxable_employers" type="boolean"/>
+            <column name="rate" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="vendor_id" type="numeric"/>
-            <column name="tax_category_id" type="numeric"/>
-            <column name="tax_rate_id" type="numeric"/>
+            <column name="tax_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200810220500" author="Ananta Aryadewa">
+        <dropColumn tableName="c_vendor_tax" columnName="is_faktur" />
+        <dropColumn tableName="c_vendor_tax" columnName="is_pkp" />
+        <addColumn tableName="c_vendor_tax">
+            <column name="invoice" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="taxable_employers" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200818020900" author="Ananta Aryadewa">
+        <dropColumn tableName="c_vendor_tax" columnName="tax_category_id"/>
+        <renameColumn tableName="c_vendor_tax" oldColumnName="invoice" newColumnName="e_invoice" />
+        <renameColumn tableName="c_vendor_tax" oldColumnName="tax_rate_id" newColumnName="tax_id" />
+        <modifyDataType tableName="c_vendor_tax" columnName="rate" newDataType="decimal(21,2)" />
     </changeSet>
 
 </databaseChangeLog>

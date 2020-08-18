@@ -1,7 +1,5 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -12,14 +10,14 @@ import javax.validation.constraints.NotNull;
  */
 public class CLocationDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
     private String streetAddress;
 
     private String postalCode;
-
-    private Boolean taxInvoiceAddress;
 
     private UUID uid;
 
@@ -54,14 +52,6 @@ public class CLocationDTO extends AbstractAuditingDTO {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
-    }
-
-    public Boolean isTaxInvoiceAddress() {
-        return taxInvoiceAddress;
-    }
-
-    public void setTaxInvoiceAddress(Boolean taxInvoiceAddress) {
-        this.taxInvoiceAddress = taxInvoiceAddress;
     }
 
     public UUID getUid() {
@@ -139,7 +129,6 @@ public class CLocationDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", streetAddress='" + getStreetAddress() + "'" +
             ", postalCode='" + getPostalCode() + "'" +
-            ", taxInvoiceAddress='" + isTaxInvoiceAddress() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", cityId='" + getCityId() + "'" +

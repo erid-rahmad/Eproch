@@ -73,7 +73,7 @@ class CVendorGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "name":"SAMPLE_TEXT"
-                , "taxIdNo":null
+                , "taxIdNo":"SAMPLE_TEXT"
                 , "taxIdName":"SAMPLE_TEXT"
                 , "branch":null
                 , "email":"SAMPLE_TEXT"
