@@ -92,16 +92,8 @@
     </changeSet>
 
     <changeSet id="20200810220500" author="Ananta Aryadewa">
-        <dropColumn tableName="c_vendor_tax" columnName="is_faktur" />
-        <dropColumn tableName="c_vendor_tax" columnName="is_pkp" />
-        <addColumn tableName="c_vendor_tax">
-            <column name="invoice" type="boolean">
-                <constraints nullable="true" />
-            </column>
-            <column name="taxable_employers" type="boolean">
-                <constraints nullable="true" />
-            </column>
-        </addColumn>
+        <renameColumn tableName="c_vendor_tax" oldColumnName="is_faktur" newColumnName="invoice" />
+        <renameColumn tableName="c_vendor_tax" oldColumnName="is_pkp" newColumnName="taxable_employers" />
     </changeSet>
 
     <changeSet id="20200818020900" author="Ananta Aryadewa">

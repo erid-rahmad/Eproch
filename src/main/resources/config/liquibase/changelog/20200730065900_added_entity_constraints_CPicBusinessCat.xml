@@ -8,10 +8,10 @@
     -->
     <changeSet id="20200730065900-2" author="jhipster">
         
-        <addForeignKeyConstraint baseColumnNames="contact_id"
+        <addForeignKeyConstraint baseColumnNames="pic_user_id"
                                  baseTableName="c_pic_business_cat"
-                                 constraintName="fk_c_pic_business_cat_contact_id"
-                                 referencedColumnNames="id"
+                                 constraintName="fk_c_pic_business_cat_pic_user_id"
+                                 referencedColumnNames="user_id"
                                  referencedTableName="c_person_in_charge"/>
 
         <addForeignKeyConstraint baseColumnNames="business_category_id"
@@ -28,12 +28,16 @@
 
     </changeSet>
 
-    <changeSet id="20200818003300-2" author="Ananta Aryadewa">
+    <!-- <changeSet id="20200818003300-2" author="Ananta Aryadewa">
+        
+        <dropForeignKeyConstraint baseTableName="c_pic_business_cat"
+                                  constraintName="fk_c_pic_business_cat_contact_id"/>
+        
         <addForeignKeyConstraint baseColumnNames="pic_user_id"
                                  baseTableName="c_pic_business_cat"
                                  constraintName="fk_c_pic_business_cat_pic_user_id"
                                  referencedColumnNames="user_id"
                                  referencedTableName="c_person_in_charge"/>
  
-    </changeSet>
+    </changeSet> -->
 </databaseChangeLog>

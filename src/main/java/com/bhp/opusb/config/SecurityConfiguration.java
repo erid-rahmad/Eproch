@@ -94,11 +94,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/api/c-banks",
                 "/api/c-currencies",
                 "/api/c-taxes"
-            ).anonymous()
+            ).permitAll()
             .antMatchers(
                 HttpMethod.POST,
                 "/api/c-attachments/upload"
-            ).anonymous()
+            ).permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/websocket/**").permitAll()

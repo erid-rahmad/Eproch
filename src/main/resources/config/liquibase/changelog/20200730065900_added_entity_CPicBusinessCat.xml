@@ -21,7 +21,7 @@
             <column name="active" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="contact_id" type="bigint">
+            <column name="pic_user_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <column name="business_category_id" type="bigint">
@@ -76,8 +76,8 @@
         </loadData>
     </changeSet>
 
-    <changeSet id="20200818011200-1" author="Ananta Aryadewa">
+    <!-- <changeSet id="20200818011200-1" author="Ananta Aryadewa">
         <renameColumn tableName="c_pic_business_cat" oldColumnName="contact_id" newColumnName="pic_user_id"/>
-    </changeSet>
+    </changeSet> -->
 
 </databaseChangeLog>

@@ -18,6 +18,7 @@ logging:
     ROOT: INFO
     io.github.jhipster: INFO
     com.bhp.opusb: INFO
+    org.apache.kafka.clients.NetworkClient: ERROR
 
 management:
   metrics:
@@ -26,16 +27,33 @@ management:
         enabled: false
 
 spring:
+  profiles:
+    active: prod
+    mail:
+      host: BHPCAS1SRV.berca.co.id
+      port: 587
+      username: admin.opusb@berca.co.id
+      password: cSWZKe%o~h@iaUg4
+      protocol: smtp
+      tls: true
+      properties.mail.smtp:
+        auth: true
+        starttls.enable: true
+        ssl.trust: BHPCAS1SRV.berca.co.id
   devtools:
     restart:
       enabled: false
     livereload:
       enabled: false
+  cloud:
+    dataflow:
+      client:
+        server-uri: http://bhp-dwh-prd:9393
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/OpusWebApp
-    username: OpusWebApp
-    password:
+    url: jdbc:postgresql://bhp-erpdbs-dev:5434/bhp_opusbweb_dev
+    username: bhp_opusweb_dev
+    password: bhp_opusweb_dev
     hikari:
       poolName: Hikari
       auto-commit: false

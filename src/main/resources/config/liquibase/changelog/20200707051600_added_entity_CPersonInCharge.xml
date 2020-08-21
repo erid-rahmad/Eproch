@@ -87,9 +87,6 @@
     </changeSet>
 
     <changeSet id="20200818003300-1" author="Ananta Aryadewa">
-        <dropForeignKeyConstraint baseTableName="c_pic_business_cat"
-                                  constraintName="fk_c_pic_business_cat_contact_id"/>
-        
         <dropColumn tableName="c_person_in_charge" columnName="id"/>
         <addPrimaryKey tableName="c_person_in_charge" columnNames="user_id"/>
     </changeSet>
