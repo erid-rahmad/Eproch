@@ -22,8 +22,15 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
     private Long vendorId;
 
     private Long locationId;
+    private String locationName;
+    private String locationAddress;
+    private String locationPostalCode;
+    private String locationCityName;
+    private String locationRegionName;
+    private String locationCountryName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -73,12 +80,69 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
         this.locationId = cLocationId;
     }
 
+    public String getLocationName() {
+        //return locationName;
+        return (locationAddress + ", " + locationCityName + ", " + locationRegionName + ", " + locationCountryName + ", " + locationPostalCode);
+    }
+
+    public void setLocationName(String locationName) {
+        this.locationName = locationName;
+    }
+
+    public String getLocationAddress() {
+        return locationAddress;
+    }
+
+    public void setLocationAddress(String locationAddress) {
+        this.locationAddress = locationAddress;
+    }
+
+    public String getLocationPostalCode() {
+        return locationPostalCode;
+    }
+
+    public void setLocationPostalCode(String locationPostalCode) {
+        this.locationPostalCode = locationPostalCode;
+    }
+
+    public String getLocationCityName() {
+        return locationCityName;
+    }
+
+    public void setLocationCityName(String locationCityName) {
+        this.locationCityName = locationCityName;
+    }
+    
+    public String getLocationRegionName() {
+        return locationRegionName;
+    }
+
+    public void setLocationRegionName(String locationRegionName) {
+        this.locationRegionName = locationRegionName;
+    }
+
+    public String getLocationCountryName() {
+        return locationCountryName;
+    }
+
+    public void setLocationCountryName(String locationCountryName) {
+        this.locationCountryName = locationCountryName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override
@@ -111,7 +175,12 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", vendorId=" + getVendorId() +
             ", locationId=" + getLocationId() +
+            ", locationName=" + getLocationName() +
+            ", locationAddress=" + getLocationAddress() +
+            ", locationPostalCode=" + getLocationPostalCode() +
+            ", locationCityName=" + getLocationCityName() +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
 }

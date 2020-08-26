@@ -99,12 +99,12 @@ public class RegistrationDTO {
         private String npwp;
         private String npwpName;
         private String npwpAddress;
-        private Long npwpCity;
+        private Long npwpCityId;
         private String npwpPostalCode;
         private String address;
-        private Long city;
+        private Long cityId;
         private String postalCode;
-        private Long taxIdAttachmentId;
+        private Long fileId;
 
         public String getName() {
             return name;
@@ -186,12 +186,12 @@ public class RegistrationDTO {
             this.npwpAddress = npwpAddress;
         }
 
-        public Long getNpwpCity() {
-            return npwpCity;
+        public Long getNpwpCityId() {
+            return npwpCityId;
         }
 
-        public void setNpwpCity(Long npwpCity) {
-            this.npwpCity = npwpCity;
+        public void setNpwpCityId(Long npwpCityId) {
+            this.npwpCityId = npwpCityId;
         }
 
         public String getNpwpPostalCode() {
@@ -210,12 +210,12 @@ public class RegistrationDTO {
             this.address = address;
         }
 
-        public Long getCity() {
-            return city;
+        public Long getCityId() {
+            return cityId;
         }
 
-        public void setCity(Long city) {
-            this.city = city;
+        public void setCityId(Long cityId) {
+            this.cityId = cityId;
         }
 
         public String getPostalCode() {
@@ -226,12 +226,12 @@ public class RegistrationDTO {
             this.postalCode = postalCode;
         }
 
-        public Long getTaxIdAttachmentId() {
-            return taxIdAttachmentId;
+        public Long getFileId() {
+            return fileId;
         }
 
-        public void setTaxIdAttachmentId(Long taxIdAttachmentId) {
-            this.taxIdAttachmentId = taxIdAttachmentId;
+        public void setFileId(Long fileId) {
+            this.fileId = fileId;
         }
     }
 

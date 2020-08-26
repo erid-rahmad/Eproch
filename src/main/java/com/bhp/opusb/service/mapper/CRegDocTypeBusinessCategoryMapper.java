@@ -13,6 +13,7 @@ import org.mapstruct.*;
 public interface CRegDocTypeBusinessCategoryMapper extends EntityMapper<CRegDocTypeBusinessCategoryDTO, CRegDocTypeBusinessCategory> {
 
     @Mapping(source = "documentType.id", target = "documentTypeId")
+    @Mapping(source = "documentType.name", target = "documentTypeName")
     @Mapping(source = "businessCategory.id", target = "businessCategoryId")
     @Mapping(source = "businessCategory.name", target = "businessCategoryName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")

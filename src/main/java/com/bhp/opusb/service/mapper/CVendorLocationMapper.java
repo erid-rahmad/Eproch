@@ -14,7 +14,14 @@ public interface CVendorLocationMapper extends EntityMapper<CVendorLocationDTO, 
 
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "location.id", target = "locationId")
+    @Mapping(source = "location.streetAddress", target = "locationName")
+    @Mapping(source = "location.streetAddress", target = "locationAddress")
+    @Mapping(source = "location.postalCode", target = "locationPostalCode")
+    @Mapping(source = "location.city.name", target = "locationCityName")
+    @Mapping(source = "location.city.region.name", target = "locationRegionName")
+    @Mapping(source = "location.city.region.country.name", target = "locationCountryName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     CVendorLocationDTO toDto(CVendorLocation cVendorLocation);
 
     @Mapping(source = "vendorId", target = "vendor")

@@ -107,22 +107,22 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="6">
                             <el-form-item :label="$t('register.basic.address.country')" prop="country" required>
-                                <el-input class="form-input" v-model="company.country" :disabled="true" />
+                                <el-input class="form-input" v-model="company.countryName" :disabled="true" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-form-item :label="$t('register.basic.address.region')" prop="region" required>
-                                <el-input class="form-input" v-model="company.region" :disabled="true" />
+                                <el-input class="form-input" v-model="company.regionName" :disabled="true" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-form-item :label="$t('register.basic.address.npwpCountry')" prop="npwpCountry" required>
-                                <el-input class="form-input" v-model="company.npwpCountry" :disabled="true" />
+                                <el-input class="form-input" v-model="company.npwpCountryName" :disabled="true" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-form-item :label="$t('register.basic.address.npwpRegion')" prop="npwpRegion" required>
-                                <el-input class="form-input" v-model="company.npwpRegion" :disabled="true" />
+                                <el-input class="form-input" v-model="company.npwpRegionName" :disabled="true" />
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -130,7 +130,7 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="6">
                             <el-form-item :label="$t('register.basic.address.city')" prop="city" required>
-                                <el-input class="form-input" v-model="company.city" :disabled="true" />
+                                <el-input class="form-input" v-model="company.cityName" :disabled="true" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -140,7 +140,7 @@
                         </el-col>
                         <el-col :span="6">
                             <el-form-item :label="$t('register.basic.address.npwpCity')" prop="npwpCity" required>
-                                <el-input class="form-input" v-model="company.npwpCity" :disabled="true" />
+                                <el-input class="form-input" v-model="company.npwpCityName" :disabled="true" />
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">

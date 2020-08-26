@@ -4,7 +4,7 @@
         <p>
             <el-alert
                 :title="$t('register.pic.contact.description')"
-                type="info"
+                :type="errors.type.contacts"
                 :closable="false"
                 show-icon>
             </el-alert>
@@ -22,6 +22,7 @@
                 ref="contacts"
                 max-height="250"
                 style="width: 100%"
+                :rules="rules"
                 :data="contacts"
             >
                 <el-table-column
@@ -90,7 +91,7 @@
         <p>
             <el-alert
                 :title="$t('register.pic.functionary.description')"
-                :type="errors.type"
+                :type="errors.type.functionaries"
                 :closable="false"
                 show-icon>
             </el-alert>

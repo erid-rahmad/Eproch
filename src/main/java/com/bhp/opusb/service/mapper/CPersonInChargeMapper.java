@@ -13,9 +13,12 @@ import org.mapstruct.*;
 public interface CPersonInChargeMapper extends EntityMapper<CPersonInChargeDTO, CPersonInCharge> {
 
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.firstName", target = "userName")
+    @Mapping(source = "user.email", target = "email")
     @Mapping(source = "user.login", target = "userLogin")
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     CPersonInChargeDTO toDto(CPersonInCharge cPersonInCharge);
 
     @Mapping(source = "userId", target = "user")

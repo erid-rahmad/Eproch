@@ -46,8 +46,8 @@ export default class StepsForm extends Vue {
   eventBus = new Vue();
   registration = {
     loginDetails: {
-      login: 'user12',
-      email: 'user12@gmail.com',
+      login: 'user1',
+      email: 'user1@gmail.com',
       password: 'user',
       passwordConfirmation: 'user'
     },
@@ -116,19 +116,10 @@ export default class StepsForm extends Vue {
   retrieveBusinessCategory() {
     const businessCategory = Array.from(registrationStore.businessCategories);
     this.registration.businesses = businessCategory;
-    /*
-    this.dynamicWindowService('/api/c-business-categories')
-        .retrieve({
-            criteriaQuery: [`sector.equals=TERTIARY`]
-            .concat(businessCategory.map(id => `id.in=${id}`))
-        })
-        .then(res=>{
-            this.registration.businesses = res.data;
-        });
-    */
   }
 
   submit() {
+    this.retrieveBusinessCategory();
     // Set the tax details and strip out the ID of each tax.
     this.registration.taxes = registrationStore.taxes;
     this.registration.taxes.forEach(tax => { delete tax.id });
@@ -143,6 +134,8 @@ export default class StepsForm extends Vue {
       .processRegistration(this.registration)
       .then(() => {
         this.success = true;
+        this.$router.go(-1);
+        this.registration = null;
         this.$notify({
           title: 'Success',
           dangerouslyUseHTMLString: true,

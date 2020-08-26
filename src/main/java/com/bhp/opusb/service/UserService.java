@@ -367,6 +367,11 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities(Long id) {
         return userRepository.findOneWithAuthoritiesById(id);
     }

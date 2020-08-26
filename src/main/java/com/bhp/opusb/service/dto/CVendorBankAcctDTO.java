@@ -27,14 +27,19 @@ public class CVendorBankAcctDTO extends AbstractAuditingDTO {
 
 
     private Long vendorId;
+    private String vendorName;
 
     private Long bankId;
+    private String bankName;
 
     private Long currencyId;
+    private String currencyName;
 
     private Long fileId;
+    private String fileName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -124,6 +129,47 @@ public class CVendorBankAcctDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public String getBankName() {
+        return bankName;
+    }
+
+    public void setBankName(String bankName) {
+        this.bankName = bankName;
+    }
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -155,10 +201,15 @@ public class CVendorBankAcctDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", vendorId=" + getVendorId() +
+            ", vendorName=" + getVendorName() +
             ", bankId=" + getBankId() +
+            ", bankName=" + getBankName() +
             ", currencyId=" + getCurrencyId() +
+            ", currencyName=" + getCurrencyName() +
             ", fileId=" + getFileId() +
+            ", fileName=" + getFileName() +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
 }

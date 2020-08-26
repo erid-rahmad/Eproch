@@ -13,10 +13,15 @@ import org.mapstruct.*;
 public interface CVendorBankAcctMapper extends EntityMapper<CVendorBankAcctDTO, CVendorBankAcct> {
 
     @Mapping(source = "vendor.id", target = "vendorId")
+    @Mapping(source = "vendor.name", target = "vendorName")
     @Mapping(source = "bank.id", target = "bankId")
+    @Mapping(source = "bank.name", target = "bankName")
     @Mapping(source = "currency.id", target = "currencyId")
+    @Mapping(source = "currency.name", target = "currencyName")
     @Mapping(source = "file.id", target = "fileId")
+    @Mapping(source = "file.fileName", target = "fileName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     CVendorBankAcctDTO toDto(CVendorBankAcct cVendorBankAcct);
 
     @Mapping(source = "vendorId", target = "vendor")

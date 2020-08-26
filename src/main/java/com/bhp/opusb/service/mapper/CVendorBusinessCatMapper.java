@@ -14,7 +14,9 @@ public interface CVendorBusinessCatMapper extends EntityMapper<CVendorBusinessCa
 
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "businessCategory.id", target = "businessCategoryId")
+    @Mapping(source = "businessCategory.name", target = "businessCategoryName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     CVendorBusinessCatDTO toDto(CVendorBusinessCat cVendorBusinessCat);
 
     @Mapping(source = "vendorId", target = "vendor")

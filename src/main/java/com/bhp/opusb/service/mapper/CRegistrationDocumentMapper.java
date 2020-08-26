@@ -13,9 +13,13 @@ import org.mapstruct.*;
 public interface CRegistrationDocumentMapper extends EntityMapper<CRegistrationDocumentDTO, CRegistrationDocument> {
 
     @Mapping(source = "type.id", target = "typeId")
+    @Mapping(source = "type.name", target = "typeName")
     @Mapping(source = "file.id", target = "fileId")
+    @Mapping(source = "file.fileName", target = "fileName")
     @Mapping(source = "vendor.id", target = "vendorId")
+    @Mapping(source = "vendor.name", target = "vendorName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     CRegistrationDocumentDTO toDto(CRegistrationDocument cRegistrationDocument);
 
     @Mapping(source = "typeId", target = "type")

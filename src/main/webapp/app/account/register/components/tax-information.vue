@@ -103,8 +103,8 @@
                 :event-bus="eventBus"
             />
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editDialogVisible = false">Cancel</el-button>
-                <el-button type="primary" @click="onTaxesApplied">Add</el-button>
+                <el-button @click="editDialogVisible = false" icon="el-icon-close">{{ $t('entity.action.cancel') }}</el-button>
+                <el-button type="primary" @click="onTaxesApplied" icon="el-icon-check">{{ $t('entity.action.save') }}</el-button>
             </span>
         </el-dialog>
 

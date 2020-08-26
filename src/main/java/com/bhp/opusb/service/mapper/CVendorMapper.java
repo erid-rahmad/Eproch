@@ -13,7 +13,9 @@ import org.mapstruct.*;
 public interface CVendorMapper extends EntityMapper<CVendorDTO, CVendor> {
 
     @Mapping(source = "taxIdFile.id", target = "taxIdFileId")
+    @Mapping(source = "taxIdFile.fileName", target = "taxIdFileName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     CVendorDTO toDto(CVendor cVendor);
 
     @Mapping(source = "taxIdFileId", target = "taxIdFile")

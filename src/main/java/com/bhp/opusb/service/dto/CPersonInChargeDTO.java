@@ -32,6 +32,7 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
     private Boolean active;
 
     private Long userId;
+    private String userName;
 
     @Size(min = ManagedUserVM.PASSWORD_MIN_LENGTH, max = ManagedUserVM.PASSWORD_MAX_LENGTH)
     private String password;
@@ -49,6 +50,7 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
     private Long vendorId;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     public Long getId() {
         return id;
@@ -96,6 +98,15 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
 
     public void setUserId(Long userId) {
         this.userId = userId;
+    }
+
+    
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getPassword() {
@@ -154,6 +165,15 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public List<Long> getBusinessCategories() {
         return businessCategories;
     }
@@ -186,8 +206,9 @@ public class CPersonInChargeDTO extends AbstractAuditingDTO {
     @Override
     public String toString() {
         return "CPersonInChargeDTO{" + "id=" + getId() + ", uid='" + getUid() + "'" + ", position='" + getPosition()
-                + "'" + ", phone='" + getPhone() + "'" + ", active='" + isActive() + "'" + ", userId=" + getUserId()
+                + "'" + ", phone='" + getPhone() + "'" + ", active='" + isActive() + "'" + ", userId=" + getUserId() + ", userName=" + getUserName()
                 + ", userLogin='" + getUserLogin() + "'" + ", vendorId=" + getVendorId() + ", adOrganizationId="
-                + getAdOrganizationId() + "}";
+                + getAdOrganizationId() + ", adOrganizationName="
+                + getAdOrganizationName() + "}";
     }
 }

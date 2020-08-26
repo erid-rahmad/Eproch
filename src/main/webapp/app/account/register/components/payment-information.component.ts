@@ -125,12 +125,7 @@ export default class PaymentInformation extends PaymentInformationProps {
             let passed = true;
 
             if (this.payments.length === 0) {
-                /*
-                const types = registrationStore.mandatoryDocumentTypes
-                    .map(item => item.name)
-                    .join(', ');
-                */
-                passed = true;
+                passed = false;
                 this.errors.payment = `Your company must have at least a payment`;
                 this.errors.type = 'error';
                 

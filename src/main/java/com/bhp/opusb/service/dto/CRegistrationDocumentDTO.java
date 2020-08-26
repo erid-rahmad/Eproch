@@ -26,8 +26,10 @@ public class CRegistrationDocumentDTO extends AbstractAuditingDTO {
 
 
     private Long typeId;
+    private String typeName;
 
     private Long fileId;
+    private String fileName;
 
     private Long vendorId;
     private String vendorName;
@@ -83,12 +85,28 @@ public class CRegistrationDocumentDTO extends AbstractAuditingDTO {
         this.typeId = cRegistrationDocTypeId;
     }
 
+    public String getTypeName() {
+        return typeName;
+    }
+
+    public void setTypeName(String typeName) {
+        this.typeName = typeName;
+    }
+    
     public Long getFileId() {
         return fileId;
     }
 
     public void setFileId(Long cAttachmentId) {
         this.fileId = cAttachmentId;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public Long getVendorId() {
@@ -153,9 +171,15 @@ public class CRegistrationDocumentDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", typeId=" + getTypeId() +
+            ", typeName=" + getTypeName() +
             ", fileId=" + getFileId() +
+            ", fileName=" + getFileName() +
             ", vendorId=" + getVendorId() +
+            ", vendorName=" + getVendorName() +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
+
+    
 }

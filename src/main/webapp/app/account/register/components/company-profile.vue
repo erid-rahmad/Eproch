@@ -60,20 +60,24 @@
             clearable
             v-model="company.npwpName" />
         </el-form-item>
-        <el-form-item :label="$t('register.basic.basic.npwpFile')" prop="file">
-          <el-upload
-            :limit="1"
-            class="upload-demo"
-            ref="upload"
-            action=""
-            :on-change="getFile"
-            :on-exceed="handleExceed"
-            :on-remove="handleRemove"
-            :auto-upload="false">
-              <el-button slot="trigger" type="primary" icon="el-icon-search">select file</el-button>
-              <!--<el-button type="success" @click="submitUpload">upload to server</el-button>-->
-              <span style="margin-left: 10px;" class="el-upload__tip" slot="tip">files with a size less than 500kb</span>
-          </el-upload>
+        <el-form-item 
+          :label="$t('register.basic.basic.npwpFile')" 
+          prop="file">
+            <el-upload
+                ref="upload"
+                :action="action"
+                :accept="accept"
+                :file-list="fileList"
+                :limit="limit"
+                :before-upload="handleBeforeUpload"
+                :on-change="onUploadChange"
+                :on-exceed="handleExceed"
+                :on-remove="handleRemove"
+                :on-error="onUploadError"
+                :on-success="onUploadSuccess">
+                <el-button slot="trigger" type="primary" icon="el-icon-search">select file</el-button>
+                <span style="margin-left: 10px;" class="el-upload__tip" slot="tip">files with a size less than 5Mb</span>
+            </el-upload>
         </el-form-item>
       </el-col>
     </el-row>
@@ -116,7 +120,7 @@
               v-for="item in countryOptions"
               :key="item.key"
               :label="item.value"
-              :value="item.key"
+              :value="item.key + '_' + item.value"
             />
           </el-select>
         </el-form-item>
@@ -134,7 +138,7 @@
               v-for="item in regionOptions"
               :key="item.key"
               :label="item.value"
-              :value="item.key"
+              :value="item.key + '_' + item.value"
             />
           </el-select>
         </el-form-item>
@@ -152,7 +156,7 @@
               v-for="item in countryOptionsNpwp"
               :key="item.key"
               :label="item.value"
-              :value="item.key"
+              :value="item.key + '_' + item.value"
             />
           </el-select>
         </el-form-item>
@@ -170,7 +174,7 @@
               v-for="item in regionOptionsNpwp"
               :key="item.key"
               :label="item.value"
-              :value="item.key"
+              :value="item.key + '_' + item.value"
             />
           </el-select>
         </el-form-item>
@@ -190,7 +194,7 @@
               v-for="item in cityOptions"
               :key="item.key"
               :label="item.value"
-              :value="item.key"
+              :value="item.key + '_' + item.value"
             />
           </el-select>
         </el-form-item>
@@ -217,7 +221,7 @@
               v-for="item in cityOptionsNpwp"
               :key="item.key"
               :label="item.value"
-              :value="item.key"
+              :value="item.key + '_' + item.value"
             />
           </el-select>
         </el-form-item>

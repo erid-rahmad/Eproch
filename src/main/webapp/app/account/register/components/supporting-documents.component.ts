@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import Component from 'vue-class-component';
-//import SupportingDocumentsForm from './supporting-documents-form.vue';
 import SupportingDocumentsUpdate from './supporting-documents-update.vue';
 import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store';
 import DynamicWindowService from '../../../core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import { Inject } from 'vue-property-decorator';
+import Schema from 'async-validator';
 
 const DocumentProps = Vue.extend({
   props: {
@@ -43,6 +43,15 @@ export default class SupportingDocuments extends DocumentProps {
         mainDocuments: null,
         type: 'info'
     }
+    private validationSchema: any = {};
+    rules = {
+        documentNo: {
+            required: true,
+        },
+        file: {
+            required: true,
+        }
+    };
 
     mounted() {
         this.eventBus.$on('validate-form', this.validate);
@@ -175,19 +184,30 @@ export default class SupportingDocuments extends DocumentProps {
 
     private validate(formIndex: number) {
         if (formIndex === 3) {
-            let passed = true;
-            if (this.mainDocuments.length < registrationStore.mandatoryDocumentTypes.length) {
-                /*
-                const types = registrationStore.mandatoryDocumentTypes
-                    .map(item => item.name)
-                    .join(', ');
-                */
-                passed = false;
-                this.errors.mainDocuments = `Document of the following document types are required: `;//${types}
-                this.errors.type = 'error';
-            } else {
-                this.errors.mainDocuments = null;
-                this.errors.type = 'info';
+            let passed;
+            let offsets = 0;
+            this.validationSchema = {};
+            this.validationSchema = new Schema(this.rules);
+            for(let field=0; field<this.mainDocuments.length; field++){                
+                this.validationSchema.validate(this.mainDocuments[field], (errors, fields) => {
+                    if (errors) {
+                        this.$notify({
+                            title: 'Error',
+                            message: errors[0].message + " in " + this.mainDocuments[field].typeName,
+                            type: 'error',
+                            duration: 5000,
+                            offset: offsets
+                        });
+                        passed = false;
+                        this.errors.mainDocuments = `Document of the following document types are required`;
+                        this.errors.type = 'error';
+                        offsets+=100;
+                    }else{
+                        passed = true;
+                        this.errors.mainDocuments = null;
+                        this.errors.type = 'info';
+                    }
+                })
             }
             
             this.eventBus.$emit('step-validated', { passed, errors: this.errors });

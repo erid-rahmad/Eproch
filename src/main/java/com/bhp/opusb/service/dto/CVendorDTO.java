@@ -52,8 +52,10 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
 
     private Long taxIdFileId;
+    private String taxIdFileName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -175,12 +177,28 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.taxIdFileId = cAttachmentId;
     }
 
+    public String getTaxIdFileName() {
+        return taxIdFileName;
+    }
+
+    public void setTaxIdFileName(String taxIdFileName) {
+        this.taxIdFileName = taxIdFileName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override
@@ -222,7 +240,9 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", taxIdFileId=" + getTaxIdFileId() +
+            ", taxIdFileName='" + getTaxIdFileName() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationName='" + getAdOrganizationName() + "'" +
             "}";
     }
 }

@@ -18,9 +18,9 @@ public class RegistrationMapper {
   public CVendor toVendor(CompanyProfile companyProfile) {
     CVendor vendor = new CVendor();
 
-    if (companyProfile.getTaxIdAttachmentId() != null) {
+    if (companyProfile.getFileId() != null) {
       CAttachment taxIdAttachment = new CAttachment();
-      taxIdAttachment.setId(companyProfile.getTaxIdAttachmentId());
+      taxIdAttachment.setId(companyProfile.getFileId());
       vendor.setTaxIdFile(taxIdAttachment);
     }
 
@@ -45,7 +45,7 @@ public class RegistrationMapper {
     CLocation location = new CLocation();
     CCity city = new CCity();
 
-    city.setId(companyProfile.getCity());
+    city.setId(companyProfile.getCityId());
     location.active(true)
       .adOrganization(organization)
       .city(city)
@@ -59,7 +59,7 @@ public class RegistrationMapper {
     CLocation location = new CLocation();
     CCity city = new CCity();
 
-    city.setId(companyProfile.getNpwpCity());
+    city.setId(companyProfile.getNpwpCityId());
     location.active(true)
       .adOrganization(organization)
       .city(city)

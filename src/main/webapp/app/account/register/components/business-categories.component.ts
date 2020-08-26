@@ -83,7 +83,9 @@ export default class BusinessCategories extends BusinessCategoriesProps {
 
                 const values = (<any>this.$refs.businessCategories).getCheckedNodes();
                 values.forEach(element => {
-                    registrationStore.addBusinessCategory(element.value);
+                    if(element.level === 3){
+                        registrationStore.addBusinessCategory(element.value);
+                    }
                 });
                 if (passed) {
                     await this.retrieveDocumentTypes(true);

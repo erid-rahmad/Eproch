@@ -2,15 +2,8 @@ import Vue from 'vue'
 import Component from 'vue-class-component'
 import { ElForm } from 'element-ui/types/form'
 import { Inject, Watch } from 'vue-property-decorator'
-import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store'
-//import DocumentTypeService from '@/entities/document-type/document-type.service'
-//import { SupportingDocument } from '@/shared/model/supporting-document.model'
 import DynamicWindowService from '../../../core/application-dictionary/components/DynamicWindow/dynamic-window.service';
-import { IADField } from '@/shared/model/ad-field.model';
-import { ADReferenceType } from '@/shared/model/ad-reference.model';
-import { ADColumnType } from '@/shared/model/ad-column.model';
-import pluralize from 'pluralize'
-import { kebabCase } from 'lodash'
+import { required } from 'vuelidate/lib/validators'
 
 const SupportingDocumentsProps = Vue.extend({
     props: {
@@ -34,7 +27,14 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
     @Inject('dynamicWindowService')
     private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
 
-    public rules = {};
+    public rules = {
+        //file: {
+            //required
+        //}
+    };
+    private limit: number = 1;
+    private action: string = "/api/c-attachments/upload";
+    private accept: string = ".jpg, .jpeg, .png, .pdf, .doc, .docx";
     public document:any = {};
     public docTypeName = null;
     public hasExpirationDate = false;
@@ -114,6 +114,10 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
         this.document.file = file;
     }
 
+    handleRemove(files, fileList) {
+        this.document.file = "";
+    }
+
     onUploadError(err: any) {
         console.log('Failed uploading a file ', err);
     }
@@ -122,4 +126,47 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
         console.log('File uploaded successfully ', response);
         this.document.fileId = response.attachment.id;
     }
+
+    handleExceed(files, fileList) {
+        if (fileList.length > 1) {
+            this.$notify({
+                title: 'Warning',
+                message: "The limit file is 1",
+                type: 'warning',
+                duration: 3000
+            });
+            return false;
+        }
+    }
+
+    handleBeforeUpload(file: any) {
+        // File size limitation
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isLt5M) {
+          this.$notify({
+              title: 'Warning',
+              message: "files with a size less than 5Mb",
+              type: 'warning',
+              duration: 3000
+          });
+          return isLt5M;
+        }
+    
+        // File type restriction
+        const name = file.name ? file.name : '';
+        const ext = name
+          ? name.substr(name.lastIndexOf('.') + 1, name.length)
+          : true;
+        const isExt = this.accept.indexOf(ext) < 0;
+        if (isExt) {
+          this.$notify({
+            title: 'Warning',
+            message: "Please upload the correct format type",
+            type: 'warning',
+            duration: 3000
+          });
+          return !isExt;
+        }
+    }
+
 }

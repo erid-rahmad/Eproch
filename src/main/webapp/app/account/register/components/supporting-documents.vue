@@ -27,6 +27,7 @@
                 ref="mainDocuments"
                 max-height="250"
                 style="width: 100%"
+                :rules="rules"
                 :data="mainDocuments"
             >
                 <el-table-column

@@ -96,6 +96,10 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
         this.pay.supportingfile = file;
     }
 
+    handleRemove(files, fileList) {
+        this.pay.supportingfile = "";
+    }
+
     onUploadError(err: any) {
         console.log('Failed uploading a file ', err);
     }
@@ -106,12 +110,47 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
     }
 
     handleExceed(files, fileList) {
-        this.$notify({
+        if (fileList.length > 1) {
+          this.$notify({
             title: 'Warning',
-            message: "The limit file is 1",
+            message: "Up to 1 files are allowed",
             type: 'warning',
             duration: 3000
-        });
+          });
+          return false;
+        }
+        
+    }
+    
+    handleBeforeUpload(file: any) {
+        // File size limitation
+        const isLt5M = file.size / 1024 / 1024 < 5;
+        if (!isLt5M) {
+          this.$notify({
+              title: 'Warning',
+              message: "files with a size less than 5Mb",
+              type: 'warning',
+              duration: 3000
+          });
+          return isLt5M;
+        }
+    
+        // File type restriction
+        const name = file.name ? file.name : '';
+        const ext = name
+          ? name.substr(name.lastIndexOf('.') + 1, name.length)
+          : true;
+        const isExt = this.accept.indexOf(ext) < 0;
+        if (isExt) {
+          this.$notify({
+            title: 'Warning',
+            message: "Please upload the correct format type",
+            type: 'warning',
+            duration: 3000
+          });
+          return !isExt;
+        }
+        
     }
 
 }

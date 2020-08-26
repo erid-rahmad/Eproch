@@ -63,14 +63,18 @@
             
             <el-upload
                 ref="upload"
-                action="/api/c-attachments/upload"
+                :action="action"
+                :accept="accept"
                 :file-list="fileList"
-                :limit="1"
+                :limit="limit"
+                :before-upload="handleBeforeUpload"
                 :on-change="onUploadChange"
+                :on-exceed="handleExceed"
+                :on-remove="handleRemove"
                 :on-error="onUploadError"
                 :on-success="onUploadSuccess">
                 <el-button slot="trigger" type="primary" icon="el-icon-search">select file</el-button>
-                <div class="el-upload__tip" slot="tip">files with a size less than 500kb</div>
+                <span style="margin-left: 10px;" class="el-upload__tip" slot="tip">files with a size less than 500kb</span>
             </el-upload>
 
         </el-form-item>

@@ -173,6 +173,14 @@ public class UserResource {
                 .map(UserDTO::new));
     }
 
+    @GetMapping("/users/email/{email:" + Constants.LOGIN_REGEX + "}")
+    public ResponseEntity<UserDTO> getUserEmail(@PathVariable String email) {
+        log.debug("REST request to get User : {}", email);
+        return ResponseUtil.wrapOrNotFound(
+            userService.getUserByEmail(email)
+                .map(UserDTO::new));
+    }
+
     /**
      * {@code DELETE /users/:login} : delete the "login" User.
      *

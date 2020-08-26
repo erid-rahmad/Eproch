@@ -20,6 +20,7 @@ public class CRegDocTypeBusinessCategoryDTO extends AbstractAuditingDTO {
 
 
     private Long documentTypeId;
+    private String documentTypeName;
 
     private Long businessCategoryId;
     private String businessCategoryName;
@@ -65,6 +66,14 @@ public class CRegDocTypeBusinessCategoryDTO extends AbstractAuditingDTO {
 
     public void setDocumentTypeId(Long cRegistrationDocTypeId) {
         this.documentTypeId = cRegistrationDocTypeId;
+    }
+
+    public String getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(String documentTypeName) {
+        this.documentTypeName = documentTypeName;
     }
 
     public Long getBusinessCategoryId() {
