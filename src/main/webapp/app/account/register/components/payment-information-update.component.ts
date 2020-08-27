@@ -31,6 +31,9 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
     public banks = [];
     public currencies = [];
     public pay:any = {};
+    private limit: number = 1;
+    private action: string = "/api/c-attachments/upload";
+    private accept: string = ".jpg, .jpeg, .png, .pdf, .doc, .docx";
     
     @Watch('pays')
     setPayment(payment){
@@ -110,7 +113,7 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
     }
 
     handleExceed(files, fileList) {
-        if (fileList.length > 1) {
+        if (fileList.length >= 1) {
           this.$notify({
             title: 'Warning',
             message: "Up to 1 files are allowed",

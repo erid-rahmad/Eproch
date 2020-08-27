@@ -128,7 +128,7 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
     }
 
     handleExceed(files, fileList) {
-        if (fileList.length > 1) {
+        if (fileList.length >= 1) {
             this.$notify({
                 title: 'Warning',
                 message: "The limit file is 1",

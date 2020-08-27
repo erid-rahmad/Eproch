@@ -80,9 +80,6 @@ export default class CompanyProfile extends CompanyProps {
 
   validate(formIndex: number) {
     if (formIndex === 1) {
-
-      
-    
       (this.$refs.company as ElForm).validate((passed, errors) => {
 
         this.company.countryName = this.printValueByParam(this.company.country);
@@ -101,7 +98,6 @@ export default class CompanyProfile extends CompanyProps {
 
         this.eventBus.$emit('step-validated', { passed, errors })
       })
-      
     }
   }
 
@@ -231,7 +227,7 @@ export default class CompanyProfile extends CompanyProps {
   }
 
   handleExceed(files, fileList) {
-    if (fileList.length > 1) {
+    if (files.length >= 1) {
       this.$notify({
         title: 'Warning',
         message: "Up to 1 files are allowed",
@@ -240,7 +236,6 @@ export default class CompanyProfile extends CompanyProps {
       });
       return false;
     }
-    
   }
 
   handleBeforeUpload(file: any) {
