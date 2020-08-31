@@ -170,7 +170,7 @@ public class AdTaskSchedulerService {
         log.debug("Request to delete AdTaskScheduler : {}", id);
         Optional<AdTaskScheduler> taskScheduler = adTaskSchedulerRepository.findById(id);
 
-        if (taskScheduler.isEmpty())
+        if (! taskScheduler.isPresent())
             throw new IllegalArgumentException("There is no scheduler with ID " + id);
 
         AdTaskScheduler record = taskScheduler.get();
