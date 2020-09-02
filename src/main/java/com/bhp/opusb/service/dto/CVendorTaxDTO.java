@@ -161,6 +161,7 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
             ", vendorId=" + getVendorId() +
             ", taxId=" + getTaxId() +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
 }

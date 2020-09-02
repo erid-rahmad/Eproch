@@ -41,13 +41,13 @@ export default class StepsForm extends Vue {
   errorUserExists = '';
   success = false;
 
-  loading = false;
+  fullscreenLoading= false;
   active = 0;
   eventBus = new Vue();
   registration = {
     loginDetails: {
-      login: 'user1',
-      email: 'user1@gmail.com',
+      login: 'user3',
+      email: 'user3@gmail.com',
       password: 'user',
       passwordConfirmation: 'user'
     },
@@ -67,6 +67,7 @@ export default class StepsForm extends Vue {
       npwpRegion: '',
       npwpCity: '',
       npwpPostalCode: '',
+      file: '',
 
       address: 'Jl. Sudirman',
       country: '',
@@ -124,7 +125,7 @@ export default class StepsForm extends Vue {
     this.registration.taxes = registrationStore.taxes;
     this.registration.taxes.forEach(tax => { delete tax.id });
     console.log('Submitting registration data. ', this.registration);
-    this.loading = true;
+    this.fullscreenLoading = true;
     this.doNotMatch = null;
     this.error = null;
     //this.errorUserExists = null;
@@ -134,8 +135,6 @@ export default class StepsForm extends Vue {
       .processRegistration(this.registration)
       .then(() => {
         this.success = true;
-        this.$router.go(-1);
-        this.registration = null;
         this.$notify({
           title: 'Success',
           dangerouslyUseHTMLString: true,
@@ -163,7 +162,51 @@ export default class StepsForm extends Vue {
         });
       })
       .finally(() => {
-        this.loading = false;
+        this.active = 0;
+        this.fullscreenLoading = false;
+        this.$router.go(-1);
+        this.registration = {
+          loginDetails: {
+            login: '',
+            email: '',
+            password: '',
+            passwordConfirmation: ''
+          },
+          companyProfile: {
+            name: '',
+            type: '',
+            branch: false,
+            phone: '',
+            fax: '',
+            email: '',
+            website: '',
+      
+            npwp: '',
+            npwpName: '',
+            npwpAddress: '',
+            npwpCountry: '',
+            npwpRegion: '',
+            npwpCity: '',
+            npwpPostalCode: '',
+            file: '',
+      
+            address: '',
+            country: '',
+            region: '',
+            city: '',
+            postalCode: ''
+          },
+          businesses: [],
+          businessCategories: {
+            values: []
+          },
+          mainDocuments: [],
+          additionalDocuments: [],
+          contacts: [],
+          functionaries: [],
+          payments: [],
+          taxes: []
+        }
       });
   }
 

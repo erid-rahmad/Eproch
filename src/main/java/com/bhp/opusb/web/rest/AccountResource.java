@@ -1,6 +1,7 @@
 package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.domain.User;
+import com.bhp.opusb.service.dto.CPersonInChargeDTO;
 import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.security.SecurityUtils;
 import com.bhp.opusb.service.CVendorService;
@@ -64,7 +65,11 @@ public class AccountResource {
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerAccount(@Valid @RequestBody RegistrationDTO registrationDTO) {
-        cVendorService.registerVendor(registrationDTO);
+        List<User> users = cVendorService.registerVendor(registrationDTO);
+        
+        for (User user :users) {
+            mailService.sendActivationEmail(user);
+        }
     }
     /**
      * public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {

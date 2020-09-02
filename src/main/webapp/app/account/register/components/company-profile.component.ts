@@ -45,22 +45,16 @@ export default class CompanyProfile extends CompanyProps {
   private rules = {
     website: {
       type: 'url'
-    },
-    /*file: [
-      {
-        required: true,
-        message: 'File required!'
-      }
-    ]*/
+    }
   }
 
   private typeOptions = [
     {
-      value: 'Company',
+      value: 'COMPANY',
       key: 'COMPANY'
     }, 
     {
-      value: 'Professional',
+      value: 'PROFESSIONAL',
       key: 'PROFESSIONAL'
     }
   ]
@@ -214,16 +208,10 @@ export default class CompanyProfile extends CompanyProps {
   onUploadSuccess(response: any) {
       console.log('File uploaded successfully ', response);
       this.company.fileId = response.attachment.id;
-      //(this.$refs.upload as ElForm).validateField(this.company.file);
-      /*(this.$refs.company as ElForm).validate((valid) => {
-        console.log(valid);
-        if (valid) { 
-            console.log("submit");
-        } else {
-            console.log("error submit!!");
-            return false;
-        }
-      });*/
+      //(this.$refs.company as ElForm).validate(this.company.file);
+      (this.$refs.company as ElForm).validate((passed, errors) => {
+        this.company.file != '';
+      });
   }
 
   handleExceed(files, fileList) {

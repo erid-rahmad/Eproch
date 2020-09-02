@@ -62,9 +62,11 @@
         </el-form-item>
         <el-form-item 
           :label="$t('register.basic.basic.npwpFile')" 
-          prop="file">
+          prop="file"
+          required>
             <el-upload
                 ref="upload"
+                v-model="company.file"
                 :action="action"
                 :accept="accept"
                 :file-list="fileList"

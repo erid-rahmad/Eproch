@@ -148,6 +148,7 @@ public class UserService {
 
         String encryptedPassword = passwordEncoder.encode(cPersonInChargeDTO.getPassword());
         newUser.setLogin(cPersonInChargeDTO.getLogin());
+        newUser.setLangKey("en");
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
 

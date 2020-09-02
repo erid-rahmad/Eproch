@@ -173,12 +173,15 @@ public class UserResource {
                 .map(UserDTO::new));
     }
 
-    @GetMapping("/users/email/{email:" + Constants.LOGIN_REGEX + "}")
-    public ResponseEntity<UserDTO> getUserEmail(@PathVariable String email) {
-        log.debug("REST request to get User : {}", email);
-        return ResponseUtil.wrapOrNotFound(
-            userService.getUserByEmail(email)
-                .map(UserDTO::new));
+    @GetMapping("/users/registration-check")
+    public ResponseEntity<Boolean> getUser(@RequestParam("login") String login, @RequestParam("email") String email) {
+        log.debug("REST request to get User : {}", login);
+        Optional<User> user = userService.getUserWithAuthoritiesByLogin(login);
+
+        if (!user.isPresent()){
+            user = userService.getUserByEmail(email);
+        }
+        return ResponseEntity.ok(!user.isPresent());
     }
 
     /**

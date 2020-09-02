@@ -57,7 +57,17 @@
                     min-width="128"
                     :label="$t('register.payment.supportingfile')"
                     show-overflow-tooltip
-                />
+                >
+                    <template scope="props">
+                        <el-link 
+                            target="_blank"
+                            v-if="props.row.supportingfile" 
+                            v-bind:href="''+props.row.supportingfile.response.downloadUri+''" 
+                            :underline="false">
+                            {{ props.row.supportingfile.response.attachment.fileName }}
+                        </el-link>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     fixed="right"
                     align="center"

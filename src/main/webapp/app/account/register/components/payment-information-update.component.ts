@@ -110,6 +110,9 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
     onUploadSuccess(response: any) {
         console.log('File uploaded successfully ', response);
         this.pay.fileId = response.attachment.id;
+        (<ElForm>this.$refs.pay).validate((passed, errors) => {
+            this.pay.supportingfile != '';
+        });
     }
 
     handleExceed(files, fileList) {

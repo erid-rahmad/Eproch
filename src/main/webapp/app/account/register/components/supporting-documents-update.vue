@@ -49,7 +49,7 @@
         <el-form-item 
             :label="$t('register.document.form.file')"
             prop="file"
-            >
+            required>
             <el-upload
                 ref="upload"
                 v-model="document.file"

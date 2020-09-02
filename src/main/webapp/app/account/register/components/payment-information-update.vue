@@ -45,8 +45,8 @@
                 <el-option
                     v-for="item in currencies"
                     :key="item.id"
-                    :label="item.name"
-                    :value="item.id + '_' + item.name"
+                    :label="item.code"
+                    :value="item.id + '_' + item.code"
                 />
             </el-select>
         </el-form-item>
@@ -59,10 +59,12 @@
         </el-form-item>
         <el-form-item 
             :label="$t('register.payment.supportingfile')"
-            prop="supportingfile">
+            prop="supportingfile"
+            required>
             
             <el-upload
                 ref="upload"
+                v-model="pay.supportingfile"
                 :action="action"
                 :accept="accept"
                 :file-list="fileList"

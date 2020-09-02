@@ -45,46 +45,32 @@ export default class LoginDetails extends LoginProps {
   }
 
   private retrieveLoginExist(username, email) {
-    let param;
-    if(username){
-      param = `/api/users/${username}`;
-    }else{
-      param = `/api/users/email/${email}`;
-    }
-    this.dynamicWindowService(param)
-    .retrieve()
+    this.dynamicWindowService(`/api/users/registration-check`)
+    .retrieve({
+      criteriaQuery: [`login=${username}&email=${email}`]
+    })
     .then(
       res => {
         console.log(res);
-        let message;
-        if(username){
-          message = "<strong>Login name already registered!</strong> Please choose another one.";
+        if(!res.data){
+          this.$notify({
+            title: 'Error',
+            dangerouslyUseHTMLString: true,
+            message: "<strong>Login name or Email already registered!</strong> Please choose another one.",
+            type: 'error',
+            duration: 3000
+          });
         }else{
-          message = "<strong>Email already registered!</strong> Please choose another one.";
-        }
-        this.$notify({
-          title: 'Error',
-          dangerouslyUseHTMLString: true,
-          message: message,
-          type: 'error',
-          duration: 3000
-        });
-
-      },
-      err => {
-        console.log(`Error : ${err}`);
-        if(email){
-          
           (this.$refs.login as ElForm).validate((passed, errors) => {
             if (passed) {
               registrationStore.setLoginDetails(this.login);
             }
             this.eventBus.$emit('step-validated', { passed, errors })
           })
-        }else{
-          this.retrieveLoginExist("", this.login.email);
         }
-
+      },
+      err => {
+        console.log(`Error : ${err}`);
       }
     )
     .catch(
@@ -106,8 +92,7 @@ export default class LoginDetails extends LoginProps {
           duration: 3000
         });
       }else{
-        this.retrieveLoginExist(this.login.login, "");
-        //this.retrieveLoginExist("", this.login.email);
+        this.retrieveLoginExist(this.login.login, this.login.email);
       }
       
     }

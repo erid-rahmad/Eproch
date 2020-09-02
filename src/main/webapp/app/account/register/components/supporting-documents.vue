@@ -47,7 +47,17 @@
                     prop="file.name"
                     :label="$t('register.document.form.file')"
                     show-overflow-tooltip
-                />
+                >
+                    <template scope="props">
+                        <el-link 
+                            target="_blank"
+                            v-if="props.row.file" 
+                            v-bind:href="''+props.row.file.response.downloadUri+''" 
+                            :underline="false">
+                            {{ props.row.file.response.attachment.fileName }}
+                        </el-link>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     fixed="right"
                     align="center"
@@ -116,8 +126,17 @@
                     prop="file.name"
                     :label="$t('register.document.form.file')"
                     show-overflow-tooltip
-                />
-                   
+                >
+                    <template scope="props">
+                        <el-link 
+                            target="_blank"
+                            v-if="props.row.file" 
+                            v-bind:href="''+props.row.file.response.downloadUri+''" 
+                            :underline="false">
+                            {{ props.row.file.response.attachment.fileName }}
+                        </el-link>
+                    </template>
+                </el-table-column>
                 <el-table-column
                     fixed="right"
                     align="center"

@@ -120,7 +120,7 @@
         style="margin-bottom: 12px;"
         v-if="active === 7"
         :disabled="! agreementAccepted"
-        :loading="loading"
+        v-loading.fullscreen.lock="fullscreenLoading"
         @click="submit"
       >
         Submit <em class="el-icon-arrow-right"></em>

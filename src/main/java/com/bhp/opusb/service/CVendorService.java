@@ -1,12 +1,15 @@
 package com.bhp.opusb.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CLocation;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CVendorLocation;
+import com.bhp.opusb.domain.User;
 import com.bhp.opusb.repository.CLocationRepository;
 import com.bhp.opusb.repository.CVendorLocationRepository;
 import com.bhp.opusb.repository.CVendorRepository;
@@ -75,7 +78,7 @@ public class CVendorService {
         registrationMapper = new RegistrationMapper(organization);
     }
 
-    public CVendor registerVendor(RegistrationDTO registrationDTO){
+    public  List<User> registerVendor(RegistrationDTO registrationDTO){
         // Ensure vendor has generated ID.
         CVendor vendor = registrationMapper.toVendor(registrationDTO.getCompanyProfile());
         cVendorRepository.save(vendor);
@@ -98,8 +101,9 @@ public class CVendorService {
         cRegistrationDocumentService.saveAll(registrationDTO.getAdditionalDocuments(), vendor, organization);
 
         // Save persons and map each person with the user entity.
+        List<User> users = new ArrayList<>();
         for (CPersonInChargeDTO contact : registrationDTO.getContacts()) {
-            userService.registerUser(contact, vendor, organization);
+            users.add(userService.registerUser(contact, vendor, organization));
         }
 
         // Batch save company functionaries.
@@ -109,7 +113,7 @@ public class CVendorService {
         cVendorBankAcctService.saveAll(registrationDTO.getPayments(), vendor, organization);
 
         cVendorTaxService.saveAll(registrationDTO.getTaxes(), vendor, organization);
-        return vendor;
+        return users;
     }
 
     /**

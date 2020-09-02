@@ -1,7 +1,9 @@
 package com.bhp.opusb.service;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +20,8 @@ import com.bhp.opusb.service.mapper.CAttachmentMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -84,6 +88,20 @@ public class CAttachmentService {
         }
 
         return null;
+    }
+
+    public Resource loadFileAsResource(String fileName) throws Exception {
+        try {
+            Path filePath = this.uploadPath.resolve(fileName).normalize();
+            Resource resource = new UrlResource(filePath.toUri());
+            if(resource.exists()) {
+                return resource;
+            } else {
+                throw new FileNotFoundException("File not found " + fileName);
+            }
+        } catch (MalformedURLException ex) {
+            throw new FileNotFoundException("File not found " + fileName);
+        }
     }
 
     /**

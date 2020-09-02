@@ -125,6 +125,9 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
     onUploadSuccess(response: any) {
         console.log('File uploaded successfully ', response);
         this.document.fileId = response.attachment.id;
+        (<ElForm>this.$refs.document).validate((passed, errors) => {
+            this.document.file != '';
+        });
     }
 
     handleExceed(files, fileList) {

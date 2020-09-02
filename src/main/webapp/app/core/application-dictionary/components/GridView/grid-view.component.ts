@@ -288,7 +288,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public changeRowSelection(rows: Array<any>) {
-    this.selectedRows = rows;
+    this.multipleSelectedRow = rows;
+    //this.selectedRows = rows;
     this.$emit('row-selection-change', rows);
   }
 
@@ -307,20 +308,40 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     Promise.allSettled(this.multipleSelectedRow.map((row: any) => {
       return this.dynamicWindowService(this.baseApiUrl).delete(row.id);
     })).then((results) => {
-      const deletedCount = results.filter(res => res.status === 'fulfilled').length
+      const deletedCount = results.filter(res => res.status === 'fulfilled').length;
       const message = this.$t(`opusWebApp.applicationDictionary.recordsDeleted`, {
         tabName: this.tabName,
         count: deletedCount
       });
 
       this.retrieveAllRecords();
+      if(deletedCount==0){
+        this.$notify({
+          title: 'Error',
+          message: "Error deleted the record",
+          type: 'error',
+          duration: 3000
+        });
+      }else{
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        });
+      }
+    })
+    .catch((err) => {
+      console.error('Error deleted the record! %O', err);
+      const message = `Error deleted the record`;
       this.$notify({
-        title: 'Success',
+        title: 'Error',
         message: message.toString(),
-        type: 'success',
+        type: 'error',
         duration: 3000
       });
-    }).finally(() => {
+    })
+    .finally(() => {
       this.multipleSelectedRow = [];
       this.closeDialog();
     });
