@@ -75,6 +75,8 @@ class CCountryGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "code":"SAMPLE_TEXT"
                 , "withRegion":null
+                , "phoneCode":"SAMPLE_TEXT"
+                , "description":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

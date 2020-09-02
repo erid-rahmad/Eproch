@@ -29,8 +29,16 @@ public class CRegion extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
+    @Pattern(regexp = "^[A-Z]{3}$")
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
+
+    @NotNull
     @Column(name = "name", nullable = false)
     private String name;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "uid")
     private UUID uid;
@@ -61,6 +69,19 @@ public class CRegion extends AbstractAuditingEntity {
         this.id = id;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public CRegion code(String code) {
+        this.code = code;
+        return this;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return name;
     }
@@ -72,6 +93,19 @@ public class CRegion extends AbstractAuditingEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public CRegion description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UUID getUid() {
@@ -177,7 +211,9 @@ public class CRegion extends AbstractAuditingEntity {
     public String toString() {
         return "CRegion{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

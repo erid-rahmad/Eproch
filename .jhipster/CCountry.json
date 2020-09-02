@@ -23,6 +23,14 @@
             "fieldType": "Boolean"
         },
         {
+            "fieldName": "phoneCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

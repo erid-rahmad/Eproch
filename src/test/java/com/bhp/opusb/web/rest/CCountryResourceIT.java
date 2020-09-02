@@ -43,11 +43,17 @@ public class CCountryResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_CODE = "ZK";
-    private static final String UPDATED_CODE = "NS";
+    private static final String DEFAULT_CODE = "BQ";
+    private static final String UPDATED_CODE = "JU";
 
     private static final Boolean DEFAULT_WITH_REGION = false;
     private static final Boolean UPDATED_WITH_REGION = true;
+
+    private static final String DEFAULT_PHONE_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_PHONE_CODE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
@@ -86,6 +92,8 @@ public class CCountryResourceIT {
             .name(DEFAULT_NAME)
             .code(DEFAULT_CODE)
             .withRegion(DEFAULT_WITH_REGION)
+            .phoneCode(DEFAULT_PHONE_CODE)
+            .description(DEFAULT_DESCRIPTION)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -121,6 +129,8 @@ public class CCountryResourceIT {
             .name(UPDATED_NAME)
             .code(UPDATED_CODE)
             .withRegion(UPDATED_WITH_REGION)
+            .phoneCode(UPDATED_PHONE_CODE)
+            .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -170,6 +180,8 @@ public class CCountryResourceIT {
         assertThat(testCCountry.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCCountry.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCCountry.isWithRegion()).isEqualTo(DEFAULT_WITH_REGION);
+        assertThat(testCCountry.getPhoneCode()).isEqualTo(DEFAULT_PHONE_CODE);
+        assertThat(testCCountry.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCCountry.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCCountry.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -247,6 +259,8 @@ public class CCountryResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].withRegion").value(hasItem(DEFAULT_WITH_REGION.booleanValue())))
+            .andExpect(jsonPath("$.[*].phoneCode").value(hasItem(DEFAULT_PHONE_CODE)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -265,6 +279,8 @@ public class CCountryResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.withRegion").value(DEFAULT_WITH_REGION.booleanValue()))
+            .andExpect(jsonPath("$.phoneCode").value(DEFAULT_PHONE_CODE))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -499,6 +515,162 @@ public class CCountryResourceIT {
 
     @Test
     @Transactional
+    public void getAllCCountriesByPhoneCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where phoneCode equals to DEFAULT_PHONE_CODE
+        defaultCCountryShouldBeFound("phoneCode.equals=" + DEFAULT_PHONE_CODE);
+
+        // Get all the cCountryList where phoneCode equals to UPDATED_PHONE_CODE
+        defaultCCountryShouldNotBeFound("phoneCode.equals=" + UPDATED_PHONE_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByPhoneCodeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where phoneCode not equals to DEFAULT_PHONE_CODE
+        defaultCCountryShouldNotBeFound("phoneCode.notEquals=" + DEFAULT_PHONE_CODE);
+
+        // Get all the cCountryList where phoneCode not equals to UPDATED_PHONE_CODE
+        defaultCCountryShouldBeFound("phoneCode.notEquals=" + UPDATED_PHONE_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByPhoneCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where phoneCode in DEFAULT_PHONE_CODE or UPDATED_PHONE_CODE
+        defaultCCountryShouldBeFound("phoneCode.in=" + DEFAULT_PHONE_CODE + "," + UPDATED_PHONE_CODE);
+
+        // Get all the cCountryList where phoneCode equals to UPDATED_PHONE_CODE
+        defaultCCountryShouldNotBeFound("phoneCode.in=" + UPDATED_PHONE_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByPhoneCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where phoneCode is not null
+        defaultCCountryShouldBeFound("phoneCode.specified=true");
+
+        // Get all the cCountryList where phoneCode is null
+        defaultCCountryShouldNotBeFound("phoneCode.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCCountriesByPhoneCodeContainsSomething() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where phoneCode contains DEFAULT_PHONE_CODE
+        defaultCCountryShouldBeFound("phoneCode.contains=" + DEFAULT_PHONE_CODE);
+
+        // Get all the cCountryList where phoneCode contains UPDATED_PHONE_CODE
+        defaultCCountryShouldNotBeFound("phoneCode.contains=" + UPDATED_PHONE_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByPhoneCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where phoneCode does not contain DEFAULT_PHONE_CODE
+        defaultCCountryShouldNotBeFound("phoneCode.doesNotContain=" + DEFAULT_PHONE_CODE);
+
+        // Get all the cCountryList where phoneCode does not contain UPDATED_PHONE_CODE
+        defaultCCountryShouldBeFound("phoneCode.doesNotContain=" + UPDATED_PHONE_CODE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where description equals to DEFAULT_DESCRIPTION
+        defaultCCountryShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cCountryList where description equals to UPDATED_DESCRIPTION
+        defaultCCountryShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where description not equals to DEFAULT_DESCRIPTION
+        defaultCCountryShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cCountryList where description not equals to UPDATED_DESCRIPTION
+        defaultCCountryShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultCCountryShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the cCountryList where description equals to UPDATED_DESCRIPTION
+        defaultCCountryShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where description is not null
+        defaultCCountryShouldBeFound("description.specified=true");
+
+        // Get all the cCountryList where description is null
+        defaultCCountryShouldNotBeFound("description.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCCountriesByDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where description contains DEFAULT_DESCRIPTION
+        defaultCCountryShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cCountryList where description contains UPDATED_DESCRIPTION
+        defaultCCountryShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCountriesByDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        cCountryRepository.saveAndFlush(cCountry);
+
+        // Get all the cCountryList where description does not contain DEFAULT_DESCRIPTION
+        defaultCCountryShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cCountryList where description does not contain UPDATED_DESCRIPTION
+        defaultCCountryShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllCCountriesByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         cCountryRepository.saveAndFlush(cCountry);
@@ -683,6 +855,8 @@ public class CCountryResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].withRegion").value(hasItem(DEFAULT_WITH_REGION.booleanValue())))
+            .andExpect(jsonPath("$.[*].phoneCode").value(hasItem(DEFAULT_PHONE_CODE)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -735,6 +909,8 @@ public class CCountryResourceIT {
             .name(UPDATED_NAME)
             .code(UPDATED_CODE)
             .withRegion(UPDATED_WITH_REGION)
+            .phoneCode(UPDATED_PHONE_CODE)
+            .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CCountryDTO cCountryDTO = cCountryMapper.toDto(updatedCCountry);
@@ -751,6 +927,8 @@ public class CCountryResourceIT {
         assertThat(testCCountry.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCCountry.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCCountry.isWithRegion()).isEqualTo(UPDATED_WITH_REGION);
+        assertThat(testCCountry.getPhoneCode()).isEqualTo(UPDATED_PHONE_CODE);
+        assertThat(testCCountry.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCCountry.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCCountry.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

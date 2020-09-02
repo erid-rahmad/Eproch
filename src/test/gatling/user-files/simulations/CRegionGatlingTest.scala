@@ -72,7 +72,9 @@ class CRegionGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "code":"SAMPLE_TEXT"
                 , "name":"SAMPLE_TEXT"
+                , "description":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

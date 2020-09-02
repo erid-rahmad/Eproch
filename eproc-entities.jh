@@ -9,6 +9,8 @@ entity CCountry {
 	name String required
 	code String required pattern(/^[A-Z]{2}$/) unique
 	withRegion Boolean
+	phoneCode String
+	description String
 	uid UUID
 	active Boolean
 }
@@ -20,11 +22,14 @@ entity CCurrency {
 	active Boolean
 }
 entity CRegion {
+	code String required pattern(/^[A-Z]{3}$/) unique
 	name String required
+	description String
 	uid UUID
 	active Boolean
 }
 entity CCity {
+	code String required pattern(/^[A-Z]{3}$/) unique
 	name String required
 	uid UUID
 	active Boolean

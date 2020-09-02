@@ -27,6 +27,11 @@ public class CCity extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
+    @Pattern(regexp = "^[A-Z]{3}$")
+    @Column(name = "code", nullable = false, unique = true)
+    private String code;
+
+    @NotNull
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -56,6 +61,19 @@ public class CCity extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public CCity code(String code) {
+        this.code = code;
+        return this;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -162,6 +180,7 @@ public class CCity extends AbstractAuditingEntity {
     public String toString() {
         return "CCity{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +

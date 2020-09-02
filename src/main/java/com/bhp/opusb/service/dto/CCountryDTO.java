@@ -21,6 +21,10 @@ public class CCountryDTO extends AbstractAuditingDTO {
 
     private Boolean withRegion;
 
+    private String phoneCode;
+
+    private String description;
+
     private UUID uid;
 
     private Boolean active;
@@ -62,6 +66,22 @@ public class CCountryDTO extends AbstractAuditingDTO {
 
     public void setWithRegion(Boolean withRegion) {
         this.withRegion = withRegion;
+    }
+
+    public String getPhoneCode() {
+        return phoneCode;
+    }
+
+    public void setPhoneCode(String phoneCode) {
+        this.phoneCode = phoneCode;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UUID getUid() {
@@ -140,6 +160,8 @@ public class CCountryDTO extends AbstractAuditingDTO {
             ", name='" + getName() + "'" +
             ", code='" + getCode() + "'" +
             ", withRegion='" + isWithRegion() + "'" +
+            ", phoneCode='" + getPhoneCode() + "'" +
+            ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", currencyId='" + getCurrencyId() + "'" +

@@ -100,6 +100,12 @@ public class CCountryQueryService extends QueryService<CCountry> {
             if (criteria.getWithRegion() != null) {
                 specification = specification.and(buildSpecification(criteria.getWithRegion(), CCountry_.withRegion));
             }
+            if (criteria.getPhoneCode() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPhoneCode(), CCountry_.phoneCode));
+            }
+            if (criteria.getDescription() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDescription(), CCountry_.description));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CCountry_.uid));
             }

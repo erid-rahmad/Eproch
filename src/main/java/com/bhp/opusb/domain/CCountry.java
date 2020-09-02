@@ -40,6 +40,12 @@ public class CCountry extends AbstractAuditingEntity {
     @Column(name = "with_region")
     private Boolean withRegion;
 
+    @Column(name = "phone_code")
+    private String phoneCode;
+
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -110,6 +116,32 @@ public class CCountry extends AbstractAuditingEntity {
 
     public void setWithRegion(Boolean withRegion) {
         this.withRegion = withRegion;
+    }
+
+    public String getPhoneCode() {
+        return phoneCode;
+    }
+
+    public CCountry phoneCode(String phoneCode) {
+        this.phoneCode = phoneCode;
+        return this;
+    }
+
+    public void setPhoneCode(String phoneCode) {
+        this.phoneCode = phoneCode;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public CCountry description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UUID getUid() {
@@ -243,6 +275,8 @@ public class CCountry extends AbstractAuditingEntity {
             ", name='" + getName() + "'" +
             ", code='" + getCode() + "'" +
             ", withRegion='" + isWithRegion() + "'" +
+            ", phoneCode='" + getPhoneCode() + "'" +
+            ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

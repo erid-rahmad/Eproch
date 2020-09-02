@@ -70,6 +70,8 @@
             <column name="name" type="string"/>
             <column name="code" type="string"/>
             <column name="with_region" type="boolean"/>
+            <column name="phone_code" type="string"/>
+            <column name="description" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="currency_id" type="numeric"/>
@@ -78,6 +80,16 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20200831072700-1-add-column" author="dian-tri-budianto">
+        <addColumn tableName="c_country">
+            <column name="phone_code" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
     <!--
     <changeSet id="20200619072400-1-add-column" author="dian-tri-budianto">
         <addColumn tableName="c_country">

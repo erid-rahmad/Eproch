@@ -27,7 +27,11 @@ public class CRegionCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter code;
+
     private StringFilter name;
+
+    private StringFilter description;
 
     private UUIDFilter uid;
 
@@ -38,20 +42,20 @@ public class CRegionCriteria implements Serializable, Criteria {
     private LongFilter adOrganizationId;
 
     private LongFilter countryId;
-    private StringFilter countryName;
 
     public CRegionCriteria() {
     }
 
     public CRegionCriteria(CRegionCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.code = other.code == null ? null : other.code.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.description = other.description == null ? null : other.description.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.cCityId = other.cCityId == null ? null : other.cCityId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.countryId = other.countryId == null ? null : other.countryId.copy();
-        this.countryName = other.countryName == null ? null : other.countryName.copy();
     }
 
     @Override
@@ -67,12 +71,28 @@ public class CRegionCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
+    public StringFilter getCode() {
+        return code;
+    }
+
+    public void setCode(StringFilter code) {
+        this.code = code;
+    }
+
     public StringFilter getName() {
         return name;
     }
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getDescription() {
+        return description;
+    }
+
+    public void setDescription(StringFilter description) {
+        this.description = description;
     }
 
     public UUIDFilter getUid() {
@@ -115,15 +135,6 @@ public class CRegionCriteria implements Serializable, Criteria {
         this.countryId = countryId;
     }
 
-    public StringFilter getCountryName() {
-        return countryName;
-    }
-
-    public void setCountryName(StringFilter countryName) {
-        this.countryName = countryName;
-    }
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -136,26 +147,28 @@ public class CRegionCriteria implements Serializable, Criteria {
         final CRegionCriteria that = (CRegionCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(code, that.code) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(description, that.description) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(cCityId, that.cCityId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(countryId, that.countryId) &&
-            Objects.equals(countryName, that.countryName);
+            Objects.equals(countryId, that.countryId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
+        code,
         name,
+        description,
         uid,
         active,
         cCityId,
         adOrganizationId,
-        countryId,
-        countryName
+        countryId
         );
     }
 
@@ -163,16 +176,15 @@ public class CRegionCriteria implements Serializable, Criteria {
     public String toString() {
         return "CRegionCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (code != null ? "code=" + code + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (description != null ? "description=" + description + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (cCityId != null ? "cCityId=" + cCityId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (countryId != null ? "countryId=" + countryId + ", " : "") +
-                (countryName != null ? "countryName=" + countryName + ", " : "") +
             "}";
     }
-
-    
 
 }

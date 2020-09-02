@@ -1,11 +1,11 @@
-id;name;uid;active;ad_organization_id;country_id
-1;Tactics;da10a13d-898f-4d04-9b35-f80342e4cade;true;1;1
-2;Point Chair parse;c9d89ba0-44e1-4e90-af97-b91934ceea6b;false;2;2
-3;calculate Unbranded Soft Chair;60fe653d-7778-4946-b762-4468507312da;false;3;3
-4;web-readiness;664e6a85-4478-4259-ba77-5b20bc215535;false;4;4
-5;one-to-one Organic;f77914ab-21e2-43cb-a430-02f5f2d374d2;false;5;5
-6;Savings Account Guinea Franc;77f363d3-9aac-4f4a-bf73-0808855c101e;true;6;6
-7;infrastructure;5fee0094-7a22-4087-b666-077300efc357;true;7;7
-8;Arkansas Officer Money Market Account;756acfc6-5442-4856-9415-28a67270d70e;true;8;8
-9;Marketing Configuration pixel;4a325f90-2d51-4b11-bc6a-b275e1aa6265;true;9;9
-10;Montana Metrics;2b69026f-1a62-420c-8599-5fb3d332fb99;true;10;10
+id;code;name;description;uid;active;ad_organization_id;country_id
+1;"RCA";Intelligent EXE;Cambridgeshire auxiliary;49b35f80-342e-44ca-9eab-7a20cfc9d89b;true;1;1
+2;"DXQ";Chief;Buckinghamshire Checking Account;934ceea6-b77c-4a0e-8060-fe653d777894;false;2;2
+3;"JOJ";Ferry;Fresh;a6060664-e6a8-4544-b825-9fa775b20bc2;false;3;3
+4;"JFG";Administrator Place;moderator;b21e23cb-a430-402f-9f2d-374d20892a47;false;4;4
+5;"QTZ";withdrawal;Fields Beauty Beauty;855c101e-a057-45fe-a009-47a22087f666;false;5;5
+6;"FIL";COM Tasty Soap;Highway;6acfc654-4285-46d4-9528-a67270d70ecc;true;6;6
+7;"PGQ";Pants;Checking Account Bacon attitude;b117c6ab-275e-41aa-a265-8a98ff2b6902;false;7;7
+8;"TIP";toolset Egyptian Pound;teal lavender quantify;9e6383a3-d9b6-4f9f-a50d-068d71672616;true;8;8
+9;"ERC";Up-sized Central;HDD Implementation Sports;26191adb-60f3-4fa1-8ad5-5ca9aec5bbed;false;9;9
+10;"BQO";Soft;Creek;4d07aaf8-17a2-4dc2-bbe9-3fe0301f2faa;true;10;10

@@ -13,6 +13,10 @@ public class CCityDTO extends AbstractAuditingDTO {
     private Long id;
 
     @NotNull
+    @Pattern(regexp = "^[A-Z]{3}$")
+    private String code;
+
+    @NotNull
     private String name;
 
     private UUID uid;
@@ -35,6 +39,14 @@ public class CCityDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -138,6 +150,7 @@ public class CCityDTO extends AbstractAuditingDTO {
     public String toString() {
         return "CCityDTO{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +

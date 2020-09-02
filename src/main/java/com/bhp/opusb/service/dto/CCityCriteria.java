@@ -27,6 +27,8 @@ public class CCityCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter code;
+
     private StringFilter name;
 
     private UUIDFilter uid;
@@ -34,28 +36,23 @@ public class CCityCriteria implements Serializable, Criteria {
     private BooleanFilter active;
 
     private LongFilter adOrganizationId;
-    private StringFilter adOrganizationName;
 
     private LongFilter countryId;
-    private StringFilter countryName;
 
     private LongFilter regionId;
-    private StringFilter regionName;
 
     public CCityCriteria() {
     }
 
     public CCityCriteria(CCityCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.code = other.code == null ? null : other.code.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
         this.countryId = other.countryId == null ? null : other.countryId.copy();
-        this.countryName = other.countryName == null ? null : other.countryName.copy();
         this.regionId = other.regionId == null ? null : other.regionId.copy();
-        this.regionName = other.regionName == null ? null : other.regionName.copy();
     }
 
     @Override
@@ -69,6 +66,14 @@ public class CCityCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getCode() {
+        return code;
+    }
+
+    public void setCode(StringFilter code) {
+        this.code = code;
     }
 
     public StringFilter getName() {
@@ -103,14 +108,6 @@ public class CCityCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public StringFilter getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(StringFilter adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
-
     public LongFilter getCountryId() {
         return countryId;
     }
@@ -127,26 +124,6 @@ public class CCityCriteria implements Serializable, Criteria {
         this.regionId = regionId;
     }
 
-    public StringFilter getCountryName() {
-        return countryName;
-    }
-
-    public void setCountryName(StringFilter countryName) {
-        this.countryName = countryName;
-    }
-
-    public StringFilter getRegionName() {
-        return regionName;
-    }
-
-    public void setRegionName(StringFilter regionName) {
-        this.regionName = regionName;
-    }
-    
-
-
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -159,30 +136,26 @@ public class CCityCriteria implements Serializable, Criteria {
         final CCityCriteria that = (CCityCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(code, that.code) &&
             Objects.equals(name, that.name) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(adOrganizationName, that.adOrganizationName) &&
             Objects.equals(countryId, that.countryId) &&
-            Objects.equals(countryName, that.countryName) &&
-            Objects.equals(regionId, that.regionId) &&
-            Objects.equals(regionName, that.regionName);
+            Objects.equals(regionId, that.regionId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
+        code,
         name,
         uid,
         active,
         adOrganizationId,
-        adOrganizationName,
         countryId,
-        countryName,
-        regionId,
-        regionName
+        regionId
         );
     }
 
@@ -190,18 +163,14 @@ public class CCityCriteria implements Serializable, Criteria {
     public String toString() {
         return "CCityCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (code != null ? "code=" + code + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
                 (countryId != null ? "countryId=" + countryId + ", " : "") +
-                (countryName != null ? "countryName=" + countryName + ", " : "") +
                 (regionId != null ? "regionId=" + regionId + ", " : "") +
-                (regionName != null ? "regionName=" + regionName + ", " : "") +
             "}";
     }
-
-    
 
 }

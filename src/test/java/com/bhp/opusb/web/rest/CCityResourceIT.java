@@ -39,6 +39,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class CCityResourceIT {
 
+    private static final String DEFAULT_CODE = "HRU";
+    private static final String UPDATED_CODE = "DLE";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -76,6 +79,7 @@ public class CCityResourceIT {
      */
     public static CCity createEntity(EntityManager em) {
         CCity cCity = new CCity()
+            .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
@@ -99,6 +103,7 @@ public class CCityResourceIT {
      */
     public static CCity createUpdatedEntity(EntityManager em) {
         CCity cCity = new CCity()
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
@@ -136,6 +141,7 @@ public class CCityResourceIT {
         List<CCity> cCityList = cCityRepository.findAll();
         assertThat(cCityList).hasSize(databaseSizeBeforeCreate + 1);
         CCity testCCity = cCityList.get(cCityList.size() - 1);
+        assertThat(testCCity.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCCity.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCCity.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCCity.isActive()).isEqualTo(DEFAULT_ACTIVE);
@@ -161,6 +167,25 @@ public class CCityResourceIT {
         assertThat(cCityList).hasSize(databaseSizeBeforeCreate);
     }
 
+
+    @Test
+    @Transactional
+    public void checkCodeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cCityRepository.findAll().size();
+        // set the field null
+        cCity.setCode(null);
+
+        // Create the CCity, which fails.
+        CCityDTO cCityDTO = cCityMapper.toDto(cCity);
+
+        restCCityMockMvc.perform(post("/api/c-cities")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(cCityDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CCity> cCityList = cCityRepository.findAll();
+        assertThat(cCityList).hasSize(databaseSizeBeforeTest);
+    }
 
     @Test
     @Transactional
@@ -192,6 +217,7 @@ public class CCityResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cCity.getId().intValue())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -208,6 +234,7 @@ public class CCityResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cCity.getId().intValue()))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
@@ -230,6 +257,84 @@ public class CCityResourceIT {
 
         defaultCCityShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCCityShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCCitiesByCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cCityRepository.saveAndFlush(cCity);
+
+        // Get all the cCityList where code equals to DEFAULT_CODE
+        defaultCCityShouldBeFound("code.equals=" + DEFAULT_CODE);
+
+        // Get all the cCityList where code equals to UPDATED_CODE
+        defaultCCityShouldNotBeFound("code.equals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCitiesByCodeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cCityRepository.saveAndFlush(cCity);
+
+        // Get all the cCityList where code not equals to DEFAULT_CODE
+        defaultCCityShouldNotBeFound("code.notEquals=" + DEFAULT_CODE);
+
+        // Get all the cCityList where code not equals to UPDATED_CODE
+        defaultCCityShouldBeFound("code.notEquals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCitiesByCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        cCityRepository.saveAndFlush(cCity);
+
+        // Get all the cCityList where code in DEFAULT_CODE or UPDATED_CODE
+        defaultCCityShouldBeFound("code.in=" + DEFAULT_CODE + "," + UPDATED_CODE);
+
+        // Get all the cCityList where code equals to UPDATED_CODE
+        defaultCCityShouldNotBeFound("code.in=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCitiesByCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cCityRepository.saveAndFlush(cCity);
+
+        // Get all the cCityList where code is not null
+        defaultCCityShouldBeFound("code.specified=true");
+
+        // Get all the cCityList where code is null
+        defaultCCityShouldNotBeFound("code.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCCitiesByCodeContainsSomething() throws Exception {
+        // Initialize the database
+        cCityRepository.saveAndFlush(cCity);
+
+        // Get all the cCityList where code contains DEFAULT_CODE
+        defaultCCityShouldBeFound("code.contains=" + DEFAULT_CODE);
+
+        // Get all the cCityList where code contains UPDATED_CODE
+        defaultCCityShouldNotBeFound("code.contains=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCCitiesByCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        cCityRepository.saveAndFlush(cCity);
+
+        // Get all the cCityList where code does not contain DEFAULT_CODE
+        defaultCCityShouldNotBeFound("code.doesNotContain=" + DEFAULT_CODE);
+
+        // Get all the cCityList where code does not contain UPDATED_CODE
+        defaultCCityShouldBeFound("code.doesNotContain=" + UPDATED_CODE);
     }
 
 
@@ -478,6 +583,7 @@ public class CCityResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cCity.getId().intValue())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -528,6 +634,7 @@ public class CCityResourceIT {
         // Disconnect from session so that the updates on updatedCCity are not directly saved in db
         em.detach(updatedCCity);
         updatedCCity
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
@@ -542,6 +649,7 @@ public class CCityResourceIT {
         List<CCity> cCityList = cCityRepository.findAll();
         assertThat(cCityList).hasSize(databaseSizeBeforeUpdate);
         CCity testCCity = cCityList.get(cCityList.size() - 1);
+        assertThat(testCCity.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCCity.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCCity.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCCity.isActive()).isEqualTo(UPDATED_ACTIVE);

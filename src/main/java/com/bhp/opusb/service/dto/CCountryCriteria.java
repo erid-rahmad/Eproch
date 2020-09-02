@@ -33,12 +33,15 @@ public class CCountryCriteria implements Serializable, Criteria {
 
     private BooleanFilter withRegion;
 
+    private StringFilter phoneCode;
+
+    private StringFilter description;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
 
     private LongFilter currencyId;
-    private StringFilter currencyName;
 
     private LongFilter cRegionId;
 
@@ -54,10 +57,11 @@ public class CCountryCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.code = other.code == null ? null : other.code.copy();
         this.withRegion = other.withRegion == null ? null : other.withRegion.copy();
+        this.phoneCode = other.phoneCode == null ? null : other.phoneCode.copy();
+        this.description = other.description == null ? null : other.description.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
-        this.currencyName = other.currencyName == null ? null : other.currencyName.copy();
         this.cRegionId = other.cRegionId == null ? null : other.cRegionId.copy();
         this.cCityId = other.cCityId == null ? null : other.cCityId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -100,6 +104,22 @@ public class CCountryCriteria implements Serializable, Criteria {
         this.withRegion = withRegion;
     }
 
+    public StringFilter getPhoneCode() {
+        return phoneCode;
+    }
+
+    public void setPhoneCode(StringFilter phoneCode) {
+        this.phoneCode = phoneCode;
+    }
+
+    public StringFilter getDescription() {
+        return description;
+    }
+
+    public void setDescription(StringFilter description) {
+        this.description = description;
+    }
+
     public UUIDFilter getUid() {
         return uid;
     }
@@ -124,18 +144,6 @@ public class CCountryCriteria implements Serializable, Criteria {
         this.currencyId = currencyId;
     }
 
-    public StringFilter getCurrencyName() {
-        return currencyName;
-    }
-
-    public void setCurrencyName(StringFilter currencyName) {
-        this.currencyName = currencyName;
-    }
-
-
-
-
-
     public LongFilter getCRegionId() {
         return cRegionId;
     }
@@ -159,7 +167,8 @@ public class CCountryCriteria implements Serializable, Criteria {
     public void setAdOrganizationId(LongFilter adOrganizationId) {
         this.adOrganizationId = adOrganizationId;
     }
-    
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -174,10 +183,11 @@ public class CCountryCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(code, that.code) &&
             Objects.equals(withRegion, that.withRegion) &&
+            Objects.equals(phoneCode, that.phoneCode) &&
+            Objects.equals(description, that.description) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(currencyId, that.currencyId) &&
-            Objects.equals(currencyName, that.currencyName) &&
             Objects.equals(cRegionId, that.cRegionId) &&
             Objects.equals(cCityId, that.cCityId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
@@ -190,10 +200,11 @@ public class CCountryCriteria implements Serializable, Criteria {
         name,
         code,
         withRegion,
+        phoneCode,
+        description,
         uid,
         active,
         currencyId,
-        currencyName,
         cRegionId,
         cCityId,
         adOrganizationId
@@ -207,16 +218,15 @@ public class CCountryCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (code != null ? "code=" + code + ", " : "") +
                 (withRegion != null ? "withRegion=" + withRegion + ", " : "") +
+                (phoneCode != null ? "phoneCode=" + phoneCode + ", " : "") +
+                (description != null ? "description=" + description + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
-                (currencyName != null ? "currencyName=" + currencyName + ", " : "") +
                 (cRegionId != null ? "cRegionId=" + cRegionId + ", " : "") +
                 (cCityId != null ? "cCityId=" + cCityId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }
-
-    
 
 }

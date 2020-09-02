@@ -64,6 +64,7 @@
                   separator=";"
                   tableName="c_city">
             <column name="id" type="numeric"/>
+            <column name="code" type="string"/>
             <column name="name" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
@@ -72,6 +73,13 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20200831072700-1-add-column" author="dian-tri-budianto">
+        <addColumn tableName="c_city">
+            <column name="code" type="varchar(255)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="ux_c_city_code" />
+            </column>
+        </addColumn>
+    </changeSet>
 <!--
     <changeSet id="20200619072700-1-add-column" author="dian-tri-budianto">
         <addColumn tableName="c_city">

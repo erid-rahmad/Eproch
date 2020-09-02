@@ -13,7 +13,13 @@ public class CRegionDTO extends AbstractAuditingDTO {
     private Long id;
 
     @NotNull
+    @Pattern(regexp = "^[A-Z]{3}$")
+    private String code;
+
+    @NotNull
     private String name;
+
+    private String description;
 
     private UUID uid;
 
@@ -34,12 +40,28 @@ public class CRegionDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UUID getUid() {
@@ -117,7 +139,9 @@ public class CRegionDTO extends AbstractAuditingDTO {
     public String toString() {
         return "CRegionDTO{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
