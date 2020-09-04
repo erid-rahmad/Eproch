@@ -184,6 +184,108 @@ entity CVendorTax {
 	active Boolean
 }
 
+/**
+ * The UoM entity.
+ */
+entity CUnitOfMeasure {
+	code String required unique
+	symbol String required
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+/**
+ * The Convertion Type & Rate entity.
+ */
+entity CConvertionType {
+	code String required unique
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CConvertionRate {
+	validFrom LocalDate required 
+	validTo LocalDate required
+	rate BigDecimal required
+	uid UUID
+	active Boolean
+}
+/**
+ * The CostCenter entity.
+ */
+entity CCostCenter {
+	code String required unique
+	name String required
+	division String required
+	description String
+	uid UUID
+	active Boolean
+}
+/**
+ * The Element Value entity.
+ */
+entity CElementValue {
+	code String required unique
+	name String required
+	type String required
+	description String
+	uid UUID
+	active Boolean
+}
+/**
+ * The Product Group/ Asset Group entity.
+ */
+entity CProductGroup {
+	code String required unique
+	name String required
+	type String
+	uid UUID
+	active Boolean
+}
+
+entity CProductGroupAccount {
+	depreciation Depreciation required
+	lifeYear Integer required
+	lifeMonth Integer required
+	uid UUID
+	active Boolean
+}
+/**
+ * The Calendar entity.
+ */
+entity CCalendar {
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CPeriod {
+	name String required
+	description String
+	startDate LocalDate required
+	endDate LocalDate required
+	uid UUID
+	active Boolean
+}
+
+entity CNonBusinessDay {
+	category String required
+	date LocalDate required
+	description String
+	uid UUID
+	active Boolean
+}
+/**
+ * Enumeration.
+ */
+enum Depreciation {
+	STRAIGHT_LINE, DOUBLE_DECLINING
+}
+
 enum VendorType {
 	COMPANY, PROFESSIONAL
 }
@@ -279,6 +381,29 @@ relationship ManyToOne {
 	CVendorTax{vendor required} to CVendor
 	CVendorTax{tax required} to CTax
 	CVendorTax{adOrganization required} to ADOrganization
+
+	CUnitOfMeasure{adOrganization required} to ADOrganization
+	CCostCenter{adOrganization required} to ADOrganization
+	
+	// For convertion rate with currency and convertion type.
+	CConvertionRate{sourceCurrency required} to CCurrency
+	CConvertionRate{targetCurrency required} to CCurrency
+	CConvertionType{adOrganization required} to ADOrganization
+	CConvertionRate{convertionType required} to CConvertionType
+	CConvertionRate{adOrganization required} to ADOrganization
+
+	CElementValue{adOrganization required} to ADOrganization
+	CProductGroupAccount{assetAccount} to CElementValue
+	CProductGroupAccount{depreciationAccount} to CElementValue
+	CProductGroup{adOrganization required} to ADOrganization
+	CProductGroupAccount{productGroup required} to CProductGroup
+	CProductGroupAccount{adOrganization required} to ADOrganization
+	
+	CCalendar{adOrganization required} to ADOrganization
+	CNonBusinessDay{calendar required} to CCalendar
+	CNonBusinessDay{adOrganization required} to ADOrganization
+	CPeriod{calendar required} to CCalendar
+	CPeriod{adOrganization required} to ADOrganization
 }
 
 // Allow filtering to all entities.

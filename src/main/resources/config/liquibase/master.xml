@@ -58,6 +58,16 @@
     <include file="config/liquibase/changelog/20200730065900_added_entity_CPicBusinessCat.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200813110800_added_entity_CFunctionary.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200817184800_added_entity_CTax.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080400_added_entity_CUnitOfMeasure.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080500_added_entity_CConvertionType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080600_added_entity_CConvertionRate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080700_added_entity_CCostCenter.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080800_added_entity_CElementValue.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080900_added_entity_CProductGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081000_added_entity_CProductGroupAccount.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081100_added_entity_CCalendar.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081200_added_entity_CPeriod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081300_added_entity_CNonBusinessDay.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -99,6 +109,16 @@
     <include file="config/liquibase/changelog/20200730065900_added_entity_constraints_CPicBusinessCat.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200813110800_added_entity_constraints_CFunctionary.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200817184800_added_entity_constraints_CTax.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080400_added_entity_constraints_CUnitOfMeasure.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080500_added_entity_constraints_CConvertionType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080600_added_entity_constraints_CConvertionRate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080800_added_entity_constraints_CElementValue.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080900_added_entity_constraints_CProductGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081000_added_entity_constraints_CProductGroupAccount.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081100_added_entity_constraints_CCalendar.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081200_added_entity_constraints_CPeriod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081300_added_entity_constraints_CNonBusinessDay.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080700_added_entity_constraints_CCostCenter.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 
     <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>
