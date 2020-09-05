@@ -128,7 +128,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   private fields: any[] = [];
   private baseApiUrl: string = '';
   private filterQuery: string = '';
-  private filterQueryTmp: string = null;
+  private filterQueryTmp: string = '';
   private parentId: number = 0;
 
   private registerTabState!: (options: RegisterTabParameter) => Promise<void>
@@ -218,6 +218,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.toolbarEventBus?.$on('cancel-operation', this.cancelOperation);
     this.toolbarEventBus?.$on('delete-record', this.deleteRow);
     this.toolbarEventBus?.$on('export-record', this.exportRecord);
+    this.toolbarEventBus?.$on('clear-filter-query-tmp', this.clearFilterQueryTmp);
   }
 
   beforeDestroy() {
@@ -227,6 +228,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.toolbarEventBus?.$off('cancel-operation', this.cancelOperation);
     this.toolbarEventBus?.$off('delete-record', this.deleteRow);
     this.toolbarEventBus?.$off('export-record', this.exportRecord);
+    this.toolbarEventBus?.$off('clear-filter-query-tmp', this.clearFilterQueryTmp);
   }
   // End of lifecycle events.
 
@@ -479,17 +481,39 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     };
   }
 
+  private clearFilterQueryTmp(data?: any) {
+    if (!data.isGridView || (!this.mainTab && data?.tabId !== this.tabId))
+      return;
+      
+      this.filterQueryTmp = '';
+  }
+
   public filterRecord(query: string) {
+    //console.log("-filterQuery : "+this.filterQuery);
+    //console.log("-filterQueryTmp : "+this.filterQueryTmp);
+    
     if (!query) {
-      this.filterQuery = this.filterQueryTmp || this.tab.nativeFilterQuery;
-      this.filterQueryTmp = null;
+      //console.log('1.Clear');
+      if(this.filterQueryTmp){
+        this.filterQuery = this.filterQueryTmp || this.tab.nativeFilterQuery;
+        this.filterQueryTmp = '';
+      }
     } else {
-      if (this.filterQueryTmp === null) {
-        this.filterQueryTmp = this.filterQuery;
+      //console.log('2.Execute');
+      if(this.parentId!=0){
+        if (this.filterQueryTmp === '') {
+          this.filterQueryTmp = this.filterQuery;
+        }
       }
 
       this.filterQuery = this.filterQueryTmp ? `${this.filterQueryTmp}&${query}` : query;
     }
+
+    //console.log("========");
+    //console.log(this.parentId);
+    //console.log("query : "+query);
+    //console.log("filterQuery : "+this.filterQuery);
+    //console.log("filterQueryTmp : "+this.filterQueryTmp);
     this.retrieveAllRecords();
   }
 
@@ -648,6 +672,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public retrieveAllRecords(): void {
+    //console.log("filterQuery in retrieve : "+this.filterQuery);
     this.isFetching = true;
     const paginationQuery = {
       page: this.page - 1,
