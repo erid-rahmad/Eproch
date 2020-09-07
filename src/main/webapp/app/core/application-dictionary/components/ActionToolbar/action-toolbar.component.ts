@@ -168,6 +168,9 @@ export default class ActionToolbar extends ActionToolbarProps {
     this.eventBus.$emit('tab-navigate', {
       direction: -1
     });
+    this.eventBus.$emit('clear-filter-query-tmp', {
+      isGridView: this.gridView
+    });
   }
 
   public goToChildTab() {
@@ -177,6 +180,9 @@ export default class ActionToolbar extends ActionToolbarProps {
     });
     this.eventBus.$emit('tab-navigate', {
       direction: 1
+    });
+    this.eventBus.$emit('clear-filter-query-tmp', {
+      isGridView: this.gridView
     });
   }
 
