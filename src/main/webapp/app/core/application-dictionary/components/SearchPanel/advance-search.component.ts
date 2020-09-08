@@ -1,22 +1,13 @@
-import { Component, Vue, Inject, Watch } from 'vue-property-decorator'
-import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
+import { ADColumnType } from '@/shared/model/ad-column.model';
 import { IADField } from '@/shared/model/ad-field.model';
 import { ADReferenceType } from '@/shared/model/ad-reference.model';
-import { ADColumnType } from '@/shared/model/ad-column.model';
-import { ElTable } from 'element-ui/types/table';
-import pluralize from 'pluralize';
 import { kebabCase } from 'lodash';
-import { not } from 'vuelidate/lib/validators';
-import { getValidatorType } from '@/utils/validate';
+import pluralize from 'pluralize';
+import { Component, Inject, Vue, Watch } from 'vue-property-decorator';
+import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 
 const AdvanceSearchProps = Vue.extend({
   props: {
-    eventBus: {
-      type: Object,
-      default: () => {
-        return null;
-      }
-    },
     tab: {
       type: Object,
       default: () => {

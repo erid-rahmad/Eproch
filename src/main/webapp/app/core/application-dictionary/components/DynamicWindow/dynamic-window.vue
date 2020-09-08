@@ -2,19 +2,42 @@
   <div class="app-container">
     <el-row :gutter="0">
       <el-col :span="12">
-        <h4>{{ title }}</h4>
+        <el-breadcrumb
+          class="tab-navigation-breadcrumb"
+          separator-class="el-icon-arrow-right"
+          @click.native="onNavigationBreadcrumbClicked"
+        >
+          <transition-group name="breadcrumb">
+            <el-breadcrumb-item
+              v-for="(tab, index) in tabStack"
+              :key="tab.id"
+              :class="{ 'link-enabled': index < tabStack.length }"
+              :data-id="tab.id"
+              :data-index="index"
+            >
+              {{ tab.name }}
+            </el-breadcrumb-item>
+          </transition-group>
+        </el-breadcrumb>
       </el-col>
       <el-col :span="12">
         <action-toolbar
           ref="mainToolbar"
           :at-window-root="tabStack.length <= 1"
           :at-last-tab="childTabs.length === 0"
-          :event-bus="mainToolbarEventBus"
           :buttons="mainTab.toolbarButtons"
-          @edit-mode-change="onEditModeChange"
+          :event-bus="mainToolbarEventBus"
+          :record-count="totalRecords"
+          @cancel="onActionCanceled"
+          @copy="onRecordCopy"
+          @delete="showDeleteConfirmation"
+          @edit-mode-change="onEditModeChanged"
+          @open-search-panel="openSearchPanel"
           @refresh="refreshWindow"
-          @toggle-view="switchView"
           @run-trigger="runTrigger"
+          @save="onRecordSave"
+          @tab-navigate="onTabNavigated"
+          @toggle-view="switchView"
         />
       </el-col>
     </el-row>
@@ -23,7 +46,7 @@
       :class="{'detailed-view': !gridView}"
     >
       <splitpanes
-        class="default-theme"
+        class="opus-theme"
       >
         <pane
           v-if="treeView"
@@ -44,32 +67,32 @@
             @ready="updateHeight"
             @resized="updateHeight"
           >
-            <pane class="mainPane" ref="mainPane">
-              <transition name="fade" mode="out-in">
-                <keep-alive>
-                  <grid-view
-                    v-if="gridView"
-                    ref="mainGrid"
-                    :tab="mainTab"
-                    :toolbar-event-bus="mainToolbarEventBus"
-                    @current-row-change="onMainRecordChange"
-                    @quit-edit-mode="quitEditMode"
-                    @record-saved="reloadTreeView"
-                    @total-count-changed="onTotalCountChange"
-                    main-tab
-                  />
-                  <detail-view
-                    v-else
-                    ref="mainForm"
-                    :tab="mainTab"
-                    :page="currentRecordNo"
-                    :toolbar-event-bus="mainToolbarEventBus"
-                    @current-page-change="onMainRecordChange"
-                    @total-count-changed="onTotalCountChange"
-                  />
-                </keep-alive>
-              </transition>
-              
+            <pane
+              ref="mainPane"
+              class="main-pane"
+            >
+              <grid-view
+                v-show="gridView"
+                ref="mainGrid"
+                :tab="mainTab"
+                :toolbar-event-bus="mainToolbarEventBus"
+                @current-row-change="onMainRecordChange"
+                @quit-edit-mode="quitEditMode"
+                @record-saved="reloadTreeView"
+                @rows-deleted="deleteConfirmationVisible = false"
+                @total-count-changed="onTotalCountChange"
+                main-tab
+              />
+              <detail-view
+                v-show="!gridView"
+                ref="mainForm"
+                :tab="mainTab"
+                :record="currentRecord"
+                :toolbar-event-bus="mainToolbarEventBus"
+                @edit-mode-change="$refs.mainGrid.editRecord()"
+                @form-validated="$refs.mainGrid.beforeSave()"
+              />
+
               <div>
                 <el-pagination
                   ref="toolbarPagination"
@@ -79,9 +102,9 @@
                   :current-page.sync="currentRecordNo"
                   :page-size="1"
                   small
+                  :total="totalRecords"
                   @current-change="onCurrentRecordChange"
                 />
-                <!-- :total="totalRecords" -->
               </div>
 
             </pane>
@@ -105,11 +128,17 @@
                   :name="'' + index"
                 >
                   <span slot="label">
-                    <i v-if="tab.icon" :class="`${tab.icon}`"> </i>{{ tab.name }}
+                    <em v-if="tab.icon" :class="`${tab.icon}`"></em>{{ tab.name }}
                   </span>
                   <tab-toolbar
-                    :tab-id="'' + index"
+                    ref="lineToolbar"
+                    :disabled="isEditing"
                     :event-bus="secondaryToolbarEventBus"
+                    :tab-id="'' + index"
+                    @cancel="$refs.lineGrid[index].cancelOperation()"
+                    @copy="onRecordCopy"
+                    @delete="showDeleteConfirmation"
+                    @save="onRecordSave"
                   />
                   <grid-view
                     ref="lineGrid"
@@ -117,6 +146,8 @@
                     :tab-id="'' + index"
                     :toolbar-event-bus="secondaryToolbarEventBus"
                     lazy-load
+                    @rows-deleted="deleteConfirmationVisible = false"
+                    @total-count-changed="count => {$refs.lineToolbar[index].recordCount = count}"
                   />
                 </el-tab-pane>
               </el-tabs>
@@ -136,6 +167,35 @@
         ref="triggerForm"
         :data="triggerModel"
       />
+      <el-dialog
+          width="20%"
+          :visible.sync="deleteConfirmationVisible"
+          :title="$t('entity.delete.title')"
+      >
+        <template>
+          <span>Are you sure to delete the selected record(s)?</span>
+          <div slot="footer">
+            <el-button 
+              style="margin-left: 0px;"
+              size="mini"
+              icon="el-icon-delete" 
+              type="danger" 
+              @click="deleteRecords()"
+            >
+              {{ $t('entity.action.delete') }}
+            </el-button>
+            <el-button 
+              style="margin-left: 0px;"
+              size="mini"
+              icon="el-icon-close" 
+              @click="deleteConfirmationVisible = false"
+            >
+              {{ $t('entity.action.cancel') }}
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
+
     </div>
   </div>
 </template>
@@ -143,6 +203,36 @@
 <script lang="ts" src="./dynamic-window.component.ts"></script>
 
 <style lang="scss">
+.splitpanes {
+  background: #333;
+}
+.splitpanes__splitter {
+  background-color: #ccc;
+  position: relative;
+}
+.splitpanes__splitter:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  transition: opacity 0.4s;
+  background-color: rgba(255, 0, 0, 0.2);
+  opacity: 0;
+  z-index: 5;
+}
+.splitpanes__splitter:hover:before {
+  opacity: 1;
+}
+.splitpanes--vertical > .splitpanes__splitter:before {
+  left: -8px;
+  right: -8px;
+  height: 100%;
+}
+.splitpanes--horizontal > .splitpanes__splitter:before {
+  top: -8px;
+  bottom: -8px;
+  width: 100%;
+}
 .el-tabs--border-card > .el-tabs__content {
   height: calc(100% - 15px);
   padding: 0px;
@@ -157,19 +247,15 @@
   padding: 0px 10px 0px 10px;
   height: 30px;
 }
-/*
-.el-pagination__jump {
-  display: none;
-}
-.el-pagination__jump:before {
-  content: "row";
-}
-*/
 .window-content {
   position: relative;
   height: calc(100% - 40px);
 
-  &.detailed-view .splitpanes__pane {
+  .splitpanes__pane.main-pane {
+    position: relative;
+  }
+
+  &.detailed-view .splitpanes__pane.main-pane {
     overflow-y: auto;
   }
 
@@ -182,7 +268,17 @@
   }
 }
 </style>
+
 <style lang="scss" scoped>
+.tab-navigation-breadcrumb {
+  line-height: 32px;  
+  padding-left: 8px;
+
+  .link-enabled {
+    font-weight: 700;
+    cursor: pointer;
+  }
+}
 .action-toolbar {
   padding: 4px;
   text-align: right;
