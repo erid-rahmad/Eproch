@@ -781,9 +781,9 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public isFixed(field: any): boolean | string {
-    /* if (field.adColumn.name === 'active') {
-      return 'right';
-    } */
+    //if (field.adColumn.name === 'active') {
+      //return 'right';
+    //}
     return false;
   }
 
