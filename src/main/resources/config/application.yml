@@ -204,4 +204,4 @@ kafka:
 
 application:
   attachment:
-    upload-dir: /home/aaryadewa/Server/opusb/data/attachments
+    upload-dir: /opt/eproc/data/attachments
