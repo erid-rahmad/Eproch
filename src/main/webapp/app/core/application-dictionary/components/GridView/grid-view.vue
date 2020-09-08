@@ -21,7 +21,7 @@
         fixed
         type="selection"
         align="center"
-        width="42">
+        width="25">
       </el-table-column>
       <el-table-column
         v-for="field in gridFields"
@@ -123,9 +123,9 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column fixed="left" width="66">
+      <el-table-column fixed="left" width="30">
         <template slot-scope="scope">
-          <el-button
+          <el-link
             @click="activateInlineEditing(scope.row)"
             type="primary"
             size="mini"
@@ -247,6 +247,9 @@
 <style>
 .grid-view .el-table .is-error .el-input__inner {
   border-color: #ff4949;
+}
+.el-table__fixed, .el-table__fixed-right{
+  box-shadow: none;
 }
 </style>
 <style lang="scss" scoped>
