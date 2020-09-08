@@ -11,17 +11,17 @@
       :height="height"
       :default-sort="gridSchema.defaultSort"
       :empty-text="gridSchema.emptyText"
-      @current-change="changeCurrentRow"
+      @current-change="onCurrentRowChanged"
       @sort-change="changeOrder"
-      @select="changeMultipleRowSelection"
-      @selection-change="changeRowSelection"
+      @selection-change="onSelectionChanged"
       @row-dblclick="activateInlineEditing"
     >
       <el-table-column
+        v-show="!editing"
         fixed
         type="selection"
         align="center"
-        width="42">
+        width="25">
       </el-table-column>
       <el-table-column
         v-for="field in gridFields"
@@ -31,8 +31,8 @@
         :label="field.name"
         :width="getFieldWidth(field)"
         min-width="144"
-        :show-overflow-tooltip="!editing"
-        sortable="custom"
+        show-overflow-tooltip
+        :sortable="editing ? false: 'custom'"
       >
         <template slot-scope="scope">
           <el-switch
@@ -50,18 +50,6 @@
           <span v-else-if="!scope.row.editing">
             {{ getFieldValue(scope.row, field) }}
           </span>
-          <!-- <el-input
-            v-else-if="isTableDirectLink(field)"
-            v-model="scope.row[scope.column.property]"
-            size="small"
-            clearable
-          >
-            <i
-              slot="prefix"
-              class="el-input__icon el-icon-search"
-              @click="openSearchWindow"
-            />
-          </el-input> -->
           <el-tooltip
             v-else
             :disabled="!hasError(field)"
@@ -123,9 +111,9 @@
           </el-tooltip>
         </template>
       </el-table-column>
-      <el-table-column fixed="left" width="66">
+      <el-table-column fixed="left" width="30">
         <template slot-scope="scope">
-          <el-button
+          <el-link
             @click="activateInlineEditing(scope.row)"
             type="primary"
             size="mini"
@@ -144,38 +132,9 @@
       :current-page.sync="page"
       :page-sizes="[10, 20, 50, 100]"
       :page-size="itemsPerPage"
-      layout="total, sizes, prev, pager, next, jumper"
+      layout="sizes, prev, pager, next"
       :total="queryCount"
     />
-
-    <el-dialog
-        width="35%"
-        :visible.sync="showDeleteDialog"
-        :title="$t('entity.delete.title')"
-    >
-      <template>
-        <span>Are you sure to delete the selected records?</span>
-        <div slot="footer">
-          <el-button 
-            style="margin-left: 0px;"
-            size="mini"
-            icon="el-icon-delete" 
-            type="danger" 
-            @click="actionDelete()"
-          >
-            {{ $t('entity.action.delete') }}
-          </el-button>
-          <el-button 
-            style="margin-left: 0px;"
-            size="mini"
-            icon="el-icon-close" 
-            @click="closeDialog()"
-          >
-            {{ $t('entity.action.cancel') }}
-          </el-button>
-        </div>
-      </template>
-    </el-dialog>
 
     <el-dialog
         width="35%"
@@ -247,6 +206,9 @@
 <style>
 .grid-view .el-table .is-error .el-input__inner {
   border-color: #ff4949;
+}
+.el-table__fixed, .el-table__fixed-right{
+  box-shadow: none;
 }
 </style>
 <style lang="scss" scoped>

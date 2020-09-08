@@ -26,11 +26,28 @@ management:
         enabled: false
 
 spring:
+  profiles:
+    active: prod
+    mail:
+      host: BHPCAS1SRV.berca.co.id
+      port: 587
+      username: admin.opusb@berca.co.id
+      password: cSWZKe%o~h@iaUg4
+      protocol: smtp
+      tls: true
+      properties.mail.smtp:
+        auth: true
+        starttls.enable: true
+        ssl.trust: BHPCAS1SRV.berca.co.id
   devtools:
     restart:
       enabled: false
     livereload:
       enabled: false
+  cloud:
+    dataflow:
+      client:
+        server-uri: http://bhp-dwh-prd:9393
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/OpusWebApp

@@ -10,11 +10,11 @@
         @click="addRecord"
       />
       <el-button
+        v-show="recordCount && !isEditing"
         type="primary"
         size="small"
         icon="el-icon-document-copy"
         title="Copy (alt + c)"
-        :disabled="isEditing"
         @click="copyRecord"
       />
     </el-button-group>
@@ -35,7 +35,7 @@
         @click="cancelOperation"
       />
       <el-button
-        v-show="!isEditing"
+        v-show="recordCount && !isEditing"
         type="danger"
         size="small"
         icon="el-icon-delete"
@@ -88,7 +88,7 @@
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
-    <el-button-group v-show="!isEditing">
+    <el-button-group>
       <el-button
         type="primary"
         size="small"
@@ -98,6 +98,7 @@
         :plain="!gridView"
       />
       <el-button
+        v-show="!isEditing"
         type="primary"
         size="small"
         icon="el-icon-arrow-up"
@@ -106,6 +107,7 @@
         @click="goToParentTab"
       />
       <el-button
+        v-show="!isEditing"
         type="primary"
         size="small"
         icon="el-icon-arrow-down"

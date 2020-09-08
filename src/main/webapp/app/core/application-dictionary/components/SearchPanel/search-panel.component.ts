@@ -5,12 +5,6 @@ import { IADField } from '@/shared/model/ad-field.model';
 
 const SearchPanelProps = Vue.extend({
   props: {
-    eventBus: {
-      type: Object,
-      default: () => {
-        return null;
-      }
-    },
     fields: {
       type: Array,
       default: () => {
@@ -30,17 +24,6 @@ export default class SearchPanel extends SearchPanelProps {
 
   filterQuery: string = '';
   currentTab: string = 'basic';
-
-  @Watch('fields')
-  onFieldsChange(fields: Array<IADField>) {
-    //console.log('Fields updated. %O', fields);
-  }
-
-  created() {
-  }
-
-  beforeDestroy() {
-  }
 
   public onSearch(params: any) {
     this.filterQuery = params;
