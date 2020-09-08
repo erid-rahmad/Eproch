@@ -1,19 +1,17 @@
-import { Component, Vue, Watch, Inject, Mixins } from 'vue-property-decorator';
+import { RegisterTabParameter } from '@/shared/config/store/window-store';
+import { ADColumnType } from '@/shared/model/ad-column.model';
+import { ADReferenceType } from '@/shared/model/ad-reference.model';
+import { formatJson } from '@/utils';
+import { exportJson2Excel } from '@/utils/excel';
+import { nullifyField } from '@/utils/form';
+import schema from 'async-validator';
+import { ElTable } from 'element-ui/types/table';
+import _, { kebabCase } from 'lodash';
+import pluralize from "pluralize";
+import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
+import { mapActions } from 'vuex';
 import ContextVariableAccessor from "../ContextVariableAccessor";
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
-import { ElTable } from 'element-ui/types/table';
-import { ADColumnType, ADColumn } from '@/shared/model/ad-column.model';
-import schema from 'async-validator';
-import { getValidatorType } from '@/utils/validate';
-import { ADReferenceType } from '@/shared/model/ad-reference.model';
-import { kebabCase } from "lodash";
-import pluralize from "pluralize";
-import _ from 'lodash';
-import { mapActions } from 'vuex';
-import { RegisterTabParameter } from '@/shared/config/store/window-store';
-import { nullifyField } from '@/utils/form';
-import { exportJson2Excel } from '@/utils/excel';
-import { formatJson } from '@/utils';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -83,9 +81,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   isSaving: boolean = false;
 
   // Multiple row selection.
-  selectedRows: any = [];
-  multipleSelectedRowCheckbox: any = [];
-  multipleSelectedRow: Array<any> = [];
+  selectedRows: any[] = [];
   filterVal: any = [];
 
   //Dialog
@@ -155,32 +151,28 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   get observableTabProperties() {
-    const { name, adfields, targetEndpoint, filterQuery, parentId, promoted } = this.tab;
-    return { name, adfields, targetEndpoint, filterQuery, parentId, promoted };
+    const { name, adfields, targetEndpoint, filterQuery, parentId, promoted, validationSchema } = this.tab;
+    return { name, adfields, targetEndpoint, filterQuery, parentId, promoted, validationSchema };
   }
 
+  /**
+   * Sort the fields upon update.
+   * @param fields The updated AdField list.
+   */
   @Watch('fields')
   onFieldsChange(fields: any[]) {
+    if (! fields) {
+      return;
+    }
+
     this.referenceItemsMap.clear();
     this.gridFields = fields
       .filter(field => field.showInGrid)
-      .sort((a, b) => {
-        if (a.gridSequence !== null) {
-          return b.gridSequence !== null ? a.gridSequence - b.gridSequence : -1;
-        }
-
-        return b.gridSequence !== null ? 1 : -1;
+      .sort((prevItem, nextItem) => {
+        const prevSequence = prevItem.detailSequence || 0;
+        const nextSequence = nextItem.detailSequence || 0;
+        return prevSequence - nextSequence;
       });
-
-    // Prepare the form validation schema.
-    this.validationSchema = {};
-    for (let field of this.fields) {
-      const column = field.adColumn;
-      this.validationSchema[column.name] = {
-        type: getValidatorType(column.type),
-        required: column.mandatory
-      }
-    }
   }
 
   @Watch('observableTabProperties')
@@ -195,6 +187,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.baseApiUrl = tab.targetEndpoint;
     this.filterQuery = tab.filterQuery;
     this.parentId = tab.parentId || 0;
+    this.validationSchema = tab.validationSchema;
 
     if (!this.lazyLoad || this.parentId) {
       this.retrieveAllRecords();
@@ -213,22 +206,12 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   created() {
     this.onFieldsChange(this.fields);
     this.toolbarEventBus?.$on('add-record', this.addBlankRow);
-    this.toolbarEventBus?.$on('copy-record', this.copyRow);
-    this.toolbarEventBus?.$on('save-record', this.beforeSave);
-    this.toolbarEventBus?.$on('cancel-operation', this.cancelOperation);
-    this.toolbarEventBus?.$on('delete-record', this.deleteRow);
     this.toolbarEventBus?.$on('export-record', this.exportRecord);
-    this.toolbarEventBus?.$on('clear-filter-query-tmp', this.clearFilterQueryTmp);
   }
 
   beforeDestroy() {
     this.toolbarEventBus?.$off('add-record', this.addBlankRow);
-    this.toolbarEventBus?.$off('copy-record', this.copyRow);
-    this.toolbarEventBus?.$off('save-record', this.beforeSave);
-    this.toolbarEventBus?.$off('cancel-operation', this.cancelOperation);
-    this.toolbarEventBus?.$off('delete-record', this.deleteRow);
     this.toolbarEventBus?.$off('export-record', this.exportRecord);
-    this.toolbarEventBus?.$off('clear-filter-query-tmp', this.clearFilterQueryTmp);
   }
   // End of lifecycle events.
 
@@ -253,7 +236,11 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     }
   }
 
-  public async changeCurrentRow(row: any) {
+  /**
+   * Handle single row selection
+   * @param row The current selected row.
+   */
+  public async onCurrentRowChanged(row: any) {
     if (this.newRecord) {
       return;
     }
@@ -289,13 +276,12 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     }
   }
 
-  public changeRowSelection(rows: Array<any>) {
-    this.selectedRows = rows;
-    this.$emit('row-selection-change', rows);
-  }
-
-  public changeMultipleRowSelection(value: any) {
-    this.multipleSelectedRow = value;
+  /**
+   * Handle multiple rows selection.
+   * @param rows The selected rows
+   */
+  public onSelectionChanged(value: any) {
+    this.selectedRows = value;
   }
   
   public handleMultipleDataToJson(params: any) {
@@ -305,8 +291,13 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
   }
 
-  public actionDelete(): void {
-    Promise.allSettled(this.multipleSelectedRow.map((row: any) => {
+  public deleteRecords(): void {
+    const multiple = this.selectedRows.length > 0;
+
+    if (! multiple) {
+      (<ElTable>this.$refs.grid).toggleRowSelection(this.currentRecord);
+    }
+    Promise.allSettled(this.selectedRows.map((row: any) => {
       return this.dynamicWindowService(this.baseApiUrl).delete(row.id);
     })).then((results) => {
       const deletedCount = results.filter(res => res.status === 'fulfilled').length
@@ -323,14 +314,14 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         duration: 3000
       });
     }).finally(() => {
-      this.multipleSelectedRow = [];
-      this.closeDialog();
+      this.selectedRows = [];
+      this.$emit('rows-deleted');
     });
   }
 
   public handleCheckCurrentRow(){
     if(this.checkCurrentRow == true){
-      if(this.multipleSelectedRow.length >= 1){
+      if(this.selectedRows.length >= 1){
         this.buttonExport = false;
       }else{
         this.buttonExport = true;
@@ -351,8 +342,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.filename = this.formExport.name;
 
     let tHeaderTmp, tDataTemp;
-    let tHeader:Array<any> = [];
-    let filterVal:Array<any> = [];
+    let tHeader: Array<any> = [];
+    let filterVal: Array<any> = [];
     var service: any = '';
     var data: any = '';
 
@@ -363,23 +354,22 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       tHeader.push(tHeaderTmp);
       filterVal.push(tDataTemp);
     }
-    
-    if(this.checkCurrentRow == true){
-      if(this.multipleSelectedRow.length >= 1){
-        for (let i = 0; i < this.multipleSelectedRow.length; i++) {
+
+    if (this.checkCurrentRow == true) {
+      if (this.selectedRows.length >= 1) {
+        for (let i = 0; i < this.selectedRows.length; i++) {
           service = this.gridData[i];
-          data = formatJson(filterVal, this.multipleSelectedRow);
+          data = formatJson(filterVal, this.selectedRows);
         }
       }
-    }else{
+    } else {
       service = this.gridData;
       data = formatJson(filterVal, service);
     }
-    exportJson2Excel(tHeader, data, this.filename!==''?this.filename:'excel-list', undefined, undefined, this.autoWidth, this.bookType!==''?this.bookType:"csv");
+    exportJson2Excel(tHeader, data, this.filename !== '' ? this.filename : 'excel-list', undefined, undefined, this.autoWidth, this.bookType !== '' ? this.bookType : "csv");
   }
 
   public closeDialog(): void {
-    this.showDeleteDialog = false;
     this.showExportDialog = false;
   }
 
@@ -398,38 +388,18 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     }
   }
 
-  private deleteRow(data?: any) {
-    if (!data.isGridView || (!this.mainTab && data?.tabId !== this.tabId))
-      return;
-
-    if (this.multipleSelectedRow.length) {
-        this.handleMultipleDataToJson(this.multipleSelectedRow);
-        this.showDeleteDialog = true;
-    } else {
-      this.$notify({
-        title: 'Warning',
-        message: "Please select at least one item",
-        type: 'warning',
-        duration: 3000
-      });
-    }
-  }
-
   private exportRecord(data?: any) {
-    if (!data.isGridView || (!this.mainTab && data?.tabId !== this.tabId))
+    if (! this.mainTab && data?.tabId !== this.tabId)
       return;
       
-      this.showExportDialog = true;
+    this.showExportDialog = true;
   }
 
   public setTableDirectReference(field: any): void {
     this.activeTableDirectField = field;
   }
 
-  public cancelOperation(data?: any) {
-    if (!this.mainTab && data?.tabId !== this.tabId)
-      return;
-
+  public cancelOperation() {
     // New blank row and duplicate row are considered new record.
     if (this.newRecord) {
       const index = this.gridData.indexOf(this.currentRecord);
@@ -451,6 +421,10 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       this.editing = false;
       this.$set(this.currentRecord, 'editing', this.editing);
     }
+  }
+
+  public editRecord() {
+    this.activateInlineEditing(this.currentRecord);
   }
 
   /**
@@ -476,31 +450,28 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
   private getPageAndRowNo = (size: number, recordNo: number) => {
     return {
-      rowNo: recordNo % size || recordNo,
+      rowNo: recordNo % size || size,
       pageNo: Math.floor(((recordNo - 1) / size) + 1)
     };
   }
 
-  private clearFilterQueryTmp(data?: any) {
-    if (!data.isGridView || (!this.mainTab && data?.tabId !== this.tabId))
-      return;
-      
-      this.filterQueryTmp = '';
+  public clearFilterQueryTmp() {
+    this.filterQueryTmp = '';
   }
 
   public filterRecord(query: string) {
     //console.log("-filterQuery : "+this.filterQuery);
     //console.log("-filterQueryTmp : "+this.filterQueryTmp);
-    
+
     if (!query) {
       //console.log('1.Clear');
-      if(this.filterQueryTmp){
+      if (this.filterQueryTmp) {
         this.filterQuery = this.filterQueryTmp || this.tab.nativeFilterQuery;
         this.filterQueryTmp = '';
       }
     } else {
       //console.log('2.Execute');
-      if(this.parentId!=0){
+      if (this.parentId != 0) {
         if (this.filterQueryTmp === '') {
           this.filterQueryTmp = this.filterQuery;
         }
@@ -528,28 +499,29 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   /**
    * Triggered when user is going to add a new record.
    */
-  private addBlankRow(data?: any) {
-    if (!data.isGridView || (!this.mainTab && data?.tabId !== this.tabId))
+  private async addBlankRow(data?: any) {
+    if (! this.mainTab && data?.tabId !== this.tabId) {
       return;
+    }
 
-    let record = { id: 0 };
+    let record = { id: 0, editing: true };
+    this.prepareForm(record);
     if (this.parentId) {
       record[this.tab.foreignColumnName] = this.parentId;
     }
-    this.prepareForm(record);
-    // await this.initRelationships(record);
+    await this.initRelationships(record);
+    this.originalRecord = {...record};
     this.gridData.splice(0, 0, record);
+    this.toolbarEventBus.$emit('inline-editing', true);
     this.$nextTick(() => {
       this.setRow(record);
-      this.activateInlineEditing(record);
+      // this.activateInlineEditing(record);
       this.newRecord = true;
+      this.editing = record.editing;
     });
   }
 
-  private copyRow(data?: any) {
-    if (!data.isGridView || (!this.mainTab && data?.tabId !== this.tabId))
-      return;
-
+  public copyRow() {
     const currentIndex = this.gridData.indexOf(this.currentRecord);
     let record = {...this.currentRecord};
     record.id = 0;
@@ -589,9 +561,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     }
   }
 
-  private beforeSave(data?: any) {
-    if (data.isGridView && (this.mainTab || data?.tabId === this.tabId))
-      this.save(this.reset);
+  public beforeSave() {
+    this.save(this.reset);
   }
 
   private save(callback?: (record?: any) => void) {
@@ -672,7 +643,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public retrieveAllRecords(): void {
-    //console.log("filterQuery in retrieve : "+this.filterQuery);
     this.isFetching = true;
     const paginationQuery = {
       page: this.page - 1,
@@ -750,6 +720,10 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   public syncHeight() {
     const grid = (<ElTable>this.$refs.grid).$el;
     this.height = grid.clientHeight;
+    this.$nextTick(() => {
+      console.log('sync table layout');
+      (<ElTable>this.$refs.grid).doLayout();
+    })
   }
 
   private setRow(record: any) {
@@ -807,9 +781,9 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public isFixed(field: any): boolean | string {
-    if (field.adColumn.name === 'active') {
+    /* if (field.adColumn.name === 'active') {
       return 'right';
-    }
+    } */
     return false;
   }
 

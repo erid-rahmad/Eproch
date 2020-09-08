@@ -1,25 +1,24 @@
-import { Component, Vue, Inject, Watch, Mixins } from 'vue-property-decorator';
-import ContextVariableAccessor from "../ContextVariableAccessor";
-import { Splitpanes, Pane } from 'splitpanes';
+import ADColumnService from '@/entities/ad-column/ad-column.service';
+import ADTabService from '@/entities/ad-tab/ad-tab.service';
+import ADWindowService from '@/entities/ad-window/ad-window.service';
+import buildCriteriaQueryString from '@/shared/filter/filters';
+import { ADTab, IADTab } from '@/shared/model/ad-tab.model';
+import { getValidatorType } from '@/utils/validate';
+import _, { debounce } from 'lodash';
+import { Pane, Splitpanes } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
+import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
+import { mapActions } from 'vuex';
 import ActionToolbar from '../ActionToolbar/action-toolbar.vue';
 import TabToolbar from "../ActionToolbar/tab-toolbar.vue";
+import ContextVariableAccessor from "../ContextVariableAccessor";
 import DetailView from "../DetailView/detail-view.vue";
 import GridView from "../GridView/grid-view.vue";
-import TreeView from '../TreeView/tree-view.vue'
 import SearchPanel from "../SearchPanel/search-panel.vue";
+import TreeView from '../TreeView/tree-view.vue';
 import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
-
-import ADTabService from '@/entities/ad-tab/ad-tab.service';
-import { IADTab, ADTab } from '@/shared/model/ad-tab.model';
-import buildCriteriaQueryString from '@/shared/filter/filters';
-import ADColumnService from '@/entities/ad-column/ad-column.service';
-import { TagsViewStoreModule as tagsViewStore } from "@/shared/config/store/tags-view-store";
-import _, { debounce } from 'lodash';
-import { mapActions } from 'vuex';
-import { ElPagination } from 'element-ui/types/pagination';
-import ADWindowService from '@/entities/ad-window/ad-window.service';
 import DynamicWindowService from './dynamic-window.service';
+
 
 @Component({
   components: {
@@ -66,17 +65,19 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   public triggerModel: any = {};
 
   // Event buses.
-  private mainToolbarEventBus = new Vue();
-  private secondaryToolbarEventBus = new Vue();
+  mainToolbarEventBus = new Vue();
+  secondaryToolbarEventBus = new Vue();
   private searchPanelEventBus = new Vue();
-  
   private searchPanelActive: boolean = false;
   private fullPath: string = '';
   private unwatchStore: Function;
 
-  private totalRecords: number = 0;
-  private currentRecordNo: number = 1;
+  totalRecords: number = 0;
+  currentRecord: any = {};
+  currentRecordNo: number = 1;
   isEditing: boolean = false;
+  deleteConfirmationVisible: boolean = false;
+  deleteOptions: any = null;
 
   /**
    * Stack of the main tab. The last item in the stack
@@ -135,9 +136,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       }
     );
 
-    this.mainToolbarEventBus.$on('tab-navigate', this.navigateTab);
-    this.mainToolbarEventBus.$on('open-search-window', this.openSearchPanel);
-    this.mainToolbarEventBus.$on('cancel-operation', this.cancelOperation);
     this.debouncedUpdateChildTabs = debounce(this.updateChildTabs, 500);
     
     this.retrieveWindowDetail()
@@ -149,9 +147,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   beforeDestroy() {
-    this.mainToolbarEventBus.$off('tab-navigate', this.navigateTab);
-    this.mainToolbarEventBus.$off('open-search-window', this.openSearchPanel);
-    this.mainToolbarEventBus.$off('cancel-operation', this.cancelOperation);
     this.removeWindowState(this.fullPath);
     this.unwatchStore();
   }
@@ -183,11 +178,37 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.gridView = options.gridView;
   }
 
+  public onActionCanceled() {
+    this.closeSearchPanel();
+    (<any>this.$refs.mainGrid).cancelOperation();
+    (<any>this.$refs.mainForm).exitEditMode();
+  }
+
+  public onRecordCopy(data: any) {
+    if (data?.tabId) {
+      const index = parseInt(data.tabId);
+      (<any>this.$refs.lineGrid[index]).copyRow();
+    } else if (this.gridView) {
+      (<any>this.$refs.mainGrid).copyRow();
+    }
+  }
+
+  public onRecordSave(data: any) {
+    if (data?.tabId) {
+      const index = parseInt(data.tabId);
+      (<any>this.$refs.lineGrid[index]).beforeSave();
+    } else if (this.gridView) {
+      (<any>this.$refs.mainGrid).beforeSave();
+    } else {
+      (<any>this.$refs.mainForm).beforeSave();
+    }
+  }
+
   public onCurrentRecordChange(no: number) {
     (<any>this.$refs.mainGrid)?.setSelectedRecordNo(no);
   }
 
-  public onEditModeChange(isEditing: boolean) {
+  public onEditModeChanged(isEditing: boolean) {
     this.isEditing = isEditing;
   }
 
@@ -214,44 +235,72 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     });
   }
 
+  public showDeleteConfirmation(options: any) {
+    this.deleteConfirmationVisible = true;
+    this.deleteOptions = options;
+  }
+
+  public deleteRecords() {
+    if (this.deleteOptions.tabId) {
+      const index = parseInt(this.deleteOptions.tabId);
+      (<any>this.$refs.lineGrid[index]).deleteRecords();
+    } else {
+      (<any>this.$refs.mainGrid).deleteRecords();
+    }
+  }
+
   /**
    * Navigate between parent and child tab.
    * @param value The direction of tab navigation,
    *              negative value to go to parent tab, otherwise go to children tab.
    */
-  private navigateTab(options: any) {
+  public onTabNavigated(options: any) {
+    (<any>this.$refs.mainGrid).clearFilterQueryTmp();
+
     if (options.direction < 0 && this.tabStack.length > 1) {
       this.childTabs = [];
       this.currentTab = '';
       this.tabStack.splice(-1, 1);
     } else {
       if (!this.currentTab.length) return;
+      // Current selected child tab index.
       const index = parseInt(this.currentTab);
       const tab = this.$refs.tabPane[index];
       this.handleTabClick(tab);
     }
   }
 
-  private openSearchPanel() {
+  onNavigationBreadcrumbClicked(e) {
+    const target = e.target;
+    let index = 0;
+
+    if (target.className === 'el-breadcrumb__inner') {
+      const item = target.closest('.el-breadcrumb__item');
+      index = parseInt(item.dataset.index);
+    } else if (target.className === 'el-breadcrunb__item') {
+      index = parseInt(target.dataset.index);
+    }
+
+    if (index < this.tabStack.length - 1) {
+      const removedChildCount = index + 1;
+      (<any>this.$refs.mainGrid).clearFilterQueryTmp();
+      this.childTabs = [];
+      this.currentTab = '';
+      this.tabStack.splice(removedChildCount, this.tabStack.length - removedChildCount);
+    }
+  }
+
+  public openSearchPanel() {
     this.searchPanelActive = true;
   }
 
-  private closeSearchPanel() {
+  public closeSearchPanel() {
     this.searchPanelActive = false;
   }
 
-  private cancelOperation() {
-    this.closeSearchPanel();
-  }
-
-  public refreshWindow({isGridView}) {
+  public refreshWindow() {
     this.reloadTreeView();
-    
-    if (isGridView) {
-      (<any>this.$refs.mainGrid).clear();
-    } else {
-      (<any>this.$refs.mainForm).reload();
-    }
+    (<any>this.$refs.mainGrid).clear();
   }
 
   public runTrigger(model: any) {
@@ -271,12 +320,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   public applyFilter(query: string) {
-    if (this.gridView) {
-      (<any>this.$refs.mainGrid).filterRecord(query);
-    } else {
-      this.currentRecordNo = 1;
-      (<any>this.$refs.mainForm).filterRecord(query);
-    }
+    (<any>this.$refs.mainGrid).filterRecord(query);
     this.closeSearchPanel();
   }
 
@@ -300,13 +344,13 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     const { id, parentTabId, parentId, parentTableName } = tab.$children[1].tab;
     this.childTabs = [];
     this.currentTab = '';
-    this.retrieveTabs(parentTabId, id, async (tab: any, index: number) => {
-      tab.promoted = true;
-      await this.buildChildTabFilterQuery(tab, index, parentId, parentTableName);
+    this.retrieveTabs(parentTabId, id, async (childTab: any, index: number) => {
+      childTab.promoted = true;
+      await this.buildChildTabFilterQuery(childTab, index, parentId, parentTableName);
     });
   }
 
-  private async buildChildTabFilterQuery(tab: any, index: number, parentId: number, parentTableName?: string): Promise<void> {
+  private async buildChildTabFilterQuery(tab: any, index: number, parentId: number, parentTableName?: string) {
     // Transient fields.
     tab.foreignColumnName = await this.getForeignColumn(tab.adTableId, parentTableName);
     tab.parentId = parentId;
@@ -320,15 +364,19 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   /**
-   * TODO need to debounce the long running function.
    * This method is called once the parent tab record row changed.
    * @param parent parent tab record.
    */
   public async onMainRecordChange({data, recordNo}) {
+    this.currentRecord = data;
     this.currentRecordNo = recordNo;
     this.debouncedUpdateChildTabs(data);
   }
 
+  /**
+   * Update the children tabs based on the selected header record.
+   * @param data parent tab record.
+   */
   private updateChildTabs(data: any) {
     if (this.childTabs.length === 0 && !this.loadingChildTabs) {
       this.loadingChildTabs = true;
@@ -339,7 +387,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       if (!this.currentTab.length || data === null) {
         return;
       }
-      const index = parseInt(this.currentTab);
       this.childTabs.forEach((tab, index) => {
         tab.parentId = data.id;
 
@@ -376,7 +423,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   /* private retrieveTabs(parentTabId?: number, tabId?: number, callback?: (tab: IADTab, index: number) => void): void { */
     let parentTabId: number;
     let tabId: number;
-    let callback: (tab: IADTab, index: number) => void;
+    let callback: (tab: IADTab, index: number) => Promise<void>;
 
     if (args.length === 0) {
       throw new Error('retrieveTabs needs some arguments.');
@@ -420,16 +467,21 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
         let tabs = res.data;
         for (let [index, tab] of tabs.entries()) {
           if (callback) {
+            // Invoke the callback for modifying the tab if necessary.
             await callback(tab, index);
           }
+
+          tab.validationSchema = this.buildValidationSchema(tab.adfields);
+
           if (parentTabId && !tabId) {
-            // Child always has parent.
+            // Child has always a parent.
             if (index === 0) {
               this.currentTab = '' + index;
               this.previousTab = this.currentTab;
             }
             this.childTabs.push(tab);
           } else {
+            // Header tab is immediatelly pushed to the tab stack.
             this.tabStack.push(tab);
           }
         }
@@ -437,6 +489,41 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       .finally(() => {
         this.loadingChildTabs = false;
       });
+  }
+
+  private buildValidationSchema(fields: any[]) {
+    let validationSchema = {};
+
+    for (let field of fields) {
+      const column = field.adColumn;
+      
+      validationSchema[column.name] = {
+        type: getValidatorType(column.type),
+        required: column.mandatory
+      }
+
+      if (column.formatPattern) {
+        validationSchema[column.name].pattern = column.formatPattern;
+      }
+
+      if (column.minLength) {
+        validationSchema[column.name].min = column.minLength;
+      }
+
+      if (column.maxLength) {
+        validationSchema[column.name].max = column.maxLength;
+      }
+
+      if (column.minValue) {
+        validationSchema[column.name].min = column.minValue;
+      }
+
+      if (column.maxValue) {
+        validationSchema[column.name].max = column.maxValue;
+      }
+    }
+
+    return validationSchema;
   }
 
   private retrieveButtons(tab: any) {

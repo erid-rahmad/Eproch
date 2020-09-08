@@ -1,9 +1,9 @@
-import { Component, Prop, Vue } from "vue-property-decorator";
-import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
+import { Component, Vue } from "vue-property-decorator";
 
 const TabToolbarProps = Vue.extend({
   props: {
+    disabled: Boolean,
     tabId: String,
     eventBus: {
       type: Object,
@@ -17,6 +17,7 @@ const TabToolbarProps = Vue.extend({
 @Component
 export default class TabToolbar extends TabToolbarProps {
   authorities: Set<string> = accountStore.authorities;
+  recordCount = 0;
   private editing: boolean = false;
   private fullPath: string = '';
 
@@ -66,6 +67,7 @@ export default class TabToolbar extends TabToolbarProps {
   public copyRecord() {
     if (!this.activeWindow || this.editing) return;
     this.editing = true;
+    this.$emit('copy', {tabId: this.tabId});
     this.eventBus?.$emit('copy-record', {
       isGridView: true,
       tabId: this.tabId
@@ -74,15 +76,12 @@ export default class TabToolbar extends TabToolbarProps {
 
   public saveRecord() {
     if (!this.activeWindow && !this.editing) return;
-    this.eventBus?.$emit('save-record', {
-      isGridView: true,
-      tabId: this.tabId
-    });
+    this.$emit('save', {tabId: this.tabId});
   }
 
   public deleteRecord() {
     if (!this.activeWindow) return;
-    this.eventBus?.$emit('delete-record', {
+    this.$emit('delete', {
       isGridView: true,
       tabId: this.tabId
     });
@@ -91,9 +90,7 @@ export default class TabToolbar extends TabToolbarProps {
   public cancelOperation() {
     if (!this.activeWindow && !this.editing) return;
     this.editing = false;
-    this.eventBus?.$emit('cancel-operation', {
-      tabId: this.tabId
-    });
+    this.$emit('cancel');
   }
 
   private get activeWindow() {
