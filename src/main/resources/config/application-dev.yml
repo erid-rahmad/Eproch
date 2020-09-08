@@ -36,6 +36,10 @@ spring:
   jackson:
     serialization:
       indent-output: true
+  cloud:
+    dataflow:
+      client:
+        server-uri: http://localhost:9393
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/OpusWebApp

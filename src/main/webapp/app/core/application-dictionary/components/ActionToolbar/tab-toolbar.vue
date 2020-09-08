@@ -6,15 +6,16 @@
         size="mini"
         icon="el-icon-plus"
         title="New (shift + alt + n)"
-        :disabled="isEditing"
+        :disabled="disabled || isEditing"
         @click="addRecord"
       />
       <el-button
+        v-show="recordCount && !isEditing"
         type="primary"
         size="mini"
         icon="el-icon-document-copy"
         title="Copy (shift + alt + c)"
-        :disabled="isEditing"
+        :disabled="disabled"
         @click="copyRecord"
       />
     </el-button-group>
@@ -24,22 +25,23 @@
         size="mini"
         icon="el-icon-check"
         title="Save (shift + alt + s)"
-        :disabled="!isEditing"
+        :disabled="disabled || !isEditing"
         @click="saveRecord"
       />
       <el-button
         size="small"
         icon="el-icon-close"
         title="Cancel (shift + alt + z)"
-        :disabled="!isEditing"
+        :disabled="disabled || !isEditing"
         @click="cancelOperation"
       />
       <el-button
+        v-show="recordCount && !isEditing"
         type="danger"
         size="mini"
         icon="el-icon-delete"
         title="Delete (shift + alt + del)"
-        :disabled="isEditing"
+        :disabled="disabled"
         @click="deleteRecord"
       />
     </el-button-group>

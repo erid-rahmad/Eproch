@@ -7,23 +7,14 @@ const baseWebpackConfig = require('./webpack.common');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const jhiUtils = require('./utils.js');
 
 const env = require('../config/prod.env');
-const minimizerPlugin = new TerserPlugin({
-  terserOptions: {
-    warnings: false
-  },
-  exclude: ['LICENSE.txt'],
-  sourceMap: config.build.productionSourceMap,
-  parallel: true
-});
 
 const webpackConfig = merge(baseWebpackConfig, {
   mode: 'production',
-  cache: true,
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.productionSourceMap,
@@ -42,8 +33,6 @@ const webpackConfig = merge(baseWebpackConfig, {
     chunkFilename: 'app/[id].[hash].chunk.js'
   },
   optimization: {
-    minimize: true,
-    minimizer: [minimizerPlugin],
     splitChunks: {
       cacheGroups: {
         commons: {
@@ -59,18 +48,46 @@ const webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
-    minimizerPlugin,
-    /* new UglifyJsPlugin({
-      uglifyOptions: {
-        warnings: false
+    new TerserPlugin({
+      terserOptions: {
+        compress: {
+          arrows: false,
+          collapse_vars: false,
+          comparisons: false,
+          computed_props: false,
+          hoist_funs: false,
+          hoist_props: false,
+          hoist_vars: false,
+          inline: false,
+          loops: false,
+          negate_iife: false,
+          properties: false,
+          reduce_funcs: false,
+          reduce_vars: false,
+          switches: false,
+          toplevel: false,
+          typeofs: false,
+          booleans: true,
+          if_return: true,
+          sequences: true,
+          unused: true,
+          conditionals: true,
+          dead_code: true,
+          evaluate: true,
+        },
+        mangle: {
+          safari10: true,
+        },
       },
+      cache: true,
+      parallel: true,
+      extractComments: false,
       sourceMap: config.build.productionSourceMap,
-      parallel: true
-    }), */
+    }),
     // extract css into its own file
     new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css',
-      chunkFilename: '[id].css'
+      filename: 'content/[name].[contenthash].css',
+      chunkFilename: 'content/[id].css',
     }),
     // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
@@ -79,6 +96,7 @@ const webpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
+      base: '/',
       template: './src/main/webapp/index.html',
       chunks: ['vendors', 'main', 'global'],
       chunksSortMode: 'manual',
@@ -90,12 +108,19 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
     }),
     // keep module.id stable when vendor modules does not change
-    new webpack.HashedModuleIdsPlugin()
-  ]
+    new webpack.HashedModuleIdsPlugin(),
+    new ForkTsCheckerWebpackPlugin({
+      vue: {
+        enabled: true,
+        compiler: 'vue-template-compiler',
+      },
+      tslint: false,
+      formatter: 'codeframe',
+      checkSyntacticErrors: false,
+    }),
+  ],
 });
 
 if (config.build.productionGzip) {
