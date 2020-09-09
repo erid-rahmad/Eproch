@@ -13,9 +13,9 @@ import org.mapstruct.*;
 public interface CConvertionRateMapper extends EntityMapper<CConvertionRateDTO, CConvertionRate> {
 
     @Mapping(source = "sourceCurrency.id", target = "sourceCurrencyId")
-    @Mapping(source = "sourceCurrency.name", target = "sourceCurrencyName")
+    @Mapping(source = "sourceCurrency.code", target = "sourceCurrencyName")
     @Mapping(source = "targetCurrency.id", target = "targetCurrencyId")
-    @Mapping(source = "targetCurrency.name", target = "targetCurrencyName")
+    @Mapping(source = "targetCurrency.code", target = "targetCurrencyName")
     @Mapping(source = "convertionType.id", target = "convertionTypeId")
     @Mapping(source = "convertionType.name", target = "convertionTypeName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
