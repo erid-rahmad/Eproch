@@ -465,16 +465,12 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
     if (!query) {
       //console.log('1.Clear');
-      if (this.filterQueryTmp) {
-        this.filterQuery = this.filterQueryTmp || this.tab.nativeFilterQuery;
-        this.filterQueryTmp = '';
-      }
+      this.filterQuery = this.filterQueryTmp || this.tab.nativeFilterQuery;
+      this.filterQueryTmp = '';
     } else {
       //console.log('2.Execute');
-      if (this.parentId != 0) {
-        if (this.filterQueryTmp === '') {
-          this.filterQueryTmp = this.filterQuery;
-        }
+      if (this.filterQueryTmp === '') {
+        this.filterQueryTmp = this.filterQuery;
       }
 
       this.filterQuery = this.filterQueryTmp ? `${this.filterQueryTmp}&${query}` : query;
