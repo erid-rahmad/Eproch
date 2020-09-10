@@ -168,7 +168,7 @@
         :data="triggerModel"
       />
       <el-dialog
-          width="20%"
+          width="30%"
           :visible.sync="deleteConfirmationVisible"
           :title="$t('entity.delete.title')"
       >
