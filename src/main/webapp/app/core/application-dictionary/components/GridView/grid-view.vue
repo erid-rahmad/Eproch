@@ -21,7 +21,7 @@
         fixed
         type="selection"
         align="center"
-        width="25">
+        width="30">
       </el-table-column>
       <el-table-column
         v-for="field in gridFields"
