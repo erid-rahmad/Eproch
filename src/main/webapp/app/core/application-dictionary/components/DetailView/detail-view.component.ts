@@ -103,8 +103,10 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
   
   @Watch('record')
   onRecordChanged(record) {
-    this.model = record;
-    this.exitEditMode();
+    if (record) {
+      this.model = record;
+      this.exitEditMode();
+    }
   }
 
   private buildLayout(fields: any[]) {
