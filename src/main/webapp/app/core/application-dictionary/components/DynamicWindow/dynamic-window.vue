@@ -64,8 +64,6 @@
           <splitpanes
             horizontal
             style="height: 100%"
-            @ready="updateHeight"
-            @resized="updateHeight"
           >
             <pane
               ref="mainPane"
@@ -92,21 +90,17 @@
                 @edit-mode-change="$refs.mainGrid.editRecord()"
                 @form-validated="$refs.mainGrid.beforeSave()"
               />
-
-              <div>
-                <el-pagination
-                  ref="toolbarPagination"
-                  layout="prev, jumper, total, next"
-                  class="record-navigator"
-                  :class="{'invisible': isEditing}"
-                  :current-page.sync="currentRecordNo"
-                  :page-size="1"
-                  small
-                  :total="totalRecords"
-                  @current-change="onCurrentRecordChange"
-                />
-              </div>
-
+              <el-pagination
+                ref="toolbarPagination"
+                layout="prev, jumper, total, next"
+                class="record-navigator"
+                :class="{'invisible': isEditing}"
+                :current-page.sync="currentRecordNo"
+                :page-size="1"
+                small
+                :total="totalRecords"
+                @current-change="onCurrentRecordChange"
+              />
             </pane>
             <pane
               v-if="hasChildTabs"
@@ -168,7 +162,7 @@
         :data="triggerModel"
       />
       <el-dialog
-          width="20%"
+          width="25%"
           :visible.sync="deleteConfirmationVisible"
           :title="$t('entity.delete.title')"
       >
@@ -234,7 +228,7 @@
   width: 100%;
 }
 .el-tabs--border-card > .el-tabs__content {
-  height: calc(100% - 15px);
+  height: calc(100% - 26px);
   padding: 0px;
 }
 .el-tabs__item {
@@ -251,19 +245,29 @@
   position: relative;
   height: calc(100% - 40px);
 
-  .splitpanes__pane.main-pane {
-    position: relative;
-  }
-
   &.detailed-view .splitpanes__pane.main-pane {
     overflow-y: auto;
   }
 
-  .splitpanes .el-tabs__content {
-    overflow: auto;
+  .splitpanes {
 
-    .grid-view {
-      height: calc(100% - 48px);
+    .splitpanes__pane {
+      
+      .main-pane {
+        position: relative;
+      }
+
+      .grid-view {
+        height: 100%;
+      }
+    }
+
+    .el-tabs__content {
+      overflow: auto;
+
+      .grid-view {
+        height: calc(100% - 37px);
+      }
     }
   }
 }
@@ -294,6 +298,7 @@
 .record-navigator {
   opacity: 1;
   transition: opacity .25s ease-in-out;
+  z-index: 5;
 
   &.invisible {
     opacity: 0;

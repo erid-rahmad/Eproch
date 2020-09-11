@@ -113,8 +113,11 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
   // End of computed properties.
 
-  @Watch('currentTab')
-  currentTabChanged(tabName) {
+  @Watch('$route')
+  onRouteChanged(route: any) {
+    if (route.fullPath === this.$route.fullPath) {
+      console.log('Update window %s', route.meta.title);
+    }
   }
 
   @Watch('mainTab')
@@ -220,21 +223,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.totalRecords = count;
   }
 
-  /**
-   * grid-view's height need to be updated to maintain its fixed header position.
-   */
-  public updateHeight() {
-    this.$nextTick(() => {
-      (<any>this.$refs.mainGrid)?.syncHeight();
-
-      if (this.hasChildTabs) {
-        (<Array<any>>this.$refs.lineGrid).forEach(grid => {
-          grid.syncHeight();
-        });
-      }
-    });
-  }
-
   public showDeleteConfirmation(options: any) {
     this.deleteConfirmationVisible = true;
     this.deleteOptions = options;
@@ -331,12 +319,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   public handleTabClick(tab: any) {
     if (tab.name !== this.previousTab) {
       this.previousTab = tab.name;
-      if (this.hasChildTabs) {
-        this.$nextTick(() => {
-          const grid = (<Array<any>>this.$refs.lineGrid)[tab.index];
-          grid.syncHeight();
-        });
-      }
       return;
     }
 

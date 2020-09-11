@@ -1,14 +1,14 @@
 <template>
-  <div class="grid-view">
+  <div ref="tableWrapper" class="grid-view">
     <el-table
       v-loading="isFetching"
       ref="grid"
+      :data="gridData"
+      :height="tableHeight"
       size="mini"
       style="width: 100%"
       highlight-current-row
       stripe
-      :data="gridData"
-      :height="height"
       :default-sort="gridSchema.defaultSort"
       :empty-text="gridSchema.emptyText"
       @current-change="onCurrentRowChanged"
@@ -125,15 +125,15 @@
       </el-table-column>
     </el-table>
     <el-pagination
-      small
       ref="pagination"
       background
-      @size-change="changePageSize"
       :current-page.sync="page"
+      layout="sizes, prev, pager, next"
       :page-sizes="[10, 20, 50, 100]"
       :page-size="itemsPerPage"
-      layout="sizes, prev, pager, next"
+      small
       :total="queryCount"
+      @size-change="changePageSize"
     />
 
     <el-dialog
@@ -210,15 +210,12 @@
 .el-table__fixed, .el-table__fixed-right{
   box-shadow: none;
 }
-</style>
-<style lang="scss" scoped>
-.grid-view {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-
-  .el-table {
-    flex: 1;
-  }
+.grid-view .el-pagination {
+  background: #fff;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
 }
 </style>

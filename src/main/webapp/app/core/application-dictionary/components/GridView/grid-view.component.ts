@@ -12,6 +12,7 @@ import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import ContextVariableAccessor from "../ContextVariableAccessor";
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
+import { ElPagination } from 'element-ui/types/pagination';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -59,7 +60,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   @Inject('dynamicWindowService')
   private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
 
-  height: string | number = 'auto';
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found'
@@ -126,8 +126,13 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   private filterQuery: string = '';
   private filterQueryTmp: string = '';
   private parentId: number = 0;
+  private heightUpdateTimestamp = 0;
+  private tableHeight = 100;
 
-  private registerTabState!: (options: RegisterTabParameter) => Promise<void>
+  private gridResizeObserver;
+  private debouncedHeightResizer;
+
+  private registerTabState!: (options: RegisterTabParameter) => Promise<void>;
 
   get referenceListItems() {
     return (field: any): any[] => {
@@ -207,13 +212,31 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     this.onFieldsChange(this.fields);
     this.toolbarEventBus?.$on('add-record', this.addBlankRow);
     this.toolbarEventBus?.$on('export-record', this.exportRecord);
+    this.debouncedHeightResizer = _.debounce(this.resizeTableHeight, 200);
+  }
+
+  mounted() {
+    // AP-194 Fix Element UI's el-table layout
+    this.gridResizeObserver = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        this.debouncedHeightResizer(entry.contentRect.height);
+      });
+    });
+    this.gridResizeObserver.observe(this.$refs.tableWrapper);
   }
 
   beforeDestroy() {
+    this.gridResizeObserver.unobserve(this.$refs.tableWrapper);
     this.toolbarEventBus?.$off('add-record', this.addBlankRow);
     this.toolbarEventBus?.$off('export-record', this.exportRecord);
   }
   // End of lifecycle events.
+
+  private resizeTableHeight(height) {
+    const paginationHeight = (<ElPagination>this.$refs.pagination).$el.clientHeight;
+    console.log('Resizing height to ', height - paginationHeight);
+    this.tableHeight = height - paginationHeight;
+  }
 
   public hasError(field: any) {
     return this.errorTimestamp && this.errors.has(field.adColumn.name);
@@ -282,6 +305,20 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
    */
   public onSelectionChanged(value: any) {
     this.selectedRows = value;
+  }
+
+  public syncHeight() {
+    console.log('sync height');
+    console.log('update table height');
+    const tableWrapper = this.$el.querySelector('.table-wrapper');
+    let rect = tableWrapper.getBoundingClientRect();
+    console.log('%s grid BoundingClientRect(): %O', this.tabName, rect);
+    /* const parentHeight = this.$el.parentElement.clientHeight;
+    const paginationHeight = (<Vue>this.$refs.pagination)?.$el.clientHeight;
+    this.tableHeight = parentHeight - paginationHeight;
+    this.$nextTick(() => {
+      (<ElTable>this.$refs.grid).doLayout();
+    }); */
   }
   
   public handleMultipleDataToJson(params: any) {
@@ -464,13 +501,13 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     //console.log("-filterQueryTmp : "+this.filterQueryTmp);
 
     if (!query) {
-      //console.log('1.Clear');
+      console.log('1.Clear. tmp: %s, native: %s', this.filterQueryTmp, this.tab.nativeFilterQuery);
       if (this.filterQueryTmp) {
         this.filterQuery = this.filterQueryTmp || this.tab.nativeFilterQuery;
         this.filterQueryTmp = '';
       }
     } else {
-      //console.log('2.Execute');
+      console.log('2.Execute. parentId: %s, tmp: %s, query: %s', this.parentId, this.filterQueryTmp, query);
       if (this.parentId != 0) {
         if (this.filterQueryTmp === '') {
           this.filterQueryTmp = this.filterQuery;
@@ -715,15 +752,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
           .set(`${this.currentRecord.id}-${field.adColumn.name}`, res.data);
         this.tableDirectTimestamp = Date.now();
       });
-  }
-
-  public syncHeight() {
-    const grid = (<ElTable>this.$refs.grid).$el;
-    this.height = grid.clientHeight;
-    this.$nextTick(() => {
-      console.log('sync table layout');
-      (<ElTable>this.$refs.grid).doLayout();
-    })
   }
 
   private setRow(record: any) {
