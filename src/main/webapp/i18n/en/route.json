@@ -13,7 +13,7 @@
       "validationRule": "Validation Rule"
     },
     "admin": {
-      "default": "System Administration",
+      "default": "System",
       "userManagement": "Users",
       "api": "API References",
       "audits": "Audits",

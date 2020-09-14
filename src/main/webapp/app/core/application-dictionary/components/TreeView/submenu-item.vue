@@ -1,10 +1,6 @@
 <template>
   <el-submenu :index="`${model.id}`">
     <template slot="title">
-      <svg-icon
-        v-if="model.icon"
-        :name="model.icon"
-      />
       <span>{{ printTitle(model) }}</span>
     </template>
     <drop-list

@@ -81,6 +81,7 @@ export const constantRoutes: RouteConfig[] = [
         meta: {
           affix: true,
           title: 'home',
+          icon: 'dashboard',
           breadcrumb: false
         }
       }
@@ -115,7 +116,8 @@ export const constantRoutes: RouteConfig[] = [
     component: Layout,
     redirect: '/account/settings',
     meta: {
-      title: 'myAccount'
+      title: 'myAccount',
+      icon: 'lock'
     },
     children: [
       {
@@ -183,6 +185,7 @@ export const asyncRoutes: RouteConfig[] = [
     component: Layout,
     meta: {
       title: 'admin.default',
+      icon: 'icomoo/149-cog',
       authorities: [Authority.ADMIN]
     },
     children: [

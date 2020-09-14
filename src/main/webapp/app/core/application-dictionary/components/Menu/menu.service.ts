@@ -32,6 +32,7 @@ export default class AdMenuService {
       component: this.getComponent(data.action),
       meta: {
         title: data.name,
+        icon: data.icon,
         authorities: data.authorities || []
       }
     };
