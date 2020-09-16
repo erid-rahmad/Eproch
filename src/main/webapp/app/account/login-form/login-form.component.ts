@@ -106,6 +106,13 @@ export default class LoginForm extends Vue {
       })
       .catch(() => {
         this.authenticationError = true
+        const message = this.$t(`login.messages.error.authentication`);
+        this.$notify({
+          title: 'Error',
+          message: message.toString(),
+          type: 'error',
+          duration: 3000
+        });
       })
       .finally(() => {
         this.loading = false;
