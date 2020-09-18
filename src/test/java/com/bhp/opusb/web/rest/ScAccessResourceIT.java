@@ -5,6 +5,7 @@ import com.bhp.opusb.domain.ScAccess;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ScAccessType;
 import com.bhp.opusb.domain.ADWindow;
+import com.bhp.opusb.domain.AdForm;
 import com.bhp.opusb.domain.ScAuthority;
 import com.bhp.opusb.repository.ScAccessRepository;
 import com.bhp.opusb.service.ScAccessService;
@@ -572,6 +573,26 @@ public class ScAccessResourceIT {
 
         // Get all the scAccessList where window equals to windowId + 1
         defaultScAccessShouldNotBeFound("windowId.equals=" + (windowId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllScAccessesByFormIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scAccessRepository.saveAndFlush(scAccess);
+        AdForm form = AdFormResourceIT.createEntity(em);
+        em.persist(form);
+        em.flush();
+        scAccess.setForm(form);
+        scAccessRepository.saveAndFlush(scAccess);
+        Long formId = form.getId();
+
+        // Get all the scAccessList where form equals to formId
+        defaultScAccessShouldBeFound("formId.equals=" + formId);
+
+        // Get all the scAccessList where form equals to formId + 1
+        defaultScAccessShouldNotBeFound("formId.equals=" + (formId + 1));
     }
 
 

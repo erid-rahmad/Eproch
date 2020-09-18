@@ -19,6 +19,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.ADWindowType;
+import com.bhp.opusb.domain.enumeration.AdAccessLevel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
@@ -59,6 +60,10 @@ public class ADWindow extends AbstractAuditingEntity {
 
     @Column(name = "tree_view")
     private Boolean treeView;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "access_level")
+    private AdAccessLevel accessLevel;
 
     @Column(name = "active")
     private Boolean active = true;
@@ -159,6 +164,19 @@ public class ADWindow extends AbstractAuditingEntity {
         this.treeView = treeView;
     }
 
+    public AdAccessLevel getAccessLevel() {
+        return accessLevel;
+    }
+
+    public ADWindow accessLevel(AdAccessLevel accessLevel) {
+        this.accessLevel = accessLevel;
+        return this;
+    }
+
+    public void setAccessLevel(AdAccessLevel accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -242,6 +260,7 @@ public class ADWindow extends AbstractAuditingEntity {
             ", titleLogic='" + getTitleLogic() + "'" +
             ", type='" + getType() + "'" +
             ", treeView='" + isTreeView() + "'" +
+            ", accessLevel='" + getAccessLevel() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

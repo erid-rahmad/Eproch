@@ -40,7 +40,10 @@ public class ScAccessCriteria implements Serializable, Criteria {
 
     private LongFilter windowId;
 
+    private LongFilter formId;
+
     private LongFilter authorityId;
+    private StringFilter authorityName;
 
     public ScAccessCriteria() {
     }
@@ -53,8 +56,11 @@ public class ScAccessCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.typeId = other.typeId == null ? null : other.typeId.copy();
+        this.typeName = other.typeName == null ? null : other.typeName.copy();
         this.windowId = other.windowId == null ? null : other.windowId.copy();
+        this.formId = other.formId == null ? null : other.formId.copy();
         this.authorityId = other.authorityId == null ? null : other.authorityId.copy();
+        this.authorityName = other.authorityName == null ? null : other.authorityName.copy();
     }
 
     @Override
@@ -134,6 +140,14 @@ public class ScAccessCriteria implements Serializable, Criteria {
         this.windowId = windowId;
     }
 
+    public LongFilter getFormId() {
+        return formId;
+    }
+
+    public void setFormId(LongFilter formId) {
+        this.formId = formId;
+    }
+
     public LongFilter getAuthorityId() {
         return authorityId;
     }
@@ -142,6 +156,13 @@ public class ScAccessCriteria implements Serializable, Criteria {
         this.authorityId = authorityId;
     }
 
+    public StringFilter getAuthorityName() {
+        return authorityName;
+    }
+
+    public void setAuthorityName(StringFilter authorityName) {
+        this.authorityName = authorityName;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -160,8 +181,11 @@ public class ScAccessCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(typeId, that.typeId) &&
+            Objects.equals(typeName, that.typeName) &&
             Objects.equals(windowId, that.windowId) &&
-            Objects.equals(authorityId, that.authorityId);
+            Objects.equals(formId, that.formId) &&
+            Objects.equals(authorityId, that.authorityId) &&
+            Objects.equals(authorityName, that.authorityName);
     }
 
     @Override
@@ -174,8 +198,11 @@ public class ScAccessCriteria implements Serializable, Criteria {
         description,
         adOrganizationId,
         typeId,
+        typeName,
         windowId,
-        authorityId
+        formId,
+        authorityId,
+        authorityName
         );
     }
 
@@ -191,7 +218,9 @@ public class ScAccessCriteria implements Serializable, Criteria {
                 (typeId != null ? "typeId=" + typeId + ", " : "") +
                 (typeName != null ? "typeName=" + typeName + ", " : "") +
                 (windowId != null ? "windowId=" + windowId + ", " : "") +
+                (formId != null ? "formId=" + formId + ", " : "") +
                 (authorityId != null ? "authorityId=" + authorityId + ", " : "") +
+                (authorityName != null ? "authorityName=" + authorityName + ", " : "") +
             "}";
     }
 

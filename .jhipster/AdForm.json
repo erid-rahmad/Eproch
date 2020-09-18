@@ -1,9 +1,13 @@
 {
-    "name": "ADWindow",
+    "name": "AdForm",
     "fields": [
         {
             "fieldName": "uid",
             "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "name",
@@ -17,49 +21,30 @@
             "fieldType": "String"
         },
         {
-            "fieldName": "titleLogic",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "type",
-            "fieldType": "ADWindowType",
-            "fieldValues": "MAINTAIN,QUERY,TRANSACTION",
+            "fieldName": "formName",
+            "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "treeView",
-            "fieldType": "Boolean"
-        },
-        {
             "fieldName": "accessLevel",
             "fieldType": "AdAccessLevel",
             "fieldValues": "SYS,SYS_CLN,CLN,CLN_ORG"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
         }
     ],
     "relationships": [
         {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "aDTab",
-            "otherEntityRelationshipName": "adWindow",
-            "relationshipName": "aDTab"
-        },
-        {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "aDWindow",
+            "otherEntityRelationshipName": "adForm",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200429152900",
-    "entityTableName": "ad_window",
+    "changelogDate": "20200917033700",
+    "entityTableName": "ad_form",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",
@@ -69,6 +54,5 @@
     "embedded": false,
     "clientRootFolder": "",
     "applications": "*",
-    "enableEntityAudit": true,
     "skipClient": true
 }

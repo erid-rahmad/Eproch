@@ -48,6 +48,13 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "adForm",
+            "otherEntityRelationshipName": "scAccess",
+            "relationshipName": "form",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "scAuthority",
             "otherEntityRelationshipName": "scAccess",
             "relationshipValidateRules": "required",

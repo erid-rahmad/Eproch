@@ -1,14 +1,21 @@
 package com.bhp.opusb.repository;
 
+import java.util.List;
+
 import com.bhp.opusb.domain.AdMenu;
 
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 /**
  * Spring Data  repository for the AdMenu entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface AdMenuRepository extends JpaRepository<AdMenu, Long>, JpaSpecificationExecutor<AdMenu> {
+
+  @EntityGraph(attributePaths = { "adMenus", "adWindow" })
+  List<AdMenu> findByParentMenuIsNull(Sort sort);
 }

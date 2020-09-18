@@ -4,6 +4,8 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,20 +14,20 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
+import com.bhp.opusb.domain.enumeration.AdAccessLevel;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
- * A ScAccess.
+ * A AdForm.
  */
 @Entity
-@Table(name = "sc_access")
+@Table(name = "ad_form")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class ScAccess extends AbstractAuditingEntity {
+public class AdForm extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,35 +42,25 @@ public class ScAccess extends AbstractAuditingEntity {
     @Column(name = "active")
     private Boolean active;
 
-    @Size(max = 50)
-    @Column(name = "name", length = 50)
+    @NotNull
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "description")
     private String description;
 
+    @NotNull
+    @Column(name = "form_name", nullable = false)
+    private String formName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "access_level")
+    private AdAccessLevel accessLevel;
+
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("scAccesses")
+    @JsonIgnoreProperties("adForms")
     private ADOrganization adOrganization;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("scAccesses")
-    private ScAccessType type;
-
-    @ManyToOne
-    @JsonIgnoreProperties("scAccesses")
-    private ADWindow window;
-
-    @ManyToOne
-    @JsonIgnoreProperties("scAccesses")
-    private AdForm form;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("scAccesses")
-    private ScAuthority authority;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -83,7 +75,7 @@ public class ScAccess extends AbstractAuditingEntity {
         return uid;
     }
 
-    public ScAccess uid(UUID uid) {
+    public AdForm uid(UUID uid) {
         this.uid = uid;
         return this;
     }
@@ -96,7 +88,7 @@ public class ScAccess extends AbstractAuditingEntity {
         return active;
     }
 
-    public ScAccess active(Boolean active) {
+    public AdForm active(Boolean active) {
         this.active = active;
         return this;
     }
@@ -109,7 +101,7 @@ public class ScAccess extends AbstractAuditingEntity {
         return name;
     }
 
-    public ScAccess name(String name) {
+    public AdForm name(String name) {
         this.name = name;
         return this;
     }
@@ -122,7 +114,7 @@ public class ScAccess extends AbstractAuditingEntity {
         return description;
     }
 
-    public ScAccess description(String description) {
+    public AdForm description(String description) {
         this.description = description;
         return this;
     }
@@ -131,69 +123,43 @@ public class ScAccess extends AbstractAuditingEntity {
         this.description = description;
     }
 
+    public String getFormName() {
+        return formName;
+    }
+
+    public AdForm formName(String formName) {
+        this.formName = formName;
+        return this;
+    }
+
+    public void setFormName(String formName) {
+        this.formName = formName;
+    }
+
+    public AdAccessLevel getAccessLevel() {
+        return accessLevel;
+    }
+
+    public AdForm accessLevel(AdAccessLevel accessLevel) {
+        this.accessLevel = accessLevel;
+        return this;
+    }
+
+    public void setAccessLevel(AdAccessLevel accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
 
-    public ScAccess adOrganization(ADOrganization aDOrganization) {
+    public AdForm adOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
         return this;
     }
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
-    }
-
-    public ScAccessType getType() {
-        return type;
-    }
-
-    public ScAccess type(ScAccessType scAccessType) {
-        this.type = scAccessType;
-        return this;
-    }
-
-    public void setType(ScAccessType scAccessType) {
-        this.type = scAccessType;
-    }
-
-    public ADWindow getWindow() {
-        return window;
-    }
-
-    public ScAccess window(ADWindow aDWindow) {
-        this.window = aDWindow;
-        return this;
-    }
-
-    public void setWindow(ADWindow aDWindow) {
-        this.window = aDWindow;
-    }
-
-    public AdForm getForm() {
-        return form;
-    }
-
-    public ScAccess form(AdForm adForm) {
-        this.form = adForm;
-        return this;
-    }
-
-    public void setForm(AdForm adForm) {
-        this.form = adForm;
-    }
-
-    public ScAuthority getAuthority() {
-        return authority;
-    }
-
-    public ScAccess authority(ScAuthority scAuthority) {
-        this.authority = scAuthority;
-        return this;
-    }
-
-    public void setAuthority(ScAuthority scAuthority) {
-        this.authority = scAuthority;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -207,10 +173,10 @@ public class ScAccess extends AbstractAuditingEntity {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof ScAccess)) {
+        if (!(o instanceof AdForm)) {
             return false;
         }
-        return id != null && id.equals(((ScAccess) o).id);
+        return id != null && id.equals(((AdForm) o).id);
     }
 
     @Override
@@ -220,12 +186,14 @@ public class ScAccess extends AbstractAuditingEntity {
 
     @Override
     public String toString() {
-        return "ScAccess{" +
+        return "AdForm{" +
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", formName='" + getFormName() + "'" +
+            ", accessLevel='" + getAccessLevel() + "'" +
             "}";
     }
 }

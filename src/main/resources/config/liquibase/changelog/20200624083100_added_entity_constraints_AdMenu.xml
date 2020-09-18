@@ -27,4 +27,14 @@
                                  referencedTableName="ad_menu"/>
 
     </changeSet>
+
+    <changeSet id="20200017114600" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="ad_form_id"
+                                 baseTableName="ad_menu"
+                                 constraintName="fk_ad_menu_ad_form_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_form"/>
+
+    </changeSet>
 </databaseChangeLog>

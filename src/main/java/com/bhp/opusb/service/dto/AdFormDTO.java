@@ -5,13 +5,12 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
-import com.bhp.opusb.domain.enumeration.ADWindowType;
 import com.bhp.opusb.domain.enumeration.AdAccessLevel;
 
 /**
- * A DTO for the {@link com.bhp.opusb.domain.ADWindow} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.AdForm} entity.
  */
-public class ADWindowDTO extends AbstractAuditingDTO {
+public class AdFormDTO extends AbstractAuditingDTO {
     
     private static final long serialVersionUID = 1L;
 
@@ -19,21 +18,17 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
+    private Boolean active;
+
     @NotNull
     private String name;
 
     private String description;
 
-    private String titleLogic;
-
     @NotNull
-    private ADWindowType type;
-
-    private Boolean treeView;
+    private String formName;
 
     private AdAccessLevel accessLevel;
-
-    private Boolean active;
 
 
     private Long adOrganizationId;
@@ -55,6 +50,14 @@ public class ADWindowDTO extends AbstractAuditingDTO {
         this.uid = uid;
     }
 
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
     public String getName() {
         return name;
     }
@@ -71,28 +74,12 @@ public class ADWindowDTO extends AbstractAuditingDTO {
         this.description = description;
     }
 
-    public String getTitleLogic() {
-        return titleLogic;
+    public String getFormName() {
+        return formName;
     }
 
-    public void setTitleLogic(String titleLogic) {
-        this.titleLogic = titleLogic;
-    }
-
-    public ADWindowType getType() {
-        return type;
-    }
-
-    public void setType(ADWindowType type) {
-        this.type = type;
-    }
-
-    public Boolean isTreeView() {
-        return treeView;
-    }
-
-    public void setTreeView(Boolean treeView) {
-        this.treeView = treeView;
+    public void setFormName(String formName) {
+        this.formName = formName;
     }
 
     public AdAccessLevel getAccessLevel() {
@@ -101,14 +88,6 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     public void setAccessLevel(AdAccessLevel accessLevel) {
         this.accessLevel = accessLevel;
-    }
-
-    public Boolean isActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 
     public Long getAdOrganizationId() {
@@ -136,11 +115,11 @@ public class ADWindowDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        ADWindowDTO aDWindowDTO = (ADWindowDTO) o;
-        if (aDWindowDTO.getId() == null || getId() == null) {
+        AdFormDTO adFormDTO = (AdFormDTO) o;
+        if (adFormDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), aDWindowDTO.getId());
+        return Objects.equals(getId(), adFormDTO.getId());
     }
 
     @Override
@@ -150,16 +129,14 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "ADWindowDTO{" +
+        return "AdFormDTO{" +
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", titleLogic='" + getTitleLogic() + "'" +
-            ", type='" + getType() + "'" +
-            ", treeView='" + isTreeView() + "'" +
+            ", formName='" + getFormName() + "'" +
             ", accessLevel='" + getAccessLevel() + "'" +
-            ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";
     }

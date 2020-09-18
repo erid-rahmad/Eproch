@@ -87,4 +87,12 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20200917105000" author="Ananta Aryadewa">
+        <addColumn tableName="sc_access">
+            <column name="form_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

@@ -33,4 +33,14 @@
                                  referencedTableName="sc_authority"/>
 
     </changeSet>
+
+    <changeSet id="20200917104900" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="form_id"
+                                 baseTableName="sc_access"
+                                 constraintName="fk_sc_access_form_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_form"/>
+
+    </changeSet>
 </databaseChangeLog>

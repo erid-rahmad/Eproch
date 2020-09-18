@@ -33,6 +33,9 @@ public class ScAccessDTO extends AbstractAuditingDTO {
     private Long windowId;
     private String windowName;
 
+    private Long formId;
+    private String formName;
+
     private Long authorityId;
     private String authorityName;
     
@@ -124,6 +127,22 @@ public class ScAccessDTO extends AbstractAuditingDTO {
         this.windowName = windowName;
     }
 
+    public Long getFormId() {
+        return formId;
+    }
+
+    public void setFormId(Long adFormId) {
+        this.formId = adFormId;
+    }
+
+    public String getFormName() {
+        return formName;
+    }
+
+    public void setFormName(String formName) {
+        this.formName = formName;
+    }
+
     public Long getAuthorityId() {
         return authorityId;
     }
@@ -172,6 +191,9 @@ public class ScAccessDTO extends AbstractAuditingDTO {
             ", adOrganizationId=" + getAdOrganizationId() +
             ", typeId=" + getTypeId() +
             ", windowId=" + getWindowId() +
+            ", windowName=" + getWindowName() +
+            ", formId=" + getFormId() +
+            ", formName=" + getFormName() +
             ", authorityId=" + getAuthorityId() +
             "}";
     }

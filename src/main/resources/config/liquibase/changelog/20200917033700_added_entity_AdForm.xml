@@ -8,27 +8,30 @@
 
     
     <!--
-        Added the entity ADWindow.
+        Added the entity AdForm.
     -->
-    <changeSet id="20200429152900-1" author="jhipster">
-        <createTable tableName="ad_window">
+    <changeSet id="20200917033700-1" author="jhipster">
+        <createTable tableName="ad_form">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="name" type="varchar(255)">
+            <column name="uid" type="${uuidType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="name" type="varchar(30)">
                 <constraints nullable="false" />
             </column>
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
-            <column name="type" type="varchar(255)">
+            <column name="form_name" type="varchar(50)">
                 <constraints nullable="false" />
             </column>
-            <column name="active" type="boolean">
+            <column name="access_level" type="varchar(10)">
                 <constraints nullable="true" />
-            </column>
-            <column name="ad_client_id" type="bigint">
-                <constraints nullable="false" />
             </column>
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
@@ -37,13 +40,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="20200429152900-1-relations" author="jhipster">
+    <changeSet id="20200917033700-1-relations" author="jhipster">
 
     </changeSet>
     
     <!-- Added the entity audit columns -->
-    <changeSet id="20200429152900-audit-1" author="jhipster-entity-audit">
-        <addColumn tableName="ad_window">
+    <changeSet id="20200917033700-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="ad_form">
             <column name="created_by" type="varchar(50)" defaultValue="system">
                 <constraints nullable="false"/>
             </column>
@@ -64,42 +67,21 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20200429152900-1-data" author="jhipster" context="faker">
+    <changeSet id="20200917033700-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/ad_window.csv"
+                  file="config/liquibase/fake-data/ad_form.csv"
                   separator=";"
-                  tableName="ad_window">
+                  tableName="ad_form">
             <column name="id" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
+            <column name="active" type="boolean"/>
             <column name="name" type="string"/>
             <column name="description" type="string"/>
-            <column name="title_logic" type="string"/>
-            <column name="type" type="string"/>
-            <column name="tree_view" type="boolean"/>
+            <column name="form_name" type="string"/>
             <column name="access_level" type="string"/>
-            <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
-    </changeSet>
-
-    <changeSet id="20200629110000" author="Ananta Aryadewa">
-        <addColumn tableName="ad_window">
-            <column name="uid" type="${uuidType}">
-                <constraints nullable="true" />
-            </column>
-            <column name="tree_view" type="boolean">
-                <constraints nullable="true" />
-            </column>
-        </addColumn>
-    </changeSet>
-
-    <changeSet id="20200917105700" author="Ananta Aryadewa">
-        <addColumn tableName="ad_window">
-            <column name="access_level" type="varchar(10)">
-                <constraints nullable="true" />
-            </column>
-        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

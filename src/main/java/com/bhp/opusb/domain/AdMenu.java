@@ -88,6 +88,10 @@ public class AdMenu extends AbstractAuditingEntity {
     @JsonIgnoreProperties("adMenus")
     private ADWindow adWindow;
 
+    @ManyToOne
+    @JsonIgnoreProperties("adMenus")
+    private AdForm adForm;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("adMenus")
@@ -298,6 +302,19 @@ public class AdMenu extends AbstractAuditingEntity {
 
     public void setAdWindow(ADWindow aDWindow) {
         this.adWindow = aDWindow;
+    }
+
+    public AdForm getAdForm() {
+        return adForm;
+    }
+
+    public AdMenu adForm(AdForm adForm) {
+        this.adForm = adForm;
+        return this;
+    }
+
+    public void setAdForm(AdForm adForm) {
+        this.adForm = adForm;
     }
 
     public ADOrganization getAdOrganization() {

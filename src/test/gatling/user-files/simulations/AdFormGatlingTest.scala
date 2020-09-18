@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the ADWindow entity.
+ * Performance test for the AdForm entity.
  */
-class ADWindowGatlingTest extends Simulation {
+class AdFormGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class ADWindowGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the ADWindow entity")
+    val scn = scenario("Test the AdForm entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,36 +62,34 @@ class ADWindowGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all aDWindows")
-            .get("/api/ad-windows")
+            exec(http("Get all adForms")
+            .get("/api/ad-forms")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new aDWindow")
-            .post("/api/ad-windows")
+            .exec(http("Create new adForm")
+            .post("/api/ad-forms")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
                 , "uid":null
+                , "active":null
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
-                , "titleLogic":"SAMPLE_TEXT"
-                , "type":"MAINTAIN"
-                , "treeView":null
+                , "formName":"SAMPLE_TEXT"
                 , "accessLevel":"SYS"
-                , "active":null
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_aDWindow_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_adForm_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created aDWindow")
-                .get("${new_aDWindow_url}")
+                exec(http("Get created adForm")
+                .get("${new_adForm_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created aDWindow")
-            .delete("${new_aDWindow_url}")
+            .exec(http("Delete created adForm")
+            .delete("${new_adForm_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

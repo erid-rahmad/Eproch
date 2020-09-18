@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.AdMenu;
 import com.bhp.opusb.domain.AdMenu;
 import com.bhp.opusb.domain.ADWindow;
+import com.bhp.opusb.domain.AdForm;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.AdMenuRepository;
 import com.bhp.opusb.service.AdMenuService;
@@ -58,7 +59,7 @@ public class AdMenuResourceIT {
     private static final String DEFAULT_PATH = "AAAAAAAAAA";
     private static final String UPDATED_PATH = "BBBBBBBBBB";
 
-    private static final AdMenuAction DEFAULT_ACTION = AdMenuAction.WINDOW;
+    private static final AdMenuAction DEFAULT_ACTION = AdMenuAction.FORM;
     private static final AdMenuAction UPDATED_ACTION = AdMenuAction.WINDOW;
 
     private static final String DEFAULT_ICON = "AAAAAAAAAA";
@@ -1222,6 +1223,26 @@ public class AdMenuResourceIT {
 
         // Get all the adMenuList where adWindow equals to adWindowId + 1
         defaultAdMenuShouldNotBeFound("adWindowId.equals=" + (adWindowId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByAdFormIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+        AdForm adForm = AdFormResourceIT.createEntity(em);
+        em.persist(adForm);
+        em.flush();
+        adMenu.setAdForm(adForm);
+        adMenuRepository.saveAndFlush(adMenu);
+        Long adFormId = adForm.getId();
+
+        // Get all the adMenuList where adForm equals to adFormId
+        defaultAdMenuShouldBeFound("adFormId.equals=" + adFormId);
+
+        // Get all the adMenuList where adForm equals to adFormId + 1
+        defaultAdMenuShouldNotBeFound("adFormId.equals=" + (adFormId + 1));
     }
 
 
