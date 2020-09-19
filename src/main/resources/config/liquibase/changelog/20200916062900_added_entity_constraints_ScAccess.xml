@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity ScAccess.
+    -->
+    <changeSet id="20200916062900-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="sc_access"
+                                 constraintName="fk_sc_access_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="type_id"
+                                 baseTableName="sc_access"
+                                 constraintName="fk_sc_access_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sc_access_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="window_id"
+                                 baseTableName="sc_access"
+                                 constraintName="fk_sc_access_window_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_window"/>
+
+        <addForeignKeyConstraint baseColumnNames="authority_id"
+                                 baseTableName="sc_access"
+                                 constraintName="fk_sc_access_authority_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="sc_authority"/>
+
+    </changeSet>
+
+    <changeSet id="20200917104900" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="form_id"
+                                 baseTableName="sc_access"
+                                 constraintName="fk_sc_access_form_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_form"/>
+
+    </changeSet>
+</databaseChangeLog>

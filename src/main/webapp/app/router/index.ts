@@ -7,22 +7,6 @@ Component.registerHooks([
 ]);
 import Router, { RouteConfig } from 'vue-router';
 import Layout from '@/layout/index.vue';
-import { Authority } from '@/shared/security/authority';
-const Activate = () => import('../account/activate/activate.vue');
-const ResetPasswordInit = () => import('../account/reset-password/init/reset-password-init.vue');
-const ResetPasswordFinish = () => import('../account/reset-password/finish/reset-password-finish.vue');
-const ChangePassword = () => import('../account/change-password/change-password.vue');
-const Settings = () => import('../account/settings/settings.vue');
-const JhiUserManagementComponent = () => import('../admin/user-management/user-management.vue');
-const JhiUserManagementViewComponent = () => import('../admin/user-management/user-management-view.vue');
-const JhiUserManagementEditComponent = () => import('../admin/user-management/user-management-edit.vue');
-const JhiConfigurationComponent = () => import('../admin/configuration/configuration.vue');
-const JhiDocsComponent = () => import('../admin/docs/docs.vue');
-const JhiHealthComponent = () => import('../admin/health/health.vue');
-const JhiLogsComponent = () => import('../admin/logs/logs.vue');
-const JhiAuditsComponent = () => import('../admin/audits/audits.vue');
-const JhiMetricsComponent = () => import('../admin/metrics/metrics.vue');
-const JhiTrackerComponent = () => import('../admin/tracker/tracker.vue');
 const DynamicWindow = () => import(/* webpackChunkName: "dynamicWindow" */ '@/core/application-dictionary/components/DynamicWindow/dynamic-window.vue');
 /* tslint:disable */
 // prettier-ignore
@@ -81,6 +65,7 @@ export const constantRoutes: RouteConfig[] = [
         meta: {
           affix: true,
           title: 'home',
+          icon: 'dashboard',
           breadcrumb: false
         }
       }
@@ -109,57 +94,7 @@ export const constantRoutes: RouteConfig[] = [
         component: () => import(/* webpackChunkName: "register" */ '@/account/register/register.vue')
       }
     ]
-  },
-  {
-    path: '/account',
-    component: Layout,
-    redirect: '/account/settings',
-    meta: {
-      title: 'myAccount'
-    },
-    children: [
-      {
-        path: 'password',
-        name: 'ChangePassword',
-        component: ChangePassword,
-        meta: {
-          title: 'changePassword',
-          authorities: [Authority.USER]
-        }
-      },
-      {
-        path: 'settings',
-        name: 'Settings',
-        component: Settings,
-        meta: {
-          title: 'settings',
-          authorities: [Authority.USER]
-        }
-      },
-      {
-        path: 'activate',
-        component: Activate,
-        meta: {
-          hidden: true
-        }
-      },
-      {
-        path: 'reset/request',
-        component: ResetPasswordInit,
-        meta: {
-          hidden: true
-        }
-      },
-      {
-        path: 'reset/finish',
-        component: ResetPasswordFinish,
-        redirect: 'noredirect',
-        meta: {
-          hidden: true
-        }
-      }
-    ]
-  },
+  }
 ];
 
 /**
@@ -178,166 +113,6 @@ export const notFoundRoute: RouteConfig[] = [
  * the routes that need to be dynamically loaded based on user authorities
  */
 export const asyncRoutes: RouteConfig[] = [
-  {
-    path: '/admin',
-    component: Layout,
-    meta: {
-      title: 'admin.default',
-      authorities: [Authority.ADMIN]
-    },
-    children: [
-      {
-        path: 'user-management',
-        name: 'JhiUserManagementComponent',
-        component: JhiUserManagementComponent,
-        meta: {
-          title: 'admin.userManagement',
-          authorities: [Authority.ADMIN]
-        }
-      },
-      {
-        path: 'user-management/new',
-        name: 'JhiUserManagementNew',
-        component: JhiUserManagementEditComponent,
-        meta: {
-          hidden: true,
-          authorities: [Authority.ADMIN]
-        }
-      },
-      {
-        path: 'user-management/:userId/edit',
-        name: 'JhiUserManagementEditComponent',
-        component: JhiUserManagementEditComponent,
-        meta: {
-          hidden: true,
-          authorities: [Authority.ADMIN]
-        }
-      },
-      {
-        path: 'user-management/:userId/view',
-        name: 'JhiUserManagementViewComponent',
-        component: JhiUserManagementViewComponent,
-        meta: {
-          hidden: true,
-          authorities: [Authority.ADMIN]
-        }
-      },
-      {
-        path: 'docs',
-        name: 'JhiDocsComponent',
-        component: JhiDocsComponent,
-        meta: {
-          title: 'admin.api',
-          authorities: [Authority.ADMIN]
-        }
-      },
-      {
-        path: 'audits',
-        name: 'JhiAuditsComponent',
-        component: JhiAuditsComponent,
-        meta: {
-          title: 'admin.audits',
-          authorities: [Authority.ADMIN]
-        }
-      },
-      {
-        path: 'jhi-health',
-        name: 'JhiHealthComponent',
-        component: JhiHealthComponent,
-        meta: {
-          title: 'admin.health',
-          authorities: [Authority.ADMIN]
-        }
-      },
-      {
-        path: 'logs',
-        name: 'JhiLogsComponent',
-        component: JhiLogsComponent,
-        meta: {
-          title: 'admin.logs',
-          authorities: [Authority.ADMIN]
-        }
-      },
-      {
-        path: 'jhi-metrics',
-        name: 'JhiMetricsComponent',
-        component: JhiMetricsComponent,
-        meta: {
-          title: 'admin.metrics',
-          authorities: [Authority.ADMIN]
-        }
-      },
-      {
-        path: 'jhi-configuration',
-        name: 'JhiConfigurationComponent',
-        component: JhiConfigurationComponent,
-        meta: {
-          title: 'admin.config',
-          authorities: [Authority.ADMIN]
-        }
-      },
-      {
-        path: 'jhi-tracker',
-        name: 'JhiTrackerComponent',
-        component: JhiTrackerComponent,
-        meta: {
-          title: 'admin.tracker',
-          authorities: [Authority.ADMIN]
-        }
-      }
-    ]
-  }/* ,
-  {
-    path: '/application-dictionary',
-    component: Layout,
-    redirect: 'application-dictionary/window',
-    meta: {
-      title: 'applicationDictionary.default',
-      authorities: [Authority.ADMIN]
-    },
-    children: [
-      {
-        path: 'table',
-        name: 'TableEditor',
-        component: DynamicWindow,
-        meta: {
-          title: 'applicationDictionary.table',
-          authorities: [Authority.ADMIN],
-          windowId: 1
-        }
-      },
-      {
-        path: 'window',
-        name: 'WindowEditor',
-        component: DynamicWindow,
-        meta: {
-          title: 'applicationDictionary.window',
-          authorities: [Authority.ADMIN],
-          windowId: 2
-        }
-      },
-      {
-        path: 'reference',
-        name: 'References',
-        component: DynamicWindow,
-        meta: {
-          title: 'applicationDictionary.reference',
-          authorities: [Authority.ADMIN],
-          windowId: 1051
-        }
-      },
-      {
-        path: 'validation-rule',
-        name: 'ValidationRule',
-        component: DynamicWindow,
-        meta: {
-          title: 'applicationDictionary.validationRule',
-          authorities: [Authority.ADMIN],
-          windowId: 3001
-        }
-      }
-    ]
-  } */
   // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here
 ];
 

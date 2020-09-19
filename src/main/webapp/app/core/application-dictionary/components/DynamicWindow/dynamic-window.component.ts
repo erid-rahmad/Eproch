@@ -181,25 +181,44 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.gridView = options.gridView;
   }
 
-  public onActionCanceled() {
-    this.closeSearchPanel();
-    (<any>this.$refs.mainGrid).cancelOperation();
-    (<any>this.$refs.mainForm).exitEditMode();
+  public onAddRecord(data?: any) {
+    if (! data?.tabId) {
+      (<any>this.$refs.mainGrid).addBlankRow();
+    } else if (data.tabId === this.currentTab) {
+      const index = parseInt(data.tabId);
+      this.$refs.lineGrid[index].addBlankRow();
+    }
   }
 
-  public onRecordCopy(data: any) {
-    if (data?.tabId) {
-      const index = parseInt(data.tabId);
-      (<any>this.$refs.lineGrid[index]).copyRow();
-    } else if (this.gridView) {
+  public onCopyRecord(data?: any) {
+    console.log('copy record', data);
+    if (! data?.tabId) {
+      console.log('copy header');
       (<any>this.$refs.mainGrid).copyRow();
+    } else if (data.tabId === this.currentTab) {
+      console.log('copy line', data.tabId);
+      const index = parseInt(data.tabId);
+      this.$refs.lineGrid[index].copyRow();
+    }
+  }
+
+  public onActionCanceled(data?: any) {
+    this.closeSearchPanel();
+    if (! data?.tabId) {
+      (<any>this.$refs.mainGrid).cancelOperation();
+      (<any>this.$refs.mainForm).exitEditMode();
+    } else if (data.tabId === this.currentTab) {
+      const index = parseInt(data.tabId);
+      (<any>this.$refs.lineGrid[index]).cancelOperation();
     }
   }
 
   public onRecordSave(data: any) {
     if (data?.tabId) {
-      const index = parseInt(data.tabId);
-      (<any>this.$refs.lineGrid[index]).beforeSave();
+      if (data.tabId === this.currentTab) {
+        const index = parseInt(data.tabId);
+        (<any>this.$refs.lineGrid[index]).beforeSave();
+      }
     } else if (this.gridView) {
       (<any>this.$refs.mainGrid).beforeSave();
     } else {
@@ -226,6 +245,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   public showDeleteConfirmation(options: any) {
     this.deleteConfirmationVisible = true;
     this.deleteOptions = options;
+  }
+
+  public hideDeleteConfirmation() {
+    this.deleteConfirmationVisible = false;
   }
 
   public deleteRecords() {

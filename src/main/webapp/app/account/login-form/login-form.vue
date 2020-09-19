@@ -1,69 +1,76 @@
 <template>
   <el-dialog
-    :title="$t('login.title')"
     :visible="visible"
     :append-to-body="true"
     @opened="onLoginFormOpened"
     @close="onHide"
+    width="40%"
+    center
   >
     <div class="login-container">
       <el-row :gutter="16">
-        <el-col :span="12" :offset="6">
-          <el-alert
-            type="error"
-            closable
-            show-icon
-            v-if="authenticationError"
-            :title="$t('login.messages.error.authentication')"
-          />
-        </el-col>
-        <el-col :span="12" :offset="6">
+        <el-col :span="24" :offset="0">
           <el-form
             ref="loginForm"
             :model="loginForm"
             class="login-form"
-            autocomplete="on"
+            autocomplete="off"
             label-position="left"
           >
-            <el-form-item prop="username">
+            <div class="title-container">
+              <h3 class="title">
+                {{ $t('login.title') }}
+              </h3>
+            </div>
+            <hr />
+
+            <el-form-item prop="username" required>
               <el-input
                 ref="username"
                 v-model="loginForm.username"
-                :placeholder="$t('global.form[\'username.placeholder\']')"
+                :placeholder="$t('global.form[\'username.label\']')"
                 name="username"
                 type="text"
                 tabindex="1"
-                autocomplete="on"
+                autocomplete="off"
+                clearable
+                prefix-icon="el-icon-user"
               />
             </el-form-item>
 
             <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-              <el-form-item prop="password">
+              <el-form-item prop="password" required>
                 <el-input
                   :key="passwordType"
                   ref="password"
                   v-model="loginForm.password"
                   :type="passwordType"
-                  :placeholder="$t('login.form[\'password.placeholder\']')"
+                  :placeholder="$t('global.form[\'password.label\']')"
                   name="password"
                   tabindex="2"
-                  autocomplete="on"
+                  autocomplete="off"
                   @keyup.native="checkCapslock"
                   @blur="capsTooltip = false"
                   @keyup.enter.native="handleLogin"
+                  clearable
+                  show-password
+                  prefix-icon="el-icon-lock"
                 />
-                <span class="show-pwd" @click="showPwd">
-                  <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
-                </span>
               </el-form-item>
             </el-tooltip>
 
-            <el-checkbox v-model="loginForm.rememberMe">{{ $t('login.form.rememberme') }}</el-checkbox>
+            <el-checkbox 
+              v-model="loginForm.rememberMe"
+              tabindex="3">
+              {{ $t('login.form.rememberme') }}
+            </el-checkbox>
 
             <el-button
               :loading="loading"
               type="primary"
-              style="width:100%; margin-bottom:30px;"
+              style="width:100%; margin-bottom:0px;"
+              tabindex="4"
+              icon="el-icon-user-solid"
               @click.native.prevent="handleLogin"
             >{{ $t('login.form.button') }}</el-button>
           </el-form>
@@ -73,6 +80,7 @@
               slot="title"
               to="/account/reset/request"
               v-text="$t('login.password.forgot')"
+              tabindex="5"
             >Did you forget your password?</router-link>
           </el-alert>
           <el-alert type="info" :closable="false">
@@ -83,6 +91,7 @@
               <router-link
                 to="/register"
                 v-text="$t('global.messages.info.register.link')"
+                tabindex="6"
               >Register a new account</router-link>
             </p>
           </el-alert>
@@ -91,8 +100,10 @@
     </div>
   </el-dialog>
 </template>
+
 <script lang="ts" src="./login-form.component.ts">
 </script>
+
 <style lang="scss">
 // References: https://www.zhangxinxu.com/wordpress/2018/01/css-caret-color-first-line/
 @supports (-webkit-mask: none) and (not (cater-color: $loginCursorColor)) {
@@ -101,7 +112,7 @@
       color: $loginCursorColor;
     }
     input::first-line {
-      color: $lightGray;
+      color: #5d5d5d;
     }
   }
 }
@@ -109,12 +120,12 @@
 .login-container {
   .el-input {
     display: inline-block;
-    height: 47px;
-    width: 85%;
+    height: 4px;
+    width: 100%;
 
     input {
-      height: 47px;
-      padding: 12px 5px 12px 15px;
+      background-color: #F4F6F7;
+      padding: 12px 55px 12px 30px;
 
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $loginBg inset !important;
@@ -126,6 +137,11 @@
   .el-form-item {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 5px;
+    margin-bottom: 17px;
+  }
+
+  .el-button{
+    padding: 10px 10px;
   }
 }
 </style>
@@ -138,9 +154,9 @@
 
   .login-form {
     position: relative;
-    width: 520px;
+    width: 320px;
     max-width: 100%;
-    padding: 64px 35px 0;
+    //padding: 64px 35px 0;
     margin: 0 auto;
     overflow: hidden;
   }
@@ -170,14 +186,14 @@
 
     .title {
       font-size: 26px;
-      color: $lightGray;
-      margin: 0px auto 40px auto;
+      color: #5d5d5d;
+      //margin: 0px auto 40px auto;
       text-align: center;
       font-weight: bold;
     }
 
     .set-language {
-      color: #fff;
+      color: #5d5d5d;
       position: absolute;
       top: 3px;
       font-size: 18px;

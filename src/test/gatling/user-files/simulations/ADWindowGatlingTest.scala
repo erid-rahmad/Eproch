@@ -78,6 +78,7 @@ class ADWindowGatlingTest extends Simulation {
                 , "titleLogic":"SAMPLE_TEXT"
                 , "type":"MAINTAIN"
                 , "treeView":null
+                , "accessLevel":"SYS"
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

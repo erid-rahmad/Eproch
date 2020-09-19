@@ -81,7 +81,9 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     private Long adValidationRuleId;
     private String adValidationRuleName;
+
     private Long adTableId;
+    private String adTableName;
     
     private ADReferenceDTO adReference;
     private AdValidationRuleDTO adValidationRule;
@@ -364,6 +366,14 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     public void setAdTableId(Long aDTableId) {
         this.adTableId = aDTableId;
+    }
+
+    public String getAdTableName() {
+        return adTableName;
+    }
+
+    public void setAdTableName(String adTableName) {
+        this.adTableName = adTableName;
     }
 
     public ADReferenceDTO getAdReference() {

@@ -34,7 +34,7 @@
         {
             "fieldName": "action",
             "fieldType": "AdMenuAction",
-            "fieldValues": "WINDOW"
+            "fieldValues": "FORM,WINDOW"
         },
         {
             "fieldName": "icon",
@@ -69,6 +69,13 @@
             "otherEntityName": "aDWindow",
             "otherEntityRelationshipName": "adMenu",
             "relationshipName": "adWindow",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adForm",
+            "otherEntityRelationshipName": "adMenu",
+            "relationshipName": "adForm",
             "otherEntityField": "id"
         },
         {

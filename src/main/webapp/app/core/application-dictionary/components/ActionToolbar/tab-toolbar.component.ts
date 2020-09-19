@@ -28,8 +28,8 @@ export default class TabToolbar extends TabToolbarProps {
   // TODO Handles accidental/multiple key invocation.
   get keymap() {
     return {
-      'shift+alt+n': this.addRecord,
-      'shift+alt+c': this.copyRecord,
+      'shift+alt+a': this.addRecord,
+      'shift+alt+d': this.copyRecord,
       'shift+alt+s': this.saveRecord,
       'shift+alt+del': this.deleteRecord,
       'shift+alt+z': this.cancelOperation
@@ -37,18 +37,17 @@ export default class TabToolbar extends TabToolbarProps {
   }
 
   created() {
+    console.log('tab-toolbar created with tabId: %s', this.tabId);
     this.fullPath = this.$route.fullPath;
-    this.eventBus?.$on('inline-editing', this.onInlineEditing);
     this.eventBus?.$on('record-saved', this.onSaveSuccess);
   }
 
   beforeDestroy() {
-    this.eventBus?.$off('inline-editing', this.onInlineEditing);
     this.eventBus?.$off('record-saved', this.onSaveSuccess);
   }
 
-  private onInlineEditing(active: boolean) {
-    this.editing = active;
+  public activateInlineEditing() {
+    this.editing = true;
   }
 
   private onSaveSuccess() {
@@ -56,27 +55,19 @@ export default class TabToolbar extends TabToolbarProps {
   }
 
   public addRecord() {
-    if (!this.activeWindow || this.editing) return;
-    this.editing = true;
-    this.eventBus?.$emit('add-record', {
-      isGridView: true,
-      tabId: this.tabId
-    });
+    if (! this.activeWindow || this.editing) return;
+    this.$emit('add-record', { tabId: this.tabId });
   }
 
   public copyRecord() {
     if (!this.activeWindow || this.editing) return;
-    this.editing = true;
     this.$emit('copy', {tabId: this.tabId});
-    this.eventBus?.$emit('copy-record', {
-      isGridView: true,
-      tabId: this.tabId
-    });
   }
 
   public saveRecord() {
-    if (!this.activeWindow && !this.editing) return;
-    this.$emit('save', {tabId: this.tabId});
+    if (this.activeWindow && this.editing) {
+      this.$emit('save', {tabId: this.tabId});
+    }
   }
 
   public deleteRecord() {
@@ -88,9 +79,10 @@ export default class TabToolbar extends TabToolbarProps {
   }
 
   public cancelOperation() {
-    if (!this.activeWindow && !this.editing) return;
-    this.editing = false;
-    this.$emit('cancel');
+    if (this.activeWindow) {
+      this.editing = false;
+      this.$emit('cancel', {tabId: this.tabId});
+    }
   }
 
   private get activeWindow() {

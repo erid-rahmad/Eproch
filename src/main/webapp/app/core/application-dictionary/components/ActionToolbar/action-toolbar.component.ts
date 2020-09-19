@@ -51,8 +51,8 @@ export default class ActionToolbar extends ActionToolbarProps {
       'alt+down': this.goToChildTab,
       'alt+r': this.refreshData,
       'alt+f': this.openSearchWindow,
-      'alt+n': this.addRecord,
-      'alt+c': this.copyRecord,
+      'alt+a': this.addRecord,
+      'alt+d': this.copyRecord,
       'alt+s': this.saveRecord,
       'alt+del': this.deleteRecord,
       'alt+z': this.cancelOperation
@@ -74,17 +74,15 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   created() {
     this.fullPath = this.$route.fullPath;
-    this.eventBus.$on('inline-editing', this.onInlineEditing);
     this.eventBus.$on('record-saved', this.onSaveSuccess);
   }
 
   beforeDestroy() {
-    this.eventBus.$off('inline-editing', this.onInlineEditing);
     this.eventBus.$off('record-saved', this.onSaveSuccess);
   }
 
-  private onInlineEditing(active: boolean) {
-    this.editing = active;
+  public activateInlineEditing() {
+    this.editing = true;
   }
 
   private onSaveSuccess() {
@@ -105,24 +103,20 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   public addRecord() {
     if (!this.activeWindow || this.editing) return;
-    this.editing = true;
-    this.$emit('add-record', {
-      isGridView: this.gridView
-    });
-    this.eventBus.$emit('add-record', {
-      isGridView: this.gridView
-    });
+    this.$emit('add-record');
   }
 
   public copyRecord() {
     if (!this.activeWindow || this.editing) return;
-    this.editing = true;
     this.$emit('copy');
   }
 
   public saveRecord() {
-    if (!this.activeWindow || !this.editing) return;
-    this.$emit('save');
+    if (this.activeWindow && this.editing) {
+      this.$emit('save', {
+        isGridView: this.gridView
+      });
+    }
   }
 
   public deleteRecord() {
@@ -158,9 +152,10 @@ export default class ActionToolbar extends ActionToolbarProps {
   }
 
   public cancelOperation() {
-    if (!this.activeWindow) return;
-    this.editing = false;
-    this.$emit('cancel');
+    if (this.activeWindow) {
+      this.editing = false;
+      this.$emit('cancel');
+    }
   }
 
   /**

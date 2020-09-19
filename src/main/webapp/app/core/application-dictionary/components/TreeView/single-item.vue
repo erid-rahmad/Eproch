@@ -2,10 +2,6 @@
   <el-menu-item
     :index="`${model.id}`"
   >
-    <svg-icon
-      v-if="model.icon"
-      :name="model.icon"
-    />
     <span>{{ printTitle(model) }}</span>
   </el-menu-item>
 </template>
