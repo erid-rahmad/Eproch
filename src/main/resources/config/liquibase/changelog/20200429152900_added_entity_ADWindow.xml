@@ -76,6 +76,7 @@
             <column name="title_logic" type="string"/>
             <column name="type" type="string"/>
             <column name="tree_view" type="boolean"/>
+            <column name="access_level" type="string"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
@@ -88,6 +89,14 @@
                 <constraints nullable="true" />
             </column>
             <column name="tree_view" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200917105700" author="Ananta Aryadewa">
+        <addColumn tableName="ad_window">
+            <column name="access_level" type="varchar(10)">
                 <constraints nullable="true" />
             </column>
         </addColumn>

@@ -28,8 +28,9 @@
           :buttons="mainTab.toolbarButtons"
           :event-bus="mainToolbarEventBus"
           :record-count="totalRecords"
+          @add-record="onAddRecord"
           @cancel="onActionCanceled"
-          @copy="onRecordCopy"
+          @copy="onCopyRecord"
           @delete="showDeleteConfirmation"
           @edit-mode-change="onEditModeChanged"
           @open-search-panel="openSearchPanel"
@@ -75,9 +76,10 @@
                 :tab="mainTab"
                 :toolbar-event-bus="mainToolbarEventBus"
                 @current-row-change="onMainRecordChange"
+                @inline-editing="$refs.mainToolbar.activateInlineEditing()"
                 @quit-edit-mode="quitEditMode"
                 @record-saved="reloadTreeView"
-                @rows-deleted="deleteConfirmationVisible = false"
+                @rows-deleted="hideDeleteConfirmation"
                 @total-count-changed="onTotalCountChange"
                 main-tab
               />
@@ -129,8 +131,9 @@
                     :disabled="isEditing"
                     :event-bus="secondaryToolbarEventBus"
                     :tab-id="'' + index"
-                    @cancel="$refs.lineGrid[index].cancelOperation()"
-                    @copy="onRecordCopy"
+                    @add-record="onAddRecord"
+                    @cancel="onActionCanceled"
+                    @copy="onCopyRecord"
                     @delete="showDeleteConfirmation"
                     @save="onRecordSave"
                   />
@@ -140,7 +143,8 @@
                     :tab-id="'' + index"
                     :toolbar-event-bus="secondaryToolbarEventBus"
                     lazy-load
-                    @rows-deleted="deleteConfirmationVisible = false"
+                    @inline-editing="$refs.lineToolbar[index].activateInlineEditing()"
+                    @rows-deleted="hideDeleteConfirmation"
                     @total-count-changed="count => {$refs.lineToolbar[index].recordCount = count}"
                   />
                 </el-tab-pane>

@@ -78,7 +78,7 @@ class AdMenuGatlingTest extends Simulation {
                 , "translationKey":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "path":"SAMPLE_TEXT"
-                , "action":"WINDOW"
+                , "action":"FORM"
                 , "icon":"SAMPLE_TEXT"
                 , "redirect":"SAMPLE_TEXT"
                 , "sequence":"0"

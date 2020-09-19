@@ -12,6 +12,7 @@ export interface IMenu {
 export interface IMenuMeta {
   title?: string;
   authorities?: string[];
+  alwaysShow?: boolean;
   windowId?: number;
   hidden?: boolean;
   affix?: boolean;

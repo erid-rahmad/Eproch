@@ -33,4 +33,14 @@
                                  referencedTableName="ad_table"/>
 
     </changeSet>
+
+    <changeSet id="20200917170600" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="ad_validation_rule_id"
+                                 baseTableName="ad_column"
+                                 constraintName="fk_ad_column_ad_validation_rule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_validation_rule"/>
+
+    </changeSet>
 </databaseChangeLog>

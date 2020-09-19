@@ -8,6 +8,7 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.AdMenuAction;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.AdMenu} entity.
@@ -47,6 +48,9 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     private Long adWindowId;
     private String adWindowName;
+
+    private Long adFormId;
+    private String adFormName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -176,6 +180,22 @@ public class AdMenuDTO extends AbstractAuditingDTO {
         this.adWindowName = adWindowName;
     }
 
+    public Long getAdFormId() {
+        return adFormId;
+    }
+
+    public void setAdFormId(Long adFormId) {
+        this.adFormId = adFormId;
+    }
+
+    public String getAdFormName() {
+        return adFormName;
+    }
+
+    public void setAdFormName(String adFormName) {
+        this.adFormName = adFormName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -216,6 +236,11 @@ public class AdMenuDTO extends AbstractAuditingDTO {
         this.adMenus = adMenus;
     }
 
+    @JsonIgnore
+    public boolean hasSubmenus() {
+        return adMenus != null && ! adMenus.isEmpty();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -254,6 +279,7 @@ public class AdMenuDTO extends AbstractAuditingDTO {
             ", alwaysShow='" + isAlwaysShow() + "'" +
             ", active='" + isActive() + "'" +
             ", adWindowId=" + getAdWindowId() +
+            ", adFormId=" + getAdFormId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", parentMenuId=" + getParentMenuId() +
             "}";
