@@ -1,13 +1,13 @@
-import axios from 'axios';
-import { IMenu } from './menu.model';
-import { Authority } from '@/shared/security/authority';
-import { dynamicWindow, defaultLayout } from '@/router';
-import { IRetrieveParameter } from '../DynamicWindow/dynamic-window.service';
-import buildPaginationQueryOpts from '@/shared/sort/sorts';
+import { defaultLayout, dynamicWindow } from '@/router';
 import buildCriteriaQueryString from '@/shared/filter/filters';
+import buildPaginationQueryOpts from '@/shared/sort/sorts';
+import axios from 'axios';
 import { camelCase } from 'lodash';
+import { IRetrieveParameter } from '../DynamicWindow/dynamic-window.service';
+import { IMenu } from './menu.model';
+import { forms, blankForm } from '@/router/forms';
 
-const baseApiUrl = 'api/ad-menus';
+const baseApiUrl = 'api/ad-menus/main-menu';
 
 export default class AdMenuService {
   public find(id: number): Promise<IMenu> {
@@ -29,10 +29,11 @@ export default class AdMenuService {
 
     let router: IMenu = {
       path: data.path,
-      component: this.getComponent(data.action),
+      component: this.getComponent(data),
       meta: {
         title: data.name,
         icon: data.icon,
+        alwaysShow: data.alwaysShow || false,
         authorities: data.authorities || []
       }
     };
@@ -55,14 +56,21 @@ export default class AdMenuService {
     return router;
   }
 
-  private getComponent(action: string) {
-    return action === 'WINDOW' ? dynamicWindow : defaultLayout;
+  private getComponent({action, adFormName}) {
+    if (! action) {
+      return defaultLayout;
+    } else if (action === 'WINDOW') {
+      return dynamicWindow;
+    } else if (action === 'FORM') {
+      return forms.get(adFormName) || blankForm;
+    }
+
+    return blankForm;
   }
 
   public retrieve(query?: IRetrieveParameter): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       let queryParams = buildPaginationQueryOpts(query?.paginationQuery);
-      const buildRouter = this.buildRouter;
 
       if (query?.criteriaQuery) {
         if (queryParams.length) {
@@ -77,6 +85,7 @@ export default class AdMenuService {
           const routes: IMenu[] = res.data.map(((route: any) => {
             return this.buildRouter(route);
           }).bind(this));
+          console.log('routes: %O', routes);
           resolve({data: routes});
         }.bind(this))
         .catch(err => {

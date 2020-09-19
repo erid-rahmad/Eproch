@@ -125,4 +125,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20200917114800" author="Ananta Aryadewa">
+        <addColumn tableName="ad_menu">
+            <column name="ad_form_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

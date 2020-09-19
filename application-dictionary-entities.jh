@@ -76,7 +76,17 @@ entity ADWindow {
 	titleLogic String
 	type ADWindowType required
 	treeView Boolean
+	accessLevel AdAccessLevel
 	active Boolean
+}
+
+entity AdForm {
+	uid UUID
+	active Boolean
+	name String required
+	description String
+	formName String required
+	accessLevel AdAccessLevel
 }
 
 entity ADTab {
@@ -174,6 +184,9 @@ entity AdMenu {
 	icon String
 	redirect String
 	sequence Integer
+
+	// Just provide the Vue route.
+	hidden Boolean
 
 	// Always show the root menu. By default the first level is
 	// hidden if there is only a child menu.
@@ -277,6 +290,32 @@ entity AdButton {
 	icon String
 }
 
+/** Extends the JHipster's Authority entity */
+entity ScAuthority {
+  uid UUID
+  active Boolean
+  description String
+  master Boolean
+}
+
+entity ScAccess {
+  uid UUID
+  active Boolean
+  name String maxlength(50)
+  description String
+}
+
+entity ScAccessType {
+  uid UUID
+  active Boolean
+  name String maxlength(10)
+  description String
+}
+
+enum AdAccessLevel {
+	SYS, SYS_CLN, CLN, CLN_ORG
+}
+
 enum ADColumnType {
 	STRING, INTEGER, LONG, BIG_DECIMAL, FLOAT, DOUBLE,
 	BOOLEAN, LOCAL_DATE, ZONED_DATE_TIME, DURATION,
@@ -292,7 +331,7 @@ enum ADReferenceType {
 }
 
 enum AdMenuAction {
-	WINDOW
+	FORM, WINDOW
 }
 
 enum AdSchedulerTrigger {
@@ -301,6 +340,13 @@ enum AdSchedulerTrigger {
 
 enum AdTriggerType {
 	PROCESS, REPORT, WORKFLOW
+}
+
+/**
+ * One to one relationship.
+ */
+relationship OneToOne {
+  ScAuthority{authority(name) required} to Authority
 }
 
 /**
@@ -317,6 +363,8 @@ relationship OneToMany {
 	AdTask to AdTaskProcess{adTask required}
 	AdTrigger to AdTriggerParam{adTrigger required}
 	AdTaskSchedulerGroup to AdTaskScheduler{group}
+
+  ScAuthority to ScAccess{authority required}
 }
 /**
  * The left side entity won't be included in the right side entity.
@@ -329,6 +377,7 @@ relationship ManyToOne {
 	ADColumn{adReference} to ADReference
 	ADColumn{adValidationRule} to AdValidationRule
 
+	AdForm{adOrganization required} to ADOrganization
 	ADWindow{adOrganization required} to ADOrganization
 	
 	ADTab{adOrganization required} to ADOrganization
@@ -347,6 +396,7 @@ relationship ManyToOne {
 	AdValidationRule{adOrganization required} to ADOrganization
 
 	AdMenu{adWindow} to ADWindow
+	AdMenu{adForm} to AdForm
 	AdMenu{adOrganization required} to ADOrganization
 
 	AdTask{adOrganization} to ADOrganization
@@ -364,6 +414,15 @@ relationship ManyToOne {
 	AdButton{adOrganization required} to ADOrganization
 	AdButton{adTab required} to ADTab
 	AdButton{adTrigger} to AdTrigger
+
+  ScAuthority{adOrganization required} to ADOrganization
+
+  ScAccess{adOrganization required} to ADOrganization
+  ScAccess{type required} to ScAccessType
+  ScAccess{window} to ADWindow
+	ScAccess{form} to AdForm
+
+  ScAccessType{adOrganization required} to ADOrganization
 }
 
 // Allow filtering to all entities.

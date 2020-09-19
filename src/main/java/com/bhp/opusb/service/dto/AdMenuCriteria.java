@@ -2,12 +2,12 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
-import com.bhp.opusb.domain.enumeration.AdMenuAction;
-
 import io.github.jhipster.service.Criteria;
+import com.bhp.opusb.domain.enumeration.AdMenuAction;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -27,8 +27,6 @@ public class AdMenuCriteria implements Serializable, Criteria {
      * Class for filtering AdMenuAction
      */
     public static class AdMenuActionFilter extends Filter<AdMenuAction> {
-
-        private static final long serialVersionUID = 1L;
 
         public AdMenuActionFilter() {
         }
@@ -76,6 +74,8 @@ public class AdMenuCriteria implements Serializable, Criteria {
 
     private LongFilter adWindowId;
 
+    private LongFilter adFormId;
+
     private LongFilter adOrganizationId;
 
     private LongFilter parentMenuId;
@@ -99,6 +99,7 @@ public class AdMenuCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adMenuId = other.adMenuId == null ? null : other.adMenuId.copy();
         this.adWindowId = other.adWindowId == null ? null : other.adWindowId.copy();
+        this.adFormId = other.adFormId == null ? null : other.adFormId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.parentMenuId = other.parentMenuId == null ? null : other.parentMenuId.copy();
     }
@@ -228,6 +229,14 @@ public class AdMenuCriteria implements Serializable, Criteria {
         this.adWindowId = adWindowId;
     }
 
+    public LongFilter getAdFormId() {
+        return adFormId;
+    }
+
+    public void setAdFormId(LongFilter adFormId) {
+        this.adFormId = adFormId;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -270,6 +279,7 @@ public class AdMenuCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adMenuId, that.adMenuId) &&
             Objects.equals(adWindowId, that.adWindowId) &&
+            Objects.equals(adFormId, that.adFormId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(parentMenuId, that.parentMenuId);
     }
@@ -292,6 +302,7 @@ public class AdMenuCriteria implements Serializable, Criteria {
         active,
         adMenuId,
         adWindowId,
+        adFormId,
         adOrganizationId,
         parentMenuId
         );
@@ -315,6 +326,7 @@ public class AdMenuCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adMenuId != null ? "adMenuId=" + adMenuId + ", " : "") +
                 (adWindowId != null ? "adWindowId=" + adWindowId + ", " : "") +
+                (adFormId != null ? "adFormId=" + adFormId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (parentMenuId != null ? "parentMenuId=" + parentMenuId + ", " : "") +
             "}";

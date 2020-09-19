@@ -30,6 +30,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import com.bhp.opusb.domain.enumeration.ADWindowType;
+import com.bhp.opusb.domain.enumeration.AdAccessLevel;
 /**
  * Integration tests for the {@link ADWindowResource} REST controller.
  */
@@ -56,6 +57,9 @@ public class ADWindowResourceIT {
 
     private static final Boolean DEFAULT_TREE_VIEW = false;
     private static final Boolean UPDATED_TREE_VIEW = true;
+
+    private static final AdAccessLevel DEFAULT_ACCESS_LEVEL = AdAccessLevel.SYS;
+    private static final AdAccessLevel UPDATED_ACCESS_LEVEL = AdAccessLevel.SYS_CLN;
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
@@ -94,6 +98,7 @@ public class ADWindowResourceIT {
             .titleLogic(DEFAULT_TITLE_LOGIC)
             .type(DEFAULT_TYPE)
             .treeView(DEFAULT_TREE_VIEW)
+            .accessLevel(DEFAULT_ACCESS_LEVEL)
             .active(DEFAULT_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
@@ -121,6 +126,7 @@ public class ADWindowResourceIT {
             .titleLogic(UPDATED_TITLE_LOGIC)
             .type(UPDATED_TYPE)
             .treeView(UPDATED_TREE_VIEW)
+            .accessLevel(UPDATED_ACCESS_LEVEL)
             .active(UPDATED_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
@@ -162,6 +168,7 @@ public class ADWindowResourceIT {
         assertThat(testADWindow.getTitleLogic()).isEqualTo(DEFAULT_TITLE_LOGIC);
         assertThat(testADWindow.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testADWindow.isTreeView()).isEqualTo(DEFAULT_TREE_VIEW);
+        assertThat(testADWindow.getAccessLevel()).isEqualTo(DEFAULT_ACCESS_LEVEL);
         assertThat(testADWindow.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
@@ -241,6 +248,7 @@ public class ADWindowResourceIT {
             .andExpect(jsonPath("$.[*].titleLogic").value(hasItem(DEFAULT_TITLE_LOGIC)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].treeView").value(hasItem(DEFAULT_TREE_VIEW.booleanValue())))
+            .andExpect(jsonPath("$.[*].accessLevel").value(hasItem(DEFAULT_ACCESS_LEVEL.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
@@ -261,6 +269,7 @@ public class ADWindowResourceIT {
             .andExpect(jsonPath("$.titleLogic").value(DEFAULT_TITLE_LOGIC))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.treeView").value(DEFAULT_TREE_VIEW.booleanValue()))
+            .andExpect(jsonPath("$.accessLevel").value(DEFAULT_ACCESS_LEVEL.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
@@ -676,6 +685,58 @@ public class ADWindowResourceIT {
 
     @Test
     @Transactional
+    public void getAllADWindowsByAccessLevelIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where accessLevel equals to DEFAULT_ACCESS_LEVEL
+        defaultADWindowShouldBeFound("accessLevel.equals=" + DEFAULT_ACCESS_LEVEL);
+
+        // Get all the aDWindowList where accessLevel equals to UPDATED_ACCESS_LEVEL
+        defaultADWindowShouldNotBeFound("accessLevel.equals=" + UPDATED_ACCESS_LEVEL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByAccessLevelIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where accessLevel not equals to DEFAULT_ACCESS_LEVEL
+        defaultADWindowShouldNotBeFound("accessLevel.notEquals=" + DEFAULT_ACCESS_LEVEL);
+
+        // Get all the aDWindowList where accessLevel not equals to UPDATED_ACCESS_LEVEL
+        defaultADWindowShouldBeFound("accessLevel.notEquals=" + UPDATED_ACCESS_LEVEL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByAccessLevelIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where accessLevel in DEFAULT_ACCESS_LEVEL or UPDATED_ACCESS_LEVEL
+        defaultADWindowShouldBeFound("accessLevel.in=" + DEFAULT_ACCESS_LEVEL + "," + UPDATED_ACCESS_LEVEL);
+
+        // Get all the aDWindowList where accessLevel equals to UPDATED_ACCESS_LEVEL
+        defaultADWindowShouldNotBeFound("accessLevel.in=" + UPDATED_ACCESS_LEVEL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADWindowsByAccessLevelIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDWindowRepository.saveAndFlush(aDWindow);
+
+        // Get all the aDWindowList where accessLevel is not null
+        defaultADWindowShouldBeFound("accessLevel.specified=true");
+
+        // Get all the aDWindowList where accessLevel is null
+        defaultADWindowShouldNotBeFound("accessLevel.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllADWindowsByActiveIsEqualToSomething() throws Exception {
         // Initialize the database
         aDWindowRepository.saveAndFlush(aDWindow);
@@ -775,6 +836,7 @@ public class ADWindowResourceIT {
             .andExpect(jsonPath("$.[*].titleLogic").value(hasItem(DEFAULT_TITLE_LOGIC)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].treeView").value(hasItem(DEFAULT_TREE_VIEW.booleanValue())))
+            .andExpect(jsonPath("$.[*].accessLevel").value(hasItem(DEFAULT_ACCESS_LEVEL.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
@@ -829,6 +891,7 @@ public class ADWindowResourceIT {
             .titleLogic(UPDATED_TITLE_LOGIC)
             .type(UPDATED_TYPE)
             .treeView(UPDATED_TREE_VIEW)
+            .accessLevel(UPDATED_ACCESS_LEVEL)
             .active(UPDATED_ACTIVE);
         ADWindowDTO aDWindowDTO = aDWindowMapper.toDto(updatedADWindow);
 
@@ -847,6 +910,7 @@ public class ADWindowResourceIT {
         assertThat(testADWindow.getTitleLogic()).isEqualTo(UPDATED_TITLE_LOGIC);
         assertThat(testADWindow.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testADWindow.isTreeView()).isEqualTo(UPDATED_TREE_VIEW);
+        assertThat(testADWindow.getAccessLevel()).isEqualTo(UPDATED_ACCESS_LEVEL);
         assertThat(testADWindow.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 

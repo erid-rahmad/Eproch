@@ -2,12 +2,14 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
-import com.bhp.opusb.domain.enumeration.ADWindowType;
-
 import io.github.jhipster.service.Criteria;
+import com.bhp.opusb.domain.enumeration.ADWindowType;
+import com.bhp.opusb.domain.enumeration.AdAccessLevel;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -40,6 +42,24 @@ public class ADWindowCriteria implements Serializable, Criteria {
         }
 
     }
+    /**
+     * Class for filtering AdAccessLevel
+     */
+    public static class AdAccessLevelFilter extends Filter<AdAccessLevel> {
+
+        public AdAccessLevelFilter() {
+        }
+
+        public AdAccessLevelFilter(AdAccessLevelFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public AdAccessLevelFilter copy() {
+            return new AdAccessLevelFilter(this);
+        }
+
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -56,6 +76,8 @@ public class ADWindowCriteria implements Serializable, Criteria {
     private ADWindowTypeFilter type;
 
     private BooleanFilter treeView;
+
+    private AdAccessLevelFilter accessLevel;
 
     private BooleanFilter active;
 
@@ -74,6 +96,7 @@ public class ADWindowCriteria implements Serializable, Criteria {
         this.titleLogic = other.titleLogic == null ? null : other.titleLogic.copy();
         this.type = other.type == null ? null : other.type.copy();
         this.treeView = other.treeView == null ? null : other.treeView.copy();
+        this.accessLevel = other.accessLevel == null ? null : other.accessLevel.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.aDTabId = other.aDTabId == null ? null : other.aDTabId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -140,6 +163,14 @@ public class ADWindowCriteria implements Serializable, Criteria {
         this.treeView = treeView;
     }
 
+    public AdAccessLevelFilter getAccessLevel() {
+        return accessLevel;
+    }
+
+    public void setAccessLevel(AdAccessLevelFilter accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
     public BooleanFilter getActive() {
         return active;
     }
@@ -182,6 +213,7 @@ public class ADWindowCriteria implements Serializable, Criteria {
             Objects.equals(titleLogic, that.titleLogic) &&
             Objects.equals(type, that.type) &&
             Objects.equals(treeView, that.treeView) &&
+            Objects.equals(accessLevel, that.accessLevel) &&
             Objects.equals(active, that.active) &&
             Objects.equals(aDTabId, that.aDTabId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
@@ -197,6 +229,7 @@ public class ADWindowCriteria implements Serializable, Criteria {
         titleLogic,
         type,
         treeView,
+        accessLevel,
         active,
         aDTabId,
         adOrganizationId
@@ -213,6 +246,7 @@ public class ADWindowCriteria implements Serializable, Criteria {
                 (titleLogic != null ? "titleLogic=" + titleLogic + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
                 (treeView != null ? "treeView=" + treeView + ", " : "") +
+                (accessLevel != null ? "accessLevel=" + accessLevel + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (aDTabId != null ? "aDTabId=" + aDTabId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

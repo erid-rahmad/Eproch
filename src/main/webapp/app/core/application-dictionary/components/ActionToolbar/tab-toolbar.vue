@@ -5,7 +5,7 @@
         type="primary"
         size="mini"
         icon="el-icon-plus"
-        title="New (shift + alt + n)"
+        title="New (shift + alt + a)"
         :disabled="disabled || isEditing"
         @click="addRecord"
       />
@@ -14,7 +14,7 @@
         type="primary"
         size="mini"
         icon="el-icon-document-copy"
-        title="Copy (shift + alt + c)"
+        title="Copy (shift + alt + d)"
         :disabled="disabled"
         @click="copyRecord"
       />

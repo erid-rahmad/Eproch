@@ -119,6 +119,20 @@ public class AdMenuResource {
     }
 
     /**
+     * {@code GET  /ad-menus/main-menu} : get all the adMenus.
+     *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of adMenus in body.
+     */
+    @GetMapping("/ad-menus/main-menu")
+    public ResponseEntity<List<AdMenuDTO>> getMainMenu() {
+        log.debug("REST request to get parent AdMenus");
+        List<AdMenuDTO> menus = adMenuQueryService.findAllParentMenus();
+        return ResponseEntity.ok().body(menus);
+    }
+
+    /**
      * {@code GET  /ad-menus/count} : count all the adMenus.
      *
      * @param criteria the criteria which the requested entities should match.

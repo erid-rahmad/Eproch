@@ -10,11 +10,13 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link AdMenu} and its DTO {@link AdMenuDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADWindowMapper.class, ADOrganizationMapper.class})
+@Mapper(componentModel = "spring", uses = {ADWindowMapper.class, AdFormMapper.class, ADOrganizationMapper.class})
 public interface AdMenuMapper extends EntityMapper<AdMenuDTO, AdMenu> {
 
     @Mapping(source = "adWindow.id", target = "adWindowId")
     @Mapping(source = "adWindow.name", target = "adWindowName")
+    @Mapping(source = "adForm.id", target = "adFormId")
+    @Mapping(source = "adForm.formName", target = "adFormName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "parentMenu.id", target = "parentMenuId")
@@ -24,6 +26,7 @@ public interface AdMenuMapper extends EntityMapper<AdMenuDTO, AdMenu> {
     @Mapping(target = "adMenus", ignore = true)
     @Mapping(target = "removeAdMenu", ignore = true)
     @Mapping(source = "adWindowId", target = "adWindow")
+    @Mapping(source = "adFormId", target = "adForm")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "parentMenuId", target = "parentMenu")
     AdMenu toEntity(AdMenuDTO adMenuDTO);
