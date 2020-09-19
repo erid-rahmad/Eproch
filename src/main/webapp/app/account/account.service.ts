@@ -1,13 +1,13 @@
-import axios from 'axios';
-import { Store } from 'vuex';
-import VueRouter, { RouteConfig } from 'vue-router';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store';
-import TranslationService from '@/locale/translation.service';
-
 import TrackerService from '@/admin/tracker/tracker.service';
-import { PermissionStoreModule as permissionStore } from '@/shared/config/store/permission-store';
 import AdMenuService from '@/core/application-dictionary/components/Menu/menu.service';
+import TranslationService from '@/locale/translation.service';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { PermissionStoreModule as permissionStore } from '@/shared/config/store/permission-store';
+import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store';
+import axios from 'axios';
+import VueRouter from 'vue-router';
+import { Store } from 'vuex';
+
 
 export default class AccountService {
   constructor(

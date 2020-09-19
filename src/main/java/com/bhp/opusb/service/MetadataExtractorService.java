@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import com.bhp.opusb.config.integrator.MetadataExtractorIntegrator;
 import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.domain.ADTable;
-import com.bhp.opusb.repository.ADTableRepository;
 import com.bhp.opusb.repository.DatabaseMetadataRepository;
 
 import org.hibernate.boot.Metadata;
@@ -37,8 +36,8 @@ public class MetadataExtractorService {
         .map((persistentClass) -> {
           String entityName = persistentClass.getEntityName();
           ADTable table = new ADTable(persistentClass.getTable().getName());
-          /* Set<ADColumn> columns = getColumns(entityName);
-          table.setADColumns(columns); */
+          Set<ADColumn> columns = getColumns(entityName);
+          table.setADColumns(columns);
           return table;
         })
         .collect(Collectors.toList());
@@ -63,7 +62,7 @@ public class MetadataExtractorService {
 
   private void printColumnInfo(Column column) {
     log.info("> Column info[name: {}, length: {}, precision: {}, scale: {}, class: {}]", column.getName(), column.getLength(),
-        column.getPrecision(), column.getScale(), column.getClass(), column.getTypeIndex());
+        column.getPrecision(), column.getScale(), column.getClass());
   }
 
   /**

@@ -20,6 +20,7 @@
           :span="col.span"
         >
           <el-form-item
+            :class="col.name"
             :label="showLabel(col.field)"
             :prop="col.name"
           >

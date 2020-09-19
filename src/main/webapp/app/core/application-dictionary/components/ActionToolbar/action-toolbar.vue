@@ -5,7 +5,7 @@
         type="primary"
         size="small"
         icon="el-icon-plus"
-        title="New (alt + n)"
+        title="New (alt + a)"
         :disabled="isEditing"
         @click="addRecord"
       />
@@ -14,7 +14,7 @@
         type="primary"
         size="small"
         icon="el-icon-document-copy"
-        title="Copy (alt + c)"
+        title="Copy (alt + d)"
         @click="copyRecord"
       />
     </el-button-group>

@@ -295,7 +295,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
   }
 
   public isReadonly(field: any): boolean {
-    const newRecord: boolean = !this.record.id;
+    const newRecord: boolean = !this.record?.id;
     return !this.tab.writable || !field.writable || (!newRecord && !field.adColumn.updatable);
   }
 

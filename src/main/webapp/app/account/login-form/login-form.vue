@@ -9,15 +9,6 @@
   >
     <div class="login-container">
       <el-row :gutter="16">
-        <!-- <el-col :span="24" :offset="0">
-          <el-alert
-            type="error"
-            closable
-            show-icon
-            v-if="authenticationError"
-            :title="$t('login.messages.error.authentication')"
-          />
-        </el-col> -->
         <el-col :span="24" :offset="0">
           <el-form
             ref="loginForm"
@@ -30,7 +21,6 @@
               <h3 class="title">
                 {{ $t('login.title') }}
               </h3>
-              <lang-select class="set-language" />
             </div>
             <hr />
 
@@ -66,9 +56,6 @@
                   show-password
                   prefix-icon="el-icon-lock"
                 />
-                <!-- <span class="show-pwd" @click="showPwd">
-                  <svg-icon :name="passwordType === 'password' ? 'eye-off' : 'eye-on'" />
-                </span> -->
               </el-form-item>
             </el-tooltip>
 
