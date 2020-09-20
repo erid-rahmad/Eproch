@@ -6,6 +6,7 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.ADWindowType;
+import com.bhp.opusb.domain.enumeration.AdAccessLevel;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADWindow} entity.
@@ -30,7 +31,10 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     private Boolean treeView;
 
+    private AdAccessLevel accessLevel;
+
     private Boolean active;
+
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -91,6 +95,14 @@ public class ADWindowDTO extends AbstractAuditingDTO {
         this.treeView = treeView;
     }
 
+    public AdAccessLevel getAccessLevel() {
+        return accessLevel;
+    }
+
+    public void setAccessLevel(AdAccessLevel accessLevel) {
+        this.accessLevel = accessLevel;
+    }
+
     public Boolean isActive() {
         return active;
     }
@@ -146,6 +158,7 @@ public class ADWindowDTO extends AbstractAuditingDTO {
             ", titleLogic='" + getTitleLogic() + "'" +
             ", type='" + getType() + "'" +
             ", treeView='" + isTreeView() + "'" +
+            ", accessLevel='" + getAccessLevel() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";

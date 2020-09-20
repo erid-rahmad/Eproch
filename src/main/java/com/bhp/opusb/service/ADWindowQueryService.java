@@ -109,6 +109,9 @@ public class ADWindowQueryService extends QueryService<ADWindow> {
             if (criteria.getTreeView() != null) {
                 specification = specification.and(buildSpecification(criteria.getTreeView(), ADWindow_.treeView));
             }
+            if (criteria.getAccessLevel() != null) {
+                specification = specification.and(buildSpecification(criteria.getAccessLevel(), ADWindow_.accessLevel));
+            }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADWindow_.active));
             }

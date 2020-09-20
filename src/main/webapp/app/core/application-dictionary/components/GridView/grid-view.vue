@@ -39,12 +39,14 @@
             v-if="isActiveStatusField(scope.column)"
             :ref="scope.column.property"
             v-model="scope.row[scope.column.property]"
+            :class="scope.column.property"
             :disabled="!scope.row.editing || isReadonly(scope.row, field)"
           />
           <el-checkbox
             v-else-if="isBooleanField(field)"
             :ref="scope.column.property"
             v-model="scope.row[scope.column.property]"
+            :class="scope.column.property"
             :disabled="!scope.row.editing || isReadonly(scope.row, field)"
           />
           <span v-else-if="!scope.row.editing">
@@ -59,6 +61,7 @@
               v-if="isTableDirectLink(field)"
               :ref="scope.column.property"
               v-model="scope.row[scope.column.property]"
+              :class="scope.column.property"
               :remote="true"
               :remote-method="fetchTableDirectData"
               size="mini"
@@ -78,6 +81,7 @@
               v-else-if="hasReferenceList(field)"
               :ref="scope.column.property"
               v-model="scope.row[scope.column.property]"
+              :class="scope.column.property"
               size="mini"
               clearable
               filterable
@@ -94,6 +98,7 @@
               v-else-if="isStringField(field)"
               :ref="scope.column.property"
               v-model="scope.row[scope.column.property]"
+              :class="scope.column.property"
               size="mini"
               clearable
               :disabled="isReadonly(scope.row, field)"
@@ -102,6 +107,7 @@
               v-else-if="isNumericField(field)"
               :ref="scope.column.property"
               v-model="scope.row[scope.column.property]"
+              :class="scope.column.property"
               controls-position="right"
               size="mini"
               :min="getMinValue(field)"

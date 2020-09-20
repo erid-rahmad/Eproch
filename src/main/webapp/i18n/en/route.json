@@ -16,7 +16,7 @@
       "default": "Master Data"
     },
     "admin": {
-      "default": "System Administration",
+      "default": "System",
       "userManagement": "Users",
       "api": "API References",
       "audits": "Audits",

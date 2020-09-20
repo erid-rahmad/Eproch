@@ -69,6 +69,8 @@
     "form": {
       "username.label": "Username",
       "username.placeholder": "Your username",
+      "password.label": "Password",
+      "password.placeholder": "Your password",
       "currentpassword.label": "Current password",
       "currentpassword.placeholder": "Current password",
       "newpassword.label": "New password",
@@ -83,10 +85,12 @@
         "authenticated": {
           "prefix": "If you want to ",
           "link": "sign in",
+          "userSample": "- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\").",
           "suffix": ", you can try the default accounts:<br/>- Administrator (login=\"admin\" and password=\"admin\") <br/>- User (login=\"user\" and password=\"user\")."
         },
         "register": {
           "noaccount": "You don't have an account yet?",
+          "label": "Register",
           "link": "Register a new account"
         }
       },

@@ -178,6 +178,10 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         const nextSequence = nextItem.detailSequence || 0;
         return prevSequence - nextSequence;
       });
+
+    this.gridFields.forEach(field => {
+      this.updateReferenceQueries(field);
+    });
   }
 
   @Watch('observableTabProperties')
@@ -210,7 +214,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   // Start of lifecycle events.
   created() {
     this.onFieldsChange(this.fields);
-    this.toolbarEventBus?.$on('add-record', this.addBlankRow);
     this.toolbarEventBus?.$on('export-record', this.exportRecord);
     this.debouncedHeightResizer = _.debounce(this.resizeTableHeight, 200);
   }
@@ -227,7 +230,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
   beforeDestroy() {
     this.gridResizeObserver.unobserve(this.$refs.tableWrapper);
-    this.toolbarEventBus?.$off('add-record', this.addBlankRow);
     this.toolbarEventBus?.$off('export-record', this.exportRecord);
   }
   // End of lifecycle events.
@@ -283,10 +285,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       tabId: this.tabName,
       data: row
     });
-
-    this.fields.forEach(field => {
-      this.updateReferenceQueries(field);
-    })
 
     this.currentRecord = row;
     this.selectedRowNo = this.gridData.indexOf(row) + 1;
@@ -430,8 +428,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   /**
-   * Update the validation rule for a specific field. Triggered when the window
-   * context is just updated.
+   * Update the validation rule for a referenced field. Triggered once the records
+   * has been loaded.
    * @param field 
    */
   private updateReferenceQueries(field: any) {
@@ -499,7 +497,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     row.editing = !row.editing;
     this.originalRecord.editing = row.editing;
     this.editing = row.editing;
-    this.toolbarEventBus.$emit('inline-editing', true);
+    this.$emit('inline-editing');
   }
 
   private getRecordNo = (page: number, size: number, row: number) => (page - 1) * size + row;
@@ -551,23 +549,18 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   /**
    * Triggered when user is going to add a new record.
    */
-  private async addBlankRow(data?: any) {
-    if (! this.mainTab && data?.tabId !== this.tabId) {
-      return;
-    }
-
+  public async addBlankRow() {
     let record = { id: 0, editing: true };
-    this.prepareForm(record);
+    await this.prepareForm(record);
     if (this.parentId) {
       record[this.tab.foreignColumnName] = this.parentId;
     }
     await this.initRelationships(record);
     this.originalRecord = {...record};
     this.gridData.splice(0, 0, record);
-    this.toolbarEventBus.$emit('inline-editing', true);
+    this.$emit('inline-editing', true);
     this.$nextTick(() => {
       this.setRow(record);
-      // this.activateInlineEditing(record);
       this.newRecord = true;
       this.editing = record.editing;
     });
@@ -577,8 +570,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     const currentIndex = this.gridData.indexOf(this.currentRecord);
     let record = {...this.currentRecord};
     record.id = 0;
-    // this.prepareForm(record, false);
-    // await this.initRelationships(record);
     this.gridData.splice(currentIndex + 1, 0, record);
     this.$nextTick(() => {
       this.setRow(record);
@@ -587,15 +578,21 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     });
   }
 
-  private prepareForm(row: any, newRecord: boolean = true) {
+  private async prepareForm(row: any, newRecord: boolean = true) {
     for (const field of this.fields) {
       const column = field.adColumn;
 
       if (newRecord) {
-        // TODO Set the default value based on the field/column definition. 
-        let defaultValue = this.getContext(field.defaultValue || column.defaultValue);
+        let defaultValue = field.defaultValue || column.defaultValue;
 
-        if (!defaultValue) {
+        if (defaultValue?.includes('{select:', 0)) {
+          defaultValue = await this.retrieveRemoteValue(defaultValue);
+        } else {
+          // TODO Set the default value based on the field/column definition. 
+          defaultValue = this.getContext(field.defaultValue || column.defaultValue);
+        }
+
+        if (! defaultValue) {
           if (column.name === 'active') {
             defaultValue = true;
           } else if (this.isDateField(field) || this.isDateTimeField(field)) {
@@ -611,6 +608,30 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         row[column.name] = defaultValue;
       }
     }
+  }
+
+  private async retrieveRemoteValue(options: string) {
+    let params = options.substring(1, options.length - 1)
+      .split(/\s*?,\s*?/)
+      .map(item => {
+        const param = item.trim().split(/\s*?:\s*?/);
+        const result = {};
+        console.log('> param: %O', param);
+        result[param[0]] = param[1].trim();
+        return result;
+      });
+
+    const config = Object.assign({}, ...params);
+    const resourceName = pluralize.plural(kebabCase(config.from));
+    const api = `/api/${resourceName}`;
+    const response = await this.dynamicWindowService(api)
+      .retrieve({criteriaQuery: config.where});
+
+    if (response.data.length) {
+      return Promise.resolve(response.data[0][config.select]);
+    }
+
+    return Promise.resolve(null);
   }
 
   public beforeSave() {
@@ -708,6 +729,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       })
       .then(res => {
         this.gridData = res.data.map((item: any) => {
+          // Initialize editing prop to allow inline edit mode reactivity.
           item.editing = false;
           return item;
         });
@@ -715,6 +737,9 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
         this.$emit('total-count-changed', this.queryCount);
+
+        // TODO Skip selecting the first row when the user is navigating
+        // back to the previous page by using the record-navigator. 
         if (this.gridData.length) {
           this.setRow(this.gridData[0]);
         }
