@@ -86,4 +86,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20200924010500" author="Ananta Aryadewa">
+        <dropUniqueConstraint tableName="ad_reference_list" constraintName="ux_ad_reference_list_value" />
+    </changeSet>
+
 </databaseChangeLog>

@@ -66,6 +66,8 @@ public class AdMenuCriteria implements Serializable, Criteria {
 
     private IntegerFilter sequence;
 
+    private BooleanFilter hidden;
+
     private BooleanFilter alwaysShow;
 
     private BooleanFilter active;
@@ -95,6 +97,7 @@ public class AdMenuCriteria implements Serializable, Criteria {
         this.icon = other.icon == null ? null : other.icon.copy();
         this.redirect = other.redirect == null ? null : other.redirect.copy();
         this.sequence = other.sequence == null ? null : other.sequence.copy();
+        this.hidden = other.hidden == null ? null : other.hidden.copy();
         this.alwaysShow = other.alwaysShow == null ? null : other.alwaysShow.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adMenuId = other.adMenuId == null ? null : other.adMenuId.copy();
@@ -197,6 +200,14 @@ public class AdMenuCriteria implements Serializable, Criteria {
         this.sequence = sequence;
     }
 
+    public BooleanFilter getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(BooleanFilter hidden) {
+        this.hidden = hidden;
+    }
+
     public BooleanFilter getAlwaysShow() {
         return alwaysShow;
     }
@@ -275,6 +286,7 @@ public class AdMenuCriteria implements Serializable, Criteria {
             Objects.equals(icon, that.icon) &&
             Objects.equals(redirect, that.redirect) &&
             Objects.equals(sequence, that.sequence) &&
+            Objects.equals(hidden, that.hidden) &&
             Objects.equals(alwaysShow, that.alwaysShow) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adMenuId, that.adMenuId) &&
@@ -298,6 +310,7 @@ public class AdMenuCriteria implements Serializable, Criteria {
         icon,
         redirect,
         sequence,
+        hidden,
         alwaysShow,
         active,
         adMenuId,
@@ -322,6 +335,7 @@ public class AdMenuCriteria implements Serializable, Criteria {
                 (icon != null ? "icon=" + icon + ", " : "") +
                 (redirect != null ? "redirect=" + redirect + ", " : "") +
                 (sequence != null ? "sequence=" + sequence + ", " : "") +
+                (hidden != null ? "hidden=" + hidden + ", " : "") +
                 (alwaysShow != null ? "alwaysShow=" + alwaysShow + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adMenuId != null ? "adMenuId=" + adMenuId + ", " : "") +

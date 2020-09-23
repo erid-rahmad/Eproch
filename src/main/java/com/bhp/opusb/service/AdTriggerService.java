@@ -4,6 +4,7 @@ import com.bhp.opusb.config.factory.ProcessTriggerFactory;
 import com.bhp.opusb.domain.AdTrigger;
 import com.bhp.opusb.repository.AdTriggerRepository;
 import com.bhp.opusb.service.dto.AdTriggerDTO;
+import com.bhp.opusb.service.dto.TriggerResult;
 import com.bhp.opusb.service.mapper.AdTriggerMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,13 +93,13 @@ public class AdTriggerService {
      * @param serviceName
      * @param params
      */
-    public void executeProcess(String serviceName, Map<String, Object> params) {
+    public TriggerResult executeProcess(String serviceName, Map<String, Object> params) {
         if (log.isDebugEnabled()) {
             params.entrySet().stream().forEach((entry) -> {
                 log.debug("> {}: {}", entry.getKey(), entry.getValue());
             });
         }
-        this.processTriggerFactory.get(serviceName).run(params);
+        return this.processTriggerFactory.get(serviceName).run(params);
     }
 
 }

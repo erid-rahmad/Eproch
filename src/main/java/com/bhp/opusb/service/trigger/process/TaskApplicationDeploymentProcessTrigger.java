@@ -9,6 +9,8 @@ import com.bhp.opusb.domain.AdTaskApplication;
 import com.bhp.opusb.domain.AdTaskProcess;
 import com.bhp.opusb.repository.AdTaskApplicationRepository;
 import com.bhp.opusb.repository.AdTaskRepository;
+import com.bhp.opusb.service.dto.ProcessResult;
+import com.bhp.opusb.service.dto.TriggerResult;
 import com.bhp.opusb.service.trigger.ProcessTrigger;
 
 import org.slf4j.Logger;
@@ -16,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.dataflow.core.ApplicationType;
 import org.springframework.cloud.dataflow.rest.client.DataFlowOperations;
+import org.springframework.cloud.dataflow.rest.resource.TaskDefinitionResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,12 +42,12 @@ public class TaskApplicationDeploymentProcessTrigger implements ProcessTrigger {
   }
 
   @Override
-  public void run(Map<String, Object> params) {
+  public TriggerResult run(Map<String, Object> params) {
     Long taskId = Long.valueOf((Integer) params.get("adTaskId"));
     Optional<AdTask> task = taskRepository.findById(taskId);
 
     if (!task.isPresent()) {
-      return;
+      return null;
     }
 
     AdTask record = task.get();
@@ -69,8 +72,10 @@ public class TaskApplicationDeploymentProcessTrigger implements ProcessTrigger {
       applicationRepository.save(app);
     }
 
-    dataFlowTemplate.taskOperations()
+    TaskDefinitionResource resource = dataFlowTemplate.taskOperations()
       .create(record.getValue(), taskDefinition.toString(), null);
+    
+    return new ProcessResult().add("Deployment_Status", resource.getStatus());
   }
   
 }
