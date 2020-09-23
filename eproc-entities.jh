@@ -280,6 +280,38 @@ entity CNonBusinessDay {
 	active Boolean
 }
 /**
+ * The Product/Item Master.
+ */
+entity CProductClassification {
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CProductCategory {
+	code String required
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CProductCategoryAccount {
+	uid UUID
+	active Boolean
+}
+
+entity CProduct{
+	code String required
+	name String required
+	description String
+	type String
+	uid UUID
+	active Boolean
+}
+
+/**
  * Enumeration.
  */
 enum Depreciation {
@@ -319,6 +351,9 @@ relationship OneToMany {
 	// For city with region.
 	CRegion to CCity{region}
 	CBusinessCategory to CBusinessCategory{parentCategory}
+
+	//for product category
+	CProductCategory to CProductCategory{parentCategory}
 }
 
 /**
@@ -404,6 +439,22 @@ relationship ManyToOne {
 	CNonBusinessDay{adOrganization required} to ADOrganization
 	CPeriod{calendar required} to CCalendar
 	CPeriod{adOrganization required} to ADOrganization
+
+	//product or item master
+	CProductClassification{adOrganization required} to ADOrganization
+	CProductCategory{adOrganization required} to ADOrganization
+	CProductCategoryAccount{adOrganization required} to ADOrganization
+	CProductCategoryAccount{assetAcct required} to CElementValue
+	CProductCategoryAccount{expenseAcct required} to CElementValue
+	CProductCategoryAccount{productCategory required} to CProductCategory
+
+	CProduct{adOrganization required} to ADOrganization
+	CProduct{productClassification required} to CProductClassification
+	CProduct{productCategory required} to CProductCategory
+	CProduct{productSubCategory required} to CProductCategory
+	CProduct{assetAcct required} to CProductCategoryAccount
+	CProduct{expenseAcct required} to CProductCategoryAccount
+	CProduct{uom required} to CUnitOfMeasure
 }
 
 // Allow filtering to all entities.
