@@ -72,6 +72,9 @@ public class AdMenuResourceIT {
     private static final Integer UPDATED_SEQUENCE = 2;
     private static final Integer SMALLER_SEQUENCE = 1 - 1;
 
+    private static final Boolean DEFAULT_HIDDEN = false;
+    private static final Boolean UPDATED_HIDDEN = true;
+
     private static final Boolean DEFAULT_ALWAYS_SHOW = false;
     private static final Boolean UPDATED_ALWAYS_SHOW = true;
 
@@ -116,6 +119,7 @@ public class AdMenuResourceIT {
             .icon(DEFAULT_ICON)
             .redirect(DEFAULT_REDIRECT)
             .sequence(DEFAULT_SEQUENCE)
+            .hidden(DEFAULT_HIDDEN)
             .alwaysShow(DEFAULT_ALWAYS_SHOW)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -148,6 +152,7 @@ public class AdMenuResourceIT {
             .icon(UPDATED_ICON)
             .redirect(UPDATED_REDIRECT)
             .sequence(UPDATED_SEQUENCE)
+            .hidden(UPDATED_HIDDEN)
             .alwaysShow(UPDATED_ALWAYS_SHOW)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -194,6 +199,7 @@ public class AdMenuResourceIT {
         assertThat(testAdMenu.getIcon()).isEqualTo(DEFAULT_ICON);
         assertThat(testAdMenu.getRedirect()).isEqualTo(DEFAULT_REDIRECT);
         assertThat(testAdMenu.getSequence()).isEqualTo(DEFAULT_SEQUENCE);
+        assertThat(testAdMenu.isHidden()).isEqualTo(DEFAULT_HIDDEN);
         assertThat(testAdMenu.isAlwaysShow()).isEqualTo(DEFAULT_ALWAYS_SHOW);
         assertThat(testAdMenu.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -278,6 +284,7 @@ public class AdMenuResourceIT {
             .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)))
             .andExpect(jsonPath("$.[*].redirect").value(hasItem(DEFAULT_REDIRECT)))
             .andExpect(jsonPath("$.[*].sequence").value(hasItem(DEFAULT_SEQUENCE)))
+            .andExpect(jsonPath("$.[*].hidden").value(hasItem(DEFAULT_HIDDEN.booleanValue())))
             .andExpect(jsonPath("$.[*].alwaysShow").value(hasItem(DEFAULT_ALWAYS_SHOW.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -303,6 +310,7 @@ public class AdMenuResourceIT {
             .andExpect(jsonPath("$.icon").value(DEFAULT_ICON))
             .andExpect(jsonPath("$.redirect").value(DEFAULT_REDIRECT))
             .andExpect(jsonPath("$.sequence").value(DEFAULT_SEQUENCE))
+            .andExpect(jsonPath("$.hidden").value(DEFAULT_HIDDEN.booleanValue()))
             .andExpect(jsonPath("$.alwaysShow").value(DEFAULT_ALWAYS_SHOW.booleanValue()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -1084,6 +1092,58 @@ public class AdMenuResourceIT {
 
     @Test
     @Transactional
+    public void getAllAdMenusByHiddenIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where hidden equals to DEFAULT_HIDDEN
+        defaultAdMenuShouldBeFound("hidden.equals=" + DEFAULT_HIDDEN);
+
+        // Get all the adMenuList where hidden equals to UPDATED_HIDDEN
+        defaultAdMenuShouldNotBeFound("hidden.equals=" + UPDATED_HIDDEN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByHiddenIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where hidden not equals to DEFAULT_HIDDEN
+        defaultAdMenuShouldNotBeFound("hidden.notEquals=" + DEFAULT_HIDDEN);
+
+        // Get all the adMenuList where hidden not equals to UPDATED_HIDDEN
+        defaultAdMenuShouldBeFound("hidden.notEquals=" + UPDATED_HIDDEN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByHiddenIsInShouldWork() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where hidden in DEFAULT_HIDDEN or UPDATED_HIDDEN
+        defaultAdMenuShouldBeFound("hidden.in=" + DEFAULT_HIDDEN + "," + UPDATED_HIDDEN);
+
+        // Get all the adMenuList where hidden equals to UPDATED_HIDDEN
+        defaultAdMenuShouldNotBeFound("hidden.in=" + UPDATED_HIDDEN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdMenusByHiddenIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adMenuRepository.saveAndFlush(adMenu);
+
+        // Get all the adMenuList where hidden is not null
+        defaultAdMenuShouldBeFound("hidden.specified=true");
+
+        // Get all the adMenuList where hidden is null
+        defaultAdMenuShouldNotBeFound("hidden.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllAdMenusByAlwaysShowIsEqualToSomething() throws Exception {
         // Initialize the database
         adMenuRepository.saveAndFlush(adMenu);
@@ -1299,6 +1359,7 @@ public class AdMenuResourceIT {
             .andExpect(jsonPath("$.[*].icon").value(hasItem(DEFAULT_ICON)))
             .andExpect(jsonPath("$.[*].redirect").value(hasItem(DEFAULT_REDIRECT)))
             .andExpect(jsonPath("$.[*].sequence").value(hasItem(DEFAULT_SEQUENCE)))
+            .andExpect(jsonPath("$.[*].hidden").value(hasItem(DEFAULT_HIDDEN.booleanValue())))
             .andExpect(jsonPath("$.[*].alwaysShow").value(hasItem(DEFAULT_ALWAYS_SHOW.booleanValue())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -1358,6 +1419,7 @@ public class AdMenuResourceIT {
             .icon(UPDATED_ICON)
             .redirect(UPDATED_REDIRECT)
             .sequence(UPDATED_SEQUENCE)
+            .hidden(UPDATED_HIDDEN)
             .alwaysShow(UPDATED_ALWAYS_SHOW)
             .active(UPDATED_ACTIVE);
         AdMenuDTO adMenuDTO = adMenuMapper.toDto(updatedAdMenu);
@@ -1381,6 +1443,7 @@ public class AdMenuResourceIT {
         assertThat(testAdMenu.getIcon()).isEqualTo(UPDATED_ICON);
         assertThat(testAdMenu.getRedirect()).isEqualTo(UPDATED_REDIRECT);
         assertThat(testAdMenu.getSequence()).isEqualTo(UPDATED_SEQUENCE);
+        assertThat(testAdMenu.isHidden()).isEqualTo(UPDATED_HIDDEN);
         assertThat(testAdMenu.isAlwaysShow()).isEqualTo(UPDATED_ALWAYS_SHOW);
         assertThat(testAdMenu.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

@@ -82,6 +82,7 @@ class AdMenuGatlingTest extends Simulation {
                 , "icon":"SAMPLE_TEXT"
                 , "redirect":"SAMPLE_TEXT"
                 , "sequence":"0"
+                , "hidden":null
                 , "alwaysShow":null
                 , "active":null
                 }""")).asJson

@@ -16,8 +16,7 @@
             "fieldName": "value",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required",
-                "unique"
+                "required"
             ]
         },
         {

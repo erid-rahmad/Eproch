@@ -42,7 +42,7 @@ public class ADReferenceList extends AbstractAuditingEntity {
     private String name;
 
     @NotNull
-    @Column(name = "value", nullable = false, unique = true)
+    @Column(name = "value", nullable = false)
     private String value;
 
     @Column(name = "description")

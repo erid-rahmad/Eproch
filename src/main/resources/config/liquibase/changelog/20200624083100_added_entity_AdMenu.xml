@@ -89,6 +89,7 @@
             <column name="icon" type="string"/>
             <column name="redirect" type="string"/>
             <column name="sequence" type="numeric"/>
+            <column name="hidden" type="boolean"/>
             <column name="always_show" type="boolean"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
@@ -128,6 +129,14 @@
     <changeSet id="20200917114800" author="Ananta Aryadewa">
         <addColumn tableName="ad_menu">
             <column name="ad_form_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200924005400" author="Ananta Aryadewa">
+        <addColumn tableName="ad_menu">
+            <column name="hidden" type="boolean">
                 <constraints nullable="true" />
             </column>
         </addColumn>

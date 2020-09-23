@@ -197,6 +197,9 @@ public class AdMenuQueryService extends QueryService<AdMenu> {
             if (criteria.getSequence() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getSequence(), AdMenu_.sequence));
             }
+            if (criteria.getHidden() != null) {
+                specification = specification.and(buildSpecification(criteria.getHidden(), AdMenu_.hidden));
+            }
             if (criteria.getAlwaysShow() != null) {
                 specification = specification.and(buildSpecification(criteria.getAlwaysShow(), AdMenu_.alwaysShow));
             }
