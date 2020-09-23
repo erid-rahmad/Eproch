@@ -1,0 +1,11 @@
+id;uid;active;ad_organization_id;asset_acct_id;expense_acct_id;product_category_id
+1;dd4d3827-c0b9-47b7-b54b-73174208ec0c;false;1;1;1;1
+2;5dc5bc69-ca6b-4c30-9560-f59717f73e51;false;2;2;2;2
+3;7d9f3f6a-e137-4c91-b973-eb66be8c9ef1;true;3;3;3;3
+4;a433dac2-908c-4419-871f-6941eee121cf;true;4;4;4;4
+5;99efc567-c649-414f-82bc-54e846b3389e;true;5;5;5;5
+6;2a03e67a-557f-4e5f-b001-47f570afb675;false;6;6;6;6
+7;c7b84039-5a5f-4268-a1cb-ad9f2a597106;false;7;7;7;7
+8;2ab6b449-a4bf-4b40-a957-f9ccb340d3ea;true;8;8;8;8
+9;547d76e2-d337-4b9a-9cda-41052eda2d01;false;9;9;9;9
+10;69712ecf-8de2-42ae-835c-f29ca041792d;false;10;10;10;10
