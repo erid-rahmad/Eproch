@@ -109,7 +109,7 @@
 @supports (-webkit-mask: none) and (not (cater-color: $loginCursorColor)) {
   .login-container .el-input {
     input {
-      color: $loginCursorColor;
+      color: #5d5d5d;
     }
     input::first-line {
       color: #5d5d5d;
@@ -129,7 +129,7 @@
 
       &:-webkit-autofill {
         box-shadow: 0 0 0px 1000px $loginBg inset !important;
-        -webkit-text-fill-color: #fff !important;
+        -webkit-text-fill-color: #5d5d5d !important;
       }
     }
   }
@@ -163,7 +163,7 @@
 
   .tips {
     font-size: 14px;
-    color: #fff;
+    color: #5d5d5d;
     margin-bottom: 10px;
 
     span {

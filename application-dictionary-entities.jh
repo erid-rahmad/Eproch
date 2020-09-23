@@ -158,7 +158,7 @@ entity ADReference {
 entity ADReferenceList {
 	uid UUID
 	name String required
-	value String required unique
+	value String required
 	description String
 	active Boolean
 }

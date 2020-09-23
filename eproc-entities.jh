@@ -310,6 +310,43 @@ entity CProduct{
 	uid UUID
 	active Boolean
 }
+/**
+ * The Organization & Warehouse Master.
+ */
+entity COrganization {
+	name String required
+	code String required unique
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity COrganizationInfo {
+	address String required
+	taxId String required
+	bankAccount String
+	uid UUID
+	active Boolean
+}
+
+entity CWarehouse {
+	name String required
+	code String required unique
+	description String
+	address String
+	uid UUID
+	active Boolean
+}
+
+entity CLocator {
+	code String required unique
+	locatorType String
+	aisle String
+	bin String
+	level String
+	uid UUID
+	active Boolean
+}
 
 /**
  * Enumeration.
@@ -455,6 +492,16 @@ relationship ManyToOne {
 	CProduct{assetAcct required} to CProductCategoryAccount
 	CProduct{expenseAcct required} to CProductCategoryAccount
 	CProduct{uom required} to CUnitOfMeasure
+
+	//master data organization and organization info
+	COrganization{adOrganization required} to ADOrganization
+	COrganizationInfo{adOrganization required} to ADOrganization
+	COrganizationInfo{parentOrganization required} to COrganization
+
+	//master data warehouse and locator
+	CWarehouse{adOrganization required} to ADOrganization
+	CLocator{adOrganization required} to ADOrganization
+	CLocator{warehouse required} to CWarehouse
 }
 
 // Allow filtering to all entities.
