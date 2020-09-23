@@ -41,6 +41,8 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     private Integer sequence;
 
+    private Boolean hidden;
+
     private Boolean alwaysShow;
 
     private Boolean active;
@@ -146,6 +148,14 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     public void setSequence(Integer sequence) {
         this.sequence = sequence;
+    }
+
+    public Boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
     }
 
     public Boolean isAlwaysShow() {
@@ -276,6 +286,7 @@ public class AdMenuDTO extends AbstractAuditingDTO {
             ", icon='" + getIcon() + "'" +
             ", redirect='" + getRedirect() + "'" +
             ", sequence=" + getSequence() +
+            ", hidden='" + isHidden() + "'" +
             ", alwaysShow='" + isAlwaysShow() + "'" +
             ", active='" + isActive() + "'" +
             ", adWindowId=" + getAdWindowId() +

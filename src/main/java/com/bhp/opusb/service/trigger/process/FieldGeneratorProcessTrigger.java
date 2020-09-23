@@ -23,6 +23,7 @@ import com.bhp.opusb.service.trigger.ProcessTrigger;
 import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,12 +37,14 @@ public class FieldGeneratorProcessTrigger implements ProcessTrigger {
   private final ADTabRepository tabRepository;
   private final ADTableRepository tableRepository;
   private final ADFieldRepository fieldRepository;
+  private final CacheManager cacheManager;
 
   public FieldGeneratorProcessTrigger(ADTabRepository tabRepository, ADTableRepository tableRepository,
-      ADFieldRepository fieldRepository) {
+      ADFieldRepository fieldRepository, CacheManager cacheManager) {
     this.tabRepository = tabRepository;
     this.tableRepository = tableRepository;
     this.fieldRepository = fieldRepository;
+    this.cacheManager = cacheManager;
   }
   
   @Override
@@ -85,8 +88,9 @@ public class FieldGeneratorProcessTrigger implements ProcessTrigger {
       savedFields = new ArrayList<>();
     } else {
       savedFields = fieldRepository.saveAll(fields);
+      cacheManager.getCache("com.bhp.opusb.domain.ADTab.aDFields").clear();
     }
-    
+
     return new ProcessResult().add("Fields", savedFields);
   }
 

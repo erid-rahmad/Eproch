@@ -73,6 +73,9 @@ public class AdMenu extends AbstractAuditingEntity {
     @Column(name = "sequence")
     private Integer sequence;
 
+    @Column(name = "hidden")
+    private Boolean hidden;
+
     @Column(name = "always_show")
     private Boolean alwaysShow;
 
@@ -240,6 +243,19 @@ public class AdMenu extends AbstractAuditingEntity {
         this.sequence = sequence;
     }
 
+    public Boolean isHidden() {
+        return hidden;
+    }
+
+    public AdMenu hidden(Boolean hidden) {
+        this.hidden = hidden;
+        return this;
+    }
+
+    public void setHidden(Boolean hidden) {
+        this.hidden = hidden;
+    }
+
     public Boolean isAlwaysShow() {
         return alwaysShow;
     }
@@ -379,6 +395,7 @@ public class AdMenu extends AbstractAuditingEntity {
             ", icon='" + getIcon() + "'" +
             ", redirect='" + getRedirect() + "'" +
             ", sequence=" + getSequence() +
+            ", hidden='" + isHidden() + "'" +
             ", alwaysShow='" + isAlwaysShow() + "'" +
             ", active='" + isActive() + "'" +
             "}";
