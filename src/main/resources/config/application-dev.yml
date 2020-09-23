@@ -42,9 +42,9 @@ spring:
         server-uri: http://localhost:9393
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/OpusWebApp
-    username: OpusWebApp
-    password: 
+    url: jdbc:postgresql://localhost:5432/bhp_core_app
+    username: aaryadewa
+    password: aaryadewa
     hikari:
       poolName: Hikari
       auto-commit: false
