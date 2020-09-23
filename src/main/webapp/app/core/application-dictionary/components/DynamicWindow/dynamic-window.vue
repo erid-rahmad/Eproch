@@ -164,6 +164,9 @@
       <trigger-parameter-form
         ref="triggerForm"
         :data="triggerModel"
+        :fields="mainTab.adfields"
+        :tabName="mainTab.name"
+        @process-completed="onProcessCompleted"
       />
       <el-dialog
           width="30%"

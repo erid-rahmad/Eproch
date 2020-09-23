@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.bhp.opusb.service.dto.ProcessResult;
+import com.bhp.opusb.service.dto.TriggerResult;
 import com.bhp.opusb.service.trigger.ProcessTrigger;
 
 import org.slf4j.Logger;
@@ -24,16 +26,17 @@ public class TaskExecutorProcessTrigger implements ProcessTrigger {
   }
 
   @Override
-  public void run(Map<String, Object> params) {
+  public TriggerResult run(Map<String, Object> params) {
     String taskName = (String) params.get("taskName");
     Map<String, String> properties = new HashMap<>();
     List<String> arguments = new ArrayList<>();
     String alternateComposedTaskRunnerApp = null;
-    log.debug("Executing task {}", taskName);
+    log.debug("Executing SCDF task {}", taskName);
     long executionId = dataFlowTemplate.taskOperations()
       .launch(taskName, properties, arguments, alternateComposedTaskRunnerApp);
     
-    log.info("Task {} executed with ID: {}", taskName, executionId);
+    log.info("SCDF task {} executed with ID: {}", taskName, executionId);
+    return new ProcessResult().add("Execution_ID", executionId);
   }
   
 }

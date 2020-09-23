@@ -226,6 +226,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     }
   }
 
+  public onProcessCompleted(response: any) {
+    this.refreshWindow();
+  }
+
   public onCurrentRecordChange(no: number) {
     (<any>this.$refs.mainGrid)?.setSelectedRecordNo(no);
   }
@@ -317,11 +321,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   public runTrigger(model: any) {
     this.triggerModel = model;
     (<any> this.$refs.triggerForm).displayed = true;
-    /* this.dynamicWindowService(`/api/ad-triggers/process?name=${service}`)
-      .create(params)
-      .then((res) => {
-        console.log('Process %s triggered with status: %O', service, res);
-      }); */
   }
 
   public reloadTreeView() {
