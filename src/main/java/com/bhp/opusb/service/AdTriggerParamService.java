@@ -39,7 +39,7 @@ public class AdTriggerParamService {
      * @param adTriggerParamDTO the entity to save.
      * @return the persisted entity.
      */
-    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADTrigger.adTriggerParams", allEntries = true)
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.AdTrigger.adTriggerParams", allEntries = true)
     public AdTriggerParamDTO save(AdTriggerParamDTO adTriggerParamDTO) {
         log.debug("Request to save AdTriggerParam : {}", adTriggerParamDTO);
         AdTriggerParam adTriggerParam = adTriggerParamMapper.toEntity(adTriggerParamDTO);
@@ -78,7 +78,7 @@ public class AdTriggerParamService {
      *
      * @param id the id of the entity.
      */
-    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADTrigger.adTriggerParams", allEntries = true)
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.AdTrigger.adTriggerParams", allEntries = true)
     public void delete(Long id) {
         log.debug("Request to delete AdTriggerParam : {}", id);
         adTriggerParamRepository.deleteById(id);

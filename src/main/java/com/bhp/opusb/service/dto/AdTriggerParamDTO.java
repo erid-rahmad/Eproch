@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
-import com.bhp.opusb.domain.ADReference;
-import com.bhp.opusb.domain.AdValidationRule;
 import com.bhp.opusb.domain.enumeration.ADColumnType;
 
 /**
@@ -64,8 +62,8 @@ public class AdTriggerParamDTO extends AbstractAuditingDTO {
     private Long adTriggerId;
     private String adTriggerName;
 
-    private ADReference adReference;
-    private AdValidationRule adValidationRule;
+    private ADReferenceDTO adReference;
+    private AdValidationRuleDTO adValidationRule;
     
     public Long getId() {
         return id;
@@ -259,19 +257,19 @@ public class AdTriggerParamDTO extends AbstractAuditingDTO {
         this.adTriggerName = adTriggerName;
     }
 
-    public ADReference getAdReference() {
+    public ADReferenceDTO getAdReference() {
         return adReference;
     }
 
-    public void setAdReference(ADReference adReference) {
+    public void setAdReference(ADReferenceDTO adReference) {
         this.adReference = adReference;
     }
 
-    public AdValidationRule getAdValidationRule() {
+    public AdValidationRuleDTO getAdValidationRule() {
         return adValidationRule;
     }
 
-    public void setAdValidationRule(AdValidationRule adValidationRule) {
+    public void setAdValidationRule(AdValidationRuleDTO adValidationRule) {
         this.adValidationRule = adValidationRule;
     }
 

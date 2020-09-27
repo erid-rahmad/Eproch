@@ -8,7 +8,6 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
-import com.bhp.opusb.domain.AdTriggerParam;
 import com.bhp.opusb.domain.enumeration.AdTriggerType;
 
 /**
@@ -39,7 +38,7 @@ public class AdTriggerDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
-    private Set<AdTriggerParam> adTriggerParams = new HashSet<>();
+    private Set<AdTriggerParamDTO> adTriggerParams = new HashSet<>();
     
     public Long getId() {
         return id;
@@ -113,11 +112,11 @@ public class AdTriggerDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Set<AdTriggerParam> getAdTriggerParams() {
+    public Set<AdTriggerParamDTO> getAdTriggerParams() {
         return adTriggerParams;
     }
 
-    public void setAdTriggerParams(Set<AdTriggerParam> adTriggerParams) {
+    public void setAdTriggerParams(Set<AdTriggerParamDTO> adTriggerParams) {
         this.adTriggerParams = adTriggerParams;
     }
 

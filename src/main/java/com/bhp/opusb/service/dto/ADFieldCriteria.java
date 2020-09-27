@@ -73,6 +73,8 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter adCalloutId;
+
     private LongFilter adOrganizationId;
 
     private LongFilter adReferenceId;
@@ -113,6 +115,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.defaultValue = other.defaultValue == null ? null : other.defaultValue.copy();
         this.formatPattern = other.formatPattern == null ? null : other.formatPattern.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.adCalloutId = other.adCalloutId == null ? null : other.adCalloutId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
         this.adColumnId = other.adColumnId == null ? null : other.adColumnId.copy();
@@ -318,6 +321,14 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getAdCalloutId() {
+        return adCalloutId;
+    }
+
+    public void setAdCalloutId(LongFilter adCalloutId) {
+        this.adCalloutId = adCalloutId;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -401,6 +412,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
             Objects.equals(defaultValue, that.defaultValue) &&
             Objects.equals(formatPattern, that.formatPattern) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(adCalloutId, that.adCalloutId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adReferenceId, that.adReferenceId) &&
             Objects.equals(adColumnId, that.adColumnId) &&
@@ -436,6 +448,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
         defaultValue,
         formatPattern,
         active,
+        adCalloutId,
         adOrganizationId,
         adReferenceId,
         adColumnId,
@@ -472,6 +485,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
                 (defaultValue != null ? "defaultValue=" + defaultValue + ", " : "") +
                 (formatPattern != null ? "formatPattern=" + formatPattern + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (adCalloutId != null ? "adCalloutId=" + adCalloutId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
                 (adColumnId != null ? "adColumnId=" + adColumnId + ", " : "") +

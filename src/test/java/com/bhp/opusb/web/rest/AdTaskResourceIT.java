@@ -86,6 +86,16 @@ public class AdTaskResourceIT {
             .name(DEFAULT_NAME)
             .value(DEFAULT_VALUE)
             .async(DEFAULT_ASYNC);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        adTask.setAdOrganization(aDOrganization);
         return adTask;
     }
     /**
@@ -101,6 +111,16 @@ public class AdTaskResourceIT {
             .name(UPDATED_NAME)
             .value(UPDATED_VALUE)
             .async(UPDATED_ASYNC);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        adTask.setAdOrganization(aDOrganization);
         return adTask;
     }
 
@@ -582,12 +602,8 @@ public class AdTaskResourceIT {
     @Test
     @Transactional
     public void getAllAdTasksByAdOrganizationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        adTaskRepository.saveAndFlush(adTask);
-        ADOrganization adOrganization = ADOrganizationResourceIT.createEntity(em);
-        em.persist(adOrganization);
-        em.flush();
-        adTask.setAdOrganization(adOrganization);
+        // Get already existing entity
+        ADOrganization adOrganization = adTask.getAdOrganization();
         adTaskRepository.saveAndFlush(adTask);
         Long adOrganizationId = adOrganization.getId();
 

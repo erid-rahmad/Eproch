@@ -8,6 +8,7 @@
       size="mini"
       style="width: 100%"
       highlight-current-row
+      border
       stripe
       :default-sort="gridSchema.defaultSort"
       :empty-text="gridSchema.emptyText"
@@ -21,7 +22,23 @@
         fixed
         type="selection"
         align="center"
-        width="30">
+        width="48"
+      >
+      </el-table-column>
+      <el-table-column
+        fixed
+        width="48"
+      >
+        <template slot-scope="scope">
+          <el-link
+            @click="activateInlineEditing(scope.row)"
+            type="primary"
+            size="mini"
+            icon="el-icon-edit"
+            plain
+            :title="$t('entity.action.edit')"
+          />
+        </template>
       </el-table-column>
       <el-table-column
         v-for="field in gridFields"
@@ -30,17 +47,18 @@
         :prop="field.adColumn.name"
         :label="field.name"
         :width="getFieldWidth(field)"
-        min-width="144"
+        min-width="128"
         show-overflow-tooltip
         :sortable="editing ? false: 'custom'"
       >
         <template slot-scope="scope">
           <el-switch
-            v-if="isActiveStatusField(scope.column)"
+            v-if="isActiveStatusField(field)"
             :ref="scope.column.property"
             v-model="scope.row[scope.column.property]"
             :class="scope.column.property"
             :disabled="!scope.row.editing || isReadonly(scope.row, field)"
+            @change="value => onInputChanged(field, value)"
           />
           <el-checkbox
             v-else-if="isBooleanField(field)"
@@ -48,6 +66,7 @@
             v-model="scope.row[scope.column.property]"
             :class="scope.column.property"
             :disabled="!scope.row.editing || isReadonly(scope.row, field)"
+            @change="value => onInputChanged(field, value)"
           />
           <span v-else-if="!scope.row.editing">
             {{ getFieldValue(scope.row, field) }}
@@ -68,6 +87,7 @@
               clearable
               filterable
               :disabled="isReadonly(scope.row, field)"
+              @change="value => onInputChanged(field, value)"
               @focus="setTableDirectReference(field)"
             >
               <el-option
@@ -86,6 +106,7 @@
               clearable
               filterable
               :disabled="isReadonly(scope.row, field)"
+              @change="value => onInputChanged(field, value)"
             >
               <el-option
                 v-for="item in referenceListItems(field)"
@@ -102,6 +123,7 @@
               size="mini"
               clearable
               :disabled="isReadonly(scope.row, field)"
+              @change="value => onInputChanged(field, value)"
             />
             <el-input-number
               v-else-if="isNumericField(field)"
@@ -113,6 +135,7 @@
               :min="getMinValue(field)"
               :max="getMaxValue(field)"
               :disabled="isReadonly(scope.row, field)"
+              @change="value => onInputChanged(field, value)"
             />
             <el-date-picker
               v-else-if="isDateField(field)"
@@ -124,18 +147,6 @@
               :disabled="isReadonly(scope.row, field)"
             />
           </el-tooltip>
-        </template>
-      </el-table-column>
-      <el-table-column fixed="left" width="30">
-        <template slot-scope="scope">
-          <el-link
-            @click="activateInlineEditing(scope.row)"
-            type="primary"
-            size="mini"
-            icon="el-icon-edit"
-            plain
-            :title="$t('entity.action.edit')"
-          />
         </template>
       </el-table-column>
     </el-table>
@@ -218,19 +229,34 @@
 
 <script lang="ts" src="./grid-view.component.ts"></script>
 
-<style>
-.grid-view .el-table .is-error .el-input__inner {
-  border-color: #ff4949;
-}
+<style lang="scss">
 .el-table__fixed, .el-table__fixed-right{
   box-shadow: none;
 }
-.grid-view .el-pagination {
-  background: #fff;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
+.grid-view {
+
+  .el-table {
+    
+    .is-error .el-input__inner {
+      border-color: #ff4949;
+    }
+
+    label.el-checkbox {
+      margin: 4px 0;
+    }
+  }
+
+  .el-pagination {
+    background: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+
+    .el-input--mini .el-input__inner {
+      height: 22px;
+    }
+  }
 }
 </style>

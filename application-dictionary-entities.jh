@@ -146,6 +146,30 @@ entity ADFieldGroup {
 	active Boolean
 }
 
+entity AdCallout {
+	uid UUID
+	active Boolean
+	name String required maxlength(30)
+	description String
+
+	/* The allowed types are PROCESS and CLEAR */
+	type String required maxlength(15)
+}
+
+entity AdCalloutTarget {
+	uid UUID
+	active Boolean
+
+	/* 
+	Required if Callout type is PROCESS.
+	This is the returned field to be applied to the target field.
+	*/
+	sourceField String maxlength(30)
+
+	/* The name of the target field in the same tab to apply the change on */
+	targetName String required maxlength(30)
+}
+
 entity ADReference {
 	uid UUID
 	name String required
@@ -358,6 +382,8 @@ relationship OneToMany {
 	ADWindow to ADTab{adWindow required}
 	ADTab to ADTab{parentTab}
 	ADTab to ADField{adTab required}
+	ADField to AdCallout{field required}
+	AdCallout to AdCalloutTarget{callout required}
 	ADReference to ADReferenceList{adReference required}
 	AdMenu to AdMenu{parentMenu}
 	AdTask to AdTaskProcess{adTask required}
@@ -391,6 +417,10 @@ relationship ManyToOne {
 	ADField{adValidationRule} to AdValidationRule
 	ADField{adButton} to AdButton
 
+	AdCallout{adOrganization required} to ADOrganization
+	AdCallout{trigger} to AdTrigger
+	AdCalloutTarget{adOrganization required} to ADOrganization
+
 	ADReference{adOrganization required} to ADOrganization
 	ADReferenceList{adOrganization required} to ADOrganization
 	AdValidationRule{adOrganization required} to ADOrganization
@@ -399,18 +429,21 @@ relationship ManyToOne {
 	AdMenu{adForm} to AdForm
 	AdMenu{adOrganization required} to ADOrganization
 
-	AdTask{adOrganization} to ADOrganization
-	AdTaskApplication{adOrganization} to ADOrganization
+	AdTask{adOrganization required} to ADOrganization
+	AdTaskApplication{adOrganization required} to ADOrganization
 	AdTaskProcess{adOrganization required} to ADOrganization
 	AdTaskProcess{adTaskApplication required} to AdTaskApplication
+
 	AdTaskScheduler{adOrganization required} to ADOrganization
-	AdTaskScheduler{adTask required} to AdTask
+	AdTaskScheduler{adTask} to AdTask
+	AdTaskScheduler{adTrigger} to AdTrigger
 	AdTaskSchedulerGroup{adOrganization required} to ADOrganization
 
 	AdTrigger{adOrganization required} to ADOrganization
 	AdTriggerParam{adOrganization required} to ADOrganization
 	AdTriggerParam{adReference} to ADReference
 	AdTriggerParam{adValidationRule} to AdValidationRule
+
 	AdButton{adOrganization required} to ADOrganization
 	AdButton{adTab required} to ADTab
 	AdButton{adTrigger} to AdTrigger

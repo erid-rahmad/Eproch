@@ -44,6 +44,9 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
     private Long adTaskId;
     private String adTaskName;
 
+    private Long adTriggerId;
+    private String adTriggerName;
+
     private Long groupId;
     private String groupName;
     
@@ -159,6 +162,22 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
         this.adTaskName = adTaskName;
     }
     
+    public Long getAdTriggerId() {
+        return adTriggerId;
+    }
+
+    public void setAdTriggerId(Long adTriggerId) {
+        this.adTriggerId = adTriggerId;
+    }
+
+    public String getAdTriggerName() {
+        return adTriggerName;
+    }
+
+    public void setAdTriggerName(String adTriggerName) {
+        this.adTriggerName = adTriggerName;
+    }
+
     public Long getGroupId() {
         return groupId;
     }
@@ -211,6 +230,7 @@ public class AdTaskSchedulerDTO extends AbstractAuditingDTO {
             ", periodicUnit='" + getPeriodicUnit() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adTaskId=" + getAdTaskId() +
+            ", adTriggerId=" + getAdTriggerId() +
             ", groupId=" + getGroupId() +
             "}";
     }

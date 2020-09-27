@@ -2,78 +2,79 @@
   <div class="action-toolbar" v-hotkey="keymap">
     <el-button-group>
       <el-button
-        type="primary"
-        size="small"
+        v-show="!isEditing"
         icon="el-icon-plus"
+        size="small"
         title="New (alt + a)"
-        :disabled="isEditing"
+        type="primary"
         @click="addRecord"
       />
       <el-button
         v-show="recordCount && !isEditing"
-        type="primary"
-        size="small"
         icon="el-icon-document-copy"
+        size="small"
         title="Copy (alt + d)"
+        type="primary"
         @click="copyRecord"
       />
     </el-button-group>
     <el-button-group>
       <el-button
-        type="primary"
-        size="small"
+        v-show="isEditing"
         icon="el-icon-check"
+        size="small"
         title="Save (alt + s)"
-        :disabled="!isEditing"
+        type="primary"
         @click="saveRecord"
       />
       <el-button
-        size="small"
+        v-show="isEditing"
         icon="el-icon-close"
+        size="small"
         title="Cancel (alt + z)"
-        :disabled="!isEditing"
         @click="cancelOperation"
       />
       <el-button
         v-show="recordCount && !isEditing"
-        type="danger"
-        size="small"
         icon="el-icon-delete"
+        size="small"
         title="Delete (alt + del)"
+        type="danger"
         @click="deleteRecord"
       />
     </el-button-group>
     <el-button-group v-show="!isEditing">
       <el-button
-        type="primary"
-        size="small"
         icon="el-icon-refresh"
+        size="small"
         title="Refresh (alt + r)"
+        type="primary"
         @click="refreshData"
       />
-      <el-button 
-        type="primary"
-        size="small"
+      <el-button
         icon="el-icon-search"
+        size="small"
         title="Search (alt + f)"
+        type="primary"
         @click="openSearchWindow"
       />
       <el-button 
-        type="primary"
-        size="small"
         icon="el-icon-download"
+        size="small"
         title="Export"
+        type="primary"
         @click="exportRecord"
       />
     </el-button-group>
     <el-dropdown
       v-if="buttons.length"
+      v-show="!isEditing"
       size="small"
       @command="runProcess"
     >
       <el-button
-        type="primary"
         size="small"
+        type="primary"
       >
         <font-awesome-icon :icon="['fas', 'bolt']"/>
       </el-button>
@@ -90,29 +91,29 @@
     </el-dropdown>
     <el-button-group>
       <el-button
-        type="primary"
-        size="small"
         icon="el-icon-s-grid"
-        title="Toggle Layout (alt + g)"
-        @click="switchView"
         :plain="!gridView"
+        size="small"
+        title="Toggle Layout (alt + g)"
+        type="primary"
+        @click="switchView"
       />
       <el-button
         v-show="!isEditing"
-        type="primary"
-        size="small"
-        icon="el-icon-arrow-up"
-        title="Go to Parent Tab (alt + up)"
         :disabled="atWindowRoot"
+        icon="el-icon-arrow-up"
+        size="small"
+        title="Go to Parent Tab (alt + up)"
+        type="primary"
         @click="goToParentTab"
       />
       <el-button
         v-show="!isEditing"
-        type="primary"
-        size="small"
-        icon="el-icon-arrow-down"
-        title="Go to Child Tab (alt + down)"
         :disabled="atLastTab"
+        icon="el-icon-arrow-down"
+        size="small"
+        title="Go to Child Tab (alt + down)"
+        type="primary"
         @click="goToChildTab"
       />
     </el-button-group>
