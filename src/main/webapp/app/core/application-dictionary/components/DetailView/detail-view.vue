@@ -2,12 +2,11 @@
   <div class="detail-view">
     <el-form
       ref="mainForm"
-      v-loading="isLoading"
       :model="model"
       :rules="validationSchema"
-      label-width="128px"
+      label-width="200px"
       label-position="left"
-      size="small"
+      size="mini"
     >
       <el-row
         v-for="(row, i) in rows"
@@ -29,24 +28,25 @@
               v-model="model.active"
               active-text="Active"
               inactive-color="#ff4949"
-              @change="onFormChanged"
+              @change="value => onInputChanged(col.field, value)"
             />
             <el-checkbox
               v-else-if="isBooleanField(col.field)"
               v-model="model[col.name]"
               :label="col.field.name"
               :disabled="isReadonly(col.field)"
-              @change="onFormChanged"
+              @change="value => onInputChanged(col.field, value)"
             />
             <el-select
               v-else-if="isTableDirectLink(col.field)"
               v-model="model[col.name]"
+              v-loading="isLoading"
               :remote="true"
               :remote-method="fetchTableDirectData"
               clearable
               filterable
               :disabled="isReadonly(col.field)"
-              @change="onFormChanged"
+              @change="value => onInputChanged(col.field, value)"
               @focus="setTableDirectReference(col.field)"
             >
               <el-option
@@ -59,10 +59,11 @@
             <el-select
               v-else-if="hasReferenceList(col.field)"
               v-model="model[col.name]"
+              v-loading="isLoading"
               clearable
               filterable
               :disabled="isReadonly(col.field)"
-              @change="onFormChanged"
+              @change="value => onInputChanged(col.field, value)"
             >
               <el-option
                 v-for="item in referenceListItems(col.field)"
@@ -78,7 +79,7 @@
               :minlength="getMinLength(col.field)"
               :maxlength="getMaxLength(col.field)"
               :disabled="isReadonly(col.field)"
-              @change="onFormChanged"
+              @change="value => onInputChanged(col.field, value)"
             />
             <el-input-number
               v-else-if="isNumericField(col.field)"
@@ -87,7 +88,7 @@
               :min="getMinValue(col.field)"
               :max="getMaxValue(col.field)"
               :disabled="isReadonly(col.field)"
-              @change="onFormChanged"
+              @change="value => onInputChanged(col.field, value)"
             />
           </el-form-item>
         </el-col>

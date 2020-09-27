@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.AdTaskScheduler;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.AdTask;
+import com.bhp.opusb.domain.AdTrigger;
 import com.bhp.opusb.domain.AdTaskSchedulerGroup;
 import com.bhp.opusb.repository.AdTaskSchedulerRepository;
 import com.bhp.opusb.service.AdTaskSchedulerService;
@@ -115,16 +116,6 @@ public class AdTaskSchedulerResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         adTaskScheduler.setAdOrganization(aDOrganization);
-        // Add required entity
-        AdTask adTask;
-        if (TestUtil.findAll(em, AdTask.class).isEmpty()) {
-            adTask = AdTaskResourceIT.createEntity(em);
-            em.persist(adTask);
-            em.flush();
-        } else {
-            adTask = TestUtil.findAll(em, AdTask.class).get(0);
-        }
-        adTaskScheduler.setAdTask(adTask);
         return adTaskScheduler;
     }
     /**
@@ -154,16 +145,6 @@ public class AdTaskSchedulerResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         adTaskScheduler.setAdOrganization(aDOrganization);
-        // Add required entity
-        AdTask adTask;
-        if (TestUtil.findAll(em, AdTask.class).isEmpty()) {
-            adTask = AdTaskResourceIT.createUpdatedEntity(em);
-            em.persist(adTask);
-            em.flush();
-        } else {
-            adTask = TestUtil.findAll(em, AdTask.class).get(0);
-        }
-        adTaskScheduler.setAdTask(adTask);
         return adTaskScheduler;
     }
 
@@ -1011,8 +992,12 @@ public class AdTaskSchedulerResourceIT {
     @Test
     @Transactional
     public void getAllAdTaskSchedulersByAdTaskIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        AdTask adTask = adTaskScheduler.getAdTask();
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+        AdTask adTask = AdTaskResourceIT.createEntity(em);
+        em.persist(adTask);
+        em.flush();
+        adTaskScheduler.setAdTask(adTask);
         adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
         Long adTaskId = adTask.getId();
 
@@ -1021,6 +1006,26 @@ public class AdTaskSchedulerResourceIT {
 
         // Get all the adTaskSchedulerList where adTask equals to adTaskId + 1
         defaultAdTaskSchedulerShouldNotBeFound("adTaskId.equals=" + (adTaskId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdTaskSchedulersByAdTriggerIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+        AdTrigger adTrigger = AdTriggerResourceIT.createEntity(em);
+        em.persist(adTrigger);
+        em.flush();
+        adTaskScheduler.setAdTrigger(adTrigger);
+        adTaskSchedulerRepository.saveAndFlush(adTaskScheduler);
+        Long adTriggerId = adTrigger.getId();
+
+        // Get all the adTaskSchedulerList where adTrigger equals to adTriggerId
+        defaultAdTaskSchedulerShouldBeFound("adTriggerId.equals=" + adTriggerId);
+
+        // Get all the adTaskSchedulerList where adTrigger equals to adTriggerId + 1
+        defaultAdTaskSchedulerShouldNotBeFound("adTriggerId.equals=" + (adTriggerId + 1));
     }
 
 

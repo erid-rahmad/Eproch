@@ -1,5 +1,6 @@
-import { RegisterTabParameter } from '@/shared/config/store/window-store';
+import { WindowStoreModule as windowStore, IRegisterTabParameter } from '@/shared/config/store/window-store';
 import { ADColumnType } from '@/shared/model/ad-column.model';
+import { IADField } from '@/shared/model/ad-field.model';
 import { ADReferenceType } from '@/shared/model/ad-reference.model';
 import { formatJson } from '@/utils';
 import { exportJson2Excel } from '@/utils/excel';
@@ -9,10 +10,10 @@ import { ElPagination } from 'element-ui/types/pagination';
 import { ElTable } from 'element-ui/types/table';
 import { debounce, isEqual, kebabCase } from 'lodash';
 import pluralize from "pluralize";
-import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
+import { Component, Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import ContextVariableAccessor from "../ContextVariableAccessor";
-import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
+import CalloutMixin from '../../mixins/CalloutMixin';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -56,10 +57,7 @@ const GridViewProps = Vue.extend({
     })
   }
 })
-export default class GridView extends Mixins(ContextVariableAccessor, GridViewProps) {
-  @Inject('dynamicWindowService')
-  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
-
+export default class GridView extends Mixins(ContextVariableAccessor, CalloutMixin, GridViewProps) {
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found'
@@ -121,7 +119,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   private errors = new Map();
   private errorTimestamp = Date.now();
 
-  private tabName: string = '';
   private fields: any[] = [];
   private baseApiUrl: string = '';
   private filterQuery: string = '';
@@ -133,7 +130,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   private gridResizeObserver;
   private debouncedHeightResizer;
 
-  private registerTabState!: (options: RegisterTabParameter) => Promise<void>;
+  private registerTabState!: (options: IRegisterTabParameter) => Promise<void>;
 
   get referenceListItems() {
     return (field: any): any[] => {
@@ -212,7 +209,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   created() {
     this.onFieldsChange(this.fields);
     this.toolbarEventBus?.$on('export-record', this.exportRecord);
-    this.debouncedHeightResizer = debounce(this.resizeTableHeight, 200);
+    this.debouncedHeightResizer = debounce(this.resizeTableHeight, 300);
   }
 
   mounted() {
@@ -296,6 +293,27 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     }
   }
 
+  public onInputChanged(field: IADField, value: any) {
+    this.registerTabState({
+      path: this.$route.fullPath,
+      tabId: this.tabName,
+      data: this.currentRecord
+    })
+    .then(() => {
+      if (this.hasReferenceList(field) || this.isTableDirectLink(field)) {
+        this.updateReferenceQueries(this.gridFields);
+        this.initRelationships(this.currentRecord);
+      }
+      this.executeCallout(field, (val, target, type) => {
+        if (type === 'RESET') {
+          this.$set(this.currentRecord, target, null);
+        } else if (type === 'PROCESS') {
+          this.$set(this.currentRecord, target, val);
+        }
+      })
+    });
+  }
+
   /**
    * Handle multiple rows selection.
    * @param rows The selected rows
@@ -311,6 +329,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
   }
 
+  // TODO Should be able to process deletion of multiple rows in one transaction.
   public deleteRecords(): void {
     const multiple = this.selectedRows.length > 0;
 
@@ -321,19 +340,33 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
       return this.dynamicWindowService(this.baseApiUrl).delete(row.id);
     })).then((results) => {
       const deletedCount = results.filter(res => res.status === 'fulfilled').length
-      const message = this.$t(`opusWebApp.applicationDictionary.recordsDeleted`, {
-        tabName: this.tabName,
-        count: deletedCount
-      });
+      
+      if (deletedCount) {
+        const message = this.$t(`opusWebApp.applicationDictionary.recordsDeleted`, {
+          tabName: this.tabName,
+          count: deletedCount
+        });
 
-      this.retrieveAllRecords();
-      this.$notify({
-        title: 'Success',
-        message: message.toString(),
-        type: 'success',
-        duration: 3000
-      });
-    }).finally(() => {
+        this.retrieveAllRecords();
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        });
+      } else {
+        const rejectedCount = results.filter(res => res.status === 'rejected').length;
+        if (rejectedCount) {
+          console.log('Failed deleting the record(s)');
+          this.$notify({
+            title: 'Error',
+            message: 'Failed deleting the record(s)',
+            type: 'error'
+          })
+        }
+      }
+    })
+    .finally(() => {
       this.selectedRows = [];
       this.$emit('rows-deleted');
     });
@@ -400,16 +433,27 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   private updateReferenceQueries(fields: any[]) {
     fields
       .filter(field => this.hasReferenceList(field) || this.isTableDirectLink(field))
-      .forEach(field => {
-        // Parse the validation rule which is used to filter the reference key records.
-        const column = field.adColumn;
-        const validationRule = field.adValidationRule || column.adValidationRule;
-
-        if (validationRule) {
-          const referenceFilter = this.getContext(validationRule?.query);
-          this.referenceFilterQueries.set(field.id, <string>referenceFilter);
-        }
+      .forEach(async field => {
+        await this.updateReferenceQuery(field);
       });
+  }
+
+  private async updateReferenceQuery(field: any) {
+    // Parse the validation rule which is used to filter the reference key records.
+    const column = field.adColumn;
+    const validationRule = field.adValidationRule || column.adValidationRule;
+
+    if (validationRule) {
+      let referenceFilter = <string>this.getContext(validationRule.query, this.tabName);
+      
+      if (referenceFilter?.includes('{select', 0)) {
+        referenceFilter = await this.parseValidationQuery(referenceFilter);
+      }
+
+      if (referenceFilter) {
+        this.referenceFilterQueries.set(field.id, referenceFilter);
+      }
+    }
   }
 
   private exportRecord(data?: any) {
@@ -548,7 +592,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
           defaultValue = await this.retrieveRemoteValue(defaultValue);
         } else {
           // TODO Set the default value based on the field/column definition. 
-          defaultValue = this.getContext(field.defaultValue || column.defaultValue);
+          defaultValue = this.getContext(field.defaultValue || column.defaultValue, this.tabName);
         }
 
         if (! defaultValue) {
@@ -567,29 +611,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
         row[column.name] = defaultValue;
       }
     }
-  }
-
-  private async retrieveRemoteValue(options: string) {
-    let params = options.substring(1, options.length - 1)
-      .split(/\s*?,\s*?/)
-      .map(item => {
-        const param = item.trim().split(/\s*?:\s*?/);
-        const result = {};
-        result[param[0]] = param[1].trim();
-        return result;
-      });
-
-    const config = Object.assign({}, ...params);
-    const resourceName = pluralize.plural(kebabCase(config.from));
-    const api = `/api/${resourceName}`;
-    const response = await this.dynamicWindowService(api)
-      .retrieve({criteriaQuery: config.where});
-
-    if (response.data.length) {
-      return Promise.resolve(response.data[0][config.select]);
-    }
-
-    return Promise.resolve(null);
   }
 
   public beforeSave() {
@@ -773,7 +794,9 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     return result;
   }
 
+  // TODO Use common function to be used by both grid and detail view.
   private async initRelationships(row: any) {
+    let updated = false;
     for (let field of this.gridFields) {
       const column = field.adColumn;
 
@@ -790,6 +813,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
             ]
           });
           this.referenceItemsMap.set(`${column.name}`, res.data);
+          updated = true;
         }
 
         // Get the item list of Reference Key[DATATYPE|table|direct].
@@ -806,8 +830,13 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
 
           const res = await this.dynamicWindowService(api).retrieve({ criteriaQuery });
           this.referenceItemsMap.set(`${row.id}-${column.name}`, res.data);
+          updated = true;
         }
       }
+    }
+
+    if (updated) {
+      this.tableDirectTimestamp = Date.now();
     }
   }
 
@@ -824,11 +853,11 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
   }
 
   public getFieldWidth(field: any) {
-    if (this.isBooleanField(field) && field.adColumn.name === 'active') {
+    if (this.isActiveStatusField(field)) {
       return '96';
     }
 
-    return '';
+    return '256';
   }
 
   public getMinValue(field: any) {
@@ -888,7 +917,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, GridViewPr
     return row[field.adColumn.name];
   }
 
-  public isActiveStatusField(column: any) {
-    return column.property === 'active';
+  public isActiveStatusField(field: any) {
+    return field.adColumn.name === 'active';
   }
 }

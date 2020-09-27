@@ -1,5 +1,7 @@
 package com.bhp.opusb.domain;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -8,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -81,10 +84,10 @@ public class ADField extends AbstractAuditingEntity {
     private Boolean writable = true;
 
     @Column(name = "column_no")
-    private Integer columnNo;
+    private Integer columnNo = 1;
 
     @Column(name = "column_span")
-    private Integer columnSpan = 6;
+    private Integer columnSpan = 8;
 
     @Column(name = "updatable")
     private Boolean updatable;
@@ -104,6 +107,10 @@ public class ADField extends AbstractAuditingEntity {
     @Column(name = "active")
     private Boolean active = true;
 
+    @OneToMany(mappedBy = "field")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private List<AdCallout> adCallouts = new ArrayList<>();
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("aDFields")
@@ -113,8 +120,7 @@ public class ADField extends AbstractAuditingEntity {
     @JsonIgnoreProperties("aDFields")
     private ADReference adReference;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("aDFields")
     private ADColumn adColumn;
 
@@ -438,6 +444,31 @@ public class ADField extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public List<AdCallout> getAdCallouts() {
+        return adCallouts;
+    }
+
+    public ADField adCallouts(List<AdCallout> adCallouts) {
+        this.adCallouts = adCallouts;
+        return this;
+    }
+
+    public ADField addAdCallout(AdCallout adCallout) {
+        this.adCallouts.add(adCallout);
+        adCallout.setField(this);
+        return this;
+    }
+
+    public ADField removeAdCallout(AdCallout adCallout) {
+        this.adCallouts.remove(adCallout);
+        adCallout.setField(null);
+        return this;
+    }
+
+    public void setAdCallouts(List<AdCallout> adCallouts) {
+        this.adCallouts = adCallouts;
     }
 
     public ADOrganization getAdOrganization() {

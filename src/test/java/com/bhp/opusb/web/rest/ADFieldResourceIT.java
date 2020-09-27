@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.ADField;
+import com.bhp.opusb.domain.AdCallout;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ADReference;
 import com.bhp.opusb.domain.ADColumn;
@@ -2035,6 +2036,26 @@ public class ADFieldResourceIT {
         // Get all the aDFieldList where active is null
         defaultADFieldShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllADFieldsByAdCalloutIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+        AdCallout adCallout = AdCalloutResourceIT.createEntity(em);
+        em.persist(adCallout);
+        em.flush();
+        aDField.addAdCallout(adCallout);
+        aDFieldRepository.saveAndFlush(aDField);
+        Long adCalloutId = adCallout.getId();
+
+        // Get all the aDFieldList where adCallout equals to adCalloutId
+        defaultADFieldShouldBeFound("adCalloutId.equals=" + adCalloutId);
+
+        // Get all the aDFieldList where adCallout equals to adCalloutId + 1
+        defaultADFieldShouldNotBeFound("adCalloutId.equals=" + (adCalloutId + 1));
+    }
+
 
     @Test
     @Transactional

@@ -1,9 +1,13 @@
 package com.bhp.opusb.service.dto;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
+
+import com.bhp.opusb.domain.AdCallout;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADField} entity.
@@ -80,6 +84,7 @@ public class ADFieldDTO extends AbstractAuditingDTO {
     private Long adTabId;
     private String adTabName;
     
+    private List<AdCalloutDTO> adCallouts = new ArrayList<>();
     private ADReferenceDTO adReference;
     private AdValidationRuleDTO adValidationRule;
     private ADColumnDTO adColumn;
@@ -379,6 +384,14 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     public void setAdValidationRule(AdValidationRuleDTO adValidationRule) {
         this.adValidationRule = adValidationRule;
+    }
+
+    public List<AdCalloutDTO> getAdCallouts() {
+        return adCallouts;
+    }
+
+    public void setAdCallouts(List<AdCalloutDTO> adCallouts) {
+        this.adCallouts = adCallouts;
     }
 
     public ADReferenceDTO getAdReference() {

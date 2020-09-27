@@ -17,7 +17,6 @@ import GridView from "../GridView/grid-view.vue";
 import SearchPanel from "../SearchPanel/search-panel.vue";
 import TreeView from '../TreeView/tree-view.vue';
 import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
-import DynamicWindowService from './dynamic-window.service';
 
 
 @Component({
@@ -48,9 +47,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
   @Inject('aDColumnService')
   private aDColumnService: () => ADColumnService;
-
-  @Inject('dynamicWindowService')
-  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
 
   private removeWindowState!: (path: string) => Promise<void>;
   private debouncedUpdateChildTabs: (data: any) => void;

@@ -75,12 +75,17 @@
             <column name="name" type="string"/>
             <column name="value" type="string"/>
             <column name="async" type="boolean"/>
+            <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
 
     <changeSet id="20200708171400" author="Ananta Aryadewa">
         <addUniqueConstraint tableName="ad_task" columnNames="value" constraintName="ux_ad_task_value"/>
+    </changeSet>
+
+    <changeSet id="20200925142400" author="Ananta Aryadewa">
+        <addNotNullConstraint tableName="ad_task" columnName="ad_organization_id" />
     </changeSet>
 
 </databaseChangeLog>

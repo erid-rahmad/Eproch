@@ -80,6 +80,10 @@ public class AdTaskScheduler extends AbstractAuditingEntity {
 
     @ManyToOne
     @JsonIgnoreProperties("adTaskSchedulers")
+    private AdTrigger adTrigger;
+
+    @ManyToOne
+    @JsonIgnoreProperties("adTaskSchedulers")
     @JsonBackReference
     private AdTaskSchedulerGroup group;
 
@@ -244,6 +248,19 @@ public class AdTaskScheduler extends AbstractAuditingEntity {
 
     public void setAdTask(AdTask adTask) {
         this.adTask = adTask;
+    }
+
+    public AdTrigger getAdTrigger() {
+        return adTrigger;
+    }
+
+    public AdTaskScheduler adTrigger(AdTrigger adTrigger) {
+        this.adTrigger = adTrigger;
+        return this;
+    }
+
+    public void setAdTrigger(AdTrigger adTrigger) {
+        this.adTrigger = adTrigger;
     }
 
     public AdTaskSchedulerGroup getGroup() {

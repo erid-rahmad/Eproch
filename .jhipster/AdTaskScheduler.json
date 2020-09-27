@@ -63,8 +63,14 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "adTask",
             "otherEntityRelationshipName": "adTaskScheduler",
-            "relationshipValidateRules": "required",
             "relationshipName": "adTask",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adTrigger",
+            "otherEntityRelationshipName": "adTaskScheduler",
+            "relationshipName": "adTrigger",
             "otherEntityField": "id"
         },
         {

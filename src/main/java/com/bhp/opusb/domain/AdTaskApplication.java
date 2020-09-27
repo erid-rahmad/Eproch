@@ -65,7 +65,8 @@ public class AdTaskApplication extends AbstractAuditingEntity {
     @Column(name = "deployed")
     private Boolean deployed;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("adTaskApplications")
     private ADOrganization adOrganization;
 
