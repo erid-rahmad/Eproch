@@ -4,18 +4,6 @@ import java.util.List;
 
 import javax.persistence.criteria.JoinType;
 
-// for static metamodels
-import com.bhp.opusb.domain.ADOrganization_;
-// for static metamodels
-import com.bhp.opusb.domain.AdTaskScheduler;
-import com.bhp.opusb.domain.AdTaskSchedulerGroup_;
-import com.bhp.opusb.domain.AdTaskScheduler_;
-import com.bhp.opusb.domain.AdTask_;
-import com.bhp.opusb.repository.AdTaskSchedulerRepository;
-import com.bhp.opusb.service.dto.AdTaskSchedulerCriteria;
-import com.bhp.opusb.service.dto.AdTaskSchedulerDTO;
-import com.bhp.opusb.service.mapper.AdTaskSchedulerMapper;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -25,6 +13,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
+
+import com.bhp.opusb.domain.AdTaskScheduler;
+import com.bhp.opusb.domain.*; // for static metamodels
+import com.bhp.opusb.repository.AdTaskSchedulerRepository;
+import com.bhp.opusb.service.dto.AdTaskSchedulerCriteria;
+import com.bhp.opusb.service.dto.AdTaskSchedulerDTO;
+import com.bhp.opusb.service.mapper.AdTaskSchedulerMapper;
 
 /**
  * Service for executing complex queries for {@link AdTaskScheduler} entities in the database.
@@ -130,6 +125,10 @@ public class AdTaskSchedulerQueryService extends QueryService<AdTaskScheduler> {
             if (criteria.getAdTaskId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdTaskId(),
                     root -> root.join(AdTaskScheduler_.adTask, JoinType.LEFT).get(AdTask_.id)));
+            }
+            if (criteria.getAdTriggerId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdTriggerId(),
+                    root -> root.join(AdTaskScheduler_.adTrigger, JoinType.LEFT).get(AdTrigger_.id)));
             }
             if (criteria.getGroupId() != null) {
                 specification = specification.and(buildSpecification(criteria.getGroupId(),

@@ -42,6 +42,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
             "otherEntityRelationshipName": "adTask",
+            "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         }

@@ -85,6 +85,7 @@
             <column name="version" type="string"/>
             <column name="override_existing" type="boolean"/>
             <column name="deployed" type="boolean"/>
+            <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
@@ -103,6 +104,10 @@
                 <constraints nullable="false" />
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20200925142700" author="Ananta Aryadewa">
+        <addNotNullConstraint tableName="ad_task_application" columnName="ad_organization_id" />
     </changeSet>
 
 </databaseChangeLog>

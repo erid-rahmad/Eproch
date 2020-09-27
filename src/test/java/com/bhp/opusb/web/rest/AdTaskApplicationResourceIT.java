@@ -101,6 +101,16 @@ public class AdTaskApplicationResourceIT {
             .version(DEFAULT_VERSION)
             .overrideExisting(DEFAULT_OVERRIDE_EXISTING)
             .deployed(DEFAULT_DEPLOYED);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        adTaskApplication.setAdOrganization(aDOrganization);
         return adTaskApplication;
     }
     /**
@@ -120,6 +130,16 @@ public class AdTaskApplicationResourceIT {
             .version(UPDATED_VERSION)
             .overrideExisting(UPDATED_OVERRIDE_EXISTING)
             .deployed(UPDATED_DEPLOYED);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        adTaskApplication.setAdOrganization(aDOrganization);
         return adTaskApplication;
     }
 
@@ -898,12 +918,8 @@ public class AdTaskApplicationResourceIT {
     @Test
     @Transactional
     public void getAllAdTaskApplicationsByAdOrganizationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        adTaskApplicationRepository.saveAndFlush(adTaskApplication);
-        ADOrganization adOrganization = ADOrganizationResourceIT.createEntity(em);
-        em.persist(adOrganization);
-        em.flush();
-        adTaskApplication.setAdOrganization(adOrganization);
+        // Get already existing entity
+        ADOrganization adOrganization = adTaskApplication.getAdOrganization();
         adTaskApplicationRepository.saveAndFlush(adTaskApplication);
         Long adOrganizationId = adOrganization.getId();
 

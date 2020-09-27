@@ -5,7 +5,7 @@ export interface IWindowState {
   /**
    * Each item in the map is identified by window URL fullPath.
    */
-  windows: Map<string, Map<any, object>>;
+  windows: Map<string, Map<string, object>>;
 }
 
 export interface IRegisterTabParameter {
@@ -14,18 +14,13 @@ export interface IRegisterTabParameter {
   data: object;
 }
 
-export class RegisterTabParameter implements IRegisterTabParameter {
-  path: string;
-  tabId: string;
-  data: object;
-}
-
 @Module({ dynamic: true, store, name: 'windowStore', namespaced: true })
 class WindowStore extends VuexModule implements IWindowState {
-  windows: Map<string, Map<any, object>> = new Map();
+  
+  windows: Map<string, Map<string, object>> = new Map();
 
   public get tabs() {
-    return (key: string): Map<any, object> => this.windows.get(key);
+    return (key: string): Map<string, object> => this.windows.get(key);
   }
 
   public get tab() {

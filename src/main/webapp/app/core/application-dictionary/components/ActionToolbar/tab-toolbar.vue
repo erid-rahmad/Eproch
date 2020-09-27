@@ -1,12 +1,12 @@
 <template>
-  <div class="action-toolbar" v-hotkey="keymap">
+  <div class="tab-toolbar" v-hotkey="keymap">
     <el-button-group>
       <el-button
+        v-show="!disabled && !isEditing"
         type="primary"
         size="mini"
         icon="el-icon-plus"
         title="New (shift + alt + a)"
-        :disabled="disabled || isEditing"
         @click="addRecord"
       />
       <el-button
@@ -21,18 +21,18 @@
     </el-button-group>
     <el-button-group>
       <el-button
+        v-show="!disabled && isEditing"
         type="primary"
         size="mini"
         icon="el-icon-check"
         title="Save (shift + alt + s)"
-        :disabled="disabled || !isEditing"
         @click="saveRecord"
       />
       <el-button
+        v-show="!disabled && isEditing"
         size="small"
         icon="el-icon-close"
         title="Cancel (shift + alt + z)"
-        :disabled="disabled || !isEditing"
         @click="cancelOperation"
       />
       <el-button

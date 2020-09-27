@@ -1,11 +1,8 @@
-import { Component, Vue, Inject, Watch, Mixins } from 'vue-property-decorator';
-import { getValidatorType, isStringField, isNumericField, isDateField, isDateTimeField, isBooleanField, isActiveStatusField, hasReferenceList, isTableDirectLink } from '@/utils/validate';
 import { ADColumnType } from '@/shared/model/ad-column.model';
 import { ADReferenceType } from '@/shared/model/ad-reference.model';
+import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isStringField, isTableDirectLink } from '@/utils/validate';
+import { Component, Mixins, Vue } from 'vue-property-decorator';
 import ContextVariableAccessor from '../ContextVariableAccessor';
-import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
-import { debounce, isEmpty, isEqual, kebabCase } from 'lodash';
-import pluralize from 'pluralize';
 
 const TriggerParameterFormProps = Vue.extend({
   props: {
@@ -38,9 +35,6 @@ const TriggerParameterFormProps = Vue.extend({
 })
 export default class TriggerParameterForm extends Mixins(ContextVariableAccessor, TriggerParameterFormProps) {
 
-  @Inject('dynamicWindowService')
-  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
-  
   private visible: boolean = false;
   private activeTableDirectField: any = null;
   private referenceItemsMap = new Map();
@@ -50,7 +44,6 @@ export default class TriggerParameterForm extends Mixins(ContextVariableAccessor
   processing: boolean = false;
 
   onOpen() {
-    this.parameter = {};
     this.data.adTriggerParams.forEach((param: any) => {
       let defaultValue: any = this.getContext(param.defaultValue);
       console.log('onDataChange.defaultValue: %O', defaultValue);
@@ -71,6 +64,7 @@ export default class TriggerParameterForm extends Mixins(ContextVariableAccessor
   }
 
   onClose() {
+    this.parameter = {};
     this.visible = false;
   }
 

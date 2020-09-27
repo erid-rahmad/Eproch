@@ -8,7 +8,10 @@ import org.springframework.stereotype.Repository;
 /**
  * Spring Data  repository for the ADField entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface ADFieldRepository extends JpaRepository<ADField, Long>, JpaSpecificationExecutor<ADField> {
+
+  @Modifying
+  @Query(value = "DELETE FROM ad_field WHERE id = ?1", nativeQuery = true)
+  void deleteById(Long id);
 }

@@ -1,11 +1,11 @@
-id;uid;active;name;value;description;trigger;cron_expression;periodic_count;periodic_unit;ad_organization_id;ad_task_id
-1;b7dfb698-b822-4f0a-9362-66dd511a523b;true;invoice Manager;Table intangible invoice;Corporate Small Granite Computer infrastructures;PERIODIC;Mauritius Rupee Small Tasty;28023;challenge optical;1;1
-2;21263d08-f64f-491c-920f-c518fb6de521;false;Corporate Outdoors;UIC-Franc Hat;Granite deliverables SMS;CRON;Customer bus;14298;Profound orchid deposit;2;2
-3;8f84752d-1765-49a6-a962-57a0ef79e511;true;circuit;transparent Tasty;GB Managed clicks-and-mortar;PERIODIC;Director Business-focused invoice;83446;Steel moratorium;3;3
-4;e0628c90-416c-4b61-b53d-15431dbd0546;true;hack Sudanese Pound;Generic Fantastic Soft Mouse Plastic;Aruban Guilder invoice Mall;CRON;San Marino Barbados;82257;Oregon national Congolese Franc;4;4
-5;52b74f9c-72cf-470a-b3ab-f23b6f4cfaa6;true;Accounts enhance;Shoes bricks-and-clicks;Sao Tome and Principe maroon;CRON;bandwidth;67528;Architect;5;5
-6;5577dd91-d303-41d6-9229-526f37d1fead;false;Licensed Soft;neural-net;Awesome Metal Salad;PERIODIC;purple Forward Prairie;36190;Credit Card Account yellow;6;6
-7;1e60e9f2-807a-4dab-890e-760893d15059;true;Tonga;capacitor Response;deposit;PERIODIC;COM;6067;overriding Table impactful;7;7
-8;42dac23e-6133-40c4-9def-f0ade6cb860e;false;payment engage;reboot relationships sexy;COM;PERIODIC;programming;32530;Product Technician;8;8
-9;29bbb194-6fee-4af5-947d-9e74dc33da05;true;Towels online;withdrawal;Borders;PERIODIC;bandwidth-monitored;54138;collaborative sexy;9;9
-10;a04a5913-6860-4d46-8a4b-be6270783ee5;true;FTP Licensed Wooden Cheese monetize;Practical;Fish;CRON;Facilitator content-based;98364;Refined Metal Chips Innovative;10;10
+id;uid;active;name;value;description;trigger;cron_expression;periodic_count;periodic_unit;ad_organization_id
+1;b7dfb698-b822-4f0a-9362-66dd511a523b;true;invoice Manager;Table intangible invoice;Corporate Small Granite Computer infrastructures;PERIODIC;Mauritius Rupee Small Tasty;28023;challenge optical;1
+2;21263d08-f64f-491c-920f-c518fb6de521;false;Corporate Outdoors;UIC-Franc Hat;Granite deliverables SMS;CRON;Customer bus;14298;Profound orchid deposit;2
+3;8f84752d-1765-49a6-a962-57a0ef79e511;true;circuit;transparent Tasty;GB Managed clicks-and-mortar;PERIODIC;Director Business-focused invoice;83446;Steel moratorium;3
+4;e0628c90-416c-4b61-b53d-15431dbd0546;true;hack Sudanese Pound;Generic Fantastic Soft Mouse Plastic;Aruban Guilder invoice Mall;CRON;San Marino Barbados;82257;Oregon national Congolese Franc;4
+5;52b74f9c-72cf-470a-b3ab-f23b6f4cfaa6;true;Accounts enhance;Shoes bricks-and-clicks;Sao Tome and Principe maroon;CRON;bandwidth;67528;Architect;5
+6;5577dd91-d303-41d6-9229-526f37d1fead;false;Licensed Soft;neural-net;Awesome Metal Salad;PERIODIC;purple Forward Prairie;36190;Credit Card Account yellow;6
+7;1e60e9f2-807a-4dab-890e-760893d15059;true;Tonga;capacitor Response;deposit;PERIODIC;COM;6067;overriding Table impactful;7
+8;42dac23e-6133-40c4-9def-f0ade6cb860e;false;payment engage;reboot relationships sexy;COM;PERIODIC;programming;32530;Product Technician;8
+9;29bbb194-6fee-4af5-947d-9e74dc33da05;true;Towels online;withdrawal;Borders;PERIODIC;bandwidth-monitored;54138;collaborative sexy;9
+10;a04a5913-6860-4d46-8a4b-be6270783ee5;true;FTP Licensed Wooden Cheese monetize;Practical;Fish;CRON;Facilitator content-based;98364;Refined Metal Chips Innovative;10
