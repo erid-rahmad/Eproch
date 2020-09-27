@@ -43,10 +43,6 @@ div:focus {
   @include clearfix;
 }
 
-label {
-  font-weight: 700;
-}
-
 .app-container {
   height: 100%;
   padding: 20px;
@@ -214,7 +210,7 @@ aside {
   }
 }
 
-.el-form--label-left .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label{
+.el-form--label-left .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label {
   &::before {
     content: '';
     margin-right: 0;
@@ -232,27 +228,23 @@ aside {
     padding: 5px 10px;
   }
 
-  .mainPane{
-    position: relative;
-  }
-
-  .record-navigator {
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-  }
-
   .el-table {
-    th{
+    th {
       padding: 0px;
     }
 
-    td{
+    td {
       padding: 0px;
     }
   }
 
-  button{
+  button {
     padding: 5px 10px;
+  }
+}
+
+.el-input {
+  &.is-disabled .el-input__inner {
+    color: #70707c;
   }
 }

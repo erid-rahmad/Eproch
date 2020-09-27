@@ -63,17 +63,12 @@ public class AdTask extends AbstractAuditingEntity {
     @JsonManagedReference
     private List<AdTaskProcess> adTaskProcesses = new ArrayList<>();
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("adTasks")
     private ADOrganization adOrganization;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-
-    public AdTask() {}
-    public AdTask(Long id) {
-        this.id = id;
-    }
-    
     public Long getId() {
         return id;
     }

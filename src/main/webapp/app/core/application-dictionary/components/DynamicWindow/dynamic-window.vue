@@ -1,25 +1,9 @@
 <template>
   <div class="app-container">
-    <el-row :gutter="0">
-      <el-col :span="12">
-        <el-breadcrumb
-          class="tab-navigation-breadcrumb"
-          separator-class="el-icon-arrow-right"
-          @click.native="onNavigationBreadcrumbClicked"
-        >
-          <transition-group name="breadcrumb">
-            <el-breadcrumb-item
-              v-for="(tab, index) in tabStack"
-              :key="tab.id"
-              :class="{ 'link-enabled': index < tabStack.length }"
-              :data-id="tab.id"
-              :data-index="index"
-            >
-              {{ tab.name }}
-            </el-breadcrumb-item>
-          </transition-group>
-        </el-breadcrumb>
-      </el-col>
+    <el-row
+      class="window-control-bar"
+      :gutter="0"
+    >
       <el-col :span="12">
         <action-toolbar
           ref="mainToolbar"
@@ -39,6 +23,36 @@
           @save="onRecordSave"
           @tab-navigate="onTabNavigated"
           @toggle-view="switchView"
+        />
+        <el-breadcrumb
+          class="tab-navigation-breadcrumb"
+          separator-class="el-icon-arrow-right"
+          @click.native="onNavigationBreadcrumbClicked"
+        >
+          <transition-group name="breadcrumb">
+            <el-breadcrumb-item
+              v-for="(tab, index) in tabStack"
+              :key="tab.id"
+              :class="{ 'link-enabled': index < tabStack.length }"
+              :data-id="tab.id"
+              :data-index="index"
+            >
+              {{ tab.name }}
+            </el-breadcrumb-item>
+          </transition-group>
+        </el-breadcrumb>
+      </el-col>
+      <el-col :span="12">
+        <el-pagination
+          ref="toolbarPagination"
+          layout="prev, jumper, total, next"
+          class="record-navigator"
+          :class="{'invisible': isEditing}"
+          :current-page.sync="currentRecordNo"
+          :page-size="1"
+          small
+          :total="totalRecords"
+          @current-change="onCurrentRecordChange"
         />
       </el-col>
     </el-row>
@@ -91,17 +105,6 @@
                 :toolbar-event-bus="mainToolbarEventBus"
                 @edit-mode-change="$refs.mainGrid.editRecord()"
                 @form-validated="$refs.mainGrid.beforeSave()"
-              />
-              <el-pagination
-                ref="toolbarPagination"
-                layout="prev, jumper, total, next"
-                class="record-navigator"
-                :class="{'invisible': isEditing}"
-                :current-page.sync="currentRecordNo"
-                :page-size="1"
-                small
-                :total="totalRecords"
-                @current-change="onCurrentRecordChange"
               />
             </pane>
             <pane
@@ -234,8 +237,11 @@
   bottom: -8px;
   width: 100%;
 }
+.el-pagination--small .el-pagination__editor.el-input .el-input__inner {
+  height: 20px;
+}
 .el-tabs--border-card > .el-tabs__content {
-  height: calc(100% - 26px);
+  height: calc(100% - 30px);
   padding: 0px;
 }
 .el-tabs__item {
@@ -248,9 +254,32 @@
   padding: 0px 10px 0px 10px;
   height: 30px;
 }
+.record-navigator {
+  opacity: 1;
+  transition: opacity .25s ease-in-out;
+  z-index: 5;
+
+  &.invisible {
+    opacity: 0;
+  }
+
+  .el-input__inner {
+    font-size: 13px;
+  }
+}
+.window-control-bar {
+  position: relative;
+
+  .record-navigator {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    padding: 1px;
+  }
+}
 .window-content {
   position: relative;
-  height: calc(100% - 40px);
+  height: calc(100% - 72px);
 
   &.detailed-view .splitpanes__pane.main-pane {
     overflow-y: auto;
@@ -290,9 +319,9 @@
     cursor: pointer;
   }
 }
-.action-toolbar {
+.action-toolbar,
+.tab-toolbar {
   padding: 4px;
-  text-align: right;
 }
 .fade-enter-active,
 .fade-leave-active {
@@ -301,15 +330,6 @@
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
-}
-.record-navigator {
-  opacity: 1;
-  transition: opacity .25s ease-in-out;
-  z-index: 5;
-
-  &.invisible {
-    opacity: 0;
-  }
 }
 .tab-container {
   position: absolute;
@@ -320,6 +340,18 @@
 }
 .splitpanes {
   background: none;
+
+  &.splitpanes--vertical > .splitpanes__splitter::before {
+    left: -10px;
+    right: -10px;
+    height: 100%;
+  }
+
+  &.splitpanes--horizontal > .splitpanes__splitter::before {
+    top: -10px;
+    bottom: -10px;
+    width: 100%;
+  }
 
   &__pane {
     background: none !important;
@@ -347,15 +379,5 @@
       opacity: 1;
     }
   }
-}
-.splitpanes--vertical > .splitpanes__splitter::before {
-  left: -10px;
-  right: -10px;
-  height: 100%;
-}
-.splitpanes--horizontal > .splitpanes__splitter::before {
-  top: -10px;
-  bottom: -10px;
-  width: 100%;
 }
 </style>

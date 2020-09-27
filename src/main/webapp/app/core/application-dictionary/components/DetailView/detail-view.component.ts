@@ -1,13 +1,15 @@
+import { IRegisterTabParameter } from '@/shared/config/store/window-store';
+import { IADField } from '@/shared/model/ad-field.model';
 import { nullifyField } from '@/utils/form';
 import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isStringField, isTableDirectLink } from '@/utils/validate';
 import { ElForm } from 'element-ui/types/form';
-import { kebabCase, debounce } from 'lodash';
+import { debounce, kebabCase } from 'lodash';
 import pluralize from 'pluralize';
 import Component from 'vue-class-component';
-import { Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
+import { Mixins, Vue, Watch } from 'vue-property-decorator';
+import { mapActions } from 'vuex';
+import CalloutMixin from '../../mixins/CalloutMixin';
 import ContextVariableAccessor from '../ContextVariableAccessor';
-import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
-import { IADField } from '@/shared/model/ad-field.model';
 
 const DetailViewProps = Vue.extend({
   props: {
@@ -42,14 +44,13 @@ const DetailViewProps = Vue.extend({
     isBooleanField: isBooleanField,
     isActivatorSwitch: isActiveStatusField,
     hasReferenceList: hasReferenceList,
-    isTableDirectLink: isTableDirectLink
+    isTableDirectLink: isTableDirectLink,
+    ...mapActions({
+      registerTabState: 'windowStore/registerTab'
+    })
   }
 })
-export default class DetailView extends Mixins(ContextVariableAccessor, DetailViewProps) {
-
-  @Inject('dynamicWindowService')
-  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
-  
+export default class DetailView extends Mixins(ContextVariableAccessor, CalloutMixin, DetailViewProps) {
   isLoading: boolean = false;
   model: any = {};
 
@@ -67,9 +68,11 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
   validationSchema: any = {};
   rows: any[] = [];
 
+  private registerTabState!: (options: IRegisterTabParameter) => Promise<void>;
+
   get observableTabProperties() {
-    const { adfields, validationSchema } = this.tab;
-    return { adfields, validationSchema };
+    const { name, adfields, validationSchema } = this.tab;
+    return { name, adfields, validationSchema };
   }
 
   get referenceListItems() {
@@ -79,11 +82,12 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
   }
 
   @Watch('observableTabProperties')
-  onObservableTabPropertiesChange({adfields, validationSchema}) {
+  onObservableTabPropertiesChange({name, adfields, validationSchema}) {
     if (! adfields) {
       return;
     }
     
+    this.tabName = name;
     this.validationSchema = validationSchema;
     this.referenceItemsMap.clear();
     this.formFields = adfields
@@ -95,7 +99,6 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
       });
 
     this.rows = this.buildLayout(this.formFields);
-    this.debouncedInitRelationships(this.record);
   }
   
   @Watch('record')
@@ -103,6 +106,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
     if (record) {
       this.model = record;
       this.updateReferenceQueries(this.formFields);
+      this.debouncedInitRelationships(record);
       this.exitEditMode();
     }
   }
@@ -138,16 +142,35 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
 
   // Start of lifecycle events.
   created() {
-    this.debouncedInitRelationships = debounce(this.initRelationships, 500);
+    this.debouncedInitRelationships = debounce(this.initRelationships, 300);
     this.onObservableTabPropertiesChange(this.observableTabProperties);
   }
 
-  onFormChanged() {
+  public onInputChanged(field: IADField, value: any) {
     if (! this.editing) {
       this.originalRecord = {...this.record};
       this.editing = true;
       this.$emit('edit-mode-change', this.editing);
     }
+
+    this.registerTabState({
+      path: this.$route.fullPath,
+      tabId: this.tabName,
+      data: this.model
+    })
+    .then(() => {
+      if (this.hasReferenceList(field) || this.isTableDirectLink(field)) {
+        this.updateReferenceQueries(this.formFields);
+        this.initRelationships(this.model);
+      }
+      this.executeCallout(field, (val, target, type) => {
+        if (type === 'RESET') {
+          this.$set(this.model, target, null);
+        } else if (type === 'PROCESS') {
+          this.$set(this.model, target, val);
+        }
+      })
+    });
   }
 
   public showLabel(field: any) {
@@ -166,16 +189,27 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
   private updateReferenceQueries(fields: any[]) {
     fields
       .filter(field => this.hasReferenceList(field) || this.isTableDirectLink(field))
-      .forEach(field => {
-        // Parse the validation rule which is used to filter the reference key records.
-        const column = field.adColumn;
-        const validationRule = field.adValidationRule || column.adValidationRule;
-
-        if (validationRule) {
-          const referenceFilter = this.getContext(validationRule?.query);
-          this.referenceFilterQueries.set(field.id, <string>referenceFilter);
-        }
+      .forEach(async field => {
+        await this.updateReferenceQuery(field);
       });
+  }
+
+  private async updateReferenceQuery(field: any) {
+    // Parse the validation rule which is used to filter the reference key records.
+    const column = field.adColumn;
+    const validationRule = field.adValidationRule || column.adValidationRule;
+
+    if (validationRule) {
+      let referenceFilter = <string>this.getContext(validationRule.query, this.tabName);
+      
+      if (referenceFilter?.includes('{select', 0)) {
+        referenceFilter = await this.parseValidationQuery(referenceFilter);
+      }
+
+      if (referenceFilter) {
+        this.referenceFilterQueries.set(field.id, referenceFilter);
+      }
+    }
   }
 
   public setTableDirectReference(field: any): void {
@@ -215,47 +249,53 @@ export default class DetailView extends Mixins(ContextVariableAccessor, DetailVi
     let updated = false;
     this.isLoading = true;
 
-    for (let field of this.formFields) {
-      const column = field.adColumn;
+    try {
+      for (let field of this.formFields) {
+        const column = field.adColumn;
 
-      if (field.adReferenceId || column.adReferenceId) {
-        const filterQuery = this.referenceFilterQueries.get(field.id);
+        if (field.adReferenceId || column.adReferenceId) {
+          const filterQuery = this.referenceFilterQueries.get(field.id);
 
-        // Get the item list of Reference Key[LIST].
-        if (this.hasReferenceList(field) && this.referenceItemsMap.get(column.name) === void 0) {
-          const referenceId = field.adReferenceId || field.adColumn.adReferenceId;
-          const res = await this.dynamicWindowService('/api/ad-reference-lists').retrieve({
-            criteriaQuery: [
-              `adReferenceId.equals=${referenceId}`,
-              filterQuery
-            ]
-          });
-          this.referenceItemsMap.set(column.name, res.data);
-          updated = true;
-        }
-
-        // Get the item list of Reference Key[DATATYPE|table|direct].
-        else if (this.isTableDirectLink(field)) {
-          const resourceName = pluralize.plural(kebabCase(column.importedTable));
-          const api = `/api/${resourceName}`;
-          const linkedFieldValue = row[column.name];
-          const criteriaQuery: string[] = linkedFieldValue ? [`id.equals=${linkedFieldValue}`] : [];
-
-          // Append additional query from the cached validation rule query, if any.
-          if (filterQuery) {
-            criteriaQuery.push(filterQuery);
+          // Get the item list of Reference Key[LIST].
+          if (this.hasReferenceList(field) && this.referenceItemsMap.get(column.name) === void 0) {
+            const referenceId = field.adReferenceId || field.adColumn.adReferenceId;
+            const res = await this.dynamicWindowService('/api/ad-reference-lists').retrieve({
+              criteriaQuery: [
+                `adReferenceId.equals=${referenceId}`,
+                filterQuery
+              ]
+            });
+            this.referenceItemsMap.set(column.name, res.data);
+            updated = true;
           }
 
-          const res = await this.dynamicWindowService(api).retrieve({ criteriaQuery });
-          this.referenceItemsMap.set(column.name, res.data);
-          updated = true;
+          // Get the item list of Reference Key[DATATYPE|table|direct].
+          else if (this.isTableDirectLink(field)) {
+            const resourceName = pluralize.plural(kebabCase(column.importedTable));
+            const api = `/api/${resourceName}`;
+            const linkedFieldValue = row[column.name];
+            const criteriaQuery: string[] = linkedFieldValue ? [`id.equals=${linkedFieldValue}`] : [];
+
+            // Append additional query from the cached validation rule query, if any.
+            if (filterQuery) {
+              criteriaQuery.push(filterQuery);
+            }
+
+            const res = await this.dynamicWindowService(api).retrieve({ criteriaQuery });
+            this.referenceItemsMap.set(column.name, res.data);
+            updated = true;
+          }
         }
       }
-    }
 
-    this.isLoading = false;
-    if (updated)
-      this.referenceItemsUpdateTimestamp = Date.now();
+      if (updated) {
+        this.referenceItemsUpdateTimestamp = Date.now();
+      }
+    } catch (err) {
+      console.log('Failed initializing field relationships.', err);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   public beforeSave() {

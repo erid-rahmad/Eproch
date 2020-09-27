@@ -61,13 +61,11 @@ public class FieldGeneratorProcessTrigger implements ProcessTrigger {
 
     Set<ADColumn> columns = table.getADColumns();
     List<ADField> fields = Stream.ofAll(columns)
-      .filter(column -> 
-        ! Stream.ofAll(tab.getADFields())
-          .exists(field -> field.getAdColumn().equals(column))
-      )
+      // Exclude system fields and any existed fields.
+      .filter(column -> !isSystemFields(column.getSqlName())
+          && !Stream.ofAll(tab.getADFields())
+            .exists(field -> field.getAdColumn().equals(column)))
       .map(column -> {
-        boolean systemFields = isSystemFields(column.getSqlName());
-
         log.debug("Generating field from column {}", column.getName());
         return new ADField()
           .active(true)
@@ -78,8 +76,8 @@ public class FieldGeneratorProcessTrigger implements ProcessTrigger {
           .columnNo(1)
           .columnSpan(8)
           .showLabel( ! column.getType().equals(ADColumnType.BOOLEAN))
-          .showInDetail( ! systemFields)
-          .showInGrid( ! systemFields)
+          .showInDetail(true)
+          .showInGrid(true)
           .writable(true);
       }).toJavaList();
 

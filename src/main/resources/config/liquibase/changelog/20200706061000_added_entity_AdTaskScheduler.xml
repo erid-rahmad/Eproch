@@ -88,7 +88,6 @@
             <column name="periodic_count" type="numeric"/>
             <column name="periodic_unit" type="string"/>
             <column name="ad_organization_id" type="numeric"/>
-            <column name="ad_task_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
@@ -116,4 +115,14 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20200925143199" author="Ananta Aryadewa">
+        <addColumn tableName="ad_task_scheduler">
+            <column name="ad_trigger_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <addNotNullConstraint tableName="ad_task_scheduler" columnName="ad_organization_id" />
+    </changeSet>
+
 </databaseChangeLog>

@@ -2,12 +2,12 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
-import com.bhp.opusb.domain.enumeration.AdSchedulerTrigger;
-
 import io.github.jhipster.service.Criteria;
+import com.bhp.opusb.domain.enumeration.AdSchedulerTrigger;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -27,8 +27,6 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
      * Class for filtering AdSchedulerTrigger
      */
     public static class AdSchedulerTriggerFilter extends Filter<AdSchedulerTrigger> {
-
-        private static final long serialVersionUID = 1L;
 
         public AdSchedulerTriggerFilter() {
         }
@@ -70,6 +68,8 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
 
     private LongFilter adTaskId;
 
+    private LongFilter adTriggerId;
+
     private LongFilter groupId;
 
     public AdTaskSchedulerCriteria() {
@@ -88,6 +88,7 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
         this.periodicUnit = other.periodicUnit == null ? null : other.periodicUnit.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adTaskId = other.adTaskId == null ? null : other.adTaskId.copy();
+        this.adTriggerId = other.adTriggerId == null ? null : other.adTriggerId.copy();
         this.groupId = other.groupId == null ? null : other.groupId.copy();
     }
 
@@ -192,6 +193,14 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
         this.adTaskId = adTaskId;
     }
 
+    public LongFilter getAdTriggerId() {
+        return adTriggerId;
+    }
+
+    public void setAdTriggerId(LongFilter adTriggerId) {
+        this.adTriggerId = adTriggerId;
+    }
+
     public LongFilter getGroupId() {
         return groupId;
     }
@@ -223,6 +232,7 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
             Objects.equals(periodicUnit, that.periodicUnit) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adTaskId, that.adTaskId) &&
+            Objects.equals(adTriggerId, that.adTriggerId) &&
             Objects.equals(groupId, that.groupId);
     }
 
@@ -241,6 +251,7 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
         periodicUnit,
         adOrganizationId,
         adTaskId,
+        adTriggerId,
         groupId
         );
     }
@@ -260,6 +271,7 @@ public class AdTaskSchedulerCriteria implements Serializable, Criteria {
                 (periodicUnit != null ? "periodicUnit=" + periodicUnit + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adTaskId != null ? "adTaskId=" + adTaskId + ", " : "") +
+                (adTriggerId != null ? "adTriggerId=" + adTriggerId + ", " : "") +
                 (groupId != null ? "groupId=" + groupId + ", " : "") +
             "}";
     }
