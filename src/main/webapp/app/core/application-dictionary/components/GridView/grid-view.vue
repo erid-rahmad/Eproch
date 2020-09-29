@@ -1,7 +1,7 @@
 <template>
   <div ref="tableWrapper" class="grid-view">
     <el-table
-      v-loading="isFetching"
+      v-loading="processing"
       ref="grid"
       :data="gridData"
       :height="tableHeight"
@@ -19,9 +19,9 @@
     >
       <el-table-column
         v-show="!editing"
+        align="center"
         fixed
         type="selection"
-        align="center"
         width="48"
       >
       </el-table-column>
@@ -29,9 +29,9 @@
         fixed
         width="48"
       >
-        <template slot-scope="scope">
+        <template slot-scope="{ row }">
           <el-link
-            @click="activateInlineEditing(scope.row)"
+            @click="activateInlineEditing(row)"
             type="primary"
             size="mini"
             icon="el-icon-edit"
@@ -44,32 +44,37 @@
         v-for="field in gridFields"
         :key="field.id"
         :fixed="isFixed(field)"
-        :prop="field.adColumn.name"
         :label="field.name"
+        :prop="field.adColumn.name"
         :width="getFieldWidth(field)"
         min-width="128"
         show-overflow-tooltip
         :sortable="editing ? false: 'custom'"
       >
-        <template slot-scope="scope">
+        <template slot-scope="{ row, column }">
           <el-switch
-            v-if="isActiveStatusField(field)"
-            :ref="scope.column.property"
-            v-model="scope.row[scope.column.property]"
-            :class="scope.column.property"
-            :disabled="!scope.row.editing || isReadonly(scope.row, field)"
+            v-if="isActivatorSwitch(field)"
+            :ref="column.property"
+            v-model="row[column.property]"
+            :class="column.property"
+            :disabled="!row.editing || isReadonly(row, field)"
             @change="value => onInputChanged(field, value)"
           />
           <el-checkbox
             v-else-if="isBooleanField(field)"
-            :ref="scope.column.property"
-            v-model="scope.row[scope.column.property]"
-            :class="scope.column.property"
-            :disabled="!scope.row.editing || isReadonly(scope.row, field)"
+            v-show="displayed(row, field)"
+            :ref="column.property"
+            v-model="row[column.property]"
+            :class="column.property"
+            :disabled="!row.editing || isReadonly(row, field)"
             @change="value => onInputChanged(field, value)"
           />
-          <span v-else-if="!scope.row.editing">
-            {{ getFieldValue(scope.row, field) }}
+          <span
+            v-else-if="!row.editing"
+            v-show="displayed(row, field)"
+            :class="column.property"
+          >
+            {{ getFieldValue(row, field) }}
           </span>
           <el-tooltip
             v-else
@@ -78,16 +83,18 @@
           >
             <el-select
               v-if="isTableDirectLink(field)"
-              :ref="scope.column.property"
-              v-model="scope.row[scope.column.property]"
-              :class="scope.column.property"
+              v-show="displayed(row, field)"
+              :ref="column.property"
+              v-model="row[column.property]"
+              :class="column.property"
               :remote="true"
               :remote-method="fetchTableDirectData"
               size="mini"
               clearable
               filterable
-              :disabled="isReadonly(scope.row, field)"
+              :disabled="isReadonly(row, field)"
               @change="value => onInputChanged(field, value)"
+              @clear="onInputChanged(field)"
               @focus="setTableDirectReference(field)"
             >
               <el-option
@@ -99,14 +106,16 @@
             </el-select>
             <el-select
               v-else-if="hasReferenceList(field)"
-              :ref="scope.column.property"
-              v-model="scope.row[scope.column.property]"
-              :class="scope.column.property"
+              v-show="displayed(row, field)"
+              :ref="column.property"
+              v-model="row[column.property]"
+              :class="column.property"
               size="mini"
               clearable
               filterable
-              :disabled="isReadonly(scope.row, field)"
+              :disabled="isReadonly(row, field)"
               @change="value => onInputChanged(field, value)"
+              @clear="onInputChanged(field)"
             >
               <el-option
                 v-for="item in referenceListItems(field)"
@@ -117,24 +126,26 @@
             </el-select>
             <el-input
               v-else-if="isStringField(field)"
-              :ref="scope.column.property"
-              v-model="scope.row[scope.column.property]"
-              :class="scope.column.property"
+              v-show="displayed(row, field)"
+              :ref="column.property"
+              v-model="row[column.property]"
+              :class="column.property"
               size="mini"
               clearable
-              :disabled="isReadonly(scope.row, field)"
+              :disabled="isReadonly(row, field)"
               @change="value => onInputChanged(field, value)"
             />
             <el-input-number
               v-else-if="isNumericField(field)"
-              :ref="scope.column.property"
-              v-model="scope.row[scope.column.property]"
-              :class="scope.column.property"
+              v-show="displayed(row, field)"
+              :ref="column.property"
+              v-model="row[column.property]"
+              :class="column.property"
               controls-position="right"
               size="mini"
               :min="getMinValue(field)"
               :max="getMaxValue(field)"
-              :disabled="isReadonly(scope.row, field)"
+              :disabled="isReadonly(row, field)"
               @change="value => onInputChanged(field, value)"
             />
           </el-tooltip>

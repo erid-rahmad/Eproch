@@ -1,9 +1,9 @@
-import { IRegisterTabParameter } from '@/shared/config/store/window-store';
+import { IRegisterTabParameter, WindowStoreModule as windowStore } from '@/shared/config/store/window-store';
 import { IADField } from '@/shared/model/ad-field.model';
 import { nullifyField } from '@/utils/form';
 import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isStringField, isTableDirectLink } from '@/utils/validate';
 import { ElForm } from 'element-ui/types/form';
-import { debounce, kebabCase } from 'lodash';
+import { debounce, kebabCase, cloneDeep } from 'lodash';
 import pluralize from 'pluralize';
 import Component from 'vue-class-component';
 import { Mixins, Vue, Watch } from 'vue-property-decorator';
@@ -55,7 +55,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   model: any = {};
 
   // The displayed fields.
-  private formFields: any[] = [];
+  private formFields: IADField[] = [];
 
   private referenceItemsUpdateTimestamp: number = Date.now();
   private referenceItemsMap = new Map();
@@ -65,10 +65,17 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   private editing = false;
   private debouncedInitRelationships;
 
-  validationSchema: any = {};
+  private validationSchema: any = {};
+  private dynamicValidationSchema: any = {};
   rows: any[] = [];
 
   private registerTabState!: (options: IRegisterTabParameter) => Promise<void>;
+
+  // TODO Consider the performance.
+  get displayed() {
+    return (field: IADField) =>
+      this.evaluateDisplayLogic(field, this.tabName);
+  }
 
   get observableTabProperties() {
     const { name, adfields, validationSchema } = this.tab;
@@ -76,19 +83,20 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   }
 
   get referenceListItems() {
-    return (field: any): any[] => {
+    return (field: IADField): any[] => {
       return this.referenceItemsUpdateTimestamp && this.referenceItemsMap.get(field.adColumn.name) || [];
     }
   }
 
   @Watch('observableTabProperties')
-  onObservableTabPropertiesChange({name, adfields, validationSchema}) {
+  async onObservableTabPropertiesChange({name, adfields, validationSchema}) {
     if (! adfields) {
       return;
     }
     
     this.tabName = name;
     this.validationSchema = validationSchema;
+    this.dynamicValidationSchema = cloneDeep(this.validationSchema);
     this.referenceItemsMap.clear();
     this.formFields = adfields
       .filter((field: IADField) => field.showInDetail)
@@ -98,6 +106,15 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
         return prevSequence - nextSequence;
       });
 
+    
+    const logicallyMandatoryFields = this.formFields.filter(field => !!field.adColumn.mandatoryLogic);
+    await windowStore.addMandatoryFields({
+      path: this.$route.fullPath,
+      tabId: this.tabName,
+      fields: Object.assign({}, ...logicallyMandatoryFields.map(field => ({[field.adColumn.name]: field})))
+    });
+
+    this.reloadValidationSchema();
     this.rows = this.buildLayout(this.formFields);
   }
   
@@ -106,12 +123,13 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     if (record) {
       this.model = record;
       this.updateReferenceQueries(this.formFields);
+      this.reloadValidationSchema();
       this.debouncedInitRelationships(record);
       this.exitEditMode();
     }
   }
 
-  private buildLayout(fields: any[]) {
+  private buildLayout(fields: IADField[]) {
     const rows = [];
     let columns: any[];
     let previousColumnNo = 1;
@@ -148,7 +166,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
 
   public onInputChanged(field: IADField, value: any) {
     if (! this.editing) {
-      this.originalRecord = {...this.record};
+      this.originalRecord = cloneDeep(this.model);
       this.editing = true;
       this.$emit('edit-mode-change', this.editing);
     }
@@ -163,6 +181,8 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
         this.updateReferenceQueries(this.formFields);
         this.initRelationships(this.model);
       }
+
+      this.reloadValidationSchema();
       this.executeCallout(field, (val, target, type) => {
         if (type === 'RESET') {
           this.$set(this.model, target, null);
@@ -173,7 +193,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     });
   }
 
-  public showLabel(field: any) {
+  public showLabel(field: IADField) {
     return (!isBooleanField(field) && field.showLabel) ? field.name : '';
   }
 
@@ -181,12 +201,25 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     this.editing = false;
   }
 
+  private reloadValidationSchema() {
+    const logicallyMandatoryFields = windowStore.logicallyMandatoryFields(this.$route.fullPath, this.tabName);
+    for (let name in this.dynamicValidationSchema) {
+      const field = logicallyMandatoryFields[name];
+
+      if (field !== void 0 && !field.adColumn.mandatory) {
+        let vSchema = this.dynamicValidationSchema[name];
+        const shouldMandatory = this.evaluateMandatoryLogic(field, this.tabName);
+        vSchema.required = shouldMandatory;
+      }
+    }
+  }
+
   /**
    * Update the validation rule for a specific field. Triggered when the window
    * context is just updated.
    * @param field 
    */
-  private updateReferenceQueries(fields: any[]) {
+  private updateReferenceQueries(fields: IADField[]) {
     fields
       .filter(field => this.hasReferenceList(field) || this.isTableDirectLink(field))
       .forEach(async field => {
@@ -194,7 +227,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
       });
   }
 
-  private async updateReferenceQuery(field: any) {
+  private async updateReferenceQuery(field: IADField) {
     // Parse the validation rule which is used to filter the reference key records.
     const column = field.adColumn;
     const validationRule = field.adValidationRule || column.adValidationRule;
@@ -212,7 +245,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     }
   }
 
-  public setTableDirectReference(field: any): void {
+  public setTableDirectReference(field: IADField): void {
     this.activeTableDirectField = field;
   }
 
@@ -306,7 +339,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
       lastModifiedBy,
       lastModifiedDate,
       ...record
-    } = this.record;
+    } = this.model;
 
     this.formFields.forEach(field => {
       nullifyField(record, field);
@@ -318,38 +351,39 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     });
   }
 
-  public getMinLength(field: any) {
+  public getMinLength(field: IADField) {
     return field.adColumn.minLength || -Infinity;
   }
 
-  public getMaxLength(field: any) {
+  public getMaxLength(field: IADField) {
     return field.adColumn.maxLength || Infinity;
   }
 
-  public getMinValue(field: any) {
+  public getMinValue(field: IADField) {
     return field.adColumn.minValue || -Infinity;
   }
 
-  public getMaxValue(field: any) {
+  public getMaxValue(field: IADField) {
     return field.adColumn.maxValue || Infinity;
   }
 
-  public getReferenceList(field: any) {
-    return field?.adReference?.adreferenceLists || field.adColumn.adReference.adreferenceLists;
+  public getReferenceList(field: IADField) {
+    return field?.adReference?.adreferenceLists || field.adColumn.adReference?.adreferenceLists;
   }
 
-  public isReadonly(field: any): boolean {
-    const newRecord: boolean = !this.record?.id;
-    return !this.tab.writable || !field.writable || (!newRecord && !field.adColumn.updatable);
+  public isReadonly(field: IADField): boolean {
+    const newRecord: boolean = !this.model?.id;
+    const conditionallyReadonly = this.evaluateReadonlyLogic(field, this.tabName);
+    return !this.tab.writable || !field.writable || conditionallyReadonly || (!newRecord && !field.adColumn.updatable);
   }
 
-  public isStringField!: (field: any) => boolean;
-  public isNumericField!: (field: any) => boolean;
-  public isDateField!: (field: any) => boolean;
-  public isDateTimeField!: (field: any) => boolean;
-  public isBooleanField!: (field: any) => boolean;
-  public isActivatorSwitch!: (field: any) => boolean;
-  public hasReferenceList!: (field: any) => boolean;
-  public isTableDirectLink!: (field: any) => boolean;
+  public hasReferenceList!: (field: IADField) => boolean;
+  public isTableDirectLink!: (field: IADField) => boolean;
+  public isStringField!: (field: IADField) => boolean;
+  public isNumericField!: (field: IADField) => boolean;
+  public isDateField!: (field: IADField) => boolean;
+  public isDateTimeField!: (field: IADField) => boolean;
+  public isBooleanField!: (field: IADField) => boolean;
+  public isActivatorSwitch!: (field: IADField) => boolean;
 
 }

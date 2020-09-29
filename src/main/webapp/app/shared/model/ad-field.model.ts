@@ -1,4 +1,9 @@
+import { IADColumn } from './ad-column.model';
+import { IADReference } from './ad-reference.model';
+import { IAdValidationRule } from './ad-validation-rule.model';
+
 export interface IADField {
+  adColumn: IADColumn;
   id?: number;
   name?: string;
   description?: string;
@@ -23,14 +28,17 @@ export interface IADField {
   formatPattern?: string;
   active?: boolean;
   adOrganizationId?: number;
+  adReference?: IADReference;
   adReferenceId?: number;
   adColumnId?: number;
+  adValidationRule?: IAdValidationRule;
   adValidationRuleId?: number;
   adTabId?: number;
 }
 
 export class ADField implements IADField {
   constructor(
+    public adColumn: IADColumn,
     public id?: number,
     public name?: string,
     public description?: string,
@@ -55,8 +63,10 @@ export class ADField implements IADField {
     public formatPattern?: string,
     public active?: boolean,
     public adOrganizationId?: number,
+    public adReference?: IADReference,
     public adReferenceId?: number,
     public adColumnId?: number,
+    public adValidationRule?: IAdValidationRule,
     public adValidationRuleId?: number,
     public adTabId?: number
   ) {

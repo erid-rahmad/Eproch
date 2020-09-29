@@ -1,19 +1,18 @@
-import { WindowStoreModule as windowStore, IRegisterTabParameter } from '@/shared/config/store/window-store';
-import { ADColumnType } from '@/shared/model/ad-column.model';
+import { IRegisterTabParameter, WindowStoreModule as windowStore } from '@/shared/config/store/window-store';
 import { IADField } from '@/shared/model/ad-field.model';
-import { ADReferenceType } from '@/shared/model/ad-reference.model';
 import { formatJson } from '@/utils';
 import { exportJson2Excel } from '@/utils/excel';
 import { nullifyField } from '@/utils/form';
+import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isStringField, isTableDirectLink } from '@/utils/validate';
 import schema from 'async-validator';
 import { ElPagination } from 'element-ui/types/pagination';
 import { ElTable } from 'element-ui/types/table';
-import { debounce, isEqual, kebabCase } from 'lodash';
+import { debounce, isEqual, kebabCase, cloneDeep } from 'lodash';
 import pluralize from "pluralize";
 import { Component, Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
-import ContextVariableAccessor from "../ContextVariableAccessor";
 import CalloutMixin from '../../mixins/CalloutMixin';
+import ContextVariableAccessor from "../ContextVariableAccessor";
 
 const GridViewProps = Vue.extend({
   props: {
@@ -52,6 +51,14 @@ const GridViewProps = Vue.extend({
 
 @Component({
   methods: {
+    isStringField: isStringField,
+    isNumericField: isNumericField,
+    isDateField: isDateField,
+    isDateTimeField: isDateTimeField,
+    isBooleanField: isBooleanField,
+    isActivatorSwitch: isActiveStatusField,
+    hasReferenceList: hasReferenceList,
+    isTableDirectLink: isTableDirectLink,
     ...mapActions({
       registerTabState: 'windowStore/registerTab'
     })
@@ -62,6 +69,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     defaultSort: {},
     emptyText: 'No Records Found'
   };
+
   selectedRowNo = 1;
   itemsPerPage = 10;
   queryCount: number = null;
@@ -70,21 +78,20 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   propOrder = 'id';
   reverse = false;
   totalItems = 0;
-  isFetching = false;
+  processing = false;
   gridData: Array<any> = [];
 
   // The displayed fields.
-  gridFields: Array<any> = [];
-
-  isSaving: boolean = false;
+  gridFields: IADField[] = [];
 
   // Multiple row selection.
   selectedRows: any[] = [];
   filterVal: any = [];
 
-  //Dialog
+  // Dialog
   showDeleteDialog: boolean = false;
   showExportDialog: boolean = false;
+
   checkCurrentRow: boolean = false;
   buttonExport: boolean = false;
 
@@ -104,15 +111,22 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   ]
 
   // Inline editing mode needs these data.
-  originalRecord: any = {};
-  currentRecord: any = {};
+  private originalRecord: any = {};
+  private currentRecord: any = {};
+  private editing: boolean = false;
+  private newRecord: boolean = false;
+  
   private currentRowIndex = 0;
   private validationSchema: any = {};
-  private editing = false;
+  private dynamicValidationSchema: any = {};
+
+  // Update the table referenced dropdown list.
   private tableDirectTimestamp: number = Date.now();
-  private newRecord: boolean = false;
+
   private referenceItemsMap = new Map();
   private activeTableDirectField: any = null;
+
+  // Store the validation rule's queries.
   private referenceFilterQueries: Map<number, string> = new Map();
 
   // Error messages.
@@ -128,7 +142,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   private tableHeight = 100;
 
   private gridResizeObserver;
-  private debouncedHeightResizer;
+  private debouncedHeightResizer: (height: number) => void;
 
   private registerTabState!: (options: IRegisterTabParameter) => Promise<void>;
 
@@ -153,6 +167,12 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     }
   }
 
+  // TODO Consider the performance.
+  get displayed() {
+    return (row: any, field: IADField) =>
+      this.evaluateDisplayLogic(field, row.editing ? this.tabName : row);
+  }
+
   get observableTabProperties() {
     const { name, adfields, targetEndpoint, filterQuery, parentId, promoted, validationSchema } = this.tab;
     return { name, adfields, targetEndpoint, filterQuery, parentId, promoted, validationSchema };
@@ -163,7 +183,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
    * @param fields The updated AdField list.
    */
   @Watch('fields')
-  onFieldsChange(fields: any[]) {
+  async onFieldsChange(fields: any[]) {
     if (! fields) {
       return;
     }
@@ -176,6 +196,15 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         const nextSequence = nextItem.detailSequence || 0;
         return prevSequence - nextSequence;
       });
+
+    const logicallyMandatoryFields = this.gridFields.filter(field => !!field.adColumn.mandatoryLogic);
+    await windowStore.addMandatoryFields({
+      path: this.$route.fullPath,
+      tabId: this.tabName,
+      fields: Object.assign({}, ...logicallyMandatoryFields.map(field => ({[field.adColumn.name]: field})))
+    });
+
+    this.reloadValidationSchema();
   }
 
   @Watch('observableTabProperties')
@@ -191,6 +220,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     this.filterQuery = tab.filterQuery;
     this.parentId = tab.parentId || 0;
     this.validationSchema = tab.validationSchema;
+    this.dynamicValidationSchema = cloneDeep(this.validationSchema);
 
     if (!this.lazyLoad || this.parentId) {
       this.retrieveAllRecords();
@@ -205,7 +235,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     }
   }
 
-  // Start of lifecycle events.
+  // Start of the component's lifecycle events.
   created() {
     this.onFieldsChange(this.fields);
     this.toolbarEventBus?.$on('export-record', this.exportRecord);
@@ -219,18 +249,17 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         this.debouncedHeightResizer(entry.contentRect.height);
       });
     });
-    this.gridResizeObserver.observe(this.$refs.tableWrapper);
+    this.gridResizeObserver.observe(<Element> this.$refs.tableWrapper);
   }
 
   beforeDestroy() {
-    this.gridResizeObserver.unobserve(this.$refs.tableWrapper);
+    this.gridResizeObserver.unobserve(<Element> this.$refs.tableWrapper);
     this.toolbarEventBus?.$off('export-record', this.exportRecord);
   }
   // End of lifecycle events.
 
-  private resizeTableHeight(height) {
+  private resizeTableHeight(height: number) {
     const paginationHeight = (<ElPagination>this.$refs.pagination).$el.clientHeight;
-    console.log('Resizing height to ', height - paginationHeight);
     this.tableHeight = height - paginationHeight;
   }
 
@@ -284,6 +313,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     this.updateReferenceQueries(this.gridFields);
     this.currentRecord = row;
     this.selectedRowNo = this.gridData.indexOf(row) + 1;
+
+    // Update the record-navigator.
     if (this.mainTab) {
       const recordNo = this.getRecordNo(this.page, this.itemsPerPage, this.selectedRowNo);
       this.$emit('current-row-change', {
@@ -293,6 +324,15 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     }
   }
 
+  /**
+   * Invoked once the field value changed. It should checks the following steps:
+   * 1. Update the respective tab state.
+   * 2. Update the validation rules for any fields that depends on this field.
+   * 3. Check for any tabs and fields that are conditionally displayed and read-only.
+   * 3. Execute callouts.
+   * @param field The updated field.
+   * @param value The new value.
+   */
   public onInputChanged(field: IADField, value: any) {
     this.registerTabState({
       path: this.$route.fullPath,
@@ -304,6 +344,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         this.updateReferenceQueries(this.gridFields);
         this.initRelationships(this.currentRecord);
       }
+
+      this.reloadValidationSchema();
       this.executeCallout(field, (val, target, type) => {
         if (type === 'RESET') {
           this.$set(this.currentRecord, target, null);
@@ -425,6 +467,19 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     this.showExportDialog = false;
   }
 
+  private reloadValidationSchema() {
+    const logicallyMandatoryFields = windowStore.logicallyMandatoryFields(this.$route.fullPath, this.tabName);
+    for (let name in this.dynamicValidationSchema) {
+      const field = logicallyMandatoryFields[name];
+
+      if (field !== void 0 && !field.adColumn.mandatory) {
+        let vSchema = this.dynamicValidationSchema[name];
+        const shouldMandatory = this.evaluateMandatoryLogic(field, this.tabName);
+        vSchema.required = shouldMandatory;
+      }
+    }
+  }
+
   /**
    * Update the validation rule for a referenced field. Triggered once the records
    * has been loaded.
@@ -489,6 +544,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       this.editing = false;
       this.$set(this.currentRecord, 'editing', this.editing);
     }
+    this.dynamicValidationSchema = cloneDeep(this.validationSchema);
   }
 
   public editRecord() {
@@ -506,7 +562,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     if (this.editing && row === this.currentRecord)
       return;
 
-    this.originalRecord = {...this.currentRecord};
+    this.originalRecord = cloneDeep(this.currentRecord);
     await this.initRelationships(row);
     row.editing = !row.editing;
     this.originalRecord.editing = row.editing;
@@ -559,7 +615,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       record[this.tab.foreignColumnName] = this.parentId;
     }
     await this.initRelationships(record);
-    this.originalRecord = {...record};
+    this.originalRecord = cloneDeep(record);
     this.gridData.splice(0, 0, record);
     this.$emit('inline-editing', true);
     this.$nextTick(() => {
@@ -571,7 +627,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
 
   public copyRow() {
     const currentIndex = this.gridData.indexOf(this.currentRecord);
-    let record = {...this.currentRecord};
+    let record = cloneDeep(this.currentRecord);
     record.id = 0;
     this.gridData.splice(currentIndex + 1, 0, record);
     this.$nextTick(() => {
@@ -626,7 +682,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       lastModifiedDate,
       ...record
     } = this.currentRecord;
-    const validator = new schema(this.validationSchema);
+    const validator = new schema(this.dynamicValidationSchema);
 
     this.gridFields.forEach(field => {
       nullifyField(record, field);
@@ -646,7 +702,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
             (<any> this.$refs[field][0])?.$el.classList.remove('is-error');
         }
         
-        this.isSaving = true;
         this.saveRecord(record, callback);
       }
     });
@@ -655,6 +710,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   private saveRecord(record: any, callback?: (record?: any) => void) {
     const update: boolean = record.id > 0;
 
+    this.processing = true;
     if (!update) {
       delete record.id;
     }
@@ -677,7 +733,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         duration: 3000
       });
     })
-    .catch((err) => {
+    .catch(err => {
       console.error('Error saving the record! %O', err);
       const message = `Error saving the record`;
       this.$notify({
@@ -688,14 +744,15 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       });
     })
     .finally(() => {
+      this.dynamicValidationSchema = cloneDeep(this.validationSchema);
       this.newRecord = false;
       this.editing = false;
-      this.isSaving = false;
+      this.processing = false;
     });
   }
 
   public retrieveAllRecords(): void {
-    this.isFetching = true;
+    this.processing = true;
     const paginationQuery = {
       page: this.page - 1,
       size: this.itemsPerPage,
@@ -732,7 +789,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         });
       })
       .finally(() => {
-        this.isFetching = false;
+        this.processing = false;
       });
   }
 
@@ -840,84 +897,63 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     }
   }
 
-  public isFixed(field: any): boolean | string {
-    //if (field.adColumn.name === 'active') {
-      //return 'right';
-    //}
+  /**
+   * Whether the field is fix-positioned on the table.
+   * If true, the field will be positioned on the left side.
+   * Return 'left' or 'right' to explicitly positioning the field on the
+   * respective side. Default to false.
+   * @param field The field.
+   */
+  public isFixed(field: IADField): boolean | string {
+    // TODO Not implemented yet.
     return false;
   }
 
-  public isReadonly(row: any, field: any): boolean {
+  public isReadonly(row: any, field: IADField): boolean {
     const newRecord: boolean = !row.id;
-    return !this.tab.writable || !field.writable || (!newRecord && !field.adColumn.updatable);
+    const conditionallyReadonly = this.evaluateReadonlyLogic(field, this.tabName);
+    return !this.tab.writable || !field.writable || conditionallyReadonly || (!newRecord && !field.adColumn.updatable);
   }
 
-  public getFieldWidth(field: any) {
-    if (this.isActiveStatusField(field)) {
+  public getFieldWidth(field: IADField) {
+    if (this.isActivatorSwitch(field)) {
       return '96';
     }
 
     return '256';
   }
 
-  public getMinValue(field: any) {
+  public getMinValue(field: IADField) {
     return field.adColumn.minValue || -Infinity;
   }
 
-  public getMaxValue(field: any) {
+  public getMaxValue(field: IADField) {
     return field.adColumn.maxValue || Infinity;
   }
 
-  public getReferenceList(field: any) {
+  public getReferenceList(field: IADField) {
     return field?.adReference?.adreferenceLists || field.adColumn.adReference?.adreferenceLists;
   }
 
-  public hasReferenceList(field: any) {
-    return field.adReference?.referenceType === ADReferenceType.LIST
-      || field.adColumn.adReference?.referenceType === ADReferenceType.LIST;
-  }
+  public isStringField!: (field: IADField) => boolean;
+  public isNumericField!: (field: IADField) => boolean;
+  public isDateField!: (field: IADField) => boolean;
+  public isDateTimeField!: (field: IADField) => boolean;
+  public isBooleanField!: (field: IADField) => boolean;
+  public isActivatorSwitch!: (field: IADField) => boolean;
+  public hasReferenceList!: (field: IADField) => boolean;
+  public isTableDirectLink!: (field: IADField) => boolean;
 
-  public isTableDirectLink(field: any): boolean {
-    const column = field.adColumn;
-    const reference = field.adReference || column.adReference;
-    return column.foreignKey && (reference?.value === 'direct' || reference?.value === 'table');
-  }
-
-  public isStringField(field: any) {
-    return field.adColumn.type === ADColumnType.STRING;
-  }
-
-  public isNumericField(field: any) {
-    return (
-      field.adColumn.type === ADColumnType.BIG_DECIMAL ||
-      field.adColumn.type === ADColumnType.DOUBLE ||
-      field.adColumn.type === ADColumnType.FLOAT ||
-      field.adColumn.type === ADColumnType.INTEGER ||
-      field.adColumn.type === ADColumnType.LONG
-    );
-  }
-
-  public isDateField(field: any) {
-    return field.adColumn.type === ADColumnType.LOCAL_DATE || field.adColumn.type === ADColumnType.ZONED_DATE_TIME;
-  }
-
-  public isDateTimeField(field: any) {
-    return field.adColumn.type === ADColumnType.INSTANT;
-  }
-
-  public isBooleanField(field: any) {
-    return field.adColumn.type === ADColumnType.BOOLEAN;
-  }
-
-  public getFieldValue(row: any, field: any) {
+  /**
+   * Print the foreign-keyed field value.
+   * @param row The record of the current row iteration.
+   * @param field The inspected field of the current field iteration.
+   */
+  public getFieldValue(row: any, field: IADField) {
     if (this.isTableDirectLink(field)) {
       const propName = field.adColumn.name.replace(/Id$/, 'Name');
       return row[propName] || row[field.adColumn.name];
     }
     return row[field.adColumn.name];
-  }
-
-  public isActiveStatusField(field: any) {
-    return field.adColumn.name === 'active';
   }
 }
