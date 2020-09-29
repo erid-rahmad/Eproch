@@ -3,7 +3,7 @@
     <el-form
       ref="mainForm"
       :model="model"
-      :rules="validationSchema"
+      :rules="dynamicValidationSchema"
       label-width="200px"
       label-position="left"
       size="mini"
@@ -19,6 +19,7 @@
           :span="col.span"
         >
           <el-form-item
+            v-show="displayed(col.field)"
             :class="col.name"
             :label="showLabel(col.field)"
             :prop="col.name"

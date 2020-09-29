@@ -1,3 +1,6 @@
+import { IADReference } from './ad-reference.model';
+import { IAdValidationRule } from './ad-validation-rule.model';
+
 export const enum ADColumnType {
   STRING = 'STRING',
   INTEGER = 'INTEGER',
@@ -41,7 +44,9 @@ export interface IADColumn {
   selectionSequence?: number;
   active?: boolean;
   adOrganizationId?: number;
+  adReference?: IADReference;
   adReferenceId?: number;
+  adValidationRule?: IAdValidationRule;
   adValidationRuleId?: number;
   adTableId?: number;
 }
@@ -76,7 +81,9 @@ export class ADColumn implements IADColumn {
     public selectionSequence?: number,
     public active?: boolean,
     public adOrganizationId?: number,
+    public adReference?: IADReference,
     public adReferenceId?: number,
+    public adValidationRule?: IAdValidationRule,
     public adValidationRuleId?: number,
     public adTableId?: number
   ) {
