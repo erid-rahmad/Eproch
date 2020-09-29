@@ -19,7 +19,7 @@ public class TaskExecutorProcessTrigger implements ProcessTrigger {
 
   private static final Logger log = LoggerFactory.getLogger(TaskExecutorProcessTrigger.class);
 
-  private DataFlowOperations dataFlowTemplate;
+  private final DataFlowOperations dataFlowTemplate;
 
   public TaskExecutorProcessTrigger(DataFlowOperations dataFlowTemplate) {
     this.dataFlowTemplate = dataFlowTemplate;
@@ -34,9 +34,9 @@ public class TaskExecutorProcessTrigger implements ProcessTrigger {
     log.debug("Executing SCDF task {}", taskName);
     long executionId = dataFlowTemplate.taskOperations()
       .launch(taskName, properties, arguments, alternateComposedTaskRunnerApp);
-    
+  
     log.info("SCDF task {} executed with ID: {}", taskName, executionId);
-    return new ProcessResult().add("Execution_ID", executionId);
+    return new ProcessResult().add("execution_id", executionId);
   }
   
 }

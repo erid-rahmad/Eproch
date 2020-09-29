@@ -73,8 +73,7 @@ public class AdTaskScheduler extends AbstractAuditingEntity {
     @JsonIgnoreProperties("adTaskSchedulers")
     private ADOrganization adOrganization;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("adTaskSchedulers")
     private AdTask adTask;
 

@@ -30,12 +30,21 @@ public class JobScheduleCreator {
      * @param taskName SCDF task name to execute.
      * @return JobDetail object
      */
-    public JobDetail createJob(String name, String group, boolean isDurable, String taskName) {
+    public JobDetail createJob(String name, String group, boolean isDurable, boolean remote) {
+        String suffix = remote ? "task_" : "trigger_";
         JobDataMap jobDataMap = new JobDataMap();
-        jobDataMap.put("taskName", taskName);
+        jobDataMap.put(remote ? "taskName" : "serviceName", name);
+
+        JobBuilder jobBuilder;
+
+        if (remote) {
+            jobBuilder = JobBuilder.newJob(RemoteTaskOperationJob.class);
+        } else {
+            jobBuilder = JobBuilder.newJob(LocalProcessTriggerJob.class);
+        }
         
-		return JobBuilder.newJob(RemoteTaskOperationJob.class)
-            .withIdentity(name, group)
+		return jobBuilder
+            .withIdentity(suffix + name, group)
             .usingJobData(jobDataMap)
             .storeDurably(isDurable)
             .build();
