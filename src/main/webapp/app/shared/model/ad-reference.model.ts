@@ -13,7 +13,7 @@ export interface IADReference {
   description?: string;
   referenceType?: ADReferenceType;
   active?: boolean;
-  aDReferenceLists?: IADReferenceList[];
+  adreferenceLists?: IADReferenceList[];
   adOrganizationId?: number;
 }
 
@@ -25,7 +25,7 @@ export class ADReference implements IADReference {
     public description?: string,
     public referenceType?: ADReferenceType,
     public active?: boolean,
-    public aDReferenceLists?: IADReferenceList[],
+    public adreferenceLists?: IADReferenceList[],
     public adOrganizationId?: number
   ) {
     this.active = this.active || false;

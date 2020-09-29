@@ -28,9 +28,9 @@ public class TaskApplicationDeploymentProcessTrigger implements ProcessTrigger {
 
   private static final Logger LOG = LoggerFactory.getLogger(TaskApplicationDeploymentProcessTrigger.class);
 
-  private DataFlowOperations dataFlowTemplate;
-  private AdTaskRepository taskRepository;
-  private AdTaskApplicationRepository applicationRepository;
+  private final DataFlowOperations dataFlowTemplate;
+  private final AdTaskRepository taskRepository;
+  private final AdTaskApplicationRepository applicationRepository;
 
   @Autowired
   public TaskApplicationDeploymentProcessTrigger(DataFlowOperations dataFlowTemplate, AdTaskRepository taskRepository,
@@ -46,8 +46,8 @@ public class TaskApplicationDeploymentProcessTrigger implements ProcessTrigger {
     Long taskId = Long.valueOf((Integer) params.get("adTaskId"));
     Optional<AdTask> task = taskRepository.findById(taskId);
 
-    if (!task.isPresent()) {
-      return null;
+    if ( ! task.isPresent()) {
+      return new ProcessResult().add("error", "Task #" + taskId + " doesn't exist");
     }
 
     AdTask record = task.get();
@@ -57,25 +57,32 @@ public class TaskApplicationDeploymentProcessTrigger implements ProcessTrigger {
     LOG.debug("Found {} number of processe(s) in task {}", processes.size(), taskId);
     for (AdTaskProcess process : processes) {
       AdTaskApplication app = process.getAdTaskApplication();
-      if (app.isDeployed() && !app.isOverrideExisting())
-        continue;
+      boolean deployed = app.isDeployed();
+      boolean override = app.isOverrideExisting();
 
-      Boolean force = app.isOverrideExisting();
+      if (deployed && ! override) {
+        continue;
+      }
+
       ApplicationType type = ApplicationType.task;
       dataFlowTemplate.appRegistryOperations()
-        .register(app.getValue(), type, app.getUri(), app.getMetadataUri(), force);
+        .register(app.getValue(), type, app.getUri(), app.getMetadataUri(), override);
       
-      if (app.isDeployed())
-        continue;
+      if (! deployed) {
+        app.setDeployed(true);
+        applicationRepository.save(app);
+      }
 
-      app.setDeployed(true);
-      applicationRepository.save(app);
+      if (taskDefinition.length() > 0) {
+        taskDefinition.append(" && ");
+      }
+      taskDefinition.append(app.getValue());
     }
 
     TaskDefinitionResource resource = dataFlowTemplate.taskOperations()
       .create(record.getValue(), taskDefinition.toString(), null);
-    
-    return new ProcessResult().add("Deployment_Status", resource.getStatus());
+
+    return new ProcessResult().add("status", resource.getStatus());
   }
   
 }
