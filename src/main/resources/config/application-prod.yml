@@ -29,17 +29,6 @@ management:
 spring:
   profiles:
     active: prod
-    mail:
-      host: BHPCAS1SRV.berca.co.id
-      port: 587
-      username: admin.opusb@berca.co.id
-      password: cSWZKe%o~h@iaUg4
-      protocol: smtp
-      tls: true
-      properties.mail.smtp:
-        auth: true
-        starttls.enable: true
-        ssl.trust: BHPCAS1SRV.berca.co.id
   devtools:
     restart:
       enabled: false
@@ -64,10 +53,16 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: BHPCAS1SRV.berca.co.id
+    port: 587
+    username: admin.opusb@berca.co.id
+    password: cSWZKe%o~h@iaUg4
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: BHPCAS1SRV.berca.co.id
   thymeleaf:
     cache: true
 
@@ -128,7 +123,8 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://my-server-url-to-change # Modify according to your server's URL
+    base-url: https://eproc.opusb.id/#/ # Modify according to your server's URL
+    from: admin.opusb@berca.co.id
   metrics:
     logs: # Reports metrics in the logs
       enabled: false
