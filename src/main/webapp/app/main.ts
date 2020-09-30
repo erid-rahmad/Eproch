@@ -42,16 +42,9 @@ import TrackerService from './admin/tracker/tracker.service';
 /* tslint:disable */
 
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
-import ADReferenceService from '@/entities/ad-reference/ad-reference.service';
-import ADReferenceListService from '@/entities/ad-reference-list/ad-reference-list.service';
-import ADOrganizationService from '@/entities/ad-organization/ad-organization.service';
-import ADTableService from '@/entities/ad-table/ad-table.service';
 import ADColumnService from '@/entities/ad-column/ad-column.service';
 import ADWindowService from '@/entities/ad-window/ad-window.service';
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
-import ADFieldService from '@/entities/ad-field/ad-field.service';
-import ADFieldGroupService from '@/entities/ad-field-group/ad-field-group.service';
-import AdValidationRuleService from '@/entities/ad-validation-rule/ad-validation-rule.service';
 import RouterValidation from './permission';
 import VueRouter, { Route } from 'vue-router';
 import AdMenuService from './core/application-dictionary/components/Menu/menu.service';
@@ -145,16 +138,9 @@ accountServiceInitiator(store, translationService, trackerService, menuService, 
         translationService: () => translationService,
         // End of jhipster default services.
 
-        aDReferenceService: () => new ADReferenceService(),
-        aDReferenceListService: () => new ADReferenceListService(),
-        aDOrganizationService: () => new ADOrganizationService(),
-        aDTableService: () => new ADTableService(),
         aDColumnService: () => new ADColumnService(),
         aDWindowService: () => new ADWindowService(),
         aDTabService: () => new ADTabService(),
-        aDFieldService: () => new ADFieldService(),
-        aDFieldGroupService: () => new ADFieldGroupService(),
-        adValidationRuleService: () => new AdValidationRuleService(),
         // jhipster-needle-add-entity-service-to-main - JHipster will import entities services here
         accountService: () => accountService
       },
