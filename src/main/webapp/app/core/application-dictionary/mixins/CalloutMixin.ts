@@ -1,6 +1,7 @@
 import { ADColumnType } from '@/shared/model/ad-column.model';
 import { Component, Mixins } from 'vue-property-decorator';
 import ContextVariableAccessor from '../components/ContextVariableAccessor';
+import { isEmpty } from 'lodash';
 
 @Component
 export default class CalloutMixin extends Mixins(ContextVariableAccessor) {
@@ -20,8 +21,7 @@ export default class CalloutMixin extends Mixins(ContextVariableAccessor) {
       }
 
       callout.adCalloutTargets.forEach(async (target: any) => {
-        console.log('Applying callout %s to target: %O', callout.type, target);
-        if (callout.type === 'PROCESS' && processResult) {
+        if (callout.type === 'PROCESS' && processResult && ! isEmpty(processResult)) {
           callback(processResult[target.sourceField], target.targetName, callout.type);
         } else if (callout.type === 'RESET') {
           callback(target.sourceField, target.targetName, callout.type);

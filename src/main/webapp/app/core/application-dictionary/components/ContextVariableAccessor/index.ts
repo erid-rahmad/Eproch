@@ -4,6 +4,26 @@ import { Component, Vue, Inject } from 'vue-property-decorator';
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import pluralize from 'pluralize';
 import { kebabCase } from 'lodash';
+import { IADField } from '@/shared/model/ad-field.model';
+import { isObject } from 'util';
+
+const operators: Map<string, (a: any, b: any) => boolean> = new Map([
+  ['=', (a: any, b: any) => a === b],
+  ['!=', (a: any, b: any) => a !== b],
+  ['>', (a: any, b: any) => a > b],
+  ['>=', (a: any, b: any) => a >= b],
+  ['<', (a: any, b: any) => a < b],
+  ['<=', (a: any, b: any) => a <= b],
+  ['is', (a: any, b: any) => {
+    if (b === 'empty') {
+      return a === 'null';
+    } else if (b === 'notEmpty') {
+      return a !== 'null';
+    }
+
+    return operators.get('=')(a, b);
+  }]
+])
 
 @Component
 export default class ContextVariableAccessor extends Vue {
@@ -13,6 +33,7 @@ export default class ContextVariableAccessor extends Vue {
 
   static contextRegex = new RegExp(/\{((([\w\s]+)\|)|(\#|\$))?(\w+)\}/, 'g');
   static validationQueryRegex = new RegExp(/\{(select|from|where)[\s\w,:.=]+\}/, 'g');
+  static conditionRegex = new RegExp(/([\w\d]+)\s*?(is|=|\!\=|\<|\<\=|\>|\>\=)\s*?([\w\d]+)/, 'g');
 
   protected async parseValidationQuery(query: string) {
     if (! query)
@@ -66,7 +87,7 @@ export default class ContextVariableAccessor extends Vue {
     return Promise.resolve(null);
   }
 
-  protected getContext(text: string, defaultTabId?: string): string | number | boolean {
+  protected getContext(text: string, options?: string | Record<string, any>): string | number | boolean {
     if (!text)
       return '';
 
@@ -78,7 +99,7 @@ export default class ContextVariableAccessor extends Vue {
       parsingDone = matches.done;
 
       if (!parsingDone) {
-        const value = this.parseMatches(matches.value, defaultTabId);
+        const value = this.parseMatches(matches.value, options);
         text = text.replace(matches.value[0], value);
       }
     }
@@ -94,11 +115,88 @@ export default class ContextVariableAccessor extends Vue {
     return text;
   }
 
+  protected evaluateDisplayLogic(field: IADField, options?: string | Record<string, any>): boolean {
+    const displayLogic = field.displayLogic || field.adColumn.displayLogic;
+    let logic = <string> this.getContext(displayLogic, options);
+    return this.evaluateDynamicLogic(logic);
+  }
+
+  protected evaluateMandatoryLogic(field: IADField, options?: string | Record<string, any>) {
+    if ( ! field.adColumn.mandatoryLogic) {
+      return false;
+    }
+
+    let logic = <string> this.getContext(field.adColumn.mandatoryLogic, options);
+    return this.evaluateDynamicLogic(logic);
+  }
+
+  protected evaluateReadonlyLogic(field: IADField, options?: string | Record<string, any>) {
+    const readonlyLogic = field.readOnlyLogic || field.adColumn.readOnlyLogic;
+
+    if ( ! readonlyLogic) {
+      return false;
+    }
+
+    let logic = <string> this.getContext(readonlyLogic, options);
+    return this.evaluateDynamicLogic(logic);
+  }
+
+  private evaluateDynamicLogic(logic: string) {
+    if (logic) {
+      const branches = logic.split(/\s*?OR\s*/);
+      let fulfilled = false;
+
+      for (const branch of branches) {
+        if (this.evaluateCondition(branch)) {
+          fulfilled = true;
+          break;
+        }
+      }
+
+      return fulfilled;
+    }
+
+    return true;
+  }
+
+  private evaluateCondition(branch: string) {
+    let fulfilled = false;
+    const conditions = branch.matchAll(ContextVariableAccessor.conditionRegex);
+    let parseDone = false;
+
+    while (!parseDone) {
+      const matches = conditions.next();
+      parseDone = matches.done;
+
+      if (!parseDone) {
+        const operand1 = matches.value[1];
+        const operator = matches.value[2];
+        const operand2 = matches.value[3];
+
+        fulfilled = operators.get(operator)(operand1, operand2);
+        if (!fulfilled) {
+          break;
+        }
+      }
+    }
+
+    return fulfilled;
+  }
+
   /**
    * 
    * @param matches Array of matched regex groups.
    */
-  private parseMatches(matches: string[], defaultTabId?: string) {
+  private parseMatches(matches: string[], options?: string | Record<string, any>) {
+    let defaultTabId: string;
+    let record: Record<string, any>;
+
+    if (typeof options === 'string') {
+      defaultTabId = options;
+    } else if (isObject(options)) {
+      record = options;
+    }
+
     const tabId = matches[3] || defaultTabId;
     const flag = matches[4];
     const variable = matches[5];
@@ -111,7 +209,12 @@ export default class ContextVariableAccessor extends Vue {
     }
 
     if (windowContext) {
-      return windowStore.value(this.$route.fullPath, tabId, variable);
+      if (record) {
+        return record[variable];
+      } else {
+        const value = windowStore.value(this.$route.fullPath, tabId, variable);
+        return value === '' ? null : value;
+      }
     }
 
     return null;

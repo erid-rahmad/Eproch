@@ -17,6 +17,7 @@ export default class LoginForm extends Vue {
   @Inject('accountService')
   private accountService: () => AccountService
   public visible = false
+  public authenticationError = null
   private passwordType = 'password'
   private loading = false
   private capsTooltip = false
@@ -99,10 +100,12 @@ export default class LoginForm extends Vue {
             sessionStorage.setItem('jhi-authenticationToken', jwt)
           }
         }
+        this.authenticationError = false
         this.visible = false
         this.accountService().retrieveAccount()
       })
       .catch(() => {
+        this.authenticationError = true
         this.$message({
           message: this.$t('login.messages.error.authentication').toString(),
           type: "error"

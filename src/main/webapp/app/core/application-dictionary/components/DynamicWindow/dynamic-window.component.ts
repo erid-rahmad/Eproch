@@ -17,6 +17,7 @@ import GridView from "../GridView/grid-view.vue";
 import SearchPanel from "../SearchPanel/search-panel.vue";
 import TreeView from '../TreeView/tree-view.vue';
 import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
+import { IADField } from '@/shared/model/ad-field.model';
 
 
 @Component({
@@ -491,15 +492,18 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       });
   }
 
-  private buildValidationSchema(fields: any[]) {
+  private buildValidationSchema(fields: IADField[]) {
     let validationSchema = {};
 
     for (let field of fields) {
       const column = field.adColumn;
       
       validationSchema[column.name] = {
-        type: getValidatorType(column.type),
         required: column.mandatory
+      }
+
+      if ( ! column.foreignKey) {
+        validationSchema[column.name].type = getValidatorType(column.type);
       }
 
       if (column.formatPattern) {

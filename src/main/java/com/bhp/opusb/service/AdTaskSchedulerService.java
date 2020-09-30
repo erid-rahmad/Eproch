@@ -1,5 +1,6 @@
 package com.bhp.opusb.service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.AdTask;
@@ -81,17 +82,27 @@ public class AdTaskSchedulerService {
         AdTaskScheduler adTaskScheduler = adTaskSchedulerMapper.toEntity(adTaskSchedulerDTO);
         adTaskScheduler = adTaskSchedulerRepository.save(adTaskScheduler);
 
-        // Whether to invoke task or trigger.
-        boolean invokeTask = adTaskScheduler.getAdTask() != null;
+        // Whether to invoke SCDF task or local trigger.
+        boolean remote = adTaskScheduler.getAdTask() != null;
 
         AdTaskSchedulerGroup group = adTaskScheduler.getGroup();
-        String jobName = getJobName(invokeTask ? adTaskScheduler.getAdTask().getId() : adTaskScheduler.getAdTrigger().getId(), invokeTask);
-        String groupName = getGroupName(group == null ? null : group.getId());
-        String taskName = jobName;
+        String groupName = null;
+        String jobName;
+
+        if (remote) {
+            jobName = getJobName(adTaskScheduler.getAdTask().getId(), remote);
+        } else {
+            jobName = getJobName(adTaskScheduler.getAdTrigger().getId(), remote);
+        }
+
+        if (group != null) {
+            groupName = getGroupName(group.getId());
+        }
 
         try {
             if (newRecord) {
-                JobDetail jobDetail = scheduleCreator.createJob(jobName, groupName, false, taskName);
+                // TODO Should be able to pass the trigger parameters for local process, 
+                JobDetail jobDetail = scheduleCreator.createJob(jobName, groupName, false, remote);
                 Trigger trigger = createTrigger(adTaskScheduler, groupName);
                 scheduler.scheduleJob(jobDetail, trigger);
                 log.info("Job with key - {} scheduled sucessfully", jobDetail.getKey());
@@ -212,9 +223,9 @@ public class AdTaskSchedulerService {
 
         boolean useCron = newData.getTrigger() == AdSchedulerTrigger.CRON;
         boolean useInterval = newData.getTrigger() == AdSchedulerTrigger.PERIODIC;
-        boolean cronChanged = useCron && newData.getCronExpression().equals(oldData.getCronExpression());
-        boolean intervalChanged = useInterval && (newData.getPeriodicCount().equals(oldData.getPeriodicCount())
-            || newData.getPeriodicUnit().equals(oldData.getPeriodicUnit()));
+        boolean cronChanged = useCron && ! Objects.equals(newData.getCronExpression(), oldData.getCronExpression());
+        boolean intervalChanged = useInterval && (! Objects.equals(newData.getPeriodicCount(), oldData.getPeriodicCount())
+            || ! Objects.equals(newData.getPeriodicUnit(), oldData.getPeriodicUnit()));
 
         return cronChanged || intervalChanged;
     }
@@ -226,10 +237,10 @@ public class AdTaskSchedulerService {
     private String getJobName(Long id, boolean invokeTask) {
         if (invokeTask) {
             Optional<AdTask> record = adTaskRepository.findById(id);
-            return record.isPresent() ? "task_" + record.get().getValue() : null;
+            return record.isPresent() ? record.get().getValue() : null;
         } else {
             Optional<AdTrigger> record = adTriggerRepository.findById(id);
-            return record.isPresent() ? "trigger_" + record.get().getValue() : null;
+            return record.isPresent() ? record.get().getValue() : null;
         }
     }
 
