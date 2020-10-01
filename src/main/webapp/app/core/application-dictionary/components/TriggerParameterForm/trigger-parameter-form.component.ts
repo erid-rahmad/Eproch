@@ -6,6 +6,12 @@ import ContextVariableAccessor from '../ContextVariableAccessor';
 
 const TriggerParameterFormProps = Vue.extend({
   props: {
+    currentRecord: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    },
     data: {
       type: Object,
       default: () => {
@@ -17,7 +23,8 @@ const TriggerParameterFormProps = Vue.extend({
       default: () => {
         return [];
       }
-    }
+    },
+    tabName: String
   }
 });
 
@@ -45,10 +52,13 @@ export default class TriggerParameterForm extends Mixins(ContextVariableAccessor
 
   onOpen() {
     this.data.adTriggerParams.forEach((param: any) => {
-      let defaultValue: any = this.getContext(param.defaultValue);
-      console.log('onDataChange.defaultValue: %O', defaultValue);
+      let defaultValue: any = this.getContext({
+        defaultTabId: this.tabName,
+        text: param.defaultValue,
+        record: this.currentRecord
+      });
 
-      if (!defaultValue) {
+      if ( ! defaultValue) {
         if (this.isDateField(param.type) || this.isDateTimeField(param.type)) {
           defaultValue = new Date().toISOString();
         } else if (this.isBooleanField(param.type)) {
@@ -73,20 +83,11 @@ export default class TriggerParameterForm extends Mixins(ContextVariableAccessor
     this.dynamicWindowService(`/api/ad-triggers/process/${this.data.value}`)
       .create(this.parameter)
       .then(res => {
-        this.$notify({
-          title: 'Success',
-          message: 'Task has been successfully deployed',
-          type: 'success',
-          duration: 3000
-        });
+        console.log('Process results:', res);
+        this.$message.success('Process has been successfully executed');
       })
       .catch(err => {
-        this.$notify({
-          title: 'Error',
-          message: err,
-          type: 'error',
-          duration: 5000
-        });
+        this.$message.error(err);
       })
       .finally(() => {
         this.processing = false;

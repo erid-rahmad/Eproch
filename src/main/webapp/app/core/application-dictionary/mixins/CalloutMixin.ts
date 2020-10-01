@@ -33,7 +33,10 @@ export default class CalloutMixin extends Mixins(ContextVariableAccessor) {
   private buildParameters(triggerParams: any[]) {
     const parameters = {};
     triggerParams.forEach((param: any) => {
-      let defaultValue: any = this.getContext(param.defaultValue, this.tabName);
+      let defaultValue: any = this.getContext({
+        defaultTabId: this.tabName,
+        text: param.defaultValue
+      });
 
       if (! defaultValue) {
         if (this.isDateField(param.type) || this.isDateTimeField(param.type)) {

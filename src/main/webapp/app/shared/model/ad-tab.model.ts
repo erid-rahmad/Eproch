@@ -21,6 +21,14 @@ export interface IADTab {
   foreignColumnId?: number;
   adWindowId?: number;
   parentTabId?: number;
+
+  /**
+   * The record ID of the parent tab.
+   */
+  parentId?: number;
+
+  foreignColumnName?: string;
+  nativeFilterQuery?: string;
 }
 
 export class ADTab implements IADTab {

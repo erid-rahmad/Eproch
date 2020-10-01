@@ -1,11 +1,11 @@
 import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
 import { WindowStoreModule as windowStore } from "@/shared/config/store/window-store";
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
-import pluralize from 'pluralize';
-import { kebabCase } from 'lodash';
 import { IADField } from '@/shared/model/ad-field.model';
-import { isObject } from 'util';
+import { IADTab } from '@/shared/model/ad-tab.model';
+import { kebabCase } from 'lodash';
+import pluralize from 'pluralize';
+import { Component, Inject, Vue } from 'vue-property-decorator';
+import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 
 const operators: Map<string, (a: any, b: any) => boolean> = new Map([
   ['=', (a: any, b: any) => a === b],
@@ -23,7 +23,35 @@ const operators: Map<string, (a: any, b: any) => boolean> = new Map([
 
     return operators.get('=')(a, b);
   }]
-])
+]);
+
+interface IContextParameter {
+  /**
+   * Tab ID to be use when there is no explicit tabId.
+   */
+  defaultTabId: string;
+
+  /**
+   * The string to be evaluated.
+   */
+  text?: string,
+
+  /**
+   * An IADTab will be passed to evaluate the tab's display logic.
+   */
+  tab?: IADTab;
+
+  /**
+   * A IADField will be used instead when there is a need to evaluate the
+   * field's display, readonly, and mandatory logic.
+   */
+  field?: IADField;
+
+  /**
+   * Ask the evaluator to use this record instead of the one that's in WindowStoreModule.
+   */
+  record?: Record<string, any>;
+}
 
 @Component
 export default class ContextVariableAccessor extends Vue {
@@ -35,18 +63,24 @@ export default class ContextVariableAccessor extends Vue {
   static validationQueryRegex = new RegExp(/\{(select|from|where)[\s\w,:.=]+\}/, 'g');
   static conditionRegex = new RegExp(/([\w\d]+)\s*?(is|=|\!\=|\<|\<\=|\>|\>\=)\s*?([\w\d]+)/, 'g');
 
-  protected async parseValidationQuery(query: string) {
-    if (! query)
+  protected async parseValidationQuery({defaultTabId, text}: IContextParameter) {
+    if (! text)
       return '';
 
+    let query = text;
     const parsed = query.matchAll(ContextVariableAccessor.validationQueryRegex);
     let parsingDone = false;
+
     while ( ! parsingDone) {
       const matches = parsed.next();
       parsingDone = matches.done;
 
       if ( ! parsingDone) {
-        const value = await this.retrieveRemoteValue(matches.value[0]);
+        const value = await this.retrieveRemoteValue({
+          defaultTabId,
+          text: matches.value[0]
+        });
+
         if (! value) {
           return '';
         }
@@ -58,8 +92,8 @@ export default class ContextVariableAccessor extends Vue {
     return query;
   }
 
-  protected async retrieveRemoteValue(options: string, defaultTabId?: string) {
-    let params = options.substring(1, options.length - 1)
+  protected async retrieveRemoteValue({defaultTabId, text}: IContextParameter) {
+    let params = text.substring(1, text.length - 1)
       .split(/\s*?,\s*?/)
       .map(item => {
         const param = item.trim().split(/\s*?:\s*?/);
@@ -71,7 +105,11 @@ export default class ContextVariableAccessor extends Vue {
     const config = Object.assign({}, ...params);
     const resourceName = pluralize.plural(kebabCase(config.from));
     const api = `/api/${resourceName}`;
-    const whereClause = <string>this.getContext(config.where, defaultTabId);
+
+    const whereClause = <string>this.getContext({
+      defaultTabId,
+      text: config.where
+    });
 
     if (whereClause.includes('=null')) {
       return Promise.resolve(null);
@@ -87,19 +125,25 @@ export default class ContextVariableAccessor extends Vue {
     return Promise.resolve(null);
   }
 
-  protected getContext(text: string, options?: string | Record<string, any>): string | number | boolean {
-    if (!text)
+  /**
+   * Get the context variable value with the given text.
+   * @param param0 
+   */
+  protected getContext({defaultTabId, text, record}: IContextParameter): string | number | boolean {
+    if ( ! text) {
       return '';
+    }
 
     // Parse auth variables.
     const parsed = text.matchAll(ContextVariableAccessor.contextRegex);
     let parsingDone = false;
+
     while (!parsingDone) {
       const matches = parsed.next();
       parsingDone = matches.done;
 
       if (!parsingDone) {
-        const value = this.parseMatches(matches.value, options);
+        const value = this.parseMatches(matches.value, { defaultTabId, record });
         text = text.replace(matches.value[0], value);
       }
     }
@@ -108,40 +152,82 @@ export default class ContextVariableAccessor extends Vue {
       return text === 'true';
     }
 
-    if (text && !isNaN(text as any)) {
+    if (text && ! isNaN(text as any)) {
       return parseFloat(text);
     }
 
     return text;
   }
 
-  protected evaluateDisplayLogic(field: IADField, options?: string | Record<string, any>): boolean {
-    const displayLogic = field.displayLogic || field.adColumn.displayLogic;
-    let logic = <string> this.getContext(displayLogic, options);
-    return this.evaluateDynamicLogic(logic);
+  /**
+   * Evaluate display logic of a tab or field.
+   * @param param0 
+   */
+  protected evaluateDisplayLogic({defaultTabId, tab, field, record}: IContextParameter): boolean {
+    if ( ! tab && ! field) {
+      return true;
+    }
+
+    let displayLogic: string;
+    
+    if (tab) {
+      displayLogic = tab.displayLogic;
+    } else {
+      displayLogic = field.displayLogic || field.adColumn.displayLogic;
+    }
+
+    return this.evaluateDynamicLogic({
+      defaultTabId,
+      text: displayLogic,
+      record
+    });
   }
 
-  protected evaluateMandatoryLogic(field: IADField, options?: string | Record<string, any>) {
-    if ( ! field.adColumn.mandatoryLogic) {
+  /**
+   * Evaluate mandatory logic of a field. Always returns true if the column is not nullable.
+   * @param param0 
+   */
+  protected evaluateMandatoryLogic({defaultTabId, field}: IContextParameter) {
+    if (field.adColumn.mandatory) {
+      return true;
+    }
+
+    const mandatoryLogic = field.adColumn.mandatoryLogic;
+
+    if ( ! mandatoryLogic) {
       return false;
     }
 
-    let logic = <string> this.getContext(field.adColumn.mandatoryLogic, options);
-    return this.evaluateDynamicLogic(logic);
+    return this.evaluateDynamicLogic({
+      defaultTabId,
+      text: mandatoryLogic
+    });
   }
 
-  protected evaluateReadonlyLogic(field: IADField, options?: string | Record<string, any>) {
+  /**
+   * Evaluate readonly logic of a field. Always returns true if the column is not nullable.
+   * @param param0 
+   */
+  protected evaluateReadonlyLogic({defaultTabId, field}: IContextParameter) {
     const readonlyLogic = field.readOnlyLogic || field.adColumn.readOnlyLogic;
 
     if ( ! readonlyLogic) {
       return false;
     }
 
-    let logic = <string> this.getContext(readonlyLogic, options);
-    return this.evaluateDynamicLogic(logic);
+    return this.evaluateDynamicLogic({
+      defaultTabId,
+      text: readonlyLogic
+    });
   }
 
-  private evaluateDynamicLogic(logic: string) {
+  /**
+   * Evaluates a condition.
+   * @param param0 
+   */
+  private evaluateDynamicLogic(options: IContextParameter) {
+    const logic = <string> this.getContext(options);
+
     if (logic) {
       const branches = logic.split(/\s*?OR\s*/);
       let fulfilled = false;
@@ -187,28 +273,23 @@ export default class ContextVariableAccessor extends Vue {
    * 
    * @param matches Array of matched regex groups.
    */
-  private parseMatches(matches: string[], options?: string | Record<string, any>) {
-    let defaultTabId: string;
-    let record: Record<string, any>;
-
-    if (typeof options === 'string') {
-      defaultTabId = options;
-    } else if (isObject(options)) {
-      record = options;
-    }
+  private parseMatches(matches: string[], options: IContextParameter) {
+    const defaultTabId = options.defaultTabId;
+    const record = options.record;
 
     const tabId = matches[3] || defaultTabId;
     const flag = matches[4];
     const variable = matches[5];
     const loginContext = flag === '#';
     // const accountingContext = flag === '$'
-    const windowContext = tabId || !flag;
+    const windowContext = ! flag;
 
     if (loginContext) {
       return accountStore.property(variable);
     }
 
     if (windowContext) {
+      // Use record when evaluating each row in a table.
       if (record) {
         return record[variable];
       } else {
