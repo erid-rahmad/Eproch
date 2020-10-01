@@ -19,7 +19,6 @@ import TreeView from '../TreeView/tree-view.vue';
 import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
 import { IADField } from '@/shared/model/ad-field.model';
 
-
 @Component({
   components: {
     Splitpanes,
@@ -56,7 +55,8 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   private windowType = null;
   public gridView = true;
   public treeView = false;
-  public childTabs = [];
+  private childTabs: IADTab[] = [];
+  public subTabs: IADTab[] = [];
   public currentTab: string = '';
   public previousTab: string = '';
   public triggerModel: any = {};
@@ -100,7 +100,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   get hasChildTabs() {
-    return this.childTabs.length > 0;
+    return this.subTabs.length > 0;
   }
 
   get title() {
@@ -376,12 +376,12 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
   /**
    * Update the children tabs based on the selected header record.
-   * @param data parent tab record.
+   * @param data parent tab's record.
    */
-  private updateChildTabs(data: any) {
+  private async updateChildTabs(data: any) {
     if (this.childTabs.length === 0 && !this.loadingChildTabs) {
       this.loadingChildTabs = true;
-      this.retrieveTabs(this.mainTab.id, (tab: any, index: number) => {
+      await this.retrieveTabs(this.mainTab.id, (tab: any, index: number) => {
         this.buildChildTabFilterQuery(tab, index, data?.id);
       });
     } else {
@@ -401,6 +401,12 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
         this.$set(this.childTabs, index, tab);
       });
     }
+
+    this.subTabs = this.childTabs.filter(tab => this.evaluateDisplayLogic({
+      defaultTabId: tab.name,
+      record: data,
+      tab
+    }));
   }
 
   private async retrieveWindowDetail(): Promise<any> {
@@ -420,7 +426,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
    * Retrieve tab(s).
    * @param parentTabId Main/header tab don't have it.
    */
-  private retrieveTabs(...args: any[]) {
+  private retrieveTabs(...args: any[]): Promise<any[]> {
   /* private retrieveTabs(parentTabId?: number, tabId?: number, callback?: (tab: IADTab, index: number) => void): void { */
     let parentTabId: number;
     let tabId: number;
@@ -462,34 +468,38 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       params['id.equals'] = tabId;
     }
 
-    this.aDTabService()
-      .retrieveWithFilter(params)
-      .then(async (res) => {
-        let tabs = res.data;
-        for (let [index, tab] of tabs.entries()) {
-          if (callback) {
-            // Invoke the callback for modifying the tab if necessary.
-            await callback(tab, index);
-          }
-
-          tab.validationSchema = this.buildValidationSchema(tab.adfields);
-
-          if (parentTabId && !tabId) {
-            // Child has always a parent.
-            if (index === 0) {
-              this.currentTab = '' + index;
-              this.previousTab = this.currentTab;
+    return new Promise((resolve, reject) => {
+      this.aDTabService()
+        .retrieveWithFilter(params)
+        .then(async (res) => {
+          let tabs = res.data;
+          for (let [index, tab] of tabs.entries()) {
+            if (callback) {
+              // Invoke the callback for modifying the tab if necessary.
+              await callback(tab, index);
             }
-            this.childTabs.push(tab);
-          } else {
-            // Header tab is immediatelly pushed to the tab stack.
-            this.tabStack.push(tab);
+
+            tab.validationSchema = this.buildValidationSchema(tab.adfields);
+
+            if (parentTabId && !tabId) {
+              // Child has always a parent.
+              if (index === 0) {
+                this.currentTab = '' + index;
+                this.previousTab = this.currentTab;
+              }
+              this.childTabs.push(tab);
+            } else {
+              // Header tab is immediatelly pushed to the tab stack.
+              this.tabStack.push(tab);
+            }
           }
-        }
-      })
-      .finally(() => {
-        this.loadingChildTabs = false;
-      });
+          return resolve(tabs);
+        })
+        .catch(err => reject(err))
+        .finally(() => {
+          this.loadingChildTabs = false;
+        });
+    });
   }
 
   private buildValidationSchema(fields: IADField[]) {

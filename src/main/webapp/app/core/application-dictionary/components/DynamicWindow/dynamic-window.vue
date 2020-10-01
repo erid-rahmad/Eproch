@@ -121,7 +121,7 @@
                 @tab-click="handleTabClick"
               >
                 <el-tab-pane
-                  v-for="(tab, index) in childTabs"
+                  v-for="(tab, index) in subTabs"
                   :key="tab.id"
                   ref="tabPane"
                   :name="'' + index"
@@ -167,8 +167,9 @@
       <trigger-parameter-form
         ref="triggerForm"
         :data="triggerModel"
+        :current-record="currentRecord"
         :fields="mainTab.adfields"
-        :tabName="mainTab.name"
+        :tab-name="mainTab.name"
         @process-completed="onProcessCompleted"
       />
       <el-dialog
