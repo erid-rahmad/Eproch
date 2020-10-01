@@ -37,7 +37,6 @@ export default class TabToolbar extends TabToolbarProps {
   }
 
   created() {
-    console.log('tab-toolbar created with tabId: %s', this.tabId);
     this.fullPath = this.$route.fullPath;
     this.eventBus?.$on('record-saved', this.onSaveSuccess);
   }

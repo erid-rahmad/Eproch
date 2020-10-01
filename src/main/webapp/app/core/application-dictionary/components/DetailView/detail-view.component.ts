@@ -74,7 +74,10 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   // TODO Consider the performance.
   get displayed() {
     return (field: IADField) =>
-      this.evaluateDisplayLogic(field, this.tabName);
+      this.evaluateDisplayLogic({
+        defaultTabId: this.tabName,
+        field
+      });
   }
 
   get observableTabProperties() {
@@ -203,12 +206,18 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
 
   private reloadValidationSchema() {
     const logicallyMandatoryFields = windowStore.logicallyMandatoryFields(this.$route.fullPath, this.tabName);
+    
     for (let name in this.dynamicValidationSchema) {
       const field = logicallyMandatoryFields[name];
 
       if (field !== void 0 && !field.adColumn.mandatory) {
         let vSchema = this.dynamicValidationSchema[name];
-        const shouldMandatory = this.evaluateMandatoryLogic(field, this.tabName);
+
+        const shouldMandatory = this.evaluateMandatoryLogic({
+          defaultTabId: this.tabName,
+          field
+        });
+
         vSchema.required = shouldMandatory;
       }
     }
@@ -233,10 +242,16 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     const validationRule = field.adValidationRule || column.adValidationRule;
 
     if (validationRule) {
-      let referenceFilter = <string>this.getContext(validationRule.query, this.tabName);
+      let referenceFilter = <string>this.getContext({
+        defaultTabId: this.tabName,
+        text: validationRule.query
+      });
       
       if (referenceFilter?.includes('{select', 0)) {
-        referenceFilter = await this.parseValidationQuery(referenceFilter);
+        referenceFilter = await this.parseValidationQuery({
+          defaultTabId: this.tabName,
+          text: referenceFilter
+        });
       }
 
       if (referenceFilter) {
@@ -372,9 +387,14 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   }
 
   public isReadonly(field: IADField): boolean {
-    const newRecord: boolean = !this.model?.id;
-    const conditionallyReadonly = this.evaluateReadonlyLogic(field, this.tabName);
-    return !this.tab.writable || !field.writable || conditionallyReadonly || (!newRecord && !field.adColumn.updatable);
+    const newRecord: boolean = ! this.model?.id;
+    const notUpdatable = ( ! newRecord && ! field.adColumn.updatable);
+    const conditionallyReadonly = this.evaluateReadonlyLogic({
+      defaultTabId: this.tabName,
+      field
+    });
+    
+    return ! this.tab.writable || ! field.writable || notUpdatable || conditionallyReadonly;
   }
 
   public hasReferenceList!: (field: IADField) => boolean;

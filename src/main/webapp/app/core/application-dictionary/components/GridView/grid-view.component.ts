@@ -170,7 +170,11 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   // TODO Consider the performance.
   get displayed() {
     return (row: any, field: IADField) =>
-      this.evaluateDisplayLogic(field, row.editing ? this.tabName : row);
+      this.evaluateDisplayLogic({
+        defaultTabId: this.tabName,
+        field,
+        record: row
+      });
   }
 
   get observableTabProperties() {
@@ -237,9 +241,9 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
 
   // Start of the component's lifecycle events.
   created() {
-    this.onFieldsChange(this.fields);
     this.toolbarEventBus?.$on('export-record', this.exportRecord);
     this.debouncedHeightResizer = debounce(this.resizeTableHeight, 300);
+    this.onObservableTabPropertiesChange(this.observableTabProperties);
   }
 
   mounted() {
@@ -352,7 +356,16 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         } else if (type === 'PROCESS') {
           this.$set(this.currentRecord, target, val);
         }
-      })
+      });
+
+      // Update the record-navigator.
+      if (this.mainTab) {
+        const recordNo = this.getRecordNo(this.page, this.itemsPerPage, this.selectedRowNo);
+        this.$emit('current-row-change', {
+          data: this.currentRecord,
+          recordNo
+        });
+      }
     });
   }
 
@@ -469,12 +482,18 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
 
   private reloadValidationSchema() {
     const logicallyMandatoryFields = windowStore.logicallyMandatoryFields(this.$route.fullPath, this.tabName);
+
     for (let name in this.dynamicValidationSchema) {
       const field = logicallyMandatoryFields[name];
 
       if (field !== void 0 && !field.adColumn.mandatory) {
         let vSchema = this.dynamicValidationSchema[name];
-        const shouldMandatory = this.evaluateMandatoryLogic(field, this.tabName);
+
+        const shouldMandatory = this.evaluateMandatoryLogic({
+          defaultTabId: this.tabName,
+          field
+        });
+
         vSchema.required = shouldMandatory;
       }
     }
@@ -485,7 +504,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
    * has been loaded.
    * @param field 
    */
-  private updateReferenceQueries(fields: any[]) {
+  private updateReferenceQueries(fields: IADField[]) {
     fields
       .filter(field => this.hasReferenceList(field) || this.isTableDirectLink(field))
       .forEach(async field => {
@@ -493,16 +512,22 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       });
   }
 
-  private async updateReferenceQuery(field: any) {
+  private async updateReferenceQuery(field: IADField) {
     // Parse the validation rule which is used to filter the reference key records.
     const column = field.adColumn;
     const validationRule = field.adValidationRule || column.adValidationRule;
 
     if (validationRule) {
-      let referenceFilter = <string>this.getContext(validationRule.query, this.tabName);
+      let referenceFilter = <string>this.getContext({
+        defaultTabId: this.tabName,
+        text: validationRule.query
+      });
       
       if (referenceFilter?.includes('{select', 0)) {
-        referenceFilter = await this.parseValidationQuery(referenceFilter);
+        referenceFilter = await this.parseValidationQuery({
+          defaultTabId: this.tabName,
+          text: referenceFilter
+        });
       }
 
       if (referenceFilter) {
@@ -643,12 +668,15 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
 
       if (newRecord) {
         let defaultValue = field.defaultValue || column.defaultValue;
+        const options = {
+          defaultTabId: this.tabName,
+          text: defaultValue
+        };
 
         if (defaultValue?.includes('{select:', 0)) {
-          defaultValue = await this.retrieveRemoteValue(defaultValue);
+          defaultValue = await this.retrieveRemoteValue(options);
         } else {
-          // TODO Set the default value based on the field/column definition. 
-          defaultValue = this.getContext(field.defaultValue || column.defaultValue, this.tabName);
+          defaultValue = this.getContext(options);
         }
 
         if (! defaultValue) {
@@ -752,6 +780,10 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   }
 
   public retrieveAllRecords(): void {
+    if ( ! this.baseApiUrl) {
+      return;
+    }
+    
     this.processing = true;
     const paginationQuery = {
       page: this.page - 1,
@@ -910,9 +942,14 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   }
 
   public isReadonly(row: any, field: IADField): boolean {
-    const newRecord: boolean = !row.id;
-    const conditionallyReadonly = this.evaluateReadonlyLogic(field, this.tabName);
-    return !this.tab.writable || !field.writable || conditionallyReadonly || (!newRecord && !field.adColumn.updatable);
+    const newRecord: boolean = ! row?.id;
+    const notUpdatable = ( ! newRecord && ! field.adColumn.updatable);
+    const conditionallyReadonly = this.evaluateReadonlyLogic({
+      defaultTabId: this.tabName,
+      field
+    });
+    
+    return ! this.tab.writable || ! field.writable || notUpdatable || conditionallyReadonly;
   }
 
   public getFieldWidth(field: IADField) {
