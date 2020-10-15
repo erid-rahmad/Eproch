@@ -5,6 +5,13 @@ entity ADOrganization {
 	description String
 	active Boolean
 }
+entity ADOrganizationInfo {
+	address String required
+	taxId String required
+	bankAccount String
+	uid UUID
+	active Boolean
+}
 entity CCountry {
 	name String required
 	code String required pattern(/^[A-Z]{2}$/) unique
@@ -349,6 +356,38 @@ entity CLocator {
 }
 
 /**
+* vendor Invoice Verification 
+*/
+entity MVerification {
+	verificationNo String required
+	verificationDate LocalDate required
+	description String
+	invoiceNo String required
+	invoiceDate LocalDate required
+	taxInvoice String
+	taxDate LocalDate
+	totalLines BigDecimal required
+	taxAmount BigDecimal required
+	grandTotal BigDecimal required
+	verificationStatus String required
+	uid UUID
+	active Boolean
+}
+
+entity MVerificationLine {
+	orderNo String required
+	receiptNo String required
+	deliveryNo String required
+	description String
+	qty Long required
+	priceActual BigDecimal required
+	totalLines BigDecimal required
+	taxAmount BigDecimal required
+	uid UUID
+	active Boolean
+}
+
+/**
  * Enumeration.
  */
 enum Depreciation {
@@ -397,6 +436,8 @@ relationship OneToMany {
  * Many to one relationship.
  */
 relationship ManyToOne {
+	ADOrganizationInfo{adOrganization required} to ADOrganization
+	
 	CLocation{city required} to CCity
 
 	CRegistrationDocument{type required} to CRegistrationDocType
@@ -502,6 +543,14 @@ relationship ManyToOne {
 	CWarehouse{adOrganization required} to ADOrganization
 	CLocator{adOrganization required} to ADOrganization
 	CLocator{warehouse required} to CWarehouse
+
+	//releated vendor invoice verification
+	MVerification{adOrganization required} to ADOrganization
+	MVerification{currency required} to CCurrency
+	MVerificationLine{verification required} to MVerification
+	MVerificationLine{adOrganization required} to ADOrganization
+	MVerificationLine{product required} to CProduct
+	MVerificationLine{uom required} to CUnitOfMeasure
 }
 
 // Allow filtering to all entities.
