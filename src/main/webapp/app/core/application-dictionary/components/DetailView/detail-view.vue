@@ -91,6 +91,14 @@
               :disabled="isReadonly(col.field)"
               @change="value => onInputChanged(col.field, value)"
             />
+            <el-date-picker
+              v-else-if="isDateField(col.field)"
+              v-model="model[col.name]"
+              size="mini"
+              type="date"
+              format="yyyy/MM/dd"
+              :disabled="isReadonly(col.field)"
+            />
           </el-form-item>
         </el-col>
       </el-row>
@@ -102,4 +110,8 @@
 .detail-view {
   padding: 8px 24px;
 }
+  .el-form-item--mini.el-form-item{
+    margin-bottom: 0px;
+  }
+
 </style>
