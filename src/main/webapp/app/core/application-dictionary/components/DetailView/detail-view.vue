@@ -91,6 +91,15 @@
               :disabled="isReadonly(col.field)"
               @change="value => onInputChanged(col.field, value)"
             />
+            <el-date-picker
+              v-else-if="isDateField(col.field)"
+              v-model="model[col.name]"
+              size="mini"
+              :type="datePickerType(col.field)"
+              :format="dateDisplayFormat(col.field)"
+              :value-format="dateValueFormat(col.field)"
+              :disabled="isReadonly(col.field)"
+            />
           </el-form-item>
         </el-col>
       </el-row>

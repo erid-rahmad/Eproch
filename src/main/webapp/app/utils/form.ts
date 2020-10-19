@@ -1,3 +1,5 @@
+import { ADColumnType } from '@/shared/model/ad-column.model';
+import { IADField } from '@/shared/model/ad-field.model';
 import { isStringField } from "@/utils/validate";
 
 export const buildCascaderOptions = source => {
@@ -53,7 +55,7 @@ export const buildCascaderOptions = source => {
   return result;
 };
 
-export const nullifyField = (record: Record<string, any>, field: any) => {
+export const normalizeField = (record: Record<string, any>, field: IADField) => {
   const fieldName: string = field.adColumn.name;
   const isForeignKey = fieldName.endsWith('Id');
   if (!field.adColumn.mandatory) {
@@ -62,5 +64,9 @@ export const nullifyField = (record: Record<string, any>, field: any) => {
     if (shouldNullify) {
       record[fieldName] = null;
     }
+  }
+
+  if (field.adColumn.type === ADColumnType.LOCAL_DATE) {
+    record[fieldName] = new Date(record[fieldName]);
   }
 }
