@@ -46,30 +46,30 @@ export default class StepsForm extends Vue {
   eventBus = new Vue();
   registration = {
     loginDetails: {
-      login: 'user3',
-      email: 'user3@gmail.com',
-      password: 'user',
-      passwordConfirmation: 'user'
+      login: '',
+      email: '',
+      password: '',
+      passwordConfirmation: ''
     },
     companyProfile: {
-      name: 'PT. Terbaik',
-      type: 'COMPANY',
+      name: '',
+      type: '',
       branch: false,
-      phone: '303030',
+      phone: '',
       fax: '',
-      email: 'cs@terbaik.com',
+      email: '',
       website: '',
 
-      npwp: '928291918290001',
-      npwpName: 'John',
-      npwpAddress: 'Jl. Pemuda',
+      npwp: '',
+      npwpName: '',
+      npwpAddress: '',
       npwpCountry: '',
       npwpRegion: '',
       npwpCity: '',
       npwpPostalCode: '',
       file: '',
 
-      address: 'Jl. Sudirman',
+      address: '',
       country: '',
       region: '',
       city: '',

@@ -116,4 +116,18 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20201009091700-added" author="dian-tri-budianto">
+        <addColumn tableName="m_verification">
+            <column name="vendor_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="pic_user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="foreign_grand_total" type="decimal(21,2)">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

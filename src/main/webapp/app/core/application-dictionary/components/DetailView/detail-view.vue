@@ -29,6 +29,7 @@
               v-model="model.active"
               active-text="Active"
               inactive-color="#ff4949"
+              class="switch"
               @change="value => onInputChanged(col.field, value)"
             />
             <el-checkbox
@@ -36,6 +37,7 @@
               v-model="model[col.name]"
               :label="col.field.name"
               :disabled="isReadonly(col.field)"
+              class="checkbox"
               @change="value => onInputChanged(col.field, value)"
             />
             <el-select
@@ -47,6 +49,7 @@
               clearable
               filterable
               :disabled="isReadonly(col.field)"
+              class="selectRemote"
               @change="value => onInputChanged(col.field, value)"
               @focus="setTableDirectReference(col.field)"
             >
@@ -64,6 +67,7 @@
               clearable
               filterable
               :disabled="isReadonly(col.field)"
+              class="select"
               @change="value => onInputChanged(col.field, value)"
             >
               <el-option
@@ -80,6 +84,7 @@
               :minlength="getMinLength(col.field)"
               :maxlength="getMaxLength(col.field)"
               :disabled="isReadonly(col.field)"
+              class="input"
               @change="value => onInputChanged(col.field, value)"
             />
             <el-input-number
@@ -89,6 +94,7 @@
               :min="getMinValue(col.field)"
               :max="getMaxValue(col.field)"
               :disabled="isReadonly(col.field)"
+              class="numeric"
               @change="value => onInputChanged(col.field, value)"
             />
             <el-date-picker
@@ -97,6 +103,7 @@
               size="mini"
               type="date"
               format="yyyy/MM/dd"
+              class="date"
               :disabled="isReadonly(col.field)"
             />
           </el-form-item>
@@ -110,8 +117,12 @@
 .detail-view {
   padding: 8px 24px;
 }
-  .el-form-item--mini.el-form-item{
-    margin-bottom: 0px;
+.el-form-item--mini.el-form-item{
+  margin-bottom: 0px;
+
+  .switch, .checkbox, .selectRemote, .select, .input, .numeric, .date{
+    width: 100%;
   }
+}
 
 </style>

@@ -1,0 +1,130 @@
+{
+    "name": "MMatchPO",
+    "fields": [
+        {
+            "fieldName": "cDocType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cVendor",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cElement",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cCostCenter",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "poNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "poDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "receiptNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "receiptDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "deliveryNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mProductCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mProductName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mProductDesc",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cUOM",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "qty",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cCurrency",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cConversionRate",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "openQty",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "priceActual",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "foreignActual",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "openAmount",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "openForeignAmount",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "totalLines",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "foreignTotalLines",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cTax",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "taxAmount",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "foreignTaxAmount",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mLocator",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "adOrganization",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20201016085600",
+    "entityTableName": "m_match_po",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

@@ -387,6 +387,37 @@ entity MVerificationLine {
 	active Boolean
 }
 
+entity MMatchPO{
+	cDocType String
+	cVendor String
+	cElement String
+	cCostCenter String
+	poNo String
+	poDate LocalDate
+	receiptNo String
+	receiptDate LocalDate
+	deliveryNo String
+	mProductCode String
+	mProductName String
+	mProductDesc String
+	cUOM String
+	qty String
+	cCurrency String
+	cConversionRate String
+	openQty String
+	priceActual String
+	foreignActual String
+	openAmount String
+	openForeignAmount String
+	totalLines String
+	foreignTotalLines String
+	cTax String
+	taxAmount String
+	foreignTaxAmount String
+	mLocator String
+	adOrganization String
+}
+
 /**
  * Enumeration.
  */

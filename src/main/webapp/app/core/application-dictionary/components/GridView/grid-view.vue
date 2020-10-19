@@ -57,6 +57,7 @@
             :ref="column.property"
             v-model="row[column.property]"
             :class="column.property"
+            class="switch"
             :disabled="!row.editing || isReadonly(row, field)"
             @change="value => onInputChanged(field, value)"
           />
@@ -66,6 +67,7 @@
             :ref="column.property"
             v-model="row[column.property]"
             :class="column.property"
+            class="checkbox"
             :disabled="!row.editing || isReadonly(row, field)"
             @change="value => onInputChanged(field, value)"
           />
@@ -87,6 +89,7 @@
               :ref="column.property"
               v-model="row[column.property]"
               :class="column.property"
+              class="selectRemote"
               :remote="true"
               :remote-method="fetchTableDirectData"
               size="mini"
@@ -110,6 +113,7 @@
               :ref="column.property"
               v-model="row[column.property]"
               :class="column.property"
+              class="select"
               size="mini"
               clearable
               filterable
@@ -130,6 +134,7 @@
               :ref="column.property"
               v-model="row[column.property]"
               :class="column.property"
+              class="input"
               size="mini"
               clearable
               :disabled="isReadonly(row, field)"
@@ -141,6 +146,7 @@
               :ref="column.property"
               v-model="row[column.property]"
               :class="column.property"
+              class="numeric"
               controls-position="right"
               size="mini"
               :min="getMinValue(field)"
@@ -155,6 +161,7 @@
               size="mini"
               type="date"
               format="yyyy/MM/dd"
+              class="date"
               :disabled="isReadonly(row, field)"
             />
           </el-tooltip>
@@ -254,6 +261,10 @@
 
     label.el-checkbox {
       margin: 4px 0;
+    }
+
+    .switch, .checkbox, .selectRemote, .select, .input, .numeric, .date{
+      width: 100%;
     }
   }
 

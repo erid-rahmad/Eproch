@@ -112,4 +112,40 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20201009091800-added" author="dian-tri-budianto">
+        <addColumn tableName="m_verification_line">
+            <column name="line_no" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_doc_type" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_element" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_cost_center" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+
+            <column name="currency_id" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="conversion_rate" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="foreign_actual" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="foreign_total_lines" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="foreign_tax_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_tax" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
