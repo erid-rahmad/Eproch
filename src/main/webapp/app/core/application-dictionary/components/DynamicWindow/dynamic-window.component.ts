@@ -75,6 +75,9 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   isEditing: boolean = false;
   deleteConfirmationVisible: boolean = false;
   deleteOptions: any = null;
+  docAction: any = {};
+  docActionMessage: string = null;
+  docActionPopupVisible: boolean = false;
 
   /**
    * Stack of the main tab. The last item in the stack
@@ -163,6 +166,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
   // End of reactive methods.
 
+  public applyDocumentAction() {
+    console.log('Apply docAction.', this.docAction);
+  }
+
   /**
    * Switch between grid and detail view of the main tab.
    * @param value Either true for grid view or false for detail view.
@@ -178,6 +185,11 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       const index = parseInt(data.tabId);
       this.$refs.lineGrid[index].addBlankRow();
     }
+  }
+
+  public onApplyDocumentAction(action: any) {
+    this.docAction = action;
+    this.docActionPopupVisible = true;
   }
 
   public onCopyRecord(data?: any) {

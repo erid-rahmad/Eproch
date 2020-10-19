@@ -12,7 +12,9 @@
           :buttons="mainTab.toolbarButtons"
           :event-bus="mainToolbarEventBus"
           :record-count="totalRecords"
+          :window-type="windowType"
           @add-record="onAddRecord"
+          @apply-document-action="onApplyDocumentAction"
           @cancel="onActionCanceled"
           @copy="onCopyRecord"
           @delete="showDeleteConfirmation"
@@ -173,23 +175,23 @@
         @process-completed="onProcessCompleted"
       />
       <el-dialog
-          width="30%"
-          :visible.sync="deleteConfirmationVisible"
-          :title="$t('entity.delete.title')"
+        width="30%"
+        :visible.sync="deleteConfirmationVisible"
+        :title="$t('entity.delete.title')"
       >
         <template>
           <span>Are you sure to delete the selected record(s)?</span>
           <div slot="footer">
-            <el-button 
+            <el-button
               style="margin-left: 0px;"
               size="mini"
               icon="el-icon-delete" 
               type="danger" 
-              @click="deleteRecords()"
+              @click="deleteRecords"
             >
               {{ $t('entity.action.delete') }}
             </el-button>
-            <el-button 
+            <el-button
               style="margin-left: 0px;"
               size="mini"
               icon="el-icon-close" 
@@ -200,7 +202,41 @@
           </div>
         </template>
       </el-dialog>
-
+      <el-dialog
+        width="20%"
+        :visible.sync="docActionPopupVisible"
+        :title="`${docAction.name} Document`"
+      >
+        <template>
+          <p>Are you sure you want to {{ docAction.name }} the document?</p>
+          <p v-if="docAction.value === 'REJECT'">Please type the reason:</p>
+          <el-input
+            v-if="docAction.value === 'REJECT'"
+            v-model="docAction.message"
+            type="textarea"
+            :autosize="{ minRows: 2, maxRows: 4}"
+          />
+          <div slot="footer">
+            <el-button
+              style="margin-left: 0px;"
+              size="mini"
+              icon="el-icon-check" 
+              :type="docAction.value === 'REJECT' ? 'danger' : 'primary'" 
+              @click="applyDocumentAction"
+            >
+              {{ docAction.name }}
+            </el-button>
+            <el-button
+              style="margin-left: 0px;"
+              size="mini"
+              icon="el-icon-close" 
+              @click="docActionPopupVisible = false"
+            >
+              {{ $t('entity.action.cancel') }}
+            </el-button>
+          </div>
+        </template>
+      </el-dialog>
     </div>
   </div>
 </template>
