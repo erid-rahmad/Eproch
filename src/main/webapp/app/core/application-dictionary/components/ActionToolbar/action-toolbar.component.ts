@@ -1,9 +1,11 @@
 import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
+import { ADWindowType } from '@/shared/model/ad-window.model';
 
 const ActionToolbarProps = Vue.extend({
   props: {
+    windowType: String,
     atWindowRoot: {
       type: Boolean,
       default: true
@@ -40,8 +42,24 @@ export default class ActionToolbar extends ActionToolbarProps {
     this.$emit('run-trigger', triggerDef);
   }
 
+  get actions() {
+    return [
+      {name: 'Approve', value: 'APPROVE'},
+      {name: 'Cancel', value: 'CANCEL'},
+      {name: 'Reject', value: 'REJECT'}
+    ];
+  }
+
   get isEditing() {
     return this.editing;
+  }
+
+  get currentDocumentAction() {
+    return 'Approve';
+  }
+
+  get transactionWindow() {
+    return this.windowType === ADWindowType.TRANSACTION;
   }
 
   get keymap() {
@@ -87,6 +105,14 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   private onSaveSuccess() {
     this.editing = false;
+  }
+
+  public applyDocumentAction(action: object) {
+    this.$emit('apply-document-action', action);
+  }
+
+  public applyNextDocumentAction() {
+    this.applyDocumentAction({name: 'Approve', value: 'APPROVE'});
   }
 
   public refreshData() {
