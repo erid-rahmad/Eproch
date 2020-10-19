@@ -117,10 +117,34 @@
         @click="goToChildTab"
       />
     </el-button-group>
+    <el-dropdown
+      v-show="transactionWindow"
+      split-button
+      type="primary"
+      @click="applyNextDocumentAction"
+      @command="applyDocumentAction"
+    >
+      {{ currentDocumentAction }}
+      <el-dropdown-menu slot="dropdown">
+        <el-dropdown-item
+          v-for="action in actions"
+          :key="action.id"
+          :command="action"
+          :title="action.name"
+        >
+          {{ action.name }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </el-dropdown>
   </div>
 </template>
 <script lang="ts" src="./action-toolbar.component.ts"></script>
-<style lang="scss" scoped>
+<style lang="scss">
+  .compact {
+    .el-button {
+      font-size: 12px;
+    }
+  }
   .el-button-group + .el-button-group,
   .el-button-group + .el-dropdown,
   .el-dropdown + .el-button-group {
