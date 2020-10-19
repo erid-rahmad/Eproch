@@ -101,9 +101,9 @@
               v-else-if="isDateField(col.field)"
               v-model="model[col.name]"
               size="mini"
-              type="date"
-              format="yyyy/MM/dd"
-              class="date"
+              :type="datePickerType(col.field)"
+              :format="dateDisplayFormat(col.field)"
+              :value-format="dateValueFormat(col.field)"
               :disabled="isReadonly(col.field)"
             />
           </el-form-item>

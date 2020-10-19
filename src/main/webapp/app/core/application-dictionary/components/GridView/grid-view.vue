@@ -159,9 +159,9 @@
               :ref="column.property"
               v-model="row[column.property]"
               size="mini"
-              type="date"
-              format="yyyy/MM/dd"
-              class="date"
+              :type="datePickerType(col.field)"
+              :format="dateDisplayFormat(col.field)"
+              :value-format="dateValueFormat(col.field)"
               :disabled="isReadonly(row, field)"
             />
           </el-tooltip>

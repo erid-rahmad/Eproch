@@ -4,6 +4,10 @@ interface ISettings {
   showTagsView: boolean // Controls tagsview display
   showSidebarLogo: boolean // Controls siderbar logo display
   fixedHeader: boolean // If true, will fix the header component
+  dateDisplayFormat: string,
+  dateTimeDisplayFormat: string,
+  dateValueFormat: string,
+  dateTimeValueFormat: string,
   errorLog: string[] // The env to enable the errorlog component, default 'production' only
   sidebarTextTheme: boolean // If true, will change active text color for sidebar based on theme
   devServerPort: number // Port number for webpack-dev-server
@@ -17,6 +21,10 @@ const settings: ISettings = {
   showTagsView: true,
   fixedHeader: true,
   showSidebarLogo: true,
+  dateDisplayFormat: 'dd/MM/yyyy',
+  dateTimeDisplayFormat: 'dd/MM/yyyy HH:mm',
+  dateValueFormat: 'yyyy-MM-dd',
+  dateTimeValueFormat: 'yyyy-MM-dd HH:mm',
   errorLog: ['production'],
   sidebarTextTheme: true,
   devServerPort: 9527,
