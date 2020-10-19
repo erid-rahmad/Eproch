@@ -236,11 +236,29 @@ aside {
     td {
       padding: 0px;
     }
+
+    .cell {
+      line-height: 26px;
+    }
   }
 
   button {
     padding: 5px 10px;
   }
+}
+
+.el-form-item--mini.el-form-item {
+  margin-bottom: 0;
+}
+
+.el-input__inner {
+  border-radius: 2px;
+}
+
+.el-form-item--mini .el-form-item__error {
+  position: inherit;
+  padding-top: 2px;
+  padding-bottom: 4px;
 }
 
 .el-input {

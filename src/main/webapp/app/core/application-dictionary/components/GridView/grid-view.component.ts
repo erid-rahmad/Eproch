@@ -1,18 +1,21 @@
+import settings from '@/settings';
 import { IRegisterTabParameter, WindowStoreModule as windowStore } from '@/shared/config/store/window-store';
+import { ADColumnType } from '@/shared/model/ad-column.model';
 import { IADField } from '@/shared/model/ad-field.model';
 import { formatJson } from '@/utils';
 import { exportJson2Excel } from '@/utils/excel';
-import { nullifyField } from '@/utils/form';
+import { normalizeField } from '@/utils/form';
 import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isStringField, isTableDirectLink } from '@/utils/validate';
 import schema from 'async-validator';
 import { ElPagination } from 'element-ui/types/pagination';
 import { ElTable } from 'element-ui/types/table';
-import { debounce, isEqual, kebabCase, cloneDeep } from 'lodash';
+import { cloneDeep, debounce, isEqual, kebabCase } from 'lodash';
 import pluralize from "pluralize";
 import { Component, Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import CalloutMixin from '../../mixins/CalloutMixin';
 import ContextVariableAccessor from "../ContextVariableAccessor";
+import { format, parseISO } from 'date-fns';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -182,12 +185,30 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     return { name, adfields, targetEndpoint, filterQuery, parentId, promoted, validationSchema };
   }
 
+  get datePickerType() {
+    return (field: IADField): string => {
+      return field.adColumn.type === ADColumnType.LOCAL_DATE ? 'date' : 'datetime';
+    }
+  }
+
+  get dateDisplayFormat() {
+    return (field: IADField): string => {
+      return field.adColumn.type === ADColumnType.LOCAL_DATE ? settings.dateDisplayFormat : settings.dateTimeDisplayFormat;
+    }
+  }
+
+  get dateValueFormat() {
+    return (field: IADField): string => {
+      return field.adColumn.type === ADColumnType.LOCAL_DATE ? settings.dateValueFormat : settings.dateTimeValueFormat;
+    }
+  }
+
   /**
    * Sort the fields upon update.
    * @param fields The updated AdField list.
    */
   @Watch('fields')
-  async onFieldsChange(fields: any[]) {
+  async onFieldsChange(fields: IADField[]) {
     if (! fields) {
       return;
     }
@@ -196,8 +217,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     this.gridFields = fields
       .filter(field => field.showInGrid)
       .sort((prevItem, nextItem) => {
-        const prevSequence = prevItem.detailSequence || 0;
-        const nextSequence = nextItem.detailSequence || 0;
+        const prevSequence = prevItem.gridSequence || 0;
+        const nextSequence = nextItem.gridSequence || 0;
         return prevSequence - nextSequence;
       });
 
@@ -316,6 +337,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
 
     this.updateReferenceQueries(this.gridFields);
     this.currentRecord = row;
+    this.originalRecord = cloneDeep(row);
     this.selectedRowNo = this.gridData.indexOf(row) + 1;
 
     // Update the record-navigator.
@@ -587,7 +609,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     if (this.editing && row === this.currentRecord)
       return;
 
-    this.originalRecord = cloneDeep(this.currentRecord);
     await this.initRelationships(row);
     row.editing = !row.editing;
     this.originalRecord.editing = row.editing;
@@ -713,7 +734,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     const validator = new schema(this.dynamicValidationSchema);
 
     this.gridFields.forEach(field => {
-      nullifyField(record, field);
+      normalizeField(record, field);
     });
 
     validator.validate(record, (errors: any[]) => {
@@ -990,6 +1011,16 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     if (this.isTableDirectLink(field)) {
       const propName = field.adColumn.name.replace(/Id$/, 'Name');
       return row[propName] || row[field.adColumn.name];
+    } else if (field.adColumn.type === ADColumnType.LOCAL_DATE) {
+      const value = row[field.adColumn.name];
+      if (value) {
+        return format(parseISO(value), settings.dateDisplayFormat);
+      }
+    } else if (field.adColumn.type === ADColumnType.INSTANT || field.adColumn.type === ADColumnType.ZONED_DATE_TIME) {
+      const value = row[field.adColumn.name];
+      if (value) {
+        return format(parseISO(value), settings.dateTimeDisplayFormat);
+      }
     }
     return row[field.adColumn.name];
   }

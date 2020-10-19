@@ -110,13 +110,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
   // End of computed properties.
 
-  @Watch('$route')
-  onRouteChanged(route: any) {
-    if (route.fullPath === this.$route.fullPath) {
-      console.log('Update window %s', route.meta.title);
-    }
-  }
-
   @Watch('mainTab')
   mainTabChanged(tab) {
     if (!tab.toolbarButtons) {
@@ -188,12 +181,9 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   public onCopyRecord(data?: any) {
-    console.log('copy record', data);
     if (! data?.tabId) {
-      console.log('copy header');
       (<any>this.$refs.mainGrid).copyRow();
     } else if (data.tabId === this.currentTab) {
-      console.log('copy line', data.tabId);
       const index = parseInt(data.tabId);
       this.$refs.lineGrid[index].copyRow();
     }
@@ -203,7 +193,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.closeSearchPanel();
     if (! data?.tabId) {
       (<any>this.$refs.mainGrid).cancelOperation();
-      (<any>this.$refs.mainForm).exitEditMode();
+
+      if (! this.gridView) {
+        (<any>this.$refs.mainForm).exitEditMode();
+      }
     } else if (data.tabId === this.currentTab) {
       const index = parseInt(data.tabId);
       (<any>this.$refs.lineGrid[index]).cancelOperation();
@@ -513,7 +506,11 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       }
 
       if ( ! column.foreignKey) {
-        validationSchema[column.name].type = getValidatorType(column.type);
+        const type = getValidatorType(column.type);
+
+        if (type !== 'date') {
+          validationSchema[column.name].type = type;
+        }
       }
 
       if (column.formatPattern) {
