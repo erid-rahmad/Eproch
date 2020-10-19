@@ -148,6 +148,16 @@
               :disabled="isReadonly(row, field)"
               @change="value => onInputChanged(field, value)"
             />
+            <el-date-picker
+              v-else-if="isDateField(field)"
+              :ref="column.property"
+              v-model="row[column.property]"
+              size="mini"
+              :type="datePickerType(col.field)"
+              :format="dateDisplayFormat(col.field)"
+              :value-format="dateValueFormat(col.field)"
+              :disabled="isReadonly(row, field)"
+            />
           </el-tooltip>
         </template>
       </el-table-column>

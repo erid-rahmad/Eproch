@@ -1,9 +1,11 @@
+import settings from '@/settings';
 import { IRegisterTabParameter, WindowStoreModule as windowStore } from '@/shared/config/store/window-store';
+import { ADColumnType } from '@/shared/model/ad-column.model';
 import { IADField } from '@/shared/model/ad-field.model';
-import { nullifyField } from '@/utils/form';
+import { normalizeField } from '@/utils/form';
 import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isStringField, isTableDirectLink } from '@/utils/validate';
 import { ElForm } from 'element-ui/types/form';
-import { debounce, kebabCase, cloneDeep } from 'lodash';
+import { cloneDeep, debounce, kebabCase } from 'lodash';
 import pluralize from 'pluralize';
 import Component from 'vue-class-component';
 import { Mixins, Vue, Watch } from 'vue-property-decorator';
@@ -91,6 +93,24 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     }
   }
 
+  get datePickerType() {
+    return (field: IADField): string => {
+      return field.adColumn.type === ADColumnType.LOCAL_DATE ? 'date' : 'datetime';
+    }
+  }
+
+  get dateDisplayFormat() {
+    return (field: IADField): string => {
+      return field.adColumn.type === ADColumnType.LOCAL_DATE ? settings.dateDisplayFormat : settings.dateTimeDisplayFormat;
+    }
+  }
+
+  get dateValueFormat() {
+    return (field: IADField): string => {
+      return field.adColumn.type === ADColumnType.LOCAL_DATE ? settings.dateValueFormat : settings.dateTimeValueFormat;
+    }
+  }
+
   @Watch('observableTabProperties')
   async onObservableTabPropertiesChange({name, adfields, validationSchema}) {
     if (! adfields) {
@@ -101,9 +121,9 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     this.validationSchema = validationSchema;
     this.dynamicValidationSchema = cloneDeep(this.validationSchema);
     this.referenceItemsMap.clear();
-    this.formFields = adfields
-      .filter((field: IADField) => field.showInDetail)
-      .sort((prevItem: IADField, nextItem: IADField) => {
+    this.formFields = (<IADField[]>adfields)
+      .filter((field) => field.showInDetail)
+      .sort((prevItem, nextItem) => {
         const prevSequence = prevItem.detailSequence || 0;
         const nextSequence = nextItem.detailSequence || 0;
         return prevSequence - nextSequence;
@@ -125,10 +145,13 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   onRecordChanged(record: any) {
     if (record) {
       this.model = record;
+      this.originalRecord = cloneDeep(record);
       this.updateReferenceQueries(this.formFields);
       this.reloadValidationSchema();
       this.debouncedInitRelationships(record);
-      this.exitEditMode();
+      if (this.editing) {
+        this.exitEditMode();
+      }
     }
   }
 
@@ -169,7 +192,6 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
 
   public onInputChanged(field: IADField, value: any) {
     if (! this.editing) {
-      this.originalRecord = cloneDeep(this.model);
       this.editing = true;
       this.$emit('edit-mode-change', this.editing);
     }
@@ -357,7 +379,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     } = this.model;
 
     this.formFields.forEach(field => {
-      nullifyField(record, field);
+      normalizeField(record, field);
     });
 
     (<ElForm>this.$refs.mainForm).validate(valid => {
