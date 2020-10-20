@@ -159,6 +159,7 @@
               :ref="column.property"
               v-model="row[column.property]"
               size="mini"
+              class="date"
               :type="datePickerType(field)"
               :format="dateDisplayFormat(field)"
               :value-format="dateValueFormat(field)"

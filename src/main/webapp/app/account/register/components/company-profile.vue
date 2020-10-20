@@ -97,7 +97,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="12">
-        <el-form-item :label="$t('register.basic.address.npwpAddress')" prop="npwpAddress" required>
+        <el-form-item :label="$t('register.basic.address.npwpAddress')" prop="npwpAddress">
           <el-input 
             class="form-input" 
             clearable
@@ -146,7 +146,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item :label="$t('register.basic.address.npwpCountry')" prop="npwpCountry" required>
+        <el-form-item :label="$t('register.basic.address.npwpCountry')" prop="npwpCountry">
           <el-select 
             class="form-input"
             clearable
@@ -164,7 +164,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item :label="$t('register.basic.address.npwpRegion')" prop="npwpRegion" required>
+        <el-form-item :label="$t('register.basic.address.npwpRegion')" prop="npwpRegion">
           <el-select 
             class="form-input"
             clearable
@@ -212,7 +212,7 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item :label="$t('register.basic.address.npwpCity')" prop="npwpCity" required>
+        <el-form-item :label="$t('register.basic.address.npwpCity')" prop="npwpCity">
           <el-select 
             class="form-input"
             clearable
