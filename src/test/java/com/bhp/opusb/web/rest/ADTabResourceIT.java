@@ -57,6 +57,9 @@ public class ADTabResourceIT {
     private static final String DEFAULT_TARGET_ENDPOINT = "AAAAAAAAAA";
     private static final String UPDATED_TARGET_ENDPOINT = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_SINGLE_ROW = false;
+    private static final Boolean UPDATED_SINGLE_ROW = true;
+
     private static final Boolean DEFAULT_DELETABLE = false;
     private static final Boolean UPDATED_DELETABLE = true;
 
@@ -115,6 +118,7 @@ public class ADTabResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .iconName(DEFAULT_ICON_NAME)
             .targetEndpoint(DEFAULT_TARGET_ENDPOINT)
+            .singleRow(DEFAULT_SINGLE_ROW)
             .deletable(DEFAULT_DELETABLE)
             .writable(DEFAULT_WRITABLE)
             .displayLogic(DEFAULT_DISPLAY_LOGIC)
@@ -168,6 +172,7 @@ public class ADTabResourceIT {
             .description(UPDATED_DESCRIPTION)
             .iconName(UPDATED_ICON_NAME)
             .targetEndpoint(UPDATED_TARGET_ENDPOINT)
+            .singleRow(UPDATED_SINGLE_ROW)
             .deletable(UPDATED_DELETABLE)
             .writable(UPDATED_WRITABLE)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
@@ -235,6 +240,7 @@ public class ADTabResourceIT {
         assertThat(testADTab.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testADTab.getIconName()).isEqualTo(DEFAULT_ICON_NAME);
         assertThat(testADTab.getTargetEndpoint()).isEqualTo(DEFAULT_TARGET_ENDPOINT);
+        assertThat(testADTab.isSingleRow()).isEqualTo(DEFAULT_SINGLE_ROW);
         assertThat(testADTab.isDeletable()).isEqualTo(DEFAULT_DELETABLE);
         assertThat(testADTab.isWritable()).isEqualTo(DEFAULT_WRITABLE);
         assertThat(testADTab.getDisplayLogic()).isEqualTo(DEFAULT_DISPLAY_LOGIC);
@@ -301,6 +307,7 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].iconName").value(hasItem(DEFAULT_ICON_NAME)))
             .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
+            .andExpect(jsonPath("$.[*].singleRow").value(hasItem(DEFAULT_SINGLE_ROW.booleanValue())))
             .andExpect(jsonPath("$.[*].deletable").value(hasItem(DEFAULT_DELETABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].writable").value(hasItem(DEFAULT_WRITABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
@@ -327,6 +334,7 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.iconName").value(DEFAULT_ICON_NAME))
             .andExpect(jsonPath("$.targetEndpoint").value(DEFAULT_TARGET_ENDPOINT))
+            .andExpect(jsonPath("$.singleRow").value(DEFAULT_SINGLE_ROW.booleanValue()))
             .andExpect(jsonPath("$.deletable").value(DEFAULT_DELETABLE.booleanValue()))
             .andExpect(jsonPath("$.writable").value(DEFAULT_WRITABLE.booleanValue()))
             .andExpect(jsonPath("$.displayLogic").value(DEFAULT_DISPLAY_LOGIC))
@@ -720,6 +728,58 @@ public class ADTabResourceIT {
         defaultADTabShouldBeFound("targetEndpoint.doesNotContain=" + UPDATED_TARGET_ENDPOINT);
     }
 
+
+    @Test
+    @Transactional
+    public void getAllADTabsBySingleRowIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where singleRow equals to DEFAULT_SINGLE_ROW
+        defaultADTabShouldBeFound("singleRow.equals=" + DEFAULT_SINGLE_ROW);
+
+        // Get all the aDTabList where singleRow equals to UPDATED_SINGLE_ROW
+        defaultADTabShouldNotBeFound("singleRow.equals=" + UPDATED_SINGLE_ROW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsBySingleRowIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where singleRow not equals to DEFAULT_SINGLE_ROW
+        defaultADTabShouldNotBeFound("singleRow.notEquals=" + DEFAULT_SINGLE_ROW);
+
+        // Get all the aDTabList where singleRow not equals to UPDATED_SINGLE_ROW
+        defaultADTabShouldBeFound("singleRow.notEquals=" + UPDATED_SINGLE_ROW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsBySingleRowIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where singleRow in DEFAULT_SINGLE_ROW or UPDATED_SINGLE_ROW
+        defaultADTabShouldBeFound("singleRow.in=" + DEFAULT_SINGLE_ROW + "," + UPDATED_SINGLE_ROW);
+
+        // Get all the aDTabList where singleRow equals to UPDATED_SINGLE_ROW
+        defaultADTabShouldNotBeFound("singleRow.in=" + UPDATED_SINGLE_ROW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsBySingleRowIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where singleRow is not null
+        defaultADTabShouldBeFound("singleRow.specified=true");
+
+        // Get all the aDTabList where singleRow is null
+        defaultADTabShouldNotBeFound("singleRow.specified=false");
+    }
 
     @Test
     @Transactional
@@ -1454,6 +1514,7 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].iconName").value(hasItem(DEFAULT_ICON_NAME)))
             .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
+            .andExpect(jsonPath("$.[*].singleRow").value(hasItem(DEFAULT_SINGLE_ROW.booleanValue())))
             .andExpect(jsonPath("$.[*].deletable").value(hasItem(DEFAULT_DELETABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].writable").value(hasItem(DEFAULT_WRITABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
@@ -1514,6 +1575,7 @@ public class ADTabResourceIT {
             .description(UPDATED_DESCRIPTION)
             .iconName(UPDATED_ICON_NAME)
             .targetEndpoint(UPDATED_TARGET_ENDPOINT)
+            .singleRow(UPDATED_SINGLE_ROW)
             .deletable(UPDATED_DELETABLE)
             .writable(UPDATED_WRITABLE)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
@@ -1538,6 +1600,7 @@ public class ADTabResourceIT {
         assertThat(testADTab.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testADTab.getIconName()).isEqualTo(UPDATED_ICON_NAME);
         assertThat(testADTab.getTargetEndpoint()).isEqualTo(UPDATED_TARGET_ENDPOINT);
+        assertThat(testADTab.isSingleRow()).isEqualTo(UPDATED_SINGLE_ROW);
         assertThat(testADTab.isDeletable()).isEqualTo(UPDATED_DELETABLE);
         assertThat(testADTab.isWritable()).isEqualTo(UPDATED_WRITABLE);
         assertThat(testADTab.getDisplayLogic()).isEqualTo(UPDATED_DISPLAY_LOGIC);

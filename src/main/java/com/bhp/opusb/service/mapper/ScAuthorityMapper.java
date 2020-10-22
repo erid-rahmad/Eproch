@@ -15,7 +15,6 @@ public interface ScAuthorityMapper extends EntityMapper<ScAuthorityDTO, ScAuthor
 
     @Mapping(source = "authority.name", target = "authorityName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
-    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     ScAuthorityDTO toDto(ScAuthority scAuthority);
 
     @Mapping(source = "authorityName", target = "authority")

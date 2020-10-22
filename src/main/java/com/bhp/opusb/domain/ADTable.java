@@ -47,6 +47,9 @@ public class ADTable extends AbstractAuditingEntity {
     @Column(name = "view")
     private Boolean view;
 
+    @Column(name = "high_volume")
+    private Boolean highVolume;
+
     @Column(name = "target_endpoint")
     private String targetEndpoint;
 
@@ -116,6 +119,19 @@ public class ADTable extends AbstractAuditingEntity {
 
     public void setView(Boolean view) {
         this.view = view;
+    }
+
+    public Boolean isHighVolume() {
+        return highVolume;
+    }
+
+    public ADTable highVolume(Boolean highVolume) {
+        this.highVolume = highVolume;
+        return this;
+    }
+
+    public void setHighVolume(Boolean highVolume) {
+        this.highVolume = highVolume;
     }
 
     public String getTargetEndpoint() {
@@ -211,6 +227,7 @@ public class ADTable extends AbstractAuditingEntity {
             ", uid='" + getUid() + "'" +
             ", name='" + getName() + "'" +
             ", view='" + isView() + "'" +
+            ", highVolume='" + isHighVolume() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
             ", active='" + isActive() + "'" +
             "}";

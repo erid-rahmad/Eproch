@@ -18,6 +18,10 @@
             "fieldType": "Boolean"
         },
         {
+            "fieldName": "highVolume",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "targetEndpoint",
             "fieldType": "String"
         },

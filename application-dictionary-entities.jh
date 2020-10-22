@@ -11,6 +11,10 @@ entity ADTable {
 	name String required unique
 	view Boolean
 
+	// Indicates that this is a high volume table, thus show the search form
+	// when entering the window.
+	highVolume Boolean
+
 	// Target API endpoint for the CRUD operations.
 	targetEndpoint String
 
@@ -99,6 +103,7 @@ entity ADTab {
 	// Override the same property in AdTable.
 	targetEndpoint String
 
+	singleRow Boolean
 	deletable Boolean
 	writable Boolean
 	displayLogic String
@@ -314,12 +319,32 @@ entity AdButton {
 	icon String
 }
 
+/**
+ * The extended User entity.
+ */
+entity AdUser {
+	uid UUID
+	active Boolean
+	code String required
+	phone String required
+
+	failedLoginCount Integer
+	lastLoginDate Instant
+}
+
+entity AdUserAuthority {
+	uid UUID
+	active Boolean
+}
+
 /** Extends the JHipster's Authority entity */
 entity ScAuthority {
   uid UUID
   active Boolean
   description String
   master Boolean
+	accessAllOrgs Boolean
+	useUserOrgs Boolean
 }
 
 entity ScAccess {
@@ -327,6 +352,7 @@ entity ScAccess {
   active Boolean
   name String maxlength(50)
   description String
+	canWrite Boolean
 }
 
 entity ScAccessType {
@@ -334,6 +360,13 @@ entity ScAccessType {
   active Boolean
   name String maxlength(10)
   description String
+}
+
+entity CDocumentType {
+	uid UUID
+	active Boolean
+	name String required
+	description String
 }
 
 enum AdAccessLevel {
@@ -370,6 +403,7 @@ enum AdTriggerType {
  * One to one relationship.
  */
 relationship OneToOne {
+	AdUser{user(login) required} to User
   ScAuthority{authority(name) required} to Authority
 }
 
@@ -448,14 +482,32 @@ relationship ManyToOne {
 	AdButton{adTab required} to ADTab
 	AdButton{adTrigger} to AdTrigger
 
+	AdUser{adOrganization required} to ADOrganization
+
+	AdUserAuthority{adOrganization required} to ADOrganization
+	AdUserAuthority{user required} to AdUser
+	AdUserAuthority{authority required} to ScAuthority
+
   ScAuthority{adOrganization required} to ADOrganization
 
   ScAccess{adOrganization required} to ADOrganization
   ScAccess{type required} to ScAccessType
+
+	// Used for restricting access to specific window.
   ScAccess{window} to ADWindow
+
+	// Used for restricting access to specific form.
 	ScAccess{form} to AdForm
 
+	// Used for restricting access to specific document actions.
+	ScAccess{documentType} to CDocumentType
+
+	// Used for restricting access to specific document actions.
+	ScAccess{referenceList} to ADReferenceList
+
   ScAccessType{adOrganization required} to ADOrganization
+
+	CDocumentType{adOrganization required} to ADOrganization
 }
 
 // Allow filtering to all entities.

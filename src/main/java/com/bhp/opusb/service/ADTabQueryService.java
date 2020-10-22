@@ -106,6 +106,9 @@ public class ADTabQueryService extends QueryService<ADTab> {
             if (criteria.getTargetEndpoint() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTargetEndpoint(), ADTab_.targetEndpoint));
             }
+            if (criteria.getSingleRow() != null) {
+                specification = specification.and(buildSpecification(criteria.getSingleRow(), ADTab_.singleRow));
+            }
             if (criteria.getDeletable() != null) {
                 specification = specification.and(buildSpecification(criteria.getDeletable(), ADTab_.deletable));
             }

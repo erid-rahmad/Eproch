@@ -25,6 +25,10 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "singleRow",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "deletable",
             "fieldType": "Boolean"
         },

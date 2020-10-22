@@ -27,6 +27,8 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     private String targetEndpoint;
 
+    private Boolean singleRow;
+
     private Boolean deletable;
 
     private Boolean writable;
@@ -112,6 +114,14 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     public void setTargetEndpoint(String targetEndpoint) {
         this.targetEndpoint = targetEndpoint;
+    }
+
+    public Boolean isSingleRow() {
+        return singleRow;
+    }
+
+    public void setSingleRow(Boolean singleRow) {
+        this.singleRow = singleRow;
     }
 
     public Boolean isDeletable() {
@@ -328,6 +338,7 @@ public class ADTabDTO extends AbstractAuditingDTO {
             ", description='" + getDescription() + "'" +
             ", iconName='" + getIconName() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
+            ", singleRow='" + isSingleRow() + "'" +
             ", deletable='" + isDeletable() + "'" +
             ", writable='" + isWritable() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +

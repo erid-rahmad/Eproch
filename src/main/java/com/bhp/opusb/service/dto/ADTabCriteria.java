@@ -37,6 +37,8 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     private StringFilter targetEndpoint;
 
+    private BooleanFilter singleRow;
+
     private BooleanFilter deletable;
 
     private BooleanFilter writable;
@@ -79,6 +81,7 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.iconName = other.iconName == null ? null : other.iconName.copy();
         this.targetEndpoint = other.targetEndpoint == null ? null : other.targetEndpoint.copy();
+        this.singleRow = other.singleRow == null ? null : other.singleRow.copy();
         this.deletable = other.deletable == null ? null : other.deletable.copy();
         this.writable = other.writable == null ? null : other.writable.copy();
         this.displayLogic = other.displayLogic == null ? null : other.displayLogic.copy();
@@ -148,6 +151,14 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     public void setTargetEndpoint(StringFilter targetEndpoint) {
         this.targetEndpoint = targetEndpoint;
+    }
+
+    public BooleanFilter getSingleRow() {
+        return singleRow;
+    }
+
+    public void setSingleRow(BooleanFilter singleRow) {
+        this.singleRow = singleRow;
     }
 
     public BooleanFilter getDeletable() {
@@ -295,6 +306,7 @@ public class ADTabCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(iconName, that.iconName) &&
             Objects.equals(targetEndpoint, that.targetEndpoint) &&
+            Objects.equals(singleRow, that.singleRow) &&
             Objects.equals(deletable, that.deletable) &&
             Objects.equals(writable, that.writable) &&
             Objects.equals(displayLogic, that.displayLogic) &&
@@ -322,6 +334,7 @@ public class ADTabCriteria implements Serializable, Criteria {
         description,
         iconName,
         targetEndpoint,
+        singleRow,
         deletable,
         writable,
         displayLogic,
@@ -350,6 +363,7 @@ public class ADTabCriteria implements Serializable, Criteria {
                 (description != null ? "description=" + description + ", " : "") +
                 (iconName != null ? "iconName=" + iconName + ", " : "") +
                 (targetEndpoint != null ? "targetEndpoint=" + targetEndpoint + ", " : "") +
+                (singleRow != null ? "singleRow=" + singleRow + ", " : "") +
                 (deletable != null ? "deletable=" + deletable + ", " : "") +
                 (writable != null ? "writable=" + writable + ", " : "") +
                 (displayLogic != null ? "displayLogic=" + displayLogic + ", " : "") +

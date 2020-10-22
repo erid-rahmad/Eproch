@@ -57,6 +57,12 @@ public class ScAuthorityResourceIT {
     private static final Boolean DEFAULT_MASTER = false;
     private static final Boolean UPDATED_MASTER = true;
 
+    private static final Boolean DEFAULT_ACCESS_ALL_ORGS = false;
+    private static final Boolean UPDATED_ACCESS_ALL_ORGS = true;
+
+    private static final Boolean DEFAULT_USE_USER_ORGS = false;
+    private static final Boolean UPDATED_USE_USER_ORGS = true;
+
     @Autowired
     private ScAuthorityRepository scAuthorityRepository;
 
@@ -88,7 +94,9 @@ public class ScAuthorityResourceIT {
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE)
             .description(DEFAULT_DESCRIPTION)
-            .master(DEFAULT_MASTER);
+            .master(DEFAULT_MASTER)
+            .accessAllOrgs(DEFAULT_ACCESS_ALL_ORGS)
+            .useUserOrgs(DEFAULT_USE_USER_ORGS);
         // Add required entity
         Authority authority = TestUtil.findAll(em, Authority.class).get(0);
         scAuthority.setAuthority(authority);
@@ -115,7 +123,9 @@ public class ScAuthorityResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
             .description(UPDATED_DESCRIPTION)
-            .master(UPDATED_MASTER);
+            .master(UPDATED_MASTER)
+            .accessAllOrgs(UPDATED_ACCESS_ALL_ORGS)
+            .useUserOrgs(UPDATED_USE_USER_ORGS);
         // Add required entity
         Authority authority = TestUtil.findAll(em, Authority.class).get(0);
         scAuthority.setAuthority(authority);
@@ -157,6 +167,8 @@ public class ScAuthorityResourceIT {
         assertThat(testScAuthority.isActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testScAuthority.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testScAuthority.isMaster()).isEqualTo(DEFAULT_MASTER);
+        assertThat(testScAuthority.isAccessAllOrgs()).isEqualTo(DEFAULT_ACCESS_ALL_ORGS);
+        assertThat(testScAuthority.isUseUserOrgs()).isEqualTo(DEFAULT_USE_USER_ORGS);
     }
 
     @Test
@@ -194,7 +206,9 @@ public class ScAuthorityResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].master").value(hasItem(DEFAULT_MASTER.booleanValue())));
+            .andExpect(jsonPath("$.[*].master").value(hasItem(DEFAULT_MASTER.booleanValue())))
+            .andExpect(jsonPath("$.[*].accessAllOrgs").value(hasItem(DEFAULT_ACCESS_ALL_ORGS.booleanValue())))
+            .andExpect(jsonPath("$.[*].useUserOrgs").value(hasItem(DEFAULT_USE_USER_ORGS.booleanValue())));
     }
     
     @Test
@@ -211,7 +225,9 @@ public class ScAuthorityResourceIT {
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.master").value(DEFAULT_MASTER.booleanValue()));
+            .andExpect(jsonPath("$.master").value(DEFAULT_MASTER.booleanValue()))
+            .andExpect(jsonPath("$.accessAllOrgs").value(DEFAULT_ACCESS_ALL_ORGS.booleanValue()))
+            .andExpect(jsonPath("$.useUserOrgs").value(DEFAULT_USE_USER_ORGS.booleanValue()));
     }
 
 
@@ -470,6 +486,110 @@ public class ScAuthorityResourceIT {
 
     @Test
     @Transactional
+    public void getAllScAuthoritiesByAccessAllOrgsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scAuthorityRepository.saveAndFlush(scAuthority);
+
+        // Get all the scAuthorityList where accessAllOrgs equals to DEFAULT_ACCESS_ALL_ORGS
+        defaultScAuthorityShouldBeFound("accessAllOrgs.equals=" + DEFAULT_ACCESS_ALL_ORGS);
+
+        // Get all the scAuthorityList where accessAllOrgs equals to UPDATED_ACCESS_ALL_ORGS
+        defaultScAuthorityShouldNotBeFound("accessAllOrgs.equals=" + UPDATED_ACCESS_ALL_ORGS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllScAuthoritiesByAccessAllOrgsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        scAuthorityRepository.saveAndFlush(scAuthority);
+
+        // Get all the scAuthorityList where accessAllOrgs not equals to DEFAULT_ACCESS_ALL_ORGS
+        defaultScAuthorityShouldNotBeFound("accessAllOrgs.notEquals=" + DEFAULT_ACCESS_ALL_ORGS);
+
+        // Get all the scAuthorityList where accessAllOrgs not equals to UPDATED_ACCESS_ALL_ORGS
+        defaultScAuthorityShouldBeFound("accessAllOrgs.notEquals=" + UPDATED_ACCESS_ALL_ORGS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllScAuthoritiesByAccessAllOrgsIsInShouldWork() throws Exception {
+        // Initialize the database
+        scAuthorityRepository.saveAndFlush(scAuthority);
+
+        // Get all the scAuthorityList where accessAllOrgs in DEFAULT_ACCESS_ALL_ORGS or UPDATED_ACCESS_ALL_ORGS
+        defaultScAuthorityShouldBeFound("accessAllOrgs.in=" + DEFAULT_ACCESS_ALL_ORGS + "," + UPDATED_ACCESS_ALL_ORGS);
+
+        // Get all the scAuthorityList where accessAllOrgs equals to UPDATED_ACCESS_ALL_ORGS
+        defaultScAuthorityShouldNotBeFound("accessAllOrgs.in=" + UPDATED_ACCESS_ALL_ORGS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllScAuthoritiesByAccessAllOrgsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        scAuthorityRepository.saveAndFlush(scAuthority);
+
+        // Get all the scAuthorityList where accessAllOrgs is not null
+        defaultScAuthorityShouldBeFound("accessAllOrgs.specified=true");
+
+        // Get all the scAuthorityList where accessAllOrgs is null
+        defaultScAuthorityShouldNotBeFound("accessAllOrgs.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllScAuthoritiesByUseUserOrgsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scAuthorityRepository.saveAndFlush(scAuthority);
+
+        // Get all the scAuthorityList where useUserOrgs equals to DEFAULT_USE_USER_ORGS
+        defaultScAuthorityShouldBeFound("useUserOrgs.equals=" + DEFAULT_USE_USER_ORGS);
+
+        // Get all the scAuthorityList where useUserOrgs equals to UPDATED_USE_USER_ORGS
+        defaultScAuthorityShouldNotBeFound("useUserOrgs.equals=" + UPDATED_USE_USER_ORGS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllScAuthoritiesByUseUserOrgsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        scAuthorityRepository.saveAndFlush(scAuthority);
+
+        // Get all the scAuthorityList where useUserOrgs not equals to DEFAULT_USE_USER_ORGS
+        defaultScAuthorityShouldNotBeFound("useUserOrgs.notEquals=" + DEFAULT_USE_USER_ORGS);
+
+        // Get all the scAuthorityList where useUserOrgs not equals to UPDATED_USE_USER_ORGS
+        defaultScAuthorityShouldBeFound("useUserOrgs.notEquals=" + UPDATED_USE_USER_ORGS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllScAuthoritiesByUseUserOrgsIsInShouldWork() throws Exception {
+        // Initialize the database
+        scAuthorityRepository.saveAndFlush(scAuthority);
+
+        // Get all the scAuthorityList where useUserOrgs in DEFAULT_USE_USER_ORGS or UPDATED_USE_USER_ORGS
+        defaultScAuthorityShouldBeFound("useUserOrgs.in=" + DEFAULT_USE_USER_ORGS + "," + UPDATED_USE_USER_ORGS);
+
+        // Get all the scAuthorityList where useUserOrgs equals to UPDATED_USE_USER_ORGS
+        defaultScAuthorityShouldNotBeFound("useUserOrgs.in=" + UPDATED_USE_USER_ORGS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllScAuthoritiesByUseUserOrgsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        scAuthorityRepository.saveAndFlush(scAuthority);
+
+        // Get all the scAuthorityList where useUserOrgs is not null
+        defaultScAuthorityShouldBeFound("useUserOrgs.specified=true");
+
+        // Get all the scAuthorityList where useUserOrgs is null
+        defaultScAuthorityShouldNotBeFound("useUserOrgs.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllScAuthoritiesByAuthorityIsEqualToSomething() throws Exception {
         // Get already existing entity
         Authority authority = scAuthority.getAuthority();
@@ -530,7 +650,9 @@ public class ScAuthorityResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].master").value(hasItem(DEFAULT_MASTER.booleanValue())));
+            .andExpect(jsonPath("$.[*].master").value(hasItem(DEFAULT_MASTER.booleanValue())))
+            .andExpect(jsonPath("$.[*].accessAllOrgs").value(hasItem(DEFAULT_ACCESS_ALL_ORGS.booleanValue())))
+            .andExpect(jsonPath("$.[*].useUserOrgs").value(hasItem(DEFAULT_USE_USER_ORGS.booleanValue())));
 
         // Check, that the count call also returns 1
         restScAuthorityMockMvc.perform(get("/api/sc-authorities/count?sort=id,desc&" + filter))
@@ -581,7 +703,9 @@ public class ScAuthorityResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
             .description(UPDATED_DESCRIPTION)
-            .master(UPDATED_MASTER);
+            .master(UPDATED_MASTER)
+            .accessAllOrgs(UPDATED_ACCESS_ALL_ORGS)
+            .useUserOrgs(UPDATED_USE_USER_ORGS);
         ScAuthorityDTO scAuthorityDTO = scAuthorityMapper.toDto(updatedScAuthority);
 
         restScAuthorityMockMvc.perform(put("/api/sc-authorities")
@@ -597,6 +721,8 @@ public class ScAuthorityResourceIT {
         assertThat(testScAuthority.isActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testScAuthority.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testScAuthority.isMaster()).isEqualTo(UPDATED_MASTER);
+        assertThat(testScAuthority.isAccessAllOrgs()).isEqualTo(UPDATED_ACCESS_ALL_ORGS);
+        assertThat(testScAuthority.isUseUserOrgs()).isEqualTo(UPDATED_USE_USER_ORGS);
     }
 
     @Test

@@ -54,6 +54,9 @@ public class ADTab extends AbstractAuditingEntity {
     @Column(name = "target_endpoint")
     private String targetEndpoint;
 
+    @Column(name = "single_row")
+    private Boolean singleRow;
+
     @Column(name = "deletable")
     private Boolean deletable;
 
@@ -186,6 +189,19 @@ public class ADTab extends AbstractAuditingEntity {
 
     public void setTargetEndpoint(String targetEndpoint) {
         this.targetEndpoint = targetEndpoint;
+    }
+
+    public Boolean isSingleRow() {
+        return singleRow;
+    }
+
+    public ADTab singleRow(Boolean singleRow) {
+        this.singleRow = singleRow;
+        return this;
+    }
+
+    public void setSingleRow(Boolean singleRow) {
+        this.singleRow = singleRow;
     }
 
     public Boolean isDeletable() {
@@ -451,6 +467,7 @@ public class ADTab extends AbstractAuditingEntity {
             ", description='" + getDescription() + "'" +
             ", iconName='" + getIconName() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
+            ", singleRow='" + isSingleRow() + "'" +
             ", deletable='" + isDeletable() + "'" +
             ", writable='" + isWritable() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +

@@ -105,6 +105,7 @@
             <column name="description" type="string"/>
             <column name="icon_name" type="string"/>
             <column name="target_endpoint" type="string"/>
+            <column name="single_row" type="boolean"/>
             <column name="deletable" type="boolean"/>
             <column name="writable" type="boolean"/>
             <column name="display_logic" type="string"/>
@@ -135,4 +136,13 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20201022090700" author="Ananta Aryadewa">
+        <addColumn tableName="ad_tab">
+            <column name="single_row" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
