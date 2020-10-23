@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity CVendor.
     -->
@@ -117,6 +117,23 @@
 
     <changeSet id="20200810230300" author="Ananta Aryadewa">
         <modifyDataType tableName="c_vendor" columnName="tax_id_no" newDataType="varchar(255)" />
+    </changeSet>
+
+    <changeSet id="20201023051700-added1" author="dian-tri-budianto">
+        <addColumn tableName="c_vendor">
+            <column name="location" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="tin" type="varchar(50)" >
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20201023051700-update1" author="dian-tri-budianto">
+        <modifyDataType tableName="c_vendor" columnName="type" newDataType="varchar(50)" />
+        <dropNotNullConstraint tableName="c_vendor" columnName="tax_id_no" newDataType="varchar(60)" />
+        <dropNotNullConstraint tableName="c_vendor" columnName="tax_id_name" newDataType="varchar(70)" />
     </changeSet>
 
 </databaseChangeLog>
