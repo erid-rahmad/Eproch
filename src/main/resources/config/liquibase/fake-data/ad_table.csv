@@ -1,11 +1,11 @@
-id;uid;name;view;active;ad_organization_id
-1;1a76a14f-e77a-441d-bb77-327e86fc11aa;Lead synthesizing;false;false;1
-2;47f6569d-eed7-4d6b-ae61-abc933f39520;Cambridgeshire Idaho e-commerce;false;true;2
-3;8ec20387-54dd-4a87-812a-0896b5810b4b;Program best-of-breed;true;true;3
-4;3e5257ed-ed69-40e9-99aa-b66188d461cb;North Dakota;false;true;4
-5;cd4e2c46-5824-4f4c-a59b-24283bf829b4;Data;true;false;5
-6;8b08134f-a491-40a2-a409-b266b33a5c1d;alarm backing up transmitting;true;true;6
-7;0bd59334-fa47-4565-8420-6ca1e218e993;Rubber Borders;false;false;7
-8;a0a76e35-9bc8-4034-a57c-857830538f34;Function-based hub;false;false;8
-9;d23980ae-5806-498e-b266-bf76ba78d9a0;deposit South Carolina internet solution;false;false;9
-10;0297bbb9-c201-49a4-9e43-727b469b7eb1;Quality Practical;true;false;10
+id;uid;name;view;high_volume;target_endpoint;active;ad_organization_id
+1;1a76a14f-e77a-441d-bb77-327e86fc11aa;Lead synthesizing;false;false;Ville;false;1
+2;569deed7-d6b2-4e61-abc9-33f39520f8f9;e-commerce;false;true;USB Chair;false;2
+3;8754dda8-7812-4a08-96b5-810b4b9f056e;Up-sized benchmark info-mediaries;true;true;ADP Checking Account Investor;true;3
+4;9aab6618-8d46-41cb-b9a7-ecd4e2c46582;Engineer;true;false;Credit Card Account Gloves;false;4
+5;83bf829b-40fc-4c28-b081-34fa4910a224;Credit Card Account;false;false;microchip Progressive;false;5
+6;c1dcbad0-dd98-40bd-9933-4fa475658420;synthesize Unbranded Wooden Computer;true;true;Savings Account innovative;true;6
+7;7922a0a7-6e35-49bc-8034-a57c85783053;Integration even-keeled;false;false;Lights;false;7
+8;d23980ae-5806-498e-b266-bf76ba78d9a0;deposit South Carolina internet solution;false;false;Soap;false;8
+9;bbb9c201-9a49-4e43-b27b-469b7eb17fa1;Savings Account US Dollar;true;true;Salad program Metal;true;9
+10;ac320113-cd6f-462c-ad05-5835ad97716a;Borders Wyoming Haven;false;false;Crossroad;false;10

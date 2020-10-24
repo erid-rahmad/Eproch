@@ -54,11 +54,20 @@ public class ADTabResourceIT {
     private static final String DEFAULT_ICON_NAME = "AAAAAAAAAA";
     private static final String UPDATED_ICON_NAME = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_TREE_VIEW = false;
+    private static final Boolean UPDATED_TREE_VIEW = true;
+
     private static final String DEFAULT_TARGET_ENDPOINT = "AAAAAAAAAA";
     private static final String UPDATED_TARGET_ENDPOINT = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_SINGLE_ROW = false;
+    private static final Boolean UPDATED_SINGLE_ROW = true;
+
     private static final Boolean DEFAULT_DELETABLE = false;
     private static final Boolean UPDATED_DELETABLE = true;
+
+    private static final Boolean DEFAULT_INSERTABLE = false;
+    private static final Boolean UPDATED_INSERTABLE = true;
 
     private static final Boolean DEFAULT_WRITABLE = false;
     private static final Boolean UPDATED_WRITABLE = true;
@@ -114,8 +123,11 @@ public class ADTabResourceIT {
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .iconName(DEFAULT_ICON_NAME)
+            .treeView(DEFAULT_TREE_VIEW)
             .targetEndpoint(DEFAULT_TARGET_ENDPOINT)
+            .singleRow(DEFAULT_SINGLE_ROW)
             .deletable(DEFAULT_DELETABLE)
+            .insertable(DEFAULT_INSERTABLE)
             .writable(DEFAULT_WRITABLE)
             .displayLogic(DEFAULT_DISPLAY_LOGIC)
             .readOnlyLogic(DEFAULT_READ_ONLY_LOGIC)
@@ -167,8 +179,11 @@ public class ADTabResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .iconName(UPDATED_ICON_NAME)
+            .treeView(UPDATED_TREE_VIEW)
             .targetEndpoint(UPDATED_TARGET_ENDPOINT)
+            .singleRow(UPDATED_SINGLE_ROW)
             .deletable(UPDATED_DELETABLE)
+            .insertable(UPDATED_INSERTABLE)
             .writable(UPDATED_WRITABLE)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
             .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
@@ -234,8 +249,11 @@ public class ADTabResourceIT {
         assertThat(testADTab.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADTab.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testADTab.getIconName()).isEqualTo(DEFAULT_ICON_NAME);
+        assertThat(testADTab.isTreeView()).isEqualTo(DEFAULT_TREE_VIEW);
         assertThat(testADTab.getTargetEndpoint()).isEqualTo(DEFAULT_TARGET_ENDPOINT);
+        assertThat(testADTab.isSingleRow()).isEqualTo(DEFAULT_SINGLE_ROW);
         assertThat(testADTab.isDeletable()).isEqualTo(DEFAULT_DELETABLE);
+        assertThat(testADTab.isInsertable()).isEqualTo(DEFAULT_INSERTABLE);
         assertThat(testADTab.isWritable()).isEqualTo(DEFAULT_WRITABLE);
         assertThat(testADTab.getDisplayLogic()).isEqualTo(DEFAULT_DISPLAY_LOGIC);
         assertThat(testADTab.getReadOnlyLogic()).isEqualTo(DEFAULT_READ_ONLY_LOGIC);
@@ -300,8 +318,11 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].iconName").value(hasItem(DEFAULT_ICON_NAME)))
+            .andExpect(jsonPath("$.[*].treeView").value(hasItem(DEFAULT_TREE_VIEW.booleanValue())))
             .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
+            .andExpect(jsonPath("$.[*].singleRow").value(hasItem(DEFAULT_SINGLE_ROW.booleanValue())))
             .andExpect(jsonPath("$.[*].deletable").value(hasItem(DEFAULT_DELETABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].insertable").value(hasItem(DEFAULT_INSERTABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].writable").value(hasItem(DEFAULT_WRITABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
             .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
@@ -326,8 +347,11 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.iconName").value(DEFAULT_ICON_NAME))
+            .andExpect(jsonPath("$.treeView").value(DEFAULT_TREE_VIEW.booleanValue()))
             .andExpect(jsonPath("$.targetEndpoint").value(DEFAULT_TARGET_ENDPOINT))
+            .andExpect(jsonPath("$.singleRow").value(DEFAULT_SINGLE_ROW.booleanValue()))
             .andExpect(jsonPath("$.deletable").value(DEFAULT_DELETABLE.booleanValue()))
+            .andExpect(jsonPath("$.insertable").value(DEFAULT_INSERTABLE.booleanValue()))
             .andExpect(jsonPath("$.writable").value(DEFAULT_WRITABLE.booleanValue()))
             .andExpect(jsonPath("$.displayLogic").value(DEFAULT_DISPLAY_LOGIC))
             .andExpect(jsonPath("$.readOnlyLogic").value(DEFAULT_READ_ONLY_LOGIC))
@@ -645,6 +669,58 @@ public class ADTabResourceIT {
 
     @Test
     @Transactional
+    public void getAllADTabsByTreeViewIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where treeView equals to DEFAULT_TREE_VIEW
+        defaultADTabShouldBeFound("treeView.equals=" + DEFAULT_TREE_VIEW);
+
+        // Get all the aDTabList where treeView equals to UPDATED_TREE_VIEW
+        defaultADTabShouldNotBeFound("treeView.equals=" + UPDATED_TREE_VIEW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByTreeViewIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where treeView not equals to DEFAULT_TREE_VIEW
+        defaultADTabShouldNotBeFound("treeView.notEquals=" + DEFAULT_TREE_VIEW);
+
+        // Get all the aDTabList where treeView not equals to UPDATED_TREE_VIEW
+        defaultADTabShouldBeFound("treeView.notEquals=" + UPDATED_TREE_VIEW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByTreeViewIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where treeView in DEFAULT_TREE_VIEW or UPDATED_TREE_VIEW
+        defaultADTabShouldBeFound("treeView.in=" + DEFAULT_TREE_VIEW + "," + UPDATED_TREE_VIEW);
+
+        // Get all the aDTabList where treeView equals to UPDATED_TREE_VIEW
+        defaultADTabShouldNotBeFound("treeView.in=" + UPDATED_TREE_VIEW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByTreeViewIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where treeView is not null
+        defaultADTabShouldBeFound("treeView.specified=true");
+
+        // Get all the aDTabList where treeView is null
+        defaultADTabShouldNotBeFound("treeView.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllADTabsByTargetEndpointIsEqualToSomething() throws Exception {
         // Initialize the database
         aDTabRepository.saveAndFlush(aDTab);
@@ -723,6 +799,58 @@ public class ADTabResourceIT {
 
     @Test
     @Transactional
+    public void getAllADTabsBySingleRowIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where singleRow equals to DEFAULT_SINGLE_ROW
+        defaultADTabShouldBeFound("singleRow.equals=" + DEFAULT_SINGLE_ROW);
+
+        // Get all the aDTabList where singleRow equals to UPDATED_SINGLE_ROW
+        defaultADTabShouldNotBeFound("singleRow.equals=" + UPDATED_SINGLE_ROW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsBySingleRowIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where singleRow not equals to DEFAULT_SINGLE_ROW
+        defaultADTabShouldNotBeFound("singleRow.notEquals=" + DEFAULT_SINGLE_ROW);
+
+        // Get all the aDTabList where singleRow not equals to UPDATED_SINGLE_ROW
+        defaultADTabShouldBeFound("singleRow.notEquals=" + UPDATED_SINGLE_ROW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsBySingleRowIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where singleRow in DEFAULT_SINGLE_ROW or UPDATED_SINGLE_ROW
+        defaultADTabShouldBeFound("singleRow.in=" + DEFAULT_SINGLE_ROW + "," + UPDATED_SINGLE_ROW);
+
+        // Get all the aDTabList where singleRow equals to UPDATED_SINGLE_ROW
+        defaultADTabShouldNotBeFound("singleRow.in=" + UPDATED_SINGLE_ROW);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsBySingleRowIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where singleRow is not null
+        defaultADTabShouldBeFound("singleRow.specified=true");
+
+        // Get all the aDTabList where singleRow is null
+        defaultADTabShouldNotBeFound("singleRow.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllADTabsByDeletableIsEqualToSomething() throws Exception {
         // Initialize the database
         aDTabRepository.saveAndFlush(aDTab);
@@ -771,6 +899,58 @@ public class ADTabResourceIT {
 
         // Get all the aDTabList where deletable is null
         defaultADTabShouldNotBeFound("deletable.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByInsertableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where insertable equals to DEFAULT_INSERTABLE
+        defaultADTabShouldBeFound("insertable.equals=" + DEFAULT_INSERTABLE);
+
+        // Get all the aDTabList where insertable equals to UPDATED_INSERTABLE
+        defaultADTabShouldNotBeFound("insertable.equals=" + UPDATED_INSERTABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByInsertableIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where insertable not equals to DEFAULT_INSERTABLE
+        defaultADTabShouldNotBeFound("insertable.notEquals=" + DEFAULT_INSERTABLE);
+
+        // Get all the aDTabList where insertable not equals to UPDATED_INSERTABLE
+        defaultADTabShouldBeFound("insertable.notEquals=" + UPDATED_INSERTABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByInsertableIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where insertable in DEFAULT_INSERTABLE or UPDATED_INSERTABLE
+        defaultADTabShouldBeFound("insertable.in=" + DEFAULT_INSERTABLE + "," + UPDATED_INSERTABLE);
+
+        // Get all the aDTabList where insertable equals to UPDATED_INSERTABLE
+        defaultADTabShouldNotBeFound("insertable.in=" + UPDATED_INSERTABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTabsByInsertableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDTabRepository.saveAndFlush(aDTab);
+
+        // Get all the aDTabList where insertable is not null
+        defaultADTabShouldBeFound("insertable.specified=true");
+
+        // Get all the aDTabList where insertable is null
+        defaultADTabShouldNotBeFound("insertable.specified=false");
     }
 
     @Test
@@ -1453,8 +1633,11 @@ public class ADTabResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].iconName").value(hasItem(DEFAULT_ICON_NAME)))
+            .andExpect(jsonPath("$.[*].treeView").value(hasItem(DEFAULT_TREE_VIEW.booleanValue())))
             .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
+            .andExpect(jsonPath("$.[*].singleRow").value(hasItem(DEFAULT_SINGLE_ROW.booleanValue())))
             .andExpect(jsonPath("$.[*].deletable").value(hasItem(DEFAULT_DELETABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].insertable").value(hasItem(DEFAULT_INSERTABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].writable").value(hasItem(DEFAULT_WRITABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].displayLogic").value(hasItem(DEFAULT_DISPLAY_LOGIC)))
             .andExpect(jsonPath("$.[*].readOnlyLogic").value(hasItem(DEFAULT_READ_ONLY_LOGIC)))
@@ -1513,8 +1696,11 @@ public class ADTabResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .iconName(UPDATED_ICON_NAME)
+            .treeView(UPDATED_TREE_VIEW)
             .targetEndpoint(UPDATED_TARGET_ENDPOINT)
+            .singleRow(UPDATED_SINGLE_ROW)
             .deletable(UPDATED_DELETABLE)
+            .insertable(UPDATED_INSERTABLE)
             .writable(UPDATED_WRITABLE)
             .displayLogic(UPDATED_DISPLAY_LOGIC)
             .readOnlyLogic(UPDATED_READ_ONLY_LOGIC)
@@ -1537,8 +1723,11 @@ public class ADTabResourceIT {
         assertThat(testADTab.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADTab.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testADTab.getIconName()).isEqualTo(UPDATED_ICON_NAME);
+        assertThat(testADTab.isTreeView()).isEqualTo(UPDATED_TREE_VIEW);
         assertThat(testADTab.getTargetEndpoint()).isEqualTo(UPDATED_TARGET_ENDPOINT);
+        assertThat(testADTab.isSingleRow()).isEqualTo(UPDATED_SINGLE_ROW);
         assertThat(testADTab.isDeletable()).isEqualTo(UPDATED_DELETABLE);
+        assertThat(testADTab.isInsertable()).isEqualTo(UPDATED_INSERTABLE);
         assertThat(testADTab.isWritable()).isEqualTo(UPDATED_WRITABLE);
         assertThat(testADTab.getDisplayLogic()).isEqualTo(UPDATED_DISPLAY_LOGIC);
         assertThat(testADTab.getReadOnlyLogic()).isEqualTo(UPDATED_READ_ONLY_LOGIC);

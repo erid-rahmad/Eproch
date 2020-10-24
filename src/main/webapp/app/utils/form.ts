@@ -56,9 +56,11 @@ export const buildCascaderOptions = source => {
 };
 
 export const normalizeField = (record: Record<string, any>, field: IADField) => {
-  const fieldName: string = field.adColumn.name;
+  const fieldName = field.virtualColumnName || field.adColumn.name;
+  const fieldType = field.type || field.adColumn.type;
   const isForeignKey = fieldName.endsWith('Id');
-  if (!field.adColumn.mandatory) {
+
+  if (! field.mandatory && ! field.adColumn?.mandatory) {
     const value = record[fieldName];
     const shouldNullify = (isForeignKey && !value) || (isStringField(field) && value?.trim() === '');
     if (shouldNullify) {
@@ -66,7 +68,7 @@ export const normalizeField = (record: Record<string, any>, field: IADField) => 
     }
   }
 
-  if (field.adColumn.type === ADColumnType.LOCAL_DATE) {
+  if (fieldType === ADColumnType.LOCAL_DATE) {
     record[fieldName] = new Date(record[fieldName]);
   }
 }

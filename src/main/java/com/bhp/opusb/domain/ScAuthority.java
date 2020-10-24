@@ -42,13 +42,19 @@ public class ScAuthority extends AbstractAuditingEntity {
     private UUID uid;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @Column(name = "description")
     private String description;
 
     @Column(name = "master")
     private Boolean master;
+
+    @Column(name = "access_all_orgs")
+    private Boolean accessAllOrgs;
+
+    @Column(name = "use_user_orgs")
+    private Boolean useUserOrgs;
 
     @OneToOne(optional = false)
     @NotNull
@@ -123,6 +129,32 @@ public class ScAuthority extends AbstractAuditingEntity {
 
     public void setMaster(Boolean master) {
         this.master = master;
+    }
+
+    public Boolean isAccessAllOrgs() {
+        return accessAllOrgs;
+    }
+
+    public ScAuthority accessAllOrgs(Boolean accessAllOrgs) {
+        this.accessAllOrgs = accessAllOrgs;
+        return this;
+    }
+
+    public void setAccessAllOrgs(Boolean accessAllOrgs) {
+        this.accessAllOrgs = accessAllOrgs;
+    }
+
+    public Boolean isUseUserOrgs() {
+        return useUserOrgs;
+    }
+
+    public ScAuthority useUserOrgs(Boolean useUserOrgs) {
+        this.useUserOrgs = useUserOrgs;
+        return this;
+    }
+
+    public void setUseUserOrgs(Boolean useUserOrgs) {
+        this.useUserOrgs = useUserOrgs;
     }
 
     public Authority getAuthority() {
@@ -206,6 +238,8 @@ public class ScAuthority extends AbstractAuditingEntity {
             ", active='" + isActive() + "'" +
             ", description='" + getDescription() + "'" +
             ", master='" + isMaster() + "'" +
+            ", accessAllOrgs='" + isAccessAllOrgs() + "'" +
+            ", useUserOrgs='" + isUseUserOrgs() + "'" +
             "}";
     }
 }

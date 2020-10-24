@@ -23,6 +23,7 @@ public class ScAccessDTO extends AbstractAuditingDTO {
 
     private String description;
 
+    private Boolean canWrite;
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -35,6 +36,12 @@ public class ScAccessDTO extends AbstractAuditingDTO {
 
     private Long formId;
     private String formName;
+
+    private Long documentTypeId;
+    private String documentTypeName;
+
+    private Long referenceListId;
+    private String referenceListName;
 
     private Long authorityId;
     private String authorityName;
@@ -77,6 +84,14 @@ public class ScAccessDTO extends AbstractAuditingDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Boolean isCanWrite() {
+        return canWrite;
+    }
+
+    public void setCanWrite(Boolean canWrite) {
+        this.canWrite = canWrite;
     }
 
     public Long getAdOrganizationId() {
@@ -143,6 +158,38 @@ public class ScAccessDTO extends AbstractAuditingDTO {
         this.formName = formName;
     }
 
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long cDocumentTypeId) {
+        this.documentTypeId = cDocumentTypeId;
+    }
+
+    public String getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(String documentTypeName) {
+        this.documentTypeName = documentTypeName;
+    }
+
+    public Long getReferenceListId() {
+        return referenceListId;
+    }
+
+    public void setReferenceListId(Long aDReferenceListId) {
+        this.referenceListId = aDReferenceListId;
+    }
+
+    public String getReferenceListName() {
+        return referenceListName;
+    }
+
+    public void setReferenceListName(String referenceListName) {
+        this.referenceListName = referenceListName;
+    }
+
     public Long getAuthorityId() {
         return authorityId;
     }
@@ -188,12 +235,15 @@ public class ScAccessDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", canWrite='" + isCanWrite() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", typeId=" + getTypeId() +
             ", windowId=" + getWindowId() +
             ", windowName=" + getWindowName() +
             ", formId=" + getFormId() +
             ", formName=" + getFormName() +
+            ", documentTypeId=" + getDocumentTypeId() +
+            ", referenceListId=" + getReferenceListId() +
             ", authorityId=" + getAuthorityId() +
             "}";
     }

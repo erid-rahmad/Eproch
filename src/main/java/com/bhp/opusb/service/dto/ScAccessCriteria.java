@@ -33,6 +33,8 @@ public class ScAccessCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
+    private BooleanFilter canWrite;
+
     private LongFilter adOrganizationId;
 
     private LongFilter typeId;
@@ -41,6 +43,10 @@ public class ScAccessCriteria implements Serializable, Criteria {
     private LongFilter windowId;
 
     private LongFilter formId;
+
+    private LongFilter documentTypeId;
+
+    private LongFilter referenceListId;
 
     private LongFilter authorityId;
     private StringFilter authorityName;
@@ -54,11 +60,14 @@ public class ScAccessCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.canWrite = other.canWrite == null ? null : other.canWrite.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.typeId = other.typeId == null ? null : other.typeId.copy();
         this.typeName = other.typeName == null ? null : other.typeName.copy();
         this.windowId = other.windowId == null ? null : other.windowId.copy();
         this.formId = other.formId == null ? null : other.formId.copy();
+        this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
+        this.referenceListId = other.referenceListId == null ? null : other.referenceListId.copy();
         this.authorityId = other.authorityId == null ? null : other.authorityId.copy();
         this.authorityName = other.authorityName == null ? null : other.authorityName.copy();
     }
@@ -108,6 +117,14 @@ public class ScAccessCriteria implements Serializable, Criteria {
         this.description = description;
     }
 
+    public BooleanFilter getCanWrite() {
+        return canWrite;
+    }
+
+    public void setCanWrite(BooleanFilter canWrite) {
+        this.canWrite = canWrite;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -148,6 +165,22 @@ public class ScAccessCriteria implements Serializable, Criteria {
         this.formId = formId;
     }
 
+    public LongFilter getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(LongFilter documentTypeId) {
+        this.documentTypeId = documentTypeId;
+    }
+
+    public LongFilter getReferenceListId() {
+        return referenceListId;
+    }
+
+    public void setReferenceListId(LongFilter referenceListId) {
+        this.referenceListId = referenceListId;
+    }
+
     public LongFilter getAuthorityId() {
         return authorityId;
     }
@@ -179,11 +212,14 @@ public class ScAccessCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(canWrite, that.canWrite) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(typeId, that.typeId) &&
             Objects.equals(typeName, that.typeName) &&
             Objects.equals(windowId, that.windowId) &&
             Objects.equals(formId, that.formId) &&
+            Objects.equals(documentTypeId, that.documentTypeId) &&
+            Objects.equals(referenceListId, that.referenceListId) &&
             Objects.equals(authorityId, that.authorityId) &&
             Objects.equals(authorityName, that.authorityName);
     }
@@ -196,11 +232,14 @@ public class ScAccessCriteria implements Serializable, Criteria {
         active,
         name,
         description,
+        canWrite,
         adOrganizationId,
         typeId,
         typeName,
         windowId,
         formId,
+        documentTypeId,
+        referenceListId,
         authorityId,
         authorityName
         );
@@ -214,13 +253,14 @@ public class ScAccessCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (canWrite != null ? "canWrite=" + canWrite + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (typeId != null ? "typeId=" + typeId + ", " : "") +
-                (typeName != null ? "typeName=" + typeName + ", " : "") +
                 (windowId != null ? "windowId=" + windowId + ", " : "") +
                 (formId != null ? "formId=" + formId + ", " : "") +
+                (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
+                (referenceListId != null ? "referenceListId=" + referenceListId + ", " : "") +
                 (authorityId != null ? "authorityId=" + authorityId + ", " : "") +
-                (authorityName != null ? "authorityName=" + authorityName + ", " : "") +
             "}";
     }
 

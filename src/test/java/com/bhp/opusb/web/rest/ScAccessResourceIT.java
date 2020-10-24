@@ -6,6 +6,8 @@ import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ScAccessType;
 import com.bhp.opusb.domain.ADWindow;
 import com.bhp.opusb.domain.AdForm;
+import com.bhp.opusb.domain.CDocumentType;
+import com.bhp.opusb.domain.ADReferenceList;
 import com.bhp.opusb.domain.ScAuthority;
 import com.bhp.opusb.repository.ScAccessRepository;
 import com.bhp.opusb.service.ScAccessService;
@@ -53,6 +55,9 @@ public class ScAccessResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_CAN_WRITE = false;
+    private static final Boolean UPDATED_CAN_WRITE = true;
+
     @Autowired
     private ScAccessRepository scAccessRepository;
 
@@ -84,7 +89,8 @@ public class ScAccessResourceIT {
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE)
             .name(DEFAULT_NAME)
-            .description(DEFAULT_DESCRIPTION);
+            .description(DEFAULT_DESCRIPTION)
+            .canWrite(DEFAULT_CAN_WRITE);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -128,7 +134,8 @@ public class ScAccessResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
             .name(UPDATED_NAME)
-            .description(UPDATED_DESCRIPTION);
+            .description(UPDATED_DESCRIPTION)
+            .canWrite(UPDATED_CAN_WRITE);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -187,6 +194,7 @@ public class ScAccessResourceIT {
         assertThat(testScAccess.isActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testScAccess.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testScAccess.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testScAccess.isCanWrite()).isEqualTo(DEFAULT_CAN_WRITE);
     }
 
     @Test
@@ -224,7 +232,8 @@ public class ScAccessResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].canWrite").value(hasItem(DEFAULT_CAN_WRITE.booleanValue())));
     }
     
     @Test
@@ -241,7 +250,8 @@ public class ScAccessResourceIT {
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION));
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.canWrite").value(DEFAULT_CAN_WRITE.booleanValue()));
     }
 
 
@@ -526,6 +536,58 @@ public class ScAccessResourceIT {
 
     @Test
     @Transactional
+    public void getAllScAccessesByCanWriteIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scAccessRepository.saveAndFlush(scAccess);
+
+        // Get all the scAccessList where canWrite equals to DEFAULT_CAN_WRITE
+        defaultScAccessShouldBeFound("canWrite.equals=" + DEFAULT_CAN_WRITE);
+
+        // Get all the scAccessList where canWrite equals to UPDATED_CAN_WRITE
+        defaultScAccessShouldNotBeFound("canWrite.equals=" + UPDATED_CAN_WRITE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllScAccessesByCanWriteIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        scAccessRepository.saveAndFlush(scAccess);
+
+        // Get all the scAccessList where canWrite not equals to DEFAULT_CAN_WRITE
+        defaultScAccessShouldNotBeFound("canWrite.notEquals=" + DEFAULT_CAN_WRITE);
+
+        // Get all the scAccessList where canWrite not equals to UPDATED_CAN_WRITE
+        defaultScAccessShouldBeFound("canWrite.notEquals=" + UPDATED_CAN_WRITE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllScAccessesByCanWriteIsInShouldWork() throws Exception {
+        // Initialize the database
+        scAccessRepository.saveAndFlush(scAccess);
+
+        // Get all the scAccessList where canWrite in DEFAULT_CAN_WRITE or UPDATED_CAN_WRITE
+        defaultScAccessShouldBeFound("canWrite.in=" + DEFAULT_CAN_WRITE + "," + UPDATED_CAN_WRITE);
+
+        // Get all the scAccessList where canWrite equals to UPDATED_CAN_WRITE
+        defaultScAccessShouldNotBeFound("canWrite.in=" + UPDATED_CAN_WRITE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllScAccessesByCanWriteIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        scAccessRepository.saveAndFlush(scAccess);
+
+        // Get all the scAccessList where canWrite is not null
+        defaultScAccessShouldBeFound("canWrite.specified=true");
+
+        // Get all the scAccessList where canWrite is null
+        defaultScAccessShouldNotBeFound("canWrite.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllScAccessesByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = scAccess.getAdOrganization();
@@ -598,6 +660,46 @@ public class ScAccessResourceIT {
 
     @Test
     @Transactional
+    public void getAllScAccessesByDocumentTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scAccessRepository.saveAndFlush(scAccess);
+        CDocumentType documentType = CDocumentTypeResourceIT.createEntity(em);
+        em.persist(documentType);
+        em.flush();
+        scAccess.setDocumentType(documentType);
+        scAccessRepository.saveAndFlush(scAccess);
+        Long documentTypeId = documentType.getId();
+
+        // Get all the scAccessList where documentType equals to documentTypeId
+        defaultScAccessShouldBeFound("documentTypeId.equals=" + documentTypeId);
+
+        // Get all the scAccessList where documentType equals to documentTypeId + 1
+        defaultScAccessShouldNotBeFound("documentTypeId.equals=" + (documentTypeId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllScAccessesByReferenceListIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scAccessRepository.saveAndFlush(scAccess);
+        ADReferenceList referenceList = ADReferenceListResourceIT.createEntity(em);
+        em.persist(referenceList);
+        em.flush();
+        scAccess.setReferenceList(referenceList);
+        scAccessRepository.saveAndFlush(scAccess);
+        Long referenceListId = referenceList.getId();
+
+        // Get all the scAccessList where referenceList equals to referenceListId
+        defaultScAccessShouldBeFound("referenceListId.equals=" + referenceListId);
+
+        // Get all the scAccessList where referenceList equals to referenceListId + 1
+        defaultScAccessShouldNotBeFound("referenceListId.equals=" + (referenceListId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllScAccessesByAuthorityIsEqualToSomething() throws Exception {
         // Get already existing entity
         ScAuthority authority = scAccess.getAuthority();
@@ -622,7 +724,8 @@ public class ScAccessResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)));
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].canWrite").value(hasItem(DEFAULT_CAN_WRITE.booleanValue())));
 
         // Check, that the count call also returns 1
         restScAccessMockMvc.perform(get("/api/sc-accesses/count?sort=id,desc&" + filter))
@@ -673,7 +776,8 @@ public class ScAccessResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
             .name(UPDATED_NAME)
-            .description(UPDATED_DESCRIPTION);
+            .description(UPDATED_DESCRIPTION)
+            .canWrite(UPDATED_CAN_WRITE);
         ScAccessDTO scAccessDTO = scAccessMapper.toDto(updatedScAccess);
 
         restScAccessMockMvc.perform(put("/api/sc-accesses")
@@ -689,6 +793,7 @@ public class ScAccessResourceIT {
         assertThat(testScAccess.isActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testScAccess.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testScAccess.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testScAccess.isCanWrite()).isEqualTo(UPDATED_CAN_WRITE);
     }
 
     @Test

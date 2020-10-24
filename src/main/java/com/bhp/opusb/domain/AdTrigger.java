@@ -9,6 +9,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 
 /**
  * A AdTrigger.
@@ -64,8 +66,9 @@ public class AdTrigger implements Serializable {
     @Column(name = "type")
     private AdTriggerType type;
 
-    @OneToMany(mappedBy = "adTrigger")
+    @OneToMany(mappedBy = "adTrigger", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Where(clause = "active = true")
     @JsonManagedReference
     private Set<AdTriggerParam> adTriggerParams = new HashSet<>();
 
