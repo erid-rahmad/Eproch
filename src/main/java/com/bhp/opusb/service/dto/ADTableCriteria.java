@@ -31,6 +31,8 @@ public class ADTableCriteria implements Serializable, Criteria {
 
     private BooleanFilter view;
 
+    private BooleanFilter highVolume;
+
     private StringFilter targetEndpoint;
 
     private BooleanFilter active;
@@ -47,6 +49,7 @@ public class ADTableCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.view = other.view == null ? null : other.view.copy();
+        this.highVolume = other.highVolume == null ? null : other.highVolume.copy();
         this.targetEndpoint = other.targetEndpoint == null ? null : other.targetEndpoint.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.aDColumnId = other.aDColumnId == null ? null : other.aDColumnId.copy();
@@ -88,6 +91,14 @@ public class ADTableCriteria implements Serializable, Criteria {
 
     public void setView(BooleanFilter view) {
         this.view = view;
+    }
+
+    public BooleanFilter getHighVolume() {
+        return highVolume;
+    }
+
+    public void setHighVolume(BooleanFilter highVolume) {
+        this.highVolume = highVolume;
     }
 
     public StringFilter getTargetEndpoint() {
@@ -137,6 +148,7 @@ public class ADTableCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(name, that.name) &&
             Objects.equals(view, that.view) &&
+            Objects.equals(highVolume, that.highVolume) &&
             Objects.equals(targetEndpoint, that.targetEndpoint) &&
             Objects.equals(active, that.active) &&
             Objects.equals(aDColumnId, that.aDColumnId) &&
@@ -150,6 +162,7 @@ public class ADTableCriteria implements Serializable, Criteria {
         uid,
         name,
         view,
+        highVolume,
         targetEndpoint,
         active,
         aDColumnId,
@@ -164,6 +177,7 @@ public class ADTableCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (view != null ? "view=" + view + ", " : "") +
+                (highVolume != null ? "highVolume=" + highVolume + ", " : "") +
                 (targetEndpoint != null ? "targetEndpoint=" + targetEndpoint + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (aDColumnId != null ? "aDColumnId=" + aDColumnId + ", " : "") +

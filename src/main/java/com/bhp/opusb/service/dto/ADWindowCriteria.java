@@ -75,8 +75,6 @@ public class ADWindowCriteria implements Serializable, Criteria {
 
     private ADWindowTypeFilter type;
 
-    private BooleanFilter treeView;
-
     private AdAccessLevelFilter accessLevel;
 
     private BooleanFilter active;
@@ -95,7 +93,6 @@ public class ADWindowCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.titleLogic = other.titleLogic == null ? null : other.titleLogic.copy();
         this.type = other.type == null ? null : other.type.copy();
-        this.treeView = other.treeView == null ? null : other.treeView.copy();
         this.accessLevel = other.accessLevel == null ? null : other.accessLevel.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.aDTabId = other.aDTabId == null ? null : other.aDTabId.copy();
@@ -155,14 +152,6 @@ public class ADWindowCriteria implements Serializable, Criteria {
         this.type = type;
     }
 
-    public BooleanFilter getTreeView() {
-        return treeView;
-    }
-
-    public void setTreeView(BooleanFilter treeView) {
-        this.treeView = treeView;
-    }
-
     public AdAccessLevelFilter getAccessLevel() {
         return accessLevel;
     }
@@ -212,7 +201,6 @@ public class ADWindowCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(titleLogic, that.titleLogic) &&
             Objects.equals(type, that.type) &&
-            Objects.equals(treeView, that.treeView) &&
             Objects.equals(accessLevel, that.accessLevel) &&
             Objects.equals(active, that.active) &&
             Objects.equals(aDTabId, that.aDTabId) &&
@@ -228,7 +216,6 @@ public class ADWindowCriteria implements Serializable, Criteria {
         description,
         titleLogic,
         type,
-        treeView,
         accessLevel,
         active,
         aDTabId,
@@ -245,7 +232,6 @@ public class ADWindowCriteria implements Serializable, Criteria {
                 (description != null ? "description=" + description + ", " : "") +
                 (titleLogic != null ? "titleLogic=" + titleLogic + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
-                (treeView != null ? "treeView=" + treeView + ", " : "") +
                 (accessLevel != null ? "accessLevel=" + accessLevel + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (aDTabId != null ? "aDTabId=" + aDTabId + ", " : "") +

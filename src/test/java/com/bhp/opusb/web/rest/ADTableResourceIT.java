@@ -47,6 +47,9 @@ public class ADTableResourceIT {
     private static final Boolean DEFAULT_VIEW = false;
     private static final Boolean UPDATED_VIEW = true;
 
+    private static final Boolean DEFAULT_HIGH_VOLUME = false;
+    private static final Boolean UPDATED_HIGH_VOLUME = true;
+
     private static final String DEFAULT_TARGET_ENDPOINT = "AAAAAAAAAA";
     private static final String UPDATED_TARGET_ENDPOINT = "BBBBBBBBBB";
 
@@ -84,6 +87,7 @@ public class ADTableResourceIT {
             .uid(DEFAULT_UID)
             .name(DEFAULT_NAME)
             .view(DEFAULT_VIEW)
+            .highVolume(DEFAULT_HIGH_VOLUME)
             .targetEndpoint(DEFAULT_TARGET_ENDPOINT)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -109,6 +113,7 @@ public class ADTableResourceIT {
             .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .view(UPDATED_VIEW)
+            .highVolume(UPDATED_HIGH_VOLUME)
             .targetEndpoint(UPDATED_TARGET_ENDPOINT)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -148,6 +153,7 @@ public class ADTableResourceIT {
         assertThat(testADTable.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testADTable.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testADTable.isView()).isEqualTo(DEFAULT_VIEW);
+        assertThat(testADTable.isHighVolume()).isEqualTo(DEFAULT_HIGH_VOLUME);
         assertThat(testADTable.getTargetEndpoint()).isEqualTo(DEFAULT_TARGET_ENDPOINT);
         assertThat(testADTable.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -206,6 +212,7 @@ public class ADTableResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].view").value(hasItem(DEFAULT_VIEW.booleanValue())))
+            .andExpect(jsonPath("$.[*].highVolume").value(hasItem(DEFAULT_HIGH_VOLUME.booleanValue())))
             .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -224,6 +231,7 @@ public class ADTableResourceIT {
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.view").value(DEFAULT_VIEW.booleanValue()))
+            .andExpect(jsonPath("$.highVolume").value(DEFAULT_HIGH_VOLUME.booleanValue()))
             .andExpect(jsonPath("$.targetEndpoint").value(DEFAULT_TARGET_ENDPOINT))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -432,6 +440,58 @@ public class ADTableResourceIT {
 
     @Test
     @Transactional
+    public void getAllADTablesByHighVolumeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where highVolume equals to DEFAULT_HIGH_VOLUME
+        defaultADTableShouldBeFound("highVolume.equals=" + DEFAULT_HIGH_VOLUME);
+
+        // Get all the aDTableList where highVolume equals to UPDATED_HIGH_VOLUME
+        defaultADTableShouldNotBeFound("highVolume.equals=" + UPDATED_HIGH_VOLUME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTablesByHighVolumeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where highVolume not equals to DEFAULT_HIGH_VOLUME
+        defaultADTableShouldNotBeFound("highVolume.notEquals=" + DEFAULT_HIGH_VOLUME);
+
+        // Get all the aDTableList where highVolume not equals to UPDATED_HIGH_VOLUME
+        defaultADTableShouldBeFound("highVolume.notEquals=" + UPDATED_HIGH_VOLUME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTablesByHighVolumeIsInShouldWork() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where highVolume in DEFAULT_HIGH_VOLUME or UPDATED_HIGH_VOLUME
+        defaultADTableShouldBeFound("highVolume.in=" + DEFAULT_HIGH_VOLUME + "," + UPDATED_HIGH_VOLUME);
+
+        // Get all the aDTableList where highVolume equals to UPDATED_HIGH_VOLUME
+        defaultADTableShouldNotBeFound("highVolume.in=" + UPDATED_HIGH_VOLUME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllADTablesByHighVolumeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        aDTableRepository.saveAndFlush(aDTable);
+
+        // Get all the aDTableList where highVolume is not null
+        defaultADTableShouldBeFound("highVolume.specified=true");
+
+        // Get all the aDTableList where highVolume is null
+        defaultADTableShouldNotBeFound("highVolume.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllADTablesByTargetEndpointIsEqualToSomething() throws Exception {
         // Initialize the database
         aDTableRepository.saveAndFlush(aDTable);
@@ -606,6 +666,7 @@ public class ADTableResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].view").value(hasItem(DEFAULT_VIEW.booleanValue())))
+            .andExpect(jsonPath("$.[*].highVolume").value(hasItem(DEFAULT_HIGH_VOLUME.booleanValue())))
             .andExpect(jsonPath("$.[*].targetEndpoint").value(hasItem(DEFAULT_TARGET_ENDPOINT)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -658,6 +719,7 @@ public class ADTableResourceIT {
             .uid(UPDATED_UID)
             .name(UPDATED_NAME)
             .view(UPDATED_VIEW)
+            .highVolume(UPDATED_HIGH_VOLUME)
             .targetEndpoint(UPDATED_TARGET_ENDPOINT)
             .active(UPDATED_ACTIVE);
         ADTableDTO aDTableDTO = aDTableMapper.toDto(updatedADTable);
@@ -674,6 +736,7 @@ public class ADTableResourceIT {
         assertThat(testADTable.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testADTable.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testADTable.isView()).isEqualTo(UPDATED_VIEW);
+        assertThat(testADTable.isHighVolume()).isEqualTo(UPDATED_HIGH_VOLUME);
         assertThat(testADTable.getTargetEndpoint()).isEqualTo(UPDATED_TARGET_ENDPOINT);
         assertThat(testADTable.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

@@ -139,8 +139,23 @@ public class ADFieldQueryService extends QueryService<ADField> {
             if (criteria.getColumnNo() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getColumnNo(), ADField_.columnNo));
             }
+            if (criteria.getColumnOffset() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getColumnOffset(), ADField_.columnOffset));
+            }
             if (criteria.getColumnSpan() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getColumnSpan(), ADField_.columnSpan));
+            }
+            if (criteria.getRowNo() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getRowNo(), ADField_.rowNo));
+            }
+            if (criteria.getVirtualColumnName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getVirtualColumnName(), ADField_.virtualColumnName));
+            }
+            if (criteria.getMandatory() != null) {
+                specification = specification.and(buildSpecification(criteria.getMandatory(), ADField_.mandatory));
+            }
+            if (criteria.getMandatoryLogic() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getMandatoryLogic(), ADField_.mandatoryLogic));
             }
             if (criteria.getUpdatable() != null) {
                 specification = specification.and(buildSpecification(criteria.getUpdatable(), ADField_.updatable));
@@ -156,6 +171,21 @@ public class ADFieldQueryService extends QueryService<ADField> {
             }
             if (criteria.getFormatPattern() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getFormatPattern(), ADField_.formatPattern));
+            }
+            if (criteria.getMinLength() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getMinLength(), ADField_.minLength));
+            }
+            if (criteria.getMaxLength() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getMaxLength(), ADField_.maxLength));
+            }
+            if (criteria.getMinValue() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getMinValue(), ADField_.minValue));
+            }
+            if (criteria.getMaxValue() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getMaxValue(), ADField_.maxValue));
+            }
+            if (criteria.getType() != null) {
+                specification = specification.and(buildSpecification(criteria.getType(), ADField_.type));
             }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), ADField_.active));

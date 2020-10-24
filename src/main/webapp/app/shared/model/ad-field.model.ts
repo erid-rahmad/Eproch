@@ -20,12 +20,22 @@ export interface IADField {
   readOnlyLogic?: string;
   writable?: boolean;
   columnNo?: number;
+  columnOffset?: number;
   columnSpan?: number;
+  rowNo?: number;
+  virtualColumnName?: string;
+  mandatory?: boolean;
+  mandatoryLogic?: string;
   updatable?: boolean;
   alwaysUpdatable?: boolean;
   copyable?: boolean;
   defaultValue?: string;
   formatPattern?: string;
+  minLength?: number;
+  maxLength?: number;
+  minValue?: number;
+  maxValue?: number;
+  type?: string;
   active?: boolean;
   adOrganizationId?: number;
   adReference?: IADReference;
@@ -55,12 +65,22 @@ export class ADField implements IADField {
     public readOnlyLogic?: string,
     public writable?: boolean,
     public columnNo?: number,
+    public columnOffset?: number,
     public columnSpan?: number,
+    public rowNo?: number,
+    public virtualColumnName?: string,
+    public mandatory?: boolean,
+    public mandatoryLogic?: string,
     public updatable?: boolean,
     public alwaysUpdatable?: boolean,
     public copyable?: boolean,
     public defaultValue?: string,
     public formatPattern?: string,
+    public minLength?: number,
+    public maxLength?: number,
+    public minValue?: number,
+    public maxValue?: number,
+    public type?: string,
     public active?: boolean,
     public adOrganizationId?: number,
     public adReference?: IADReference,
