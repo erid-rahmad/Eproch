@@ -21,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 
 /**
  * A ADTable.
@@ -67,6 +68,7 @@ public class ADTable extends AbstractAuditingEntity {
 
     @OneToMany(mappedBy = "adTable")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Where(clause = "active = true")
     @JsonManagedReference
     private Set<ADColumn> aDColumns = new HashSet<>();
 

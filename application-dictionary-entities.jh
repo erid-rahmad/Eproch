@@ -245,6 +245,7 @@ entity ADField {
 	/** The minimum number value of the numeric column. */
 	maxValue Long
 
+	type ADColumnType
 	// End of overriding AdColumn metadata.
 
 	active Boolean

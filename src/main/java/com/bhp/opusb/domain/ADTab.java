@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 
 /**
  * A ADTab.
@@ -109,10 +110,12 @@ public class ADTab extends AbstractAuditingEntity {
 
     @OneToMany(mappedBy = "parentTab")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Where(clause = "active = true")
     private Set<ADTab> aDTabs = new HashSet<>();
 
     @OneToMany(mappedBy = "adTab", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Where(clause = "active = true")
     @JsonManagedReference
     private Set<ADField> aDFields = new HashSet<>();
 
