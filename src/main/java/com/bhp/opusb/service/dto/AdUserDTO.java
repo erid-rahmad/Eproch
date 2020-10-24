@@ -35,11 +35,26 @@ public class AdUserDTO extends AbstractAuditingDTO {
     private Instant lastLoginDate;
 
     private Long userId;
+
+    /**
+     * Virtual field that's referenced from jhi_user.login
+     */
     private String userLogin;
 
+    /**
+     * This field is used for displaying the title in a dropdown item.
+     */
+    private String name;
+
+    /**
+     * Virtual field that's referenced from jhi_user.password
+     */
     @Size(min = 8, max = 100)
     private String password;
 
+    /**
+     * Virtual field that's referenced from jhi_user.email
+     */
     @Email
     @Size(min = 5, max = 254)
     private String email;
@@ -117,6 +132,14 @@ public class AdUserDTO extends AbstractAuditingDTO {
 
     public void setUserLogin(String userLogin) {
         this.userLogin = userLogin;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getPassword() {

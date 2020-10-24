@@ -13,8 +13,10 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {AuthorityMapper.class, ADOrganizationMapper.class})
 public interface ScAuthorityMapper extends EntityMapper<ScAuthorityDTO, ScAuthority> {
 
+    @Mapping(source = "authority.name", target = "name")
     @Mapping(source = "authority.name", target = "authorityName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     ScAuthorityDTO toDto(ScAuthority scAuthority);
 
     @Mapping(source = "authorityName", target = "authority")

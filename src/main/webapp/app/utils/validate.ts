@@ -56,42 +56,51 @@ export const getJsonSchemaType = (columnType: string) => {
 
 export const isTableDirectLink = (field: IADField): boolean => {
   const column = field.adColumn;
-  const reference = field.adReference || column.adReference;
-  return column.foreignKey && (reference?.value === 'direct' || reference?.value === 'table');
+  const reference = field.adReference || column?.adReference;
+  return column?.foreignKey && (reference?.value === 'direct' || reference?.value === 'table');
 }
 
 export const hasReferenceList = (field: IADField) => {
   return field.adReference?.referenceType === ADReferenceType.LIST ||
-    field.adColumn.adReference?.referenceType === ADReferenceType.LIST;
+    field.adColumn?.adReference?.referenceType === ADReferenceType.LIST;
 }
 
 export const isStringField = (field: IADField) => {
-  return field.adColumn.type === ADColumnType.STRING;
+  const type = field.type || field.adColumn?.type;
+  return type === ADColumnType.STRING;
 }
 
 export const isNumericField = (field: IADField) => {
+  const type = field.type || field.adColumn?.type;
   return (
-    field.adColumn.type === ADColumnType.BIG_DECIMAL ||
-    field.adColumn.type === ADColumnType.DOUBLE ||
-    field.adColumn.type === ADColumnType.FLOAT ||
-    field.adColumn.type === ADColumnType.INTEGER ||
-    field.adColumn.type === ADColumnType.LONG
+    type === ADColumnType.BIG_DECIMAL ||
+    type === ADColumnType.DOUBLE ||
+    type === ADColumnType.FLOAT ||
+    type === ADColumnType.INTEGER ||
+    type === ADColumnType.LONG
   );
 }
 
 export const isDateField = (field: IADField) => {
-  return field.adColumn.type === ADColumnType.LOCAL_DATE ||
-    field.adColumn.type === ADColumnType.ZONED_DATE_TIME;
+  const type = field.type || field.adColumn?.type;
+  return type === ADColumnType.LOCAL_DATE || type === ADColumnType.ZONED_DATE_TIME;
 }
 
 export const isDateTimeField = (field: IADField) => {
-  return field.adColumn.type === ADColumnType.INSTANT;
+  const type = field.type || field.adColumn?.type;
+  return type === ADColumnType.INSTANT;
 }
 
 export const isBooleanField = (field: IADField) => {
-  return field.adColumn.type === ADColumnType.BOOLEAN;
+  const type = field.type || field.adColumn?.type;
+  return type === ADColumnType.BOOLEAN;
+}
+
+export const isPasswordField = (field: IADField) => {
+  const reference = field.adReference || field.adColumn?.adReference;
+  return reference?.value === 'password';
 }
 
 export const isActiveStatusField = (field: IADField) => {
-  return isBooleanField(field) && field.adColumn.name === 'active';
+  return ! field.virtualColumnName && isBooleanField(field) && field.adColumn.name === 'active';
 }

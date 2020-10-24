@@ -15,6 +15,9 @@ public interface AdUserMapper extends EntityMapper<AdUserDTO, AdUser> {
 
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "user.login", target = "userLogin")
+    @Mapping(source = "user.login", target = "name")
+    @Mapping(source = "user.password", target = "password")
+    @Mapping(source = "user.email", target = "email")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     AdUserDTO toDto(AdUser adUser);

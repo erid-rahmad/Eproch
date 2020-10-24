@@ -2,12 +2,14 @@ package com.bhp.opusb.service;
 
 import java.util.Optional;
 
+import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.AdUserAuthority;
 import com.bhp.opusb.domain.Authority;
+import com.bhp.opusb.domain.ScAuthority;
 import com.bhp.opusb.domain.User;
 import com.bhp.opusb.repository.AdUserAuthorityRepository;
+import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.ScAuthorityRepository;
-import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.service.dto.AdUserAuthorityDTO;
 import com.bhp.opusb.service.mapper.AdUserAuthorityMapper;
 
@@ -29,17 +31,17 @@ public class AdUserAuthorityService {
 
     private final AdUserAuthorityRepository adUserAuthorityRepository;
 
-    private final UserRepository userRepository;
+    private final AdUserRepository adUserRepository;
 
     private final ScAuthorityRepository scAuthorityRepository;
 
     private final AdUserAuthorityMapper adUserAuthorityMapper;
 
     public AdUserAuthorityService(AdUserAuthorityRepository adUserAuthorityRepository,
-            AdUserAuthorityMapper adUserAuthorityMapper, UserRepository userRepository,
+            AdUserAuthorityMapper adUserAuthorityMapper, AdUserRepository adUserRepository,
             ScAuthorityRepository scAuthorityRepository) {
         this.adUserAuthorityRepository = adUserAuthorityRepository;
-        this.userRepository = userRepository;
+        this.adUserRepository = adUserRepository;
         this.scAuthorityRepository = scAuthorityRepository;
         this.adUserAuthorityMapper = adUserAuthorityMapper;
     }
@@ -55,13 +57,16 @@ public class AdUserAuthorityService {
         AdUserAuthority adUserAuthority = adUserAuthorityMapper.toEntity(adUserAuthorityDTO);
         adUserAuthority = adUserAuthorityRepository.save(adUserAuthority);
 
+        Optional<ScAuthority> authority = scAuthorityRepository.findById(adUserAuthority.getAuthority().getId());
+
         // Update jhi_user_authority table.
-        Optional<User> user = userRepository.findOneWithAuthoritiesById(adUserAuthority.getUser().getId());
-        if (user.isPresent()) {
-            log.debug("User authorities count: {}", user.get().getAuthorities().size());
-            log.debug("New user-authority, authority: {}", adUserAuthority.getAuthority());
-        }
-        log.debug("New authority: {}", adUserAuthority.getAuthority().getAuthority());
+        Optional<AdUser> record = adUserRepository.findById(adUserAuthority.getUser().getId());
+        record.ifPresent(user -> {
+            if (authority.isPresent()) {
+                user.getUser().getAuthorities().add(authority.get().getAuthority());
+            }
+        });
+
         return adUserAuthorityMapper.toDto(adUserAuthority);
     }
 

@@ -7,11 +7,13 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADTab} entity.
  */
 public class ADTabDTO extends AbstractAuditingDTO {
-    
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -25,12 +27,42 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     private String iconName;
 
+    /**
+     * Whether or not to show the tree view in the layout.
+     */
+    @ApiModelProperty(value = "Whether or not to show the tree view in the layout.")
+    private Boolean treeView;
+
+    /**
+     * Target API endpoint for the CRUD operations. Override the same property in
+     * AdTable.
+     */
+    @ApiModelProperty(value = "Target API endpoint for the CRUD operations. Override the same property in AdTable.")
     private String targetEndpoint;
 
+    /**
+     * Indicates to use the form layout by default instead of displaying the table
+     * layout first.
+     */
+    @ApiModelProperty(value = "Indicates to use the form layout by default instead of displaying the table layout first.")
     private Boolean singleRow;
 
+    /**
+     * Whether or not the record is deletable from the table.
+     */
+    @ApiModelProperty(value = "Whether or not the record is deletable from the table.")
     private Boolean deletable;
 
+    /**
+     * Whether or not to allow insert a new record to the table.
+     */
+    @ApiModelProperty(value = "Whether or not to allow insert a new record to the table.")
+    private Boolean insertable;
+
+    /**
+     * Force read-only to the whole fields in the tab.
+     */
+    @ApiModelProperty(value = "Force read-only to the whole fields in the tab.")
     private Boolean writable;
 
     private String displayLogic;
@@ -44,7 +76,6 @@ public class ADTabDTO extends AbstractAuditingDTO {
     private Integer tabSequence;
 
     private Boolean active;
-
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -65,7 +96,7 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     private Long parentTabId;
     private String parentTabName;
-    
+
     private Set<ADFieldDTO> aDFields = new HashSet<>();
 
     public Long getId() {
@@ -108,6 +139,14 @@ public class ADTabDTO extends AbstractAuditingDTO {
         this.iconName = iconName;
     }
 
+    public Boolean isTreeView() {
+        return treeView;
+    }
+
+    public void setTreeView(Boolean treeView) {
+        this.treeView = treeView;
+    }
+
     public String getTargetEndpoint() {
         return targetEndpoint;
     }
@@ -130,6 +169,14 @@ public class ADTabDTO extends AbstractAuditingDTO {
 
     public void setDeletable(Boolean deletable) {
         this.deletable = deletable;
+    }
+
+    public Boolean isInsertable() {
+        return insertable;
+    }
+
+    public void setInsertable(Boolean insertable) {
+        this.insertable = insertable;
     }
 
     public Boolean isWritable() {

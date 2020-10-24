@@ -75,7 +75,6 @@
             <column name="description" type="string"/>
             <column name="title_logic" type="string"/>
             <column name="type" type="string"/>
-            <column name="tree_view" type="boolean"/>
             <column name="access_level" type="string"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
@@ -100,6 +99,10 @@
                 <constraints nullable="true" />
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20201023024800" author="Ananta Aryadewa">
+        <dropColumn tableName="ad_window" columnName="tree_view"/>
     </changeSet>
 
 </databaseChangeLog>

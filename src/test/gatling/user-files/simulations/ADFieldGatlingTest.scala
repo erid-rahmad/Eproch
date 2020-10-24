@@ -88,12 +88,22 @@ class ADFieldGatlingTest extends Simulation {
                 , "readOnlyLogic":"SAMPLE_TEXT"
                 , "writable":null
                 , "columnNo":"0"
+                , "columnOffset":"0"
                 , "columnSpan":"0"
+                , "rowNo":"0"
+                , "virtualColumnName":"SAMPLE_TEXT"
+                , "mandatory":null
+                , "mandatoryLogic":"SAMPLE_TEXT"
                 , "updatable":null
                 , "alwaysUpdatable":null
                 , "copyable":null
                 , "defaultValue":"SAMPLE_TEXT"
                 , "formatPattern":"SAMPLE_TEXT"
+                , "minLength":"0"
+                , "maxLength":"0"
+                , "minValue":null
+                , "maxValue":null
+                , "type":"STRING"
                 , "active":null
                 }""")).asJson
             .check(status.is(201))

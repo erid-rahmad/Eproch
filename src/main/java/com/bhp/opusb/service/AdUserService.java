@@ -52,6 +52,8 @@ public class AdUserService {
             User user = new User();
             user.setEmail(adUserDTO.getEmail());
             user.setLogin(adUserDTO.getUserLogin());
+
+            // Any user that is created from the admin page doesn't need email verification.
             user.setActivated(true);
 
             String encryptedPassword = passwordEncoder.encode(adUserDTO.getPassword());

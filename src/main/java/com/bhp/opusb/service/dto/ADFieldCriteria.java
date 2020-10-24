@@ -3,6 +3,7 @@ package com.bhp.opusb.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
+import com.bhp.opusb.domain.enumeration.ADColumnType;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -22,6 +23,24 @@ import io.github.jhipster.service.filter.UUIDFilter;
  * fix type specific filters.
  */
 public class ADFieldCriteria implements Serializable, Criteria {
+    /**
+     * Class for filtering ADColumnType
+     */
+    public static class ADColumnTypeFilter extends Filter<ADColumnType> {
+
+        public ADColumnTypeFilter() {
+        }
+
+        public ADColumnTypeFilter(ADColumnTypeFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public ADColumnTypeFilter copy() {
+            return new ADColumnTypeFilter(this);
+        }
+
+    }
 
     private static final long serialVersionUID = 1L;
 
@@ -59,7 +78,17 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     private IntegerFilter columnNo;
 
+    private IntegerFilter columnOffset;
+
     private IntegerFilter columnSpan;
+
+    private IntegerFilter rowNo;
+
+    private StringFilter virtualColumnName;
+
+    private BooleanFilter mandatory;
+
+    private StringFilter mandatoryLogic;
 
     private BooleanFilter updatable;
 
@@ -70,6 +99,16 @@ public class ADFieldCriteria implements Serializable, Criteria {
     private StringFilter defaultValue;
 
     private StringFilter formatPattern;
+
+    private IntegerFilter minLength;
+
+    private IntegerFilter maxLength;
+
+    private LongFilter minValue;
+
+    private LongFilter maxValue;
+
+    private ADColumnTypeFilter type;
 
     private BooleanFilter active;
 
@@ -108,12 +147,22 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.readOnlyLogic = other.readOnlyLogic == null ? null : other.readOnlyLogic.copy();
         this.writable = other.writable == null ? null : other.writable.copy();
         this.columnNo = other.columnNo == null ? null : other.columnNo.copy();
+        this.columnOffset = other.columnOffset == null ? null : other.columnOffset.copy();
         this.columnSpan = other.columnSpan == null ? null : other.columnSpan.copy();
+        this.rowNo = other.rowNo == null ? null : other.rowNo.copy();
+        this.virtualColumnName = other.virtualColumnName == null ? null : other.virtualColumnName.copy();
+        this.mandatory = other.mandatory == null ? null : other.mandatory.copy();
+        this.mandatoryLogic = other.mandatoryLogic == null ? null : other.mandatoryLogic.copy();
         this.updatable = other.updatable == null ? null : other.updatable.copy();
         this.alwaysUpdatable = other.alwaysUpdatable == null ? null : other.alwaysUpdatable.copy();
         this.copyable = other.copyable == null ? null : other.copyable.copy();
         this.defaultValue = other.defaultValue == null ? null : other.defaultValue.copy();
         this.formatPattern = other.formatPattern == null ? null : other.formatPattern.copy();
+        this.minLength = other.minLength == null ? null : other.minLength.copy();
+        this.maxLength = other.maxLength == null ? null : other.maxLength.copy();
+        this.minValue = other.minValue == null ? null : other.minValue.copy();
+        this.maxValue = other.maxValue == null ? null : other.maxValue.copy();
+        this.type = other.type == null ? null : other.type.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adCalloutId = other.adCalloutId == null ? null : other.adCalloutId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -265,12 +314,52 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.columnNo = columnNo;
     }
 
+    public IntegerFilter getColumnOffset() {
+        return columnOffset;
+    }
+
+    public void setColumnOffset(IntegerFilter columnOffset) {
+        this.columnOffset = columnOffset;
+    }
+
     public IntegerFilter getColumnSpan() {
         return columnSpan;
     }
 
     public void setColumnSpan(IntegerFilter columnSpan) {
         this.columnSpan = columnSpan;
+    }
+
+    public IntegerFilter getRowNo() {
+        return rowNo;
+    }
+
+    public void setRowNo(IntegerFilter rowNo) {
+        this.rowNo = rowNo;
+    }
+
+    public StringFilter getVirtualColumnName() {
+        return virtualColumnName;
+    }
+
+    public void setVirtualColumnName(StringFilter virtualColumnName) {
+        this.virtualColumnName = virtualColumnName;
+    }
+
+    public BooleanFilter getMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(BooleanFilter mandatory) {
+        this.mandatory = mandatory;
+    }
+
+    public StringFilter getMandatoryLogic() {
+        return mandatoryLogic;
+    }
+
+    public void setMandatoryLogic(StringFilter mandatoryLogic) {
+        this.mandatoryLogic = mandatoryLogic;
     }
 
     public BooleanFilter getUpdatable() {
@@ -311,6 +400,46 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     public void setFormatPattern(StringFilter formatPattern) {
         this.formatPattern = formatPattern;
+    }
+
+    public IntegerFilter getMinLength() {
+        return minLength;
+    }
+
+    public void setMinLength(IntegerFilter minLength) {
+        this.minLength = minLength;
+    }
+
+    public IntegerFilter getMaxLength() {
+        return maxLength;
+    }
+
+    public void setMaxLength(IntegerFilter maxLength) {
+        this.maxLength = maxLength;
+    }
+
+    public LongFilter getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(LongFilter minValue) {
+        this.minValue = minValue;
+    }
+
+    public LongFilter getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(LongFilter maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public ADColumnTypeFilter getType() {
+        return type;
+    }
+
+    public void setType(ADColumnTypeFilter type) {
+        this.type = type;
     }
 
     public BooleanFilter getActive() {
@@ -405,12 +534,22 @@ public class ADFieldCriteria implements Serializable, Criteria {
             Objects.equals(readOnlyLogic, that.readOnlyLogic) &&
             Objects.equals(writable, that.writable) &&
             Objects.equals(columnNo, that.columnNo) &&
+            Objects.equals(columnOffset, that.columnOffset) &&
             Objects.equals(columnSpan, that.columnSpan) &&
+            Objects.equals(rowNo, that.rowNo) &&
+            Objects.equals(virtualColumnName, that.virtualColumnName) &&
+            Objects.equals(mandatory, that.mandatory) &&
+            Objects.equals(mandatoryLogic, that.mandatoryLogic) &&
             Objects.equals(updatable, that.updatable) &&
             Objects.equals(alwaysUpdatable, that.alwaysUpdatable) &&
             Objects.equals(copyable, that.copyable) &&
             Objects.equals(defaultValue, that.defaultValue) &&
             Objects.equals(formatPattern, that.formatPattern) &&
+            Objects.equals(minLength, that.minLength) &&
+            Objects.equals(maxLength, that.maxLength) &&
+            Objects.equals(minValue, that.minValue) &&
+            Objects.equals(maxValue, that.maxValue) &&
+            Objects.equals(type, that.type) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adCalloutId, that.adCalloutId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -441,12 +580,22 @@ public class ADFieldCriteria implements Serializable, Criteria {
         readOnlyLogic,
         writable,
         columnNo,
+        columnOffset,
         columnSpan,
+        rowNo,
+        virtualColumnName,
+        mandatory,
+        mandatoryLogic,
         updatable,
         alwaysUpdatable,
         copyable,
         defaultValue,
         formatPattern,
+        minLength,
+        maxLength,
+        minValue,
+        maxValue,
+        type,
         active,
         adCalloutId,
         adOrganizationId,
@@ -478,12 +627,22 @@ public class ADFieldCriteria implements Serializable, Criteria {
                 (readOnlyLogic != null ? "readOnlyLogic=" + readOnlyLogic + ", " : "") +
                 (writable != null ? "writable=" + writable + ", " : "") +
                 (columnNo != null ? "columnNo=" + columnNo + ", " : "") +
+                (columnOffset != null ? "columnOffset=" + columnOffset + ", " : "") +
                 (columnSpan != null ? "columnSpan=" + columnSpan + ", " : "") +
+                (rowNo != null ? "rowNo=" + rowNo + ", " : "") +
+                (virtualColumnName != null ? "virtualColumnName=" + virtualColumnName + ", " : "") +
+                (mandatory != null ? "mandatory=" + mandatory + ", " : "") +
+                (mandatoryLogic != null ? "mandatoryLogic=" + mandatoryLogic + ", " : "") +
                 (updatable != null ? "updatable=" + updatable + ", " : "") +
                 (alwaysUpdatable != null ? "alwaysUpdatable=" + alwaysUpdatable + ", " : "") +
                 (copyable != null ? "copyable=" + copyable + ", " : "") +
                 (defaultValue != null ? "defaultValue=" + defaultValue + ", " : "") +
                 (formatPattern != null ? "formatPattern=" + formatPattern + ", " : "") +
+                (minLength != null ? "minLength=" + minLength + ", " : "") +
+                (maxLength != null ? "maxLength=" + maxLength + ", " : "") +
+                (minValue != null ? "minValue=" + minValue + ", " : "") +
+                (maxValue != null ? "maxValue=" + maxValue + ", " : "") +
+                (type != null ? "type=" + type + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adCalloutId != null ? "adCalloutId=" + adCalloutId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

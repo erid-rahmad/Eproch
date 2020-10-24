@@ -51,15 +51,41 @@ public class ADTab extends AbstractAuditingEntity {
     @Column(name = "icon_name")
     private String iconName;
 
+    /**
+     * Whether or not to show the tree view in the layout.
+     */
+    @Column(name = "tree_view")
+    private Boolean treeView;
+
+    /**
+     * Target API endpoint for the CRUD operations. Override the same property in
+     * AdTable.
+     */
     @Column(name = "target_endpoint")
     private String targetEndpoint;
 
+    /**
+     * Indicates to use the form layout by default instead of displaying the table
+     * layout first.
+     */
     @Column(name = "single_row")
     private Boolean singleRow;
 
+    /**
+     * Whether or not the record is deletable from the table.
+     */
     @Column(name = "deletable")
     private Boolean deletable;
 
+    /**
+     * Whether or not to allow insert a new record to the table.
+     */
+    @Column(name = "insertable")
+    private Boolean insertable;
+
+    /**
+     * If false, force read-only to the whole fields in the tab.
+     */
     @Column(name = "writable")
     private Boolean writable = true;
 
@@ -178,6 +204,19 @@ public class ADTab extends AbstractAuditingEntity {
         this.iconName = iconName;
     }
 
+    public Boolean isTreeView() {
+        return treeView;
+    }
+
+    public ADTab treeView(Boolean treeView) {
+        this.treeView = treeView;
+        return this;
+    }
+
+    public void setTreeView(Boolean treeView) {
+        this.treeView = treeView;
+    }
+
     public String getTargetEndpoint() {
         return targetEndpoint;
     }
@@ -215,6 +254,19 @@ public class ADTab extends AbstractAuditingEntity {
 
     public void setDeletable(Boolean deletable) {
         this.deletable = deletable;
+    }
+
+    public Boolean isInsertable() {
+        return insertable;
+    }
+
+    public ADTab insertable(Boolean insertable) {
+        this.insertable = insertable;
+        return this;
+    }
+
+    public void setInsertable(Boolean insertable) {
+        this.insertable = insertable;
     }
 
     public Boolean isWritable() {
@@ -466,9 +518,11 @@ public class ADTab extends AbstractAuditingEntity {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", iconName='" + getIconName() + "'" +
+            ", treeView='" + isTreeView() + "'" +
             ", targetEndpoint='" + getTargetEndpoint() + "'" +
             ", singleRow='" + isSingleRow() + "'" +
             ", deletable='" + isDeletable() + "'" +
+            ", insertable='" + isInsertable() + "'" +
             ", writable='" + isWritable() + "'" +
             ", displayLogic='" + getDisplayLogic() + "'" +
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +

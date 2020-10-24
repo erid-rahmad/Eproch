@@ -19,6 +19,8 @@ public class ScAuthorityDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
+    private String name;
+
     private String description;
 
     private Boolean master;
@@ -54,6 +56,14 @@ public class ScAuthorityDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {

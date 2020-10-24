@@ -5,8 +5,9 @@ import { IADField } from '@/shared/model/ad-field.model';
 import { formatJson } from '@/utils';
 import { exportJson2Excel } from '@/utils/excel';
 import { normalizeField } from '@/utils/form';
-import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isStringField, isTableDirectLink } from '@/utils/validate';
+import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
 import schema from 'async-validator';
+import { format, parseISO } from 'date-fns';
 import { ElPagination } from 'element-ui/types/pagination';
 import { ElTable } from 'element-ui/types/table';
 import { cloneDeep, debounce, isEqual, kebabCase } from 'lodash';
@@ -15,7 +16,6 @@ import { Component, Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import CalloutMixin from '../../mixins/CalloutMixin';
 import ContextVariableAccessor from "../ContextVariableAccessor";
-import { format, parseISO } from 'date-fns';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -55,6 +55,7 @@ const GridViewProps = Vue.extend({
 @Component({
   methods: {
     isStringField: isStringField,
+    isPasswordField: isPasswordField,
     isNumericField: isNumericField,
     isDateField: isDateField,
     isDateTimeField: isDateTimeField,
@@ -150,7 +151,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   private registerTabState!: (options: IRegisterTabParameter) => Promise<void>;
 
   get referenceListItems() {
-    return (field: any): any[] => {
+    return (field: IADField): any[] => {
       if (this.currentRecord === null || field == null) {
         return [];
       }
@@ -160,7 +161,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
 
   // TODO Find another alternatives than using tableDirectTimestamp.
   get tableDirectReferences() {
-    return (field: any): any[] => {
+    return (field: IADField): any[] => {
       if (this.currentRecord === null || field == null) {
         return [];
       }
@@ -187,19 +188,22 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
 
   get datePickerType() {
     return (field: IADField): string => {
-      return field.adColumn.type === ADColumnType.LOCAL_DATE ? 'date' : 'datetime';
+      const type = field.type || field.adColumn.type;
+      return type === ADColumnType.LOCAL_DATE ? 'date' : 'datetime';
     }
   }
 
   get dateDisplayFormat() {
     return (field: IADField): string => {
-      return field.adColumn.type === ADColumnType.LOCAL_DATE ? settings.dateDisplayFormat : settings.dateTimeDisplayFormat;
+      const type = field.type || field.adColumn.type;
+      return type === ADColumnType.LOCAL_DATE ? settings.dateDisplayFormat : settings.dateTimeDisplayFormat;
     }
   }
 
   get dateValueFormat() {
     return (field: IADField): string => {
-      return field.adColumn.type === ADColumnType.LOCAL_DATE ? settings.dateValueFormat : settings.dateTimeValueFormat;
+      const type = field.type || field.adColumn.type;
+      return type === ADColumnType.LOCAL_DATE ? settings.dateValueFormat : settings.dateTimeValueFormat;
     }
   }
 
@@ -222,11 +226,13 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         return prevSequence - nextSequence;
       });
 
-    const logicallyMandatoryFields = this.gridFields.filter(field => !!field.adColumn.mandatoryLogic);
+    const logicallyMandatoryFields = this.gridFields
+      .filter(field => !!field.mandatoryLogic || !!field.adColumn?.mandatoryLogic);
+
     await windowStore.addMandatoryFields({
       path: this.$route.fullPath,
       tabId: this.tabName,
-      fields: Object.assign({}, ...logicallyMandatoryFields.map(field => ({[field.adColumn.name]: field})))
+      fields: Object.assign({}, ...logicallyMandatoryFields.map(field => ({[field.virtualColumnName || field.adColumn.name]: field})))
     });
 
     this.reloadValidationSchema();
@@ -288,12 +294,14 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     this.tableHeight = height - paginationHeight;
   }
 
-  public hasError(field: any) {
-    return this.errorTimestamp && this.errors.has(field.adColumn.name);
+  public hasError(field: IADField) {
+    const fieldName = field.virtualColumnName || field.adColumn.name;
+    return this.errorTimestamp && this.errors.has(fieldName);
   }
 
-  public getErrorMessage(field: any) {
-    return this.errorTimestamp && this.errors.get(field.adColumn.name);
+  public getErrorMessage(field: IADField) {
+    const fieldName = field.virtualColumnName || field.adColumn.name;
+    return this.errorTimestamp && this.errors.get(fieldName);
   }
 
   public clear(): void {
@@ -508,7 +516,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     for (let name in this.dynamicValidationSchema) {
       const field = logicallyMandatoryFields[name];
 
-      if (field !== void 0 && !field.adColumn.mandatory) {
+      if (field !== void 0 && !field.mandatory && !field.adColumn?.mandatory) {
         let vSchema = this.dynamicValidationSchema[name];
 
         const shouldMandatory = this.evaluateMandatoryLogic({
@@ -537,7 +545,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   private async updateReferenceQuery(field: IADField) {
     // Parse the validation rule which is used to filter the reference key records.
     const column = field.adColumn;
-    const validationRule = field.adValidationRule || column.adValidationRule;
+    const validationRule = field.adValidationRule || column?.adValidationRule;
 
     if (validationRule) {
       let referenceFilter = <string>this.getContext({
@@ -686,22 +694,24 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   private async prepareForm(row: any, newRecord: boolean = true) {
     for (const field of this.fields) {
       const column = field.adColumn;
+      const fieldName = field.virtualColumnName || column.name;
 
       if (newRecord) {
-        let defaultValue = field.defaultValue || column.defaultValue;
+        let defaultValue = field.defaultValue || column?.defaultValue;
         const options = {
           defaultTabId: this.tabName,
           text: defaultValue
         };
 
         if (defaultValue?.includes('{select:', 0)) {
+          // TODO Don't use async-await.
           defaultValue = await this.retrieveRemoteValue(options);
         } else {
           defaultValue = this.getContext(options);
         }
 
         if (! defaultValue) {
-          if (column.name === 'active') {
+          if (fieldName === 'active') {
             defaultValue = true;
           } else if (this.isDateField(field) || this.isDateTimeField(field)) {
             defaultValue = new Date().toISOString();
@@ -713,7 +723,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
             defaultValue = '';
           }
         }
-        row[column.name] = defaultValue;
+        row[fieldName] = defaultValue;
       }
     }
   }
@@ -910,7 +920,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     for (let field of this.gridFields) {
       const column = field.adColumn;
 
-      if (field.adReferenceId || column.adReferenceId) {
+      if (field.adReferenceId || column?.adReferenceId) {
         const filterQuery = this.referenceFilterQueries.get(field.id);
 
         // Get the item list of Reference Key[LIST].
@@ -964,7 +974,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
 
   public isReadonly(row: any, field: IADField): boolean {
     const newRecord: boolean = ! row?.id;
-    const notUpdatable = ( ! newRecord && ! field.adColumn.updatable);
+    const notUpdatable = ( ! newRecord && ! field.updatable && ! field.adColumn?.updatable);
     const conditionallyReadonly = this.evaluateReadonlyLogic({
       defaultTabId: this.tabName,
       field
@@ -981,12 +991,20 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     return '256';
   }
 
+  public getMinLength(field: IADField) {
+    return field.minLength || field.adColumn?.minLength || -Infinity;
+  }
+
+  public getMaxLength(field: IADField) {
+    return field.maxLength || field.adColumn?.maxLength || Infinity;
+  }
+
   public getMinValue(field: IADField) {
-    return field.adColumn.minValue || -Infinity;
+    return field.minValue || field.adColumn?.minValue || -Infinity;
   }
 
   public getMaxValue(field: IADField) {
-    return field.adColumn.maxValue || Infinity;
+    return field.maxValue || field.adColumn?.maxValue || Infinity;
   }
 
   public getReferenceList(field: IADField) {
@@ -994,6 +1012,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   }
 
   public isStringField!: (field: IADField) => boolean;
+  public isPasswordField!: (field: IADField) => boolean;
   public isNumericField!: (field: IADField) => boolean;
   public isDateField!: (field: IADField) => boolean;
   public isDateTimeField!: (field: IADField) => boolean;
@@ -1008,20 +1027,23 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
    * @param field The inspected field of the current field iteration.
    */
   public getFieldValue(row: any, field: IADField) {
+    const fieldName = field.virtualColumnName || field.adColumn.name;
+    const fieldType = field.type || field.adColumn.type;
+
     if (this.isTableDirectLink(field)) {
-      const propName = field.adColumn.name.replace(/Id$/, 'Name');
-      return row[propName] || row[field.adColumn.name];
-    } else if (field.adColumn.type === ADColumnType.LOCAL_DATE) {
-      const value = row[field.adColumn.name];
+      const propName = fieldName.replace(/Id$/, 'Name');
+      return row[propName] || row[fieldName];
+    } else if (fieldType === ADColumnType.LOCAL_DATE) {
+      const value = row[fieldName];
       if (value) {
         return format(parseISO(value), settings.dateDisplayFormat);
       }
-    } else if (field.adColumn.type === ADColumnType.INSTANT || field.adColumn.type === ADColumnType.ZONED_DATE_TIME) {
-      const value = row[field.adColumn.name];
+    } else if (fieldType === ADColumnType.INSTANT || fieldType === ADColumnType.ZONED_DATE_TIME) {
+      const value = row[fieldName];
       if (value) {
         return format(parseISO(value), settings.dateTimeDisplayFormat);
       }
     }
-    return row[field.adColumn.name];
+    return row[fieldName];
   }
 }
