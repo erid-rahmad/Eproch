@@ -15,7 +15,7 @@ public interface AdUserAuthorityMapper extends EntityMapper<AdUserAuthorityDTO, 
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
-    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "user.user.id", target = "userId")
     @Mapping(source = "user.user.login", target = "userName")
     @Mapping(source = "authority.id", target = "authorityId")
     @Mapping(source = "authority.authority.name", target = "authorityName")

@@ -12,7 +12,7 @@
     -->
     <changeSet id="20201021111500-1" author="jhipster">
         <createTable tableName="ad_user" remarks="The extended User entity.">
-            <column name="id" type="bigint">
+            <column name="user_id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="uid" type="${uuidType}">
@@ -32,9 +32,6 @@
             </column>
             <column name="last_login_date" type="datetime">
                 <constraints nullable="true" />
-            </column>
-            <column name="user_id" type="bigint">
-                <constraints unique="true" nullable="false" uniqueConstraintName="ux_ad_user_user_id" />
             </column>
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
@@ -76,14 +73,13 @@
                   file="config/liquibase/fake-data/ad_user.csv"
                   separator=";"
                   tableName="ad_user">
-            <column name="id" type="numeric"/>
+            <column name="user_id" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="code" type="string"/>
             <column name="phone" type="string"/>
             <column name="failed_login_count" type="numeric"/>
             <column name="last_login_date" type="datetime"/>
-            <column name="user_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>

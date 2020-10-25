@@ -1,13 +1,17 @@
 package com.bhp.opusb.security;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import org.passay.CharacterData;
+import org.passay.CharacterRule;
+import org.passay.EnglishCharacterData;
+import org.passay.PasswordGenerator;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.util.Optional;
-import java.util.stream.Stream;
 
 /**
  * Utility class for Spring Security.
@@ -75,6 +79,32 @@ public final class SecurityUtils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         return authentication != null &&
             getAuthorities(authentication).anyMatch(authority::equals);
+    }
+
+    public static String generatePassword() {
+        PasswordGenerator generator = new PasswordGenerator();
+        CharacterRule lowerCaseRule = new CharacterRule(EnglishCharacterData.LowerCase);
+        CharacterRule upperCaseRule = new CharacterRule(EnglishCharacterData.UpperCase);
+        CharacterRule digitRule = new CharacterRule(EnglishCharacterData.Digit);
+
+        lowerCaseRule.setNumberOfCharacters(2);
+        upperCaseRule.setNumberOfCharacters(2);
+        digitRule.setNumberOfCharacters(2);
+     
+        CharacterData specialChars = new CharacterData() {
+            public String getErrorCode() {
+                return "PassGenFail";
+            }
+     
+            public String getCharacters() {
+                return "!@#$%^&*()_+";
+            }
+        };
+        CharacterRule splCharRule = new CharacterRule(specialChars);
+        splCharRule.setNumberOfCharacters(2);
+     
+        return generator.generatePassword(10, splCharRule, lowerCaseRule, 
+          upperCaseRule, digitRule);
     }
 
     private static Stream<String> getAuthorities(Authentication authentication) {

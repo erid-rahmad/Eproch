@@ -57,13 +57,13 @@ public class AdUserAuthorityService {
         AdUserAuthority adUserAuthority = adUserAuthorityMapper.toEntity(adUserAuthorityDTO);
         adUserAuthority = adUserAuthorityRepository.save(adUserAuthority);
 
-        Optional<ScAuthority> authority = scAuthorityRepository.findById(adUserAuthority.getAuthority().getId());
+        Optional<ScAuthority> authorityRecord = scAuthorityRepository.findById(adUserAuthority.getAuthority().getId());
 
         // Update jhi_user_authority table.
-        Optional<AdUser> record = adUserRepository.findById(adUserAuthority.getUser().getId());
-        record.ifPresent(user -> {
-            if (authority.isPresent()) {
-                user.getUser().getAuthorities().add(authority.get().getAuthority());
+        Optional<AdUser> userRecord = adUserRepository.findById(adUserAuthority.getUser().getId());
+        userRecord.ifPresent(user -> {
+            if (authorityRecord.isPresent()) {
+                user.getUser().getAuthorities().add(authorityRecord.get().getAuthority());
             }
         });
 

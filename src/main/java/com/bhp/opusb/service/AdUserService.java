@@ -1,11 +1,14 @@
 package com.bhp.opusb.service;
 
+import java.time.Instant;
 import java.util.Optional;
 
+import com.bhp.opusb.config.Constants;
 import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.User;
 import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.UserRepository;
+import com.bhp.opusb.security.SecurityUtils;
 import com.bhp.opusb.service.dto.AdUserDTO;
 import com.bhp.opusb.service.mapper.AdUserMapper;
 
@@ -16,6 +19,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import io.github.jhipster.security.RandomUtil;
 
 /**
  * Service Implementation for managing {@link AdUser}.
@@ -52,13 +57,18 @@ public class AdUserService {
             User user = new User();
             user.setEmail(adUserDTO.getEmail());
             user.setLogin(adUserDTO.getUserLogin());
+            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
 
             // Any user that is created from the admin page doesn't need email verification.
             user.setActivated(true);
 
-            String encryptedPassword = passwordEncoder.encode(adUserDTO.getPassword());
+            String generatedPassword = SecurityUtils.generatePassword();
+            String encryptedPassword = passwordEncoder.encode(generatedPassword);
             user.setPassword(encryptedPassword);
+            user.setResetKey(RandomUtil.generateResetKey());
+            user.setResetDate(Instant.now());
             userRepository.save(user);
+            log.debug("User saved {}", user);
             adUser.setUser(user);
         }
         
@@ -99,6 +109,10 @@ public class AdUserService {
      */
     public void delete(Long id) {
         log.debug("Request to delete AdUser : {}", id);
-        adUserRepository.deleteById(id);
+        adUserRepository.findById(id).ifPresent(adUser -> {
+            User user = adUser.getUser();
+            adUserRepository.delete(adUser);
+            userRepository.delete(user);
+        });
     }
 }
