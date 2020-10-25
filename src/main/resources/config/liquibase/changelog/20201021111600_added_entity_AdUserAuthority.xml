@@ -24,7 +24,7 @@
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="user_id" type="bigint">
+            <column name="user_user_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <column name="authority_id" type="bigint">
@@ -70,7 +70,7 @@
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
-            <column name="user_id" type="numeric"/>
+            <column name="user_user_id" type="numeric"/>
             <column name="authority_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>

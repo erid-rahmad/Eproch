@@ -14,10 +14,10 @@
                                  referencedColumnNames="id"
                                  referencedTableName="ad_organization"/>
 
-        <addForeignKeyConstraint baseColumnNames="user_id"
+        <addForeignKeyConstraint baseColumnNames="user_user_id"
                                  baseTableName="ad_user_authority"
                                  constraintName="fk_ad_user_authority_user_id"
-                                 referencedColumnNames="id"
+                                 referencedColumnNames="user_id"
                                  referencedTableName="ad_user"/>
 
         <addForeignKeyConstraint baseColumnNames="authority_id"
