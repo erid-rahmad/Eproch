@@ -7,7 +7,9 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
-import com.bhp.opusb.domain.AdCallout;
+import com.bhp.opusb.domain.enumeration.ADColumnType;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADField} entity.
@@ -51,7 +53,29 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     private Integer columnNo;
 
+    private Integer columnOffset;
+
     private Integer columnSpan;
+
+    private Integer rowNo;
+
+    /**
+     * Don't use the actual column in the table. Instead, refers to a specific DTO's field.
+     */
+    @ApiModelProperty(value = "Don't use the actual column in the table. Instead, refers to a specific DTO's field.")
+    private String virtualColumnName;
+
+    /**
+     * It's automatically filled by the dbSync process.\nupdatable = false.
+     */
+    @ApiModelProperty(value = "It's automatically filled by the dbSync process. updatable = false.")
+    private Boolean mandatory;
+
+    /**
+     * This should be displayed only if mandatory = false.
+     */
+    @ApiModelProperty(value = "This should be displayed only if mandatory = false.")
+    private String mandatoryLogic;
 
     private Boolean updatable;
 
@@ -62,6 +86,32 @@ public class ADFieldDTO extends AbstractAuditingDTO {
     private String defaultValue;
 
     private String formatPattern;
+
+    /**
+     * The minimum character length of the string column.
+     */
+    @ApiModelProperty(value = "The minimum character length of the string column.")
+    private Integer minLength;
+
+    /**
+     * The maximum character length of the string column.
+     */
+    @ApiModelProperty(value = "The maximum character length of the string column.")
+    private Integer maxLength;
+
+    /**
+     * The minimum number value of the numeric column.
+     */
+    @ApiModelProperty(value = "The minimum number value of the numeric column.")
+    private Long minValue;
+
+    /**
+     * The minimum number value of the numeric column.
+     */
+    @ApiModelProperty(value = "The minimum number value of the numeric column.")
+    private Long maxValue;
+
+    private ADColumnType type;
 
     private Boolean active;
 
@@ -226,12 +276,52 @@ public class ADFieldDTO extends AbstractAuditingDTO {
         this.columnNo = columnNo;
     }
 
+    public Integer getColumnOffset() {
+        return columnOffset;
+    }
+
+    public void setColumnOffset(Integer columnOffset) {
+        this.columnOffset = columnOffset;
+    }
+
     public Integer getColumnSpan() {
         return columnSpan;
     }
 
     public void setColumnSpan(Integer columnSpan) {
         this.columnSpan = columnSpan;
+    }
+
+    public Integer getRowNo() {
+        return rowNo;
+    }
+
+    public void setRowNo(Integer rowNo) {
+        this.rowNo = rowNo;
+    }
+
+    public String getVirtualColumnName() {
+        return virtualColumnName;
+    }
+
+    public void setVirtualColumnName(String virtualColumnName) {
+        this.virtualColumnName = virtualColumnName;
+    }
+
+    public Boolean isMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(Boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
+    public String getMandatoryLogic() {
+        return mandatoryLogic;
+    }
+
+    public void setMandatoryLogic(String mandatoryLogic) {
+        this.mandatoryLogic = mandatoryLogic;
     }
 
     public Boolean isUpdatable() {
@@ -272,6 +362,46 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     public void setFormatPattern(String formatPattern) {
         this.formatPattern = formatPattern;
+    }
+
+    public Integer getMinLength() {
+        return minLength;
+    }
+
+    public void setMinLength(Integer minLength) {
+        this.minLength = minLength;
+    }
+
+    public Integer getMaxLength() {
+        return maxLength;
+    }
+
+    public void setMaxLength(Integer maxLength) {
+        this.maxLength = maxLength;
+    }
+
+    public Long getMinValue() {
+        return minValue;
+    }
+
+    public void setMinValue(Long minValue) {
+        this.minValue = minValue;
+    }
+
+    public Long getMaxValue() {
+        return maxValue;
+    }
+
+    public void setMaxValue(Long maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public ADColumnType getType() {
+        return type;
+    }
+
+    public void setType(ADColumnType type) {
+        this.type = type;
     }
 
     public Boolean isActive() {
@@ -459,12 +589,22 @@ public class ADFieldDTO extends AbstractAuditingDTO {
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +
             ", writable='" + isWritable() + "'" +
             ", columnNo=" + getColumnNo() +
+            ", columnOffset=" + getColumnOffset() +
             ", columnSpan=" + getColumnSpan() +
+            ", rowNo=" + getRowNo() +
+            ", virtualColumnName='" + getVirtualColumnName() + "'" +
+            ", mandatory='" + isMandatory() + "'" +
+            ", mandatoryLogic='" + getMandatoryLogic() + "'" +
             ", updatable='" + isUpdatable() + "'" +
             ", alwaysUpdatable='" + isAlwaysUpdatable() + "'" +
             ", copyable='" + isCopyable() + "'" +
             ", defaultValue='" + getDefaultValue() + "'" +
             ", formatPattern='" + getFormatPattern() + "'" +
+            ", minLength=" + getMinLength() +
+            ", maxLength=" + getMaxLength() +
+            ", minValue=" + getMinValue() +
+            ", maxValue=" + getMaxValue() +
+            ", type='" + getType() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adReferenceId=" + getAdReferenceId() +

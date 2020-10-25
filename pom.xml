@@ -5,7 +5,7 @@
 
     <groupId>com.bhp.opusb</groupId>
     <artifactId>opus-web-app</artifactId>
-    <version>0.2.8</version>
+    <version>0.3.1</version>
     <packaging>jar</packaging>
     <name>Opus Web App</name>
 
@@ -378,6 +378,11 @@
             <scope>test</scope>
         </dependency>
         <!-- jhipster-needle-maven-add-dependency -->
+        <dependency>
+            <groupId>org.passay</groupId>
+            <artifactId>passay</artifactId>
+            <version>1.6.0</version>
+        </dependency>
         <dependency>
             <groupId>io.vavr</groupId>
             <artifactId>vavr</artifactId>

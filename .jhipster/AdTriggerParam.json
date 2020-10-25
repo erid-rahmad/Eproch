@@ -26,7 +26,7 @@
         {
             "fieldName": "type",
             "fieldType": "ADColumnType",
-            "fieldValues": "STRING,INTEGER,LONG,BIG_DECIMAL,FLOAT,DOUBLE,BOOLEAN,LOCAL_DATE,ZONED_DATE_TIME,DURATION,INSTANT",
+            "fieldValues": "STRING,INTEGER,LONG,BIG_DECIMAL,FLOAT,DOUBLE,BOOLEAN,LOCAL_DATE,ZONED_DATE_TIME,DURATION,INSTANT,BLOB",
             "fieldValidateRules": [
                 "required"
             ]

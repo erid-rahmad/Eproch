@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +24,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 
 /**
  * A AdTask.
@@ -57,8 +59,9 @@ public class AdTask extends AbstractAuditingEntity {
     @Column(name = "async")
     private Boolean async;
 
-    @OneToMany(mappedBy = "adTask")
+    @OneToMany(mappedBy = "adTask", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Where(clause = "active = true")
     @OrderBy("runSequence ASC, id ASC")
     @JsonManagedReference
     private List<AdTaskProcess> adTaskProcesses = new ArrayList<>();

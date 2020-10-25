@@ -103,11 +103,20 @@ public class ADTabQueryService extends QueryService<ADTab> {
             if (criteria.getIconName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getIconName(), ADTab_.iconName));
             }
+            if (criteria.getTreeView() != null) {
+                specification = specification.and(buildSpecification(criteria.getTreeView(), ADTab_.treeView));
+            }
             if (criteria.getTargetEndpoint() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTargetEndpoint(), ADTab_.targetEndpoint));
             }
+            if (criteria.getSingleRow() != null) {
+                specification = specification.and(buildSpecification(criteria.getSingleRow(), ADTab_.singleRow));
+            }
             if (criteria.getDeletable() != null) {
                 specification = specification.and(buildSpecification(criteria.getDeletable(), ADTab_.deletable));
+            }
+            if (criteria.getInsertable() != null) {
+                specification = specification.and(buildSpecification(criteria.getInsertable(), ADTab_.insertable));
             }
             if (criteria.getWritable() != null) {
                 specification = specification.and(buildSpecification(criteria.getWritable(), ADTab_.writable));

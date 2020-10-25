@@ -16,6 +16,14 @@
         {
             "fieldName": "master",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "accessAllOrgs",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "useUserOrgs",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [

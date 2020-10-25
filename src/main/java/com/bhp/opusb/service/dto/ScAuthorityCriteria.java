@@ -33,6 +33,10 @@ public class ScAuthorityCriteria implements Serializable, Criteria {
 
     private BooleanFilter master;
 
+    private BooleanFilter accessAllOrgs;
+
+    private BooleanFilter useUserOrgs;
+
     private StringFilter authorityName;
 
     private LongFilter scAccessId;
@@ -48,6 +52,8 @@ public class ScAuthorityCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.master = other.master == null ? null : other.master.copy();
+        this.accessAllOrgs = other.accessAllOrgs == null ? null : other.accessAllOrgs.copy();
+        this.useUserOrgs = other.useUserOrgs == null ? null : other.useUserOrgs.copy();
         this.authorityName = other.authorityName == null ? null : other.authorityName.copy();
         this.scAccessId = other.scAccessId == null ? null : other.scAccessId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -98,6 +104,22 @@ public class ScAuthorityCriteria implements Serializable, Criteria {
         this.master = master;
     }
 
+    public BooleanFilter getAccessAllOrgs() {
+        return accessAllOrgs;
+    }
+
+    public void setAccessAllOrgs(BooleanFilter accessAllOrgs) {
+        this.accessAllOrgs = accessAllOrgs;
+    }
+
+    public BooleanFilter getUseUserOrgs() {
+        return useUserOrgs;
+    }
+
+    public void setUseUserOrgs(BooleanFilter useUserOrgs) {
+        this.useUserOrgs = useUserOrgs;
+    }
+
     public StringFilter getAuthorityName() {
         return authorityName;
     }
@@ -138,6 +160,8 @@ public class ScAuthorityCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(description, that.description) &&
             Objects.equals(master, that.master) &&
+            Objects.equals(accessAllOrgs, that.accessAllOrgs) &&
+            Objects.equals(useUserOrgs, that.useUserOrgs) &&
             Objects.equals(authorityName, that.authorityName) &&
             Objects.equals(scAccessId, that.scAccessId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
@@ -151,6 +175,8 @@ public class ScAuthorityCriteria implements Serializable, Criteria {
         active,
         description,
         master,
+        accessAllOrgs,
+        useUserOrgs,
         authorityName,
         scAccessId,
         adOrganizationId
@@ -165,6 +191,8 @@ public class ScAuthorityCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (master != null ? "master=" + master + ", " : "") +
+                (accessAllOrgs != null ? "accessAllOrgs=" + accessAllOrgs + ", " : "") +
+                (useUserOrgs != null ? "useUserOrgs=" + useUserOrgs + ", " : "") +
                 (authorityName != null ? "authorityName=" + authorityName + ", " : "") +
                 (scAccessId != null ? "scAccessId=" + scAccessId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

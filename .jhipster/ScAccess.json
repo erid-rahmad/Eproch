@@ -20,6 +20,10 @@
         {
             "fieldName": "description",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "canWrite",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [
@@ -51,6 +55,20 @@
             "otherEntityName": "adForm",
             "otherEntityRelationshipName": "scAccess",
             "relationshipName": "form",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "scAccess",
+            "relationshipName": "documentType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDReferenceList",
+            "otherEntityRelationshipName": "scAccess",
+            "relationshipName": "referenceList",
             "otherEntityField": "id"
         },
         {

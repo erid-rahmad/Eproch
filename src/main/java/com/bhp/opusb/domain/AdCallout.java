@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,9 +19,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 
 /**
  * A AdCallout.
@@ -56,8 +59,10 @@ public class AdCallout extends AbstractAuditingEntity {
     @Column(name = "type", length = 15, nullable = false)
     private String type;
 
-    @OneToMany(mappedBy = "callout")
+    @OneToMany(mappedBy = "callout", fetch = FetchType.EAGER)
+    @Where(clause = "active = true")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonManagedReference
     private Set<AdCalloutTarget> adCalloutTargets = new HashSet<>();
 
     @ManyToOne(optional = false)

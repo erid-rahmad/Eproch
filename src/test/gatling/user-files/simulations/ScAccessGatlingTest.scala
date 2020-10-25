@@ -76,6 +76,7 @@ class ScAccessGatlingTest extends Simulation {
                 , "active":null
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
+                , "canWrite":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_scAccess_url"))).exitHereIfFailed

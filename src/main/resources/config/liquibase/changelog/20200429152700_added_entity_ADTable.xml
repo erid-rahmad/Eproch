@@ -70,6 +70,7 @@
             <column name="uid" type="${uuidType}"/>
             <column name="name" type="string"/>
             <column name="view" type="boolean"/>
+            <column name="high_volume" type="boolean"/>
             <column name="target_endpoint" type="string"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
@@ -88,6 +89,14 @@
     <changeSet id="20200708095600" author="Ananta Aryadewa">
         <addColumn tableName="ad_table">
             <column name="target_endpoint" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20201022090100" author="Ananta Aryadewa">
+        <addColumn tableName="ad_table">
+            <column name="high_volume" type="boolean">
                 <constraints nullable="true" />
             </column>
         </addColumn>

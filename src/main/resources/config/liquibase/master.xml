@@ -43,6 +43,9 @@
     <include file="config/liquibase/changelog/20200917033700_added_entity_AdForm.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200925064700_added_entity_AdCallout.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200925064800_added_entity_AdCalloutTarget.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201021111500_added_entity_AdUser.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201021111600_added_entity_AdUserAuthority.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201021112000_added_entity_CDocumentType.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -68,6 +71,9 @@
     <include file="config/liquibase/changelog/20200917033700_added_entity_constraints_AdForm.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200925064700_added_entity_constraints_AdCallout.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200925064800_added_entity_constraints_AdCalloutTarget.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201021111500_added_entity_constraints_AdUser.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201021111600_added_entity_constraints_AdUserAuthority.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201021112000_added_entity_constraints_CDocumentType.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 
     <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>

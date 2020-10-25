@@ -80,6 +80,7 @@
               :minlength="getMinLength(col.field)"
               :maxlength="getMaxLength(col.field)"
               :disabled="isReadonly(col.field)"
+              :show-password="isPasswordField(col.field)"
               @change="value => onInputChanged(col.field, value)"
             />
             <el-input-number
