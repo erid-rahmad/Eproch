@@ -54,7 +54,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   public windowId: number = 0;
   private windowType = null;
   public gridView = true;
-  public treeView = false;
   private childTabs: IADTab[] = [];
   public subTabs: IADTab[] = [];
   public currentTab: string = '';
@@ -111,6 +110,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     const translationKey = `route.${text}`;
     return this.$te(translationKey) ? this.$t(translationKey) : text;
   }
+
+  get treeView() {
+    return this.mainTab.treeView;
+  }
   // End of computed properties.
 
   @Watch('mainTab')
@@ -137,7 +140,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.retrieveWindowDetail()
       .then((res) => {
         this.windowType = res.type;
-        this.treeView = res.treeView;
         this.retrieveTabs(null);
       });
   }
@@ -326,7 +328,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   public reloadTreeView() {
-    if (this.treeView) {
+    if (this.mainTab.treeView) {
       (<any>this.$refs.treeView).reload();
     }
   }
@@ -461,6 +463,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
     let params = {
       'adWindowId.equals': this.windowId,
+      'active.equals': true
     };
 
     if (parentTabId) {
@@ -475,7 +478,11 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
     return new Promise((resolve, reject) => {
       this.aDTabService()
-        .retrieveWithFilter(params)
+        .retrieveWithFilter(params, {
+          page: 0,
+          size: 50,
+          sort: ['tabSequence,asc', 'name,asc']
+        })
         .then(async (res) => {
           let tabs = res.data;
           for (let [index, tab] of tabs.entries()) {
@@ -512,37 +519,48 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
     for (let field of fields) {
       const column = field.adColumn;
-      
-      validationSchema[column.name] = {
-        required: column.mandatory
+      const fieldName = field.virtualColumnName || column?.name;
+
+      if ( ! fieldName) {
+        continue;
       }
 
-      if ( ! column.foreignKey) {
-        const type = getValidatorType(column.type);
+      const formatPattern = field.formatPattern || column?.formatPattern;
+      const minLength = field.minLength || column?.minLength;
+      const maxLength = field.maxLength || column?.maxLength;
+      const minValue = field.minValue || column?.minValue;
+      const maxValue = field.maxValue || column?.maxValue;
+      
+      validationSchema[fieldName] = {
+        required: field.mandatory || column?.mandatory
+      }
+
+      if ( ! column?.foreignKey) {
+        const type = getValidatorType(field.type || column.type);
 
         if (type !== 'date') {
-          validationSchema[column.name].type = type;
+          validationSchema[fieldName].type = type;
         }
       }
 
-      if (column.formatPattern) {
-        validationSchema[column.name].pattern = column.formatPattern;
+      if (formatPattern) {
+        validationSchema[fieldName].pattern = formatPattern;
       }
 
-      if (column.minLength) {
-        validationSchema[column.name].min = column.minLength;
+      if (minLength) {
+        validationSchema[fieldName].min = minLength;
       }
 
-      if (column.maxLength) {
-        validationSchema[column.name].max = column.maxLength;
+      if (maxLength) {
+        validationSchema[fieldName].max = maxLength;
       }
 
-      if (column.minValue) {
-        validationSchema[column.name].min = column.minValue;
+      if (minValue) {
+        validationSchema[fieldName].min = minValue;
       }
 
-      if (column.maxValue) {
-        validationSchema[column.name].max = column.maxValue;
+      if (maxValue) {
+        validationSchema[fieldName].max = maxValue;
       }
     }
 

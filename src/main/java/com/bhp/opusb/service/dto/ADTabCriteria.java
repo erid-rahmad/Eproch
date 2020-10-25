@@ -35,9 +35,15 @@ public class ADTabCriteria implements Serializable, Criteria {
 
     private StringFilter iconName;
 
+    private BooleanFilter treeView;
+
     private StringFilter targetEndpoint;
 
+    private BooleanFilter singleRow;
+
     private BooleanFilter deletable;
+
+    private BooleanFilter insertable;
 
     private BooleanFilter writable;
 
@@ -78,8 +84,11 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.iconName = other.iconName == null ? null : other.iconName.copy();
+        this.treeView = other.treeView == null ? null : other.treeView.copy();
         this.targetEndpoint = other.targetEndpoint == null ? null : other.targetEndpoint.copy();
+        this.singleRow = other.singleRow == null ? null : other.singleRow.copy();
         this.deletable = other.deletable == null ? null : other.deletable.copy();
+        this.insertable = other.insertable == null ? null : other.insertable.copy();
         this.writable = other.writable == null ? null : other.writable.copy();
         this.displayLogic = other.displayLogic == null ? null : other.displayLogic.copy();
         this.readOnlyLogic = other.readOnlyLogic == null ? null : other.readOnlyLogic.copy();
@@ -142,6 +151,14 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.iconName = iconName;
     }
 
+    public BooleanFilter getTreeView() {
+        return treeView;
+    }
+
+    public void setTreeView(BooleanFilter treeView) {
+        this.treeView = treeView;
+    }
+
     public StringFilter getTargetEndpoint() {
         return targetEndpoint;
     }
@@ -150,12 +167,28 @@ public class ADTabCriteria implements Serializable, Criteria {
         this.targetEndpoint = targetEndpoint;
     }
 
+    public BooleanFilter getSingleRow() {
+        return singleRow;
+    }
+
+    public void setSingleRow(BooleanFilter singleRow) {
+        this.singleRow = singleRow;
+    }
+
     public BooleanFilter getDeletable() {
         return deletable;
     }
 
     public void setDeletable(BooleanFilter deletable) {
         this.deletable = deletable;
+    }
+
+    public BooleanFilter getInsertable() {
+        return insertable;
+    }
+
+    public void setInsertable(BooleanFilter insertable) {
+        this.insertable = insertable;
     }
 
     public BooleanFilter getWritable() {
@@ -294,8 +327,11 @@ public class ADTabCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(iconName, that.iconName) &&
+            Objects.equals(treeView, that.treeView) &&
             Objects.equals(targetEndpoint, that.targetEndpoint) &&
+            Objects.equals(singleRow, that.singleRow) &&
             Objects.equals(deletable, that.deletable) &&
+            Objects.equals(insertable, that.insertable) &&
             Objects.equals(writable, that.writable) &&
             Objects.equals(displayLogic, that.displayLogic) &&
             Objects.equals(readOnlyLogic, that.readOnlyLogic) &&
@@ -321,8 +357,11 @@ public class ADTabCriteria implements Serializable, Criteria {
         name,
         description,
         iconName,
+        treeView,
         targetEndpoint,
+        singleRow,
         deletable,
+        insertable,
         writable,
         displayLogic,
         readOnlyLogic,
@@ -349,8 +388,11 @@ public class ADTabCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (iconName != null ? "iconName=" + iconName + ", " : "") +
+                (treeView != null ? "treeView=" + treeView + ", " : "") +
                 (targetEndpoint != null ? "targetEndpoint=" + targetEndpoint + ", " : "") +
+                (singleRow != null ? "singleRow=" + singleRow + ", " : "") +
                 (deletable != null ? "deletable=" + deletable + ", " : "") +
+                (insertable != null ? "insertable=" + insertable + ", " : "") +
                 (writable != null ? "writable=" + writable + ", " : "") +
                 (displayLogic != null ? "displayLogic=" + displayLogic + ", " : "") +
                 (readOnlyLogic != null ? "readOnlyLogic=" + readOnlyLogic + ", " : "") +

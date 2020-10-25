@@ -29,8 +29,6 @@ public class ADWindowDTO extends AbstractAuditingDTO {
     @NotNull
     private ADWindowType type;
 
-    private Boolean treeView;
-
     private AdAccessLevel accessLevel;
 
     private Boolean active;
@@ -85,14 +83,6 @@ public class ADWindowDTO extends AbstractAuditingDTO {
 
     public void setType(ADWindowType type) {
         this.type = type;
-    }
-
-    public Boolean isTreeView() {
-        return treeView;
-    }
-
-    public void setTreeView(Boolean treeView) {
-        this.treeView = treeView;
     }
 
     public AdAccessLevel getAccessLevel() {
@@ -157,7 +147,6 @@ public class ADWindowDTO extends AbstractAuditingDTO {
             ", description='" + getDescription() + "'" +
             ", titleLogic='" + getTitleLogic() + "'" +
             ", type='" + getType() + "'" +
-            ", treeView='" + isTreeView() + "'" +
             ", accessLevel='" + getAccessLevel() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +

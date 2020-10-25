@@ -80,6 +80,7 @@
             <column name="active" type="boolean"/>
             <column name="name" type="string"/>
             <column name="description" type="string"/>
+            <column name="can_write" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="type_id" type="numeric"/>
             <column name="authority_id" type="numeric"/>
@@ -90,6 +91,20 @@
     <changeSet id="20200917105000" author="Ananta Aryadewa">
         <addColumn tableName="sc_access">
             <column name="form_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20201022091500" author="Ananta Aryadewa">
+        <addColumn tableName="sc_access">
+            <column name="can_write" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="document_type_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="reference_list_id" type="bigint">
                 <constraints nullable="true" />
             </column>
         </addColumn>

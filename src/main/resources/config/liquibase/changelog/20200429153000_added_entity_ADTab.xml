@@ -104,8 +104,11 @@
             <column name="name" type="string"/>
             <column name="description" type="string"/>
             <column name="icon_name" type="string"/>
+            <column name="tree_view" type="boolean"/>
             <column name="target_endpoint" type="string"/>
+            <column name="single_row" type="boolean"/>
             <column name="deletable" type="boolean"/>
+            <column name="insertable" type="boolean"/>
             <column name="writable" type="boolean"/>
             <column name="display_logic" type="string"/>
             <column name="read_only_logic" type="string"/>
@@ -135,4 +138,28 @@
             </column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="20201022090700" author="Ananta Aryadewa">
+        <addColumn tableName="ad_tab">
+            <column name="single_row" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20201023023800" author="Ananta Aryadewa">
+        <addColumn tableName="ad_tab">
+            <column name="tree_view" type="boolean" remarks="Whether or not to show the tree view in the layout.">
+                <constraints nullable="true" />
+            </column>
+            <column name="insertable" type="boolean" remarks="Whether or not to allow insert a new record to the table.">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <setColumnRemarks tableName="ad_tab" columnName="target_endpoint" remarks="Target API endpoint for the CRUD operations. Override the same property in AdTable."/>
+        <setColumnRemarks tableName="ad_tab" columnName="deletable" remarks="Whether or not the record is deletable from the table."/>
+        <setColumnRemarks tableName="ad_tab" columnName="writable" remarks="If false, force read-only to the whole fields in the tab."/>
+        <setColumnRemarks tableName="ad_tab" columnName="single_row" remarks="Indicates to use the form layout by default instead of displaying the table layout first."/>
+    </changeSet>
+
 </databaseChangeLog>

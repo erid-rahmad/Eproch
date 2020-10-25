@@ -47,6 +47,9 @@ public class ScAccess extends AbstractAuditingEntity {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "can_write")
+    private Boolean canWrite;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("scAccesses")
@@ -64,6 +67,14 @@ public class ScAccess extends AbstractAuditingEntity {
     @ManyToOne
     @JsonIgnoreProperties("scAccesses")
     private AdForm form;
+
+    @ManyToOne
+    @JsonIgnoreProperties("scAccesses")
+    private CDocumentType documentType;
+
+    @ManyToOne
+    @JsonIgnoreProperties("scAccesses")
+    private ADReferenceList referenceList;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -131,6 +142,19 @@ public class ScAccess extends AbstractAuditingEntity {
         this.description = description;
     }
 
+    public Boolean isCanWrite() {
+        return canWrite;
+    }
+
+    public ScAccess canWrite(Boolean canWrite) {
+        this.canWrite = canWrite;
+        return this;
+    }
+
+    public void setCanWrite(Boolean canWrite) {
+        this.canWrite = canWrite;
+    }
+
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -183,6 +207,32 @@ public class ScAccess extends AbstractAuditingEntity {
         this.form = adForm;
     }
 
+    public CDocumentType getDocumentType() {
+        return documentType;
+    }
+
+    public ScAccess documentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+        return this;
+    }
+
+    public void setDocumentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+    }
+
+    public ADReferenceList getReferenceList() {
+        return referenceList;
+    }
+
+    public ScAccess referenceList(ADReferenceList aDReferenceList) {
+        this.referenceList = aDReferenceList;
+        return this;
+    }
+
+    public void setReferenceList(ADReferenceList aDReferenceList) {
+        this.referenceList = aDReferenceList;
+    }
+
     public ScAuthority getAuthority() {
         return authority;
     }
@@ -226,6 +276,7 @@ public class ScAccess extends AbstractAuditingEntity {
             ", active='" + isActive() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", canWrite='" + isCanWrite() + "'" +
             "}";
     }
 }

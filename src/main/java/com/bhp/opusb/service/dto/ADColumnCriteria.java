@@ -2,12 +2,12 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
-import com.bhp.opusb.domain.enumeration.ADColumnType;
-
 import io.github.jhipster.service.Criteria;
+import com.bhp.opusb.domain.enumeration.ADColumnType;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -27,8 +27,6 @@ public class ADColumnCriteria implements Serializable, Criteria {
      * Class for filtering ADColumnType
      */
     public static class ADColumnTypeFilter extends Filter<ADColumnType> {
-
-        private static final long serialVersionUID = 1L;
 
         public ADColumnTypeFilter() {
         }

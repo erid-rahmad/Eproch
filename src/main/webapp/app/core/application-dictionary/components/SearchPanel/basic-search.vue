@@ -8,14 +8,12 @@
             <el-form-item 
               v-for="field in listFields"
               :key="field.id"
-              :prop="field.adColumn.name"
-              :fixed="isFixed(field)"
-              :width="getFieldWidth(field)"
+              :prop="fieldName(field)"
               :label="field.name">
                 
                 <el-select
-                  v-if="getqueryValueByColumnBoolean(field)"
-                  v-model="row[field.adColumn.name]"
+                  v-if="isBooleanField(field)"
+                  v-model="row[fieldName(field)]"
                   size="small"
                   filterable
                 >
@@ -29,7 +27,7 @@
                 
                 <el-select
                   v-else-if="isTableDirectLink(field)"
-                  v-model="row[field.adColumn.name]"
+                  v-model="row[fieldName(field)]"
                   :remote="true"
                   :remote-method="fetchTableDirectData"
                   size="small"
@@ -46,7 +44,7 @@
 
                 <el-select
                   v-else-if="hasReferenceList(field)"
-                  v-model="row[field.adColumn.name]"
+                  v-model="row[fieldName(field)]"
                   size="small"
                   filterable
                 >
@@ -60,14 +58,14 @@
 
                 <el-input
                   v-else-if="isStringField(field)"
-                  v-model="row[field.adColumn.name]"
+                  v-model="row[fieldName(field)]"
                   size="small"
                   clearable
                 />
 
                 <el-input-number
                   v-else-if="isNumericField(field)"
-                  v-model="row[field.adColumn.name]"
+                  v-model="row[fieldName(field)]"
                   controls-position="right"
                   size="small"
                   :min="getMinValue(field)"

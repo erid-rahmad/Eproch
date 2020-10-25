@@ -75,6 +75,7 @@ class ADTableGatlingTest extends Simulation {
                 , "uid":null
                 , "name":"SAMPLE_TEXT"
                 , "view":null
+                , "highVolume":null
                 , "targetEndpoint":"SAMPLE_TEXT"
                 , "active":null
                 }""")).asJson

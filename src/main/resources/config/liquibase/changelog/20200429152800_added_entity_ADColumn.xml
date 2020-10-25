@@ -94,6 +94,20 @@
     <changeSet id="20200429152800-1-relations" author="jhipster">
 
     </changeSet>
+    
+    <!-- Added the entity audit columns -->
+    <changeSet id="20200429152800-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="ad_column">
+            <column name="created_by" type="varchar(50)" defaultValue="system">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -107,7 +121,7 @@
     <changeSet id="20200429152800-1-data" author="jhipster" context="faker">
         <loadData
                   file="config/liquibase/fake-data/ad_column.csv"
-                  separator=";"
+                  separator=","
                   tableName="ad_column">
             <column name="id" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
@@ -150,6 +164,26 @@
                 <constraints nullable="true" />
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20201023020700" author="Ananta Aryadewa">
+        <setColumnRemarks tableName="ad_column" columnName="name" remarks="The JPA entity field name (usually in a camelCased format). It's automatically filled by the dbSync process. updatable = false."/>
+        <setColumnRemarks tableName="ad_column" columnName="sql_name" remarks="The native database column name (usually in a kebab_cased format). It's automatically filled by the dbSync process. updatable = false."/>
+        <setColumnRemarks tableName="ad_column" columnName="key" remarks="Whether it is a primary key column or not. It's automatically filled by the dbSync process. updatable = false."/>
+        <setColumnRemarks tableName="ad_column" columnName="foreign_key" remarks="Whether it is a foreign key column or not. It's automatically filled by the dbSync process. updatable = false."/>
+        <setColumnRemarks tableName="ad_column" columnName="imported_table" remarks="The name of the linked primary key table if foreignKey is true. It's automatically filled by the dbSync process. updatable = false."/>
+        <setColumnRemarks tableName="ad_column" columnName="imported_column" remarks="The column name of the linked primary key if foreignKey is true. It's automatically filled by the dbSync process. updatable = false."/>
+        <setColumnRemarks tableName="ad_column" columnName="max_length" remarks="The maximum character length of the string column."/>
+        <setColumnRemarks tableName="ad_column" columnName="min_value" remarks="The minimum number value of the numeric column."/>
+        <setColumnRemarks tableName="ad_column" columnName="max_value" remarks="The maximum number value of the numeric column."/>
+        <setColumnRemarks tableName="ad_column" columnName="mandatory" remarks="It's automatically filled by the dbSync process. updatable = false."/>
+        <setColumnRemarks tableName="ad_column" columnName="mandatory_logic" remarks="This should be displayed only if mandatory = false."/>
+    </changeSet>
+
+    <changeSet id="20201023110400" author="Ananta Aryadewa">
+        <setColumnRemarks tableName="ad_column" columnName="min_length" remarks="The minimum character length of the string column."/>
+        <setColumnRemarks tableName="ad_column" columnName="default_selection" remarks="Determine that the field is displayed by default in the search form."/>
+        <setColumnRemarks tableName="ad_column" columnName="selection_sequence" remarks="Determine the field sequence in the search form."/>
     </changeSet>
 
 </databaseChangeLog>

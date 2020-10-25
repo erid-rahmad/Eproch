@@ -29,10 +29,6 @@
             ]
         },
         {
-            "fieldName": "treeView",
-            "fieldType": "Boolean"
-        },
-        {
             "fieldName": "accessLevel",
             "fieldType": "AdAccessLevel",
             "fieldValues": "SYS,SYS_CLN,CLN,CLN_ORG"

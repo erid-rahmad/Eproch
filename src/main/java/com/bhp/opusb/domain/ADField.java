@@ -6,6 +6,9 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,11 +19,14 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.bhp.opusb.domain.enumeration.ADColumnType;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Where;
 
 /**
  * A ADField.
@@ -86,8 +92,32 @@ public class ADField extends AbstractAuditingEntity {
     @Column(name = "column_no")
     private Integer columnNo = 1;
 
+    @Column(name = "column_offset")
+    private Integer columnOffset = 0;
+
     @Column(name = "column_span")
     private Integer columnSpan = 8;
+
+    @Column(name = "row_no")
+    private Integer rowNo;
+
+    /**
+     * Don't use the actual column in the table. Instead, refers to a specific DTO's field.
+     */
+    @Column(name = "virtual_column_name")
+    private String virtualColumnName;
+
+    /**
+     * It's automatically filled by the dbSync process. updatable = false.
+     */
+    @Column(name = "mandatory")
+    private Boolean mandatory;
+
+    /**
+     * This should be displayed only if mandatory = false.
+     */
+    @Column(name = "mandatory_logic")
+    private String mandatoryLogic;
 
     @Column(name = "updatable")
     private Boolean updatable;
@@ -104,11 +134,41 @@ public class ADField extends AbstractAuditingEntity {
     @Column(name = "format_pattern")
     private String formatPattern;
 
+    /**
+     * The minimum character length of the string column.
+     */
+    @Column(name = "min_length")
+    private Integer minLength;
+
+    /**
+     * The maximum character length of the string column.
+     */
+    @Column(name = "max_length")
+    private Integer maxLength;
+
+    /**
+     * The minimum number value of the numeric column.
+     */
+    @Column(name = "min_value")
+    private Long minValue;
+
+    /**
+     * The minimum number value of the numeric column.
+     */
+    @Column(name = "max_value")
+    private Long maxValue;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    private ADColumnType type;
+
     @Column(name = "active")
     private Boolean active = true;
 
-    @OneToMany(mappedBy = "field")
+    @OneToMany(mappedBy = "field", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @Where(clause = "active = true")
+    @JsonManagedReference
     private List<AdCallout> adCallouts = new ArrayList<>();
 
     @ManyToOne(optional = false)
@@ -355,6 +415,19 @@ public class ADField extends AbstractAuditingEntity {
         this.columnNo = columnNo;
     }
 
+    public Integer getColumnOffset() {
+        return columnOffset;
+    }
+
+    public ADField columnOffset(Integer columnOffset) {
+        this.columnOffset = columnOffset;
+        return this;
+    }
+
+    public void setColumnOffset(Integer columnOffset) {
+        this.columnOffset = columnOffset;
+    }
+
     public Integer getColumnSpan() {
         return columnSpan;
     }
@@ -366,6 +439,58 @@ public class ADField extends AbstractAuditingEntity {
 
     public void setColumnSpan(Integer columnSpan) {
         this.columnSpan = columnSpan;
+    }
+
+    public Integer getRowNo() {
+        return rowNo;
+    }
+
+    public ADField rowNo(Integer rowNo) {
+        this.rowNo = rowNo;
+        return this;
+    }
+
+    public void setRowNo(Integer rowNo) {
+        this.rowNo = rowNo;
+    }
+
+    public String getVirtualColumnName() {
+        return virtualColumnName;
+    }
+
+    public ADField virtualColumnName(String virtualColumnName) {
+        this.virtualColumnName = virtualColumnName;
+        return this;
+    }
+
+    public void setVirtualColumnName(String virtualColumnName) {
+        this.virtualColumnName = virtualColumnName;
+    }
+
+    public Boolean isMandatory() {
+        return mandatory;
+    }
+
+    public ADField mandatory(Boolean mandatory) {
+        this.mandatory = mandatory;
+        return this;
+    }
+
+    public void setMandatory(Boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
+    public String getMandatoryLogic() {
+        return mandatoryLogic;
+    }
+
+    public ADField mandatoryLogic(String mandatoryLogic) {
+        this.mandatoryLogic = mandatoryLogic;
+        return this;
+    }
+
+    public void setMandatoryLogic(String mandatoryLogic) {
+        this.mandatoryLogic = mandatoryLogic;
     }
 
     public Boolean isUpdatable() {
@@ -431,6 +556,71 @@ public class ADField extends AbstractAuditingEntity {
 
     public void setFormatPattern(String formatPattern) {
         this.formatPattern = formatPattern;
+    }
+
+    public Integer getMinLength() {
+        return minLength;
+    }
+
+    public ADField minLength(Integer minLength) {
+        this.minLength = minLength;
+        return this;
+    }
+
+    public void setMinLength(Integer minLength) {
+        this.minLength = minLength;
+    }
+
+    public Integer getMaxLength() {
+        return maxLength;
+    }
+
+    public ADField maxLength(Integer maxLength) {
+        this.maxLength = maxLength;
+        return this;
+    }
+
+    public void setMaxLength(Integer maxLength) {
+        this.maxLength = maxLength;
+    }
+
+    public Long getMinValue() {
+        return minValue;
+    }
+
+    public ADField minValue(Long minValue) {
+        this.minValue = minValue;
+        return this;
+    }
+
+    public void setMinValue(Long minValue) {
+        this.minValue = minValue;
+    }
+
+    public Long getMaxValue() {
+        return maxValue;
+    }
+
+    public ADField maxValue(Long maxValue) {
+        this.maxValue = maxValue;
+        return this;
+    }
+
+    public void setMaxValue(Long maxValue) {
+        this.maxValue = maxValue;
+    }
+
+    public ADColumnType getType() {
+        return type;
+    }
+
+    public ADField type(ADColumnType type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(ADColumnType type) {
+        this.type = type;
     }
 
     public Boolean isActive() {
@@ -591,12 +781,22 @@ public class ADField extends AbstractAuditingEntity {
             ", readOnlyLogic='" + getReadOnlyLogic() + "'" +
             ", writable='" + isWritable() + "'" +
             ", columnNo=" + getColumnNo() +
+            ", columnOffset=" + getColumnOffset() +
             ", columnSpan=" + getColumnSpan() +
+            ", rowNo=" + getRowNo() +
+            ", virtualColumnName='" + getVirtualColumnName() + "'" +
+            ", mandatory='" + isMandatory() + "'" +
+            ", mandatoryLogic='" + getMandatoryLogic() + "'" +
             ", updatable='" + isUpdatable() + "'" +
             ", alwaysUpdatable='" + isAlwaysUpdatable() + "'" +
             ", copyable='" + isCopyable() + "'" +
             ", defaultValue='" + getDefaultValue() + "'" +
             ", formatPattern='" + getFormatPattern() + "'" +
+            ", minLength=" + getMinLength() +
+            ", maxLength=" + getMaxLength() +
+            ", minValue=" + getMinValue() +
+            ", maxValue=" + getMaxValue() +
+            ", type='" + getType() + "'" +
             ", active='" + isActive() + "'" +
             "}";
     }

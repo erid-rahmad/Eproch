@@ -3,7 +3,7 @@ import { IRegisterTabParameter, WindowStoreModule as windowStore } from '@/share
 import { ADColumnType } from '@/shared/model/ad-column.model';
 import { IADField } from '@/shared/model/ad-field.model';
 import { normalizeField } from '@/utils/form';
-import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isStringField, isTableDirectLink } from '@/utils/validate';
+import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
 import { ElForm } from 'element-ui/types/form';
 import { cloneDeep, debounce, kebabCase } from 'lodash';
 import pluralize from 'pluralize';
@@ -40,6 +40,7 @@ const DetailViewProps = Vue.extend({
 @Component({
   methods: {
     isStringField: isStringField,
+    isPasswordField: isPasswordField,
     isNumericField: isNumericField,
     isDateField: isDateField,
     isDateTimeField: isDateTimeField,
@@ -95,19 +96,22 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
 
   get datePickerType() {
     return (field: IADField): string => {
-      return field.adColumn.type === ADColumnType.LOCAL_DATE ? 'date' : 'datetime';
+      const type = field.type || field.adColumn.type;
+      return type === ADColumnType.LOCAL_DATE ? 'date' : 'datetime';
     }
   }
 
   get dateDisplayFormat() {
     return (field: IADField): string => {
-      return field.adColumn.type === ADColumnType.LOCAL_DATE ? settings.dateDisplayFormat : settings.dateTimeDisplayFormat;
+      const type = field.type || field.adColumn.type;
+      return type === ADColumnType.LOCAL_DATE ? settings.dateDisplayFormat : settings.dateTimeDisplayFormat;
     }
   }
 
   get dateValueFormat() {
     return (field: IADField): string => {
-      return field.adColumn.type === ADColumnType.LOCAL_DATE ? settings.dateValueFormat : settings.dateTimeValueFormat;
+      const type = field.type || field.adColumn.type;
+      return type === ADColumnType.LOCAL_DATE ? settings.dateValueFormat : settings.dateTimeValueFormat;
     }
   }
 
@@ -129,12 +133,13 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
         return prevSequence - nextSequence;
       });
 
-    
-    const logicallyMandatoryFields = this.formFields.filter(field => !!field.adColumn.mandatoryLogic);
+    const logicallyMandatoryFields = this.formFields
+      .filter(field => !!field.mandatoryLogic || !!field.adColumn?.mandatoryLogic);
+
     await windowStore.addMandatoryFields({
       path: this.$route.fullPath,
       tabId: this.tabName,
-      fields: Object.assign({}, ...logicallyMandatoryFields.map(field => ({[field.adColumn.name]: field})))
+      fields: Object.assign({}, ...logicallyMandatoryFields.map(field => ({[field.virtualColumnName || field.adColumn.name]: field})))
     });
 
     this.reloadValidationSchema();
@@ -173,7 +178,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
       }
 
       columns.push({
-        name: column.name,
+        name: field.virtualColumnName || column?.name,
         span: field.columnSpan || 12,
         field
       });
@@ -232,7 +237,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     for (let name in this.dynamicValidationSchema) {
       const field = logicallyMandatoryFields[name];
 
-      if (field !== void 0 && !field.adColumn.mandatory) {
+      if (field !== void 0 && !field.mandatory && !field.adColumn?.mandatory) {
         let vSchema = this.dynamicValidationSchema[name];
 
         const shouldMandatory = this.evaluateMandatoryLogic({
@@ -261,7 +266,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   private async updateReferenceQuery(field: IADField) {
     // Parse the validation rule which is used to filter the reference key records.
     const column = field.adColumn;
-    const validationRule = field.adValidationRule || column.adValidationRule;
+    const validationRule = field.adValidationRule || column?.adValidationRule;
 
     if (validationRule) {
       let referenceFilter = <string>this.getContext({
@@ -323,7 +328,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
       for (let field of this.formFields) {
         const column = field.adColumn;
 
-        if (field.adReferenceId || column.adReferenceId) {
+        if (field.adReferenceId || column?.adReferenceId) {
           const filterQuery = this.referenceFilterQueries.get(field.id);
 
           // Get the item list of Reference Key[LIST].
@@ -389,28 +394,28 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   }
 
   public getMinLength(field: IADField) {
-    return field.adColumn.minLength || -Infinity;
+    return field.minLength || field.adColumn?.minLength || -Infinity;
   }
 
   public getMaxLength(field: IADField) {
-    return field.adColumn.maxLength || Infinity;
+    return field.maxLength || field.adColumn?.maxLength || Infinity;
   }
 
   public getMinValue(field: IADField) {
-    return field.adColumn.minValue || -Infinity;
+    return field.minValue || field.adColumn?.minValue || -Infinity;
   }
 
   public getMaxValue(field: IADField) {
-    return field.adColumn.maxValue || Infinity;
+    return field.maxValue || field.adColumn?.maxValue || Infinity;
   }
 
   public getReferenceList(field: IADField) {
-    return field?.adReference?.adreferenceLists || field.adColumn.adReference?.adreferenceLists;
+    return field?.adReference?.adreferenceLists || field.adColumn?.adReference?.adreferenceLists;
   }
 
   public isReadonly(field: IADField): boolean {
     const newRecord: boolean = ! this.model?.id;
-    const notUpdatable = ( ! newRecord && ! field.adColumn.updatable);
+    const notUpdatable = ( ! newRecord && ! field.updatable && ! field.adColumn?.updatable);
     const conditionallyReadonly = this.evaluateReadonlyLogic({
       defaultTabId: this.tabName,
       field
@@ -422,6 +427,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   public hasReferenceList!: (field: IADField) => boolean;
   public isTableDirectLink!: (field: IADField) => boolean;
   public isStringField!: (field: IADField) => boolean;
+  public isPasswordField!: (field: IADField) => boolean;
   public isNumericField!: (field: IADField) => boolean;
   public isDateField!: (field: IADField) => boolean;
   public isDateTimeField!: (field: IADField) => boolean;

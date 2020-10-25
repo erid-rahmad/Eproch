@@ -74,7 +74,7 @@
         >
           <tree-view
             ref="treeView"
-            :tab="firstTab"
+            :tab="mainTab"
           />
         </pane>
         <pane>

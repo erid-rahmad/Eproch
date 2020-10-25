@@ -40,10 +40,20 @@ public class ADColumn extends AbstractAuditingEntity {
     @Column(name = "uid")
     private UUID uid;
 
+    /**
+     * The JPA entity field name (usually in a camelCased format). It's
+     * automatically filled by the dbSync process.
+     * updatable = false.
+     */
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
 
+    /**
+     * The native database column name (usually in a kebab_cased format). It's
+     * automatically filled by the dbSync process.
+     * updatable = false.
+     */
     @NotNull
     @Column(name = "sql_name", nullable = false)
     private String sqlName;
@@ -54,6 +64,11 @@ public class ADColumn extends AbstractAuditingEntity {
     @Column(name = "field_length")
     private Long fieldLength;
 
+    /**
+     * Whether it is a primary key column or not. It's automatically filled by the
+     * dbSync process.
+     * updatable = false.
+     */
     @Column(name = "key")
     private Boolean key;
 
@@ -61,18 +76,40 @@ public class ADColumn extends AbstractAuditingEntity {
     @Column(name = "type")
     private ADColumnType type;
 
+    /**
+     * Whether it is a foreign key column or not. It's automatically filled by the
+     * dbSync process.
+     * updatable = false.
+     */
     @Column(name = "foreign_key")
     private Boolean foreignKey;
 
+    /**
+     * The name of the linked primary key table if foreignKey is true. It's
+     * automatically filled by the dbSync process.
+     * updatable = false.
+     */
     @Column(name = "imported_table")
     private String importedTable;
 
+    /**
+     * The column name of the linked primary key if foreignKey is true. It's
+     * automatically filled by the dbSync process.
+     * updatable = false.
+     */
     @Column(name = "imported_column")
     private String importedColumn;
 
+    /**
+     * It's automatically filled by the dbSync process.
+     * updatable = false.
+     */
     @Column(name = "mandatory")
     private Boolean mandatory;
 
+    /**
+     * This should be displayed only if mandatory = false.
+     */
     @Column(name = "mandatory_logic")
     private String mandatoryLogic;
 
@@ -97,24 +134,42 @@ public class ADColumn extends AbstractAuditingEntity {
     @Column(name = "format_pattern")
     private String formatPattern;
 
+    /**
+     * The minimum character length of the string column.
+     */
     @Column(name = "min_length")
     private Integer minLength;
 
+    /**
+     * The maximum character length of the string column.
+     */
     @Column(name = "max_length")
     private Integer maxLength;
 
+    /**
+     * The minimum number value of the numeric column.
+     */
     @Column(name = "min_value")
     private Long minValue;
 
+    /**
+     * The minimum number value of the numeric column.
+     */
     @Column(name = "max_value")
     private Long maxValue;
 
     @Column(name = "identifier")
     private Boolean identifier;
 
+    /**
+     * Determine that the field is displayed by default in the search form.
+     */
     @Column(name = "default_selection")
     private Boolean defaultSelection;
 
+    /**
+     * Determine the field sequence in the search form.
+     */
     @Column(name = "selection_sequence")
     private Integer selectionSequence;
 

@@ -6,6 +6,7 @@ import { ADColumnType } from '@/shared/model/ad-column.model';
 import pluralize from 'pluralize';
 import { kebabCase } from 'lodash';
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
+import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isStringField, isTableDirectLink } from '@/utils/validate';
 
 const BasicSearchProps = Vue.extend({
   props: {
@@ -18,7 +19,18 @@ const BasicSearchProps = Vue.extend({
   }
 });
 
-@Component
+@Component({
+  methods: {
+    isStringField: isStringField,
+    isNumericField: isNumericField,
+    isDateField: isDateField,
+    isDateTimeField: isDateTimeField,
+    isBooleanField: isBooleanField,
+    isActivatorSwitch: isActiveStatusField,
+    hasReferenceList: hasReferenceList,
+    isTableDirectLink: isTableDirectLink
+  }
+})
 export default class BasicSearch extends BasicSearchProps {
   @Inject('dynamicWindowService')
   private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
@@ -30,6 +42,10 @@ export default class BasicSearch extends BasicSearchProps {
   private newRecord: boolean = false;
   private tableDirectReferenceMap = new Map();
   private activeTableDirectField: any = null;
+
+  get fieldName() {
+    return (field: IADField) => field.virtualColumnName || field.adColumn.name;
+  }
 
   @Watch('fields')
   onFieldsChange(fields: Array<IADField>) {
@@ -43,26 +59,24 @@ export default class BasicSearch extends BasicSearchProps {
     this.onFieldsChange(this.fields);
   }
 
-
-
-
   public filterBasic() {
     let rowQueryTemp = "";
     for (let field of this.fields) {
       const column = field.adColumn;
-      
+      const fieldName = field.virtualColumnName || column?.name;
       const queryName = this.row[column.name];
+
       if (!queryName)
         continue;
-      
-      const queryNameParam = column.name;
-      const queryTypeParam = column.type;
-      
+
+      const fieldType = field.type || column?.type;
       let rowQuery: string;
-      if (queryTypeParam === "STRING") {
-        rowQuery = `${queryNameParam}.contains=${queryName}`;
-      } else if((queryTypeParam === "INTEGER") || (queryTypeParam === "BIG_DECIMAL") || (queryTypeParam === "BOOLEAN")) {
-        rowQuery = `${queryNameParam}.equals=${queryName}`;
+
+      if (fieldType === ADColumnType.STRING) {
+        rowQuery = `${fieldName}.contains=${queryName}`;
+      } else if (fieldType === ADColumnType.INTEGER || fieldType === ADColumnType.LONG || fieldType === ADColumnType.BIG_DECIMAL || fieldType === ADColumnType.BOOLEAN
+        || fieldType === ADColumnType.LOCAL_DATE || fieldType === ADColumnType.ZONED_DATE_TIME) {
+        rowQuery = `${fieldName}.equals=${queryName}`;
       }
 
       if (rowQuery)
@@ -74,9 +88,9 @@ export default class BasicSearch extends BasicSearchProps {
 
   public clear() {
     for (let field of this.fields) {
-      const column = field.adColumn;
-      // TODO Set the value depending on the column data type.
-      this.$set(this.row, column.name, "");
+      const fieldName = field.virtualColumnName || field.adColumn;
+      if (this.row[fieldName] !== void 0)
+        this.$set(this.row, fieldName, '');
     }
     this.$emit('clear');
   }
@@ -90,10 +104,6 @@ export default class BasicSearch extends BasicSearchProps {
     { value: 'true', label: 'true' },
     { value: 'false', label: 'false' },
   ]
-
-
-
-
 
   public setTableDirectReference(field: any): void {
     this.activeTableDirectField = field;
@@ -127,74 +137,26 @@ export default class BasicSearch extends BasicSearchProps {
         });
     //}
   }
-  
-  
-  public isFixed(field: any): boolean | string {
-    if (field.adColumn.name === 'active') {
-      return 'right';
-    }
-    return false;
-  }
-  
 
-  public getFieldWidth(field: any) {
-    if (this.isBooleanField(field) && field.adColumn.name === 'active') {
-      return '96';
-    }
-
-    return '';
+  public getMinValue(field: IADField) {
+    return field.minValue || field.adColumn?.minValue || -Infinity;
   }
 
-  public getMinValue(field: any) {
-    return field.adColumn.minValue || -Infinity;
-  }
-
-  public getMaxValue(field: any) {
-    return field.adColumn.maxValue || Infinity;
+  public getMaxValue(field: IADField) {
+    return field.maxValue || field.adColumn?.maxValue || Infinity;
   }
 
   public getReferenceList(field: any) {
-    return field?.adReference?.adreferenceLists || field.adColumn.adReference.adreferenceLists;
+    return field.adReference?.adreferenceLists || field.adColumn?.adReference?.adreferenceLists;
   }
 
-  public hasReferenceList(field: any) {
-    return field.adReference?.referenceType === ADReferenceType.LIST
-      || field.adColumn.adReference?.referenceType === ADReferenceType.LIST;
-  }
+  public hasReferenceList!: (field: IADField) => boolean;
+  public isTableDirectLink!: (field: IADField) => boolean;
+  public isStringField!: (field: IADField) => boolean;
+  public isNumericField!: (field: IADField) => boolean;
+  public isDateField!: (field: IADField) => boolean;
+  public isDateTimeField!: (field: IADField) => boolean;
+  public isBooleanField!: (field: IADField) => boolean;
+  public isActivatorSwitch!: (field: IADField) => boolean;
 
-  public isTableDirectLink(field: any): boolean {
-    const column = field.adColumn;
-    const reference = field.adReference || column.adReference;
-    return column.foreignKey && (reference?.referenceType === ADReferenceType.DATATYPE || reference?.value === 'direct' || reference?.value === 'table');
-  }
-
-  public isStringField(field: any) {
-    return field.adColumn.type === ADColumnType.STRING;
-  }
-
-  public isNumericField(field: any) {
-    return (
-      field.adColumn.type === ADColumnType.BIG_DECIMAL ||
-      field.adColumn.type === ADColumnType.DOUBLE ||
-      field.adColumn.type === ADColumnType.FLOAT ||
-      field.adColumn.type === ADColumnType.INTEGER ||
-      field.adColumn.type === ADColumnType.LONG
-    );
-  }
-
-  public isDateTimeField(field: any) {
-    return field.adColumn.type === ADColumnType.INSTANT;
-  }
-
-  public isBooleanField(field: any) {
-    return field.adColumn.type === ADColumnType.BOOLEAN;
-  }
-
-  public isActiveStatusField(column: any) {
-    return column.adColumn.name === 'active';
-  }
-
-  public getqueryValueByColumnBoolean(row: any) {
-    return row && row.adColumn.type === "BOOLEAN";
-  }
 }
