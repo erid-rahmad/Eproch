@@ -29,6 +29,15 @@ public class CVendorLocation extends AbstractAuditingEntity {
     @Column(name = "tax_invoice_address")
     private Boolean taxInvoiceAddress;
 
+    @Column(name = "ship_address")
+    private Boolean shipAddress;
+
+    @Column(name = "invoice_address")
+    private Boolean invoiceAddress;
+
+    @Column(name = "pay_from_address")
+    private Boolean payFromAddress;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -68,6 +77,45 @@ public class CVendorLocation extends AbstractAuditingEntity {
 
     public void setTaxInvoiceAddress(Boolean taxInvoiceAddress) {
         this.taxInvoiceAddress = taxInvoiceAddress;
+    }
+
+    public Boolean isShipAddress() {
+        return shipAddress;
+    }
+
+    public CVendorLocation shipAddress(Boolean shipAddress) {
+        this.shipAddress = shipAddress;
+        return this;
+    }
+
+    public void setShipAddress(Boolean shipAddress) {
+        this.shipAddress = shipAddress;
+    }
+
+    public Boolean isInvoiceAddress() {
+        return invoiceAddress;
+    }
+
+    public CVendorLocation invoiceAddress(Boolean invoiceAddress) {
+        this.invoiceAddress = invoiceAddress;
+        return this;
+    }
+
+    public void setInvoiceAddress(Boolean invoiceAddress) {
+        this.invoiceAddress = invoiceAddress;
+    }
+
+    public Boolean isPayFromAddress() {
+        return payFromAddress;
+    }
+
+    public CVendorLocation payFromAddress(Boolean payFromAddress) {
+        this.payFromAddress = payFromAddress;
+        return this;
+    }
+
+    public void setPayFromAddress(Boolean payFromAddress) {
+        this.payFromAddress = payFromAddress;
     }
 
     public UUID getUid() {
@@ -140,7 +188,7 @@ public class CVendorLocation extends AbstractAuditingEntity {
     public void assignUUID() {
         this.uid = UUID.randomUUID();
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -162,6 +210,9 @@ public class CVendorLocation extends AbstractAuditingEntity {
         return "CVendorLocation{" +
             "id=" + getId() +
             ", taxInvoiceAddress='" + isTaxInvoiceAddress() + "'" +
+            ", shipAddress='" + isShipAddress() + "'" +
+            ", invoiceAddress='" + isInvoiceAddress() + "'" +
+            ", payFromAddress='" + isPayFromAddress() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

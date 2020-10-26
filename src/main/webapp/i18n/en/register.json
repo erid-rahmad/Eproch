@@ -13,6 +13,7 @@
     "basic": {
       "basic": {
         "title": "Basic Information",
+        "sameAddress": "Same Address",
         "name": "Name",
         "npwp": "NPWP",
         "npwpName": "NPWP Name",
@@ -30,6 +31,11 @@
         "region": "Region",
         "city": "City",
         "postCode": "Postal Code",
+        "taxAddress": "Tax Address",
+        "taxCountry": "Tax Country",
+        "taxRegion": "Tax Region",
+        "taxCity": "Tax City",
+        "taxPostCode": "Tax Postal Code",
         "npwpAddress": "NPWP Address",
         "npwpCountry": "NPWP Country",
         "npwpRegion": "NPWP Region",

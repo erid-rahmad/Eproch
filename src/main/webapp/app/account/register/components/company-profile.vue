@@ -28,10 +28,10 @@
                             @change="handleTypeChange"
                         >
                             <el-option
-                            v-for="item in typeOptions"
-                            :key="item.key"
-                            :label="item.value"
-                            :value="item.key"
+                                v-for="item in typeOptions"
+                                :key="item.key"
+                                :label="item.value"
+                                :value="item.key"
                             />
                         </el-select>
                     </el-form-item>
@@ -57,11 +57,11 @@
             </el-row>
 
             <el-form-item required>
-            <el-switch
-                style="padding-left: 20px;"
-                v-model="company.branch"
-                :active-text="$t('register.basic.basic.branch')"
-            />
+                <el-switch
+                    style="padding-left: 20px;"
+                    v-model="company.branch"
+                    :active-text="$t('register.basic.basic.branch')"
+                />
             </el-form-item>
         </el-col>
 
@@ -122,22 +122,38 @@
     <el-divider content-position="left"><h4>{{ $t('register.basic.address.title') }}</h4></el-divider>
     <el-row :gutter="columnSpacing">
       <el-col :span="12">
-        <el-form-item :label="$t('register.basic.address.address')" prop="address" required>
-          <el-input
-            class="form-input"
-            clearable
-            v-model="company.address"
-            type="textarea"
-            :autosize="{ maxRows: 3 }" />
-        </el-form-item>
+            <el-row :gutter="columnSpacing">
+                <el-col :span="13">
+                    <el-form-item :label="$t('register.basic.address.address')" prop="address" required>
+                    <el-input
+                        class="form-input"
+                        clearable
+                        v-model="company.address"
+                        type="textarea"
+                        @change="changeAddress"
+                        :autosize="{ maxRows: 3 }" />
+                    </el-form-item>
+                </el-col>
+                <el-col :span="11">
+                    <el-form-item required>
+                        <el-switch
+                            @change="validateSameAddress"
+                            v-model="sameAddress"
+                            :active-text="$t('register.basic.basic.sameAddress')"
+                        />
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
       </el-col>
       <el-col :span="12">
-        <el-form-item :label="$t('register.basic.address.npwpAddress')" prop="npwpAddress">
+        <el-form-item :label="$t('register.basic.address.taxAddress')" prop="npwpAddress" required>
           <el-input
             class="form-input"
             clearable
             v-model="company.npwpAddress"
             type="textarea"
+            :disabled="sameAddress"
             :autosize="{ maxRows: 3 }" />
         </el-form-item>
       </el-col>
@@ -181,12 +197,13 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item :label="$t('register.basic.address.npwpCountry')" prop="npwpCountry">
+        <el-form-item :label="$t('register.basic.address.taxCountry')" prop="npwpCountry" required>
           <el-select
             class="form-input"
             clearable
             filterable
             v-model="company.npwpCountry"
+            :disabled="sameAddress"
             :placeholder="$t('register.form.select')"
             @change="retrieveRegion($event, 2)">
             <el-option
@@ -199,12 +216,13 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item :label="$t('register.basic.address.npwpRegion')" prop="npwpRegion">
+        <el-form-item :label="$t('register.basic.address.taxRegion')" prop="npwpRegion" required>
           <el-select
             class="form-input"
             clearable
             filterable
             v-model="company.npwpRegion"
+            :disabled="sameAddress"
             :placeholder="$t('register.form.select')"
             @change="retrieveCity($event, 2)">
             <el-option
@@ -226,6 +244,7 @@
             clearable
             filterable
             v-model="company.city"
+            @change="changeCity"
             :placeholder="$t('register.form.select')">
             <el-option
               v-for="item in cityOptions"
@@ -243,16 +262,18 @@
             clearable
             v-model="company.postalCode"
             max="5"
-            maxlength="5" />
+            maxlength="5"
+            @change="changePostalCode" />
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item :label="$t('register.basic.address.npwpCity')" prop="npwpCity">
+        <el-form-item :label="$t('register.basic.address.taxCity')" prop="npwpCity" required>
           <el-select
             class="form-input"
             clearable
             filterable
             v-model="company.npwpCity"
+            :disabled="sameAddress"
             :placeholder="$t('register.form.select')">
             <el-option
               v-for="item in cityOptionsNpwp"
@@ -264,13 +285,14 @@
         </el-form-item>
       </el-col>
       <el-col :span="6">
-        <el-form-item :label="$t('register.basic.address.npwpPostCode')" prop="npwpPostalCode">
+        <el-form-item :label="$t('register.basic.address.taxPostCode')" prop="npwpPostalCode">
           <el-input
             class="form-input"
             clearable
             v-model="company.npwpPostalCode"
             max="5"
-            maxlength="5" />
+            maxlength="5"
+            :disabled="sameAddress" />
         </el-form-item>
       </el-col>
     </el-row>
@@ -324,6 +346,11 @@
     }
   }
 
+.el-form-item is-required el-form-item--mini{
+    .el-form-item__content{
+        margin-left: 0px;
+    }
+}
   /*
   .el-form-item {
     margin-bottom: 0px;

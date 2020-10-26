@@ -96,6 +96,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/api/c-taxes",
                 "/api/users/registration-check",
                 "/api/attachments/download/**",
+                "/api/ad-references",
                 "/api/ad-reference-lists"
             ).permitAll()
             .antMatchers(

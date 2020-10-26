@@ -50,6 +50,7 @@ export default class CompanyProfile extends CompanyProps {
 
   private npwp: boolean = true;
   private tax: boolean = false;
+  private sameAddress: boolean = true;
   private columnSpacing = 32;
   private rules = {
     website: {
@@ -80,8 +81,6 @@ export default class CompanyProfile extends CompanyProps {
     }else{
       this.npwp = false;
     }
-    console.log(this.npwp);
-    console.log(value);
   }
 
   validate(formIndex: number) {
@@ -121,6 +120,30 @@ export default class CompanyProfile extends CompanyProps {
       let value, key;
       key = parseInt(row.substring( 0, row.indexOf('_')));
       return key;
+    }
+  }
+
+  private changeAddress(value: string){
+    if(this.sameAddress){
+      this.company.npwpAddress = value;
+    }
+  }
+
+  private changeCity(value: string){
+    if(this.sameAddress){
+      this.company.npwpCity = this.printValueByParam(value);
+    }
+  }
+
+  private changePostalCode(value: string){
+    if(this.sameAddress){
+      this.company.npwpPostalCode = value;
+    }
+  }
+
+  private validateSameAddress(value: string){
+    if(value){
+      this.company.npwpAddress = this.company.address;
     }
   }
 
@@ -192,6 +215,10 @@ export default class CompanyProfile extends CompanyProps {
       this.company.npwpCity = "";
     }
 
+    if(this.sameAddress){
+      this.company.npwpCountry = value;
+    }
+
     this.dynamicWindowService('/api/c-regions')
     .retrieve({
         criteriaQuery: [`countryId.equals=${countryId}`]
@@ -219,6 +246,11 @@ export default class CompanyProfile extends CompanyProps {
     }else{
       this.company.npwpCity = "";
     }
+
+    if(this.sameAddress){
+      this.company.npwpRegion = this.printValueByParam(value);
+    }
+
     this.dynamicWindowService('/api/c-cities')
     .retrieve({
         criteriaQuery: [`regionId.equals=${regionId}`]
