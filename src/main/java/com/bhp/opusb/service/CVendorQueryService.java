@@ -94,6 +94,15 @@ public class CVendorQueryService extends QueryService<CVendor> {
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CVendor_.name));
             }
+            if (criteria.getType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getType(), CVendor_.type));
+            }
+            if (criteria.getLocation() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLocation(), CVendor_.location));
+            }
+            if (criteria.getTin() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getTin(), CVendor_.tin));
+            }
             if (criteria.getTaxIdNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTaxIdNo(), CVendor_.taxIdNo));
             }
@@ -114,9 +123,6 @@ public class CVendorQueryService extends QueryService<CVendor> {
             }
             if (criteria.getWebsite() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getWebsite(), CVendor_.website));
-            }
-            if (criteria.getType() != null) {
-                specification = specification.and(buildSpecification(criteria.getType(), CVendor_.type));
             }
             if (criteria.getPaymentCategory() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPaymentCategory(), CVendor_.paymentCategory));

@@ -10,6 +10,7 @@ export interface ILoginDetails {
 export interface IRegistrationState {
   loginDetails: ILoginDetails;
   vendorType: string;
+  vendorLocation: string;
   businessCategories: Set<number>;
   mandatoryDocumentTypes: Array<object>;
   additionalDocumentTypes: Array<object>;
@@ -22,6 +23,7 @@ export interface IRegistrationState {
 class RegistrationStore extends VuexModule implements IRegistrationState {
   public loginDetails = null;
   public vendorType = '';
+  public vendorLocation = '';
   public businessCategories = new Set<number>();
   public mandatoryDocumentTypes = [];
   public additionalDocumentTypes = [];
@@ -37,6 +39,11 @@ class RegistrationStore extends VuexModule implements IRegistrationState {
   @Mutation
   private SET_VENDOR_TYPE(type: string) {
     this.vendorType = type;
+  }
+
+  @Mutation
+  private SET_VENDOR_LOCATION(location: string) {
+    this.vendorLocation = location;
   }
 
   @Mutation
@@ -94,6 +101,11 @@ class RegistrationStore extends VuexModule implements IRegistrationState {
   @Action
   public setVendorType(type: string) {
     this.SET_VENDOR_TYPE(type);
+  }
+
+  @Action
+  public setVendorLocation(location: string) {
+    this.SET_VENDOR_LOCATION(location);
   }
 
   @Action

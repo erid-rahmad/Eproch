@@ -145,14 +145,16 @@ entity CFunctionary {
 
 entity CVendor {
 	name String required
-	taxIdNo String required
-	taxIdName String required
+    type String required
+    location String required
+    tin String
+	taxIdNo String
+	taxIdName String
 	branch Boolean
 	email String required
 	phone String required
 	fax String
 	website String
-	type VendorType required
 	paymentCategory String required
 	approvalStatus String required
 	uid UUID
@@ -214,7 +216,7 @@ entity CConvertionType {
 }
 
 entity CConvertionRate {
-	validFrom LocalDate required 
+	validFrom LocalDate required
 	validTo LocalDate required
 	rate BigDecimal required
 	uid UUID
@@ -356,7 +358,7 @@ entity CLocator {
 }
 
 /**
-* vendor Invoice Verification 
+* vendor Invoice Verification
 */
 entity MVerification {
 	verificationNo String required
@@ -468,7 +470,7 @@ relationship OneToMany {
  */
 relationship ManyToOne {
 	ADOrganizationInfo{adOrganization required} to ADOrganization
-	
+
 	CLocation{city required} to CCity
 
 	CRegistrationDocument{type required} to CRegistrationDocType
@@ -502,12 +504,12 @@ relationship ManyToOne {
 	CTax{taxCategory required} to CTaxCategory
 
 	CBusinessCategory{adOrganization required} to ADOrganization
-	
+
 	CAttachment{adOrganization required} to ADOrganization
 	CRegistrationDocType{adOrganization required} to ADOrganization
-	
+
 	CVendor{adOrganization required} to ADOrganization
-	
+
 	CVendorBusinessCat{vendor required} to CVendor
 	CVendorBusinessCat{businessCategory required} to CBusinessCategory
 	CVendorBusinessCat{adOrganization required} to ADOrganization
@@ -515,7 +517,7 @@ relationship ManyToOne {
 	CPicBusinessCat{pic required} to CPersonInCharge
 	CPicBusinessCat{businessCategory required} to CBusinessCategory
 	CPicBusinessCat{adOrganization required} to ADOrganization
-	
+
 	CVendorBankAcct{vendor required} to CVendor
 	CVendorBankAcct{bank required} to CBank
 	CVendorBankAcct{currency required} to CCurrency
@@ -528,7 +530,7 @@ relationship ManyToOne {
 
 	CUnitOfMeasure{adOrganization required} to ADOrganization
 	CCostCenter{adOrganization required} to ADOrganization
-	
+
 	// For convertion rate with currency and convertion type.
 	CConvertionRate{sourceCurrency required} to CCurrency
 	CConvertionRate{targetCurrency required} to CCurrency
@@ -542,7 +544,7 @@ relationship ManyToOne {
 	CProductGroup{adOrganization required} to ADOrganization
 	CProductGroupAccount{productGroup required} to CProductGroup
 	CProductGroupAccount{adOrganization required} to ADOrganization
-	
+
 	CCalendar{adOrganization required} to ADOrganization
 	CNonBusinessDay{calendar required} to CCalendar
 	CNonBusinessDay{adOrganization required} to ADOrganization

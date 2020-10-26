@@ -95,7 +95,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/api/c-currencies",
                 "/api/c-taxes",
                 "/api/users/registration-check",
-                "/api/attachments/download/**"
+                "/api/attachments/download/**",
+                "/api/ad-reference-lists"
             ).permitAll()
             .antMatchers(
                 HttpMethod.POST,

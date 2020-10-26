@@ -19,7 +19,7 @@ const CompanyProps = Vue.extend({
         return null;
       }
     },
-    
+
   }
 })
 
@@ -28,7 +28,7 @@ export default class CompanyProfile extends CompanyProps {
 
   @Inject('dynamicWindowService')
   private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
-  
+
   public countryOptions: any = {};
   public regionOptions: any = {};
   public cityOptions: any = {};
@@ -37,10 +37,19 @@ export default class CompanyProfile extends CompanyProps {
   public regionOptionsNpwp: any = {};
   public cityOptionsNpwp: any = {};
 
+  public referencesList: any = {};
+  public typeOptions: any = {};
+  public locationOptions: any = {};
+  public companyType: string = "companyType";
+  public companyLocation: string = "companyLocation";
+  public companyTaxLocation: string = "Domestic";
+
   private limit: number = 1;
   private action: string = "/api/c-attachments/upload";
   private accept: string = ".jpg, .jpeg, .png, .pdf, .doc, .docx";
 
+  private npwp: boolean = true;
+  private tax: boolean = false;
   private columnSpacing = 32;
   private rules = {
     website: {
@@ -48,18 +57,9 @@ export default class CompanyProfile extends CompanyProps {
     }
   }
 
-  private typeOptions = [
-    {
-      value: 'COMPANY',
-      key: 'COMPANY'
-    }, 
-    {
-      value: 'PROFESSIONAL',
-      key: 'PROFESSIONAL'
-    }
-  ]
-
   created() {
+    this.retrieveGetReferences(this.companyType);
+    this.retrieveGetReferences(this.companyLocation);
     this.retrieveCountry(1);
     this.retrieveCountry(2);
   }
@@ -70,6 +70,18 @@ export default class CompanyProfile extends CompanyProps {
 
   public handleTypeChange(value: string) {
     registrationStore.setVendorType(value);
+  }
+
+  public handleLocationChange(value: string){
+    registrationStore.setVendorLocation(value);
+    this.tax = true;
+    if(value == this.companyTaxLocation){
+      this.npwp = true;
+    }else{
+      this.npwp = false;
+    }
+    console.log(this.npwp);
+    console.log(value);
   }
 
   validate(formIndex: number) {
@@ -103,13 +115,52 @@ export default class CompanyProfile extends CompanyProps {
       return value;
     }
   }
-  
+
   private printKeyByParam(row: any){
     if(row){
       let value, key;
       key = parseInt(row.substring( 0, row.indexOf('_')));
       return key;
     }
+  }
+
+  private retrieveGetReferences(param: string) {
+    this.dynamicWindowService('/api/ad-references')
+    .retrieve({
+      criteriaQuery: [`value.contains=`+param]
+    })
+    .then(res => {
+        let references = res.data.map(item => {
+            return{
+                id: item.id,
+                value: item.value,
+                name: item.name
+            };
+        });
+        console.log(references);
+        this.retrieveGetReferenceLists(references);
+    });
+  }
+
+  private retrieveGetReferenceLists(param: any) {
+    this.dynamicWindowService('/api/ad-reference-lists')
+    .retrieve({
+      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
+    })
+    .then(res => {
+        let referenceList = res.data.map(item => {
+            return{
+                key: item.value,
+                value: item.name
+            };
+        });
+
+        if(param[0].value == this.companyType){
+          this.typeOptions = referenceList;
+        }else if(param[0].value == this.companyLocation){
+          this.locationOptions = referenceList;
+        }
+    });
   }
 
   private retrieveCountry(i) {
@@ -127,7 +178,7 @@ export default class CompanyProfile extends CompanyProps {
           this.countryOptions = country;
         }else{
           this.countryOptionsNpwp = country;
-        }        
+        }
     });
   }
 
@@ -140,7 +191,7 @@ export default class CompanyProfile extends CompanyProps {
       this.company.npwpRegion = "";
       this.company.npwpCity = "";
     }
-    
+
     this.dynamicWindowService('/api/c-regions')
     .retrieve({
         criteriaQuery: [`countryId.equals=${countryId}`]
@@ -160,7 +211,7 @@ export default class CompanyProfile extends CompanyProps {
         }
     });
   }
-  
+
   private retrieveCity(value, i) {
     let regionId = this.printKeyByParam(value);
     if(i===1){
@@ -254,7 +305,7 @@ export default class CompanyProfile extends CompanyProps {
       });
       return !isExt;
     }
-    
+
   }
 
 }

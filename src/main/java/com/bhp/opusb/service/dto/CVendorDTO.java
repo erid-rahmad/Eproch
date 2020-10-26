@@ -1,28 +1,22 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-
-import com.bhp.opusb.domain.enumeration.VendorType;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CVendor} entity.
  */
 public class CVendorDTO extends AbstractAuditingDTO {
-    
-    private static final long serialVersionUID = 1L;
 
     private Long id;
 
     @NotNull
     private String name;
 
-    @NotNull
     private String taxIdNo;
 
-    @NotNull
     private String taxIdName;
 
     private Boolean branch;
@@ -38,7 +32,12 @@ public class CVendorDTO extends AbstractAuditingDTO {
     private String website;
 
     @NotNull
-    private VendorType type;
+    private String type;
+
+    @NotNull
+    private String location;
+
+    private String tin;
 
     @NotNull
     private String paymentCategory;
@@ -56,7 +55,7 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
     private String adOrganizationName;
-    
+
     public Long getId() {
         return id;
     }
@@ -129,12 +128,28 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.website = website;
     }
 
-    public VendorType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(VendorType type) {
+    public void setType(String type) {
         this.type = type;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getTin() {
+        return tin;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
     }
 
     public String getPaymentCategory() {
@@ -235,6 +250,8 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", fax='" + getFax() + "'" +
             ", website='" + getWebsite() + "'" +
             ", type='" + getType() + "'" +
+            ", location='" + getLocation() + "'" +
+            ", tin='" + getTin() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
             ", approvalStatus='" + getApprovalStatus() + "'" +
             ", uid='" + getUid() + "'" +

@@ -34,6 +34,8 @@ public class RegistrationMapper {
       .paymentCategory("RED")
       .phone(companyProfile.getPhone())
       .type(companyProfile.getType())
+      .location(companyProfile.getLocation())
+      .tin(companyProfile.getTin())
       .website(companyProfile.getWebsite())
       .taxIdName(companyProfile.getNpwpName())
       .taxIdNo(companyProfile.getNpwp());
@@ -54,7 +56,7 @@ public class RegistrationMapper {
 
     return location;
   }
-  
+
   public CLocation toTaxLocation(CompanyProfile companyProfile) {
     CLocation location = new CLocation();
     CCity city = new CCity();

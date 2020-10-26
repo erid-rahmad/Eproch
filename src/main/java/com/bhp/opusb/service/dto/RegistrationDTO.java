@@ -90,7 +90,9 @@ public class RegistrationDTO {
 
     public class CompanyProfile {
         private String name;
-        private VendorType type;
+        private String type;
+        private String location;
+        private String tin;
         private Boolean branch;
         private String phone;
         private String fax;
@@ -114,12 +116,28 @@ public class RegistrationDTO {
             this.name = name;
         }
 
-        public VendorType getType() {
+        public String getType() {
             return type;
         }
 
-        public void setType(VendorType type) {
+        public void setType(String type) {
             this.type = type;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public String getTin() {
+            return tin;
+        }
+
+        public void setTin(String tin) {
+            this.tin = tin;
         }
 
         public Boolean getBranch() {

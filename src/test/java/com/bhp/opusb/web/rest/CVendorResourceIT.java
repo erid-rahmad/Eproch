@@ -29,7 +29,6 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.bhp.opusb.domain.enumeration.VendorType;
 /**
  * Integration tests for the {@link CVendorResource} REST controller.
  */
@@ -41,6 +40,15 @@ public class CVendorResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
+
+    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_LOCATION = "AAAAAAAAAA";
+    private static final String UPDATED_LOCATION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_TIN = "AAAAAAAAAA";
+    private static final String UPDATED_TIN = "BBBBBBBBBB";
 
     private static final String DEFAULT_TAX_ID_NO = "AAAAAAAAAA";
     private static final String UPDATED_TAX_ID_NO = "BBBBBBBBBB";
@@ -62,9 +70,6 @@ public class CVendorResourceIT {
 
     private static final String DEFAULT_WEBSITE = "AAAAAAAAAA";
     private static final String UPDATED_WEBSITE = "BBBBBBBBBB";
-
-    private static final VendorType DEFAULT_TYPE = VendorType.COMPANY;
-    private static final VendorType UPDATED_TYPE = VendorType.PROFESSIONAL;
 
     private static final String DEFAULT_PAYMENT_CATEGORY = "AAAAAAAAAA";
     private static final String UPDATED_PAYMENT_CATEGORY = "BBBBBBBBBB";
@@ -107,6 +112,9 @@ public class CVendorResourceIT {
     public static CVendor createEntity(EntityManager em) {
         CVendor cVendor = new CVendor()
             .name(DEFAULT_NAME)
+            .type(DEFAULT_TYPE)
+            .location(DEFAULT_LOCATION)
+            .tin(DEFAULT_TIN)
             .taxIdNo(DEFAULT_TAX_ID_NO)
             .taxIdName(DEFAULT_TAX_ID_NAME)
             .branch(DEFAULT_BRANCH)
@@ -114,7 +122,6 @@ public class CVendorResourceIT {
             .phone(DEFAULT_PHONE)
             .fax(DEFAULT_FAX)
             .website(DEFAULT_WEBSITE)
-            .type(DEFAULT_TYPE)
             .paymentCategory(DEFAULT_PAYMENT_CATEGORY)
             .approvalStatus(DEFAULT_APPROVAL_STATUS)
             .uid(DEFAULT_UID)
@@ -140,6 +147,9 @@ public class CVendorResourceIT {
     public static CVendor createUpdatedEntity(EntityManager em) {
         CVendor cVendor = new CVendor()
             .name(UPDATED_NAME)
+            .type(UPDATED_TYPE)
+            .location(UPDATED_LOCATION)
+            .tin(UPDATED_TIN)
             .taxIdNo(UPDATED_TAX_ID_NO)
             .taxIdName(UPDATED_TAX_ID_NAME)
             .branch(UPDATED_BRANCH)
@@ -147,7 +157,6 @@ public class CVendorResourceIT {
             .phone(UPDATED_PHONE)
             .fax(UPDATED_FAX)
             .website(UPDATED_WEBSITE)
-            .type(UPDATED_TYPE)
             .paymentCategory(UPDATED_PAYMENT_CATEGORY)
             .approvalStatus(UPDATED_APPROVAL_STATUS)
             .uid(UPDATED_UID)
@@ -187,6 +196,9 @@ public class CVendorResourceIT {
         assertThat(cVendorList).hasSize(databaseSizeBeforeCreate + 1);
         CVendor testCVendor = cVendorList.get(cVendorList.size() - 1);
         assertThat(testCVendor.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testCVendor.getType()).isEqualTo(DEFAULT_TYPE);
+        assertThat(testCVendor.getLocation()).isEqualTo(DEFAULT_LOCATION);
+        assertThat(testCVendor.getTin()).isEqualTo(DEFAULT_TIN);
         assertThat(testCVendor.getTaxIdNo()).isEqualTo(DEFAULT_TAX_ID_NO);
         assertThat(testCVendor.getTaxIdName()).isEqualTo(DEFAULT_TAX_ID_NAME);
         assertThat(testCVendor.isBranch()).isEqualTo(DEFAULT_BRANCH);
@@ -194,7 +206,6 @@ public class CVendorResourceIT {
         assertThat(testCVendor.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testCVendor.getFax()).isEqualTo(DEFAULT_FAX);
         assertThat(testCVendor.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
-        assertThat(testCVendor.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testCVendor.getPaymentCategory()).isEqualTo(DEFAULT_PAYMENT_CATEGORY);
         assertThat(testCVendor.getApprovalStatus()).isEqualTo(DEFAULT_APPROVAL_STATUS);
         assertThat(testCVendor.getUid()).isEqualTo(DEFAULT_UID);
@@ -243,10 +254,10 @@ public class CVendorResourceIT {
 
     @Test
     @Transactional
-    public void checkTaxIdNoIsRequired() throws Exception {
+    public void checkTypeIsRequired() throws Exception {
         int databaseSizeBeforeTest = cVendorRepository.findAll().size();
         // set the field null
-        cVendor.setTaxIdNo(null);
+        cVendor.setType(null);
 
         // Create the CVendor, which fails.
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
@@ -262,10 +273,10 @@ public class CVendorResourceIT {
 
     @Test
     @Transactional
-    public void checkTaxIdNameIsRequired() throws Exception {
+    public void checkLocationIsRequired() throws Exception {
         int databaseSizeBeforeTest = cVendorRepository.findAll().size();
         // set the field null
-        cVendor.setTaxIdName(null);
+        cVendor.setLocation(null);
 
         // Create the CVendor, which fails.
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
@@ -304,25 +315,6 @@ public class CVendorResourceIT {
         int databaseSizeBeforeTest = cVendorRepository.findAll().size();
         // set the field null
         cVendor.setPhone(null);
-
-        // Create the CVendor, which fails.
-        CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
-
-        restCVendorMockMvc.perform(post("/api/c-vendors")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(cVendorDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<CVendor> cVendorList = cVendorRepository.findAll();
-        assertThat(cVendorList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkTypeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = cVendorRepository.findAll().size();
-        // set the field null
-        cVendor.setType(null);
 
         // Create the CVendor, which fails.
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
@@ -386,6 +378,9 @@ public class CVendorResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendor.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION)))
+            .andExpect(jsonPath("$.[*].tin").value(hasItem(DEFAULT_TIN)))
             .andExpect(jsonPath("$.[*].taxIdNo").value(hasItem(DEFAULT_TAX_ID_NO)))
             .andExpect(jsonPath("$.[*].taxIdName").value(hasItem(DEFAULT_TAX_ID_NAME)))
             .andExpect(jsonPath("$.[*].branch").value(hasItem(DEFAULT_BRANCH.booleanValue())))
@@ -393,7 +388,6 @@ public class CVendorResourceIT {
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].fax").value(hasItem(DEFAULT_FAX)))
             .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE)))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)))
             .andExpect(jsonPath("$.[*].approvalStatus").value(hasItem(DEFAULT_APPROVAL_STATUS)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -412,6 +406,9 @@ public class CVendorResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cVendor.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
+            .andExpect(jsonPath("$.location").value(DEFAULT_LOCATION))
+            .andExpect(jsonPath("$.tin").value(DEFAULT_TIN))
             .andExpect(jsonPath("$.taxIdNo").value(DEFAULT_TAX_ID_NO))
             .andExpect(jsonPath("$.taxIdName").value(DEFAULT_TAX_ID_NAME))
             .andExpect(jsonPath("$.branch").value(DEFAULT_BRANCH.booleanValue()))
@@ -419,7 +416,6 @@ public class CVendorResourceIT {
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
             .andExpect(jsonPath("$.fax").value(DEFAULT_FAX))
             .andExpect(jsonPath("$.website").value(DEFAULT_WEBSITE))
-            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE.toString()))
             .andExpect(jsonPath("$.paymentCategory").value(DEFAULT_PAYMENT_CATEGORY))
             .andExpect(jsonPath("$.approvalStatus").value(DEFAULT_APPROVAL_STATUS))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
@@ -521,6 +517,240 @@ public class CVendorResourceIT {
 
         // Get all the cVendorList where name does not contain UPDATED_NAME
         defaultCVendorShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where type equals to DEFAULT_TYPE
+        defaultCVendorShouldBeFound("type.equals=" + DEFAULT_TYPE);
+
+        // Get all the cVendorList where type equals to UPDATED_TYPE
+        defaultCVendorShouldNotBeFound("type.equals=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where type not equals to DEFAULT_TYPE
+        defaultCVendorShouldNotBeFound("type.notEquals=" + DEFAULT_TYPE);
+
+        // Get all the cVendorList where type not equals to UPDATED_TYPE
+        defaultCVendorShouldBeFound("type.notEquals=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where type in DEFAULT_TYPE or UPDATED_TYPE
+        defaultCVendorShouldBeFound("type.in=" + DEFAULT_TYPE + "," + UPDATED_TYPE);
+
+        // Get all the cVendorList where type equals to UPDATED_TYPE
+        defaultCVendorShouldNotBeFound("type.in=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where type is not null
+        defaultCVendorShouldBeFound("type.specified=true");
+
+        // Get all the cVendorList where type is null
+        defaultCVendorShouldNotBeFound("type.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCVendorsByTypeContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where type contains DEFAULT_TYPE
+        defaultCVendorShouldBeFound("type.contains=" + DEFAULT_TYPE);
+
+        // Get all the cVendorList where type contains UPDATED_TYPE
+        defaultCVendorShouldNotBeFound("type.contains=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByTypeNotContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where type does not contain DEFAULT_TYPE
+        defaultCVendorShouldNotBeFound("type.doesNotContain=" + DEFAULT_TYPE);
+
+        // Get all the cVendorList where type does not contain UPDATED_TYPE
+        defaultCVendorShouldBeFound("type.doesNotContain=" + UPDATED_TYPE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByLocationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where location equals to DEFAULT_LOCATION
+        defaultCVendorShouldBeFound("location.equals=" + DEFAULT_LOCATION);
+
+        // Get all the cVendorList where location equals to UPDATED_LOCATION
+        defaultCVendorShouldNotBeFound("location.equals=" + UPDATED_LOCATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByLocationIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where location not equals to DEFAULT_LOCATION
+        defaultCVendorShouldNotBeFound("location.notEquals=" + DEFAULT_LOCATION);
+
+        // Get all the cVendorList where location not equals to UPDATED_LOCATION
+        defaultCVendorShouldBeFound("location.notEquals=" + UPDATED_LOCATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByLocationIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where location in DEFAULT_LOCATION or UPDATED_LOCATION
+        defaultCVendorShouldBeFound("location.in=" + DEFAULT_LOCATION + "," + UPDATED_LOCATION);
+
+        // Get all the cVendorList where location equals to UPDATED_LOCATION
+        defaultCVendorShouldNotBeFound("location.in=" + UPDATED_LOCATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByLocationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where location is not null
+        defaultCVendorShouldBeFound("location.specified=true");
+
+        // Get all the cVendorList where location is null
+        defaultCVendorShouldNotBeFound("location.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCVendorsByLocationContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where location contains DEFAULT_LOCATION
+        defaultCVendorShouldBeFound("location.contains=" + DEFAULT_LOCATION);
+
+        // Get all the cVendorList where location contains UPDATED_LOCATION
+        defaultCVendorShouldNotBeFound("location.contains=" + UPDATED_LOCATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByLocationNotContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where location does not contain DEFAULT_LOCATION
+        defaultCVendorShouldNotBeFound("location.doesNotContain=" + DEFAULT_LOCATION);
+
+        // Get all the cVendorList where location does not contain UPDATED_LOCATION
+        defaultCVendorShouldBeFound("location.doesNotContain=" + UPDATED_LOCATION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByTinIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where tin equals to DEFAULT_TIN
+        defaultCVendorShouldBeFound("tin.equals=" + DEFAULT_TIN);
+
+        // Get all the cVendorList where tin equals to UPDATED_TIN
+        defaultCVendorShouldNotBeFound("tin.equals=" + UPDATED_TIN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByTinIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where tin not equals to DEFAULT_TIN
+        defaultCVendorShouldNotBeFound("tin.notEquals=" + DEFAULT_TIN);
+
+        // Get all the cVendorList where tin not equals to UPDATED_TIN
+        defaultCVendorShouldBeFound("tin.notEquals=" + UPDATED_TIN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByTinIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where tin in DEFAULT_TIN or UPDATED_TIN
+        defaultCVendorShouldBeFound("tin.in=" + DEFAULT_TIN + "," + UPDATED_TIN);
+
+        // Get all the cVendorList where tin equals to UPDATED_TIN
+        defaultCVendorShouldNotBeFound("tin.in=" + UPDATED_TIN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByTinIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where tin is not null
+        defaultCVendorShouldBeFound("tin.specified=true");
+
+        // Get all the cVendorList where tin is null
+        defaultCVendorShouldNotBeFound("tin.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCVendorsByTinContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where tin contains DEFAULT_TIN
+        defaultCVendorShouldBeFound("tin.contains=" + DEFAULT_TIN);
+
+        // Get all the cVendorList where tin contains UPDATED_TIN
+        defaultCVendorShouldNotBeFound("tin.contains=" + UPDATED_TIN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByTinNotContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where tin does not contain DEFAULT_TIN
+        defaultCVendorShouldNotBeFound("tin.doesNotContain=" + DEFAULT_TIN);
+
+        // Get all the cVendorList where tin does not contain UPDATED_TIN
+        defaultCVendorShouldBeFound("tin.doesNotContain=" + UPDATED_TIN);
     }
 
 
@@ -1046,58 +1276,6 @@ public class CVendorResourceIT {
 
     @Test
     @Transactional
-    public void getAllCVendorsByTypeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cVendorRepository.saveAndFlush(cVendor);
-
-        // Get all the cVendorList where type equals to DEFAULT_TYPE
-        defaultCVendorShouldBeFound("type.equals=" + DEFAULT_TYPE);
-
-        // Get all the cVendorList where type equals to UPDATED_TYPE
-        defaultCVendorShouldNotBeFound("type.equals=" + UPDATED_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorsByTypeIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        cVendorRepository.saveAndFlush(cVendor);
-
-        // Get all the cVendorList where type not equals to DEFAULT_TYPE
-        defaultCVendorShouldNotBeFound("type.notEquals=" + DEFAULT_TYPE);
-
-        // Get all the cVendorList where type not equals to UPDATED_TYPE
-        defaultCVendorShouldBeFound("type.notEquals=" + UPDATED_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorsByTypeIsInShouldWork() throws Exception {
-        // Initialize the database
-        cVendorRepository.saveAndFlush(cVendor);
-
-        // Get all the cVendorList where type in DEFAULT_TYPE or UPDATED_TYPE
-        defaultCVendorShouldBeFound("type.in=" + DEFAULT_TYPE + "," + UPDATED_TYPE);
-
-        // Get all the cVendorList where type equals to UPDATED_TYPE
-        defaultCVendorShouldNotBeFound("type.in=" + UPDATED_TYPE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorsByTypeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        cVendorRepository.saveAndFlush(cVendor);
-
-        // Get all the cVendorList where type is not null
-        defaultCVendorShouldBeFound("type.specified=true");
-
-        // Get all the cVendorList where type is null
-        defaultCVendorShouldNotBeFound("type.specified=false");
-    }
-
-    @Test
-    @Transactional
     public void getAllCVendorsByPaymentCategoryIsEqualToSomething() throws Exception {
         // Initialize the database
         cVendorRepository.saveAndFlush(cVendor);
@@ -1400,6 +1578,9 @@ public class CVendorResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendor.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
+            .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION)))
+            .andExpect(jsonPath("$.[*].tin").value(hasItem(DEFAULT_TIN)))
             .andExpect(jsonPath("$.[*].taxIdNo").value(hasItem(DEFAULT_TAX_ID_NO)))
             .andExpect(jsonPath("$.[*].taxIdName").value(hasItem(DEFAULT_TAX_ID_NAME)))
             .andExpect(jsonPath("$.[*].branch").value(hasItem(DEFAULT_BRANCH.booleanValue())))
@@ -1407,7 +1588,6 @@ public class CVendorResourceIT {
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].fax").value(hasItem(DEFAULT_FAX)))
             .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE)))
-            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE.toString())))
             .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)))
             .andExpect(jsonPath("$.[*].approvalStatus").value(hasItem(DEFAULT_APPROVAL_STATUS)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -1460,6 +1640,9 @@ public class CVendorResourceIT {
         em.detach(updatedCVendor);
         updatedCVendor
             .name(UPDATED_NAME)
+            .type(UPDATED_TYPE)
+            .location(UPDATED_LOCATION)
+            .tin(UPDATED_TIN)
             .taxIdNo(UPDATED_TAX_ID_NO)
             .taxIdName(UPDATED_TAX_ID_NAME)
             .branch(UPDATED_BRANCH)
@@ -1467,7 +1650,6 @@ public class CVendorResourceIT {
             .phone(UPDATED_PHONE)
             .fax(UPDATED_FAX)
             .website(UPDATED_WEBSITE)
-            .type(UPDATED_TYPE)
             .paymentCategory(UPDATED_PAYMENT_CATEGORY)
             .approvalStatus(UPDATED_APPROVAL_STATUS)
             .uid(UPDATED_UID)
@@ -1484,6 +1666,9 @@ public class CVendorResourceIT {
         assertThat(cVendorList).hasSize(databaseSizeBeforeUpdate);
         CVendor testCVendor = cVendorList.get(cVendorList.size() - 1);
         assertThat(testCVendor.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testCVendor.getType()).isEqualTo(UPDATED_TYPE);
+        assertThat(testCVendor.getLocation()).isEqualTo(UPDATED_LOCATION);
+        assertThat(testCVendor.getTin()).isEqualTo(UPDATED_TIN);
         assertThat(testCVendor.getTaxIdNo()).isEqualTo(UPDATED_TAX_ID_NO);
         assertThat(testCVendor.getTaxIdName()).isEqualTo(UPDATED_TAX_ID_NAME);
         assertThat(testCVendor.isBranch()).isEqualTo(UPDATED_BRANCH);
@@ -1491,7 +1676,6 @@ public class CVendorResourceIT {
         assertThat(testCVendor.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testCVendor.getFax()).isEqualTo(UPDATED_FAX);
         assertThat(testCVendor.getWebsite()).isEqualTo(UPDATED_WEBSITE);
-        assertThat(testCVendor.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testCVendor.getPaymentCategory()).isEqualTo(UPDATED_PAYMENT_CATEGORY);
         assertThat(testCVendor.getApprovalStatus()).isEqualTo(UPDATED_APPROVAL_STATUS);
         assertThat(testCVendor.getUid()).isEqualTo(UPDATED_UID);

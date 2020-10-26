@@ -1,27 +1,15 @@
 package com.bhp.opusb.domain;
 
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
-import com.bhp.opusb.domain.enumeration.VendorType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A CVendor.
@@ -42,12 +30,10 @@ public class CVendor extends AbstractAuditingEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotNull
-    @Column(name = "tax_id_no", nullable = false)
+    @Column(name = "tax_id_no")
     private String taxIdNo;
 
-    @NotNull
-    @Column(name = "tax_id_name", nullable = false)
+    @Column(name = "tax_id_name")
     private String taxIdName;
 
     @Column(name = "branch")
@@ -68,9 +54,16 @@ public class CVendor extends AbstractAuditingEntity {
     private String website;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private VendorType type;
+    private String type;
+
+    @NotNull
+    @Column(name = "location", nullable = false)
+    private String location;
+
+    @Column(name = "tin")
+    private String tin;
+
 
     @NotNull
     @Column(name = "payment_category", nullable = false)
@@ -208,17 +201,43 @@ public class CVendor extends AbstractAuditingEntity {
         this.website = website;
     }
 
-    public VendorType getType() {
+    public String getType() {
         return type;
     }
 
-    public CVendor type(VendorType type) {
+    public CVendor type(String type) {
         this.type = type;
         return this;
     }
 
-    public void setType(VendorType type) {
+    public void setType(String type) {
         this.type = type;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public CVendor location(String location) {
+        this.location = location;
+        return this;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getTin() {
+        return tin;
+    }
+
+    public CVendor tin(String tin) {
+        this.tin = tin;
+        return this;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
     }
 
     public String getPaymentCategory() {
@@ -304,7 +323,7 @@ public class CVendor extends AbstractAuditingEntity {
     public void assignUUID() {
         this.uid = UUID.randomUUID();
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -334,6 +353,8 @@ public class CVendor extends AbstractAuditingEntity {
             ", fax='" + getFax() + "'" +
             ", website='" + getWebsite() + "'" +
             ", type='" + getType() + "'" +
+            ", location='" + getLocation() + "'" +
+            ", tin='" + getTin() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
             ", approvalStatus='" + getApprovalStatus() + "'" +
             ", uid='" + getUid() + "'" +

@@ -9,18 +9,30 @@
             ]
         },
         {
-            "fieldName": "taxIdNo",
+            "fieldName": "type",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "taxIdName",
+            "fieldName": "location",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "tin",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "taxIdNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "taxIdName",
+            "fieldType": "String"
         },
         {
             "fieldName": "branch",
@@ -47,14 +59,6 @@
         {
             "fieldName": "website",
             "fieldType": "String"
-        },
-        {
-            "fieldName": "type",
-            "fieldType": "VendorType",
-            "fieldValues": "COMPANY,PROFESSIONAL",
-            "fieldValidateRules": [
-                "required"
-            ]
         },
         {
             "fieldName": "paymentCategory",

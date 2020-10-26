@@ -3,7 +3,6 @@ package com.bhp.opusb.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 import io.github.jhipster.service.Criteria;
-import com.bhp.opusb.domain.enumeration.VendorType;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -23,30 +22,18 @@ import io.github.jhipster.service.filter.UUIDFilter;
  * fix type specific filters.
  */
 public class CVendorCriteria implements Serializable, Criteria {
-    /**
-     * Class for filtering VendorType
-     */
-    public static class VendorTypeFilter extends Filter<VendorType> {
-
-        public VendorTypeFilter() {
-        }
-
-        public VendorTypeFilter(VendorTypeFilter filter) {
-            super(filter);
-        }
-
-        @Override
-        public VendorTypeFilter copy() {
-            return new VendorTypeFilter(this);
-        }
-
-    }
 
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
     private StringFilter name;
+
+    private StringFilter type;
+
+    private StringFilter location;
+
+    private StringFilter tin;
 
     private StringFilter taxIdNo;
 
@@ -61,8 +48,6 @@ public class CVendorCriteria implements Serializable, Criteria {
     private StringFilter fax;
 
     private StringFilter website;
-
-    private VendorTypeFilter type;
 
     private StringFilter paymentCategory;
 
@@ -82,6 +67,9 @@ public class CVendorCriteria implements Serializable, Criteria {
     public CVendorCriteria(CVendorCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
+        this.type = other.type == null ? null : other.type.copy();
+        this.location = other.location == null ? null : other.location.copy();
+        this.tin = other.tin == null ? null : other.tin.copy();
         this.taxIdNo = other.taxIdNo == null ? null : other.taxIdNo.copy();
         this.taxIdName = other.taxIdName == null ? null : other.taxIdName.copy();
         this.branch = other.branch == null ? null : other.branch.copy();
@@ -89,7 +77,6 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.phone = other.phone == null ? null : other.phone.copy();
         this.fax = other.fax == null ? null : other.fax.copy();
         this.website = other.website == null ? null : other.website.copy();
-        this.type = other.type == null ? null : other.type.copy();
         this.paymentCategory = other.paymentCategory == null ? null : other.paymentCategory.copy();
         this.approvalStatus = other.approvalStatus == null ? null : other.approvalStatus.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
@@ -117,6 +104,30 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     public void setName(StringFilter name) {
         this.name = name;
+    }
+
+    public StringFilter getType() {
+        return type;
+    }
+
+    public void setType(StringFilter type) {
+        this.type = type;
+    }
+
+    public StringFilter getLocation() {
+        return location;
+    }
+
+    public void setLocation(StringFilter location) {
+        this.location = location;
+    }
+
+    public StringFilter getTin() {
+        return tin;
+    }
+
+    public void setTin(StringFilter tin) {
+        this.tin = tin;
     }
 
     public StringFilter getTaxIdNo() {
@@ -173,14 +184,6 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     public void setWebsite(StringFilter website) {
         this.website = website;
-    }
-
-    public VendorTypeFilter getType() {
-        return type;
-    }
-
-    public void setType(VendorTypeFilter type) {
-        this.type = type;
     }
 
     public StringFilter getPaymentCategory() {
@@ -244,6 +247,9 @@ public class CVendorCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
+            Objects.equals(type, that.type) &&
+            Objects.equals(location, that.location) &&
+            Objects.equals(tin, that.tin) &&
             Objects.equals(taxIdNo, that.taxIdNo) &&
             Objects.equals(taxIdName, that.taxIdName) &&
             Objects.equals(branch, that.branch) &&
@@ -251,7 +257,6 @@ public class CVendorCriteria implements Serializable, Criteria {
             Objects.equals(phone, that.phone) &&
             Objects.equals(fax, that.fax) &&
             Objects.equals(website, that.website) &&
-            Objects.equals(type, that.type) &&
             Objects.equals(paymentCategory, that.paymentCategory) &&
             Objects.equals(approvalStatus, that.approvalStatus) &&
             Objects.equals(uid, that.uid) &&
@@ -265,6 +270,9 @@ public class CVendorCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         name,
+        type,
+        location,
+        tin,
         taxIdNo,
         taxIdName,
         branch,
@@ -272,7 +280,6 @@ public class CVendorCriteria implements Serializable, Criteria {
         phone,
         fax,
         website,
-        type,
         paymentCategory,
         approvalStatus,
         uid,
@@ -287,6 +294,9 @@ public class CVendorCriteria implements Serializable, Criteria {
         return "CVendorCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
+                (type != null ? "type=" + type + ", " : "") +
+                (location != null ? "location=" + location + ", " : "") +
+                (tin != null ? "tin=" + tin + ", " : "") +
                 (taxIdNo != null ? "taxIdNo=" + taxIdNo + ", " : "") +
                 (taxIdName != null ? "taxIdName=" + taxIdName + ", " : "") +
                 (branch != null ? "branch=" + branch + ", " : "") +
@@ -294,7 +304,6 @@ public class CVendorCriteria implements Serializable, Criteria {
                 (phone != null ? "phone=" + phone + ", " : "") +
                 (fax != null ? "fax=" + fax + ", " : "") +
                 (website != null ? "website=" + website + ", " : "") +
-                (type != null ? "type=" + type + ", " : "") +
                 (paymentCategory != null ? "paymentCategory=" + paymentCategory + ", " : "") +
                 (approvalStatus != null ? "approvalStatus=" + approvalStatus + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +

@@ -1,7 +1,7 @@
 <template>
     <div class='summary'>
         <el-divider content-position="left"><h4>{{ $t('register.form.summary') }}</h4></el-divider>
-        
+
         <el-collapse :model="activeNames" accordion>
             <el-collapse-item :title="'1. '+$t('register.login.title')" name="1">
 
@@ -13,7 +13,7 @@
                     :model="login"
                     >
                     <el-row :gutter="columnSpacing">
-                        
+
                         <el-col :span="12">
                             <el-form-item :label="$t('register.login.form.username')" prop="login" required>
                                 <el-input v-model="login.login" class="form-input" min="3" :disabled="true" />
@@ -28,27 +28,27 @@
 
                     </el-row>
                     <el-row :gutter="columnSpacing">
-                        
+
                         <el-col :span="12">
                             <el-form-item :label="$t('register.login.form.password')"  prop="password" required>
                                 <el-input v-model="login.password" class="form-input" :disabled="true" show-password />
                             </el-form-item>
                         </el-col>
 
-                        <el-col :span="12">  
+                        <el-col :span="12">
                             <el-form-item :label="$t('register.login.form.passwordConfirm')"  prop="passwordConfirmation" required>
                                 <el-input v-model="login.passwordConfirmation" class="form-input" :disabled="true" show-password />
                             </el-form-item>
                         </el-col>
 
-                        
+
                     </el-row>
                 </el-form>
 
             </el-collapse-item>
 
             <el-collapse-item :title="'2. '+$t('register.basic.basic.title')" name="2">
-                
+
                 <el-form
                     label-position="right"
                     label-width="150px"
@@ -60,13 +60,20 @@
                             <el-form-item :label="$t('register.basic.basic.name')" prop="name" required>
                                 <el-input class="form-input" v-model="company.name" :disabled="true" />
                             </el-form-item>
-                            <el-form-item :label="$t('register.basic.basic.type')" prop="type" required>
-                                <el-row type="flex">
-                                    <el-col :span="20">
+
+                            <el-row :gutter="columnSpacing">
+                                <el-col :span="12">
+                                    <el-form-item :label="$t('register.basic.basic.type')" prop="type" required>
                                         <el-input class="form-input" v-model="company.type" :disabled="true" />
-                                    </el-col>
-                                </el-row>
-                            </el-form-item>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item :label="$t('register.basic.basic.location')" prop="location" required>
+                                        <el-input class="form-input" v-model="company.location" :disabled="true" />
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+
                             <el-form-item required>
                                 <el-switch
                                     style="padding-left: 20px;"
@@ -76,10 +83,15 @@
                                 />
                             </el-form-item>
                         </el-col>
-                        
-                        <el-col :span="12">
+                        <el-col v-if="npwp" :span="12">
                             <el-form-item :label="$t('register.basic.basic.npwp')" prop="npwp" required>
-                                <el-input class="form-input" v-model="company.npwp" :disabled="true" />
+                                <el-input
+                                    class="form-input"
+                                    v-model="company.npwp"
+                                    :disabled="true"
+                                    v-inputmask
+                                    data-inputmask="'mask': '99.999.999.9-999.999'"
+                                    placeholder="__.___.___._-___.___" />
                             </el-form-item>
                             <el-form-item :label="$t('register.basic.basic.npwpName')" prop="npwpName" required>
                                 <el-input class="form-input" v-model="company.npwpName" :disabled="true" />
@@ -88,8 +100,15 @@
                                 <span v-if="company.file">{{ company.file.name }}</span>
                             </el-form-item>
                         </el-col>
+                        <el-col v-else :span="12">
+                            <el-tooltip class="item" effect="dark" :content="$t('register.basic.basic.taxInformationNumber')" placement="top">
+                                <el-form-item :label="$t('register.basic.basic.tin')" prop="tin" required>
+                                    <el-input class="form-input" v-model="company.tin" :disabled="true" />
+                                </el-form-item>
+                            </el-tooltip>
+                        </el-col>
                     </el-row>
-                    
+
                     <el-divider content-position="left"><h4>{{ $t('register.basic.address.title') }}</h4></el-divider>
                     <el-row :gutter="columnSpacing">
                         <el-col :span="12">
@@ -103,7 +122,7 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    
+
                     <el-row :gutter="columnSpacing">
                         <el-col :span="6">
                             <el-form-item :label="$t('register.basic.address.country')" prop="country" required>
@@ -150,7 +169,7 @@
                         </el-col>
                     </el-row>
 
-                    
+
                     <el-divider content-position="left"><h4>{{ $t('register.basic.contact.title') }}</h4></el-divider>
                     <el-row :gutter="columnSpacing">
                         <el-col :span="6">
@@ -423,9 +442,9 @@
             </el-collapse-item>
 
         </el-collapse>
-        
+
     </div>
-    
+
 </template>
 <script lang="ts" src="./summary-registration.component.ts"></script>
 <style lang="scss" scoped>
