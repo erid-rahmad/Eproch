@@ -6,6 +6,18 @@
             "fieldType": "Boolean"
         },
         {
+            "fieldName": "shipAddress",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "invoiceAddress",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "payFromAddress",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

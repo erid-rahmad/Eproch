@@ -163,6 +163,9 @@ entity CVendor {
 
 entity CVendorLocation {
 	taxInvoiceAddress Boolean
+    shipAddress Boolean
+    invoiceAddress Boolean
+    payFromAddress Boolean
 	uid UUID
 	active Boolean
 }

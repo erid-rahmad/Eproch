@@ -94,6 +94,15 @@ public class CVendorLocationQueryService extends QueryService<CVendorLocation> {
             if (criteria.getTaxInvoiceAddress() != null) {
                 specification = specification.and(buildSpecification(criteria.getTaxInvoiceAddress(), CVendorLocation_.taxInvoiceAddress));
             }
+            if (criteria.getShipAddress() != null) {
+                specification = specification.and(buildSpecification(criteria.getShipAddress(), CVendorLocation_.shipAddress));
+            }
+            if (criteria.getInvoiceAddress() != null) {
+                specification = specification.and(buildSpecification(criteria.getInvoiceAddress(), CVendorLocation_.invoiceAddress));
+            }
+            if (criteria.getPayFromAddress() != null) {
+                specification = specification.and(buildSpecification(criteria.getPayFromAddress(), CVendorLocation_.payFromAddress));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CVendorLocation_.uid));
             }

@@ -9,10 +9,16 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.CVendorLocation} entity.
  */
 public class CVendorLocationDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     private Boolean taxInvoiceAddress;
+
+    private Boolean shipAddress;
+
+    private Boolean invoiceAddress;
+
+    private Boolean payFromAddress;
 
     private UUID uid;
 
@@ -31,7 +37,7 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
     private String adOrganizationName;
-    
+
     public Long getId() {
         return id;
     }
@@ -46,6 +52,30 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
 
     public void setTaxInvoiceAddress(Boolean taxInvoiceAddress) {
         this.taxInvoiceAddress = taxInvoiceAddress;
+    }
+
+    public Boolean isShipAddress() {
+        return shipAddress;
+    }
+
+    public void setShipAddress(Boolean shipAddress) {
+        this.shipAddress = shipAddress;
+    }
+
+    public Boolean isInvoiceAddress() {
+        return invoiceAddress;
+    }
+
+    public void setInvoiceAddress(Boolean invoiceAddress) {
+        this.invoiceAddress = invoiceAddress;
+    }
+
+    public Boolean isPayFromAddress() {
+        return payFromAddress;
+    }
+
+    public void setPayFromAddress(Boolean payFromAddress) {
+        this.payFromAddress = payFromAddress;
     }
 
     public UUID getUid() {
@@ -112,7 +142,7 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
     public void setLocationCityName(String locationCityName) {
         this.locationCityName = locationCityName;
     }
-    
+
     public String getLocationRegionName() {
         return locationRegionName;
     }
@@ -171,6 +201,9 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
         return "CVendorLocationDTO{" +
             "id=" + getId() +
             ", taxInvoiceAddress='" + isTaxInvoiceAddress() + "'" +
+            ", shipAddress='" + isShipAddress() + "'" +
+            ", invoiceAddress='" + isInvoiceAddress() + "'" +
+            ", payFromAddress='" + isPayFromAddress() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", vendorId=" + getVendorId() +
