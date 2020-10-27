@@ -182,8 +182,12 @@ entity CPicBusinessCat {
 
 entity CVendorBankAcct {
 	accountNo String required
+    accountName String required
 	name String
 	branch String
+    bban String
+    iban String
+    description String
 	uid UUID
 	active Boolean
 }

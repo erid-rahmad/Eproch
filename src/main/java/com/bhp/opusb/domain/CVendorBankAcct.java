@@ -30,11 +30,24 @@ public class CVendorBankAcct extends AbstractAuditingEntity {
     @Column(name = "account_no", nullable = false)
     private String accountNo;
 
+    @NotNull
+    @Column(name = "account_name", nullable = false)
+    private String accountName;
+
     @Column(name = "name")
     private String name;
 
     @Column(name = "branch")
     private String branch;
+
+    @Column(name = "bban")
+    private String bban;
+
+    @Column(name = "iban")
+    private String iban;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "uid")
     private UUID uid;
@@ -89,6 +102,19 @@ public class CVendorBankAcct extends AbstractAuditingEntity {
         this.accountNo = accountNo;
     }
 
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public CVendorBankAcct accountName(String accountName) {
+        this.accountName = accountName;
+        return this;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
     public String getName() {
         return name;
     }
@@ -113,6 +139,45 @@ public class CVendorBankAcct extends AbstractAuditingEntity {
 
     public void setBranch(String branch) {
         this.branch = branch;
+    }
+
+    public String getBban() {
+        return bban;
+    }
+
+    public CVendorBankAcct bban(String bban) {
+        this.bban = bban;
+        return this;
+    }
+
+    public void setBban(String bban) {
+        this.bban = bban;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public CVendorBankAcct iban(String iban) {
+        this.iban = iban;
+        return this;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public CVendorBankAcct description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UUID getUid() {
@@ -211,7 +276,7 @@ public class CVendorBankAcct extends AbstractAuditingEntity {
     public void assignUUID() {
         this.uid = UUID.randomUUID();
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -233,8 +298,12 @@ public class CVendorBankAcct extends AbstractAuditingEntity {
         return "CVendorBankAcct{" +
             "id=" + getId() +
             ", accountNo='" + getAccountNo() + "'" +
+            ", accountName='" + getAccountName() + "'" +
             ", name='" + getName() + "'" +
             ", branch='" + getBranch() + "'" +
+            ", bban='" + getBban() + "'" +
+            ", iban='" + getIban() + "'" +
+            ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

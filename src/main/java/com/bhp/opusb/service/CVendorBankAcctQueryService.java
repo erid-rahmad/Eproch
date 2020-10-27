@@ -94,11 +94,23 @@ public class CVendorBankAcctQueryService extends QueryService<CVendorBankAcct> {
             if (criteria.getAccountNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAccountNo(), CVendorBankAcct_.accountNo));
             }
+            if (criteria.getAccountName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getAccountName(), CVendorBankAcct_.accountName));
+            }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CVendorBankAcct_.name));
             }
             if (criteria.getBranch() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getBranch(), CVendorBankAcct_.branch));
+            }
+            if (criteria.getBban() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getBban(), CVendorBankAcct_.bban));
+            }
+            if (criteria.getIban() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getIban(), CVendorBankAcct_.iban));
+            }
+            if (criteria.getDescription() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDescription(), CVendorBankAcct_.description));
             }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CVendorBankAcct_.uid));
