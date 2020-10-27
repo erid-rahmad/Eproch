@@ -429,6 +429,28 @@
                             :label="$t('register.payment.account')"
                         />
                         <el-table-column
+                            prop="accountName"
+                            min-width="128"
+                            :label="$t('register.payment.accountName')"
+                            show-overflow-tooltip
+                        />
+                        <el-table-column
+                            prop="bban"
+                            min-width="128"
+                            :label="$t('register.payment.bban')"
+                        />
+                        <el-table-column
+                            prop="iban"
+                            min-width="128"
+                            :label="$t('register.payment.iban')"
+                        />
+                        <el-table-column
+                            prop="description"
+                            min-width="128"
+                            :label="$t('register.payment.description')"
+                            show-overflow-tooltip
+                        />
+                        <el-table-column
                             prop="supportingfile.name"
                             min-width="128"
                             :label="$t('register.payment.supportingfile')"
