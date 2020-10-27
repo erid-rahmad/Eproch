@@ -94,6 +94,7 @@ public class RegistrationDTO {
         private String location;
         private String tin;
         private Boolean branch;
+        private Boolean sameAddress;
         private String phone;
         private String fax;
         private String email;
@@ -146,6 +147,14 @@ public class RegistrationDTO {
 
         public void setBranch(Boolean branch) {
             this.branch = branch;
+        }
+
+        public Boolean getSameAddress() {
+            return sameAddress;
+        }
+
+        public void setSameAddress(Boolean sameAddress) {
+            this.sameAddress = sameAddress;
         }
 
         public String getPhone() {

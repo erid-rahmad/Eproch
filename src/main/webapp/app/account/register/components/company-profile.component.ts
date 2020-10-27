@@ -37,7 +37,6 @@ export default class CompanyProfile extends CompanyProps {
   public regionOptionsNpwp: any = {};
   public cityOptionsNpwp: any = {};
 
-  public referencesList: any = {};
   public typeOptions: any = {};
   public locationOptions: any = {};
   public companyType: string = "companyType";
@@ -51,6 +50,8 @@ export default class CompanyProfile extends CompanyProps {
   private npwp: boolean = true;
   private tax: boolean = false;
   private sameAddress: boolean = true;
+  private withRegion: boolean = true;
+  private withRegionNpwp: boolean = true;
   private columnSpacing = 32;
   private rules = {
     website: {
@@ -101,6 +102,8 @@ export default class CompanyProfile extends CompanyProps {
         this.company.npwpRegionId = this.printKeyByParam(this.company.npwpRegion);
         this.company.npwpCityId = this.printKeyByParam(this.company.npwpCity);
 
+        this.company.sameAddress = this.sameAddress;
+
         this.eventBus.$emit('step-validated', { passed, errors })
       })
     }
@@ -144,6 +147,9 @@ export default class CompanyProfile extends CompanyProps {
   private validateSameAddress(value: string){
     if(value){
       this.company.npwpAddress = this.company.address;
+      this.company.npwpCountry = this.company.country;
+      this.company.npwpRegion = this.printValueByParam(this.company.region);
+      this.company.npwpCity = this.printValueByParam(this.company.city);
     }
   }
 
@@ -160,7 +166,6 @@ export default class CompanyProfile extends CompanyProps {
                 name: item.name
             };
         });
-        console.log(references);
         this.retrieveGetReferenceLists(references);
     });
   }
@@ -236,11 +241,21 @@ export default class CompanyProfile extends CompanyProps {
         }else{
           this.regionOptionsNpwp = region;
         }
+
+        this.checkCountryWithRegion(region[0].key+"_"+region[0].value, countryId, i);
     });
   }
 
-  private retrieveCity(value, i) {
-    let regionId = this.printKeyByParam(value);
+  private retrieveCity(region, country, i) {
+    let regionId = this.printKeyByParam(region);
+    let queryWithRegion;
+
+    if(country == 0){
+      queryWithRegion = `regionId.equals=${regionId}`;
+    }else{
+      queryWithRegion = `countryId.equals=${country}`;
+    }
+
     if(i===1){
       this.company.city = "";
     }else{
@@ -248,12 +263,12 @@ export default class CompanyProfile extends CompanyProps {
     }
 
     if(this.sameAddress){
-      this.company.npwpRegion = this.printValueByParam(value);
+      this.company.npwpRegion = this.printValueByParam(region);
     }
 
     this.dynamicWindowService('/api/c-cities')
     .retrieve({
-        criteriaQuery: [`regionId.equals=${regionId}`]
+        criteriaQuery: [queryWithRegion]
     })
     .then(res => {
         let city = res.data.map(item => {
@@ -269,6 +284,60 @@ export default class CompanyProfile extends CompanyProps {
           this.cityOptionsNpwp = city;
         }
     });
+  }
+
+  private checkCountryWithRegion(region, country, i) {
+
+    this.dynamicWindowService('/api/c-countries')
+    .retrieve({
+        criteriaQuery: [`id.equals=${country}`]
+    })
+    .then(res => {
+        let result = res.data.map(item => {
+            return{
+              id: item.id,
+              withRegion: item.withRegion
+            };
+        });
+
+        if(result[0].withRegion){
+          if(i===1){
+            this.withRegion = true;
+            this.withRegionNpwp = true;
+          }else{
+            this.withRegionNpwp = true;
+          }
+          this.cityOptions = {};
+        }else{
+
+          if(i===1){
+            this.withRegion = false;
+            this.withRegionNpwp = false;
+          }else{
+            this.withRegionNpwp = false;
+          }
+
+          this.retrieveCity(region, result[0].id, i);
+        }
+    });
+  }
+
+  private clearAllOption(i){
+    if(i == 1){
+      this.regionOptions = {};
+      this.cityOptions = {};
+    }else{
+      this.regionOptionsNpwp = {};
+      this.cityOptionsNpwp = {};
+    }
+  }
+
+  private clearOptionRegionCity(i){
+    if(i == 1){
+      this.cityOptions = {};
+    }else{
+      this.cityOptionsNpwp = {};
+    }
   }
 
   get fileList() {
