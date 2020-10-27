@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity CVendorBankAcct.
     -->
@@ -83,8 +83,12 @@
                   tableName="c_vendor_bank_acct">
             <column name="id" type="numeric"/>
             <column name="account_no" type="string"/>
+            <column name="account_name" type="string"/>
             <column name="name" type="string"/>
             <column name="branch" type="string"/>
+            <column name="bban" type="string"/>
+            <column name="iban" type="string"/>
+            <column name="description" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="vendor_id" type="numeric"/>
@@ -94,6 +98,25 @@
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20201026152600-added1" author="dian-tri-budianto">
+        <addColumn tableName="c_vendor_bank_acct">
+
+            <column name="account_name" type="varchar(150)">
+                <constraints nullable="true" />
+            </column>
+            <column name="bban" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="iban" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

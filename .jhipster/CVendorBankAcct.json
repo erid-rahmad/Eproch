@@ -9,11 +9,30 @@
             ]
         },
         {
+            "fieldName": "accountName",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "name",
             "fieldType": "String"
         },
         {
             "fieldName": "branch",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "bban",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "iban",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
             "fieldType": "String"
         },
         {

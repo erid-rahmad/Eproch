@@ -29,9 +29,17 @@ public class CVendorBankAcctCriteria implements Serializable, Criteria {
 
     private StringFilter accountNo;
 
+    private StringFilter accountName;
+
     private StringFilter name;
 
     private StringFilter branch;
+
+    private StringFilter bban;
+
+    private StringFilter iban;
+
+    private StringFilter description;
 
     private UUIDFilter uid;
 
@@ -53,8 +61,12 @@ public class CVendorBankAcctCriteria implements Serializable, Criteria {
     public CVendorBankAcctCriteria(CVendorBankAcctCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.accountNo = other.accountNo == null ? null : other.accountNo.copy();
+        this.accountName = other.accountName == null ? null : other.accountName.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.branch = other.branch == null ? null : other.branch.copy();
+        this.bban = other.bban == null ? null : other.bban.copy();
+        this.iban = other.iban == null ? null : other.iban.copy();
+        this.description = other.description == null ? null : other.description.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
@@ -85,6 +97,14 @@ public class CVendorBankAcctCriteria implements Serializable, Criteria {
         this.accountNo = accountNo;
     }
 
+    public StringFilter getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(StringFilter accountName) {
+        this.accountName = accountName;
+    }
+
     public StringFilter getName() {
         return name;
     }
@@ -99,6 +119,30 @@ public class CVendorBankAcctCriteria implements Serializable, Criteria {
 
     public void setBranch(StringFilter branch) {
         this.branch = branch;
+    }
+
+    public StringFilter getBban() {
+        return bban;
+    }
+
+    public void setBban(StringFilter bban) {
+        this.bban = bban;
+    }
+
+    public StringFilter getIban() {
+        return iban;
+    }
+
+    public void setIban(StringFilter iban) {
+        this.iban = iban;
+    }
+
+    public StringFilter getDescription() {
+        return description;
+    }
+
+    public void setDescription(StringFilter description) {
+        this.description = description;
     }
 
     public UUIDFilter getUid() {
@@ -170,8 +214,12 @@ public class CVendorBankAcctCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(accountNo, that.accountNo) &&
+            Objects.equals(accountName, that.accountName) &&
             Objects.equals(name, that.name) &&
             Objects.equals(branch, that.branch) &&
+            Objects.equals(bban, that.bban) &&
+            Objects.equals(iban, that.iban) &&
+            Objects.equals(description, that.description) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(vendorId, that.vendorId) &&
@@ -186,8 +234,12 @@ public class CVendorBankAcctCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         accountNo,
+        accountName,
         name,
         branch,
+        bban,
+        iban,
+        description,
         uid,
         active,
         vendorId,
@@ -203,8 +255,12 @@ public class CVendorBankAcctCriteria implements Serializable, Criteria {
         return "CVendorBankAcctCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (accountNo != null ? "accountNo=" + accountNo + ", " : "") +
+                (accountName != null ? "accountName=" + accountName + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (branch != null ? "branch=" + branch + ", " : "") +
+                (bban != null ? "bban=" + bban + ", " : "") +
+                (iban != null ? "iban=" + iban + ", " : "") +
+                (description != null ? "description=" + description + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +

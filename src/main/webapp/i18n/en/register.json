@@ -83,11 +83,18 @@
     },
     "payment": {
       "title": "Payment Information",
-      "description": "Please provide the payment information",
+      "descriptionInputBankAccount": "Please provide the payment information",
       "bank": "Bank",
       "branch": "Branch",
       "currency": "Currency",
       "account": "Account No.",
+      "accountName": "Account Name",
+
+      "bban": "BBAN",
+      "basicBankAccountNumber": "Basic Bank Account Number",
+      "iban": "IBAN",
+      "internationalBankAccountNumber": "International Bank Account Number",
+      "description": "Description",
       "supportingfile": "Supporting File"
     },
     "tax": {

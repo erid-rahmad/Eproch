@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
  * A DTO for the {@link com.bhp.opusb.domain.CVendorBankAcct} entity.
  */
 public class CVendorBankAcctDTO extends AbstractAuditingDTO {
-    
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -17,9 +17,18 @@ public class CVendorBankAcctDTO extends AbstractAuditingDTO {
     @NotNull
     private String accountNo;
 
+    @NotNull
+    private String accountName;
+
     private String name;
 
     private String branch;
+
+    private String bban;
+
+    private String iban;
+
+    private String description;
 
     private UUID uid;
 
@@ -40,7 +49,7 @@ public class CVendorBankAcctDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
     private String adOrganizationName;
-    
+
     public Long getId() {
         return id;
     }
@@ -57,6 +66,14 @@ public class CVendorBankAcctDTO extends AbstractAuditingDTO {
         this.accountNo = accountNo;
     }
 
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
     public String getName() {
         return name;
     }
@@ -71,6 +88,30 @@ public class CVendorBankAcctDTO extends AbstractAuditingDTO {
 
     public void setBranch(String branch) {
         this.branch = branch;
+    }
+
+    public String getBban() {
+        return bban;
+    }
+
+    public void setBban(String bban) {
+        this.bban = bban;
+    }
+
+    public String getIban() {
+        return iban;
+    }
+
+    public void setIban(String iban) {
+        this.iban = iban;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UUID getUid() {
@@ -129,7 +170,7 @@ public class CVendorBankAcctDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    
+
     public String getVendorName() {
         return vendorName;
     }
@@ -196,8 +237,12 @@ public class CVendorBankAcctDTO extends AbstractAuditingDTO {
         return "CVendorBankAcctDTO{" +
             "id=" + getId() +
             ", accountNo='" + getAccountNo() + "'" +
+            ", accountName='" + getAccountName() + "'" +
             ", name='" + getName() + "'" +
             ", branch='" + getBranch() + "'" +
+            ", bban='" + getBban() + "'" +
+            ", iban='" + getIban() + "'" +
+            ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", vendorId=" + getVendorId() +
