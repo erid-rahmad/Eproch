@@ -104,6 +104,15 @@ export default class CompanyProfile extends CompanyProps {
 
         this.company.sameAddress = this.sameAddress;
 
+        if(this.companyTaxLocation == this.company.location){
+          this.company.tin = "";
+        }else{
+          this.company.npwp = "";
+          this.company.npwpName = "";
+          this.company.file = "";
+          this.company.fileId = "";
+        }
+
         this.eventBus.$emit('step-validated', { passed, errors })
       })
     }
