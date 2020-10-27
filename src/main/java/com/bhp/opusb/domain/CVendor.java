@@ -39,8 +39,7 @@ public class CVendor extends AbstractAuditingEntity {
     @Column(name = "branch")
     private Boolean branch;
 
-    @NotNull
-    @Column(name = "email", nullable = false)
+    @Column(name = "email")
     private String email;
 
     @NotNull

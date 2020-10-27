@@ -136,4 +136,8 @@
         <dropNotNullConstraint tableName="c_vendor" columnName="tax_id_name" newDataType="varchar(70)" />
     </changeSet>
 
+    <changeSet id="20201028051700-update1" author="dian-tri-budianto">
+        <dropNotNullConstraint tableName="c_vendor" columnName="email" newDataType="varchar(50)" />
+    </changeSet>
+
 </databaseChangeLog>

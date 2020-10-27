@@ -21,7 +21,6 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
     private Boolean branch;
 
-    @NotNull
     private String email;
 
     @NotNull

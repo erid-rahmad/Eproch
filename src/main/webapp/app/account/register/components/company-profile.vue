@@ -358,14 +358,14 @@
             v-model="company.fax" />
         </el-form-item>
       </el-col>
-      <el-col :span="6">
+      <!--<el-col :span="6">
         <el-form-item :label="$t('register.basic.contact.email')" prop="email" required>
           <el-input
             class="form-input"
             clearable
             v-model="company.email" />
         </el-form-item>
-      </el-col>
+      </el-col>-->
       <el-col :span="6">
         <el-form-item :label="$t('register.basic.contact.website')" prop="website">
           <el-input

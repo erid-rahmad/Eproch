@@ -151,7 +151,7 @@ entity CVendor {
 	taxIdNo String
 	taxIdName String
 	branch Boolean
-	email String required
+	email String
 	phone String required
 	fax String
 	website String

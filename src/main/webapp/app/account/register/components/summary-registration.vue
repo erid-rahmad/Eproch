@@ -225,11 +225,11 @@
                                 <el-input class="form-input" v-model="company.fax" :disabled="true" />
                             </el-form-item>
                         </el-col>
-                        <el-col :span="6">
+                        <!--<el-col :span="6">
                             <el-form-item :label="$t('register.basic.contact.email')" prop="email" required>
                                 <el-input class="form-input" v-model="company.email" :disabled="true" />
                             </el-form-item>
-                        </el-col>
+                        </el-col>-->
                         <el-col :span="6">
                             <el-form-item :label="$t('register.basic.contact.website')" prop="website">
                                 <el-input class="form-input" v-model="company.website" :disabled="true" />
