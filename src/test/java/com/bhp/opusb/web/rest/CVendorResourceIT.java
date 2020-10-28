@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CAttachment;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.CVendorGroup;
 import com.bhp.opusb.repository.CVendorRepository;
 import com.bhp.opusb.service.CVendorService;
 import com.bhp.opusb.service.dto.CVendorDTO;
@@ -393,7 +394,7 @@ public class CVendorResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getCVendor() throws Exception {
@@ -1567,6 +1568,26 @@ public class CVendorResourceIT {
 
         // Get all the cVendorList where adOrganization equals to adOrganizationId + 1
         defaultCVendorShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByVendorGroupIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+        CVendorGroup vendorGroup = CVendorGroupResourceIT.createEntity(em);
+        em.persist(vendorGroup);
+        em.flush();
+        cVendor.setVendorGroup(vendorGroup);
+        cVendorRepository.saveAndFlush(cVendor);
+        Long vendorGroupId = vendorGroup.getId();
+
+        // Get all the cVendorList where vendorGroup equals to vendorGroupId
+        defaultCVendorShouldBeFound("vendorGroupId.equals=" + vendorGroupId);
+
+        // Get all the cVendorList where vendorGroup equals to vendorGroupId + 1
+        defaultCVendorShouldNotBeFound("vendorGroupId.equals=" + (vendorGroupId + 1));
     }
 
     /**

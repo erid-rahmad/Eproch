@@ -7,7 +7,7 @@
         Added the constraints for entity CVendor.
     -->
     <changeSet id="20200707051700-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="tax_id_file_id"
                                  baseTableName="c_vendor"
                                  constraintName="fk_c_vendor_tax_id_file_id"
@@ -19,6 +19,15 @@
                                  constraintName="fk_c_vendor_ad_organization_id"
                                  referencedColumnNames="id"
                                  referencedTableName="ad_organization"/>
+
+    </changeSet>
+    <changeSet id="20201028051700-added-foreignkey2" author="dian-tri-budianto">
+
+        <addForeignKeyConstraint baseColumnNames="vendor_group_id"
+                                 baseTableName="c_vendor"
+                                 constraintName="fk_c_vendor_vendor_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor_group"/>
 
     </changeSet>
 </databaseChangeLog>

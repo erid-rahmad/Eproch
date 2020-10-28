@@ -140,4 +140,12 @@
         <dropNotNullConstraint tableName="c_vendor" columnName="email" newDataType="varchar(50)" />
     </changeSet>
 
+    <changeSet id="20201028051700-added2" author="dian-tri-budianto">
+        <addColumn tableName="c_vendor">
+            <column name="vendor_group_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

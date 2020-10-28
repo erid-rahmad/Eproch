@@ -61,6 +61,8 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
+    private LongFilter vendorGroupId;
+
     public CVendorCriteria() {
     }
 
@@ -83,6 +85,7 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.taxIdFileId = other.taxIdFileId == null ? null : other.taxIdFileId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.vendorGroupId = other.vendorGroupId == null ? null : other.vendorGroupId.copy();
     }
 
     @Override
@@ -234,6 +237,14 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getVendorGroupId() {
+        return vendorGroupId;
+    }
+
+    public void setVendorGroupId(LongFilter vendorGroupId) {
+        this.vendorGroupId = vendorGroupId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -262,7 +273,8 @@ public class CVendorCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(taxIdFileId, that.taxIdFileId) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(vendorGroupId, that.vendorGroupId);
     }
 
     @Override
@@ -285,7 +297,8 @@ public class CVendorCriteria implements Serializable, Criteria {
         uid,
         active,
         taxIdFileId,
-        adOrganizationId
+        adOrganizationId,
+        vendorGroupId
         );
     }
 
@@ -310,6 +323,7 @@ public class CVendorCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (taxIdFileId != null ? "taxIdFileId=" + taxIdFileId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (vendorGroupId != null ? "vendorGroupId=" + vendorGroupId + ", " : "") +
             "}";
     }
 

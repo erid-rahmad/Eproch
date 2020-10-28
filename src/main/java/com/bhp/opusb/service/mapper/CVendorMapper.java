@@ -9,17 +9,20 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link CVendor} and its DTO {@link CVendorDTO}.
  */
-@Mapper(componentModel = "spring", uses = {CAttachmentMapper.class, ADOrganizationMapper.class})
+@Mapper(componentModel = "spring", uses = {CAttachmentMapper.class, ADOrganizationMapper.class, CVendorGroupMapper.class})
 public interface CVendorMapper extends EntityMapper<CVendorDTO, CVendor> {
 
     @Mapping(source = "taxIdFile.id", target = "taxIdFileId")
     @Mapping(source = "taxIdFile.fileName", target = "taxIdFileName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
+    @Mapping(source = "vendorGroup.id", target = "vendorGroupId")
+    @Mapping(source = "vendorGroup.name", target = "vendorGroupName")
     CVendorDTO toDto(CVendor cVendor);
 
     @Mapping(source = "taxIdFileId", target = "taxIdFile")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
+    @Mapping(source = "vendorGroupId", target = "vendorGroup")
     CVendor toEntity(CVendorDTO cVendorDTO);
 
     default CVendor fromId(Long id) {

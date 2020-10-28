@@ -96,6 +96,13 @@
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendorGroup",
+            "otherEntityRelationshipName": "cVendor",
+            "relationshipName": "vendorGroup",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20200707051700",

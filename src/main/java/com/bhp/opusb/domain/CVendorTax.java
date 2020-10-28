@@ -19,6 +19,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.math.BigDecimal;
+import java.util.UUID;
+
 /**
  * A CVendorTax.
  */
@@ -57,7 +65,7 @@ public class CVendorTax extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("cVendorTaxes")
-    private CTax tax;
+    private CTaxCategory taxCategory;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -151,17 +159,17 @@ public class CVendorTax extends AbstractAuditingEntity {
         this.vendor = cVendor;
     }
 
-    public CTax getTax() {
-        return tax;
+    public CTaxCategory getTaxCategory() {
+        return taxCategory;
     }
 
-    public CVendorTax tax(CTax cTax) {
-        this.tax = cTax;
+    public CVendorTax taxCategory(CTaxCategory cTaxCategory) {
+        this.taxCategory = cTaxCategory;
         return this;
     }
 
-    public void setTax(CTax cTax) {
-        this.tax = cTax;
+    public void setTaxCategory(CTaxCategory cTaxCategory) {
+        this.taxCategory = cTaxCategory;
     }
 
     public ADOrganization getAdOrganization() {

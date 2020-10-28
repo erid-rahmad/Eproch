@@ -35,7 +35,7 @@ export default class TaxInformationUpdate extends TaxInformationUpdateProps {
   }
 
   private retrieveTax() {
-    this.dynamicWindowService('/api/c-taxes')
+    this.dynamicWindowService('/api/c-tax-categories')
       .retrieve()
       .then(res => {
         this.taxes = res.data;

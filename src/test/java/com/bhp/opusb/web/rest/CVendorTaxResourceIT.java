@@ -3,7 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CVendorTax;
 import com.bhp.opusb.domain.CVendor;
-import com.bhp.opusb.domain.CTax;
+import com.bhp.opusb.domain.CTaxCategory;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.CVendorTaxRepository;
 import com.bhp.opusb.service.CVendorTaxService;
@@ -100,15 +100,15 @@ public class CVendorTaxResourceIT {
         }
         cVendorTax.setVendor(cVendor);
         // Add required entity
-        CTax cTax;
-        if (TestUtil.findAll(em, CTax.class).isEmpty()) {
-            cTax = CTaxResourceIT.createEntity(em);
-            em.persist(cTax);
+        CTaxCategory cTaxCategory;
+        if (TestUtil.findAll(em, CTaxCategory.class).isEmpty()) {
+            cTaxCategory = CTaxCategoryResourceIT.createEntity(em);
+            em.persist(cTaxCategory);
             em.flush();
         } else {
-            cTax = TestUtil.findAll(em, CTax.class).get(0);
+            cTaxCategory = TestUtil.findAll(em, CTaxCategory.class).get(0);
         }
-        cVendorTax.setTax(cTax);
+        cVendorTax.setTaxCategory(cTaxCategory);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -145,15 +145,15 @@ public class CVendorTaxResourceIT {
         }
         cVendorTax.setVendor(cVendor);
         // Add required entity
-        CTax cTax;
-        if (TestUtil.findAll(em, CTax.class).isEmpty()) {
-            cTax = CTaxResourceIT.createUpdatedEntity(em);
-            em.persist(cTax);
+        CTaxCategory cTaxCategory;
+        if (TestUtil.findAll(em, CTaxCategory.class).isEmpty()) {
+            cTaxCategory = CTaxCategoryResourceIT.createUpdatedEntity(em);
+            em.persist(cTaxCategory);
             em.flush();
         } else {
-            cTax = TestUtil.findAll(em, CTax.class).get(0);
+            cTaxCategory = TestUtil.findAll(em, CTaxCategory.class).get(0);
         }
-        cVendorTax.setTax(cTax);
+        cVendorTax.setTaxCategory(cTaxCategory);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -233,7 +233,7 @@ public class CVendorTaxResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getCVendorTax() throws Exception {
@@ -603,17 +603,17 @@ public class CVendorTaxResourceIT {
 
     @Test
     @Transactional
-    public void getAllCVendorTaxesByTaxIsEqualToSomething() throws Exception {
+    public void getAllCVendorTaxesByTaxCategoryIsEqualToSomething() throws Exception {
         // Get already existing entity
-        CTax tax = cVendorTax.getTax();
+        CTaxCategory taxCategory = cVendorTax.getTaxCategory();
         cVendorTaxRepository.saveAndFlush(cVendorTax);
-        Long taxId = tax.getId();
+        Long taxCategoryId = taxCategory.getId();
 
-        // Get all the cVendorTaxList where tax equals to taxId
-        defaultCVendorTaxShouldBeFound("taxId.equals=" + taxId);
+        // Get all the cVendorTaxList where taxCategory equals to taxCategoryId
+        defaultCVendorTaxShouldBeFound("taxCategoryId.equals=" + taxCategoryId);
 
-        // Get all the cVendorTaxList where tax equals to taxId + 1
-        defaultCVendorTaxShouldNotBeFound("taxId.equals=" + (taxId + 1));
+        // Get all the cVendorTaxList where taxCategory equals to taxCategoryId + 1
+        defaultCVendorTaxShouldNotBeFound("taxCategoryId.equals=" + (taxCategoryId + 1));
     }
 
 

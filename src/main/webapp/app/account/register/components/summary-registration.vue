@@ -493,15 +493,21 @@
                             fixed
                             min-width="128"
                             prop="name"
-                            :label="$t('register.tax.taxRateName')"/>
+                            :label="$t('register.tax.taxCategoryName')"/>
                         <el-table-column
-                            prop="transactionType"
+                            prop="description"
                             min-width="128"
-                            :label="$t('register.tax.transactionType')"/>
+                            :label="$t('register.tax.description')"/>
                         <el-table-column
-                            prop="rate"
                             min-width="128"
-                            :label="$t('register.tax.rate')"/>
+                            :label="$t('register.tax.isWithholding')">
+                            <template slot-scope="props">
+                                <el-checkbox
+                                    v-model="props.row.isWithholding"
+                                    disabled
+                                />
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </div>
             </el-collapse-item>

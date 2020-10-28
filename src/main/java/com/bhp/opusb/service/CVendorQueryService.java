@@ -144,6 +144,10 @@ public class CVendorQueryService extends QueryService<CVendor> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(CVendor_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getVendorGroupId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorGroupId(),
+                    root -> root.join(CVendor_.vendorGroup, JoinType.LEFT).get(CVendorGroup_.id)));
+            }
         }
         return specification;
     }

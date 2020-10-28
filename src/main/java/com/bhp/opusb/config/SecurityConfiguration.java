@@ -94,6 +94,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/api/c-banks",
                 "/api/c-currencies",
                 "/api/c-taxes",
+                "/api/c-tax-categories",
                 "/api/users/registration-check",
                 "/api/attachments/download/**",
                 "/api/ad-references",

@@ -48,7 +48,7 @@
                     {{ $t('entity.action.add') }}
                 </el-button>
             </div>
-            
+
             <el-table
                 max-height="250"
                 style="width: 100%"
@@ -58,25 +58,31 @@
                     fixed
                     min-width="128"
                     prop="name"
-                    :label="$t('register.tax.taxRateName')"
+                    :label="$t('register.tax.taxCategoryName')"
                 />
                 <el-table-column
-                    prop="transactionType"
+                    prop="description"
                     min-width="128"
-                    :label="$t('register.tax.transactionType')"
+                    :label="$t('register.tax.description')"
                 />
                 <el-table-column
-                    prop="rate"
                     min-width="128"
-                    :label="$t('register.tax.rate')"
-                />
+                    :label="$t('register.tax.isWithholding')"
+                >
+                    <template slot-scope="props">
+                        <el-checkbox
+                            v-model="props.row.isWithholding"
+                            disabled
+                        />
+                    </template>
+                </el-table-column>
                 <el-table-column
                     fixed="right"
                     align="center"
                     :label="$t('register.form.operation')"
                     width="128"
                 >
-                    
+
                     <template slot-scope="scope">
                         <el-button
                             v-loading="applying"
@@ -93,7 +99,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        
+
         <el-dialog
             :title="$t('register.form.tax[\'title.edit\']')"
             :visible.sync="editDialogVisible"
@@ -109,7 +115,7 @@
         </el-dialog>
 
     </div>
-    
+
 </template>
 <script lang="ts" src="./tax-information.component.ts"></script>
 

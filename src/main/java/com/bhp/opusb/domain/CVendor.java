@@ -30,6 +30,17 @@ public class CVendor extends AbstractAuditingEntity {
     @Column(name = "name", nullable = false)
     private String name;
 
+    @NotNull
+    @Column(name = "type", nullable = false)
+    private String type;
+
+    @NotNull
+    @Column(name = "location", nullable = false)
+    private String location;
+
+    @Column(name = "tin")
+    private String tin;
+
     @Column(name = "tax_id_no")
     private String taxIdNo;
 
@@ -51,18 +62,6 @@ public class CVendor extends AbstractAuditingEntity {
 
     @Column(name = "website")
     private String website;
-
-    @NotNull
-    @Column(name = "type", nullable = false)
-    private String type;
-
-    @NotNull
-    @Column(name = "location", nullable = false)
-    private String location;
-
-    @Column(name = "tin")
-    private String tin;
-
 
     @NotNull
     @Column(name = "payment_category", nullable = false)
@@ -87,6 +86,10 @@ public class CVendor extends AbstractAuditingEntity {
     @JsonIgnoreProperties("cVendors")
     private ADOrganization adOrganization;
 
+    @ManyToOne
+    @JsonIgnoreProperties("cVendors")
+    private CVendorGroup vendorGroup;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -107,6 +110,45 @@ public class CVendor extends AbstractAuditingEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public CVendor type(String type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public CVendor location(String location) {
+        this.location = location;
+        return this;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getTin() {
+        return tin;
+    }
+
+    public CVendor tin(String tin) {
+        this.tin = tin;
+        return this;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
     }
 
     public String getTaxIdNo() {
@@ -200,45 +242,6 @@ public class CVendor extends AbstractAuditingEntity {
         this.website = website;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public CVendor type(String type) {
-        this.type = type;
-        return this;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public CVendor location(String location) {
-        this.location = location;
-        return this;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getTin() {
-        return tin;
-    }
-
-    public CVendor tin(String tin) {
-        this.tin = tin;
-        return this;
-    }
-
-    public void setTin(String tin) {
-        this.tin = tin;
-    }
-
     public String getPaymentCategory() {
         return paymentCategory;
     }
@@ -316,6 +319,19 @@ public class CVendor extends AbstractAuditingEntity {
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
     }
+
+    public CVendorGroup getVendorGroup() {
+        return vendorGroup;
+    }
+
+    public CVendor vendorGroup(CVendorGroup cVendorGroup) {
+        this.vendorGroup = cVendorGroup;
+        return this;
+    }
+
+    public void setVendorGroup(CVendorGroup cVendorGroup) {
+        this.vendorGroup = cVendorGroup;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
@@ -344,6 +360,9 @@ public class CVendor extends AbstractAuditingEntity {
         return "CVendor{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", type='" + getType() + "'" +
+            ", location='" + getLocation() + "'" +
+            ", tin='" + getTin() + "'" +
             ", taxIdNo='" + getTaxIdNo() + "'" +
             ", taxIdName='" + getTaxIdName() + "'" +
             ", branch='" + isBranch() + "'" +
@@ -351,9 +370,6 @@ public class CVendor extends AbstractAuditingEntity {
             ", phone='" + getPhone() + "'" +
             ", fax='" + getFax() + "'" +
             ", website='" + getWebsite() + "'" +
-            ", type='" + getType() + "'" +
-            ", location='" + getLocation() + "'" +
-            ", tin='" + getTin() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
             ", approvalStatus='" + getApprovalStatus() + "'" +
             ", uid='" + getUid() + "'" +

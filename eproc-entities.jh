@@ -200,6 +200,15 @@ entity CVendorTax {
 	active Boolean
 }
 
+entity CVendorGroup {
+	code String required
+	name String required
+	description String
+    isDefault Boolean
+	uid UUID
+	active Boolean
+}
+
 /**
  * The UoM entity.
  */
@@ -532,7 +541,7 @@ relationship ManyToOne {
 	CVendorBankAcct{adOrganization required} to ADOrganization
 
 	CVendorTax{vendor required} to CVendor
-	CVendorTax{tax required} to CTax
+	CVendorTax{taxCategory required} to CTaxCategory
 	CVendorTax{adOrganization required} to ADOrganization
 
 	CUnitOfMeasure{adOrganization required} to ADOrganization
@@ -591,6 +600,9 @@ relationship ManyToOne {
 	MVerificationLine{adOrganization required} to ADOrganization
 	MVerificationLine{product required} to CProduct
 	MVerificationLine{uom required} to CUnitOfMeasure
+
+    CVendorGroup{adOrganization required} to ADOrganization
+    CVendor{vendorGroup} to CVendorGroup
 }
 
 // Allow filtering to all entities.

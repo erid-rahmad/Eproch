@@ -15,6 +15,14 @@ public class CVendorDTO extends AbstractAuditingDTO {
     @NotNull
     private String name;
 
+    @NotNull
+    private String type;
+
+    @NotNull
+    private String location;
+
+    private String tin;
+
     private String taxIdNo;
 
     private String taxIdName;
@@ -29,14 +37,6 @@ public class CVendorDTO extends AbstractAuditingDTO {
     private String fax;
 
     private String website;
-
-    @NotNull
-    private String type;
-
-    @NotNull
-    private String location;
-
-    private String tin;
 
     @NotNull
     private String paymentCategory;
@@ -55,6 +55,9 @@ public class CVendorDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    private Long vendorGroupId;
+    private String vendorGroupName;
+
     public Long getId() {
         return id;
     }
@@ -69,6 +72,30 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getTin() {
+        return tin;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
     }
 
     public String getTaxIdNo() {
@@ -125,30 +152,6 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
     public void setWebsite(String website) {
         this.website = website;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getTin() {
-        return tin;
-    }
-
-    public void setTin(String tin) {
-        this.tin = tin;
     }
 
     public String getPaymentCategory() {
@@ -215,6 +218,22 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public Long getVendorGroupId() {
+        return vendorGroupId;
+    }
+
+    public void setVendorGroupId(Long cVendorGroupId) {
+        this.vendorGroupId = cVendorGroupId;
+    }
+
+    public String getVendorGroupName() {
+        return vendorGroupName;
+    }
+
+    public void setVendorGroupName(String vendorGroupName) {
+        this.vendorGroupName = vendorGroupName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -241,6 +260,9 @@ public class CVendorDTO extends AbstractAuditingDTO {
         return "CVendorDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", type='" + getType() + "'" +
+            ", location='" + getLocation() + "'" +
+            ", tin='" + getTin() + "'" +
             ", taxIdNo='" + getTaxIdNo() + "'" +
             ", taxIdName='" + getTaxIdName() + "'" +
             ", branch='" + isBranch() + "'" +
@@ -248,9 +270,6 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", phone='" + getPhone() + "'" +
             ", fax='" + getFax() + "'" +
             ", website='" + getWebsite() + "'" +
-            ", type='" + getType() + "'" +
-            ", location='" + getLocation() + "'" +
-            ", tin='" + getTin() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
             ", approvalStatus='" + getApprovalStatus() + "'" +
             ", uid='" + getUid() + "'" +
@@ -259,6 +278,8 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", taxIdFileName='" + getTaxIdFileName() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName='" + getAdOrganizationName() + "'" +
+            ", vendorGroupId=" + getVendorGroupId() +
+            ", vendorGroupName='" + getVendorGroupName() + "'" +
             "}";
     }
 }

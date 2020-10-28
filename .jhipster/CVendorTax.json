@@ -33,10 +33,10 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cTax",
+            "otherEntityName": "cTaxCategory",
             "otherEntityRelationshipName": "cVendorTax",
             "relationshipValidateRules": "required",
-            "relationshipName": "tax",
+            "relationshipName": "taxCategory",
             "otherEntityField": "id"
         },
         {

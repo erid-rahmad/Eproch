@@ -8,7 +8,7 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.CVendorTax} entity.
  */
 public class CVendorTaxDTO extends AbstractAuditingDTO {
-    
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -26,12 +26,12 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
     private Long vendorId;
     private String vendorName;
 
-    private Long taxId;
-    private String taxName;
+    private Long taxCategoryId;
+    private String taxCategoryName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
-    
+
     public Long getId() {
         return id;
     }
@@ -96,20 +96,20 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
         this.vendorName = vendorName;
     }
 
-    public Long getTaxId() {
-        return taxId;
+    public Long getTaxCategoryId() {
+        return taxCategoryId;
     }
 
-    public void setTaxId(Long cTaxId) {
-        this.taxId = cTaxId;
+    public void setTaxCategoryId(Long cTaxCategoryId) {
+        this.taxCategoryId = cTaxCategoryId;
     }
 
-    public String getTaxName() {
-        return taxName;
+    public String getTaxCategoryName() {
+        return taxCategoryName;
     }
 
-    public void setTaxName(String taxName) {
-        this.taxName = taxName;
+    public void setTaxCategoryName(String taxCategoryName) {
+        this.taxCategoryName = taxCategoryName;
     }
 
     public Long getAdOrganizationId() {
@@ -159,7 +159,9 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", vendorId=" + getVendorId() +
-            ", taxId=" + getTaxId() +
+            ", vendorName=" + getVendorName() +
+            ", taxCategoryId=" + getTaxCategoryId() +
+            ", taxCategoryName=" + getTaxCategoryName() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName=" + getAdOrganizationName() +
             "}";
