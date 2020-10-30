@@ -79,7 +79,7 @@
                                 </el-col>
                             </el-row>
 
-                            <el-row :gutter="columnSpacing">
+                            <!--<el-row :gutter="columnSpacing">
                                 <el-col :span="24">
                                     <el-form-item required>
                                         <el-switch
@@ -90,7 +90,7 @@
                                         />
                                     </el-form-item>
                                 </el-col>
-                            </el-row>
+                            </el-row>-->
                         </el-col>
                         <el-col v-if="npwp" :span="12">
                             <el-form-item :label="$t('register.basic.basic.npwp')" prop="npwp" required>

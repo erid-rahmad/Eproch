@@ -81,7 +81,7 @@ export default class TaxInformation extends TaxInformationProps {
         taxes.forEach((tax: any) => {
                 tax.eInvoice = this.eInvoice;
                 tax.taxableEmployers = this.taxableEmployers;
-                tax.taxId = tax.id;
+                tax.taxCategoryId = tax.id;
             });
 
         await registrationStore.setTaxes(taxes);

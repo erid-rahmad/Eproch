@@ -61,7 +61,7 @@
                 </el-col>
             </el-row>
 
-            <el-row :gutter="columnSpacing">
+            <!--<el-row :gutter="columnSpacing">
                 <el-col :span="24">
                     <el-form-item required>
                         <el-switch
@@ -71,7 +71,7 @@
                         />
                     </el-form-item>
                 </el-col>
-            </el-row>
+            </el-row>-->
         </el-col>
 
         <div v-if="tax">

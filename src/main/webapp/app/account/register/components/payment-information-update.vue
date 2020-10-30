@@ -31,8 +31,7 @@
             <el-col :span="12">
                 <el-form-item
                     :label="$t('register.payment.branch')"
-                    prop="branch"
-                    required>
+                    prop="branch">
                     <el-input clearable v-model="pay.branch" />
                 </el-form-item>
             </el-col>
