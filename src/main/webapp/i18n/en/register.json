@@ -18,6 +18,7 @@
         "npwp": "NPWP",
         "npwpName": "NPWP Name",
         "npwpFile": "NPWP File",
+        "idNo": "ID No.",
         "tin": "TIN",
         "taxInformationNumber": "Tax Information Number",
         "type": "Type",

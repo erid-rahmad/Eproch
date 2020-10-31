@@ -74,57 +74,71 @@
             </el-row>-->
         </el-col>
 
-        <div v-if="tax">
-            <el-col v-if="npwp" :span="12">
-                <el-form-item :label="$t('register.basic.basic.npwp')" prop="npwp" required>
+
+        <el-col :span="12">
+            <div v-if="professional">
+                <el-form-item :label="$t('register.basic.basic.idNo')" prop="idNo" required>
                     <el-input
                         class="form-input"
                         clearable
-                        v-model="company.npwp"
-                        v-inputmask
-                        data-inputmask="'mask': '99.999.999.9-999.999'"
-                        placeholder="__.___.___._-___.___"
-                        />
+                        v-model="company.idNo" />
                 </el-form-item>
-                <el-form-item :label="$t('register.basic.basic.npwpName')" prop="npwpName" required>
-                    <el-input
-                        class="form-input"
-                        clearable
-                        v-model="company.npwpName" />
-                </el-form-item>
-                <el-form-item
-                :label="$t('register.basic.basic.npwpFile')"
-                prop="file"
-                required>
-                    <el-upload
-                        ref="upload"
-                        v-model="company.file"
-                        :action="action"
-                        :accept="accept"
-                        :file-list="fileList"
-                        :limit="limit"
-                        :before-upload="handleBeforeUpload"
-                        :on-change="onUploadChange"
-                        :on-exceed="handleExceed"
-                        :on-remove="handleRemove"
-                        :on-error="onUploadError"
-                        :on-success="onUploadSuccess">
-                        <el-button slot="trigger" type="primary" icon="el-icon-search">select file</el-button>
-                        <span style="margin-left: 10px;" class="el-upload__tip" slot="tip">files with a size less than 5Mb</span>
-                    </el-upload>
-                </el-form-item>
-            </el-col>
-            <el-col v-else :span="12">
-                <el-tooltip class="item" effect="dark" :content="$t('register.basic.basic.taxInformationNumber')" placement="top">
-                    <el-form-item :label="$t('register.basic.basic.tin')" prop="tin" required>
+            </div>
+            <div v-if="tax">
+                <div v-if="npwp">
+                    <el-form-item :label="$t('register.basic.basic.npwp')" prop="npwp" required>
                         <el-input
                             class="form-input"
                             clearable
-                            v-model="company.tin" />
+                            v-model="company.npwp"
+                            v-inputmask
+                            data-inputmask="'mask': '99.999.999.9-999.999'"
+                            placeholder="__.___.___._-___.___"
+                            />
                     </el-form-item>
-                </el-tooltip>
-            </el-col>
-        </div>
+                    <el-form-item :label="$t('register.basic.basic.npwpName')" prop="npwpName" required>
+                        <el-input
+                            class="form-input"
+                            clearable
+                            v-model="company.npwpName" />
+                    </el-form-item>
+                    <el-form-item
+                        :label="$t('register.basic.basic.npwpFile')"
+                        prop="file"
+                        required>
+                            <el-upload
+                                ref="upload"
+                                v-model="company.file"
+                                :action="action"
+                                :accept="accept"
+                                :file-list="fileList"
+                                :limit="limit"
+                                :before-upload="handleBeforeUpload"
+                                :on-change="onUploadChange"
+                                :on-exceed="handleExceed"
+                                :on-remove="handleRemove"
+                                :on-error="onUploadError"
+                                :on-success="onUploadSuccess">
+                                <el-button slot="trigger" type="primary" icon="el-icon-search">select file</el-button>
+                                <span style="margin-left: 10px;" class="el-upload__tip" slot="tip">files with a size less than 5Mb</span>
+                            </el-upload>
+                    </el-form-item>
+                </div>
+                <div v-else>
+                    <el-tooltip class="item" effect="dark" :content="$t('register.basic.basic.taxInformationNumber')" placement="bottom">
+                        <el-form-item :label="$t('register.basic.basic.tin')" prop="tin" required>
+                            <el-input
+                                class="form-input"
+                                clearable
+                                v-model="company.tin" />
+                        </el-form-item>
+                    </el-tooltip>
+                </div>
+            </div>
+
+        </el-col>
+
+
 
     </el-row>
 

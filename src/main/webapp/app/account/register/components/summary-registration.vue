@@ -92,29 +92,40 @@
                                 </el-col>
                             </el-row>-->
                         </el-col>
-                        <el-col v-if="npwp" :span="12">
-                            <el-form-item :label="$t('register.basic.basic.npwp')" prop="npwp" required>
-                                <el-input
-                                    class="form-input"
-                                    v-model="company.npwp"
-                                    :disabled="true"
-                                    v-inputmask
-                                    data-inputmask="'mask': '99.999.999.9-999.999'"
-                                    placeholder="__.___.___._-___.___" />
-                            </el-form-item>
-                            <el-form-item :label="$t('register.basic.basic.npwpName')" prop="npwpName" required>
-                                <el-input class="form-input" v-model="company.npwpName" :disabled="true" />
-                            </el-form-item>
-                            <el-form-item :label="$t('register.basic.basic.npwpFile')" prop="file">
-                                <span v-if="company.file">{{ company.file.name }}</span>
-                            </el-form-item>
-                        </el-col>
-                        <el-col v-else :span="12">
-                            <el-tooltip class="item" effect="dark" :content="$t('register.basic.basic.taxInformationNumber')" placement="top">
-                                <el-form-item :label="$t('register.basic.basic.tin')" prop="tin" required>
-                                    <el-input class="form-input" v-model="company.tin" :disabled="true" />
+                        <el-col :span="12">
+                            <div v-if="professional" >
+                                <el-form-item :label="$t('register.basic.basic.idNo')" prop="idNo" required>
+                                    <el-input
+                                        class="form-input"
+                                        v-model="company.idNo"
+                                        :disabled="true" />
                                 </el-form-item>
-                            </el-tooltip>
+                            </div>
+
+                            <div v-if="npwp">
+                                <el-form-item :label="$t('register.basic.basic.npwp')" prop="npwp" required>
+                                    <el-input
+                                        class="form-input"
+                                        v-model="company.npwp"
+                                        :disabled="true"
+                                        v-inputmask
+                                        data-inputmask="'mask': '99.999.999.9-999.999'"
+                                        placeholder="__.___.___._-___.___" />
+                                </el-form-item>
+                                <el-form-item :label="$t('register.basic.basic.npwpName')" prop="npwpName" required>
+                                    <el-input class="form-input" v-model="company.npwpName" :disabled="true" />
+                                </el-form-item>
+                                <el-form-item :label="$t('register.basic.basic.npwpFile')" prop="file">
+                                    <span v-if="company.file">{{ company.file.name }}</span>
+                                </el-form-item>
+                            </div>
+                            <div v-else>
+                                <el-tooltip class="item" effect="dark" :content="$t('register.basic.basic.taxInformationNumber')" placement="top">
+                                    <el-form-item :label="$t('register.basic.basic.tin')" prop="tin" required>
+                                        <el-input class="form-input" v-model="company.tin" :disabled="true" />
+                                    </el-form-item>
+                                </el-tooltip>
+                            </div>
                         </el-col>
                     </el-row>
 

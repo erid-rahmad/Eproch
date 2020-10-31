@@ -21,6 +21,8 @@ public class CVendorDTO extends AbstractAuditingDTO {
     @NotNull
     private String location;
 
+    private String idNo;
+
     private String tin;
 
     private String taxIdNo;
@@ -88,6 +90,14 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
     }
 
     public String getTin() {
@@ -262,6 +272,7 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", name='" + getName() + "'" +
             ", type='" + getType() + "'" +
             ", location='" + getLocation() + "'" +
+            ", idNo='" + getIdNo() + "'" +
             ", tin='" + getTin() + "'" +
             ", taxIdNo='" + getTaxIdNo() + "'" +
             ", taxIdName='" + getTaxIdName() + "'" +

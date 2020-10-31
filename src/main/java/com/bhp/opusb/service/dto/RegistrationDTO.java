@@ -92,6 +92,7 @@ public class RegistrationDTO {
         private String name;
         private String type;
         private String location;
+        private String idNo;
         private String tin;
         private Boolean branch;
         private Boolean sameAddress;
@@ -131,6 +132,14 @@ public class RegistrationDTO {
 
         public void setLocation(String location) {
             this.location = location;
+        }
+
+        public String getIdNo() {
+            return idNo;
+        }
+
+        public void setIdNo(String idNo) {
+            this.idNo = idNo;
         }
 
         public String getTin() {

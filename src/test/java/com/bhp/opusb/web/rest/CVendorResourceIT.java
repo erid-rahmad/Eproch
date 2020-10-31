@@ -48,6 +48,9 @@ public class CVendorResourceIT {
     private static final String DEFAULT_LOCATION = "AAAAAAAAAA";
     private static final String UPDATED_LOCATION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_ID_NO = "AAAAAAAAAA";
+    private static final String UPDATED_ID_NO = "BBBBBBBBBB";
+
     private static final String DEFAULT_TIN = "AAAAAAAAAA";
     private static final String UPDATED_TIN = "BBBBBBBBBB";
 
@@ -115,6 +118,7 @@ public class CVendorResourceIT {
             .name(DEFAULT_NAME)
             .type(DEFAULT_TYPE)
             .location(DEFAULT_LOCATION)
+            .idNo(DEFAULT_ID_NO)
             .tin(DEFAULT_TIN)
             .taxIdNo(DEFAULT_TAX_ID_NO)
             .taxIdName(DEFAULT_TAX_ID_NAME)
@@ -150,6 +154,7 @@ public class CVendorResourceIT {
             .name(UPDATED_NAME)
             .type(UPDATED_TYPE)
             .location(UPDATED_LOCATION)
+            .idNo(UPDATED_ID_NO)
             .tin(UPDATED_TIN)
             .taxIdNo(UPDATED_TAX_ID_NO)
             .taxIdName(UPDATED_TAX_ID_NAME)
@@ -199,6 +204,7 @@ public class CVendorResourceIT {
         assertThat(testCVendor.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCVendor.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testCVendor.getLocation()).isEqualTo(DEFAULT_LOCATION);
+        assertThat(testCVendor.getIdNo()).isEqualTo(DEFAULT_ID_NO);
         assertThat(testCVendor.getTin()).isEqualTo(DEFAULT_TIN);
         assertThat(testCVendor.getTaxIdNo()).isEqualTo(DEFAULT_TAX_ID_NO);
         assertThat(testCVendor.getTaxIdName()).isEqualTo(DEFAULT_TAX_ID_NAME);
@@ -381,6 +387,7 @@ public class CVendorResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION)))
+            .andExpect(jsonPath("$.[*].idNo").value(hasItem(DEFAULT_ID_NO)))
             .andExpect(jsonPath("$.[*].tin").value(hasItem(DEFAULT_TIN)))
             .andExpect(jsonPath("$.[*].taxIdNo").value(hasItem(DEFAULT_TAX_ID_NO)))
             .andExpect(jsonPath("$.[*].taxIdName").value(hasItem(DEFAULT_TAX_ID_NAME)))
@@ -409,6 +416,7 @@ public class CVendorResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.location").value(DEFAULT_LOCATION))
+            .andExpect(jsonPath("$.idNo").value(DEFAULT_ID_NO))
             .andExpect(jsonPath("$.tin").value(DEFAULT_TIN))
             .andExpect(jsonPath("$.taxIdNo").value(DEFAULT_TAX_ID_NO))
             .andExpect(jsonPath("$.taxIdName").value(DEFAULT_TAX_ID_NAME))
@@ -674,6 +682,84 @@ public class CVendorResourceIT {
 
         // Get all the cVendorList where location does not contain UPDATED_LOCATION
         defaultCVendorShouldBeFound("location.doesNotContain=" + UPDATED_LOCATION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByIdNoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where idNo equals to DEFAULT_ID_NO
+        defaultCVendorShouldBeFound("idNo.equals=" + DEFAULT_ID_NO);
+
+        // Get all the cVendorList where idNo equals to UPDATED_ID_NO
+        defaultCVendorShouldNotBeFound("idNo.equals=" + UPDATED_ID_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByIdNoIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where idNo not equals to DEFAULT_ID_NO
+        defaultCVendorShouldNotBeFound("idNo.notEquals=" + DEFAULT_ID_NO);
+
+        // Get all the cVendorList where idNo not equals to UPDATED_ID_NO
+        defaultCVendorShouldBeFound("idNo.notEquals=" + UPDATED_ID_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByIdNoIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where idNo in DEFAULT_ID_NO or UPDATED_ID_NO
+        defaultCVendorShouldBeFound("idNo.in=" + DEFAULT_ID_NO + "," + UPDATED_ID_NO);
+
+        // Get all the cVendorList where idNo equals to UPDATED_ID_NO
+        defaultCVendorShouldNotBeFound("idNo.in=" + UPDATED_ID_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByIdNoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where idNo is not null
+        defaultCVendorShouldBeFound("idNo.specified=true");
+
+        // Get all the cVendorList where idNo is null
+        defaultCVendorShouldNotBeFound("idNo.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCVendorsByIdNoContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where idNo contains DEFAULT_ID_NO
+        defaultCVendorShouldBeFound("idNo.contains=" + DEFAULT_ID_NO);
+
+        // Get all the cVendorList where idNo contains UPDATED_ID_NO
+        defaultCVendorShouldNotBeFound("idNo.contains=" + UPDATED_ID_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByIdNoNotContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where idNo does not contain DEFAULT_ID_NO
+        defaultCVendorShouldNotBeFound("idNo.doesNotContain=" + DEFAULT_ID_NO);
+
+        // Get all the cVendorList where idNo does not contain UPDATED_ID_NO
+        defaultCVendorShouldBeFound("idNo.doesNotContain=" + UPDATED_ID_NO);
     }
 
 
@@ -1601,6 +1687,7 @@ public class CVendorResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION)))
+            .andExpect(jsonPath("$.[*].idNo").value(hasItem(DEFAULT_ID_NO)))
             .andExpect(jsonPath("$.[*].tin").value(hasItem(DEFAULT_TIN)))
             .andExpect(jsonPath("$.[*].taxIdNo").value(hasItem(DEFAULT_TAX_ID_NO)))
             .andExpect(jsonPath("$.[*].taxIdName").value(hasItem(DEFAULT_TAX_ID_NAME)))
@@ -1663,6 +1750,7 @@ public class CVendorResourceIT {
             .name(UPDATED_NAME)
             .type(UPDATED_TYPE)
             .location(UPDATED_LOCATION)
+            .idNo(UPDATED_ID_NO)
             .tin(UPDATED_TIN)
             .taxIdNo(UPDATED_TAX_ID_NO)
             .taxIdName(UPDATED_TAX_ID_NAME)
@@ -1689,6 +1777,7 @@ public class CVendorResourceIT {
         assertThat(testCVendor.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCVendor.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testCVendor.getLocation()).isEqualTo(UPDATED_LOCATION);
+        assertThat(testCVendor.getIdNo()).isEqualTo(UPDATED_ID_NO);
         assertThat(testCVendor.getTin()).isEqualTo(UPDATED_TIN);
         assertThat(testCVendor.getTaxIdNo()).isEqualTo(UPDATED_TAX_ID_NO);
         assertThat(testCVendor.getTaxIdName()).isEqualTo(UPDATED_TAX_ID_NAME);

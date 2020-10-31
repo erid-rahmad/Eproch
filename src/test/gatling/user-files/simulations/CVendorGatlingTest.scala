@@ -75,6 +75,7 @@ class CVendorGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "type":"SAMPLE_TEXT"
                 , "location":"SAMPLE_TEXT"
+                , "idNo":"SAMPLE_TEXT"
                 , "tin":"SAMPLE_TEXT"
                 , "taxIdNo":"SAMPLE_TEXT"
                 , "taxIdName":"SAMPLE_TEXT"

@@ -35,6 +35,7 @@ public class RegistrationMapper {
       .phone(companyProfile.getPhone())
       .type(companyProfile.getType())
       .location(companyProfile.getLocation())
+      .idNo(companyProfile.getIdNo())
       .tin(companyProfile.getTin())
       .website(companyProfile.getWebsite())
       .taxIdName(companyProfile.getNpwpName())

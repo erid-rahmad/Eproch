@@ -33,6 +33,8 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     private StringFilter location;
 
+    private StringFilter idNo;
+
     private StringFilter tin;
 
     private StringFilter taxIdNo;
@@ -71,6 +73,7 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.type = other.type == null ? null : other.type.copy();
         this.location = other.location == null ? null : other.location.copy();
+        this.idNo = other.idNo == null ? null : other.idNo.copy();
         this.tin = other.tin == null ? null : other.tin.copy();
         this.taxIdNo = other.taxIdNo == null ? null : other.taxIdNo.copy();
         this.taxIdName = other.taxIdName == null ? null : other.taxIdName.copy();
@@ -123,6 +126,14 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     public void setLocation(StringFilter location) {
         this.location = location;
+    }
+
+    public StringFilter getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(StringFilter idNo) {
+        this.idNo = idNo;
     }
 
     public StringFilter getTin() {
@@ -260,6 +271,7 @@ public class CVendorCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(type, that.type) &&
             Objects.equals(location, that.location) &&
+            Objects.equals(idNo, that.idNo) &&
             Objects.equals(tin, that.tin) &&
             Objects.equals(taxIdNo, that.taxIdNo) &&
             Objects.equals(taxIdName, that.taxIdName) &&
@@ -284,6 +296,7 @@ public class CVendorCriteria implements Serializable, Criteria {
         name,
         type,
         location,
+        idNo,
         tin,
         taxIdNo,
         taxIdName,
@@ -309,6 +322,7 @@ public class CVendorCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
                 (location != null ? "location=" + location + ", " : "") +
+                (idNo != null ? "idNo=" + idNo + ", " : "") +
                 (tin != null ? "tin=" + tin + ", " : "") +
                 (taxIdNo != null ? "taxIdNo=" + taxIdNo + ", " : "") +
                 (taxIdName != null ? "taxIdName=" + taxIdName + ", " : "") +

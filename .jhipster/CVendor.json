@@ -23,6 +23,10 @@
             ]
         },
         {
+            "fieldName": "idNo",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "tin",
             "fieldType": "String"
         },

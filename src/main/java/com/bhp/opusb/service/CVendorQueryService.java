@@ -100,6 +100,9 @@ public class CVendorQueryService extends QueryService<CVendor> {
             if (criteria.getLocation() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getLocation(), CVendor_.location));
             }
+            if (criteria.getIdNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getIdNo(), CVendor_.idNo));
+            }
             if (criteria.getTin() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTin(), CVendor_.tin));
             }

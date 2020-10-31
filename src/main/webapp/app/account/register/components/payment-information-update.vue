@@ -79,7 +79,7 @@
 
         <el-row>
             <el-col :span="12">
-                <el-tooltip class="item" effect="dark" :content="$t('register.payment.basicBankAccountNumber')" placement="top">
+                <el-tooltip class="item" effect="dark" :content="$t('register.payment.basicBankAccountNumber')" placement="right">
                     <el-form-item
                         :label="$t('register.payment.bban')"
                         prop="bban">
@@ -88,7 +88,7 @@
                 </el-tooltip>
             </el-col>
             <el-col :span="12">
-                <el-tooltip class="item" effect="dark" :content="$t('register.payment.internationalBankAccountNumber')" placement="top">
+                <el-tooltip class="item" effect="dark" :content="$t('register.payment.internationalBankAccountNumber')" placement="right">
                     <el-form-item
                         :label="$t('register.payment.iban')"
                         prop="iban">

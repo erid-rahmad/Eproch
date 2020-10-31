@@ -147,6 +147,7 @@ entity CVendor {
 	name String required
     type String required
     location String required
+    idNo String
     tin String
 	taxIdNo String
 	taxIdName String
@@ -195,7 +196,6 @@ entity CVendorBankAcct {
 entity CVendorTax {
 	eInvoice Boolean
 	taxableEmployers Boolean
-	rate BigDecimal
 	uid UUID
 	active Boolean
 }

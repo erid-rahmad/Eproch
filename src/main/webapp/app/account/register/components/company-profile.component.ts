@@ -42,6 +42,7 @@ export default class CompanyProfile extends CompanyProps {
   public companyType: string = "companyType";
   public companyLocation: string = "companyLocation";
   public companyTaxLocation: string = "Domestic";
+  public companyTypeProfessional: string = "Professional";
 
   private limit: number = 1;
   private action: string = "/api/c-attachments/upload";
@@ -49,6 +50,7 @@ export default class CompanyProfile extends CompanyProps {
 
   private npwp: boolean = true;
   private tax: boolean = false;
+  private professional: boolean = false;
   private sameAddress: boolean = true;
   private withRegion: boolean = true;
   private withRegionNpwp: boolean = true;
@@ -72,6 +74,11 @@ export default class CompanyProfile extends CompanyProps {
 
   public handleTypeChange(value: string) {
     registrationStore.setVendorType(value);
+    if(value == this.companyTypeProfessional){
+      this.professional = true;
+    }else{
+      this.professional = false;
+    }
   }
 
   public handleLocationChange(value: string){

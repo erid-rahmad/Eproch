@@ -38,6 +38,9 @@ public class CVendor extends AbstractAuditingEntity {
     @Column(name = "location", nullable = false)
     private String location;
 
+    @Column(name = "id_no")
+    private String idNo;
+
     @Column(name = "tin")
     private String tin;
 
@@ -136,6 +139,19 @@ public class CVendor extends AbstractAuditingEntity {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public CVendor idNo(String idNo) {
+        this.idNo = idNo;
+        return this;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
     }
 
     public String getTin() {
@@ -362,6 +378,7 @@ public class CVendor extends AbstractAuditingEntity {
             ", name='" + getName() + "'" +
             ", type='" + getType() + "'" +
             ", location='" + getLocation() + "'" +
+            ", idNo='" + getIdNo() + "'" +
             ", tin='" + getTin() + "'" +
             ", taxIdNo='" + getTaxIdNo() + "'" +
             ", taxIdName='" + getTaxIdName() + "'" +
