@@ -78,7 +78,7 @@ public class TokenProvider {
 
         if (adUser.isPresent()) {
             AdUser user = adUser.get();
-            vendor = user.isVendor();
+            vendor = user.isVendor() != null && user.isVendor();
         }
 
         long now = (new Date()).getTime();
