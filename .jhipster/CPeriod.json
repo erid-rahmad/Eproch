@@ -1,0 +1,68 @@
+{
+    "name": "CPeriod",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "startDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "endDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCalendar",
+            "otherEntityRelationshipName": "cPeriod",
+            "relationshipValidateRules": "required",
+            "relationshipName": "calendar",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cPeriod",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200903081200",
+    "entityTableName": "c_period",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

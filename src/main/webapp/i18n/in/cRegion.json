@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "cRegion": {
+      "home": {
+        "title": "C Regions",
+        "createLabel": "Buat C Region baru",
+        "createOrEditLabel": "Buat atau edit C Region",
+        "notFound": "No C Regions found"
+      },
+      "created": "C Region dengan id {{ param }} telah dibuat",
+      "updated": "C Region dengan id {{ param }} telah diperbaharui",
+      "deleted": "C Region dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus C Region {{ id }}?"
+      },
+      "detail": {
+        "title": "C Region"
+      },
+      "name": "Name",
+      "active": "Active",
+      "cCity": "C City",
+      "country": "Country"
+    }
+  }
+}

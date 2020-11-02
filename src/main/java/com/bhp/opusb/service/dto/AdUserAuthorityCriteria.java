@@ -33,7 +33,7 @@ public class AdUserAuthorityCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
-    private LongFilter userId;
+    private LongFilter userUserId;
 
     private LongFilter authorityId;
 
@@ -45,7 +45,7 @@ public class AdUserAuthorityCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.userId = other.userId == null ? null : other.userId.copy();
+        this.userUserId = other.userUserId == null ? null : other.userUserId.copy();
         this.authorityId = other.authorityId == null ? null : other.authorityId.copy();
     }
 
@@ -86,12 +86,12 @@ public class AdUserAuthorityCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getUserId() {
-        return userId;
+    public LongFilter getUserUserId() {
+        return userUserId;
     }
 
-    public void setUserId(LongFilter userId) {
-        this.userId = userId;
+    public void setUserUserId(LongFilter userUserId) {
+        this.userUserId = userUserId;
     }
 
     public LongFilter getAuthorityId() {
@@ -117,7 +117,7 @@ public class AdUserAuthorityCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(userId, that.userId) &&
+            Objects.equals(userUserId, that.userUserId) &&
             Objects.equals(authorityId, that.authorityId);
     }
 
@@ -128,7 +128,7 @@ public class AdUserAuthorityCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
-        userId,
+        userUserId,
         authorityId
         );
     }
@@ -140,7 +140,7 @@ public class AdUserAuthorityCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (userId != null ? "userId=" + userId + ", " : "") +
+                (userUserId != null ? "userId=" + userUserId + ", " : "") +
                 (authorityId != null ? "authorityId=" + authorityId + ", " : "") +
             "}";
     }

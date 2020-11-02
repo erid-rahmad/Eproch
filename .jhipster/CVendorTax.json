@@ -1,0 +1,63 @@
+{
+    "name": "CVendorTax",
+    "fields": [
+        {
+            "fieldName": "eInvoice",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "taxableEmployers",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "rate",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "cVendorTax",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTax",
+            "otherEntityRelationshipName": "cVendorTax",
+            "relationshipValidateRules": "required",
+            "relationshipName": "tax",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cVendorTax",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200729152700",
+    "entityTableName": "c_vendor_tax",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

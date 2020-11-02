@@ -27,8 +27,21 @@
     <include file="config/liquibase/changelog/20200429153200_added_entity_ADFieldGroup.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200601164200_added_entity_AdValidationRule.xml" relativeToChangelogFile="false"/>
-
+    <include file="config/liquibase/changelog/20200619072400_added_entity_CCountry.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072500_added_entity_CCurrency.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072600_added_entity_CRegion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072700_added_entity_CCity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072800_added_entity_CLocation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072900_added_entity_CBank.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200624083100_added_entity_AdMenu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051100_added_entity_CBusinessCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051200_added_entity_CRegistrationDocument.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051300_added_entity_CAttachment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051400_added_entity_CRegistrationDocType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051500_added_entity_CRegDocTypeBusinessCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051600_added_entity_CPersonInCharge.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051700_added_entity_CVendor.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051800_added_entity_CVendorLocation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706060700_added_entity_AdTask.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706060800_added_entity_AdTaskApplication.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706060900_added_entity_AdTaskProcess.xml" relativeToChangelogFile="false"/>
@@ -37,12 +50,42 @@
     <include file="config/liquibase/changelog/20200707181700_added_entity_AdTriggerParam.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200707181800_added_entity_AdButton.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200715022400_added_entity_AdTaskSchedulerGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200722015900_added_entity_CTaxCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200722020000_added_entity_CTaxRate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200729152500_added_entity_CVendorBusinessCat.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200729152600_added_entity_CVendorBankAcct.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200729152700_added_entity_CVendorTax.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200730065900_added_entity_CPicBusinessCat.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200813110800_added_entity_CFunctionary.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200817184800_added_entity_CTax.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080400_added_entity_CUnitOfMeasure.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080500_added_entity_CConvertionType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080600_added_entity_CConvertionRate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080700_added_entity_CCostCenter.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080800_added_entity_CElementValue.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080900_added_entity_CProductGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081000_added_entity_CProductGroupAccount.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081100_added_entity_CCalendar.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081200_added_entity_CPeriod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081300_added_entity_CNonBusinessDay.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200915075000_added_entity_ScAuthority.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200916062900_added_entity_ScAccess.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200916063000_added_entity_ScAccessType.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200917033700_added_entity_AdForm.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200918073300_added_entity_CProductCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200918073400_added_entity_CProductCategoryAccount.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200921090000_added_entity_CProductClassification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200922060500_added_entity_CProduct.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200923060900_added_entity_COrganization.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200923061000_added_entity_COrganizationInfo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200923061100_added_entity_CWarehouse.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200923061200_added_entity_CLocator.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200925064700_added_entity_AdCallout.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200925064800_added_entity_AdCalloutTarget.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201009091700_added_entity_MVerification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201009091800_added_entity_MVerificationLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201014053800_added_entity_ADOrganizationInfo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201016085600_added_entity_MMatchPO.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021111500_added_entity_AdUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021111600_added_entity_AdUserAuthority.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021112000_added_entity_CDocumentType.xml" relativeToChangelogFile="false"/>
@@ -56,7 +99,21 @@
     <include file="config/liquibase/changelog/20200429153100_added_entity_constraints_ADField.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200415082500_added_entity_constraints_ADReference.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200601164200_added_entity_constraints_AdValidationRule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072400_added_entity_constraints_CCountry.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072600_added_entity_constraints_CRegion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072700_added_entity_constraints_CCity.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072800_added_entity_constraints_CLocation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200624083100_added_entity_constraints_AdMenu.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072500_added_entity_constraints_CCurrency.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200619072900_added_entity_constraints_CBank.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051100_added_entity_constraints_CBusinessCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051200_added_entity_constraints_CRegistrationDocument.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051300_added_entity_constraints_CAttachment.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051400_added_entity_constraints_CRegistrationDocType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051500_added_entity_constraints_CRegDocTypeBusinessCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051600_added_entity_constraints_CPersonInCharge.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051700_added_entity_constraints_CVendor.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200707051800_added_entity_constraints_CVendorLocation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706060700_added_entity_constraints_AdTask.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706060800_added_entity_constraints_AdTaskApplication.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200706060900_added_entity_constraints_AdTaskProcess.xml" relativeToChangelogFile="false"/>
@@ -65,12 +122,41 @@
     <include file="config/liquibase/changelog/20200707181700_added_entity_constraints_AdTriggerParam.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200707181800_added_entity_constraints_AdButton.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200715022400_added_entity_constraints_AdTaskSchedulerGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200722015900_added_entity_constraints_CTaxCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200722020000_added_entity_constraints_CTaxRate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200729152500_added_entity_constraints_CVendorBusinessCat.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200729152600_added_entity_constraints_CVendorBankAcct.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200729152700_added_entity_constraints_CVendorTax.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200730065900_added_entity_constraints_CPicBusinessCat.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200813110800_added_entity_constraints_CFunctionary.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200817184800_added_entity_constraints_CTax.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080400_added_entity_constraints_CUnitOfMeasure.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080500_added_entity_constraints_CConvertionType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080600_added_entity_constraints_CConvertionRate.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080800_added_entity_constraints_CElementValue.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080900_added_entity_constraints_CProductGroup.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081000_added_entity_constraints_CProductGroupAccount.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081100_added_entity_constraints_CCalendar.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081200_added_entity_constraints_CPeriod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903081300_added_entity_constraints_CNonBusinessDay.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200903080700_added_entity_constraints_CCostCenter.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200915075000_added_entity_constraints_ScAuthority.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200916062900_added_entity_constraints_ScAccess.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200916063000_added_entity_constraints_ScAccessType.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200917033700_added_entity_constraints_AdForm.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200918073300_added_entity_constraints_CProductCategory.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200918073400_added_entity_constraints_CProductCategoryAccount.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200921090000_added_entity_constraints_CProductClassification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200922060500_added_entity_constraints_CProduct.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200923060900_added_entity_constraints_COrganization.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200923061000_added_entity_constraints_COrganizationInfo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200923061100_added_entity_constraints_CWarehouse.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20200923061200_added_entity_constraints_CLocator.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200925064700_added_entity_constraints_AdCallout.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200925064800_added_entity_constraints_AdCalloutTarget.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201009091700_added_entity_constraints_MVerification.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201009091800_added_entity_constraints_MVerificationLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201014053800_added_entity_constraints_ADOrganizationInfo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021111500_added_entity_constraints_AdUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021111600_added_entity_constraints_AdUserAuthority.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021112000_added_entity_constraints_CDocumentType.xml" relativeToChangelogFile="false"/>

@@ -1,0 +1,26 @@
+{
+  "opusWebApp": {
+    "cLocation": {
+      "home": {
+        "title": "C Locations",
+        "createLabel": "Create a new C Location",
+        "createOrEditLabel": "Create or edit a C Location",
+        "notFound": "No C Locations found"
+      },
+      "created": "A new C Location is created with identifier {{ param }}",
+      "updated": "A C Location is updated with identifier {{ param }}",
+      "deleted": "A C Location is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete C Location {{ id }}?"
+      },
+      "detail": {
+        "title": "C Location"
+      },
+      "streetAddress": "Street Address",
+      "postalCode": "Postal Code",
+      "taxInvoiceAddress": "Tax Invoice Address",
+      "active": "Active",
+      "city": "City"
+    }
+  }
+}

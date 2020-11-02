@@ -1,9 +1,14 @@
 package com.bhp.opusb.web.rest;
 
+import java.util.Optional;
+
+import javax.validation.Valid;
+
+import com.bhp.opusb.domain.AdUser;
+import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.security.jwt.JWTFilter;
 import com.bhp.opusb.security.jwt.TokenProvider;
 import com.bhp.opusb.web.rest.vm.LoginVM;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import org.springframework.http.HttpHeaders;
@@ -13,9 +18,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Controller to authenticate users.
@@ -28,9 +34,12 @@ public class UserJWTController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    private final AdUserRepository adUserRepository;
+
+    public UserJWTController(TokenProvider tokenProvider, AuthenticationManagerBuilder authenticationManagerBuilder, AdUserRepository adUserRepository) {
         this.tokenProvider = tokenProvider;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.adUserRepository = adUserRepository;
     }
 
     @PostMapping("/authenticate")
@@ -42,7 +51,8 @@ public class UserJWTController {
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
-        String jwt = tokenProvider.createToken(authentication, rememberMe);
+        Optional<AdUser> adUser = adUserRepository.findByUserLogin(authentication.getName());
+        String jwt = tokenProvider.createToken(authentication, adUser, rememberMe);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);

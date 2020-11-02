@@ -1,0 +1,53 @@
+{
+    "name": "ADOrganizationInfo",
+    "fields": [
+        {
+            "fieldName": "address",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "taxId",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "bankAccount",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "aDOrganizationInfo",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20201014053800",
+    "entityTableName": "ad_organization_info",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

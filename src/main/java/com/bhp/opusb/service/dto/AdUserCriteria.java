@@ -2,15 +2,14 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.InstantFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.InstantFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -36,11 +35,17 @@ public class AdUserCriteria implements Serializable, Criteria {
 
     private StringFilter phone;
 
+    private StringFilter position;
+
+    private BooleanFilter vendor;
+
     private IntegerFilter failedLoginCount;
 
     private InstantFilter lastLoginDate;
 
     private LongFilter userId;
+
+    private LongFilter cVendorId;
 
     private LongFilter adOrganizationId;
 
@@ -53,9 +58,12 @@ public class AdUserCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.code = other.code == null ? null : other.code.copy();
         this.phone = other.phone == null ? null : other.phone.copy();
+        this.position = other.position == null ? null : other.position.copy();
+        this.vendor = other.vendor == null ? null : other.vendor.copy();
         this.failedLoginCount = other.failedLoginCount == null ? null : other.failedLoginCount.copy();
         this.lastLoginDate = other.lastLoginDate == null ? null : other.lastLoginDate.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
+        this.cVendorId = other.cVendorId == null ? null : other.cVendorId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
@@ -104,6 +112,22 @@ public class AdUserCriteria implements Serializable, Criteria {
         this.phone = phone;
     }
 
+    public StringFilter getPosition() {
+        return position;
+    }
+
+    public void setPosition(StringFilter position) {
+        this.position = position;
+    }
+
+    public BooleanFilter getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(BooleanFilter vendor) {
+        this.vendor = vendor;
+    }
+
     public IntegerFilter getFailedLoginCount() {
         return failedLoginCount;
     }
@@ -126,6 +150,14 @@ public class AdUserCriteria implements Serializable, Criteria {
 
     public void setUserId(LongFilter userId) {
         this.userId = userId;
+    }
+
+    public LongFilter getCVendorId() {
+        return cVendorId;
+    }
+
+    public void setCVendorId(LongFilter cVendorId) {
+        this.cVendorId = cVendorId;
     }
 
     public LongFilter getAdOrganizationId() {
@@ -152,9 +184,12 @@ public class AdUserCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(code, that.code) &&
             Objects.equals(phone, that.phone) &&
+            Objects.equals(position, that.position) &&
+            Objects.equals(vendor, that.vendor) &&
             Objects.equals(failedLoginCount, that.failedLoginCount) &&
             Objects.equals(lastLoginDate, that.lastLoginDate) &&
             Objects.equals(userId, that.userId) &&
+            Objects.equals(cVendorId, that.cVendorId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
@@ -166,9 +201,12 @@ public class AdUserCriteria implements Serializable, Criteria {
         active,
         code,
         phone,
+        position,
+        vendor,
         failedLoginCount,
         lastLoginDate,
         userId,
+        cVendorId,
         adOrganizationId
         );
     }
@@ -181,9 +219,12 @@ public class AdUserCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (code != null ? "code=" + code + ", " : "") +
                 (phone != null ? "phone=" + phone + ", " : "") +
+                (position != null ? "position=" + position + ", " : "") +
+                (vendor != null ? "vendor=" + vendor + ", " : "") +
                 (failedLoginCount != null ? "failedLoginCount=" + failedLoginCount + ", " : "") +
                 (lastLoginDate != null ? "lastLoginDate=" + lastLoginDate + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
+                (cVendorId != null ? "cVendorId=" + cVendorId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }

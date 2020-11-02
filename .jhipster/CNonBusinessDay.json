@@ -1,0 +1,61 @@
+{
+    "name": "CNonBusinessDay",
+    "fields": [
+        {
+            "fieldName": "category",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "date",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCalendar",
+            "otherEntityRelationshipName": "cNonBusinessDay",
+            "relationshipValidateRules": "required",
+            "relationshipName": "calendar",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cNonBusinessDay",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200903081300",
+    "entityTableName": "c_non_business_day",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

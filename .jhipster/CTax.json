@@ -1,0 +1,70 @@
+{
+    "name": "CTax",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "rate",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "validFrom",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "transactionType",
+            "fieldType": "CTaxTransactionType",
+            "fieldValues": "SALES,PURCHASE,BOTH",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cTax",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTaxCategory",
+            "otherEntityRelationshipName": "cTax",
+            "relationshipValidateRules": "required",
+            "relationshipName": "taxCategory",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200817184800",
+    "entityTableName": "c_tax",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

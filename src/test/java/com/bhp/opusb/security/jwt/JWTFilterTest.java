@@ -1,5 +1,6 @@
 package com.bhp.opusb.security.jwt;
 
+import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.security.AuthoritiesConstants;
 import io.github.jhipster.config.JHipsterProperties;
 import io.jsonwebtoken.io.Decoders;
@@ -17,6 +18,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.Collections;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -46,7 +48,7 @@ public class JWTFilterTest {
             "test-password",
             Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
         );
-        String jwt = tokenProvider.createToken(authentication, false);
+        String jwt = tokenProvider.createToken(authentication, Optional.of(new AdUser()), false);
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
         request.setRequestURI("/api/test");
@@ -101,7 +103,7 @@ public class JWTFilterTest {
             "test-password",
             Collections.singletonList(new SimpleGrantedAuthority(AuthoritiesConstants.USER))
         );
-        String jwt = tokenProvider.createToken(authentication, false);
+        String jwt = tokenProvider.createToken(authentication, Optional.of(new AdUser()), false);
         MockHttpServletRequest request = new MockHttpServletRequest();
         request.addHeader(JWTFilter.AUTHORIZATION_HEADER, "Basic " + jwt);
         request.setRequestURI("/api/test");

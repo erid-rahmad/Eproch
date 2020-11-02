@@ -5,7 +5,7 @@
 
     <groupId>com.bhp.opusb</groupId>
     <artifactId>opus-web-app</artifactId>
-    <version>0.3.1</version>
+    <version>0.5.0</version>
     <packaging>jar</packaging>
     <name>Opus Web App</name>
 

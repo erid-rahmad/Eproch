@@ -20,7 +20,7 @@ public class AdUserAuthorityDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
-    private Long userId;
+    private Long userUserId;
     private String userName;
 
     private Long authorityId;
@@ -66,12 +66,12 @@ public class AdUserAuthorityDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getUserId() {
-        return userId;
+    public Long getUserUserId() {
+        return userUserId;
     }
 
-    public void setUserId(Long adUserId) {
-        this.userId = adUserId;
+    public void setUserUserId(Long adUserUserId) {
+        this.userUserId = adUserUserId;
     }
 
     public String getUserName() {
@@ -126,7 +126,7 @@ public class AdUserAuthorityDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", userId=" + getUserId() +
+            ", userId=" + getUserUserId() +
             ", authorityId=" + getAuthorityId() +
             "}";
     }

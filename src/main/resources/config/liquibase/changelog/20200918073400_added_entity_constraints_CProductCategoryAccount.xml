@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity CProductCategoryAccount.
+    -->
+    <changeSet id="20200918073400-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="c_product_category_account"
+                                 constraintName="fk_c_product_category_account_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="asset_acct_id"
+                                 baseTableName="c_product_category_account"
+                                 constraintName="fk_c_product_category_account_asset_acct_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_element_value"/>
+
+        <addForeignKeyConstraint baseColumnNames="expense_acct_id"
+                                 baseTableName="c_product_category_account"
+                                 constraintName="fk_c_product_category_account_expense_acct_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_element_value"/>
+
+        <addForeignKeyConstraint baseColumnNames="product_category_id"
+                                 baseTableName="c_product_category_account"
+                                 constraintName="fk_c_product_category_account_product_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_product_category"/>
+
+    </changeSet>
+</databaseChangeLog>

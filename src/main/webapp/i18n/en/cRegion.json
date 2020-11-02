@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "cRegion": {
+      "home": {
+        "title": "C Regions",
+        "createLabel": "Create a new C Region",
+        "createOrEditLabel": "Create or edit a C Region",
+        "notFound": "No C Regions found"
+      },
+      "created": "A new C Region is created with identifier {{ param }}",
+      "updated": "A C Region is updated with identifier {{ param }}",
+      "deleted": "A C Region is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete C Region {{ id }}?"
+      },
+      "detail": {
+        "title": "C Region"
+      },
+      "name": "Name",
+      "active": "Active",
+      "cCity": "C City",
+      "country": "Country"
+    }
+  }
+}

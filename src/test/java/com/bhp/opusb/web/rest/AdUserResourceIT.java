@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.User;
+import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.service.AdUserService;
@@ -52,6 +53,12 @@ public class AdUserResourceIT {
     private static final String DEFAULT_PHONE = "AAAAAAAAAA";
     private static final String UPDATED_PHONE = "BBBBBBBBBB";
 
+    private static final String DEFAULT_POSITION = "AAAAAAAAAA";
+    private static final String UPDATED_POSITION = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_VENDOR = false;
+    private static final Boolean UPDATED_VENDOR = true;
+
     private static final Integer DEFAULT_FAILED_LOGIN_COUNT = 1;
     private static final Integer UPDATED_FAILED_LOGIN_COUNT = 2;
     private static final Integer SMALLER_FAILED_LOGIN_COUNT = 1 - 1;
@@ -91,6 +98,8 @@ public class AdUserResourceIT {
             .active(DEFAULT_ACTIVE)
             .code(DEFAULT_CODE)
             .phone(DEFAULT_PHONE)
+            .position(DEFAULT_POSITION)
+            .vendor(DEFAULT_VENDOR)
             .failedLoginCount(DEFAULT_FAILED_LOGIN_COUNT)
             .lastLoginDate(DEFAULT_LAST_LOGIN_DATE);
         // Add required entity
@@ -122,6 +131,8 @@ public class AdUserResourceIT {
             .active(UPDATED_ACTIVE)
             .code(UPDATED_CODE)
             .phone(UPDATED_PHONE)
+            .position(UPDATED_POSITION)
+            .vendor(UPDATED_VENDOR)
             .failedLoginCount(UPDATED_FAILED_LOGIN_COUNT)
             .lastLoginDate(UPDATED_LAST_LOGIN_DATE);
         // Add required entity
@@ -167,6 +178,8 @@ public class AdUserResourceIT {
         assertThat(testAdUser.isActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testAdUser.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testAdUser.getPhone()).isEqualTo(DEFAULT_PHONE);
+        assertThat(testAdUser.getPosition()).isEqualTo(DEFAULT_POSITION);
+        assertThat(testAdUser.isVendor()).isEqualTo(DEFAULT_VENDOR);
         assertThat(testAdUser.getFailedLoginCount()).isEqualTo(DEFAULT_FAILED_LOGIN_COUNT);
         assertThat(testAdUser.getLastLoginDate()).isEqualTo(DEFAULT_LAST_LOGIN_DATE);
     }
@@ -245,6 +258,8 @@ public class AdUserResourceIT {
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
+            .andExpect(jsonPath("$.[*].position").value(hasItem(DEFAULT_POSITION)))
+            .andExpect(jsonPath("$.[*].vendor").value(hasItem(DEFAULT_VENDOR.booleanValue())))
             .andExpect(jsonPath("$.[*].failedLoginCount").value(hasItem(DEFAULT_FAILED_LOGIN_COUNT)))
             .andExpect(jsonPath("$.[*].lastLoginDate").value(hasItem(DEFAULT_LAST_LOGIN_DATE.toString())));
     }
@@ -264,6 +279,8 @@ public class AdUserResourceIT {
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
+            .andExpect(jsonPath("$.position").value(DEFAULT_POSITION))
+            .andExpect(jsonPath("$.vendor").value(DEFAULT_VENDOR.booleanValue()))
             .andExpect(jsonPath("$.failedLoginCount").value(DEFAULT_FAILED_LOGIN_COUNT))
             .andExpect(jsonPath("$.lastLoginDate").value(DEFAULT_LAST_LOGIN_DATE.toString()));
     }
@@ -550,6 +567,136 @@ public class AdUserResourceIT {
 
     @Test
     @Transactional
+    public void getAllAdUsersByPositionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where position equals to DEFAULT_POSITION
+        defaultAdUserShouldBeFound("position.equals=" + DEFAULT_POSITION);
+
+        // Get all the adUserList where position equals to UPDATED_POSITION
+        defaultAdUserShouldNotBeFound("position.equals=" + UPDATED_POSITION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByPositionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where position not equals to DEFAULT_POSITION
+        defaultAdUserShouldNotBeFound("position.notEquals=" + DEFAULT_POSITION);
+
+        // Get all the adUserList where position not equals to UPDATED_POSITION
+        defaultAdUserShouldBeFound("position.notEquals=" + UPDATED_POSITION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByPositionIsInShouldWork() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where position in DEFAULT_POSITION or UPDATED_POSITION
+        defaultAdUserShouldBeFound("position.in=" + DEFAULT_POSITION + "," + UPDATED_POSITION);
+
+        // Get all the adUserList where position equals to UPDATED_POSITION
+        defaultAdUserShouldNotBeFound("position.in=" + UPDATED_POSITION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByPositionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where position is not null
+        defaultAdUserShouldBeFound("position.specified=true");
+
+        // Get all the adUserList where position is null
+        defaultAdUserShouldNotBeFound("position.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllAdUsersByPositionContainsSomething() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where position contains DEFAULT_POSITION
+        defaultAdUserShouldBeFound("position.contains=" + DEFAULT_POSITION);
+
+        // Get all the adUserList where position contains UPDATED_POSITION
+        defaultAdUserShouldNotBeFound("position.contains=" + UPDATED_POSITION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByPositionNotContainsSomething() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where position does not contain DEFAULT_POSITION
+        defaultAdUserShouldNotBeFound("position.doesNotContain=" + DEFAULT_POSITION);
+
+        // Get all the adUserList where position does not contain UPDATED_POSITION
+        defaultAdUserShouldBeFound("position.doesNotContain=" + UPDATED_POSITION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByVendorIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where vendor equals to DEFAULT_VENDOR
+        defaultAdUserShouldBeFound("vendor.equals=" + DEFAULT_VENDOR);
+
+        // Get all the adUserList where vendor equals to UPDATED_VENDOR
+        defaultAdUserShouldNotBeFound("vendor.equals=" + UPDATED_VENDOR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByVendorIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where vendor not equals to DEFAULT_VENDOR
+        defaultAdUserShouldNotBeFound("vendor.notEquals=" + DEFAULT_VENDOR);
+
+        // Get all the adUserList where vendor not equals to UPDATED_VENDOR
+        defaultAdUserShouldBeFound("vendor.notEquals=" + UPDATED_VENDOR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByVendorIsInShouldWork() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where vendor in DEFAULT_VENDOR or UPDATED_VENDOR
+        defaultAdUserShouldBeFound("vendor.in=" + DEFAULT_VENDOR + "," + UPDATED_VENDOR);
+
+        // Get all the adUserList where vendor equals to UPDATED_VENDOR
+        defaultAdUserShouldNotBeFound("vendor.in=" + UPDATED_VENDOR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByVendorIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where vendor is not null
+        defaultAdUserShouldBeFound("vendor.specified=true");
+
+        // Get all the adUserList where vendor is null
+        defaultAdUserShouldNotBeFound("vendor.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllAdUsersByFailedLoginCountIsEqualToSomething() throws Exception {
         // Initialize the database
         adUserRepository.saveAndFlush(adUser);
@@ -723,6 +870,26 @@ public class AdUserResourceIT {
 
     @Test
     @Transactional
+    public void getAllAdUsersByCVendorIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+        CVendor cVendor = CVendorResourceIT.createEntity(em);
+        em.persist(cVendor);
+        em.flush();
+        adUser.setCVendor(cVendor);
+        adUserRepository.saveAndFlush(adUser);
+        Long cVendorId = cVendor.getId();
+
+        // Get all the adUserList where cVendor equals to cVendorId
+        defaultAdUserShouldBeFound("cVendorId.equals=" + cVendorId);
+
+        // Get all the adUserList where cVendor equals to cVendorId + 1
+        defaultAdUserShouldNotBeFound("cVendorId.equals=" + (cVendorId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllAdUsersByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = adUser.getAdOrganization();
@@ -748,6 +915,8 @@ public class AdUserResourceIT {
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
+            .andExpect(jsonPath("$.[*].position").value(hasItem(DEFAULT_POSITION)))
+            .andExpect(jsonPath("$.[*].vendor").value(hasItem(DEFAULT_VENDOR.booleanValue())))
             .andExpect(jsonPath("$.[*].failedLoginCount").value(hasItem(DEFAULT_FAILED_LOGIN_COUNT)))
             .andExpect(jsonPath("$.[*].lastLoginDate").value(hasItem(DEFAULT_LAST_LOGIN_DATE.toString())));
 
@@ -801,6 +970,8 @@ public class AdUserResourceIT {
             .active(UPDATED_ACTIVE)
             .code(UPDATED_CODE)
             .phone(UPDATED_PHONE)
+            .position(UPDATED_POSITION)
+            .vendor(UPDATED_VENDOR)
             .failedLoginCount(UPDATED_FAILED_LOGIN_COUNT)
             .lastLoginDate(UPDATED_LAST_LOGIN_DATE);
         AdUserDTO adUserDTO = adUserMapper.toDto(updatedAdUser);
@@ -818,6 +989,8 @@ public class AdUserResourceIT {
         assertThat(testAdUser.isActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testAdUser.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testAdUser.getPhone()).isEqualTo(UPDATED_PHONE);
+        assertThat(testAdUser.getPosition()).isEqualTo(UPDATED_POSITION);
+        assertThat(testAdUser.isVendor()).isEqualTo(UPDATED_VENDOR);
         assertThat(testAdUser.getFailedLoginCount()).isEqualTo(UPDATED_FAILED_LOGIN_COUNT);
         assertThat(testAdUser.getLastLoginDate()).isEqualTo(UPDATED_LAST_LOGIN_DATE);
     }

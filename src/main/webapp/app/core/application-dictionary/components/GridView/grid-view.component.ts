@@ -16,6 +16,8 @@ import { Component, Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import CalloutMixin from '../../mixins/CalloutMixin';
 import ContextVariableAccessor from "../ContextVariableAccessor";
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { ADWindowType } from '@/shared/model/ad-window.model';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -33,6 +35,8 @@ const GridViewProps = Vue.extend({
       type: Boolean,
       default: true
     },
+
+    accessLevel: String,
 
     /**
      * The identifier of a child tab.
@@ -149,6 +153,10 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   private debouncedHeightResizer: (height: number) => void;
 
   private registerTabState!: (options: IRegisterTabParameter) => Promise<void>;
+
+  get isVendor() {
+    return accountStore.userDetails.vendor && this.accessLevel === 'CLN_VND';
+  }
 
   get referenceListItems() {
     return (field: IADField): any[] => {
@@ -714,7 +722,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
           if (fieldName === 'active') {
             defaultValue = true;
           } else if (this.isDateField(field) || this.isDateTimeField(field)) {
-            defaultValue = new Date().toISOString();
+            defaultValue = null;
           } else if (this.isBooleanField(field)) {
             defaultValue = false;
           } else if (this.isNumericField(field)) {
@@ -821,6 +829,9 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       size: this.itemsPerPage,
       sort: this.sort()
     };
+
+    console.log('retrieveAllRecords. table: %s, isVendor: %s', this.tab.adTableName, this.isVendor);
+
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
         criteriaQuery: this.filterQuery,
@@ -1031,7 +1042,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     const fieldType = field.type || field.adColumn.type;
 
     if (this.isTableDirectLink(field)) {
-      const propName = fieldName.replace(/Id$/, 'Name');
+      const propName = fieldName.replace(/(UserId|Id)$/, 'Name');
       return row[propName] || row[fieldName];
     } else if (fieldType === ADColumnType.LOCAL_DATE) {
       const value = row[fieldName];

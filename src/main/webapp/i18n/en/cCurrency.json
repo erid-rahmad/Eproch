@@ -1,0 +1,25 @@
+{
+  "opusWebApp": {
+    "cCurrency": {
+      "home": {
+        "title": "C Currencies",
+        "createLabel": "Create a new C Currency",
+        "createOrEditLabel": "Create or edit a C Currency",
+        "notFound": "No C Currencies found"
+      },
+      "created": "A new C Currency is created with identifier {{ param }}",
+      "updated": "A C Currency is updated with identifier {{ param }}",
+      "deleted": "A C Currency is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete C Currency {{ id }}?"
+      },
+      "detail": {
+        "title": "C Currency"
+      },
+      "code": "Code",
+      "symbol": "Symbol",
+      "name": "Name",
+      "active": "Active"
+    }
+  }
+}

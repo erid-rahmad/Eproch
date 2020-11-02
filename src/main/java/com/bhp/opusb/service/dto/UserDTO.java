@@ -30,6 +30,7 @@ public class UserDTO {
 
     @Email
     @Size(min = 5, max = 254)
+    @Pattern(regexp = Constants.LOGIN_REGEX)
     private String email;
 
     @Size(max = 256)

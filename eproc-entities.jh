@@ -1,0 +1,623 @@
+entity ADOrganization {
+	uid UUID
+	name String required
+	code String required unique
+	description String
+	active Boolean
+}
+entity ADOrganizationInfo {
+	address String required
+	taxId String required
+	bankAccount String
+	uid UUID
+	active Boolean
+}
+
+/**
+ * The extended User entity.
+ */
+entity AdUser {
+	uid UUID
+	active Boolean
+	code String required maxlength(15)
+	phone String required maxlength(20)
+	position String maxlength(30)
+
+	/** Whether it is a vendor or not */
+	vendor Boolean
+
+	failedLoginCount Integer
+	lastLoginDate Instant
+}
+
+entity CDocumentType {
+	uid UUID
+	active Boolean
+	name String required
+	description String
+}
+
+entity CCountry {
+	name String required
+	code String required pattern(/^[A-Z]{2}$/) unique
+	withRegion Boolean
+	phoneCode String
+	description String
+	uid UUID
+	active Boolean
+}
+entity CCurrency {
+	code String required pattern(/^[A-Z]{3}$/) unique
+	symbol String required
+	name String required
+	uid UUID
+	active Boolean
+}
+entity CRegion {
+	code String required pattern(/^[A-Z]{3}$/) unique
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+entity CCity {
+	code String required pattern(/^[A-Z]{3}$/) unique
+	name String required
+	uid UUID
+	active Boolean
+}
+entity CLocation {
+	streetAddress String required
+	postalCode String
+	uid UUID
+	active Boolean
+}
+entity CBank {
+	name String required
+	value String required
+	shortName String required
+	description String
+	swiftCode String pattern(/^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/) unique
+	uid UUID
+	active Boolean
+}
+
+entity CBusinessCategory {
+	name String required unique
+	description String
+	sector CBusinessCategorySector required
+	uid UUID
+	active Boolean
+}
+
+entity CAttachment {
+	fileName String
+	mimeType String
+	documentType String
+	uploadDir String
+	uid UUID
+	active Boolean
+}
+
+entity CRegistrationDocument {
+	documentNo String required
+	expirationDate LocalDate
+	uid UUID
+	active Boolean
+}
+/**
+ * The Registration Document Type entity.
+ */
+entity CRegistrationDocType {
+	name String required unique
+	description String
+	hasExpirationDate Boolean
+	mandatoryBusinessCategories BusinessCategorySelection required
+	additionalBusinessCategories BusinessCategorySelection required
+	mandatoryForCompany Boolean
+	additionalForCompany Boolean
+	mandatoryForProfessional Boolean
+	additionalForProfessional Boolean
+	uid UUID
+	active Boolean
+}
+
+entity CRegDocTypeBusinessCategory(c_regdoctype_businesses) {
+	uid UUID
+	mandatory Boolean
+	active Boolean
+}
+
+/**
+ * The Tax Category entity.
+ */
+entity CTaxCategory {
+	name String required
+	description String
+	isWithholding Boolean
+	uid UUID
+	active Boolean
+}
+
+entity CTax {
+	name String required
+	description String
+	rate BigDecimal
+	validFrom LocalDate
+	transactionType CTaxTransactionType required
+	uid UUID
+	active Boolean
+}
+
+entity CFunctionary {
+	name String required
+	position String required
+	phone String required
+	email String required
+	uid UUID
+	active Boolean
+}
+
+entity CVendor {
+	name String required
+	taxIdNo String required
+	taxIdName String required
+	branch Boolean
+	email String required
+	phone String required
+	fax String
+	website String
+	type VendorType required
+	paymentCategory String required
+	approvalStatus String required
+
+	dateTrx LocalDate required
+	documentNo String required
+	documentAction String required
+	documentStatus String required
+	approved Boolean
+	processed Boolean
+
+	uid UUID
+	active Boolean
+}
+
+entity CVendorLocation {
+	taxInvoiceAddress Boolean
+	uid UUID
+	active Boolean
+}
+
+entity CVendorBusinessCat {
+	uid UUID
+	active Boolean
+}
+
+entity CPicBusinessCat {
+	uid UUID
+	active Boolean
+}
+
+entity CVendorBankAcct {
+	accountNo String required
+	name String
+	branch String
+	uid UUID
+	active Boolean
+}
+
+entity CVendorTax {
+	eInvoice Boolean
+	taxableEmployers Boolean
+	rate BigDecimal
+	uid UUID
+	active Boolean
+}
+
+/**
+ * The UoM entity.
+ */
+entity CUnitOfMeasure {
+	code String required unique
+	symbol String required
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+/**
+ * The Convertion Type & Rate entity.
+ */
+entity CConvertionType {
+	code String required unique
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CConvertionRate {
+	validFrom LocalDate required 
+	validTo LocalDate required
+	rate BigDecimal required
+	uid UUID
+	active Boolean
+}
+/**
+ * The CostCenter entity.
+ */
+entity CCostCenter {
+	code String required unique
+	name String required
+	division String required
+	description String
+	uid UUID
+	active Boolean
+}
+/**
+ * The Element Value entity.
+ */
+entity CElementValue {
+	code String required unique
+	name String required
+	type String required
+	description String
+	uid UUID
+	active Boolean
+}
+/**
+ * The Product Group/ Asset Group entity.
+ */
+entity CProductGroup {
+	code String required unique
+	name String required
+	type String
+	uid UUID
+	active Boolean
+}
+
+entity CProductGroupAccount {
+	depreciation Depreciation required
+	lifeYear Integer required
+	lifeMonth Integer required
+	uid UUID
+	active Boolean
+}
+/**
+ * The Calendar entity.
+ */
+entity CCalendar {
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CPeriod {
+	name String required
+	description String
+	startDate LocalDate required
+	endDate LocalDate required
+	uid UUID
+	active Boolean
+}
+
+entity CNonBusinessDay {
+	category String required
+	date LocalDate required
+	description String
+	uid UUID
+	active Boolean
+}
+/**
+ * The Product/Item Master.
+ */
+entity CProductClassification {
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CProductCategory {
+	code String required
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CProductCategoryAccount {
+	uid UUID
+	active Boolean
+}
+
+entity CProduct{
+	code String required
+	name String required
+	description String
+	type String
+	uid UUID
+	active Boolean
+}
+/**
+ * The Organization & Warehouse Master.
+ */
+entity COrganization {
+	name String required
+	code String required unique
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity COrganizationInfo {
+	address String required
+	taxId String required
+	bankAccount String
+	uid UUID
+	active Boolean
+}
+
+entity CWarehouse {
+	name String required
+	code String required unique
+	description String
+	address String
+	uid UUID
+	active Boolean
+}
+
+entity CLocator {
+	code String required unique
+	locatorType String
+	aisle String
+	bin String
+	level String
+	uid UUID
+	active Boolean
+}
+
+/**
+* vendor Invoice Verification 
+*/
+entity MVerification {
+	verificationNo String required
+	verificationDate LocalDate required
+	description String
+	invoiceNo String required
+	invoiceDate LocalDate required
+	taxInvoice String
+	taxDate LocalDate
+	totalLines BigDecimal required
+	taxAmount BigDecimal required
+	grandTotal BigDecimal required
+	verificationStatus String required
+	uid UUID
+	active Boolean
+}
+
+entity MVerificationLine {
+	orderNo String required
+	receiptNo String required
+	deliveryNo String required
+	description String
+	qty Long required
+	priceActual BigDecimal required
+	totalLines BigDecimal required
+	taxAmount BigDecimal required
+	uid UUID
+	active Boolean
+}
+
+entity MMatchPO{
+	cDocType String
+	cVendor String
+	cElement String
+	cCostCenter String
+	poNo String
+	poDate LocalDate
+	receiptNo String
+	receiptDate LocalDate
+	deliveryNo String
+	mProductCode String
+	mProductName String
+	mProductDesc String
+	cUOM String
+	qty String
+	cCurrency String
+	cConversionRate String
+	openQty String
+	priceActual String
+	foreignActual String
+	openAmount String
+	openForeignAmount String
+	totalLines String
+	foreignTotalLines String
+	cTax String
+	taxAmount String
+	foreignTaxAmount String
+	mLocator String
+	adOrganization String
+}
+
+/**
+ * Enumeration.
+ */
+enum Depreciation {
+	STRAIGHT_LINE, DOUBLE_DECLINING
+}
+
+enum VendorType {
+	COMPANY, PROFESSIONAL
+}
+
+enum CBusinessCategorySector {
+	PRIMARY, SECONDARY, TERTIARY
+}
+
+enum CTaxTransactionType {
+	SALES, PURCHASE, BOTH
+}
+
+enum BusinessCategorySelection {
+	ALL, SELECTED, NONE
+}
+
+relationship OneToOne {
+	AdUser{user(login) required} to User
+	CCountry{currency required} to CCurrency
+	CVendor{taxIdFile} to CAttachment
+}
+/**
+ * Both side will reference each other.
+ */
+relationship OneToMany {
+	CCountry to CRegion{country required}
+
+	// For city without region.
+	CCountry to CCity{country}
+
+	// For city with region.
+	CRegion to CCity{region}
+	CBusinessCategory to CBusinessCategory{parentCategory}
+
+	//for product category
+	CProductCategory to CProductCategory{parentCategory}
+}
+
+/**
+ * Many to one relationship.
+ */
+relationship ManyToOne {
+	ADOrganizationInfo{adOrganization required} to ADOrganization
+	
+	/** This field should not empty for a supplier's user */
+	AdUser{cVendor} to CVendor
+	AdUser{adOrganization required} to ADOrganization
+
+	CDocumentType{adOrganization required} to ADOrganization
+
+	CLocation{city required} to CCity
+
+	CRegistrationDocument{type required} to CRegistrationDocType
+	CRegistrationDocument{file required} to CAttachment
+	CRegistrationDocument{vendor} to CVendor
+	CRegistrationDocument{adOrganization required} to ADOrganization
+
+	CRegDocTypeBusinessCategory{documentType} to CRegistrationDocType
+	CRegDocTypeBusinessCategory{businessCategory} to CBusinessCategory
+	CRegDocTypeBusinessCategory{adOrganization required} to ADOrganization
+
+	CVendorLocation{vendor} to CVendor
+	CVendorLocation{location} to CLocation
+	CVendorLocation{adOrganization required} to ADOrganization
+
+	CFunctionary{adOrganization required} to ADOrganization
+	CFunctionary{vendor} to CVendor
+
+	CCountry{adOrganization required} to ADOrganization
+	CCurrency{adOrganization required} to ADOrganization
+	CRegion{adOrganization required} to ADOrganization
+	CCity{adOrganization required} to ADOrganization
+	CLocation{adOrganization required} to ADOrganization
+	CBank{adOrganization required} to ADOrganization
+
+	CTaxCategory{adOrganization required} to ADOrganization
+	CTax{adOrganization required} to ADOrganization
+	CTax{taxCategory required} to CTaxCategory
+
+	CBusinessCategory{adOrganization required} to ADOrganization
+	
+	CAttachment{adOrganization required} to ADOrganization
+	CRegistrationDocType{adOrganization required} to ADOrganization
+	
+	CVendor{adOrganization required} to ADOrganization
+	CVendor{documentType required} to CDocumentType
+	
+	CVendorBusinessCat{vendor required} to CVendor
+	CVendorBusinessCat{businessCategory required} to CBusinessCategory
+	CVendorBusinessCat{adOrganization required} to ADOrganization
+
+	CPicBusinessCat{pic required} to AdUser
+	CPicBusinessCat{businessCategory required} to CBusinessCategory
+	CPicBusinessCat{adOrganization required} to ADOrganization
+	
+	CVendorBankAcct{vendor required} to CVendor
+	CVendorBankAcct{bank required} to CBank
+	CVendorBankAcct{currency required} to CCurrency
+	CVendorBankAcct{file required} to CAttachment
+	CVendorBankAcct{adOrganization required} to ADOrganization
+
+	CVendorTax{vendor required} to CVendor
+	CVendorTax{tax required} to CTax
+	CVendorTax{adOrganization required} to ADOrganization
+
+	CUnitOfMeasure{adOrganization required} to ADOrganization
+	CCostCenter{adOrganization required} to ADOrganization
+	
+	// For convertion rate with currency and convertion type.
+	CConvertionRate{sourceCurrency required} to CCurrency
+	CConvertionRate{targetCurrency required} to CCurrency
+	CConvertionType{adOrganization required} to ADOrganization
+	CConvertionRate{convertionType required} to CConvertionType
+	CConvertionRate{adOrganization required} to ADOrganization
+
+	CElementValue{adOrganization required} to ADOrganization
+	CProductGroupAccount{assetAccount} to CElementValue
+	CProductGroupAccount{depreciationAccount} to CElementValue
+	CProductGroup{adOrganization required} to ADOrganization
+	CProductGroupAccount{productGroup required} to CProductGroup
+	CProductGroupAccount{adOrganization required} to ADOrganization
+	
+	CCalendar{adOrganization required} to ADOrganization
+	CNonBusinessDay{calendar required} to CCalendar
+	CNonBusinessDay{adOrganization required} to ADOrganization
+	CPeriod{calendar required} to CCalendar
+	CPeriod{adOrganization required} to ADOrganization
+
+	//product or item master
+	CProductClassification{adOrganization required} to ADOrganization
+	CProductCategory{adOrganization required} to ADOrganization
+	CProductCategoryAccount{adOrganization required} to ADOrganization
+	CProductCategoryAccount{assetAcct required} to CElementValue
+	CProductCategoryAccount{expenseAcct required} to CElementValue
+	CProductCategoryAccount{productCategory required} to CProductCategory
+
+	CProduct{adOrganization required} to ADOrganization
+	CProduct{productClassification required} to CProductClassification
+	CProduct{productCategory required} to CProductCategory
+	CProduct{productSubCategory required} to CProductCategory
+	CProduct{assetAcct required} to CProductCategoryAccount
+	CProduct{expenseAcct required} to CProductCategoryAccount
+	CProduct{uom required} to CUnitOfMeasure
+
+	//master data organization and organization info
+	COrganization{adOrganization required} to ADOrganization
+	COrganizationInfo{adOrganization required} to ADOrganization
+	COrganizationInfo{parentOrganization required} to COrganization
+
+	//master data warehouse and locator
+	CWarehouse{adOrganization required} to ADOrganization
+	CLocator{adOrganization required} to ADOrganization
+	CLocator{warehouse required} to CWarehouse
+
+	//releated vendor invoice verification
+	MVerification{adOrganization required} to ADOrganization
+	MVerification{currency required} to CCurrency
+	MVerificationLine{verification required} to MVerification
+	MVerificationLine{adOrganization required} to ADOrganization
+	MVerificationLine{product required} to CProduct
+	MVerificationLine{uom required} to CUnitOfMeasure
+}
+
+// Allow filtering to all entities.
+filter * except CRegDocTypeBusinessCategory
+// Set pagination options.
+paginate * with pagination except CRegDocTypeBusinessCategory
+// Use Data Transfert Objects (DTO)
+dto * with mapstruct except CRegDocTypeBusinessCategory
+// Set service options to all except few
+service * with serviceClass
+
+skipClient *

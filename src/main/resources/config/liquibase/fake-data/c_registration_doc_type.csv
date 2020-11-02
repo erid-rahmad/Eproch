@@ -1,0 +1,11 @@
+id;name;description;has_expiration_date;mandatory_business_categories;additional_business_categories;mandatory_for_company;additional_for_company;mandatory_for_professional;additional_for_professional;uid;active;ad_organization_id
+1;redundant;Burkina Faso bandwidth;false;ALL;NONE;true;true;false;false;80175aad-360b-41d1-b741-344fad424742;false;1
+2;driver parse Data;Executive architectures;true;ALL;NONE;true;true;true;false;da77ea1c-71b7-4d1f-a19c-b7c5fa33144a;false;2
+3;firewall Small Rubber Bacon Mauritania;throughput Fantastic mission-critical;true;NONE;NONE;false;true;true;true;e71ba7be-7ea4-42e0-a0b6-59fa126645e9;false;3
+4;deliver Fresh;Dynamic Light;false;NONE;NONE;true;true;false;false;3bff6c1a-231d-40f7-b09e-0d0b1c4b382d;true;4
+5;Argentina Falkland Islands (Malvinas);Incredible Rubber Gloves Intelligent;true;NONE;NONE;false;true;true;false;0d4422d5-8f1b-49bf-a3a8-aec4a629bed7;true;5
+6;Consultant Analyst Awesome Granite Chair;AGP Handmade Rubber Table Towels;false;ALL;ALL;true;false;false;true;1ab153da-6d14-4e6e-933f-dec7a496fdbb;false;6
+7;Executive Surinam Dollar hard drive;Horizontal middleware vortals;false;SELECTED;NONE;true;true;false;true;97e04ee6-e7bf-49ab-a552-1713259e88c3;true;7
+8;Pakistan Rupee Soft;system disintermediate Mobility;true;SELECTED;NONE;true;true;true;true;7e810634-c50f-4314-b668-01e055c1d711;true;8
+9;Incredible Cotton Table;Small Granite Tuna platforms;false;NONE;SELECTED;true;true;true;true;572bace1-b440-4ced-8e76-459836bca1b1;false;9
+10;Berkshire;Bedfordshire Toys Granite;false;SELECTED;SELECTED;true;false;true;false;31f3e024-10b8-4413-9427-f30eb59505a9;false;10

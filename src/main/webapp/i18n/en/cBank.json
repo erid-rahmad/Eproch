@@ -1,0 +1,27 @@
+{
+  "opusWebApp": {
+    "cBank": {
+      "home": {
+        "title": "C Banks",
+        "createLabel": "Create a new C Bank",
+        "createOrEditLabel": "Create or edit a C Bank",
+        "notFound": "No C Banks found"
+      },
+      "created": "A new C Bank is created with identifier {{ param }}",
+      "updated": "A C Bank is updated with identifier {{ param }}",
+      "deleted": "A C Bank is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete C Bank {{ id }}?"
+      },
+      "detail": {
+        "title": "C Bank"
+      },
+      "name": "Name",
+      "value": "Value",
+      "shortName": "Short Name",
+      "description": "Description",
+      "swiftCode": "Swift Code",
+      "active": "Active"
+    }
+  }
+}

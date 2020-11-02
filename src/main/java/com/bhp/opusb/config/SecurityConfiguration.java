@@ -84,12 +84,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
             .antMatchers("/api/opus-web-app-kafka/publish").permitAll()
             .antMatchers(
                 HttpMethod.GET,
-                "/api/countries",
-                "/api/regions",
-                "/api/cities",
-                "/api/document-types/**",
-                "/api/business-categories",
-                "/api/document-type-business-categories"
+                "/api/c-business-categories",
+                "/api/c-registration-doc-types/**",
+                "/api/c-reg-doc-type-business-categories",
+                "/api/c-countries",
+                "/api/c-regions",
+                "/api/c-cities",
+                "/api/c-person-in-charges",
+                "/api/c-banks",
+                "/api/c-currencies",
+                "/api/c-taxes",
+                "/api/users/registration-check",
+                "/api/attachments/download/**"
+            ).permitAll()
+            .antMatchers(
+                HttpMethod.POST,
+                "/api/c-attachments/upload"
             ).permitAll()
             .antMatchers("/api/**").authenticated()
             .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)

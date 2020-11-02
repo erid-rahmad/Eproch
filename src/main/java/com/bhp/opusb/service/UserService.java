@@ -1,15 +1,35 @@
 package com.bhp.opusb.service;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 import com.bhp.opusb.config.Constants;
+import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.AdUser;
+import com.bhp.opusb.domain.AdUserAuthority;
 import com.bhp.opusb.domain.Authority;
+import com.bhp.opusb.domain.CBusinessCategory;
+import com.bhp.opusb.domain.CPicBusinessCat;
+import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.User;
+import com.bhp.opusb.repository.AdUserAuthorityRepository;
+import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.AuthorityRepository;
+import com.bhp.opusb.repository.CPicBusinessCatRepository;
+import com.bhp.opusb.repository.ScAuthorityRepository;
 import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.security.AuthoritiesConstants;
 import com.bhp.opusb.security.SecurityUtils;
+import com.bhp.opusb.service.dto.AdUserDTO;
 import com.bhp.opusb.service.dto.UserDTO;
-
-import io.github.jhipster.security.RandomUtil;
+import com.bhp.opusb.service.mapper.AdUserMapper;
+import com.bhp.opusb.service.mapper.CBusinessCategoryMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +41,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.stream.Collectors;
+import io.github.jhipster.security.RandomUtil;
 
 /**
  * Service class for managing users.
@@ -40,25 +57,62 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
+    private final ScAuthorityRepository scAuthorityRepository;
+    private final AdUserAuthorityRepository adUserAuthorityRepository;
 
     private final CacheManager cacheManager;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager) {
+    private final AdUserRepository adUserRepository;
+    private final AdUserMapper adUserMapper;
+    private final CBusinessCategoryMapper cBusinessCategoryMapper;
+
+    private final CPicBusinessCatRepository cPicBusinessCatRepository;
+
+    public UserService(UserRepository userRepository, AdUserRepository adUserRepository,
+            PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, ScAuthorityRepository scAuthorityRepository,
+            AdUserAuthorityRepository adUserAuthorityRepository, CacheManager cacheManager, AdUserMapper adUserMapper,
+            CBusinessCategoryMapper cBusinessCategoryMapper, CPicBusinessCatRepository cPicBusinessCatRepository) {
+
         this.userRepository = userRepository;
+        this.adUserRepository = adUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.scAuthorityRepository = scAuthorityRepository;
+        this.adUserAuthorityRepository = adUserAuthorityRepository;
         this.cacheManager = cacheManager;
+        this.adUserMapper = adUserMapper;
+        this.cBusinessCategoryMapper = cBusinessCategoryMapper;
+        this.cPicBusinessCatRepository = cPicBusinessCatRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
             .map(user -> {
+                adUserRepository.findById(user.getId())
+                    .ifPresent(adUser -> {
+                        adUser.active(true);
+                        scAuthorityRepository.findByAuthorityName(AuthoritiesConstants.SUPPLIER)
+                            .ifPresent(scAuthority -> {
+                                AdUserAuthority userAuthority = new AdUserAuthority().active(true)
+                                    .adOrganization(adUser.getAdOrganization())
+                                    .authority(scAuthority)
+                                    .user(adUser);
+
+                                adUserAuthorityRepository.save(userAuthority);
+
+                                // Add ROLE_SUPPLIER to jhi_user_authority.
+                                user.getAuthorities().add(scAuthority.getAuthority());
+                            });
+                    });
+
+                log.debug("Activated user: {}", user);
+
                 // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
                 this.clearUserCaches(user);
-                log.debug("Activated user: {}", user);
+
                 return user;
             });
     }
@@ -87,31 +141,47 @@ public class UserService {
             });
     }
 
-    public User registerUser(UserDTO userDTO, String password) {
-        userRepository.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+    public User registerUser(AdUserDTO adUser, CVendor vendor, ADOrganization organization) {
+        User newUser = null;
+
+        userRepository.findOneByLogin(adUser.getUserLogin()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new UsernameAlreadyUsedException();
             }
         });
-        userRepository.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+        userRepository.findOneByEmailIgnoreCase(adUser.getEmail()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new EmailAlreadyUsedException();
             }
         });
-        User newUser = new User();
-        String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
+
+        String fullName = adUser.getName().trim();
+        int spaceIndex = fullName.indexOf(" ");
+        newUser = new User();
+
+        if (spaceIndex > 0) {
+            newUser.setFirstName(fullName.substring(0, spaceIndex));
+            newUser.setLastName(fullName.substring(spaceIndex + 1));
+        } else {
+            newUser.setFirstName(fullName);
+        }
+
+        if (adUser.getPassword() == null) {
+            adUser.setPassword(SecurityUtils.generatePassword());
+        }
+
+        String encryptedPassword = passwordEncoder.encode(adUser.getPassword());
+        newUser.setLogin(adUser.getUserLogin());
+        newUser.setLangKey("en");
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
-        if (userDTO.getEmail() != null) {
-            newUser.setEmail(userDTO.getEmail().toLowerCase());
+
+        if (adUser.getEmail() != null) {
+            newUser.setEmail(adUser.getEmail());
         }
-        newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
+
         // new user is not active
         newUser.setActivated(false);
         // new user gets registration key
@@ -122,6 +192,38 @@ public class UserService {
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
+
+        // Create and save the UserExtra entity
+        AdUser pic = adUserMapper.toEntity(adUser)
+            .active(newUser.getActivated())
+            .code(adUser.getUserLogin())
+            .adOrganization(organization)
+            .phone(adUser.getPhone())
+            .position(adUser.getPosition())
+            .user(newUser)
+            .vendor(true)
+            .cVendor(vendor);
+
+        adUserRepository.save(pic);
+        log.debug("PIC saved: {}", pic);
+
+        List<CPicBusinessCat> categories = adUser.getBusinessCategoryIds()
+            .stream()
+            .map((id -> {
+                CPicBusinessCat picBusinessCategory = new CPicBusinessCat();
+                CBusinessCategory category = cBusinessCategoryMapper.fromId(id);
+
+                return picBusinessCategory
+                    .active(true)
+                    .adOrganization(organization)
+                    .pic(pic)
+                    .businessCategory(category);
+            }))
+            .collect(Collectors.toList());
+
+        cPicBusinessCatRepository.saveAll(categories);
+        log.debug("Created Information for PIC's business sector: {}", categories);
+
         return newUser;
     }
 
@@ -260,6 +362,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userRepository.findOneWithAuthoritiesByLogin(login);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> getUserByEmail(String email) {
+        return userRepository.findOneWithAuthoritiesByEmailIgnoreCase(email);
     }
 
     @Transactional(readOnly = true)

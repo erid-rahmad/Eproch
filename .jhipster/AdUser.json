@@ -13,15 +13,32 @@
             "fieldName": "code",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "15"
         },
         {
             "fieldName": "phone",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
+            "fieldName": "position",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "vendor",
+            "javadoc": "Whether it is a vendor or not",
+            "fieldType": "Boolean"
         },
         {
             "fieldName": "failedLoginCount",
@@ -41,6 +58,14 @@
             "relationshipName": "user",
             "otherEntityField": "login",
             "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "adUser",
+            "javadoc": "This field should not empty for a supplier's user",
+            "relationshipName": "cVendor",
+            "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",

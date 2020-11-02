@@ -1,0 +1,28 @@
+{
+  "opusWebApp": {
+    "cCountry": {
+      "home": {
+        "title": "C Countries",
+        "createLabel": "Buat C Country baru",
+        "createOrEditLabel": "Buat atau edit C Country",
+        "notFound": "No C Countries found"
+      },
+      "created": "C Country dengan id {{ param }} telah dibuat",
+      "updated": "C Country dengan id {{ param }} telah diperbaharui",
+      "deleted": "C Country dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus C Country {{ id }}?"
+      },
+      "detail": {
+        "title": "C Country"
+      },
+      "name": "Name",
+      "code": "Code",
+      "withRegion": "With Region",
+      "active": "Active",
+      "currency": "Currency",
+      "cRegion": "C Region",
+      "cCity": "C City"
+    }
+  }
+}

@@ -1,11 +1,11 @@
-user_id;uid;active;code;phone;failed_login_count;last_login_date;ad_organization_id
-1;450cd0aa-1c64-4659-9458-13215b911c49;true;Computer;(999) 152-9860 x77154;70671;2020-10-20T23:17:37;1
-2;5d36652c-1286-4f84-8ff2-6158020dc2d9;false;embrace foreground;091.965.1371;69855;2020-10-20T23:00:49;2
-3;698be50f-8f5b-406c-9902-f773a55acae7;true;Personal Loan Account Quality circuit;107-278-5841 x59162;3471;2020-10-20T22:49:21;3
-4;922b56ad-d8dd-43f6-b692-1e0ff4935cad;true;Markets New Mexico;774-630-7393 x255;95470;2020-10-21T10:21:34;4
-5;d6a83e1d-5490-4146-99f7-162f42375c73;true;Ports neural hack;882.258.3395;27035;2020-10-21T00:41:12;5
-6;d6f47d20-61ed-4288-a693-c03acf8171a4;false;Sleek Steel Chicken Enhanced American Samoa;215-160-7852;20076;2020-10-21T02:11:14;6
-7;a59b8288-5e7d-49b2-9be4-4fbe196b7b36;true;proactive Bypass Unbranded Concrete Computer;1-411-556-4967 x473;96466;2020-10-20T19:02:44;7
-8;c7c99b1b-c63d-47d5-858c-c58a058e0e63;true;Cambridgeshire;082.681.6468;55129;2020-10-21T06:20:14;8
-9;78475488-6390-4b45-a8e8-d5e9e8913056;false;Berkshire;(731) 397-6780;59908;2020-10-21T06:52:21;9
-10;1bc63a2b-6f38-4b9b-8be9-1ba9505361cd;false;JBOD;(796) 782-9642 x24771;88256;2020-10-21T03:10:42;10
+uid;active;code;phone;position;vendor;failed_login_count;last_login_date;user_id;ad_organization_id
+450cd0aa-1c64-4659-9458-13215b911c49;true;Computer;(999) 152-9860 x7715;Borders user-centric Implement;false;34501;2020-10-21T07:22:29;2;1
+1286f840-ff26-4158-820d-c2d959624660;true;Orchestrator;1-137-165-3455 x793;Optimization;true;36169;2020-10-20T17:49:58;1;2
+6c5902f7-73a5-45ac-ae7a-c9feabec11b4;true;Togo Expressway;1-620-575-1163;invoice connecting;true;84458;2020-10-21T06:41:44;2;3
+6f6921e0-ff49-435c-ad85-f6997bb6b50c;false;aggregate Monte;1-846-529-0833;Rustic Plastic Shirt generatin;true;48988;2020-10-21T09:12:01;1;4
+2f42375c-73cd-47ac-8c25-ce348d55f947;false;matrix grid-ena;(418) 815-5945;auxiliary;false;67996;2020-10-20T16:22:35;2;5
+8171a42d-080b-4438-8332-82a0bd94362a;false;quantify Hat;1-394-867-1878 x329;Security Massachusetts Tenge;true;23390;2020-10-21T00:48:50;2;6
+b50700e3-1863-4299-b6fa-b7b5fadc7c99;true;El Salvador Col;284.835.3577;New Zealand Garden;true;90822;2020-10-21T10:31:05;2;7
+63828f20-c39d-42a7-ac83-f78475488639;false;empowering Opti;395-856-0203 x32243;array;false;39773;2020-10-20T12:34:35;2;8
+acd092d1-bc63-4a2b-af38-b9bcbe91ba95;false;maroon Handmade;898.796.7829;Bedfordshire Networked;true;72279;2020-10-21T07:15:20;2;9
+5aa385db-dd64-4990-8a8c-97f672b8bd9b;false;Auto Loan Accou;1-346-529-8265 x840;Rubber;false;26608;2020-10-21T05:27:51;1;10

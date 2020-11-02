@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MVerification.
+    -->
+    <changeSet id="20201009091700-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_verification"
+                                 constraintName="fk_m_verification_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="currency_id"
+                                 baseTableName="m_verification"
+                                 constraintName="fk_m_verification_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_currency"/>
+
+    </changeSet>
+
+    <changeSet id="20201009091700-3" author="dian-tri-budianto">
+        
+        <addForeignKeyConstraint baseColumnNames="vendor_id"
+                                 baseTableName="m_verification"
+                                 constraintName="fk_m_verification_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
+
+        <addForeignKeyConstraint baseColumnNames="pic_user_id"
+                                 baseTableName="m_verification"
+                                 constraintName="fk_m_verification_pic_user_id"
+                                 referencedColumnNames="user_id"
+                                 referencedTableName="c_person_in_charge"/>
+        
+    </changeSet>
+</databaseChangeLog>

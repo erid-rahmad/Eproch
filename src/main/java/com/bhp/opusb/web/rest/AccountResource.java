@@ -1,13 +1,27 @@
 package com.bhp.opusb.web.rest;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+
 import com.bhp.opusb.domain.User;
 import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.security.SecurityUtils;
+import com.bhp.opusb.service.CVendorService;
 import com.bhp.opusb.service.MailService;
+import com.bhp.opusb.service.ScAccessQueryService;
 import com.bhp.opusb.service.UserService;
 import com.bhp.opusb.service.dto.PasswordChangeDTO;
+import com.bhp.opusb.service.dto.RegistrationDTO;
+import com.bhp.opusb.service.dto.ScAccessCriteria;
+import com.bhp.opusb.service.dto.ScAccessDTO;
 import com.bhp.opusb.service.dto.UserDTO;
-import com.bhp.opusb.web.rest.errors.*;
+import com.bhp.opusb.web.rest.errors.EmailAlreadyUsedException;
+import com.bhp.opusb.web.rest.errors.InvalidPasswordException;
+import com.bhp.opusb.web.rest.errors.LoginAlreadyUsedException;
 import com.bhp.opusb.web.rest.vm.KeyAndPasswordVM;
 import com.bhp.opusb.web.rest.vm.ManagedUserVM;
 
@@ -15,11 +29,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
-import java.util.*;
+import io.github.jhipster.service.filter.StringFilter;
+import io.vavr.collection.Stream;
 
 /**
  * REST controller for managing the current user's account.
@@ -39,13 +60,17 @@ public class AccountResource {
     private final UserRepository userRepository;
 
     private final UserService userService;
+    private final CVendorService cVendorService;
+    private final ScAccessQueryService scAccessQueryService;
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    public AccountResource(UserRepository userRepository, UserService userService, CVendorService cVendorService, ScAccessQueryService scAccessQueryService, MailService mailService) {
 
         this.userRepository = userRepository;
         this.userService = userService;
+        this.cVendorService = cVendorService;
+        this.scAccessQueryService = scAccessQueryService;
         this.mailService = mailService;
     }
 
@@ -59,13 +84,18 @@ public class AccountResource {
      */
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        if (!checkPasswordLength(managedUserVM.getPassword())) {
-            throw new InvalidPasswordException();
-        }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        mailService.sendActivationEmail(user);
+    public void registerAccount(@Valid @RequestBody RegistrationDTO registrationDTO) {
+        cVendorService.registerVendor(registrationDTO);
     }
+    /**
+     * public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
+     *  if (!checkPasswordLength(managedUserVM.getPassword())) {
+     *      throw new InvalidPasswordException();
+     *  }
+     *  User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
+     *  mailService.sendActivationEmail(user);
+     * }
+     */
 
     /**
      * {@code GET  /activate} : activate the registered user.
@@ -104,6 +134,18 @@ public class AccountResource {
         return userService.getUserWithAuthorities()
             .map(UserDTO::new)
             .orElseThrow(() -> new AccountResourceException("User could not be found"));
+    }
+
+    @GetMapping("/accesses")
+    public Set<ScAccessDTO> getGrantedAccesses(Authentication authentication) {
+        List<String> authorities = Stream.ofAll(authentication.getAuthorities()).map(GrantedAuthority::getAuthority).toJavaList();
+        ScAccessCriteria criteria = new ScAccessCriteria();
+        StringFilter filter = new StringFilter();
+
+        log.debug("Granted authorities: {}", authorities);
+        filter.setIn(authorities);
+        criteria.setAuthorityName(filter);
+        return Stream.ofAll(scAccessQueryService.findByCriteria(criteria)).toJavaSet();
     }
 
     /**

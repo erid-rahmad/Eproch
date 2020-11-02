@@ -144,6 +144,7 @@ public class ADReferenceListDTO extends AbstractAuditingDTO {
             ", description='" + getDescription() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationName='" + getAdOrganizationName() + "'" +
             ", adReferenceId=" + getAdReferenceId() +
             "}";
     }

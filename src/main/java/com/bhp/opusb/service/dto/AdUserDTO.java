@@ -1,6 +1,7 @@
 package com.bhp.opusb.service.dto;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -9,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.AdUser} entity.
@@ -25,10 +27,21 @@ public class AdUserDTO extends AbstractAuditingDTO {
     private Boolean active;
 
     @NotNull
+    @Size(max = 15)
     private String code;
 
     @NotNull
+    @Size(max = 20)
     private String phone;
+
+    @Size(max = 30)
+    private String position;
+
+    /**
+     * Whether it is a vendor or not
+     */
+    @ApiModelProperty(value = "Whether it is a vendor or not")
+    private Boolean vendor;
 
     private Integer failedLoginCount;
 
@@ -59,9 +72,18 @@ public class AdUserDTO extends AbstractAuditingDTO {
     @Size(min = 5, max = 254)
     private String email;
 
+    /**
+     * This field should not empty for a supplier's user
+     */
+    @ApiModelProperty(value = "This field should not empty for a supplier's user")
+    private Long cVendorId;
+    private String cVendorName;
+
     private Long adOrganizationId;
     private String adOrganizationName;
     
+    private List<Long> businessCategoryIds;
+
     public Long getId() {
         return id;
     }
@@ -100,6 +122,22 @@ public class AdUserDTO extends AbstractAuditingDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public Boolean isVendor() {
+        return vendor;
+    }
+
+    public void setVendor(Boolean vendor) {
+        this.vendor = vendor;
     }
 
     public Integer getFailedLoginCount() {
@@ -158,6 +196,22 @@ public class AdUserDTO extends AbstractAuditingDTO {
         this.email = email;
     }
 
+    public Long getcVendorId() {
+        return cVendorId;
+    }
+
+    public void setcVendorId(Long cVendorId) {
+        this.cVendorId = cVendorId;
+    }
+
+    public String getcVendorName() {
+        return cVendorName;
+    }
+
+    public void setcVendorName(String cVendorName) {
+        this.cVendorName = cVendorName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -172,6 +226,14 @@ public class AdUserDTO extends AbstractAuditingDTO {
 
     public void setAdOrganizationName(String adOrganizationName) {
         this.adOrganizationName = adOrganizationName;
+    }
+
+    public List<Long> getBusinessCategoryIds() {
+        return businessCategoryIds;
+    }
+
+    public void setBusinessCategoryIds(List<Long> businessCategoryIds) {
+        this.businessCategoryIds = businessCategoryIds;
     }
 
     @Override
@@ -203,10 +265,13 @@ public class AdUserDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", code='" + getCode() + "'" +
             ", phone='" + getPhone() + "'" +
+            ", position='" + getPosition() + "'" +
+            ", vendor='" + isVendor() + "'" +
             ", failedLoginCount=" + getFailedLoginCount() +
             ", lastLoginDate='" + getLastLoginDate() + "'" +
             ", userId=" + getUserId() +
             ", userLogin='" + getUserLogin() + "'" +
+            ", cVendorId=" + getcVendorId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";
     }

@@ -1,0 +1,28 @@
+{
+  "opusWebApp": {
+    "cCountry": {
+      "home": {
+        "title": "C Countries",
+        "createLabel": "Create a new C Country",
+        "createOrEditLabel": "Create or edit a C Country",
+        "notFound": "No C Countries found"
+      },
+      "created": "A new C Country is created with identifier {{ param }}",
+      "updated": "A C Country is updated with identifier {{ param }}",
+      "deleted": "A C Country is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete C Country {{ id }}?"
+      },
+      "detail": {
+        "title": "C Country"
+      },
+      "name": "Name",
+      "code": "Code",
+      "withRegion": "With Region",
+      "active": "Active",
+      "currency": "Currency",
+      "cRegion": "C Region",
+      "cCity": "C City"
+    }
+  }
+}

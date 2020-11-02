@@ -18,6 +18,7 @@ logging:
     ROOT: INFO
     io.github.jhipster: INFO
     com.bhp.opusb: INFO
+    org.apache.kafka.clients.NetworkClient: ERROR
 
 management:
   metrics:
@@ -28,17 +29,6 @@ management:
 spring:
   profiles:
     active: prod
-    mail:
-      host: BHPCAS1SRV.berca.co.id
-      port: 587
-      username: admin.opusb@berca.co.id
-      password: cSWZKe%o~h@iaUg4
-      protocol: smtp
-      tls: true
-      properties.mail.smtp:
-        auth: true
-        starttls.enable: true
-        ssl.trust: BHPCAS1SRV.berca.co.id
   devtools:
     restart:
       enabled: false
@@ -50,9 +40,9 @@ spring:
         server-uri: http://bhp-dwh-prd:9393
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/OpusWebApp
-    username: OpusWebApp
-    password:
+    url: jdbc:postgresql://bhp-erpdbs-dev:5434/bhp_opusbweb_dev
+    username: bhp_opusweb_dev
+    password: bhp_opusweb_dev
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -63,10 +53,16 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: localhost
-    port: 25
-    username:
-    password:
+    host: BHPCAS1SRV.berca.co.id
+    port: 587
+    username: admin.opusb@berca.co.id
+    password: cSWZKe%o~h@iaUg4
+    protocol: smtp
+    tls: true
+    properties.mail.smtp:
+      auth: true
+      starttls.enable: true
+      ssl.trust: BHPCAS1SRV.berca.co.id
   thymeleaf:
     cache: true
 
@@ -90,7 +86,7 @@ spring:
 #        ciphers: TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA,TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256,TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_DHE_RSA_WITH_AES_128_GCM_SHA256 ,TLS_DHE_RSA_WITH_AES_256_GCM_SHA384 ,TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256,TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384,TLS_DHE_RSA_WITH_AES_128_CBC_SHA256,TLS_DHE_RSA_WITH_AES_128_CBC_SHA,TLS_DHE_RSA_WITH_AES_256_CBC_SHA256,TLS_DHE_RSA_WITH_AES_256_CBC_SHA,TLS_RSA_WITH_AES_128_GCM_SHA256,TLS_RSA_WITH_AES_256_GCM_SHA384,TLS_RSA_WITH_AES_128_CBC_SHA256,TLS_RSA_WITH_AES_256_CBC_SHA256,TLS_RSA_WITH_AES_128_CBC_SHA,TLS_RSA_WITH_AES_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_RSA_WITH_CAMELLIA_256_CBC_SHA,TLS_DHE_RSA_WITH_CAMELLIA_128_CBC_SHA,TLS_RSA_WITH_CAMELLIA_128_CBC_SHA
 # ===================================================================
 server:
-  port: 8080
+  port: 8090
   compression:
     enabled: true
     mime-types: text/html,text/xml,text/plain,text/css, application/javascript, application/json
@@ -127,7 +123,8 @@ jhipster:
         token-validity-in-seconds: 86400
         token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
-    base-url: http://my-server-url-to-change # Modify according to your server's URL
+    base-url: https://eproc.opusb.id/#/ # Modify according to your server's URL
+    from: admin.opusb@berca.co.id
   metrics:
     logs: # Reports metrics in the logs
       enabled: false
@@ -151,4 +148,6 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  attachment:
+    upload-dir: /opt/opus-web-attachments

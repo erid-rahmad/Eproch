@@ -101,13 +101,13 @@ public class AdUserAuthorityQueryService extends QueryService<AdUserAuthority> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(AdUserAuthority_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
-            if (criteria.getUserId() != null) {
-                specification = specification.and(buildSpecification(criteria.getUserId(),
-                    root -> root.join(AdUserAuthority_.user, JoinType.LEFT).get(AdUser_.id)));
+            if (criteria.getUserUserId() != null) {
+                specification = specification.and(buildSpecification(criteria.getUserUserId(),
+                    root -> root.join(AdUserAuthority_.user, JoinType.INNER).get(AdUser_.id)));
             }
             if (criteria.getAuthorityId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAuthorityId(),
-                    root -> root.join(AdUserAuthority_.authority, JoinType.LEFT).get(ScAuthority_.id)));
+                    root -> root.join(AdUserAuthority_.authority, JoinType.INNER).get(ScAuthority_.id)));
             }
         }
         return specification;

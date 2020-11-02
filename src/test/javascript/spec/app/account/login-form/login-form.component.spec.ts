@@ -71,7 +71,7 @@ describe('LoginForm Component', () => {
       rememberMe: true
     });
 
-    expect(loginForm.authenticationError).toBeTruthy();
+    expect(localStorage.getItem('jhi-authenticationToken')).toBeUndefined();
   });
 
   it('should store token if authentication is OK', async () => {
@@ -93,7 +93,6 @@ describe('LoginForm Component', () => {
       rememberMe: true
     });
 
-    expect(loginForm.authenticationError).toBeFalsy();
     expect(localStorage.getItem('jhi-authenticationToken')).toEqual(jwtSecret);
   });
 });

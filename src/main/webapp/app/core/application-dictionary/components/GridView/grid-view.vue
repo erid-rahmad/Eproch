@@ -57,6 +57,7 @@
             :ref="column.property"
             v-model="row[column.property]"
             :class="column.property"
+            class="switch"
             :disabled="!row.editing || isReadonly(row, field)"
             @change="value => onInputChanged(field, value)"
           />
@@ -66,6 +67,7 @@
             :ref="column.property"
             v-model="row[column.property]"
             :class="column.property"
+            class="checkbox"
             :disabled="!row.editing || isReadonly(row, field)"
             @change="value => onInputChanged(field, value)"
           />
@@ -87,6 +89,7 @@
               :ref="column.property"
               v-model="row[column.property]"
               :class="column.property"
+              class="selectRemote"
               :remote="true"
               :remote-method="fetchTableDirectData"
               size="mini"
@@ -110,6 +113,7 @@
               :ref="column.property"
               v-model="row[column.property]"
               :class="column.property"
+              class="select"
               size="mini"
               clearable
               filterable
@@ -130,6 +134,7 @@
               :ref="column.property"
               v-model="row[column.property]"
               :class="column.property"
+              class="input"
               :minlength="getMinLength(field)"
               :maxlength="getMaxLength(field)"
               :show-password="isPasswordField(field)"
@@ -144,6 +149,7 @@
               :ref="column.property"
               v-model="row[column.property]"
               :class="column.property"
+              class="numeric"
               controls-position="right"
               size="mini"
               :min="getMinValue(field)"
@@ -156,6 +162,7 @@
               :ref="column.property"
               v-model="row[column.property]"
               size="mini"
+              class="date"
               :type="datePickerType(field)"
               :format="dateDisplayFormat(field)"
               :value-format="dateValueFormat(field)"
@@ -258,6 +265,10 @@
 
     label.el-checkbox {
       margin: 4px 0;
+    }
+
+    .switch, .checkbox, .selectRemote, .select, .input, .numeric, .date{
+      width: 100%;
     }
   }
 

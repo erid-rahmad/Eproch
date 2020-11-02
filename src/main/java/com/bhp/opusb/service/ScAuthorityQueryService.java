@@ -105,7 +105,7 @@ public class ScAuthorityQueryService extends QueryService<ScAuthority> {
             }
             if (criteria.getAuthorityName() != null) {
                 specification = specification.and(buildSpecification(criteria.getAuthorityName(),
-                    root -> root.join(ScAuthority_.authority, JoinType.LEFT).get(Authority_.name)));
+                    root -> root.join(ScAuthority_.authority, JoinType.INNER).get(Authority_.name)));
             }
             if (criteria.getAccessAllOrgs() != null) {
                 specification = specification.and(buildSpecification(criteria.getAccessAllOrgs(), ScAuthority_.accessAllOrgs));

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity CProductGroupAccount.
+    -->
+    <changeSet id="20200903081000-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="asset_account_id"
+                                 baseTableName="c_product_group_account"
+                                 constraintName="fk_c_product_group_account_asset_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_element_value"/>
+
+        <addForeignKeyConstraint baseColumnNames="depreciation_account_id"
+                                 baseTableName="c_product_group_account"
+                                 constraintName="fk_c_product_group_account_depreciation_account_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_element_value"/>
+
+        <addForeignKeyConstraint baseColumnNames="product_group_id"
+                                 baseTableName="c_product_group_account"
+                                 constraintName="fk_c_product_group_account_product_group_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_product_group"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="c_product_group_account"
+                                 constraintName="fk_c_product_group_account_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+    </changeSet>
+</databaseChangeLog>

@@ -1,0 +1,85 @@
+{
+    "name": "CCountry",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "pattern",
+                "unique"
+            ],
+            "fieldValidateRulesPattern": "^[A-Z]{2}$"
+        },
+        {
+            "fieldName": "withRegion",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "phoneCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "cCountry",
+            "relationshipValidateRules": "required",
+            "relationshipName": "currency",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cRegion",
+            "otherEntityRelationshipName": "country",
+            "relationshipName": "cRegion"
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "cCity",
+            "otherEntityRelationshipName": "country",
+            "relationshipName": "cCity"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cCountry",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200619072400",
+    "entityTableName": "c_country",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

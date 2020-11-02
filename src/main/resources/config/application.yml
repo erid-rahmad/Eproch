@@ -104,6 +104,12 @@ spring:
   mvc:
     favicon:
       enabled: false
+  servlet:
+    multipart:
+      enabled: true
+      file-size-threshold: 2KB
+      max-file-size: 200MB
+      max-request-size: 215MB
   task:
     execution:
       thread-name-prefix: opus-web-app-task-
@@ -122,6 +128,8 @@ spring:
       console-available: true
   quartz:
     job-store-type: jdbc
+    # jdbc:
+      # initialize-schema: always
     overwrite-existing-jobs: true
     properties:
       org.quartz.scheduler.instanceId: AUTO
@@ -194,4 +202,6 @@ kafka:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  attachment:
+    upload-dir: /opt/eproc/data/attachments

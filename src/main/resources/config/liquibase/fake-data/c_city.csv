@@ -1,0 +1,11 @@
+id;code;name;uid;active;ad_organization_id
+1;"MUK";Personal Loan Account bypass;88fa0a83-96af-461f-a7b6-7bd86ede7ba9;false;1
+2;"ZVN";Guyana Associate payment;34d38c3f-38f6-43fb-97c5-7827b911862c;false;2
+3;"EZM";deposit generating;792213f7-8f0b-49f6-a64d-c3507620e8db;true;3
+4;"CKC";SMS;8a578677-e6ac-423e-bef2-3a946171c2b4;false;4
+5;"IHR";overriding;cd234d9b-9e0e-493e-ac7f-e61aa3fb1f57;true;5
+6;"SRC";Synchronised;b8f64757-5a59-4af6-8051-fb08ca96272a;true;6
+7;"YYF";Avon neural;2f984aa3-a497-47a7-bf85-1cd8a2c32a4b;true;7
+8;"WJO";monitor dynamic Communications;7fc1fd8b-ce60-4073-8422-be9a114553cc;true;8
+9;"MKS";Soft;85148b63-6979-40e4-8dd4-69d6fe674794;false;9
+10;"GOF";SAS Stream;e4d77a2a-0b17-4d9c-84d0-92c15c48dc50;false;10

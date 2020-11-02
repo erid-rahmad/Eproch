@@ -131,7 +131,7 @@ Desktop.ini
 *.*~
 *~
 .merge_file*
-*entities.png
+/*.png
 
 ######################
 # Gradle Wrapper

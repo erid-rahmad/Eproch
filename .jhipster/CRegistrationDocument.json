@@ -1,0 +1,69 @@
+{
+    "name": "CRegistrationDocument",
+    "fields": [
+        {
+            "fieldName": "documentNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "expirationDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cRegistrationDocType",
+            "otherEntityRelationshipName": "cRegistrationDocument",
+            "relationshipValidateRules": "required",
+            "relationshipName": "type",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "cRegistrationDocument",
+            "relationshipValidateRules": "required",
+            "relationshipName": "file",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "cRegistrationDocument",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cRegistrationDocument",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200707051200",
+    "entityTableName": "c_registration_document",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

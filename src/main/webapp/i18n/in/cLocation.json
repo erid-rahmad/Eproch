@@ -1,0 +1,26 @@
+{
+  "opusWebApp": {
+    "cLocation": {
+      "home": {
+        "title": "C Locations",
+        "createLabel": "Buat C Location baru",
+        "createOrEditLabel": "Buat atau edit C Location",
+        "notFound": "No C Locations found"
+      },
+      "created": "C Location dengan id {{ param }} telah dibuat",
+      "updated": "C Location dengan id {{ param }} telah diperbaharui",
+      "deleted": "C Location dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus C Location {{ id }}?"
+      },
+      "detail": {
+        "title": "C Location"
+      },
+      "streetAddress": "Street Address",
+      "postalCode": "Postal Code",
+      "taxInvoiceAddress": "Tax Invoice Address",
+      "active": "Active",
+      "city": "City"
+    }
+  }
+}
