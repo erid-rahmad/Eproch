@@ -12,6 +12,31 @@ entity ADOrganizationInfo {
 	uid UUID
 	active Boolean
 }
+
+/**
+ * The extended User entity.
+ */
+entity AdUser {
+	uid UUID
+	active Boolean
+	code String required maxlength(15)
+	phone String required maxlength(20)
+	position String maxlength(30)
+
+	/** Whether it is a vendor or not */
+	vendor Boolean
+
+	failedLoginCount Integer
+	lastLoginDate Instant
+}
+
+entity CDocumentType {
+	uid UUID
+	active Boolean
+	name String required
+	description String
+}
+
 entity CCountry {
 	name String required
 	code String required pattern(/^[A-Z]{2}$/) unique
@@ -124,16 +149,6 @@ entity CTax {
 	active Boolean
 }
 
-/**
- * The PIC entity.
- */
-entity CPersonInCharge {
-	uid UUID
-	position String required
-	phone String required
-	active Boolean
-}
-
 entity CFunctionary {
 	name String required
 	position String required
@@ -145,10 +160,10 @@ entity CFunctionary {
 
 entity CVendor {
 	name String required
-    type String required
-    location String required
-    idNo String
-    tin String
+	type String required
+	location String required
+	idNo String
+	tin String
 	taxIdNo String
 	taxIdName String
 	branch Boolean
@@ -158,15 +173,23 @@ entity CVendor {
 	website String
 	paymentCategory String required
 	approvalStatus String required
+
+	dateTrx LocalDate required
+	documentNo String required
+	documentAction String required
+	documentStatus String required
+	approved Boolean
+	processed Boolean
+
 	uid UUID
 	active Boolean
 }
 
 entity CVendorLocation {
 	taxInvoiceAddress Boolean
-    shipAddress Boolean
-    invoiceAddress Boolean
-    payFromAddress Boolean
+	shipAddress Boolean
+	invoiceAddress Boolean
+	payFromAddress Boolean
 	uid UUID
 	active Boolean
 }
@@ -183,12 +206,12 @@ entity CPicBusinessCat {
 
 entity CVendorBankAcct {
 	accountNo String required
-    accountName String required
+	accountName String required
 	name String
 	branch String
-    bban String
-    iban String
-    description String
+	bban String
+	iban String
+	description String
 	uid UUID
 	active Boolean
 }
@@ -204,7 +227,7 @@ entity CVendorGroup {
 	code String required
 	name String required
 	description String
-    isDefault Boolean
+	isDefault Boolean
 	uid UUID
 	active Boolean
 }
@@ -304,6 +327,7 @@ entity CNonBusinessDay {
 	uid UUID
 	active Boolean
 }
+
 /**
  * The Product/Item Master.
  */
@@ -332,24 +356,6 @@ entity CProduct{
 	name String required
 	description String
 	type String
-	uid UUID
-	active Boolean
-}
-/**
- * The Organization & Warehouse Master.
- */
-entity COrganization {
-	name String required
-	code String required unique
-	description String
-	uid UUID
-	active Boolean
-}
-
-entity COrganizationInfo {
-	address String required
-	taxId String required
-	bankAccount String
 	uid UUID
 	active Boolean
 }
@@ -443,10 +449,6 @@ enum Depreciation {
 	STRAIGHT_LINE, DOUBLE_DECLINING
 }
 
-enum VendorType {
-	COMPANY, PROFESSIONAL
-}
-
 enum CBusinessCategorySector {
 	PRIMARY, SECONDARY, TERTIARY
 }
@@ -460,8 +462,8 @@ enum BusinessCategorySelection {
 }
 
 relationship OneToOne {
+	AdUser{user(login) required} to User
 	CCountry{currency required} to CCurrency
-	CPersonInCharge{user required} to User
 	CVendor{taxIdFile} to CAttachment
 }
 /**
@@ -486,6 +488,12 @@ relationship OneToMany {
  */
 relationship ManyToOne {
 	ADOrganizationInfo{adOrganization required} to ADOrganization
+	
+	/** This field should not empty for a supplier's user */
+	AdUser{cVendor} to CVendor
+	AdUser{adOrganization required} to ADOrganization
+
+	CDocumentType{adOrganization required} to ADOrganization
 
 	CLocation{city required} to CCity
 
@@ -501,9 +509,6 @@ relationship ManyToOne {
 	CVendorLocation{vendor} to CVendor
 	CVendorLocation{location} to CLocation
 	CVendorLocation{adOrganization required} to ADOrganization
-
-	CPersonInCharge{vendor} to CVendor
-	CPersonInCharge{adOrganization required} to ADOrganization
 
 	CFunctionary{adOrganization required} to ADOrganization
 	CFunctionary{vendor} to CVendor
@@ -525,12 +530,13 @@ relationship ManyToOne {
 	CRegistrationDocType{adOrganization required} to ADOrganization
 
 	CVendor{adOrganization required} to ADOrganization
-
+	CVendor{documentType required} to CDocumentType
+	
 	CVendorBusinessCat{vendor required} to CVendor
 	CVendorBusinessCat{businessCategory required} to CBusinessCategory
 	CVendorBusinessCat{adOrganization required} to ADOrganization
 
-	CPicBusinessCat{pic required} to CPersonInCharge
+	CPicBusinessCat{pic required} to AdUser
 	CPicBusinessCat{businessCategory required} to CBusinessCategory
 	CPicBusinessCat{adOrganization required} to ADOrganization
 
@@ -583,11 +589,6 @@ relationship ManyToOne {
 	CProduct{expenseAcct required} to CProductCategoryAccount
 	CProduct{uom required} to CUnitOfMeasure
 
-	//master data organization and organization info
-	COrganization{adOrganization required} to ADOrganization
-	COrganizationInfo{adOrganization required} to ADOrganization
-	COrganizationInfo{parentOrganization required} to COrganization
-
 	//master data warehouse and locator
 	CWarehouse{adOrganization required} to ADOrganization
 	CLocator{adOrganization required} to ADOrganization
@@ -601,8 +602,8 @@ relationship ManyToOne {
 	MVerificationLine{product required} to CProduct
 	MVerificationLine{uom required} to CUnitOfMeasure
 
-    CVendorGroup{adOrganization required} to ADOrganization
-    CVendor{vendorGroup} to CVendorGroup
+	CVendorGroup{adOrganization required} to ADOrganization
+	CVendor{vendorGroup} to CVendorGroup
 }
 
 // Allow filtering to all entities.

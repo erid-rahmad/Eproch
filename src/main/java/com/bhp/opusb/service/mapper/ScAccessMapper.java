@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link ScAccess} and its DTO {@link ScAccessDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, ScAccessTypeMapper.class, ADWindowMapper.class, AdFormMapper.class, ScAuthorityMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, ScAccessTypeMapper.class, ADWindowMapper.class, AdFormMapper.class, CDocumentTypeMapper.class, ADReferenceListMapper.class, ScAuthorityMapper.class})
 public interface ScAccessMapper extends EntityMapper<ScAccessDTO, ScAccess> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
@@ -21,6 +21,10 @@ public interface ScAccessMapper extends EntityMapper<ScAccessDTO, ScAccess> {
     @Mapping(source = "window.name", target = "windowName")
     @Mapping(source = "form.id", target = "formId")
     @Mapping(source = "form.name", target = "formName")
+    @Mapping(source = "documentType.id", target = "documentTypeId")
+    @Mapping(source = "documentType.name", target = "documentTypeName")
+    @Mapping(source = "referenceList.id", target = "referenceListId")
+    @Mapping(source = "referenceList.name", target = "referenceListName")
     @Mapping(source = "authority.id", target = "authorityId")
     @Mapping(source = "authority.authority.name", target = "authorityName")
     ScAccessDTO toDto(ScAccess scAccess);
@@ -29,6 +33,8 @@ public interface ScAccessMapper extends EntityMapper<ScAccessDTO, ScAccess> {
     @Mapping(source = "typeId", target = "type")
     @Mapping(source = "windowId", target = "window")
     @Mapping(source = "formId", target = "form")
+    @Mapping(source = "documentTypeId", target = "documentType")
+    @Mapping(source = "referenceListId", target = "referenceList")
     @Mapping(source = "authorityId", target = "authority")
     ScAccess toEntity(ScAccessDTO scAccessDTO);
 

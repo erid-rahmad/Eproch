@@ -7,39 +7,86 @@ import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.ADColumnType;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ADColumn} entity.
  */
 public class ADColumnDTO extends AbstractAuditingDTO {
-    
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
     private UUID uid;
 
+    /**
+     * The JPA entity field name (usually in a camelCased format). It's
+     * automatically filled by the dbSync process.
+     * updatable = false.
+     */
     @NotNull
+    @ApiModelProperty(value = "The JPA entity field name (usually in a camelCased format).\nIt's automatically filled by the dbSync process.\nupdatable = false.", required = true)
     private String name;
 
+    /**
+     * The native database column name (usually in a kebab_cased format). It's
+     * automatically filled by the dbSync process.
+     * updatable = false.
+     */
     @NotNull
+    @ApiModelProperty(value = "The native database column name (usually in a kebab_cased format).\nIt's automatically filled by the dbSync process.\nupdatable = false.", required = true)
     private String sqlName;
 
     private String description;
 
     private Long fieldLength;
 
+    /**
+     * Whether it is a primary key column or not. It's automatically filled by the
+     * dbSync process.
+     * updatable = false.
+     */
+    @ApiModelProperty(value = "Whether it is a primary key column or not.\nIt's automatically filled by the dbSync process.\nupdatable = false.")
     private Boolean key;
 
     private ADColumnType type;
 
+    /**
+     * Whether it is a foreign key column or not. It's automatically filled by the
+     * dbSync process.
+     * updatable = false.
+     */
+    @ApiModelProperty(value = "Whether it is a foreign key column or not.\nIt's automatically filled by the dbSync process.\nupdatable = false.")
     private Boolean foreignKey;
 
+    /**
+     * The name of the linked primary key table if foreignKey is true. It's
+     * automatically filled by the dbSync process.
+     * updatable = false.
+     */
+    @ApiModelProperty(value = "The name of the linked primary key table if foreignKey is true.\nIt's automatically filled by the dbSync process.\nupdatable = false.")
     private String importedTable;
 
+    /**
+     * The column name of the linked primary key if foreignKey is true. It's
+     * automatically filled by the dbSync process.
+     * updatable = false.
+     */
+    @ApiModelProperty(value = "The column name of the linked primary key if foreignKey is true.\nIt's automatically filled by the dbSync process.\nupdatable = false.")
     private String importedColumn;
 
+    /**
+     * It's automatically filled by the dbSync process.
+     * updatable = false.
+     */
+    @ApiModelProperty(value = "It's automatically filled by the dbSync process. updatable = false.")
     private Boolean mandatory;
 
+    /**
+     * This should be displayed only if mandatory = false.
+     */
+    @ApiModelProperty(value = "This should be displayed only if mandatory = false.")
     private String mandatoryLogic;
 
     private String displayLogic;
@@ -56,22 +103,45 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     private String formatPattern;
 
+    /**
+     * The minimum character length of the string column.
+     */
+    @ApiModelProperty(value = "The minimum character length of the string column.")
     private Integer minLength;
 
+    /**
+     * The maximum character length of the string column.
+     */
+    @ApiModelProperty(value = "The maximum character length of the string column.")
     private Integer maxLength;
 
+    /**
+     * The minimum number value of the numeric column.
+     */
+    @ApiModelProperty(value = "The minimum number value of the numeric column.")
     private Long minValue;
 
+    /**
+     * The minimum number value of the numeric column.
+     */
+    @ApiModelProperty(value = "The minimum number value of the numeric column.")
     private Long maxValue;
 
     private Boolean identifier;
 
+    /**
+     * Determine that the field is displayed by default in the search form.
+     */
+    @ApiModelProperty(value = "Determine that the field is displayed by default in the search form.")
     private Boolean defaultSelection;
 
+    /**
+     * Determine the field sequence in the search form.
+     */
+    @ApiModelProperty(value = "Determine the field sequence in the search form.")
     private Integer selectionSequence;
 
     private Boolean active;
-
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -84,7 +154,7 @@ public class ADColumnDTO extends AbstractAuditingDTO {
 
     private Long adTableId;
     private String adTableName;
-    
+
     private ADReferenceDTO adReference;
     private AdValidationRuleDTO adValidationRule;
 
@@ -343,7 +413,7 @@ public class ADColumnDTO extends AbstractAuditingDTO {
     public void setAdReferenceName(String adReferenceName) {
         this.adReferenceName = adReferenceName;
     }
-    
+
     public Long getAdValidationRuleId() {
         return adValidationRuleId;
     }

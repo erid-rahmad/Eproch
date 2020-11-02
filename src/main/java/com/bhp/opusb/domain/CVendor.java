@@ -1,15 +1,25 @@
 package com.bhp.opusb.domain;
 
+import java.time.LocalDate;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * A CVendor.
@@ -74,6 +84,28 @@ public class CVendor extends AbstractAuditingEntity {
     @Column(name = "approval_status", nullable = false)
     private String approvalStatus;
 
+    @NotNull
+    @Column(name = "date_trx", nullable = false)
+    private LocalDate dateTrx;
+
+    @NotNull
+    @Column(name = "document_no", nullable = false)
+    private String documentNo;
+
+    @NotNull
+    @Column(name = "document_action", nullable = false)
+    private String documentAction;
+
+    @NotNull
+    @Column(name = "document_status", nullable = false)
+    private String documentStatus;
+
+    @Column(name = "approved")
+    private Boolean approved;
+
+    @Column(name = "processed")
+    private Boolean processed;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -92,6 +124,11 @@ public class CVendor extends AbstractAuditingEntity {
     @ManyToOne
     @JsonIgnoreProperties("cVendors")
     private CVendorGroup vendorGroup;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cVendors")
+    private CDocumentType documentType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -284,6 +321,84 @@ public class CVendor extends AbstractAuditingEntity {
         this.approvalStatus = approvalStatus;
     }
 
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public CVendor dateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+        return this;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public CVendor documentNo(String documentNo) {
+        this.documentNo = documentNo;
+        return this;
+    }
+
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public CVendor documentAction(String documentAction) {
+        this.documentAction = documentAction;
+        return this;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public CVendor documentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+        return this;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public Boolean isApproved() {
+        return approved;
+    }
+
+    public CVendor approved(Boolean approved) {
+        this.approved = approved;
+        return this;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public Boolean isProcessed() {
+        return processed;
+    }
+
+    public CVendor processed(Boolean processed) {
+        this.processed = processed;
+        return this;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -348,6 +463,19 @@ public class CVendor extends AbstractAuditingEntity {
     public void setVendorGroup(CVendorGroup cVendorGroup) {
         this.vendorGroup = cVendorGroup;
     }
+
+    public CDocumentType getDocumentType() {
+        return documentType;
+    }
+
+    public CVendor documentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+        return this;
+    }
+
+    public void setDocumentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
@@ -389,6 +517,12 @@ public class CVendor extends AbstractAuditingEntity {
             ", website='" + getWebsite() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
             ", approvalStatus='" + getApprovalStatus() + "'" +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

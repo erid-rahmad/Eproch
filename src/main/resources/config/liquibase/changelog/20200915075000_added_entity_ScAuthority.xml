@@ -71,7 +71,9 @@
             <column name="active" type="boolean"/>
             <column name="description" type="string"/>
             <column name="master" type="boolean"/>
-            <column name="authority_id" type="numeric"/>
+            <column name="access_all_orgs" type="boolean"/>
+            <column name="use_user_orgs" type="boolean"/>
+            <column name="authority_name" type="string"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
@@ -81,6 +83,17 @@
         <addColumn tableName="sc_authority">
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20201022091200" author="Ananta Aryadewa">
+        <addColumn tableName="sc_authority">
+            <column name="access_all_orgs" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="use_user_orgs" type="boolean">
+                <constraints nullable="true" />
             </column>
         </addColumn>
     </changeSet>

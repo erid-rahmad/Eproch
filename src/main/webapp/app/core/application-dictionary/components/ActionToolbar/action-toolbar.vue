@@ -118,16 +118,17 @@
       />
     </el-button-group>
     <el-dropdown
-      v-show="transactionWindow"
+      v-show="hasDocumentActions"
+      ref="docActionButton"
       split-button
-      type="primary"
+      :type="approved ? 'success' : 'primary'"
       @click="applyNextDocumentAction"
       @command="applyDocumentAction"
     >
-      {{ currentDocumentAction }}
+      {{ defaultDocumentAction }}
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item
-          v-for="action in actions"
+          v-for="action in documentActions"
           :key="action.id"
           :command="action"
           :title="action.name"

@@ -58,9 +58,6 @@ public class ADWindow extends AbstractAuditingEntity {
     @Column(name = "type", nullable = false)
     private ADWindowType type;
 
-    @Column(name = "tree_view")
-    private Boolean treeView;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "access_level")
     private AdAccessLevel accessLevel;
@@ -149,19 +146,6 @@ public class ADWindow extends AbstractAuditingEntity {
 
     public void setType(ADWindowType type) {
         this.type = type;
-    }
-
-    public Boolean isTreeView() {
-        return treeView;
-    }
-
-    public ADWindow treeView(Boolean treeView) {
-        this.treeView = treeView;
-        return this;
-    }
-
-    public void setTreeView(Boolean treeView) {
-        this.treeView = treeView;
     }
 
     public AdAccessLevel getAccessLevel() {
@@ -259,7 +243,6 @@ public class ADWindow extends AbstractAuditingEntity {
             ", description='" + getDescription() + "'" +
             ", titleLogic='" + getTitleLogic() + "'" +
             ", type='" + getType() + "'" +
-            ", treeView='" + isTreeView() + "'" +
             ", accessLevel='" + getAccessLevel() + "'" +
             ", active='" + isActive() + "'" +
             "}";

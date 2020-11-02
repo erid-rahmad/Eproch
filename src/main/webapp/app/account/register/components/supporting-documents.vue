@@ -52,7 +52,7 @@
                         <el-link 
                             target="_blank"
                             v-if="props.row.file" 
-                            v-bind:href="''+props.row.file.response.downloadUri+''" 
+                            :href="'' + props.row.file.response.downloadUri+''" 
                             :underline="false">
                             {{ props.row.file.response.attachment.fileName }}
                         </el-link>
@@ -131,7 +131,7 @@
                         <el-link 
                             target="_blank"
                             v-if="props.row.file" 
-                            v-bind:href="''+props.row.file.response.downloadUri+''" 
+                            :href="'' + props.row.file.response.downloadUri+''" 
                             :underline="false">
                             {{ props.row.file.response.attachment.fileName }}
                         </el-link>

@@ -1,5 +1,7 @@
 package com.bhp.opusb.service.mapper;
 
+import java.time.LocalDate;
+
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CAttachment;
 import com.bhp.opusb.domain.CCity;
@@ -39,7 +41,11 @@ public class RegistrationMapper {
       .tin(companyProfile.getTin())
       .website(companyProfile.getWebsite())
       .taxIdName(companyProfile.getNpwpName())
-      .taxIdNo(companyProfile.getNpwp());
+      .taxIdNo(companyProfile.getNpwp())
+      .dateTrx(LocalDate.now())
+      .documentAction("APV")
+      .documentNo("1000")
+      .documentStatus("SMT");
 
     return vendor;
   }

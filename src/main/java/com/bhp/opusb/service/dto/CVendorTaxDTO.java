@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CVendorTax} entity.
  */
@@ -13,6 +15,7 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
 
     private Long id;
 
+    @JsonProperty("eInvoice")
     private Boolean eInvoice;
 
     private Boolean taxableEmployers;

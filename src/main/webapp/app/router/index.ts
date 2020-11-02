@@ -7,6 +7,7 @@ Component.registerHooks([
 ]);
 import Router, { RouteConfig } from 'vue-router';
 import Layout from '@/layout/index.vue';
+import { forms } from './forms';
 const DynamicWindow = () => import(/* webpackChunkName: "dynamicWindow" */ '@/core/application-dictionary/components/DynamicWindow/dynamic-window.vue');
 /* tslint:disable */
 // prettier-ignore
@@ -94,6 +95,28 @@ export const constantRoutes: RouteConfig[] = [
         component: () => import(/* webpackChunkName: "register" */ '@/account/register/steps-form.vue')
       }
     ]
+  },
+  {
+    path: '/account/activate',
+    component: forms.get('accountActivation'),
+    meta: {
+      hidden: true
+    }
+  },
+  {
+    path: '/account/reset/request',
+    component: forms.get('accountResetPasswordInit'),
+    meta: {
+      hidden: true
+    }
+  },
+  {
+    path: '/account/reset/finish',
+    component: forms.get('accountResetPasswordFinish'),
+    redirect: 'noredirect',
+    meta: {
+      hidden: true
+    }
   }
 ];
 

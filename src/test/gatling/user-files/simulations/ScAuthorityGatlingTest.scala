@@ -76,6 +76,8 @@ class ScAuthorityGatlingTest extends Simulation {
                 , "active":null
                 , "description":"SAMPLE_TEXT"
                 , "master":null
+                , "accessAllOrgs":null
+                , "useUserOrgs":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_scAuthority_url"))).exitHereIfFailed

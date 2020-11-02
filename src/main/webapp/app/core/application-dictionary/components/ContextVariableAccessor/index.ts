@@ -134,6 +134,12 @@ export default class ContextVariableAccessor extends Vue {
       return '';
     }
 
+    if (text === 'Y') {
+      return true;
+    } else if (text === 'N') {
+      return false;
+    }
+
     // Parse auth variables.
     const parsed = text.matchAll(ContextVariableAccessor.contextRegex);
     let parsingDone = false;
@@ -173,7 +179,7 @@ export default class ContextVariableAccessor extends Vue {
     if (tab) {
       displayLogic = tab.displayLogic;
     } else {
-      displayLogic = field.displayLogic || field.adColumn.displayLogic;
+      displayLogic = field.displayLogic || field.adColumn?.displayLogic;
     }
 
     return this.evaluateDynamicLogic({
@@ -188,11 +194,11 @@ export default class ContextVariableAccessor extends Vue {
    * @param param0 
    */
   protected evaluateMandatoryLogic({defaultTabId, field}: IContextParameter) {
-    if (field.adColumn.mandatory) {
+    if (field.mandatory || field.adColumn?.mandatory) {
       return true;
     }
 
-    const mandatoryLogic = field.adColumn.mandatoryLogic;
+    const mandatoryLogic = field.mandatoryLogic || field.adColumn?.mandatoryLogic;
 
     if ( ! mandatoryLogic) {
       return false;
@@ -209,7 +215,7 @@ export default class ContextVariableAccessor extends Vue {
    * @param param0 
    */
   protected evaluateReadonlyLogic({defaultTabId, field}: IContextParameter) {
-    const readonlyLogic = field.readOnlyLogic || field.adColumn.readOnlyLogic;
+    const readonlyLogic = field.readOnlyLogic || field.adColumn?.readOnlyLogic;
 
     if ( ! readonlyLogic) {
       return false;

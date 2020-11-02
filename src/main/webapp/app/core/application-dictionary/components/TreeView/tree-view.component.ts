@@ -46,7 +46,7 @@ export default class TreeView extends TreeViewProps {
   }
 
   created() {
-    console.log('tree-view created');
+    this.onObservableTabPropertiesChange(this.tab);
     this.listKey = 'adMenus';
   }
 

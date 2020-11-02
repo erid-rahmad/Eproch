@@ -19,9 +19,15 @@ public class ScAuthorityDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
+    private String name;
+
     private String description;
 
     private Boolean master;
+
+    private Boolean accessAllOrgs;
+
+    private Boolean useUserOrgs;
 
     private String authorityName;
 
@@ -52,6 +58,14 @@ public class ScAuthorityDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -66,6 +80,22 @@ public class ScAuthorityDTO extends AbstractAuditingDTO {
 
     public void setMaster(Boolean master) {
         this.master = master;
+    }
+
+    public Boolean isAccessAllOrgs() {
+        return accessAllOrgs;
+    }
+
+    public void setAccessAllOrgs(Boolean accessAllOrgs) {
+        this.accessAllOrgs = accessAllOrgs;
+    }
+
+    public Boolean isUseUserOrgs() {
+        return useUserOrgs;
+    }
+
+    public void setUseUserOrgs(Boolean useUserOrgs) {
+        this.useUserOrgs = useUserOrgs;
     }
 
     public String getAuthorityName() {
@@ -121,6 +151,8 @@ public class ScAuthorityDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", description='" + getDescription() + "'" +
             ", master='" + isMaster() + "'" +
+            ", accessAllOrgs='" + isAccessAllOrgs() + "'" +
+            ", useUserOrgs='" + isUseUserOrgs() + "'" +
             ", authorityName='" + getAuthorityName() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";

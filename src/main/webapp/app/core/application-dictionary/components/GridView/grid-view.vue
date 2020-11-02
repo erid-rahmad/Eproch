@@ -45,7 +45,7 @@
         :key="field.id"
         :fixed="isFixed(field)"
         :label="field.name"
-        :prop="field.adColumn.name"
+        :prop="field.virtualColumnName || field.adColumn.name"
         :width="getFieldWidth(field)"
         min-width="128"
         show-overflow-tooltip
@@ -135,6 +135,9 @@
               v-model="row[column.property]"
               :class="column.property"
               class="input"
+              :minlength="getMinLength(field)"
+              :maxlength="getMaxLength(field)"
+              :show-password="isPasswordField(field)"
               size="mini"
               clearable
               :disabled="isReadonly(row, field)"

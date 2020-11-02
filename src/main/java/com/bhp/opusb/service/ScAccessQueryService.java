@@ -103,17 +103,20 @@ public class ScAccessQueryService extends QueryService<ScAccess> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), ScAccess_.description));
             }
+            if (criteria.getCanWrite() != null) {
+                specification = specification.and(buildSpecification(criteria.getCanWrite(), ScAccess_.canWrite));
+            }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(ScAccess_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
             if (criteria.getTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getTypeId(),
-                    root -> root.join(ScAccess_.type, JoinType.LEFT).get(ScAccessType_.id)));
+                    root -> root.join(ScAccess_.type, JoinType.INNER).get(ScAccessType_.id)));
             }
             if (criteria.getTypeName() != null) {
                 specification = specification.and(buildSpecification(criteria.getTypeName(),
-                    root -> root.join(ScAccess_.type, JoinType.LEFT).get(ScAccessType_.name)));
+                    root -> root.join(ScAccess_.type, JoinType.INNER).get(ScAccessType_.name)));
             }
             if (criteria.getWindowId() != null) {
                 specification = specification.and(buildSpecification(criteria.getWindowId(),
@@ -123,9 +126,17 @@ public class ScAccessQueryService extends QueryService<ScAccess> {
                 specification = specification.and(buildSpecification(criteria.getFormId(),
                     root -> root.join(ScAccess_.form, JoinType.LEFT).get(AdForm_.id)));
             }
+            if (criteria.getDocumentTypeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
+                    root -> root.join(ScAccess_.documentType, JoinType.LEFT).get(CDocumentType_.id)));
+            }
+            if (criteria.getReferenceListId() != null) {
+                specification = specification.and(buildSpecification(criteria.getReferenceListId(),
+                    root -> root.join(ScAccess_.referenceList, JoinType.LEFT).get(ADReferenceList_.id)));
+            }
             if (criteria.getAuthorityId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAuthorityId(),
-                    root -> root.join(ScAccess_.authority, JoinType.LEFT).get(ScAuthority_.id)));
+                    root -> root.join(ScAccess_.authority, JoinType.INNER).get(ScAuthority_.id)));
             }
             if (criteria.getAuthorityName() != null) {
                 specification = specification.and(buildSpecification(criteria.getAuthorityName(),

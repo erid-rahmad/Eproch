@@ -1,19 +1,18 @@
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants'
+import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store'
+import Inputmask from 'inputmask'
 import Vue from 'vue'
 import Component from 'vue-class-component'
+import { Inject } from 'vue-property-decorator'
 import BusinessCategories from './components/business-categories.vue'
 import CompanyProfile from './components/company-profile.vue'
 import LoginDetails from './components/login-details.vue'
-import SupportingDocuments from './components/supporting-documents.vue'
-import PersonInCharge from './components/person-in-charge.vue'
 import PaymentInformation from './components/payment-information.vue'
-import TaxInformation from './components/tax-information.vue'
+import PersonInCharge from './components/person-in-charge.vue'
 import SummaryRegistration from './components/summary-registration.vue'
-import { Inject } from 'vue-property-decorator'
+import SupportingDocuments from './components/supporting-documents.vue'
+import TaxInformation from './components/tax-information.vue'
 import RegisterService from './register.service'
-import { LOGIN_ALREADY_USED_TYPE, EMAIL_ALREADY_USED_TYPE } from '@/constants'
-import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store';
-import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service'
-import Inputmask from 'inputmask'
 
 Vue.directive('inputmask', {
   bind: function(el, binding) {
@@ -44,8 +43,6 @@ Vue.directive('inputmask', {
 })
 
 export default class StepsForm extends Vue {
-  @Inject('dynamicWindowService')
-  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
 
   @Inject('registerService')
   private registerService: () => RegisterService;
@@ -57,7 +54,7 @@ export default class StepsForm extends Vue {
   errorUserExists = '';
   success = false;
 
-  fullscreenLoading= false;
+  fullscreenLoading = false;
   active = 0;
   eventBus = new Vue();
   registration = {
@@ -100,7 +97,8 @@ export default class StepsForm extends Vue {
     contacts: [],
     functionaries: [],
     payments: [],
-    taxes: []
+    taxes: [],
+    taxInformations: {}
   }
 
   mounted() {
@@ -138,9 +136,12 @@ export default class StepsForm extends Vue {
   submit() {
     this.retrieveBusinessCategory();
     // Set the tax details and strip out the ID of each tax.
+    this.registration.taxInformations = {
+      eInvoice: registrationStore.eInvoice,
+      taxableEmployers: registrationStore.taxableEmployers
+    }
     this.registration.taxes = registrationStore.taxes;
     this.registration.taxes.forEach(tax => { delete tax.id });
-    console.log('Submitting registration data. ', this.registration);
     this.fullscreenLoading = true;
     this.doNotMatch = null;
     this.error = null;
@@ -151,36 +152,14 @@ export default class StepsForm extends Vue {
       .processRegistration(this.registration)
       .then(() => {
         this.success = true;
+        this.active = 0;
         this.$notify({
           title: 'Success',
           dangerouslyUseHTMLString: true,
-          message: '<strong>Registration saved!</strong> Please check your email for confirmation.',
-          type: 'success',
-          duration: 3000
+          message: '<strong>Registration form submitted</strong>.',
+          type: 'success'
         });
-      })
-      .catch(error => {
-        this.success = null;
-        if (error.response.status === 400 && error.response.data.type === LOGIN_ALREADY_USED_TYPE) {
-          this.error = '<strong>Login name already registered!</strong> Please choose another one.';
-        } else if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
-          this.error = '<strong>Email is already in use!</strong> Please choose another one.';
-        } else {
-          this.error = '<strong>Registration failed!</strong> Please try again later.';
-        }
 
-        this.$notify({
-          title: 'Error',
-          dangerouslyUseHTMLString: true,
-          message: this.error,
-          type: 'error',
-          duration: 3000
-        });
-      })
-      .finally(() => {
-        this.active = 0;
-        this.fullscreenLoading = false;
-        this.$router.go(-1);
         this.registration = {
           loginDetails: {
             login: '',
@@ -221,8 +200,31 @@ export default class StepsForm extends Vue {
           contacts: [],
           functionaries: [],
           payments: [],
+          taxInformations: {},
           taxes: []
+        };
+        this.$router.replace('/');
+      })
+      .catch(error => {
+        this.success = null;
+        if (error.response.status === 400 && error.response.data.type === LOGIN_ALREADY_USED_TYPE) {
+          this.error = '<strong>Login name already registered!</strong> Please choose another one.';
+        } else if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+          this.error = '<strong>Email is already in use!</strong> Please choose another one.';
+        } else {
+          this.error = '<strong>Registration failed!</strong> Please try again later.';
         }
+
+        this.$notify({
+          title: 'Error',
+          dangerouslyUseHTMLString: true,
+          message: this.error,
+          type: 'error',
+          duration: 3000
+        });
+      })
+      .finally(() => {
+        this.fullscreenLoading = false;
       });
   }
 

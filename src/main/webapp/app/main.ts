@@ -70,15 +70,17 @@ const trackerService = new TrackerService(router);
 const translationService = new TranslationService(store, i18n);
 const loginService = new LoginService();
 const menuService = new AdMenuService();
+const windowService = (baseApiUrl: string) => new DynamicWindowService(baseApiUrl);
 
 const accountServiceInitiator = (async (
-  store: Store<any>,
-  translationService: TranslationService,
-  trackerService: TrackerService,
-  menuService: AdMenuService,
-  router: VueRouter
+  vuexStore: Store<any>,
+  dynWindowService: (baseApiUrl: string) => DynamicWindowService,
+  i18nService: TranslationService,
+  userTrackerService: TrackerService,
+  adMenuService: AdMenuService,
+  vueRouter: VueRouter
 ) => {
-  const service = new AccountService(store, translationService, trackerService, menuService, router);
+  const service = new AccountService(vuexStore, dynWindowService, i18nService, userTrackerService, adMenuService, vueRouter);
   await service.init();
   return service;
 });
@@ -98,7 +100,7 @@ Vue.use(SvgIcon, {
 
 Vue.use(VueHotkey);
 
-accountServiceInitiator(store, translationService, trackerService, menuService, router)
+accountServiceInitiator(store, windowService, translationService, trackerService, menuService, router)
   .then((service) => {
     const accountService = service;
     const routerValidation = new RouterValidation(router, i18n, accountService);
@@ -133,7 +135,7 @@ accountServiceInitiator(store, translationService, trackerService, menuService, 
         logsService: () => new LogsService(),
         metricsService: () => new MetricsService(),
         trackerService: () => trackerService,
-        dynamicWindowService: (baseApiUrl: string) => new DynamicWindowService(baseApiUrl),
+        dynamicWindowService: windowService,
         alertService: () => alertService,
         translationService: () => translationService,
         // End of jhipster default services.

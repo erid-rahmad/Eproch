@@ -10,7 +10,7 @@ public class RegistrationDTO {
     List<Long> businesses;
     List<CRegistrationDocumentDTO> mainDocuments;
     List<CRegistrationDocumentDTO> additionalDocuments;
-    List<CPersonInChargeDTO> contacts;
+    List<AdUserDTO> contacts;
     List<CFunctionaryDTO> functionaries;
     List<CVendorBankAcctDTO> payments;
     List<CVendorTaxDTO> taxes;
@@ -48,11 +48,11 @@ public class RegistrationDTO {
         this.additionalDocuments = additionalDocuments;
     }
 
-    public List<CPersonInChargeDTO> getContacts() {
+    public List<AdUserDTO> getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<CPersonInChargeDTO> contacts) {
+    public void setContacts(List<AdUserDTO> contacts) {
         this.contacts = contacts;
     }
 

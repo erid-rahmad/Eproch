@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    
+    <!--
+        Added the entity AdUser.
+    -->
+    <changeSet id="20201021111500-1" author="jhipster">
+        <createTable tableName="ad_user" remarks="The extended User entity.">
+            <column name="user_id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="uid" type="${uuidType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="code" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="phone" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="failed_login_count" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="last_login_date" type="datetime">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_organization_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+        <dropDefaultValue tableName="ad_user" columnName="last_login_date" columnDataType="datetime"/>
+    </changeSet>
+
+    <changeSet id="20201021111500-1-relations" author="jhipster">
+
+    </changeSet>
+
+    <!-- Added the entity audit columns -->
+    <changeSet id="20201021111500-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="ad_user">
+            <column name="created_by" type="varchar(50)" defaultValue="system">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20201021111500-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/ad_user.csv"
+                  separator=";"
+                  tableName="ad_user">
+            <column name="user_id" type="numeric"/>
+            <column name="uid" type="${uuidType}"/>
+            <column name="active" type="boolean"/>
+            <column name="code" type="string"/>
+            <column name="phone" type="string"/>
+            <column name="position" type="string"/>
+            <column name="vendor" type="boolean"/>
+            <column name="failed_login_count" type="numeric"/>
+            <column name="last_login_date" type="datetime"/>
+            <column name="ad_organization_id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
+        </loadData>
+    </changeSet>
+
+    <changeSet id="20201101185900" author="Ananta Aryadewa">
+        <modifyDataType tableName="ad_user" columnName="code" newDataType="varchar(15)" />
+        <modifyDataType tableName="ad_user" columnName="phone" newDataType="varchar(20)" />
+        <addColumn tableName="ad_user">
+            <column name="position" type="varchar(30)">
+                <constraints nullable="true" />
+            </column>
+            <column name="vendor" type="boolean" remarks="Whether it is a vendor or not">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_vendor_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+</databaseChangeLog>

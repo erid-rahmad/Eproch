@@ -22,7 +22,6 @@
                 ref="contacts"
                 max-height="250"
                 style="width: 100%"
-                :rules="rules"
                 :data="contacts"
             >
                 <el-table-column
@@ -50,12 +49,12 @@
                     min-width="256"
                     :label="$t('register.pic.subcategory')"
                 >
-                    <template slot-scope="scope">
-                        <span>{{printBusinessCategory(scope.row)}}</span>
+                    <template slot-scope="{row}">
+                        <span>{{ printBusinessCategory(row) }}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
-                    prop="login"
+                    prop="userLogin"
                     min-width="128"
                     :label="$t('register.pic.username')"
                 />
@@ -64,9 +63,9 @@
                     align="center"
                     :label="$t('register.form.operation')"
                     width="128">
-                    <template slot-scope="scope">
+                    <template slot-scope="{row, $index}">
                         <el-button
-                            @click="edit(scope.row, 'contacts', scope.$index)"
+                            @click="edit(row, 'contacts', $index)"
                             type="primary"
                             size="mini"
                             icon="el-icon-edit"
@@ -74,8 +73,8 @@
                             :title="$t('entity.action.edit')"
                         />
                         <el-button
-                            v-if="scope.$index !== 0"
-                            @click="prepareRemove('contacts', scope.$index)"
+                            v-if="$index !== 0"
+                            @click="prepareRemove('contacts', $index)"
                             type="danger"
                             size="mini"
                             icon="el-icon-delete"
@@ -105,7 +104,6 @@
                     {{ $t('entity.action.add') }}
                 </el-button>
             </div>
-            <!--<p v-if="hasErrors" :text="errors.functionaries.message" class="error"/>Your company must have at least a functionary</p>-->
             <el-table
                 ref="functionaries"
                 max-height="250"

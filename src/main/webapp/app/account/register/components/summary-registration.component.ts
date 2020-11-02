@@ -97,17 +97,14 @@ export default class SummaryRegistration extends SummaryRegistrationProps {
     }
   }
 
-  private printBusinessCategory(row: any){
-    if(row.valueBusinessCategories){
-        let i, value, key;
-        let stringArray = [];
-        for (i=0; i<row.valueBusinessCategories.length; i++) {
-            key = parseInt(row.valueBusinessCategories[i].substring( 0, row.valueBusinessCategories[i].indexOf('_')));
-            value = row.valueBusinessCategories[i].substring(row.valueBusinessCategories[i].indexOf('_') + 1, row.valueBusinessCategories[i].length);
-            stringArray.push(value);
-        }
-        return stringArray?.join(', ') || "";
+  printBusinessCategory(pic: any) {
+    if (pic.businessCategories === void 0) {
+        return '';
     }
+
+    return pic.businessCategories.map((value: string) => {
+        return value.substring(value.indexOf('_') + 1, value.length);
+    }).join(', ');
   }
 
   private printValueByParam(row: any){

@@ -115,7 +115,7 @@ public class AdMenuQueryService extends QueryService<AdMenu> {
         }
 
         // TODO Tune the repository to eagerly load the ad_menu records.
-        final List<AdMenuDTO> menus = adMenuMapper.toDto(adMenuRepository.findByParentMenuIsNull(Sort.by("sequence").ascending()));
+        final List<AdMenuDTO> menus = adMenuMapper.toDto(adMenuRepository.findByParentMenuIsNullAndActiveTrue(Sort.by("sequence").ascending()));
         return filterMenu(menus, accessibleFormId, accessibleWindowId);
     }
 

@@ -7,10 +7,13 @@
       <el-col :span="12">
         <action-toolbar
           ref="mainToolbar"
+          :approved="approved"
           :at-window-root="tabStack.length <= 1"
           :at-last-tab="childTabs.length === 0"
           :buttons="mainTab.toolbarButtons"
+          :document-type-id="documentTypeId"
           :event-bus="mainToolbarEventBus"
+          :next-document-action="nextDocumentAction"
           :record-count="totalRecords"
           :window-type="windowType"
           @add-record="onAddRecord"
@@ -74,7 +77,7 @@
         >
           <tree-view
             ref="treeView"
-            :tab="firstTab"
+            :tab="mainTab"
           />
         </pane>
         <pane>
@@ -89,6 +92,7 @@
               <grid-view
                 v-show="gridView"
                 ref="mainGrid"
+                :access-level="accessLevel"
                 :tab="mainTab"
                 :toolbar-event-bus="mainToolbarEventBus"
                 @current-row-change="onMainRecordChange"
@@ -209,9 +213,9 @@
       >
         <template>
           <p>Are you sure you want to {{ docAction.name }} the document?</p>
-          <p v-if="docAction.value === 'REJECT'">Please type the reason:</p>
+          <p v-if="docAction.value === 'RJC'">Please type the reason:</p>
           <el-input
-            v-if="docAction.value === 'REJECT'"
+            v-if="docAction.value === 'RJC'"
             v-model="docAction.message"
             type="textarea"
             :autosize="{ minRows: 2, maxRows: 4}"
@@ -221,7 +225,7 @@
               style="margin-left: 0px;"
               size="mini"
               icon="el-icon-check" 
-              :type="docAction.value === 'REJECT' ? 'danger' : 'primary'" 
+              :type="docAction.value === 'RJC' ? 'danger' : 'primary'" 
               @click="applyDocumentAction"
             >
               {{ docAction.name }}

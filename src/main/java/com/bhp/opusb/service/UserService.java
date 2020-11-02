@@ -11,26 +11,26 @@ import java.util.stream.Collectors;
 
 import com.bhp.opusb.config.Constants;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.AdUser;
+import com.bhp.opusb.domain.AdUserAuthority;
 import com.bhp.opusb.domain.Authority;
 import com.bhp.opusb.domain.CBusinessCategory;
-import com.bhp.opusb.domain.CPersonInCharge;
 import com.bhp.opusb.domain.CPicBusinessCat;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.User;
+import com.bhp.opusb.repository.AdUserAuthorityRepository;
+import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.AuthorityRepository;
-import com.bhp.opusb.repository.CPersonInChargeRepository;
 import com.bhp.opusb.repository.CPicBusinessCatRepository;
+import com.bhp.opusb.repository.ScAuthorityRepository;
 import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.security.AuthoritiesConstants;
 import com.bhp.opusb.security.SecurityUtils;
-import com.bhp.opusb.service.dto.CPersonInChargeDTO;
+import com.bhp.opusb.service.dto.AdUserDTO;
 import com.bhp.opusb.service.dto.UserDTO;
-import com.bhp.opusb.service.mapper.CPersonInChargeMapper;
+import com.bhp.opusb.service.mapper.AdUserMapper;
+import com.bhp.opusb.service.mapper.CBusinessCategoryMapper;
 
-import org.passay.CharacterData;
-import org.passay.CharacterRule;
-import org.passay.EnglishCharacterData;
-import org.passay.PasswordGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -57,24 +57,31 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
+    private final ScAuthorityRepository scAuthorityRepository;
+    private final AdUserAuthorityRepository adUserAuthorityRepository;
 
     private final CacheManager cacheManager;
 
-    private final CPersonInChargeRepository cPersonInChargeRepository;
-    private final CPersonInChargeMapper cPersonInChargeMapper;
+    private final AdUserRepository adUserRepository;
+    private final AdUserMapper adUserMapper;
+    private final CBusinessCategoryMapper cBusinessCategoryMapper;
+
     private final CPicBusinessCatRepository cPicBusinessCatRepository;
 
-    public UserService(
-        UserRepository userRepository, CPersonInChargeRepository cPersonInChargeRepository,
-        PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, CacheManager cacheManager,
-        CPersonInChargeMapper cPersonInChargeMapper, CPicBusinessCatRepository cPicBusinessCatRepository) {
+    public UserService(UserRepository userRepository, AdUserRepository adUserRepository,
+            PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, ScAuthorityRepository scAuthorityRepository,
+            AdUserAuthorityRepository adUserAuthorityRepository, CacheManager cacheManager, AdUserMapper adUserMapper,
+            CBusinessCategoryMapper cBusinessCategoryMapper, CPicBusinessCatRepository cPicBusinessCatRepository) {
 
         this.userRepository = userRepository;
-        this.cPersonInChargeRepository = cPersonInChargeRepository;
+        this.adUserRepository = adUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
+        this.scAuthorityRepository = scAuthorityRepository;
+        this.adUserAuthorityRepository = adUserAuthorityRepository;
         this.cacheManager = cacheManager;
-        this.cPersonInChargeMapper = cPersonInChargeMapper;
+        this.adUserMapper = adUserMapper;
+        this.cBusinessCategoryMapper = cBusinessCategoryMapper;
         this.cPicBusinessCatRepository = cPicBusinessCatRepository;
     }
 
@@ -82,11 +89,30 @@ public class UserService {
         log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key)
             .map(user -> {
+                adUserRepository.findById(user.getId())
+                    .ifPresent(adUser -> {
+                        adUser.active(true);
+                        scAuthorityRepository.findByAuthorityName(AuthoritiesConstants.SUPPLIER)
+                            .ifPresent(scAuthority -> {
+                                AdUserAuthority userAuthority = new AdUserAuthority().active(true)
+                                    .adOrganization(adUser.getAdOrganization())
+                                    .authority(scAuthority)
+                                    .user(adUser);
+
+                                adUserAuthorityRepository.save(userAuthority);
+
+                                // Add ROLE_SUPPLIER to jhi_user_authority.
+                                user.getAuthorities().add(scAuthority.getAuthority());
+                            });
+                    });
+
+                log.debug("Activated user: {}", user);
+
                 // activate given user for the registration key.
                 user.setActivated(true);
                 user.setActivationKey(null);
                 this.clearUserCaches(user);
-                log.debug("Activated user: {}", user);
+
                 return user;
             });
     }
@@ -115,23 +141,23 @@ public class UserService {
             });
     }
 
-    public User registerUser(CPersonInChargeDTO cPersonInChargeDTO, CVendor vendor, ADOrganization organization) {
+    public User registerUser(AdUserDTO adUser, CVendor vendor, ADOrganization organization) {
         User newUser = null;
 
-        userRepository.findOneByLogin(cPersonInChargeDTO.getLogin()).ifPresent(existingUser -> {
+        userRepository.findOneByLogin(adUser.getUserLogin()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new UsernameAlreadyUsedException();
             }
         });
-        userRepository.findOneByEmailIgnoreCase(cPersonInChargeDTO.getEmail()).ifPresent(existingUser -> {
+        userRepository.findOneByEmailIgnoreCase(adUser.getEmail()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
             if (!removed) {
                 throw new EmailAlreadyUsedException();
             }
         });
 
-        String fullName = cPersonInChargeDTO.getName().trim();
+        String fullName = adUser.getName().trim();
         int spaceIndex = fullName.indexOf(" ");
         newUser = new User();
 
@@ -142,18 +168,18 @@ public class UserService {
             newUser.setFirstName(fullName);
         }
 
-        if (cPersonInChargeDTO.getPassword() == null) {
-            cPersonInChargeDTO.setPassword(generatePassword());
+        if (adUser.getPassword() == null) {
+            adUser.setPassword(SecurityUtils.generatePassword());
         }
 
-        String encryptedPassword = passwordEncoder.encode(cPersonInChargeDTO.getPassword());
-        newUser.setLogin(cPersonInChargeDTO.getLogin());
+        String encryptedPassword = passwordEncoder.encode(adUser.getPassword());
+        newUser.setLogin(adUser.getUserLogin());
         newUser.setLangKey("en");
         // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
 
-        if (cPersonInChargeDTO.getEmail() != null) {
-            newUser.setEmail(cPersonInChargeDTO.getEmail());
+        if (adUser.getEmail() != null) {
+            newUser.setEmail(adUser.getEmail());
         }
 
         // new user is not active
@@ -168,25 +194,27 @@ public class UserService {
         log.debug("Created Information for User: {}", newUser);
 
         // Create and save the UserExtra entity
-        CPersonInCharge pic = cPersonInChargeMapper.toEntity(cPersonInChargeDTO)
-            .active(true)
+        AdUser pic = adUserMapper.toEntity(adUser)
+            .active(newUser.getActivated())
+            .code(adUser.getUserLogin())
             .adOrganization(organization)
-            .phone(cPersonInChargeDTO.getPhone())
-            .position(cPersonInChargeDTO.getPosition())
+            .phone(adUser.getPhone())
+            .position(adUser.getPosition())
             .user(newUser)
-            .vendor(vendor);
+            .vendor(true)
+            .cVendor(vendor);
 
-        cPersonInChargeRepository.save(pic);
-        log.debug("Created Information for Contact/Functionary: {}", pic);
+        adUserRepository.save(pic);
+        log.debug("PIC saved: {}", pic);
 
-        List<CPicBusinessCat> categories = cPersonInChargeDTO.getBusinessCategories()
+        List<CPicBusinessCat> categories = adUser.getBusinessCategoryIds()
             .stream()
-            .map((business -> {
-                CPicBusinessCat picBusiness = new CPicBusinessCat();
-                CBusinessCategory category = new CBusinessCategory();
+            .map((id -> {
+                CPicBusinessCat picBusinessCategory = new CPicBusinessCat();
+                CBusinessCategory category = cBusinessCategoryMapper.fromId(id);
 
-                category.setId(business);
-                return picBusiness.active(true)
+                return picBusinessCategory
+                    .active(true)
                     .adOrganization(organization)
                     .pic(pic)
                     .businessCategory(category);
@@ -194,40 +222,9 @@ public class UserService {
             .collect(Collectors.toList());
 
         cPicBusinessCatRepository.saveAll(categories);
-        log.debug("Created Information for Contact/Functionary business sector: {}", categories);
+        log.debug("Created Information for PIC's business sector: {}", categories);
 
         return newUser;
-    }
-
-    private String generatePassword() {
-        PasswordGenerator gen = new PasswordGenerator();
-        CharacterData lowerCaseChars = EnglishCharacterData.LowerCase;
-        CharacterRule lowerCaseRule = new CharacterRule(lowerCaseChars);
-        lowerCaseRule.setNumberOfCharacters(2);
-     
-        CharacterData upperCaseChars = EnglishCharacterData.UpperCase;
-        CharacterRule upperCaseRule = new CharacterRule(upperCaseChars);
-        upperCaseRule.setNumberOfCharacters(2);
-     
-        CharacterData digitChars = EnglishCharacterData.Digit;
-        CharacterRule digitRule = new CharacterRule(digitChars);
-        digitRule.setNumberOfCharacters(2);
-     
-        CharacterData specialChars = new CharacterData() {
-            public String getErrorCode() {
-                return "PassGenFail";
-            }
-     
-            public String getCharacters() {
-                return "!@#$%^&*()_+";
-            }
-        };
-        CharacterRule splCharRule = new CharacterRule(specialChars);
-        splCharRule.setNumberOfCharacters(2);
-     
-        String password = gen.generatePassword(10, splCharRule, lowerCaseRule, 
-          upperCaseRule, digitRule);
-        return password;
     }
 
     private boolean removeNonActivatedUser(User existingUser) {

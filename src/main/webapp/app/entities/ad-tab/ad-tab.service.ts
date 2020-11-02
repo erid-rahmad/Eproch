@@ -36,7 +36,7 @@ export default class ADTabService {
 
   public retrieveWithFilter(criteriaQuery: any, paginationQuery?: any): Promise<any> {
     return new Promise<any>((resolve, reject) => {
-      let criteria = buildCriteriaQueryString(criteriaQuery);
+      const criteria = buildCriteriaQueryString(criteriaQuery);
       const pagination = buildPaginationQueryOpts(paginationQuery);
       const separator = pagination.length ? '&' : '';
       axios

@@ -12,8 +12,8 @@
       <el-row :gutter="columnSpacing">
         
         <el-col :span="12">
-          <el-form-item :label="$t('register.login.form.username')" prop="login" required>
-            <el-input v-model="login.login" class="form-input" min="3" clearable />
+          <el-form-item :label="$t('register.login.form.username')" prop="userLogin" required>
+            <el-input v-model="login.userLogin" class="form-input" min="3" clearable />
           </el-form-item>
         </el-col>
 

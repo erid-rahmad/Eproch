@@ -3,17 +3,20 @@ package com.bhp.opusb.service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.CLocation;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CVendorLocation;
 import com.bhp.opusb.domain.User;
+import com.bhp.opusb.repository.CDocumentTypeRepository;
 import com.bhp.opusb.repository.CLocationRepository;
 import com.bhp.opusb.repository.CVendorLocationRepository;
 import com.bhp.opusb.repository.CVendorRepository;
-import com.bhp.opusb.service.dto.CPersonInChargeDTO;
+import com.bhp.opusb.service.dto.AdUserDTO;
 import com.bhp.opusb.service.dto.CVendorDTO;
 import com.bhp.opusb.service.dto.RegistrationDTO;
 import com.bhp.opusb.service.mapper.CVendorMapper;
@@ -36,6 +39,7 @@ public class CVendorService {
     private final Logger log = LoggerFactory.getLogger(CVendorService.class);
 
     private final ADOrganization organization;
+    private final CDocumentTypeRepository cDocumentTypeRepository;
     private final CVendorRepository cVendorRepository;
     private final CLocationRepository cLocationRepository;
     private final CVendorLocationRepository cVendorLocationRepository;
@@ -50,6 +54,7 @@ public class CVendorService {
     private final UserService userService;
 
     public CVendorService(
+        CDocumentTypeRepository cDocumentTypeRepository,
         CVendorRepository cVendorRepository,
         CVendorMapper cVendorMapper,
         CLocationRepository cLocationRepository,
@@ -61,7 +66,7 @@ public class CVendorService {
         CVendorTaxService cVendorTaxService,
         UserService userService
     ) {
-
+        this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.cVendorRepository = cVendorRepository;
         this.cLocationRepository = cLocationRepository;
         this.cVendorLocationRepository = cVendorLocationRepository;
@@ -78,9 +83,15 @@ public class CVendorService {
         registrationMapper = new RegistrationMapper(organization);
     }
 
-    public  List<User> registerVendor(RegistrationDTO registrationDTO){
+    public List<User> registerVendor(RegistrationDTO registrationDTO) {
         // Ensure vendor has generated ID.
         CVendor vendor = registrationMapper.toVendor(registrationDTO.getCompanyProfile());
+        List<CDocumentType> documentTypes = cDocumentTypeRepository.findByName("Supplier Registration");
+        
+        if ( ! documentTypes.isEmpty()) {
+            vendor.setDocumentType(documentTypes.get(0));
+        }
+
         cVendorRepository.save(vendor);
 
         CLocation location = registrationMapper.toLocation(registrationDTO.getCompanyProfile());
@@ -111,7 +122,7 @@ public class CVendorService {
 
         // Save persons and map each person with the user entity.
         List<User> users = new ArrayList<>();
-        for (CPersonInChargeDTO contact : registrationDTO.getContacts()) {
+        for (AdUserDTO contact : registrationDTO.getContacts()) {
             users.add(userService.registerUser(contact, vendor, organization));
         }
 
@@ -121,7 +132,8 @@ public class CVendorService {
         // Batch save bank account and payment informations.
         cVendorBankAcctService.saveAll(registrationDTO.getPayments(), vendor, organization);
 
-        cVendorTaxService.saveAll(registrationDTO.getTaxes(), vendor, organization);
+        Map<String, Boolean> taxInfo = registrationDTO.getTaxInformations();
+        cVendorTaxService.saveAll(registrationDTO.getTaxes(), taxInfo.get("eInvoice"), taxInfo.get("taxableEmployers"), vendor, organization);
         return users;
     }
 

@@ -16,7 +16,7 @@
 
                         <el-col :span="12">
                             <el-form-item :label="$t('register.login.form.username')" prop="login" required>
-                                <el-input v-model="login.login" class="form-input" min="3" :disabled="true" />
+                                <el-input v-model="login.userLogin" class="form-input" min="3" :disabled="true" />
                             </el-form-item>
                         </el-col>
 
@@ -360,12 +360,12 @@
                             min-width="256"
                             :label="$t('register.pic.subcategory')"
                         >
-                            <template slot-scope="scope">
-                                <span>{{printBusinessCategory(scope.row)}}</span>
+                            <template slot-scope="{row}">
+                                <span>{{printBusinessCategory(row)}}</span>
                             </template>
                         </el-table-column>
                         <el-table-column
-                            prop="login"
+                            prop="userLogin"
                             min-width="128"
                             :label="$t('register.pic.username')"
                         />

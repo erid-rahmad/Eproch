@@ -86,6 +86,12 @@ class CVendorGatlingTest extends Simulation {
                 , "website":"SAMPLE_TEXT"
                 , "paymentCategory":"SAMPLE_TEXT"
                 , "approvalStatus":"SAMPLE_TEXT"
+                , "dateTrx":"2020-01-01T00:00:00.000Z"
+                , "documentNo":"SAMPLE_TEXT"
+                , "documentAction":"SAMPLE_TEXT"
+                , "documentStatus":"SAMPLE_TEXT"
+                , "approved":null
+                , "processed":null
                 , "uid":null
                 , "active":null
                 }""")).asJson

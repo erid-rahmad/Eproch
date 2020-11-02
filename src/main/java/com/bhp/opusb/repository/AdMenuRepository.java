@@ -16,6 +16,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface AdMenuRepository extends JpaRepository<AdMenu, Long>, JpaSpecificationExecutor<AdMenu> {
 
-  @EntityGraph(attributePaths = { "adMenus", "adWindow" })
-  List<AdMenu> findByParentMenuIsNull(Sort sort);
+  @EntityGraph(attributePaths = { "adMenus", "adWindow", "adForm" })
+  List<AdMenu> findByParentMenuIsNullAndActiveTrue(Sort sort);
 }

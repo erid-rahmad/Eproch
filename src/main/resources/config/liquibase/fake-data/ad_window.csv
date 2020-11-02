@@ -1,11 +1,11 @@
-id;uid;name;description;title_logic;type;tree_view;access_level;active;ad_organization_id
-1;6c35340b-0c5a-427d-923e-ea1da9bcaf30;Hawaii;Brand Berkshire communities;core Tasty Cotton Pants Checking Account;QUERY;false;CLN;true;1
-2;ea9628e5-d9e0-4d2e-834e-17af6eb9a92a;Dynamic discrete;Music Outdoors;Credit Card Account Peso Uruguayo Uruguay Peso en Unidades Indexadas;MAINTAIN;false;SYS;true;2
-3;1ae6a24b-3088-48bf-ba87-85c8e44a3b9b;Delaware service-desk;SMTP transmitting standardization;JBOD;TRANSACTION;true;CLN_ORG;false;3
-4;33419464-5a68-467a-9963-e312ab1ae46b;next-generation parse Handcrafted Cotton Chips;bypass purple platforms;Granite;MAINTAIN;true;CLN;false;4
-5;2f4c0fcd-d96f-4f44-a4f2-8af95c01662f;Beauty;Analyst Incredible;hierarchy;QUERY;false;SYS_CLN;true;5
-6;389da4df-de82-406b-b13d-cf61a6110e47;deliverables;Handmade;optical Infrastructure;QUERY;false;CLN_ORG;true;6
-7;2899c48a-c3f7-406c-87d7-7957c5e57974;grow;Oregon Shoes;Industrial Angola olive;MAINTAIN;true;CLN;true;7
-8;cc5db15f-1695-4468-bf70-9e39a9871314;Oregon dynamic Guinea Franc;payment Music Borders;Chile Courts Licensed;QUERY;false;SYS_CLN;true;8
-9;036c9a43-c060-4de3-a448-853e7d65ec1a;deposit Specialist UAE Dirham;target input;generating Clothing;MAINTAIN;true;SYS_CLN;false;9
-10;c0ed3553-8350-4b8b-811f-737f82bf88c5;withdrawal Ball;Shoes;mindshare portals Facilitator;TRANSACTION;false;CLN;false;10
+id;uid;name;description;title_logic;type;access_level;active;ad_organization_id
+1;6c35340b-0c5a-427d-923e-ea1da9bcaf30;Hawaii;Brand Berkshire communities;core Tasty Cotton Pants Checking Account;QUERY;CLN_ORG;true;1
+2;a9628e5d-9e0d-42e0-b4e1-7af6eb9a92a9;Ball hybrid Music;Regional;synthesize compressing;QUERY;SYS;true;2
+3;1ae6a24b-3088-48bf-ba87-85c8e44a3b9b;Delaware service-desk;SMTP transmitting standardization;JBOD;TRANSACTION;CLN;true;3
+4;13341946-45a6-4867-ad96-3e312ab1ae46;array calculating Brand;redefine Consultant;purple;TRANSACTION;SYS_CLN;true;4
+5;30b3fe95-2f4c-40fc-9d96-ff4424f28af9;back up Fantastic;Chips Books;Personal Loan Account Avon;QUERY;CLN;false;5
+6;7f4a57d3-89da-44df-9e82-06bb13dcf61a;Wooden Unbranded Plastic Shoes;deliverables;Handmade;MAINTAIN;SYS_CLN;false;6
+7;ef2899c4-8ac3-4f70-acc7-d77957c5e579;analyzing grow;Oregon Shoes;Industrial Angola olive;MAINTAIN;CLN;true;7
+8;c5db15f1-6954-4687-b709-e39a9871314c;card neural-net;Investor;Music Borders;MAINTAIN;SYS;false;8
+9;c57b036c-9a43-4c06-8de3-6448853e7d65;back-end invoice deposit;open system Toys target;index generating Clothing;MAINTAIN;SYS;true;9
+10;0ed35538-350b-48b4-91f7-37f82bf88c5a;Estates composite;application;index redefine;TRANSACTION;CLN;true;10

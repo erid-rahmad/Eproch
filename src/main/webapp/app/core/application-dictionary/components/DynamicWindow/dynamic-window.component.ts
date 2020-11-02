@@ -18,6 +18,7 @@ import SearchPanel from "../SearchPanel/search-panel.vue";
 import TreeView from '../TreeView/tree-view.vue';
 import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
 import { IADField } from '@/shared/model/ad-field.model';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
 @Component({
   components: {
@@ -52,9 +53,9 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   private debouncedUpdateChildTabs: (data: any) => void;
 
   public windowId: number = 0;
-  private windowType = null;
+  windowType = null;
+  accessLevel = null;
   public gridView = true;
-  public treeView = false;
   private childTabs: IADTab[] = [];
   public subTabs: IADTab[] = [];
   public currentTab: string = '';
@@ -75,6 +76,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   isEditing: boolean = false;
   deleteConfirmationVisible: boolean = false;
   deleteOptions: any = null;
+
+  approved: boolean = false;
+  documentTypeId: number = 0;
+  nextDocumentAction: string = null;
   docAction: any = {};
   docActionMessage: string = null;
   docActionPopupVisible: boolean = false;
@@ -89,6 +94,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
    * Prevents load the same child tabs multiple times.
    */
   private loadingChildTabs = false;
+
+  get isVendor() {
+    return accountStore.userDetails.vendor && this.accessLevel === 'CLN_VND';
+  }
 
   // Start of computed properties.
   get firstTab() {
@@ -110,6 +119,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     const text: string = this.$route.meta.title;
     const translationKey = `route.${text}`;
     return this.$te(translationKey) ? this.$t(translationKey) : text;
+  }
+
+  get treeView() {
+    return this.mainTab.treeView;
   }
   // End of computed properties.
 
@@ -135,11 +148,13 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.debouncedUpdateChildTabs = debounce(this.updateChildTabs, 500);
     
     this.retrieveWindowDetail()
-      .then((res) => {
+      .then(res => {
         this.windowType = res.type;
-        this.treeView = res.treeView;
+        this.accessLevel = res.accessLevel;
         this.retrieveTabs(null);
       });
+
+    console.log('User details: %O', accountStore.userDetails);
   }
 
   beforeDestroy() {
@@ -167,7 +182,39 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   // End of reactive methods.
 
   public applyDocumentAction() {
-    console.log('Apply docAction.', this.docAction);
+    const tableId = this.mainTab.adTableId;
+    const tableName = this.mainTab.adTableName;
+    console.log('Apply docAction[%O]. table[id: %s, name: %s], record: %O', this.docAction, tableId, tableName, this.currentRecord);
+    const {
+      editing,
+      createdBy,
+      createdDate,
+      lastModifiedBy,
+      lastModifiedDate,
+      ...record
+    } = this.currentRecord;
+
+    record.approvalStatus = this.docAction.value;
+    record.approved = true;
+    record.processed = true;
+    record.documentStatus = this.docAction.value;
+    this.dynamicWindowService(this.mainTab.targetEndpoint)
+      .update(record)
+      .then(data => {
+        this.refreshWindow();
+        this.$message({
+          message: `Document has been successfully ${record.approvalStatus.toLowerCase() }ed`,
+          type: 'success'
+        });
+      })
+      .catch(err => {
+        console.error('Error updating the document status! %O', err);
+        const message = `Error updating the document status`;
+        this.$message({
+          message: message.toString(),
+          type: 'error'
+        });
+      });
   }
 
   /**
@@ -326,7 +373,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   public reloadTreeView() {
-    if (this.treeView) {
+    if (this.mainTab.treeView) {
       (<any>this.$refs.treeView).reload();
     }
   }
@@ -376,6 +423,13 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   public async onMainRecordChange({data, recordNo}) {
     this.currentRecord = data;
     this.currentRecordNo = recordNo;
+
+    if (this.windowType === 'TRANSACTION' && this.tabStack.length === 1) {
+      this.approved = data.approved;
+      this.documentTypeId = data.documentTypeId;
+      this.nextDocumentAction = data.documentAction;
+    }
+
     this.debouncedUpdateChildTabs(data);
   }
 
@@ -461,6 +515,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
     let params = {
       'adWindowId.equals': this.windowId,
+      'active.equals': true
     };
 
     if (parentTabId) {
@@ -475,7 +530,11 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
     return new Promise((resolve, reject) => {
       this.aDTabService()
-        .retrieveWithFilter(params)
+        .retrieveWithFilter(params, {
+          page: 0,
+          size: 50,
+          sort: ['tabSequence,asc', 'name,asc']
+        })
         .then(async (res) => {
           let tabs = res.data;
           for (let [index, tab] of tabs.entries()) {
@@ -495,6 +554,16 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
               this.childTabs.push(tab);
             } else {
               // Header tab is immediatelly pushed to the tab stack.
+              if (this.isVendor) {
+                const vendorIdField = tab.adTableName === 'c_vendor' ? 'id' : 'vendorId';
+                tab.nativeFilterQuery = tab.filterQuery;
+                tab.filterQuery = buildCriteriaQueryString([
+                  `${vendorIdField}.equals=${accountStore.userDetails.cVendorId}`,
+                  tab.nativeFilterQuery // Include current query.
+                ]);
+                console.log('isVendor. nativeQuery: %s, overriden query: %s', tab.nativeFilterQuery, tab.filterQuery);
+              }
+
               this.tabStack.push(tab);
             }
           }
@@ -512,37 +581,48 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
     for (let field of fields) {
       const column = field.adColumn;
-      
-      validationSchema[column.name] = {
-        required: column.mandatory
+      const fieldName = field.virtualColumnName || column?.name;
+
+      if ( ! fieldName) {
+        continue;
       }
 
-      if ( ! column.foreignKey) {
-        const type = getValidatorType(column.type);
+      const formatPattern = field.formatPattern || column?.formatPattern;
+      const minLength = field.minLength || column?.minLength;
+      const maxLength = field.maxLength || column?.maxLength;
+      const minValue = field.minValue || column?.minValue;
+      const maxValue = field.maxValue || column?.maxValue;
+      
+      validationSchema[fieldName] = {
+        required: field.mandatory || column?.mandatory
+      }
+
+      if ( ! column?.foreignKey) {
+        const type = getValidatorType(field.type || column.type);
 
         if (type !== 'date') {
-          validationSchema[column.name].type = type;
+          validationSchema[fieldName].type = type;
         }
       }
 
-      if (column.formatPattern) {
-        validationSchema[column.name].pattern = column.formatPattern;
+      if (formatPattern) {
+        validationSchema[fieldName].pattern = formatPattern;
       }
 
-      if (column.minLength) {
-        validationSchema[column.name].min = column.minLength;
+      if (minLength) {
+        validationSchema[fieldName].min = minLength;
       }
 
-      if (column.maxLength) {
-        validationSchema[column.name].max = column.maxLength;
+      if (maxLength) {
+        validationSchema[fieldName].max = maxLength;
       }
 
-      if (column.minValue) {
-        validationSchema[column.name].min = column.minValue;
+      if (minValue) {
+        validationSchema[fieldName].min = minValue;
       }
 
-      if (column.maxValue) {
-        validationSchema[column.name].max = column.maxValue;
+      if (maxValue) {
+        validationSchema[fieldName].max = maxValue;
       }
     }
 
