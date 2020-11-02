@@ -48,9 +48,6 @@ public class CVendorTax extends AbstractAuditingEntity {
     @Column(name = "taxable_employers")
     private Boolean taxableEmployers;
 
-    @Column(name = "rate", precision = 21, scale = 2)
-    private BigDecimal rate;
-
     @Column(name = "uid")
     private UUID uid;
 
@@ -105,19 +102,6 @@ public class CVendorTax extends AbstractAuditingEntity {
 
     public void setTaxableEmployers(Boolean taxableEmployers) {
         this.taxableEmployers = taxableEmployers;
-    }
-
-    public BigDecimal getRate() {
-        return rate;
-    }
-
-    public CVendorTax rate(BigDecimal rate) {
-        this.rate = rate;
-        return this;
-    }
-
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
     }
 
     public UUID getUid() {
@@ -213,7 +197,6 @@ public class CVendorTax extends AbstractAuditingEntity {
             "id=" + getId() +
             ", eInvoice='" + isEInvoice() + "'" +
             ", taxableEmployers='" + isTaxableEmployers() + "'" +
-            ", rate=" + getRate() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

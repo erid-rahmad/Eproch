@@ -113,4 +113,9 @@
         <dropNotNullConstraint tableName="c_vendor_tax" columnName="tax_id" />
     </changeSet>
 
+    <changeSet id="20201030020900-added1" author="Ananta Aryadewa">
+        <dropColumn tableName="c_vendor_tax" columnName="tax_id"/>
+        <dropColumn tableName="c_vendor_tax" columnName="rate"/>
+    </changeSet>
+
 </databaseChangeLog>

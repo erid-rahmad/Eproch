@@ -17,8 +17,6 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
 
     private Boolean taxableEmployers;
 
-    private BigDecimal rate;
-
     private UUID uid;
 
     private Boolean active;
@@ -54,14 +52,6 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
 
     public void setTaxableEmployers(Boolean taxableEmployers) {
         this.taxableEmployers = taxableEmployers;
-    }
-
-    public BigDecimal getRate() {
-        return rate;
-    }
-
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
     }
 
     public UUID getUid() {
@@ -155,7 +145,6 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", eInvoice='" + isEInvoice() + "'" +
             ", taxableEmployers='" + isTaxableEmployers() + "'" +
-            ", rate=" + getRate() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", vendorId=" + getVendorId() +

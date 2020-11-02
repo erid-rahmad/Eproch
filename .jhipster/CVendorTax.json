@@ -10,10 +10,6 @@
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "rate",
-            "fieldType": "BigDecimal"
-        },
-        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

@@ -32,8 +32,6 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
 
     private BooleanFilter taxableEmployers;
 
-    private BigDecimalFilter rate;
-
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -51,7 +49,6 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.eInvoice = other.eInvoice == null ? null : other.eInvoice.copy();
         this.taxableEmployers = other.taxableEmployers == null ? null : other.taxableEmployers.copy();
-        this.rate = other.rate == null ? null : other.rate.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
@@ -86,14 +83,6 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
 
     public void setTaxableEmployers(BooleanFilter taxableEmployers) {
         this.taxableEmployers = taxableEmployers;
-    }
-
-    public BigDecimalFilter getRate() {
-        return rate;
-    }
-
-    public void setRate(BigDecimalFilter rate) {
-        this.rate = rate;
     }
 
     public UUIDFilter getUid() {
@@ -150,7 +139,6 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(eInvoice, that.eInvoice) &&
             Objects.equals(taxableEmployers, that.taxableEmployers) &&
-            Objects.equals(rate, that.rate) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(vendorId, that.vendorId) &&
@@ -164,7 +152,6 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
         id,
         eInvoice,
         taxableEmployers,
-        rate,
         uid,
         active,
         vendorId,
@@ -179,7 +166,6 @@ public class CVendorTaxCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (eInvoice != null ? "eInvoice=" + eInvoice + ", " : "") +
                 (taxableEmployers != null ? "taxableEmployers=" + taxableEmployers + ", " : "") +
-                (rate != null ? "rate=" + rate + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +

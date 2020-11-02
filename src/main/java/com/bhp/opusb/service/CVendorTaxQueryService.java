@@ -97,9 +97,6 @@ public class CVendorTaxQueryService extends QueryService<CVendorTax> {
             if (criteria.getTaxableEmployers() != null) {
                 specification = specification.and(buildSpecification(criteria.getTaxableEmployers(), CVendorTax_.taxableEmployers));
             }
-            if (criteria.getRate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getRate(), CVendorTax_.rate));
-            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CVendorTax_.uid));
             }
