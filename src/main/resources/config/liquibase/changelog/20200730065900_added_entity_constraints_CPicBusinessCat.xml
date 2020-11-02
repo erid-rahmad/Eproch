@@ -28,6 +28,17 @@
 
     </changeSet>
 
+    <changeSet id="20201101185200" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="c_pic_business_cat" constraintName="fk_c_pic_business_cat_pic_user_id"/>
+
+        <addForeignKeyConstraint baseColumnNames="pic_user_id"
+                                 baseTableName="c_pic_business_cat"
+                                 constraintName="fk_c_pic_business_cat_pic_user_id"
+                                 referencedColumnNames="user_id"
+                                 referencedTableName="ad_user"/>
+
+    </changeSet>
+
     <!-- <changeSet id="20200818003300-2" author="Ananta Aryadewa">
         
         <dropForeignKeyConstraint baseTableName="c_pic_business_cat"

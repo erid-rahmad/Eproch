@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -39,12 +40,24 @@ public class AdUser extends AbstractAuditingEntity {
     private Boolean active = true;
 
     @NotNull
-    @Column(name = "code", nullable = false)
+    @Size(max = 15)
+    @Column(name = "code", length = 15, nullable = false)
     private String code;
 
     @NotNull
-    @Column(name = "phone", nullable = false)
+    @Size(max = 20)
+    @Column(name = "phone", length = 20, nullable = false)
     private String phone;
+
+    @Size(max = 30)
+    @Column(name = "position", length = 30)
+    private String position;
+
+    /**
+     * Whether it is a vendor or not
+     */
+    @Column(name = "vendor")
+    private Boolean vendor;
 
     @Column(name = "failed_login_count")
     private Integer failedLoginCount;
@@ -57,6 +70,13 @@ public class AdUser extends AbstractAuditingEntity {
     @JoinColumn(unique = true)
     @MapsId
     private User user;
+
+    /**
+     * This field should not empty for a supplier's user
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("adUsers")
+    private CVendor cVendor;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -124,6 +144,32 @@ public class AdUser extends AbstractAuditingEntity {
         this.phone = phone;
     }
 
+    public String getPosition() {
+        return position;
+    }
+
+    public AdUser position(String position) {
+        this.position = position;
+        return this;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public Boolean isVendor() {
+        return vendor;
+    }
+
+    public AdUser vendor(Boolean vendor) {
+        this.vendor = vendor;
+        return this;
+    }
+
+    public void setVendor(Boolean vendor) {
+        this.vendor = vendor;
+    }
+
     public Integer getFailedLoginCount() {
         return failedLoginCount;
     }
@@ -161,6 +207,19 @@ public class AdUser extends AbstractAuditingEntity {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public CVendor getCVendor() {
+        return cVendor;
+    }
+
+    public AdUser cVendor(CVendor cVendor) {
+        this.cVendor = cVendor;
+        return this;
+    }
+
+    public void setCVendor(CVendor cVendor) {
+        this.cVendor = cVendor;
     }
 
     public ADOrganization getAdOrganization() {
@@ -206,6 +265,8 @@ public class AdUser extends AbstractAuditingEntity {
             ", active='" + isActive() + "'" +
             ", code='" + getCode() + "'" +
             ", phone='" + getPhone() + "'" +
+            ", position='" + getPosition() + "'" +
+            ", vendor='" + isVendor() + "'" +
             ", failedLoginCount=" + getFailedLoginCount() +
             ", lastLoginDate='" + getLastLoginDate() + "'" +
             "}";

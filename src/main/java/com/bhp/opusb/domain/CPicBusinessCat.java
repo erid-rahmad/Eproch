@@ -42,7 +42,7 @@ public class CPicBusinessCat extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("cPicBusinessCats")
-    private CPersonInCharge pic;
+    private AdUser pic;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -89,17 +89,17 @@ public class CPicBusinessCat extends AbstractAuditingEntity {
         this.active = active;
     }
 
-    public CPersonInCharge getPic() {
+    public AdUser getPic() {
         return pic;
     }
 
-    public CPicBusinessCat pic(CPersonInCharge cPersonInCharge) {
-        this.pic = cPersonInCharge;
+    public CPicBusinessCat pic(AdUser adUser) {
+        this.pic = adUser;
         return this;
     }
 
-    public void setPic(CPersonInCharge cPersonInCharge) {
-        this.pic = cPersonInCharge;
+    public void setPic(AdUser adUser) {
+        this.pic = adUser;
     }
 
     public CBusinessCategory getBusinessCategory() {

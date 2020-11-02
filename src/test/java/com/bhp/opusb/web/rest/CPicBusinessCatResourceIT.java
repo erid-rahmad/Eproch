@@ -2,7 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CPicBusinessCat;
-import com.bhp.opusb.domain.CPersonInCharge;
+import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.CBusinessCategory;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.CPicBusinessCatRepository;
@@ -76,15 +76,15 @@ public class CPicBusinessCatResourceIT {
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
-        CPersonInCharge cPersonInCharge;
-        if (TestUtil.findAll(em, CPersonInCharge.class).isEmpty()) {
-            cPersonInCharge = CPersonInChargeResourceIT.createEntity(em);
-            em.persist(cPersonInCharge);
+        AdUser adUser;
+        if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
+            adUser = AdUserResourceIT.createEntity(em);
+            em.persist(adUser);
             em.flush();
         } else {
-            cPersonInCharge = TestUtil.findAll(em, CPersonInCharge.class).get(0);
+            adUser = TestUtil.findAll(em, AdUser.class).get(0);
         }
-        cPicBusinessCat.setPic(cPersonInCharge);
+        cPicBusinessCat.setPic(adUser);
         // Add required entity
         CBusinessCategory cBusinessCategory;
         if (TestUtil.findAll(em, CBusinessCategory.class).isEmpty()) {
@@ -118,15 +118,15 @@ public class CPicBusinessCatResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
-        CPersonInCharge cPersonInCharge;
-        if (TestUtil.findAll(em, CPersonInCharge.class).isEmpty()) {
-            cPersonInCharge = CPersonInChargeResourceIT.createUpdatedEntity(em);
-            em.persist(cPersonInCharge);
+        AdUser adUser;
+        if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
+            adUser = AdUserResourceIT.createUpdatedEntity(em);
+            em.persist(adUser);
             em.flush();
         } else {
-            cPersonInCharge = TestUtil.findAll(em, CPersonInCharge.class).get(0);
+            adUser = TestUtil.findAll(em, AdUser.class).get(0);
         }
-        cPicBusinessCat.setPic(cPersonInCharge);
+        cPicBusinessCat.setPic(adUser);
         // Add required entity
         CBusinessCategory cBusinessCategory;
         if (TestUtil.findAll(em, CBusinessCategory.class).isEmpty()) {
@@ -354,7 +354,7 @@ public class CPicBusinessCatResourceIT {
     @Transactional
     public void getAllCPicBusinessCatsByPicIsEqualToSomething() throws Exception {
         // Get already existing entity
-        CPersonInCharge pic = cPicBusinessCat.getPic();
+        AdUser pic = cPicBusinessCat.getPic();
         cPicBusinessCatRepository.saveAndFlush(cPicBusinessCat);
         Long picId = pic.getId();
 

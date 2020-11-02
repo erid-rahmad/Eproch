@@ -99,7 +99,7 @@ public class CPicBusinessCatQueryService extends QueryService<CPicBusinessCat> {
             }
             if (criteria.getPicId() != null) {
                 specification = specification.and(buildSpecification(criteria.getPicId(),
-                    root -> root.join(CPicBusinessCat_.pic, JoinType.LEFT).get(CPersonInCharge_.id)));
+                    root -> root.join(CPicBusinessCat_.pic, JoinType.LEFT).get(AdUser_.id)));
             }
             if (criteria.getBusinessCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBusinessCategoryId(),

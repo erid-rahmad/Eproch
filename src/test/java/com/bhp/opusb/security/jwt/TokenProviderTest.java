@@ -1,5 +1,6 @@
 package com.bhp.opusb.security.jwt;
 
+import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.security.AuthoritiesConstants;
 
 import java.security.Key;
@@ -48,7 +49,7 @@ public class TokenProviderTest {
     @Test
     public void testReturnFalseWhenJWTisMalformed() {
         Authentication authentication = createAuthentication();
-        String token = tokenProvider.createToken(authentication, false);
+        String token = tokenProvider.createToken(authentication, Optional.of(new AdUser()), false);
         String invalidToken = token.substring(1);
         boolean isTokenValid = tokenProvider.validateToken(invalidToken);
 
@@ -60,7 +61,7 @@ public class TokenProviderTest {
         ReflectionTestUtils.setField(tokenProvider, "tokenValidityInMilliseconds", -ONE_MINUTE);
 
         Authentication authentication = createAuthentication();
-        String token = tokenProvider.createToken(authentication, false);
+        String token = tokenProvider.createToken(authentication, Optional.of(new AdUser()), false);
 
         boolean isTokenValid = tokenProvider.validateToken(token);
 

@@ -55,9 +55,15 @@ export default class BusinessCategories extends BusinessCategoriesProps {
     }
 
     private retrieveBusinessCategories() {
-        
+        // TODO Use custom API that is doesn't limit the record.
         this.dynamicWindowService('/api/c-business-categories')
-        .retrieve()
+        .retrieve({
+            paginationQuery: {
+                size: 1000,
+                page: 0,
+                sort: ['name']
+            }
+        })
         .then(res => {
             let categories = res.data.map(item => {
                 return {

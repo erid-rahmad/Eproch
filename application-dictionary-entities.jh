@@ -478,7 +478,7 @@ entity CDocumentType {
 }
 
 enum AdAccessLevel {
-	SYS, SYS_CLN, CLN, CLN_ORG
+	SYS, SYS_CLN, CLN, CLN_ORG, CLN_VND
 }
 
 enum ADColumnType {

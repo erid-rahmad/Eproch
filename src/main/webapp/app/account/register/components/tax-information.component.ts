@@ -1,8 +1,7 @@
-import Vue from 'vue'
-import Component from 'vue-class-component'
+import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store';
+import Vue from 'vue';
+import Component from 'vue-class-component';
 import TaxInformationUpdate from './tax-information-update.vue';
-import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store'
-import DynamicWindowService from '../../../core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 
 const TaxInformationProps = Vue.extend({
     props: {
@@ -49,7 +48,6 @@ export default class TaxInformation extends TaxInformationProps {
     }
 
     mounted() {
-        // Pre-populate the contact person table with the one who was specified in the login details.
         this.eventBus.$on('validate-form', this.validate);
     }
 

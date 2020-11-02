@@ -60,12 +60,12 @@ public class AdUserAuthorityService {
         Optional<ScAuthority> authorityRecord = scAuthorityRepository.findById(adUserAuthority.getAuthority().getId());
 
         // Update jhi_user_authority table.
-        Optional<AdUser> userRecord = adUserRepository.findById(adUserAuthority.getUser().getId());
-        userRecord.ifPresent(user -> {
-            if (authorityRecord.isPresent()) {
-                user.getUser().getAuthorities().add(authorityRecord.get().getAuthority());
-            }
-        });
+        adUserRepository.findById(adUserAuthority.getUser().getId())
+            .ifPresent(user -> {
+                if (authorityRecord.isPresent()) {
+                    user.getUser().getAuthorities().add(authorityRecord.get().getAuthority());
+                }
+            });
 
         return adUserAuthorityMapper.toDto(adUserAuthority);
     }

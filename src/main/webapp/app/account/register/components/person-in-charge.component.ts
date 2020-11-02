@@ -38,9 +38,9 @@ export default class PersonInCharge extends PICProps {
             contacts: "info",
             functionaries: "info"
         }
-    }
-    private validationSchema: any = {};
-    rules = {
+    };
+
+    private rules = {
         name: {
             required: true,
         },
@@ -53,10 +53,10 @@ export default class PersonInCharge extends PICProps {
         email: {
             required: true,
         },
-        valueBusinessCategories: {
+        businessCategoryIds: {
             required: true,
         },
-        login: {
+        userLogin: {
             required: true,
         }
     };
@@ -110,60 +110,42 @@ export default class PersonInCharge extends PICProps {
         this.loading = false;
     }
 
-    private printBusinessCategory(row: any){
-
-        if(row.valueBusinessCategories){
-            let i, value, key;
-            let stringArray = [];
-            for (i=0; i<row.valueBusinessCategories.length; i++) {
-                key = parseInt(row.valueBusinessCategories[i].substring( 0, row.valueBusinessCategories[i].indexOf('_')));
-                value = row.valueBusinessCategories[i].substring(row.valueBusinessCategories[i].indexOf('_') + 1, row.valueBusinessCategories[i].length);
-                stringArray.push(value);
-            }
-            return stringArray?.join(', ') || "";
+    printBusinessCategory(pic: any) {
+        if (pic.businessCategories === void 0) {
+            return '';
         }
-        
+
+        return pic.businessCategories.map((value: string) => {
+            return value.substring(value.indexOf('_') + 1, value.length);
+        }).join(', ');
     }
 
-    private printKeyBusinessCategory(row: any){
-
-        if(row.valueBusinessCategories){
-            let i, value, key;
-            let stringArray = [];
-            for (i=0; i<row.valueBusinessCategories.length; i++) {
-                key = parseInt(row.valueBusinessCategories[i].substring( 0, row.valueBusinessCategories[i].indexOf('_')));
-                value = row.valueBusinessCategories[i].substring(row.valueBusinessCategories[i].indexOf('_') + 1, row.valueBusinessCategories[i].length);
-                stringArray.push(key);
-            }
-            return stringArray;
+    private getBusinessCategoryIds(pic: any) {
+        if (pic.businessCategories === void 0) {
+            return [];
         }
-        
-    }
 
-    private printKeyByParam(row: any){
-        if(row){
-            let value, key;
-            key = parseInt(row.substring( 0, row.indexOf('_')));
-            return key;
-        }
+        return pic.businessCategories.map((value: string) => {
+            return parseInt(value.substring(0, value.indexOf('_')));
+        });
     }
 
     private savePerson(person) {
-        console.log(person);
-        
-        person.businessCategories = this.printKeyBusinessCategory(person);
-        if(person.index !== undefined){
+        person.businessCategoryIds = this.getBusinessCategoryIds(person);
+
+        if (person.index !== void 0) {
             this[this.editingForm].splice(person.index, 1, person);
-        }else{
+        } else {
             this[this.editingForm].push(person);
         }
         
         if (this.functionaries.length > 0) {
             this.errors.type.functionaries = 'info';
             this.errors.functionaries = null;
-        }else{
+        } else {
             this.errors.type.contacts = 'info';
         }
+
         this.loading = false;
         this.editDialogVisible = false;
     }
@@ -176,10 +158,9 @@ export default class PersonInCharge extends PICProps {
     validate(formIndex: number) {
         if (formIndex === 4) {
             let passed;
-            this.validationSchema = {};
-            this.validationSchema = new Schema(this.rules);
+            const validationSchema = new Schema(this.rules);
             //for(let field=0; field<this.contacts.length; field++){
-                this.validationSchema.validate(this.contacts[0], (errors, fields) => {
+                validationSchema.validate(this.contacts[0], (errors, fields) => {
                     if (errors) {
                         this.$notify({
                             title: 'Error',
@@ -189,7 +170,7 @@ export default class PersonInCharge extends PICProps {
                         });
                         passed = false;
                         this.errors.type.contacts = 'error';
-                    }else{
+                    } else {
                         passed = true;
                         this.errors.type.contacts = 'info';
 

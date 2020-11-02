@@ -108,15 +108,53 @@
             <column name="type" type="string"/>
             <column name="payment_category" type="string"/>
             <column name="approval_status" type="string"/>
+            <column name="date_trx" type="date"/>
+            <column name="document_no" type="string"/>
+            <column name="document_action" type="string"/>
+            <column name="document_status" type="string"/>
+            <column name="approved" type="boolean"/>
+            <column name="processed" type="boolean"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
+            <column name="document_type_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
 
     <changeSet id="20200810230300" author="Ananta Aryadewa">
         <modifyDataType tableName="c_vendor" columnName="tax_id_no" newDataType="varchar(255)" />
+    </changeSet>
+
+    <changeSet id="20201101185000" author="Ananta Aryadewa">
+        <addColumn tableName="c_vendor">
+            <column name="date_trx" type="date">
+                <constraints nullable="false" />
+            </column>
+            <column name="document_no" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="document_action" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="document_status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="approved" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="processed" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20201101215600" author="Ananta Aryadewa">
+        <addColumn tableName="c_vendor">
+            <column name="document_type_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

@@ -17,7 +17,7 @@ public class CPicBusinessCatDTO extends AbstractAuditingDTO {
     private Boolean active;
 
 
-    private Long picUserId;
+    private Long picId;
     private String picUserLogin;
 
     private Long businessCategoryId;
@@ -50,12 +50,12 @@ public class CPicBusinessCatDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
-    public Long getPicUserId() {
-        return picUserId;
+    public Long getPicId() {
+        return picId;
     }
 
-    public void setPicUserId(Long picUserId) {
-        this.picUserId = picUserId;
+    public void setPicId(Long adUserId) {
+        this.picId = adUserId;
     }
 
     public String getPicUserLogin() {
@@ -125,7 +125,7 @@ public class CPicBusinessCatDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", picUserId=" + getPicUserId() +
+            ", picId=" + getPicId() +
             ", businessCategoryId=" + getBusinessCategoryId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             "}";

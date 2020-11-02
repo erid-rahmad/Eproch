@@ -1,11 +1,21 @@
 import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
-import { Component, Vue, Watch } from "vue-property-decorator";
+import { Component, Vue, Watch, Inject } from "vue-property-decorator";
 import DynamicWindowService from '../DynamicWindow/dynamic-window.service';
 import { ADWindowType } from '@/shared/model/ad-window.model';
+import { ElDropdown } from 'element-ui/types/dropdown';
 
 const ActionToolbarProps = Vue.extend({
   props: {
     windowType: String,
+    approved: Boolean,
+    documentTypeId: Number,
+    nextDocumentAction: String,
+    documentType: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    },
     atWindowRoot: {
       type: Boolean,
       default: true
@@ -32,9 +42,13 @@ const ActionToolbarProps = Vue.extend({
 
 @Component
 export default class ActionToolbar extends ActionToolbarProps {
-  dynamicWindowService: DynamicWindowService = null;
+
+  @Inject('dynamicWindowService')
+  protected dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
+
   gridView = true;
   authorities: Set<string> = accountStore.authorities;
+  documentActions: Array<any> = [];
   private editing: boolean = false;
   private fullPath: string = '';
 
@@ -42,20 +56,20 @@ export default class ActionToolbar extends ActionToolbarProps {
     this.$emit('run-trigger', triggerDef);
   }
 
-  get actions() {
-    return [
-      {name: 'Approve', value: 'APPROVE'},
-      {name: 'Cancel', value: 'CANCEL'},
-      {name: 'Reject', value: 'REJECT'}
-    ];
+  get defaultDocumentAction() {
+    if (this.approved) {
+      return 'Approved';
+    }
+    const docAction = this.documentActions.find(action => action.value === this.nextDocumentAction);
+    return docAction?.name || this.nextDocumentAction;
   }
 
   get isEditing() {
     return this.editing;
   }
 
-  get currentDocumentAction() {
-    return 'Approve';
+  get hasDocumentActions() {
+    return this.transactionWindow && this.documentActions.length;
   }
 
   get transactionWindow() {
@@ -85,18 +99,42 @@ export default class ActionToolbar extends ActionToolbarProps {
     this.editing = editing;
   }
 
+  @Watch('approved')
+  onApprovedChange(approved: boolean) {
+    this.$nextTick(() => {
+      (<ElDropdown>this.$refs.docActionButton)?.$el
+        ?.querySelectorAll('button')
+        .forEach(button => {
+          button.disabled = approved;
+          button.classList[approved ? 'add' : 'remove']('is-disabled');
+        });
+    });
+  }
+
   @Watch('editing')
   onEditingChange(editing: boolean) {
     this.$emit('edit-mode-change', editing);
   }
 
+  @Watch('documentTypeId')
+  onDocumentTypeIdChange(id: number) {
+    if (this.windowType === ADWindowType.TRANSACTION) {
+      this.retrieveDocumentActions(id);
+    }
+  }
+
   created() {
     this.fullPath = this.$route.fullPath;
     this.eventBus.$on('record-saved', this.onSaveSuccess);
+    console.log('action-toolbar created. granted docActions: %O', accountStore.grantedDocActions);
   }
 
   beforeDestroy() {
     this.eventBus.$off('record-saved', this.onSaveSuccess);
+  }
+
+  public isActionDisabled(action) {
+    return this.approved && (action.value === 'RJC' || action.value === 'APV')
   }
 
   public activateInlineEditing() {
@@ -112,7 +150,8 @@ export default class ActionToolbar extends ActionToolbarProps {
   }
 
   public applyNextDocumentAction() {
-    this.applyDocumentAction({name: 'Approve', value: 'APPROVE'});
+    const docAction = this.documentActions.find(action => action.value === this.nextDocumentAction);
+    this.applyDocumentAction(docAction);
   }
 
   public refreshData() {
@@ -198,5 +237,19 @@ export default class ActionToolbar extends ActionToolbarProps {
 
   private get activeWindow() {
     return this.fullPath === this.$route.fullPath;
+  }
+
+  private retrieveDocumentActions(docTypeId: number) {
+    if (accountStore.grantedDocActions.has(docTypeId)) {
+      const referenceListIds = [...accountStore.grantedDocActions.get(docTypeId)];
+
+      this.dynamicWindowService('/api/ad-reference-lists')
+      .retrieve({
+        criteriaQuery: referenceListIds.map(id => `id.in=${id}`)
+      })
+      .then(res => {
+        this.documentActions = res.data
+      });
+    }
   }
 }

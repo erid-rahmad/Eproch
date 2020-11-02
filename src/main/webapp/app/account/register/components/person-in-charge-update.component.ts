@@ -28,23 +28,24 @@ export default class PersonInChargeUpdate extends PersonInChargeUpdateProps {
     private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
 
     public rules = {
-        login: {
-            min: 3,
+        userLogin: {
+            min: 8,
             pattern: '^[_.@A-Za-z0-9-]*$'
         },
         email: {
             type: 'email'
         }
     };
+    
     public businessCategories = [];
     public person = {};
     
     @Watch('user')
-    setPerson(person){
+    setPerson(person) {
         this.person = person;
     }
 
-    created(){
+    created() {
         this.setPerson(this.user);
     }
 
@@ -77,13 +78,20 @@ export default class PersonInChargeUpdate extends PersonInChargeUpdateProps {
     }
 
     private retrieveBusinessCategory() {
-        const businessCategory = Array.from(registrationStore.businessCategories);
+        const businessCategoryIds = Array.from(registrationStore.businessCategories);
         this.dynamicWindowService('/api/c-business-categories')
             .retrieve({
-                criteriaQuery: [`sector.equals=TERTIARY`]
-                .concat(businessCategory.map(id => `id.in=${id}`))
+                criteriaQuery: [
+                    'active.equals=true',
+                    'sector.equals=TERTIARY'
+                ].concat(businessCategoryIds.map(id => `id.in=${id}`)),
+                paginationQuery: {
+                    size: 1000,
+                    page: 0,
+                    sort: ['name']
+                }
             })
-            .then(res=>{
+            .then(res => {
                 this.businessCategories = res.data;
             });
     }

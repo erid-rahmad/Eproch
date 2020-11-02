@@ -103,6 +103,12 @@ public class AdUserQueryService extends QueryService<AdUser> {
             if (criteria.getPhone() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPhone(), AdUser_.phone));
             }
+            if (criteria.getPosition() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPosition(), AdUser_.position));
+            }
+            if (criteria.getVendor() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendor(), AdUser_.vendor));
+            }
             if (criteria.getFailedLoginCount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getFailedLoginCount(), AdUser_.failedLoginCount));
             }
@@ -112,6 +118,10 @@ public class AdUserQueryService extends QueryService<AdUser> {
             if (criteria.getUserId() != null) {
                 specification = specification.and(buildSpecification(criteria.getUserId(),
                     root -> root.join(AdUser_.user, JoinType.LEFT).get(User_.id)));
+            }
+            if (criteria.getCVendorId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCVendorId(),
+                    root -> root.join(AdUser_.cVendor, JoinType.LEFT).get(CVendor_.id)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),

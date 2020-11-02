@@ -68,21 +68,21 @@ public class CAttachmentService {
             String fileName = tmpFile.getName();
             tmpFile.delete();
 
-            Path targetLocation = this.uploadPath.resolve(tmpFile.getName());
+            Path targetLocation = this.uploadPath.resolve(fileName);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             ADOrganization organization = new ADOrganization();
-            CAttachment attachment = new CAttachment();
+            CAttachment cAttachment = new CAttachment();
 
             organization.setId(1L);
-            attachment.active(true)
+            cAttachment.active(true)
                 .adOrganization(organization)
                 .fileName(fileName)
                 .documentType(file.getContentType())
                 .mimeType(file.getContentType());
 
-            cAttachmentRepository.save(attachment);
-            return cAttachmentMapper.toDto(attachment);
+            cAttachmentRepository.save(cAttachment);
+            return cAttachmentMapper.toDto(cAttachment);
         } catch (IOException e) {
             e.printStackTrace();
         }

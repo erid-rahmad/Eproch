@@ -21,4 +21,14 @@
                                  referencedTableName="ad_organization"/>
 
     </changeSet>
+
+    <changeSet id="20201101215400" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="document_type_id"
+                                 baseTableName="c_vendor"
+                                 constraintName="fk_c_vendor_document_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_document_type"/>
+
+    </changeSet>
 </databaseChangeLog>

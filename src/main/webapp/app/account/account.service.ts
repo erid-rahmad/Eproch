@@ -7,11 +7,13 @@ import { TranslationStoreModule as translationStore } from '@/shared/config/stor
 import axios from 'axios';
 import VueRouter from 'vue-router';
 import { Store } from 'vuex';
+import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 
 
 export default class AccountService {
   constructor(
     private store: Store<any>,
+    private windowService: (baseApiUrl: string) => DynamicWindowService,
     private translationService: TranslationService,
     private trackerService: TrackerService,
     private menuService: AdMenuService,
@@ -43,9 +45,16 @@ export default class AccountService {
     accountStore.authenticate();
     
     try {
-      const response = await axios.get('api/account');
+      let response = await axios.get('api/account');
       const account = response.data;
+
       if (account) {
+        response = await this.windowService('api/ad-users').find(account.id);
+        accountStore.setUserDetails(response);
+
+        response = await axios.get('api/accesses');
+        accountStore.setGrantedResources(response.data);
+
         const routes = await this.menuService.retrieve({
           criteriaQuery: 'parentMenuId.specified=false'
         });

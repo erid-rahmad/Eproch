@@ -78,11 +78,29 @@
             <column name="active" type="boolean"/>
             <column name="code" type="string"/>
             <column name="phone" type="string"/>
+            <column name="position" type="string"/>
+            <column name="vendor" type="boolean"/>
             <column name="failed_login_count" type="numeric"/>
             <column name="last_login_date" type="datetime"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20201101185900" author="Ananta Aryadewa">
+        <modifyDataType tableName="ad_user" columnName="code" newDataType="varchar(15)" />
+        <modifyDataType tableName="ad_user" columnName="phone" newDataType="varchar(20)" />
+        <addColumn tableName="ad_user">
+            <column name="position" type="varchar(30)">
+                <constraints nullable="true" />
+            </column>
+            <column name="vendor" type="boolean" remarks="Whether it is a vendor or not">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_vendor_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

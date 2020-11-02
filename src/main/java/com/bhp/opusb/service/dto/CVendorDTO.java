@@ -1,5 +1,6 @@
 package com.bhp.opusb.service.dto;
 
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -46,6 +47,22 @@ public class CVendorDTO extends AbstractAuditingDTO {
     @NotNull
     private String approvalStatus;
 
+    @NotNull
+    private LocalDate dateTrx;
+
+    @NotNull
+    private String documentNo;
+
+    @NotNull
+    private String documentAction;
+
+    @NotNull
+    private String documentStatus;
+
+    private Boolean approved;
+
+    private Boolean processed;
+
     private UUID uid;
 
     private Boolean active;
@@ -56,6 +73,9 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
     private String adOrganizationName;
+
+    private Long documentTypeId;
+    private String documentTypeName;
     
     public Long getId() {
         return id;
@@ -153,6 +173,54 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.approvalStatus = approvalStatus;
     }
 
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public Boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public Boolean isProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -201,6 +269,22 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long cDocumentTypeId) {
+        this.documentTypeId = cDocumentTypeId;
+    }
+
+    public String getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(String documentTypeName) {
+        this.documentTypeName = documentTypeName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -237,12 +321,17 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", type='" + getType() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
             ", approvalStatus='" + getApprovalStatus() + "'" +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", taxIdFileId=" + getTaxIdFileId() +
-            ", taxIdFileName='" + getTaxIdFileName() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName='" + getAdOrganizationName() + "'" +
+            ", documentTypeId=" + getDocumentTypeId() +
             "}";
     }
 }

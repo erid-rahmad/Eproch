@@ -49,16 +49,18 @@ public class CVendorTaxService {
         return cVendorTaxMapper.toDto(cVendorTax);
     }
 
-    public List<CVendorTaxDTO> saveAll(List<CVendorTaxDTO> cVendorTaxDTOs, CVendor vendor, ADOrganization organization) {
+    public List<CVendorTaxDTO> saveAll(List<CVendorTaxDTO> cVendorTaxDTOs, boolean eInvoice, boolean taxableEmployers,
+            CVendor vendor, ADOrganization organization) {
         log.debug("Request to save CVendorTaxes. List size: {}", cVendorTaxDTOs.size());
         List<CVendorTax> vendorTaxes = cVendorTaxDTOs.stream()
             .map(vendorTax
                 -> cVendorTaxMapper.toEntity(vendorTax)
                     .active(true)
                     .adOrganization(organization)
+                    .eInvoice(eInvoice)
+                    .taxableEmployers(taxableEmployers)
                     .vendor(vendor)
-            )
-            .collect(Collectors.toList());
+            ).collect(Collectors.toList());
 
         return cVendorTaxRepository.saveAll(vendorTaxes)
             .stream()

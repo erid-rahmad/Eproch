@@ -71,6 +71,42 @@
             ]
         },
         {
+            "fieldName": "dateTrx",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "documentNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "documentAction",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "documentStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "approved",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "processed",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },
@@ -94,6 +130,14 @@
             "otherEntityRelationshipName": "cVendor",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "cVendor",
+            "relationshipValidateRules": "required",
+            "relationshipName": "documentType",
             "otherEntityField": "id"
         }
     ],

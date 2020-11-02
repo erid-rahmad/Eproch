@@ -124,6 +124,24 @@ public class CVendorQueryService extends QueryService<CVendor> {
             if (criteria.getApprovalStatus() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getApprovalStatus(), CVendor_.approvalStatus));
             }
+            if (criteria.getDateTrx() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), CVendor_.dateTrx));
+            }
+            if (criteria.getDocumentNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentNo(), CVendor_.documentNo));
+            }
+            if (criteria.getDocumentAction() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentAction(), CVendor_.documentAction));
+            }
+            if (criteria.getDocumentStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentStatus(), CVendor_.documentStatus));
+            }
+            if (criteria.getApproved() != null) {
+                specification = specification.and(buildSpecification(criteria.getApproved(), CVendor_.approved));
+            }
+            if (criteria.getProcessed() != null) {
+                specification = specification.and(buildSpecification(criteria.getProcessed(), CVendor_.processed));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CVendor_.uid));
             }
@@ -137,6 +155,10 @@ public class CVendorQueryService extends QueryService<CVendor> {
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(CVendor_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
+            }
+            if (criteria.getDocumentTypeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
+                    root -> root.join(CVendor_.documentType, JoinType.LEFT).get(CDocumentType_.id)));
             }
         }
         return specification;

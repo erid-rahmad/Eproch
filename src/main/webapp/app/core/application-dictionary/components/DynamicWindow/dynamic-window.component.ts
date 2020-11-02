@@ -18,6 +18,7 @@ import SearchPanel from "../SearchPanel/search-panel.vue";
 import TreeView from '../TreeView/tree-view.vue';
 import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
 import { IADField } from '@/shared/model/ad-field.model';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
 @Component({
   components: {
@@ -52,7 +53,8 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   private debouncedUpdateChildTabs: (data: any) => void;
 
   public windowId: number = 0;
-  private windowType = null;
+  windowType = null;
+  accessLevel = null;
   public gridView = true;
   private childTabs: IADTab[] = [];
   public subTabs: IADTab[] = [];
@@ -74,6 +76,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   isEditing: boolean = false;
   deleteConfirmationVisible: boolean = false;
   deleteOptions: any = null;
+
+  approved: boolean = false;
+  documentTypeId: number = 0;
+  nextDocumentAction: string = null;
   docAction: any = {};
   docActionMessage: string = null;
   docActionPopupVisible: boolean = false;
@@ -88,6 +94,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
    * Prevents load the same child tabs multiple times.
    */
   private loadingChildTabs = false;
+
+  get isVendor() {
+    return accountStore.userDetails.vendor && this.accessLevel === 'CLN_VND';
+  }
 
   // Start of computed properties.
   get firstTab() {
@@ -138,10 +148,13 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     this.debouncedUpdateChildTabs = debounce(this.updateChildTabs, 500);
     
     this.retrieveWindowDetail()
-      .then((res) => {
+      .then(res => {
         this.windowType = res.type;
+        this.accessLevel = res.accessLevel;
         this.retrieveTabs(null);
       });
+
+    console.log('User details: %O', accountStore.userDetails);
   }
 
   beforeDestroy() {
@@ -169,7 +182,39 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   // End of reactive methods.
 
   public applyDocumentAction() {
-    console.log('Apply docAction.', this.docAction);
+    const tableId = this.mainTab.adTableId;
+    const tableName = this.mainTab.adTableName;
+    console.log('Apply docAction[%O]. table[id: %s, name: %s], record: %O', this.docAction, tableId, tableName, this.currentRecord);
+    const {
+      editing,
+      createdBy,
+      createdDate,
+      lastModifiedBy,
+      lastModifiedDate,
+      ...record
+    } = this.currentRecord;
+
+    record.approvalStatus = this.docAction.value;
+    record.approved = true;
+    record.processed = true;
+    record.documentStatus = this.docAction.value;
+    this.dynamicWindowService(this.mainTab.targetEndpoint)
+      .update(record)
+      .then(data => {
+        this.refreshWindow();
+        this.$message({
+          message: `Document has been successfully ${record.approvalStatus.toLowerCase() }ed`,
+          type: 'success'
+        });
+      })
+      .catch(err => {
+        console.error('Error updating the document status! %O', err);
+        const message = `Error updating the document status`;
+        this.$message({
+          message: message.toString(),
+          type: 'error'
+        });
+      });
   }
 
   /**
@@ -378,6 +423,13 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   public async onMainRecordChange({data, recordNo}) {
     this.currentRecord = data;
     this.currentRecordNo = recordNo;
+
+    if (this.windowType === 'TRANSACTION' && this.tabStack.length === 1) {
+      this.approved = data.approved;
+      this.documentTypeId = data.documentTypeId;
+      this.nextDocumentAction = data.documentAction;
+    }
+
     this.debouncedUpdateChildTabs(data);
   }
 
@@ -502,6 +554,16 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
               this.childTabs.push(tab);
             } else {
               // Header tab is immediatelly pushed to the tab stack.
+              if (this.isVendor) {
+                const vendorIdField = tab.adTableName === 'c_vendor' ? 'id' : 'vendorId';
+                tab.nativeFilterQuery = tab.filterQuery;
+                tab.filterQuery = buildCriteriaQueryString([
+                  `${vendorIdField}.equals=${accountStore.userDetails.cVendorId}`,
+                  tab.nativeFilterQuery // Include current query.
+                ]);
+                console.log('isVendor. nativeQuery: %s, overriden query: %s', tab.nativeFilterQuery, tab.filterQuery);
+              }
+
               this.tabStack.push(tab);
             }
           }

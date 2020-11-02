@@ -15,16 +15,10 @@
             label-width="256px"
         >
             <el-form-item :label="$t('register.tax.efaktur')">
-                <el-checkbox
-                    v-model="eInvoice"
-                    @change="onEInvoiceChanged"
-                />
+                <el-checkbox v-model="eInvoice"/>
             </el-form-item>
             <el-form-item :label="$t('register.tax.pkp')">
-                <el-checkbox
-                    v-model="taxableEmployers"
-                    @change="onTaxableEmployersChanged"
-                />
+                <el-checkbox v-model="taxableEmployers"/>
             </el-form-item>
         </el-form>
 
