@@ -33,6 +33,6 @@ public class MetadataExtractorIntegrator implements Integrator {
 
   @Override
   public void disintegrate(SessionFactoryImplementor sessionFactory, SessionFactoryServiceRegistry serviceRegistry) {
-
+    // No need implementation.
   }
 }
