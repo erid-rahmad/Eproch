@@ -57,13 +57,4 @@
 
     </changeSet>
 
-    <changeSet id="20201112020900-added-foreignkey2" author="dian-tri-budianto">
-
-        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
-                                 baseTableName="c_vendor_tax"
-                                 constraintName="fk_c_vendor_tax_ad_organization_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="ad_organization"/>
-
-    </changeSet>
 </databaseChangeLog>

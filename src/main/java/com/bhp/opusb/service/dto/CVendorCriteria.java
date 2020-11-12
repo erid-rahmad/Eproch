@@ -2,13 +2,15 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.LocalDateFilter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -54,8 +56,6 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     private StringFilter paymentCategory;
 
-    private StringFilter approvalStatus;
-
     private LocalDateFilter dateTrx;
 
     private StringFilter documentNo;
@@ -76,9 +76,9 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
-    private LongFilter vendorGroupId;
-
     private LongFilter documentTypeId;
+
+    private LongFilter vendorGroupId;
 
     public CVendorCriteria() {
     }
@@ -99,7 +99,6 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.fax = other.fax == null ? null : other.fax.copy();
         this.website = other.website == null ? null : other.website.copy();
         this.paymentCategory = other.paymentCategory == null ? null : other.paymentCategory.copy();
-        this.approvalStatus = other.approvalStatus == null ? null : other.approvalStatus.copy();
         this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
         this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
         this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
@@ -110,8 +109,8 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.taxIdFileId = other.taxIdFileId == null ? null : other.taxIdFileId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.vendorGroupId = other.vendorGroupId == null ? null : other.vendorGroupId.copy();
         this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
+        this.vendorGroupId = other.vendorGroupId == null ? null : other.vendorGroupId.copy();
     }
 
     @Override
@@ -239,14 +238,6 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.paymentCategory = paymentCategory;
     }
 
-    public StringFilter getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public void setApprovalStatus(StringFilter approvalStatus) {
-        this.approvalStatus = approvalStatus;
-    }
-
     public LocalDateFilter getDateTrx() {
         return dateTrx;
     }
@@ -327,20 +318,20 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getVendorGroupId() {
-        return vendorGroupId;
-    }
-
-    public void setVendorGroupId(LongFilter vendorGroupId) {
-        this.vendorGroupId = vendorGroupId;
-    }
-
     public LongFilter getDocumentTypeId() {
         return documentTypeId;
     }
 
     public void setDocumentTypeId(LongFilter documentTypeId) {
         this.documentTypeId = documentTypeId;
+    }
+
+    public LongFilter getVendorGroupId() {
+        return vendorGroupId;
+    }
+
+    public void setVendorGroupId(LongFilter vendorGroupId) {
+        this.vendorGroupId = vendorGroupId;
     }
 
 
@@ -369,7 +360,6 @@ public class CVendorCriteria implements Serializable, Criteria {
             Objects.equals(fax, that.fax) &&
             Objects.equals(website, that.website) &&
             Objects.equals(paymentCategory, that.paymentCategory) &&
-            Objects.equals(approvalStatus, that.approvalStatus) &&
             Objects.equals(dateTrx, that.dateTrx) &&
             Objects.equals(documentNo, that.documentNo) &&
             Objects.equals(documentAction, that.documentAction) &&
@@ -380,8 +370,8 @@ public class CVendorCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(taxIdFileId, that.taxIdFileId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(vendorGroupId, that.vendorGroupId) &&
-            Objects.equals(documentTypeId, that.documentTypeId);
+            Objects.equals(documentTypeId, that.documentTypeId) &&
+            Objects.equals(vendorGroupId, that.vendorGroupId);
     }
 
     @Override
@@ -402,7 +392,6 @@ public class CVendorCriteria implements Serializable, Criteria {
         fax,
         website,
         paymentCategory,
-        approvalStatus,
         dateTrx,
         documentNo,
         documentAction,
@@ -413,8 +402,8 @@ public class CVendorCriteria implements Serializable, Criteria {
         active,
         taxIdFileId,
         adOrganizationId,
-        vendorGroupId,
-        documentTypeId
+        documentTypeId,
+        vendorGroupId
         );
     }
 
@@ -436,7 +425,6 @@ public class CVendorCriteria implements Serializable, Criteria {
                 (fax != null ? "fax=" + fax + ", " : "") +
                 (website != null ? "website=" + website + ", " : "") +
                 (paymentCategory != null ? "paymentCategory=" + paymentCategory + ", " : "") +
-                (approvalStatus != null ? "approvalStatus=" + approvalStatus + ", " : "") +
                 (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
                 (documentNo != null ? "documentNo=" + documentNo + ", " : "") +
                 (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
@@ -447,8 +435,8 @@ public class CVendorCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (taxIdFileId != null ? "taxIdFileId=" + taxIdFileId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (vendorGroupId != null ? "vendorGroupId=" + vendorGroupId + ", " : "") +
                 (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
+                (vendorGroupId != null ? "vendorGroupId=" + vendorGroupId + ", " : "") +
             "}";
     }
 

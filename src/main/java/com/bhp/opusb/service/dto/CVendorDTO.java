@@ -5,6 +5,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CVendor} entity.
@@ -15,52 +16,62 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
     private Long id;
 
+    @Size(max = 30)
     private String code;
 
     @NotNull
+    @Size(max = 150)
     private String name;
 
     @NotNull
+    @Size(max = 10)
     private String type;
 
     @NotNull
+    @Size(max = 10)
     private String location;
 
+    @Size(max = 50)
     private String idNo;
 
+    @Size(max = 30)
     private String tin;
 
+    @Size(max = 30)
     private String taxIdNo;
 
+    @Size(max = 50)
     private String taxIdName;
 
     private Boolean branch;
 
+    @Size(max = 30)
     private String email;
 
-    @NotNull
     private String phone;
 
     private String fax;
 
+    @Size(max = 50)
     private String website;
 
     @NotNull
+    @Size(max = 10)
     private String paymentCategory;
-
-    @NotNull
-    private String approvalStatus;
 
     @NotNull
     private LocalDate dateTrx;
 
     @NotNull
+    @Size(max = 30)
     private String documentNo;
 
     @NotNull
+    @Size(max = 10)
     private String documentAction;
 
     @NotNull
+    @Size(max = 10)
     private String documentStatus;
 
     private Boolean approved;
@@ -202,14 +213,6 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
     public void setPaymentCategory(String paymentCategory) {
         this.paymentCategory = paymentCategory;
-    }
-
-    public String getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public void setApprovalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus;
     }
 
     public LocalDate getDateTrx() {
@@ -379,7 +382,6 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", fax='" + getFax() + "'" +
             ", website='" + getWebsite() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
-            ", approvalStatus='" + getApprovalStatus() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +
@@ -390,10 +392,8 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", taxIdFileId=" + getTaxIdFileId() +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName='" + getAdOrganizationName() + "'" +
-            ", vendorGroupId=" + getVendorGroupId() +
-            ", vendorGroupName='" + getVendorGroupName() + "'" +
             ", documentTypeId=" + getDocumentTypeId() +
+            ", vendorGroupId=" + getVendorGroupId() +
             "}";
     }
 }

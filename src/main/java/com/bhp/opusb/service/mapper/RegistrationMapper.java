@@ -28,7 +28,6 @@ public class RegistrationMapper {
 
     vendor.active(true)
       .adOrganization(organization)
-      .approvalStatus("PENDING")
       .branch(companyProfile.getBranch())
       .email(companyProfile.getEmail())
       .fax(companyProfile.getFax())

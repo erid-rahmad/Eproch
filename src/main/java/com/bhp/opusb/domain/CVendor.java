@@ -15,6 +15,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -36,71 +37,80 @@ public class CVendor extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "code")
+    @Size(max = 30)
+    @Column(name = "code", length = 30)
     private String code;
 
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Size(max = 150)
+    @Column(name = "name", length = 150, nullable = false)
     private String name;
 
     @NotNull
-    @Column(name = "type", nullable = false)
+    @Size(max = 10)
+    @Column(name = "type", length = 10, nullable = false)
     private String type;
 
     @NotNull
-    @Column(name = "location", nullable = false)
+    @Size(max = 10)
+    @Column(name = "location", length = 10, nullable = false)
     private String location;
 
-    @Column(name = "id_no")
+    @Size(max = 50)
+    @Column(name = "id_no", length = 50)
     private String idNo;
 
-    @Column(name = "tin")
+    @Size(max = 30)
+    @Column(name = "tin", length = 30)
     private String tin;
 
-    @Column(name = "tax_id_no")
+    @Size(max = 30)
+    @Column(name = "tax_id_no", length = 30)
     private String taxIdNo;
 
-    @Column(name = "tax_id_name")
+    @Size(max = 50)
+    @Column(name = "tax_id_name", length = 50)
     private String taxIdName;
 
     @Column(name = "branch")
     private Boolean branch;
 
-    @Column(name = "email")
+    @Size(max = 30)
+    @Column(name = "email", length = 30)
     private String email;
 
-    @NotNull
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
     private String phone;
 
     @Column(name = "fax")
     private String fax;
 
-    @Column(name = "website")
+    @Size(max = 50)
+    @Column(name = "website", length = 50)
     private String website;
 
     @NotNull
-    @Column(name = "payment_category", nullable = false)
+    @Size(max = 10)
+    @Column(name = "payment_category", length = 10, nullable = false)
     private String paymentCategory;
-
-    @NotNull
-    @Column(name = "approval_status", nullable = false)
-    private String approvalStatus;
 
     @NotNull
     @Column(name = "date_trx", nullable = false)
     private LocalDate dateTrx;
 
     @NotNull
-    @Column(name = "document_no", nullable = false)
+    @Size(max = 30)
+    @Column(name = "document_no", length = 30, nullable = false)
     private String documentNo;
 
     @NotNull
-    @Column(name = "document_action", nullable = false)
+    @Size(max = 10)
+    @Column(name = "document_action", length = 10, nullable = false)
     private String documentAction;
 
     @NotNull
-    @Column(name = "document_status", nullable = false)
+    @Size(max = 10)
+    @Column(name = "document_status", length = 10, nullable = false)
     private String documentStatus;
 
     @Column(name = "approved")
@@ -124,14 +134,14 @@ public class CVendor extends AbstractAuditingEntity {
     @JsonIgnoreProperties("cVendors")
     private ADOrganization adOrganization;
 
-    @ManyToOne
-    @JsonIgnoreProperties("cVendors")
-    private CVendorGroup vendorGroup;
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("cVendors")
     private CDocumentType documentType;
+
+    @ManyToOne
+    @JsonIgnoreProperties("cVendors")
+    private CVendorGroup vendorGroup;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -324,19 +334,6 @@ public class CVendor extends AbstractAuditingEntity {
         this.paymentCategory = paymentCategory;
     }
 
-    public String getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public CVendor approvalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus;
-        return this;
-    }
-
-    public void setApprovalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus;
-    }
-
     public LocalDate getDateTrx() {
         return dateTrx;
     }
@@ -467,19 +464,6 @@ public class CVendor extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
 
-    public CVendorGroup getVendorGroup() {
-        return vendorGroup;
-    }
-
-    public CVendor vendorGroup(CVendorGroup cVendorGroup) {
-        this.vendorGroup = cVendorGroup;
-        return this;
-    }
-
-    public void setVendorGroup(CVendorGroup cVendorGroup) {
-        this.vendorGroup = cVendorGroup;
-    }
-
     public CDocumentType getDocumentType() {
         return documentType;
     }
@@ -491,6 +475,19 @@ public class CVendor extends AbstractAuditingEntity {
 
     public void setDocumentType(CDocumentType cDocumentType) {
         this.documentType = cDocumentType;
+    }
+
+    public CVendorGroup getVendorGroup() {
+        return vendorGroup;
+    }
+
+    public CVendor vendorGroup(CVendorGroup cVendorGroup) {
+        this.vendorGroup = cVendorGroup;
+        return this;
+    }
+
+    public void setVendorGroup(CVendorGroup cVendorGroup) {
+        this.vendorGroup = cVendorGroup;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -533,7 +530,6 @@ public class CVendor extends AbstractAuditingEntity {
             ", fax='" + getFax() + "'" +
             ", website='" + getWebsite() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
-            ", approvalStatus='" + getApprovalStatus() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +

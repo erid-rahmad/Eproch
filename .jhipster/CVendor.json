@@ -3,44 +3,70 @@
     "fields": [
         {
             "fieldName": "code",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
         },
         {
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "150"
         },
         {
             "fieldName": "type",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
         },
         {
             "fieldName": "location",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
         },
         {
             "fieldName": "idNo",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
         },
         {
             "fieldName": "tin",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
         },
         {
             "fieldName": "taxIdNo",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
         },
         {
             "fieldName": "taxIdName",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
         },
         {
             "fieldName": "branch",
@@ -48,14 +74,15 @@
         },
         {
             "fieldName": "email",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
         },
         {
             "fieldName": "phone",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "String"
         },
         {
             "fieldName": "fax",
@@ -63,21 +90,20 @@
         },
         {
             "fieldName": "website",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
         },
         {
             "fieldName": "paymentCategory",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "approvalStatus",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
         },
         {
             "fieldName": "dateTrx",
@@ -90,22 +116,28 @@
             "fieldName": "documentNo",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
         },
         {
             "fieldName": "documentAction",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
         },
         {
             "fieldName": "documentStatus",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
         },
         {
             "fieldName": "approved",
@@ -143,17 +175,17 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cVendorGroup",
-            "otherEntityRelationshipName": "cVendor",
-            "relationshipName": "vendorGroup",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "cDocumentType",
             "otherEntityRelationshipName": "cVendor",
             "relationshipValidateRules": "required",
             "relationshipName": "documentType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendorGroup",
+            "otherEntityRelationshipName": "cVendor",
+            "relationshipName": "vendorGroup",
             "otherEntityField": "id"
         }
     ],

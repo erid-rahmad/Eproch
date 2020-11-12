@@ -133,9 +133,6 @@ public class CVendorQueryService extends QueryService<CVendor> {
             if (criteria.getPaymentCategory() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPaymentCategory(), CVendor_.paymentCategory));
             }
-            if (criteria.getApprovalStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getApprovalStatus(), CVendor_.approvalStatus));
-            }
             if (criteria.getDateTrx() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), CVendor_.dateTrx));
             }
@@ -168,13 +165,13 @@ public class CVendorQueryService extends QueryService<CVendor> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(CVendor_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
-            if (criteria.getVendorGroupId() != null) {
-                specification = specification.and(buildSpecification(criteria.getVendorGroupId(),
-                    root -> root.join(CVendor_.vendorGroup, JoinType.LEFT).get(CVendorGroup_.id)));
-            }
             if (criteria.getDocumentTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
                     root -> root.join(CVendor_.documentType, JoinType.LEFT).get(CDocumentType_.id)));
+            }
+            if (criteria.getVendorGroupId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorGroupId(),
+                    root -> root.join(CVendor_.vendorGroup, JoinType.LEFT).get(CVendorGroup_.id)));
             }
         }
         return specification;

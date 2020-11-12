@@ -159,26 +159,25 @@ entity CFunctionary {
 }
 
 entity CVendor {
-    code String
-	name String required
-	type String required
-	location String required
-	idNo String
-	tin String
-	taxIdNo String
-	taxIdName String
+	code String maxlength(30)
+	name String required maxlength(150)
+	type String required maxlength(10)
+	location String required maxlength(10)
+	idNo String maxlength(50)
+	tin String maxlength(30)
+	taxIdNo String maxlength(30)
+	taxIdName String maxlength(50)
 	branch Boolean
-	email String
-	phone String required
+	email String maxlength(30)
+	phone String
 	fax String
-	website String
-	paymentCategory String required
-	approvalStatus String required
+	website String maxlength(50)
+	paymentCategory String required maxlength(10)
 
 	dateTrx LocalDate required
-	documentNo String required
-	documentAction String required
-	documentStatus String required
+	documentNo String required maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
 	approved Boolean
 	processed Boolean
 
@@ -441,16 +440,16 @@ entity MMatchPO{
 	foreignTaxAmount String
 	mLocator String
 	adOrganization String
-    dateAccount LocalDate
-    cDocTypeMr String
-    orderSuffix String
-    lineNoPo String
-    lineNoMr String
-    isTaxable Boolean
-    cTaxCode String
-    cTaxName String
-    description String
-    mMatchType String
+	dateAccount LocalDate
+	cDocTypeMr String
+	orderSuffix String
+	lineNoPo String
+	lineNoMr String
+	isTaxable Boolean
+	cTaxCode String
+	cTaxName String
+	description String
+	mMatchType String
 }
 
 /**
