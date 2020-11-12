@@ -107,4 +107,17 @@ export default class DynamicWindowService {
         });
     });
   }
+
+  public applyDocAction(entity: any): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .put(`${this.baseApiUrl}/update-doc-status`, entity)
+        .then(function(res) {
+          resolve(res.status);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
 }

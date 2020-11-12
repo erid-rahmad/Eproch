@@ -151,6 +151,19 @@ public class CVendorService {
     }
 
     /**
+     * TODO Use a generic method to update the document status for every entities.
+     * TODO Use the workflow engine for maintaining the flow state.
+     */
+    public void updateDocumentStatus(CVendorDTO cVendorDTO) {
+        log.debug("Request to update CVendor's document status : {}", cVendorDTO);
+        CVendor cVendor = cVendorMapper.toEntity(cVendorDTO);
+        String action = cVendor.getDocumentAction();
+
+        cVendorRepository.updateDocumentStatus(cVendor.getId(), action, action);
+        userService.sendActivationEmail(cVendor);
+    }
+
+    /**
      * Get all the cVendors.
      *
      * @param pageable the pagination information.

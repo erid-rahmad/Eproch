@@ -42,6 +42,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.security.RandomUtil;
+import io.vavr.collection.Stream;
 
 /**
  * Service class for managing users.
@@ -67,11 +68,13 @@ public class UserService {
     private final CBusinessCategoryMapper cBusinessCategoryMapper;
 
     private final CPicBusinessCatRepository cPicBusinessCatRepository;
+    private final MailService mailService;
 
     public UserService(UserRepository userRepository, AdUserRepository adUserRepository,
             PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository, ScAuthorityRepository scAuthorityRepository,
             AdUserAuthorityRepository adUserAuthorityRepository, CacheManager cacheManager, AdUserMapper adUserMapper,
-            CBusinessCategoryMapper cBusinessCategoryMapper, CPicBusinessCatRepository cPicBusinessCatRepository) {
+            CBusinessCategoryMapper cBusinessCategoryMapper, CPicBusinessCatRepository cPicBusinessCatRepository,
+            MailService mailService) {
 
         this.userRepository = userRepository;
         this.adUserRepository = adUserRepository;
@@ -83,6 +86,12 @@ public class UserService {
         this.adUserMapper = adUserMapper;
         this.cBusinessCategoryMapper = cBusinessCategoryMapper;
         this.cPicBusinessCatRepository = cPicBusinessCatRepository;
+        this.mailService = mailService;
+    }
+
+    public void sendActivationEmail(CVendor vendor) {
+        List<AdUser> users = adUserRepository.findBycVendor(vendor);
+        Stream.ofAll(users).map(AdUser::getUser).forEach(mailService::sendActivationEmail);
     }
 
     public Optional<User> activateRegistration(String key) {

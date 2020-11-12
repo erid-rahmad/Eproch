@@ -141,4 +141,25 @@ public class CVendorResource {
         cVendorService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
+
+    /**
+     * TODO Make a single endpoint for document status update.
+     * {@code PUT  /c-vendors} : Apply the document action to an existing cVendor.
+     *
+     * @param cVendorDTO the cVendorDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated cVendorDTO,
+     * or with status {@code 400 (Bad Request)} if the cVendorDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the cVendorDTO couldn't be updated.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/c-vendors/update-doc-status")
+    @ResponseStatus(HttpStatus.OK)
+    public void applyDocumentAction(@Valid @RequestBody CVendorDTO cVendorDTO) throws URISyntaxException {
+        log.debug("REST request to apply CVendor's document action : {}", cVendorDTO);
+        if (cVendorDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        cVendorService.updateDocumentStatus(cVendorDTO);
+    }
+
 }

@@ -199,8 +199,8 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     record.processed = true;
     record.documentStatus = this.docAction.value;
     this.dynamicWindowService(this.mainTab.targetEndpoint)
-      .update(record)
-      .then(data => {
+      .applyDocAction(record)
+      .then(status => {
         this.refreshWindow();
         this.$message({
           message: `Document has been successfully ${record.approvalStatus.toLowerCase() }ed`,
