@@ -5,58 +5,73 @@ import java.util.Objects;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
-
-import com.bhp.opusb.domain.enumeration.VendorType;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CVendor} entity.
  */
 public class CVendorDTO extends AbstractAuditingDTO {
-    
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
+    @Size(max = 30)
+    private String code;
+
     @NotNull
+    @Size(max = 150)
     private String name;
 
     @NotNull
-    private String taxIdNo;
+    @Size(max = 10)
+    private String type;
 
     @NotNull
+    @Size(max = 10)
+    private String location;
+
+    @Size(max = 50)
+    private String idNo;
+
+    @Size(max = 30)
+    private String tin;
+
+    @Size(max = 30)
+    private String taxIdNo;
+
+    @Size(max = 50)
     private String taxIdName;
 
     private Boolean branch;
 
-    @NotNull
+    @Size(max = 30)
     private String email;
 
-    @NotNull
     private String phone;
 
     private String fax;
 
+    @Size(max = 50)
     private String website;
 
     @NotNull
-    private VendorType type;
-
-    @NotNull
+    @Size(max = 10)
     private String paymentCategory;
-
-    @NotNull
-    private String approvalStatus;
 
     @NotNull
     private LocalDate dateTrx;
 
     @NotNull
+    @Size(max = 30)
     private String documentNo;
 
     @NotNull
+    @Size(max = 10)
     private String documentAction;
 
     @NotNull
+    @Size(max = 10)
     private String documentStatus;
 
     private Boolean approved;
@@ -74,9 +89,12 @@ public class CVendorDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    private Long vendorGroupId;
+    private String vendorGroupName;
+
     private Long documentTypeId;
     private String documentTypeName;
-    
+
     public Long getId() {
         return id;
     }
@@ -85,12 +103,52 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
+    public String getTin() {
+        return tin;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
     }
 
     public String getTaxIdNo() {
@@ -149,28 +207,12 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.website = website;
     }
 
-    public VendorType getType() {
-        return type;
-    }
-
-    public void setType(VendorType type) {
-        this.type = type;
-    }
-
     public String getPaymentCategory() {
         return paymentCategory;
     }
 
     public void setPaymentCategory(String paymentCategory) {
         this.paymentCategory = paymentCategory;
-    }
-
-    public String getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public void setApprovalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus;
     }
 
     public LocalDate getDateTrx() {
@@ -269,6 +311,22 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public Long getVendorGroupId() {
+        return vendorGroupId;
+    }
+
+    public void setVendorGroupId(Long cVendorGroupId) {
+        this.vendorGroupId = cVendorGroupId;
+    }
+
+    public String getVendorGroupName() {
+        return vendorGroupName;
+    }
+
+    public void setVendorGroupName(String vendorGroupName) {
+        this.vendorGroupName = vendorGroupName;
+    }
+
     public Long getDocumentTypeId() {
         return documentTypeId;
     }
@@ -310,7 +368,12 @@ public class CVendorDTO extends AbstractAuditingDTO {
     public String toString() {
         return "CVendorDTO{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
+            ", type='" + getType() + "'" +
+            ", location='" + getLocation() + "'" +
+            ", idNo='" + getIdNo() + "'" +
+            ", tin='" + getTin() + "'" +
             ", taxIdNo='" + getTaxIdNo() + "'" +
             ", taxIdName='" + getTaxIdName() + "'" +
             ", branch='" + isBranch() + "'" +
@@ -318,9 +381,7 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", phone='" + getPhone() + "'" +
             ", fax='" + getFax() + "'" +
             ", website='" + getWebsite() + "'" +
-            ", type='" + getType() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
-            ", approvalStatus='" + getApprovalStatus() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +
@@ -332,6 +393,7 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", taxIdFileId=" + getTaxIdFileId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", documentTypeId=" + getDocumentTypeId() +
+            ", vendorGroupId=" + getVendorGroupId() +
             "}";
     }
 }

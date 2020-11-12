@@ -94,15 +94,24 @@ public class CVendorService {
 
         cVendorRepository.save(vendor);
 
-        // Batch save locations.
         CLocation location = registrationMapper.toLocation(registrationDTO.getCompanyProfile());
-        CLocation taxLocation = registrationMapper.toTaxLocation(registrationDTO.getCompanyProfile());
-        cLocationRepository.saveAll(Arrays.asList(location, taxLocation));
+        CVendorLocation vendorLocation = pairVendorLocation(vendor, location, false, true, true, true);
 
-        // Make links between vendor and locations.
-        CVendorLocation vendorLocation = pairVendorLocation(vendor, location, false);
-        CVendorLocation vendorTaxLocation = pairVendorLocation(vendor, taxLocation, true);
-        cVendorLocationRepository.saveAll(Arrays.asList(vendorLocation, vendorTaxLocation));
+        if(registrationDTO.getCompanyProfile().getSameAddress()){
+            // Batch save locations.
+            cLocationRepository.saveAll(Arrays.asList(location));
+
+            // Make links between vendor and locations.
+            cVendorLocationRepository.saveAll(Arrays.asList(vendorLocation));
+        }else{
+            // Batch save locations TAX.
+            CLocation taxLocation = registrationMapper.toTaxLocation(registrationDTO.getCompanyProfile());
+            cLocationRepository.saveAll(Arrays.asList(location, taxLocation));
+
+            // Make links between vendor and locations TAX.
+            CVendorLocation vendorTaxLocation = pairVendorLocation(vendor, taxLocation, true, false, false, false);
+            cVendorLocationRepository.saveAll(Arrays.asList(vendorLocation, vendorTaxLocation));
+        }
 
         // Make links between vendor and business categories.
         cVendorBusinessCatService.saveAll(registrationDTO.getBusinesses(), vendor, organization);
@@ -142,6 +151,19 @@ public class CVendorService {
     }
 
     /**
+     * TODO Use a generic method to update the document status for every entities.
+     * TODO Use the workflow engine for maintaining the flow state.
+     */
+    public void updateDocumentStatus(CVendorDTO cVendorDTO) {
+        log.debug("Request to update CVendor's document status : {}", cVendorDTO);
+        CVendor cVendor = cVendorMapper.toEntity(cVendorDTO);
+        String action = cVendor.getDocumentAction();
+
+        cVendorRepository.updateDocumentStatus(cVendor.getId(), action, action);
+        userService.sendActivationEmail(cVendor);
+    }
+
+    /**
      * Get all the cVendors.
      *
      * @param pageable the pagination information.
@@ -177,13 +199,16 @@ public class CVendorService {
         cVendorRepository.deleteById(id);
     }
 
-    private CVendorLocation pairVendorLocation(CVendor vendor, CLocation location, boolean taxAddress) {
+    private CVendorLocation pairVendorLocation(CVendor vendor, CLocation location, boolean taxAddress, boolean shipAddr, boolean invoiceAddr, boolean payFromAddr) {
         CVendorLocation vendorLocation = new CVendorLocation();
         vendorLocation.active(true)
             .adOrganization(organization)
             .vendor(vendor)
             .location(location)
-            .taxInvoiceAddress(taxAddress);
+            .taxInvoiceAddress(taxAddress)
+            .shipAddress(shipAddr)
+            .invoiceAddress(invoiceAddr)
+            .payFromAddress(payFromAddr);
 
         return vendorLocation;
     }

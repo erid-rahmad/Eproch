@@ -44,11 +44,23 @@ public class CVendorBankAcctResourceIT {
     private static final String DEFAULT_ACCOUNT_NO = "AAAAAAAAAA";
     private static final String UPDATED_ACCOUNT_NO = "BBBBBBBBBB";
 
+    private static final String DEFAULT_ACCOUNT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_ACCOUNT_NAME = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     private static final String DEFAULT_BRANCH = "AAAAAAAAAA";
     private static final String UPDATED_BRANCH = "BBBBBBBBBB";
+
+    private static final String DEFAULT_BBAN = "AAAAAAAAAA";
+    private static final String UPDATED_BBAN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_IBAN = "AAAAAAAAAA";
+    private static final String UPDATED_IBAN = "BBBBBBBBBB";
+
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
@@ -85,8 +97,12 @@ public class CVendorBankAcctResourceIT {
     public static CVendorBankAcct createEntity(EntityManager em) {
         CVendorBankAcct cVendorBankAcct = new CVendorBankAcct()
             .accountNo(DEFAULT_ACCOUNT_NO)
+            .accountName(DEFAULT_ACCOUNT_NAME)
             .name(DEFAULT_NAME)
             .branch(DEFAULT_BRANCH)
+            .bban(DEFAULT_BBAN)
+            .iban(DEFAULT_IBAN)
+            .description(DEFAULT_DESCRIPTION)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -150,8 +166,12 @@ public class CVendorBankAcctResourceIT {
     public static CVendorBankAcct createUpdatedEntity(EntityManager em) {
         CVendorBankAcct cVendorBankAcct = new CVendorBankAcct()
             .accountNo(UPDATED_ACCOUNT_NO)
+            .accountName(UPDATED_ACCOUNT_NAME)
             .name(UPDATED_NAME)
             .branch(UPDATED_BRANCH)
+            .bban(UPDATED_BBAN)
+            .iban(UPDATED_IBAN)
+            .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -229,8 +249,12 @@ public class CVendorBankAcctResourceIT {
         assertThat(cVendorBankAcctList).hasSize(databaseSizeBeforeCreate + 1);
         CVendorBankAcct testCVendorBankAcct = cVendorBankAcctList.get(cVendorBankAcctList.size() - 1);
         assertThat(testCVendorBankAcct.getAccountNo()).isEqualTo(DEFAULT_ACCOUNT_NO);
+        assertThat(testCVendorBankAcct.getAccountName()).isEqualTo(DEFAULT_ACCOUNT_NAME);
         assertThat(testCVendorBankAcct.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCVendorBankAcct.getBranch()).isEqualTo(DEFAULT_BRANCH);
+        assertThat(testCVendorBankAcct.getBban()).isEqualTo(DEFAULT_BBAN);
+        assertThat(testCVendorBankAcct.getIban()).isEqualTo(DEFAULT_IBAN);
+        assertThat(testCVendorBankAcct.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCVendorBankAcct.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCVendorBankAcct.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -277,6 +301,25 @@ public class CVendorBankAcctResourceIT {
 
     @Test
     @Transactional
+    public void checkAccountNameIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cVendorBankAcctRepository.findAll().size();
+        // set the field null
+        cVendorBankAcct.setAccountName(null);
+
+        // Create the CVendorBankAcct, which fails.
+        CVendorBankAcctDTO cVendorBankAcctDTO = cVendorBankAcctMapper.toDto(cVendorBankAcct);
+
+        restCVendorBankAcctMockMvc.perform(post("/api/c-vendor-bank-accts")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(cVendorBankAcctDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CVendorBankAcct> cVendorBankAcctList = cVendorBankAcctRepository.findAll();
+        assertThat(cVendorBankAcctList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllCVendorBankAccts() throws Exception {
         // Initialize the database
         cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
@@ -287,8 +330,12 @@ public class CVendorBankAcctResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendorBankAcct.getId().intValue())))
             .andExpect(jsonPath("$.[*].accountNo").value(hasItem(DEFAULT_ACCOUNT_NO)))
+            .andExpect(jsonPath("$.[*].accountName").value(hasItem(DEFAULT_ACCOUNT_NAME)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].branch").value(hasItem(DEFAULT_BRANCH)))
+            .andExpect(jsonPath("$.[*].bban").value(hasItem(DEFAULT_BBAN)))
+            .andExpect(jsonPath("$.[*].iban").value(hasItem(DEFAULT_IBAN)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -305,8 +352,12 @@ public class CVendorBankAcctResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cVendorBankAcct.getId().intValue()))
             .andExpect(jsonPath("$.accountNo").value(DEFAULT_ACCOUNT_NO))
+            .andExpect(jsonPath("$.accountName").value(DEFAULT_ACCOUNT_NAME))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.branch").value(DEFAULT_BRANCH))
+            .andExpect(jsonPath("$.bban").value(DEFAULT_BBAN))
+            .andExpect(jsonPath("$.iban").value(DEFAULT_IBAN))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -406,6 +457,84 @@ public class CVendorBankAcctResourceIT {
 
         // Get all the cVendorBankAcctList where accountNo does not contain UPDATED_ACCOUNT_NO
         defaultCVendorBankAcctShouldBeFound("accountNo.doesNotContain=" + UPDATED_ACCOUNT_NO);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByAccountNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where accountName equals to DEFAULT_ACCOUNT_NAME
+        defaultCVendorBankAcctShouldBeFound("accountName.equals=" + DEFAULT_ACCOUNT_NAME);
+
+        // Get all the cVendorBankAcctList where accountName equals to UPDATED_ACCOUNT_NAME
+        defaultCVendorBankAcctShouldNotBeFound("accountName.equals=" + UPDATED_ACCOUNT_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByAccountNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where accountName not equals to DEFAULT_ACCOUNT_NAME
+        defaultCVendorBankAcctShouldNotBeFound("accountName.notEquals=" + DEFAULT_ACCOUNT_NAME);
+
+        // Get all the cVendorBankAcctList where accountName not equals to UPDATED_ACCOUNT_NAME
+        defaultCVendorBankAcctShouldBeFound("accountName.notEquals=" + UPDATED_ACCOUNT_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByAccountNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where accountName in DEFAULT_ACCOUNT_NAME or UPDATED_ACCOUNT_NAME
+        defaultCVendorBankAcctShouldBeFound("accountName.in=" + DEFAULT_ACCOUNT_NAME + "," + UPDATED_ACCOUNT_NAME);
+
+        // Get all the cVendorBankAcctList where accountName equals to UPDATED_ACCOUNT_NAME
+        defaultCVendorBankAcctShouldNotBeFound("accountName.in=" + UPDATED_ACCOUNT_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByAccountNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where accountName is not null
+        defaultCVendorBankAcctShouldBeFound("accountName.specified=true");
+
+        // Get all the cVendorBankAcctList where accountName is null
+        defaultCVendorBankAcctShouldNotBeFound("accountName.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByAccountNameContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where accountName contains DEFAULT_ACCOUNT_NAME
+        defaultCVendorBankAcctShouldBeFound("accountName.contains=" + DEFAULT_ACCOUNT_NAME);
+
+        // Get all the cVendorBankAcctList where accountName contains UPDATED_ACCOUNT_NAME
+        defaultCVendorBankAcctShouldNotBeFound("accountName.contains=" + UPDATED_ACCOUNT_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByAccountNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where accountName does not contain DEFAULT_ACCOUNT_NAME
+        defaultCVendorBankAcctShouldNotBeFound("accountName.doesNotContain=" + DEFAULT_ACCOUNT_NAME);
+
+        // Get all the cVendorBankAcctList where accountName does not contain UPDATED_ACCOUNT_NAME
+        defaultCVendorBankAcctShouldBeFound("accountName.doesNotContain=" + UPDATED_ACCOUNT_NAME);
     }
 
 
@@ -562,6 +691,240 @@ public class CVendorBankAcctResourceIT {
 
         // Get all the cVendorBankAcctList where branch does not contain UPDATED_BRANCH
         defaultCVendorBankAcctShouldBeFound("branch.doesNotContain=" + UPDATED_BRANCH);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByBbanIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where bban equals to DEFAULT_BBAN
+        defaultCVendorBankAcctShouldBeFound("bban.equals=" + DEFAULT_BBAN);
+
+        // Get all the cVendorBankAcctList where bban equals to UPDATED_BBAN
+        defaultCVendorBankAcctShouldNotBeFound("bban.equals=" + UPDATED_BBAN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByBbanIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where bban not equals to DEFAULT_BBAN
+        defaultCVendorBankAcctShouldNotBeFound("bban.notEquals=" + DEFAULT_BBAN);
+
+        // Get all the cVendorBankAcctList where bban not equals to UPDATED_BBAN
+        defaultCVendorBankAcctShouldBeFound("bban.notEquals=" + UPDATED_BBAN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByBbanIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where bban in DEFAULT_BBAN or UPDATED_BBAN
+        defaultCVendorBankAcctShouldBeFound("bban.in=" + DEFAULT_BBAN + "," + UPDATED_BBAN);
+
+        // Get all the cVendorBankAcctList where bban equals to UPDATED_BBAN
+        defaultCVendorBankAcctShouldNotBeFound("bban.in=" + UPDATED_BBAN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByBbanIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where bban is not null
+        defaultCVendorBankAcctShouldBeFound("bban.specified=true");
+
+        // Get all the cVendorBankAcctList where bban is null
+        defaultCVendorBankAcctShouldNotBeFound("bban.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByBbanContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where bban contains DEFAULT_BBAN
+        defaultCVendorBankAcctShouldBeFound("bban.contains=" + DEFAULT_BBAN);
+
+        // Get all the cVendorBankAcctList where bban contains UPDATED_BBAN
+        defaultCVendorBankAcctShouldNotBeFound("bban.contains=" + UPDATED_BBAN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByBbanNotContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where bban does not contain DEFAULT_BBAN
+        defaultCVendorBankAcctShouldNotBeFound("bban.doesNotContain=" + DEFAULT_BBAN);
+
+        // Get all the cVendorBankAcctList where bban does not contain UPDATED_BBAN
+        defaultCVendorBankAcctShouldBeFound("bban.doesNotContain=" + UPDATED_BBAN);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByIbanIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where iban equals to DEFAULT_IBAN
+        defaultCVendorBankAcctShouldBeFound("iban.equals=" + DEFAULT_IBAN);
+
+        // Get all the cVendorBankAcctList where iban equals to UPDATED_IBAN
+        defaultCVendorBankAcctShouldNotBeFound("iban.equals=" + UPDATED_IBAN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByIbanIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where iban not equals to DEFAULT_IBAN
+        defaultCVendorBankAcctShouldNotBeFound("iban.notEquals=" + DEFAULT_IBAN);
+
+        // Get all the cVendorBankAcctList where iban not equals to UPDATED_IBAN
+        defaultCVendorBankAcctShouldBeFound("iban.notEquals=" + UPDATED_IBAN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByIbanIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where iban in DEFAULT_IBAN or UPDATED_IBAN
+        defaultCVendorBankAcctShouldBeFound("iban.in=" + DEFAULT_IBAN + "," + UPDATED_IBAN);
+
+        // Get all the cVendorBankAcctList where iban equals to UPDATED_IBAN
+        defaultCVendorBankAcctShouldNotBeFound("iban.in=" + UPDATED_IBAN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByIbanIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where iban is not null
+        defaultCVendorBankAcctShouldBeFound("iban.specified=true");
+
+        // Get all the cVendorBankAcctList where iban is null
+        defaultCVendorBankAcctShouldNotBeFound("iban.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByIbanContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where iban contains DEFAULT_IBAN
+        defaultCVendorBankAcctShouldBeFound("iban.contains=" + DEFAULT_IBAN);
+
+        // Get all the cVendorBankAcctList where iban contains UPDATED_IBAN
+        defaultCVendorBankAcctShouldNotBeFound("iban.contains=" + UPDATED_IBAN);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByIbanNotContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where iban does not contain DEFAULT_IBAN
+        defaultCVendorBankAcctShouldNotBeFound("iban.doesNotContain=" + DEFAULT_IBAN);
+
+        // Get all the cVendorBankAcctList where iban does not contain UPDATED_IBAN
+        defaultCVendorBankAcctShouldBeFound("iban.doesNotContain=" + UPDATED_IBAN);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where description equals to DEFAULT_DESCRIPTION
+        defaultCVendorBankAcctShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cVendorBankAcctList where description equals to UPDATED_DESCRIPTION
+        defaultCVendorBankAcctShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where description not equals to DEFAULT_DESCRIPTION
+        defaultCVendorBankAcctShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cVendorBankAcctList where description not equals to UPDATED_DESCRIPTION
+        defaultCVendorBankAcctShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultCVendorBankAcctShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the cVendorBankAcctList where description equals to UPDATED_DESCRIPTION
+        defaultCVendorBankAcctShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where description is not null
+        defaultCVendorBankAcctShouldBeFound("description.specified=true");
+
+        // Get all the cVendorBankAcctList where description is null
+        defaultCVendorBankAcctShouldNotBeFound("description.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where description contains DEFAULT_DESCRIPTION
+        defaultCVendorBankAcctShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cVendorBankAcctList where description contains UPDATED_DESCRIPTION
+        defaultCVendorBankAcctShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorBankAcctsByDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorBankAcctRepository.saveAndFlush(cVendorBankAcct);
+
+        // Get all the cVendorBankAcctList where description does not contain DEFAULT_DESCRIPTION
+        defaultCVendorBankAcctShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
+
+        // Get all the cVendorBankAcctList where description does not contain UPDATED_DESCRIPTION
+        defaultCVendorBankAcctShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
     }
 
 
@@ -757,8 +1120,12 @@ public class CVendorBankAcctResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendorBankAcct.getId().intValue())))
             .andExpect(jsonPath("$.[*].accountNo").value(hasItem(DEFAULT_ACCOUNT_NO)))
+            .andExpect(jsonPath("$.[*].accountName").value(hasItem(DEFAULT_ACCOUNT_NAME)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].branch").value(hasItem(DEFAULT_BRANCH)))
+            .andExpect(jsonPath("$.[*].bban").value(hasItem(DEFAULT_BBAN)))
+            .andExpect(jsonPath("$.[*].iban").value(hasItem(DEFAULT_IBAN)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -809,8 +1176,12 @@ public class CVendorBankAcctResourceIT {
         em.detach(updatedCVendorBankAcct);
         updatedCVendorBankAcct
             .accountNo(UPDATED_ACCOUNT_NO)
+            .accountName(UPDATED_ACCOUNT_NAME)
             .name(UPDATED_NAME)
             .branch(UPDATED_BRANCH)
+            .bban(UPDATED_BBAN)
+            .iban(UPDATED_IBAN)
+            .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CVendorBankAcctDTO cVendorBankAcctDTO = cVendorBankAcctMapper.toDto(updatedCVendorBankAcct);
@@ -825,8 +1196,12 @@ public class CVendorBankAcctResourceIT {
         assertThat(cVendorBankAcctList).hasSize(databaseSizeBeforeUpdate);
         CVendorBankAcct testCVendorBankAcct = cVendorBankAcctList.get(cVendorBankAcctList.size() - 1);
         assertThat(testCVendorBankAcct.getAccountNo()).isEqualTo(UPDATED_ACCOUNT_NO);
+        assertThat(testCVendorBankAcct.getAccountName()).isEqualTo(UPDATED_ACCOUNT_NAME);
         assertThat(testCVendorBankAcct.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCVendorBankAcct.getBranch()).isEqualTo(UPDATED_BRANCH);
+        assertThat(testCVendorBankAcct.getBban()).isEqualTo(UPDATED_BBAN);
+        assertThat(testCVendorBankAcct.getIban()).isEqualTo(UPDATED_IBAN);
+        assertThat(testCVendorBankAcct.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCVendorBankAcct.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCVendorBankAcct.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

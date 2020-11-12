@@ -159,22 +159,25 @@ entity CFunctionary {
 }
 
 entity CVendor {
-	name String required
-	taxIdNo String required
-	taxIdName String required
+	code String maxlength(30)
+	name String required maxlength(150)
+	type String required maxlength(10)
+	location String required maxlength(10)
+	idNo String maxlength(50)
+	tin String maxlength(30)
+	taxIdNo String maxlength(30)
+	taxIdName String maxlength(50)
 	branch Boolean
-	email String required
-	phone String required
+	email String maxlength(30)
+	phone String
 	fax String
-	website String
-	type VendorType required
-	paymentCategory String required
-	approvalStatus String required
+	website String maxlength(50)
+	paymentCategory String required maxlength(10)
 
 	dateTrx LocalDate required
-	documentNo String required
-	documentAction String required
-	documentStatus String required
+	documentNo String required maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
 	approved Boolean
 	processed Boolean
 
@@ -184,6 +187,9 @@ entity CVendor {
 
 entity CVendorLocation {
 	taxInvoiceAddress Boolean
+	shipAddress Boolean
+	invoiceAddress Boolean
+	payFromAddress Boolean
 	uid UUID
 	active Boolean
 }
@@ -200,8 +206,12 @@ entity CPicBusinessCat {
 
 entity CVendorBankAcct {
 	accountNo String required
+	accountName String required
 	name String
 	branch String
+	bban String
+	iban String
+	description String
 	uid UUID
 	active Boolean
 }
@@ -209,7 +219,15 @@ entity CVendorBankAcct {
 entity CVendorTax {
 	eInvoice Boolean
 	taxableEmployers Boolean
-	rate BigDecimal
+	uid UUID
+	active Boolean
+}
+
+entity CVendorGroup {
+	code String required
+	name String required
+	description String
+	isDefault Boolean
 	uid UUID
 	active Boolean
 }
@@ -237,7 +255,7 @@ entity CConvertionType {
 }
 
 entity CConvertionRate {
-	validFrom LocalDate required 
+	validFrom LocalDate required
 	validTo LocalDate required
 	rate BigDecimal required
 	uid UUID
@@ -309,6 +327,7 @@ entity CNonBusinessDay {
 	uid UUID
 	active Boolean
 }
+
 /**
  * The Product/Item Master.
  */
@@ -340,24 +359,6 @@ entity CProduct{
 	uid UUID
 	active Boolean
 }
-/**
- * The Organization & Warehouse Master.
- */
-entity COrganization {
-	name String required
-	code String required unique
-	description String
-	uid UUID
-	active Boolean
-}
-
-entity COrganizationInfo {
-	address String required
-	taxId String required
-	bankAccount String
-	uid UUID
-	active Boolean
-}
 
 entity CWarehouse {
 	name String required
@@ -379,7 +380,7 @@ entity CLocator {
 }
 
 /**
-* vendor Invoice Verification 
+* vendor Invoice Verification
 */
 entity MVerification {
 	verificationNo String required
@@ -439,6 +440,16 @@ entity MMatchPO{
 	foreignTaxAmount String
 	mLocator String
 	adOrganization String
+	dateAccount LocalDate
+	cDocTypeMr String
+	orderSuffix String
+	lineNoPo String
+	lineNoMr String
+	isTaxable Boolean
+	cTaxCode String
+	cTaxName String
+	description String
+	mMatchType String
 }
 
 /**
@@ -446,10 +457,6 @@ entity MMatchPO{
  */
 enum Depreciation {
 	STRAIGHT_LINE, DOUBLE_DECLINING
-}
-
-enum VendorType {
-	COMPANY, PROFESSIONAL
 }
 
 enum CBusinessCategorySector {
@@ -491,7 +498,7 @@ relationship OneToMany {
  */
 relationship ManyToOne {
 	ADOrganizationInfo{adOrganization required} to ADOrganization
-	
+
 	/** This field should not empty for a supplier's user */
 	AdUser{cVendor} to CVendor
 	AdUser{adOrganization required} to ADOrganization
@@ -528,13 +535,13 @@ relationship ManyToOne {
 	CTax{taxCategory required} to CTaxCategory
 
 	CBusinessCategory{adOrganization required} to ADOrganization
-	
+
 	CAttachment{adOrganization required} to ADOrganization
 	CRegistrationDocType{adOrganization required} to ADOrganization
-	
+
 	CVendor{adOrganization required} to ADOrganization
 	CVendor{documentType required} to CDocumentType
-	
+
 	CVendorBusinessCat{vendor required} to CVendor
 	CVendorBusinessCat{businessCategory required} to CBusinessCategory
 	CVendorBusinessCat{adOrganization required} to ADOrganization
@@ -542,7 +549,7 @@ relationship ManyToOne {
 	CPicBusinessCat{pic required} to AdUser
 	CPicBusinessCat{businessCategory required} to CBusinessCategory
 	CPicBusinessCat{adOrganization required} to ADOrganization
-	
+
 	CVendorBankAcct{vendor required} to CVendor
 	CVendorBankAcct{bank required} to CBank
 	CVendorBankAcct{currency required} to CCurrency
@@ -550,12 +557,12 @@ relationship ManyToOne {
 	CVendorBankAcct{adOrganization required} to ADOrganization
 
 	CVendorTax{vendor required} to CVendor
-	CVendorTax{tax required} to CTax
+	CVendorTax{taxCategory required} to CTaxCategory
 	CVendorTax{adOrganization required} to ADOrganization
 
 	CUnitOfMeasure{adOrganization required} to ADOrganization
 	CCostCenter{adOrganization required} to ADOrganization
-	
+
 	// For convertion rate with currency and convertion type.
 	CConvertionRate{sourceCurrency required} to CCurrency
 	CConvertionRate{targetCurrency required} to CCurrency
@@ -569,7 +576,7 @@ relationship ManyToOne {
 	CProductGroup{adOrganization required} to ADOrganization
 	CProductGroupAccount{productGroup required} to CProductGroup
 	CProductGroupAccount{adOrganization required} to ADOrganization
-	
+
 	CCalendar{adOrganization required} to ADOrganization
 	CNonBusinessDay{calendar required} to CCalendar
 	CNonBusinessDay{adOrganization required} to ADOrganization
@@ -592,11 +599,6 @@ relationship ManyToOne {
 	CProduct{expenseAcct required} to CProductCategoryAccount
 	CProduct{uom required} to CUnitOfMeasure
 
-	//master data organization and organization info
-	COrganization{adOrganization required} to ADOrganization
-	COrganizationInfo{adOrganization required} to ADOrganization
-	COrganizationInfo{parentOrganization required} to COrganization
-
 	//master data warehouse and locator
 	CWarehouse{adOrganization required} to ADOrganization
 	CLocator{adOrganization required} to ADOrganization
@@ -609,6 +611,9 @@ relationship ManyToOne {
 	MVerificationLine{adOrganization required} to ADOrganization
 	MVerificationLine{product required} to CProduct
 	MVerificationLine{uom required} to CUnitOfMeasure
+
+	CVendorGroup{adOrganization required} to ADOrganization
+	CVendor{vendorGroup} to CVendorGroup
 }
 
 // Allow filtering to all entities.

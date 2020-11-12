@@ -19,6 +19,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.math.BigDecimal;
+import java.util.UUID;
+
 /**
  * A CVendorTax.
  */
@@ -40,9 +48,6 @@ public class CVendorTax extends AbstractAuditingEntity {
     @Column(name = "taxable_employers")
     private Boolean taxableEmployers;
 
-    @Column(name = "rate", precision = 21, scale = 2)
-    private BigDecimal rate;
-
     @Column(name = "uid")
     private UUID uid;
 
@@ -57,7 +62,7 @@ public class CVendorTax extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("cVendorTaxes")
-    private CTax tax;
+    private CTaxCategory taxCategory;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -99,19 +104,6 @@ public class CVendorTax extends AbstractAuditingEntity {
         this.taxableEmployers = taxableEmployers;
     }
 
-    public BigDecimal getRate() {
-        return rate;
-    }
-
-    public CVendorTax rate(BigDecimal rate) {
-        this.rate = rate;
-        return this;
-    }
-
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
-    }
-
     public UUID getUid() {
         return uid;
     }
@@ -151,17 +143,17 @@ public class CVendorTax extends AbstractAuditingEntity {
         this.vendor = cVendor;
     }
 
-    public CTax getTax() {
-        return tax;
+    public CTaxCategory getTaxCategory() {
+        return taxCategory;
     }
 
-    public CVendorTax tax(CTax cTax) {
-        this.tax = cTax;
+    public CVendorTax taxCategory(CTaxCategory cTaxCategory) {
+        this.taxCategory = cTaxCategory;
         return this;
     }
 
-    public void setTax(CTax cTax) {
-        this.tax = cTax;
+    public void setTaxCategory(CTaxCategory cTaxCategory) {
+        this.taxCategory = cTaxCategory;
     }
 
     public ADOrganization getAdOrganization() {
@@ -205,7 +197,6 @@ public class CVendorTax extends AbstractAuditingEntity {
             "id=" + getId() +
             ", eInvoice='" + isEInvoice() + "'" +
             ", taxableEmployers='" + isTaxableEmployers() + "'" +
-            ", rate=" + getRate() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

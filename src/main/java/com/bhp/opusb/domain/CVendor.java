@@ -5,8 +5,6 @@ import java.util.UUID;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,8 +15,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
-import com.bhp.opusb.domain.enumeration.VendorType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
@@ -39,62 +37,80 @@ public class CVendor extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Size(max = 30)
+    @Column(name = "code", length = 30)
+    private String code;
+
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Size(max = 150)
+    @Column(name = "name", length = 150, nullable = false)
     private String name;
 
     @NotNull
-    @Column(name = "tax_id_no", nullable = false)
-    private String taxIdNo;
+    @Size(max = 10)
+    @Column(name = "type", length = 10, nullable = false)
+    private String type;
 
     @NotNull
-    @Column(name = "tax_id_name", nullable = false)
+    @Size(max = 10)
+    @Column(name = "location", length = 10, nullable = false)
+    private String location;
+
+    @Size(max = 50)
+    @Column(name = "id_no", length = 50)
+    private String idNo;
+
+    @Size(max = 30)
+    @Column(name = "tin", length = 30)
+    private String tin;
+
+    @Size(max = 30)
+    @Column(name = "tax_id_no", length = 30)
+    private String taxIdNo;
+
+    @Size(max = 50)
+    @Column(name = "tax_id_name", length = 50)
     private String taxIdName;
 
     @Column(name = "branch")
     private Boolean branch;
 
-    @NotNull
-    @Column(name = "email", nullable = false)
+    @Size(max = 30)
+    @Column(name = "email", length = 30)
     private String email;
 
-    @NotNull
-    @Column(name = "phone", nullable = false)
+    @Column(name = "phone")
     private String phone;
 
     @Column(name = "fax")
     private String fax;
 
-    @Column(name = "website")
+    @Size(max = 50)
+    @Column(name = "website", length = 50)
     private String website;
 
     @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(name = "type", nullable = false)
-    private VendorType type;
-
-    @NotNull
-    @Column(name = "payment_category", nullable = false)
+    @Size(max = 10)
+    @Column(name = "payment_category", length = 10, nullable = false)
     private String paymentCategory;
-
-    @NotNull
-    @Column(name = "approval_status", nullable = false)
-    private String approvalStatus;
 
     @NotNull
     @Column(name = "date_trx", nullable = false)
     private LocalDate dateTrx;
 
     @NotNull
-    @Column(name = "document_no", nullable = false)
+    @Size(max = 30)
+    @Column(name = "document_no", length = 30, nullable = false)
     private String documentNo;
 
     @NotNull
-    @Column(name = "document_action", nullable = false)
+    @Size(max = 10)
+    @Column(name = "document_action", length = 10, nullable = false)
     private String documentAction;
 
     @NotNull
-    @Column(name = "document_status", nullable = false)
+    @Size(max = 10)
+    @Column(name = "document_status", length = 10, nullable = false)
     private String documentStatus;
 
     @Column(name = "approved")
@@ -123,6 +139,10 @@ public class CVendor extends AbstractAuditingEntity {
     @JsonIgnoreProperties("cVendors")
     private CDocumentType documentType;
 
+    @ManyToOne
+    @JsonIgnoreProperties("cVendors")
+    private CVendorGroup vendorGroup;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -130,6 +150,19 @@ public class CVendor extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public CVendor code(String code) {
+        this.code = code;
+        return this;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -143,6 +176,58 @@ public class CVendor extends AbstractAuditingEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public CVendor type(String type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public CVendor location(String location) {
+        this.location = location;
+        return this;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public CVendor idNo(String idNo) {
+        this.idNo = idNo;
+        return this;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
+    }
+
+    public String getTin() {
+        return tin;
+    }
+
+    public CVendor tin(String tin) {
+        this.tin = tin;
+        return this;
+    }
+
+    public void setTin(String tin) {
+        this.tin = tin;
     }
 
     public String getTaxIdNo() {
@@ -236,19 +321,6 @@ public class CVendor extends AbstractAuditingEntity {
         this.website = website;
     }
 
-    public VendorType getType() {
-        return type;
-    }
-
-    public CVendor type(VendorType type) {
-        this.type = type;
-        return this;
-    }
-
-    public void setType(VendorType type) {
-        this.type = type;
-    }
-
     public String getPaymentCategory() {
         return paymentCategory;
     }
@@ -260,19 +332,6 @@ public class CVendor extends AbstractAuditingEntity {
 
     public void setPaymentCategory(String paymentCategory) {
         this.paymentCategory = paymentCategory;
-    }
-
-    public String getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public CVendor approvalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus;
-        return this;
-    }
-
-    public void setApprovalStatus(String approvalStatus) {
-        this.approvalStatus = approvalStatus;
     }
 
     public LocalDate getDateTrx() {
@@ -417,13 +476,26 @@ public class CVendor extends AbstractAuditingEntity {
     public void setDocumentType(CDocumentType cDocumentType) {
         this.documentType = cDocumentType;
     }
+
+    public CVendorGroup getVendorGroup() {
+        return vendorGroup;
+    }
+
+    public CVendor vendorGroup(CVendorGroup cVendorGroup) {
+        this.vendorGroup = cVendorGroup;
+        return this;
+    }
+
+    public void setVendorGroup(CVendorGroup cVendorGroup) {
+        this.vendorGroup = cVendorGroup;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
     public void assignUUID() {
         this.uid = UUID.randomUUID();
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -444,7 +516,12 @@ public class CVendor extends AbstractAuditingEntity {
     public String toString() {
         return "CVendor{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
+            ", type='" + getType() + "'" +
+            ", location='" + getLocation() + "'" +
+            ", idNo='" + getIdNo() + "'" +
+            ", tin='" + getTin() + "'" +
             ", taxIdNo='" + getTaxIdNo() + "'" +
             ", taxIdName='" + getTaxIdName() + "'" +
             ", branch='" + isBranch() + "'" +
@@ -452,9 +529,7 @@ public class CVendor extends AbstractAuditingEntity {
             ", phone='" + getPhone() + "'" +
             ", fax='" + getFax() + "'" +
             ", website='" + getWebsite() + "'" +
-            ", type='" + getType() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
-            ", approvalStatus='" + getApprovalStatus() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +

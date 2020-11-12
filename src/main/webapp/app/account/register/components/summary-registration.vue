@@ -1,7 +1,7 @@
 <template>
     <div class='summary'>
         <el-divider content-position="left"><h4>{{ $t('register.form.summary') }}</h4></el-divider>
-        
+
         <el-collapse :model="activeNames" accordion>
             <el-collapse-item :title="'1. '+$t('register.login.title')" name="1">
 
@@ -13,7 +13,7 @@
                     :model="login"
                     >
                     <el-row :gutter="columnSpacing">
-                        
+
                         <el-col :span="12">
                             <el-form-item :label="$t('register.login.form.username')" prop="login" required>
                                 <el-input v-model="login.userLogin" class="form-input" min="3" :disabled="true" />
@@ -28,27 +28,27 @@
 
                     </el-row>
                     <el-row :gutter="columnSpacing">
-                        
+
                         <el-col :span="12">
                             <el-form-item :label="$t('register.login.form.password')"  prop="password" required>
                                 <el-input v-model="login.password" class="form-input" :disabled="true" show-password />
                             </el-form-item>
                         </el-col>
 
-                        <el-col :span="12">  
+                        <el-col :span="12">
                             <el-form-item :label="$t('register.login.form.passwordConfirm')"  prop="passwordConfirmation" required>
                                 <el-input v-model="login.passwordConfirmation" class="form-input" :disabled="true" show-password />
                             </el-form-item>
                         </el-col>
 
-                        
+
                     </el-row>
                 </el-form>
 
             </el-collapse-item>
 
             <el-collapse-item :title="'2. '+$t('register.basic.basic.title')" name="2">
-                
+
                 <el-form
                     label-position="right"
                     label-width="150px"
@@ -57,100 +57,173 @@
                     <el-divider content-position="left"><h4>{{ $t('register.basic.basic.title') }}</h4></el-divider>
                     <el-row :gutter="columnSpacing">
                         <el-col :span="12">
-                            <el-form-item :label="$t('register.basic.basic.name')" prop="name" required>
-                                <el-input class="form-input" v-model="company.name" :disabled="true" />
-                            </el-form-item>
-                            <el-form-item :label="$t('register.basic.basic.type')" prop="type" required>
-                                <el-row type="flex">
-                                    <el-col :span="20">
+
+                            <el-row :gutter="columnSpacing">
+                                <el-col :span="24">
+                                    <el-form-item :label="$t('register.basic.basic.name')" prop="name" required>
+                                        <el-input class="form-input" v-model="company.name" :disabled="true" />
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+
+                            <el-row :gutter="columnSpacing">
+                                <el-col :span="12">
+                                    <el-form-item :label="$t('register.basic.basic.type')" prop="type" required>
                                         <el-input class="form-input" v-model="company.type" :disabled="true" />
-                                    </el-col>
-                                </el-row>
-                            </el-form-item>
-                            <el-form-item required>
-                                <el-switch
-                                    style="padding-left: 20px;"
-                                    v-model="company.branch"
-                                    :disabled="true"
-                                    :active-text="$t('register.basic.basic.branch')"
-                                />
-                            </el-form-item>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item :label="$t('register.basic.basic.location')" prop="location" required>
+                                        <el-input class="form-input" v-model="company.location" :disabled="true" />
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+
+                            <!--<el-row :gutter="columnSpacing">
+                                <el-col :span="24">
+                                    <el-form-item required>
+                                        <el-switch
+                                            style="padding-left: 20px;"
+                                            v-model="company.branch"
+                                            :disabled="true"
+                                            :active-text="$t('register.basic.basic.branch')"
+                                        />
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>-->
                         </el-col>
-                        
                         <el-col :span="12">
-                            <el-form-item :label="$t('register.basic.basic.npwp')" prop="npwp" required>
-                                <el-input class="form-input" v-model="company.npwp" :disabled="true" />
-                            </el-form-item>
-                            <el-form-item :label="$t('register.basic.basic.npwpName')" prop="npwpName" required>
-                                <el-input class="form-input" v-model="company.npwpName" :disabled="true" />
-                            </el-form-item>
-                            <el-form-item :label="$t('register.basic.basic.npwpFile')" prop="file">
-                                <span v-if="company.file">{{ company.file.name }}</span>
-                            </el-form-item>
+                            <div v-if="professional" >
+                                <el-form-item :label="$t('register.basic.basic.idNo')" prop="idNo" required>
+                                    <el-input
+                                        class="form-input"
+                                        v-model="company.idNo"
+                                        :disabled="true" />
+                                </el-form-item>
+                            </div>
+
+                            <div v-if="npwp">
+                                <el-form-item :label="$t('register.basic.basic.npwp')" prop="npwp" required>
+                                    <el-input
+                                        class="form-input"
+                                        v-model="company.npwp"
+                                        :disabled="true"
+                                        v-inputmask
+                                        data-inputmask="'mask': '99.999.999.9-999.999'"
+                                        placeholder="__.___.___._-___.___" />
+                                </el-form-item>
+                                <el-form-item :label="$t('register.basic.basic.npwpName')" prop="npwpName" required>
+                                    <el-input class="form-input" v-model="company.npwpName" :disabled="true" />
+                                </el-form-item>
+                                <el-form-item :label="$t('register.basic.basic.npwpFile')" prop="file">
+                                    <span v-if="company.file">{{ company.file.name }}</span>
+                                </el-form-item>
+                            </div>
+                            <div v-else>
+                                <el-tooltip class="item" effect="dark" :content="$t('register.basic.basic.taxInformationNumber')" placement="top">
+                                    <el-form-item :label="$t('register.basic.basic.tin')" prop="tin" required>
+                                        <el-input class="form-input" v-model="company.tin" :disabled="true" />
+                                    </el-form-item>
+                                </el-tooltip>
+                            </div>
                         </el-col>
                     </el-row>
-                    
+
                     <el-divider content-position="left"><h4>{{ $t('register.basic.address.title') }}</h4></el-divider>
                     <el-row :gutter="columnSpacing">
                         <el-col :span="12">
-                            <el-form-item :label="$t('register.basic.address.address')" prop="address" required>
-                                <el-input class="form-input" v-model="company.address" type="textarea" :autosize="{ maxRows: 3 }" :disabled="true"/>
-                            </el-form-item>
+
+                            <el-row :gutter="columnSpacing">
+                                <el-col :span="24">
+
+                                    <el-form-item :label="$t('register.basic.address.address')" prop="address" required>
+                                        <el-input class="form-input" v-model="company.address" type="textarea" :autosize="{ maxRows: 3 }" :disabled="true"/>
+                                    </el-form-item>
+
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="columnSpacing">
+                                <el-col :span="12">
+
+                                    <el-form-item :label="$t('register.basic.address.country')" prop="country" required>
+                                        <el-input class="form-input" v-model="company.countryName" :disabled="true" />
+                                    </el-form-item>
+
+                                </el-col>
+                                <el-col :span="12">
+
+                                    <el-form-item :label="$t('register.basic.address.region')" prop="region" required>
+                                        <el-input class="form-input" v-model="company.regionName" :disabled="true" />
+                                    </el-form-item>
+
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="columnSpacing">
+                                <el-col :span="12">
+
+                                    <el-form-item :label="$t('register.basic.address.city')" prop="city" required>
+                                        <el-input class="form-input" v-model="company.cityName" :disabled="true" />
+                                    </el-form-item>
+
+                                </el-col>
+                                <el-col :span="12">
+
+                                    <el-form-item :label="$t('register.basic.address.postCode')" prop="postalCode">
+                                        <el-input class="form-input" v-model="company.postalCode" :disabled="true" />
+                                    </el-form-item>
+
+                                </el-col>
+                            </el-row>
+
+
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item :label="$t('register.basic.address.npwpAddress')" prop="npwpAddress" required>
-                                <el-input class="form-input" v-model="company.npwpAddress" type="textarea" :autosize="{ maxRows: 3 }" :disabled="true" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    
-                    <el-row :gutter="columnSpacing">
-                        <el-col :span="6">
-                            <el-form-item :label="$t('register.basic.address.country')" prop="country" required>
-                                <el-input class="form-input" v-model="company.countryName" :disabled="true" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item :label="$t('register.basic.address.region')" prop="region" required>
-                                <el-input class="form-input" v-model="company.regionName" :disabled="true" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item :label="$t('register.basic.address.npwpCountry')" prop="npwpCountry" required>
-                                <el-input class="form-input" v-model="company.npwpCountryName" :disabled="true" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item :label="$t('register.basic.address.npwpRegion')" prop="npwpRegion" required>
-                                <el-input class="form-input" v-model="company.npwpRegionName" :disabled="true" />
-                            </el-form-item>
+
+                            <el-row :gutter="columnSpacing">
+                                <el-col :span="24">
+
+                                    <el-form-item :label="$t('register.basic.address.npwpAddress')" prop="npwpAddress" required>
+                                        <el-input class="form-input" v-model="company.npwpAddress" type="textarea" :autosize="{ maxRows: 3 }" :disabled="true" />
+                                    </el-form-item>
+
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="columnSpacing">
+                                <el-col :span="12">
+
+                                    <el-form-item :label="$t('register.basic.address.npwpCountry')" prop="npwpCountry" required>
+                                        <el-input class="form-input" v-model="company.npwpCountryName" :disabled="true" />
+                                    </el-form-item>
+
+                                </el-col>
+                                <el-col :span="12">
+
+                                    <el-form-item :label="$t('register.basic.address.npwpRegion')" prop="npwpRegion" required>
+                                        <el-input class="form-input" v-model="company.npwpRegionName" :disabled="true" />
+                                    </el-form-item>
+
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="columnSpacing">
+                                <el-col :span="12">
+
+                                    <el-form-item :label="$t('register.basic.address.npwpCity')" prop="npwpCity" required>
+                                        <el-input class="form-input" v-model="company.npwpCityName" :disabled="true" />
+                                    </el-form-item>
+
+                                </el-col>
+                                <el-col :span="12">
+
+                                    <el-form-item :label="$t('register.basic.address.npwpPostCode')" prop="npwpPostalCode">
+                                        <el-input class="form-input" v-model="company.npwpPostalCode" :disabled="true" />
+                                    </el-form-item>
+
+                                </el-col>
+                            </el-row>
+
                         </el-col>
                     </el-row>
 
-                    <el-row :gutter="columnSpacing">
-                        <el-col :span="6">
-                            <el-form-item :label="$t('register.basic.address.city')" prop="city" required>
-                                <el-input class="form-input" v-model="company.cityName" :disabled="true" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item :label="$t('register.basic.address.postCode')" prop="postalCode">
-                                <el-input class="form-input" v-model="company.postalCode" :disabled="true" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item :label="$t('register.basic.address.npwpCity')" prop="npwpCity" required>
-                                <el-input class="form-input" v-model="company.npwpCityName" :disabled="true" />
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item :label="$t('register.basic.address.npwpPostCode')" prop="npwpPostalCode">
-                                <el-input class="form-input" v-model="company.npwpPostalCode" :disabled="true" />
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-
-                    
                     <el-divider content-position="left"><h4>{{ $t('register.basic.contact.title') }}</h4></el-divider>
                     <el-row :gutter="columnSpacing">
                         <el-col :span="6">
@@ -163,11 +236,11 @@
                                 <el-input class="form-input" v-model="company.fax" :disabled="true" />
                             </el-form-item>
                         </el-col>
-                        <el-col :span="6">
+                        <!--<el-col :span="6">
                             <el-form-item :label="$t('register.basic.contact.email')" prop="email" required>
                                 <el-input class="form-input" v-model="company.email" :disabled="true" />
                             </el-form-item>
-                        </el-col>
+                        </el-col>-->
                         <el-col :span="6">
                             <el-form-item :label="$t('register.basic.contact.website')" prop="website">
                                 <el-input class="form-input" v-model="company.website" :disabled="true" />
@@ -367,6 +440,28 @@
                             :label="$t('register.payment.account')"
                         />
                         <el-table-column
+                            prop="accountName"
+                            min-width="128"
+                            :label="$t('register.payment.accountName')"
+                            show-overflow-tooltip
+                        />
+                        <el-table-column
+                            prop="bban"
+                            min-width="128"
+                            :label="$t('register.payment.bban')"
+                        />
+                        <el-table-column
+                            prop="iban"
+                            min-width="128"
+                            :label="$t('register.payment.iban')"
+                        />
+                        <el-table-column
+                            prop="description"
+                            min-width="128"
+                            :label="$t('register.payment.description')"
+                            show-overflow-tooltip
+                        />
+                        <el-table-column
                             prop="supportingfile.name"
                             min-width="128"
                             :label="$t('register.payment.supportingfile')"
@@ -409,23 +504,29 @@
                             fixed
                             min-width="128"
                             prop="name"
-                            :label="$t('register.tax.taxRateName')"/>
+                            :label="$t('register.tax.taxCategoryName')"/>
                         <el-table-column
-                            prop="transactionType"
+                            prop="description"
                             min-width="128"
-                            :label="$t('register.tax.transactionType')"/>
+                            :label="$t('register.tax.description')"/>
                         <el-table-column
-                            prop="rate"
                             min-width="128"
-                            :label="$t('register.tax.rate')"/>
+                            :label="$t('register.tax.isWithholding')">
+                            <template slot-scope="props">
+                                <el-checkbox
+                                    v-model="props.row.isWithholding"
+                                    disabled
+                                />
+                            </template>
+                        </el-table-column>
                     </el-table>
                 </div>
             </el-collapse-item>
 
         </el-collapse>
-        
+
     </div>
-    
+
 </template>
 <script lang="ts" src="./summary-registration.component.ts"></script>
 <style lang="scss" scoped>

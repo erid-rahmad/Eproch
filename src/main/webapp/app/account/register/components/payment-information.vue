@@ -53,16 +53,40 @@
                     show-overflow-tooltip
                 />
                 <el-table-column
+                    prop="accountName"
+                    min-width="128"
+                    :label="$t('register.payment.accountName')"
+                    show-overflow-tooltip
+                />
+                <el-table-column
+                    prop="bban"
+                    min-width="128"
+                    :label="$t('register.payment.bban')"
+                    show-overflow-tooltip
+                />
+                <el-table-column
+                    prop="iban"
+                    min-width="128"
+                    :label="$t('register.payment.iban')"
+                    show-overflow-tooltip
+                />
+                <el-table-column
+                    prop="description"
+                    min-width="128"
+                    :label="$t('register.payment.description')"
+                    show-overflow-tooltip
+                />
+                <el-table-column
                     prop="supportingfile.name"
                     min-width="128"
                     :label="$t('register.payment.supportingfile')"
                     show-overflow-tooltip
                 >
                     <template scope="props">
-                        <el-link 
+                        <el-link
                             target="_blank"
-                            v-if="props.row.supportingfile" 
-                            v-bind:href="''+props.row.supportingfile.response.downloadUri+''" 
+                            v-if="props.row.supportingfile"
+                            v-bind:href="''+props.row.supportingfile.response.downloadUri+''"
                             :underline="false">
                             {{ props.row.supportingfile.response.attachment.fileName }}
                         </el-link>
@@ -95,7 +119,7 @@
                 </el-table-column>
             </el-table>
         </div>
-        
+
         <el-dialog
             :title="$t('register.form.payment[\'title.edit\']')"
             :visible.sync="editDialogVisible"

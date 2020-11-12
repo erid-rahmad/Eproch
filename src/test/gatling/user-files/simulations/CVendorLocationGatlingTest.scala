@@ -73,6 +73,9 @@ class CVendorLocationGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "taxInvoiceAddress":null
+                , "shipAddress":null
+                , "invoiceAddress":null
+                , "payFromAddress":null
                 , "uid":null
                 , "active":null
                 }""")).asJson

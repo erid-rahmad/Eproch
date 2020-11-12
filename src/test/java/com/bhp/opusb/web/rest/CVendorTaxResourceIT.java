@@ -3,7 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CVendorTax;
 import com.bhp.opusb.domain.CVendor;
-import com.bhp.opusb.domain.CTax;
+import com.bhp.opusb.domain.CTaxCategory;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.CVendorTaxRepository;
 import com.bhp.opusb.service.CVendorTaxService;
@@ -46,10 +46,6 @@ public class CVendorTaxResourceIT {
     private static final Boolean DEFAULT_TAXABLE_EMPLOYERS = false;
     private static final Boolean UPDATED_TAXABLE_EMPLOYERS = true;
 
-    private static final BigDecimal DEFAULT_RATE = new BigDecimal(1);
-    private static final BigDecimal UPDATED_RATE = new BigDecimal(2);
-    private static final BigDecimal SMALLER_RATE = new BigDecimal(1 - 1);
-
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -86,7 +82,6 @@ public class CVendorTaxResourceIT {
         CVendorTax cVendorTax = new CVendorTax()
             .eInvoice(DEFAULT_E_INVOICE)
             .taxableEmployers(DEFAULT_TAXABLE_EMPLOYERS)
-            .rate(DEFAULT_RATE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -100,15 +95,15 @@ public class CVendorTaxResourceIT {
         }
         cVendorTax.setVendor(cVendor);
         // Add required entity
-        CTax cTax;
-        if (TestUtil.findAll(em, CTax.class).isEmpty()) {
-            cTax = CTaxResourceIT.createEntity(em);
-            em.persist(cTax);
+        CTaxCategory cTaxCategory;
+        if (TestUtil.findAll(em, CTaxCategory.class).isEmpty()) {
+            cTaxCategory = CTaxCategoryResourceIT.createEntity(em);
+            em.persist(cTaxCategory);
             em.flush();
         } else {
-            cTax = TestUtil.findAll(em, CTax.class).get(0);
+            cTaxCategory = TestUtil.findAll(em, CTaxCategory.class).get(0);
         }
-        cVendorTax.setTax(cTax);
+        cVendorTax.setTaxCategory(cTaxCategory);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -131,7 +126,6 @@ public class CVendorTaxResourceIT {
         CVendorTax cVendorTax = new CVendorTax()
             .eInvoice(UPDATED_E_INVOICE)
             .taxableEmployers(UPDATED_TAXABLE_EMPLOYERS)
-            .rate(UPDATED_RATE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -145,15 +139,15 @@ public class CVendorTaxResourceIT {
         }
         cVendorTax.setVendor(cVendor);
         // Add required entity
-        CTax cTax;
-        if (TestUtil.findAll(em, CTax.class).isEmpty()) {
-            cTax = CTaxResourceIT.createUpdatedEntity(em);
-            em.persist(cTax);
+        CTaxCategory cTaxCategory;
+        if (TestUtil.findAll(em, CTaxCategory.class).isEmpty()) {
+            cTaxCategory = CTaxCategoryResourceIT.createUpdatedEntity(em);
+            em.persist(cTaxCategory);
             em.flush();
         } else {
-            cTax = TestUtil.findAll(em, CTax.class).get(0);
+            cTaxCategory = TestUtil.findAll(em, CTaxCategory.class).get(0);
         }
-        cVendorTax.setTax(cTax);
+        cVendorTax.setTaxCategory(cTaxCategory);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -190,7 +184,6 @@ public class CVendorTaxResourceIT {
         CVendorTax testCVendorTax = cVendorTaxList.get(cVendorTaxList.size() - 1);
         assertThat(testCVendorTax.isEInvoice()).isEqualTo(DEFAULT_E_INVOICE);
         assertThat(testCVendorTax.isTaxableEmployers()).isEqualTo(DEFAULT_TAXABLE_EMPLOYERS);
-        assertThat(testCVendorTax.getRate()).isEqualTo(DEFAULT_RATE);
         assertThat(testCVendorTax.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCVendorTax.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -229,11 +222,10 @@ public class CVendorTaxResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendorTax.getId().intValue())))
             .andExpect(jsonPath("$.[*].eInvoice").value(hasItem(DEFAULT_E_INVOICE.booleanValue())))
             .andExpect(jsonPath("$.[*].taxableEmployers").value(hasItem(DEFAULT_TAXABLE_EMPLOYERS.booleanValue())))
-            .andExpect(jsonPath("$.[*].rate").value(hasItem(DEFAULT_RATE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getCVendorTax() throws Exception {
@@ -247,7 +239,6 @@ public class CVendorTaxResourceIT {
             .andExpect(jsonPath("$.id").value(cVendorTax.getId().intValue()))
             .andExpect(jsonPath("$.eInvoice").value(DEFAULT_E_INVOICE.booleanValue()))
             .andExpect(jsonPath("$.taxableEmployers").value(DEFAULT_TAXABLE_EMPLOYERS.booleanValue()))
-            .andExpect(jsonPath("$.rate").value(DEFAULT_RATE.intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -378,111 +369,6 @@ public class CVendorTaxResourceIT {
 
     @Test
     @Transactional
-    public void getAllCVendorTaxesByRateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cVendorTaxRepository.saveAndFlush(cVendorTax);
-
-        // Get all the cVendorTaxList where rate equals to DEFAULT_RATE
-        defaultCVendorTaxShouldBeFound("rate.equals=" + DEFAULT_RATE);
-
-        // Get all the cVendorTaxList where rate equals to UPDATED_RATE
-        defaultCVendorTaxShouldNotBeFound("rate.equals=" + UPDATED_RATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorTaxesByRateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        cVendorTaxRepository.saveAndFlush(cVendorTax);
-
-        // Get all the cVendorTaxList where rate not equals to DEFAULT_RATE
-        defaultCVendorTaxShouldNotBeFound("rate.notEquals=" + DEFAULT_RATE);
-
-        // Get all the cVendorTaxList where rate not equals to UPDATED_RATE
-        defaultCVendorTaxShouldBeFound("rate.notEquals=" + UPDATED_RATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorTaxesByRateIsInShouldWork() throws Exception {
-        // Initialize the database
-        cVendorTaxRepository.saveAndFlush(cVendorTax);
-
-        // Get all the cVendorTaxList where rate in DEFAULT_RATE or UPDATED_RATE
-        defaultCVendorTaxShouldBeFound("rate.in=" + DEFAULT_RATE + "," + UPDATED_RATE);
-
-        // Get all the cVendorTaxList where rate equals to UPDATED_RATE
-        defaultCVendorTaxShouldNotBeFound("rate.in=" + UPDATED_RATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorTaxesByRateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        cVendorTaxRepository.saveAndFlush(cVendorTax);
-
-        // Get all the cVendorTaxList where rate is not null
-        defaultCVendorTaxShouldBeFound("rate.specified=true");
-
-        // Get all the cVendorTaxList where rate is null
-        defaultCVendorTaxShouldNotBeFound("rate.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorTaxesByRateIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        cVendorTaxRepository.saveAndFlush(cVendorTax);
-
-        // Get all the cVendorTaxList where rate is greater than or equal to DEFAULT_RATE
-        defaultCVendorTaxShouldBeFound("rate.greaterThanOrEqual=" + DEFAULT_RATE);
-
-        // Get all the cVendorTaxList where rate is greater than or equal to UPDATED_RATE
-        defaultCVendorTaxShouldNotBeFound("rate.greaterThanOrEqual=" + UPDATED_RATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorTaxesByRateIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        cVendorTaxRepository.saveAndFlush(cVendorTax);
-
-        // Get all the cVendorTaxList where rate is less than or equal to DEFAULT_RATE
-        defaultCVendorTaxShouldBeFound("rate.lessThanOrEqual=" + DEFAULT_RATE);
-
-        // Get all the cVendorTaxList where rate is less than or equal to SMALLER_RATE
-        defaultCVendorTaxShouldNotBeFound("rate.lessThanOrEqual=" + SMALLER_RATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorTaxesByRateIsLessThanSomething() throws Exception {
-        // Initialize the database
-        cVendorTaxRepository.saveAndFlush(cVendorTax);
-
-        // Get all the cVendorTaxList where rate is less than DEFAULT_RATE
-        defaultCVendorTaxShouldNotBeFound("rate.lessThan=" + DEFAULT_RATE);
-
-        // Get all the cVendorTaxList where rate is less than UPDATED_RATE
-        defaultCVendorTaxShouldBeFound("rate.lessThan=" + UPDATED_RATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCVendorTaxesByRateIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        cVendorTaxRepository.saveAndFlush(cVendorTax);
-
-        // Get all the cVendorTaxList where rate is greater than DEFAULT_RATE
-        defaultCVendorTaxShouldNotBeFound("rate.greaterThan=" + DEFAULT_RATE);
-
-        // Get all the cVendorTaxList where rate is greater than SMALLER_RATE
-        defaultCVendorTaxShouldBeFound("rate.greaterThan=" + SMALLER_RATE);
-    }
-
-
-    @Test
-    @Transactional
     public void getAllCVendorTaxesByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         cVendorTaxRepository.saveAndFlush(cVendorTax);
@@ -603,17 +489,17 @@ public class CVendorTaxResourceIT {
 
     @Test
     @Transactional
-    public void getAllCVendorTaxesByTaxIsEqualToSomething() throws Exception {
+    public void getAllCVendorTaxesByTaxCategoryIsEqualToSomething() throws Exception {
         // Get already existing entity
-        CTax tax = cVendorTax.getTax();
+        CTaxCategory taxCategory = cVendorTax.getTaxCategory();
         cVendorTaxRepository.saveAndFlush(cVendorTax);
-        Long taxId = tax.getId();
+        Long taxCategoryId = taxCategory.getId();
 
-        // Get all the cVendorTaxList where tax equals to taxId
-        defaultCVendorTaxShouldBeFound("taxId.equals=" + taxId);
+        // Get all the cVendorTaxList where taxCategory equals to taxCategoryId
+        defaultCVendorTaxShouldBeFound("taxCategoryId.equals=" + taxCategoryId);
 
-        // Get all the cVendorTaxList where tax equals to taxId + 1
-        defaultCVendorTaxShouldNotBeFound("taxId.equals=" + (taxId + 1));
+        // Get all the cVendorTaxList where taxCategory equals to taxCategoryId + 1
+        defaultCVendorTaxShouldNotBeFound("taxCategoryId.equals=" + (taxCategoryId + 1));
     }
 
 
@@ -642,7 +528,6 @@ public class CVendorTaxResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendorTax.getId().intValue())))
             .andExpect(jsonPath("$.[*].eInvoice").value(hasItem(DEFAULT_E_INVOICE.booleanValue())))
             .andExpect(jsonPath("$.[*].taxableEmployers").value(hasItem(DEFAULT_TAXABLE_EMPLOYERS.booleanValue())))
-            .andExpect(jsonPath("$.[*].rate").value(hasItem(DEFAULT_RATE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -694,7 +579,6 @@ public class CVendorTaxResourceIT {
         updatedCVendorTax
             .eInvoice(UPDATED_E_INVOICE)
             .taxableEmployers(UPDATED_TAXABLE_EMPLOYERS)
-            .rate(UPDATED_RATE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CVendorTaxDTO cVendorTaxDTO = cVendorTaxMapper.toDto(updatedCVendorTax);
@@ -710,7 +594,6 @@ public class CVendorTaxResourceIT {
         CVendorTax testCVendorTax = cVendorTaxList.get(cVendorTaxList.size() - 1);
         assertThat(testCVendorTax.isEInvoice()).isEqualTo(UPDATED_E_INVOICE);
         assertThat(testCVendorTax.isTaxableEmployers()).isEqualTo(UPDATED_TAXABLE_EMPLOYERS);
-        assertThat(testCVendorTax.getRate()).isEqualTo(UPDATED_RATE);
         assertThat(testCVendorTax.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCVendorTax.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

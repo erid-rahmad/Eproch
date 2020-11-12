@@ -9,6 +9,7 @@ import * as config from '@/shared/config/config';
 import LoginForm from '@/account/login-form/login-form.vue';
 import LoginFormClass from '@/account/login-form/login-form.component';
 import MenuService from '@/core/application-dictionary/components/Menu/menu.service';
+import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 
 const localVue = createLocalVue();
 localVue.component('b-alert', {});
@@ -43,7 +44,7 @@ describe('LoginForm Component', () => {
       i18n,
       localVue,
       provide: {
-        accountService: () => new AccountService(store, new TranslationService(store, i18n), new TrackerService(router), new MenuService(), router)
+        accountService: () => new AccountService(store, (url) => new DynamicWindowService(url), new TranslationService(store, i18n), new TrackerService(router), new MenuService(), router)
       }
     });
     loginForm = wrapper.vm;

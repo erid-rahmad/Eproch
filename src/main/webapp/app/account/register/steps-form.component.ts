@@ -1,5 +1,6 @@
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants'
 import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store'
+import Inputmask from 'inputmask'
 import Vue from 'vue'
 import Component from 'vue-class-component'
 import { Inject } from 'vue-property-decorator'
@@ -12,6 +13,21 @@ import SummaryRegistration from './components/summary-registration.vue'
 import SupportingDocuments from './components/supporting-documents.vue'
 import TaxInformation from './components/tax-information.vue'
 import RegisterService from './register.service'
+
+Vue.directive('inputmask', {
+  bind: function(el, binding) {
+    var inputs = el.getElementsByTagName('INPUT')
+    var input = inputs[0]
+    if (inputs.length > 1) {
+      input = inputs[inputs.length - 1]
+    }
+    // new Inputmask(binding.value).mask(input)
+    new Inputmask({
+      autoUnmask: true,
+    }).mask(input)
+  },
+})
+
 
 @Component({
   components: {
@@ -159,7 +175,7 @@ export default class StepsForm extends Vue {
             fax: '',
             email: '',
             website: '',
-      
+
             npwp: '',
             npwpName: '',
             npwpAddress: '',
@@ -168,7 +184,7 @@ export default class StepsForm extends Vue {
             npwpCity: '',
             npwpPostalCode: '',
             file: '',
-      
+
             address: '',
             country: '',
             region: '',

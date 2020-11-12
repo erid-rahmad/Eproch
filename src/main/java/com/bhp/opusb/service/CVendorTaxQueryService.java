@@ -97,9 +97,6 @@ public class CVendorTaxQueryService extends QueryService<CVendorTax> {
             if (criteria.getTaxableEmployers() != null) {
                 specification = specification.and(buildSpecification(criteria.getTaxableEmployers(), CVendorTax_.taxableEmployers));
             }
-            if (criteria.getRate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getRate(), CVendorTax_.rate));
-            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CVendorTax_.uid));
             }
@@ -110,9 +107,9 @@ public class CVendorTaxQueryService extends QueryService<CVendorTax> {
                 specification = specification.and(buildSpecification(criteria.getVendorId(),
                     root -> root.join(CVendorTax_.vendor, JoinType.LEFT).get(CVendor_.id)));
             }
-            if (criteria.getTaxId() != null) {
-                specification = specification.and(buildSpecification(criteria.getTaxId(),
-                    root -> root.join(CVendorTax_.tax, JoinType.LEFT).get(CTax_.id)));
+            if (criteria.getTaxCategoryId() != null) {
+                specification = specification.and(buildSpecification(criteria.getTaxCategoryId(),
+                    root -> root.join(CVendorTax_.taxCategory, JoinType.LEFT).get(CTaxCategory_.id)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),

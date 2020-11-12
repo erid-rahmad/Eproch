@@ -42,6 +42,15 @@ public class CVendorLocationResourceIT {
     private static final Boolean DEFAULT_TAX_INVOICE_ADDRESS = false;
     private static final Boolean UPDATED_TAX_INVOICE_ADDRESS = true;
 
+    private static final Boolean DEFAULT_SHIP_ADDRESS = false;
+    private static final Boolean UPDATED_SHIP_ADDRESS = true;
+
+    private static final Boolean DEFAULT_INVOICE_ADDRESS = false;
+    private static final Boolean UPDATED_INVOICE_ADDRESS = true;
+
+    private static final Boolean DEFAULT_PAY_FROM_ADDRESS = false;
+    private static final Boolean UPDATED_PAY_FROM_ADDRESS = true;
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -77,6 +86,9 @@ public class CVendorLocationResourceIT {
     public static CVendorLocation createEntity(EntityManager em) {
         CVendorLocation cVendorLocation = new CVendorLocation()
             .taxInvoiceAddress(DEFAULT_TAX_INVOICE_ADDRESS)
+            .shipAddress(DEFAULT_SHIP_ADDRESS)
+            .invoiceAddress(DEFAULT_INVOICE_ADDRESS)
+            .payFromAddress(DEFAULT_PAY_FROM_ADDRESS)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -100,6 +112,9 @@ public class CVendorLocationResourceIT {
     public static CVendorLocation createUpdatedEntity(EntityManager em) {
         CVendorLocation cVendorLocation = new CVendorLocation()
             .taxInvoiceAddress(UPDATED_TAX_INVOICE_ADDRESS)
+            .shipAddress(UPDATED_SHIP_ADDRESS)
+            .invoiceAddress(UPDATED_INVOICE_ADDRESS)
+            .payFromAddress(UPDATED_PAY_FROM_ADDRESS)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -137,6 +152,9 @@ public class CVendorLocationResourceIT {
         assertThat(cVendorLocationList).hasSize(databaseSizeBeforeCreate + 1);
         CVendorLocation testCVendorLocation = cVendorLocationList.get(cVendorLocationList.size() - 1);
         assertThat(testCVendorLocation.isTaxInvoiceAddress()).isEqualTo(DEFAULT_TAX_INVOICE_ADDRESS);
+        assertThat(testCVendorLocation.isShipAddress()).isEqualTo(DEFAULT_SHIP_ADDRESS);
+        assertThat(testCVendorLocation.isInvoiceAddress()).isEqualTo(DEFAULT_INVOICE_ADDRESS);
+        assertThat(testCVendorLocation.isPayFromAddress()).isEqualTo(DEFAULT_PAY_FROM_ADDRESS);
         assertThat(testCVendorLocation.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCVendorLocation.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -174,6 +192,9 @@ public class CVendorLocationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendorLocation.getId().intValue())))
             .andExpect(jsonPath("$.[*].taxInvoiceAddress").value(hasItem(DEFAULT_TAX_INVOICE_ADDRESS.booleanValue())))
+            .andExpect(jsonPath("$.[*].shipAddress").value(hasItem(DEFAULT_SHIP_ADDRESS.booleanValue())))
+            .andExpect(jsonPath("$.[*].invoiceAddress").value(hasItem(DEFAULT_INVOICE_ADDRESS.booleanValue())))
+            .andExpect(jsonPath("$.[*].payFromAddress").value(hasItem(DEFAULT_PAY_FROM_ADDRESS.booleanValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -190,6 +211,9 @@ public class CVendorLocationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cVendorLocation.getId().intValue()))
             .andExpect(jsonPath("$.taxInvoiceAddress").value(DEFAULT_TAX_INVOICE_ADDRESS.booleanValue()))
+            .andExpect(jsonPath("$.shipAddress").value(DEFAULT_SHIP_ADDRESS.booleanValue()))
+            .andExpect(jsonPath("$.invoiceAddress").value(DEFAULT_INVOICE_ADDRESS.booleanValue()))
+            .andExpect(jsonPath("$.payFromAddress").value(DEFAULT_PAY_FROM_ADDRESS.booleanValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -264,6 +288,162 @@ public class CVendorLocationResourceIT {
 
         // Get all the cVendorLocationList where taxInvoiceAddress is null
         defaultCVendorLocationShouldNotBeFound("taxInvoiceAddress.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByShipAddressIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where shipAddress equals to DEFAULT_SHIP_ADDRESS
+        defaultCVendorLocationShouldBeFound("shipAddress.equals=" + DEFAULT_SHIP_ADDRESS);
+
+        // Get all the cVendorLocationList where shipAddress equals to UPDATED_SHIP_ADDRESS
+        defaultCVendorLocationShouldNotBeFound("shipAddress.equals=" + UPDATED_SHIP_ADDRESS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByShipAddressIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where shipAddress not equals to DEFAULT_SHIP_ADDRESS
+        defaultCVendorLocationShouldNotBeFound("shipAddress.notEquals=" + DEFAULT_SHIP_ADDRESS);
+
+        // Get all the cVendorLocationList where shipAddress not equals to UPDATED_SHIP_ADDRESS
+        defaultCVendorLocationShouldBeFound("shipAddress.notEquals=" + UPDATED_SHIP_ADDRESS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByShipAddressIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where shipAddress in DEFAULT_SHIP_ADDRESS or UPDATED_SHIP_ADDRESS
+        defaultCVendorLocationShouldBeFound("shipAddress.in=" + DEFAULT_SHIP_ADDRESS + "," + UPDATED_SHIP_ADDRESS);
+
+        // Get all the cVendorLocationList where shipAddress equals to UPDATED_SHIP_ADDRESS
+        defaultCVendorLocationShouldNotBeFound("shipAddress.in=" + UPDATED_SHIP_ADDRESS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByShipAddressIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where shipAddress is not null
+        defaultCVendorLocationShouldBeFound("shipAddress.specified=true");
+
+        // Get all the cVendorLocationList where shipAddress is null
+        defaultCVendorLocationShouldNotBeFound("shipAddress.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByInvoiceAddressIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where invoiceAddress equals to DEFAULT_INVOICE_ADDRESS
+        defaultCVendorLocationShouldBeFound("invoiceAddress.equals=" + DEFAULT_INVOICE_ADDRESS);
+
+        // Get all the cVendorLocationList where invoiceAddress equals to UPDATED_INVOICE_ADDRESS
+        defaultCVendorLocationShouldNotBeFound("invoiceAddress.equals=" + UPDATED_INVOICE_ADDRESS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByInvoiceAddressIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where invoiceAddress not equals to DEFAULT_INVOICE_ADDRESS
+        defaultCVendorLocationShouldNotBeFound("invoiceAddress.notEquals=" + DEFAULT_INVOICE_ADDRESS);
+
+        // Get all the cVendorLocationList where invoiceAddress not equals to UPDATED_INVOICE_ADDRESS
+        defaultCVendorLocationShouldBeFound("invoiceAddress.notEquals=" + UPDATED_INVOICE_ADDRESS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByInvoiceAddressIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where invoiceAddress in DEFAULT_INVOICE_ADDRESS or UPDATED_INVOICE_ADDRESS
+        defaultCVendorLocationShouldBeFound("invoiceAddress.in=" + DEFAULT_INVOICE_ADDRESS + "," + UPDATED_INVOICE_ADDRESS);
+
+        // Get all the cVendorLocationList where invoiceAddress equals to UPDATED_INVOICE_ADDRESS
+        defaultCVendorLocationShouldNotBeFound("invoiceAddress.in=" + UPDATED_INVOICE_ADDRESS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByInvoiceAddressIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where invoiceAddress is not null
+        defaultCVendorLocationShouldBeFound("invoiceAddress.specified=true");
+
+        // Get all the cVendorLocationList where invoiceAddress is null
+        defaultCVendorLocationShouldNotBeFound("invoiceAddress.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByPayFromAddressIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where payFromAddress equals to DEFAULT_PAY_FROM_ADDRESS
+        defaultCVendorLocationShouldBeFound("payFromAddress.equals=" + DEFAULT_PAY_FROM_ADDRESS);
+
+        // Get all the cVendorLocationList where payFromAddress equals to UPDATED_PAY_FROM_ADDRESS
+        defaultCVendorLocationShouldNotBeFound("payFromAddress.equals=" + UPDATED_PAY_FROM_ADDRESS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByPayFromAddressIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where payFromAddress not equals to DEFAULT_PAY_FROM_ADDRESS
+        defaultCVendorLocationShouldNotBeFound("payFromAddress.notEquals=" + DEFAULT_PAY_FROM_ADDRESS);
+
+        // Get all the cVendorLocationList where payFromAddress not equals to UPDATED_PAY_FROM_ADDRESS
+        defaultCVendorLocationShouldBeFound("payFromAddress.notEquals=" + UPDATED_PAY_FROM_ADDRESS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByPayFromAddressIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where payFromAddress in DEFAULT_PAY_FROM_ADDRESS or UPDATED_PAY_FROM_ADDRESS
+        defaultCVendorLocationShouldBeFound("payFromAddress.in=" + DEFAULT_PAY_FROM_ADDRESS + "," + UPDATED_PAY_FROM_ADDRESS);
+
+        // Get all the cVendorLocationList where payFromAddress equals to UPDATED_PAY_FROM_ADDRESS
+        defaultCVendorLocationShouldNotBeFound("payFromAddress.in=" + UPDATED_PAY_FROM_ADDRESS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorLocationsByPayFromAddressIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorLocationRepository.saveAndFlush(cVendorLocation);
+
+        // Get all the cVendorLocationList where payFromAddress is not null
+        defaultCVendorLocationShouldBeFound("payFromAddress.specified=true");
+
+        // Get all the cVendorLocationList where payFromAddress is null
+        defaultCVendorLocationShouldNotBeFound("payFromAddress.specified=false");
     }
 
     @Test
@@ -434,6 +614,9 @@ public class CVendorLocationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendorLocation.getId().intValue())))
             .andExpect(jsonPath("$.[*].taxInvoiceAddress").value(hasItem(DEFAULT_TAX_INVOICE_ADDRESS.booleanValue())))
+            .andExpect(jsonPath("$.[*].shipAddress").value(hasItem(DEFAULT_SHIP_ADDRESS.booleanValue())))
+            .andExpect(jsonPath("$.[*].invoiceAddress").value(hasItem(DEFAULT_INVOICE_ADDRESS.booleanValue())))
+            .andExpect(jsonPath("$.[*].payFromAddress").value(hasItem(DEFAULT_PAY_FROM_ADDRESS.booleanValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -484,6 +667,9 @@ public class CVendorLocationResourceIT {
         em.detach(updatedCVendorLocation);
         updatedCVendorLocation
             .taxInvoiceAddress(UPDATED_TAX_INVOICE_ADDRESS)
+            .shipAddress(UPDATED_SHIP_ADDRESS)
+            .invoiceAddress(UPDATED_INVOICE_ADDRESS)
+            .payFromAddress(UPDATED_PAY_FROM_ADDRESS)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CVendorLocationDTO cVendorLocationDTO = cVendorLocationMapper.toDto(updatedCVendorLocation);
@@ -498,6 +684,9 @@ public class CVendorLocationResourceIT {
         assertThat(cVendorLocationList).hasSize(databaseSizeBeforeUpdate);
         CVendorLocation testCVendorLocation = cVendorLocationList.get(cVendorLocationList.size() - 1);
         assertThat(testCVendorLocation.isTaxInvoiceAddress()).isEqualTo(UPDATED_TAX_INVOICE_ADDRESS);
+        assertThat(testCVendorLocation.isShipAddress()).isEqualTo(UPDATED_SHIP_ADDRESS);
+        assertThat(testCVendorLocation.isInvoiceAddress()).isEqualTo(UPDATED_INVOICE_ADDRESS);
+        assertThat(testCVendorLocation.isPayFromAddress()).isEqualTo(UPDATED_PAY_FROM_ADDRESS);
         assertThat(testCVendorLocation.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCVendorLocation.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

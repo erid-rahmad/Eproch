@@ -266,3 +266,12 @@ aside {
     color: #70707c;
   }
 }
+
+.el-textarea.is-disabled .el-textarea__inner {
+  color: #70707c;
+}
+
+.el-divider h4 {
+  font-size: 1em;
+  font-weight: 600;
+}

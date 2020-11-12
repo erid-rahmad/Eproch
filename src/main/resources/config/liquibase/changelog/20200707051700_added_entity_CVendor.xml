@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity CVendor.
     -->
@@ -97,7 +97,12 @@
                   separator=";"
                   tableName="c_vendor">
             <column name="id" type="numeric"/>
+            <column name="code" type="string"/>
             <column name="name" type="string"/>
+            <column name="type" type="string"/>
+            <column name="location" type="string"/>
+            <column name="id_no" type="string"/>
+            <column name="tin" type="string"/>
             <column name="tax_id_no" type="string"/>
             <column name="tax_id_name" type="string"/>
             <column name="branch" type="boolean"/>
@@ -105,9 +110,7 @@
             <column name="phone" type="string"/>
             <column name="fax" type="string"/>
             <column name="website" type="string"/>
-            <column name="type" type="string"/>
             <column name="payment_category" type="string"/>
-            <column name="approval_status" type="string"/>
             <column name="date_trx" type="date"/>
             <column name="document_no" type="string"/>
             <column name="document_action" type="string"/>
@@ -124,6 +127,35 @@
 
     <changeSet id="20200810230300" author="Ananta Aryadewa">
         <modifyDataType tableName="c_vendor" columnName="tax_id_no" newDataType="varchar(255)" />
+    </changeSet>
+
+    <changeSet id="20201023051700-added1" author="dian-tri-budianto">
+        <addColumn tableName="c_vendor">
+            <column name="location" type="varchar(50)">
+                <constraints nullable="true"/>
+            </column>
+            <column name="tin" type="varchar(50)" >
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20201023051700-update1" author="dian-tri-budianto">
+        <modifyDataType tableName="c_vendor" columnName="type" newDataType="varchar(50)" />
+        <dropNotNullConstraint tableName="c_vendor" columnName="tax_id_no" newDataType="varchar(60)" />
+        <dropNotNullConstraint tableName="c_vendor" columnName="tax_id_name" newDataType="varchar(70)" />
+    </changeSet>
+
+    <changeSet id="20201028051700-update1" author="dian-tri-budianto">
+        <dropNotNullConstraint tableName="c_vendor" columnName="email" newDataType="varchar(50)" />
+    </changeSet>
+
+    <changeSet id="20201028051700-added2" author="dian-tri-budianto">
+        <addColumn tableName="c_vendor">
+            <column name="vendor_group_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
     <changeSet id="20201101185000" author="Ananta Aryadewa">
@@ -149,12 +181,49 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20201030051700-added3" author="dian-tri-budianto">
+        <addColumn tableName="c_vendor">
+            <column name="id_no" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
     <changeSet id="20201101215600" author="Ananta Aryadewa">
         <addColumn tableName="c_vendor">
             <column name="document_type_id" type="bigint">
                 <constraints nullable="false" />
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20201110215600" author="dian-tri-budianto">
+        <addColumn tableName="c_vendor">
+            <column name="code" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20201112171500" author="Ananta Aryadewa">
+        <modifyDataType tableName="c_vendor" columnName="type" newDataType="varchar(10)" />
+        <modifyDataType tableName="c_vendor" columnName="location" newDataType="varchar(10)" />
+        <modifyDataType tableName="c_vendor" columnName="code" newDataType="varchar(30)" />
+        <modifyDataType tableName="c_vendor" columnName="name" newDataType="varchar(150)" />
+        <modifyDataType tableName="c_vendor" columnName="tax_id_no" newDataType="varchar(30)" />
+        <modifyDataType tableName="c_vendor" columnName="tax_id_name" newDataType="varchar(50)" />
+        <modifyDataType tableName="c_vendor" columnName="tin" newDataType="varchar(30)" />
+        <modifyDataType tableName="c_vendor" columnName="email" newDataType="varchar(30)" />
+        <modifyDataType tableName="c_vendor" columnName="document_no" newDataType="varchar(30)" />
+        <modifyDataType tableName="c_vendor" columnName="document_action" newDataType="varchar(10)" />
+        <modifyDataType tableName="c_vendor" columnName="document_status" newDataType="varchar(10)" />
+        <dropNotNullConstraint tableName="c_vendor" columnName="phone" />
+    </changeSet>
+
+    <changeSet id="20201113040700" author="Ananta Aryadewa">
+        <modifyDataType tableName="c_vendor" columnName="website" newDataType="varchar(50)" />
+        <modifyDataType tableName="c_vendor" columnName="payment_category" newDataType="varchar(10)" />
+        <dropColumn tableName="c_vendor" columnName="approval_status" />
     </changeSet>
 
 </databaseChangeLog>

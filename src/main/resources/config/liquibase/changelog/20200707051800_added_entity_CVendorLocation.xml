@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity CVendorLocation.
     -->
@@ -76,6 +76,22 @@
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20201026051800-added1" author="dian-tri-budianto">
+        <addColumn tableName="c_vendor_location">
+
+            <column name="ship_address" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="invoice_address" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="pay_from_address" type="boolean">
+                <constraints nullable="true" />
+            </column>
+
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

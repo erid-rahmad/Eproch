@@ -29,6 +29,12 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
 
     private BooleanFilter taxInvoiceAddress;
 
+    private BooleanFilter shipAddress;
+
+    private BooleanFilter invoiceAddress;
+
+    private BooleanFilter payFromAddress;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -45,6 +51,9 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
     public CVendorLocationCriteria(CVendorLocationCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.taxInvoiceAddress = other.taxInvoiceAddress == null ? null : other.taxInvoiceAddress.copy();
+        this.shipAddress = other.shipAddress == null ? null : other.shipAddress.copy();
+        this.invoiceAddress = other.invoiceAddress == null ? null : other.invoiceAddress.copy();
+        this.payFromAddress = other.payFromAddress == null ? null : other.payFromAddress.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
@@ -71,6 +80,30 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
 
     public void setTaxInvoiceAddress(BooleanFilter taxInvoiceAddress) {
         this.taxInvoiceAddress = taxInvoiceAddress;
+    }
+
+    public BooleanFilter getShipAddress() {
+        return shipAddress;
+    }
+
+    public void setShipAddress(BooleanFilter shipAddress) {
+        this.shipAddress = shipAddress;
+    }
+
+    public BooleanFilter getInvoiceAddress() {
+        return invoiceAddress;
+    }
+
+    public void setInvoiceAddress(BooleanFilter invoiceAddress) {
+        this.invoiceAddress = invoiceAddress;
+    }
+
+    public BooleanFilter getPayFromAddress() {
+        return payFromAddress;
+    }
+
+    public void setPayFromAddress(BooleanFilter payFromAddress) {
+        this.payFromAddress = payFromAddress;
     }
 
     public UUIDFilter getUid() {
@@ -126,6 +159,9 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(taxInvoiceAddress, that.taxInvoiceAddress) &&
+            Objects.equals(shipAddress, that.shipAddress) &&
+            Objects.equals(invoiceAddress, that.invoiceAddress) &&
+            Objects.equals(payFromAddress, that.payFromAddress) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(vendorId, that.vendorId) &&
@@ -138,6 +174,9 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         taxInvoiceAddress,
+        shipAddress,
+        invoiceAddress,
+        payFromAddress,
         uid,
         active,
         vendorId,
@@ -151,6 +190,9 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
         return "CVendorLocationCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (taxInvoiceAddress != null ? "taxInvoiceAddress=" + taxInvoiceAddress + ", " : "") +
+                (shipAddress != null ? "shipAddress=" + shipAddress + ", " : "") +
+                (invoiceAddress != null ? "invoiceAddress=" + invoiceAddress + ", " : "") +
+                (payFromAddress != null ? "payFromAddress=" + payFromAddress + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +

@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * A DTO for the {@link com.bhp.opusb.domain.CVendorTax} entity.
  */
 public class CVendorTaxDTO extends AbstractAuditingDTO {
-    
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -20,8 +20,6 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
 
     private Boolean taxableEmployers;
 
-    private BigDecimal rate;
-
     private UUID uid;
 
     private Boolean active;
@@ -29,12 +27,12 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
     private Long vendorId;
     private String vendorName;
 
-    private Long taxId;
-    private String taxName;
+    private Long taxCategoryId;
+    private String taxCategoryName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
-    
+
     public Long getId() {
         return id;
     }
@@ -57,14 +55,6 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
 
     public void setTaxableEmployers(Boolean taxableEmployers) {
         this.taxableEmployers = taxableEmployers;
-    }
-
-    public BigDecimal getRate() {
-        return rate;
-    }
-
-    public void setRate(BigDecimal rate) {
-        this.rate = rate;
     }
 
     public UUID getUid() {
@@ -99,20 +89,20 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
         this.vendorName = vendorName;
     }
 
-    public Long getTaxId() {
-        return taxId;
+    public Long getTaxCategoryId() {
+        return taxCategoryId;
     }
 
-    public void setTaxId(Long cTaxId) {
-        this.taxId = cTaxId;
+    public void setTaxCategoryId(Long cTaxCategoryId) {
+        this.taxCategoryId = cTaxCategoryId;
     }
 
-    public String getTaxName() {
-        return taxName;
+    public String getTaxCategoryName() {
+        return taxCategoryName;
     }
 
-    public void setTaxName(String taxName) {
-        this.taxName = taxName;
+    public void setTaxCategoryName(String taxCategoryName) {
+        this.taxCategoryName = taxCategoryName;
     }
 
     public Long getAdOrganizationId() {
@@ -158,11 +148,12 @@ public class CVendorTaxDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", eInvoice='" + isEInvoice() + "'" +
             ", taxableEmployers='" + isTaxableEmployers() + "'" +
-            ", rate=" + getRate() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", vendorId=" + getVendorId() +
-            ", taxId=" + getTaxId() +
+            ", vendorName=" + getVendorName() +
+            ", taxCategoryId=" + getTaxCategoryId() +
+            ", taxCategoryName=" + getTaxCategoryName() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName=" + getAdOrganizationName() +
             "}";

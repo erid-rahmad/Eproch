@@ -7,7 +7,7 @@
         Added the constraints for entity CVendorTax.
     -->
     <changeSet id="20200729152700-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="vendor_id"
                                  baseTableName="c_vendor_tax"
                                  constraintName="fk_c_vendor_tax_vendor_id"
@@ -43,4 +43,18 @@
                                  referencedTableName="c_tax"/>
 
     </changeSet>
+
+    <changeSet id="20201028020900-added-foreignkey1" author="dian-tri-budianto">
+
+        <addForeignKeyConstraint baseColumnNames="tax_category_id"
+                                 baseTableName="c_vendor_tax"
+                                 constraintName="fk_c_vendor_tax_tax_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_tax_category"/>
+
+        <dropForeignKeyConstraint baseTableName="c_vendor_tax"
+                                 constraintName="fk_c_vendor_tax_tax_id"/>
+
+    </changeSet>
+
 </databaseChangeLog>

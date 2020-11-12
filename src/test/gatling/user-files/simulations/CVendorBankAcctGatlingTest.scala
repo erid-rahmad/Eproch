@@ -73,8 +73,12 @@ class CVendorBankAcctGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "accountNo":"SAMPLE_TEXT"
+                , "accountName":"SAMPLE_TEXT"
                 , "name":"SAMPLE_TEXT"
                 , "branch":"SAMPLE_TEXT"
+                , "bban":"SAMPLE_TEXT"
+                , "iban":"SAMPLE_TEXT"
+                , "description":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

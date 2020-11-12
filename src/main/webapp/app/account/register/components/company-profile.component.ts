@@ -19,7 +19,7 @@ const CompanyProps = Vue.extend({
         return null;
       }
     },
-    
+
   }
 })
 
@@ -28,7 +28,7 @@ export default class CompanyProfile extends CompanyProps {
 
   @Inject('dynamicWindowService')
   private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
-  
+
   public countryOptions: any = {};
   public regionOptions: any = {};
   public cityOptions: any = {};
@@ -37,10 +37,23 @@ export default class CompanyProfile extends CompanyProps {
   public regionOptionsNpwp: any = {};
   public cityOptionsNpwp: any = {};
 
+  public typeOptions: any = {};
+  public locationOptions: any = {};
+  public companyType: string = "companyType";
+  public companyLocation: string = "companyLocation";
+  public companyTaxLocation: string = "Domestic";
+  public companyTypeProfessional: string = "Professional";
+
   private limit: number = 1;
   private action: string = "/api/c-attachments/upload";
   private accept: string = ".jpg, .jpeg, .png, .pdf, .doc, .docx";
 
+  private npwp: boolean = true;
+  private tax: boolean = false;
+  private professional: boolean = false;
+  private sameAddress: boolean = true;
+  private withRegion: boolean = true;
+  private withRegionNpwp: boolean = true;
   private columnSpacing = 32;
   private rules = {
     website: {
@@ -48,18 +61,9 @@ export default class CompanyProfile extends CompanyProps {
     }
   }
 
-  private typeOptions = [
-    {
-      value: 'COMPANY',
-      key: 'COMPANY'
-    }, 
-    {
-      value: 'PROFESSIONAL',
-      key: 'PROFESSIONAL'
-    }
-  ]
-
   created() {
+    this.retrieveGetReferences(this.companyType);
+    this.retrieveGetReferences(this.companyLocation);
     this.retrieveCountry(1);
     this.retrieveCountry(2);
   }
@@ -70,6 +74,21 @@ export default class CompanyProfile extends CompanyProps {
 
   public handleTypeChange(value: string) {
     registrationStore.setVendorType(value);
+    if(value == this.companyTypeProfessional){
+      this.professional = true;
+    }else{
+      this.professional = false;
+    }
+  }
+
+  public handleLocationChange(value: string){
+    registrationStore.setVendorLocation(value);
+    this.tax = true;
+    if(value == this.companyTaxLocation){
+      this.npwp = true;
+    }else{
+      this.npwp = false;
+    }
   }
 
   validate(formIndex: number) {
@@ -90,6 +109,17 @@ export default class CompanyProfile extends CompanyProps {
         this.company.npwpRegionId = this.printKeyByParam(this.company.npwpRegion);
         this.company.npwpCityId = this.printKeyByParam(this.company.npwpCity);
 
+        this.company.sameAddress = this.sameAddress;
+
+        if(this.companyTaxLocation == this.company.location){
+          this.company.tin = "";
+        }else{
+          this.company.npwp = "";
+          this.company.npwpName = "";
+          this.company.file = "";
+          this.company.fileId = "";
+        }
+
         this.eventBus.$emit('step-validated', { passed, errors })
       })
     }
@@ -103,13 +133,78 @@ export default class CompanyProfile extends CompanyProps {
       return value;
     }
   }
-  
+
   private printKeyByParam(row: any){
     if(row){
       let value, key;
       key = parseInt(row.substring( 0, row.indexOf('_')));
       return key;
     }
+  }
+
+  private changeAddress(value: string){
+    if(this.sameAddress){
+      this.company.npwpAddress = value;
+    }
+  }
+
+  private changeCity(value: string){
+    if(this.sameAddress){
+      this.company.npwpCity = this.printValueByParam(value);
+    }
+  }
+
+  private changePostalCode(value: string){
+    if(this.sameAddress){
+      this.company.npwpPostalCode = value;
+    }
+  }
+
+  private validateSameAddress(value: string){
+    if(value){
+      this.company.npwpAddress = this.company.address;
+      this.company.npwpCountry = this.company.country;
+      this.company.npwpRegion = this.printValueByParam(this.company.region);
+      this.company.npwpCity = this.printValueByParam(this.company.city);
+    }
+  }
+
+  private retrieveGetReferences(param: string) {
+    this.dynamicWindowService('/api/ad-references')
+    .retrieve({
+      criteriaQuery: [`value.contains=`+param]
+    })
+    .then(res => {
+        let references = res.data.map(item => {
+            return{
+                id: item.id,
+                value: item.value,
+                name: item.name
+            };
+        });
+        this.retrieveGetReferenceLists(references);
+    });
+  }
+
+  private retrieveGetReferenceLists(param: any) {
+    this.dynamicWindowService('/api/ad-reference-lists')
+    .retrieve({
+      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
+    })
+    .then(res => {
+        let referenceList = res.data.map(item => {
+            return{
+                key: item.value,
+                value: item.name
+            };
+        });
+
+        if(param[0].value == this.companyType){
+          this.typeOptions = referenceList;
+        }else if(param[0].value == this.companyLocation){
+          this.locationOptions = referenceList;
+        }
+    });
   }
 
   private retrieveCountry(i) {
@@ -127,7 +222,7 @@ export default class CompanyProfile extends CompanyProps {
           this.countryOptions = country;
         }else{
           this.countryOptionsNpwp = country;
-        }        
+        }
     });
   }
 
@@ -140,7 +235,11 @@ export default class CompanyProfile extends CompanyProps {
       this.company.npwpRegion = "";
       this.company.npwpCity = "";
     }
-    
+
+    if(this.sameAddress){
+      this.company.npwpCountry = value;
+    }
+
     this.dynamicWindowService('/api/c-regions')
     .retrieve({
         criteriaQuery: [`countryId.equals=${countryId}`]
@@ -158,19 +257,34 @@ export default class CompanyProfile extends CompanyProps {
         }else{
           this.regionOptionsNpwp = region;
         }
+
+        this.checkCountryWithRegion(region[0].key+"_"+region[0].value, countryId, i);
     });
   }
-  
-  private retrieveCity(value, i) {
-    let regionId = this.printKeyByParam(value);
+
+  private retrieveCity(region, country, i) {
+    let regionId = this.printKeyByParam(region);
+    let queryWithRegion;
+
+    if(country == 0){
+      queryWithRegion = `regionId.equals=${regionId}`;
+    }else{
+      queryWithRegion = `countryId.equals=${country}`;
+    }
+
     if(i===1){
       this.company.city = "";
     }else{
       this.company.npwpCity = "";
     }
+
+    if(this.sameAddress){
+      this.company.npwpRegion = this.printValueByParam(region);
+    }
+
     this.dynamicWindowService('/api/c-cities')
     .retrieve({
-        criteriaQuery: [`regionId.equals=${regionId}`]
+        criteriaQuery: [queryWithRegion]
     })
     .then(res => {
         let city = res.data.map(item => {
@@ -186,6 +300,60 @@ export default class CompanyProfile extends CompanyProps {
           this.cityOptionsNpwp = city;
         }
     });
+  }
+
+  private checkCountryWithRegion(region, country, i) {
+
+    this.dynamicWindowService('/api/c-countries')
+    .retrieve({
+        criteriaQuery: [`id.equals=${country}`]
+    })
+    .then(res => {
+        let result = res.data.map(item => {
+            return{
+              id: item.id,
+              withRegion: item.withRegion
+            };
+        });
+
+        if(result[0].withRegion){
+          if(i===1){
+            this.withRegion = true;
+            this.withRegionNpwp = true;
+          }else{
+            this.withRegionNpwp = true;
+          }
+          this.cityOptions = {};
+        }else{
+
+          if(i===1){
+            this.withRegion = false;
+            this.withRegionNpwp = false;
+          }else{
+            this.withRegionNpwp = false;
+          }
+
+          this.retrieveCity(region, result[0].id, i);
+        }
+    });
+  }
+
+  private clearAllOption(i){
+    if(i == 1){
+      this.regionOptions = {};
+      this.cityOptions = {};
+    }else{
+      this.regionOptionsNpwp = {};
+      this.cityOptionsNpwp = {};
+    }
+  }
+
+  private clearOptionRegionCity(i){
+    if(i == 1){
+      this.cityOptions = {};
+    }else{
+      this.cityOptionsNpwp = {};
+    }
   }
 
   get fileList() {
@@ -254,7 +422,7 @@ export default class CompanyProfile extends CompanyProps {
       });
       return !isExt;
     }
-    
+
   }
 
 }

@@ -62,9 +62,13 @@ export default class SummaryRegistration extends SummaryRegistrationProps {
   @Inject('dynamicWindowService')
   private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
 
-  columnSpacing = 32;  
-  public businessCategoryValues = []; 
+  columnSpacing = 32;
+  public businessCategoryValues = [];
   public businessCategoryOptions = [];
+  private npwp:boolean;
+  private professional:boolean;
+  private companyLocation: string = "Domestic";
+  public companyTypeProfessional: string = "Professional";
 
   get eInvoice() {
     return registrationStore.eInvoice;
@@ -79,7 +83,18 @@ export default class SummaryRegistration extends SummaryRegistrationProps {
   }
 
   created() {
+    console.log(this.company);
     this.retrieveBusinessCategories();
+    if(this.company.type == this.companyTypeProfessional){
+      this.professional = true;
+    }else{
+      this.professional = false;
+    }
+    if(this.company.location == this.companyLocation){
+      this.npwp = true;
+    }else{
+      this.npwp = false;
+    }
   }
 
   printBusinessCategory(pic: any) {

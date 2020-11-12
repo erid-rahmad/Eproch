@@ -91,8 +91,23 @@ public class CVendorQueryService extends QueryService<CVendor> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CVendor_.id));
             }
+            if (criteria.getCode() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getCode(), CVendor_.code));
+            }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CVendor_.name));
+            }
+            if (criteria.getType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getType(), CVendor_.type));
+            }
+            if (criteria.getLocation() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLocation(), CVendor_.location));
+            }
+            if (criteria.getIdNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getIdNo(), CVendor_.idNo));
+            }
+            if (criteria.getTin() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getTin(), CVendor_.tin));
             }
             if (criteria.getTaxIdNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getTaxIdNo(), CVendor_.taxIdNo));
@@ -115,14 +130,8 @@ public class CVendorQueryService extends QueryService<CVendor> {
             if (criteria.getWebsite() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getWebsite(), CVendor_.website));
             }
-            if (criteria.getType() != null) {
-                specification = specification.and(buildSpecification(criteria.getType(), CVendor_.type));
-            }
             if (criteria.getPaymentCategory() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPaymentCategory(), CVendor_.paymentCategory));
-            }
-            if (criteria.getApprovalStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getApprovalStatus(), CVendor_.approvalStatus));
             }
             if (criteria.getDateTrx() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), CVendor_.dateTrx));
@@ -159,6 +168,10 @@ public class CVendorQueryService extends QueryService<CVendor> {
             if (criteria.getDocumentTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
                     root -> root.join(CVendor_.documentType, JoinType.LEFT).get(CDocumentType_.id)));
+            }
+            if (criteria.getVendorGroupId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorGroupId(),
+                    root -> root.join(CVendor_.vendorGroup, JoinType.LEFT).get(CVendorGroup_.id)));
             }
         }
         return specification;

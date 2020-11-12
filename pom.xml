@@ -5,7 +5,7 @@
 
     <groupId>com.bhp.opusb</groupId>
     <artifactId>opus-web-app</artifactId>
-    <version>0.5.1</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
     <name>Opus Web App</name>
 
@@ -668,7 +668,7 @@
                             <image>adoptopenjdk:11-jre-hotspot</image>
                         </from>
                         <to>
-                            <image>opuswebapp:latest</image>
+				<image>bhp/eproc:latest</image>
                         </to>
                         <container>
                             <entrypoint>
@@ -677,7 +677,7 @@
                                 <arg>/entrypoint.sh</arg>
                             </entrypoint>
                             <ports>
-                                <port>8080</port>
+                                <port>8090</port>
                                 <port>5701/udp</port>
                             </ports>
                             <environment>

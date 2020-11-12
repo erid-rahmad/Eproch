@@ -13,11 +13,16 @@
     "basic": {
       "basic": {
         "title": "Basic Information",
+        "sameAddress": "Same Address",
         "name": "Name",
         "npwp": "NPWP",
         "npwpName": "NPWP Name",
         "npwpFile": "NPWP File",
+        "idNo": "ID No.",
+        "tin": "TIN",
+        "taxInformationNumber": "Tax Information Number",
         "type": "Type",
+        "location": "Location",
         "branch": "Branch"
       },
       "address": {
@@ -27,6 +32,11 @@
         "region": "Region",
         "city": "City",
         "postCode": "Postal Code",
+        "taxAddress": "Tax Address",
+        "taxCountry": "Tax Country",
+        "taxRegion": "Tax Region",
+        "taxCity": "Tax City",
+        "taxPostCode": "Tax Postal Code",
         "npwpAddress": "NPWP Address",
         "npwpCountry": "NPWP Country",
         "npwpRegion": "NPWP Region",
@@ -80,11 +90,18 @@
     },
     "payment": {
       "title": "Payment Information",
-      "description": "Please provide the payment information",
+      "descriptionInputBankAccount": "Please provide the payment information",
       "bank": "Bank",
       "branch": "Branch",
       "currency": "Currency",
       "account": "Account No.",
+      "accountName": "Account Name",
+
+      "bban": "BBAN",
+      "basicBankAccountNumber": "Basic Bank Account Number",
+      "iban": "IBAN",
+      "internationalBankAccountNumber": "International Bank Account Number",
+      "description": "Description",
       "supportingfile": "Supporting File"
     },
     "tax": {
@@ -98,6 +115,9 @@
       },
       "efaktur": "E-Faktur",
       "pkp": "Pengusaha Kena Pajak (PKP)",
+      "taxCategoryName": "Tax Category Name",
+      "description": "Description",
+      "isWithholding": "Is Withholding",
       "withholdingType": "Withholding Type",
       "taxRateName": "Tax Rate Name",
       "transactionType": "Transaction Type",

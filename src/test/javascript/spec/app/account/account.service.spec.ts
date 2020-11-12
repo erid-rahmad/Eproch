@@ -6,6 +6,7 @@ import TranslationService from '@/locale/translation.service';
 
 import * as config from '@/shared/config/config';
 import MenuService from '@/core/application-dictionary/components/Menu/menu.service';
+import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 
 const mockedAxios: any = axios;
 jest.mock('axios', () => ({
@@ -30,7 +31,7 @@ describe('Account Service test suite', () => {
   it('should init service and do not retrieve account', async () => {
     mockedAxios.get.mockReturnValue(Promise.resolve({ data: { 'display-ribbon-on-profiles': 'dev', activeProfiles: ['dev', 'test'] } }));
 
-    accountService = await new AccountService(store, new TranslationService(store, i18n), null, new MenuService(), router);
+    accountService = new AccountService(store, (url) => new DynamicWindowService(url), new TranslationService(store, i18n), null, new MenuService(), router);
 
     expect(store.getters.logon).toBe(false);
     expect(accountService.authenticated).toBe(false);
@@ -45,7 +46,7 @@ describe('Account Service test suite', () => {
     localStorage.setItem('jhi-authenticationToken', 'token');
 
     mockedAxios.get.mockReturnValue(Promise.resolve({}));
-    accountService = await new AccountService(store, new TranslationService(store, i18n), null, new MenuService(), router);
+    accountService = new AccountService(store, (url) => new DynamicWindowService(url), new TranslationService(store, i18n), null, new MenuService(), router);
 
     expect((<any>router).history.current.fullPath).toBe('/');
     expect(store.getters.logon).toBe(false);
@@ -60,7 +61,7 @@ describe('Account Service test suite', () => {
     localStorage.setItem('jhi-authenticationToken', 'token');
 
     mockedAxios.get = jest.fn(apiName => (apiName === 'api/account' ? Promise.reject() : Promise.resolve({})));
-    accountService = await new AccountService(store, new TranslationService(store, i18n), null, new MenuService(), router);
+    accountService = new AccountService(store, (url) => new DynamicWindowService(url), new TranslationService(store, i18n), null, new MenuService(), router);
 
     expect((<any>router).history.current.fullPath).toBe('/');
     expect(accountService.authenticated).toBe(false);
@@ -71,21 +72,21 @@ describe('Account Service test suite', () => {
 
   it('should init service and check for authority', async () => {
     mockedAxios.get.mockReturnValue(Promise.resolve({ data: { authorities: ['USER'] } }));
-    accountService = await new AccountService(store, new TranslationService(store, i18n), null, new MenuService(), router);
+    accountService = new AccountService(store, (url) => new DynamicWindowService(url), new TranslationService(store, i18n), null, new MenuService(), router);
 
     expect(accountService.hasAnyAuthority('USER')).toBe(true);
   });
 
   it('should init service and not return any authorities', async () => {
     mockedAxios.get.mockReturnValue(Promise.resolve({ data: { authorities: ['USER'] } }));
-    accountService = await new AccountService(store, new TranslationService(store, i18n), null, new MenuService(), router);
+    accountService = new AccountService(store, (url) => new DynamicWindowService(url), new TranslationService(store, i18n), null, new MenuService(), router);
 
     expect(accountService.hasAnyAuthority('ADMIN')).toBe(false);
   });
 
   it('should init service as not authentified and not return any authorities', async () => {
     mockedAxios.get = jest.fn(apiName => (apiName === 'api/account' ? Promise.reject() : Promise.resolve({})));
-    accountService = await new AccountService(store, new TranslationService(store, i18n), null, new MenuService(), router);
+    accountService = new AccountService(store, (url) => new DynamicWindowService(url), new TranslationService(store, i18n), null, new MenuService(), router);
 
     expect(accountService.hasAnyAuthority('ADMIN')).toBe(false);
   });

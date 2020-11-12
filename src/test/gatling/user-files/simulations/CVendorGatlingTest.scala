@@ -72,7 +72,12 @@ class CVendorGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "code":"SAMPLE_TEXT"
                 , "name":"SAMPLE_TEXT"
+                , "type":"SAMPLE_TEXT"
+                , "location":"SAMPLE_TEXT"
+                , "idNo":"SAMPLE_TEXT"
+                , "tin":"SAMPLE_TEXT"
                 , "taxIdNo":"SAMPLE_TEXT"
                 , "taxIdName":"SAMPLE_TEXT"
                 , "branch":null
@@ -80,9 +85,7 @@ class CVendorGatlingTest extends Simulation {
                 , "phone":"SAMPLE_TEXT"
                 , "fax":"SAMPLE_TEXT"
                 , "website":"SAMPLE_TEXT"
-                , "type":"COMPANY"
                 , "paymentCategory":"SAMPLE_TEXT"
-                , "approvalStatus":"SAMPLE_TEXT"
                 , "dateTrx":"2020-01-01T00:00:00.000Z"
                 , "documentNo":"SAMPLE_TEXT"
                 , "documentAction":"SAMPLE_TEXT"

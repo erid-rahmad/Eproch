@@ -14,7 +14,17 @@ import VueI18n from 'vue-i18n'
 
 NProgress.configure({ showSpinner: false });
 
-const whiteList = ['/', '/auth-redirect', '/redirect', '/forbidden', '/not-found', '/login', '/register'];
+const whiteList = ['/',
+  '/auth-redirect',
+  '/redirect',
+  '/forbidden',
+  '/not-found',
+  '/login',
+  '/register',
+  '/account/activate',
+  '/account/reset/request',
+  '/account/reset/finish'
+];
 
 export default class RouterValidation {
 

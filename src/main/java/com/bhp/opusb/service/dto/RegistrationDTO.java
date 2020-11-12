@@ -89,9 +89,14 @@ public class RegistrationDTO {
     }
 
     public class CompanyProfile {
+        private String code;
         private String name;
-        private VendorType type;
+        private String type;
+        private String location;
+        private String idNo;
+        private String tin;
         private Boolean branch;
+        private Boolean sameAddress;
         private String phone;
         private String fax;
         private String email;
@@ -106,6 +111,14 @@ public class RegistrationDTO {
         private String postalCode;
         private Long fileId;
 
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
+
         public String getName() {
             return name;
         }
@@ -114,12 +127,36 @@ public class RegistrationDTO {
             this.name = name;
         }
 
-        public VendorType getType() {
+        public String getType() {
             return type;
         }
 
-        public void setType(VendorType type) {
+        public void setType(String type) {
             this.type = type;
+        }
+
+        public String getLocation() {
+            return location;
+        }
+
+        public void setLocation(String location) {
+            this.location = location;
+        }
+
+        public String getIdNo() {
+            return idNo;
+        }
+
+        public void setIdNo(String idNo) {
+            this.idNo = idNo;
+        }
+
+        public String getTin() {
+            return tin;
+        }
+
+        public void setTin(String tin) {
+            this.tin = tin;
         }
 
         public Boolean getBranch() {
@@ -128,6 +165,14 @@ public class RegistrationDTO {
 
         public void setBranch(Boolean branch) {
             this.branch = branch;
+        }
+
+        public Boolean getSameAddress() {
+            return sameAddress;
+        }
+
+        public void setSameAddress(Boolean sameAddress) {
+            this.sameAddress = sameAddress;
         }
 
         public String getPhone() {

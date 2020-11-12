@@ -86,6 +86,7 @@
     <include file="config/liquibase/changelog/20201009091800_added_entity_MVerificationLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201014053800_added_entity_ADOrganizationInfo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201016085600_added_entity_MMatchPO.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201028034600_added_entity_CVendorGroup.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021111500_added_entity_AdUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021111600_added_entity_AdUserAuthority.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021112000_added_entity_CDocumentType.xml" relativeToChangelogFile="false"/>
@@ -157,6 +158,7 @@
     <include file="config/liquibase/changelog/20201009091700_added_entity_constraints_MVerification.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201009091800_added_entity_constraints_MVerificationLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201014053800_added_entity_constraints_ADOrganizationInfo.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201028034600_added_entity_constraints_CVendorGroup.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021111500_added_entity_constraints_AdUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021111600_added_entity_constraints_AdUserAuthority.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021112000_added_entity_constraints_CDocumentType.xml" relativeToChangelogFile="false"/>

@@ -1,4 +1,4 @@
-id;e_invoice;taxable_employers;rate;uid;active;vendor_id;tax_id;ad_organization_id
+id;e_invoice;taxable_employers;rate;uid;active;vendor_id;tax_category_id;ad_organization_id
 1;true;false;18658;a0d228af-9928-4684-a94f-05ae45a54975;false;1;1;1
 2;true;true;39989;348c7448-8eae-453e-af8a-9fba2473062b;false;2;2;2
 3;true;true;90014;9d30ad4c-0006-4ea0-817b-6be11681675d;true;3;3;3

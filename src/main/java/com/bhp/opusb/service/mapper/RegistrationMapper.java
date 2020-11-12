@@ -28,7 +28,6 @@ public class RegistrationMapper {
 
     vendor.active(true)
       .adOrganization(organization)
-      .approvalStatus("PENDING")
       .branch(companyProfile.getBranch())
       .email(companyProfile.getEmail())
       .fax(companyProfile.getFax())
@@ -36,16 +35,25 @@ public class RegistrationMapper {
       .paymentCategory("RED")
       .phone(companyProfile.getPhone())
       .type(companyProfile.getType())
+      .location(companyProfile.getLocation())
+      .idNo(companyProfile.getIdNo())
+      .tin(companyProfile.getTin())
       .website(companyProfile.getWebsite())
       .taxIdName(companyProfile.getNpwpName())
       .taxIdNo(companyProfile.getNpwp())
       .dateTrx(LocalDate.now())
       .documentAction("APV")
       .documentNo("1000")
-      .documentStatus("SMT");
+      .documentStatus("SMT")
+      .code(String.valueOf(randomTimestamp()));
 
     return vendor;
   }
+
+    public static long randomTimestamp() {
+        long timestamp = System.currentTimeMillis() / 1000L;
+        return timestamp;
+    }
 
   public CLocation toLocation(CompanyProfile companyProfile) {
     CLocation location = new CLocation();
@@ -60,7 +68,7 @@ public class RegistrationMapper {
 
     return location;
   }
-  
+
   public CLocation toTaxLocation(CompanyProfile companyProfile) {
     CLocation location = new CLocation();
     CCity city = new CCity();
