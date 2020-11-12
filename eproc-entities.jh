@@ -159,6 +159,7 @@ entity CFunctionary {
 }
 
 entity CVendor {
+    code String
 	name String required
 	type String required
 	location String required
@@ -440,6 +441,16 @@ entity MMatchPO{
 	foreignTaxAmount String
 	mLocator String
 	adOrganization String
+    dateAccount LocalDate
+    cDocTypeMr String
+    orderSuffix String
+    lineNoPo String
+    lineNoMr String
+    isTaxable Boolean
+    cTaxCode String
+    cTaxName String
+    description String
+    mMatchType String
 }
 
 /**
@@ -488,7 +499,7 @@ relationship OneToMany {
  */
 relationship ManyToOne {
 	ADOrganizationInfo{adOrganization required} to ADOrganization
-	
+
 	/** This field should not empty for a supplier's user */
 	AdUser{cVendor} to CVendor
 	AdUser{adOrganization required} to ADOrganization
@@ -531,7 +542,7 @@ relationship ManyToOne {
 
 	CVendor{adOrganization required} to ADOrganization
 	CVendor{documentType required} to CDocumentType
-	
+
 	CVendorBusinessCat{vendor required} to CVendor
 	CVendorBusinessCat{businessCategory required} to CBusinessCategory
 	CVendorBusinessCat{adOrganization required} to ADOrganization

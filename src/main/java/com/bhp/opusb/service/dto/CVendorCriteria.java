@@ -26,6 +26,8 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter code;
+
     private StringFilter name;
 
     private StringFilter type;
@@ -83,6 +85,7 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     public CVendorCriteria(CVendorCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.code = other.code == null ? null : other.code.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.type = other.type == null ? null : other.type.copy();
         this.location = other.location == null ? null : other.location.copy();
@@ -122,6 +125,14 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getCode() {
+        return code;
+    }
+
+    public void setCode(StringFilter code) {
+        this.code = code;
     }
 
     public StringFilter getName() {
@@ -344,6 +355,7 @@ public class CVendorCriteria implements Serializable, Criteria {
         final CVendorCriteria that = (CVendorCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(code, that.code) &&
             Objects.equals(name, that.name) &&
             Objects.equals(type, that.type) &&
             Objects.equals(location, that.location) &&
@@ -376,6 +388,7 @@ public class CVendorCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        code,
         name,
         type,
         location,
@@ -409,6 +422,7 @@ public class CVendorCriteria implements Serializable, Criteria {
     public String toString() {
         return "CVendorCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (code != null ? "code=" + code + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (type != null ? "type=" + type + ", " : "") +
                 (location != null ? "location=" + location + ", " : "") +

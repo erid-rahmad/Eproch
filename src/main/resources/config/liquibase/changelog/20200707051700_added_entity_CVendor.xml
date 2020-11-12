@@ -194,4 +194,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20201110215600" author="dian-tri-budianto">
+        <addColumn tableName="c_vendor">
+            <column name="code" type="varchar(10)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

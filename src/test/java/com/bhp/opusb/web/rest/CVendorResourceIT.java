@@ -48,6 +48,9 @@ import org.springframework.transaction.annotation.Transactional;
 @WithMockUser
 public class CVendorResourceIT {
 
+    private static final String DEFAULT_CODE = "AAAAAAAAAA";
+    private static final String UPDATED_CODE = "BBBBBBBBBB";
+
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -143,6 +146,7 @@ public class CVendorResourceIT {
      */
     public static CVendor createEntity(EntityManager em) {
         CVendor cVendor = new CVendor()
+            .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
             .type(DEFAULT_TYPE)
             .location(DEFAULT_LOCATION)
@@ -195,6 +199,7 @@ public class CVendorResourceIT {
      */
     public static CVendor createUpdatedEntity(EntityManager em) {
         CVendor cVendor = new CVendor()
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .type(UPDATED_TYPE)
             .location(UPDATED_LOCATION)
@@ -261,6 +266,7 @@ public class CVendorResourceIT {
         List<CVendor> cVendorList = cVendorRepository.findAll();
         assertThat(cVendorList).hasSize(databaseSizeBeforeCreate + 1);
         CVendor testCVendor = cVendorList.get(cVendorList.size() - 1);
+        assertThat(testCVendor.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCVendor.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCVendor.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testCVendor.getLocation()).isEqualTo(DEFAULT_LOCATION);
@@ -526,6 +532,7 @@ public class CVendorResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendor.getId().intValue())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION)))
@@ -561,6 +568,7 @@ public class CVendorResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cVendor.getId().intValue()))
+            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.location").value(DEFAULT_LOCATION))
@@ -602,6 +610,84 @@ public class CVendorResourceIT {
 
         defaultCVendorShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCVendorShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByCodeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where code equals to DEFAULT_CODE
+        defaultCVendorShouldBeFound("code.equals=" + DEFAULT_CODE);
+
+        // Get all the cVendorList where code equals to UPDATED_CODE
+        defaultCVendorShouldNotBeFound("code.equals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByCodeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where code not equals to DEFAULT_CODE
+        defaultCVendorShouldNotBeFound("code.notEquals=" + DEFAULT_CODE);
+
+        // Get all the cVendorList where code not equals to UPDATED_CODE
+        defaultCVendorShouldBeFound("code.notEquals=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByCodeIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where code in DEFAULT_CODE or UPDATED_CODE
+        defaultCVendorShouldBeFound("code.in=" + DEFAULT_CODE + "," + UPDATED_CODE);
+
+        // Get all the cVendorList where code equals to UPDATED_CODE
+        defaultCVendorShouldNotBeFound("code.in=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByCodeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where code is not null
+        defaultCVendorShouldBeFound("code.specified=true");
+
+        // Get all the cVendorList where code is null
+        defaultCVendorShouldNotBeFound("code.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCVendorsByCodeContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where code contains DEFAULT_CODE
+        defaultCVendorShouldBeFound("code.contains=" + DEFAULT_CODE);
+
+        // Get all the cVendorList where code contains UPDATED_CODE
+        defaultCVendorShouldNotBeFound("code.contains=" + UPDATED_CODE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByCodeNotContainsSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where code does not contain DEFAULT_CODE
+        defaultCVendorShouldNotBeFound("code.doesNotContain=" + DEFAULT_CODE);
+
+        // Get all the cVendorList where code does not contain UPDATED_CODE
+        defaultCVendorShouldBeFound("code.doesNotContain=" + UPDATED_CODE);
     }
 
 
@@ -2272,7 +2358,6 @@ public class CVendorResourceIT {
         // Get all the cVendorList where vendorGroup equals to vendorGroupId + 1
         defaultCVendorShouldNotBeFound("vendorGroupId.equals=" + (vendorGroupId + 1));
     }
-
     public void getAllCVendorsByDocumentTypeIsEqualToSomething() throws Exception {
         // Get already existing entity
         CDocumentType documentType = cVendor.getDocumentType();
@@ -2285,7 +2370,6 @@ public class CVendorResourceIT {
         // Get all the cVendorList where documentType equals to documentTypeId + 1
         defaultCVendorShouldNotBeFound("documentTypeId.equals=" + (documentTypeId + 1));
     }
-
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -2294,6 +2378,7 @@ public class CVendorResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cVendor.getId().intValue())))
+            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].location").value(hasItem(DEFAULT_LOCATION)))
@@ -2363,6 +2448,7 @@ public class CVendorResourceIT {
         // Disconnect from session so that the updates on updatedCVendor are not directly saved in db
         em.detach(updatedCVendor);
         updatedCVendor
+            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .type(UPDATED_TYPE)
             .location(UPDATED_LOCATION)
@@ -2396,6 +2482,7 @@ public class CVendorResourceIT {
         List<CVendor> cVendorList = cVendorRepository.findAll();
         assertThat(cVendorList).hasSize(databaseSizeBeforeUpdate);
         CVendor testCVendor = cVendorList.get(cVendorList.size() - 1);
+        assertThat(testCVendor.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCVendor.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCVendor.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testCVendor.getLocation()).isEqualTo(UPDATED_LOCATION);

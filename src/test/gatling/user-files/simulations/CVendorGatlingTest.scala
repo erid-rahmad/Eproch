@@ -72,6 +72,7 @@ class CVendorGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "code":"SAMPLE_TEXT"
                 , "name":"SAMPLE_TEXT"
                 , "type":"SAMPLE_TEXT"
                 , "location":"SAMPLE_TEXT"

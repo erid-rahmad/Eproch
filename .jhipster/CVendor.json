@@ -2,6 +2,10 @@
     "name": "CVendor",
     "fields": [
         {
+            "fieldName": "code",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
