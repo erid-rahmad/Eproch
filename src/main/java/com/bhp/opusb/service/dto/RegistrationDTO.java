@@ -89,6 +89,7 @@ public class RegistrationDTO {
     }
 
     public class CompanyProfile {
+        private String code;
         private String name;
         private String type;
         private String location;
@@ -109,6 +110,14 @@ public class RegistrationDTO {
         private Long cityId;
         private String postalCode;
         private Long fileId;
+
+        public String getCode() {
+            return code;
+        }
+
+        public void setCode(String code) {
+            this.code = code;
+        }
 
         public String getName() {
             return name;

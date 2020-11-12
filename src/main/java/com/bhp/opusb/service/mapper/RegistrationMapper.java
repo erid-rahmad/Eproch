@@ -45,10 +45,16 @@ public class RegistrationMapper {
       .dateTrx(LocalDate.now())
       .documentAction("APV")
       .documentNo("1000")
-      .documentStatus("SMT");
+      .documentStatus("SMT")
+      .code(String.valueOf(randomTimestamp()));
 
     return vendor;
   }
+
+    public static long randomTimestamp() {
+        long timestamp = System.currentTimeMillis() / 1000L;
+        return timestamp;
+    }
 
   public CLocation toLocation(CompanyProfile companyProfile) {
     CLocation location = new CLocation();

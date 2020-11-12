@@ -36,6 +36,9 @@ public class CVendor extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "code")
+    private String code;
+
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
@@ -137,6 +140,19 @@ public class CVendor extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public CVendor code(String code) {
+        this.code = code;
+        return this;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getName() {
@@ -503,6 +519,7 @@ public class CVendor extends AbstractAuditingEntity {
     public String toString() {
         return "CVendor{" +
             "id=" + getId() +
+            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", type='" + getType() + "'" +
             ", location='" + getLocation() + "'" +
