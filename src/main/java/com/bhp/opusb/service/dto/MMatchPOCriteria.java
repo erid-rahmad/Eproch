@@ -83,6 +83,28 @@ public class MMatchPOCriteria implements Serializable, Criteria {
 
     private StringFilter adOrganization;
 
+    private LocalDateFilter dateAccount;
+
+    private StringFilter cDocTypeMr;
+
+    private StringFilter orderSuffix;
+
+    private StringFilter lineNoPo;
+
+    private StringFilter lineNoMr;
+
+    private BooleanFilter isTaxable;
+
+    private StringFilter cTaxCode;
+
+    private StringFilter cTaxName;
+
+    private StringFilter description;
+
+    private StringFilter mMatchType;
+
+    private StringFilter mWarehouse;
+
     public MMatchPOCriteria() {
     }
 
@@ -116,6 +138,17 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.foreignTaxAmount = other.foreignTaxAmount == null ? null : other.foreignTaxAmount.copy();
         this.mLocator = other.mLocator == null ? null : other.mLocator.copy();
         this.adOrganization = other.adOrganization == null ? null : other.adOrganization.copy();
+        this.dateAccount = other.dateAccount == null ? null : other.dateAccount.copy();
+        this.cDocTypeMr = other.cDocTypeMr == null ? null : other.cDocTypeMr.copy();
+        this.orderSuffix = other.orderSuffix == null ? null : other.orderSuffix.copy();
+        this.lineNoPo = other.lineNoPo == null ? null : other.lineNoPo.copy();
+        this.lineNoMr = other.lineNoMr == null ? null : other.lineNoMr.copy();
+        this.isTaxable = other.isTaxable == null ? null : other.isTaxable.copy();
+        this.cTaxCode = other.cTaxCode == null ? null : other.cTaxCode.copy();
+        this.cTaxName = other.cTaxName == null ? null : other.cTaxName.copy();
+        this.description = other.description == null ? null : other.description.copy();
+        this.mMatchType = other.mMatchType == null ? null : other.mMatchType.copy();
+        this.mWarehouse = other.mWarehouse == null ? null : other.mWarehouse.copy();
     }
 
     @Override
@@ -355,6 +388,94 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.adOrganization = adOrganization;
     }
 
+    public LocalDateFilter getDateAccount() {
+        return dateAccount;
+    }
+
+    public void setDateAccount(LocalDateFilter dateAccount) {
+        this.dateAccount = dateAccount;
+    }
+
+    public StringFilter getcDocTypeMr() {
+        return cDocTypeMr;
+    }
+
+    public void setcDocTypeMr(StringFilter cDocTypeMr) {
+        this.cDocTypeMr = cDocTypeMr;
+    }
+
+    public StringFilter getOrderSuffix() {
+        return orderSuffix;
+    }
+
+    public void setOrderSuffix(StringFilter orderSuffix) {
+        this.orderSuffix = orderSuffix;
+    }
+
+    public StringFilter getLineNoPo() {
+        return lineNoPo;
+    }
+
+    public void setLineNoPo(StringFilter lineNoPo) {
+        this.lineNoPo = lineNoPo;
+    }
+
+    public StringFilter getLineNoMr() {
+        return lineNoMr;
+    }
+
+    public void setLineNoMr(StringFilter lineNoMr) {
+        this.lineNoMr = lineNoMr;
+    }
+
+    public BooleanFilter getIsTaxable() {
+        return isTaxable;
+    }
+
+    public void setIsTaxable(BooleanFilter isTaxable) {
+        this.isTaxable = isTaxable;
+    }
+
+    public StringFilter getcTaxCode() {
+        return cTaxCode;
+    }
+
+    public void setcTaxCode(StringFilter cTaxCode) {
+        this.cTaxCode = cTaxCode;
+    }
+
+    public StringFilter getcTaxName() {
+        return cTaxName;
+    }
+
+    public void setcTaxName(StringFilter cTaxName) {
+        this.cTaxName = cTaxName;
+    }
+
+    public StringFilter getDescription() {
+        return description;
+    }
+
+    public void setDescription(StringFilter description) {
+        this.description = description;
+    }
+
+    public StringFilter getmMatchType() {
+        return mMatchType;
+    }
+
+    public void setmMatchType(StringFilter mMatchType) {
+        this.mMatchType = mMatchType;
+    }
+
+    public StringFilter getmWarehouse() {
+        return mWarehouse;
+    }
+
+    public void setmWarehouse(StringFilter mWarehouse) {
+        this.mWarehouse = mWarehouse;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -394,7 +515,18 @@ public class MMatchPOCriteria implements Serializable, Criteria {
             Objects.equals(taxAmount, that.taxAmount) &&
             Objects.equals(foreignTaxAmount, that.foreignTaxAmount) &&
             Objects.equals(mLocator, that.mLocator) &&
-            Objects.equals(adOrganization, that.adOrganization);
+            Objects.equals(adOrganization, that.adOrganization) &&
+            Objects.equals(dateAccount, that.dateAccount) &&
+            Objects.equals(cDocTypeMr, that.cDocTypeMr) &&
+            Objects.equals(orderSuffix, that.orderSuffix) &&
+            Objects.equals(lineNoPo, that.lineNoPo) &&
+            Objects.equals(lineNoMr, that.lineNoMr) &&
+            Objects.equals(isTaxable, that.isTaxable) &&
+            Objects.equals(cTaxCode, that.cTaxCode) &&
+            Objects.equals(cTaxName, that.cTaxName) &&
+            Objects.equals(description, that.description) &&
+            Objects.equals(mMatchType, that.mMatchType) &&
+            Objects.equals(mWarehouse, that.mWarehouse);
     }
 
     @Override
@@ -428,7 +560,18 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         taxAmount,
         foreignTaxAmount,
         mLocator,
-        adOrganization
+        adOrganization,
+        dateAccount,
+        cDocTypeMr,
+        orderSuffix,
+        lineNoPo,
+        lineNoMr,
+        isTaxable,
+        cTaxCode,
+        cTaxName,
+        description,
+        mMatchType,
+        mWarehouse
         );
     }
 
@@ -464,6 +607,17 @@ public class MMatchPOCriteria implements Serializable, Criteria {
                 (foreignTaxAmount != null ? "foreignTaxAmount=" + foreignTaxAmount + ", " : "") +
                 (mLocator != null ? "mLocator=" + mLocator + ", " : "") +
                 (adOrganization != null ? "adOrganization=" + adOrganization + ", " : "") +
+                (dateAccount != null ? "dateAccount=" + dateAccount + ", " : "") +
+                (cDocTypeMr != null ? "cDocTypeMr=" + cDocTypeMr + ", " : "") +
+                (orderSuffix != null ? "orderSuffix=" + orderSuffix + ", " : "") +
+                (lineNoPo != null ? "lineNoPo=" + lineNoPo + ", " : "") +
+                (lineNoMr != null ? "lineNoMr=" + lineNoMr + ", " : "") +
+                (isTaxable != null ? "isTaxable=" + isTaxable + ", " : "") +
+                (cTaxCode != null ? "cTaxCode=" + cTaxCode + ", " : "") +
+                (cTaxName != null ? "cTaxName=" + cTaxName + ", " : "") +
+                (description != null ? "description=" + description + ", " : "") +
+                (mMatchType != null ? "mMatchType=" + mMatchType + ", " : "") +
+                (mWarehouse != null ? "mWarehouse=" + mWarehouse + ", " : "") +
             "}";
     }
 

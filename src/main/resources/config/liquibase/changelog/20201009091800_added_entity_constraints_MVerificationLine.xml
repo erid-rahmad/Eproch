@@ -7,7 +7,7 @@
         Added the constraints for entity MVerificationLine.
     -->
     <changeSet id="20201009091800-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="verification_id"
                                  baseTableName="m_verification_line"
                                  constraintName="fk_m_verification_line_verification_id"
@@ -33,4 +33,27 @@
                                  referencedTableName="c_unit_of_measure"/>
 
     </changeSet>
+
+    <changeSet id="20201113091800-3" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="c_element"
+                                 baseTableName="m_verification_line"
+                                 constraintName="fk_m_verification_line_c_element"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_element_value"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_cost_center"
+                                 baseTableName="m_verification_line"
+                                 constraintName="fk_m_verification_line_c_cost_center"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_cost_center"/>
+
+        <addForeignKeyConstraint baseColumnNames="currency_id"
+                                 baseTableName="m_verification_line"
+                                 constraintName="fk_m_verification_line_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_currency"/>
+
+    </changeSet>
+
 </databaseChangeLog>

@@ -112,6 +112,50 @@
         {
             "fieldName": "adOrganization",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "dateAccount",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "cDocTypeMr",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "orderSuffix",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lineNoPo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "lineNoMr",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "isTaxable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "cTaxCode",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "cTaxName",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mMatchType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mWarehouse",
+            "fieldType": "String"
         }
     ],
     "relationships": [],

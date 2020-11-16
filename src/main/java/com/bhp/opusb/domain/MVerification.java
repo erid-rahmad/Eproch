@@ -75,6 +75,18 @@ public class MVerification extends AbstractAuditingEntity {
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "foreign_grand_total", precision = 21, scale = 2)
+    private BigDecimal foreignGrandTotal;
+
+    @Column(name = "foreign_tax_amount", precision = 21, scale = 2)
+    private BigDecimal foreignTaxAmount;
+
+    @Column(name = "data_submit")
+    private LocalDate dataSubmit;
+
+    @Column(name = "date_acct")
+    private LocalDate dateAcct;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mVerifications")
@@ -84,6 +96,16 @@ public class MVerification extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("mVerifications")
     private CCurrency currency;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mVerifications")
+    private CVendor vendor;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mVerifications")
+    private AdUser pic;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -263,6 +285,58 @@ public class MVerification extends AbstractAuditingEntity {
         this.active = active;
     }
 
+    public BigDecimal getForeignGrandTotal() {
+        return foreignGrandTotal;
+    }
+
+    public MVerification foreignGrandTotal(BigDecimal foreignGrandTotal) {
+        this.foreignGrandTotal = foreignGrandTotal;
+        return this;
+    }
+
+    public void setForeignGrandTotal(BigDecimal foreignGrandTotal) {
+        this.foreignGrandTotal = foreignGrandTotal;
+    }
+
+    public BigDecimal getForeignTaxAmount() {
+        return foreignTaxAmount;
+    }
+
+    public MVerification foreignTaxAmount(BigDecimal foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+        return this;
+    }
+
+    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+    }
+
+    public LocalDate getDataSubmit() {
+        return dataSubmit;
+    }
+
+    public MVerification dataSubmit(LocalDate dataSubmit) {
+        this.dataSubmit = dataSubmit;
+        return this;
+    }
+
+    public void setDataSubmit(LocalDate dataSubmit) {
+        this.dataSubmit = dataSubmit;
+    }
+
+    public LocalDate getDateAcct() {
+        return dateAcct;
+    }
+
+    public MVerification dateAcct(LocalDate dateAcct) {
+        this.dateAcct = dateAcct;
+        return this;
+    }
+
+    public void setDateAcct(LocalDate dateAcct) {
+        this.dateAcct = dateAcct;
+    }
+
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -288,13 +362,39 @@ public class MVerification extends AbstractAuditingEntity {
     public void setCurrency(CCurrency cCurrency) {
         this.currency = cCurrency;
     }
+
+    public CVendor getVendor() {
+        return vendor;
+    }
+
+    public MVerification vendor(CVendor cVendor) {
+        this.vendor = cVendor;
+        return this;
+    }
+
+    public void setVendor(CVendor cVendor) {
+        this.vendor = cVendor;
+    }
+
+    public AdUser getPic() {
+        return pic;
+    }
+
+    public MVerification pic(AdUser adUser) {
+        this.pic = adUser;
+        return this;
+    }
+
+    public void setPic(AdUser adUser) {
+        this.pic = adUser;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
     public void assignUUID() {
         this.uid = UUID.randomUUID();
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -328,6 +428,10 @@ public class MVerification extends AbstractAuditingEntity {
             ", verificationStatus='" + getVerificationStatus() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", foreignGrandTotal=" + getForeignGrandTotal() +
+            ", foreignTaxAmount=" + getForeignTaxAmount() +
+            ", dataSubmit='" + getDataSubmit() + "'" +
+            ", dateAcct='" + getDateAcct() + "'" +
             "}";
     }
 }

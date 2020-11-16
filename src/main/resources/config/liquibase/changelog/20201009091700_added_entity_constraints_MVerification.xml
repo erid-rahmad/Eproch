@@ -7,7 +7,7 @@
         Added the constraints for entity MVerification.
     -->
     <changeSet id="20201009091700-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="m_verification"
                                  constraintName="fk_m_verification_ad_organization_id"
@@ -23,7 +23,7 @@
     </changeSet>
 
     <changeSet id="20201009091700-3" author="dian-tri-budianto">
-        
+
         <addForeignKeyConstraint baseColumnNames="vendor_id"
                                  baseTableName="m_verification"
                                  constraintName="fk_m_verification_vendor_id"
@@ -35,6 +35,19 @@
                                  constraintName="fk_m_verification_pic_user_id"
                                  referencedColumnNames="user_id"
                                  referencedTableName="c_person_in_charge"/>
-        
+
+    </changeSet>
+
+    <changeSet id="20201009091700-4" author="dian-tri-budianto">
+
+        <dropForeignKeyConstraint baseTableName="m_verification"
+                                  constraintName="fk_m_verification_pic_user_id"/>
+
+        <addForeignKeyConstraint baseColumnNames="pic_user_id"
+                                 baseTableName="m_verification"
+                                 constraintName="fk_m_verification_pic_user_id"
+                                 referencedColumnNames="user_id"
+                                 referencedTableName="ad_user"/>
+
     </changeSet>
 </databaseChangeLog>

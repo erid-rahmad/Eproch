@@ -175,6 +175,39 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
             if (criteria.getAdOrganization() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getAdOrganization(), MMatchPO_.adOrganization));
             }
+            if (criteria.getDateAccount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateAccount(), MMatchPO_.dateAccount));
+            }
+            if (criteria.getcDocTypeMr() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getcDocTypeMr(), MMatchPO_.cDocTypeMr));
+            }
+            if (criteria.getOrderSuffix() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getOrderSuffix(), MMatchPO_.orderSuffix));
+            }
+            if (criteria.getLineNoPo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLineNoPo(), MMatchPO_.lineNoPo));
+            }
+            if (criteria.getLineNoMr() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLineNoMr(), MMatchPO_.lineNoMr));
+            }
+            if (criteria.getIsTaxable() != null) {
+                specification = specification.and(buildSpecification(criteria.getIsTaxable(), MMatchPO_.isTaxable));
+            }
+            if (criteria.getcTaxCode() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getcTaxCode(), MMatchPO_.cTaxCode));
+            }
+            if (criteria.getcTaxName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getcTaxName(), MMatchPO_.cTaxName));
+            }
+            if (criteria.getDescription() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDescription(), MMatchPO_.description));
+            }
+            if (criteria.getmMatchType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getmMatchType(), MMatchPO_.mMatchType));
+            }
+            if (criteria.getmWarehouse() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getmWarehouse(), MMatchPO_.mWarehouse));
+            }
         }
         return specification;
     }

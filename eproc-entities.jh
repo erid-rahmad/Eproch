@@ -396,11 +396,16 @@ entity MVerification {
 	verificationStatus String required
 	uid UUID
 	active Boolean
+    foreignGrandTotal BigDecimal
+    foreignTaxAmount BigDecimal
+    dataSubmit LocalDate
+    dateAcct LocalDate
 }
 
 entity MVerificationLine {
-	orderNo String required
-	receiptNo String required
+    verificationNo String
+	poNo String required
+	receiveNo String required
 	deliveryNo String required
 	description String
 	qty Long required
@@ -409,6 +414,12 @@ entity MVerificationLine {
 	taxAmount BigDecimal required
 	uid UUID
 	active Boolean
+    lineNo String
+    conversionRate String
+    foreignActual BigDecimal
+    foreignTotalLines BigDecimal
+    foreignTaxAmount BigDecimal
+    receiveDate LocalDate
 }
 
 entity MMatchPO{
@@ -440,16 +451,17 @@ entity MMatchPO{
 	foreignTaxAmount String
 	mLocator String
 	adOrganization String
-	dateAccount LocalDate
-	cDocTypeMr String
-	orderSuffix String
-	lineNoPo String
-	lineNoMr String
-	isTaxable Boolean
-	cTaxCode String
-	cTaxName String
-	description String
-	mMatchType String
+    dateAccount LocalDate
+    cDocTypeMr String
+    orderSuffix String
+    lineNoPo String
+    lineNoMr String
+    isTaxable Boolean
+    cTaxCode String
+    cTaxName String
+    description String
+    mMatchType String
+    mWarehouse String
 }
 
 /**
@@ -607,11 +619,15 @@ relationship ManyToOne {
 	//releated vendor invoice verification
 	MVerification{adOrganization required} to ADOrganization
 	MVerification{currency required} to CCurrency
+    MVerification{vendor required} to CVendor
+    MVerification{pic required} to AdUser
 	MVerificationLine{verification required} to MVerification
 	MVerificationLine{adOrganization required} to ADOrganization
 	MVerificationLine{product required} to CProduct
 	MVerificationLine{uom required} to CUnitOfMeasure
-
+    MVerificationLine{cElement required} to CElementValue
+    MVerificationLine{cCostCenter required} to CCostCenter
+    MVerificationLine{cCurrency required} to CCurrency
 	CVendorGroup{adOrganization required} to ADOrganization
 	CVendor{vendorGroup} to CVendorGroup
 }

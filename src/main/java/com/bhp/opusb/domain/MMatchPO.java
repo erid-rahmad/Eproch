@@ -108,6 +108,39 @@ public class MMatchPO implements Serializable {
     @Column(name = "ad_organization")
     private String adOrganization;
 
+    @Column(name = "date_account")
+    private LocalDate dateAccount;
+
+    @Column(name = "c_doc_type_mr")
+    private String cDocTypeMr;
+
+    @Column(name = "order_suffix")
+    private String orderSuffix;
+
+    @Column(name = "line_no_po")
+    private String lineNoPo;
+
+    @Column(name = "line_no_mr")
+    private String lineNoMr;
+
+    @Column(name = "is_taxable")
+    private Boolean isTaxable;
+
+    @Column(name = "c_tax_code")
+    private String cTaxCode;
+
+    @Column(name = "c_tax_name")
+    private String cTaxName;
+
+    @Column(name = "description")
+    private String description;
+
+    @Column(name = "m_match_type")
+    private String mMatchType;
+
+    @Column(name = "m_warehouse")
+    private String mWarehouse;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -480,6 +513,149 @@ public class MMatchPO implements Serializable {
     public void setAdOrganization(String adOrganization) {
         this.adOrganization = adOrganization;
     }
+
+    public LocalDate getDateAccount() {
+        return dateAccount;
+    }
+
+    public MMatchPO dateAccount(LocalDate dateAccount) {
+        this.dateAccount = dateAccount;
+        return this;
+    }
+
+    public void setDateAccount(LocalDate dateAccount) {
+        this.dateAccount = dateAccount;
+    }
+
+    public String getcDocTypeMr() {
+        return cDocTypeMr;
+    }
+
+    public MMatchPO cDocTypeMr(String cDocTypeMr) {
+        this.cDocTypeMr = cDocTypeMr;
+        return this;
+    }
+
+    public void setcDocTypeMr(String cDocTypeMr) {
+        this.cDocTypeMr = cDocTypeMr;
+    }
+
+    public String getOrderSuffix() {
+        return orderSuffix;
+    }
+
+    public MMatchPO orderSuffix(String orderSuffix) {
+        this.orderSuffix = orderSuffix;
+        return this;
+    }
+
+    public void setOrderSuffix(String orderSuffix) {
+        this.orderSuffix = orderSuffix;
+    }
+
+    public String getLineNoPo() {
+        return lineNoPo;
+    }
+
+    public MMatchPO lineNoPo(String lineNoPo) {
+        this.lineNoPo = lineNoPo;
+        return this;
+    }
+
+    public void setLineNoPo(String lineNoPo) {
+        this.lineNoPo = lineNoPo;
+    }
+
+    public String getLineNoMr() {
+        return lineNoMr;
+    }
+
+    public MMatchPO lineNoMr(String lineNoMr) {
+        this.lineNoMr = lineNoMr;
+        return this;
+    }
+
+    public void setLineNoMr(String lineNoMr) {
+        this.lineNoMr = lineNoMr;
+    }
+
+    public Boolean isIsTaxable() {
+        return isTaxable;
+    }
+
+    public MMatchPO isTaxable(Boolean isTaxable) {
+        this.isTaxable = isTaxable;
+        return this;
+    }
+
+    public void setIsTaxable(Boolean isTaxable) {
+        this.isTaxable = isTaxable;
+    }
+
+    public String getcTaxCode() {
+        return cTaxCode;
+    }
+
+    public MMatchPO cTaxCode(String cTaxCode) {
+        this.cTaxCode = cTaxCode;
+        return this;
+    }
+
+    public void setcTaxCode(String cTaxCode) {
+        this.cTaxCode = cTaxCode;
+    }
+
+    public String getcTaxName() {
+        return cTaxName;
+    }
+
+    public MMatchPO cTaxName(String cTaxName) {
+        this.cTaxName = cTaxName;
+        return this;
+    }
+
+    public void setcTaxName(String cTaxName) {
+        this.cTaxName = cTaxName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public MMatchPO description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getmMatchType() {
+        return mMatchType;
+    }
+
+    public MMatchPO mMatchType(String mMatchType) {
+        this.mMatchType = mMatchType;
+        return this;
+    }
+
+    public void setmMatchType(String mMatchType) {
+        this.mMatchType = mMatchType;
+    }
+
+    public String getmWarehouse() {
+        return mWarehouse;
+    }
+
+    public MMatchPO mWarehouse(String mWarehouse) {
+        this.mWarehouse = mWarehouse;
+        return this;
+    }
+
+    public void setmWarehouse(String mWarehouse) {
+        this.mWarehouse = mWarehouse;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @Override
@@ -530,6 +706,17 @@ public class MMatchPO implements Serializable {
             ", foreignTaxAmount='" + getForeignTaxAmount() + "'" +
             ", mLocator='" + getmLocator() + "'" +
             ", adOrganization='" + getAdOrganization() + "'" +
+            ", dateAccount='" + getDateAccount() + "'" +
+            ", cDocTypeMr='" + getcDocTypeMr() + "'" +
+            ", orderSuffix='" + getOrderSuffix() + "'" +
+            ", lineNoPo='" + getLineNoPo() + "'" +
+            ", lineNoMr='" + getLineNoMr() + "'" +
+            ", isTaxable='" + isIsTaxable() + "'" +
+            ", cTaxCode='" + getcTaxCode() + "'" +
+            ", cTaxName='" + getcTaxName() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", mMatchType='" + getmMatchType() + "'" +
+            ", mWarehouse='" + getmWarehouse() + "'" +
             "}";
     }
 }

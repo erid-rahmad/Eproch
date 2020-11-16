@@ -7,8 +7,8 @@ import java.util.Objects;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MMatchPO} entity.
  */
-public class MMatchPODTO implements Serializable {
-    
+public class MMatchPODTO extends AbstractAuditingDTO {
+
     private Long id;
 
     private String cDocType;
@@ -67,7 +67,29 @@ public class MMatchPODTO implements Serializable {
 
     private String adOrganization;
 
-    
+    private LocalDate dateAccount;
+
+    private String cDocTypeMr;
+
+    private String orderSuffix;
+
+    private String lineNoPo;
+
+    private String lineNoMr;
+
+    private Boolean isTaxable;
+
+    private String cTaxCode;
+
+    private String cTaxName;
+
+    private String description;
+
+    private String mMatchType;
+
+    private String mWarehouse;
+
+
     public Long getId() {
         return id;
     }
@@ -300,6 +322,94 @@ public class MMatchPODTO implements Serializable {
         this.adOrganization = adOrganization;
     }
 
+    public LocalDate getDateAccount() {
+        return dateAccount;
+    }
+
+    public void setDateAccount(LocalDate dateAccount) {
+        this.dateAccount = dateAccount;
+    }
+
+    public String getcDocTypeMr() {
+        return cDocTypeMr;
+    }
+
+    public void setcDocTypeMr(String cDocTypeMr) {
+        this.cDocTypeMr = cDocTypeMr;
+    }
+
+    public String getOrderSuffix() {
+        return orderSuffix;
+    }
+
+    public void setOrderSuffix(String orderSuffix) {
+        this.orderSuffix = orderSuffix;
+    }
+
+    public String getLineNoPo() {
+        return lineNoPo;
+    }
+
+    public void setLineNoPo(String lineNoPo) {
+        this.lineNoPo = lineNoPo;
+    }
+
+    public String getLineNoMr() {
+        return lineNoMr;
+    }
+
+    public void setLineNoMr(String lineNoMr) {
+        this.lineNoMr = lineNoMr;
+    }
+
+    public Boolean isIsTaxable() {
+        return isTaxable;
+    }
+
+    public void setIsTaxable(Boolean isTaxable) {
+        this.isTaxable = isTaxable;
+    }
+
+    public String getcTaxCode() {
+        return cTaxCode;
+    }
+
+    public void setcTaxCode(String cTaxCode) {
+        this.cTaxCode = cTaxCode;
+    }
+
+    public String getcTaxName() {
+        return cTaxName;
+    }
+
+    public void setcTaxName(String cTaxName) {
+        this.cTaxName = cTaxName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getmMatchType() {
+        return mMatchType;
+    }
+
+    public void setmMatchType(String mMatchType) {
+        this.mMatchType = mMatchType;
+    }
+
+    public String getmWarehouse() {
+        return mWarehouse;
+    }
+
+    public void setmWarehouse(String mWarehouse) {
+        this.mWarehouse = mWarehouse;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -353,6 +463,17 @@ public class MMatchPODTO implements Serializable {
             ", foreignTaxAmount='" + getForeignTaxAmount() + "'" +
             ", mLocator='" + getmLocator() + "'" +
             ", adOrganization='" + getAdOrganization() + "'" +
+            ", dateAccount='" + getDateAccount() + "'" +
+            ", cDocTypeMr='" + getcDocTypeMr() + "'" +
+            ", orderSuffix='" + getOrderSuffix() + "'" +
+            ", lineNoPo='" + getLineNoPo() + "'" +
+            ", lineNoMr='" + getLineNoMr() + "'" +
+            ", isTaxable='" + isIsTaxable() + "'" +
+            ", cTaxCode='" + getcTaxCode() + "'" +
+            ", cTaxName='" + getcTaxName() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", mMatchType='" + getmMatchType() + "'" +
+            ", mWarehouse='" + getmWarehouse() + "'" +
             "}";
     }
 }

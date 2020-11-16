@@ -100,6 +100,17 @@ class MMatchPOGatlingTest extends Simulation {
                 , "foreignTaxAmount":"SAMPLE_TEXT"
                 , "mLocator":"SAMPLE_TEXT"
                 , "adOrganization":"SAMPLE_TEXT"
+                , "dateAccount":"2020-01-01T00:00:00.000Z"
+                , "cDocTypeMr":"SAMPLE_TEXT"
+                , "orderSuffix":"SAMPLE_TEXT"
+                , "lineNoPo":"SAMPLE_TEXT"
+                , "lineNoMr":"SAMPLE_TEXT"
+                , "isTaxable":null
+                , "cTaxCode":"SAMPLE_TEXT"
+                , "cTaxName":"SAMPLE_TEXT"
+                , "description":"SAMPLE_TEXT"
+                , "mMatchType":"SAMPLE_TEXT"
+                , "mWarehouse":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_mMatchPO_url"))).exitHereIfFailed
