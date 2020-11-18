@@ -11,6 +11,7 @@ import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.BigDecimalFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -28,9 +29,11 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter orderNo;
+    private StringFilter verificationNo;
 
-    private StringFilter receiptNo;
+    private StringFilter poNo;
+
+    private StringFilter receiveNo;
 
     private StringFilter deliveryNo;
 
@@ -48,6 +51,18 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private StringFilter lineNo;
+
+    private StringFilter conversionRate;
+
+    private BigDecimalFilter foreignActual;
+
+    private BigDecimalFilter foreignTotalLines;
+
+    private BigDecimalFilter foreignTaxAmount;
+
+    private LocalDateFilter receiveDate;
+
     private LongFilter verificationId;
 
     private LongFilter adOrganizationId;
@@ -56,13 +71,20 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private LongFilter uomId;
 
+    private LongFilter cElementId;
+
+    private LongFilter cCostCenterId;
+
+    private LongFilter cCurrencyId;
+
     public MVerificationLineCriteria() {
     }
 
     public MVerificationLineCriteria(MVerificationLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.orderNo = other.orderNo == null ? null : other.orderNo.copy();
-        this.receiptNo = other.receiptNo == null ? null : other.receiptNo.copy();
+        this.verificationNo = other.verificationNo == null ? null : other.verificationNo.copy();
+        this.poNo = other.poNo == null ? null : other.poNo.copy();
+        this.receiveNo = other.receiveNo == null ? null : other.receiveNo.copy();
         this.deliveryNo = other.deliveryNo == null ? null : other.deliveryNo.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.qty = other.qty == null ? null : other.qty.copy();
@@ -71,10 +93,19 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.taxAmount = other.taxAmount == null ? null : other.taxAmount.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.lineNo = other.lineNo == null ? null : other.lineNo.copy();
+        this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
+        this.foreignActual = other.foreignActual == null ? null : other.foreignActual.copy();
+        this.foreignTotalLines = other.foreignTotalLines == null ? null : other.foreignTotalLines.copy();
+        this.foreignTaxAmount = other.foreignTaxAmount == null ? null : other.foreignTaxAmount.copy();
+        this.receiveDate = other.receiveDate == null ? null : other.receiveDate.copy();
         this.verificationId = other.verificationId == null ? null : other.verificationId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.productId = other.productId == null ? null : other.productId.copy();
         this.uomId = other.uomId == null ? null : other.uomId.copy();
+        this.cElementId = other.cElementId == null ? null : other.cElementId.copy();
+        this.cCostCenterId = other.cCostCenterId == null ? null : other.cCostCenterId.copy();
+        this.cCurrencyId = other.cCurrencyId == null ? null : other.cCurrencyId.copy();
     }
 
     @Override
@@ -90,20 +121,28 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getOrderNo() {
-        return orderNo;
+    public StringFilter getVerificationNo() {
+        return verificationNo;
     }
 
-    public void setOrderNo(StringFilter orderNo) {
-        this.orderNo = orderNo;
+    public void setVerificationNo(StringFilter verificationNo) {
+        this.verificationNo = verificationNo;
     }
 
-    public StringFilter getReceiptNo() {
-        return receiptNo;
+    public StringFilter getPoNo() {
+        return poNo;
     }
 
-    public void setReceiptNo(StringFilter receiptNo) {
-        this.receiptNo = receiptNo;
+    public void setPoNo(StringFilter poNo) {
+        this.poNo = poNo;
+    }
+
+    public StringFilter getReceiveNo() {
+        return receiveNo;
+    }
+
+    public void setReceiveNo(StringFilter receiveNo) {
+        this.receiveNo = receiveNo;
     }
 
     public StringFilter getDeliveryNo() {
@@ -170,6 +209,54 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public StringFilter getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(StringFilter lineNo) {
+        this.lineNo = lineNo;
+    }
+
+    public StringFilter getConversionRate() {
+        return conversionRate;
+    }
+
+    public void setConversionRate(StringFilter conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    public BigDecimalFilter getForeignActual() {
+        return foreignActual;
+    }
+
+    public void setForeignActual(BigDecimalFilter foreignActual) {
+        this.foreignActual = foreignActual;
+    }
+
+    public BigDecimalFilter getForeignTotalLines() {
+        return foreignTotalLines;
+    }
+
+    public void setForeignTotalLines(BigDecimalFilter foreignTotalLines) {
+        this.foreignTotalLines = foreignTotalLines;
+    }
+
+    public BigDecimalFilter getForeignTaxAmount() {
+        return foreignTaxAmount;
+    }
+
+    public void setForeignTaxAmount(BigDecimalFilter foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+    }
+
+    public LocalDateFilter getReceiveDate() {
+        return receiveDate;
+    }
+
+    public void setReceiveDate(LocalDateFilter receiveDate) {
+        this.receiveDate = receiveDate;
+    }
+
     public LongFilter getVerificationId() {
         return verificationId;
     }
@@ -202,6 +289,30 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.uomId = uomId;
     }
 
+    public LongFilter getCElementId() {
+        return cElementId;
+    }
+
+    public void setCElementId(LongFilter cElementId) {
+        this.cElementId = cElementId;
+    }
+
+    public LongFilter getCCostCenterId() {
+        return cCostCenterId;
+    }
+
+    public void setCCostCenterId(LongFilter cCostCenterId) {
+        this.cCostCenterId = cCostCenterId;
+    }
+
+    public LongFilter getCCurrencyId() {
+        return cCurrencyId;
+    }
+
+    public void setCCurrencyId(LongFilter cCurrencyId) {
+        this.cCurrencyId = cCurrencyId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -214,8 +325,9 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         final MVerificationLineCriteria that = (MVerificationLineCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(orderNo, that.orderNo) &&
-            Objects.equals(receiptNo, that.receiptNo) &&
+            Objects.equals(verificationNo, that.verificationNo) &&
+            Objects.equals(poNo, that.poNo) &&
+            Objects.equals(receiveNo, that.receiveNo) &&
             Objects.equals(deliveryNo, that.deliveryNo) &&
             Objects.equals(description, that.description) &&
             Objects.equals(qty, that.qty) &&
@@ -224,18 +336,28 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
             Objects.equals(taxAmount, that.taxAmount) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(lineNo, that.lineNo) &&
+            Objects.equals(conversionRate, that.conversionRate) &&
+            Objects.equals(foreignActual, that.foreignActual) &&
+            Objects.equals(foreignTotalLines, that.foreignTotalLines) &&
+            Objects.equals(foreignTaxAmount, that.foreignTaxAmount) &&
+            Objects.equals(receiveDate, that.receiveDate) &&
             Objects.equals(verificationId, that.verificationId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(productId, that.productId) &&
-            Objects.equals(uomId, that.uomId);
+            Objects.equals(uomId, that.uomId) &&
+            Objects.equals(cElementId, that.cElementId) &&
+            Objects.equals(cCostCenterId, that.cCostCenterId) &&
+            Objects.equals(cCurrencyId, that.cCurrencyId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
-        orderNo,
-        receiptNo,
+        verificationNo,
+        poNo,
+        receiveNo,
         deliveryNo,
         description,
         qty,
@@ -244,10 +366,19 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         taxAmount,
         uid,
         active,
+        lineNo,
+        conversionRate,
+        foreignActual,
+        foreignTotalLines,
+        foreignTaxAmount,
+        receiveDate,
         verificationId,
         adOrganizationId,
         productId,
-        uomId
+        uomId,
+        cElementId,
+        cCostCenterId,
+        cCurrencyId
         );
     }
 
@@ -255,8 +386,9 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
     public String toString() {
         return "MVerificationLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (orderNo != null ? "orderNo=" + orderNo + ", " : "") +
-                (receiptNo != null ? "receiptNo=" + receiptNo + ", " : "") +
+                (verificationNo != null ? "verificationNo=" + verificationNo + ", " : "") +
+                (poNo != null ? "poNo=" + poNo + ", " : "") +
+                (receiveNo != null ? "receiveNo=" + receiveNo + ", " : "") +
                 (deliveryNo != null ? "deliveryNo=" + deliveryNo + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (qty != null ? "qty=" + qty + ", " : "") +
@@ -265,10 +397,19 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
                 (taxAmount != null ? "taxAmount=" + taxAmount + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (lineNo != null ? "lineNo=" + lineNo + ", " : "") +
+                (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
+                (foreignActual != null ? "foreignActual=" + foreignActual + ", " : "") +
+                (foreignTotalLines != null ? "foreignTotalLines=" + foreignTotalLines + ", " : "") +
+                (foreignTaxAmount != null ? "foreignTaxAmount=" + foreignTaxAmount + ", " : "") +
+                (receiveDate != null ? "receiveDate=" + receiveDate + ", " : "") +
                 (verificationId != null ? "verificationId=" + verificationId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (productId != null ? "productId=" + productId + ", " : "") +
                 (uomId != null ? "uomId=" + uomId + ", " : "") +
+                (cElementId != null ? "cElementId=" + cElementId + ", " : "") +
+                (cCostCenterId != null ? "cCostCenterId=" + cCostCenterId + ", " : "") +
+                (cCurrencyId != null ? "cCurrencyId=" + cCurrencyId + ", " : "") +
             "}";
     }
 

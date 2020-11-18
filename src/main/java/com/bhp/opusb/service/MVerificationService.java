@@ -1,13 +1,7 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.AdUser;
-import com.bhp.opusb.domain.CCostCenter;
-import com.bhp.opusb.domain.CCurrency;
-import com.bhp.opusb.domain.CElementValue;
 import com.bhp.opusb.domain.CProduct;
-import com.bhp.opusb.domain.CUnitOfMeasure;
-import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.MVerification;
 import com.bhp.opusb.repository.MVerificationRepository;
 import com.bhp.opusb.service.dto.MVerificationDTO;
@@ -17,12 +11,17 @@ import com.bhp.opusb.service.mapper.VerificationMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import io.github.jhipster.web.util.HeaderUtil;
+
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Optional;
 
 /**
@@ -34,31 +33,38 @@ public class MVerificationService {
 
     private final Logger log = LoggerFactory.getLogger(MVerificationService.class);
 
-    //private final ADOrganization organization;
+    private final ADOrganization organization;
+    private final CProduct product;
     private final MVerificationRepository mVerificationRepository;
 
     private final MVerificationMapper mVerificationMapper;
     private final VerificationMapper verificationMapper;
     private final MVerificationLineService mVerificationLineService;
 
-    public MVerificationService(MVerificationRepository mVerificationRepository, MVerificationMapper mVerificationMapper, MVerificationLineService mVerificationLineService) {
+    public MVerificationService(MVerificationRepository mVerificationRepository,
+            MVerificationMapper mVerificationMapper, MVerificationLineService mVerificationLineService) {
         this.mVerificationRepository = mVerificationRepository;
         this.mVerificationMapper = mVerificationMapper;
         this.mVerificationLineService = mVerificationLineService;
 
-        //organization = new ADOrganization();
-        //organization.setId(1L);
-        verificationMapper = new VerificationMapper();
+        product = new CProduct();
+        organization = new ADOrganization();
+        organization.setId(1L);
+        product.setId(456645L);
+        verificationMapper = new VerificationMapper(organization);
     }
 
     public MVerification submitEVerification(VerificationDTO verificationDTO) {
         // Ensure verification has generated ID.
-        MVerification verification = verificationMapper.toMVerification(verificationDTO.getVerification());
-        System.out.println(" = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = ="+verification);
+        MVerification verification = verificationMapper.toMVerification(verificationDTO.getForm());
         mVerificationRepository.save(verification);
 
         // Batch save verification line.
-        //mVerificationLineService.saveAll(verificationDTO.getMverificationLineDTO(), verification, organization, product, uom, elementValue, costCenter, currency);
+        if(verificationDTO.getRemove().size() == 0){
+            mVerificationLineService.saveAll(verificationDTO.getLine(), verification, organization, product);
+        }else{
+            mVerificationLineService.removeAll(verificationDTO.getRemove(), verification, organization, product);
+        }
 
         return verification;
     }

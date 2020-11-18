@@ -179,4 +179,10 @@
         <modifyDataType tableName="m_verification_line" columnName="currency_id" newDataType="bigint" />
     </changeSet>
 
+    <changeSet author="dian-tri-budianto" id="20201116020900-rename">
+        <renameColumn columnDataType="bigint" newColumnName="c_element_id" oldColumnName="c_element" tableName="m_verification_line"/>
+        <renameColumn columnDataType="bigint" newColumnName="c_cost_center_id" oldColumnName="c_cost_center" tableName="m_verification_line"/>
+        <renameColumn columnDataType="bigint" newColumnName="c_currency_id" oldColumnName="currency_id" tableName="m_verification_line"/>
+    </changeSet>
+
 </databaseChangeLog>

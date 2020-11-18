@@ -72,8 +72,9 @@ class MVerificationLineGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "orderNo":"SAMPLE_TEXT"
-                , "receiptNo":"SAMPLE_TEXT"
+                , "verificationNo":"SAMPLE_TEXT"
+                , "poNo":"SAMPLE_TEXT"
+                , "receiveNo":"SAMPLE_TEXT"
                 , "deliveryNo":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "qty":null
@@ -82,6 +83,12 @@ class MVerificationLineGatlingTest extends Simulation {
                 , "taxAmount":"0"
                 , "uid":null
                 , "active":null
+                , "lineNo":"SAMPLE_TEXT"
+                , "conversionRate":"SAMPLE_TEXT"
+                , "foreignActual":"0"
+                , "foreignTotalLines":"0"
+                , "foreignTaxAmount":"0"
+                , "receiveDate":"2020-01-01T00:00:00.000Z"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_mVerificationLine_url"))).exitHereIfFailed

@@ -69,9 +69,15 @@ public class MVerificationResource {
             .body(result);
     }
 
-    @PostMapping("/m-verifications-submit")
+    @PostMapping("/m-verifications/submit")
     @ResponseStatus(HttpStatus.CREATED)
     public void submitEVerification(@Valid @RequestBody VerificationDTO verificationDTO) {
+        mVerificationService.submitEVerification(verificationDTO);
+    }
+
+    @PutMapping("/m-verifications/submit")
+    @ResponseStatus(HttpStatus.OK)
+    public void submitUpdateEVerification(@Valid @RequestBody VerificationDTO verificationDTO) {
         mVerificationService.submitEVerification(verificationDTO);
     }
 
