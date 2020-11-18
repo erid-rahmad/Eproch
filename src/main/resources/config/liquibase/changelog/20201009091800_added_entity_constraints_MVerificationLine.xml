@@ -36,21 +36,21 @@
 
     <changeSet id="20201113091800-3" author="jhipster">
 
-        <addForeignKeyConstraint baseColumnNames="c_element"
+        <addForeignKeyConstraint baseColumnNames="c_element_id"
                                  baseTableName="m_verification_line"
-                                 constraintName="fk_m_verification_line_c_element"
+                                 constraintName="fk_m_verification_line_c_element_id"
                                  referencedColumnNames="id"
                                  referencedTableName="c_element_value"/>
 
-        <addForeignKeyConstraint baseColumnNames="c_cost_center"
+        <addForeignKeyConstraint baseColumnNames="c_cost_center_id"
                                  baseTableName="m_verification_line"
-                                 constraintName="fk_m_verification_line_c_cost_center"
+                                 constraintName="fk_m_verification_line_c_cost_center_id"
                                  referencedColumnNames="id"
                                  referencedTableName="c_cost_center"/>
 
-        <addForeignKeyConstraint baseColumnNames="currency_id"
+        <addForeignKeyConstraint baseColumnNames="c_currency_id"
                                  baseTableName="m_verification_line"
-                                 constraintName="fk_m_verification_line_currency_id"
+                                 constraintName="fk_m_verification_line_c_currency_id"
                                  referencedColumnNames="id"
                                  referencedTableName="c_currency"/>
 
