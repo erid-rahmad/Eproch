@@ -92,4 +92,13 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20201120125600" author="Ananta Aryadewa">
+        <dropUniqueConstraint tableName="c_locator" constraintName="ux_c_locator_code" />
+        <addUniqueConstraint
+            tableName="c_locator"
+            columnNames="ad_organization_id, warehouse_id, code"
+            constraintName="ux_c_locator_fields"
+        />
+    </changeSet>
+
 </databaseChangeLog>

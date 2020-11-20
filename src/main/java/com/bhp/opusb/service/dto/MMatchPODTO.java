@@ -1,95 +1,245 @@
 package com.bhp.opusb.service.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.io.Serializable;
 import java.util.Objects;
+
+import javax.validation.constraints.Size;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MMatchPO} entity.
  */
 public class MMatchPODTO extends AbstractAuditingDTO {
 
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
-    private String cDocType;
-
-    private String cVendor;
-
-    private String cElement;
-
-    private String cCostCenter;
-
-    private String poNo;
-
-    private LocalDate poDate;
-
-    private String receiptNo;
-
-    private LocalDate receiptDate;
-
+    /**
+     * PRSHPN
+     */
+    @Size(max = 20)
+    @ApiModelProperty(value = "PRSHPN")
     private String deliveryNo;
 
-    private String mProductCode;
+    /**
+     * PRDCTO
+     */
+    @Size(max = 2)
+    @ApiModelProperty(value = "PRDCTO")
+    private String cDocType;
 
-    private String mProductName;
+    /**
+     * PRDOCO
+     */
+    @Size(max = 20)
+    @ApiModelProperty(value = "PRDOCO")
+    private String poNo;
 
-    private String mProductDesc;
+    /**
+     * PRTRDJ
+     */
+    @ApiModelProperty(value = "PRTRDJ")
+    private LocalDate poDate;
 
-    private String cUOM;
+    /**
+     * PRDOC
+     */
+    @Size(max = 20)
+    @ApiModelProperty(value = "PRDOC")
+    private String receiptNo;
 
-    private String qty;
+    /**
+     * PRRCDJ
+     */
+    @ApiModelProperty(value = "PRRCDJ")
+    private LocalDate receiptDate;
 
-    private String cCurrency;
+    /**
+     * PRUREC for Receipt Quantity
+     */
+    @ApiModelProperty(value = "PRUREC for Receipt Quantity")
+    private BigDecimal qty;
 
-    private String cConversionRate;
+    /**
+     * PRCRR
+     */
+    @ApiModelProperty(value = "PRCRR")
+    private BigDecimal cConversionRate;
 
-    private String openQty;
+    /**
+     * PRUOPN for Open Quantity
+     */
+    @ApiModelProperty(value = "PRUOPN for Open Quantity")
+    private BigDecimal openQty;
 
-    private String priceActual;
+    /**
+     * PRPRRC for Unit Price
+     */
+    @ApiModelProperty(value = "PRPRRC for Unit Price")
+    private BigDecimal priceActual;
 
-    private String foreignActual;
+    /**
+     * PRFRRC for Unit Price in foreign currency
+     */
+    @ApiModelProperty(value = "PRFRRC for Unit Price in foreign currency")
+    private BigDecimal foreignActual;
 
-    private String openAmount;
+    /**
+     * PRAOPN for Open Amount
+     */
+    @ApiModelProperty(value = "PRAOPN for Open Amount")
+    private BigDecimal openAmount;
 
-    private String openForeignAmount;
+    /**
+     * PRFAP for Open Amount in foreign currency
+     */
+    @ApiModelProperty(value = "PRFAP for Open Amount in foreign currency")
+    private BigDecimal openForeignAmount;
 
-    private String totalLines;
+    /**
+     * PRAREC for Total Line Amount
+     */
+    @ApiModelProperty(value = "PRAREC for Total Line Amount")
+    private BigDecimal totalLines;
 
-    private String foreignTotalLines;
+    /**
+     * PRFREC for Total Line Amount in foreign currency
+     */
+    @ApiModelProperty(value = "PRFREC for Total Line Amount in foreign currency")
+    private BigDecimal foreignTotalLines;
 
-    private String cTax;
+    /**
+     * PRSTAM
+     */
+    @ApiModelProperty(value = "PRSTAM")
+    private BigDecimal taxAmount;
 
-    private String taxAmount;
+    /**
+     * PRCTAM
+     */
+    @ApiModelProperty(value = "PRCTAM")
+    private BigDecimal foreignTaxAmount;
 
-    private String foreignTaxAmount;
-
-    private String mLocator;
-
-    private String adOrganization;
-
+    /**
+     * PRDGL for GL date
+     */
+    @ApiModelProperty(value = "PRDGL for GL date")
     private LocalDate dateAccount;
 
+    /**
+     * PRDCT
+     */
+    @Size(max = 2)
+    @ApiModelProperty(value = "PRDCT")
     private String cDocTypeMr;
 
+    /**
+     * PRSFXO
+     */
+    @Size(max = 10)
+    @ApiModelProperty(value = "PRSFXO")
     private String orderSuffix;
 
-    private String lineNoPo;
+    /**
+     * PRLNID for PO line number
+     */
+    @ApiModelProperty(value = "PRLNID for PO line number")
+    private Integer lineNoPo;
 
-    private String lineNoMr;
+    /**
+     * PRNLIN for number of lines
+     */
+    @ApiModelProperty(value = "PRNLIN for number of lines")
+    private Integer lineNoMr;
 
-    private Boolean isTaxable;
+    /**
+     * PRTX Y means true, otherwise false
+     */
+    @ApiModelProperty(value = "PRTX Y means true, otherwise false")
+    private Boolean taxable;
 
-    private String cTaxCode;
-
-    private String cTaxName;
-
+    /**
+     * PRVRMK
+     */
+    @Size(max = 30)
+    @ApiModelProperty(value = "PRVRMK")
     private String description;
 
+    /**
+     * PRMATC
+     */
+    @Size(max = 1)
+    @ApiModelProperty(value = "PRMATC")
     private String mMatchType;
 
-    private String mWarehouse;
+    /**
+     * PRKCOO
+     */
+    @ApiModelProperty(value = "PRKCOO")
+    private Long adOrganizationId;
+    private String adOrganizationName;
 
+    private Long cElementValueId;
+    private String cElementValueName;
 
+    private Long cCostCenterId;
+    private String cCostCenterName;
+
+    /**
+     * PRAN8 is mapped to vendor code.
+     */
+    @ApiModelProperty(value = "PRAN8 is mapped to vendor code.")
+    private Long cVendorId;
+    private String cVendorName;
+
+    /**
+     * PRCRCD
+     */
+    @ApiModelProperty(value = "PRCRCD")
+    private Long cCurrencyId;
+    private String cCurrencyName;
+
+    /**
+     * PREXR1 is mapped to tax code.
+     * PRTXA1 is mapped to tax name.
+     */
+    @ApiModelProperty(value = "PREXR1 is mapped to tax code.\nPRTXA1 is mapped to tax name.")
+    private Long cTaxCategoryId;
+    private String cTaxCategoryName;
+
+    /**
+     * PRUOM is mapped to code, name, and symbol.
+     */
+    @ApiModelProperty(value = "PRUOM is mapped to code, name, and symbol.")
+    private Long cUomId;
+    private String cUomName;
+
+    /**
+     * PRITM is mapped to product code.
+     * PRLITM is mapped to product name.
+     * PRAITM is mapped to product desc.
+     */
+    @ApiModelProperty(value = "PRITM is mapped to product code.\nPRLITM is mapped to product name.\nPRAITM is mapped to product desc.")
+    private Long mProductId;
+    private String mProductName;
+
+    /**
+     * PRMCU is mapped to warehouse code and name.
+     */
+    @ApiModelProperty(value = "PRMCU is mapped to warehouse code and name.")
+    private Long mWarehouseId;
+    private String mWarehouseName;
+
+    /**
+     * PRLOCN is mapped to locator code.
+     */
+    @ApiModelProperty(value = "PRLOCN is mapped to locator code.")
+    private Long mLocatorId;
+    private String mLocatorName;
+ 
     public Long getId() {
         return id;
     }
@@ -98,36 +248,20 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
+    public String getDeliveryNo() {
+        return deliveryNo;
+    }
+
+    public void setDeliveryNo(String deliveryNo) {
+        this.deliveryNo = deliveryNo;
+    }
+
     public String getcDocType() {
         return cDocType;
     }
 
     public void setcDocType(String cDocType) {
         this.cDocType = cDocType;
-    }
-
-    public String getcVendor() {
-        return cVendor;
-    }
-
-    public void setcVendor(String cVendor) {
-        this.cVendor = cVendor;
-    }
-
-    public String getcElement() {
-        return cElement;
-    }
-
-    public void setcElement(String cElement) {
-        this.cElement = cElement;
-    }
-
-    public String getcCostCenter() {
-        return cCostCenter;
-    }
-
-    public void setcCostCenter(String cCostCenter) {
-        this.cCostCenter = cCostCenter;
     }
 
     public String getPoNo() {
@@ -162,164 +296,92 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.receiptDate = receiptDate;
     }
 
-    public String getDeliveryNo() {
-        return deliveryNo;
-    }
-
-    public void setDeliveryNo(String deliveryNo) {
-        this.deliveryNo = deliveryNo;
-    }
-
-    public String getmProductCode() {
-        return mProductCode;
-    }
-
-    public void setmProductCode(String mProductCode) {
-        this.mProductCode = mProductCode;
-    }
-
-    public String getmProductName() {
-        return mProductName;
-    }
-
-    public void setmProductName(String mProductName) {
-        this.mProductName = mProductName;
-    }
-
-    public String getmProductDesc() {
-        return mProductDesc;
-    }
-
-    public void setmProductDesc(String mProductDesc) {
-        this.mProductDesc = mProductDesc;
-    }
-
-    public String getcUOM() {
-        return cUOM;
-    }
-
-    public void setcUOM(String cUOM) {
-        this.cUOM = cUOM;
-    }
-
-    public String getQty() {
+    public BigDecimal getQty() {
         return qty;
     }
 
-    public void setQty(String qty) {
+    public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 
-    public String getcCurrency() {
-        return cCurrency;
-    }
-
-    public void setcCurrency(String cCurrency) {
-        this.cCurrency = cCurrency;
-    }
-
-    public String getcConversionRate() {
+    public BigDecimal getcConversionRate() {
         return cConversionRate;
     }
 
-    public void setcConversionRate(String cConversionRate) {
+    public void setcConversionRate(BigDecimal cConversionRate) {
         this.cConversionRate = cConversionRate;
     }
 
-    public String getOpenQty() {
+    public BigDecimal getOpenQty() {
         return openQty;
     }
 
-    public void setOpenQty(String openQty) {
+    public void setOpenQty(BigDecimal openQty) {
         this.openQty = openQty;
     }
 
-    public String getPriceActual() {
+    public BigDecimal getPriceActual() {
         return priceActual;
     }
 
-    public void setPriceActual(String priceActual) {
+    public void setPriceActual(BigDecimal priceActual) {
         this.priceActual = priceActual;
     }
 
-    public String getForeignActual() {
+    public BigDecimal getForeignActual() {
         return foreignActual;
     }
 
-    public void setForeignActual(String foreignActual) {
+    public void setForeignActual(BigDecimal foreignActual) {
         this.foreignActual = foreignActual;
     }
 
-    public String getOpenAmount() {
+    public BigDecimal getOpenAmount() {
         return openAmount;
     }
 
-    public void setOpenAmount(String openAmount) {
+    public void setOpenAmount(BigDecimal openAmount) {
         this.openAmount = openAmount;
     }
 
-    public String getOpenForeignAmount() {
+    public BigDecimal getOpenForeignAmount() {
         return openForeignAmount;
     }
 
-    public void setOpenForeignAmount(String openForeignAmount) {
+    public void setOpenForeignAmount(BigDecimal openForeignAmount) {
         this.openForeignAmount = openForeignAmount;
     }
 
-    public String getTotalLines() {
+    public BigDecimal getTotalLines() {
         return totalLines;
     }
 
-    public void setTotalLines(String totalLines) {
+    public void setTotalLines(BigDecimal totalLines) {
         this.totalLines = totalLines;
     }
 
-    public String getForeignTotalLines() {
+    public BigDecimal getForeignTotalLines() {
         return foreignTotalLines;
     }
 
-    public void setForeignTotalLines(String foreignTotalLines) {
+    public void setForeignTotalLines(BigDecimal foreignTotalLines) {
         this.foreignTotalLines = foreignTotalLines;
     }
 
-    public String getcTax() {
-        return cTax;
-    }
-
-    public void setcTax(String cTax) {
-        this.cTax = cTax;
-    }
-
-    public String getTaxAmount() {
+    public BigDecimal getTaxAmount() {
         return taxAmount;
     }
 
-    public void setTaxAmount(String taxAmount) {
+    public void setTaxAmount(BigDecimal taxAmount) {
         this.taxAmount = taxAmount;
     }
 
-    public String getForeignTaxAmount() {
+    public BigDecimal getForeignTaxAmount() {
         return foreignTaxAmount;
     }
 
-    public void setForeignTaxAmount(String foreignTaxAmount) {
+    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
         this.foreignTaxAmount = foreignTaxAmount;
-    }
-
-    public String getmLocator() {
-        return mLocator;
-    }
-
-    public void setmLocator(String mLocator) {
-        this.mLocator = mLocator;
-    }
-
-    public String getAdOrganization() {
-        return adOrganization;
-    }
-
-    public void setAdOrganization(String adOrganization) {
-        this.adOrganization = adOrganization;
     }
 
     public LocalDate getDateAccount() {
@@ -346,44 +408,28 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.orderSuffix = orderSuffix;
     }
 
-    public String getLineNoPo() {
+    public Integer getLineNoPo() {
         return lineNoPo;
     }
 
-    public void setLineNoPo(String lineNoPo) {
+    public void setLineNoPo(Integer lineNoPo) {
         this.lineNoPo = lineNoPo;
     }
 
-    public String getLineNoMr() {
+    public Integer getLineNoMr() {
         return lineNoMr;
     }
 
-    public void setLineNoMr(String lineNoMr) {
+    public void setLineNoMr(Integer lineNoMr) {
         this.lineNoMr = lineNoMr;
     }
 
-    public Boolean isIsTaxable() {
-        return isTaxable;
+    public Boolean isTaxable() {
+        return taxable;
     }
 
-    public void setIsTaxable(Boolean isTaxable) {
-        this.isTaxable = isTaxable;
-    }
-
-    public String getcTaxCode() {
-        return cTaxCode;
-    }
-
-    public void setcTaxCode(String cTaxCode) {
-        this.cTaxCode = cTaxCode;
-    }
-
-    public String getcTaxName() {
-        return cTaxName;
-    }
-
-    public void setcTaxName(String cTaxName) {
-        this.cTaxName = cTaxName;
+    public void setTaxable(Boolean taxable) {
+        this.taxable = taxable;
     }
 
     public String getDescription() {
@@ -402,12 +448,164 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.mMatchType = mMatchType;
     }
 
-    public String getmWarehouse() {
-        return mWarehouse;
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
     }
 
-    public void setmWarehouse(String mWarehouse) {
-        this.mWarehouse = mWarehouse;
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
+    public Long getCElementValueId() {
+        return cElementValueId;
+    }
+
+    public void setCElementValueId(Long cElementValueId) {
+        this.cElementValueId = cElementValueId;
+    }
+
+    public String getCElementValueName() {
+        return cElementValueName;
+    }
+
+    public void setCElementValueName(String cElementValueName) {
+        this.cElementValueName = cElementValueName;
+    }
+
+    public Long getCCostCenterId() {
+        return cCostCenterId;
+    }
+
+    public void setCCostCenterId(Long cCostCenterId) {
+        this.cCostCenterId = cCostCenterId;
+    }
+
+    public String getCCostCenterName() {
+        return cCostCenterName;
+    }
+
+    public void setCCostCenterName(String cCostCenterName) {
+        this.cCostCenterName = cCostCenterName;
+    }
+
+    public Long getCVendorId() {
+        return cVendorId;
+    }
+
+    public void setCVendorId(Long cVendorId) {
+        this.cVendorId = cVendorId;
+    }
+
+    public String getCVendorName() {
+        return cVendorName;
+    }
+
+    public void setCVendorName(String cVendorName) {
+        this.cVendorName = cVendorName;
+    }
+
+    public Long getCCurrencyId() {
+        return cCurrencyId;
+    }
+
+    public void setCCurrencyId(Long cCurrencyId) {
+        this.cCurrencyId = cCurrencyId;
+    }
+
+    public String getCCurrencyName() {
+        return cCurrencyName;
+    }
+
+    public void setCCurrencyName(String cCurrencyName) {
+        this.cCurrencyName = cCurrencyName;
+    }
+
+    public Long getCTaxCategoryId() {
+        return cTaxCategoryId;
+    }
+
+    public void setCTaxCategoryId(Long cTaxCategoryId) {
+        this.cTaxCategoryId = cTaxCategoryId;
+    }
+
+    public String getCTaxCategoryName() {
+        return cTaxCategoryName;
+    }
+
+    public void setCTaxCategoryName(String cTaxCategoryName) {
+        this.cTaxCategoryName = cTaxCategoryName;
+    }
+
+    public Long getCUomId() {
+        return cUomId;
+    }
+
+    public void setCUomId(Long cUnitOfMeasureId) {
+        this.cUomId = cUnitOfMeasureId;
+    }
+
+    public String getCUomName() {
+        return cUomName;
+    }
+
+    public void setCUomName(String cUomName) {
+        this.cUomName = cUomName;
+    }
+
+    public Long getMProductId() {
+        return mProductId;
+    }
+
+    public void setMProductId(Long cProductId) {
+        this.mProductId = cProductId;
+    }
+
+    public String getMProductName() {
+        return mProductName;
+    }
+
+    public void setMProductName(String mProductName) {
+        this.mProductName = mProductName;
+    }
+
+    public Long getMWarehouseId() {
+        return mWarehouseId;
+    }
+
+    public void setMWarehouseId(Long cWarehouseId) {
+        this.mWarehouseId = cWarehouseId;
+    }
+
+    public String getMWarehouseName() {
+        return mWarehouseName;
+    }
+
+    public void setMWarehouseName(String mWarehouseName) {
+        this.mWarehouseName = mWarehouseName;
+    }
+
+    public Long getMLocatorId() {
+        return mLocatorId;
+    }
+
+    public void setMLocatorId(Long cLocatorId) {
+        this.mLocatorId = cLocatorId;
+    }
+
+    public String getMLocatorName() {
+        return mLocatorName;
+    }
+
+    public void setMLocatorName(String mLocatorName) {
+        this.mLocatorName = mLocatorName;
     }
 
     @Override
@@ -435,45 +633,41 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     public String toString() {
         return "MMatchPODTO{" +
             "id=" + getId() +
+            ", deliveryNo='" + getDeliveryNo() + "'" +
             ", cDocType='" + getcDocType() + "'" +
-            ", cVendor='" + getcVendor() + "'" +
-            ", cElement='" + getcElement() + "'" +
-            ", cCostCenter='" + getcCostCenter() + "'" +
             ", poNo='" + getPoNo() + "'" +
             ", poDate='" + getPoDate() + "'" +
             ", receiptNo='" + getReceiptNo() + "'" +
             ", receiptDate='" + getReceiptDate() + "'" +
-            ", deliveryNo='" + getDeliveryNo() + "'" +
-            ", mProductCode='" + getmProductCode() + "'" +
-            ", mProductName='" + getmProductName() + "'" +
-            ", mProductDesc='" + getmProductDesc() + "'" +
-            ", cUOM='" + getcUOM() + "'" +
-            ", qty='" + getQty() + "'" +
-            ", cCurrency='" + getcCurrency() + "'" +
-            ", cConversionRate='" + getcConversionRate() + "'" +
-            ", openQty='" + getOpenQty() + "'" +
-            ", priceActual='" + getPriceActual() + "'" +
-            ", foreignActual='" + getForeignActual() + "'" +
-            ", openAmount='" + getOpenAmount() + "'" +
-            ", openForeignAmount='" + getOpenForeignAmount() + "'" +
-            ", totalLines='" + getTotalLines() + "'" +
-            ", foreignTotalLines='" + getForeignTotalLines() + "'" +
-            ", cTax='" + getcTax() + "'" +
-            ", taxAmount='" + getTaxAmount() + "'" +
-            ", foreignTaxAmount='" + getForeignTaxAmount() + "'" +
-            ", mLocator='" + getmLocator() + "'" +
-            ", adOrganization='" + getAdOrganization() + "'" +
+            ", qty=" + getQty() +
+            ", cConversionRate=" + getcConversionRate() +
+            ", openQty=" + getOpenQty() +
+            ", priceActual=" + getPriceActual() +
+            ", foreignActual=" + getForeignActual() +
+            ", openAmount=" + getOpenAmount() +
+            ", openForeignAmount=" + getOpenForeignAmount() +
+            ", totalLines=" + getTotalLines() +
+            ", foreignTotalLines=" + getForeignTotalLines() +
+            ", taxAmount=" + getTaxAmount() +
+            ", foreignTaxAmount=" + getForeignTaxAmount() +
             ", dateAccount='" + getDateAccount() + "'" +
             ", cDocTypeMr='" + getcDocTypeMr() + "'" +
             ", orderSuffix='" + getOrderSuffix() + "'" +
-            ", lineNoPo='" + getLineNoPo() + "'" +
-            ", lineNoMr='" + getLineNoMr() + "'" +
-            ", isTaxable='" + isIsTaxable() + "'" +
-            ", cTaxCode='" + getcTaxCode() + "'" +
-            ", cTaxName='" + getcTaxName() + "'" +
+            ", lineNoPo=" + getLineNoPo() +
+            ", lineNoMr=" + getLineNoMr() +
+            ", taxable='" + isTaxable() + "'" +
             ", description='" + getDescription() + "'" +
             ", mMatchType='" + getmMatchType() + "'" +
-            ", mWarehouse='" + getmWarehouse() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            ", cElementValueId=" + getCElementValueId() +
+            ", cCostCenterId=" + getCCostCenterId() +
+            ", cVendorId=" + getCVendorId() +
+            ", cCurrencyId=" + getCCurrencyId() +
+            ", cTaxCategoryId=" + getCTaxCategoryId() +
+            ", cUomId=" + getCUomId() +
+            ", mProductId=" + getMProductId() +
+            ", mWarehouseId=" + getMWarehouseId() +
+            ", mLocatorId=" + getMLocatorId() +
             "}";
     }
 }

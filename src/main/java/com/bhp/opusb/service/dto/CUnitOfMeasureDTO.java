@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.dto;
 
-import io.swagger.annotations.ApiModel;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.ApiModel;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CUnitOfMeasure} entity.
@@ -12,6 +13,8 @@ import java.util.UUID;
 @ApiModel(description = "The UoM entity.")
 public class CUnitOfMeasureDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -137,9 +140,6 @@ public class CUnitOfMeasureDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName='" + getAdOrganizationName() + "'" +
             "}";
     }
-
-
 }

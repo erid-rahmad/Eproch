@@ -72,8 +72,13 @@ class CLocationGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "streetAddress":"SAMPLE_TEXT"
+                , "address1":"SAMPLE_TEXT"
+                , "address2":"SAMPLE_TEXT"
+                , "address3":"SAMPLE_TEXT"
+                , "address4":"SAMPLE_TEXT"
                 , "postalCode":"SAMPLE_TEXT"
+                , "phone":"SAMPLE_TEXT"
+                , "fax":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

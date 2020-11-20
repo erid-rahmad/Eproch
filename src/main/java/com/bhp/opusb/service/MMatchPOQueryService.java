@@ -91,17 +91,11 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MMatchPO_.id));
             }
+            if (criteria.getDeliveryNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDeliveryNo(), MMatchPO_.deliveryNo));
+            }
             if (criteria.getcDocType() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getcDocType(), MMatchPO_.cDocType));
-            }
-            if (criteria.getcVendor() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getcVendor(), MMatchPO_.cVendor));
-            }
-            if (criteria.getcElement() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getcElement(), MMatchPO_.cElement));
-            }
-            if (criteria.getcCostCenter() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getcCostCenter(), MMatchPO_.cCostCenter));
             }
             if (criteria.getPoNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPoNo(), MMatchPO_.poNo));
@@ -115,65 +109,38 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
             if (criteria.getReceiptDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getReceiptDate(), MMatchPO_.receiptDate));
             }
-            if (criteria.getDeliveryNo() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getDeliveryNo(), MMatchPO_.deliveryNo));
-            }
-            if (criteria.getmProductCode() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getmProductCode(), MMatchPO_.mProductCode));
-            }
-            if (criteria.getmProductName() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getmProductName(), MMatchPO_.mProductName));
-            }
-            if (criteria.getmProductDesc() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getmProductDesc(), MMatchPO_.mProductDesc));
-            }
-            if (criteria.getcUOM() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getcUOM(), MMatchPO_.cUOM));
-            }
             if (criteria.getQty() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getQty(), MMatchPO_.qty));
-            }
-            if (criteria.getcCurrency() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getcCurrency(), MMatchPO_.cCurrency));
+                specification = specification.and(buildRangeSpecification(criteria.getQty(), MMatchPO_.qty));
             }
             if (criteria.getcConversionRate() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getcConversionRate(), MMatchPO_.cConversionRate));
+                specification = specification.and(buildRangeSpecification(criteria.getcConversionRate(), MMatchPO_.cConversionRate));
             }
             if (criteria.getOpenQty() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getOpenQty(), MMatchPO_.openQty));
+                specification = specification.and(buildRangeSpecification(criteria.getOpenQty(), MMatchPO_.openQty));
             }
             if (criteria.getPriceActual() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPriceActual(), MMatchPO_.priceActual));
+                specification = specification.and(buildRangeSpecification(criteria.getPriceActual(), MMatchPO_.priceActual));
             }
             if (criteria.getForeignActual() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getForeignActual(), MMatchPO_.foreignActual));
+                specification = specification.and(buildRangeSpecification(criteria.getForeignActual(), MMatchPO_.foreignActual));
             }
             if (criteria.getOpenAmount() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getOpenAmount(), MMatchPO_.openAmount));
+                specification = specification.and(buildRangeSpecification(criteria.getOpenAmount(), MMatchPO_.openAmount));
             }
             if (criteria.getOpenForeignAmount() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getOpenForeignAmount(), MMatchPO_.openForeignAmount));
+                specification = specification.and(buildRangeSpecification(criteria.getOpenForeignAmount(), MMatchPO_.openForeignAmount));
             }
             if (criteria.getTotalLines() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getTotalLines(), MMatchPO_.totalLines));
+                specification = specification.and(buildRangeSpecification(criteria.getTotalLines(), MMatchPO_.totalLines));
             }
             if (criteria.getForeignTotalLines() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getForeignTotalLines(), MMatchPO_.foreignTotalLines));
-            }
-            if (criteria.getcTax() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getcTax(), MMatchPO_.cTax));
+                specification = specification.and(buildRangeSpecification(criteria.getForeignTotalLines(), MMatchPO_.foreignTotalLines));
             }
             if (criteria.getTaxAmount() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getTaxAmount(), MMatchPO_.taxAmount));
+                specification = specification.and(buildRangeSpecification(criteria.getTaxAmount(), MMatchPO_.taxAmount));
             }
             if (criteria.getForeignTaxAmount() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getForeignTaxAmount(), MMatchPO_.foreignTaxAmount));
-            }
-            if (criteria.getmLocator() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getmLocator(), MMatchPO_.mLocator));
-            }
-            if (criteria.getAdOrganization() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getAdOrganization(), MMatchPO_.adOrganization));
+                specification = specification.and(buildRangeSpecification(criteria.getForeignTaxAmount(), MMatchPO_.foreignTaxAmount));
             }
             if (criteria.getDateAccount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateAccount(), MMatchPO_.dateAccount));
@@ -185,19 +152,13 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
                 specification = specification.and(buildStringSpecification(criteria.getOrderSuffix(), MMatchPO_.orderSuffix));
             }
             if (criteria.getLineNoPo() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLineNoPo(), MMatchPO_.lineNoPo));
+                specification = specification.and(buildRangeSpecification(criteria.getLineNoPo(), MMatchPO_.lineNoPo));
             }
             if (criteria.getLineNoMr() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLineNoMr(), MMatchPO_.lineNoMr));
+                specification = specification.and(buildRangeSpecification(criteria.getLineNoMr(), MMatchPO_.lineNoMr));
             }
-            if (criteria.getIsTaxable() != null) {
-                specification = specification.and(buildSpecification(criteria.getIsTaxable(), MMatchPO_.isTaxable));
-            }
-            if (criteria.getcTaxCode() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getcTaxCode(), MMatchPO_.cTaxCode));
-            }
-            if (criteria.getcTaxName() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getcTaxName(), MMatchPO_.cTaxName));
+            if (criteria.getTaxable() != null) {
+                specification = specification.and(buildSpecification(criteria.getTaxable(), MMatchPO_.taxable));
             }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), MMatchPO_.description));
@@ -205,8 +166,45 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
             if (criteria.getmMatchType() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getmMatchType(), MMatchPO_.mMatchType));
             }
-            if (criteria.getmWarehouse() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getmWarehouse(), MMatchPO_.mWarehouse));
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(MMatchPO_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
+            }
+            if (criteria.getCElementValueId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCElementValueId(),
+                    root -> root.join(MMatchPO_.cElementValue, JoinType.LEFT).get(CElementValue_.id)));
+            }
+            if (criteria.getCCostCenterId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCCostCenterId(),
+                    root -> root.join(MMatchPO_.cCostCenter, JoinType.LEFT).get(CCostCenter_.id)));
+            }
+            if (criteria.getCVendorId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCVendorId(),
+                    root -> root.join(MMatchPO_.cVendor, JoinType.LEFT).get(CVendor_.id)));
+            }
+            if (criteria.getCCurrencyId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCCurrencyId(),
+                    root -> root.join(MMatchPO_.cCurrency, JoinType.LEFT).get(CCurrency_.id)));
+            }
+            if (criteria.getCTaxCategoryId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCTaxCategoryId(),
+                    root -> root.join(MMatchPO_.cTaxCategory, JoinType.LEFT).get(CTaxCategory_.id)));
+            }
+            if (criteria.getCUomId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCUomId(),
+                    root -> root.join(MMatchPO_.cUom, JoinType.LEFT).get(CUnitOfMeasure_.id)));
+            }
+            if (criteria.getMProductId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMProductId(),
+                    root -> root.join(MMatchPO_.mProduct, JoinType.LEFT).get(CProduct_.id)));
+            }
+            if (criteria.getMWarehouseId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMWarehouseId(),
+                    root -> root.join(MMatchPO_.mWarehouse, JoinType.LEFT).get(CWarehouse_.id)));
+            }
+            if (criteria.getMLocatorId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMLocatorId(),
+                    root -> root.join(MMatchPO_.mLocator, JoinType.LEFT).get(CLocator_.id)));
             }
         }
         return specification;

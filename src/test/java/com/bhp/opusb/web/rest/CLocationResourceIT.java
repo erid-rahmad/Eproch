@@ -38,11 +38,26 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class CLocationResourceIT {
 
-    private static final String DEFAULT_STREET_ADDRESS = "AAAAAAAAAA";
-    private static final String UPDATED_STREET_ADDRESS = "BBBBBBBBBB";
+    private static final String DEFAULT_ADDRESS_1 = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS_1 = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ADDRESS_2 = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS_2 = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ADDRESS_3 = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS_3 = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ADDRESS_4 = "AAAAAAAAAA";
+    private static final String UPDATED_ADDRESS_4 = "BBBBBBBBBB";
 
     private static final String DEFAULT_POSTAL_CODE = "AAAAAAAAAA";
     private static final String UPDATED_POSTAL_CODE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PHONE = "AAAAAAAAAA";
+    private static final String UPDATED_PHONE = "BBBBBBBBBB";
+
+    private static final String DEFAULT_FAX = "AAAAAAAAAA";
+    private static final String UPDATED_FAX = "BBBBBBBBBB";
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
@@ -78,8 +93,13 @@ public class CLocationResourceIT {
      */
     public static CLocation createEntity(EntityManager em) {
         CLocation cLocation = new CLocation()
-            .streetAddress(DEFAULT_STREET_ADDRESS)
+            .address1(DEFAULT_ADDRESS_1)
+            .address2(DEFAULT_ADDRESS_2)
+            .address3(DEFAULT_ADDRESS_3)
+            .address4(DEFAULT_ADDRESS_4)
             .postalCode(DEFAULT_POSTAL_CODE)
+            .phone(DEFAULT_PHONE)
+            .fax(DEFAULT_FAX)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -112,8 +132,13 @@ public class CLocationResourceIT {
      */
     public static CLocation createUpdatedEntity(EntityManager em) {
         CLocation cLocation = new CLocation()
-            .streetAddress(UPDATED_STREET_ADDRESS)
+            .address1(UPDATED_ADDRESS_1)
+            .address2(UPDATED_ADDRESS_2)
+            .address3(UPDATED_ADDRESS_3)
+            .address4(UPDATED_ADDRESS_4)
             .postalCode(UPDATED_POSTAL_CODE)
+            .phone(UPDATED_PHONE)
+            .fax(UPDATED_FAX)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -160,8 +185,13 @@ public class CLocationResourceIT {
         List<CLocation> cLocationList = cLocationRepository.findAll();
         assertThat(cLocationList).hasSize(databaseSizeBeforeCreate + 1);
         CLocation testCLocation = cLocationList.get(cLocationList.size() - 1);
-        assertThat(testCLocation.getStreetAddress()).isEqualTo(DEFAULT_STREET_ADDRESS);
+        assertThat(testCLocation.getAddress1()).isEqualTo(DEFAULT_ADDRESS_1);
+        assertThat(testCLocation.getAddress2()).isEqualTo(DEFAULT_ADDRESS_2);
+        assertThat(testCLocation.getAddress3()).isEqualTo(DEFAULT_ADDRESS_3);
+        assertThat(testCLocation.getAddress4()).isEqualTo(DEFAULT_ADDRESS_4);
         assertThat(testCLocation.getPostalCode()).isEqualTo(DEFAULT_POSTAL_CODE);
+        assertThat(testCLocation.getPhone()).isEqualTo(DEFAULT_PHONE);
+        assertThat(testCLocation.getFax()).isEqualTo(DEFAULT_FAX);
         assertThat(testCLocation.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCLocation.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -189,10 +219,10 @@ public class CLocationResourceIT {
 
     @Test
     @Transactional
-    public void checkStreetAddressIsRequired() throws Exception {
+    public void checkAddress1IsRequired() throws Exception {
         int databaseSizeBeforeTest = cLocationRepository.findAll().size();
         // set the field null
-        cLocation.setStreetAddress(null);
+        cLocation.setAddress1(null);
 
         // Create the CLocation, which fails.
         CLocationDTO cLocationDTO = cLocationMapper.toDto(cLocation);
@@ -217,8 +247,13 @@ public class CLocationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cLocation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].streetAddress").value(hasItem(DEFAULT_STREET_ADDRESS)))
+            .andExpect(jsonPath("$.[*].address1").value(hasItem(DEFAULT_ADDRESS_1)))
+            .andExpect(jsonPath("$.[*].address2").value(hasItem(DEFAULT_ADDRESS_2)))
+            .andExpect(jsonPath("$.[*].address3").value(hasItem(DEFAULT_ADDRESS_3)))
+            .andExpect(jsonPath("$.[*].address4").value(hasItem(DEFAULT_ADDRESS_4)))
             .andExpect(jsonPath("$.[*].postalCode").value(hasItem(DEFAULT_POSTAL_CODE)))
+            .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
+            .andExpect(jsonPath("$.[*].fax").value(hasItem(DEFAULT_FAX)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -234,8 +269,13 @@ public class CLocationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cLocation.getId().intValue()))
-            .andExpect(jsonPath("$.streetAddress").value(DEFAULT_STREET_ADDRESS))
+            .andExpect(jsonPath("$.address1").value(DEFAULT_ADDRESS_1))
+            .andExpect(jsonPath("$.address2").value(DEFAULT_ADDRESS_2))
+            .andExpect(jsonPath("$.address3").value(DEFAULT_ADDRESS_3))
+            .andExpect(jsonPath("$.address4").value(DEFAULT_ADDRESS_4))
             .andExpect(jsonPath("$.postalCode").value(DEFAULT_POSTAL_CODE))
+            .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
+            .andExpect(jsonPath("$.fax").value(DEFAULT_FAX))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -262,79 +302,313 @@ public class CLocationResourceIT {
 
     @Test
     @Transactional
-    public void getAllCLocationsByStreetAddressIsEqualToSomething() throws Exception {
+    public void getAllCLocationsByAddress1IsEqualToSomething() throws Exception {
         // Initialize the database
         cLocationRepository.saveAndFlush(cLocation);
 
-        // Get all the cLocationList where streetAddress equals to DEFAULT_STREET_ADDRESS
-        defaultCLocationShouldBeFound("streetAddress.equals=" + DEFAULT_STREET_ADDRESS);
+        // Get all the cLocationList where address1 equals to DEFAULT_ADDRESS_1
+        defaultCLocationShouldBeFound("address1.equals=" + DEFAULT_ADDRESS_1);
 
-        // Get all the cLocationList where streetAddress equals to UPDATED_STREET_ADDRESS
-        defaultCLocationShouldNotBeFound("streetAddress.equals=" + UPDATED_STREET_ADDRESS);
+        // Get all the cLocationList where address1 equals to UPDATED_ADDRESS_1
+        defaultCLocationShouldNotBeFound("address1.equals=" + UPDATED_ADDRESS_1);
     }
 
     @Test
     @Transactional
-    public void getAllCLocationsByStreetAddressIsNotEqualToSomething() throws Exception {
+    public void getAllCLocationsByAddress1IsNotEqualToSomething() throws Exception {
         // Initialize the database
         cLocationRepository.saveAndFlush(cLocation);
 
-        // Get all the cLocationList where streetAddress not equals to DEFAULT_STREET_ADDRESS
-        defaultCLocationShouldNotBeFound("streetAddress.notEquals=" + DEFAULT_STREET_ADDRESS);
+        // Get all the cLocationList where address1 not equals to DEFAULT_ADDRESS_1
+        defaultCLocationShouldNotBeFound("address1.notEquals=" + DEFAULT_ADDRESS_1);
 
-        // Get all the cLocationList where streetAddress not equals to UPDATED_STREET_ADDRESS
-        defaultCLocationShouldBeFound("streetAddress.notEquals=" + UPDATED_STREET_ADDRESS);
+        // Get all the cLocationList where address1 not equals to UPDATED_ADDRESS_1
+        defaultCLocationShouldBeFound("address1.notEquals=" + UPDATED_ADDRESS_1);
     }
 
     @Test
     @Transactional
-    public void getAllCLocationsByStreetAddressIsInShouldWork() throws Exception {
+    public void getAllCLocationsByAddress1IsInShouldWork() throws Exception {
         // Initialize the database
         cLocationRepository.saveAndFlush(cLocation);
 
-        // Get all the cLocationList where streetAddress in DEFAULT_STREET_ADDRESS or UPDATED_STREET_ADDRESS
-        defaultCLocationShouldBeFound("streetAddress.in=" + DEFAULT_STREET_ADDRESS + "," + UPDATED_STREET_ADDRESS);
+        // Get all the cLocationList where address1 in DEFAULT_ADDRESS_1 or UPDATED_ADDRESS_1
+        defaultCLocationShouldBeFound("address1.in=" + DEFAULT_ADDRESS_1 + "," + UPDATED_ADDRESS_1);
 
-        // Get all the cLocationList where streetAddress equals to UPDATED_STREET_ADDRESS
-        defaultCLocationShouldNotBeFound("streetAddress.in=" + UPDATED_STREET_ADDRESS);
+        // Get all the cLocationList where address1 equals to UPDATED_ADDRESS_1
+        defaultCLocationShouldNotBeFound("address1.in=" + UPDATED_ADDRESS_1);
     }
 
     @Test
     @Transactional
-    public void getAllCLocationsByStreetAddressIsNullOrNotNull() throws Exception {
+    public void getAllCLocationsByAddress1IsNullOrNotNull() throws Exception {
         // Initialize the database
         cLocationRepository.saveAndFlush(cLocation);
 
-        // Get all the cLocationList where streetAddress is not null
-        defaultCLocationShouldBeFound("streetAddress.specified=true");
+        // Get all the cLocationList where address1 is not null
+        defaultCLocationShouldBeFound("address1.specified=true");
 
-        // Get all the cLocationList where streetAddress is null
-        defaultCLocationShouldNotBeFound("streetAddress.specified=false");
+        // Get all the cLocationList where address1 is null
+        defaultCLocationShouldNotBeFound("address1.specified=false");
     }
                 @Test
     @Transactional
-    public void getAllCLocationsByStreetAddressContainsSomething() throws Exception {
+    public void getAllCLocationsByAddress1ContainsSomething() throws Exception {
         // Initialize the database
         cLocationRepository.saveAndFlush(cLocation);
 
-        // Get all the cLocationList where streetAddress contains DEFAULT_STREET_ADDRESS
-        defaultCLocationShouldBeFound("streetAddress.contains=" + DEFAULT_STREET_ADDRESS);
+        // Get all the cLocationList where address1 contains DEFAULT_ADDRESS_1
+        defaultCLocationShouldBeFound("address1.contains=" + DEFAULT_ADDRESS_1);
 
-        // Get all the cLocationList where streetAddress contains UPDATED_STREET_ADDRESS
-        defaultCLocationShouldNotBeFound("streetAddress.contains=" + UPDATED_STREET_ADDRESS);
+        // Get all the cLocationList where address1 contains UPDATED_ADDRESS_1
+        defaultCLocationShouldNotBeFound("address1.contains=" + UPDATED_ADDRESS_1);
     }
 
     @Test
     @Transactional
-    public void getAllCLocationsByStreetAddressNotContainsSomething() throws Exception {
+    public void getAllCLocationsByAddress1NotContainsSomething() throws Exception {
         // Initialize the database
         cLocationRepository.saveAndFlush(cLocation);
 
-        // Get all the cLocationList where streetAddress does not contain DEFAULT_STREET_ADDRESS
-        defaultCLocationShouldNotBeFound("streetAddress.doesNotContain=" + DEFAULT_STREET_ADDRESS);
+        // Get all the cLocationList where address1 does not contain DEFAULT_ADDRESS_1
+        defaultCLocationShouldNotBeFound("address1.doesNotContain=" + DEFAULT_ADDRESS_1);
 
-        // Get all the cLocationList where streetAddress does not contain UPDATED_STREET_ADDRESS
-        defaultCLocationShouldBeFound("streetAddress.doesNotContain=" + UPDATED_STREET_ADDRESS);
+        // Get all the cLocationList where address1 does not contain UPDATED_ADDRESS_1
+        defaultCLocationShouldBeFound("address1.doesNotContain=" + UPDATED_ADDRESS_1);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress2IsEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address2 equals to DEFAULT_ADDRESS_2
+        defaultCLocationShouldBeFound("address2.equals=" + DEFAULT_ADDRESS_2);
+
+        // Get all the cLocationList where address2 equals to UPDATED_ADDRESS_2
+        defaultCLocationShouldNotBeFound("address2.equals=" + UPDATED_ADDRESS_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress2IsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address2 not equals to DEFAULT_ADDRESS_2
+        defaultCLocationShouldNotBeFound("address2.notEquals=" + DEFAULT_ADDRESS_2);
+
+        // Get all the cLocationList where address2 not equals to UPDATED_ADDRESS_2
+        defaultCLocationShouldBeFound("address2.notEquals=" + UPDATED_ADDRESS_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress2IsInShouldWork() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address2 in DEFAULT_ADDRESS_2 or UPDATED_ADDRESS_2
+        defaultCLocationShouldBeFound("address2.in=" + DEFAULT_ADDRESS_2 + "," + UPDATED_ADDRESS_2);
+
+        // Get all the cLocationList where address2 equals to UPDATED_ADDRESS_2
+        defaultCLocationShouldNotBeFound("address2.in=" + UPDATED_ADDRESS_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress2IsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address2 is not null
+        defaultCLocationShouldBeFound("address2.specified=true");
+
+        // Get all the cLocationList where address2 is null
+        defaultCLocationShouldNotBeFound("address2.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCLocationsByAddress2ContainsSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address2 contains DEFAULT_ADDRESS_2
+        defaultCLocationShouldBeFound("address2.contains=" + DEFAULT_ADDRESS_2);
+
+        // Get all the cLocationList where address2 contains UPDATED_ADDRESS_2
+        defaultCLocationShouldNotBeFound("address2.contains=" + UPDATED_ADDRESS_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress2NotContainsSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address2 does not contain DEFAULT_ADDRESS_2
+        defaultCLocationShouldNotBeFound("address2.doesNotContain=" + DEFAULT_ADDRESS_2);
+
+        // Get all the cLocationList where address2 does not contain UPDATED_ADDRESS_2
+        defaultCLocationShouldBeFound("address2.doesNotContain=" + UPDATED_ADDRESS_2);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress3IsEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address3 equals to DEFAULT_ADDRESS_3
+        defaultCLocationShouldBeFound("address3.equals=" + DEFAULT_ADDRESS_3);
+
+        // Get all the cLocationList where address3 equals to UPDATED_ADDRESS_3
+        defaultCLocationShouldNotBeFound("address3.equals=" + UPDATED_ADDRESS_3);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress3IsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address3 not equals to DEFAULT_ADDRESS_3
+        defaultCLocationShouldNotBeFound("address3.notEquals=" + DEFAULT_ADDRESS_3);
+
+        // Get all the cLocationList where address3 not equals to UPDATED_ADDRESS_3
+        defaultCLocationShouldBeFound("address3.notEquals=" + UPDATED_ADDRESS_3);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress3IsInShouldWork() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address3 in DEFAULT_ADDRESS_3 or UPDATED_ADDRESS_3
+        defaultCLocationShouldBeFound("address3.in=" + DEFAULT_ADDRESS_3 + "," + UPDATED_ADDRESS_3);
+
+        // Get all the cLocationList where address3 equals to UPDATED_ADDRESS_3
+        defaultCLocationShouldNotBeFound("address3.in=" + UPDATED_ADDRESS_3);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress3IsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address3 is not null
+        defaultCLocationShouldBeFound("address3.specified=true");
+
+        // Get all the cLocationList where address3 is null
+        defaultCLocationShouldNotBeFound("address3.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCLocationsByAddress3ContainsSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address3 contains DEFAULT_ADDRESS_3
+        defaultCLocationShouldBeFound("address3.contains=" + DEFAULT_ADDRESS_3);
+
+        // Get all the cLocationList where address3 contains UPDATED_ADDRESS_3
+        defaultCLocationShouldNotBeFound("address3.contains=" + UPDATED_ADDRESS_3);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress3NotContainsSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address3 does not contain DEFAULT_ADDRESS_3
+        defaultCLocationShouldNotBeFound("address3.doesNotContain=" + DEFAULT_ADDRESS_3);
+
+        // Get all the cLocationList where address3 does not contain UPDATED_ADDRESS_3
+        defaultCLocationShouldBeFound("address3.doesNotContain=" + UPDATED_ADDRESS_3);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress4IsEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address4 equals to DEFAULT_ADDRESS_4
+        defaultCLocationShouldBeFound("address4.equals=" + DEFAULT_ADDRESS_4);
+
+        // Get all the cLocationList where address4 equals to UPDATED_ADDRESS_4
+        defaultCLocationShouldNotBeFound("address4.equals=" + UPDATED_ADDRESS_4);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress4IsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address4 not equals to DEFAULT_ADDRESS_4
+        defaultCLocationShouldNotBeFound("address4.notEquals=" + DEFAULT_ADDRESS_4);
+
+        // Get all the cLocationList where address4 not equals to UPDATED_ADDRESS_4
+        defaultCLocationShouldBeFound("address4.notEquals=" + UPDATED_ADDRESS_4);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress4IsInShouldWork() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address4 in DEFAULT_ADDRESS_4 or UPDATED_ADDRESS_4
+        defaultCLocationShouldBeFound("address4.in=" + DEFAULT_ADDRESS_4 + "," + UPDATED_ADDRESS_4);
+
+        // Get all the cLocationList where address4 equals to UPDATED_ADDRESS_4
+        defaultCLocationShouldNotBeFound("address4.in=" + UPDATED_ADDRESS_4);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress4IsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address4 is not null
+        defaultCLocationShouldBeFound("address4.specified=true");
+
+        // Get all the cLocationList where address4 is null
+        defaultCLocationShouldNotBeFound("address4.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCLocationsByAddress4ContainsSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address4 contains DEFAULT_ADDRESS_4
+        defaultCLocationShouldBeFound("address4.contains=" + DEFAULT_ADDRESS_4);
+
+        // Get all the cLocationList where address4 contains UPDATED_ADDRESS_4
+        defaultCLocationShouldNotBeFound("address4.contains=" + UPDATED_ADDRESS_4);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByAddress4NotContainsSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where address4 does not contain DEFAULT_ADDRESS_4
+        defaultCLocationShouldNotBeFound("address4.doesNotContain=" + DEFAULT_ADDRESS_4);
+
+        // Get all the cLocationList where address4 does not contain UPDATED_ADDRESS_4
+        defaultCLocationShouldBeFound("address4.doesNotContain=" + UPDATED_ADDRESS_4);
     }
 
 
@@ -413,6 +687,162 @@ public class CLocationResourceIT {
 
         // Get all the cLocationList where postalCode does not contain UPDATED_POSTAL_CODE
         defaultCLocationShouldBeFound("postalCode.doesNotContain=" + UPDATED_POSTAL_CODE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByPhoneIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where phone equals to DEFAULT_PHONE
+        defaultCLocationShouldBeFound("phone.equals=" + DEFAULT_PHONE);
+
+        // Get all the cLocationList where phone equals to UPDATED_PHONE
+        defaultCLocationShouldNotBeFound("phone.equals=" + UPDATED_PHONE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByPhoneIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where phone not equals to DEFAULT_PHONE
+        defaultCLocationShouldNotBeFound("phone.notEquals=" + DEFAULT_PHONE);
+
+        // Get all the cLocationList where phone not equals to UPDATED_PHONE
+        defaultCLocationShouldBeFound("phone.notEquals=" + UPDATED_PHONE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByPhoneIsInShouldWork() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where phone in DEFAULT_PHONE or UPDATED_PHONE
+        defaultCLocationShouldBeFound("phone.in=" + DEFAULT_PHONE + "," + UPDATED_PHONE);
+
+        // Get all the cLocationList where phone equals to UPDATED_PHONE
+        defaultCLocationShouldNotBeFound("phone.in=" + UPDATED_PHONE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByPhoneIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where phone is not null
+        defaultCLocationShouldBeFound("phone.specified=true");
+
+        // Get all the cLocationList where phone is null
+        defaultCLocationShouldNotBeFound("phone.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCLocationsByPhoneContainsSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where phone contains DEFAULT_PHONE
+        defaultCLocationShouldBeFound("phone.contains=" + DEFAULT_PHONE);
+
+        // Get all the cLocationList where phone contains UPDATED_PHONE
+        defaultCLocationShouldNotBeFound("phone.contains=" + UPDATED_PHONE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByPhoneNotContainsSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where phone does not contain DEFAULT_PHONE
+        defaultCLocationShouldNotBeFound("phone.doesNotContain=" + DEFAULT_PHONE);
+
+        // Get all the cLocationList where phone does not contain UPDATED_PHONE
+        defaultCLocationShouldBeFound("phone.doesNotContain=" + UPDATED_PHONE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByFaxIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where fax equals to DEFAULT_FAX
+        defaultCLocationShouldBeFound("fax.equals=" + DEFAULT_FAX);
+
+        // Get all the cLocationList where fax equals to UPDATED_FAX
+        defaultCLocationShouldNotBeFound("fax.equals=" + UPDATED_FAX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByFaxIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where fax not equals to DEFAULT_FAX
+        defaultCLocationShouldNotBeFound("fax.notEquals=" + DEFAULT_FAX);
+
+        // Get all the cLocationList where fax not equals to UPDATED_FAX
+        defaultCLocationShouldBeFound("fax.notEquals=" + UPDATED_FAX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByFaxIsInShouldWork() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where fax in DEFAULT_FAX or UPDATED_FAX
+        defaultCLocationShouldBeFound("fax.in=" + DEFAULT_FAX + "," + UPDATED_FAX);
+
+        // Get all the cLocationList where fax equals to UPDATED_FAX
+        defaultCLocationShouldNotBeFound("fax.in=" + UPDATED_FAX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByFaxIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where fax is not null
+        defaultCLocationShouldBeFound("fax.specified=true");
+
+        // Get all the cLocationList where fax is null
+        defaultCLocationShouldNotBeFound("fax.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCLocationsByFaxContainsSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where fax contains DEFAULT_FAX
+        defaultCLocationShouldBeFound("fax.contains=" + DEFAULT_FAX);
+
+        // Get all the cLocationList where fax contains UPDATED_FAX
+        defaultCLocationShouldNotBeFound("fax.contains=" + UPDATED_FAX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCLocationsByFaxNotContainsSomething() throws Exception {
+        // Initialize the database
+        cLocationRepository.saveAndFlush(cLocation);
+
+        // Get all the cLocationList where fax does not contain DEFAULT_FAX
+        defaultCLocationShouldNotBeFound("fax.doesNotContain=" + DEFAULT_FAX);
+
+        // Get all the cLocationList where fax does not contain UPDATED_FAX
+        defaultCLocationShouldBeFound("fax.doesNotContain=" + UPDATED_FAX);
     }
 
 
@@ -559,8 +989,13 @@ public class CLocationResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cLocation.getId().intValue())))
-            .andExpect(jsonPath("$.[*].streetAddress").value(hasItem(DEFAULT_STREET_ADDRESS)))
+            .andExpect(jsonPath("$.[*].address1").value(hasItem(DEFAULT_ADDRESS_1)))
+            .andExpect(jsonPath("$.[*].address2").value(hasItem(DEFAULT_ADDRESS_2)))
+            .andExpect(jsonPath("$.[*].address3").value(hasItem(DEFAULT_ADDRESS_3)))
+            .andExpect(jsonPath("$.[*].address4").value(hasItem(DEFAULT_ADDRESS_4)))
             .andExpect(jsonPath("$.[*].postalCode").value(hasItem(DEFAULT_POSTAL_CODE)))
+            .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
+            .andExpect(jsonPath("$.[*].fax").value(hasItem(DEFAULT_FAX)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -610,8 +1045,13 @@ public class CLocationResourceIT {
         // Disconnect from session so that the updates on updatedCLocation are not directly saved in db
         em.detach(updatedCLocation);
         updatedCLocation
-            .streetAddress(UPDATED_STREET_ADDRESS)
+            .address1(UPDATED_ADDRESS_1)
+            .address2(UPDATED_ADDRESS_2)
+            .address3(UPDATED_ADDRESS_3)
+            .address4(UPDATED_ADDRESS_4)
             .postalCode(UPDATED_POSTAL_CODE)
+            .phone(UPDATED_PHONE)
+            .fax(UPDATED_FAX)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CLocationDTO cLocationDTO = cLocationMapper.toDto(updatedCLocation);
@@ -625,8 +1065,13 @@ public class CLocationResourceIT {
         List<CLocation> cLocationList = cLocationRepository.findAll();
         assertThat(cLocationList).hasSize(databaseSizeBeforeUpdate);
         CLocation testCLocation = cLocationList.get(cLocationList.size() - 1);
-        assertThat(testCLocation.getStreetAddress()).isEqualTo(UPDATED_STREET_ADDRESS);
+        assertThat(testCLocation.getAddress1()).isEqualTo(UPDATED_ADDRESS_1);
+        assertThat(testCLocation.getAddress2()).isEqualTo(UPDATED_ADDRESS_2);
+        assertThat(testCLocation.getAddress3()).isEqualTo(UPDATED_ADDRESS_3);
+        assertThat(testCLocation.getAddress4()).isEqualTo(UPDATED_ADDRESS_4);
         assertThat(testCLocation.getPostalCode()).isEqualTo(UPDATED_POSTAL_CODE);
+        assertThat(testCLocation.getPhone()).isEqualTo(UPDATED_PHONE);
+        assertThat(testCLocation.getFax()).isEqualTo(UPDATED_FAX);
         assertThat(testCLocation.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCLocation.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

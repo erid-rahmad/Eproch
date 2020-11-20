@@ -91,11 +91,26 @@ public class CLocationQueryService extends QueryService<CLocation> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CLocation_.id));
             }
-            if (criteria.getStreetAddress() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getStreetAddress(), CLocation_.streetAddress));
+            if (criteria.getAddress1() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getAddress1(), CLocation_.address1));
+            }
+            if (criteria.getAddress2() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getAddress2(), CLocation_.address2));
+            }
+            if (criteria.getAddress3() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getAddress3(), CLocation_.address3));
+            }
+            if (criteria.getAddress4() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getAddress4(), CLocation_.address4));
             }
             if (criteria.getPostalCode() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPostalCode(), CLocation_.postalCode));
+            }
+            if (criteria.getPhone() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPhone(), CLocation_.phone));
+            }
+            if (criteria.getFax() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFax(), CLocation_.fax));
             }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CLocation_.uid));

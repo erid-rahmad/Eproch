@@ -61,7 +61,6 @@
                   separator=";"
                   tableName="c_region">
             <column name="id" type="numeric"/>
-            <column name="code" type="string"/>
             <column name="name" type="string"/>
             <column name="description" type="string"/>
             <column name="uid" type="${uuidType}"/>
@@ -99,4 +98,7 @@
     </changeSet>
 
 -->
+    <changeSet id="20201120173400" author="Ananta ryadewa">
+        <dropColumn tableName="c_region" columnName="code"/>
+    </changeSet>
 </databaseChangeLog>

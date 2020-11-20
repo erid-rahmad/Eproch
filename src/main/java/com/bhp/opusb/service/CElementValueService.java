@@ -1,18 +1,19 @@
 package com.bhp.opusb.service;
 
+import java.util.Optional;
+
+import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.domain.CElementValue;
 import com.bhp.opusb.repository.CElementValueRepository;
 import com.bhp.opusb.service.dto.CElementValueDTO;
 import com.bhp.opusb.service.mapper.CElementValueMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link CElementValue}.
@@ -27,9 +28,13 @@ public class CElementValueService {
 
     private final CElementValueMapper cElementValueMapper;
 
-    public CElementValueService(CElementValueRepository cElementValueRepository, CElementValueMapper cElementValueMapper) {
+    private final ApplicationProperties applicationProperties;
+
+    public CElementValueService(CElementValueRepository cElementValueRepository, CElementValueMapper cElementValueMapper,
+    ApplicationProperties applicationProperties) {
         this.cElementValueRepository = cElementValueRepository;
         this.cElementValueMapper = cElementValueMapper;
+        this.applicationProperties = applicationProperties;
     }
 
     /**
@@ -79,5 +84,11 @@ public class CElementValueService {
     public void delete(Long id) {
         log.debug("Request to delete CElementValue : {}", id);
         cElementValueRepository.deleteById(id);
+    }
+
+    public CElementValue getDefaultElementValue() {
+        CElementValue elementValue = new CElementValue();
+        elementValue.setId(applicationProperties.getDefaultElementValueId());
+        return elementValue;
     }
 }

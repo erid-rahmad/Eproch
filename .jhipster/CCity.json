@@ -2,16 +2,6 @@
     "name": "CCity",
     "fields": [
         {
-            "fieldName": "code",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "pattern",
-                "unique"
-            ],
-            "fieldValidateRulesPattern": "^[A-Z]{3}$"
-        },
-        {
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [

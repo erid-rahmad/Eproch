@@ -1,18 +1,22 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CProduct} entity.
  */
 public class CProductDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
+    @Size(max = 50)
     private String code;
 
     @NotNull
@@ -20,6 +24,8 @@ public class CProductDTO extends AbstractAuditingDTO {
 
     private String description;
 
+    @NotNull
+    @Size(max = 1)
     private String type;
 
     private UUID uid;
@@ -172,8 +178,8 @@ public class CProductDTO extends AbstractAuditingDTO {
         return assetAcctId;
     }
 
-    public void setAssetAcctId(Long cProductCategoryAccountId) {
-        this.assetAcctId = cProductCategoryAccountId;
+    public void setAssetAcctId(Long cElementValueId) {
+        this.assetAcctId = cElementValueId;
     }
 
     public String getAssetAcctName() {
@@ -188,8 +194,8 @@ public class CProductDTO extends AbstractAuditingDTO {
         return expenseAcctId;
     }
 
-    public void setExpenseAcctId(Long cProductCategoryAccountId) {
-        this.expenseAcctId = cProductCategoryAccountId;
+    public void setExpenseAcctId(Long cElementValueId) {
+        this.expenseAcctId = cElementValueId;
     }
 
     public String getExpenseAcctName() {
@@ -248,21 +254,12 @@ public class CProductDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
             ", productClassificationId=" + getProductClassificationId() +
-            ", productClassificationName=" + getProductClassificationName() +
             ", productCategoryId=" + getProductCategoryId() +
-            ", productCategoryName=" + getProductCategoryName() +
             ", productSubCategoryId=" + getProductSubCategoryId() +
-            ", productSubCategoryName=" + getProductSubCategoryName() +
             ", assetAcctId=" + getAssetAcctId() +
-            ", assetAcctName=" + getAssetAcctName() +
             ", expenseAcctId=" + getExpenseAcctId() +
-            ", expenseAcctName=" + getExpenseAcctName() +
             ", uomId=" + getUomId() +
-            ", uomName=" + getUomName() +
             "}";
     }
-
-    
 }

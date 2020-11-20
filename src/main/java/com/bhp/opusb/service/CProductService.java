@@ -1,6 +1,11 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.domain.CElementValue;
 import com.bhp.opusb.domain.CProduct;
+import com.bhp.opusb.domain.CProductCategory;
+import com.bhp.opusb.domain.CProductCategoryAccount;
+import com.bhp.opusb.domain.CProductClassification;
 import com.bhp.opusb.repository.CProductRepository;
 import com.bhp.opusb.service.dto.CProductDTO;
 import com.bhp.opusb.service.mapper.CProductMapper;
@@ -27,9 +32,13 @@ public class CProductService {
 
     private final CProductMapper cProductMapper;
 
-    public CProductService(CProductRepository cProductRepository, CProductMapper cProductMapper) {
+    private final ApplicationProperties applicationProperties;
+
+    public CProductService(CProductRepository cProductRepository, CProductMapper cProductMapper,
+    ApplicationProperties applicationProperties) {
         this.cProductRepository = cProductRepository;
         this.cProductMapper = cProductMapper;
+        this.applicationProperties = applicationProperties;
     }
 
     /**
@@ -79,5 +88,33 @@ public class CProductService {
     public void delete(Long id) {
         log.debug("Request to delete CProduct : {}", id);
         cProductRepository.deleteById(id);
+    }
+
+    public CProductClassification getDefaultClassification() {
+        CProductClassification classification = new CProductClassification();
+        classification.setId(applicationProperties.getDefaultProductClassificationId());
+        return classification;
+    }
+
+    public CProductCategory getDefaultCategory() {
+        CProductCategory category = new CProductCategory();
+        category.setId(applicationProperties.getDefaultProductCategoryId());
+        return category;
+    }
+
+    public CElementValue getDefaultAssetAccount() {
+        CElementValue account = new CElementValue();
+        account.setId(applicationProperties.getDefaultProductAssetAccountId());
+        return account;
+    }
+
+    public CElementValue getDefaultExpenseAccount() {
+        CElementValue account = new CElementValue();
+        account.setId(applicationProperties.getDefaultProductExpenseAccountId());
+        return account;
+    }
+
+    public String getDefaultType() {
+        return applicationProperties.getDefaultProductType();
     }
 }

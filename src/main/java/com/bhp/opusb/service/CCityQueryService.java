@@ -91,9 +91,6 @@ public class CCityQueryService extends QueryService<CCity> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CCity_.id));
             }
-            if (criteria.getCode() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getCode(), CCity_.code));
-            }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CCity_.name));
             }

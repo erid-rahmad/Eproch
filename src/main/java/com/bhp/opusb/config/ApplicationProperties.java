@@ -13,8 +13,81 @@ public class ApplicationProperties {
 
   private final Attachment attachment = new Attachment();
 
+  private long defaultOrganizationId = 1L;
+  private long defaultCostCenterId = 1L;
+  private long defaultElementValueId = 1L;
+  private String defaultProductType = "I";
+  private long defaultProductClassificationId = 1L;
+  private long defaultProductCategoryId = 1L;
+  private long defaultProductAssetAccountId = 1L;
+  private long defaultProductExpenseAccountId = 1L;
+
   public Attachment getAttachment() {
     return attachment;
+  }
+
+  public long getDefaultOrganizationId() {
+    return defaultOrganizationId;
+  }
+
+  public void setDefaultOrganizationId(long defaultOrganizationId) {
+    this.defaultOrganizationId = defaultOrganizationId;
+  }
+
+  public long getDefaultCostCenterId() {
+    return defaultCostCenterId;
+  }
+
+  public void setDefaultCostCenterId(long defaultCostCenterId) {
+    this.defaultCostCenterId = defaultCostCenterId;
+  }
+
+  public long getDefaultElementValueId() {
+    return defaultElementValueId;
+  }
+
+  public void setDefaultElementValueId(long defaultElementValueId) {
+    this.defaultElementValueId = defaultElementValueId;
+  }
+
+  public String getDefaultProductType() {
+    return defaultProductType;
+  }
+
+  public void setDefaultProductType(String defaultProductType) {
+    this.defaultProductType = defaultProductType;
+  }
+
+  public long getDefaultProductClassificationId() {
+    return defaultProductClassificationId;
+  }
+
+  public void setDefaultProductClassificationId(long defaultProductClassificationId) {
+    this.defaultProductClassificationId = defaultProductClassificationId;
+  }
+
+  public long getDefaultProductCategoryId() {
+    return defaultProductCategoryId;
+  }
+
+  public void setDefaultProductCategoryId(long defaultProductCategoryId) {
+    this.defaultProductCategoryId = defaultProductCategoryId;
+  }
+
+  public long getDefaultProductAssetAccountId() {
+    return defaultProductAssetAccountId;
+  }
+
+  public void setDefaultProductAssetAccountId(long defaultProductAssetAccountId) {
+    this.defaultProductAssetAccountId = defaultProductAssetAccountId;
+  }
+
+  public long getDefaultProductExpenseAccountId() {
+    return defaultProductExpenseAccountId;
+  }
+
+  public void setDefaultProductExpenseAccountId(long defaultProductExpenseAccountId) {
+    this.defaultProductExpenseAccountId = defaultProductExpenseAccountId;
   }
 
   public static final class Attachment {

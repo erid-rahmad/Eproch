@@ -10,6 +10,7 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.LocalDateFilter;
 
 /**
@@ -27,13 +28,9 @@ public class MMatchPOCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private StringFilter deliveryNo;
+
     private StringFilter cDocType;
-
-    private StringFilter cVendor;
-
-    private StringFilter cElement;
-
-    private StringFilter cCostCenter;
 
     private StringFilter poNo;
 
@@ -43,45 +40,27 @@ public class MMatchPOCriteria implements Serializable, Criteria {
 
     private LocalDateFilter receiptDate;
 
-    private StringFilter deliveryNo;
+    private BigDecimalFilter qty;
 
-    private StringFilter mProductCode;
+    private BigDecimalFilter cConversionRate;
 
-    private StringFilter mProductName;
+    private BigDecimalFilter openQty;
 
-    private StringFilter mProductDesc;
+    private BigDecimalFilter priceActual;
 
-    private StringFilter cUOM;
+    private BigDecimalFilter foreignActual;
 
-    private StringFilter qty;
+    private BigDecimalFilter openAmount;
 
-    private StringFilter cCurrency;
+    private BigDecimalFilter openForeignAmount;
 
-    private StringFilter cConversionRate;
+    private BigDecimalFilter totalLines;
 
-    private StringFilter openQty;
+    private BigDecimalFilter foreignTotalLines;
 
-    private StringFilter priceActual;
+    private BigDecimalFilter taxAmount;
 
-    private StringFilter foreignActual;
-
-    private StringFilter openAmount;
-
-    private StringFilter openForeignAmount;
-
-    private StringFilter totalLines;
-
-    private StringFilter foreignTotalLines;
-
-    private StringFilter cTax;
-
-    private StringFilter taxAmount;
-
-    private StringFilter foreignTaxAmount;
-
-    private StringFilter mLocator;
-
-    private StringFilter adOrganization;
+    private BigDecimalFilter foreignTaxAmount;
 
     private LocalDateFilter dateAccount;
 
@@ -89,42 +68,48 @@ public class MMatchPOCriteria implements Serializable, Criteria {
 
     private StringFilter orderSuffix;
 
-    private StringFilter lineNoPo;
+    private IntegerFilter lineNoPo;
 
-    private StringFilter lineNoMr;
+    private IntegerFilter lineNoMr;
 
-    private BooleanFilter isTaxable;
-
-    private StringFilter cTaxCode;
-
-    private StringFilter cTaxName;
+    private BooleanFilter taxable;
 
     private StringFilter description;
 
     private StringFilter mMatchType;
 
-    private StringFilter mWarehouse;
+    private LongFilter adOrganizationId;
+
+    private LongFilter cElementValueId;
+
+    private LongFilter cCostCenterId;
+
+    private LongFilter cVendorId;
+
+    private LongFilter cCurrencyId;
+
+    private LongFilter cTaxCategoryId;
+
+    private LongFilter cUomId;
+
+    private LongFilter mProductId;
+
+    private LongFilter mWarehouseId;
+
+    private LongFilter mLocatorId;
 
     public MMatchPOCriteria() {
     }
 
     public MMatchPOCriteria(MMatchPOCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.deliveryNo = other.deliveryNo == null ? null : other.deliveryNo.copy();
         this.cDocType = other.cDocType == null ? null : other.cDocType.copy();
-        this.cVendor = other.cVendor == null ? null : other.cVendor.copy();
-        this.cElement = other.cElement == null ? null : other.cElement.copy();
-        this.cCostCenter = other.cCostCenter == null ? null : other.cCostCenter.copy();
         this.poNo = other.poNo == null ? null : other.poNo.copy();
         this.poDate = other.poDate == null ? null : other.poDate.copy();
         this.receiptNo = other.receiptNo == null ? null : other.receiptNo.copy();
         this.receiptDate = other.receiptDate == null ? null : other.receiptDate.copy();
-        this.deliveryNo = other.deliveryNo == null ? null : other.deliveryNo.copy();
-        this.mProductCode = other.mProductCode == null ? null : other.mProductCode.copy();
-        this.mProductName = other.mProductName == null ? null : other.mProductName.copy();
-        this.mProductDesc = other.mProductDesc == null ? null : other.mProductDesc.copy();
-        this.cUOM = other.cUOM == null ? null : other.cUOM.copy();
         this.qty = other.qty == null ? null : other.qty.copy();
-        this.cCurrency = other.cCurrency == null ? null : other.cCurrency.copy();
         this.cConversionRate = other.cConversionRate == null ? null : other.cConversionRate.copy();
         this.openQty = other.openQty == null ? null : other.openQty.copy();
         this.priceActual = other.priceActual == null ? null : other.priceActual.copy();
@@ -133,22 +118,26 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.openForeignAmount = other.openForeignAmount == null ? null : other.openForeignAmount.copy();
         this.totalLines = other.totalLines == null ? null : other.totalLines.copy();
         this.foreignTotalLines = other.foreignTotalLines == null ? null : other.foreignTotalLines.copy();
-        this.cTax = other.cTax == null ? null : other.cTax.copy();
         this.taxAmount = other.taxAmount == null ? null : other.taxAmount.copy();
         this.foreignTaxAmount = other.foreignTaxAmount == null ? null : other.foreignTaxAmount.copy();
-        this.mLocator = other.mLocator == null ? null : other.mLocator.copy();
-        this.adOrganization = other.adOrganization == null ? null : other.adOrganization.copy();
         this.dateAccount = other.dateAccount == null ? null : other.dateAccount.copy();
         this.cDocTypeMr = other.cDocTypeMr == null ? null : other.cDocTypeMr.copy();
         this.orderSuffix = other.orderSuffix == null ? null : other.orderSuffix.copy();
         this.lineNoPo = other.lineNoPo == null ? null : other.lineNoPo.copy();
         this.lineNoMr = other.lineNoMr == null ? null : other.lineNoMr.copy();
-        this.isTaxable = other.isTaxable == null ? null : other.isTaxable.copy();
-        this.cTaxCode = other.cTaxCode == null ? null : other.cTaxCode.copy();
-        this.cTaxName = other.cTaxName == null ? null : other.cTaxName.copy();
+        this.taxable = other.taxable == null ? null : other.taxable.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.mMatchType = other.mMatchType == null ? null : other.mMatchType.copy();
-        this.mWarehouse = other.mWarehouse == null ? null : other.mWarehouse.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.cElementValueId = other.cElementValueId == null ? null : other.cElementValueId.copy();
+        this.cCostCenterId = other.cCostCenterId == null ? null : other.cCostCenterId.copy();
+        this.cVendorId = other.cVendorId == null ? null : other.cVendorId.copy();
+        this.cCurrencyId = other.cCurrencyId == null ? null : other.cCurrencyId.copy();
+        this.cTaxCategoryId = other.cTaxCategoryId == null ? null : other.cTaxCategoryId.copy();
+        this.cUomId = other.cUomId == null ? null : other.cUomId.copy();
+        this.mProductId = other.mProductId == null ? null : other.mProductId.copy();
+        this.mWarehouseId = other.mWarehouseId == null ? null : other.mWarehouseId.copy();
+        this.mLocatorId = other.mLocatorId == null ? null : other.mLocatorId.copy();
     }
 
     @Override
@@ -164,36 +153,20 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
+    public StringFilter getDeliveryNo() {
+        return deliveryNo;
+    }
+
+    public void setDeliveryNo(StringFilter deliveryNo) {
+        this.deliveryNo = deliveryNo;
+    }
+
     public StringFilter getcDocType() {
         return cDocType;
     }
 
     public void setcDocType(StringFilter cDocType) {
         this.cDocType = cDocType;
-    }
-
-    public StringFilter getcVendor() {
-        return cVendor;
-    }
-
-    public void setcVendor(StringFilter cVendor) {
-        this.cVendor = cVendor;
-    }
-
-    public StringFilter getcElement() {
-        return cElement;
-    }
-
-    public void setcElement(StringFilter cElement) {
-        this.cElement = cElement;
-    }
-
-    public StringFilter getcCostCenter() {
-        return cCostCenter;
-    }
-
-    public void setcCostCenter(StringFilter cCostCenter) {
-        this.cCostCenter = cCostCenter;
     }
 
     public StringFilter getPoNo() {
@@ -228,164 +201,92 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.receiptDate = receiptDate;
     }
 
-    public StringFilter getDeliveryNo() {
-        return deliveryNo;
-    }
-
-    public void setDeliveryNo(StringFilter deliveryNo) {
-        this.deliveryNo = deliveryNo;
-    }
-
-    public StringFilter getmProductCode() {
-        return mProductCode;
-    }
-
-    public void setmProductCode(StringFilter mProductCode) {
-        this.mProductCode = mProductCode;
-    }
-
-    public StringFilter getmProductName() {
-        return mProductName;
-    }
-
-    public void setmProductName(StringFilter mProductName) {
-        this.mProductName = mProductName;
-    }
-
-    public StringFilter getmProductDesc() {
-        return mProductDesc;
-    }
-
-    public void setmProductDesc(StringFilter mProductDesc) {
-        this.mProductDesc = mProductDesc;
-    }
-
-    public StringFilter getcUOM() {
-        return cUOM;
-    }
-
-    public void setcUOM(StringFilter cUOM) {
-        this.cUOM = cUOM;
-    }
-
-    public StringFilter getQty() {
+    public BigDecimalFilter getQty() {
         return qty;
     }
 
-    public void setQty(StringFilter qty) {
+    public void setQty(BigDecimalFilter qty) {
         this.qty = qty;
     }
 
-    public StringFilter getcCurrency() {
-        return cCurrency;
-    }
-
-    public void setcCurrency(StringFilter cCurrency) {
-        this.cCurrency = cCurrency;
-    }
-
-    public StringFilter getcConversionRate() {
+    public BigDecimalFilter getcConversionRate() {
         return cConversionRate;
     }
 
-    public void setcConversionRate(StringFilter cConversionRate) {
+    public void setcConversionRate(BigDecimalFilter cConversionRate) {
         this.cConversionRate = cConversionRate;
     }
 
-    public StringFilter getOpenQty() {
+    public BigDecimalFilter getOpenQty() {
         return openQty;
     }
 
-    public void setOpenQty(StringFilter openQty) {
+    public void setOpenQty(BigDecimalFilter openQty) {
         this.openQty = openQty;
     }
 
-    public StringFilter getPriceActual() {
+    public BigDecimalFilter getPriceActual() {
         return priceActual;
     }
 
-    public void setPriceActual(StringFilter priceActual) {
+    public void setPriceActual(BigDecimalFilter priceActual) {
         this.priceActual = priceActual;
     }
 
-    public StringFilter getForeignActual() {
+    public BigDecimalFilter getForeignActual() {
         return foreignActual;
     }
 
-    public void setForeignActual(StringFilter foreignActual) {
+    public void setForeignActual(BigDecimalFilter foreignActual) {
         this.foreignActual = foreignActual;
     }
 
-    public StringFilter getOpenAmount() {
+    public BigDecimalFilter getOpenAmount() {
         return openAmount;
     }
 
-    public void setOpenAmount(StringFilter openAmount) {
+    public void setOpenAmount(BigDecimalFilter openAmount) {
         this.openAmount = openAmount;
     }
 
-    public StringFilter getOpenForeignAmount() {
+    public BigDecimalFilter getOpenForeignAmount() {
         return openForeignAmount;
     }
 
-    public void setOpenForeignAmount(StringFilter openForeignAmount) {
+    public void setOpenForeignAmount(BigDecimalFilter openForeignAmount) {
         this.openForeignAmount = openForeignAmount;
     }
 
-    public StringFilter getTotalLines() {
+    public BigDecimalFilter getTotalLines() {
         return totalLines;
     }
 
-    public void setTotalLines(StringFilter totalLines) {
+    public void setTotalLines(BigDecimalFilter totalLines) {
         this.totalLines = totalLines;
     }
 
-    public StringFilter getForeignTotalLines() {
+    public BigDecimalFilter getForeignTotalLines() {
         return foreignTotalLines;
     }
 
-    public void setForeignTotalLines(StringFilter foreignTotalLines) {
+    public void setForeignTotalLines(BigDecimalFilter foreignTotalLines) {
         this.foreignTotalLines = foreignTotalLines;
     }
 
-    public StringFilter getcTax() {
-        return cTax;
-    }
-
-    public void setcTax(StringFilter cTax) {
-        this.cTax = cTax;
-    }
-
-    public StringFilter getTaxAmount() {
+    public BigDecimalFilter getTaxAmount() {
         return taxAmount;
     }
 
-    public void setTaxAmount(StringFilter taxAmount) {
+    public void setTaxAmount(BigDecimalFilter taxAmount) {
         this.taxAmount = taxAmount;
     }
 
-    public StringFilter getForeignTaxAmount() {
+    public BigDecimalFilter getForeignTaxAmount() {
         return foreignTaxAmount;
     }
 
-    public void setForeignTaxAmount(StringFilter foreignTaxAmount) {
+    public void setForeignTaxAmount(BigDecimalFilter foreignTaxAmount) {
         this.foreignTaxAmount = foreignTaxAmount;
-    }
-
-    public StringFilter getmLocator() {
-        return mLocator;
-    }
-
-    public void setmLocator(StringFilter mLocator) {
-        this.mLocator = mLocator;
-    }
-
-    public StringFilter getAdOrganization() {
-        return adOrganization;
-    }
-
-    public void setAdOrganization(StringFilter adOrganization) {
-        this.adOrganization = adOrganization;
     }
 
     public LocalDateFilter getDateAccount() {
@@ -412,44 +313,28 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.orderSuffix = orderSuffix;
     }
 
-    public StringFilter getLineNoPo() {
+    public IntegerFilter getLineNoPo() {
         return lineNoPo;
     }
 
-    public void setLineNoPo(StringFilter lineNoPo) {
+    public void setLineNoPo(IntegerFilter lineNoPo) {
         this.lineNoPo = lineNoPo;
     }
 
-    public StringFilter getLineNoMr() {
+    public IntegerFilter getLineNoMr() {
         return lineNoMr;
     }
 
-    public void setLineNoMr(StringFilter lineNoMr) {
+    public void setLineNoMr(IntegerFilter lineNoMr) {
         this.lineNoMr = lineNoMr;
     }
 
-    public BooleanFilter getIsTaxable() {
-        return isTaxable;
+    public BooleanFilter getTaxable() {
+        return taxable;
     }
 
-    public void setIsTaxable(BooleanFilter isTaxable) {
-        this.isTaxable = isTaxable;
-    }
-
-    public StringFilter getcTaxCode() {
-        return cTaxCode;
-    }
-
-    public void setcTaxCode(StringFilter cTaxCode) {
-        this.cTaxCode = cTaxCode;
-    }
-
-    public StringFilter getcTaxName() {
-        return cTaxName;
-    }
-
-    public void setcTaxName(StringFilter cTaxName) {
-        this.cTaxName = cTaxName;
+    public void setTaxable(BooleanFilter taxable) {
+        this.taxable = taxable;
     }
 
     public StringFilter getDescription() {
@@ -468,12 +353,84 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.mMatchType = mMatchType;
     }
 
-    public StringFilter getmWarehouse() {
-        return mWarehouse;
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
     }
 
-    public void setmWarehouse(StringFilter mWarehouse) {
-        this.mWarehouse = mWarehouse;
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+
+    public LongFilter getCElementValueId() {
+        return cElementValueId;
+    }
+
+    public void setCElementValueId(LongFilter cElementValueId) {
+        this.cElementValueId = cElementValueId;
+    }
+
+    public LongFilter getCCostCenterId() {
+        return cCostCenterId;
+    }
+
+    public void setCCostCenterId(LongFilter cCostCenterId) {
+        this.cCostCenterId = cCostCenterId;
+    }
+
+    public LongFilter getCVendorId() {
+        return cVendorId;
+    }
+
+    public void setCVendorId(LongFilter cVendorId) {
+        this.cVendorId = cVendorId;
+    }
+
+    public LongFilter getCCurrencyId() {
+        return cCurrencyId;
+    }
+
+    public void setCCurrencyId(LongFilter cCurrencyId) {
+        this.cCurrencyId = cCurrencyId;
+    }
+
+    public LongFilter getCTaxCategoryId() {
+        return cTaxCategoryId;
+    }
+
+    public void setCTaxCategoryId(LongFilter cTaxCategoryId) {
+        this.cTaxCategoryId = cTaxCategoryId;
+    }
+
+    public LongFilter getCUomId() {
+        return cUomId;
+    }
+
+    public void setCUomId(LongFilter cUomId) {
+        this.cUomId = cUomId;
+    }
+
+    public LongFilter getMProductId() {
+        return mProductId;
+    }
+
+    public void setMProductId(LongFilter mProductId) {
+        this.mProductId = mProductId;
+    }
+
+    public LongFilter getMWarehouseId() {
+        return mWarehouseId;
+    }
+
+    public void setMWarehouseId(LongFilter mWarehouseId) {
+        this.mWarehouseId = mWarehouseId;
+    }
+
+    public LongFilter getMLocatorId() {
+        return mLocatorId;
+    }
+
+    public void setMLocatorId(LongFilter mLocatorId) {
+        this.mLocatorId = mLocatorId;
     }
 
 
@@ -488,21 +445,13 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         final MMatchPOCriteria that = (MMatchPOCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(deliveryNo, that.deliveryNo) &&
             Objects.equals(cDocType, that.cDocType) &&
-            Objects.equals(cVendor, that.cVendor) &&
-            Objects.equals(cElement, that.cElement) &&
-            Objects.equals(cCostCenter, that.cCostCenter) &&
             Objects.equals(poNo, that.poNo) &&
             Objects.equals(poDate, that.poDate) &&
             Objects.equals(receiptNo, that.receiptNo) &&
             Objects.equals(receiptDate, that.receiptDate) &&
-            Objects.equals(deliveryNo, that.deliveryNo) &&
-            Objects.equals(mProductCode, that.mProductCode) &&
-            Objects.equals(mProductName, that.mProductName) &&
-            Objects.equals(mProductDesc, that.mProductDesc) &&
-            Objects.equals(cUOM, that.cUOM) &&
             Objects.equals(qty, that.qty) &&
-            Objects.equals(cCurrency, that.cCurrency) &&
             Objects.equals(cConversionRate, that.cConversionRate) &&
             Objects.equals(openQty, that.openQty) &&
             Objects.equals(priceActual, that.priceActual) &&
@@ -511,43 +460,39 @@ public class MMatchPOCriteria implements Serializable, Criteria {
             Objects.equals(openForeignAmount, that.openForeignAmount) &&
             Objects.equals(totalLines, that.totalLines) &&
             Objects.equals(foreignTotalLines, that.foreignTotalLines) &&
-            Objects.equals(cTax, that.cTax) &&
             Objects.equals(taxAmount, that.taxAmount) &&
             Objects.equals(foreignTaxAmount, that.foreignTaxAmount) &&
-            Objects.equals(mLocator, that.mLocator) &&
-            Objects.equals(adOrganization, that.adOrganization) &&
             Objects.equals(dateAccount, that.dateAccount) &&
             Objects.equals(cDocTypeMr, that.cDocTypeMr) &&
             Objects.equals(orderSuffix, that.orderSuffix) &&
             Objects.equals(lineNoPo, that.lineNoPo) &&
             Objects.equals(lineNoMr, that.lineNoMr) &&
-            Objects.equals(isTaxable, that.isTaxable) &&
-            Objects.equals(cTaxCode, that.cTaxCode) &&
-            Objects.equals(cTaxName, that.cTaxName) &&
+            Objects.equals(taxable, that.taxable) &&
             Objects.equals(description, that.description) &&
             Objects.equals(mMatchType, that.mMatchType) &&
-            Objects.equals(mWarehouse, that.mWarehouse);
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(cElementValueId, that.cElementValueId) &&
+            Objects.equals(cCostCenterId, that.cCostCenterId) &&
+            Objects.equals(cVendorId, that.cVendorId) &&
+            Objects.equals(cCurrencyId, that.cCurrencyId) &&
+            Objects.equals(cTaxCategoryId, that.cTaxCategoryId) &&
+            Objects.equals(cUomId, that.cUomId) &&
+            Objects.equals(mProductId, that.mProductId) &&
+            Objects.equals(mWarehouseId, that.mWarehouseId) &&
+            Objects.equals(mLocatorId, that.mLocatorId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
+        deliveryNo,
         cDocType,
-        cVendor,
-        cElement,
-        cCostCenter,
         poNo,
         poDate,
         receiptNo,
         receiptDate,
-        deliveryNo,
-        mProductCode,
-        mProductName,
-        mProductDesc,
-        cUOM,
         qty,
-        cCurrency,
         cConversionRate,
         openQty,
         priceActual,
@@ -556,22 +501,26 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         openForeignAmount,
         totalLines,
         foreignTotalLines,
-        cTax,
         taxAmount,
         foreignTaxAmount,
-        mLocator,
-        adOrganization,
         dateAccount,
         cDocTypeMr,
         orderSuffix,
         lineNoPo,
         lineNoMr,
-        isTaxable,
-        cTaxCode,
-        cTaxName,
+        taxable,
         description,
         mMatchType,
-        mWarehouse
+        adOrganizationId,
+        cElementValueId,
+        cCostCenterId,
+        cVendorId,
+        cCurrencyId,
+        cTaxCategoryId,
+        cUomId,
+        mProductId,
+        mWarehouseId,
+        mLocatorId
         );
     }
 
@@ -579,21 +528,13 @@ public class MMatchPOCriteria implements Serializable, Criteria {
     public String toString() {
         return "MMatchPOCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (deliveryNo != null ? "deliveryNo=" + deliveryNo + ", " : "") +
                 (cDocType != null ? "cDocType=" + cDocType + ", " : "") +
-                (cVendor != null ? "cVendor=" + cVendor + ", " : "") +
-                (cElement != null ? "cElement=" + cElement + ", " : "") +
-                (cCostCenter != null ? "cCostCenter=" + cCostCenter + ", " : "") +
                 (poNo != null ? "poNo=" + poNo + ", " : "") +
                 (poDate != null ? "poDate=" + poDate + ", " : "") +
                 (receiptNo != null ? "receiptNo=" + receiptNo + ", " : "") +
                 (receiptDate != null ? "receiptDate=" + receiptDate + ", " : "") +
-                (deliveryNo != null ? "deliveryNo=" + deliveryNo + ", " : "") +
-                (mProductCode != null ? "mProductCode=" + mProductCode + ", " : "") +
-                (mProductName != null ? "mProductName=" + mProductName + ", " : "") +
-                (mProductDesc != null ? "mProductDesc=" + mProductDesc + ", " : "") +
-                (cUOM != null ? "cUOM=" + cUOM + ", " : "") +
                 (qty != null ? "qty=" + qty + ", " : "") +
-                (cCurrency != null ? "cCurrency=" + cCurrency + ", " : "") +
                 (cConversionRate != null ? "cConversionRate=" + cConversionRate + ", " : "") +
                 (openQty != null ? "openQty=" + openQty + ", " : "") +
                 (priceActual != null ? "priceActual=" + priceActual + ", " : "") +
@@ -602,22 +543,26 @@ public class MMatchPOCriteria implements Serializable, Criteria {
                 (openForeignAmount != null ? "openForeignAmount=" + openForeignAmount + ", " : "") +
                 (totalLines != null ? "totalLines=" + totalLines + ", " : "") +
                 (foreignTotalLines != null ? "foreignTotalLines=" + foreignTotalLines + ", " : "") +
-                (cTax != null ? "cTax=" + cTax + ", " : "") +
                 (taxAmount != null ? "taxAmount=" + taxAmount + ", " : "") +
                 (foreignTaxAmount != null ? "foreignTaxAmount=" + foreignTaxAmount + ", " : "") +
-                (mLocator != null ? "mLocator=" + mLocator + ", " : "") +
-                (adOrganization != null ? "adOrganization=" + adOrganization + ", " : "") +
                 (dateAccount != null ? "dateAccount=" + dateAccount + ", " : "") +
                 (cDocTypeMr != null ? "cDocTypeMr=" + cDocTypeMr + ", " : "") +
                 (orderSuffix != null ? "orderSuffix=" + orderSuffix + ", " : "") +
                 (lineNoPo != null ? "lineNoPo=" + lineNoPo + ", " : "") +
                 (lineNoMr != null ? "lineNoMr=" + lineNoMr + ", " : "") +
-                (isTaxable != null ? "isTaxable=" + isTaxable + ", " : "") +
-                (cTaxCode != null ? "cTaxCode=" + cTaxCode + ", " : "") +
-                (cTaxName != null ? "cTaxName=" + cTaxName + ", " : "") +
+                (taxable != null ? "taxable=" + taxable + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (mMatchType != null ? "mMatchType=" + mMatchType + ", " : "") +
-                (mWarehouse != null ? "mWarehouse=" + mWarehouse + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (cElementValueId != null ? "cElementValueId=" + cElementValueId + ", " : "") +
+                (cCostCenterId != null ? "cCostCenterId=" + cCostCenterId + ", " : "") +
+                (cVendorId != null ? "cVendorId=" + cVendorId + ", " : "") +
+                (cCurrencyId != null ? "cCurrencyId=" + cCurrencyId + ", " : "") +
+                (cTaxCategoryId != null ? "cTaxCategoryId=" + cTaxCategoryId + ", " : "") +
+                (cUomId != null ? "cUomId=" + cUomId + ", " : "") +
+                (mProductId != null ? "mProductId=" + mProductId + ", " : "") +
+                (mWarehouseId != null ? "mWarehouseId=" + mWarehouseId + ", " : "") +
+                (mLocatorId != null ? "mLocatorId=" + mLocatorId + ", " : "") +
             "}";
     }
 

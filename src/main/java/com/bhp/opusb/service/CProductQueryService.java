@@ -127,11 +127,11 @@ public class CProductQueryService extends QueryService<CProduct> {
             }
             if (criteria.getAssetAcctId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAssetAcctId(),
-                    root -> root.join(CProduct_.assetAcct, JoinType.LEFT).get(CProductCategoryAccount_.id)));
+                    root -> root.join(CProduct_.assetAcct, JoinType.LEFT).get(CElementValue_.id)));
             }
             if (criteria.getExpenseAcctId() != null) {
                 specification = specification.and(buildSpecification(criteria.getExpenseAcctId(),
-                    root -> root.join(CProduct_.expenseAcct, JoinType.LEFT).get(CProductCategoryAccount_.id)));
+                    root -> root.join(CProduct_.expenseAcct, JoinType.LEFT).get(CElementValue_.id)));
             }
             if (criteria.getUomId() != null) {
                 specification = specification.and(buildSpecification(criteria.getUomId(),

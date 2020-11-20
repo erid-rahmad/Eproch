@@ -98,14 +98,20 @@
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
-            <column name="product_classification_id" type="numeric"/>
             <column name="product_category_id" type="numeric"/>
-            <column name="product_sub_category_id" type="numeric"/>
             <column name="asset_acct_id" type="numeric"/>
             <column name="expense_acct_id" type="numeric"/>
             <column name="uom_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20201119095700" author="Ananta Aryadewa">
+        <modifyDataType tableName="c_product" columnName="code" newDataType="varchar(50)" />
+        <modifyDataType tableName="c_product" columnName="type" newDataType="varchar(1)" />
+        <addNotNullConstraint tableName="c_product" columnName="type" />
+        <dropNotNullConstraint tableName="c_product" columnName="product_classification_id" />
+        <dropNotNullConstraint tableName="c_product" columnName="product_sub_category_id" />
     </changeSet>
 
 </databaseChangeLog>

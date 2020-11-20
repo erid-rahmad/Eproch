@@ -2,163 +2,246 @@
     "name": "MMatchPO",
     "fields": [
         {
+            "fieldName": "deliveryNo",
+            "javadoc": "PRSHPN",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
             "fieldName": "cDocType",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "cVendor",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "cElement",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "cCostCenter",
-            "fieldType": "String"
+            "javadoc": "PRDCTO",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "2"
         },
         {
             "fieldName": "poNo",
-            "fieldType": "String"
+            "javadoc": "PRDOCO",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
         },
         {
             "fieldName": "poDate",
+            "javadoc": "PRTRDJ",
             "fieldType": "LocalDate"
         },
         {
             "fieldName": "receiptNo",
-            "fieldType": "String"
+            "javadoc": "PRDOC",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
         },
         {
             "fieldName": "receiptDate",
+            "javadoc": "PRRCDJ",
             "fieldType": "LocalDate"
         },
         {
-            "fieldName": "deliveryNo",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "mProductCode",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "mProductName",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "mProductDesc",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "cUOM",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "qty",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "cCurrency",
-            "fieldType": "String"
+            "javadoc": "PRUREC for Receipt Quantity",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "cConversionRate",
-            "fieldType": "String"
+            "javadoc": "PRCRR",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "openQty",
-            "fieldType": "String"
+            "javadoc": "PRUOPN for Open Quantity",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "priceActual",
-            "fieldType": "String"
+            "javadoc": "PRPRRC for Unit Price",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "foreignActual",
-            "fieldType": "String"
+            "javadoc": "PRFRRC for Unit Price in foreign currency",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "openAmount",
-            "fieldType": "String"
+            "javadoc": "PRAOPN for Open Amount",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "openForeignAmount",
-            "fieldType": "String"
+            "javadoc": "PRFAP for Open Amount in foreign currency",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "totalLines",
-            "fieldType": "String"
+            "javadoc": "PRAREC for Total Line Amount",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "foreignTotalLines",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "cTax",
-            "fieldType": "String"
+            "javadoc": "PRFREC for Total Line Amount in foreign currency",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "taxAmount",
-            "fieldType": "String"
+            "javadoc": "PRSTAM",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "foreignTaxAmount",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "mLocator",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "adOrganization",
-            "fieldType": "String"
+            "javadoc": "PRCTAM",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "dateAccount",
+            "javadoc": "PRDGL for GL date",
             "fieldType": "LocalDate"
         },
         {
             "fieldName": "cDocTypeMr",
-            "fieldType": "String"
+            "javadoc": "PRDCT",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "2"
         },
         {
             "fieldName": "orderSuffix",
-            "fieldType": "String"
+            "javadoc": "PRSFXO",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
         },
         {
             "fieldName": "lineNoPo",
-            "fieldType": "String"
+            "javadoc": "PRLNID for PO line number",
+            "fieldType": "Integer"
         },
         {
             "fieldName": "lineNoMr",
-            "fieldType": "String"
+            "javadoc": "PRNLIN for number of lines",
+            "fieldType": "Integer"
         },
         {
-            "fieldName": "isTaxable",
+            "fieldName": "taxable",
+            "javadoc": "PRTX Y means true, otherwise false",
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "cTaxCode",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "cTaxName",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "description",
-            "fieldType": "String"
+            "javadoc": "PRVRMK",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
         },
         {
             "fieldName": "mMatchType",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "mWarehouse",
-            "fieldType": "String"
+            "javadoc": "PRMATC",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1"
         }
     ],
-    "relationships": [],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mMatchPO",
+            "relationshipValidateRules": "required",
+            "javadoc": "PRKCOO",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cElementValue",
+            "otherEntityRelationshipName": "mMatchPO",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cElementValue",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCostCenter",
+            "otherEntityRelationshipName": "mMatchPO",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cCostCenter",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mMatchPO",
+            "javadoc": "PRAN8 is mapped to vendor code.",
+            "relationshipName": "cVendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mMatchPO",
+            "javadoc": "PRCRCD",
+            "relationshipName": "cCurrency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTaxCategory",
+            "otherEntityRelationshipName": "mMatchPO",
+            "javadoc": "PREXR1 is mapped to tax code.\\nPRTXA1 is mapped to tax name.",
+            "relationshipName": "cTaxCategory",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cUnitOfMeasure",
+            "otherEntityRelationshipName": "mMatchPO",
+            "javadoc": "PRUOM is mapped to code, name, and symbol.",
+            "relationshipName": "cUom",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cProduct",
+            "otherEntityRelationshipName": "mMatchPO",
+            "javadoc": "PRITM is mapped to product code.\\nPRLITM is mapped to product name.\\nPRAITM is mapped to product desc.",
+            "relationshipName": "mProduct",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cWarehouse",
+            "otherEntityRelationshipName": "mMatchPO",
+            "javadoc": "PRMCU is mapped to warehouse code and name.",
+            "relationshipName": "mWarehouse",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cLocator",
+            "otherEntityRelationshipName": "mMatchPO",
+            "javadoc": "PRLOCN is mapped to locator code.",
+            "relationshipName": "mLocator",
+            "otherEntityField": "id"
+        }
+    ],
     "changelogDate": "20201016085600",
     "entityTableName": "m_match_po",
     "dto": "mapstruct",

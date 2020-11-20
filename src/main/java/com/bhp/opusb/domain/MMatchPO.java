@@ -1,13 +1,24 @@
 package com.bhp.opusb.domain;
 
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.time.LocalDate;
 
 /**
  * A MMatchPO.
@@ -24,130 +35,255 @@ public class MMatchPO implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "c_doc_type")
+    /**
+     * PRSHPN
+     */
+    @Size(max = 20)
+    @Column(name = "delivery_no", length = 20)
+    private String deliveryNo;
+
+    /**
+     * PRDCTO
+     */
+    @Size(max = 2)
+    @Column(name = "c_doc_type", length = 2)
     private String cDocType;
 
-    @Column(name = "c_vendor")
-    private String cVendor;
-
-    @Column(name = "c_element")
-    private String cElement;
-
-    @Column(name = "c_cost_center")
-    private String cCostCenter;
-
-    @Column(name = "po_no")
+    /**
+     * PRDOCO
+     */
+    @Size(max = 20)
+    @Column(name = "po_no", length = 20)
     private String poNo;
 
+    /**
+     * PRTRDJ
+     */
     @Column(name = "po_date")
     private LocalDate poDate;
 
-    @Column(name = "receipt_no")
+    /**
+     * PRDOC
+     */
+    @Size(max = 20)
+    @Column(name = "receipt_no", length = 20)
     private String receiptNo;
 
+    /**
+     * PRRCDJ
+     */
     @Column(name = "receipt_date")
     private LocalDate receiptDate;
 
-    @Column(name = "delivery_no")
-    private String deliveryNo;
+    /**
+     * PRUREC for Receipt Quantity
+     */
+    @Column(name = "qty", precision = 21, scale = 2)
+    private BigDecimal qty;
 
-    @Column(name = "m_product_code")
-    private String mProductCode;
+    /**
+     * PRCRR
+     */
+    @Column(name = "c_conversion_rate", precision = 21, scale = 2)
+    private BigDecimal cConversionRate;
 
-    @Column(name = "m_product_name")
-    private String mProductName;
+    /**
+     * PRUOPN for Open Quantity
+     */
+    @Column(name = "open_qty", precision = 21, scale = 2)
+    private BigDecimal openQty;
 
-    @Column(name = "m_product_desc")
-    private String mProductDesc;
+    /**
+     * PRPRRC for Unit Price
+     */
+    @Column(name = "price_actual", precision = 21, scale = 2)
+    private BigDecimal priceActual;
 
-    @Column(name = "c_uom")
-    private String cUOM;
+    /**
+     * PRFRRC for Unit Price in foreign currency
+     */
+    @Column(name = "foreign_actual", precision = 21, scale = 2)
+    private BigDecimal foreignActual;
 
-    @Column(name = "qty")
-    private String qty;
+    /**
+     * PRAOPN for Open Amount
+     */
+    @Column(name = "open_amount", precision = 21, scale = 2)
+    private BigDecimal openAmount;
 
-    @Column(name = "c_currency")
-    private String cCurrency;
+    /**
+     * PRFAP for Open Amount in foreign currency
+     */
+    @Column(name = "open_foreign_amount", precision = 21, scale = 2)
+    private BigDecimal openForeignAmount;
 
-    @Column(name = "c_conversion_rate")
-    private String cConversionRate;
+    /**
+     * PRAREC for Total Line Amount
+     */
+    @Column(name = "total_lines", precision = 21, scale = 2)
+    private BigDecimal totalLines;
 
-    @Column(name = "open_qty")
-    private String openQty;
+    /**
+     * PRFREC for Total Line Amount in foreign currency
+     */
+    @Column(name = "foreign_total_lines", precision = 21, scale = 2)
+    private BigDecimal foreignTotalLines;
 
-    @Column(name = "price_actual")
-    private String priceActual;
+    /**
+     * PRSTAM
+     */
+    @Column(name = "tax_amount", precision = 21, scale = 2)
+    private BigDecimal taxAmount;
 
-    @Column(name = "foreign_actual")
-    private String foreignActual;
+    /**
+     * PRCTAM
+     */
+    @Column(name = "foreign_tax_amount", precision = 21, scale = 2)
+    private BigDecimal foreignTaxAmount;
 
-    @Column(name = "open_amount")
-    private String openAmount;
-
-    @Column(name = "open_foreign_amount")
-    private String openForeignAmount;
-
-    @Column(name = "total_lines")
-    private String totalLines;
-
-    @Column(name = "foreign_total_lines")
-    private String foreignTotalLines;
-
-    @Column(name = "c_tax")
-    private String cTax;
-
-    @Column(name = "tax_amount")
-    private String taxAmount;
-
-    @Column(name = "foreign_tax_amount")
-    private String foreignTaxAmount;
-
-    @Column(name = "m_locator")
-    private String mLocator;
-
-    @Column(name = "ad_organization")
-    private String adOrganization;
-
+    /**
+     * PRDGL for GL date
+     */
     @Column(name = "date_account")
     private LocalDate dateAccount;
 
-    @Column(name = "c_doc_type_mr")
+    /**
+     * PRDCT
+     */
+    @Size(max = 2)
+    @Column(name = "c_doc_type_mr", length = 2)
     private String cDocTypeMr;
 
-    @Column(name = "order_suffix")
+    /**
+     * PRSFXO
+     */
+    @Size(max = 10)
+    @Column(name = "order_suffix", length = 10)
     private String orderSuffix;
 
+    /**
+     * PRLNID for PO line number
+     */
     @Column(name = "line_no_po")
-    private String lineNoPo;
+    private Integer lineNoPo;
 
+    /**
+     * PRNLIN for number of lines
+     */
     @Column(name = "line_no_mr")
-    private String lineNoMr;
+    private Integer lineNoMr;
 
-    @Column(name = "is_taxable")
-    private Boolean isTaxable;
+    /**
+     * PRTX Y means true, otherwise false
+     */
+    @Column(name = "taxable")
+    private Boolean taxable;
 
-    @Column(name = "c_tax_code")
-    private String cTaxCode;
-
-    @Column(name = "c_tax_name")
-    private String cTaxName;
-
-    @Column(name = "description")
+    /**
+     * PRVRMK
+     */
+    @Size(max = 30)
+    @Column(name = "description", length = 30)
     private String description;
 
-    @Column(name = "m_match_type")
+    /**
+     * PRMATC
+     */
+    @Size(max = 1)
+    @Column(name = "m_match_type", length = 1)
     private String mMatchType;
 
-    @Column(name = "m_warehouse")
-    private String mWarehouse;
+    /**
+     * PRKCOO
+     */
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mMatchPOS")
+    private ADOrganization adOrganization;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mMatchPOS")
+    private CElementValue cElementValue;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mMatchPOS")
+    private CCostCenter cCostCenter;
+
+    /**
+     * PRAN8 is mapped to vendor code.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mMatchPOS")
+    private CVendor cVendor;
+
+    /**
+     * PRCRCD
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mMatchPOS")
+    private CCurrency cCurrency;
+
+    /**
+     * PREXR1 is mapped to tax code.
+     * PRTXA1 is mapped to tax name.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mMatchPOS")
+    private CTaxCategory cTaxCategory;
+
+    /**
+     * PRUOM is mapped to code, name, and symbol.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mMatchPOS")
+    private CUnitOfMeasure cUom;
+
+    /**
+     * PRITM is mapped to product code.
+     * PRLITM is mapped to product name.
+     * PRAITM is mapped to product desc.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mMatchPOS")
+    private CProduct mProduct;
+
+    /**
+     * PRMCU is mapped to warehouse code and name.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mMatchPOS")
+    private CWarehouse mWarehouse;
+
+    /**
+     * PRLOCN is mapped to locator code.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mMatchPOS")
+    private CLocator mLocator;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getDeliveryNo() {
+        return deliveryNo;
+    }
+
+    public MMatchPO deliveryNo(String deliveryNo) {
+        this.deliveryNo = deliveryNo;
+        return this;
+    }
+
+    public void setDeliveryNo(String deliveryNo) {
+        this.deliveryNo = deliveryNo;
     }
 
     public String getcDocType() {
@@ -161,45 +297,6 @@ public class MMatchPO implements Serializable {
 
     public void setcDocType(String cDocType) {
         this.cDocType = cDocType;
-    }
-
-    public String getcVendor() {
-        return cVendor;
-    }
-
-    public MMatchPO cVendor(String cVendor) {
-        this.cVendor = cVendor;
-        return this;
-    }
-
-    public void setcVendor(String cVendor) {
-        this.cVendor = cVendor;
-    }
-
-    public String getcElement() {
-        return cElement;
-    }
-
-    public MMatchPO cElement(String cElement) {
-        this.cElement = cElement;
-        return this;
-    }
-
-    public void setcElement(String cElement) {
-        this.cElement = cElement;
-    }
-
-    public String getcCostCenter() {
-        return cCostCenter;
-    }
-
-    public MMatchPO cCostCenter(String cCostCenter) {
-        this.cCostCenter = cCostCenter;
-        return this;
-    }
-
-    public void setcCostCenter(String cCostCenter) {
-        this.cCostCenter = cCostCenter;
     }
 
     public String getPoNo() {
@@ -254,264 +351,147 @@ public class MMatchPO implements Serializable {
         this.receiptDate = receiptDate;
     }
 
-    public String getDeliveryNo() {
-        return deliveryNo;
-    }
-
-    public MMatchPO deliveryNo(String deliveryNo) {
-        this.deliveryNo = deliveryNo;
-        return this;
-    }
-
-    public void setDeliveryNo(String deliveryNo) {
-        this.deliveryNo = deliveryNo;
-    }
-
-    public String getmProductCode() {
-        return mProductCode;
-    }
-
-    public MMatchPO mProductCode(String mProductCode) {
-        this.mProductCode = mProductCode;
-        return this;
-    }
-
-    public void setmProductCode(String mProductCode) {
-        this.mProductCode = mProductCode;
-    }
-
-    public String getmProductName() {
-        return mProductName;
-    }
-
-    public MMatchPO mProductName(String mProductName) {
-        this.mProductName = mProductName;
-        return this;
-    }
-
-    public void setmProductName(String mProductName) {
-        this.mProductName = mProductName;
-    }
-
-    public String getmProductDesc() {
-        return mProductDesc;
-    }
-
-    public MMatchPO mProductDesc(String mProductDesc) {
-        this.mProductDesc = mProductDesc;
-        return this;
-    }
-
-    public void setmProductDesc(String mProductDesc) {
-        this.mProductDesc = mProductDesc;
-    }
-
-    public String getcUOM() {
-        return cUOM;
-    }
-
-    public MMatchPO cUOM(String cUOM) {
-        this.cUOM = cUOM;
-        return this;
-    }
-
-    public void setcUOM(String cUOM) {
-        this.cUOM = cUOM;
-    }
-
-    public String getQty() {
+    public BigDecimal getQty() {
         return qty;
     }
 
-    public MMatchPO qty(String qty) {
+    public MMatchPO qty(BigDecimal qty) {
         this.qty = qty;
         return this;
     }
 
-    public void setQty(String qty) {
+    public void setQty(BigDecimal qty) {
         this.qty = qty;
     }
 
-    public String getcCurrency() {
-        return cCurrency;
-    }
-
-    public MMatchPO cCurrency(String cCurrency) {
-        this.cCurrency = cCurrency;
-        return this;
-    }
-
-    public void setcCurrency(String cCurrency) {
-        this.cCurrency = cCurrency;
-    }
-
-    public String getcConversionRate() {
+    public BigDecimal getcConversionRate() {
         return cConversionRate;
     }
 
-    public MMatchPO cConversionRate(String cConversionRate) {
+    public MMatchPO cConversionRate(BigDecimal cConversionRate) {
         this.cConversionRate = cConversionRate;
         return this;
     }
 
-    public void setcConversionRate(String cConversionRate) {
+    public void setcConversionRate(BigDecimal cConversionRate) {
         this.cConversionRate = cConversionRate;
     }
 
-    public String getOpenQty() {
+    public BigDecimal getOpenQty() {
         return openQty;
     }
 
-    public MMatchPO openQty(String openQty) {
+    public MMatchPO openQty(BigDecimal openQty) {
         this.openQty = openQty;
         return this;
     }
 
-    public void setOpenQty(String openQty) {
+    public void setOpenQty(BigDecimal openQty) {
         this.openQty = openQty;
     }
 
-    public String getPriceActual() {
+    public BigDecimal getPriceActual() {
         return priceActual;
     }
 
-    public MMatchPO priceActual(String priceActual) {
+    public MMatchPO priceActual(BigDecimal priceActual) {
         this.priceActual = priceActual;
         return this;
     }
 
-    public void setPriceActual(String priceActual) {
+    public void setPriceActual(BigDecimal priceActual) {
         this.priceActual = priceActual;
     }
 
-    public String getForeignActual() {
+    public BigDecimal getForeignActual() {
         return foreignActual;
     }
 
-    public MMatchPO foreignActual(String foreignActual) {
+    public MMatchPO foreignActual(BigDecimal foreignActual) {
         this.foreignActual = foreignActual;
         return this;
     }
 
-    public void setForeignActual(String foreignActual) {
+    public void setForeignActual(BigDecimal foreignActual) {
         this.foreignActual = foreignActual;
     }
 
-    public String getOpenAmount() {
+    public BigDecimal getOpenAmount() {
         return openAmount;
     }
 
-    public MMatchPO openAmount(String openAmount) {
+    public MMatchPO openAmount(BigDecimal openAmount) {
         this.openAmount = openAmount;
         return this;
     }
 
-    public void setOpenAmount(String openAmount) {
+    public void setOpenAmount(BigDecimal openAmount) {
         this.openAmount = openAmount;
     }
 
-    public String getOpenForeignAmount() {
+    public BigDecimal getOpenForeignAmount() {
         return openForeignAmount;
     }
 
-    public MMatchPO openForeignAmount(String openForeignAmount) {
+    public MMatchPO openForeignAmount(BigDecimal openForeignAmount) {
         this.openForeignAmount = openForeignAmount;
         return this;
     }
 
-    public void setOpenForeignAmount(String openForeignAmount) {
+    public void setOpenForeignAmount(BigDecimal openForeignAmount) {
         this.openForeignAmount = openForeignAmount;
     }
 
-    public String getTotalLines() {
+    public BigDecimal getTotalLines() {
         return totalLines;
     }
 
-    public MMatchPO totalLines(String totalLines) {
+    public MMatchPO totalLines(BigDecimal totalLines) {
         this.totalLines = totalLines;
         return this;
     }
 
-    public void setTotalLines(String totalLines) {
+    public void setTotalLines(BigDecimal totalLines) {
         this.totalLines = totalLines;
     }
 
-    public String getForeignTotalLines() {
+    public BigDecimal getForeignTotalLines() {
         return foreignTotalLines;
     }
 
-    public MMatchPO foreignTotalLines(String foreignTotalLines) {
+    public MMatchPO foreignTotalLines(BigDecimal foreignTotalLines) {
         this.foreignTotalLines = foreignTotalLines;
         return this;
     }
 
-    public void setForeignTotalLines(String foreignTotalLines) {
+    public void setForeignTotalLines(BigDecimal foreignTotalLines) {
         this.foreignTotalLines = foreignTotalLines;
     }
 
-    public String getcTax() {
-        return cTax;
-    }
-
-    public MMatchPO cTax(String cTax) {
-        this.cTax = cTax;
-        return this;
-    }
-
-    public void setcTax(String cTax) {
-        this.cTax = cTax;
-    }
-
-    public String getTaxAmount() {
+    public BigDecimal getTaxAmount() {
         return taxAmount;
     }
 
-    public MMatchPO taxAmount(String taxAmount) {
+    public MMatchPO taxAmount(BigDecimal taxAmount) {
         this.taxAmount = taxAmount;
         return this;
     }
 
-    public void setTaxAmount(String taxAmount) {
+    public void setTaxAmount(BigDecimal taxAmount) {
         this.taxAmount = taxAmount;
     }
 
-    public String getForeignTaxAmount() {
+    public BigDecimal getForeignTaxAmount() {
         return foreignTaxAmount;
     }
 
-    public MMatchPO foreignTaxAmount(String foreignTaxAmount) {
+    public MMatchPO foreignTaxAmount(BigDecimal foreignTaxAmount) {
         this.foreignTaxAmount = foreignTaxAmount;
         return this;
     }
 
-    public void setForeignTaxAmount(String foreignTaxAmount) {
+    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
         this.foreignTaxAmount = foreignTaxAmount;
-    }
-
-    public String getmLocator() {
-        return mLocator;
-    }
-
-    public MMatchPO mLocator(String mLocator) {
-        this.mLocator = mLocator;
-        return this;
-    }
-
-    public void setmLocator(String mLocator) {
-        this.mLocator = mLocator;
-    }
-
-    public String getAdOrganization() {
-        return adOrganization;
-    }
-
-    public MMatchPO adOrganization(String adOrganization) {
-        this.adOrganization = adOrganization;
-        return this;
-    }
-
-    public void setAdOrganization(String adOrganization) {
-        this.adOrganization = adOrganization;
     }
 
     public LocalDate getDateAccount() {
@@ -553,69 +533,43 @@ public class MMatchPO implements Serializable {
         this.orderSuffix = orderSuffix;
     }
 
-    public String getLineNoPo() {
+    public Integer getLineNoPo() {
         return lineNoPo;
     }
 
-    public MMatchPO lineNoPo(String lineNoPo) {
+    public MMatchPO lineNoPo(Integer lineNoPo) {
         this.lineNoPo = lineNoPo;
         return this;
     }
 
-    public void setLineNoPo(String lineNoPo) {
+    public void setLineNoPo(Integer lineNoPo) {
         this.lineNoPo = lineNoPo;
     }
 
-    public String getLineNoMr() {
+    public Integer getLineNoMr() {
         return lineNoMr;
     }
 
-    public MMatchPO lineNoMr(String lineNoMr) {
+    public MMatchPO lineNoMr(Integer lineNoMr) {
         this.lineNoMr = lineNoMr;
         return this;
     }
 
-    public void setLineNoMr(String lineNoMr) {
+    public void setLineNoMr(Integer lineNoMr) {
         this.lineNoMr = lineNoMr;
     }
 
-    public Boolean isIsTaxable() {
-        return isTaxable;
+    public Boolean isTaxable() {
+        return taxable;
     }
 
-    public MMatchPO isTaxable(Boolean isTaxable) {
-        this.isTaxable = isTaxable;
+    public MMatchPO taxable(Boolean taxable) {
+        this.taxable = taxable;
         return this;
     }
 
-    public void setIsTaxable(Boolean isTaxable) {
-        this.isTaxable = isTaxable;
-    }
-
-    public String getcTaxCode() {
-        return cTaxCode;
-    }
-
-    public MMatchPO cTaxCode(String cTaxCode) {
-        this.cTaxCode = cTaxCode;
-        return this;
-    }
-
-    public void setcTaxCode(String cTaxCode) {
-        this.cTaxCode = cTaxCode;
-    }
-
-    public String getcTaxName() {
-        return cTaxName;
-    }
-
-    public MMatchPO cTaxName(String cTaxName) {
-        this.cTaxName = cTaxName;
-        return this;
-    }
-
-    public void setcTaxName(String cTaxName) {
-        this.cTaxName = cTaxName;
+    public void setTaxable(Boolean taxable) {
+        this.taxable = taxable;
     }
 
     public String getDescription() {
@@ -644,17 +598,134 @@ public class MMatchPO implements Serializable {
         this.mMatchType = mMatchType;
     }
 
-    public String getmWarehouse() {
-        return mWarehouse;
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
     }
 
-    public MMatchPO mWarehouse(String mWarehouse) {
-        this.mWarehouse = mWarehouse;
+    public MMatchPO adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
         return this;
     }
 
-    public void setmWarehouse(String mWarehouse) {
-        this.mWarehouse = mWarehouse;
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+    }
+
+    public CElementValue getCElementValue() {
+        return cElementValue;
+    }
+
+    public MMatchPO cElementValue(CElementValue cElementValue) {
+        this.cElementValue = cElementValue;
+        return this;
+    }
+
+    public void setCElementValue(CElementValue cElementValue) {
+        this.cElementValue = cElementValue;
+    }
+
+    public CCostCenter getCCostCenter() {
+        return cCostCenter;
+    }
+
+    public MMatchPO cCostCenter(CCostCenter cCostCenter) {
+        this.cCostCenter = cCostCenter;
+        return this;
+    }
+
+    public void setCCostCenter(CCostCenter cCostCenter) {
+        this.cCostCenter = cCostCenter;
+    }
+
+    public CVendor getCVendor() {
+        return cVendor;
+    }
+
+    public MMatchPO cVendor(CVendor cVendor) {
+        this.cVendor = cVendor;
+        return this;
+    }
+
+    public void setCVendor(CVendor cVendor) {
+        this.cVendor = cVendor;
+    }
+
+    public CCurrency getCCurrency() {
+        return cCurrency;
+    }
+
+    public MMatchPO cCurrency(CCurrency cCurrency) {
+        this.cCurrency = cCurrency;
+        return this;
+    }
+
+    public void setCCurrency(CCurrency cCurrency) {
+        this.cCurrency = cCurrency;
+    }
+
+    public CTaxCategory getCTaxCategory() {
+        return cTaxCategory;
+    }
+
+    public MMatchPO cTaxCategory(CTaxCategory cTaxCategory) {
+        this.cTaxCategory = cTaxCategory;
+        return this;
+    }
+
+    public void setCTaxCategory(CTaxCategory cTaxCategory) {
+        this.cTaxCategory = cTaxCategory;
+    }
+
+    public CUnitOfMeasure getCUom() {
+        return cUom;
+    }
+
+    public MMatchPO cUom(CUnitOfMeasure cUnitOfMeasure) {
+        this.cUom = cUnitOfMeasure;
+        return this;
+    }
+
+    public void setCUom(CUnitOfMeasure cUnitOfMeasure) {
+        this.cUom = cUnitOfMeasure;
+    }
+
+    public CProduct getMProduct() {
+        return mProduct;
+    }
+
+    public MMatchPO mProduct(CProduct cProduct) {
+        this.mProduct = cProduct;
+        return this;
+    }
+
+    public void setMProduct(CProduct cProduct) {
+        this.mProduct = cProduct;
+    }
+
+    public CWarehouse getMWarehouse() {
+        return mWarehouse;
+    }
+
+    public MMatchPO mWarehouse(CWarehouse cWarehouse) {
+        this.mWarehouse = cWarehouse;
+        return this;
+    }
+
+    public void setMWarehouse(CWarehouse cWarehouse) {
+        this.mWarehouse = cWarehouse;
+    }
+
+    public CLocator getMLocator() {
+        return mLocator;
+    }
+
+    public MMatchPO mLocator(CLocator cLocator) {
+        this.mLocator = cLocator;
+        return this;
+    }
+
+    public void setMLocator(CLocator cLocator) {
+        this.mLocator = cLocator;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -678,45 +749,31 @@ public class MMatchPO implements Serializable {
     public String toString() {
         return "MMatchPO{" +
             "id=" + getId() +
+            ", deliveryNo='" + getDeliveryNo() + "'" +
             ", cDocType='" + getcDocType() + "'" +
-            ", cVendor='" + getcVendor() + "'" +
-            ", cElement='" + getcElement() + "'" +
-            ", cCostCenter='" + getcCostCenter() + "'" +
             ", poNo='" + getPoNo() + "'" +
             ", poDate='" + getPoDate() + "'" +
             ", receiptNo='" + getReceiptNo() + "'" +
             ", receiptDate='" + getReceiptDate() + "'" +
-            ", deliveryNo='" + getDeliveryNo() + "'" +
-            ", mProductCode='" + getmProductCode() + "'" +
-            ", mProductName='" + getmProductName() + "'" +
-            ", mProductDesc='" + getmProductDesc() + "'" +
-            ", cUOM='" + getcUOM() + "'" +
-            ", qty='" + getQty() + "'" +
-            ", cCurrency='" + getcCurrency() + "'" +
-            ", cConversionRate='" + getcConversionRate() + "'" +
-            ", openQty='" + getOpenQty() + "'" +
-            ", priceActual='" + getPriceActual() + "'" +
-            ", foreignActual='" + getForeignActual() + "'" +
-            ", openAmount='" + getOpenAmount() + "'" +
-            ", openForeignAmount='" + getOpenForeignAmount() + "'" +
-            ", totalLines='" + getTotalLines() + "'" +
-            ", foreignTotalLines='" + getForeignTotalLines() + "'" +
-            ", cTax='" + getcTax() + "'" +
-            ", taxAmount='" + getTaxAmount() + "'" +
-            ", foreignTaxAmount='" + getForeignTaxAmount() + "'" +
-            ", mLocator='" + getmLocator() + "'" +
-            ", adOrganization='" + getAdOrganization() + "'" +
+            ", qty=" + getQty() +
+            ", cConversionRate=" + getcConversionRate() +
+            ", openQty=" + getOpenQty() +
+            ", priceActual=" + getPriceActual() +
+            ", foreignActual=" + getForeignActual() +
+            ", openAmount=" + getOpenAmount() +
+            ", openForeignAmount=" + getOpenForeignAmount() +
+            ", totalLines=" + getTotalLines() +
+            ", foreignTotalLines=" + getForeignTotalLines() +
+            ", taxAmount=" + getTaxAmount() +
+            ", foreignTaxAmount=" + getForeignTaxAmount() +
             ", dateAccount='" + getDateAccount() + "'" +
             ", cDocTypeMr='" + getcDocTypeMr() + "'" +
             ", orderSuffix='" + getOrderSuffix() + "'" +
-            ", lineNoPo='" + getLineNoPo() + "'" +
-            ", lineNoMr='" + getLineNoMr() + "'" +
-            ", isTaxable='" + isIsTaxable() + "'" +
-            ", cTaxCode='" + getcTaxCode() + "'" +
-            ", cTaxName='" + getcTaxName() + "'" +
+            ", lineNoPo=" + getLineNoPo() +
+            ", lineNoMr=" + getLineNoMr() +
+            ", taxable='" + isTaxable() + "'" +
             ", description='" + getDescription() + "'" +
             ", mMatchType='" + getmMatchType() + "'" +
-            ", mWarehouse='" + getmWarehouse() + "'" +
             "}";
     }
 }

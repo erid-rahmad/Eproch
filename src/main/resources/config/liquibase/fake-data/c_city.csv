@@ -1,11 +1,11 @@
-id;code;name;uid;active;ad_organization_id
-1;"MUK";Personal Loan Account bypass;88fa0a83-96af-461f-a7b6-7bd86ede7ba9;false;1
-2;"ZVN";Guyana Associate payment;34d38c3f-38f6-43fb-97c5-7827b911862c;false;2
-3;"EZM";deposit generating;792213f7-8f0b-49f6-a64d-c3507620e8db;true;3
-4;"CKC";SMS;8a578677-e6ac-423e-bef2-3a946171c2b4;false;4
-5;"IHR";overriding;cd234d9b-9e0e-493e-ac7f-e61aa3fb1f57;true;5
-6;"SRC";Synchronised;b8f64757-5a59-4af6-8051-fb08ca96272a;true;6
-7;"YYF";Avon neural;2f984aa3-a497-47a7-bf85-1cd8a2c32a4b;true;7
-8;"WJO";monitor dynamic Communications;7fc1fd8b-ce60-4073-8422-be9a114553cc;true;8
-9;"MKS";Soft;85148b63-6979-40e4-8dd4-69d6fe674794;false;9
-10;"GOF";SAS Stream;e4d77a2a-0b17-4d9c-84d0-92c15c48dc50;false;10
+id;name;uid;active;ad_organization_id
+1;Summit;c7c6a9fc-188f-4a0a-8396-af61fe7b67bd;true;1
+2;Internal Central;ba91c843-887a-4fd8-985f-1a834d38c3f3;true;2
+3;eyeballs Developer Investment Account;c57827b9-1186-42c5-b1f0-7803cf2f76a2;true;3
+4;Plaza Keyboard;13f78f0b-9f6e-464d-8350-7620e8dbb507;false;4
+5;forecast primary;613eb8a5-7867-47e6-ac23-efef23a94617;false;5
+6;Fish homogeneous Borders;ae3c54a0-d3cd-4234-99b9-e0e93e6c7fe6;false;6
+7;deposit Developer;1f57f1ee-1ba1-454d-b8f6-47575a59af6c;false;7
+8;Tasty Metal Car Saint Kitts and Nevis;a96272ae-f85e-4a88-afe3-871cc2f984aa;false;8
+9;mobile Berkshire;a73f851c-d8a2-4c32-a4bc-fff6c6d2d69c;true;9
+10;dynamic Communications Villages;c1fd8bce-6007-4304-a2be-9a114553ccbb;false;10

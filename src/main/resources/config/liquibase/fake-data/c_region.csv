@@ -1,11 +1,11 @@
-id;code;name;description;uid;active;ad_organization_id;country_id
-1;"RCA";Intelligent EXE;Cambridgeshire auxiliary;49b35f80-342e-44ca-9eab-7a20cfc9d89b;true;1;1
-2;"DXQ";Chief;Buckinghamshire Checking Account;934ceea6-b77c-4a0e-8060-fe653d777894;false;2;2
-3;"JOJ";Ferry;Fresh;a6060664-e6a8-4544-b825-9fa775b20bc2;false;3;3
-4;"JFG";Administrator Place;moderator;b21e23cb-a430-402f-9f2d-374d20892a47;false;4;4
-5;"QTZ";withdrawal;Fields Beauty Beauty;855c101e-a057-45fe-a009-47a22087f666;false;5;5
-6;"FIL";COM Tasty Soap;Highway;6acfc654-4285-46d4-9528-a67270d70ecc;true;6;6
-7;"PGQ";Pants;Checking Account Bacon attitude;b117c6ab-275e-41aa-a265-8a98ff2b6902;false;7;7
-8;"TIP";toolset Egyptian Pound;teal lavender quantify;9e6383a3-d9b6-4f9f-a50d-068d71672616;true;8;8
-9;"ERC";Up-sized Central;HDD Implementation Sports;26191adb-60f3-4fa1-8ad5-5ca9aec5bbed;false;9;9
-10;"BQO";Soft;Creek;4d07aaf8-17a2-4dc2-bbe9-3fe0301f2faa;true;10;10
+id;name;description;uid;active;ad_organization_id;country_id
+1;Tactics;Boliviano Mvdol Kids Intelligent;d898fd04-9b35-4f80-b42e-4cadeab7a20c;true;1;1
+2;Texas Borders Serbian Dinar;Expanded;e1e90ef9-7b91-4934-8eea-6b77ca0ec060;true;2;2
+3;portals fuchsia Manors;Montserrat Implemented;77624468-5073-412d-a606-0664e6a85447;true;3;3
+4;seamless;Sri Lanka Rupee Berkshire Costa Rican Colon;0bc21553-5155-4339-b779-14ab21e23cba;false;4;4
+5;Books;Coordinator;f2d374d2-0892-4a47-bf36-3d39aacf4a7f;false;5;5
+6;Beauty;Borders;55c101ea-0575-4fee-8094-7a22087f6660;false;6;6
+7;green Automotive;override magnetic circuit;91f29575-6acf-4c65-8428-56d41528a672;false;7;7
+8;indexing;Forward;cf2fdb94-a325-4f90-ad51-b117c6ab275e;false;8;8
+9;Won Cotton;Niger Montana;ff2b6902-6f1a-4622-8cc5-995fb3d332fb;true;9;9
+10;Group Optional;deposit;d9b6f9f2-50d0-468d-b167-2616f7984ae2;true;10;10

@@ -64,7 +64,6 @@
                   separator=";"
                   tableName="c_city">
             <column name="id" type="numeric"/>
-            <column name="code" type="string"/>
             <column name="name" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
@@ -97,4 +96,8 @@
     </changeSet>
 
 -->
+
+    <changeSet id="20201120150900" author="Ananta Aryadewa">
+        <dropColumn tableName="c_city" columnName="code"/>
+    </changeSet>
 </databaseChangeLog>

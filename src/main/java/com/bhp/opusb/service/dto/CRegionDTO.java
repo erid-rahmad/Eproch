@@ -1,20 +1,18 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CRegion} entity.
  */
 public class CRegionDTO extends AbstractAuditingDTO {
     
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
-    @NotNull
-    @Pattern(regexp = "^[A-Z]{3}$")
-    private String code;
+    private Long id;
 
     @NotNull
     private String name;
@@ -38,14 +36,6 @@ public class CRegionDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {
@@ -139,17 +129,12 @@ public class CRegionDTO extends AbstractAuditingDTO {
     public String toString() {
         return "CRegionDTO{" +
             "id=" + getId() +
-            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
-            ", countryId='" + getCountryId() + "'" +
-            ", countryName=" + getCountryName() +
+            ", countryId=" + getCountryId() +
             "}";
     }
-
-
 }

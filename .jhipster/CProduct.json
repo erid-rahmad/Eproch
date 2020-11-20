@@ -5,8 +5,10 @@
             "fieldName": "code",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
         },
         {
             "fieldName": "name",
@@ -21,7 +23,12 @@
         },
         {
             "fieldName": "type",
-            "fieldType": "String"
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1"
         },
         {
             "fieldName": "uid",
@@ -45,7 +52,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cProductClassification",
             "otherEntityRelationshipName": "cProduct",
-            "relationshipValidateRules": "required",
             "relationshipName": "productClassification",
             "otherEntityField": "id"
         },
@@ -61,13 +67,12 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cProductCategory",
             "otherEntityRelationshipName": "cProduct",
-            "relationshipValidateRules": "required",
             "relationshipName": "productSubCategory",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cProductCategoryAccount",
+            "otherEntityName": "cElementValue",
             "otherEntityRelationshipName": "cProduct",
             "relationshipValidateRules": "required",
             "relationshipName": "assetAcct",
@@ -75,7 +80,7 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cProductCategoryAccount",
+            "otherEntityName": "cElementValue",
             "otherEntityRelationshipName": "cProduct",
             "relationshipValidateRules": "required",
             "relationshipName": "expenseAcct",

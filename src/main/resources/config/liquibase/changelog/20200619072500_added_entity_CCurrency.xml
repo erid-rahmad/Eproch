@@ -91,4 +91,14 @@
     </changeSet>
 
 -->
+
+    <changeSet id="20201120165500" author="Ananta Aryadewa">
+        <dropUniqueConstraint tableName="c_currency" constraintName="ux_c_currency_code" />
+        <addUniqueConstraint
+            tableName="c_currency"
+            columnNames="ad_organization_id, code"
+            constraintName="ux_c_currency_fields"
+        />
+    </changeSet>
+
 </databaseChangeLog>
