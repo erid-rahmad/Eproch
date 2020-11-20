@@ -38,7 +38,6 @@ public class CCurrencyCriteria implements Serializable, Criteria {
     private BooleanFilter active;
 
     private LongFilter adOrganizationId;
-    private StringFilter adOrganizationName;
 
     public CCurrencyCriteria() {
     }
@@ -51,7 +50,6 @@ public class CCurrencyCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
     }
 
     @Override
@@ -115,13 +113,6 @@ public class CCurrencyCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public StringFilter getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(StringFilter adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -139,8 +130,7 @@ public class CCurrencyCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(adOrganizationName, that.adOrganizationName);
+            Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
     @Override
@@ -152,8 +142,7 @@ public class CCurrencyCriteria implements Serializable, Criteria {
         name,
         uid,
         active,
-        adOrganizationId,
-        adOrganizationName
+        adOrganizationId
         );
     }
 
@@ -167,7 +156,6 @@ public class CCurrencyCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
             "}";
     }
 

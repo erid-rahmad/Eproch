@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.CRegion;
 import com.bhp.opusb.service.dto.CRegionDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link CRegion} and its DTO {@link CRegionDTO}.

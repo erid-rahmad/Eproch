@@ -6,8 +6,7 @@
             "fieldType": "String",
             "fieldValidateRules": [
                 "required",
-                "pattern",
-                "unique"
+                "pattern"
             ],
             "fieldValidateRulesPattern": "^[A-Z]{3}$"
         },

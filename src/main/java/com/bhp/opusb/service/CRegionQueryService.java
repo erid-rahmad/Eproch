@@ -91,9 +91,6 @@ public class CRegionQueryService extends QueryService<CRegion> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CRegion_.id));
             }
-            if (criteria.getCode() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getCode(), CRegion_.code));
-            }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CRegion_.name));
             }

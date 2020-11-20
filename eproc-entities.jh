@@ -47,28 +47,31 @@ entity CCountry {
 	active Boolean
 }
 entity CCurrency {
-	code String required pattern(/^[A-Z]{3}$/) unique
+	code String required pattern(/^[A-Z]{3}$/)
 	symbol String required
 	name String required
 	uid UUID
 	active Boolean
 }
 entity CRegion {
-	code String required pattern(/^[A-Z]{3}$/) unique
 	name String required
 	description String
 	uid UUID
 	active Boolean
 }
 entity CCity {
-	code String required pattern(/^[A-Z]{3}$/) unique
 	name String required
 	uid UUID
 	active Boolean
 }
 entity CLocation {
-	streetAddress String required
-	postalCode String
+	address1 String required maxlength(100)
+	address2 String maxlength(100)
+	address3 String maxlength(100)
+	address4 String maxlength(100)
+	postalCode String maxlength(10)
+	phone String maxlength(20)
+	fax String maxlength(20)
 	uid UUID
 	active Boolean
 }
@@ -236,7 +239,7 @@ entity CVendorGroup {
  * The UoM entity.
  */
 entity CUnitOfMeasure {
-	code String required unique
+	code String required
 	symbol String required
 	name String required
 	description String
@@ -265,7 +268,7 @@ entity CConvertionRate {
  * The CostCenter entity.
  */
 entity CCostCenter {
-	code String required unique
+	code String required
 	name String required
 	division String required
 	description String
@@ -276,7 +279,7 @@ entity CCostCenter {
  * The Element Value entity.
  */
 entity CElementValue {
-	code String required unique
+	code String required
 	name String required
 	type String required
 	description String
@@ -362,7 +365,7 @@ entity CProduct{
 
 entity CWarehouse {
 	name String required
-	code String required unique
+	code String required
 	description String
 	address String
 	uid UUID
@@ -370,7 +373,7 @@ entity CWarehouse {
 }
 
 entity CLocator {
-	code String required unique
+	code String required
 	locatorType String
 	aisle String
 	bin String

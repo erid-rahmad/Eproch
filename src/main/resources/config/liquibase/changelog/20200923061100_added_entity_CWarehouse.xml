@@ -84,4 +84,13 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20201120125500" author="Ananta Aryadewa">
+        <dropUniqueConstraint tableName="c_warehouse" constraintName="ux_c_warehouse_code" />
+        <addUniqueConstraint
+            tableName="c_warehouse"
+            columnNames="ad_organization_id, code"
+            constraintName="ux_c_warehouse_fields"
+        />
+    </changeSet>
+
 </databaseChangeLog>

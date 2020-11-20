@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.CElementValue;
 import com.bhp.opusb.service.dto.CElementValueDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link CElementValue} and its DTO {@link CElementValueDTO}.

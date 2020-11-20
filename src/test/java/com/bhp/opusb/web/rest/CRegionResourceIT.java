@@ -39,9 +39,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class CRegionResourceIT {
 
-    private static final String DEFAULT_CODE = "KPD";
-    private static final String UPDATED_CODE = "YPX";
-
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -82,7 +79,6 @@ public class CRegionResourceIT {
      */
     public static CRegion createEntity(EntityManager em) {
         CRegion cRegion = new CRegion()
-            .code(DEFAULT_CODE)
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .uid(DEFAULT_UID)
@@ -117,7 +113,6 @@ public class CRegionResourceIT {
      */
     public static CRegion createUpdatedEntity(EntityManager em) {
         CRegion cRegion = new CRegion()
-            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
@@ -166,7 +161,6 @@ public class CRegionResourceIT {
         List<CRegion> cRegionList = cRegionRepository.findAll();
         assertThat(cRegionList).hasSize(databaseSizeBeforeCreate + 1);
         CRegion testCRegion = cRegionList.get(cRegionList.size() - 1);
-        assertThat(testCRegion.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testCRegion.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCRegion.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCRegion.getUid()).isEqualTo(DEFAULT_UID);
@@ -193,25 +187,6 @@ public class CRegionResourceIT {
         assertThat(cRegionList).hasSize(databaseSizeBeforeCreate);
     }
 
-
-    @Test
-    @Transactional
-    public void checkCodeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = cRegionRepository.findAll().size();
-        // set the field null
-        cRegion.setCode(null);
-
-        // Create the CRegion, which fails.
-        CRegionDTO cRegionDTO = cRegionMapper.toDto(cRegion);
-
-        restCRegionMockMvc.perform(post("/api/c-regions")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(cRegionDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<CRegion> cRegionList = cRegionRepository.findAll();
-        assertThat(cRegionList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     @Transactional
@@ -243,7 +218,6 @@ public class CRegionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cRegion.getId().intValue())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -261,7 +235,6 @@ public class CRegionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cRegion.getId().intValue()))
-            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
@@ -285,84 +258,6 @@ public class CRegionResourceIT {
 
         defaultCRegionShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCRegionShouldNotBeFound("id.lessThan=" + id);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllCRegionsByCodeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cRegionRepository.saveAndFlush(cRegion);
-
-        // Get all the cRegionList where code equals to DEFAULT_CODE
-        defaultCRegionShouldBeFound("code.equals=" + DEFAULT_CODE);
-
-        // Get all the cRegionList where code equals to UPDATED_CODE
-        defaultCRegionShouldNotBeFound("code.equals=" + UPDATED_CODE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCRegionsByCodeIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        cRegionRepository.saveAndFlush(cRegion);
-
-        // Get all the cRegionList where code not equals to DEFAULT_CODE
-        defaultCRegionShouldNotBeFound("code.notEquals=" + DEFAULT_CODE);
-
-        // Get all the cRegionList where code not equals to UPDATED_CODE
-        defaultCRegionShouldBeFound("code.notEquals=" + UPDATED_CODE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCRegionsByCodeIsInShouldWork() throws Exception {
-        // Initialize the database
-        cRegionRepository.saveAndFlush(cRegion);
-
-        // Get all the cRegionList where code in DEFAULT_CODE or UPDATED_CODE
-        defaultCRegionShouldBeFound("code.in=" + DEFAULT_CODE + "," + UPDATED_CODE);
-
-        // Get all the cRegionList where code equals to UPDATED_CODE
-        defaultCRegionShouldNotBeFound("code.in=" + UPDATED_CODE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCRegionsByCodeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        cRegionRepository.saveAndFlush(cRegion);
-
-        // Get all the cRegionList where code is not null
-        defaultCRegionShouldBeFound("code.specified=true");
-
-        // Get all the cRegionList where code is null
-        defaultCRegionShouldNotBeFound("code.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllCRegionsByCodeContainsSomething() throws Exception {
-        // Initialize the database
-        cRegionRepository.saveAndFlush(cRegion);
-
-        // Get all the cRegionList where code contains DEFAULT_CODE
-        defaultCRegionShouldBeFound("code.contains=" + DEFAULT_CODE);
-
-        // Get all the cRegionList where code contains UPDATED_CODE
-        defaultCRegionShouldNotBeFound("code.contains=" + UPDATED_CODE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCRegionsByCodeNotContainsSomething() throws Exception {
-        // Initialize the database
-        cRegionRepository.saveAndFlush(cRegion);
-
-        // Get all the cRegionList where code does not contain DEFAULT_CODE
-        defaultCRegionShouldNotBeFound("code.doesNotContain=" + DEFAULT_CODE);
-
-        // Get all the cRegionList where code does not contain UPDATED_CODE
-        defaultCRegionShouldBeFound("code.doesNotContain=" + UPDATED_CODE);
     }
 
 
@@ -685,7 +580,6 @@ public class CRegionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cRegion.getId().intValue())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -737,7 +631,6 @@ public class CRegionResourceIT {
         // Disconnect from session so that the updates on updatedCRegion are not directly saved in db
         em.detach(updatedCRegion);
         updatedCRegion
-            .code(UPDATED_CODE)
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
@@ -753,7 +646,6 @@ public class CRegionResourceIT {
         List<CRegion> cRegionList = cRegionRepository.findAll();
         assertThat(cRegionList).hasSize(databaseSizeBeforeUpdate);
         CRegion testCRegion = cRegionList.get(cRegionList.size() - 1);
-        assertThat(testCRegion.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testCRegion.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCRegion.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCRegion.getUid()).isEqualTo(UPDATED_UID);

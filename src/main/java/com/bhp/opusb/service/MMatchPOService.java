@@ -273,7 +273,7 @@ public class MMatchPOService {
     private CUnitOfMeasure buildUnitOfMeasure(Map<String, Object> payload, final ADOrganization org) {
         final String code = (String) payload.get("PRUOM");
 
-        return cUnitOfMeasureRepository.findFirstByCode(code)
+        return cUnitOfMeasureRepository.findFirstByCodeAndAdOrganizationId(code, org.getId())
             .orElseGet(() -> {
                 final CUnitOfMeasure uom = new CUnitOfMeasure();
                 uom.active(true)

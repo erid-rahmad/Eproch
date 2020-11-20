@@ -84,4 +84,13 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20201120125400" author="Ananta Aryadewa">
+        <dropUniqueConstraint tableName="c_element_value" constraintName="ux_c_element_value_code" />
+        <addUniqueConstraint
+            tableName="c_element_value"
+            columnNames="ad_organization_id, code"
+            constraintName="ux_c_element_value_fields"
+        />
+    </changeSet>
+
 </databaseChangeLog>

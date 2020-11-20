@@ -5,8 +5,7 @@
             "fieldName": "code",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required",
-                "unique"
+                "required"
             ]
         },
         {
