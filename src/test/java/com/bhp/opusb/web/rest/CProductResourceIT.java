@@ -5,7 +5,7 @@ import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CProductClassification;
 import com.bhp.opusb.domain.CProductCategory;
-import com.bhp.opusb.domain.CProductCategoryAccount;
+import com.bhp.opusb.domain.CElementValue;
 import com.bhp.opusb.domain.CUnitOfMeasure;
 import com.bhp.opusb.repository.CProductRepository;
 import com.bhp.opusb.service.CProductService;
@@ -50,8 +50,8 @@ public class CProductResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
-    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+    private static final String DEFAULT_TYPE = "A";
+    private static final String UPDATED_TYPE = "B";
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
@@ -104,16 +104,6 @@ public class CProductResourceIT {
         }
         cProduct.setAdOrganization(aDOrganization);
         // Add required entity
-        CProductClassification cProductClassification;
-        if (TestUtil.findAll(em, CProductClassification.class).isEmpty()) {
-            cProductClassification = CProductClassificationResourceIT.createEntity(em);
-            em.persist(cProductClassification);
-            em.flush();
-        } else {
-            cProductClassification = TestUtil.findAll(em, CProductClassification.class).get(0);
-        }
-        cProduct.setProductClassification(cProductClassification);
-        // Add required entity
         CProductCategory cProductCategory;
         if (TestUtil.findAll(em, CProductCategory.class).isEmpty()) {
             cProductCategory = CProductCategoryResourceIT.createEntity(em);
@@ -124,19 +114,17 @@ public class CProductResourceIT {
         }
         cProduct.setProductCategory(cProductCategory);
         // Add required entity
-        cProduct.setProductSubCategory(cProductCategory);
-        // Add required entity
-        CProductCategoryAccount cProductCategoryAccount;
-        if (TestUtil.findAll(em, CProductCategoryAccount.class).isEmpty()) {
-            cProductCategoryAccount = CProductCategoryAccountResourceIT.createEntity(em);
-            em.persist(cProductCategoryAccount);
+        CElementValue cElementValue;
+        if (TestUtil.findAll(em, CElementValue.class).isEmpty()) {
+            cElementValue = CElementValueResourceIT.createEntity(em);
+            em.persist(cElementValue);
             em.flush();
         } else {
-            cProductCategoryAccount = TestUtil.findAll(em, CProductCategoryAccount.class).get(0);
+            cElementValue = TestUtil.findAll(em, CElementValue.class).get(0);
         }
-        cProduct.setAssetAcct(cProductCategoryAccount);
+        cProduct.setAssetAcct(cElementValue);
         // Add required entity
-        cProduct.setExpenseAcct(cProductCategoryAccount);
+        cProduct.setExpenseAcct(cElementValue);
         // Add required entity
         CUnitOfMeasure cUnitOfMeasure;
         if (TestUtil.findAll(em, CUnitOfMeasure.class).isEmpty()) {
@@ -174,16 +162,6 @@ public class CProductResourceIT {
         }
         cProduct.setAdOrganization(aDOrganization);
         // Add required entity
-        CProductClassification cProductClassification;
-        if (TestUtil.findAll(em, CProductClassification.class).isEmpty()) {
-            cProductClassification = CProductClassificationResourceIT.createUpdatedEntity(em);
-            em.persist(cProductClassification);
-            em.flush();
-        } else {
-            cProductClassification = TestUtil.findAll(em, CProductClassification.class).get(0);
-        }
-        cProduct.setProductClassification(cProductClassification);
-        // Add required entity
         CProductCategory cProductCategory;
         if (TestUtil.findAll(em, CProductCategory.class).isEmpty()) {
             cProductCategory = CProductCategoryResourceIT.createUpdatedEntity(em);
@@ -194,19 +172,17 @@ public class CProductResourceIT {
         }
         cProduct.setProductCategory(cProductCategory);
         // Add required entity
-        cProduct.setProductSubCategory(cProductCategory);
-        // Add required entity
-        CProductCategoryAccount cProductCategoryAccount;
-        if (TestUtil.findAll(em, CProductCategoryAccount.class).isEmpty()) {
-            cProductCategoryAccount = CProductCategoryAccountResourceIT.createUpdatedEntity(em);
-            em.persist(cProductCategoryAccount);
+        CElementValue cElementValue;
+        if (TestUtil.findAll(em, CElementValue.class).isEmpty()) {
+            cElementValue = CElementValueResourceIT.createUpdatedEntity(em);
+            em.persist(cElementValue);
             em.flush();
         } else {
-            cProductCategoryAccount = TestUtil.findAll(em, CProductCategoryAccount.class).get(0);
+            cElementValue = TestUtil.findAll(em, CElementValue.class).get(0);
         }
-        cProduct.setAssetAcct(cProductCategoryAccount);
+        cProduct.setAssetAcct(cElementValue);
         // Add required entity
-        cProduct.setExpenseAcct(cProductCategoryAccount);
+        cProduct.setExpenseAcct(cElementValue);
         // Add required entity
         CUnitOfMeasure cUnitOfMeasure;
         if (TestUtil.findAll(em, CUnitOfMeasure.class).isEmpty()) {
@@ -295,6 +271,25 @@ public class CProductResourceIT {
         int databaseSizeBeforeTest = cProductRepository.findAll().size();
         // set the field null
         cProduct.setName(null);
+
+        // Create the CProduct, which fails.
+        CProductDTO cProductDTO = cProductMapper.toDto(cProduct);
+
+        restCProductMockMvc.perform(post("/api/c-products")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(cProductDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CProduct> cProductList = cProductRepository.findAll();
+        assertThat(cProductList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cProductRepository.findAll().size();
+        // set the field null
+        cProduct.setType(null);
 
         // Create the CProduct, which fails.
         CProductDTO cProductDTO = cProductMapper.toDto(cProduct);
@@ -801,8 +796,12 @@ public class CProductResourceIT {
     @Test
     @Transactional
     public void getAllCProductsByProductClassificationIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        CProductClassification productClassification = cProduct.getProductClassification();
+        // Initialize the database
+        cProductRepository.saveAndFlush(cProduct);
+        CProductClassification productClassification = CProductClassificationResourceIT.createEntity(em);
+        em.persist(productClassification);
+        em.flush();
+        cProduct.setProductClassification(productClassification);
         cProductRepository.saveAndFlush(cProduct);
         Long productClassificationId = productClassification.getId();
 
@@ -833,8 +832,12 @@ public class CProductResourceIT {
     @Test
     @Transactional
     public void getAllCProductsByProductSubCategoryIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        CProductCategory productSubCategory = cProduct.getProductSubCategory();
+        // Initialize the database
+        cProductRepository.saveAndFlush(cProduct);
+        CProductCategory productSubCategory = CProductCategoryResourceIT.createEntity(em);
+        em.persist(productSubCategory);
+        em.flush();
+        cProduct.setProductSubCategory(productSubCategory);
         cProductRepository.saveAndFlush(cProduct);
         Long productSubCategoryId = productSubCategory.getId();
 
@@ -850,7 +853,7 @@ public class CProductResourceIT {
     @Transactional
     public void getAllCProductsByAssetAcctIsEqualToSomething() throws Exception {
         // Get already existing entity
-        CProductCategoryAccount assetAcct = cProduct.getAssetAcct();
+        CElementValue assetAcct = cProduct.getAssetAcct();
         cProductRepository.saveAndFlush(cProduct);
         Long assetAcctId = assetAcct.getId();
 
@@ -866,7 +869,7 @@ public class CProductResourceIT {
     @Transactional
     public void getAllCProductsByExpenseAcctIsEqualToSomething() throws Exception {
         // Get already existing entity
-        CProductCategoryAccount expenseAcct = cProduct.getExpenseAcct();
+        CElementValue expenseAcct = cProduct.getExpenseAcct();
         cProductRepository.saveAndFlush(cProduct);
         Long expenseAcctId = expenseAcct.getId();
 

@@ -1,11 +1,11 @@
-id;code;name;description;type;uid;active;ad_organization_id;product_classification_id;product_category_id;product_sub_category_id;asset_acct_id;expense_acct_id;uom_id
-1;coherent;Bedfordshire;Direct;RAM;91f944cc-e50a-4ea5-a6b7-b03abc4fb781;true;1;1;1;1;1;1;1
-2;Tools;redundant Rustic;Fantastic Soft Keyboard;Shoes clear-thinking Handcrafted;30f7fcf4-823f-4ef5-942e-d854bf5c396a;false;2;2;2;2;2;2;2
-3;Down-sized Keyboard;Steel strategy;Utah copy XSS;Borders;71c7cd50-08bf-45ee-aa6b-3400fb3004db;false;3;3;3;3;3;3;3
-4;Japan transmit real-time;virtual SAS Saint Helena Pound;Administrator Arizona;Practical Rubber Cheese;97c1580d-a5d2-4728-b590-ef1d9e33c38f;false;4;4;4;4;4;4;4
-5;rich Unbranded Fresh Ball;fuchsia streamline Valley;Home Loan Account Home Loan Account deposit;metrics;6f6346c8-371d-4860-b55c-c8ef219f5c7b;false;5;5;5;5;5;5;5
-6;Credit Card Account RAM Iowa;Auto Loan Account;Awesome Plastic Keyboard copy Communications;empower quantify;1799fae5-16e6-4207-8fed-e7e88d418f74;false;6;6;6;6;6;6;6
-7;Practical back-end Sports;deposit payment Books;bypassing withdrawal feed;Senior redefine;ed75995d-1358-428e-8aba-cf986adf4644;false;7;7;7;7;7;7;7
-8;Shirt;Bike Clothing dot-com;Directives Liaison mesh;Home Loan Account web-enabled auxiliary;27975b87-c273-44cc-a3f9-2be6cd43a9c8;false;8;8;8;8;8;8;8
-9;Gorgeous Plastic Gloves;navigate AI;USB withdrawal architectures;payment;62833dba-3de8-460a-9eb1-fdcc240e21fd;true;9;9;9;9;9;9;9
-10;Gorgeous Wooden Chips Unbranded Cotton Ball Frozen;bus Rustic;morph system encoding;Street;9ba6fff1-f587-4754-936c-fc05d491b8b6;false;10;10;10;10;10;10;10
+id;code;name;description;type;uid;active;ad_organization_id;product_category_id;asset_acct_id;expense_acct_id;uom_id
+1;coherent;Bedfordshire;Direct;R;91f944cc-e50a-4ea5-a6b7-b03abc4fb781;true;1;1;1;1;1
+2;Tools;redundant Rustic;Fantastic Soft Keyboard;S;30f7fcf4-823f-4ef5-942e-d854bf5c396a;false;2;2;2;2;2
+3;Down-sized Keyboard;Steel strategy;Utah copy XSS;B;71c7cd50-08bf-45ee-aa6b-3400fb3004db;false;3;3;3;3;3
+4;Japan transmit real-time;virtual SAS Saint Helena Pound;Administrator Arizona;P;97c1580d-a5d2-4728-b590-ef1d9e33c38f;false;4;4;4;4;4
+5;rich Unbranded Fresh Ball;fuchsia streamline Valley;Home Loan Account Home Loan Account deposit;m;6f6346c8-371d-4860-b55c-c8ef219f5c7b;false;5;5;5;5;5
+6;Credit Card Account RAM Iowa;Auto Loan Account;Awesome Plastic Keyboard copy Communications;e;1799fae5-16e6-4207-8fed-e7e88d418f74;false;6;6;6;6;6
+7;Practical back-end Sports;deposit payment Books;bypassing withdrawal feed;S;ed75995d-1358-428e-8aba-cf986adf4644;false;7;7;7;7;7
+8;Shirt;Bike Clothing dot-com;Directives Liaison mesh;H;27975b87-c273-44cc-a3f9-2be6cd43a9c8;false;8;8;8;8;8
+9;Gorgeous Plastic Gloves;navigate AI;USB withdrawal architectures;p;62833dba-3de8-460a-9eb1-fdcc240e21fd;true;9;9;9;9;9
+10;Gorgeous Wooden Chips Unbranded Cotton Ball Frozen;bus Rustic;morph system encoding;S;9ba6fff1-f587-4754-936c-fc05d491b8b6;false;10;10;10;10;10

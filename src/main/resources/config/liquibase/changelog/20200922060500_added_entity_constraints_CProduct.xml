@@ -51,4 +51,21 @@
                                  referencedTableName="c_unit_of_measure"/>
 
     </changeSet>
+
+    <changeSet id="20201119104700" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="c_product" constraintName="fk_c_product_asset_acct_id"/>
+        <dropForeignKeyConstraint baseTableName="c_product" constraintName="fk_c_product_expense_acct_id"/>
+        <addForeignKeyConstraint baseColumnNames="asset_acct_id"
+                                 baseTableName="c_product"
+                                 constraintName="fk_c_product_asset_acct_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_element_value"/>
+
+        <addForeignKeyConstraint baseColumnNames="expense_acct_id"
+                                 baseTableName="c_product"
+                                 constraintName="fk_c_product_expense_acct_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_element_value"/>
+
+    </changeSet>
 </databaseChangeLog>

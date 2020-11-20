@@ -133,4 +133,12 @@ jhipster:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  default-organization-id: 1
+  default-cost-center-id: 19851
+  default-element-value-id: 19901
+  default-product-type: I
+  default-product-classification-id: 33701
+  default-product-category-id: 33751
+  default-product-asset-account-id: 48151
+  default-product-expense-account-id: 48152

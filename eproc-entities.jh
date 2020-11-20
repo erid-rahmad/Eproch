@@ -352,10 +352,10 @@ entity CProductCategoryAccount {
 }
 
 entity CProduct{
-	code String required
+	code String required maxlength(50)
 	name String required
 	description String
-	type String
+	type String required maxlength(1)
 	uid UUID
 	active Boolean
 }
@@ -422,46 +422,81 @@ entity MVerificationLine {
     receiveDate LocalDate
 }
 
-entity MMatchPO{
-	cDocType String
-	cVendor String
-	cElement String
-	cCostCenter String
-	poNo String
+entity MMatchPO {
+	/** PRSHPN */
+	deliveryNo String maxlength(20)
+
+	/** PRDCTO */
+	cDocType String maxlength(2)
+	
+	/** PRDOCO */
+	poNo String maxlength(20)
+
+	/** PRTRDJ */
 	poDate LocalDate
-	receiptNo String
+
+	/** PRDOC */
+	receiptNo String maxlength(20)
+
+	/** PRRCDJ */
 	receiptDate LocalDate
-	deliveryNo String
-	mProductCode String
-	mProductName String
-	mProductDesc String
-	cUOM String
-	qty String
-	cCurrency String
-	cConversionRate String
-	openQty String
-	priceActual String
-	foreignActual String
-	openAmount String
-	openForeignAmount String
-	totalLines String
-	foreignTotalLines String
-	cTax String
-	taxAmount String
-	foreignTaxAmount String
-	mLocator String
-	adOrganization String
-    dateAccount LocalDate
-    cDocTypeMr String
-    orderSuffix String
-    lineNoPo String
-    lineNoMr String
-    isTaxable Boolean
-    cTaxCode String
-    cTaxName String
-    description String
-    mMatchType String
-    mWarehouse String
+
+	/** PRUREC for Receipt Quantity */
+	qty BigDecimal
+
+	/** PRCRR */
+	cConversionRate BigDecimal
+
+	/** PRUOPN for Open Quantity */
+	openQty BigDecimal
+
+	/** PRPRRC for Unit Price */
+	priceActual BigDecimal
+
+	/** PRFRRC for Unit Price in foreign currency */
+	foreignActual BigDecimal
+
+	/** PRAOPN for Open Amount */
+	openAmount BigDecimal
+
+	/** PRFAP for Open Amount in foreign currency */
+	openForeignAmount BigDecimal
+
+	/** PRAREC for Total Line Amount */
+	totalLines BigDecimal
+
+	/** PRFREC for Total Line Amount in foreign currency */
+	foreignTotalLines BigDecimal
+
+	/** PRSTAM */
+	taxAmount BigDecimal
+
+	/** PRCTAM */
+	foreignTaxAmount BigDecimal
+
+	/** PRDGL for GL date */
+	dateAccount LocalDate
+
+	/** PRDCT */
+	cDocTypeMr String maxlength(2)
+
+	/** PRSFXO */
+	orderSuffix String maxlength(10)
+
+	/** PRLNID for PO line number */
+	lineNoPo Integer
+
+	/** PRNLIN for number of lines */
+	lineNoMr Integer
+
+	/** PRTX Y means true, otherwise false */
+	taxable Boolean
+
+	/** PRVRMK */
+	description String maxlength(30)
+
+	/** PRMATC */
+	mMatchType String maxlength(1)
 }
 
 /**
@@ -604,11 +639,11 @@ relationship ManyToOne {
 	CProductCategoryAccount{productCategory required} to CProductCategory
 
 	CProduct{adOrganization required} to ADOrganization
-	CProduct{productClassification required} to CProductClassification
+	CProduct{productClassification} to CProductClassification
 	CProduct{productCategory required} to CProductCategory
-	CProduct{productSubCategory required} to CProductCategory
-	CProduct{assetAcct required} to CProductCategoryAccount
-	CProduct{expenseAcct required} to CProductCategoryAccount
+	CProduct{productSubCategory} to CProductCategory
+	CProduct{assetAcct required} to CElementValue
+	CProduct{expenseAcct required} to CElementValue
 	CProduct{uom required} to CUnitOfMeasure
 
 	//master data warehouse and locator
@@ -619,17 +654,60 @@ relationship ManyToOne {
 	//releated vendor invoice verification
 	MVerification{adOrganization required} to ADOrganization
 	MVerification{currency required} to CCurrency
-    MVerification{vendor required} to CVendor
-    MVerification{pic required} to AdUser
+	MVerification{vendor required} to CVendor
+	MVerification{pic required} to AdUser
 	MVerificationLine{verification required} to MVerification
 	MVerificationLine{adOrganization required} to ADOrganization
 	MVerificationLine{product required} to CProduct
 	MVerificationLine{uom required} to CUnitOfMeasure
-    MVerificationLine{cElement required} to CElementValue
-    MVerificationLine{cCostCenter required} to CCostCenter
-    MVerificationLine{cCurrency required} to CCurrency
+	MVerificationLine{cElement required} to CElementValue
+	MVerificationLine{cCostCenter required} to CCostCenter
+	MVerificationLine{cCurrency required} to CCurrency
+
 	CVendorGroup{adOrganization required} to ADOrganization
 	CVendor{vendorGroup} to CVendorGroup
+}
+
+/**
+ * Many to one relationship.
+ */
+relationship ManyToOne {
+	/** PRKCOO */
+	MMatchPO{adOrganization required} to ADOrganization
+
+	// Set to default value when integrating with BHp.
+	MMatchPO{cElementValue required} to CElementValue
+
+	// Set to default value when integrating with BHp.
+	MMatchPO{cCostCenter required} to CCostCenter
+
+	/** PRAN8 is mapped to vendor code. */
+	MMatchPO{cVendor} to CVendor
+
+	/** PRCRCD */
+	MMatchPO{cCurrency} to CCurrency
+
+	/**
+	 * PREXR1 is mapped to tax code.
+	 * PRTXA1 is mapped to tax name.
+	 */
+	MMatchPO{cTaxCategory} to CTaxCategory
+
+	/** PRUOM is mapped to code, name, and symbol. */
+	MMatchPO{cUom} to CUnitOfMeasure
+
+	/**
+	 * PRITM is mapped to product code.
+	 * PRLITM is mapped to product name.
+	 * PRAITM is mapped to product desc.
+	 */
+	MMatchPO{mProduct} to CProduct
+	
+	/** PRMCU is mapped to warehouse code and name. */
+	MMatchPO{mWarehouse} to CWarehouse
+
+	/** PRLOCN is mapped to locator code. */
+	MMatchPO{mLocator} to CLocator
 }
 
 // Allow filtering to all entities.

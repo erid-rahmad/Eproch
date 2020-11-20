@@ -162,6 +162,7 @@
     <include file="config/liquibase/changelog/20201021111500_added_entity_constraints_AdUser.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021111600_added_entity_constraints_AdUserAuthority.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021112000_added_entity_constraints_CDocumentType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201016085600_added_entity_constraints_MMatchPO.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 
     <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>

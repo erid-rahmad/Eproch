@@ -1,5 +1,7 @@
 package com.bhp.opusb.repository;
 
+import java.util.Optional;
+
 import com.bhp.opusb.domain.CVendor;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface CVendorRepository extends JpaRepository<CVendor, Long>, JpaSpecificationExecutor<CVendor> {
+
+  Optional<CVendor> findFirstByCode(String code);
 
   @Modifying
   @Query("UPDATE CVendor v SET v.documentAction = :action, v.documentStatus = :status, v.approved = true, v.processed = true WHERE v.id = :id")

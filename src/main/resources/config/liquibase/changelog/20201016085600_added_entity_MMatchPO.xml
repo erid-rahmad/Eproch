@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity MMatchPO.
     -->
@@ -136,34 +136,34 @@
                   separator=";"
                   tableName="m_match_po">
             <column name="id" type="numeric"/>
+            <column name="delivery_no" type="string"/>
             <column name="c_doc_type" type="string"/>
-            <column name="c_vendor" type="string"/>
-            <column name="c_element" type="string"/>
-            <column name="c_cost_center" type="string"/>
             <column name="po_no" type="string"/>
             <column name="po_date" type="date"/>
             <column name="receipt_no" type="string"/>
             <column name="receipt_date" type="date"/>
-            <column name="delivery_no" type="string"/>
-            <column name="m_product_code" type="string"/>
-            <column name="m_product_name" type="string"/>
-            <column name="m_product_desc" type="string"/>
-            <column name="c_uom" type="string"/>
-            <column name="qty" type="string"/>
-            <column name="c_currency" type="string"/>
-            <column name="c_conversion_rate" type="string"/>
-            <column name="open_qty" type="string"/>
-            <column name="price_actual" type="string"/>
-            <column name="foreign_actual" type="string"/>
-            <column name="open_amount" type="string"/>
-            <column name="open_foreign_amount" type="string"/>
-            <column name="total_lines" type="string"/>
-            <column name="foreign_total_lines" type="string"/>
-            <column name="c_tax" type="string"/>
-            <column name="tax_amount" type="string"/>
-            <column name="foreign_tax_amount" type="string"/>
-            <column name="m_locator" type="string"/>
-            <column name="ad_organization" type="string"/>
+            <column name="qty" type="numeric"/>
+            <column name="c_conversion_rate" type="numeric"/>
+            <column name="open_qty" type="numeric"/>
+            <column name="price_actual" type="numeric"/>
+            <column name="foreign_actual" type="numeric"/>
+            <column name="open_amount" type="numeric"/>
+            <column name="open_foreign_amount" type="numeric"/>
+            <column name="total_lines" type="numeric"/>
+            <column name="foreign_total_lines" type="numeric"/>
+            <column name="tax_amount" type="numeric"/>
+            <column name="foreign_tax_amount" type="numeric"/>
+            <column name="date_account" type="date"/>
+            <column name="c_doc_type_mr" type="string"/>
+            <column name="order_suffix" type="string"/>
+            <column name="line_no_po" type="numeric"/>
+            <column name="line_no_mr" type="numeric"/>
+            <column name="taxable" type="boolean"/>
+            <column name="description" type="string"/>
+            <column name="m_match_type" type="string"/>
+            <column name="ad_organization_id" type="numeric"/>
+            <column name="c_element_value_id" type="numeric"/>
+            <column name="c_cost_center_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
@@ -204,6 +204,113 @@
                 <constraints nullable="true" />
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20201117133900" author="Ananta Aryadewa">
+        <dropColumn tableName="m_match_po">
+            <column name="ad_organization"/>
+            <column name="c_vendor"/>
+            <column name="c_element"/>
+            <column name="c_cost_center"/>
+            <column name="m_product_code"/>
+            <column name="m_product_name"/>
+            <column name="m_product_desc"/>
+            <column name="c_uom"/>
+            <column name="c_currency"/>
+            <column name="c_tax"/>
+        </dropColumn>
+        <addColumn tableName="m_match_po">
+            <column name="ad_organization_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="c_element_value_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="c_cost_center_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="c_vendor_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_currency_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_tax_category_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_uom_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="m_product_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="m_warehouse_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="m_locator_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <modifyDataType tableName="m_match_po" columnName="delivery_no" newDataType="varchar(20)" />
+        <setColumnRemarks tableName="m_match_po" columnName="delivery_no" remarks="PRSHPN"/>
+        <modifyDataType tableName="m_match_po" columnName="c_doc_type" newDataType="varchar(2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="c_doc_type" remarks="PRDCTO"/>
+        <modifyDataType tableName="m_match_po" columnName="c_doc_type_mr" newDataType="varchar(2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="c_doc_type_mr" remarks="PRDCT"/>
+        <modifyDataType tableName="m_match_po" columnName="po_no" newDataType="varchar(20)" />
+        <setColumnRemarks tableName="m_match_po" columnName="po_no" remarks="PRDOCO"/>
+        <setColumnRemarks tableName="m_match_po" columnName="po_date" remarks="PRTRDJ"/>
+        <modifyDataType tableName="m_match_po" columnName="receipt_no" newDataType="varchar(20)" />
+        <setColumnRemarks tableName="m_match_po" columnName="receipt_no" remarks="PRDOC"/>
+        <setColumnRemarks tableName="m_match_po" columnName="receipt_date" remarks="PRRCDJ"/>
+        <modifyDataType tableName="m_match_po" columnName="qty" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="qty" remarks="PRUREC for Receipt Quantity"/>
+        <modifyDataType tableName="m_match_po" columnName="open_qty" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="open_qty" remarks="PRUOPN for Open Quantity"/>
+        <modifyDataType tableName="m_match_po" columnName="c_conversion_rate" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="c_conversion_rate" remarks="PRCRR"/>
+        <modifyDataType tableName="m_match_po" columnName="price_actual" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="price_actual" remarks="PRPRRC for Unit Price"/>
+        <modifyDataType tableName="m_match_po" columnName="foreign_actual" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="foreign_actual" remarks="PRFRRC for Unit Price in foreign currency"/>
+        <modifyDataType tableName="m_match_po" columnName="open_amount" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="open_amount" remarks="PRAOPN for Open Amount"/>
+        <modifyDataType tableName="m_match_po" columnName="open_foreign_amount" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="open_foreign_amount" remarks="PRFAP for Open Amount in foreign currency"/>
+        <modifyDataType tableName="m_match_po" columnName="total_lines" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="total_lines" remarks="PRAREC for Total Line Amount"/>
+        <modifyDataType tableName="m_match_po" columnName="foreign_total_lines" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="foreign_total_lines" remarks="PRFREC for Total Line Amount in foreign currency"/>
+        <modifyDataType tableName="m_match_po" columnName="tax_amount" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="tax_amount" remarks="PRSTAM"/>
+        <modifyDataType tableName="m_match_po" columnName="foreign_tax_amount" newDataType="decimal(21,2)" />
+        <setColumnRemarks tableName="m_match_po" columnName="foreign_tax_amount" remarks="PRCTAM"/>
+        <setColumnRemarks tableName="m_match_po" columnName="date_account" remarks="PRDGL for GL date"/>
+        <modifyDataType tableName="m_match_po" columnName="order_suffix" newDataType="varchar(20)" />
+        <setColumnRemarks tableName="m_match_po" columnName="order_suffix" remarks="PRSFXO"/>
+        <modifyDataType tableName="m_match_po" columnName="line_no_po" newDataType="integer" />
+        <setColumnRemarks tableName="m_match_po" columnName="line_no_po" remarks="PRLNID for PO line number"/>
+        <modifyDataType tableName="m_match_po" columnName="line_no_mr" newDataType="integer" />
+        <setColumnRemarks tableName="m_match_po" columnName="line_no_mr" remarks="PRNLIN for number of lines"/>
+        <renameColumn tableName="m_match_po" oldColumnName="is_taxable" newColumnName="taxable" />
+        <modifyDataType tableName="m_match_po" columnName="taxable" newDataType="boolean" />
+        <setColumnRemarks tableName="m_match_po" columnName="taxable" remarks="PRTX Y means true, otherwise false"/>
+        <modifyDataType tableName="m_match_po" columnName="description" newDataType="varchar(30)" />
+        <setColumnRemarks tableName="m_match_po" columnName="description" remarks="PRVRMK"/>
+        <modifyDataType tableName="m_match_po" columnName="m_match_type" newDataType="varchar(1)" />
+        <setColumnRemarks tableName="m_match_po" columnName="m_match_type" remarks="PRMATC"/>
+    </changeSet>
+
+    <changeSet id="20201119111100" author="Ananta Aryadewa">
+        <modifyDataType tableName="m_match_po" columnName="date_account" newDataType="date" />
+    </changeSet>
+
+    <changeSet id="20201119140300" author="Ananta Aryadewa">
+        <addUniqueConstraint
+            tableName="m_match_po"
+            columnNames="m_match_type, ad_organization_id, c_doc_type, po_no, receipt_no, line_no_po, line_no_mr, order_suffix"
+            constraintName="m_match_po_unique_fields"
+        />
     </changeSet>
 
 </databaseChangeLog>
