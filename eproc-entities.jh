@@ -431,6 +431,20 @@ entity MVerificationLine {
     receiveDate LocalDate
 }
 
+entity MVerificationTax {
+    taxPeriod Long required
+	traxCode String required
+	statusCode String required
+	docCode String required
+	year Long required
+	returnDocType String
+    repSerNo String
+    taxExpCode String
+    dateSSP LocalDate
+	uid UUID
+    active Boolean
+}
+
 entity MMatchPO{
 	cDocType String
 	cVendor String
@@ -638,6 +652,12 @@ relationship ManyToOne {
     MVerificationLine{cElement required} to CElementValue
     MVerificationLine{cCostCenter required} to CCostCenter
     MVerificationLine{cCurrency required} to CCurrency
+
+    MVerificationTax{adOrganization required} to ADOrganization
+    MVerificationTax{currency required} to CCurrency
+    MVerificationTax{taxCategory required} to CTaxCategory
+    MVerificationTax{costCenter required} to CCostCenter
+
 	CVendorGroup{adOrganization required} to ADOrganization
 	CVendor{vendorGroup} to CVendorGroup
 }
