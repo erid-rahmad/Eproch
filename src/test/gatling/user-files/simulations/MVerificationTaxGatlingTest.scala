@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the MVerification entity.
+ * Performance test for the MVerificationTax entity.
  */
-class MVerificationGatlingTest extends Simulation {
+class MVerificationTaxGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class MVerificationGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the MVerification entity")
+    val scn = scenario("Test the MVerificationTax entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,54 +62,39 @@ class MVerificationGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all mVerifications")
-            .get("/api/m-verifications")
+            exec(http("Get all mVerificationTaxes")
+            .get("/api/m-verification-taxes")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new mVerification")
-            .post("/api/m-verifications")
+            .exec(http("Create new mVerificationTax")
+            .post("/api/m-verification-taxes")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "verificationNo":"SAMPLE_TEXT"
-                , "verificationDate":"2020-01-01T00:00:00.000Z"
-                , "description":"SAMPLE_TEXT"
-                , "invoiceNo":"SAMPLE_TEXT"
-                , "invoiceDate":"2020-01-01T00:00:00.000Z"
-                , "taxInvoice":"SAMPLE_TEXT"
-                , "taxDate":"2020-01-01T00:00:00.000Z"
-                , "totalLines":"0"
-                , "taxAmount":"0"
-                , "grandTotal":"0"
-                , "verificationStatus":"SAMPLE_TEXT"
+                , "taxPeriod":null
+                , "traxCode":"SAMPLE_TEXT"
+                , "statusCode":"SAMPLE_TEXT"
+                , "docCode":"SAMPLE_TEXT"
+                , "year":null
+                , "returnDocType":"SAMPLE_TEXT"
+                , "repSerNo":"SAMPLE_TEXT"
+                , "taxExpCode":"SAMPLE_TEXT"
+                , "dateSSP":"2020-01-01T00:00:00.000Z"
                 , "uid":null
                 , "active":null
-                , "foreignGrandTotal":"0"
-                , "foreignTaxAmount":"0"
-                , "dataSubmit":"2020-01-01T00:00:00.000Z"
-                , "dateAcct":"2020-01-01T00:00:00.000Z"
-                , "withholdingAmt":"0"
-                , "invoiceAp":"SAMPLE_TEXT"
-                , "docType":"SAMPLE_TEXT"
-                , "payDate":"2020-01-01T00:00:00.000Z"
-                , "dueDate":"2020-01-01T00:00:00.000Z"
-                , "payStatus":"SAMPLE_TEXT"
-                , "payAmt":"0"
-                , "dateReject":"2020-01-01T00:00:00.000Z"
-                , "dateApprove":"2020-01-01T00:00:00.000Z"
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_mVerification_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_mVerificationTax_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created mVerification")
-                .get("${new_mVerification_url}")
+                exec(http("Get created mVerificationTax")
+                .get("${new_mVerificationTax_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created mVerification")
-            .delete("${new_mVerification_url}")
+            .exec(http("Delete created mVerificationTax")
+            .delete("${new_mVerificationTax_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

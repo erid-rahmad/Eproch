@@ -10,6 +10,7 @@
                     size="small"
                     type="primary"
                     icon="el-icon-check"
+                    v-loading.fullscreen.lock="fullscreenLoading"
                     @click="updateEVerification"/>
                 <el-button
                     class="button"

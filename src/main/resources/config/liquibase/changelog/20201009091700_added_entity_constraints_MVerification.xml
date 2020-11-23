@@ -50,4 +50,14 @@
                                  referencedTableName="ad_user"/>
 
     </changeSet>
+
+    <changeSet id="20201120091700-5" author="dian-tri-budianto">
+
+        <addForeignKeyConstraint baseColumnNames="vendor_to_id"
+                                 baseTableName="m_verification"
+                                 constraintName="fk_m_verification_vendor_to_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
+
+    </changeSet>
 </databaseChangeLog>

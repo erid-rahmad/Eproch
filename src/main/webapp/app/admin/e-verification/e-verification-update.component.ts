@@ -52,6 +52,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   public statusOptions: any = {};
   public filter: any = {};
   private processing = false;
+  private fullscreenLoading: boolean = false;
 
   public currencyOptions: any = {};
   public vendorOptions: any = {};
@@ -162,7 +163,12 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         message = "Please input tax invoice date";
         this.notifWarning(message);
       }else{
-        this.submit();
+        this.fullscreenLoading = true;
+
+        setTimeout(() => {
+          this.submit();
+        }, 2000);
+
       }
 
     }else{
@@ -199,13 +205,13 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         criteriaQuery: this.filterQuery,
       })
       .then(res => {
-        console.log(res);
+        //console.log(res);
         this.gridData = res.data.map((item: any) => {
           this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });
 
-        console.log(this.gridData);
+        //console.log(this.gridData);
 
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
@@ -286,7 +292,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     this.gridData.splice(data.$index, 1);
     if(this.formUpdate.id != null){
       this.remove.push(data.row);
-      console.log(this.remove);
+      //console.log(this.remove);
     }
 
     this.formUpdate.totalLines -= parseInt(data.row.totalLines);
@@ -325,6 +331,8 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
             type: 'error',
             duration: 3000
           });
+        }).finally(() => {
+          this.fullscreenLoading = false;
         });
 
     }else{
@@ -349,6 +357,8 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
             type: 'error',
             duration: 3000
           });
+        }).finally(() => {
+          this.fullscreenLoading = false;
         });
 
     }

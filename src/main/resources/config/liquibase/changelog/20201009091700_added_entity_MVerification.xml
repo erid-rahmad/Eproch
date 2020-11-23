@@ -146,4 +146,39 @@
         <dropNotNullConstraint tableName="m_verification" columnName="foreign_grand_total" />
     </changeSet>
 
+    <changeSet id="20201120091700-added3" author="dian-tri-budianto">
+        <addColumn tableName="m_verification">
+            <column name="withholding_amt" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="invoice_ap" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="doc_type" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pay_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="due_date" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="pay_status" type="varchar(50)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pay_amt" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="date_reject" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="date_approve" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="vendor_to_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

@@ -19,12 +19,15 @@ public interface MVerificationMapper extends EntityMapper<MVerificationDTO, MVer
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "vendor.name", target = "vendorName")
     @Mapping(source = "pic.id", target = "picId")
+    @Mapping(source = "vendorTo.id", target = "vendorToId")
+    @Mapping(source = "vendorTo.name", target = "vendorToName")
     MVerificationDTO toDto(MVerification mVerification);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "currencyId", target = "currency")
     @Mapping(source = "vendorId", target = "vendor")
     @Mapping(source = "picId", target = "pic")
+    @Mapping(source = "vendorToId", target = "vendorTo")
     MVerification toEntity(MVerificationDTO mVerificationDTO);
 
     default MVerification fromId(Long id) {
