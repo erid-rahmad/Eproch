@@ -149,5 +149,13 @@ jhipster:
 # ===================================================================
 
 application:
+  default-organization-id: 1
+  default-cost-center-id: 45651
+  default-element-value-id: 19901
+  default-product-type: I
+  default-product-classification-id: 33701
+  default-product-category-id: 45551
+  default-product-asset-account-id: 18601
+  default-product-expense-account-id: 19901
   attachment:
     upload-dir: /opt/opus-web-attachments
