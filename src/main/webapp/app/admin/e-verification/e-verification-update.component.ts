@@ -1,11 +1,12 @@
+import settings from '@/settings';
+import AlertMixin from '@/shared/alert/alert.mixin';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import Vue from 'vue';
 import { mixins } from 'vue-class-component';
-import Vue from 'vue'
 import { Component } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
-import MatchPo from './match-po.vue';
-import AlertMixin from '@/shared/alert/alert.mixin';
 import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import MatchPo from './match-po.vue';
 
 const EVerificationUpdateProps = Vue.extend({
   props: {
@@ -69,6 +70,14 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     form: {},
     line: [],
     remove: []
+  }
+
+  get dateDisplayFormat() {
+    return settings.dateDisplayFormat;
+  }
+
+  get dateValueFormat() {
+    return settings.dateValueFormat;
   }
 
   created(){

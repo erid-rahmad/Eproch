@@ -51,8 +51,7 @@ public class RegistrationMapper {
   }
 
     public static long randomTimestamp() {
-        long timestamp = System.currentTimeMillis() / 1000L;
-        return timestamp;
+        return System.currentTimeMillis() / 1000L;
     }
 
   public CLocation toLocation(CompanyProfile companyProfile) {
@@ -63,8 +62,9 @@ public class RegistrationMapper {
     location.active(true)
       .adOrganization(organization)
       .city(city)
-      .streetAddress(companyProfile.getAddress())
       .postalCode(companyProfile.getPostalCode());
+
+    parseAddress(location, companyProfile, false);
 
     return location;
   }
@@ -77,9 +77,35 @@ public class RegistrationMapper {
     location.active(true)
       .adOrganization(organization)
       .city(city)
-      .streetAddress(companyProfile.getNpwpAddress())
       .postalCode(companyProfile.getNpwpPostalCode());
 
+    parseAddress(location, companyProfile, true);
+
     return location;
+  }
+
+  private void parseAddress(CLocation location, CompanyProfile companyProfile, boolean npwp) {
+    final String address = npwp ? companyProfile.getNpwpAddress() : companyProfile.getAddress();
+    String[] addressFields = address.split("\\s*?,\\s*?");
+
+    for (int i = 0; i < addressFields.length; ++i) {
+      String field = addressFields[i].trim();
+
+      if (i == 0) {
+        location.setAddress1(field);
+      }
+      if (i == 1) {
+        location.setAddress2(field);
+      }
+      if (i == 2) {
+        location.setAddress3(field);
+      }
+      if (i == 3) {
+        location.setAddress4(field);
+      }
+      if (i > 3) {
+        location.setAddress4(location.getAddress4() + ", " + field);
+      }
+    }
   }
 }

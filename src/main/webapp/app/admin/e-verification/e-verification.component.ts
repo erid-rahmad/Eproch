@@ -1,12 +1,13 @@
+import settings from '@/settings';
+import AlertMixin from '@/shared/alert/alert.mixin';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import Inputmask from 'inputmask';
+import Vue from 'vue';
 import { mixins } from 'vue-class-component';
-import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
-import EVerificationUpdate from './e-verification-update.vue';
-import AlertMixin from '@/shared/alert/alert.mixin';
 import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import Inputmask from 'inputmask'
+import EVerificationUpdate from './e-verification-update.vue';
 
 Vue.directive('inputmask', {
   bind: function(el, binding) {
@@ -75,6 +76,14 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public filter: any = {};
   public vendorApprovalStatus: string = "vendorApprovalStatus";
   public radioSelection: number = null;
+
+  get dateDisplayFormat() {
+    return settings.dateDisplayFormat;
+  }
+
+  get dateValueFormat() {
+    return settings.dateValueFormat;
+  }
 
   created(){
     this.retrieveGetReferences(this.vendorApprovalStatus);

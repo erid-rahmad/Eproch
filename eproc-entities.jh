@@ -679,9 +679,6 @@ relationship ManyToOne {
 	MMatchPO{adOrganization required} to ADOrganization
 
 	// Set to default value when integrating with BHp.
-	MMatchPO{cElementValue required} to CElementValue
-
-	// Set to default value when integrating with BHp.
 	MMatchPO{cCostCenter required} to CCostCenter
 
 	/** PRAN8 is mapped to vendor code. */

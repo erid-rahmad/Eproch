@@ -171,14 +171,6 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cElementValue",
-            "otherEntityRelationshipName": "mMatchPO",
-            "relationshipValidateRules": "required",
-            "relationshipName": "cElementValue",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "cCostCenter",
             "otherEntityRelationshipName": "mMatchPO",
             "relationshipValidateRules": "required",

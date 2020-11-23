@@ -170,10 +170,6 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MMatchPO_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
-            if (criteria.getCElementValueId() != null) {
-                specification = specification.and(buildSpecification(criteria.getCElementValueId(),
-                    root -> root.join(MMatchPO_.cElementValue, JoinType.LEFT).get(CElementValue_.id)));
-            }
             if (criteria.getCCostCenterId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCCostCenterId(),
                     root -> root.join(MMatchPO_.cCostCenter, JoinType.LEFT).get(CCostCenter_.id)));

@@ -100,8 +100,8 @@
                                     clearable
                                     v-model="filter.verificationDateFrom"
                                     type="date"
-                                    format="yyyy/MM/dd"
-                                    value-format="yyyy-MM-dd"
+                                    :format="dateDisplayFormat"
+                                    :value-format="dateValueFormat"
                                     placeholder="Pick a date"/>
                             </el-form-item>
                             <el-form-item label="Invoice Date - From" prop="invoiceDateFrom">
@@ -110,8 +110,8 @@
                                     clearable
                                     v-model="filter.invoiceDateFrom"
                                     type="date"
-                                    format="yyyy/MM/dd"
-                                    value-format="yyyy-MM-dd"
+                                    :format="dateDisplayFormat"
+                                    :value-format="dateValueFormat"
                                     placeholder="Pick a date" />
                             </el-form-item>
                             <el-form-item label="Tax Invoice Date - From" prop="taxInvoiceDateFrom">
@@ -120,8 +120,8 @@
                                     clearable
                                     v-model="filter.taxInvoiceDateFrom"
                                     type="date"
-                                    format="yyyy/MM/dd"
-                                    value-format="yyyy-MM-dd"
+                                    :format="dateDisplayFormat"
+                                    :value-format="dateValueFormat"
                                     placeholder="Pick a date" />
                             </el-form-item>
                         </el-col>
@@ -132,8 +132,8 @@
                                     clearable
                                     v-model="filter.verificationDateTo"
                                     type="date"
-                                    format="yyyy/MM/dd"
-                                    value-format="yyyy-MM-dd"
+                                    :format="dateDisplayFormat"
+                                    :value-format="dateValueFormat"
                                     placeholder="Pick a date" />
                             </el-form-item>
                             <el-form-item label="Invoice Date - To" prop="invoiceDateTo">
@@ -142,8 +142,8 @@
                                     clearable
                                     v-model="filter.invoiceDateTo"
                                     type="date"
-                                    format="yyyy/MM/dd"
-                                    value-format="yyyy-MM-dd"
+                                    :format="dateDisplayFormat"
+                                    :value-format="dateValueFormat"
                                     placeholder="Pick a date" />
                             </el-form-item>
                             <el-form-item label="Tax Invoice Date - To" prop="taxInvoiceDateTo">
@@ -152,8 +152,8 @@
                                     clearable
                                     v-model="filter.taxInvoiceDateTo"
                                     type="date"
-                                    format="yyyy/MM/dd"
-                                    value-format="yyyy-MM-dd"
+                                    :format="dateDisplayFormat"
+                                    :value-format="dateValueFormat"
                                     placeholder="Pick a date" />
                             </el-form-item>
                         </el-col>

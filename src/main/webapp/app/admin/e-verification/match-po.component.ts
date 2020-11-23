@@ -1,16 +1,14 @@
+import settings from '@/settings';
+import AlertMixin from '@/shared/alert/alert.mixin';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import Vue from 'vue';
 import { mixins } from 'vue-class-component';
-import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
-import AlertMixin from '@/shared/alert/alert.mixin';
 import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
 
 const EVerificationProps = Vue.extend({
   props: {
-    eventBus: {
-      type: Object,
-      default: () => {}
-    },
     modeFilterMatchPo: {
       type: Object,
       default: () => {}
@@ -45,6 +43,14 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
   private vendorApprovalStatus: string = "vendorApprovalStatus";
   private selectedMatchPo: any[] = [];
   private totalAmount: number = null;
+
+  get dateDisplayFormat() {
+    return settings.dateDisplayFormat;
+  }
+
+  get dateValueFormat() {
+    return settings.dateValueFormat;
+  }
 
   created(){
     if(this.modeFilterMatchPo.mode == 1){
@@ -84,11 +90,13 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
 
 
   private retrieveAllRecordMatchPos(): void {
-    if ( ! this.baseApiUrlMatchPo) {
+    if (!this.baseApiUrlMatchPo) {
       return;
     }
 
     this.processing = true;
+    this.filterQuery += `mMatchType.equals=1&cVendorId.equals=${accountStore.userDetails.cVendorId}`;
+
     const paginationQuery = {
       page: this.page - 1,
       size: this.itemsPerPage,
@@ -103,9 +111,9 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
       .then(res => {
         console.log(res);
 
-        if(this.modeFilterMatchPo.mode == 1){
+        if (this.modeFilterMatchPo.mode == 1) {
           this.gridData = res.data.map((item: any) => {
-            this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
+            this.totalAmount = item.totalLines + item.taxAmount;
             return item;
           });
 
@@ -113,9 +121,9 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
           this.queryCount = this.totalItems;
           this.$emit('total-count-changed', this.queryCount);
 
-        }else{
+        } else {
           this.selectedMatchPo = res.data.map((item: any) => {
-            this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
+            this.totalAmount = item.totalLines + item.taxAmount;
             return item;
           });
 
@@ -159,18 +167,16 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
     }
   }
 
-  public matchPoFilter(){
+  public matchPoFilter() {
+    this.filterQuery = '';
 
-    if(this.modeFilterMatchPo.mode == 2){
+    if (this.modeFilterMatchPo.mode == 2) {
       this.modeFilterMatchPo.filterByReceiptNo = this.filter.filterByReceiptNo;
-      this.filterQuery = "receiptNo.equals="+this.filter.filterByReceiptNo;
+      this.filterQuery += "receiptNo.equals=" + this.filter.filterByReceiptNo;
       this.retrieveAllRecordMatchPos();
-    }else{
-
-      this.filterQuery = "";
-
-      if(this.filter.receiptNo != null){
-        this.filterQuery = "receiptNo.contains="+this.filter.receiptNo;
+    } else {
+      if (this.filter.receiptNo != null) {
+        this.filterQuery = "receiptNo.contains=" + this.filter.receiptNo;
       }
 
       if(this.filter.receiptDateFrom != null){

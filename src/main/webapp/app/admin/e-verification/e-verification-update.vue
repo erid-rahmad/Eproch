@@ -52,8 +52,8 @@
                             clearable
                             v-model="formUpdate.invoiceDate"
                             type="date"
-                            format="yyyy/MM/dd"
-                            value-format="yyyy-MM-dd"
+                            :format="dateDisplayFormat"
+                            :value-format="dateValueFormat"
                             placeholder="Pick a date" />
                     </el-form-item>
                     <el-form-item label="Currency" prop="currencyId">
@@ -84,8 +84,8 @@
                             clearable
                             v-model="formUpdate.taxDate"
                             type="date"
-                            format="yyyy/MM/dd"
-                            value-format="yyyy-MM-dd"
+                            :format="dateDisplayFormat"
+                            :value-format="dateValueFormat"
                             placeholder="Pick a date" />
                     </el-form-item>
                     <el-form-item label="NPWP" prop="vendorName">

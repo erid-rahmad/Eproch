@@ -56,6 +56,23 @@ public class CLocationDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
+    public String getName() {
+        StringBuilder address = new StringBuilder(address1);
+        if (address2 != null) {
+            address.append(", ").append(address2);
+        }
+        if (address3 != null) {
+            address.append(", ").append(address3);
+        }
+        if (address4 != null) {
+            address.append(", ").append(address4);
+        }
+        if (postalCode != null) {
+            address.append(", ").append(postalCode);
+        }
+        return address.toString();
+    }
+
     public String getAddress1() {
         return address1;
     }

@@ -80,8 +80,6 @@ public class MMatchPOCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
-    private LongFilter cElementValueId;
-
     private LongFilter cCostCenterId;
 
     private LongFilter cVendorId;
@@ -129,7 +127,6 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.mMatchType = other.mMatchType == null ? null : other.mMatchType.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.cElementValueId = other.cElementValueId == null ? null : other.cElementValueId.copy();
         this.cCostCenterId = other.cCostCenterId == null ? null : other.cCostCenterId.copy();
         this.cVendorId = other.cVendorId == null ? null : other.cVendorId.copy();
         this.cCurrencyId = other.cCurrencyId == null ? null : other.cCurrencyId.copy();
@@ -361,14 +358,6 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getCElementValueId() {
-        return cElementValueId;
-    }
-
-    public void setCElementValueId(LongFilter cElementValueId) {
-        this.cElementValueId = cElementValueId;
-    }
-
     public LongFilter getCCostCenterId() {
         return cCostCenterId;
     }
@@ -471,7 +460,6 @@ public class MMatchPOCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(mMatchType, that.mMatchType) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(cElementValueId, that.cElementValueId) &&
             Objects.equals(cCostCenterId, that.cCostCenterId) &&
             Objects.equals(cVendorId, that.cVendorId) &&
             Objects.equals(cCurrencyId, that.cCurrencyId) &&
@@ -512,7 +500,6 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         description,
         mMatchType,
         adOrganizationId,
-        cElementValueId,
         cCostCenterId,
         cVendorId,
         cCurrencyId,
@@ -554,7 +541,6 @@ public class MMatchPOCriteria implements Serializable, Criteria {
                 (description != null ? "description=" + description + ", " : "") +
                 (mMatchType != null ? "mMatchType=" + mMatchType + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (cElementValueId != null ? "cElementValueId=" + cElementValueId + ", " : "") +
                 (cCostCenterId != null ? "cCostCenterId=" + cCostCenterId + ", " : "") +
                 (cVendorId != null ? "cVendorId=" + cVendorId + ", " : "") +
                 (cCurrencyId != null ? "cCurrencyId=" + cCurrencyId + ", " : "") +

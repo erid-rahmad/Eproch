@@ -3,7 +3,6 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MMatchPO;
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.CElementValue;
 import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CCurrency;
@@ -203,16 +202,6 @@ public class MMatchPOResourceIT {
         }
         mMatchPO.setAdOrganization(aDOrganization);
         // Add required entity
-        CElementValue cElementValue;
-        if (TestUtil.findAll(em, CElementValue.class).isEmpty()) {
-            cElementValue = CElementValueResourceIT.createEntity(em);
-            em.persist(cElementValue);
-            em.flush();
-        } else {
-            cElementValue = TestUtil.findAll(em, CElementValue.class).get(0);
-        }
-        mMatchPO.setCElementValue(cElementValue);
-        // Add required entity
         CCostCenter cCostCenter;
         if (TestUtil.findAll(em, CCostCenter.class).isEmpty()) {
             cCostCenter = CCostCenterResourceIT.createEntity(em);
@@ -267,16 +256,6 @@ public class MMatchPOResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mMatchPO.setAdOrganization(aDOrganization);
-        // Add required entity
-        CElementValue cElementValue;
-        if (TestUtil.findAll(em, CElementValue.class).isEmpty()) {
-            cElementValue = CElementValueResourceIT.createUpdatedEntity(em);
-            em.persist(cElementValue);
-            em.flush();
-        } else {
-            cElementValue = TestUtil.findAll(em, CElementValue.class).get(0);
-        }
-        mMatchPO.setCElementValue(cElementValue);
         // Add required entity
         CCostCenter cCostCenter;
         if (TestUtil.findAll(em, CCostCenter.class).isEmpty()) {
@@ -2824,22 +2803,6 @@ public class MMatchPOResourceIT {
 
         // Get all the mMatchPOList where adOrganization equals to adOrganizationId + 1
         defaultMMatchPOShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMMatchPOSByCElementValueIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        CElementValue cElementValue = mMatchPO.getCElementValue();
-        mMatchPORepository.saveAndFlush(mMatchPO);
-        Long cElementValueId = cElementValue.getId();
-
-        // Get all the mMatchPOList where cElementValue equals to cElementValueId
-        defaultMMatchPOShouldBeFound("cElementValueId.equals=" + cElementValueId);
-
-        // Get all the mMatchPOList where cElementValue equals to cElementValueId + 1
-        defaultMMatchPOShouldNotBeFound("cElementValueId.equals=" + (cElementValueId + 1));
     }
 
 

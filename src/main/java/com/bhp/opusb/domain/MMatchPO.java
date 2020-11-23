@@ -204,11 +204,6 @@ public class MMatchPO implements Serializable {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mMatchPOS")
-    private CElementValue cElementValue;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("mMatchPOS")
     private CCostCenter cCostCenter;
 
     /**
@@ -264,7 +259,6 @@ public class MMatchPO implements Serializable {
     private CLocator mLocator;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
-
     public Long getId() {
         return id;
     }
@@ -609,19 +603,6 @@ public class MMatchPO implements Serializable {
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
-    }
-
-    public CElementValue getCElementValue() {
-        return cElementValue;
-    }
-
-    public MMatchPO cElementValue(CElementValue cElementValue) {
-        this.cElementValue = cElementValue;
-        return this;
-    }
-
-    public void setCElementValue(CElementValue cElementValue) {
-        this.cElementValue = cElementValue;
     }
 
     public CCostCenter getCCostCenter() {

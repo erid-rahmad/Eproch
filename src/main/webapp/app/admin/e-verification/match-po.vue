@@ -16,8 +16,8 @@
                                 clearable
                                 v-model="filter.receiptDateFrom"
                                 type="date"
-                                format="yyyy/MM/dd"
-                                value-format="yyyy-MM-dd"
+                                :format="dateDisplayFormat"
+                                :value-format="dateValueFormat"
                                 placeholder="Pick a date" />
                         </el-form-item>
 
@@ -32,8 +32,8 @@
                                 clearable
                                 v-model="filter.receiptDateTo"
                                 type="date"
-                                format="yyyy/MM/dd"
-                                value-format="yyyy-MM-dd"
+                                :format="dateDisplayFormat"
+                                :value-format="dateValueFormat"
                                 placeholder="Pick a date" />
                         </el-form-item>
                     </el-col>
@@ -96,7 +96,7 @@
                             label="Item Description"/>
                         <el-table-column
                             min-width="128"
-                            prop="cUOM"
+                            prop="cUOMName"
                             label="UoM"/>
                         <el-table-column
                             min-width="128"

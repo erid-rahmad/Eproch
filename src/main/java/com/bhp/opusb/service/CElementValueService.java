@@ -28,13 +28,9 @@ public class CElementValueService {
 
     private final CElementValueMapper cElementValueMapper;
 
-    private final ApplicationProperties applicationProperties;
-
-    public CElementValueService(CElementValueRepository cElementValueRepository, CElementValueMapper cElementValueMapper,
-    ApplicationProperties applicationProperties) {
+    public CElementValueService(CElementValueRepository cElementValueRepository, CElementValueMapper cElementValueMapper) {
         this.cElementValueRepository = cElementValueRepository;
         this.cElementValueMapper = cElementValueMapper;
-        this.applicationProperties = applicationProperties;
     }
 
     /**
@@ -84,11 +80,5 @@ public class CElementValueService {
     public void delete(Long id) {
         log.debug("Request to delete CElementValue : {}", id);
         cElementValueRepository.deleteById(id);
-    }
-
-    public CElementValue getDefaultElementValue() {
-        CElementValue elementValue = new CElementValue();
-        elementValue.setId(applicationProperties.getDefaultElementValueId());
-        return elementValue;
     }
 }

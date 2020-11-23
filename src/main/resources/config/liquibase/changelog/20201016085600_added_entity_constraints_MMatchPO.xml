@@ -69,4 +69,8 @@
                                  referencedTableName="c_locator"/>
 
     </changeSet>
+
+    <changeSet id="20201123080200" author="Ananta Aryadewa">
+        <dropColumn tableName="m_match_po" columnName="c_element_value_id"></dropColumn>
+    </changeSet>
 </databaseChangeLog>

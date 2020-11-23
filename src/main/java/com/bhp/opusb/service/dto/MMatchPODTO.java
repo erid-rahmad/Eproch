@@ -179,11 +179,9 @@ public class MMatchPODTO extends AbstractAuditingDTO {
      * PRKCOO
      */
     @ApiModelProperty(value = "PRKCOO")
+
     private Long adOrganizationId;
     private String adOrganizationName;
-
-    private Long cElementValueId;
-    private String cElementValueName;
 
     private Long cCostCenterId;
     private String cCostCenterName;
@@ -448,6 +446,10 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.mMatchType = mMatchType;
     }
 
+    public BigDecimal getTotalAmount() {
+        return totalLines.add(taxAmount);
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -462,22 +464,6 @@ public class MMatchPODTO extends AbstractAuditingDTO {
 
     public void setAdOrganizationName(String adOrganizationName) {
         this.adOrganizationName = adOrganizationName;
-    }
-
-    public Long getCElementValueId() {
-        return cElementValueId;
-    }
-
-    public void setCElementValueId(Long cElementValueId) {
-        this.cElementValueId = cElementValueId;
-    }
-
-    public String getCElementValueName() {
-        return cElementValueName;
-    }
-
-    public void setCElementValueName(String cElementValueName) {
-        this.cElementValueName = cElementValueName;
     }
 
     public Long getCCostCenterId() {
@@ -659,7 +645,6 @@ public class MMatchPODTO extends AbstractAuditingDTO {
             ", description='" + getDescription() + "'" +
             ", mMatchType='" + getmMatchType() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", cElementValueId=" + getCElementValueId() +
             ", cCostCenterId=" + getCCostCenterId() +
             ", cVendorId=" + getCVendorId() +
             ", cCurrencyId=" + getCCurrencyId() +

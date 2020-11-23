@@ -63,9 +63,6 @@ public class MMatchPOService {
     private CCostCenterService cCostCenterService;
 
     @Autowired
-    private CElementValueService cElementValueService;
-
-    @Autowired
     private ADOrganizationService adOrganizationService;
 
     @Autowired
@@ -179,6 +176,7 @@ public class MMatchPOService {
             .cCurrency(buildCurrency(payload, org))
             .cTaxCategory(buildTaxCategory(payload, org))
             .cUom(buildUnitOfMeasure(payload, org))
+            .cVendor(buildVendor(String.valueOf(payload.get("PRAN8"))))
             .mWarehouse(buildWarehouse(payload, org))
             .mLocator(buildLocator(payload, entity.getMWarehouse(), org));
     }
@@ -217,7 +215,6 @@ public class MMatchPOService {
             .adOrganization(org)
             .cCostCenter(cCostCenterService.getDefaultCostCenter())
             .cCurrency(buildCurrency(payload, org))
-            .cElementValue(cElementValueService.getDefaultElementValue())
             .cTaxCategory(buildTaxCategory(payload, org))
             .cUom(buildUnitOfMeasure(payload, org))
             .cVendor(buildVendor(String.valueOf(payload.get("PRAN8"))))
