@@ -55,9 +55,21 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private BigDecimalFilter foreignGrandTotal;
+
+    private BigDecimalFilter foreignTaxAmount;
+
+    private LocalDateFilter dataSubmit;
+
+    private LocalDateFilter dateAcct;
+
     private LongFilter adOrganizationId;
 
     private LongFilter currencyId;
+
+    private LongFilter vendorId;
+
+    private LongFilter picId;
 
     public MVerificationCriteria() {
     }
@@ -77,8 +89,14 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.verificationStatus = other.verificationStatus == null ? null : other.verificationStatus.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.foreignGrandTotal = other.foreignGrandTotal == null ? null : other.foreignGrandTotal.copy();
+        this.foreignTaxAmount = other.foreignTaxAmount == null ? null : other.foreignTaxAmount.copy();
+        this.dataSubmit = other.dataSubmit == null ? null : other.dataSubmit.copy();
+        this.dateAcct = other.dateAcct == null ? null : other.dateAcct.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
+        this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
+        this.picId = other.picId == null ? null : other.picId.copy();
     }
 
     @Override
@@ -198,6 +216,38 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public BigDecimalFilter getForeignGrandTotal() {
+        return foreignGrandTotal;
+    }
+
+    public void setForeignGrandTotal(BigDecimalFilter foreignGrandTotal) {
+        this.foreignGrandTotal = foreignGrandTotal;
+    }
+
+    public BigDecimalFilter getForeignTaxAmount() {
+        return foreignTaxAmount;
+    }
+
+    public void setForeignTaxAmount(BigDecimalFilter foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+    }
+
+    public LocalDateFilter getDataSubmit() {
+        return dataSubmit;
+    }
+
+    public void setDataSubmit(LocalDateFilter dataSubmit) {
+        this.dataSubmit = dataSubmit;
+    }
+
+    public LocalDateFilter getDateAcct() {
+        return dateAcct;
+    }
+
+    public void setDateAcct(LocalDateFilter dateAcct) {
+        this.dateAcct = dateAcct;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -212,6 +262,22 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     public void setCurrencyId(LongFilter currencyId) {
         this.currencyId = currencyId;
+    }
+
+    public LongFilter getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(LongFilter vendorId) {
+        this.vendorId = vendorId;
+    }
+
+    public LongFilter getPicId() {
+        return picId;
+    }
+
+    public void setPicId(LongFilter picId) {
+        this.picId = picId;
     }
 
 
@@ -239,8 +305,14 @@ public class MVerificationCriteria implements Serializable, Criteria {
             Objects.equals(verificationStatus, that.verificationStatus) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(foreignGrandTotal, that.foreignGrandTotal) &&
+            Objects.equals(foreignTaxAmount, that.foreignTaxAmount) &&
+            Objects.equals(dataSubmit, that.dataSubmit) &&
+            Objects.equals(dateAcct, that.dateAcct) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(currencyId, that.currencyId);
+            Objects.equals(currencyId, that.currencyId) &&
+            Objects.equals(vendorId, that.vendorId) &&
+            Objects.equals(picId, that.picId);
     }
 
     @Override
@@ -260,8 +332,14 @@ public class MVerificationCriteria implements Serializable, Criteria {
         verificationStatus,
         uid,
         active,
+        foreignGrandTotal,
+        foreignTaxAmount,
+        dataSubmit,
+        dateAcct,
         adOrganizationId,
-        currencyId
+        currencyId,
+        vendorId,
+        picId
         );
     }
 
@@ -282,8 +360,14 @@ public class MVerificationCriteria implements Serializable, Criteria {
                 (verificationStatus != null ? "verificationStatus=" + verificationStatus + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (foreignGrandTotal != null ? "foreignGrandTotal=" + foreignGrandTotal + ", " : "") +
+                (foreignTaxAmount != null ? "foreignTaxAmount=" + foreignTaxAmount + ", " : "") +
+                (dataSubmit != null ? "dataSubmit=" + dataSubmit + ", " : "") +
+                (dateAcct != null ? "dateAcct=" + dateAcct + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
+                (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
+                (picId != null ? "picId=" + picId + ", " : "") +
             "}";
     }
 

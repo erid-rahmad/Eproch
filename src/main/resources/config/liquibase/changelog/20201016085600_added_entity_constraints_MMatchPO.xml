@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MMatchPO.
+    -->
+    <changeSet id="20201016085600-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_element_value_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_c_element_value_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_element_value"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_cost_center_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_c_cost_center_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_cost_center"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_vendor_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_c_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_currency_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_c_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_tax_category_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_c_tax_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_tax_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_uom_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_c_uom_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_unit_of_measure"/>
+
+        <addForeignKeyConstraint baseColumnNames="m_product_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_m_product_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_product"/>
+
+        <addForeignKeyConstraint baseColumnNames="m_warehouse_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_m_warehouse_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_warehouse"/>
+
+        <addForeignKeyConstraint baseColumnNames="m_locator_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_m_locator_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_locator"/>
+
+    </changeSet>
+
+    <changeSet id="20201123080200" author="Ananta Aryadewa">
+        <dropColumn tableName="m_match_po" columnName="c_element_value_id"></dropColumn>
+    </changeSet>
+</databaseChangeLog>

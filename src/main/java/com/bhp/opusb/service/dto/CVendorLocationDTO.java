@@ -1,7 +1,5 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -9,6 +7,8 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.CVendorLocation} entity.
  */
 public class CVendorLocationDTO extends AbstractAuditingDTO {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 
@@ -24,16 +24,22 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
-
     private Long vendorId;
+    private String vendorCode;
+    private String vendorRegisteredName;
 
     private Long locationId;
-    private String locationName;
-    private String locationAddress;
-    private String locationPostalCode;
-    private String locationCityName;
-    private String locationRegionName;
-    private String locationCountryName;
+    private String address1;
+    private String address2;
+    private String address3;
+    private String address4;
+    private String postalCode;
+    private String phone;
+    private String fax;
+    private String cityName;
+    private String regionName;
+    private String countryWithRegionName;
+    private String countryWithoutRegionName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -102,6 +108,18 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
         this.vendorId = cVendorId;
     }
 
+    public void setVendorCode(String vendorCode) {
+        this.vendorCode = vendorCode;
+    }
+
+    public void setVendorRegisteredName(String vendorRegisteredName) {
+        this.vendorRegisteredName = vendorRegisteredName;
+    }
+
+    public String getVendorName() {
+        return vendorCode + " - " + vendorRegisteredName;
+    }
+
     public Long getLocationId() {
         return locationId;
     }
@@ -111,54 +129,85 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
     }
 
     public String getLocationName() {
-        //return locationName;
-        return (locationAddress + ", " + locationCityName + ", " + locationRegionName + ", " + locationCountryName + ", " + locationPostalCode);
+        StringBuilder address = new StringBuilder(address1);
+        if (address2 != null) {
+            address.append(", ").append(address2);
+        }
+        if (address3 != null) {
+            address.append(", ").append(address3);
+        }
+        if (address4 != null) {
+            address.append(", ").append(address4);
+        }
+        if (postalCode != null) {
+            address.append(", ").append(postalCode);
+        }
+        return address.toString();
     }
 
-    public void setLocationName(String locationName) {
-        this.locationName = locationName;
+    public void setAddress1(String address1) {
+        this.address1 = address1;
     }
 
-    public String getLocationAddress() {
-        return locationAddress;
+    public void setAddress2(String address2) {
+        this.address2 = address2;
     }
 
-    public void setLocationAddress(String locationAddress) {
-        this.locationAddress = locationAddress;
+    public void setAddress3(String address3) {
+        this.address3 = address3;
     }
 
-    public String getLocationPostalCode() {
-        return locationPostalCode;
+    public void setAddress4(String address4) {
+        this.address4 = address4;
     }
 
-    public void setLocationPostalCode(String locationPostalCode) {
-        this.locationPostalCode = locationPostalCode;
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
     }
 
-    public String getLocationCityName() {
-        return locationCityName;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setLocationCityName(String locationCityName) {
-        this.locationCityName = locationCityName;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getLocationRegionName() {
-        return locationRegionName;
+    public String getFax() {
+        return fax;
     }
 
-    public void setLocationRegionName(String locationRegionName) {
-        this.locationRegionName = locationRegionName;
+    public void setFax(String fax) {
+        this.fax = fax;
     }
 
-    public String getLocationCountryName() {
-        return locationCountryName;
+    public String getCityName() {
+        return cityName;
     }
 
-    public void setLocationCountryName(String locationCountryName) {
-        this.locationCountryName = locationCountryName;
+    public void setCityName(String cityName) {
+        this.cityName = cityName;
     }
 
+    public String getRegionName() {
+        return regionName;
+    }
+
+    public void setRegionName(String regionName) {
+        this.regionName = regionName;
+    }
+
+    public String getCountryName() {
+        return regionName == null ? countryWithoutRegionName : countryWithRegionName;
+    }
+
+    public void setCountryWithRegionName(String countryWithRegionName) {
+        this.countryWithRegionName = countryWithRegionName;
+    }
+
+    public void setCountryWithoutRegionName(String countryWithoutRegionName) {
+        this.countryWithoutRegionName = countryWithoutRegionName;
+    }
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -209,9 +258,12 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
             ", vendorId=" + getVendorId() +
             ", locationId=" + getLocationId() +
             ", locationName=" + getLocationName() +
-            ", locationAddress=" + getLocationAddress() +
-            ", locationPostalCode=" + getLocationPostalCode() +
-            ", locationCityName=" + getLocationCityName() +
+            ", postalCode=" + postalCode +
+            ", phone=" + getPhone() +
+            ", fax=" + getFax() +
+            ", cityName=" + getCityName() +
+            ", regionName=" + getRegionName() +
+            ", countryName=" + getCountryName() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName=" + getAdOrganizationName() +
             "}";

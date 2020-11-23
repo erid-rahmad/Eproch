@@ -1,20 +1,18 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CCity} entity.
  */
 public class CCityDTO extends AbstractAuditingDTO {
     
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
-    @NotNull
-    @Pattern(regexp = "^[A-Z]{3}$")
-    private String code;
+    private Long id;
 
     @NotNull
     private String name;
@@ -39,14 +37,6 @@ public class CCityDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {
@@ -97,20 +87,20 @@ public class CCityDTO extends AbstractAuditingDTO {
         this.countryId = cCountryId;
     }
 
-    public Long getRegionId() {
-        return regionId;
-    }
-
-    public void setRegionId(Long cRegionId) {
-        this.regionId = cRegionId;
-    }
-
     public String getCountryName() {
         return countryName;
     }
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public Long getRegionId() {
+        return regionId;
+    }
+
+    public void setRegionId(Long cRegionId) {
+        this.regionId = cRegionId;
     }
 
     public String getRegionName() {
@@ -150,18 +140,12 @@ public class CCityDTO extends AbstractAuditingDTO {
     public String toString() {
         return "CCityDTO{" +
             "id=" + getId() +
-            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName='" + getAdOrganizationName() + "'" +
             ", countryId=" + getCountryId() +
-            ", countryName='" + getCountryName() + "'" +
             ", regionId=" + getRegionId() +
-            ", regionName='" + getRegionName() + "'" +
             "}";
     }
-
-    
 }

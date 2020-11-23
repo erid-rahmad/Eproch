@@ -9,7 +9,7 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link MVerificationLine} and its DTO {@link MVerificationLineDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MVerificationMapper.class, ADOrganizationMapper.class, CProductMapper.class, CUnitOfMeasureMapper.class})
+@Mapper(componentModel = "spring", uses = {MVerificationMapper.class, ADOrganizationMapper.class, CProductMapper.class, CUnitOfMeasureMapper.class, CElementValueMapper.class, CCostCenterMapper.class, CCurrencyMapper.class})
 public interface MVerificationLineMapper extends EntityMapper<MVerificationLineDTO, MVerificationLine> {
 
     @Mapping(source = "verification.id", target = "verificationId")
@@ -19,12 +19,18 @@ public interface MVerificationLineMapper extends EntityMapper<MVerificationLineD
     @Mapping(source = "product.name", target = "productName")
     @Mapping(source = "uom.id", target = "uomId")
     @Mapping(source = "uom.name", target = "uomName")
+    @Mapping(source = "CElement.id", target = "CElementId")
+    @Mapping(source = "CCostCenter.id", target = "CCostCenterId")
+    @Mapping(source = "CCurrency.id", target = "CCurrencyId")
     MVerificationLineDTO toDto(MVerificationLine mVerificationLine);
 
     @Mapping(source = "verificationId", target = "verification")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "productId", target = "product")
     @Mapping(source = "uomId", target = "uom")
+    @Mapping(source = "CElementId", target = "CElement")
+    @Mapping(source = "CCostCenterId", target = "CCostCenter")
+    @Mapping(source = "CCurrencyId", target = "CCurrency")
     MVerificationLine toEntity(MVerificationLineDTO mVerificationLineDTO);
 
     default MVerificationLine fromId(Long id) {

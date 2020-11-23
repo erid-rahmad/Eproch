@@ -2,14 +2,18 @@
     "name": "MVerificationLine",
     "fields": [
         {
-            "fieldName": "orderNo",
+            "fieldName": "verificationNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "poNo",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
             ]
         },
         {
-            "fieldName": "receiptNo",
+            "fieldName": "receiveNo",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
@@ -61,6 +65,30 @@
         {
             "fieldName": "active",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "lineNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "conversionRate",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "foreignActual",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "foreignTotalLines",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "foreignTaxAmount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "receiveDate",
+            "fieldType": "LocalDate"
         }
     ],
     "relationships": [
@@ -94,6 +122,30 @@
             "otherEntityRelationshipName": "mVerificationLine",
             "relationshipValidateRules": "required",
             "relationshipName": "uom",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cElementValue",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cElement",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCostCenter",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cCostCenter",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cCurrency",
             "otherEntityField": "id"
         }
     ],

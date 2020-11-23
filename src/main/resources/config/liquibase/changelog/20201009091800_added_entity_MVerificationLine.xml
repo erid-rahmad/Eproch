@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MVerificationLine.
     -->
@@ -148,4 +148,41 @@
 
         </addColumn>
     </changeSet>
+
+    <changeSet id="20201113020900-added2" author="dian-tri-budianto">
+        <dropColumn tableName="m_verification_line" columnName="c_doc_type"/>
+        <dropColumn tableName="m_verification_line" columnName="c_tax"/>
+        <dropColumn tableName="m_verification_line" columnName="order_no"/>
+        <dropColumn tableName="m_verification_line" columnName="receipt_no"/>
+    </changeSet>
+
+    <changeSet id="20201113020900-added3" author="dian-tri-budianto">
+        <addColumn tableName="m_verification_line">
+            <column name="receive_no" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="verification_no" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="po_no" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="receive_date" type="date">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20201113020900-added4" author="dian-tri-budianto">
+        <modifyDataType tableName="m_verification_line" columnName="c_element" newDataType="bigint" />
+        <modifyDataType tableName="m_verification_line" columnName="c_cost_center" newDataType="bigint" />
+        <modifyDataType tableName="m_verification_line" columnName="currency_id" newDataType="bigint" />
+    </changeSet>
+
+    <changeSet author="dian-tri-budianto" id="20201116020900-rename">
+        <renameColumn columnDataType="bigint" newColumnName="c_element_id" oldColumnName="c_element" tableName="m_verification_line"/>
+        <renameColumn columnDataType="bigint" newColumnName="c_cost_center_id" oldColumnName="c_cost_center" tableName="m_verification_line"/>
+        <renameColumn columnDataType="bigint" newColumnName="c_currency_id" oldColumnName="currency_id" tableName="m_verification_line"/>
+    </changeSet>
+
 </databaseChangeLog>

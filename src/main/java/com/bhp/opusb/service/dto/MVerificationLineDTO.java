@@ -1,6 +1,10 @@
 package com.bhp.opusb.service.dto;
 
+import java.time.LocalDate;
 import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
@@ -9,15 +13,18 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVerificationLine} entity.
  */
-public class MVerificationLineDTO implements Serializable {
-    
+public class MVerificationLineDTO extends AbstractAuditingDTO {
+
     private Long id;
 
-    @NotNull
-    private String orderNo;
+    private String verificationNo;
 
     @NotNull
-    private String receiptNo;
+    private String poNo;
+
+    @NotNull
+    @JsonProperty("receiptNo")
+    private String receiveNo;
 
     @NotNull
     private String deliveryNo;
@@ -40,6 +47,18 @@ public class MVerificationLineDTO implements Serializable {
 
     private Boolean active;
 
+    private String lineNo;
+
+    private String conversionRate;
+
+    private BigDecimal foreignActual;
+
+    private BigDecimal foreignTotalLines;
+
+    private BigDecimal foreignTaxAmount;
+
+    private LocalDate receiveDate;
+
 
     private Long verificationId;
 
@@ -49,9 +68,22 @@ public class MVerificationLineDTO implements Serializable {
     private Long productId;
     private String productName;
 
+    @JsonProperty("cUOM")
     private Long uomId;
     private String uomName;
-    
+
+    @JsonProperty("cElement")
+    private Long cElementId;
+    private String cElementName;
+
+    @JsonProperty("cCostCenter")
+    private Long cCostCenterId;
+    private String cCostCenterName;
+
+    @JsonProperty("cCurrency")
+    private Long cCurrencyId;
+    private String cCurrencyName;
+
     public Long getId() {
         return id;
     }
@@ -60,20 +92,28 @@ public class MVerificationLineDTO implements Serializable {
         this.id = id;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getVerificationNo() {
+        return verificationNo;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setVerificationNo(String verificationNo) {
+        this.verificationNo = verificationNo;
     }
 
-    public String getReceiptNo() {
-        return receiptNo;
+    public String getPoNo() {
+        return poNo;
     }
 
-    public void setReceiptNo(String receiptNo) {
-        this.receiptNo = receiptNo;
+    public void setPoNo(String poNo) {
+        this.poNo = poNo;
+    }
+
+    public String getReceiveNo() {
+        return receiveNo;
+    }
+
+    public void setReceiveNo(String receiveNo) {
+        this.receiveNo = receiveNo;
     }
 
     public String getDeliveryNo() {
@@ -140,6 +180,54 @@ public class MVerificationLineDTO implements Serializable {
         this.active = active;
     }
 
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(String lineNo) {
+        this.lineNo = lineNo;
+    }
+
+    public String getConversionRate() {
+        return conversionRate;
+    }
+
+    public void setConversionRate(String conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    public BigDecimal getForeignActual() {
+        return foreignActual;
+    }
+
+    public void setForeignActual(BigDecimal foreignActual) {
+        this.foreignActual = foreignActual;
+    }
+
+    public BigDecimal getForeignTotalLines() {
+        return foreignTotalLines;
+    }
+
+    public void setForeignTotalLines(BigDecimal foreignTotalLines) {
+        this.foreignTotalLines = foreignTotalLines;
+    }
+
+    public BigDecimal getForeignTaxAmount() {
+        return foreignTaxAmount;
+    }
+
+    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+    }
+
+    public LocalDate getReceiveDate() {
+        return receiveDate;
+    }
+
+    public void setReceiveDate(LocalDate receiveDate) {
+        this.receiveDate = receiveDate;
+    }
+
     public Long getVerificationId() {
         return verificationId;
     }
@@ -196,6 +284,54 @@ public class MVerificationLineDTO implements Serializable {
         this.uomName = uomName;
     }
 
+    public Long getCElementId() {
+        return cElementId;
+    }
+
+    public void setCElementId(Long cElementValueId) {
+        this.cElementId = cElementValueId;
+    }
+
+    public String getcElementName() {
+        return cElementName;
+    }
+
+    public void setcElementName(String cElementName) {
+        this.cElementName = cElementName;
+    }
+
+    public Long getCCostCenterId() {
+        return cCostCenterId;
+    }
+
+    public void setCCostCenterId(Long cCostCenterId) {
+        this.cCostCenterId = cCostCenterId;
+    }
+
+    public String getcCostCenterName() {
+        return cCostCenterName;
+    }
+
+    public void setcCostCenterName(String cCostCenterName) {
+        this.cCostCenterName = cCostCenterName;
+    }
+
+    public Long getCCurrencyId() {
+        return cCurrencyId;
+    }
+
+    public void setCCurrencyId(Long cCurrencyId) {
+        this.cCurrencyId = cCurrencyId;
+    }
+
+    public String getcCurrencyName() {
+        return cCurrencyName;
+    }
+
+    public void setcCurrencyName(String cCurrencyName) {
+        this.cCurrencyName = cCurrencyName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -221,8 +357,9 @@ public class MVerificationLineDTO implements Serializable {
     public String toString() {
         return "MVerificationLineDTO{" +
             "id=" + getId() +
-            ", orderNo='" + getOrderNo() + "'" +
-            ", receiptNo='" + getReceiptNo() + "'" +
+            ", verificationNo='" + getVerificationNo() + "'" +
+            ", poNo='" + getPoNo() + "'" +
+            ", receiveNo='" + getReceiveNo() + "'" +
             ", deliveryNo='" + getDeliveryNo() + "'" +
             ", description='" + getDescription() + "'" +
             ", qty=" + getQty() +
@@ -231,6 +368,12 @@ public class MVerificationLineDTO implements Serializable {
             ", taxAmount=" + getTaxAmount() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", lineNo='" + getLineNo() + "'" +
+            ", conversionRate='" + getConversionRate() + "'" +
+            ", foreignActual=" + getForeignActual() +
+            ", foreignTotalLines=" + getForeignTotalLines() +
+            ", foreignTaxAmount=" + getForeignTaxAmount() +
+            ", receiveDate='" + getReceiveDate() + "'" +
             ", verificationId=" + getVerificationId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName='" + getAdOrganizationName() + "'" +
@@ -238,6 +381,9 @@ public class MVerificationLineDTO implements Serializable {
             ", productName='" + getProductName() + "'" +
             ", uomId=" + getUomId() +
             ", uomName='" + getUomName() + "'" +
+            ", cElementId=" + getCElementId() +
+            ", cCostCenterId=" + getCCostCenterId() +
+            ", cCurrencyId=" + getCCurrencyId() +
             "}";
     }
 }

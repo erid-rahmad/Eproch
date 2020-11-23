@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 @ApiModel(description = "vendor Invoice Verification")
 public class MVerificationDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     @NotNull
@@ -50,13 +50,26 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
+    private BigDecimal foreignGrandTotal;
+
+    private BigDecimal foreignTaxAmount;
+
+    private LocalDate dataSubmit;
+
+    private LocalDate dateAcct;
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
     private Long currencyId;
     private String currencyName;
-    
+
+    private Long vendorId;
+    private String vendorName;
+
+    private Long picId;
+    private Long picName;
+
     public Long getId() {
         return id;
     }
@@ -169,6 +182,38 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
+    public BigDecimal getForeignGrandTotal() {
+        return foreignGrandTotal;
+    }
+
+    public void setForeignGrandTotal(BigDecimal foreignGrandTotal) {
+        this.foreignGrandTotal = foreignGrandTotal;
+    }
+
+    public BigDecimal getForeignTaxAmount() {
+        return foreignTaxAmount;
+    }
+
+    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+    }
+
+    public LocalDate getDataSubmit() {
+        return dataSubmit;
+    }
+
+    public void setDataSubmit(LocalDate dataSubmit) {
+        this.dataSubmit = dataSubmit;
+    }
+
+    public LocalDate getDateAcct() {
+        return dateAcct;
+    }
+
+    public void setDateAcct(LocalDate dateAcct) {
+        this.dateAcct = dateAcct;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -184,7 +229,7 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     public void setAdOrganizationName(String adOrganizationName) {
         this.adOrganizationName = adOrganizationName;
     }
-    
+
     public Long getCurrencyId() {
         return currencyId;
     }
@@ -199,6 +244,38 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     public void setCurrencyName(String currencyName) {
         this.currencyName = currencyName;
+    }
+
+    public Long getVendorId() {
+        return vendorId;
+    }
+
+    public void setVendorId(Long cVendorId) {
+        this.vendorId = cVendorId;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public Long getPicId() {
+        return picId;
+    }
+
+    public void setPicId(Long adUserId) {
+        this.picId = adUserId;
+    }
+
+    public Long getPicName() {
+        return picName;
+    }
+
+    public void setPicName(Long picName) {
+        this.picName = picName;
     }
 
     @Override
@@ -239,12 +316,20 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", verificationStatus='" + getVerificationStatus() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", foreignGrandTotal=" + getForeignGrandTotal() +
+            ", foreignTaxAmount=" + getForeignTaxAmount() +
+            ", dataSubmit='" + getDataSubmit() + "'" +
+            ", dateAcct='" + getDateAcct() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName='" + getAdOrganizationName() + "'" +
             ", currencyId=" + getCurrencyId() +
             ", currencyName='" + getCurrencyName() + "'" +
+            ", vendorId=" + getVendorId() +
+            ", vendorName=" + getVendorName() +
+            ", picId=" + getPicId() +
+            ", picName=" + getPicName() +
             "}";
     }
 
-    
+
 }

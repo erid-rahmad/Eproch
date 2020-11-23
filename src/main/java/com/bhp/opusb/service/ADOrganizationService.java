@@ -1,18 +1,19 @@
 package com.bhp.opusb.service;
 
+import java.util.Optional;
+
+import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.ADOrganizationRepository;
 import com.bhp.opusb.service.dto.ADOrganizationDTO;
 import com.bhp.opusb.service.mapper.ADOrganizationMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link ADOrganization}.
@@ -27,9 +28,13 @@ public class ADOrganizationService {
 
     private final ADOrganizationMapper aDOrganizationMapper;
 
-    public ADOrganizationService(ADOrganizationRepository aDOrganizationRepository, ADOrganizationMapper aDOrganizationMapper) {
+    private final ApplicationProperties applicationProperties;
+
+    public ADOrganizationService(ADOrganizationRepository aDOrganizationRepository, ADOrganizationMapper aDOrganizationMapper,
+            ApplicationProperties applicationProperties) {
         this.aDOrganizationRepository = aDOrganizationRepository;
         this.aDOrganizationMapper = aDOrganizationMapper;
+        this.applicationProperties = applicationProperties;
     }
 
     /**
@@ -72,6 +77,21 @@ public class ADOrganizationService {
     }
 
     /**
+     * Get an organization by the given code, or create a new if it doesn't exist.
+     */
+    public ADOrganization findOrCreate(String code) {
+        return aDOrganizationRepository.findFirstByCode(code)
+            .orElseGet(() -> {
+                ADOrganization org = new ADOrganization();
+                org.active(true)
+                    .code(code)
+                    .name(code);
+
+                return aDOrganizationRepository.save(org);
+            });
+    }
+
+    /**
      * Delete the aDOrganization by id.
      *
      * @param id the id of the entity.
@@ -79,5 +99,11 @@ public class ADOrganizationService {
     public void delete(Long id) {
         log.debug("Request to delete ADOrganization : {}", id);
         aDOrganizationRepository.deleteById(id);
+    }
+
+    public ADOrganization getDefaultOrganization() {
+        ADOrganization organization = new ADOrganization();
+        organization.setId(applicationProperties.getDefaultOrganizationId());
+        return organization;
     }
 }

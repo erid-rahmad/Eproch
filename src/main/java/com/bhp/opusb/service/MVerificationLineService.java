@@ -1,5 +1,8 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.CProduct;
+import com.bhp.opusb.domain.MVerification;
 import com.bhp.opusb.domain.MVerificationLine;
 import com.bhp.opusb.repository.MVerificationLineRepository;
 import com.bhp.opusb.service.dto.MVerificationLineDTO;
@@ -12,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link MVerificationLine}.
@@ -43,6 +48,37 @@ public class MVerificationLineService {
         MVerificationLine mVerificationLine = mVerificationLineMapper.toEntity(mVerificationLineDTO);
         mVerificationLine = mVerificationLineRepository.save(mVerificationLine);
         return mVerificationLineMapper.toDto(mVerificationLine);
+    }
+
+    public List<MVerificationLineDTO> saveAll(List<MVerificationLineDTO> mVerificationLineDTOs, MVerification mVerification, ADOrganization organization, CProduct product) {
+        List<MVerificationLine> verificationLines = mVerificationLineDTOs.stream()
+            .map(verificationLine
+                -> mVerificationLineMapper.toEntity(verificationLine)
+                    .active(true)
+                    .product(product)
+                    .adOrganization(organization)
+                    .verification(mVerification)
+            )
+            .collect(Collectors.toList());
+
+        return mVerificationLineRepository.saveAll(verificationLines)
+            .stream()
+            .map(mVerificationLineMapper::toDto)
+            .collect(Collectors.toList());
+    }
+
+    public void removeAll(List<MVerificationLineDTO> mVerificationLineDTOs, MVerification mVerification, ADOrganization organization, CProduct product) {
+        List<MVerificationLine> verificationLines = mVerificationLineDTOs.stream()
+            .map(verificationLine
+                -> mVerificationLineMapper.toEntity(verificationLine)
+                    .active(true)
+                    .product(product)
+                    .adOrganization(organization)
+                    .verification(mVerification)
+            )
+            .collect(Collectors.toList());
+        mVerificationLineRepository.deleteAll(verificationLines);
+
     }
 
     /**

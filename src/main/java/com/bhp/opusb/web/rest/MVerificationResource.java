@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.service.MVerificationService;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MVerificationDTO;
+import com.bhp.opusb.service.dto.VerificationDTO;
 import com.bhp.opusb.service.dto.MVerificationCriteria;
 import com.bhp.opusb.service.MVerificationQueryService;
 
@@ -66,6 +67,18 @@ public class MVerificationResource {
         return ResponseEntity.created(new URI("/api/m-verifications/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @PostMapping("/m-verifications/submit")
+    @ResponseStatus(HttpStatus.CREATED)
+    public void submitEVerification(@Valid @RequestBody VerificationDTO verificationDTO) {
+        mVerificationService.submitEVerification(verificationDTO);
+    }
+
+    @PutMapping("/m-verifications/submit")
+    @ResponseStatus(HttpStatus.OK)
+    public void submitUpdateEVerification(@Valid @RequestBody VerificationDTO verificationDTO) {
+        mVerificationService.submitEVerification(verificationDTO);
     }
 
     /**

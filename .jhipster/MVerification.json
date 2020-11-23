@@ -76,6 +76,22 @@
         {
             "fieldName": "active",
             "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "foreignGrandTotal",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "foreignTaxAmount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "dataSubmit",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateAcct",
+            "fieldType": "LocalDate"
         }
     ],
     "relationships": [
@@ -93,6 +109,22 @@
             "otherEntityRelationshipName": "mVerification",
             "relationshipValidateRules": "required",
             "relationshipName": "currency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mVerification",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adUser",
+            "otherEntityRelationshipName": "mVerification",
+            "relationshipValidateRules": "required",
+            "relationshipName": "pic",
             "otherEntityField": "id"
         }
     ],

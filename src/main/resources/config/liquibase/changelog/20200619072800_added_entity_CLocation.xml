@@ -67,8 +67,13 @@
                   separator=";"
                   tableName="c_location">
             <column name="id" type="numeric"/>
-            <column name="street_address" type="string"/>
+            <column name="address_1" type="string"/>
+            <column name="address_2" type="string"/>
+            <column name="address_3" type="string"/>
+            <column name="address_4" type="string"/>
             <column name="postal_code" type="string"/>
+            <column name="phone" type="string"/>
+            <column name="fax" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="city_id" type="numeric"/>
@@ -94,6 +99,28 @@
 
     <changeSet id="20200810215800" author="Ananta Aryadewa">
         <dropColumn tableName="c_location" columnName="tax_invoice_address" />
+    </changeSet>
+
+    <changeSet id="20201120171700" author="Ananta Aryadewa">
+        <renameColumn tableName="c_location" oldColumnName="street_address" newColumnName="address_1" columnDataType="varchar(100)"/>
+        <addColumn tableName="c_location">
+            <column name="address_2" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="address_3" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="address_4" type="varchar(100)">
+                <constraints nullable="true" />
+            </column>
+            <column name="phone" type="varchar(20)">
+                <constraints nullable="true" />
+            </column>
+            <column name="fax" type="varchar(20)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <modifyDataType tableName="c_location" columnName="postal_code" newDataType="varchar(10)" />
     </changeSet>
 
 </databaseChangeLog>

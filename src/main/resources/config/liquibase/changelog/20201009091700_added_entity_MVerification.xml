@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MVerification.
     -->
@@ -128,6 +128,22 @@
                 <constraints nullable="false" />
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20201113091700-added2" author="dian-tri-budianto">
+        <addColumn tableName="m_verification">
+            <column name="foreign_tax_amount" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="data_submit" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="date_acct" type="date">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+        <dropNotNullConstraint tableName="m_verification" columnName="foreign_grand_total" />
     </changeSet>
 
 </databaseChangeLog>

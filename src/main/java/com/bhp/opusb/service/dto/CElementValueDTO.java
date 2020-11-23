@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.dto;
 
-import io.swagger.annotations.ApiModel;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.ApiModel;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CElementValue} entity.
@@ -12,6 +13,8 @@ import java.util.UUID;
 @ApiModel(description = "The Element Value entity.")
 public class CElementValueDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -140,6 +143,4 @@ public class CElementValueDTO extends AbstractAuditingDTO {
             ", adOrganizationName='" + getAdOrganizationName() + "'" +
             "}";
     }
-
-
 }

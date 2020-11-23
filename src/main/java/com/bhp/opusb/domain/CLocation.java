@@ -12,6 +12,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -34,11 +35,33 @@ public class CLocation extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "street_address", nullable = false)
-    private String streetAddress;
+    @Size(max = 100)
+    @Column(name = "address_1", length = 100, nullable = false)
+    private String address1;
 
-    @Column(name = "postal_code")
+    @Size(max = 100)
+    @Column(name = "address_2", length = 100)
+    private String address2;
+
+    @Size(max = 100)
+    @Column(name = "address_3", length = 100)
+    private String address3;
+
+    @Size(max = 100)
+    @Column(name = "address_4", length = 100)
+    private String address4;
+
+    @Size(max = 10)
+    @Column(name = "postal_code", length = 10)
     private String postalCode;
+
+    @Size(max = 20)
+    @Column(name = "phone", length = 20)
+    private String phone;
+
+    @Size(max = 20)
+    @Column(name = "fax", length = 20)
+    private String fax;
 
     @Column(name = "uid")
     private UUID uid;
@@ -65,17 +88,56 @@ public class CLocation extends AbstractAuditingEntity {
         this.id = id;
     }
 
-    public String getStreetAddress() {
-        return streetAddress;
+    public String getAddress1() {
+        return address1;
     }
 
-    public CLocation streetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
+    public CLocation address1(String address1) {
+        this.address1 = address1;
         return this;
     }
 
-    public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
+    public void setAddress1(String address1) {
+        this.address1 = address1;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public CLocation address2(String address2) {
+        this.address2 = address2;
+        return this;
+    }
+
+    public void setAddress2(String address2) {
+        this.address2 = address2;
+    }
+
+    public String getAddress3() {
+        return address3;
+    }
+
+    public CLocation address3(String address3) {
+        this.address3 = address3;
+        return this;
+    }
+
+    public void setAddress3(String address3) {
+        this.address3 = address3;
+    }
+
+    public String getAddress4() {
+        return address4;
+    }
+
+    public CLocation address4(String address4) {
+        this.address4 = address4;
+        return this;
+    }
+
+    public void setAddress4(String address4) {
+        this.address4 = address4;
     }
 
     public String getPostalCode() {
@@ -89,6 +151,32 @@ public class CLocation extends AbstractAuditingEntity {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public CLocation phone(String phone) {
+        this.phone = phone;
+        return this;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public CLocation fax(String fax) {
+        this.fax = fax;
+        return this;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
     }
 
     public UUID getUid() {
@@ -169,8 +257,13 @@ public class CLocation extends AbstractAuditingEntity {
     public String toString() {
         return "CLocation{" +
             "id=" + getId() +
-            ", streetAddress='" + getStreetAddress() + "'" +
+            ", address1='" + getAddress1() + "'" +
+            ", address2='" + getAddress2() + "'" +
+            ", address3='" + getAddress3() + "'" +
+            ", address4='" + getAddress4() + "'" +
             ", postalCode='" + getPostalCode() + "'" +
+            ", phone='" + getPhone() + "'" +
+            ", fax='" + getFax() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

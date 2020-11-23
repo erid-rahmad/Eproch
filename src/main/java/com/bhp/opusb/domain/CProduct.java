@@ -1,15 +1,23 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * A CProduct.
@@ -17,7 +25,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "c_product")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CProduct implements Serializable {
+public class CProduct extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -27,7 +35,8 @@ public class CProduct implements Serializable {
     private Long id;
 
     @NotNull
-    @Column(name = "code", nullable = false)
+    @Size(max = 50)
+    @Column(name = "code", length = 50, nullable = false)
     private String code;
 
     @NotNull
@@ -37,7 +46,9 @@ public class CProduct implements Serializable {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "type")
+    @NotNull
+    @Size(max = 1)
+    @Column(name = "type", length = 1, nullable = false)
     private String type;
 
     @Column(name = "uid")
@@ -51,8 +62,7 @@ public class CProduct implements Serializable {
     @JsonIgnoreProperties("cProducts")
     private ADOrganization adOrganization;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("cProducts")
     private CProductClassification productClassification;
 
@@ -61,20 +71,19 @@ public class CProduct implements Serializable {
     @JsonIgnoreProperties("cProducts")
     private CProductCategory productCategory;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("cProducts")
     private CProductCategory productSubCategory;
 
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("cProducts")
-    private CProductCategoryAccount assetAcct;
+    private CElementValue assetAcct;
 
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("cProducts")
-    private CProductCategoryAccount expenseAcct;
+    private CElementValue expenseAcct;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -220,30 +229,30 @@ public class CProduct implements Serializable {
         this.productSubCategory = cProductCategory;
     }
 
-    public CProductCategoryAccount getAssetAcct() {
+    public CElementValue getAssetAcct() {
         return assetAcct;
     }
 
-    public CProduct assetAcct(CProductCategoryAccount cProductCategoryAccount) {
-        this.assetAcct = cProductCategoryAccount;
+    public CProduct assetAcct(CElementValue cElementValue) {
+        this.assetAcct = cElementValue;
         return this;
     }
 
-    public void setAssetAcct(CProductCategoryAccount cProductCategoryAccount) {
-        this.assetAcct = cProductCategoryAccount;
+    public void setAssetAcct(CElementValue cElementValue) {
+        this.assetAcct = cElementValue;
     }
 
-    public CProductCategoryAccount getExpenseAcct() {
+    public CElementValue getExpenseAcct() {
         return expenseAcct;
     }
 
-    public CProduct expenseAcct(CProductCategoryAccount cProductCategoryAccount) {
-        this.expenseAcct = cProductCategoryAccount;
+    public CProduct expenseAcct(CElementValue cElementValue) {
+        this.expenseAcct = cElementValue;
         return this;
     }
 
-    public void setExpenseAcct(CProductCategoryAccount cProductCategoryAccount) {
-        this.expenseAcct = cProductCategoryAccount;
+    public void setExpenseAcct(CElementValue cElementValue) {
+        this.expenseAcct = cElementValue;
     }
 
     public CUnitOfMeasure getUom() {
@@ -260,6 +269,11 @@ public class CProduct implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {

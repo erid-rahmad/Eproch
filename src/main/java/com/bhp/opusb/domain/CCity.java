@@ -1,15 +1,22 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * A CCity.
@@ -25,11 +32,6 @@ public class CCity extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-
-    @NotNull
-    @Pattern(regexp = "^[A-Z]{3}$")
-    @Column(name = "code", nullable = false, unique = true)
-    private String code;
 
     @NotNull
     @Column(name = "name", nullable = false)
@@ -61,19 +63,6 @@ public class CCity extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public CCity code(String code) {
-        this.code = code;
-        return this;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getName() {
@@ -180,7 +169,6 @@ public class CCity extends AbstractAuditingEntity {
     public String toString() {
         return "CCity{" +
             "id=" + getId() +
-            ", code='" + getCode() + "'" +
             ", name='" + getName() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +

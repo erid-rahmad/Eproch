@@ -2,12 +2,10 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -27,8 +25,6 @@ public class CCityCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter code;
-
     private StringFilter name;
 
     private UUIDFilter uid;
@@ -46,7 +42,6 @@ public class CCityCriteria implements Serializable, Criteria {
 
     public CCityCriteria(CCityCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.code = other.code == null ? null : other.code.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
@@ -66,14 +61,6 @@ public class CCityCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getCode() {
-        return code;
-    }
-
-    public void setCode(StringFilter code) {
-        this.code = code;
     }
 
     public StringFilter getName() {
@@ -136,7 +123,6 @@ public class CCityCriteria implements Serializable, Criteria {
         final CCityCriteria that = (CCityCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(code, that.code) &&
             Objects.equals(name, that.name) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
@@ -149,7 +135,6 @@ public class CCityCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
-        code,
         name,
         uid,
         active,
@@ -163,7 +148,6 @@ public class CCityCriteria implements Serializable, Criteria {
     public String toString() {
         return "CCityCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (code != null ? "code=" + code + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +

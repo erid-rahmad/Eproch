@@ -130,6 +130,18 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MVerification_.active));
             }
+            if (criteria.getForeignGrandTotal() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getForeignGrandTotal(), MVerification_.foreignGrandTotal));
+            }
+            if (criteria.getForeignTaxAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getForeignTaxAmount(), MVerification_.foreignTaxAmount));
+            }
+            if (criteria.getDataSubmit() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDataSubmit(), MVerification_.dataSubmit));
+            }
+            if (criteria.getDateAcct() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateAcct(), MVerification_.dateAcct));
+            }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MVerification_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
@@ -137,6 +149,14 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             if (criteria.getCurrencyId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCurrencyId(),
                     root -> root.join(MVerification_.currency, JoinType.LEFT).get(CCurrency_.id)));
+            }
+            if (criteria.getVendorId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorId(),
+                    root -> root.join(MVerification_.vendor, JoinType.LEFT).get(CVendor_.id)));
+            }
+            if (criteria.getPicId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPicId(),
+                    root -> root.join(MVerification_.pic, JoinType.LEFT).get(AdUser_.id)));
             }
         }
         return specification;

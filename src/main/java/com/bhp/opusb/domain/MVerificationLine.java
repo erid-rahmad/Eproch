@@ -10,6 +10,7 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
 
 /**
@@ -27,13 +28,16 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "order_no", nullable = false)
-    private String orderNo;
+    @Column(name = "verification_no")
+    private String verificationNo;
 
     @NotNull
-    @Column(name = "receipt_no", nullable = false)
-    private String receiptNo;
+    @Column(name = "po_no", nullable = false)
+    private String poNo;
+
+    @NotNull
+    @Column(name = "receive_no", nullable = false)
+    private String receiveNo;
 
     @NotNull
     @Column(name = "delivery_no", nullable = false)
@@ -64,6 +68,24 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "line_no")
+    private String lineNo;
+
+    @Column(name = "conversion_rate")
+    private String conversionRate;
+
+    @Column(name = "foreign_actual", precision = 21, scale = 2)
+    private BigDecimal foreignActual;
+
+    @Column(name = "foreign_total_lines", precision = 21, scale = 2)
+    private BigDecimal foreignTotalLines;
+
+    @Column(name = "foreign_tax_amount", precision = 21, scale = 2)
+    private BigDecimal foreignTaxAmount;
+
+    @Column(name = "receive_date")
+    private LocalDate receiveDate;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mVerificationLines")
@@ -84,6 +106,21 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mVerificationLines")
     private CUnitOfMeasure uom;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mVerificationLines")
+    private CElementValue cElement;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mVerificationLines")
+    private CCostCenter cCostCenter;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mVerificationLines")
+    private CCurrency cCurrency;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -93,30 +130,43 @@ public class MVerificationLine extends AbstractAuditingEntity {
         this.id = id;
     }
 
-    public String getOrderNo() {
-        return orderNo;
+    public String getVerificationNo() {
+        return verificationNo;
     }
 
-    public MVerificationLine orderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public MVerificationLine verificationNo(String verificationNo) {
+        this.verificationNo = verificationNo;
         return this;
     }
 
-    public void setOrderNo(String orderNo) {
-        this.orderNo = orderNo;
+    public void setVerificationNo(String verificationNo) {
+        this.verificationNo = verificationNo;
     }
 
-    public String getReceiptNo() {
-        return receiptNo;
+    public String getPoNo() {
+        return poNo;
     }
 
-    public MVerificationLine receiptNo(String receiptNo) {
-        this.receiptNo = receiptNo;
+    public MVerificationLine poNo(String poNo) {
+        this.poNo = poNo;
         return this;
     }
 
-    public void setReceiptNo(String receiptNo) {
-        this.receiptNo = receiptNo;
+    public void setPoNo(String poNo) {
+        this.poNo = poNo;
+    }
+
+    public String getReceiveNo() {
+        return receiveNo;
+    }
+
+    public MVerificationLine receiveNo(String receiveNo) {
+        this.receiveNo = receiveNo;
+        return this;
+    }
+
+    public void setReceiveNo(String receiveNo) {
+        this.receiveNo = receiveNo;
     }
 
     public String getDeliveryNo() {
@@ -223,6 +273,84 @@ public class MVerificationLine extends AbstractAuditingEntity {
         this.active = active;
     }
 
+    public String getLineNo() {
+        return lineNo;
+    }
+
+    public MVerificationLine lineNo(String lineNo) {
+        this.lineNo = lineNo;
+        return this;
+    }
+
+    public void setLineNo(String lineNo) {
+        this.lineNo = lineNo;
+    }
+
+    public String getConversionRate() {
+        return conversionRate;
+    }
+
+    public MVerificationLine conversionRate(String conversionRate) {
+        this.conversionRate = conversionRate;
+        return this;
+    }
+
+    public void setConversionRate(String conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    public BigDecimal getForeignActual() {
+        return foreignActual;
+    }
+
+    public MVerificationLine foreignActual(BigDecimal foreignActual) {
+        this.foreignActual = foreignActual;
+        return this;
+    }
+
+    public void setForeignActual(BigDecimal foreignActual) {
+        this.foreignActual = foreignActual;
+    }
+
+    public BigDecimal getForeignTotalLines() {
+        return foreignTotalLines;
+    }
+
+    public MVerificationLine foreignTotalLines(BigDecimal foreignTotalLines) {
+        this.foreignTotalLines = foreignTotalLines;
+        return this;
+    }
+
+    public void setForeignTotalLines(BigDecimal foreignTotalLines) {
+        this.foreignTotalLines = foreignTotalLines;
+    }
+
+    public BigDecimal getForeignTaxAmount() {
+        return foreignTaxAmount;
+    }
+
+    public MVerificationLine foreignTaxAmount(BigDecimal foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+        return this;
+    }
+
+    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+    }
+
+    public LocalDate getReceiveDate() {
+        return receiveDate;
+    }
+
+    public MVerificationLine receiveDate(LocalDate receiveDate) {
+        this.receiveDate = receiveDate;
+        return this;
+    }
+
+    public void setReceiveDate(LocalDate receiveDate) {
+        this.receiveDate = receiveDate;
+    }
+
     public MVerification getVerification() {
         return verification;
     }
@@ -274,13 +402,52 @@ public class MVerificationLine extends AbstractAuditingEntity {
     public void setUom(CUnitOfMeasure cUnitOfMeasure) {
         this.uom = cUnitOfMeasure;
     }
+
+    public CElementValue getCElement() {
+        return cElement;
+    }
+
+    public MVerificationLine cElement(CElementValue cElementValue) {
+        this.cElement = cElementValue;
+        return this;
+    }
+
+    public void setCElement(CElementValue cElementValue) {
+        this.cElement = cElementValue;
+    }
+
+    public CCostCenter getCCostCenter() {
+        return cCostCenter;
+    }
+
+    public MVerificationLine cCostCenter(CCostCenter cCostCenter) {
+        this.cCostCenter = cCostCenter;
+        return this;
+    }
+
+    public void setCCostCenter(CCostCenter cCostCenter) {
+        this.cCostCenter = cCostCenter;
+    }
+
+    public CCurrency getCCurrency() {
+        return cCurrency;
+    }
+
+    public MVerificationLine cCurrency(CCurrency cCurrency) {
+        this.cCurrency = cCurrency;
+        return this;
+    }
+
+    public void setCCurrency(CCurrency cCurrency) {
+        this.cCurrency = cCurrency;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
     public void assignUUID() {
         this.uid = UUID.randomUUID();
     }
-    
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -301,8 +468,9 @@ public class MVerificationLine extends AbstractAuditingEntity {
     public String toString() {
         return "MVerificationLine{" +
             "id=" + getId() +
-            ", orderNo='" + getOrderNo() + "'" +
-            ", receiptNo='" + getReceiptNo() + "'" +
+            ", verificationNo='" + getVerificationNo() + "'" +
+            ", poNo='" + getPoNo() + "'" +
+            ", receiveNo='" + getReceiveNo() + "'" +
             ", deliveryNo='" + getDeliveryNo() + "'" +
             ", description='" + getDescription() + "'" +
             ", qty=" + getQty() +
@@ -311,6 +479,12 @@ public class MVerificationLine extends AbstractAuditingEntity {
             ", taxAmount=" + getTaxAmount() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", lineNo='" + getLineNo() + "'" +
+            ", conversionRate='" + getConversionRate() + "'" +
+            ", foreignActual=" + getForeignActual() +
+            ", foreignTotalLines=" + getForeignTotalLines() +
+            ", foreignTaxAmount=" + getForeignTaxAmount() +
+            ", receiveDate='" + getReceiveDate() + "'" +
             "}";
     }
 }

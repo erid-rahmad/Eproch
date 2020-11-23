@@ -27,8 +27,6 @@ public class CRegionCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter code;
-
     private StringFilter name;
 
     private StringFilter description;
@@ -48,7 +46,6 @@ public class CRegionCriteria implements Serializable, Criteria {
 
     public CRegionCriteria(CRegionCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.code = other.code == null ? null : other.code.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
@@ -69,14 +66,6 @@ public class CRegionCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getCode() {
-        return code;
-    }
-
-    public void setCode(StringFilter code) {
-        this.code = code;
     }
 
     public StringFilter getName() {
@@ -147,7 +136,6 @@ public class CRegionCriteria implements Serializable, Criteria {
         final CRegionCriteria that = (CRegionCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(code, that.code) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(uid, that.uid) &&
@@ -161,7 +149,6 @@ public class CRegionCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
-        code,
         name,
         description,
         uid,
@@ -176,7 +163,6 @@ public class CRegionCriteria implements Serializable, Criteria {
     public String toString() {
         return "CRegionCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (code != null ? "code=" + code + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +

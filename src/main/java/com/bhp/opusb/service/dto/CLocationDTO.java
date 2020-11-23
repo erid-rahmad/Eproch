@@ -4,6 +4,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CLocation} entity.
@@ -15,9 +16,26 @@ public class CLocationDTO extends AbstractAuditingDTO {
     private Long id;
 
     @NotNull
-    private String streetAddress;
+    @Size(max = 100)
+    private String address1;
 
+    @Size(max = 100)
+    private String address2;
+
+    @Size(max = 100)
+    private String address3;
+
+    @Size(max = 100)
+    private String address4;
+
+    @Size(max = 10)
     private String postalCode;
+
+    @Size(max = 20)
+    private String phone;
+
+    @Size(max = 20)
+    private String fax;
 
     private UUID uid;
 
@@ -38,12 +56,53 @@ public class CLocationDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
-    public String getStreetAddress() {
-        return streetAddress;
+    public String getName() {
+        StringBuilder address = new StringBuilder(address1);
+        if (address2 != null) {
+            address.append(", ").append(address2);
+        }
+        if (address3 != null) {
+            address.append(", ").append(address3);
+        }
+        if (address4 != null) {
+            address.append(", ").append(address4);
+        }
+        if (postalCode != null) {
+            address.append(", ").append(postalCode);
+        }
+        return address.toString();
     }
 
-    public void setStreetAddress(String streetAddress) {
-        this.streetAddress = streetAddress;
+    public String getAddress1() {
+        return address1;
+    }
+
+    public void setAddress1(String address1) {
+        this.address1 = address1;
+    }
+
+    public String getAddress2() {
+        return address2;
+    }
+
+    public void setAddress2(String address2) {
+        this.address2 = address2;
+    }
+
+    public String getAddress3() {
+        return address3;
+    }
+
+    public void setAddress3(String address3) {
+        this.address3 = address3;
+    }
+
+    public String getAddress4() {
+        return address4;
+    }
+
+    public void setAddress4(String address4) {
+        this.address4 = address4;
     }
 
     public String getPostalCode() {
@@ -52,6 +111,22 @@ public class CLocationDTO extends AbstractAuditingDTO {
 
     public void setPostalCode(String postalCode) {
         this.postalCode = postalCode;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+        this.fax = fax;
     }
 
     public UUID getUid() {
@@ -127,16 +202,17 @@ public class CLocationDTO extends AbstractAuditingDTO {
     public String toString() {
         return "CLocationDTO{" +
             "id=" + getId() +
-            ", streetAddress='" + getStreetAddress() + "'" +
+            ", address1='" + getAddress1() + "'" +
+            ", address2='" + getAddress2() + "'" +
+            ", address3='" + getAddress3() + "'" +
+            ", address4='" + getAddress4() + "'" +
             ", postalCode='" + getPostalCode() + "'" +
+            ", phone='" + getPhone() + "'" +
+            ", fax='" + getFax() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", cityId='" + getCityId() + "'" +
-            ", cityName='" + getCityName() + "'" +
-            ", adOrganizationId='" + getAdOrganizationId() + "'" +
-            ", adOrganizationName=" + getAdOrganizationName() +
+            ", cityId=" + getCityId() +
+            ", adOrganizationId=" + getAdOrganizationId() +
             "}";
     }
-
-    
 }

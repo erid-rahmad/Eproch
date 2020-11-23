@@ -85,6 +85,10 @@ class MVerificationGatlingTest extends Simulation {
                 , "verificationStatus":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
+                , "foreignGrandTotal":"0"
+                , "foreignTaxAmount":"0"
+                , "dataSubmit":"2020-01-01T00:00:00.000Z"
+                , "dateAcct":"2020-01-01T00:00:00.000Z"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_mVerification_url"))).exitHereIfFailed

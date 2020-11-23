@@ -84,4 +84,13 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20201120124700" author="Ananta Aryadewa">
+        <dropUniqueConstraint tableName="c_cost_center" constraintName="ux_c_cost_center_code" />
+        <addUniqueConstraint
+            tableName="c_cost_center"
+            columnNames="ad_organization_id, code"
+            constraintName="ux_c_cost_center_fields"
+        />
+    </changeSet>
+
 </databaseChangeLog>

@@ -1,15 +1,18 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CCurrency} entity.
  */
 public class CCurrencyDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -26,7 +29,7 @@ public class CCurrencyDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
-    
+
     private Long adOrganizationId;
     private String adOrganizationName;
     
@@ -124,8 +127,7 @@ public class CCurrencyDTO extends AbstractAuditingDTO {
             ", name='" + getName() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", adOrganizationId='" + getAdOrganizationId() + "'" +
-            ", adOrganizationName=" + getAdOrganizationName() +
+            ", adOrganizationId=" + getAdOrganizationId() +
             "}";
     }
 }

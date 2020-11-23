@@ -9,17 +9,22 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link MVerification} and its DTO {@link MVerificationDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CCurrencyMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CCurrencyMapper.class, CVendorMapper.class, AdUserMapper.class})
 public interface MVerificationMapper extends EntityMapper<MVerificationDTO, MVerification> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "currency.id", target = "currencyId")
     @Mapping(source = "currency.code", target = "currencyName")
+    @Mapping(source = "vendor.id", target = "vendorId")
+    @Mapping(source = "vendor.name", target = "vendorName")
+    @Mapping(source = "pic.id", target = "picId")
     MVerificationDTO toDto(MVerification mVerification);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "currencyId", target = "currency")
+    @Mapping(source = "vendorId", target = "vendor")
+    @Mapping(source = "picId", target = "pic")
     MVerification toEntity(MVerificationDTO mVerificationDTO);
 
     default MVerification fromId(Long id) {

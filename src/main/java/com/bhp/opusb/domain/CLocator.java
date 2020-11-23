@@ -27,7 +27,7 @@ public class CLocator extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "code", nullable = false, unique = true)
+    @Column(name = "code", nullable = false)
     private String code;
 
     @Column(name = "locator_type")

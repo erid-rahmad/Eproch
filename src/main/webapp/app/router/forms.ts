@@ -15,7 +15,9 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['systemLogs', () => import(/* webpackChunkName: "system" */'../admin/logs/logs.vue')],
   ['systemAudit', () => import(/* webpackChunkName: "system" */'../admin/audits/audits.vue')],
   ['systemMetric', () => import(/* webpackChunkName: "system" */'../admin/metrics/metrics.vue')],
-  ['systemTracker', () => import(/* webpackChunkName: "system" */'../admin/tracker/tracker.vue')]
+  ['systemTracker', () => import(/* webpackChunkName: "system" */'../admin/tracker/tracker.vue')],
+
+  ['eVerification', () => import(/* webpackChunkName: "system" */'../admin/e-verification/e-verification.vue')]
 ]);
 
 export const blankForm = () => import(/* webpackChunckName: "blankForm" */'@/core/application-dictionary/components/Form/index.vue');

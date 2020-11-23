@@ -91,11 +91,14 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MVerificationLine_.id));
             }
-            if (criteria.getOrderNo() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getOrderNo(), MVerificationLine_.orderNo));
+            if (criteria.getVerificationNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getVerificationNo(), MVerificationLine_.verificationNo));
             }
-            if (criteria.getReceiptNo() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getReceiptNo(), MVerificationLine_.receiptNo));
+            if (criteria.getPoNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPoNo(), MVerificationLine_.poNo));
+            }
+            if (criteria.getReceiveNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getReceiveNo(), MVerificationLine_.receiveNo));
             }
             if (criteria.getDeliveryNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDeliveryNo(), MVerificationLine_.deliveryNo));
@@ -121,6 +124,24 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MVerificationLine_.active));
             }
+            if (criteria.getLineNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getLineNo(), MVerificationLine_.lineNo));
+            }
+            if (criteria.getConversionRate() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getConversionRate(), MVerificationLine_.conversionRate));
+            }
+            if (criteria.getForeignActual() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getForeignActual(), MVerificationLine_.foreignActual));
+            }
+            if (criteria.getForeignTotalLines() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getForeignTotalLines(), MVerificationLine_.foreignTotalLines));
+            }
+            if (criteria.getForeignTaxAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getForeignTaxAmount(), MVerificationLine_.foreignTaxAmount));
+            }
+            if (criteria.getReceiveDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getReceiveDate(), MVerificationLine_.receiveDate));
+            }
             if (criteria.getVerificationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getVerificationId(),
                     root -> root.join(MVerificationLine_.verification, JoinType.LEFT).get(MVerification_.id)));
@@ -136,6 +157,18 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getUomId() != null) {
                 specification = specification.and(buildSpecification(criteria.getUomId(),
                     root -> root.join(MVerificationLine_.uom, JoinType.LEFT).get(CUnitOfMeasure_.id)));
+            }
+            if (criteria.getCElementId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCElementId(),
+                    root -> root.join(MVerificationLine_.cElement, JoinType.LEFT).get(CElementValue_.id)));
+            }
+            if (criteria.getCCostCenterId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCCostCenterId(),
+                    root -> root.join(MVerificationLine_.cCostCenter, JoinType.LEFT).get(CCostCenter_.id)));
+            }
+            if (criteria.getCCurrencyId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCCurrencyId(),
+                    root -> root.join(MVerificationLine_.cCurrency, JoinType.LEFT).get(CCurrency_.id)));
             }
         }
         return specification;
