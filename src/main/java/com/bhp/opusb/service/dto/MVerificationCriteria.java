@@ -63,6 +63,24 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     private LocalDateFilter dateAcct;
 
+    private BigDecimalFilter withholdingAmt;
+
+    private StringFilter invoiceAp;
+
+    private StringFilter docType;
+
+    private LocalDateFilter payDate;
+
+    private LocalDateFilter dueDate;
+
+    private StringFilter payStatus;
+
+    private BigDecimalFilter payAmt;
+
+    private LocalDateFilter dateReject;
+
+    private LocalDateFilter dateApprove;
+
     private LongFilter adOrganizationId;
 
     private LongFilter currencyId;
@@ -70,6 +88,8 @@ public class MVerificationCriteria implements Serializable, Criteria {
     private LongFilter vendorId;
 
     private LongFilter picId;
+
+    private LongFilter vendorToId;
 
     public MVerificationCriteria() {
     }
@@ -93,10 +113,20 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.foreignTaxAmount = other.foreignTaxAmount == null ? null : other.foreignTaxAmount.copy();
         this.dataSubmit = other.dataSubmit == null ? null : other.dataSubmit.copy();
         this.dateAcct = other.dateAcct == null ? null : other.dateAcct.copy();
+        this.withholdingAmt = other.withholdingAmt == null ? null : other.withholdingAmt.copy();
+        this.invoiceAp = other.invoiceAp == null ? null : other.invoiceAp.copy();
+        this.docType = other.docType == null ? null : other.docType.copy();
+        this.payDate = other.payDate == null ? null : other.payDate.copy();
+        this.dueDate = other.dueDate == null ? null : other.dueDate.copy();
+        this.payStatus = other.payStatus == null ? null : other.payStatus.copy();
+        this.payAmt = other.payAmt == null ? null : other.payAmt.copy();
+        this.dateReject = other.dateReject == null ? null : other.dateReject.copy();
+        this.dateApprove = other.dateApprove == null ? null : other.dateApprove.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
         this.picId = other.picId == null ? null : other.picId.copy();
+        this.vendorToId = other.vendorToId == null ? null : other.vendorToId.copy();
     }
 
     @Override
@@ -248,6 +278,78 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.dateAcct = dateAcct;
     }
 
+    public BigDecimalFilter getWithholdingAmt() {
+        return withholdingAmt;
+    }
+
+    public void setWithholdingAmt(BigDecimalFilter withholdingAmt) {
+        this.withholdingAmt = withholdingAmt;
+    }
+
+    public StringFilter getInvoiceAp() {
+        return invoiceAp;
+    }
+
+    public void setInvoiceAp(StringFilter invoiceAp) {
+        this.invoiceAp = invoiceAp;
+    }
+
+    public StringFilter getDocType() {
+        return docType;
+    }
+
+    public void setDocType(StringFilter docType) {
+        this.docType = docType;
+    }
+
+    public LocalDateFilter getPayDate() {
+        return payDate;
+    }
+
+    public void setPayDate(LocalDateFilter payDate) {
+        this.payDate = payDate;
+    }
+
+    public LocalDateFilter getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDateFilter dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public StringFilter getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(StringFilter payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public BigDecimalFilter getPayAmt() {
+        return payAmt;
+    }
+
+    public void setPayAmt(BigDecimalFilter payAmt) {
+        this.payAmt = payAmt;
+    }
+
+    public LocalDateFilter getDateReject() {
+        return dateReject;
+    }
+
+    public void setDateReject(LocalDateFilter dateReject) {
+        this.dateReject = dateReject;
+    }
+
+    public LocalDateFilter getDateApprove() {
+        return dateApprove;
+    }
+
+    public void setDateApprove(LocalDateFilter dateApprove) {
+        this.dateApprove = dateApprove;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -280,6 +382,14 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.picId = picId;
     }
 
+    public LongFilter getVendorToId() {
+        return vendorToId;
+    }
+
+    public void setVendorToId(LongFilter vendorToId) {
+        this.vendorToId = vendorToId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -309,10 +419,20 @@ public class MVerificationCriteria implements Serializable, Criteria {
             Objects.equals(foreignTaxAmount, that.foreignTaxAmount) &&
             Objects.equals(dataSubmit, that.dataSubmit) &&
             Objects.equals(dateAcct, that.dateAcct) &&
+            Objects.equals(withholdingAmt, that.withholdingAmt) &&
+            Objects.equals(invoiceAp, that.invoiceAp) &&
+            Objects.equals(docType, that.docType) &&
+            Objects.equals(payDate, that.payDate) &&
+            Objects.equals(dueDate, that.dueDate) &&
+            Objects.equals(payStatus, that.payStatus) &&
+            Objects.equals(payAmt, that.payAmt) &&
+            Objects.equals(dateReject, that.dateReject) &&
+            Objects.equals(dateApprove, that.dateApprove) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(vendorId, that.vendorId) &&
-            Objects.equals(picId, that.picId);
+            Objects.equals(picId, that.picId) &&
+            Objects.equals(vendorToId, that.vendorToId);
     }
 
     @Override
@@ -336,10 +456,20 @@ public class MVerificationCriteria implements Serializable, Criteria {
         foreignTaxAmount,
         dataSubmit,
         dateAcct,
+        withholdingAmt,
+        invoiceAp,
+        docType,
+        payDate,
+        dueDate,
+        payStatus,
+        payAmt,
+        dateReject,
+        dateApprove,
         adOrganizationId,
         currencyId,
         vendorId,
-        picId
+        picId,
+        vendorToId
         );
     }
 
@@ -364,10 +494,20 @@ public class MVerificationCriteria implements Serializable, Criteria {
                 (foreignTaxAmount != null ? "foreignTaxAmount=" + foreignTaxAmount + ", " : "") +
                 (dataSubmit != null ? "dataSubmit=" + dataSubmit + ", " : "") +
                 (dateAcct != null ? "dateAcct=" + dateAcct + ", " : "") +
+                (withholdingAmt != null ? "withholdingAmt=" + withholdingAmt + ", " : "") +
+                (invoiceAp != null ? "invoiceAp=" + invoiceAp + ", " : "") +
+                (docType != null ? "docType=" + docType + ", " : "") +
+                (payDate != null ? "payDate=" + payDate + ", " : "") +
+                (dueDate != null ? "dueDate=" + dueDate + ", " : "") +
+                (payStatus != null ? "payStatus=" + payStatus + ", " : "") +
+                (payAmt != null ? "payAmt=" + payAmt + ", " : "") +
+                (dateReject != null ? "dateReject=" + dateReject + ", " : "") +
+                (dateApprove != null ? "dateApprove=" + dateApprove + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
                 (picId != null ? "picId=" + picId + ", " : "") +
+                (vendorToId != null ? "vendorToId=" + vendorToId + ", " : "") +
             "}";
     }
 

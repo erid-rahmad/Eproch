@@ -142,6 +142,33 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             if (criteria.getDateAcct() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateAcct(), MVerification_.dateAcct));
             }
+            if (criteria.getWithholdingAmt() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getWithholdingAmt(), MVerification_.withholdingAmt));
+            }
+            if (criteria.getInvoiceAp() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getInvoiceAp(), MVerification_.invoiceAp));
+            }
+            if (criteria.getDocType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocType(), MVerification_.docType));
+            }
+            if (criteria.getPayDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPayDate(), MVerification_.payDate));
+            }
+            if (criteria.getDueDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDueDate(), MVerification_.dueDate));
+            }
+            if (criteria.getPayStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPayStatus(), MVerification_.payStatus));
+            }
+            if (criteria.getPayAmt() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPayAmt(), MVerification_.payAmt));
+            }
+            if (criteria.getDateReject() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateReject(), MVerification_.dateReject));
+            }
+            if (criteria.getDateApprove() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateApprove(), MVerification_.dateApprove));
+            }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MVerification_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
@@ -157,6 +184,10 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             if (criteria.getPicId() != null) {
                 specification = specification.and(buildSpecification(criteria.getPicId(),
                     root -> root.join(MVerification_.pic, JoinType.LEFT).get(AdUser_.id)));
+            }
+            if (criteria.getVendorToId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorToId(),
+                    root -> root.join(MVerification_.vendorTo, JoinType.LEFT).get(CVendor_.id)));
             }
         }
         return specification;

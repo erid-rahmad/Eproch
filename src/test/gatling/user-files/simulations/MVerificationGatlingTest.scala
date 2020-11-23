@@ -89,6 +89,15 @@ class MVerificationGatlingTest extends Simulation {
                 , "foreignTaxAmount":"0"
                 , "dataSubmit":"2020-01-01T00:00:00.000Z"
                 , "dateAcct":"2020-01-01T00:00:00.000Z"
+                , "withholdingAmt":"0"
+                , "invoiceAp":"SAMPLE_TEXT"
+                , "docType":"SAMPLE_TEXT"
+                , "payDate":"2020-01-01T00:00:00.000Z"
+                , "dueDate":"2020-01-01T00:00:00.000Z"
+                , "payStatus":"SAMPLE_TEXT"
+                , "payAmt":"0"
+                , "dateReject":"2020-01-01T00:00:00.000Z"
+                , "dateApprove":"2020-01-01T00:00:00.000Z"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_mVerification_url"))).exitHereIfFailed

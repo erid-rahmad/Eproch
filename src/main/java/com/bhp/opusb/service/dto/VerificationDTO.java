@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class VerificationDTO {
     Verification form;
     List<MVerificationLineDTO> line;
@@ -50,6 +52,7 @@ public class VerificationDTO {
         private Long adOrganizationId;
         private Long currencyId;
         private Long vendorId;
+        private Long vendorToId;
         private Long picUserId;
         private BigDecimal foreignGrandTotal;
         private BigDecimal foreignTaxAmount;
@@ -182,6 +185,14 @@ public class VerificationDTO {
 
         public void setVendorId(Long vendorId) {
             this.vendorId = vendorId;
+        }
+
+        public Long getVendorToId() {
+            return vendorToId;
+        }
+
+        public void setVendorToId(Long vendorToId) {
+            this.vendorToId = vendorToId;
         }
 
         public Long getPicUserId() {

@@ -400,6 +400,15 @@ entity MVerification {
     foreignTaxAmount BigDecimal
     dataSubmit LocalDate
     dateAcct LocalDate
+    withholdingAmt BigDecimal
+    invoiceAp String
+    docType String
+    payDate LocalDate
+    dueDate LocalDate
+    payStatus String
+    payAmt BigDecimal
+    dateReject LocalDate
+    dateApprove LocalDate
 }
 
 entity MVerificationLine {
@@ -621,6 +630,7 @@ relationship ManyToOne {
 	MVerification{currency required} to CCurrency
     MVerification{vendor required} to CVendor
     MVerification{pic required} to AdUser
+    MVerification{vendorTo} to CVendor
 	MVerificationLine{verification required} to MVerification
 	MVerificationLine{adOrganization required} to ADOrganization
 	MVerificationLine{product required} to CProduct
