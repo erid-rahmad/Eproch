@@ -6,6 +6,8 @@ import java.util.Objects;
 
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -183,21 +185,30 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    @JsonProperty("cCostCenterId")
     private Long cCostCenterId;
+
+    @JsonProperty("cCostCenterName")
     private String cCostCenterName;
 
     /**
      * PRAN8 is mapped to vendor code.
      */
     @ApiModelProperty(value = "PRAN8 is mapped to vendor code.")
+    @JsonProperty("cVendorId")
     private Long cVendorId;
+
+    @JsonProperty("cVendorName")
     private String cVendorName;
 
     /**
      * PRCRCD
      */
     @ApiModelProperty(value = "PRCRCD")
+    @JsonProperty("cCurrencyId")
     private Long cCurrencyId;
+
+    @JsonProperty("cCurrencyName")
     private String cCurrencyName;
 
     /**
@@ -205,14 +216,20 @@ public class MMatchPODTO extends AbstractAuditingDTO {
      * PRTXA1 is mapped to tax name.
      */
     @ApiModelProperty(value = "PREXR1 is mapped to tax code.\nPRTXA1 is mapped to tax name.")
+    @JsonProperty("cTaxCategoryId")
     private Long cTaxCategoryId;
+
+    @JsonProperty("cTaxCategoryName")
     private String cTaxCategoryName;
 
     /**
      * PRUOM is mapped to code, name, and symbol.
      */
     @ApiModelProperty(value = "PRUOM is mapped to code, name, and symbol.")
+    @JsonProperty("cUomId")
     private Long cUomId;
+
+    @JsonProperty("cUomName")
     private String cUomName;
 
     /**
@@ -221,21 +238,36 @@ public class MMatchPODTO extends AbstractAuditingDTO {
      * PRAITM is mapped to product desc.
      */
     @ApiModelProperty(value = "PRITM is mapped to product code.\nPRLITM is mapped to product name.\nPRAITM is mapped to product desc.")
+    @JsonProperty("mProductId")
     private Long mProductId;
-    private String mProductName;
+
+    @JsonProperty("mProductCode")
+    private String mProductCode;
+
+    @JsonProperty("mProductShortName")
+    private String mProductShortName;
+
+    @JsonProperty("mProductDescription")
+    private String mProductDescription;
 
     /**
      * PRMCU is mapped to warehouse code and name.
      */
     @ApiModelProperty(value = "PRMCU is mapped to warehouse code and name.")
+    @JsonProperty("mWarehouseId")
     private Long mWarehouseId;
+
+    @JsonProperty("mWarehouseName")
     private String mWarehouseName;
 
     /**
      * PRLOCN is mapped to locator code.
      */
     @ApiModelProperty(value = "PRLOCN is mapped to locator code.")
+    @JsonProperty("mLocatorId")
     private Long mLocatorId;
+
+    @JsonProperty("mLocatorName")
     private String mLocatorName;
  
     public Long getId() {
@@ -554,12 +586,33 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.mProductId = cProductId;
     }
 
-    public String getMProductName() {
-        return mProductName;
+    public String getMProductCode() {
+        return mProductCode;
     }
 
-    public void setMProductName(String mProductName) {
-        this.mProductName = mProductName;
+    public void setMProductCode(String mProductCode) {
+        this.mProductCode = mProductCode;
+    }
+
+    public String getMProductShortName() {
+        return mProductShortName;
+    }
+
+    public void setMProductShortName(String mProductShortName) {
+        this.mProductShortName = mProductShortName;
+    }
+
+    public String getMProductDescription() {
+        return mProductDescription;
+    }
+
+    public void setMProductDescription(String mProductDescription) {
+        this.mProductDescription = mProductDescription;
+    }
+
+    @JsonProperty("mProductName")
+    public String getMProductName() {
+        return mProductCode + " - " + mProductShortName;
     }
 
     public Long getMWarehouseId() {

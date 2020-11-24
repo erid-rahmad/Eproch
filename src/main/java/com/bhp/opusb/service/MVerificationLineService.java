@@ -50,16 +50,13 @@ public class MVerificationLineService {
         return mVerificationLineMapper.toDto(mVerificationLine);
     }
 
-    public List<MVerificationLineDTO> saveAll(List<MVerificationLineDTO> mVerificationLineDTOs, MVerification mVerification, ADOrganization organization, CProduct product) {
-        List<MVerificationLine> verificationLines = mVerificationLineDTOs.stream()
-            .map(verificationLine
-                -> mVerificationLineMapper.toEntity(verificationLine)
-                    .active(true)
-                    .product(product)
-                    .adOrganization(organization)
-                    .verification(mVerification)
-            )
-            .collect(Collectors.toList());
+    public List<MVerificationLineDTO> saveAll(List<MVerificationLineDTO> mVerificationLineDTOs, MVerification mVerification, ADOrganization organization) {
+        List<MVerificationLine> verificationLines = mVerificationLineMapper.toEntity(mVerificationLineDTOs);
+        verificationLines.forEach(line -> {
+            line.active(true)
+                .adOrganization(organization)
+                .verification(mVerification);
+        });
 
         return mVerificationLineRepository.saveAll(verificationLines)
             .stream()
@@ -67,18 +64,9 @@ public class MVerificationLineService {
             .collect(Collectors.toList());
     }
 
-    public void removeAll(List<MVerificationLineDTO> mVerificationLineDTOs, MVerification mVerification, ADOrganization organization, CProduct product) {
-        List<MVerificationLine> verificationLines = mVerificationLineDTOs.stream()
-            .map(verificationLine
-                -> mVerificationLineMapper.toEntity(verificationLine)
-                    .active(true)
-                    .product(product)
-                    .adOrganization(organization)
-                    .verification(mVerification)
-            )
-            .collect(Collectors.toList());
+    public void removeAll(List<MVerificationLineDTO> mVerificationLineDTOs) {
+        List<MVerificationLine> verificationLines = mVerificationLineMapper.toEntity(mVerificationLineDTOs);
         mVerificationLineRepository.deleteAll(verificationLines);
-
     }
 
     /**

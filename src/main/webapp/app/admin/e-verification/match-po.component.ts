@@ -29,7 +29,7 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
   private queryCount: number = null;
   private page = 1;
   private previousPage = 1;
-  private propOrder = 'id';
+  private propOrder = 'receiptDate';
   private reverse = false;
   private totalItems = 0;
   private baseApiUrlMatchPo = "/api/m-match-pos";
@@ -52,16 +52,12 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
     return settings.dateValueFormat;
   }
 
-  created(){
-    if(this.modeFilterMatchPo.mode == 1){
-      this.retrieveAllRecordMatchPos();
-    }
+  get selectedLines() {
+    return this.selectedMatchPo;
   }
 
   public onSelectionChanged(rows: any[]) {
     this.selectedMatchPo = rows;
-    this.$emit('get-match-po', rows);
-    console.log(rows);
   }
 
   public changeOrder(propOrder): void {
@@ -84,10 +80,14 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
     this.retrieveAllRecordMatchPos();
   }
 
+  public preloadData() {
+    this.filterQuery = `mMatchType.equals=1&cVendorId.equals=${accountStore.userDetails.cVendorId}`;
+    this.retrieveAllRecordMatchPos();
+  }
+
   public closeDialog(): void {
     (<any>this.$refs.removeEntity).hide();
   }
-
 
   private retrieveAllRecordMatchPos(): void {
     if (!this.baseApiUrlMatchPo) {
@@ -95,7 +95,6 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
     }
 
     this.processing = true;
-    this.filterQuery += `mMatchType.equals=1&cVendorId.equals=${accountStore.userDetails.cVendorId}`;
 
     const paginationQuery = {
       page: this.page - 1,
@@ -109,28 +108,18 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
         paginationQuery
       })
       .then(res => {
-        console.log(res);
+        console.log('Match PO list:', res.data);
+        this.gridData = res.data.map((item: any) => {
+          item.totalAmount = item.totalLines + item.taxAmount;
+          return item;
+        });
 
-        if (this.modeFilterMatchPo.mode == 1) {
-          this.gridData = res.data.map((item: any) => {
-            this.totalAmount = item.totalLines + item.taxAmount;
-            return item;
-          });
-
+        if (this.modeFilterMatchPo.mode === 1) {
           this.totalItems = Number(res.headers['x-total-count']);
           this.queryCount = this.totalItems;
-          this.$emit('total-count-changed', this.queryCount);
-
         } else {
-          this.selectedMatchPo = res.data.map((item: any) => {
-            this.totalAmount = item.totalLines + item.taxAmount;
-            return item;
-          });
-
-          this.$emit('get-match-po', this.selectedMatchPo);
-
+          this.$emit('get-match-po', this.gridData);
         }
-
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -170,45 +159,49 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
   public matchPoFilter() {
     this.filterQuery = '';
 
-    if (this.modeFilterMatchPo.mode == 2) {
+    if (this.modeFilterMatchPo.mode === 2) {
       this.modeFilterMatchPo.filterByReceiptNo = this.filter.filterByReceiptNo;
       this.filterQuery += "receiptNo.equals=" + this.filter.filterByReceiptNo;
-      this.retrieveAllRecordMatchPos();
     } else {
-      if((this.filter.receiptNo != null)||(this.filter.receiptNo != "")){
+      if (!!this.filter.receiptNo) {
         this.filterQuery = "receiptNo.equals=" + this.filter.receiptNo;
       }
 
-      if((this.filter.receiptDateFrom != null)||(this.filter.receiptDateFrom != "")){
-        if(this.filterQuery != ""){
+      if (!!this.filter.receiptDateFrom) {
+        if (this.filterQuery) {
           this.filterQuery += "&"
         }
-        this.filterQuery += "receiptDate.greaterThan="+this.filter.receiptDateFrom;
+        this.filterQuery += "receiptDate.greaterOrEqualThan=" + this.filter.receiptDateFrom;
       }
 
-      if((this.filter.poNo != null)||(this.filter.poNo != "")){
-        if(this.filterQuery != ""){
+      if (!!this.filter.poNo) {
+        if (this.filterQuery) {
           this.filterQuery += "&"
         }
-        this.filterQuery += "poNo.equals="+this.filter.poNo;
+        this.filterQuery += "poNo.equals=" + this.filter.poNo;
       }
 
-      if((this.filter.receiptDateTo != null)||(this.filter.receiptDateTo != "")){
-        if(this.filterQuery != ""){
+      if (!!this.filter.receiptDateTo) {
+        if (this.filterQuery) {
           this.filterQuery += "&"
         }
-        this.filterQuery += "receiptDate.lessThan="+this.filter.receiptDateTo;
+        this.filterQuery += "receiptDate.lessOrEqualThan=" + this.filter.receiptDateTo;
       }
 
-      if((this.filter.deliveryNo != null)||(this.filter.deliveryNo != "")){
-        if(this.filterQuery != ""){
+      if (!!this.filter.deliveryNo) {
+        if (this.filterQuery) {
           this.filterQuery += "&"
         }
-        this.filterQuery += "deliveryNo.equals="+this.filter.deliveryNo;
+        this.filterQuery += "deliveryNo.equals=" + this.filter.deliveryNo;
       }
-
-      this.retrieveAllRecordMatchPos();
     }
+
+    if (this.filterQuery) {
+      this.filterQuery += '&';
+    }
+
+    this.filterQuery += `mMatchType.equals=1&cVendorId.equals=${accountStore.userDetails.cVendorId}`;
+    this.retrieveAllRecordMatchPos();
   }
 
 

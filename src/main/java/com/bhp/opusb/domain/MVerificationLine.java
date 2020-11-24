@@ -1,17 +1,25 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.io.Serializable;
-import java.util.Objects;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A MVerificationLine.
@@ -19,7 +27,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "m_verification_line")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MVerificationLine extends AbstractAuditingEntity {
+public class MVerificationLine implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -54,37 +62,40 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @Column(name = "price_actual", precision = 21, scale = 2, nullable = false)
     private BigDecimal priceActual;
 
+    @Column(name = "foreign_actual", precision = 21, scale = 2)
+    private BigDecimal foreignActual;
+
     @NotNull
     @Column(name = "total_lines", precision = 21, scale = 2, nullable = false)
     private BigDecimal totalLines;
 
+    @Column(name = "foreign_total_lines", precision = 21, scale = 2)
+    private BigDecimal foreignTotalLines;
+
     @NotNull
     @Column(name = "tax_amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal taxAmount;
+
+    @Column(name = "foreign_tax_amount", precision = 21, scale = 2)
+    private BigDecimal foreignTaxAmount;
+
+    @Column(name = "line_no")
+    private Integer lineNo;
+
+    @Column(name = "line_no_mr")
+    private Integer lineNoMr;
+
+    @Column(name = "conversion_rate", precision = 21, scale = 2)
+    private BigDecimal conversionRate;
+
+    @Column(name = "receive_date")
+    private LocalDate receiveDate;
 
     @Column(name = "uid")
     private UUID uid;
 
     @Column(name = "active")
     private Boolean active;
-
-    @Column(name = "line_no")
-    private String lineNo;
-
-    @Column(name = "conversion_rate")
-    private String conversionRate;
-
-    @Column(name = "foreign_actual", precision = 21, scale = 2)
-    private BigDecimal foreignActual;
-
-    @Column(name = "foreign_total_lines", precision = 21, scale = 2)
-    private BigDecimal foreignTotalLines;
-
-    @Column(name = "foreign_tax_amount", precision = 21, scale = 2)
-    private BigDecimal foreignTaxAmount;
-
-    @Column(name = "receive_date")
-    private LocalDate receiveDate;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -105,11 +116,6 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("mVerificationLines")
     private CUnitOfMeasure uom;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("mVerificationLines")
-    private CElementValue cElement;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -221,6 +227,19 @@ public class MVerificationLine extends AbstractAuditingEntity {
         this.priceActual = priceActual;
     }
 
+    public BigDecimal getForeignActual() {
+        return foreignActual;
+    }
+
+    public MVerificationLine foreignActual(BigDecimal foreignActual) {
+        this.foreignActual = foreignActual;
+        return this;
+    }
+
+    public void setForeignActual(BigDecimal foreignActual) {
+        this.foreignActual = foreignActual;
+    }
+
     public BigDecimal getTotalLines() {
         return totalLines;
     }
@@ -234,6 +253,19 @@ public class MVerificationLine extends AbstractAuditingEntity {
         this.totalLines = totalLines;
     }
 
+    public BigDecimal getForeignTotalLines() {
+        return foreignTotalLines;
+    }
+
+    public MVerificationLine foreignTotalLines(BigDecimal foreignTotalLines) {
+        this.foreignTotalLines = foreignTotalLines;
+        return this;
+    }
+
+    public void setForeignTotalLines(BigDecimal foreignTotalLines) {
+        this.foreignTotalLines = foreignTotalLines;
+    }
+
     public BigDecimal getTaxAmount() {
         return taxAmount;
     }
@@ -245,6 +277,71 @@ public class MVerificationLine extends AbstractAuditingEntity {
 
     public void setTaxAmount(BigDecimal taxAmount) {
         this.taxAmount = taxAmount;
+    }
+
+    public BigDecimal getForeignTaxAmount() {
+        return foreignTaxAmount;
+    }
+
+    public MVerificationLine foreignTaxAmount(BigDecimal foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+        return this;
+    }
+
+    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+    }
+
+    public Integer getLineNo() {
+        return lineNo;
+    }
+
+    public MVerificationLine lineNo(Integer lineNo) {
+        this.lineNo = lineNo;
+        return this;
+    }
+
+    public void setLineNo(Integer lineNo) {
+        this.lineNo = lineNo;
+    }
+
+    public Integer getLineNoMr() {
+        return lineNoMr;
+    }
+
+    public MVerificationLine lineNoMr(Integer lineNoMr) {
+        this.lineNoMr = lineNoMr;
+        return this;
+    }
+
+    public void setLineNoMr(Integer lineNoMr) {
+        this.lineNoMr = lineNoMr;
+    }
+
+    public BigDecimal getConversionRate() {
+        return conversionRate;
+    }
+
+    public MVerificationLine conversionRate(BigDecimal conversionRate) {
+        this.conversionRate = conversionRate;
+        return this;
+    }
+
+    public void setConversionRate(BigDecimal conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    public LocalDate getReceiveDate() {
+        return receiveDate;
+    }
+
+    public MVerificationLine receiveDate(LocalDate receiveDate) {
+        this.receiveDate = receiveDate;
+        return this;
+    }
+
+    public void setReceiveDate(LocalDate receiveDate) {
+        this.receiveDate = receiveDate;
     }
 
     public UUID getUid() {
@@ -271,84 +368,6 @@ public class MVerificationLine extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public String getLineNo() {
-        return lineNo;
-    }
-
-    public MVerificationLine lineNo(String lineNo) {
-        this.lineNo = lineNo;
-        return this;
-    }
-
-    public void setLineNo(String lineNo) {
-        this.lineNo = lineNo;
-    }
-
-    public String getConversionRate() {
-        return conversionRate;
-    }
-
-    public MVerificationLine conversionRate(String conversionRate) {
-        this.conversionRate = conversionRate;
-        return this;
-    }
-
-    public void setConversionRate(String conversionRate) {
-        this.conversionRate = conversionRate;
-    }
-
-    public BigDecimal getForeignActual() {
-        return foreignActual;
-    }
-
-    public MVerificationLine foreignActual(BigDecimal foreignActual) {
-        this.foreignActual = foreignActual;
-        return this;
-    }
-
-    public void setForeignActual(BigDecimal foreignActual) {
-        this.foreignActual = foreignActual;
-    }
-
-    public BigDecimal getForeignTotalLines() {
-        return foreignTotalLines;
-    }
-
-    public MVerificationLine foreignTotalLines(BigDecimal foreignTotalLines) {
-        this.foreignTotalLines = foreignTotalLines;
-        return this;
-    }
-
-    public void setForeignTotalLines(BigDecimal foreignTotalLines) {
-        this.foreignTotalLines = foreignTotalLines;
-    }
-
-    public BigDecimal getForeignTaxAmount() {
-        return foreignTaxAmount;
-    }
-
-    public MVerificationLine foreignTaxAmount(BigDecimal foreignTaxAmount) {
-        this.foreignTaxAmount = foreignTaxAmount;
-        return this;
-    }
-
-    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
-        this.foreignTaxAmount = foreignTaxAmount;
-    }
-
-    public LocalDate getReceiveDate() {
-        return receiveDate;
-    }
-
-    public MVerificationLine receiveDate(LocalDate receiveDate) {
-        this.receiveDate = receiveDate;
-        return this;
-    }
-
-    public void setReceiveDate(LocalDate receiveDate) {
-        this.receiveDate = receiveDate;
     }
 
     public MVerification getVerification() {
@@ -401,19 +420,6 @@ public class MVerificationLine extends AbstractAuditingEntity {
 
     public void setUom(CUnitOfMeasure cUnitOfMeasure) {
         this.uom = cUnitOfMeasure;
-    }
-
-    public CElementValue getCElement() {
-        return cElement;
-    }
-
-    public MVerificationLine cElement(CElementValue cElementValue) {
-        this.cElement = cElementValue;
-        return this;
-    }
-
-    public void setCElement(CElementValue cElementValue) {
-        this.cElement = cElementValue;
     }
 
     public CCostCenter getCCostCenter() {
@@ -475,16 +481,17 @@ public class MVerificationLine extends AbstractAuditingEntity {
             ", description='" + getDescription() + "'" +
             ", qty=" + getQty() +
             ", priceActual=" + getPriceActual() +
+            ", foreignActual=" + getForeignActual() +
             ", totalLines=" + getTotalLines() +
+            ", foreignTotalLines=" + getForeignTotalLines() +
             ", taxAmount=" + getTaxAmount() +
+            ", foreignTaxAmount=" + getForeignTaxAmount() +
+            ", lineNo=" + getLineNo() +
+            ", lineNoMr=" + getLineNoMr() +
+            ", conversionRate=" + getConversionRate() +
+            ", receiveDate='" + getReceiveDate() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", lineNo='" + getLineNo() + "'" +
-            ", conversionRate='" + getConversionRate() + "'" +
-            ", foreignActual=" + getForeignActual() +
-            ", foreignTotalLines=" + getForeignTotalLines() +
-            ", foreignTaxAmount=" + getForeignTaxAmount() +
-            ", receiveDate='" + getReceiveDate() + "'" +
             "}";
     }
 }

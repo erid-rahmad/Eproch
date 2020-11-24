@@ -47,7 +47,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   private baseApiUrlCurrency = "/api/c-currencies";
   private baseApiUrlVendor = "/api/c-vendors";
   public gridData: Array<any> = [];
-  public remove: Array<any> = [];
+  public removedLines: Array<any> = [];
 
   public statusOptions: any = {};
   public filter: any = {};
@@ -55,7 +55,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   private fullscreenLoading: boolean = false;
 
   public currencyOptions: any = {};
-  public vendorOptions: any = {};
 
   public formUpdateTotalLines: number = 0;
   public formUpdateTaxAmount: number = 0;
@@ -83,18 +82,13 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
   created(){
     this.retrieveGetCurrencies();
-    this.retrieveGetVendor();
     this.formUpdate.vendorId = accountStore.userDetails.cVendorId;
     this.formUpdate.vendorName = accountStore.userDetails.cVendorName;
 
-    if(this.formUpdate.id != null){
-      this.filterQuery = "verificationId.equals="+this.formUpdate.id;
+    if (this.formUpdate.id) {
+      this.filterQuery = `verificationId.equals=${this.formUpdate.id}`;
       this.retrieveEVerificationLine();
     }
-  }
-
-  public mounted(): void {
-
   }
 
   public changeOrder(propOrder): void {
@@ -111,7 +105,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
 
   public transition(): void {
-    //this.retrieveAllRecords();
+    this.retrieveEVerificationLine();
   }
 
   public sort(): Array<any> {
@@ -132,19 +126,19 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       titleModal = "Add By Receipt No";
     }
     this.modeFilterMatchPo = {
-      "mode": id,
-      "width": width,
-      "titleModal": titleModal,
-      "filterByReceiptNo": ""
+      mode: id,
+      width: width,
+      titleModal: titleModal,
+      filterByReceiptNo: ''
     };
     this.dialogMatchPoVisible = true;
   }
 
-  public closeEVerificationUpdate(){
+  public closeEVerificationUpdate() {
     this.$emit('close-e-verification-update');
   }
 
-  private updateEVerification(){
+  updateEVerification(){
     var message;
     if(this.gridData.length){
       if((this.formUpdate.invoiceNo == null)||(this.formUpdate.invoiceNo == "")){
@@ -205,18 +199,13 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         criteriaQuery: this.filterQuery,
       })
       .then(res => {
-        //console.log(res);
         this.gridData = res.data.map((item: any) => {
-          this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
+          item.totalAmount = item.totalLines + item.taxAmount;
           return item;
         });
 
-        //console.log(this.gridData);
-
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
-        this.$emit('total-count-changed', this.queryCount);
-
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -245,72 +234,72 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     });
   }
 
-  private retrieveGetVendor() {
-    this.dynamicWindowService(this.baseApiUrlVendor)
-    .retrieve()
-    .then(res => {
-        let vendorList = res.data.map(item => {
-            return{
-                key: item.id,
-                value: item.name
-            };
-        });
-        this.vendorOptions = vendorList;
+  addAllLines(data: any[]) {
+    const lines = this.transformMatchPo(data);
+    
+    for (const line of lines) {
+      const lineExist = (this.gridData.some((vLine: any) => vLine.id === line.id));
 
-    });
+      if (!lineExist) {
+        this.gridData.push(line);
+      }
+    }
   }
 
-  private getMatchPo(data?: any){
-    this.gridData = data;
-    if(this.modeFilterMatchPo.mode == 2){
-      this.onMatchPoApplied();
+  addSelectedLines() {
+    let totalLines = 0;
+    let totalAmount = 0;
+    let taxAmount = 0;
+    const lines = this.transformMatchPo((<any>this.$refs.matchPo)?.selectedLines || []);
+
+    for (const line of lines) {
+      const lineExist = (this.gridData.some((vLine: any) => vLine.id === line.id));
+
+      if (!lineExist) {
+        this.gridData.push(line);
+      }
     }
 
-  }
-
-  private onMatchPoApplied() {
-
-    this.formUpdateTotalLines = 0;
-    this.formUpdateTaxAmount = 0;
-    this.formUpdateTotalAmount = 0;
-
-    for (let i = 0; i < this.gridData.length; i++) {
-      this.formUpdateTotalLines += parseInt(this.gridData[i].totalLines);
-      this.formUpdateTaxAmount += parseInt(this.gridData[i].taxAmount);
-
-      this.totalAmount = parseInt(this.gridData[i].totalLines) + parseInt(this.gridData[i].taxAmount);
+    for (const row of this.gridData) {
+      totalLines += row.totalLines;
+      totalAmount += row.totalAmount;
+      taxAmount += row.taxAmount;
     }
 
-    this.formUpdate.totalLines = this.formUpdateTotalLines;
-    this.formUpdate.taxAmount = this.formUpdateTaxAmount;
-    this.formUpdate.grandTotal = this.formUpdateTotalLines + this.formUpdateTaxAmount;
-
+    this.formUpdate.totalLines = totalLines;
+    this.formUpdate.taxAmount = taxAmount;
+    this.formUpdate.grandTotal = totalAmount;
     this.dialogMatchPoVisible = false;
   }
 
-  private removeRow(data){
-    this.gridData.splice(data.$index, 1);
-    if(this.formUpdate.id != null){
-      this.remove.push(data.row);
-      //console.log(this.remove);
+  onMatchPoOpen() {
+    if (this.modeFilterMatchPo.mode === 1)
+      (<any>this.$refs.matchPo)?.preloadData();
+  }
+
+  removeRow(row: any, index: number) {
+    this.gridData.splice(index, 1);
+
+    if (this.formUpdate.id) {
+      this.removedLines.push(row);
     }
 
-    this.formUpdate.totalLines -= parseInt(data.row.totalLines);
-    this.formUpdate.taxAmount -= parseInt(data.row.taxAmount);
-    this.formUpdate.grandTotal = this.formUpdate.totalLines + this.formUpdate.taxAmount;
+    this.formUpdate.totalLines -= row.totalLines;
+    this.formUpdate.taxAmount -= row.taxAmount;
+    this.formUpdate.grandTotal -= row.totalAmount;
   }
 
   submit() {
-    this.formUpdate.picUserId = accountStore.userDetails.id;
+    this.formUpdate.picId = accountStore.userDetails.id;
 
     this.eVerification.form = this.formUpdate;
     this.eVerification.line = this.gridData;
-    this.eVerification.remove = this.remove;
+    this.eVerification.remove = this.removedLines;
 
     console.log(this.eVerification);
 
-    if(this.formUpdate.id != null){
-      this.dynamicWindowService(this.baseApiUrlEVerification+"/submit")
+    if (this.formUpdate.id != null) {
+      this.dynamicWindowService(this.baseApiUrlEVerification + "/submit")
         .update(this.eVerification)
         .then(() => {
 
@@ -335,8 +324,8 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
           this.fullscreenLoading = false;
         });
 
-    }else{
-      this.dynamicWindowService(this.baseApiUrlEVerification+"/submit")
+    } else {
+      this.dynamicWindowService(this.baseApiUrlEVerification + "/submit")
         .create(this.eVerification)
         .then(() => {
 
@@ -362,6 +351,32 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         });
 
     }
+  }
+
+  private transformMatchPo(lines: any[]) {
+    return lines.map(line => {
+      const {
+        cConversionRate,
+        cDocType,
+        cDocTypeMr,
+        cTaxCategory,
+        cVendor,
+        dateAccount,
+        lineNoPo,
+        mMatchType,
+        openAmount,
+        openForeignAmount,
+        openQty,
+        orderSuffix,
+        poDate,
+        taxable,
+        ...data
+      } = line;
+
+      line.conversionRate = data.cConversionRate;
+      line.lineNo = data.lineNoMr;
+      return line;
+    });
   }
 
 }

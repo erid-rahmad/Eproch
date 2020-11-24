@@ -1,26 +1,10 @@
-import { mixins } from 'vue-class-component';
-import Vue from 'vue'
-import { Component, Watch } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import InvoiceVerificationDocumentApproval from './invoice-verification-document-approval.vue';
 import AlertMixin from '@/shared/alert/alert.mixin';
+import Vue from 'vue';
+import { mixins } from 'vue-class-component';
+import { Component } from 'vue-property-decorator';
+import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import Inputmask from 'inputmask'
-
-Vue.directive('inputmask', {
-  bind: function(el, binding) {
-    var inputs = el.getElementsByTagName('INPUT')
-    var input = inputs[0]
-    if (inputs.length > 1) {
-      input = inputs[inputs.length - 1]
-    }
-    // new Inputmask(binding.value).mask(input)
-    new Inputmask({
-      autoUnmask: true,
-    }).mask(input)
-  },
-})
+import InvoiceVerificationDocumentApproval from './invoice-verification-document-approval.vue';
 
 const InvoiceVerificationProps = Vue.extend({
   props: {
@@ -85,11 +69,8 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
     }else{
       this.dialogTitle = "Verification Document Approval"
       this.fullscreenLoading = true;
-
-      setTimeout(() => {
-        this.filterQuery = "verificationNo.equals="+this.filterForm.verificationNo;
-        this.searchVerification();
-      }, 2000);
+      this.filterQuery = "verificationNo.equals="+this.filterForm.verificationNo;
+      this.searchVerification();
     }
   }
 
@@ -113,7 +94,7 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
           });
 
         }else{
-          if(res.data[0].verificationStatus == "Submit"){
+          if(res.data[0].verificationStatus == "SMT"){
             res.data.map((item: any) => {
               this.$set(this.eVerification, 'form', item);
               this.$set(this.eVerification.form, 'glDate', null);

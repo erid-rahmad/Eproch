@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import { format, parseISO } from 'date-fns';
+import { TranslationStoreModule as tranlationStore } from '@/shared/config/store/translation-store';
 
 export const DATE_FORMAT = 'yyyy-MM-dd';
 export const DATE_TIME_FORMAT = 'yyyy-MM-dd HH:mm';
@@ -20,5 +21,16 @@ export function initFilters() {
       return format(new Date(value), DATE_TIME_FORMAT);
     }
     return '';
+  });
+  Vue.filter('formatCurrency', function(value: number, locales?: string | string[], defaultValue?: number) {
+    const formatter = new Intl.NumberFormat(locales || tranlationStore.currentLanguage, {
+      minimumFractionDigits: 2
+    });
+
+    if (value !== void 0) {
+      return formatter.format(value);
+    }
+
+    return defaultValue || null;
   });
 }

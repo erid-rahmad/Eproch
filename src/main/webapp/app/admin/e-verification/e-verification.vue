@@ -81,7 +81,13 @@
                                 <el-input class="form-input" clearable v-model="filter.invoiceNo"></el-input>
                             </el-form-item>
                             <el-form-item label="Tax Invoice No." prop="taxInvoiceNo">
-                                <el-input class="form-input" clearable v-model="filter.taxInvoiceNo"></el-input>
+                                <el-input
+                                    v-model="filter.taxInvoiceNo"
+                                    v-inputmask="{'mask': '99.999.999.9-999.999'}"
+                                    class="form-input"
+                                    clearable
+                                    placeholder="__.___.___._-___.___"
+                                />
                             </el-form-item>
                             <el-form-item label="Status" prop="verificationStatus">
                                 <el-select class="form-input" clearable filterable v-model="filter.verificationStatus" placeholder="Status" >

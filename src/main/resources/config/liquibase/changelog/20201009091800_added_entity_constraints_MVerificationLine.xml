@@ -7,7 +7,7 @@
         Added the constraints for entity MVerificationLine.
     -->
     <changeSet id="20201009091800-2" author="jhipster">
-
+        
         <addForeignKeyConstraint baseColumnNames="verification_id"
                                  baseTableName="m_verification_line"
                                  constraintName="fk_m_verification_line_verification_id"
@@ -56,4 +56,7 @@
 
     </changeSet>
 
+    <changeSet id="20201124134800" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="m_verification_line" constraintName="fk_m_verification_line_c_element_id" />
+    </changeSet>
 </databaseChangeLog>

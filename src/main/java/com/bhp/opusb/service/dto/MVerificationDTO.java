@@ -1,18 +1,21 @@
 package com.bhp.opusb.service.dto;
 
-import io.swagger.annotations.ApiModel;
-import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.ApiModel;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVerification} entity.
  */
 @ApiModel(description = "vendor Invoice Verification")
 public class MVerificationDTO extends AbstractAuditingDTO {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 

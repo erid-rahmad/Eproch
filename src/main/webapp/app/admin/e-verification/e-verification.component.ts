@@ -1,27 +1,12 @@
 import settings from '@/settings';
 import AlertMixin from '@/shared/alert/alert.mixin';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import Inputmask from 'inputmask';
 import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
 import EVerificationUpdate from './e-verification-update.vue';
-
-Vue.directive('inputmask', {
-  bind: function(el, binding) {
-    var inputs = el.getElementsByTagName('INPUT')
-    var input = inputs[0]
-    if (inputs.length > 1) {
-      input = inputs[inputs.length - 1]
-    }
-    // new Inputmask(binding.value).mask(input)
-    new Inputmask({
-      autoUnmask: true,
-    }).mask(input)
-  },
-})
 
 const EVerificationProps = Vue.extend({
   props: {
@@ -70,7 +55,13 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public gridData: Array<any> = [];
 
   selectedRows: any = {};
-  public statusOptions: any = {};
+  public statusOptions: any[] = [
+    { key: 'DRF', value: 'Draft' },
+    { key: 'CNL', value: 'Canceled' },
+    { key: 'SMT', value: 'Submited' },
+    { key: 'APV', value: 'Approved' },
+    { key: 'RJC', value: 'Rejected' }
+  ];
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
@@ -86,7 +77,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   created(){
-    this.retrieveGetReferences(this.vendorApprovalStatus);
+    // this.retrieveGetReferences(this.vendorApprovalStatus);
   }
 
   public mounted(): void {
@@ -166,28 +157,28 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   public showDialogConfirmation(key: string) {
-    if(this.radioSelection != null){
+    if (this.radioSelection != null) {
 
-      if(key == "void"){
+      if (key == "void") {
         this.dialogTitle = "Confirm VOID status verification";
         this.dialogMessage = "Update status verification to VOID ?";
         this.dialogButton = "Update";
-        this.dialogValue = "Void";
+        this.dialogValue = "CNL";
         this.dialogType = "danger";
 
         this.dialogConfirmationVisible = true;
-      }else if(key == "submit"){
+      } else if (key == "submit") {
         this.dialogTitle = "Confirm SUBMIT status verification";
         this.dialogMessage = "Update status verification to SUBMIT ?";
         this.dialogButton = "Update";
-        this.dialogValue = "Submit";
+        this.dialogValue = "SMT";
         this.dialogType = "primary";
 
         this.dialogConfirmationVisible = true;
-      }else if(key == "update"){
+      } else if (key == "update") {
         this.index = false;
       }
-    }else{
+    } else {
       const message = `Please Selected row`;
       this.$notify({
         title: 'Warning',
@@ -199,35 +190,15 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   public buttonDialogUpdateRecords(): void {
-    var updateStatusVerification: any = {
-      id: this.selectedRows.id,
-      verificationDate: this.selectedRows.verificationDate,
-      verificationNo: this.selectedRows.verificationNo,
-      taxAmount: this.selectedRows.taxAmount,
-      totalLines: this.selectedRows.totalLines,
-      grandTotal: this.selectedRows.grandTotal,
-      invoiceDate: this.selectedRows.invoiceDate,
-      invoiceNo: this.selectedRows.invoiceNo,
-      description: this.selectedRows.description,
-      taxInvoice: this.selectedRows.taxInvoice,
-      taxDate: this.selectedRows.taxDate,
-      active: this.selectedRows.active,
-      adOrganizationId: this.selectedRows.adOrganizationId,
-      adOrganizationName: this.selectedRows.adOrganizationName,
-      currencyId: this.selectedRows.currencyId,
-      currencyName: this.selectedRows.currencyName,
-      picId: this.selectedRows.picId,
-      vendorId: this.selectedRows.vendorId,
-      verificationStatus: this.dialogValue
-    };
-    this.dynamicWindowService(this.baseApiUrl)
-      .update(updateStatusVerification)
-      .then(res=>{
+    const data = { ...this.selectedRows };
+    data.verificationStatus = this.dialogValue;
 
+    this.dynamicWindowService(this.baseApiUrl)
+      .update(data)
+      .then(res => {
         this.statementButtonDisabled();
         this.retrieveAllRecords();
         this.radioSelection = null;
-
         this.dialogConfirmationVisible = false;
         this.$notify({
           title: 'Success',
@@ -235,7 +206,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
           type: 'success',
           duration: 3000
         });
-
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -246,7 +216,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       })
       .finally(() => {
         this.processing = false;
-      });;
+      });
   }
 
   public retrieveAllRecords(): void {
@@ -341,67 +311,67 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     });
   }
 
-  public verificationFilter(){
+  public verificationFilter() {
 
-    this.filterQuery = "";
+    this.filterQuery = '';
 
-    if((this.filter.verificationNo != null)&&(this.filter.verificationNo != "")){
-      this.filterQuery = "verificationNo.equals="+this.filter.verificationNo;
+    if (!!this.filter.verificationNo) {
+      this.filterQuery = "verificationNo.equals=" + this.filter.verificationNo;
     }
-    if((this.filter.invoiceNo != null)&&(this.filter.invoiceNo != "")){
-      if(this.filterQuery != ""){
+    if (!!this.filter.invoiceNo) {
+      if (this.filterQuery) {
         this.filterQuery += "&"
       }
-      this.filterQuery += "invoiceNo.equals="+this.filter.invoiceNo;
+      this.filterQuery += "invoiceNo.equals=" + this.filter.invoiceNo;
     }
-    if((this.filter.taxInvoiceNo != null)&&(this.filter.taxInvoiceNo != "")){
-      if(this.filterQuery != ""){
+    if (!!this.filter.taxInvoiceNo) {
+      if (this.filterQuery) {
         this.filterQuery += "&"
       }
-      this.filterQuery += "taxInvoiceNo.equals="+this.filter.taxInvoiceNo;
+      this.filterQuery += "taxInvoice.equals=" + this.filter.taxInvoiceNo;
     }
-    if((this.filter.verificationStatus != null)&&(this.filter.verificationStatus != "")){
-      if(this.filterQuery != ""){
+    if (!!this.filter.verificationStatus) {
+      if (this.filterQuery) {
         this.filterQuery += "&"
       }
-      this.filterQuery += "verificationStatus.equals="+this.filter.verificationStatus;
+      this.filterQuery += "verificationStatus.equals=" + this.filter.verificationStatus;
     }
 
-    if((this.filter.verificationDateFrom != null)||(this.filter.verificationDateFrom != "")){
-      if(this.filterQuery != ""){
+    if (!!this.filter.verificationDateFrom) {
+      if (this.filterQuery) {
         this.filterQuery += "&"
       }
-      this.filterQuery += "verificationDate.greaterThan="+this.filter.verificationDateFrom;
+      this.filterQuery += "verificationDate.greaterOrEqualThan=" + this.filter.verificationDateFrom;
     }
-    if((this.filter.invoiceDateFrom != null)||(this.filter.invoiceDateFrom != "")){
-      if(this.filterQuery != ""){
+    if (!!this.filter.invoiceDateFrom) {
+      if (this.filterQuery) {
         this.filterQuery += "&"
       }
-      this.filterQuery += "invoiceDate.greaterThan="+this.filter.invoiceDateFrom;
+      this.filterQuery += "invoiceDate.greaterOrEqualThan=" + this.filter.invoiceDateFrom;
     }
-    if((this.filter.taxInvoiceDateFrom != null)||(this.filter.taxInvoiceDateFrom != "")){
-      if(this.filterQuery != ""){
+    if (!!this.filter.taxInvoiceDateFrom) {
+      if (this.filterQuery) {
         this.filterQuery += "&"
       }
-      this.filterQuery += "taxInvoiceDate.greaterThan="+this.filter.taxInvoiceDateFrom;
+      this.filterQuery += "taxInvoiceDate.greaterOrEqualThan=" + this.filter.taxInvoiceDateFrom;
     }
-    if((this.filter.verificationDateTo != null)||(this.filter.verificationDateTo != "")){
-      if(this.filterQuery != ""){
+    if (!!this.filter.verificationDateTo) {
+      if (this.filterQuery) {
         this.filterQuery += "&"
       }
-      this.filterQuery += "verificationDate.lessThan="+this.filter.verificationDateTo;
+      this.filterQuery += "verificationDate.lessOrEqualThan=" + this.filter.verificationDateTo;
     }
-    if((this.filter.invoiceDateTo != null)||(this.filter.invoiceDateTo != "")){
-      if(this.filterQuery != ""){
+    if (!!this.filter.invoiceDateTo) {
+      if (this.filterQuery) {
         this.filterQuery += "&"
       }
-      this.filterQuery += "invoiceDate.lessThan="+this.filter.invoiceDateTo;
+      this.filterQuery += "invoiceDate.lessOrEqualThan=" + this.filter.invoiceDateTo;
     }
-    if((this.filter.taxInvoiceDateTo != null)||(this.filter.taxInvoiceDateTo != "")){
-      if(this.filterQuery != ""){
+    if (!!this.filter.taxInvoiceDateTo) {
+      if (this.filterQuery) {
         this.filterQuery += "&"
       }
-      this.filterQuery += "taxInvoiceDate.lessThan="+this.filter.taxInvoiceDateTo;
+      this.filterQuery += "taxInvoiceDate.lessOrEqualThan=" + this.filter.taxInvoiceDateTo;
     }
 
     this.retrieveAllRecords();

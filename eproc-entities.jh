@@ -415,37 +415,41 @@ entity MVerification {
 }
 
 entity MVerificationLine {
-    verificationNo String
+	verificationNo String
 	poNo String required
 	receiveNo String required
 	deliveryNo String required
 	description String
 	qty Long required
+
 	priceActual BigDecimal required
+	foreignActual BigDecimal
 	totalLines BigDecimal required
+	foreignTotalLines BigDecimal
 	taxAmount BigDecimal required
+	foreignTaxAmount BigDecimal
+
+	lineNo Integer
+	lineNoMr Integer
+	conversionRate BigDecimal
+	receiveDate LocalDate
+
 	uid UUID
 	active Boolean
-    lineNo String
-    conversionRate String
-    foreignActual BigDecimal
-    foreignTotalLines BigDecimal
-    foreignTaxAmount BigDecimal
-    receiveDate LocalDate
 }
 
 entity MVerificationTax {
-    taxPeriod Long required
+	taxPeriod Long required
 	traxCode String required
 	statusCode String required
 	docCode String required
 	year Long required
 	returnDocType String
-    repSerNo String
-    taxExpCode String
-    dateSSP LocalDate
+	repSerNo String
+	taxExpCode String
+	dateSSP LocalDate
 	uid UUID
-    active Boolean
+	active Boolean
 }
 
 entity MMatchPO {
@@ -682,19 +686,19 @@ relationship ManyToOne {
 	MVerification{currency required} to CCurrency
 	MVerification{vendor required} to CVendor
 	MVerification{pic required} to AdUser
-    MVerification{vendorTo} to CVendor
+	MVerification{vendorTo} to CVendor
+
 	MVerificationLine{verification required} to MVerification
 	MVerificationLine{adOrganization required} to ADOrganization
 	MVerificationLine{product required} to CProduct
 	MVerificationLine{uom required} to CUnitOfMeasure
-	MVerificationLine{cElement required} to CElementValue
 	MVerificationLine{cCostCenter required} to CCostCenter
 	MVerificationLine{cCurrency required} to CCurrency
 
-    MVerificationTax{adOrganization required} to ADOrganization
-    MVerificationTax{currency required} to CCurrency
-    MVerificationTax{taxCategory required} to CTaxCategory
-    MVerificationTax{costCenter required} to CCostCenter
+	MVerificationTax{adOrganization required} to ADOrganization
+	MVerificationTax{currency required} to CCurrency
+	MVerificationTax{taxCategory required} to CTaxCategory
+	MVerificationTax{costCenter required} to CCostCenter
 
 	CVendorGroup{adOrganization required} to ADOrganization
 	CVendor{vendorGroup} to CVendorGroup

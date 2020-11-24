@@ -1,19 +1,20 @@
 package com.bhp.opusb.service.dto;
 
-import java.time.LocalDate;
-import javax.validation.constraints.*;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVerificationLine} entity.
  */
 public class MVerificationLineDTO extends AbstractAuditingDTO {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 
@@ -37,53 +38,70 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     @NotNull
     private BigDecimal priceActual;
 
+    private BigDecimal foreignActual;
+
     @NotNull
     private BigDecimal totalLines;
 
+    private BigDecimal foreignTotalLines;
+
     @NotNull
     private BigDecimal taxAmount;
+
+    private BigDecimal foreignTaxAmount;
+
+    private Integer lineNo;
+
+    private Integer lineNoMr;
+
+    private BigDecimal conversionRate;
+
+    @JsonProperty("receiptDate")
+    private LocalDate receiveDate;
 
     private UUID uid;
 
     private Boolean active;
 
-    private String lineNo;
-
-    private String conversionRate;
-
-    private BigDecimal foreignActual;
-
-    private BigDecimal foreignTotalLines;
-
-    private BigDecimal foreignTaxAmount;
-
-    private LocalDate receiveDate;
-
-
     private Long verificationId;
+    private String verificationName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    @JsonProperty("mProductId")
     private Long productId;
-    private String productName;
 
-    @JsonProperty("cUOM")
+    @JsonProperty("mProductCode")
+    private String productCode;
+
+    @JsonProperty("mProductShortName")
+    private String productShortName;
+
+    @JsonProperty("mProductDescription")
+    private String productDescription;
+
+    @JsonProperty("cUomId")
     private Long uomId;
+
+    @JsonProperty("cUomName")
     private String uomName;
 
-    @JsonProperty("cElement")
-    private Long cElementId;
-    private String cElementName;
-
-    @JsonProperty("cCostCenter")
+    @JsonProperty("cCostCenterId")
     private Long cCostCenterId;
-    private String cCostCenterName;
 
-    @JsonProperty("cCurrency")
+    @JsonProperty("cCostCenterCode")
+    private String cCostCenterCode;
+
+    @JsonProperty("cCostCenterShortName")
+    private String cCostCenterShortName;
+
+    @JsonProperty("cCurrencyId")
     private Long cCurrencyId;
-    private String cCurrencyName;
 
+    @JsonProperty("cCurrencyName")
+    private String cCurrencyName;
+    
     public Long getId() {
         return id;
     }
@@ -148,6 +166,14 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.priceActual = priceActual;
     }
 
+    public BigDecimal getForeignActual() {
+        return foreignActual;
+    }
+
+    public void setForeignActual(BigDecimal foreignActual) {
+        this.foreignActual = foreignActual;
+    }
+
     public BigDecimal getTotalLines() {
         return totalLines;
     }
@@ -156,12 +182,60 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.totalLines = totalLines;
     }
 
+    public BigDecimal getForeignTotalLines() {
+        return foreignTotalLines;
+    }
+
+    public void setForeignTotalLines(BigDecimal foreignTotalLines) {
+        this.foreignTotalLines = foreignTotalLines;
+    }
+
     public BigDecimal getTaxAmount() {
         return taxAmount;
     }
 
     public void setTaxAmount(BigDecimal taxAmount) {
         this.taxAmount = taxAmount;
+    }
+
+    public BigDecimal getForeignTaxAmount() {
+        return foreignTaxAmount;
+    }
+
+    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+    }
+
+    public Integer getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(Integer lineNo) {
+        this.lineNo = lineNo;
+    }
+
+    public Integer getLineNoMr() {
+        return lineNoMr;
+    }
+
+    public void setLineNoMr(Integer lineNoMr) {
+        this.lineNoMr = lineNoMr;
+    }
+
+    public BigDecimal getConversionRate() {
+        return conversionRate;
+    }
+
+    public void setConversionRate(BigDecimal conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    public LocalDate getReceiveDate() {
+        return receiveDate;
+    }
+
+    public void setReceiveDate(LocalDate receiveDate) {
+        this.receiveDate = receiveDate;
     }
 
     public UUID getUid() {
@@ -180,60 +254,20 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
-    public String getLineNo() {
-        return lineNo;
-    }
-
-    public void setLineNo(String lineNo) {
-        this.lineNo = lineNo;
-    }
-
-    public String getConversionRate() {
-        return conversionRate;
-    }
-
-    public void setConversionRate(String conversionRate) {
-        this.conversionRate = conversionRate;
-    }
-
-    public BigDecimal getForeignActual() {
-        return foreignActual;
-    }
-
-    public void setForeignActual(BigDecimal foreignActual) {
-        this.foreignActual = foreignActual;
-    }
-
-    public BigDecimal getForeignTotalLines() {
-        return foreignTotalLines;
-    }
-
-    public void setForeignTotalLines(BigDecimal foreignTotalLines) {
-        this.foreignTotalLines = foreignTotalLines;
-    }
-
-    public BigDecimal getForeignTaxAmount() {
-        return foreignTaxAmount;
-    }
-
-    public void setForeignTaxAmount(BigDecimal foreignTaxAmount) {
-        this.foreignTaxAmount = foreignTaxAmount;
-    }
-
-    public LocalDate getReceiveDate() {
-        return receiveDate;
-    }
-
-    public void setReceiveDate(LocalDate receiveDate) {
-        this.receiveDate = receiveDate;
-    }
-
     public Long getVerificationId() {
         return verificationId;
     }
 
     public void setVerificationId(Long mVerificationId) {
         this.verificationId = mVerificationId;
+    }
+
+    public String getVerificationName() {
+        return verificationName;
+    }
+
+    public void setVerificationName(String verificationName) {
+        this.verificationName = verificationName;
     }
 
     public Long getAdOrganizationId() {
@@ -260,12 +294,33 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.productId = cProductId;
     }
 
-    public String getProductName() {
-        return productName;
+    public String getProductCode() {
+        return productCode;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProductCode(String productCode) {
+        this.productCode = productCode;
+    }
+
+    public String getProductShortName() {
+        return productShortName;
+    }
+
+    public void setProductShortName(String productShortName) {
+        this.productShortName = productShortName;
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
+
+    @JsonProperty("mProductName")
+    public String getProductName() {
+        return productCode + " - " + productShortName;
     }
 
     public Long getUomId() {
@@ -284,22 +339,6 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.uomName = uomName;
     }
 
-    public Long getCElementId() {
-        return cElementId;
-    }
-
-    public void setCElementId(Long cElementValueId) {
-        this.cElementId = cElementValueId;
-    }
-
-    public String getcElementName() {
-        return cElementName;
-    }
-
-    public void setcElementName(String cElementName) {
-        this.cElementName = cElementName;
-    }
-
     public Long getCCostCenterId() {
         return cCostCenterId;
     }
@@ -308,12 +347,25 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.cCostCenterId = cCostCenterId;
     }
 
-    public String getcCostCenterName() {
-        return cCostCenterName;
+    public String getCCostCenterCode() {
+        return cCostCenterCode;
     }
 
-    public void setcCostCenterName(String cCostCenterName) {
-        this.cCostCenterName = cCostCenterName;
+    public void setCCostCenterCode(String cCostCenterCode) {
+        this.cCostCenterCode = cCostCenterCode;
+    }
+
+    public String getCCostCenterShortName() {
+        return cCostCenterShortName;
+    }
+
+    public void setCCostCenterShortName(String cCostCenterShortName) {
+        this.cCostCenterShortName = cCostCenterShortName;
+    }
+
+    @JsonProperty("cCostCenterName")
+    public String getCCostCenterName() {
+        return cCostCenterCode + " - " + cCostCenterShortName;
     }
 
     public Long getCCurrencyId() {
@@ -324,11 +376,11 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.cCurrencyId = cCurrencyId;
     }
 
-    public String getcCurrencyName() {
+    public String getCCurrencyName() {
         return cCurrencyName;
     }
 
-    public void setcCurrencyName(String cCurrencyName) {
+    public void setCCurrencyName(String cCurrencyName) {
         this.cCurrencyName = cCurrencyName;
     }
 
@@ -364,24 +416,21 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
             ", description='" + getDescription() + "'" +
             ", qty=" + getQty() +
             ", priceActual=" + getPriceActual() +
+            ", foreignActual=" + getForeignActual() +
             ", totalLines=" + getTotalLines() +
+            ", foreignTotalLines=" + getForeignTotalLines() +
             ", taxAmount=" + getTaxAmount() +
+            ", foreignTaxAmount=" + getForeignTaxAmount() +
+            ", lineNo=" + getLineNo() +
+            ", lineNoMr=" + getLineNoMr() +
+            ", conversionRate=" + getConversionRate() +
+            ", receiveDate='" + getReceiveDate() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", lineNo='" + getLineNo() + "'" +
-            ", conversionRate='" + getConversionRate() + "'" +
-            ", foreignActual=" + getForeignActual() +
-            ", foreignTotalLines=" + getForeignTotalLines() +
-            ", foreignTaxAmount=" + getForeignTaxAmount() +
-            ", receiveDate='" + getReceiveDate() + "'" +
             ", verificationId=" + getVerificationId() +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName='" + getAdOrganizationName() + "'" +
             ", productId=" + getProductId() +
-            ", productName='" + getProductName() + "'" +
             ", uomId=" + getUomId() +
-            ", uomName='" + getUomName() + "'" +
-            ", cElementId=" + getCElementId() +
             ", cCostCenterId=" + getCCostCenterId() +
             ", cCurrencyId=" + getCCurrencyId() +
             "}";

@@ -74,8 +74,7 @@
                             class="form-input"
                             clearable
                             v-model="formUpdate.taxInvoice"
-                            v-inputmask
-                            data-inputmask="'mask': '99.999.999.9-999.999'"
+                            v-inputmask="{'mask': '99.999.999.9-999.999'}"
                             placeholder="__.___.___._-___.___"
                             />
                     </el-form-item>
@@ -95,13 +94,28 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="Taxable Amount" prop="totalLines">
-                        <el-input class="form-input" disabled clearable v-model="formUpdate.totalLines"></el-input>
+                        <el-input
+                            class="form-input"
+                            disabled
+                            v-model="formUpdate.totalLines"
+                            v-inputmask="{'alias': 'currency'}"
+                        />
                     </el-form-item>
                     <el-form-item label="PPN" prop="taxAmount">
-                        <el-input class="form-input" disabled clearable v-model="formUpdate.taxAmount"></el-input>
+                        <el-input
+                            class="form-input"
+                            disabled
+                            v-model="formUpdate.taxAmount"
+                            v-inputmask="{'alias': 'currency'}"
+                        />
                     </el-form-item>
                     <el-form-item label="Total Amount" prop="grandTotal">
-                        <el-input class="form-input" disabled clearable v-model="formUpdate.grandTotal"></el-input>
+                        <el-input
+                            class="form-input"
+                            disabled
+                            v-model="formUpdate.grandTotal"
+                            v-inputmask="{'alias': 'currency'}"
+                        />
                     </el-form-item>
                 </el-col>
             </el-form>
@@ -128,13 +142,13 @@
                         fixed
                         width="50"
                     >
-                        <template slot-scope="scope">
+                        <template slot-scope="{ row, $index }">
                             <el-button
                                 type="danger"
                                 size="mini"
                                 icon="el-icon-close"
                                 plain
-                                @click="removeRow(scope)"
+                                @click="removeRow(row, $index)"
                                 :title="$t('entity.action.delete')"
                             />
                         </template>
@@ -143,80 +157,103 @@
                     <el-table-column
                         min-width="130"
                         prop="poNo"
-                        label="PO No."/>
+                        label="PO No."
+                    />
                     <el-table-column
                         min-width="150"
                         prop="receiptNo"
-                        label="Receipt No."/>
+                        label="Receipt No."
+                    />
                     <el-table-column
                         min-width="128"
                         prop="deliveryNo"
-                        label="Delivery No."/>
+                        label="Delivery No."
+                    />
                     <el-table-column
                         min-width="256"
-                        prop="description"
-                        label="Description"/>
+                        prop="mProductName"
+                        label="Item Desc."
+                    />
                     <el-table-column
                         min-width="128"
-                        prop="cUOM"
-                        label="UoM"/>
+                        prop="cUomName"
+                        label="UoM"
+                    />
                     <el-table-column
                         min-width="128"
                         prop="qty"
-                        label="Qty"/>
+                        label="Qty"
+                    />
                     <el-table-column
                         min-width="128"
-                        prop="priceActual"
-                        label="Unit Price"/>
-                    <el-table-column
-                        min-width="128"
-                        prop="totalLines"
-                        label="Taxable Amount"/>
-                    <el-table-column
-                        min-width="128"
-                        prop="taxAmount"
-                        label="PPN"/>
-                    <el-table-column
-                        min-width="128"
-                        label="Total Amount">
-                        {{ totalAmount }}
+                        label="Unit Price"
+                    >
+                        <template slot-scope="{ row }">
+                            {{ row.priceActual | formatCurrency }}
+                        </template>
                     </el-table-column>
-
+                    <el-table-column
+                        min-width="128"
+                        label="Taxable Amount"
+                    >
+                        <template slot-scope="{ row }">
+                            {{ row.totalLines | formatCurrency }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        min-width="128"
+                        label="PPN"
+                    >
+                        <template slot-scope="{ row }">
+                            {{ row.taxAmount | formatCurrency }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        min-width="128"
+                        label="Total Amount"
+                    >
+                        <template slot-scope="{ row }">
+                            {{ row.totalAmount | formatCurrency }}
+                        </template>
+                    </el-table-column>
                 </el-table>
-
             </el-col>
         </el-row>
 
         <el-dialog
             :width="modeFilterMatchPo.width"
             :visible.sync="dialogMatchPoVisible"
-            :title="modeFilterMatchPo.titleModal">
+            :title="modeFilterMatchPo.titleModal"
+            @opened="onMatchPoOpen"
+        >
 
             <el-row :gutter="16">
                 <el-col :span="24" :offset="0">
                     <match-po
                         ref="matchPo"
                         :mode-filter-match-po="modeFilterMatchPo"
-                        @get-match-po="getMatchPo"
+                        @get-match-po="addAllLines"
                     />
                 </el-col>
             </el-row>
 
-            <div v-if="modeFilterMatchPo.mode == 1" slot="footer">
+            <div v-if="modeFilterMatchPo.mode === 1" slot="footer">
                 <el-button
                     style="margin-left: 0px;"
                     size="mini"
                     icon="el-icon-check"
                     type="primary"
-                    @click="onMatchPoApplied">
-                        Add
+                    @click="addSelectedLines"
+                >
+                    Add
                 </el-button>
                 <el-button
                     style="margin-left: 0px;"
                     size="mini"
                     icon="el-icon-close"
-                    @click="dialogMatchPoVisible = false">
-                        {{ $t('entity.action.cancel') }}
+                    @click="dialogMatchPoVisible = false"
+                >
+                    {{ $t('entity.action.cancel') }}
                 </el-button>
             </div>
         </el-dialog>
