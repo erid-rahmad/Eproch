@@ -71,7 +71,7 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
-  public vendorApprovalStatus: string = "vendorApprovalStatus";
+  public docStatus: string = "docStatus";
   public paymentStatus: string = "paymentStatus";
   public radioSelection: number = null;
   private voucher: any = {};
@@ -85,7 +85,7 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   created(){
-    this.retrieveGetReferences(this.vendorApprovalStatus);
+    this.retrieveGetReferences(this.docStatus);
     this.retrieveGetReferences(this.paymentStatus);
   }
 
@@ -200,9 +200,16 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
       sort: this.sort()
     };
 
+    var joinFilterQuery = "";
+    if(accountStore.userDetails.cVendorId){
+      joinFilterQuery = "&vendorId.equals="+accountStore.userDetails.cVendorId;
+    }else{
+      joinFilterQuery = "";
+    }
+
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
+        criteriaQuery: this.filterQuery+joinFilterQuery,
         paginationQuery
       })
       .then(res => {
@@ -264,7 +271,7 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
             };
         });
 
-        if(param[0].value == this.vendorApprovalStatus){
+        if(param[0].value == this.docStatus){
           this.statusOptions = referenceList;
         }else if(param[0].value == this.paymentStatus){
           this.paymentStatusOptions = referenceList;
@@ -296,13 +303,13 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "verificationDate.greaterThan="+this.filter.verificationDate;
+      this.filterQuery += "verificationDate.lessThan="+this.filter.verificationDate;
     }
     if((this.filter.invoiceDate != null)&&(this.filter.invoiceDate != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "invoiceDate.greaterThan="+this.filter.invoiceDate;
+      this.filterQuery += "invoiceDate.lessThan="+this.filter.invoiceDate;
     }
     if((this.filter.payStatus != null)&&(this.filter.payStatus != "")){
       if(this.filterQuery != ""){

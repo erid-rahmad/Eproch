@@ -134,11 +134,11 @@
                                 label="Pay Status"/>
                             <el-table-column
                                 min-width="128"
-                                prop="payDate"
+                                prop="dueDate"
                                 label="Pay Schedule"/>
                             <el-table-column
                                 min-width="128"
-                                prop="dateAcct"
+                                prop="payDate"
                                 label="Actual Pay Date"/>
                             <el-table-column
                                 min-width="128"
