@@ -7,7 +7,8 @@ import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
-import EVerificationUpdate from './e-verification-update.vue';
+import UpdateVoucher from './update-voucher.vue';
+import DetailVerificationDocument from './detail-verification-document.vue';
 
 Vue.directive('inputmask', {
   bind: function(el, binding) {
@@ -23,30 +24,28 @@ Vue.directive('inputmask', {
   },
 })
 
-const EVerificationProps = Vue.extend({
+const VerificationDocumentInquiryProps = Vue.extend({
   props: {
-    eventBus: {
-      type: Object,
-      default: () => {}
-    },
+
 
   }
 })
 
 @Component({
   components: {
-    EVerificationUpdate
+    UpdateVoucher,
+    DetailVerificationDocument
   }
 })
-export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, EVerificationProps) {
+export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, VerificationDocumentInquiryProps) {
   private index: boolean = true;
-  private disabledButton: boolean = false;
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
     maxHeight: 450,
     height: 420
   };
+
   public itemsPerPage = 10;
   public queryCount: number = null;
   public page = 1;
@@ -54,7 +53,9 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public propOrder = 'id';
   public reverse = false;
   public totalItems = 0;
+
   private baseApiUrl = "/api/m-verifications";
+  private baseApiUrlVendor = "/api/c-vendors";
   private baseApiUrlReference = "/api/ad-references";
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
 
@@ -68,14 +69,20 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   private dialogType = "";
 
   public gridData: Array<any> = [];
+  private totalAmount: number = null;
+  private setVerificationNo: string = "";
 
   selectedRows: any = {};
+  public vendorOptions: any = {};
   public statusOptions: any = {};
+  public paymentStatusOptions: any = {};
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
-  public vendorApprovalStatus: string = "vendorApprovalStatus";
+  public docStatus: string = "docStatus";
+  public paymentStatus: string = "paymentStatus";
   public radioSelection: number = null;
+  private voucher: any = {};
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -86,7 +93,9 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   created(){
-    this.retrieveGetReferences(this.vendorApprovalStatus);
+    this.retrieveGetReferences(this.docStatus);
+    this.retrieveGetReferences(this.paymentStatus);
+    this.retrieveAllVendorRecords();
   }
 
   public mounted(): void {
@@ -97,11 +106,11 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   }
 
-  private closeEVerificationUpdate(){
+  private closeDetailVerification(){
     this.index = true;
-    this.selectedRows = {};
-    this.radioSelection = null;
-    this.retrieveAllRecords();
+    //this.selectedRows = {};
+    //this.radioSelection = null;
+    //this.retrieveAllRecords();
   }
 
   public changeOrder(propOrder): void {
@@ -156,7 +165,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     this.radioSelection = this.gridData.indexOf(row);
     this.selectedRows = row;
 
-    this.statementButtonDisabled();
     console.log(row);
   }
 
@@ -168,25 +176,13 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public showDialogConfirmation(key: string) {
     if(this.radioSelection != null){
 
-      if(key == "void"){
-        this.dialogTitle = "Confirm VOID status verification";
-        this.dialogMessage = "Update status verification to VOID ?";
-        this.dialogButton = "Update";
-        this.dialogValue = "Void";
-        this.dialogType = "danger";
-
-        this.dialogConfirmationVisible = true;
-      }else if(key == "submit"){
-        this.dialogTitle = "Confirm SUBMIT status verification";
-        this.dialogMessage = "Update status verification to SUBMIT ?";
-        this.dialogButton = "Update";
-        this.dialogValue = "Submit";
-        this.dialogType = "primary";
-
-        this.dialogConfirmationVisible = true;
-      }else if(key == "update"){
+      if(key == "detail"){
         this.index = false;
+      }else if(key == "update"){
+        this.dialogConfirmationVisible = true;
+        this.setVerificationNo = this.gridData[0].verificationNo;
       }
+
     }else{
       const message = `Please Selected row`;
       this.$notify({
@@ -196,58 +192,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         duration: 3000
       });
     }
+
   }
 
-  public buttonDialogUpdateRecords(): void {
-    var updateStatusVerification: any = {
-      id: this.selectedRows.id,
-      verificationDate: this.selectedRows.verificationDate,
-      verificationNo: this.selectedRows.verificationNo,
-      taxAmount: this.selectedRows.taxAmount,
-      totalLines: this.selectedRows.totalLines,
-      grandTotal: this.selectedRows.grandTotal,
-      invoiceDate: this.selectedRows.invoiceDate,
-      invoiceNo: this.selectedRows.invoiceNo,
-      description: this.selectedRows.description,
-      taxInvoice: this.selectedRows.taxInvoice,
-      taxDate: this.selectedRows.taxDate,
-      active: this.selectedRows.active,
-      adOrganizationId: this.selectedRows.adOrganizationId,
-      adOrganizationName: this.selectedRows.adOrganizationName,
-      currencyId: this.selectedRows.currencyId,
-      currencyName: this.selectedRows.currencyName,
-      picId: this.selectedRows.picId,
-      vendorId: this.selectedRows.vendorId,
-      verificationStatus: this.dialogValue
-    };
-    this.dynamicWindowService(this.baseApiUrl)
-      .update(updateStatusVerification)
-      .then(res=>{
 
-        this.statementButtonDisabled();
-        this.retrieveAllRecords();
-        this.radioSelection = null;
-
-        this.dialogConfirmationVisible = false;
-        this.$notify({
-          title: 'Success',
-          message: this.dialogMessage,
-          type: 'success',
-          duration: 3000
-        });
-
-      })
-      .catch(err => {
-        console.error('Failed getting the record. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
-        });
-      })
-      .finally(() => {
-        this.processing = false;
-      });;
-  }
 
   public retrieveAllRecords(): void {
     if ( ! this.baseApiUrl) {
@@ -263,12 +211,14 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
+        //criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
+        criteriaQuery: this.filterQuery,
         paginationQuery
       })
       .then(res => {
         console.log(res);
         this.gridData = res.data.map((item: any) => {
+          this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });
 
@@ -276,7 +226,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         this.queryCount = this.totalItems;
         this.$emit('total-count-changed', this.queryCount);
 
-        this.statementButtonDisabled();
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -290,14 +239,42 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       });
   }
 
-  private statementButtonDisabled(){
-    if(this.selectedRows.verificationStatus == "Void"){
-      this.disabledButton = true;
-    } else if(this.selectedRows.verificationStatus == "Submit"){
-      this.disabledButton = true;
-    }else{
-      this.disabledButton = false;
-    }
+  public retrieveAllVendorRecords(): void {
+
+    this.processing = true;
+    const paginationQuery = {
+      page: this.page - 1,
+      size: this.itemsPerPage,
+      sort: this.sort()
+    };
+
+    this.dynamicWindowService(this.baseApiUrlVendor)
+      .retrieve({
+        //criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
+        paginationQuery
+      })
+      .then(res => {
+
+        let referenceList = res.data.map(item => {
+          return{
+              key: item.id,
+              value: item.name
+          };
+      });
+
+      this.vendorOptions = referenceList;
+
+      })
+      .catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message({
+          type: 'error',
+          message: err.detail || err.message
+        });
+      })
+      .finally(() => {
+        this.processing = false;
+      });
   }
 
   public closeDialog(): void {
@@ -335,8 +312,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
             };
         });
 
-        if(param[0].value == this.vendorApprovalStatus){
+        if(param[0].value == this.docStatus){
           this.statusOptions = referenceList;
+        }else if(param[0].value == this.paymentStatus){
+          this.paymentStatusOptions = referenceList;
         }
     });
   }
@@ -360,6 +339,31 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       }
       this.filterQuery += "taxInvoiceNo.equals="+this.filter.taxInvoiceNo;
     }
+    if((this.filter.vendorName != null)&&(this.filter.vendorName != "")){
+      if(this.filterQuery != ""){
+        this.filterQuery += "&"
+      }
+      this.filterQuery += "vendorId.equals="+this.filter.vendorName;
+    }
+
+    if((this.filter.verificationDateFrom != null)&&(this.filter.verificationDateFrom != "")){
+      if(this.filterQuery != ""){
+        this.filterQuery += "&"
+      }
+      this.filterQuery += "verificationDate.greaterThan="+this.filter.verificationDateFrom;
+    }
+    if((this.filter.invoiceDateFrom != null)&&(this.filter.invoiceDateFrom != "")){
+      if(this.filterQuery != ""){
+        this.filterQuery += "&"
+      }
+      this.filterQuery += "invoiceDate.greaterThan="+this.filter.invoiceDateFrom;
+    }
+    if((this.filter.taxInvoiceDateFrom != null)&&(this.filter.taxInvoiceDateFrom != "")){
+      if(this.filterQuery != ""){
+        this.filterQuery += "&"
+      }
+      this.filterQuery += "taxInvoiceDate.greaterThan="+this.filter.taxInvoiceDateFrom;
+    }
     if((this.filter.verificationStatus != null)&&(this.filter.verificationStatus != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
@@ -367,49 +371,41 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       this.filterQuery += "verificationStatus.equals="+this.filter.verificationStatus;
     }
 
-    if((this.filter.verificationDateFrom != null)||(this.filter.verificationDateFrom != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "verificationDate.greaterThan="+this.filter.verificationDateFrom;
-    }
-    if((this.filter.invoiceDateFrom != null)||(this.filter.invoiceDateFrom != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "invoiceDate.greaterThan="+this.filter.invoiceDateFrom;
-    }
-    if((this.filter.taxInvoiceDateFrom != null)||(this.filter.taxInvoiceDateFrom != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "taxInvoiceDate.greaterThan="+this.filter.taxInvoiceDateFrom;
-    }
-    if((this.filter.verificationDateTo != null)||(this.filter.verificationDateTo != "")){
+    if((this.filter.verificationDateTo != null)&&(this.filter.verificationDateTo != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
       this.filterQuery += "verificationDate.lessThan="+this.filter.verificationDateTo;
     }
-    if((this.filter.invoiceDateTo != null)||(this.filter.invoiceDateTo != "")){
+    if((this.filter.invoiceDateTo != null)&&(this.filter.invoiceDateTo != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
       this.filterQuery += "invoiceDate.lessThan="+this.filter.invoiceDateTo;
     }
-    if((this.filter.taxInvoiceDateTo != null)||(this.filter.taxInvoiceDateTo != "")){
+    if((this.filter.taxInvoiceDateTo != null)&&(this.filter.taxInvoiceDateTo != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
       this.filterQuery += "taxInvoiceDate.lessThan="+this.filter.taxInvoiceDateTo;
     }
+    if((this.filter.payStatus != null)&&(this.filter.payStatus != "")){
+      if(this.filterQuery != ""){
+        this.filterQuery += "&"
+      }
+      this.filterQuery += "payStatus.equals="+this.filter.payStatus;
+    }
 
     this.retrieveAllRecords();
   }
 
-  public addEVerification() {
-    this.index = false;
-    this.selectedRows = {};
+  public dataVoucher(data?: any){
+    this.voucher = data;
+  }
+
+  private onUpdateVoucherApplied(){
+    console.log(this.voucher);
+    //proses save
   }
 
 }
