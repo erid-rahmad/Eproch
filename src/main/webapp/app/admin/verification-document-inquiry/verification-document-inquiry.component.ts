@@ -79,7 +79,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
-  public vendorApprovalStatus: string = "vendorApprovalStatus";
+  public docStatus: string = "docStatus";
   public paymentStatus: string = "paymentStatus";
   public radioSelection: number = null;
   private voucher: any = {};
@@ -93,7 +93,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   created(){
-    this.retrieveGetReferences(this.vendorApprovalStatus);
+    this.retrieveGetReferences(this.docStatus);
     this.retrieveGetReferences(this.paymentStatus);
     this.retrieveAllVendorRecords();
   }
@@ -312,7 +312,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
             };
         });
 
-        if(param[0].value == this.vendorApprovalStatus){
+        if(param[0].value == this.docStatus){
           this.statusOptions = referenceList;
         }else if(param[0].value == this.paymentStatus){
           this.paymentStatusOptions = referenceList;
