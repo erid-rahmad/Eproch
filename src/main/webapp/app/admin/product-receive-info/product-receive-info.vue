@@ -33,11 +33,52 @@
                     <el-form ref="form"  label-width="170px" size="mini">
                         <el-col :span="8">
 
-                            <el-form-item label="Verification No." prop="verificationNo">
-                                <el-input class="form-input" clearable v-model="filter.verificationNo"/>
+                            <el-form-item label="Receive No." prop="receiveNo">
+                                <el-input class="form-input" clearable v-model="filter.receiveNo"/>
                             </el-form-item>
-                            <el-form-item label="Invoice No." prop="invoiceNo">
-                                <el-input class="form-input" clearable v-model="filter.invoiceNo"></el-input>
+                            <el-form-item label="Receive Date - From" prop="receiveDateFrom">
+                                <el-date-picker
+                                    class="form-input"
+                                    clearable
+                                    v-model="filter.receiveDateFrom"
+                                    type="date"
+                                    :format="dateDisplayFormat"
+                                    :value-format="dateValueFormat"
+                                    placeholder="Pick a date"/>
+                            </el-form-item>
+
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="PO No." prop="poNo">
+                                <el-input class="form-input" clearable v-model="filter.poNo"/>
+                            </el-form-item>
+
+                            <el-form-item label="Receive Date - To" prop="receiveDateTo">
+                                <el-date-picker
+                                    class="form-input"
+                                    clearable
+                                    v-model="filter.receiveDateTo"
+                                    type="date"
+                                    :format="dateDisplayFormat"
+                                    :value-format="dateValueFormat"
+                                    placeholder="Pick a date"/>
+                            </el-form-item>
+
+                        </el-col>
+                        <el-col :span="8">
+
+                            <el-form-item v-if="isVendor!=null" label="Delivery No." prop="deliveryNo">
+                                <el-input class="form-input" clearable v-model="filter.deliveryNo"/>
+                            </el-form-item>
+
+                            <el-form-item v-else label="Vendor" prop="vendor">
+                                <el-select class="form-input" clearable filterable v-model="filter.vendor" >
+                                    <el-option
+                                        v-for="item in vendorOptions"
+                                        :key="item.key"
+                                        :label="item.value"
+                                        :value="item.key" />
+                                </el-select>
                             </el-form-item>
 
                             <el-form-item label="Status" prop="verificationStatus">
@@ -49,41 +90,6 @@
                                         :value="item.key" />
                                 </el-select>
                             </el-form-item>
-
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="Verification Date" prop="verificationDate">
-                                <el-date-picker
-                                    class="form-input"
-                                    clearable
-                                    v-model="filter.verificationDate"
-                                    type="date"
-                                    :format="dateDisplayFormat"
-                                    :value-format="dateValueFormat"
-                                    placeholder="Pick a date"/>
-                            </el-form-item>
-
-                            <el-form-item label="Invoice Date" prop="invoiceDate">
-                                <el-date-picker
-                                    class="form-input"
-                                    clearable
-                                    v-model="filter.invoiceDate"
-                                    type="date"
-                                    :format="dateDisplayFormat"
-                                    :value-format="dateValueFormat"
-                                    placeholder="Pick a date" />
-                            </el-form-item>
-
-                            <el-form-item label="Payment Status" prop="payStatus">
-                                <el-select class="form-input" clearable filterable v-model="filter.payStatus" placeholder="Status" >
-                                    <el-option
-                                        v-for="item in paymentStatusOptions"
-                                        :key="item.key"
-                                        :label="item.value"
-                                        :value="item.key" />
-                                </el-select>
-                            </el-form-item>
-
                         </el-col>
                     </el-form>
 
@@ -117,41 +123,43 @@
 
                             <el-table-column
                                 min-width="130"
-                                prop="verificationNo"
-                                label="Verification No"/>
+                                v-if="isVendor==null"
+                                prop="cvendorName"
+                                label="Vendor"/>
+
                             <el-table-column
                                 min-width="130"
-                                prop="verificationDate"
-                                label="Verification Date"/>
+                                prop="poNo"
+                                label="PO No."/>
+                            <el-table-column
+                                min-width="130"
+                                prop="receiptNo"
+                                label="Receive No."/>
                             <el-table-column
                                 min-width="100"
-                                prop="verificationStatus"
-                                label="Status"/>
+                                prop="receiptDate"
+                                label="Receive Date"/>
 
                             <el-table-column
                                 min-width="128"
-                                prop="payStatus"
-                                label="Pay Status"/>
+                                prop="deliveryNo"
+                                label="Delivery No."/>
                             <el-table-column
                                 min-width="128"
-                                prop="dueDate"
-                                label="Pay Schedule"/>
+                                prop="description"
+                                label="Description"/>
                             <el-table-column
                                 min-width="128"
-                                prop="payDate"
-                                label="Actual Pay Date"/>
+                                prop="cuomName"
+                                label="UoM"/>
                             <el-table-column
                                 min-width="128"
-                                prop="invoiceNo"
-                                label="Invoice No"/>
+                                prop="qty"
+                                label="Qty"/>
                             <el-table-column
                                 min-width="128"
-                                prop="invoiceDate"
-                                label="Invoice Date"/>
-                            <el-table-column
-                                min-width="128"
-                                prop="currencyName"
-                                label="Currency"/>
+                                prop="priceActual"
+                                label="Unit Price"/>
 
                             <el-table-column
                                 min-width="128"
@@ -163,13 +171,8 @@
                                 label="PPN"/>
                             <el-table-column
                                 min-width="128"
-                                prop="taxAmount"
-                                label="PPH"/>
-                            <el-table-column
-                                min-width="128"
-                                label="Total Amount">
-                                {{ totalAmount }}
-                            </el-table-column>
+                                prop="status"
+                                label="Status"/>
 
                         </el-table>
                         <el-pagination
@@ -224,7 +227,7 @@
     </div>
 </template>
 
-<script lang="ts" src="./payment-status.component.ts">
+<script lang="ts" src="./product-receive-info.component.ts">
 </script>
 
 <style lang="scss">

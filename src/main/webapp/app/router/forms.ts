@@ -21,6 +21,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['invoiceVerification', () => import(/* webpackChunkName: "system" */'../admin/invoice-verification/invoice-verification.vue')],
   ['verificationDocumentInquiry', () => import(/* webpackChunkName: "system" */'../admin/verification-document-inquiry/verification-document-inquiry.vue')],
   ['paymentStatus', () => import(/* webpackChunkName: "system" */'../admin/payment-status/payment-status.vue')],
+  ['productReceiveInfo', () => import(/* webpackChunkName: "system" */'../admin/product-receive-info/product-receive-info.vue')],
 ]);
 
 export const blankForm = () => import(/* webpackChunckName: "blankForm" */'@/core/application-dictionary/components/Form/index.vue');

@@ -7,38 +7,13 @@ import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
-import UpdateVoucher from './update-voucher.vue';
-import DetailVerificationDocument from './detail-verification-document.vue';
-
-Vue.directive('inputmask', {
-  bind: function(el, binding) {
-    var inputs = el.getElementsByTagName('INPUT')
-    var input = inputs[0]
-    if (inputs.length > 1) {
-      input = inputs[inputs.length - 1]
-    }
-    // new Inputmask(binding.value).mask(input)
-    new Inputmask({
-      autoUnmask: true,
-    }).mask(input)
-  },
-})
-
-const VerificationDocumentInquiryProps = Vue.extend({
-  props: {
-
-
-  }
-})
 
 @Component({
   components: {
-    UpdateVoucher,
-    DetailVerificationDocument
+
   }
 })
-export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, VerificationDocumentInquiryProps) {
-  private index: boolean = true;
+export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -54,7 +29,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public reverse = false;
   public totalItems = 0;
 
-  private baseApiUrl = "/api/m-verifications";
+  private baseApiUrl = "/api/m-match-pos";
   private baseApiUrlVendor = "/api/c-vendors";
   private baseApiUrlReference = "/api/ad-references";
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
@@ -70,7 +45,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   public gridData: Array<any> = [];
   private totalAmount: number = null;
-  private setVerificationNo: string = "";
 
   selectedRows: any = {};
   public vendorOptions: any = {};
@@ -79,10 +53,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
-  public docStatus: string = "docStatus";
   public paymentStatus: string = "paymentStatus";
   public radioSelection: number = null;
-  private voucher: any = {};
+
+  private isVendor = accountStore.userDetails.cVendorId;
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -93,7 +67,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   created(){
-    this.retrieveGetReferences(this.docStatus);
     this.retrieveGetReferences(this.paymentStatus);
     this.retrieveAllVendorRecords();
   }
@@ -107,7 +80,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   private closeDetailVerification(){
-    this.index = true;
+    //this.index = true;
     //this.selectedRows = {};
     //this.radioSelection = null;
     //this.retrieveAllRecords();
@@ -176,12 +149,12 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public showDialogConfirmation(key: string) {
     if(this.radioSelection != null){
 
-      if(key == "detail"){
+      /* if(key == "detail"){
         this.index = false;
       }else if(key == "update"){
         this.dialogConfirmationVisible = true;
         this.setVerificationNo = this.gridData[0].verificationNo;
-      }
+      } */
 
     }else{
       const message = `Please Selected row`;
@@ -195,8 +168,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   }
 
-
-
   public retrieveAllRecords(): void {
     if ( ! this.baseApiUrl) {
       return;
@@ -209,10 +180,16 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       sort: this.sort()
     };
 
+    var joinFilterQuery = "";
+    if(this.isVendor){
+      joinFilterQuery = "&cVendorId.equals="+this.isVendor;
+    }else{
+      joinFilterQuery = "";
+    }
+
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        //criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
-        criteriaQuery: this.filterQuery,
+        criteriaQuery: this.filterQuery+joinFilterQuery,
         paginationQuery
       })
       .then(res => {
@@ -225,44 +202,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
         this.$emit('total-count-changed', this.queryCount);
-
-      })
-      .catch(err => {
-        console.error('Failed getting the record. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
-        });
-      })
-      .finally(() => {
-        this.processing = false;
-      });
-  }
-
-  public retrieveAllVendorRecords(): void {
-
-    this.processing = true;
-    const paginationQuery = {
-      page: this.page - 1,
-      size: this.itemsPerPage,
-      sort: this.sort()
-    };
-
-    this.dynamicWindowService(this.baseApiUrlVendor)
-      .retrieve({
-        //criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
-        paginationQuery
-      })
-      .then(res => {
-
-        let referenceList = res.data.map(item => {
-          return{
-              key: item.id,
-              value: item.name
-          };
-      });
-
-      this.vendorOptions = referenceList;
 
       })
       .catch(err => {
@@ -312,57 +251,88 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
             };
         });
 
-        if(param[0].value == this.docStatus){
+        if(param[0].value == this.paymentStatus){
           this.statusOptions = referenceList;
-        }else if(param[0].value == this.paymentStatus){
-          this.paymentStatusOptions = referenceList;
         }
     });
+  }
+
+  public retrieveAllVendorRecords(): void {
+
+    this.processing = true;
+    const paginationQuery = {
+      page: this.page - 1,
+      size: this.itemsPerPage,
+      sort: this.sort()
+    };
+
+    this.dynamicWindowService(this.baseApiUrlVendor)
+      .retrieve({
+        //criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
+        paginationQuery
+      })
+      .then(res => {
+
+        let referenceList = res.data.map(item => {
+          return{
+              key: item.id,
+              value: item.name
+          };
+      });
+
+      this.vendorOptions = referenceList;
+
+      })
+      .catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message({
+          type: 'error',
+          message: err.detail || err.message
+        });
+      })
+      .finally(() => {
+        this.processing = false;
+      });
   }
 
   public verificationFilter(){
 
     this.filterQuery = "";
 
-    if((this.filter.verificationNo != null)&&(this.filter.verificationNo != "")){
-      this.filterQuery = "verificationNo.equals="+this.filter.verificationNo;
+    if((this.filter.receiveNo != null)&&(this.filter.receiveNo != "")){
+      this.filterQuery = "receiptNo.equals="+this.filter.receiveNo;
     }
-    if((this.filter.invoiceNo != null)&&(this.filter.invoiceNo != "")){
+    if((this.filter.receiveDateFrom != null)&&(this.filter.receiveDateFrom != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "invoiceNo.equals="+this.filter.invoiceNo;
-    }
-    if((this.filter.taxInvoiceNo != null)&&(this.filter.taxInvoiceNo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "taxInvoiceNo.equals="+this.filter.taxInvoiceNo;
-    }
-    if((this.filter.vendorName != null)&&(this.filter.vendorName != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "vendorId.equals="+this.filter.vendorName;
+      this.filterQuery += "receiptDate.greaterThan="+this.filter.receiveDateFrom;
     }
 
-    if((this.filter.verificationDateFrom != null)&&(this.filter.verificationDateFrom != "")){
+    if((this.filter.poNo != null)&&(this.filter.poNo != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "verificationDate.greaterThan="+this.filter.verificationDateFrom;
+      this.filterQuery += "poNo.equals="+this.filter.poNo;
     }
-    if((this.filter.invoiceDateFrom != null)&&(this.filter.invoiceDateFrom != "")){
+    if((this.filter.receiveDateTo != null)&&(this.filter.receiveDateTo != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "invoiceDate.greaterThan="+this.filter.invoiceDateFrom;
+      this.filterQuery += "receiptDate.lessThan="+this.filter.receiveDateTo;
     }
-    if((this.filter.taxInvoiceDateFrom != null)&&(this.filter.taxInvoiceDateFrom != "")){
+
+    if((this.filter.deliveryNo != null)&&(this.filter.deliveryNo != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "taxInvoiceDate.greaterThan="+this.filter.taxInvoiceDateFrom;
+      this.filterQuery += "deliveryNo.equals="+this.filter.deliveryNo;
+    }
+    if((this.filter.vendor != null)&&(this.filter.vendor != "")){
+      if(this.filterQuery != ""){
+        this.filterQuery += "&"
+      }
+      this.filterQuery += "cVendorId.equals="+this.filter.vendor;
     }
     if((this.filter.verificationStatus != null)&&(this.filter.verificationStatus != "")){
       if(this.filterQuery != ""){
@@ -371,41 +341,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       this.filterQuery += "verificationStatus.equals="+this.filter.verificationStatus;
     }
 
-    if((this.filter.verificationDateTo != null)&&(this.filter.verificationDateTo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "verificationDate.lessThan="+this.filter.verificationDateTo;
-    }
-    if((this.filter.invoiceDateTo != null)&&(this.filter.invoiceDateTo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "invoiceDate.lessThan="+this.filter.invoiceDateTo;
-    }
-    if((this.filter.taxInvoiceDateTo != null)&&(this.filter.taxInvoiceDateTo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "taxInvoiceDate.lessThan="+this.filter.taxInvoiceDateTo;
-    }
-    if((this.filter.payStatus != null)&&(this.filter.payStatus != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "payStatus.equals="+this.filter.payStatus;
-    }
-
     this.retrieveAllRecords();
-  }
-
-  public dataVoucher(data?: any){
-    this.voucher = data;
-  }
-
-  private onUpdateVoucherApplied(){
-    console.log(this.voucher);
-    //proses save
   }
 
 }
