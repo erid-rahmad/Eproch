@@ -113,7 +113,7 @@
                             label="Item Description"/>
                         <el-table-column
                             min-width="128"
-                            prop="cUOM"
+                            prop="uomName"
                             label="UoM"/>
                         <el-table-column
                             min-width="128"

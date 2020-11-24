@@ -175,36 +175,36 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
       this.filterQuery += "receiptNo.equals=" + this.filter.filterByReceiptNo;
       this.retrieveAllRecordMatchPos();
     } else {
-      if (this.filter.receiptNo != null) {
-        this.filterQuery = "receiptNo.contains=" + this.filter.receiptNo;
+      if((this.filter.receiptNo != null)||(this.filter.receiptNo != "")){
+        this.filterQuery = "receiptNo.equals=" + this.filter.receiptNo;
       }
 
-      if(this.filter.receiptDateFrom != null){
+      if((this.filter.receiptDateFrom != null)||(this.filter.receiptDateFrom != "")){
         if(this.filterQuery != ""){
           this.filterQuery += "&"
         }
         this.filterQuery += "receiptDate.greaterThan="+this.filter.receiptDateFrom;
       }
 
-      if(this.filter.poNo != null){
+      if((this.filter.poNo != null)||(this.filter.poNo != "")){
         if(this.filterQuery != ""){
           this.filterQuery += "&"
         }
-        this.filterQuery += "poNo.contains="+this.filter.poNo;
+        this.filterQuery += "poNo.equals="+this.filter.poNo;
       }
 
-      if(this.filter.receiptDateTo != null){
+      if((this.filter.receiptDateTo != null)||(this.filter.receiptDateTo != "")){
         if(this.filterQuery != ""){
           this.filterQuery += "&"
         }
         this.filterQuery += "receiptDate.lessThan="+this.filter.receiptDateTo;
       }
 
-      if(this.filter.deliveryNo != null){
+      if((this.filter.deliveryNo != null)||(this.filter.deliveryNo != "")){
         if(this.filterQuery != ""){
           this.filterQuery += "&"
         }
-        this.filterQuery += "deliveryNo.contains="+this.filter.deliveryNo;
+        this.filterQuery += "deliveryNo.equals="+this.filter.deliveryNo;
       }
 
       this.retrieveAllRecordMatchPos();
