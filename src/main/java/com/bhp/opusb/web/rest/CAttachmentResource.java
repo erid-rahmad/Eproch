@@ -1,5 +1,6 @@
 package com.bhp.opusb.web.rest;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -162,8 +163,8 @@ public class CAttachmentResource {
 
         CAttachmentDTO result = cAttachmentService.storeFile(file);
         String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-            .path("/api/attachments/download/")
-            .path(result.getFileName())
+            .path("/api/c-attachments/download/")
+            .path(result.getId() + "-" + result.getFileName())
             .toUriString();
 
         UploadFileResponse uploadedFile = new UploadFileResponse();
@@ -174,34 +175,21 @@ public class CAttachmentResource {
             .body(uploadedFile);
     }
 
-    @GetMapping("/attachments/download/{fileName}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
-        Resource resource = null;
-        if(fileName != null) {
-            try {
-                resource = cAttachmentService.loadFileAsResource(fileName);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            // Try to determine file's content type
-            String contentType = null;
-            try {
-                contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-            } catch (IOException ex) {
-                log.debug("Could not determine file type : {}", ex);
-            }
-            // Fallback to the default content type if type could not be determined
-            if(contentType == null) {
-                contentType = "application/octet-stream";
-            }
+    @GetMapping("/c-attachments/download/{id}-{fileName}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable Long id, @PathVariable String fileName,
+            HttpServletRequest request) throws IOException {
+        Resource resource = cAttachmentService.loadFileAsResource(id, fileName);
 
-            return ResponseEntity.ok()
-                .contentType(MediaType.parseMediaType(contentType))
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-                .body(resource);
-        } else {
-            return ResponseEntity.notFound().build();
+        // Try to determine file's content type
+        String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+
+        // Fallback to the default content type if type could not be determined
+        if (contentType == null) {
+            contentType = "application/octet-stream";
         }
+
+        return ResponseEntity.ok().contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"").body(resource);
     }
     
 }

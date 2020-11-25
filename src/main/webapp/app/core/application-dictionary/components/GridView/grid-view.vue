@@ -71,6 +71,16 @@
             :disabled="!row.editing || isReadonly(row, field)"
             @change="value => onInputChanged(field, value)"
           />
+          <el-button
+            v-else-if="isAttachmentField(field)"
+            class="btn-attachment"
+            icon="el-icon-download"
+            size="mini"
+            type="primary"
+            @click="downloadAttachment(row, field)"
+          >
+            {{ getFileName(row, field) }}
+          </el-button>
           <span
             v-else-if="!row.editing"
             v-show="displayed(row, field)"
@@ -258,6 +268,9 @@
 .grid-view {
 
   .el-table {
+    .btn-attachment {
+      width: 100%;
+    }
     
     .is-error .el-input__inner {
       border-color: #ff4949;

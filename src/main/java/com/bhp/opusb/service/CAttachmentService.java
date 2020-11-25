@@ -90,7 +90,16 @@ public class CAttachmentService {
         return null;
     }
 
-    public Resource loadFileAsResource(String fileName) throws Exception {
+    public Resource loadFileAsResource(Long id, String fileName) throws FileNotFoundException {
+        log.debug("Request to load file. id:{}, name: {}", fileName, id);
+        Optional<CAttachment> attachment = cAttachmentRepository.findById(id);
+
+        if (attachment.isPresent()) {
+            CAttachment record = attachment.get();
+            if (! record.getFileName().equals(fileName)) {
+                throw new FileNotFoundException("File not found. id: " + id + ", name: " + fileName);
+            }
+        }
         try {
             Path filePath = this.uploadPath.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri());

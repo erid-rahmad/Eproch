@@ -5,7 +5,7 @@ import { IADField } from '@/shared/model/ad-field.model';
 import { formatJson } from '@/utils';
 import { exportJson2Excel } from '@/utils/excel';
 import { normalizeField } from '@/utils/form';
-import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
+import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isPasswordField, isStringField, isTableDirectLink, isAttachmentField } from '@/utils/validate';
 import schema from 'async-validator';
 import { format, parseISO } from 'date-fns';
 import { ElPagination } from 'element-ui/types/pagination';
@@ -58,15 +58,16 @@ const GridViewProps = Vue.extend({
 
 @Component({
   methods: {
-    isStringField: isStringField,
-    isPasswordField: isPasswordField,
-    isNumericField: isNumericField,
-    isDateField: isDateField,
-    isDateTimeField: isDateTimeField,
-    isBooleanField: isBooleanField,
+    isStringField,
+    isPasswordField,
+    isNumericField,
+    isDateField,
+    isDateTimeField,
+    isBooleanField,
+    hasReferenceList,
+    isTableDirectLink,
+    isAttachmentField,
     isActivatorSwitch: isActiveStatusField,
-    hasReferenceList: hasReferenceList,
-    isTableDirectLink: isTableDirectLink,
     ...mapActions({
       registerTabState: 'windowStore/registerTab'
     })
@@ -1031,6 +1032,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   public isActivatorSwitch!: (field: IADField) => boolean;
   public hasReferenceList!: (field: IADField) => boolean;
   public isTableDirectLink!: (field: IADField) => boolean;
+  public isAttachmentField!: (field: IADField) => boolean;
 
   /**
    * Print the foreign-keyed field value.
@@ -1057,4 +1059,16 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     }
     return row[fieldName];
   }
+
+  public getFileName(row: any, field: IADField) {
+    const fieldName = field.adColumn.name;
+    const propName = fieldName.replace(/(UserId|Id)$/, 'Name');
+    return row[propName] || row[fieldName];
+  }
+
+  public downloadAttachment(row: any, field: IADField) {
+    const fileName = `${row[field.adColumn.name]}-${this.getFileName(row, field)}`;
+    window.open(`/api/c-attachments/download/${fileName}`, '_blank'); 
+  }
+  
 }
