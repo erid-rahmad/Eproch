@@ -54,6 +54,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   public gridData: Array<any> = [];
 
+  public documentStatuses = [];
   selectedRows: any = {};
   public statusOptions: any[] = [
     { key: 'DRF', value: 'Draft' },
@@ -78,6 +79,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   created(){
     // this.retrieveGetReferences(this.vendorApprovalStatus);
+    this.retrieveDocumentStatuses();
   }
 
   public mounted(): void {
@@ -219,6 +221,16 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       });
   }
 
+  private retrieveDocumentStatuses() {
+    this.documentStatuses = [
+      { code: 'APV', name: 'Approved' },
+      { code: 'DRF', name: 'Draft' },
+      { code: 'RJC', name: 'Rejected' },
+      { code: 'SMT', name: 'Submited' },
+      { code: 'CNL', name: 'Void' }
+    ]
+  }
+
   public retrieveAllRecords(): void {
     if ( ! this.baseApiUrl) {
       return;
@@ -247,6 +259,9 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         this.$emit('total-count-changed', this.queryCount);
 
         this.statementButtonDisabled();
+        this.$nextTick(() => {
+          console.log('taxInvoice refs: %O', this.$refs.taxInvoice);
+        })
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -380,6 +395,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public addEVerification() {
     this.index = false;
     this.selectedRows = {};
+  }
+
+  formatDocumentStatus(value: string) {
+    return this.documentStatuses.find(status => status.code === value)?.name;
   }
 
 }
