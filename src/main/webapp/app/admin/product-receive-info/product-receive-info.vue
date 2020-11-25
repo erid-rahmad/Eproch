@@ -81,8 +81,8 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item label="Status" prop="verificationStatus">
-                                <el-select class="form-input" clearable filterable v-model="filter.verificationStatus" placeholder="Status" >
+                            <el-form-item label="Status" prop="productReceiveStatus">
+                                <el-select class="form-input" clearable filterable v-model="filter.productReceiveStatus" placeholder="Select" >
                                     <el-option
                                         v-for="item in statusOptions"
                                         :key="item.key"
@@ -171,7 +171,7 @@
                                 label="PPN"/>
                             <el-table-column
                                 min-width="128"
-                                prop="status"
+                                prop="mMatchType"
                                 label="Status"/>
 
                         </el-table>

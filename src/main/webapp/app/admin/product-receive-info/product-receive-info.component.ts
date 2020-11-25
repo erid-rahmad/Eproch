@@ -45,15 +45,15 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
 
   public gridData: Array<any> = [];
   private totalAmount: number = null;
+  private mMatchType: string = "";
 
   selectedRows: any = {};
   public vendorOptions: any = {};
   public statusOptions: any = {};
-  public paymentStatusOptions: any = {};
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
-  public paymentStatus: string = "paymentStatus";
+  public productReceiveStatus: string = "productReceiveStatus";
   public radioSelection: number = null;
 
   private isVendor = accountStore.userDetails.cVendorId;
@@ -67,7 +67,7 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
   }
 
   created(){
-    this.retrieveGetReferences(this.paymentStatus);
+    this.retrieveGetReferences(this.productReceiveStatus);
     this.retrieveAllVendorRecords();
   }
 
@@ -195,6 +195,14 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
       .then(res => {
         console.log(res);
         this.gridData = res.data.map((item: any) => {
+          var matchType;
+          if(item.mMatchType == 1){
+            matchType = "Applied";
+          }else{
+            matchType = "Unapplied";
+          }
+          this.mMatchType = item.mMatchType;
+          console.log(item.mMatchType);
           this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });
@@ -251,7 +259,7 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
             };
         });
 
-        if(param[0].value == this.paymentStatus){
+        if(param[0].value == this.productReceiveStatus){
           this.statusOptions = referenceList;
         }
     });
@@ -334,11 +342,11 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
       }
       this.filterQuery += "cVendorId.equals="+this.filter.vendor;
     }
-    if((this.filter.verificationStatus != null)&&(this.filter.verificationStatus != "")){
+    if((this.filter.productReceiveStatus != null)&&(this.filter.productReceiveStatus != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "verificationStatus.equals="+this.filter.verificationStatus;
+      this.filterQuery += "mMatchType.equals="+this.filter.productReceiveStatus;
     }
 
     this.retrieveAllRecords();
