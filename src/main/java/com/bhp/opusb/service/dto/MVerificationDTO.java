@@ -1,18 +1,21 @@
 package com.bhp.opusb.service.dto;
 
-import io.swagger.annotations.ApiModel;
-import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+
+import io.swagger.annotations.ApiModel;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVerification} entity.
  */
 @ApiModel(description = "vendor Invoice Verification")
 public class MVerificationDTO extends AbstractAuditingDTO {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 
@@ -58,6 +61,25 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     private LocalDate dateAcct;
 
+    private BigDecimal withholdingAmt;
+
+    private String invoiceAp;
+
+    private String docType;
+
+    private LocalDate payDate;
+
+    private LocalDate dueDate;
+
+    private String payStatus;
+
+    private BigDecimal payAmt;
+
+    private LocalDate dateReject;
+
+    private LocalDate dateApprove;
+
+
     private Long adOrganizationId;
     private String adOrganizationName;
 
@@ -69,6 +91,9 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     private Long picId;
     private Long picName;
+
+    private Long vendorToId;
+    private String vendorToName;
 
     public Long getId() {
         return id;
@@ -214,6 +239,78 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.dateAcct = dateAcct;
     }
 
+    public BigDecimal getWithholdingAmt() {
+        return withholdingAmt;
+    }
+
+    public void setWithholdingAmt(BigDecimal withholdingAmt) {
+        this.withholdingAmt = withholdingAmt;
+    }
+
+    public String getInvoiceAp() {
+        return invoiceAp;
+    }
+
+    public void setInvoiceAp(String invoiceAp) {
+        this.invoiceAp = invoiceAp;
+    }
+
+    public String getDocType() {
+        return docType;
+    }
+
+    public void setDocType(String docType) {
+        this.docType = docType;
+    }
+
+    public LocalDate getPayDate() {
+        return payDate;
+    }
+
+    public void setPayDate(LocalDate payDate) {
+        this.payDate = payDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public String getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(String payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public BigDecimal getPayAmt() {
+        return payAmt;
+    }
+
+    public void setPayAmt(BigDecimal payAmt) {
+        this.payAmt = payAmt;
+    }
+
+    public LocalDate getDateReject() {
+        return dateReject;
+    }
+
+    public void setDateReject(LocalDate dateReject) {
+        this.dateReject = dateReject;
+    }
+
+    public LocalDate getDateApprove() {
+        return dateApprove;
+    }
+
+    public void setDateApprove(LocalDate dateApprove) {
+        this.dateApprove = dateApprove;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -278,6 +375,22 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.picName = picName;
     }
 
+    public Long getVendorToId() {
+        return vendorToId;
+    }
+
+    public void setVendorToId(Long cVendorId) {
+        this.vendorToId = cVendorId;
+    }
+
+    public String getVendorToName() {
+        return vendorToName;
+    }
+
+    public void setVendorToName(String vendorToName) {
+        this.vendorToName = vendorToName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -320,6 +433,15 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", foreignTaxAmount=" + getForeignTaxAmount() +
             ", dataSubmit='" + getDataSubmit() + "'" +
             ", dateAcct='" + getDateAcct() + "'" +
+            ", withholdingAmt=" + getWithholdingAmt() +
+            ", invoiceAp='" + getInvoiceAp() + "'" +
+            ", docType='" + getDocType() + "'" +
+            ", payDate='" + getPayDate() + "'" +
+            ", dueDate='" + getDueDate() + "'" +
+            ", payStatus='" + getPayStatus() + "'" +
+            ", payAmt=" + getPayAmt() +
+            ", dateReject='" + getDateReject() + "'" +
+            ", dateApprove='" + getDateApprove() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName='" + getAdOrganizationName() + "'" +
             ", currencyId=" + getCurrencyId() +
@@ -328,6 +450,8 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", vendorName=" + getVendorName() +
             ", picId=" + getPicId() +
             ", picName=" + getPicName() +
+            ", vendorToId=" + getVendorToId() +
+            ", vendorToName=" + getVendorToName() +
             "}";
     }
 

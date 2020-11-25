@@ -6,7 +6,6 @@ import com.bhp.opusb.domain.MVerification;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.CUnitOfMeasure;
-import com.bhp.opusb.domain.CElementValue;
 import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.repository.MVerificationLineRepository;
@@ -69,41 +68,47 @@ public class MVerificationLineResourceIT {
     private static final BigDecimal UPDATED_PRICE_ACTUAL = new BigDecimal(2);
     private static final BigDecimal SMALLER_PRICE_ACTUAL = new BigDecimal(1 - 1);
 
+    private static final BigDecimal DEFAULT_FOREIGN_ACTUAL = new BigDecimal(1);
+    private static final BigDecimal UPDATED_FOREIGN_ACTUAL = new BigDecimal(2);
+    private static final BigDecimal SMALLER_FOREIGN_ACTUAL = new BigDecimal(1 - 1);
+
     private static final BigDecimal DEFAULT_TOTAL_LINES = new BigDecimal(1);
     private static final BigDecimal UPDATED_TOTAL_LINES = new BigDecimal(2);
     private static final BigDecimal SMALLER_TOTAL_LINES = new BigDecimal(1 - 1);
 
+    private static final BigDecimal DEFAULT_FOREIGN_TOTAL_LINES = new BigDecimal(1);
+    private static final BigDecimal UPDATED_FOREIGN_TOTAL_LINES = new BigDecimal(2);
+    private static final BigDecimal SMALLER_FOREIGN_TOTAL_LINES = new BigDecimal(1 - 1);
+
     private static final BigDecimal DEFAULT_TAX_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_TAX_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_TAX_AMOUNT = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_FOREIGN_TAX_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_FOREIGN_TAX_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_FOREIGN_TAX_AMOUNT = new BigDecimal(1 - 1);
+
+    private static final Integer DEFAULT_LINE_NO = 1;
+    private static final Integer UPDATED_LINE_NO = 2;
+    private static final Integer SMALLER_LINE_NO = 1 - 1;
+
+    private static final Integer DEFAULT_LINE_NO_MR = 1;
+    private static final Integer UPDATED_LINE_NO_MR = 2;
+    private static final Integer SMALLER_LINE_NO_MR = 1 - 1;
+
+    private static final BigDecimal DEFAULT_CONVERSION_RATE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_CONVERSION_RATE = new BigDecimal(2);
+    private static final BigDecimal SMALLER_CONVERSION_RATE = new BigDecimal(1 - 1);
+
+    private static final LocalDate DEFAULT_RECEIVE_DATE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_RECEIVE_DATE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_RECEIVE_DATE = LocalDate.ofEpochDay(-1L);
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
-
-    private static final String DEFAULT_LINE_NO = "AAAAAAAAAA";
-    private static final String UPDATED_LINE_NO = "BBBBBBBBBB";
-
-    private static final String DEFAULT_CONVERSION_RATE = "AAAAAAAAAA";
-    private static final String UPDATED_CONVERSION_RATE = "BBBBBBBBBB";
-
-    private static final BigDecimal DEFAULT_FOREIGN_ACTUAL = new BigDecimal(1);
-    private static final BigDecimal UPDATED_FOREIGN_ACTUAL = new BigDecimal(2);
-    private static final BigDecimal SMALLER_FOREIGN_ACTUAL = new BigDecimal(1 - 1);
-
-    private static final BigDecimal DEFAULT_FOREIGN_TOTAL_LINES = new BigDecimal(1);
-    private static final BigDecimal UPDATED_FOREIGN_TOTAL_LINES = new BigDecimal(2);
-    private static final BigDecimal SMALLER_FOREIGN_TOTAL_LINES = new BigDecimal(1 - 1);
-
-    private static final BigDecimal DEFAULT_FOREIGN_TAX_AMOUNT = new BigDecimal(1);
-    private static final BigDecimal UPDATED_FOREIGN_TAX_AMOUNT = new BigDecimal(2);
-    private static final BigDecimal SMALLER_FOREIGN_TAX_AMOUNT = new BigDecimal(1 - 1);
-
-    private static final LocalDate DEFAULT_RECEIVE_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_RECEIVE_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_RECEIVE_DATE = LocalDate.ofEpochDay(-1L);
 
     @Autowired
     private MVerificationLineRepository mVerificationLineRepository;
@@ -140,16 +145,17 @@ public class MVerificationLineResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .qty(DEFAULT_QTY)
             .priceActual(DEFAULT_PRICE_ACTUAL)
-            .totalLines(DEFAULT_TOTAL_LINES)
-            .taxAmount(DEFAULT_TAX_AMOUNT)
-            .uid(DEFAULT_UID)
-            .active(DEFAULT_ACTIVE)
-            .lineNo(DEFAULT_LINE_NO)
-            .conversionRate(DEFAULT_CONVERSION_RATE)
             .foreignActual(DEFAULT_FOREIGN_ACTUAL)
+            .totalLines(DEFAULT_TOTAL_LINES)
             .foreignTotalLines(DEFAULT_FOREIGN_TOTAL_LINES)
+            .taxAmount(DEFAULT_TAX_AMOUNT)
             .foreignTaxAmount(DEFAULT_FOREIGN_TAX_AMOUNT)
-            .receiveDate(DEFAULT_RECEIVE_DATE);
+            .lineNo(DEFAULT_LINE_NO)
+            .lineNoMr(DEFAULT_LINE_NO_MR)
+            .conversionRate(DEFAULT_CONVERSION_RATE)
+            .receiveDate(DEFAULT_RECEIVE_DATE)
+            .uid(DEFAULT_UID)
+            .active(DEFAULT_ACTIVE);
         // Add required entity
         MVerification mVerification;
         if (TestUtil.findAll(em, MVerification.class).isEmpty()) {
@@ -191,16 +197,6 @@ public class MVerificationLineResourceIT {
         }
         mVerificationLine.setUom(cUnitOfMeasure);
         // Add required entity
-        CElementValue cElementValue;
-        if (TestUtil.findAll(em, CElementValue.class).isEmpty()) {
-            cElementValue = CElementValueResourceIT.createEntity(em);
-            em.persist(cElementValue);
-            em.flush();
-        } else {
-            cElementValue = TestUtil.findAll(em, CElementValue.class).get(0);
-        }
-        mVerificationLine.setCElement(cElementValue);
-        // Add required entity
         CCostCenter cCostCenter;
         if (TestUtil.findAll(em, CCostCenter.class).isEmpty()) {
             cCostCenter = CCostCenterResourceIT.createEntity(em);
@@ -237,16 +233,17 @@ public class MVerificationLineResourceIT {
             .description(UPDATED_DESCRIPTION)
             .qty(UPDATED_QTY)
             .priceActual(UPDATED_PRICE_ACTUAL)
-            .totalLines(UPDATED_TOTAL_LINES)
-            .taxAmount(UPDATED_TAX_AMOUNT)
-            .uid(UPDATED_UID)
-            .active(UPDATED_ACTIVE)
-            .lineNo(UPDATED_LINE_NO)
-            .conversionRate(UPDATED_CONVERSION_RATE)
             .foreignActual(UPDATED_FOREIGN_ACTUAL)
+            .totalLines(UPDATED_TOTAL_LINES)
             .foreignTotalLines(UPDATED_FOREIGN_TOTAL_LINES)
+            .taxAmount(UPDATED_TAX_AMOUNT)
             .foreignTaxAmount(UPDATED_FOREIGN_TAX_AMOUNT)
-            .receiveDate(UPDATED_RECEIVE_DATE);
+            .lineNo(UPDATED_LINE_NO)
+            .lineNoMr(UPDATED_LINE_NO_MR)
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .receiveDate(UPDATED_RECEIVE_DATE)
+            .uid(UPDATED_UID)
+            .active(UPDATED_ACTIVE);
         // Add required entity
         MVerification mVerification;
         if (TestUtil.findAll(em, MVerification.class).isEmpty()) {
@@ -287,16 +284,6 @@ public class MVerificationLineResourceIT {
             cUnitOfMeasure = TestUtil.findAll(em, CUnitOfMeasure.class).get(0);
         }
         mVerificationLine.setUom(cUnitOfMeasure);
-        // Add required entity
-        CElementValue cElementValue;
-        if (TestUtil.findAll(em, CElementValue.class).isEmpty()) {
-            cElementValue = CElementValueResourceIT.createUpdatedEntity(em);
-            em.persist(cElementValue);
-            em.flush();
-        } else {
-            cElementValue = TestUtil.findAll(em, CElementValue.class).get(0);
-        }
-        mVerificationLine.setCElement(cElementValue);
         // Add required entity
         CCostCenter cCostCenter;
         if (TestUtil.findAll(em, CCostCenter.class).isEmpty()) {
@@ -348,16 +335,17 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testMVerificationLine.getQty()).isEqualTo(DEFAULT_QTY);
         assertThat(testMVerificationLine.getPriceActual()).isEqualTo(DEFAULT_PRICE_ACTUAL);
+        assertThat(testMVerificationLine.getForeignActual()).isEqualTo(DEFAULT_FOREIGN_ACTUAL);
         assertThat(testMVerificationLine.getTotalLines()).isEqualTo(DEFAULT_TOTAL_LINES);
+        assertThat(testMVerificationLine.getForeignTotalLines()).isEqualTo(DEFAULT_FOREIGN_TOTAL_LINES);
         assertThat(testMVerificationLine.getTaxAmount()).isEqualTo(DEFAULT_TAX_AMOUNT);
+        assertThat(testMVerificationLine.getForeignTaxAmount()).isEqualTo(DEFAULT_FOREIGN_TAX_AMOUNT);
+        assertThat(testMVerificationLine.getLineNo()).isEqualTo(DEFAULT_LINE_NO);
+        assertThat(testMVerificationLine.getLineNoMr()).isEqualTo(DEFAULT_LINE_NO_MR);
+        assertThat(testMVerificationLine.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
+        assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(DEFAULT_RECEIVE_DATE);
         assertThat(testMVerificationLine.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMVerificationLine.isActive()).isEqualTo(DEFAULT_ACTIVE);
-        assertThat(testMVerificationLine.getLineNo()).isEqualTo(DEFAULT_LINE_NO);
-        assertThat(testMVerificationLine.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
-        assertThat(testMVerificationLine.getForeignActual()).isEqualTo(DEFAULT_FOREIGN_ACTUAL);
-        assertThat(testMVerificationLine.getForeignTotalLines()).isEqualTo(DEFAULT_FOREIGN_TOTAL_LINES);
-        assertThat(testMVerificationLine.getForeignTaxAmount()).isEqualTo(DEFAULT_FOREIGN_TAX_AMOUNT);
-        assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(DEFAULT_RECEIVE_DATE);
     }
 
     @Test
@@ -532,16 +520,17 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].qty").value(hasItem(DEFAULT_QTY.intValue())))
             .andExpect(jsonPath("$.[*].priceActual").value(hasItem(DEFAULT_PRICE_ACTUAL.intValue())))
-            .andExpect(jsonPath("$.[*].totalLines").value(hasItem(DEFAULT_TOTAL_LINES.intValue())))
-            .andExpect(jsonPath("$.[*].taxAmount").value(hasItem(DEFAULT_TAX_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE)))
             .andExpect(jsonPath("$.[*].foreignActual").value(hasItem(DEFAULT_FOREIGN_ACTUAL.intValue())))
+            .andExpect(jsonPath("$.[*].totalLines").value(hasItem(DEFAULT_TOTAL_LINES.intValue())))
             .andExpect(jsonPath("$.[*].foreignTotalLines").value(hasItem(DEFAULT_FOREIGN_TOTAL_LINES.intValue())))
+            .andExpect(jsonPath("$.[*].taxAmount").value(hasItem(DEFAULT_TAX_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].foreignTaxAmount").value(hasItem(DEFAULT_FOREIGN_TAX_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())));
+            .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
+            .andExpect(jsonPath("$.[*].lineNoMr").value(hasItem(DEFAULT_LINE_NO_MR)))
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.intValue())))
+            .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
     @Test
@@ -562,16 +551,17 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.qty").value(DEFAULT_QTY.intValue()))
             .andExpect(jsonPath("$.priceActual").value(DEFAULT_PRICE_ACTUAL.intValue()))
-            .andExpect(jsonPath("$.totalLines").value(DEFAULT_TOTAL_LINES.intValue()))
-            .andExpect(jsonPath("$.taxAmount").value(DEFAULT_TAX_AMOUNT.intValue()))
-            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
-            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
-            .andExpect(jsonPath("$.lineNo").value(DEFAULT_LINE_NO))
-            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE))
             .andExpect(jsonPath("$.foreignActual").value(DEFAULT_FOREIGN_ACTUAL.intValue()))
+            .andExpect(jsonPath("$.totalLines").value(DEFAULT_TOTAL_LINES.intValue()))
             .andExpect(jsonPath("$.foreignTotalLines").value(DEFAULT_FOREIGN_TOTAL_LINES.intValue()))
+            .andExpect(jsonPath("$.taxAmount").value(DEFAULT_TAX_AMOUNT.intValue()))
             .andExpect(jsonPath("$.foreignTaxAmount").value(DEFAULT_FOREIGN_TAX_AMOUNT.intValue()))
-            .andExpect(jsonPath("$.receiveDate").value(DEFAULT_RECEIVE_DATE.toString()));
+            .andExpect(jsonPath("$.lineNo").value(DEFAULT_LINE_NO))
+            .andExpect(jsonPath("$.lineNoMr").value(DEFAULT_LINE_NO_MR))
+            .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.intValue()))
+            .andExpect(jsonPath("$.receiveDate").value(DEFAULT_RECEIVE_DATE.toString()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
 
@@ -1196,476 +1186,6 @@ public class MVerificationLineResourceIT {
 
     @Test
     @Transactional
-    public void getAllMVerificationLinesByTotalLinesIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where totalLines equals to DEFAULT_TOTAL_LINES
-        defaultMVerificationLineShouldBeFound("totalLines.equals=" + DEFAULT_TOTAL_LINES);
-
-        // Get all the mVerificationLineList where totalLines equals to UPDATED_TOTAL_LINES
-        defaultMVerificationLineShouldNotBeFound("totalLines.equals=" + UPDATED_TOTAL_LINES);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTotalLinesIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where totalLines not equals to DEFAULT_TOTAL_LINES
-        defaultMVerificationLineShouldNotBeFound("totalLines.notEquals=" + DEFAULT_TOTAL_LINES);
-
-        // Get all the mVerificationLineList where totalLines not equals to UPDATED_TOTAL_LINES
-        defaultMVerificationLineShouldBeFound("totalLines.notEquals=" + UPDATED_TOTAL_LINES);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTotalLinesIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where totalLines in DEFAULT_TOTAL_LINES or UPDATED_TOTAL_LINES
-        defaultMVerificationLineShouldBeFound("totalLines.in=" + DEFAULT_TOTAL_LINES + "," + UPDATED_TOTAL_LINES);
-
-        // Get all the mVerificationLineList where totalLines equals to UPDATED_TOTAL_LINES
-        defaultMVerificationLineShouldNotBeFound("totalLines.in=" + UPDATED_TOTAL_LINES);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTotalLinesIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where totalLines is not null
-        defaultMVerificationLineShouldBeFound("totalLines.specified=true");
-
-        // Get all the mVerificationLineList where totalLines is null
-        defaultMVerificationLineShouldNotBeFound("totalLines.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTotalLinesIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where totalLines is greater than or equal to DEFAULT_TOTAL_LINES
-        defaultMVerificationLineShouldBeFound("totalLines.greaterThanOrEqual=" + DEFAULT_TOTAL_LINES);
-
-        // Get all the mVerificationLineList where totalLines is greater than or equal to UPDATED_TOTAL_LINES
-        defaultMVerificationLineShouldNotBeFound("totalLines.greaterThanOrEqual=" + UPDATED_TOTAL_LINES);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTotalLinesIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where totalLines is less than or equal to DEFAULT_TOTAL_LINES
-        defaultMVerificationLineShouldBeFound("totalLines.lessThanOrEqual=" + DEFAULT_TOTAL_LINES);
-
-        // Get all the mVerificationLineList where totalLines is less than or equal to SMALLER_TOTAL_LINES
-        defaultMVerificationLineShouldNotBeFound("totalLines.lessThanOrEqual=" + SMALLER_TOTAL_LINES);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTotalLinesIsLessThanSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where totalLines is less than DEFAULT_TOTAL_LINES
-        defaultMVerificationLineShouldNotBeFound("totalLines.lessThan=" + DEFAULT_TOTAL_LINES);
-
-        // Get all the mVerificationLineList where totalLines is less than UPDATED_TOTAL_LINES
-        defaultMVerificationLineShouldBeFound("totalLines.lessThan=" + UPDATED_TOTAL_LINES);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTotalLinesIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where totalLines is greater than DEFAULT_TOTAL_LINES
-        defaultMVerificationLineShouldNotBeFound("totalLines.greaterThan=" + DEFAULT_TOTAL_LINES);
-
-        // Get all the mVerificationLineList where totalLines is greater than SMALLER_TOTAL_LINES
-        defaultMVerificationLineShouldBeFound("totalLines.greaterThan=" + SMALLER_TOTAL_LINES);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTaxAmountIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where taxAmount equals to DEFAULT_TAX_AMOUNT
-        defaultMVerificationLineShouldBeFound("taxAmount.equals=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationLineList where taxAmount equals to UPDATED_TAX_AMOUNT
-        defaultMVerificationLineShouldNotBeFound("taxAmount.equals=" + UPDATED_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTaxAmountIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where taxAmount not equals to DEFAULT_TAX_AMOUNT
-        defaultMVerificationLineShouldNotBeFound("taxAmount.notEquals=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationLineList where taxAmount not equals to UPDATED_TAX_AMOUNT
-        defaultMVerificationLineShouldBeFound("taxAmount.notEquals=" + UPDATED_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTaxAmountIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where taxAmount in DEFAULT_TAX_AMOUNT or UPDATED_TAX_AMOUNT
-        defaultMVerificationLineShouldBeFound("taxAmount.in=" + DEFAULT_TAX_AMOUNT + "," + UPDATED_TAX_AMOUNT);
-
-        // Get all the mVerificationLineList where taxAmount equals to UPDATED_TAX_AMOUNT
-        defaultMVerificationLineShouldNotBeFound("taxAmount.in=" + UPDATED_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTaxAmountIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where taxAmount is not null
-        defaultMVerificationLineShouldBeFound("taxAmount.specified=true");
-
-        // Get all the mVerificationLineList where taxAmount is null
-        defaultMVerificationLineShouldNotBeFound("taxAmount.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTaxAmountIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where taxAmount is greater than or equal to DEFAULT_TAX_AMOUNT
-        defaultMVerificationLineShouldBeFound("taxAmount.greaterThanOrEqual=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationLineList where taxAmount is greater than or equal to UPDATED_TAX_AMOUNT
-        defaultMVerificationLineShouldNotBeFound("taxAmount.greaterThanOrEqual=" + UPDATED_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTaxAmountIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where taxAmount is less than or equal to DEFAULT_TAX_AMOUNT
-        defaultMVerificationLineShouldBeFound("taxAmount.lessThanOrEqual=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationLineList where taxAmount is less than or equal to SMALLER_TAX_AMOUNT
-        defaultMVerificationLineShouldNotBeFound("taxAmount.lessThanOrEqual=" + SMALLER_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTaxAmountIsLessThanSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where taxAmount is less than DEFAULT_TAX_AMOUNT
-        defaultMVerificationLineShouldNotBeFound("taxAmount.lessThan=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationLineList where taxAmount is less than UPDATED_TAX_AMOUNT
-        defaultMVerificationLineShouldBeFound("taxAmount.lessThan=" + UPDATED_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByTaxAmountIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where taxAmount is greater than DEFAULT_TAX_AMOUNT
-        defaultMVerificationLineShouldNotBeFound("taxAmount.greaterThan=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationLineList where taxAmount is greater than SMALLER_TAX_AMOUNT
-        defaultMVerificationLineShouldBeFound("taxAmount.greaterThan=" + SMALLER_TAX_AMOUNT);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByUidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where uid equals to DEFAULT_UID
-        defaultMVerificationLineShouldBeFound("uid.equals=" + DEFAULT_UID);
-
-        // Get all the mVerificationLineList where uid equals to UPDATED_UID
-        defaultMVerificationLineShouldNotBeFound("uid.equals=" + UPDATED_UID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByUidIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where uid not equals to DEFAULT_UID
-        defaultMVerificationLineShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
-
-        // Get all the mVerificationLineList where uid not equals to UPDATED_UID
-        defaultMVerificationLineShouldBeFound("uid.notEquals=" + UPDATED_UID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByUidIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where uid in DEFAULT_UID or UPDATED_UID
-        defaultMVerificationLineShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
-
-        // Get all the mVerificationLineList where uid equals to UPDATED_UID
-        defaultMVerificationLineShouldNotBeFound("uid.in=" + UPDATED_UID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByUidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where uid is not null
-        defaultMVerificationLineShouldBeFound("uid.specified=true");
-
-        // Get all the mVerificationLineList where uid is null
-        defaultMVerificationLineShouldNotBeFound("uid.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByActiveIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where active equals to DEFAULT_ACTIVE
-        defaultMVerificationLineShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
-
-        // Get all the mVerificationLineList where active equals to UPDATED_ACTIVE
-        defaultMVerificationLineShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByActiveIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where active not equals to DEFAULT_ACTIVE
-        defaultMVerificationLineShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
-
-        // Get all the mVerificationLineList where active not equals to UPDATED_ACTIVE
-        defaultMVerificationLineShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByActiveIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where active in DEFAULT_ACTIVE or UPDATED_ACTIVE
-        defaultMVerificationLineShouldBeFound("active.in=" + DEFAULT_ACTIVE + "," + UPDATED_ACTIVE);
-
-        // Get all the mVerificationLineList where active equals to UPDATED_ACTIVE
-        defaultMVerificationLineShouldNotBeFound("active.in=" + UPDATED_ACTIVE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByActiveIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where active is not null
-        defaultMVerificationLineShouldBeFound("active.specified=true");
-
-        // Get all the mVerificationLineList where active is null
-        defaultMVerificationLineShouldNotBeFound("active.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByLineNoIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where lineNo equals to DEFAULT_LINE_NO
-        defaultMVerificationLineShouldBeFound("lineNo.equals=" + DEFAULT_LINE_NO);
-
-        // Get all the mVerificationLineList where lineNo equals to UPDATED_LINE_NO
-        defaultMVerificationLineShouldNotBeFound("lineNo.equals=" + UPDATED_LINE_NO);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByLineNoIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where lineNo not equals to DEFAULT_LINE_NO
-        defaultMVerificationLineShouldNotBeFound("lineNo.notEquals=" + DEFAULT_LINE_NO);
-
-        // Get all the mVerificationLineList where lineNo not equals to UPDATED_LINE_NO
-        defaultMVerificationLineShouldBeFound("lineNo.notEquals=" + UPDATED_LINE_NO);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByLineNoIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where lineNo in DEFAULT_LINE_NO or UPDATED_LINE_NO
-        defaultMVerificationLineShouldBeFound("lineNo.in=" + DEFAULT_LINE_NO + "," + UPDATED_LINE_NO);
-
-        // Get all the mVerificationLineList where lineNo equals to UPDATED_LINE_NO
-        defaultMVerificationLineShouldNotBeFound("lineNo.in=" + UPDATED_LINE_NO);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByLineNoIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where lineNo is not null
-        defaultMVerificationLineShouldBeFound("lineNo.specified=true");
-
-        // Get all the mVerificationLineList where lineNo is null
-        defaultMVerificationLineShouldNotBeFound("lineNo.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllMVerificationLinesByLineNoContainsSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where lineNo contains DEFAULT_LINE_NO
-        defaultMVerificationLineShouldBeFound("lineNo.contains=" + DEFAULT_LINE_NO);
-
-        // Get all the mVerificationLineList where lineNo contains UPDATED_LINE_NO
-        defaultMVerificationLineShouldNotBeFound("lineNo.contains=" + UPDATED_LINE_NO);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByLineNoNotContainsSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where lineNo does not contain DEFAULT_LINE_NO
-        defaultMVerificationLineShouldNotBeFound("lineNo.doesNotContain=" + DEFAULT_LINE_NO);
-
-        // Get all the mVerificationLineList where lineNo does not contain UPDATED_LINE_NO
-        defaultMVerificationLineShouldBeFound("lineNo.doesNotContain=" + UPDATED_LINE_NO);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByConversionRateIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where conversionRate equals to DEFAULT_CONVERSION_RATE
-        defaultMVerificationLineShouldBeFound("conversionRate.equals=" + DEFAULT_CONVERSION_RATE);
-
-        // Get all the mVerificationLineList where conversionRate equals to UPDATED_CONVERSION_RATE
-        defaultMVerificationLineShouldNotBeFound("conversionRate.equals=" + UPDATED_CONVERSION_RATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByConversionRateIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where conversionRate not equals to DEFAULT_CONVERSION_RATE
-        defaultMVerificationLineShouldNotBeFound("conversionRate.notEquals=" + DEFAULT_CONVERSION_RATE);
-
-        // Get all the mVerificationLineList where conversionRate not equals to UPDATED_CONVERSION_RATE
-        defaultMVerificationLineShouldBeFound("conversionRate.notEquals=" + UPDATED_CONVERSION_RATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByConversionRateIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where conversionRate in DEFAULT_CONVERSION_RATE or UPDATED_CONVERSION_RATE
-        defaultMVerificationLineShouldBeFound("conversionRate.in=" + DEFAULT_CONVERSION_RATE + "," + UPDATED_CONVERSION_RATE);
-
-        // Get all the mVerificationLineList where conversionRate equals to UPDATED_CONVERSION_RATE
-        defaultMVerificationLineShouldNotBeFound("conversionRate.in=" + UPDATED_CONVERSION_RATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByConversionRateIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where conversionRate is not null
-        defaultMVerificationLineShouldBeFound("conversionRate.specified=true");
-
-        // Get all the mVerificationLineList where conversionRate is null
-        defaultMVerificationLineShouldNotBeFound("conversionRate.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllMVerificationLinesByConversionRateContainsSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where conversionRate contains DEFAULT_CONVERSION_RATE
-        defaultMVerificationLineShouldBeFound("conversionRate.contains=" + DEFAULT_CONVERSION_RATE);
-
-        // Get all the mVerificationLineList where conversionRate contains UPDATED_CONVERSION_RATE
-        defaultMVerificationLineShouldNotBeFound("conversionRate.contains=" + UPDATED_CONVERSION_RATE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationLinesByConversionRateNotContainsSomething() throws Exception {
-        // Initialize the database
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-
-        // Get all the mVerificationLineList where conversionRate does not contain DEFAULT_CONVERSION_RATE
-        defaultMVerificationLineShouldNotBeFound("conversionRate.doesNotContain=" + DEFAULT_CONVERSION_RATE);
-
-        // Get all the mVerificationLineList where conversionRate does not contain UPDATED_CONVERSION_RATE
-        defaultMVerificationLineShouldBeFound("conversionRate.doesNotContain=" + UPDATED_CONVERSION_RATE);
-    }
-
-
-    @Test
-    @Transactional
     public void getAllMVerificationLinesByForeignActualIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationLineRepository.saveAndFlush(mVerificationLine);
@@ -1766,6 +1286,111 @@ public class MVerificationLineResourceIT {
 
         // Get all the mVerificationLineList where foreignActual is greater than SMALLER_FOREIGN_ACTUAL
         defaultMVerificationLineShouldBeFound("foreignActual.greaterThan=" + SMALLER_FOREIGN_ACTUAL);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTotalLinesIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where totalLines equals to DEFAULT_TOTAL_LINES
+        defaultMVerificationLineShouldBeFound("totalLines.equals=" + DEFAULT_TOTAL_LINES);
+
+        // Get all the mVerificationLineList where totalLines equals to UPDATED_TOTAL_LINES
+        defaultMVerificationLineShouldNotBeFound("totalLines.equals=" + UPDATED_TOTAL_LINES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTotalLinesIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where totalLines not equals to DEFAULT_TOTAL_LINES
+        defaultMVerificationLineShouldNotBeFound("totalLines.notEquals=" + DEFAULT_TOTAL_LINES);
+
+        // Get all the mVerificationLineList where totalLines not equals to UPDATED_TOTAL_LINES
+        defaultMVerificationLineShouldBeFound("totalLines.notEquals=" + UPDATED_TOTAL_LINES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTotalLinesIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where totalLines in DEFAULT_TOTAL_LINES or UPDATED_TOTAL_LINES
+        defaultMVerificationLineShouldBeFound("totalLines.in=" + DEFAULT_TOTAL_LINES + "," + UPDATED_TOTAL_LINES);
+
+        // Get all the mVerificationLineList where totalLines equals to UPDATED_TOTAL_LINES
+        defaultMVerificationLineShouldNotBeFound("totalLines.in=" + UPDATED_TOTAL_LINES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTotalLinesIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where totalLines is not null
+        defaultMVerificationLineShouldBeFound("totalLines.specified=true");
+
+        // Get all the mVerificationLineList where totalLines is null
+        defaultMVerificationLineShouldNotBeFound("totalLines.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTotalLinesIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where totalLines is greater than or equal to DEFAULT_TOTAL_LINES
+        defaultMVerificationLineShouldBeFound("totalLines.greaterThanOrEqual=" + DEFAULT_TOTAL_LINES);
+
+        // Get all the mVerificationLineList where totalLines is greater than or equal to UPDATED_TOTAL_LINES
+        defaultMVerificationLineShouldNotBeFound("totalLines.greaterThanOrEqual=" + UPDATED_TOTAL_LINES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTotalLinesIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where totalLines is less than or equal to DEFAULT_TOTAL_LINES
+        defaultMVerificationLineShouldBeFound("totalLines.lessThanOrEqual=" + DEFAULT_TOTAL_LINES);
+
+        // Get all the mVerificationLineList where totalLines is less than or equal to SMALLER_TOTAL_LINES
+        defaultMVerificationLineShouldNotBeFound("totalLines.lessThanOrEqual=" + SMALLER_TOTAL_LINES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTotalLinesIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where totalLines is less than DEFAULT_TOTAL_LINES
+        defaultMVerificationLineShouldNotBeFound("totalLines.lessThan=" + DEFAULT_TOTAL_LINES);
+
+        // Get all the mVerificationLineList where totalLines is less than UPDATED_TOTAL_LINES
+        defaultMVerificationLineShouldBeFound("totalLines.lessThan=" + UPDATED_TOTAL_LINES);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTotalLinesIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where totalLines is greater than DEFAULT_TOTAL_LINES
+        defaultMVerificationLineShouldNotBeFound("totalLines.greaterThan=" + DEFAULT_TOTAL_LINES);
+
+        // Get all the mVerificationLineList where totalLines is greater than SMALLER_TOTAL_LINES
+        defaultMVerificationLineShouldBeFound("totalLines.greaterThan=" + SMALLER_TOTAL_LINES);
     }
 
 
@@ -1876,6 +1501,111 @@ public class MVerificationLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMVerificationLinesByTaxAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxAmount equals to DEFAULT_TAX_AMOUNT
+        defaultMVerificationLineShouldBeFound("taxAmount.equals=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationLineList where taxAmount equals to UPDATED_TAX_AMOUNT
+        defaultMVerificationLineShouldNotBeFound("taxAmount.equals=" + UPDATED_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTaxAmountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxAmount not equals to DEFAULT_TAX_AMOUNT
+        defaultMVerificationLineShouldNotBeFound("taxAmount.notEquals=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationLineList where taxAmount not equals to UPDATED_TAX_AMOUNT
+        defaultMVerificationLineShouldBeFound("taxAmount.notEquals=" + UPDATED_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTaxAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxAmount in DEFAULT_TAX_AMOUNT or UPDATED_TAX_AMOUNT
+        defaultMVerificationLineShouldBeFound("taxAmount.in=" + DEFAULT_TAX_AMOUNT + "," + UPDATED_TAX_AMOUNT);
+
+        // Get all the mVerificationLineList where taxAmount equals to UPDATED_TAX_AMOUNT
+        defaultMVerificationLineShouldNotBeFound("taxAmount.in=" + UPDATED_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTaxAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxAmount is not null
+        defaultMVerificationLineShouldBeFound("taxAmount.specified=true");
+
+        // Get all the mVerificationLineList where taxAmount is null
+        defaultMVerificationLineShouldNotBeFound("taxAmount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTaxAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxAmount is greater than or equal to DEFAULT_TAX_AMOUNT
+        defaultMVerificationLineShouldBeFound("taxAmount.greaterThanOrEqual=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationLineList where taxAmount is greater than or equal to UPDATED_TAX_AMOUNT
+        defaultMVerificationLineShouldNotBeFound("taxAmount.greaterThanOrEqual=" + UPDATED_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTaxAmountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxAmount is less than or equal to DEFAULT_TAX_AMOUNT
+        defaultMVerificationLineShouldBeFound("taxAmount.lessThanOrEqual=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationLineList where taxAmount is less than or equal to SMALLER_TAX_AMOUNT
+        defaultMVerificationLineShouldNotBeFound("taxAmount.lessThanOrEqual=" + SMALLER_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTaxAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxAmount is less than DEFAULT_TAX_AMOUNT
+        defaultMVerificationLineShouldNotBeFound("taxAmount.lessThan=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationLineList where taxAmount is less than UPDATED_TAX_AMOUNT
+        defaultMVerificationLineShouldBeFound("taxAmount.lessThan=" + UPDATED_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTaxAmountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxAmount is greater than DEFAULT_TAX_AMOUNT
+        defaultMVerificationLineShouldNotBeFound("taxAmount.greaterThan=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationLineList where taxAmount is greater than SMALLER_TAX_AMOUNT
+        defaultMVerificationLineShouldBeFound("taxAmount.greaterThan=" + SMALLER_TAX_AMOUNT);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMVerificationLinesByForeignTaxAmountIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationLineRepository.saveAndFlush(mVerificationLine);
@@ -1976,6 +1706,321 @@ public class MVerificationLineResourceIT {
 
         // Get all the mVerificationLineList where foreignTaxAmount is greater than SMALLER_FOREIGN_TAX_AMOUNT
         defaultMVerificationLineShouldBeFound("foreignTaxAmount.greaterThan=" + SMALLER_FOREIGN_TAX_AMOUNT);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNo equals to DEFAULT_LINE_NO
+        defaultMVerificationLineShouldBeFound("lineNo.equals=" + DEFAULT_LINE_NO);
+
+        // Get all the mVerificationLineList where lineNo equals to UPDATED_LINE_NO
+        defaultMVerificationLineShouldNotBeFound("lineNo.equals=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNo not equals to DEFAULT_LINE_NO
+        defaultMVerificationLineShouldNotBeFound("lineNo.notEquals=" + DEFAULT_LINE_NO);
+
+        // Get all the mVerificationLineList where lineNo not equals to UPDATED_LINE_NO
+        defaultMVerificationLineShouldBeFound("lineNo.notEquals=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNo in DEFAULT_LINE_NO or UPDATED_LINE_NO
+        defaultMVerificationLineShouldBeFound("lineNo.in=" + DEFAULT_LINE_NO + "," + UPDATED_LINE_NO);
+
+        // Get all the mVerificationLineList where lineNo equals to UPDATED_LINE_NO
+        defaultMVerificationLineShouldNotBeFound("lineNo.in=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNo is not null
+        defaultMVerificationLineShouldBeFound("lineNo.specified=true");
+
+        // Get all the mVerificationLineList where lineNo is null
+        defaultMVerificationLineShouldNotBeFound("lineNo.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNo is greater than or equal to DEFAULT_LINE_NO
+        defaultMVerificationLineShouldBeFound("lineNo.greaterThanOrEqual=" + DEFAULT_LINE_NO);
+
+        // Get all the mVerificationLineList where lineNo is greater than or equal to UPDATED_LINE_NO
+        defaultMVerificationLineShouldNotBeFound("lineNo.greaterThanOrEqual=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNo is less than or equal to DEFAULT_LINE_NO
+        defaultMVerificationLineShouldBeFound("lineNo.lessThanOrEqual=" + DEFAULT_LINE_NO);
+
+        // Get all the mVerificationLineList where lineNo is less than or equal to SMALLER_LINE_NO
+        defaultMVerificationLineShouldNotBeFound("lineNo.lessThanOrEqual=" + SMALLER_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNo is less than DEFAULT_LINE_NO
+        defaultMVerificationLineShouldNotBeFound("lineNo.lessThan=" + DEFAULT_LINE_NO);
+
+        // Get all the mVerificationLineList where lineNo is less than UPDATED_LINE_NO
+        defaultMVerificationLineShouldBeFound("lineNo.lessThan=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNo is greater than DEFAULT_LINE_NO
+        defaultMVerificationLineShouldNotBeFound("lineNo.greaterThan=" + DEFAULT_LINE_NO);
+
+        // Get all the mVerificationLineList where lineNo is greater than SMALLER_LINE_NO
+        defaultMVerificationLineShouldBeFound("lineNo.greaterThan=" + SMALLER_LINE_NO);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoMrIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoMr equals to DEFAULT_LINE_NO_MR
+        defaultMVerificationLineShouldBeFound("lineNoMr.equals=" + DEFAULT_LINE_NO_MR);
+
+        // Get all the mVerificationLineList where lineNoMr equals to UPDATED_LINE_NO_MR
+        defaultMVerificationLineShouldNotBeFound("lineNoMr.equals=" + UPDATED_LINE_NO_MR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoMrIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoMr not equals to DEFAULT_LINE_NO_MR
+        defaultMVerificationLineShouldNotBeFound("lineNoMr.notEquals=" + DEFAULT_LINE_NO_MR);
+
+        // Get all the mVerificationLineList where lineNoMr not equals to UPDATED_LINE_NO_MR
+        defaultMVerificationLineShouldBeFound("lineNoMr.notEquals=" + UPDATED_LINE_NO_MR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoMrIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoMr in DEFAULT_LINE_NO_MR or UPDATED_LINE_NO_MR
+        defaultMVerificationLineShouldBeFound("lineNoMr.in=" + DEFAULT_LINE_NO_MR + "," + UPDATED_LINE_NO_MR);
+
+        // Get all the mVerificationLineList where lineNoMr equals to UPDATED_LINE_NO_MR
+        defaultMVerificationLineShouldNotBeFound("lineNoMr.in=" + UPDATED_LINE_NO_MR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoMrIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoMr is not null
+        defaultMVerificationLineShouldBeFound("lineNoMr.specified=true");
+
+        // Get all the mVerificationLineList where lineNoMr is null
+        defaultMVerificationLineShouldNotBeFound("lineNoMr.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoMrIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoMr is greater than or equal to DEFAULT_LINE_NO_MR
+        defaultMVerificationLineShouldBeFound("lineNoMr.greaterThanOrEqual=" + DEFAULT_LINE_NO_MR);
+
+        // Get all the mVerificationLineList where lineNoMr is greater than or equal to UPDATED_LINE_NO_MR
+        defaultMVerificationLineShouldNotBeFound("lineNoMr.greaterThanOrEqual=" + UPDATED_LINE_NO_MR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoMrIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoMr is less than or equal to DEFAULT_LINE_NO_MR
+        defaultMVerificationLineShouldBeFound("lineNoMr.lessThanOrEqual=" + DEFAULT_LINE_NO_MR);
+
+        // Get all the mVerificationLineList where lineNoMr is less than or equal to SMALLER_LINE_NO_MR
+        defaultMVerificationLineShouldNotBeFound("lineNoMr.lessThanOrEqual=" + SMALLER_LINE_NO_MR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoMrIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoMr is less than DEFAULT_LINE_NO_MR
+        defaultMVerificationLineShouldNotBeFound("lineNoMr.lessThan=" + DEFAULT_LINE_NO_MR);
+
+        // Get all the mVerificationLineList where lineNoMr is less than UPDATED_LINE_NO_MR
+        defaultMVerificationLineShouldBeFound("lineNoMr.lessThan=" + UPDATED_LINE_NO_MR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoMrIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoMr is greater than DEFAULT_LINE_NO_MR
+        defaultMVerificationLineShouldNotBeFound("lineNoMr.greaterThan=" + DEFAULT_LINE_NO_MR);
+
+        // Get all the mVerificationLineList where lineNoMr is greater than SMALLER_LINE_NO_MR
+        defaultMVerificationLineShouldBeFound("lineNoMr.greaterThan=" + SMALLER_LINE_NO_MR);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByConversionRateIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where conversionRate equals to DEFAULT_CONVERSION_RATE
+        defaultMVerificationLineShouldBeFound("conversionRate.equals=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the mVerificationLineList where conversionRate equals to UPDATED_CONVERSION_RATE
+        defaultMVerificationLineShouldNotBeFound("conversionRate.equals=" + UPDATED_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByConversionRateIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where conversionRate not equals to DEFAULT_CONVERSION_RATE
+        defaultMVerificationLineShouldNotBeFound("conversionRate.notEquals=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the mVerificationLineList where conversionRate not equals to UPDATED_CONVERSION_RATE
+        defaultMVerificationLineShouldBeFound("conversionRate.notEquals=" + UPDATED_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByConversionRateIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where conversionRate in DEFAULT_CONVERSION_RATE or UPDATED_CONVERSION_RATE
+        defaultMVerificationLineShouldBeFound("conversionRate.in=" + DEFAULT_CONVERSION_RATE + "," + UPDATED_CONVERSION_RATE);
+
+        // Get all the mVerificationLineList where conversionRate equals to UPDATED_CONVERSION_RATE
+        defaultMVerificationLineShouldNotBeFound("conversionRate.in=" + UPDATED_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByConversionRateIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where conversionRate is not null
+        defaultMVerificationLineShouldBeFound("conversionRate.specified=true");
+
+        // Get all the mVerificationLineList where conversionRate is null
+        defaultMVerificationLineShouldNotBeFound("conversionRate.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByConversionRateIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where conversionRate is greater than or equal to DEFAULT_CONVERSION_RATE
+        defaultMVerificationLineShouldBeFound("conversionRate.greaterThanOrEqual=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the mVerificationLineList where conversionRate is greater than or equal to UPDATED_CONVERSION_RATE
+        defaultMVerificationLineShouldNotBeFound("conversionRate.greaterThanOrEqual=" + UPDATED_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByConversionRateIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where conversionRate is less than or equal to DEFAULT_CONVERSION_RATE
+        defaultMVerificationLineShouldBeFound("conversionRate.lessThanOrEqual=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the mVerificationLineList where conversionRate is less than or equal to SMALLER_CONVERSION_RATE
+        defaultMVerificationLineShouldNotBeFound("conversionRate.lessThanOrEqual=" + SMALLER_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByConversionRateIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where conversionRate is less than DEFAULT_CONVERSION_RATE
+        defaultMVerificationLineShouldNotBeFound("conversionRate.lessThan=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the mVerificationLineList where conversionRate is less than UPDATED_CONVERSION_RATE
+        defaultMVerificationLineShouldBeFound("conversionRate.lessThan=" + UPDATED_CONVERSION_RATE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByConversionRateIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where conversionRate is greater than DEFAULT_CONVERSION_RATE
+        defaultMVerificationLineShouldNotBeFound("conversionRate.greaterThan=" + DEFAULT_CONVERSION_RATE);
+
+        // Get all the mVerificationLineList where conversionRate is greater than SMALLER_CONVERSION_RATE
+        defaultMVerificationLineShouldBeFound("conversionRate.greaterThan=" + SMALLER_CONVERSION_RATE);
     }
 
 
@@ -2086,6 +2131,110 @@ public class MVerificationLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMVerificationLinesByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where uid equals to DEFAULT_UID
+        defaultMVerificationLineShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the mVerificationLineList where uid equals to UPDATED_UID
+        defaultMVerificationLineShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where uid not equals to DEFAULT_UID
+        defaultMVerificationLineShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the mVerificationLineList where uid not equals to UPDATED_UID
+        defaultMVerificationLineShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where uid in DEFAULT_UID or UPDATED_UID
+        defaultMVerificationLineShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the mVerificationLineList where uid equals to UPDATED_UID
+        defaultMVerificationLineShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where uid is not null
+        defaultMVerificationLineShouldBeFound("uid.specified=true");
+
+        // Get all the mVerificationLineList where uid is null
+        defaultMVerificationLineShouldNotBeFound("uid.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByActiveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where active equals to DEFAULT_ACTIVE
+        defaultMVerificationLineShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
+
+        // Get all the mVerificationLineList where active equals to UPDATED_ACTIVE
+        defaultMVerificationLineShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where active not equals to DEFAULT_ACTIVE
+        defaultMVerificationLineShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the mVerificationLineList where active not equals to UPDATED_ACTIVE
+        defaultMVerificationLineShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByActiveIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where active in DEFAULT_ACTIVE or UPDATED_ACTIVE
+        defaultMVerificationLineShouldBeFound("active.in=" + DEFAULT_ACTIVE + "," + UPDATED_ACTIVE);
+
+        // Get all the mVerificationLineList where active equals to UPDATED_ACTIVE
+        defaultMVerificationLineShouldNotBeFound("active.in=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByActiveIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where active is not null
+        defaultMVerificationLineShouldBeFound("active.specified=true");
+
+        // Get all the mVerificationLineList where active is null
+        defaultMVerificationLineShouldNotBeFound("active.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllMVerificationLinesByVerificationIsEqualToSomething() throws Exception {
         // Get already existing entity
         MVerification verification = mVerificationLine.getVerification();
@@ -2150,22 +2299,6 @@ public class MVerificationLineResourceIT {
 
     @Test
     @Transactional
-    public void getAllMVerificationLinesByCElementIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        CElementValue cElement = mVerificationLine.getCElement();
-        mVerificationLineRepository.saveAndFlush(mVerificationLine);
-        Long cElementId = cElement.getId();
-
-        // Get all the mVerificationLineList where cElement equals to cElementId
-        defaultMVerificationLineShouldBeFound("cElementId.equals=" + cElementId);
-
-        // Get all the mVerificationLineList where cElement equals to cElementId + 1
-        defaultMVerificationLineShouldNotBeFound("cElementId.equals=" + (cElementId + 1));
-    }
-
-
-    @Test
-    @Transactional
     public void getAllMVerificationLinesByCCostCenterIsEqualToSomething() throws Exception {
         // Get already existing entity
         CCostCenter cCostCenter = mVerificationLine.getCCostCenter();
@@ -2210,16 +2343,17 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].qty").value(hasItem(DEFAULT_QTY.intValue())))
             .andExpect(jsonPath("$.[*].priceActual").value(hasItem(DEFAULT_PRICE_ACTUAL.intValue())))
-            .andExpect(jsonPath("$.[*].totalLines").value(hasItem(DEFAULT_TOTAL_LINES.intValue())))
-            .andExpect(jsonPath("$.[*].taxAmount").value(hasItem(DEFAULT_TAX_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
-            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE)))
             .andExpect(jsonPath("$.[*].foreignActual").value(hasItem(DEFAULT_FOREIGN_ACTUAL.intValue())))
+            .andExpect(jsonPath("$.[*].totalLines").value(hasItem(DEFAULT_TOTAL_LINES.intValue())))
             .andExpect(jsonPath("$.[*].foreignTotalLines").value(hasItem(DEFAULT_FOREIGN_TOTAL_LINES.intValue())))
+            .andExpect(jsonPath("$.[*].taxAmount").value(hasItem(DEFAULT_TAX_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].foreignTaxAmount").value(hasItem(DEFAULT_FOREIGN_TAX_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())));
+            .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
+            .andExpect(jsonPath("$.[*].lineNoMr").value(hasItem(DEFAULT_LINE_NO_MR)))
+            .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.intValue())))
+            .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
         restMVerificationLineMockMvc.perform(get("/api/m-verification-lines/count?sort=id,desc&" + filter))
@@ -2274,16 +2408,17 @@ public class MVerificationLineResourceIT {
             .description(UPDATED_DESCRIPTION)
             .qty(UPDATED_QTY)
             .priceActual(UPDATED_PRICE_ACTUAL)
-            .totalLines(UPDATED_TOTAL_LINES)
-            .taxAmount(UPDATED_TAX_AMOUNT)
-            .uid(UPDATED_UID)
-            .active(UPDATED_ACTIVE)
-            .lineNo(UPDATED_LINE_NO)
-            .conversionRate(UPDATED_CONVERSION_RATE)
             .foreignActual(UPDATED_FOREIGN_ACTUAL)
+            .totalLines(UPDATED_TOTAL_LINES)
             .foreignTotalLines(UPDATED_FOREIGN_TOTAL_LINES)
+            .taxAmount(UPDATED_TAX_AMOUNT)
             .foreignTaxAmount(UPDATED_FOREIGN_TAX_AMOUNT)
-            .receiveDate(UPDATED_RECEIVE_DATE);
+            .lineNo(UPDATED_LINE_NO)
+            .lineNoMr(UPDATED_LINE_NO_MR)
+            .conversionRate(UPDATED_CONVERSION_RATE)
+            .receiveDate(UPDATED_RECEIVE_DATE)
+            .uid(UPDATED_UID)
+            .active(UPDATED_ACTIVE);
         MVerificationLineDTO mVerificationLineDTO = mVerificationLineMapper.toDto(updatedMVerificationLine);
 
         restMVerificationLineMockMvc.perform(put("/api/m-verification-lines")
@@ -2302,16 +2437,17 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testMVerificationLine.getQty()).isEqualTo(UPDATED_QTY);
         assertThat(testMVerificationLine.getPriceActual()).isEqualTo(UPDATED_PRICE_ACTUAL);
+        assertThat(testMVerificationLine.getForeignActual()).isEqualTo(UPDATED_FOREIGN_ACTUAL);
         assertThat(testMVerificationLine.getTotalLines()).isEqualTo(UPDATED_TOTAL_LINES);
+        assertThat(testMVerificationLine.getForeignTotalLines()).isEqualTo(UPDATED_FOREIGN_TOTAL_LINES);
         assertThat(testMVerificationLine.getTaxAmount()).isEqualTo(UPDATED_TAX_AMOUNT);
+        assertThat(testMVerificationLine.getForeignTaxAmount()).isEqualTo(UPDATED_FOREIGN_TAX_AMOUNT);
+        assertThat(testMVerificationLine.getLineNo()).isEqualTo(UPDATED_LINE_NO);
+        assertThat(testMVerificationLine.getLineNoMr()).isEqualTo(UPDATED_LINE_NO_MR);
+        assertThat(testMVerificationLine.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
+        assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(UPDATED_RECEIVE_DATE);
         assertThat(testMVerificationLine.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMVerificationLine.isActive()).isEqualTo(UPDATED_ACTIVE);
-        assertThat(testMVerificationLine.getLineNo()).isEqualTo(UPDATED_LINE_NO);
-        assertThat(testMVerificationLine.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
-        assertThat(testMVerificationLine.getForeignActual()).isEqualTo(UPDATED_FOREIGN_ACTUAL);
-        assertThat(testMVerificationLine.getForeignTotalLines()).isEqualTo(UPDATED_FOREIGN_TOTAL_LINES);
-        assertThat(testMVerificationLine.getForeignTaxAmount()).isEqualTo(UPDATED_FOREIGN_TAX_AMOUNT);
-        assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(UPDATED_RECEIVE_DATE);
     }
 
     @Test

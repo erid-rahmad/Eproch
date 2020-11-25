@@ -104,3 +104,8 @@ export const isPasswordField = (field: IADField) => {
 export const isActiveStatusField = (field: IADField) => {
   return ! field.virtualColumnName && isBooleanField(field) && field.adColumn.name === 'active';
 }
+
+export const isAttachmentField = (field: IADField) => {
+  return field.adReference?.value === 'file' ||
+    field.adColumn?.adReference?.value === 'file';
+}

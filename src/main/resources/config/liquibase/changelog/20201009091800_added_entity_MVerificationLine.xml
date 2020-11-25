@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity MVerificationLine.
     -->
@@ -94,14 +94,22 @@
                   separator=";"
                   tableName="m_verification_line">
             <column name="id" type="numeric"/>
-            <column name="order_no" type="string"/>
-            <column name="receipt_no" type="string"/>
+            <column name="verification_no" type="string"/>
+            <column name="po_no" type="string"/>
+            <column name="receive_no" type="string"/>
             <column name="delivery_no" type="string"/>
             <column name="description" type="string"/>
             <column name="qty" type="numeric"/>
             <column name="price_actual" type="numeric"/>
+            <column name="foreign_actual" type="numeric"/>
             <column name="total_lines" type="numeric"/>
+            <column name="foreign_total_lines" type="numeric"/>
             <column name="tax_amount" type="numeric"/>
+            <column name="foreign_tax_amount" type="numeric"/>
+            <column name="line_no" type="numeric"/>
+            <column name="line_no_mr" type="numeric"/>
+            <column name="conversion_rate" type="numeric"/>
+            <column name="receive_date" type="date"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="verification_id" type="numeric"/>
@@ -183,6 +191,20 @@
         <renameColumn columnDataType="bigint" newColumnName="c_element_id" oldColumnName="c_element" tableName="m_verification_line"/>
         <renameColumn columnDataType="bigint" newColumnName="c_cost_center_id" oldColumnName="c_cost_center" tableName="m_verification_line"/>
         <renameColumn columnDataType="bigint" newColumnName="c_currency_id" oldColumnName="currency_id" tableName="m_verification_line"/>
+    </changeSet>
+
+    <changeSet id="20201124135400" author="Ananta Aryadewa">
+        <modifyDataType tableName="m_verification_line" columnName="conversion_rate" newDataType="decimal(21,2)" />
+        <modifyDataType tableName="m_verification_line" columnName="line_no" newDataType="integer" />
+        <addNotNullConstraint tableName="m_verification_line" columnName="c_cost_center_id" />
+        <addNotNullConstraint tableName="m_verification_line" columnName="c_currency_id" />
+        <addNotNullConstraint tableName="m_verification_line" columnName="po_no" />
+        <addNotNullConstraint tableName="m_verification_line" columnName="receive_no" />
+        <addColumn tableName="m_verification_line">
+            <column name="line_no_mr" type="integer">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

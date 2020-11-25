@@ -112,35 +112,38 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getPriceActual() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPriceActual(), MVerificationLine_.priceActual));
             }
+            if (criteria.getForeignActual() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getForeignActual(), MVerificationLine_.foreignActual));
+            }
             if (criteria.getTotalLines() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getTotalLines(), MVerificationLine_.totalLines));
             }
+            if (criteria.getForeignTotalLines() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getForeignTotalLines(), MVerificationLine_.foreignTotalLines));
+            }
             if (criteria.getTaxAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getTaxAmount(), MVerificationLine_.taxAmount));
+            }
+            if (criteria.getForeignTaxAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getForeignTaxAmount(), MVerificationLine_.foreignTaxAmount));
+            }
+            if (criteria.getLineNo() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLineNo(), MVerificationLine_.lineNo));
+            }
+            if (criteria.getLineNoMr() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLineNoMr(), MVerificationLine_.lineNoMr));
+            }
+            if (criteria.getConversionRate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getConversionRate(), MVerificationLine_.conversionRate));
+            }
+            if (criteria.getReceiveDate() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getReceiveDate(), MVerificationLine_.receiveDate));
             }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MVerificationLine_.uid));
             }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MVerificationLine_.active));
-            }
-            if (criteria.getLineNo() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getLineNo(), MVerificationLine_.lineNo));
-            }
-            if (criteria.getConversionRate() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getConversionRate(), MVerificationLine_.conversionRate));
-            }
-            if (criteria.getForeignActual() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getForeignActual(), MVerificationLine_.foreignActual));
-            }
-            if (criteria.getForeignTotalLines() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getForeignTotalLines(), MVerificationLine_.foreignTotalLines));
-            }
-            if (criteria.getForeignTaxAmount() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getForeignTaxAmount(), MVerificationLine_.foreignTaxAmount));
-            }
-            if (criteria.getReceiveDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getReceiveDate(), MVerificationLine_.receiveDate));
             }
             if (criteria.getVerificationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getVerificationId(),
@@ -157,10 +160,6 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getUomId() != null) {
                 specification = specification.and(buildSpecification(criteria.getUomId(),
                     root -> root.join(MVerificationLine_.uom, JoinType.LEFT).get(CUnitOfMeasure_.id)));
-            }
-            if (criteria.getCElementId() != null) {
-                specification = specification.and(buildSpecification(criteria.getCElementId(),
-                    root -> root.join(MVerificationLine_.cElement, JoinType.LEFT).get(CElementValue_.id)));
             }
             if (criteria.getCCostCenterId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCCostCenterId(),

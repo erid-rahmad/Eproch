@@ -66,63 +66,81 @@
                         :empty-text="gridSchema.emptyText"
                         :data="gridData"
                         @selection-change="onSelectionChanged"
-                        @sort-change="changeOrder">
-
+                        @sort-change="changeOrder"
+                    >
                         <el-table-column
                             align="center"
                             fixed
                             type="selection"
-                            width="48"/>
-
+                            width="48"
+                        />
                         <el-table-column
                             min-width="130"
                             prop="poNo"
-                            label="PO No."/>
+                            label="PO No."
+                        />
                         <el-table-column
                             min-width="150"
                             prop="receiptNo"
-                            label="Receipt No."/>
+                            label="Receipt No."
+                        />
                         <el-table-column
                             min-width="150"
                             prop="receiptDate"
-                            label="Receipt Date"/>
+                            label="Receipt Date"
+                        />
                         <el-table-column
                             min-width="128"
                             prop="deliveryNo"
-                            label="Delivery No."/>
+                            label="Delivery No."
+                        />
                         <el-table-column
                             min-width="256"
-                            prop="description"
-                            label="Item Description"/>
+                            prop="mProductName"
+                            label="Item Desc."
+                        />
                         <el-table-column
                             min-width="128"
-                            prop="cUOMName"
-                            label="UoM"/>
+                            prop="cUomName"
+                            label="UoM"
+                        />
                         <el-table-column
                             min-width="128"
                             prop="qty"
-                            label="Qty"/>
+                            label="Qty"
+                        />
                         <el-table-column
                             min-width="128"
-                            prop="priceActual"
-                            label="Unit Price"/>
-
-                        <el-table-column
-                            min-width="128"
-                            prop="totalLines"
-                            label="Taxable Amount"/>
-
-                        <el-table-column
-                            min-width="128"
-                            prop="taxAmount"
-                            label="PPN"/>
-
-                        <el-table-column
-                            min-width="128"
-                            label="Total Amount">
-                            {{ totalAmount }}
+                            label="Unit Price"
+                        >
+                          <template slot-scope="{ row }">
+                            {{ row.priceActual | formatCurrency }}
+                          </template>
                         </el-table-column>
-
+                        <el-table-column
+                            min-width="128"
+                            label="Taxable Amount"
+                        >
+                          <template slot-scope="{ row }">
+                            {{ row.totalLines | formatCurrency }}
+                          </template>
+                        </el-table-column>
+                        <el-table-column
+                            min-width="128"
+                            label="PPN (%)"
+                        >
+                          <template slot-scope="{ row }">
+                            {{ row.taxAmount | formatCurrency }}
+                          </template>
+                        </el-table-column>
+                        <el-table-column
+                            min-width="128"
+                            label="Total Amount"
+                        >
+                          <template slot-scope="{ row }">
+                            {{ row.totalAmount | formatCurrency }}
+                          </template>
+                        </el-table-column>
                     </el-table>
                     <el-pagination
                         ref="pagination"

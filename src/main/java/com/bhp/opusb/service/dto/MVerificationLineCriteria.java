@@ -43,25 +43,27 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter priceActual;
 
+    private BigDecimalFilter foreignActual;
+
     private BigDecimalFilter totalLines;
 
+    private BigDecimalFilter foreignTotalLines;
+
     private BigDecimalFilter taxAmount;
+
+    private BigDecimalFilter foreignTaxAmount;
+
+    private IntegerFilter lineNo;
+
+    private IntegerFilter lineNoMr;
+
+    private BigDecimalFilter conversionRate;
+
+    private LocalDateFilter receiveDate;
 
     private UUIDFilter uid;
 
     private BooleanFilter active;
-
-    private StringFilter lineNo;
-
-    private StringFilter conversionRate;
-
-    private BigDecimalFilter foreignActual;
-
-    private BigDecimalFilter foreignTotalLines;
-
-    private BigDecimalFilter foreignTaxAmount;
-
-    private LocalDateFilter receiveDate;
 
     private LongFilter verificationId;
 
@@ -70,8 +72,6 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
     private LongFilter productId;
 
     private LongFilter uomId;
-
-    private LongFilter cElementId;
 
     private LongFilter cCostCenterId;
 
@@ -89,21 +89,21 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.description = other.description == null ? null : other.description.copy();
         this.qty = other.qty == null ? null : other.qty.copy();
         this.priceActual = other.priceActual == null ? null : other.priceActual.copy();
+        this.foreignActual = other.foreignActual == null ? null : other.foreignActual.copy();
         this.totalLines = other.totalLines == null ? null : other.totalLines.copy();
+        this.foreignTotalLines = other.foreignTotalLines == null ? null : other.foreignTotalLines.copy();
         this.taxAmount = other.taxAmount == null ? null : other.taxAmount.copy();
+        this.foreignTaxAmount = other.foreignTaxAmount == null ? null : other.foreignTaxAmount.copy();
+        this.lineNo = other.lineNo == null ? null : other.lineNo.copy();
+        this.lineNoMr = other.lineNoMr == null ? null : other.lineNoMr.copy();
+        this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
+        this.receiveDate = other.receiveDate == null ? null : other.receiveDate.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.lineNo = other.lineNo == null ? null : other.lineNo.copy();
-        this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
-        this.foreignActual = other.foreignActual == null ? null : other.foreignActual.copy();
-        this.foreignTotalLines = other.foreignTotalLines == null ? null : other.foreignTotalLines.copy();
-        this.foreignTaxAmount = other.foreignTaxAmount == null ? null : other.foreignTaxAmount.copy();
-        this.receiveDate = other.receiveDate == null ? null : other.receiveDate.copy();
         this.verificationId = other.verificationId == null ? null : other.verificationId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.productId = other.productId == null ? null : other.productId.copy();
         this.uomId = other.uomId == null ? null : other.uomId.copy();
-        this.cElementId = other.cElementId == null ? null : other.cElementId.copy();
         this.cCostCenterId = other.cCostCenterId == null ? null : other.cCostCenterId.copy();
         this.cCurrencyId = other.cCurrencyId == null ? null : other.cCurrencyId.copy();
     }
@@ -177,6 +177,14 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.priceActual = priceActual;
     }
 
+    public BigDecimalFilter getForeignActual() {
+        return foreignActual;
+    }
+
+    public void setForeignActual(BigDecimalFilter foreignActual) {
+        this.foreignActual = foreignActual;
+    }
+
     public BigDecimalFilter getTotalLines() {
         return totalLines;
     }
@@ -185,12 +193,60 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.totalLines = totalLines;
     }
 
+    public BigDecimalFilter getForeignTotalLines() {
+        return foreignTotalLines;
+    }
+
+    public void setForeignTotalLines(BigDecimalFilter foreignTotalLines) {
+        this.foreignTotalLines = foreignTotalLines;
+    }
+
     public BigDecimalFilter getTaxAmount() {
         return taxAmount;
     }
 
     public void setTaxAmount(BigDecimalFilter taxAmount) {
         this.taxAmount = taxAmount;
+    }
+
+    public BigDecimalFilter getForeignTaxAmount() {
+        return foreignTaxAmount;
+    }
+
+    public void setForeignTaxAmount(BigDecimalFilter foreignTaxAmount) {
+        this.foreignTaxAmount = foreignTaxAmount;
+    }
+
+    public IntegerFilter getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(IntegerFilter lineNo) {
+        this.lineNo = lineNo;
+    }
+
+    public IntegerFilter getLineNoMr() {
+        return lineNoMr;
+    }
+
+    public void setLineNoMr(IntegerFilter lineNoMr) {
+        this.lineNoMr = lineNoMr;
+    }
+
+    public BigDecimalFilter getConversionRate() {
+        return conversionRate;
+    }
+
+    public void setConversionRate(BigDecimalFilter conversionRate) {
+        this.conversionRate = conversionRate;
+    }
+
+    public LocalDateFilter getReceiveDate() {
+        return receiveDate;
+    }
+
+    public void setReceiveDate(LocalDateFilter receiveDate) {
+        this.receiveDate = receiveDate;
     }
 
     public UUIDFilter getUid() {
@@ -207,54 +263,6 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     public void setActive(BooleanFilter active) {
         this.active = active;
-    }
-
-    public StringFilter getLineNo() {
-        return lineNo;
-    }
-
-    public void setLineNo(StringFilter lineNo) {
-        this.lineNo = lineNo;
-    }
-
-    public StringFilter getConversionRate() {
-        return conversionRate;
-    }
-
-    public void setConversionRate(StringFilter conversionRate) {
-        this.conversionRate = conversionRate;
-    }
-
-    public BigDecimalFilter getForeignActual() {
-        return foreignActual;
-    }
-
-    public void setForeignActual(BigDecimalFilter foreignActual) {
-        this.foreignActual = foreignActual;
-    }
-
-    public BigDecimalFilter getForeignTotalLines() {
-        return foreignTotalLines;
-    }
-
-    public void setForeignTotalLines(BigDecimalFilter foreignTotalLines) {
-        this.foreignTotalLines = foreignTotalLines;
-    }
-
-    public BigDecimalFilter getForeignTaxAmount() {
-        return foreignTaxAmount;
-    }
-
-    public void setForeignTaxAmount(BigDecimalFilter foreignTaxAmount) {
-        this.foreignTaxAmount = foreignTaxAmount;
-    }
-
-    public LocalDateFilter getReceiveDate() {
-        return receiveDate;
-    }
-
-    public void setReceiveDate(LocalDateFilter receiveDate) {
-        this.receiveDate = receiveDate;
     }
 
     public LongFilter getVerificationId() {
@@ -287,14 +295,6 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     public void setUomId(LongFilter uomId) {
         this.uomId = uomId;
-    }
-
-    public LongFilter getCElementId() {
-        return cElementId;
-    }
-
-    public void setCElementId(LongFilter cElementId) {
-        this.cElementId = cElementId;
     }
 
     public LongFilter getCCostCenterId() {
@@ -332,21 +332,21 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
             Objects.equals(description, that.description) &&
             Objects.equals(qty, that.qty) &&
             Objects.equals(priceActual, that.priceActual) &&
+            Objects.equals(foreignActual, that.foreignActual) &&
             Objects.equals(totalLines, that.totalLines) &&
+            Objects.equals(foreignTotalLines, that.foreignTotalLines) &&
             Objects.equals(taxAmount, that.taxAmount) &&
+            Objects.equals(foreignTaxAmount, that.foreignTaxAmount) &&
+            Objects.equals(lineNo, that.lineNo) &&
+            Objects.equals(lineNoMr, that.lineNoMr) &&
+            Objects.equals(conversionRate, that.conversionRate) &&
+            Objects.equals(receiveDate, that.receiveDate) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(lineNo, that.lineNo) &&
-            Objects.equals(conversionRate, that.conversionRate) &&
-            Objects.equals(foreignActual, that.foreignActual) &&
-            Objects.equals(foreignTotalLines, that.foreignTotalLines) &&
-            Objects.equals(foreignTaxAmount, that.foreignTaxAmount) &&
-            Objects.equals(receiveDate, that.receiveDate) &&
             Objects.equals(verificationId, that.verificationId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(productId, that.productId) &&
             Objects.equals(uomId, that.uomId) &&
-            Objects.equals(cElementId, that.cElementId) &&
             Objects.equals(cCostCenterId, that.cCostCenterId) &&
             Objects.equals(cCurrencyId, that.cCurrencyId);
     }
@@ -362,21 +362,21 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         description,
         qty,
         priceActual,
+        foreignActual,
         totalLines,
+        foreignTotalLines,
         taxAmount,
+        foreignTaxAmount,
+        lineNo,
+        lineNoMr,
+        conversionRate,
+        receiveDate,
         uid,
         active,
-        lineNo,
-        conversionRate,
-        foreignActual,
-        foreignTotalLines,
-        foreignTaxAmount,
-        receiveDate,
         verificationId,
         adOrganizationId,
         productId,
         uomId,
-        cElementId,
         cCostCenterId,
         cCurrencyId
         );
@@ -393,21 +393,21 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
                 (description != null ? "description=" + description + ", " : "") +
                 (qty != null ? "qty=" + qty + ", " : "") +
                 (priceActual != null ? "priceActual=" + priceActual + ", " : "") +
+                (foreignActual != null ? "foreignActual=" + foreignActual + ", " : "") +
                 (totalLines != null ? "totalLines=" + totalLines + ", " : "") +
+                (foreignTotalLines != null ? "foreignTotalLines=" + foreignTotalLines + ", " : "") +
                 (taxAmount != null ? "taxAmount=" + taxAmount + ", " : "") +
+                (foreignTaxAmount != null ? "foreignTaxAmount=" + foreignTaxAmount + ", " : "") +
+                (lineNo != null ? "lineNo=" + lineNo + ", " : "") +
+                (lineNoMr != null ? "lineNoMr=" + lineNoMr + ", " : "") +
+                (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
+                (receiveDate != null ? "receiveDate=" + receiveDate + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (lineNo != null ? "lineNo=" + lineNo + ", " : "") +
-                (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
-                (foreignActual != null ? "foreignActual=" + foreignActual + ", " : "") +
-                (foreignTotalLines != null ? "foreignTotalLines=" + foreignTotalLines + ", " : "") +
-                (foreignTaxAmount != null ? "foreignTaxAmount=" + foreignTaxAmount + ", " : "") +
-                (receiveDate != null ? "receiveDate=" + receiveDate + ", " : "") +
                 (verificationId != null ? "verificationId=" + verificationId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (productId != null ? "productId=" + productId + ", " : "") +
                 (uomId != null ? "uomId=" + uomId + ", " : "") +
-                (cElementId != null ? "cElementId=" + cElementId + ", " : "") +
                 (cCostCenterId != null ? "cCostCenterId=" + cCostCenterId + ", " : "") +
                 (cCurrencyId != null ? "cCurrencyId=" + cCurrencyId + ", " : "") +
             "}";

@@ -45,11 +45,19 @@
             ]
         },
         {
+            "fieldName": "foreignActual",
+            "fieldType": "BigDecimal"
+        },
+        {
             "fieldName": "totalLines",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "required"
             ]
+        },
+        {
+            "fieldName": "foreignTotalLines",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "taxAmount",
@@ -59,36 +67,32 @@
             ]
         },
         {
+            "fieldName": "foreignTaxAmount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "lineNo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "lineNoMr",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "conversionRate",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "receiveDate",
+            "fieldType": "LocalDate"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },
         {
             "fieldName": "active",
             "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "lineNo",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "conversionRate",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "foreignActual",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "foreignTotalLines",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "foreignTaxAmount",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "receiveDate",
-            "fieldType": "LocalDate"
         }
     ],
     "relationships": [
@@ -122,14 +126,6 @@
             "otherEntityRelationshipName": "mVerificationLine",
             "relationshipValidateRules": "required",
             "relationshipName": "uom",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cElementValue",
-            "otherEntityRelationshipName": "mVerificationLine",
-            "relationshipValidateRules": "required",
-            "relationshipName": "cElement",
             "otherEntityField": "id"
         },
         {

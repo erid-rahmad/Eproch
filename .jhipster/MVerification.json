@@ -92,6 +92,42 @@
         {
             "fieldName": "dateAcct",
             "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "withholdingAmt",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "invoiceAp",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "docType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "payDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dueDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "payStatus",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "payAmt",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "dateReject",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateApprove",
+            "fieldType": "LocalDate"
         }
     ],
     "relationships": [
@@ -125,6 +161,13 @@
             "otherEntityRelationshipName": "mVerification",
             "relationshipValidateRules": "required",
             "relationshipName": "pic",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mVerification",
+            "relationshipName": "vendorTo",
             "otherEntityField": "id"
         }
     ],

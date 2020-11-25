@@ -81,7 +81,13 @@
                                 <el-input class="form-input" clearable v-model="filter.invoiceNo"></el-input>
                             </el-form-item>
                             <el-form-item label="Tax Invoice No." prop="taxInvoiceNo">
-                                <el-input class="form-input" clearable v-model="filter.taxInvoiceNo"></el-input>
+                                <el-input
+                                    v-model="filter.taxInvoiceNo"
+                                    v-inputmask="{'mask': '99.999.999.9-999.999'}"
+                                    class="form-input"
+                                    clearable
+                                    placeholder="__.___.___._-___.___"
+                                />
                             </el-form-item>
                             <el-form-item label="Status" prop="verificationStatus">
                                 <el-select class="form-input" clearable filterable v-model="filter.verificationStatus" placeholder="Status" >
@@ -193,11 +199,16 @@
                             <el-table-column
                                 min-width="150"
                                 prop="verificationDate"
-                                label="Verification Date"/>
+                                label="Verification Date"
+                            />
                             <el-table-column
                                 min-width="128"
-                                prop="verificationStatus"
-                                label="Status"/>
+                                label="Status"
+                            >
+                                <template slot-scope="{ row }">
+                                    {{ formatDocumentStatus(row.verificationStatus) }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
                                 min-width="128"
                                 prop="invoiceNo"
@@ -207,9 +218,14 @@
                                 prop="invoiceDate"
                                 label="Invoice Date"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="200"
                                 prop="taxInvoice"
-                                label="Tax Invoice"/>
+                                label="Tax Invoice"
+                            >
+                                <template slot-scope="{ row }">
+                                    <span v-inputmask="{'mask': '99.999.999.9-999.999'}">{{ row.taxInvoice }}</span>
+                                </template>
+                            </el-table-column>
                             <el-table-column
                                 min-width="128"
                                 prop="taxDate"
@@ -225,16 +241,28 @@
                                 label="Notes"/>
                             <el-table-column
                                 min-width="128"
-                                prop="taxAmount"
-                                label="Tax Amount"/>
+                                label="Tax Amount"
+                            >
+                                <template slot-scope="{ row }">
+                                    {{ row.taxAmount | formatCurrency }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
-                                prop="totalLines"
-                                label="Total Amount"/>
+                                min-width="200"
+                                label="Total Amount"
+                            >
+                                <template slot-scope="{ row }">
+                                    {{ row.totalLines | formatCurrency }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
-                                prop="grandTotal"
-                                label="Grand Total"/>
+                                min-width="200"
+                                label="Grand Total"
+                            >
+                                <template slot-scope="{ row }">
+                                    {{ row.grandTotal | formatCurrency }}
+                                </template>
+                            </el-table-column>        
 
                         </el-table>
                         <el-pagination

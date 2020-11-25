@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MVerificationTax.
+    -->
+    <changeSet id="20201123064000-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_verification_tax"
+                                 constraintName="fk_m_verification_tax_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="currency_id"
+                                 baseTableName="m_verification_tax"
+                                 constraintName="fk_m_verification_tax_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="tax_category_id"
+                                 baseTableName="m_verification_tax"
+                                 constraintName="fk_m_verification_tax_tax_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_tax_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="cost_center_id"
+                                 baseTableName="m_verification_tax"
+                                 constraintName="fk_m_verification_tax_cost_center_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_cost_center"/>
+
+    </changeSet>
+</databaseChangeLog>

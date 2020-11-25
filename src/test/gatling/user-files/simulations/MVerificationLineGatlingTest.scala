@@ -79,16 +79,17 @@ class MVerificationLineGatlingTest extends Simulation {
                 , "description":"SAMPLE_TEXT"
                 , "qty":null
                 , "priceActual":"0"
+                , "foreignActual":"0"
                 , "totalLines":"0"
+                , "foreignTotalLines":"0"
                 , "taxAmount":"0"
+                , "foreignTaxAmount":"0"
+                , "lineNo":"0"
+                , "lineNoMr":"0"
+                , "conversionRate":"0"
+                , "receiveDate":"2020-01-01T00:00:00.000Z"
                 , "uid":null
                 , "active":null
-                , "lineNo":"SAMPLE_TEXT"
-                , "conversionRate":"SAMPLE_TEXT"
-                , "foreignActual":"0"
-                , "foreignTotalLines":"0"
-                , "foreignTaxAmount":"0"
-                , "receiveDate":"2020-01-01T00:00:00.000Z"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_mVerificationLine_url"))).exitHereIfFailed
