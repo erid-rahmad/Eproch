@@ -244,6 +244,8 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         this.gridData.push(line);
       }
     }
+    this.calculateLines();
+    this.dialogMatchPoVisible = false;
   }
 
   addSelectedLines() {
@@ -259,6 +261,14 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         this.gridData.push(line);
       }
     }
+    this.calculateLines();
+    this.dialogMatchPoVisible = false;
+  }
+
+  private calculateLines() {
+    let totalLines = 0;
+    let totalAmount = 0;
+    let taxAmount = 0;
 
     for (const row of this.gridData) {
       totalLines += row.totalLines;
@@ -269,7 +279,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     this.formUpdate.totalLines = totalLines;
     this.formUpdate.taxAmount = taxAmount;
     this.formUpdate.grandTotal = totalAmount;
-    this.dialogMatchPoVisible = false;
   }
 
   onMatchPoOpen() {
