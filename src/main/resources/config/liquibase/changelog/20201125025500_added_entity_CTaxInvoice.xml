@@ -8,39 +8,18 @@
 
 
     <!--
-        Added the entity MVerificationTax.
+        Added the entity CTaxInvoice.
     -->
-    <changeSet id="20201123064000-1" author="jhipster">
-        <createTable tableName="m_verification_tax">
+    <changeSet id="20201125025500-1" author="jhipster">
+        <createTable tableName="c_tax_invoice">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="tax_period" type="bigint">
+            <column name="start_no" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="trax_code" type="varchar(255)">
+            <column name="end_no" type="varchar(255)">
                 <constraints nullable="false" />
-            </column>
-            <column name="status_code" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-            <column name="doc_code" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-            <column name="year" type="bigint">
-                <constraints nullable="false" />
-            </column>
-            <column name="return_doc_type" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="rep_ser_no" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="tax_exp_code" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-            <column name="date_ssp" type="date">
-                <constraints nullable="true" />
             </column>
             <column name="uid" type="${uuidType}">
                 <constraints nullable="true" />
@@ -51,26 +30,20 @@
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="currency_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
-            <column name="tax_category_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
-            <column name="cost_center_id" type="bigint">
+            <column name="vendor_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
     </changeSet>
 
-    <changeSet id="20201123064000-1-relations" author="jhipster">
+    <changeSet id="20201125025500-1-relations" author="jhipster">
 
     </changeSet>
 
     <!-- Added the entity audit columns -->
-    <changeSet id="20201123064000-audit-1" author="jhipster-entity-audit">
-        <addColumn tableName="m_verification_tax">
+    <changeSet id="20201125025500-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="c_tax_invoice">
             <column name="created_by" type="varchar(50)" defaultValue="system">
                 <constraints nullable="false"/>
             </column>
@@ -91,27 +64,18 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20201123064000-1-data" author="jhipster" context="faker">
+    <changeSet id="20201125025500-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/m_verification_tax.csv"
+                  file="config/liquibase/fake-data/c_tax_invoice.csv"
                   separator=";"
-                  tableName="m_verification_tax">
+                  tableName="c_tax_invoice">
             <column name="id" type="numeric"/>
-            <column name="tax_period" type="numeric"/>
-            <column name="trax_code" type="string"/>
-            <column name="status_code" type="string"/>
-            <column name="doc_code" type="string"/>
-            <column name="year" type="numeric"/>
-            <column name="return_doc_type" type="string"/>
-            <column name="rep_ser_no" type="string"/>
-            <column name="tax_exp_code" type="string"/>
-            <column name="date_ssp" type="date"/>
+            <column name="start_no" type="string"/>
+            <column name="end_no" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
-            <column name="currency_id" type="numeric"/>
-            <column name="tax_category_id" type="numeric"/>
-            <column name="cost_center_id" type="numeric"/>
+            <column name="vendor_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>

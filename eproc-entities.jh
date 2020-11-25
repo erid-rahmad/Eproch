@@ -452,6 +452,13 @@ entity MVerificationTax {
 	active Boolean
 }
 
+entity CTaxInvoice {
+	startNo String required
+	endNo String required
+	uid UUID
+	active Boolean
+}
+
 entity MMatchPO {
 	/** PRSHPN */
 	deliveryNo String maxlength(20)
@@ -699,6 +706,9 @@ relationship ManyToOne {
 	MVerificationTax{currency required} to CCurrency
 	MVerificationTax{taxCategory required} to CTaxCategory
 	MVerificationTax{costCenter required} to CCostCenter
+
+    CTaxInvoice{adOrganization required} to ADOrganization
+    CTaxInvoice{vendor required} to CVendor
 
 	CVendorGroup{adOrganization required} to ADOrganization
 	CVendor{vendorGroup} to CVendorGroup

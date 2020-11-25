@@ -91,6 +91,7 @@
     <include file="config/liquibase/changelog/20201021111600_added_entity_AdUserAuthority.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201021112000_added_entity_CDocumentType.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201123064000_added_entity_MVerificationTax.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201125025500_added_entity_CTaxInvoice.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -165,6 +166,7 @@
     <include file="config/liquibase/changelog/20201021112000_added_entity_constraints_CDocumentType.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201016085600_added_entity_constraints_MMatchPO.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20201123064000_added_entity_constraints_MVerificationTax.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20201125025500_added_entity_constraints_CTaxInvoice.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 
     <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>

@@ -7,13 +7,20 @@ import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
+import ENofaUpdate from './e-nofa-update.vue';
 
-@Component({
-  components: {
+const ENovaProps = Vue.extend({
+  props: {
 
   }
 })
-export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+
+@Component({
+  components: {
+    ENofaUpdate,
+  }
+})
+export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, ENovaProps) {
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -29,34 +36,28 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
   public reverse = false;
   public totalItems = 0;
 
-  private baseApiUrl = "/api/m-match-pos";
+  private baseApiUrl = "/api/c-tax-invoices";
   private baseApiUrlVendor = "/api/c-vendors";
-  private baseApiUrlReference = "/api/ad-references";
-  private baseApiUrlReferenceList = "/api/ad-reference-lists";
 
   private filterQuery: string = '';
   private processing = false;
 
+  private dialogType = "";
   private dialogTitle = "";
   private dialogMessage = "";
   private dialogButton = "";
-  private dialogValue = "";
-  private dialogType = "";
+  private dialogButtonType = "";
+  private dialogButtonIcon = "";
 
   public gridData: Array<any> = [];
-  private totalAmount: number = null;
-  private mMatchType: string = "";
+  private formInputFaktur = {};
 
   selectedRows: any = {};
   public vendorOptions: any = {};
-  public statusOptions: any = {};
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
-  public productReceiveStatus: string = "productReceiveStatus";
   public radioSelection: number = null;
-
-  private isVendor = accountStore.userDetails.cVendorId;
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -67,8 +68,8 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
   }
 
   created(){
-    this.retrieveGetReferences(this.productReceiveStatus);
     this.retrieveAllVendorRecords();
+
   }
 
   public mounted(): void {
@@ -143,30 +144,144 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
 
   public onSelectionChanged(value: any) {
     //this.selectedRowsLine = value;
-    console.log(value);
+    //console.log(value);
+  }
+
+  private closeEVerificationUpdate(){
+    this.formInputFaktur = {};
+    this.dialogConfirmationVisible = false;
+    this.retrieveAllRecords();
   }
 
   public showDialogConfirmation(key: string) {
     if(this.radioSelection != null){
-
-      /* if(key == "detail"){
-        this.index = false;
-      }else if(key == "update"){
+      if(key == "detail"){
+        //this.index = false;
+        this.dialogType = "";
+        this.dialogTitle = "";
+        this.dialogMessage = "";
+        this.dialogButton = "";
+        this.dialogButtonType = "";
+        this.dialogButtonIcon = "";
+      }else if(key == "remove"){
         this.dialogConfirmationVisible = true;
-        this.setVerificationNo = this.gridData[0].verificationNo;
-      } */
-
+        this.dialogType = key;
+        this.dialogTitle = "Confirm delete operation";
+        this.dialogMessage = "Are you sure to delete the selected record?";
+        this.dialogButton = "Remove";
+        this.dialogButtonType = "danger";
+        this.dialogButtonIcon = "el-icon-delete";
+      }
     }else{
-      const message = `Please Selected row`;
-      this.$notify({
-        title: 'Warning',
-        message: message.toString(),
-        type: 'warning',
-        duration: 3000
-      });
+      if((key=="detail")||(key=="remove")){
+        const message = `Please Selected row`;
+        this.$notify({
+          title: 'Warning',
+          message: message.toString(),
+          type: 'warning',
+          duration: 3000
+        });
+      }
+    }
+
+    if(key == "add"){
+      this.dialogType = key;
+      this.dialogTitle = "User Revision";
+      this.dialogMessage = "";
+      this.dialogButton = "Save";
+      this.dialogButtonType = "primary";
+      this.dialogButtonIcon = "el-icon-check";
+
+      this.dialogConfirmationVisible = true;
+    }else if(key == "export"){
+      this.dialogType = key;
+      this.dialogTitle = "Export";
+      this.dialogMessage = "";
+      this.dialogButton = "Export";
+      this.dialogButtonType = "primary";
+      this.dialogButtonIcon = "el-icon-download";
+
+      this.dialogConfirmationVisible = true;
     }
 
   }
+
+  private dialogButtonAction(key){
+    if(key == "add"){
+      console.log(this.formInputFaktur);
+      this.save();
+    }else if(key == "remove"){
+      this.remove();
+    }
+  }
+
+  private save(){
+    this.dynamicWindowService(this.baseApiUrl)
+      .create(this.formInputFaktur)
+      .then(() => {
+
+        this.$notify({
+          title: 'Success',
+          dangerouslyUseHTMLString: true,
+          message: 'Success created.',
+          type: 'success'
+        });
+
+        this.closeEVerificationUpdate();
+
+      }).catch(error => {
+        this.$notify({
+          title: 'Error',
+          dangerouslyUseHTMLString: true,
+          message: error,
+          type: 'error',
+          duration: 3000
+        });
+      }).finally(() => {
+        //this.fullscreenLoading = false;
+        console.log("proses");
+      });
+
+  }
+
+  private remove(){
+    console.log(this.selectedRows);
+    this.dynamicWindowService(this.baseApiUrl)
+      .delete(this.selectedRows.id)
+      .then(() => {
+
+        this.$notify({
+          title: 'Success',
+          dangerouslyUseHTMLString: true,
+          message: 'Success deleted.',
+          type: 'success'
+        });
+
+        this.closeEVerificationUpdate();
+
+      }).catch(error => {
+        this.$notify({
+          title: 'Error',
+          dangerouslyUseHTMLString: true,
+          message: error,
+          type: 'error',
+          duration: 3000
+        });
+      }).finally(() => {
+        //this.fullscreenLoading = false;
+        console.log("proses");
+      });
+  }
+
+  private export(){
+    console.log("export");
+  }
+
+  public dataFormInputFaktur(data?: any){
+    this.formInputFaktur = data;
+  }
+
+
 
   public retrieveAllRecords(): void {
     if ( ! this.baseApiUrl) {
@@ -181,8 +296,8 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
     };
 
     var joinFilterQuery = "";
-    if(this.isVendor){
-      joinFilterQuery = "&cVendorId.equals="+this.isVendor;
+    if(accountStore.userDetails.cVendorId){
+      joinFilterQuery = "&vendorId.equals="+accountStore.userDetails.cVendorId;
     }else{
       joinFilterQuery = "";
     }
@@ -195,15 +310,6 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
       .then(res => {
         console.log(res);
         this.gridData = res.data.map((item: any) => {
-          var matchType;
-          if(item.mMatchType == 1){
-            matchType = "Applied";
-          }else{
-            matchType = "Unapplied";
-          }
-          this.mMatchType = item.mMatchType;
-          console.log(item.mMatchType);
-          this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });
 
@@ -227,42 +333,6 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
   public closeDialog(): void {
     (<any>this.$refs.removeEntity).hide();
     this.retrieveAllRecords();
-  }
-
-  private retrieveGetReferences(param: string) {
-    this.dynamicWindowService(this.baseApiUrlReference)
-    .retrieve({
-      criteriaQuery: [`value.contains=`+param]
-    })
-    .then(res => {
-        let references = res.data.map(item => {
-            return{
-                id: item.id,
-                value: item.value,
-                name: item.name
-            };
-        });
-        this.retrieveGetReferenceLists(references);
-    });
-  }
-
-  private retrieveGetReferenceLists(param: any) {
-    this.dynamicWindowService(this.baseApiUrlReferenceList)
-    .retrieve({
-      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
-    })
-    .then(res => {
-        let referenceList = res.data.map(item => {
-            return{
-                key: item.value,
-                value: item.name
-            };
-        });
-
-        if(param[0].value == this.productReceiveStatus){
-          this.statusOptions = referenceList;
-        }
-    });
   }
 
   public retrieveAllVendorRecords(): void {
@@ -307,46 +377,8 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
 
     this.filterQuery = "";
 
-    if((this.filter.receiveNo != null)&&(this.filter.receiveNo != "")){
-      this.filterQuery = "receiptNo.equals="+this.filter.receiveNo;
-    }
-    if((this.filter.receiveDateFrom != null)&&(this.filter.receiveDateFrom != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "receiptDate.greaterThan="+this.filter.receiveDateFrom;
-    }
-
-    if((this.filter.poNo != null)&&(this.filter.poNo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "poNo.equals="+this.filter.poNo;
-    }
-    if((this.filter.receiveDateTo != null)&&(this.filter.receiveDateTo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "receiptDate.lessThan="+this.filter.receiveDateTo;
-    }
-
-    if((this.filter.deliveryNo != null)&&(this.filter.deliveryNo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "deliveryNo.equals="+this.filter.deliveryNo;
-    }
     if((this.filter.vendor != null)&&(this.filter.vendor != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "cVendorId.equals="+this.filter.vendor;
-    }
-    if((this.filter.productReceiveStatus != null)&&(this.filter.productReceiveStatus != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "mMatchType.equals="+this.filter.productReceiveStatus;
+      this.filterQuery = "vendorId.equals="+this.filter.vendor;
     }
 
     this.retrieveAllRecords();

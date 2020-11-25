@@ -8,6 +8,14 @@
                             style="margin-left: 0px;"
                             size="small"
                             type="primary"
+                            @click="showDialogConfirmation('detail')"
+                            icon="el-icon-check"/>
+
+                        <el-button
+                            class="button"
+                            style="margin-left: 0px;"
+                            size="small"
+                            type="primary"
                             icon="el-icon-search"
                             @click.native.prevent="verificationFilter"/>
 
@@ -15,13 +23,23 @@
                             class="button"
                             style="margin-left: 0px;"
                             size="small"
+                            type="primary"
+                            @click="showDialogConfirmation('add')"
+                            icon="el-icon-plus"/>
+
+                        <el-button
+                            class="button"
+                            style="margin-left: 0px;"
+                            size="small"
                             type="danger"
-                            icon="el-icon-close"/>
+                            @click="showDialogConfirmation('remove')"
+                            icon="el-icon-delete"/>
 
                         <el-button
                             class="button"
                             size="small"
                             type="primary"
+                            @click="showDialogConfirmation('export')"
                             icon="el-icon-download">
                             Export
                         </el-button>
@@ -33,45 +51,7 @@
                     <el-form ref="form"  label-width="170px" size="mini">
                         <el-col :span="8">
 
-                            <el-form-item label="Receive No." prop="receiveNo">
-                                <el-input class="form-input" clearable v-model="filter.receiveNo"/>
-                            </el-form-item>
-                            <el-form-item label="Receive Date - From" prop="receiveDateFrom">
-                                <el-date-picker
-                                    class="form-input"
-                                    clearable
-                                    v-model="filter.receiveDateFrom"
-                                    type="date"
-                                    :format="dateDisplayFormat"
-                                    :value-format="dateValueFormat"
-                                    placeholder="Pick a date"/>
-                            </el-form-item>
-
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="PO No." prop="poNo">
-                                <el-input class="form-input" clearable v-model="filter.poNo"/>
-                            </el-form-item>
-
-                            <el-form-item label="Receive Date - To" prop="receiveDateTo">
-                                <el-date-picker
-                                    class="form-input"
-                                    clearable
-                                    v-model="filter.receiveDateTo"
-                                    type="date"
-                                    :format="dateDisplayFormat"
-                                    :value-format="dateValueFormat"
-                                    placeholder="Pick a date"/>
-                            </el-form-item>
-
-                        </el-col>
-                        <el-col :span="8">
-
-                            <el-form-item v-if="isVendor!=null" label="Delivery No." prop="deliveryNo">
-                                <el-input class="form-input" clearable v-model="filter.deliveryNo"/>
-                            </el-form-item>
-
-                            <el-form-item v-else label="Vendor" prop="vendor">
+                            <el-form-item label="Vendor" prop="vendor">
                                 <el-select class="form-input" clearable filterable v-model="filter.vendor" >
                                     <el-option
                                         v-for="item in vendorOptions"
@@ -81,15 +61,6 @@
                                 </el-select>
                             </el-form-item>
 
-                            <el-form-item label="Status" prop="productReceiveStatus">
-                                <el-select class="form-input" clearable filterable v-model="filter.productReceiveStatus" placeholder="Select" >
-                                    <el-option
-                                        v-for="item in statusOptions"
-                                        :key="item.key"
-                                        :label="item.value"
-                                        :value="item.key" />
-                                </el-select>
-                            </el-form-item>
                         </el-col>
                     </el-form>
 
@@ -123,56 +94,25 @@
 
                             <el-table-column
                                 min-width="130"
-                                v-if="isVendor==null"
-                                prop="cvendorName"
-                                label="Vendor"/>
-
+                                prop="vendorCode"
+                                label="Address ID"/>
                             <el-table-column
                                 min-width="130"
-                                prop="poNo"
-                                label="PO No."/>
-                            <el-table-column
-                                min-width="130"
-                                prop="receiptNo"
-                                label="Receive No."/>
+                                prop="vendorName"
+                                label="Name"/>
                             <el-table-column
                                 min-width="100"
-                                prop="receiptDate"
-                                label="Receive Date"/>
+                                prop="startNo"
+                                label="Start No"/>
 
                             <el-table-column
                                 min-width="128"
-                                prop="deliveryNo"
-                                label="Delivery No."/>
+                                prop="endNo"
+                                label="End No"/>
                             <el-table-column
                                 min-width="128"
-                                prop="description"
-                                label="Description"/>
-                            <el-table-column
-                                min-width="128"
-                                prop="cuomName"
-                                label="UoM"/>
-                            <el-table-column
-                                min-width="128"
-                                prop="qty"
-                                label="Qty"/>
-                            <el-table-column
-                                min-width="128"
-                                prop="priceActual"
-                                label="Unit Price"/>
-
-                            <el-table-column
-                                min-width="128"
-                                prop="totalLines"
-                                label="Taxable Amount"/>
-                            <el-table-column
-                                min-width="128"
-                                prop="taxAmount"
-                                label="PPN"/>
-                            <el-table-column
-                                min-width="128"
-                                prop="mMatchType"
-                                label="Status"/>
+                                prop="createdDate"
+                                label="Created Date"/>
 
                         </el-table>
                         <el-pagination
@@ -190,18 +130,31 @@
 
             <!-- =========================================================================== -->
 
-
-
         <el-dialog
             width="50%"
             :visible.sync="dialogConfirmationVisible"
-            title="Update Voucher Match No.">
+            :title="dialogTitle">
 
             <template>
 
-                <el-row :gutter="16">
+                <el-row v-if="dialogType=='add'" :gutter="16">
+                    <el-col :span="24" :offset="0">
+                        <e-nofa-update
+                            ref="addTaxInvoice"
+                            @get-form="dataFormInputFaktur"
+                        />
+                    </el-col>
+                </el-row>
+
+                <el-row v-if="dialogType=='export'" :gutter="16">
                     <el-col :span="24" :offset="0">
 
+                    </el-col>
+                </el-row>
+
+                <el-row v-else :gutter="16">
+                    <el-col :span="24" :offset="0">
+                        {{ dialogMessage }}
                     </el-col>
                 </el-row>
 
@@ -209,9 +162,10 @@
                     <el-button
                         style="margin-left: 0px;"
                         size="mini"
-                        icon="el-icon-check"
-                        type="primary">
-                            Save
+                        @click="dialogButtonAction(dialogType)"
+                        :icon="dialogButtonIcon"
+                        :type="dialogButtonType">
+                            {{ dialogButton }}
                     </el-button>
                     <el-button
                         style="margin-left: 0px;"
@@ -227,7 +181,7 @@
     </div>
 </template>
 
-<script lang="ts" src="./product-receive-info.component.ts">
+<script lang="ts" src="./e-nofa.component.ts">
 </script>
 
 <style lang="scss">
