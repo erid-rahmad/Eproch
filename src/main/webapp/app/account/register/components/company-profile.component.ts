@@ -252,13 +252,21 @@ export default class CompanyProfile extends CompanyProps {
             };
         });
 
+      if(region.length != 0){
         if(i===1){
           this.regionOptions = region;
+          this.withRegion = true;
+          this.withRegionNpwp = true;
         }else{
           this.regionOptionsNpwp = region;
+          this.withRegionNpwp = true;
         }
 
-        this.checkCountryWithRegion(region[0].key+"_"+region[0].value, countryId, i);
+        this.cityOptions = {};
+
+      }else{
+        this.checkCountryWithRegion(0, countryId, i);
+      }
     });
   }
 
@@ -266,7 +274,10 @@ export default class CompanyProfile extends CompanyProps {
     let regionId = this.printKeyByParam(region);
     let queryWithRegion;
 
-    if(country == 0){
+    if(region != 0){
+      if(this.sameAddress){
+        this.company.npwpRegion = this.printValueByParam(region);
+      }
       queryWithRegion = `regionId.equals=${regionId}`;
     }else{
       queryWithRegion = `countryId.equals=${country}`;
@@ -276,10 +287,6 @@ export default class CompanyProfile extends CompanyProps {
       this.company.city = "";
     }else{
       this.company.npwpCity = "";
-    }
-
-    if(this.sameAddress){
-      this.company.npwpRegion = this.printValueByParam(region);
     }
 
     this.dynamicWindowService('/api/c-cities')
@@ -316,25 +323,14 @@ export default class CompanyProfile extends CompanyProps {
             };
         });
 
-        if(result[0].withRegion){
-          if(i===1){
-            this.withRegion = true;
-            this.withRegionNpwp = true;
-          }else{
-            this.withRegionNpwp = true;
-          }
-          this.cityOptions = {};
+        if(i===1){
+          this.withRegion = false;
+          this.withRegionNpwp = false;
         }else{
-
-          if(i===1){
-            this.withRegion = false;
-            this.withRegionNpwp = false;
-          }else{
-            this.withRegionNpwp = false;
-          }
-
-          this.retrieveCity(region, result[0].id, i);
+          this.withRegionNpwp = false;
         }
+
+        this.retrieveCity(region, result[0].id, i);
     });
   }
 
