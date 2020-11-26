@@ -108,8 +108,7 @@
                                         class="form-input"
                                         v-model="company.npwp"
                                         :disabled="true"
-                                        v-inputmask
-                                        data-inputmask="'mask': '99.999.999.9-999.999'"
+                                        v-inputmask="{'mask': '99.999.999.9-999.999'}"
                                         placeholder="__.___.___._-___.___" />
                                 </el-form-item>
                                 <el-form-item :label="$t('register.basic.basic.npwpName')" prop="npwpName" required>

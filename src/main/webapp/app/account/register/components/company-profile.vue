@@ -91,8 +91,7 @@
                             class="form-input"
                             clearable
                             v-model="company.npwp"
-                            v-inputmask
-                            data-inputmask="'mask': '99.999.999.9-999.999'"
+                            v-inputmask="{'mask': '99.999.999.9-999.999'}"
                             placeholder="__.___.___._-___.___"
                             />
                     </el-form-item>
