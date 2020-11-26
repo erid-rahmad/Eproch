@@ -145,60 +145,58 @@
 
     <el-row :gutter="columnSpacing">
       <el-col :span="12">
-
         <el-row :gutter="columnSpacing">
           <el-col :span="24">
-
-              <el-form-item :label="$t('register.basic.address.address')" prop="address" required>
-                <el-input
-                    class="form-input"
-                    clearable
-                    v-model="company.address"
-                    type="textarea"
-                    @change="changeAddress"
-                    :autosize="{ maxRows: 3 }" />
-              </el-form-item>
-
+            <el-form-item :label="$t('register.basic.address.address')" prop="address" required>
+              <el-input
+                v-model="company.address"
+                :autosize="{ maxRows: 4 }"
+                class="form-input"
+                clearable
+                type="textarea"
+                @change="onAddressChange"
+              />
+            </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="columnSpacing">
           <el-col :span="12">
-
-              <el-form-item :label="$t('register.basic.address.country')" prop="country" required>
-                <el-select
-                  class="form-input"
-                  clearable
-                  filterable
-                  v-model="company.country"
-                  @clear="clearAllOption(1)"
-                  :placeholder="$t('register.form.select')"
-                  @change="retrieveRegion($event, 1)">
-                  <el-option
-                    v-for="item in countryOptions"
-                    :key="item.key"
-                    :label="item.value"
-                    :value="item.key + '_' + item.value"
-                  />
-                </el-select>
-              </el-form-item>
-
+            <el-form-item :label="$t('register.basic.address.country')" prop="country" required>
+              <el-select
+                v-model="company.country"
+                class="form-input"
+                clearable
+                filterable
+                :placeholder="$t('register.form.select')"
+                @change="retrieveRegion($event, 1)"
+                @clear="onCountryClear(1)"
+              >
+                <el-option
+                  v-for="item in countryOptions"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="jsonEncode(item, ['id', 'name', 'withRegion'])"
+                />
+              </el-select>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
 
-              <el-form-item v-if="withRegion" :label="$t('register.basic.address.region')" prop="region" :required="withRegion">
+              <el-form-item v-if="withRegion1" :label="$t('register.basic.address.region')" prop="region" :required="withRegion1">
                 <el-select
+                  v-model="company.region"
                   class="form-input"
                   clearable
                   filterable
-                  v-model="company.region"
-                  @clear="clearOptionRegionCity(1)"
                   :placeholder="$t('register.form.select')"
-                  @change="retrieveCity($event, 0, 1)">
+                  @change="retrieveCity($event, 0, 1)"
+                  @clear="onRegionClear(1)"
+                >
                   <el-option
                     v-for="item in regionOptions"
-                    :key="item.key"
-                    :label="item.value"
-                    :value="item.key + '_' + item.value"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="jsonEncode(item, ['id', 'name'])"
                   />
                 </el-select>
               </el-form-item>
@@ -210,17 +208,19 @@
 
               <el-form-item :label="$t('register.basic.address.city')" prop="city" required>
                 <el-select
+                  v-model="company.city"
                   class="form-input"
                   clearable
                   filterable
-                  v-model="company.city"
-                  @change="changeCity"
-                  :placeholder="$t('register.form.select')">
+                  :placeholder="$t('register.form.select')"
+                  @change="onCityChange"
+                  @clear="onCityClear"
+                >
                   <el-option
                     v-for="item in cityOptions"
-                    :key="item.key"
-                    :label="item.value"
-                    :value="item.key + '_' + item.value"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="jsonEncode(item, ['id', 'name'])"
                   />
                 </el-select>
               </el-form-item>
@@ -233,9 +233,9 @@
                   class="form-input"
                   clearable
                   v-model="company.postalCode"
-                  max="5"
-                  maxlength="5"
-                  @change="changePostalCode" />
+                  max="10"
+                  maxlength="10"
+                  @change="onPostalCodeChange" />
               </el-form-item>
 
           </el-col>
@@ -259,44 +259,43 @@
         </el-row>
         <el-row :gutter="columnSpacing">
           <el-col :span="12">
-
-              <el-form-item :label="$t('register.basic.address.taxCountry')" prop="npwpCountry" required>
-                <el-select
-                  class="form-input"
-                  clearable
-                  filterable
-                  v-model="company.npwpCountry"
-                  @clear="clearAllOption(2)"
-                  :disabled="sameAddress"
-                  :placeholder="$t('register.form.select')"
-                  @change="retrieveRegion($event, 2)">
-                  <el-option
-                    v-for="item in countryOptionsNpwp"
-                    :key="item.key"
-                    :label="item.value"
-                    :value="item.key + '_' + item.value"
-                  />
-                </el-select>
-              </el-form-item>
-
+            <el-form-item :label="$t('register.basic.address.taxCountry')" prop="npwpCountry" required>
+              <el-select
+                v-model="company.npwpCountry"
+                class="form-input"
+                clearable
+                filterable
+                :disabled="sameAddress"
+                :placeholder="$t('register.form.select')"
+                @change="retrieveRegion($event, 2)"
+                @clear="onCountryClear(2)"
+              >
+                <el-option
+                  v-for="item in countryOptions"
+                  :key="item.id"
+                  :label="item.name"
+                    :value="jsonEncode(item, ['id', 'name', 'withRegion'])"
+                />
+              </el-select>
+            </el-form-item>
           </el-col>
           <el-col :span="12">
-
-              <el-form-item v-if="withRegionNpwp" :label="$t('register.basic.address.taxRegion')" prop="npwpRegion" :required="withRegionNpwp">
+              <el-form-item v-if="withRegion2" :label="$t('register.basic.address.taxRegion')" prop="npwpRegion" :required="withRegion2">
                 <el-select
+                  v-model="company.npwpRegion"
                   class="form-input"
                   clearable
                   filterable
-                  v-model="company.npwpRegion"
-                  @clear="clearOptionRegionCity(2)"
                   :disabled="sameAddress"
                   :placeholder="$t('register.form.select')"
-                  @change="retrieveCity($event, 0, 2)">
+                  @clear="onRegionClear(2)"
+                  @change="retrieveCity($event, 0, 2)"
+                >
                   <el-option
                     v-for="item in regionOptionsNpwp"
-                    :key="item.key"
-                    :label="item.value"
-                    :value="item.key + '_' + item.value"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="jsonEncode(item, ['id', 'name'])"
                   />
                 </el-select>
               </el-form-item>
@@ -308,17 +307,18 @@
 
               <el-form-item :label="$t('register.basic.address.taxCity')" prop="npwpCity" required>
                 <el-select
+                  v-model="company.npwpCity"
                   class="form-input"
                   clearable
-                  filterable
-                  v-model="company.npwpCity"
                   :disabled="sameAddress"
-                  :placeholder="$t('register.form.select')">
+                  filterable
+                  :placeholder="$t('register.form.select')"
+                >
                   <el-option
                     v-for="item in cityOptionsNpwp"
-                    :key="item.key"
-                    :label="item.value"
-                    :value="item.key + '_' + item.value"
+                    :key="item.id"
+                    :label="item.name"
+                    :value="jsonEncode(item, ['id', 'name'])"
                   />
                 </el-select>
               </el-form-item>
@@ -331,8 +331,8 @@
                   class="form-input"
                   clearable
                   v-model="company.npwpPostalCode"
-                  max="5"
-                  maxlength="5"
+                  max="10"
+                  maxlength="10"
                   :disabled="sameAddress" />
               </el-form-item>
 
@@ -342,9 +342,9 @@
           <el-col :span="24">
             <el-form-item required>
                 <el-switch
-                    @change="validateSameAddress"
                     v-model="sameAddress"
                     :active-text="$t('register.basic.basic.sameAddress')"
+                    @change="onSameAddressChange"
                 />
             </el-form-item>
           </el-col>

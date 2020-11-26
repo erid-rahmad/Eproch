@@ -1,11 +1,9 @@
-import Vue from 'vue'
-import Component from 'vue-class-component'
-import { ElForm } from 'element-ui/types/form'
-import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store'
-import DynamicWindowService from '../../../core/application-dictionary/components/DynamicWindow/dynamic-window.service';
+import { RegistrationStoreModule as registrationStore } from '@/shared/config/store/registration-store';
+import { ElForm } from 'element-ui/types/form';
+import Vue from 'vue';
+import Component from 'vue-class-component';
 import { Inject } from 'vue-property-decorator';
-import { ElInput } from 'element-ui/types/input';
-import { ElUploadInternalFileDetail, ElUpload, ElUploadInternalRawFile } from 'element-ui/types/upload';
+import DynamicWindowService from '../../../core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 
 const CompanyProps = Vue.extend({
   props: {
@@ -41,8 +39,7 @@ export default class CompanyProfile extends CompanyProps {
   public locationOptions: any = {};
   public companyType: string = "companyType";
   public companyLocation: string = "companyLocation";
-  public companyTaxLocation: string = "Domestic";
-  public companyTypeProfessional: string = "Professional";
+  public companyTaxLocation: string = "DMS";
 
   private limit: number = 1;
   private action: string = "/api/c-attachments/upload";
@@ -52,8 +49,8 @@ export default class CompanyProfile extends CompanyProps {
   private tax: boolean = false;
   private professional: boolean = false;
   private sameAddress: boolean = true;
-  private withRegion: boolean = true;
-  private withRegionNpwp: boolean = true;
+  private withRegion1: boolean = true;
+  private withRegion2: boolean = true;
   private columnSpacing = 32;
   private rules = {
     website: {
@@ -62,10 +59,9 @@ export default class CompanyProfile extends CompanyProps {
   }
 
   created() {
-    this.retrieveGetReferences(this.companyType);
-    this.retrieveGetReferences(this.companyLocation);
-    this.retrieveCountry(1);
-    this.retrieveCountry(2);
+    this.retrieveReferences(this.companyType);
+    this.retrieveReferences(this.companyLocation);
+    this.retrieveCountry();
   }
 
   mounted() {
@@ -74,11 +70,13 @@ export default class CompanyProfile extends CompanyProps {
 
   public handleTypeChange(value: string) {
     registrationStore.setVendorType(value);
-    if(value == this.companyTypeProfessional){
+    console.log('type changed', value);
+    if (value.toUpperCase() === 'PRF') {
       this.professional = true;
-    }else{
+    } else {
       this.professional = false;
     }
+    console.log('isProfessional', this.professional);
   }
 
   public handleLocationChange(value: string){
@@ -94,26 +92,21 @@ export default class CompanyProfile extends CompanyProps {
   validate(formIndex: number) {
     if (formIndex === 1) {
       (this.$refs.company as ElForm).validate((passed, errors) => {
+        this.company.countryName = this.getJsonField(this.company.country, 'name');
+        this.company.regionName = this.getJsonField(this.company.region, 'name');
+        this.company.cityName = this.getJsonField(this.company.city, 'name');
+        this.company.cityId = this.getJsonField(this.company.city, 'id');
 
-        this.company.countryName = this.printValueByParam(this.company.country);
-        this.company.regionName = this.printValueByParam(this.company.region);
-        this.company.cityName = this.printValueByParam(this.company.city);
-        this.company.countryId = this.printKeyByParam(this.company.country);
-        this.company.regionId = this.printKeyByParam(this.company.region);
-        this.company.cityId = this.printKeyByParam(this.company.city);
-
-        this.company.npwpCountryName = this.printValueByParam(this.company.npwpCountry);
-        this.company.npwpRegionName = this.printValueByParam(this.company.npwpRegion);
-        this.company.npwpCityName = this.printValueByParam(this.company.npwpCity);
-        this.company.npwpCountryId = this.printKeyByParam(this.company.npwpCountry);
-        this.company.npwpRegionId = this.printKeyByParam(this.company.npwpRegion);
-        this.company.npwpCityId = this.printKeyByParam(this.company.npwpCity);
+        this.company.npwpCountryName = this.getJsonField(this.company.npwpCountry, 'name');
+        this.company.npwpRegionName = this.getJsonField(this.company.npwpRegion, 'name');
+        this.company.npwpCityName = this.getJsonField(this.company.npwpCity, 'name');
+        this.company.npwpCityId = this.getJsonField(this.company.npwpCity, 'id');
 
         this.company.sameAddress = this.sameAddress;
 
-        if(this.companyTaxLocation == this.company.location){
+        if (this.companyTaxLocation == this.company.location) {
           this.company.tin = "";
-        }else{
+        } else {
           this.company.npwp = "";
           this.company.npwpName = "";
           this.company.file = "";
@@ -121,239 +114,250 @@ export default class CompanyProfile extends CompanyProps {
         }
 
         this.eventBus.$emit('step-validated', { passed, errors })
-      })
+      });
     }
   }
 
-  private printValueByParam(row: any){
-    if(row){
-      let value, key;
-      key = parseInt(row.substring( 0, row.indexOf('_')));
-      value = row.substring(row.indexOf('_') + 1, row.length);
-      return value;
+  jsonEncode(data: any, fields: string[]) {
+    const record: Record<string, any> = {};
+    for (const field of fields) {
+      record[field] = data[field];
     }
+    return JSON.stringify(record);
   }
 
-  private printKeyByParam(row: any){
-    if(row){
-      let value, key;
-      key = parseInt(row.substring( 0, row.indexOf('_')));
-      return key;
+  private getJsonField(json: string, field: string) {
+    if (json) {
+      const data = JSON.parse(json);
+      return data[field];
     }
+    return null;
   }
 
-  private changeAddress(value: string){
-    if(this.sameAddress){
+  onAddressChange(value: string) {
+    if (this.sameAddress) {
       this.company.npwpAddress = value;
     }
   }
 
-  private changeCity(value: string){
-    if(this.sameAddress){
-      this.company.npwpCity = this.printValueByParam(value);
+  onCityChange(value: string) {
+    if (this.sameAddress) {
+      this.company.npwpCity = value;
     }
   }
 
-  private changePostalCode(value: string){
-    if(this.sameAddress){
+  onPostalCodeChange(value: string) {
+    if (this.sameAddress) {
       this.company.npwpPostalCode = value;
     }
   }
 
-  private validateSameAddress(value: string){
-    if(value){
+  onSameAddressChange(value: boolean) {
+    if (value) {
       this.company.npwpAddress = this.company.address;
       this.company.npwpCountry = this.company.country;
-      this.company.npwpRegion = this.printValueByParam(this.company.region);
-      this.company.npwpCity = this.printValueByParam(this.company.city);
+      this.company.npwpPostalCode = this.company.postalCode;
+
+      this.withRegion2 = this.withRegion1;
+      this.company.npwpRegion = this.company.region;
+      this.regionOptionsNpwp = this.regionOptions;
+
+      this.company.npwpCity = this.company.city;
+      this.cityOptionsNpwp = this.cityOptions;
     }
   }
 
-  private retrieveGetReferences(param: string) {
+  private retrieveReferences(param: string) {
     this.dynamicWindowService('/api/ad-references')
-    .retrieve({
-      criteriaQuery: [`value.contains=`+param]
-    })
-    .then(res => {
+      .retrieve({
+        criteriaQuery: [`value.contains=` + param]
+      })
+      .then(res => {
         let references = res.data.map(item => {
-            return{
-                id: item.id,
-                value: item.value,
-                name: item.name
-            };
+          return {
+            id: item.id,
+            value: item.value,
+            name: item.name
+          };
         });
-        this.retrieveGetReferenceLists(references);
-    });
+        this.retrieveReferenceLists(references);
+      });
   }
 
-  private retrieveGetReferenceLists(param: any) {
+  private retrieveReferenceLists(param: any) {
     this.dynamicWindowService('/api/ad-reference-lists')
-    .retrieve({
-      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
-    })
-    .then(res => {
+      .retrieve({
+        criteriaQuery: [`adReferenceId.equals=` + param[0].id]
+      })
+      .then(res => {
         let referenceList = res.data.map(item => {
-            return{
-                key: item.value,
-                value: item.name
-            };
+          return {
+            key: item.value,
+            value: item.name
+          };
         });
 
-        if(param[0].value == this.companyType){
+        if (param[0].value == this.companyType) {
           this.typeOptions = referenceList;
-        }else if(param[0].value == this.companyLocation){
+        } else if (param[0].value == this.companyLocation) {
           this.locationOptions = referenceList;
         }
-    });
+      });
   }
 
-  private retrieveCountry(i) {
+  private retrieveCountry() {
     this.dynamicWindowService('/api/c-countries')
-    .retrieve()
-    .then(res => {
-        let country = res.data.map(item => {
-            return{
-                key: item.id,
-                value: item.name
-            };
-        });
-
-        if(i===1){
-          this.countryOptions = country;
-        }else{
-          this.countryOptionsNpwp = country;
+      .retrieve({
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['name']
         }
-    });
+      })
+      .then(res => {
+        this.countryOptions = res.data;
+      });
   }
 
-  private retrieveRegion(value, i) {
-    let countryId = this.printKeyByParam(value);
-    if(i===1){
-      this.company.region = "";
-      this.company.city = "";
-    }else{
-      this.company.npwpRegion = "";
-      this.company.npwpCity = "";
+  /**
+   * Fetch the region for the selected country.
+   * @param value JSON-encoded value contains: id, name, withRegion
+   * @param i 1 for the main address, 2 for the NPWP address.
+   */
+  retrieveRegion(value: string, i: number) {
+    if (!value) {
+      return;
     }
 
-    if(this.sameAddress){
+    const country = JSON.parse(value);
+    this[`withRegion${i}`] = country.withRegion;
+    this.onCountryClear(i);
+
+    if (this.sameAddress) {
+      this.company.npwpCountry = value;
+      this.withRegion2 = this.withRegion1;
+    }
+
+    // Country without region should immediatelly retrieve the related cities.
+    if (!this[`withRegion${i}`]) {
+      this.retrieveCity(null, country.id, i);
+      return;
+    }
+
+    if (i === 1) {
+      this.company.region = '';
+      this.company.city = '';
+    } else {
+      this.company.npwpRegion = '';
+      this.company.npwpCity = '';
+    }
+
+    if (this.sameAddress) {
       this.company.npwpCountry = value;
     }
 
     this.dynamicWindowService('/api/c-regions')
-    .retrieve({
-        criteriaQuery: [`countryId.equals=${countryId}`]
-    })
-    .then(res => {
-        let region = res.data.map(item => {
-            return{
-              key: item.id,
-              value: item.name
-            };
-        });
-
-        if(i===1){
-          this.regionOptions = region;
-        }else{
-          this.regionOptionsNpwp = region;
+      .retrieve({
+        criteriaQuery: [`countryId.equals=${country.id}`],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['name']
         }
-
-        this.checkCountryWithRegion(region[0].key+"_"+region[0].value, countryId, i);
-    });
+      })
+      .then(res => {
+        if (i === 1) {
+          this.regionOptions = res.data;
+        }
+        if (i === 2 || this.sameAddress) {
+          this.regionOptionsNpwp = res.data;
+        }
+      });
   }
 
-  private retrieveCity(region, country, i) {
-    let regionId = this.printKeyByParam(region);
-    let queryWithRegion;
-
-    if(country == 0){
-      queryWithRegion = `regionId.equals=${regionId}`;
-    }else{
-      queryWithRegion = `countryId.equals=${country}`;
+  private retrieveCity(value: string, countryId: number, i: number) {
+    if (!countryId && !value) {
+      return;
     }
 
-    if(i===1){
-      this.company.city = "";
-    }else{
-      this.company.npwpCity = "";
+    let filterQuery: string;
+    this.onRegionClear(i);
+
+    if (countryId) {
+      filterQuery = `countryId.equals=${countryId}`;
+    } else if (value !== null) {
+      const region = JSON.parse(value);
+      filterQuery = `regionId.equals=${region.id}`;
     }
 
-    if(this.sameAddress){
-      this.company.npwpRegion = this.printValueByParam(region);
+    if (i === 1) {
+      this.$set(this.company, 'city', null);
+      if (this.sameAddress)
+        this.$set(this.company, 'npwpCity', null);
+    } else {
+      this.$set(this.company, 'npwpCity', null);
+    }
+
+    if (this.sameAddress) {
+      this.company.npwpRegion = value;
     }
 
     this.dynamicWindowService('/api/c-cities')
-    .retrieve({
-        criteriaQuery: [queryWithRegion]
-    })
-    .then(res => {
-        let city = res.data.map(item => {
-            return{
-              key: item.id,
-              value: item.name
-            };
-        });
-
-        if(i===1){
-          this.cityOptions = city;
-        }else{
-          this.cityOptionsNpwp = city;
+      .retrieve({
+        criteriaQuery: filterQuery || null,
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['name']
         }
-    });
+      })
+      .then(res => {
+        if (i === 1) {
+          this.cityOptions = res.data;
+        }
+        if (i === 2 || this.sameAddress) {
+          this.cityOptionsNpwp = res.data;
+        }
+      });
   }
 
-  private checkCountryWithRegion(region, country, i) {
+  onCountryClear(i: number) {
+    if (i === 1) {
+      this.clearField('region');
+      this.onRegionClear(1);
+      this.$set(this.company, 'region', null);
+      this.$set(this.company, 'city', null);
 
-    this.dynamicWindowService('/api/c-countries')
-    .retrieve({
-        criteriaQuery: [`id.equals=${country}`]
-    })
-    .then(res => {
-        let result = res.data.map(item => {
-            return{
-              id: item.id,
-              withRegion: item.withRegion
-            };
-        });
-
-        if(result[0].withRegion){
-          if(i===1){
-            this.withRegion = true;
-            this.withRegionNpwp = true;
-          }else{
-            this.withRegionNpwp = true;
-          }
-          this.cityOptions = {};
-        }else{
-
-          if(i===1){
-            this.withRegion = false;
-            this.withRegionNpwp = false;
-          }else{
-            this.withRegionNpwp = false;
-          }
-
-          this.retrieveCity(region, result[0].id, i);
-        }
-    });
-  }
-
-  private clearAllOption(i){
-    if(i == 1){
-      this.regionOptions = {};
-      this.cityOptions = {};
-    }else{
-      this.regionOptionsNpwp = {};
-      this.cityOptionsNpwp = {};
+      if (this.sameAddress) {
+        this.clearField('npwpCountry');
+        this.onCountryClear(2);
+      }
+    } else {
+      this.onRegionClear(2);
     }
   }
 
-  private clearOptionRegionCity(i){
-    if(i == 1){
-      this.cityOptions = {};
-    }else{
-      this.cityOptionsNpwp = {};
+  onRegionClear(i: number) {
+    if (i === 1) {
+      if (this.sameAddress) {
+        this.clearField('npwpRegion');
+      }
+
+      this.clearField('city');
+      this.onCityClear();
+    } else {
+      this.clearField('npwpCity');
     }
+  }
+
+  onCityClear() {
+    if (this.sameAddress) {
+      this.clearField('npwpCity');
+    }
+  }
+
+  private clearField(field: string) {
+    this.$set(this.company, field, null);
   }
 
   get fileList() {

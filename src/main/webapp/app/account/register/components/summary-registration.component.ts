@@ -67,8 +67,8 @@ export default class SummaryRegistration extends SummaryRegistrationProps {
   public businessCategoryOptions = [];
   private npwp:boolean;
   private professional:boolean;
-  private companyLocation: string = "Domestic";
-  public companyTypeProfessional: string = "Professional";
+  private companyLocation: string = "DMS";
+  public companyTypeProfessional: string = "PRF";
 
   get eInvoice() {
     return registrationStore.eInvoice;
