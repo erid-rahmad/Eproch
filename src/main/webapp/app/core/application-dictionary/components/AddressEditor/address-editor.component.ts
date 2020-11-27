@@ -3,7 +3,7 @@ import { AccountStoreModule as accountStore } from '@/shared/config/store/accoun
 import { ElForm } from 'element-ui/types/form';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Inject } from 'vue-property-decorator';
+import { Inject, Watch } from 'vue-property-decorator';
 
 const AddressEditorProps = Vue.extend({
   props: {
@@ -31,6 +31,13 @@ export default class AddressEditor extends AddressEditorProps {
   regions: any[] = [];
   country = null;
   region = null;
+
+  @Watch('value')
+  onValueChange(value: number) {
+    if (value) {
+      this.initForm();
+    }
+  }
 
   created() {
     this.retrieveCountries();

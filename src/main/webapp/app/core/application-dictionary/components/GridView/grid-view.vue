@@ -175,6 +175,7 @@
             />
             <el-date-picker
               v-else-if="isDateField(field)"
+              v-show="displayed(row, field)"
               :ref="column.property"
               v-model="row[column.property]"
               size="mini"

@@ -11,6 +11,7 @@ import Component from 'vue-class-component';
 import { Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import CalloutMixin from '../../mixins/CalloutMixin';
+import AddressEditor from "../AddressEditor/address-editor.vue";
 import ContextVariableAccessor from '../ContextVariableAccessor';
 
 const DetailViewProps = Vue.extend({
@@ -38,6 +39,9 @@ const DetailViewProps = Vue.extend({
 });
 
 @Component({
+  components: {
+    AddressEditor
+  },
   methods: {
     isStringField: isStringField,
     isPasswordField: isPasswordField,
@@ -433,5 +437,14 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   public isDateTimeField!: (field: IADField) => boolean;
   public isBooleanField!: (field: IADField) => boolean;
   public isActivatorSwitch!: (field: IADField) => boolean;
+
+  isAddressField(field: IADField) {
+    if (field.virtualColumnName) {
+      return false;
+    }
+
+    const reference = field.adReference || field.adColumn.adReference;
+    return reference?.value === 'address';
+  }
 
 }
