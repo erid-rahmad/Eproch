@@ -116,6 +116,8 @@
             <column name="ad_organization_id" type="numeric"/>
             <column name="product_id" type="numeric"/>
             <column name="uom_id" type="numeric"/>
+            <column name="c_cost_center_id" type="numeric"/>
+            <column name="c_currency_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
@@ -213,6 +215,19 @@
                 <constraints nullable="true" />
             </column>
         </addColumn>
+    </changeSet>
+    
+    <changeSet id="20201128044800" author="Ananta Aryadewa">
+        <setColumnRemarks tableName="m_verification_line" columnName="description" remarks="VDVRMK Supplier&apos;s remark." />
+        <setColumnRemarks tableName="m_verification_line" columnName="price_actual" remarks="VDPRRC Unit price." />
+        <setColumnRemarks tableName="m_verification_line" columnName="foreign_actual" remarks="VDFRRC Unit price in foreign currency." />
+        <setColumnRemarks tableName="m_verification_line" columnName="total_lines" remarks="VDAREC Receipt amount." />
+        <setColumnRemarks tableName="m_verification_line" columnName="foreign_total_lines" remarks="VDRCDJ Receipt date." />
+        <setColumnRemarks tableName="m_verification_line" columnName="tax_amount" remarks="VDSTAM Tax amount." />
+        <setColumnRemarks tableName="m_verification_line" columnName="foreign_tax_amount" remarks="VDCTAM Tax amount in foreign currency." />
+        <setColumnRemarks tableName="m_verification_line" columnName="line_no" remarks="VDLINN Invoice verification line no." />
+        <setColumnRemarks tableName="m_verification_line" columnName="line_no_mr" remarks="VDLNID Receipt line no." />
+        <setColumnRemarks tableName="m_verification_line" columnName="receive_date" remarks="VDRCDJ Receipt date." />
     </changeSet>
 
 </databaseChangeLog>

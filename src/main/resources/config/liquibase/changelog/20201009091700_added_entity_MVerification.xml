@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity MVerification.
     -->
@@ -100,18 +100,34 @@
             <column name="verification_no" type="string"/>
             <column name="verification_date" type="date"/>
             <column name="description" type="string"/>
+            <column name="receipt_no" type="string"/>
             <column name="invoice_no" type="string"/>
             <column name="invoice_date" type="date"/>
             <column name="tax_invoice" type="string"/>
             <column name="tax_date" type="date"/>
             <column name="total_lines" type="numeric"/>
-            <column name="tax_amount" type="numeric"/>
             <column name="grand_total" type="numeric"/>
+            <column name="foreign_grand_total" type="numeric"/>
+            <column name="tax_amount" type="numeric"/>
+            <column name="foreign_tax_amount" type="numeric"/>
+            <column name="date_submit" type="date"/>
+            <column name="date_acct" type="date"/>
+            <column name="withholding_amt" type="numeric"/>
+            <column name="invoice_ap" type="string"/>
+            <column name="doc_type" type="string"/>
+            <column name="pay_date" type="date"/>
+            <column name="due_date" type="date"/>
+            <column name="pay_amt" type="numeric"/>
+            <column name="date_reject" type="date"/>
+            <column name="date_approve" type="date"/>
             <column name="verification_status" type="string"/>
+            <column name="pay_status" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="currency_id" type="numeric"/>
+            <column name="vendor_id" type="numeric"/>
+            <column name="pic_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
@@ -179,6 +195,31 @@
                 <constraints nullable="true" />
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20201128052300" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification">
+            <column name="receipt_no" type="varchar(20)" remarks="VHANUR">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <renameColumn tableName="m_verification" oldColumnName="data_submit" newColumnName="date_submit" remarks="VHDTSUB"/>
+        <addNotNullConstraint tableName="m_verification" columnName="foreign_grand_total" />
+        <setColumnRemarks tableName="m_verification" columnName="verification_no" remarks="VHDOCM Invoice verification document no." />
+        <setColumnRemarks tableName="m_verification" columnName="verification_date" remarks="VHTRDJ Transaction date" />
+        <setColumnRemarks tableName="m_verification" columnName="invoice_date" remarks="VHDIVJ" />
+        <setColumnRemarks tableName="m_verification" columnName="tax_date" remarks="VHDSV Date service/tax." />
+        <setColumnRemarks tableName="m_verification" columnName="total_lines" remarks="VHAEXP Total amount of receipt lines." />
+        <setColumnRemarks tableName="m_verification" columnName="grand_total" remarks="VHAREC Receipt amount (base currency)." />
+        <setColumnRemarks tableName="m_verification" columnName="foreign_grand_total" remarks="VHFREC Receipt amount in foreign currency." />
+        <setColumnRemarks tableName="m_verification" columnName="tax_amount" remarks="VHSTAM Tax amount (base currency)." />
+        <setColumnRemarks tableName="m_verification" columnName="foreign_tax_amount" remarks="VHCTAM Tax amount in foreign currency." />
+        <setColumnRemarks tableName="m_verification" columnName="date_approve" remarks="VHAPRD" />
+        <setColumnRemarks tableName="m_verification" columnName="date_reject" remarks="VHRJDJ" />
+        <setColumnRemarks tableName="m_verification" columnName="date_acct" remarks="VHDGJ GL date." />
+        <setColumnRemarks tableName="m_verification" columnName="pay_date" remarks="VHDMTJ Payment date." />
+        <setColumnRemarks tableName="m_verification" columnName="due_date" remarks="VHDDJ Promised date/payment schedule." />
+        <setColumnRemarks tableName="m_verification" columnName="pay_amt" remarks="VHAA Total actual amount." />
     </changeSet>
 
 </databaseChangeLog>

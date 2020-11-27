@@ -9,6 +9,8 @@ import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVerificationLine} entity.
  */
@@ -30,32 +32,72 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     @NotNull
     private String deliveryNo;
 
+    /**
+     * VDVRMK Supplier's remark.
+     */
+    @ApiModelProperty(value = "VDVRMK Supplier's remark.")
     private String description;
 
     @NotNull
     private Long qty;
 
+    /**
+     * VDPRRC Unit price.
+     */
     @NotNull
+    @ApiModelProperty(value = "VDPRRC Unit price.", required = true)
     private BigDecimal priceActual;
 
+    /**
+     * VDFRRC Unit price in foreign currency.
+     */
+    @ApiModelProperty(value = "VDFRRC Unit price in foreign currency.")
     private BigDecimal foreignActual;
 
+    /**
+     * VDAREC Receipt amount.
+     */
     @NotNull
+    @ApiModelProperty(value = "VDAREC Receipt amount.", required = true)
     private BigDecimal totalLines;
 
+    /**
+     * VDFREC Receipt amount in foreign currency.
+     */
+    @ApiModelProperty(value = "VDFREC Receipt amount in foreign currency.")
     private BigDecimal foreignTotalLines;
 
+    /**
+     * VDSTAM Tax amount.
+     */
     @NotNull
+    @ApiModelProperty(value = "VDSTAM Tax amount.", required = true)
     private BigDecimal taxAmount;
 
+    /**
+     * VDCTAM Tax amount in foreign currency.
+     */
+    @ApiModelProperty(value = "VDCTAM Tax amount in foreign currency.")
     private BigDecimal foreignTaxAmount;
 
+    /**
+     * VDLINN Invoice verification line no.
+     */
+    @ApiModelProperty(value = "VDLINN Invoice verification line no.")
     private Integer lineNo;
 
+    /**
+     * VDLNID Receipt line no.
+     */
+    @ApiModelProperty(value = "VDLNID Receipt line no.")
     private Integer lineNoMr;
 
     private BigDecimal conversionRate;
 
+    /**
+     * VDRCDJ Receipt date.
+     */
+    @ApiModelProperty(value = "VDRCDJ Receipt date.")
     @JsonProperty("receiptDate")
     private LocalDate receiveDate;
 
@@ -64,6 +106,7 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     private UUID uid;
 
     private Boolean active;
+
 
     private Long verificationId;
     private String verificationName;

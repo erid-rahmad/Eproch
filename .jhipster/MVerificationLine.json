@@ -28,6 +28,7 @@
         },
         {
             "fieldName": "description",
+            "javadoc": "VDVRMK Supplier's remark.",
             "fieldType": "String"
         },
         {
@@ -39,6 +40,7 @@
         },
         {
             "fieldName": "priceActual",
+            "javadoc": "VDPRRC Unit price.",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "required"
@@ -46,10 +48,12 @@
         },
         {
             "fieldName": "foreignActual",
+            "javadoc": "VDFRRC Unit price in foreign currency.",
             "fieldType": "BigDecimal"
         },
         {
             "fieldName": "totalLines",
+            "javadoc": "VDAREC Receipt amount.",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "required"
@@ -57,10 +61,12 @@
         },
         {
             "fieldName": "foreignTotalLines",
+            "javadoc": "VDFREC Receipt amount in foreign currency.",
             "fieldType": "BigDecimal"
         },
         {
             "fieldName": "taxAmount",
+            "javadoc": "VDSTAM Tax amount.",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [
                 "required"
@@ -68,14 +74,17 @@
         },
         {
             "fieldName": "foreignTaxAmount",
+            "javadoc": "VDCTAM Tax amount in foreign currency.",
             "fieldType": "BigDecimal"
         },
         {
             "fieldName": "lineNo",
+            "javadoc": "VDLINN Invoice verification line no.",
             "fieldType": "Integer"
         },
         {
             "fieldName": "lineNoMr",
+            "javadoc": "VDLNID Receipt line no.",
             "fieldType": "Integer"
         },
         {
@@ -84,6 +93,7 @@
         },
         {
             "fieldName": "receiveDate",
+            "javadoc": "VDRCDJ Receipt date.",
             "fieldType": "LocalDate"
         },
         {

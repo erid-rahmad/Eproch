@@ -75,29 +75,30 @@ class MVerificationGatlingTest extends Simulation {
                 , "verificationNo":"SAMPLE_TEXT"
                 , "verificationDate":"2020-01-01T00:00:00.000Z"
                 , "description":"SAMPLE_TEXT"
+                , "receiptNo":"SAMPLE_TEXT"
                 , "invoiceNo":"SAMPLE_TEXT"
                 , "invoiceDate":"2020-01-01T00:00:00.000Z"
                 , "taxInvoice":"SAMPLE_TEXT"
                 , "taxDate":"2020-01-01T00:00:00.000Z"
                 , "totalLines":"0"
-                , "taxAmount":"0"
                 , "grandTotal":"0"
-                , "verificationStatus":"SAMPLE_TEXT"
-                , "uid":null
-                , "active":null
                 , "foreignGrandTotal":"0"
+                , "taxAmount":"0"
                 , "foreignTaxAmount":"0"
-                , "dataSubmit":"2020-01-01T00:00:00.000Z"
+                , "dateSubmit":"2020-01-01T00:00:00.000Z"
                 , "dateAcct":"2020-01-01T00:00:00.000Z"
                 , "withholdingAmt":"0"
                 , "invoiceAp":"SAMPLE_TEXT"
                 , "docType":"SAMPLE_TEXT"
                 , "payDate":"2020-01-01T00:00:00.000Z"
                 , "dueDate":"2020-01-01T00:00:00.000Z"
-                , "payStatus":"SAMPLE_TEXT"
                 , "payAmt":"0"
                 , "dateReject":"2020-01-01T00:00:00.000Z"
                 , "dateApprove":"2020-01-01T00:00:00.000Z"
+                , "verificationStatus":"SAMPLE_TEXT"
+                , "payStatus":"SAMPLE_TEXT"
+                , "uid":null
+                , "active":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_mVerification_url"))).exitHereIfFailed

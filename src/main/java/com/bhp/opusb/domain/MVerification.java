@@ -16,6 +16,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -37,10 +38,16 @@ public class MVerification extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    /**
+     * VHDOCM Invoice verification document no.
+     */
     @NotNull
     @Column(name = "verification_no", nullable = false)
     private String verificationNo;
 
+    /**
+     * VHTRDJ Transaction date
+     */
     @NotNull
     @Column(name = "verification_date", nullable = false)
     private LocalDate verificationDate;
@@ -48,10 +55,20 @@ public class MVerification extends AbstractAuditingEntity {
     @Column(name = "description")
     private String description;
 
+    /**
+     * VHANUR
+     */
+    @Size(max = 20)
+    @Column(name = "receipt_no", length = 20)
+    private String receiptNo;
+
     @NotNull
     @Column(name = "invoice_no", nullable = false)
     private String invoiceNo;
 
+    /**
+     * VHDIVJ
+     */
     @NotNull
     @Column(name = "invoice_date", nullable = false)
     private LocalDate invoiceDate;
@@ -59,40 +76,54 @@ public class MVerification extends AbstractAuditingEntity {
     @Column(name = "tax_invoice")
     private String taxInvoice;
 
+    /**
+     * VHDSV Date service/tax.
+     */
     @Column(name = "tax_date")
     private LocalDate taxDate;
 
+    /**
+     * VHAEXP Total amount of receipt lines.
+     */
     @NotNull
     @Column(name = "total_lines", precision = 21, scale = 2, nullable = false)
     private BigDecimal totalLines;
 
-    @NotNull
-    @Column(name = "tax_amount", precision = 21, scale = 2, nullable = false)
-    private BigDecimal taxAmount;
-
+    /**
+     * VHAREC Receipt amount (base currency).
+     */
     @NotNull
     @Column(name = "grand_total", precision = 21, scale = 2, nullable = false)
     private BigDecimal grandTotal;
 
-    @NotNull
-    @Column(name = "verification_status", nullable = false)
-    private String verificationStatus;
-
-    @Column(name = "uid")
-    private UUID uid;
-
-    @Column(name = "active")
-    private Boolean active;
-
+    /**
+     * VHFREC Receipt amount in foreign currency.
+     */
     @Column(name = "foreign_grand_total", precision = 21, scale = 2)
     private BigDecimal foreignGrandTotal;
 
+    /**
+     * VHSTAM Tax amount (base currency).
+     */
+    @NotNull
+    @Column(name = "tax_amount", precision = 21, scale = 2, nullable = false)
+    private BigDecimal taxAmount;
+
+    /**
+     * VHCTAM Tax amount in foreign currency.
+     */
     @Column(name = "foreign_tax_amount", precision = 21, scale = 2)
     private BigDecimal foreignTaxAmount;
 
-    @Column(name = "data_submit")
-    private LocalDate dataSubmit;
+    /**
+     * VHDTSUB
+     */
+    @Column(name = "date_submit")
+    private LocalDate dateSubmit;
 
+    /**
+     * VHDGJ GL date.
+     */
     @Column(name = "date_acct")
     private LocalDate dateAcct;
 
@@ -105,23 +136,48 @@ public class MVerification extends AbstractAuditingEntity {
     @Column(name = "doc_type")
     private String docType;
 
+    /**
+     * VHDMTJ Payment date.
+     */
     @Column(name = "pay_date")
     private LocalDate payDate;
 
+    /**
+     * VHDDJ Promised date/payment schedule.
+     */
     @Column(name = "due_date")
     private LocalDate dueDate;
+
+    /**
+     * VHAA Total actual amount.
+     */
+    @Column(name = "pay_amt", precision = 21, scale = 2)
+    private BigDecimal payAmt;
+
+    /**
+     * VHRJDJ
+     */
+    @Column(name = "date_reject")
+    private LocalDate dateReject;
+
+    /**
+     * VHAPRD
+     */
+    @Column(name = "date_approve")
+    private LocalDate dateApprove;
+
+    @NotNull
+    @Column(name = "verification_status", nullable = false)
+    private String verificationStatus;
 
     @Column(name = "pay_status")
     private String payStatus;
 
-    @Column(name = "pay_amt", precision = 21, scale = 2)
-    private BigDecimal payAmt;
+    @Column(name = "uid")
+    private UUID uid;
 
-    @Column(name = "date_reject")
-    private LocalDate dateReject;
-
-    @Column(name = "date_approve")
-    private LocalDate dateApprove;
+    @Column(name = "active")
+    private Boolean active;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -133,11 +189,18 @@ public class MVerification extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mVerifications")
     private CCurrency currency;
 
+    /**
+     * VHAN8 for supplier code.
+     * VHALPH for supplier name.
+     */
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mVerifications")
     private CVendor vendor;
 
+    /**
+     * VHURDT User reservation.
+     */
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mVerifications")
@@ -193,6 +256,19 @@ public class MVerification extends AbstractAuditingEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getReceiptNo() {
+        return receiptNo;
+    }
+
+    public MVerification receiptNo(String receiptNo) {
+        this.receiptNo = receiptNo;
+        return this;
+    }
+
+    public void setReceiptNo(String receiptNo) {
+        this.receiptNo = receiptNo;
     }
 
     public String getInvoiceNo() {
@@ -260,19 +336,6 @@ public class MVerification extends AbstractAuditingEntity {
         this.totalLines = totalLines;
     }
 
-    public BigDecimal getTaxAmount() {
-        return taxAmount;
-    }
-
-    public MVerification taxAmount(BigDecimal taxAmount) {
-        this.taxAmount = taxAmount;
-        return this;
-    }
-
-    public void setTaxAmount(BigDecimal taxAmount) {
-        this.taxAmount = taxAmount;
-    }
-
     public BigDecimal getGrandTotal() {
         return grandTotal;
     }
@@ -284,45 +347,6 @@ public class MVerification extends AbstractAuditingEntity {
 
     public void setGrandTotal(BigDecimal grandTotal) {
         this.grandTotal = grandTotal;
-    }
-
-    public String getVerificationStatus() {
-        return verificationStatus;
-    }
-
-    public MVerification verificationStatus(String verificationStatus) {
-        this.verificationStatus = verificationStatus;
-        return this;
-    }
-
-    public void setVerificationStatus(String verificationStatus) {
-        this.verificationStatus = verificationStatus;
-    }
-
-    public UUID getUid() {
-        return uid;
-    }
-
-    public MVerification uid(UUID uid) {
-        this.uid = uid;
-        return this;
-    }
-
-    public void setUid(UUID uid) {
-        this.uid = uid;
-    }
-
-    public Boolean isActive() {
-        return active;
-    }
-
-    public MVerification active(Boolean active) {
-        this.active = active;
-        return this;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 
     public BigDecimal getForeignGrandTotal() {
@@ -338,6 +362,19 @@ public class MVerification extends AbstractAuditingEntity {
         this.foreignGrandTotal = foreignGrandTotal;
     }
 
+    public BigDecimal getTaxAmount() {
+        return taxAmount;
+    }
+
+    public MVerification taxAmount(BigDecimal taxAmount) {
+        this.taxAmount = taxAmount;
+        return this;
+    }
+
+    public void setTaxAmount(BigDecimal taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+
     public BigDecimal getForeignTaxAmount() {
         return foreignTaxAmount;
     }
@@ -351,17 +388,17 @@ public class MVerification extends AbstractAuditingEntity {
         this.foreignTaxAmount = foreignTaxAmount;
     }
 
-    public LocalDate getDataSubmit() {
-        return dataSubmit;
+    public LocalDate getDateSubmit() {
+        return dateSubmit;
     }
 
-    public MVerification dataSubmit(LocalDate dataSubmit) {
-        this.dataSubmit = dataSubmit;
+    public MVerification dateSubmit(LocalDate dateSubmit) {
+        this.dateSubmit = dateSubmit;
         return this;
     }
 
-    public void setDataSubmit(LocalDate dataSubmit) {
-        this.dataSubmit = dataSubmit;
+    public void setDateSubmit(LocalDate dateSubmit) {
+        this.dateSubmit = dateSubmit;
     }
 
     public LocalDate getDateAcct() {
@@ -442,19 +479,6 @@ public class MVerification extends AbstractAuditingEntity {
         this.dueDate = dueDate;
     }
 
-    public String getPayStatus() {
-        return payStatus;
-    }
-
-    public MVerification payStatus(String payStatus) {
-        this.payStatus = payStatus;
-        return this;
-    }
-
-    public void setPayStatus(String payStatus) {
-        this.payStatus = payStatus;
-    }
-
     public BigDecimal getPayAmt() {
         return payAmt;
     }
@@ -492,6 +516,58 @@ public class MVerification extends AbstractAuditingEntity {
 
     public void setDateApprove(LocalDate dateApprove) {
         this.dateApprove = dateApprove;
+    }
+
+    public String getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public MVerification verificationStatus(String verificationStatus) {
+        this.verificationStatus = verificationStatus;
+        return this;
+    }
+
+    public void setVerificationStatus(String verificationStatus) {
+        this.verificationStatus = verificationStatus;
+    }
+
+    public String getPayStatus() {
+        return payStatus;
+    }
+
+    public MVerification payStatus(String payStatus) {
+        this.payStatus = payStatus;
+        return this;
+    }
+
+    public void setPayStatus(String payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public MVerification uid(UUID uid) {
+        this.uid = uid;
+        return this;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public MVerification active(Boolean active) {
+        this.active = active;
+        return this;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public ADOrganization getAdOrganization() {
@@ -558,7 +634,6 @@ public class MVerification extends AbstractAuditingEntity {
     public void setVendorTo(CVendor cVendor) {
         this.vendorTo = cVendor;
     }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
@@ -591,29 +666,30 @@ public class MVerification extends AbstractAuditingEntity {
             ", verificationNo='" + getVerificationNo() + "'" +
             ", verificationDate='" + getVerificationDate() + "'" +
             ", description='" + getDescription() + "'" +
+            ", receiptNo='" + getReceiptNo() + "'" +
             ", invoiceNo='" + getInvoiceNo() + "'" +
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", taxInvoice='" + getTaxInvoice() + "'" +
             ", taxDate='" + getTaxDate() + "'" +
             ", totalLines=" + getTotalLines() +
-            ", taxAmount=" + getTaxAmount() +
             ", grandTotal=" + getGrandTotal() +
-            ", verificationStatus='" + getVerificationStatus() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
             ", foreignGrandTotal=" + getForeignGrandTotal() +
+            ", taxAmount=" + getTaxAmount() +
             ", foreignTaxAmount=" + getForeignTaxAmount() +
-            ", dataSubmit='" + getDataSubmit() + "'" +
+            ", dateSubmit='" + getDateSubmit() + "'" +
             ", dateAcct='" + getDateAcct() + "'" +
             ", withholdingAmt=" + getWithholdingAmt() +
             ", invoiceAp='" + getInvoiceAp() + "'" +
             ", docType='" + getDocType() + "'" +
             ", payDate='" + getPayDate() + "'" +
             ", dueDate='" + getDueDate() + "'" +
-            ", payStatus='" + getPayStatus() + "'" +
             ", payAmt=" + getPayAmt() +
             ", dateReject='" + getDateReject() + "'" +
             ", dateApprove='" + getDateApprove() + "'" +
+            ", verificationStatus='" + getVerificationStatus() + "'" +
+            ", payStatus='" + getPayStatus() + "'" +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
             "}";
     }
 }

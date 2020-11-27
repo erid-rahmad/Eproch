@@ -6,8 +6,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVerification} entity.
@@ -19,46 +21,90 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     private Long id;
 
+    /**
+     * VHDOCM Invoice verification document no.
+     */
     @NotNull
+    @ApiModelProperty(value = "VHDOCM Invoice verification document no.", required = true)
     private String verificationNo;
 
+    /**
+     * VHTRDJ Transaction date
+     */
     @NotNull
+    @ApiModelProperty(value = "VHTRDJ Transaction date", required = true)
     private LocalDate verificationDate;
 
     private String description;
 
+    /**
+     * VHANUR
+     */
+    @Size(max = 20)
+    @ApiModelProperty(value = "VHANUR")
+    private String receiptNo;
+
     @NotNull
     private String invoiceNo;
 
+    /**
+     * VHDIVJ
+     */
     @NotNull
+    @ApiModelProperty(value = "VHDIVJ", required = true)
     private LocalDate invoiceDate;
 
     private String taxInvoice;
 
+    /**
+     * VHDSV Date service/tax.
+     */
+    @ApiModelProperty(value = "VHDSV Date service/tax.")
     private LocalDate taxDate;
 
+    /**
+     * VHAEXP Total amount of receipt lines.
+     */
     @NotNull
+    @ApiModelProperty(value = "VHAEXP Total amount of receipt lines.", required = true)
     private BigDecimal totalLines;
 
+    /**
+     * VHAREC Receipt amount (base currency).
+     */
     @NotNull
-    private BigDecimal taxAmount;
-
-    @NotNull
+    @ApiModelProperty(value = "VHAREC Receipt amount (base currency).", required = true)
     private BigDecimal grandTotal;
 
-    @NotNull
-    private String verificationStatus;
-
-    private UUID uid;
-
-    private Boolean active;
-
+    /**
+     * VHFREC Receipt amount in foreign currency.
+     */
+    @ApiModelProperty(value = "VHFREC Receipt amount in foreign currency.")
     private BigDecimal foreignGrandTotal;
 
+    /**
+     * VHSTAM Tax amount (base currency).
+     */
+    @NotNull
+    @ApiModelProperty(value = "VHSTAM Tax amount (base currency).", required = true)
+    private BigDecimal taxAmount;
+
+    /**
+     * VHCTAM Tax amount in foreign currency.
+     */
+    @ApiModelProperty(value = "VHCTAM Tax amount in foreign currency.")
     private BigDecimal foreignTaxAmount;
 
-    private LocalDate dataSubmit;
+    /**
+     * VHDTSUB
+     */
+    @ApiModelProperty(value = "VHDTSUB")
+    private LocalDate dateSubmit;
 
+    /**
+     * VHDGJ GL date.
+     */
+    @ApiModelProperty(value = "VHDGJ GL date.")
     private LocalDate dateAcct;
 
     private BigDecimal withholdingAmt;
@@ -67,17 +113,44 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     private String docType;
 
+    /**
+     * VHDMTJ Payment date.
+     */
+    @ApiModelProperty(value = "VHDMTJ Payment date.")
     private LocalDate payDate;
 
+    /**
+     * VHDDJ Promised date/payment schedule.
+     */
+    @ApiModelProperty(value = "VHDDJ Promised date/payment schedule.")
     private LocalDate dueDate;
+
+    /**
+     * VHAA Total actual amount.
+     */
+    @ApiModelProperty(value = "VHAA Total actual amount.")
+    private BigDecimal payAmt;
+
+    /**
+     * VHRJDJ
+     */
+    @ApiModelProperty(value = "VHRJDJ")
+    private LocalDate dateReject;
+
+    /**
+     * VHAPRD
+     */
+    @ApiModelProperty(value = "VHAPRD")
+    private LocalDate dateApprove;
+
+    @NotNull
+    private String verificationStatus;
 
     private String payStatus;
 
-    private BigDecimal payAmt;
+    private UUID uid;
 
-    private LocalDate dateReject;
-
-    private LocalDate dateApprove;
+    private Boolean active;
 
 
     private Long adOrganizationId;
@@ -86,9 +159,17 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     private Long currencyId;
     private String currencyName;
 
+    /**
+     * VHAN8 for supplier code.\nVHALPH for supplier name.
+     */
+    @ApiModelProperty(value = "VHAN8 for supplier code.\nVHALPH for supplier name.")
     private Long vendorId;
     private String vendorName;
 
+    /**
+     * VHURDT User reservation.
+     */
+    @ApiModelProperty(value = "VHURDT User reservation.")
     private Long picId;
     private Long picName;
 
@@ -125,6 +206,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getReceiptNo() {
+        return receiptNo;
+    }
+
+    public void setReceiptNo(String receiptNo) {
+        this.receiptNo = receiptNo;
     }
 
     public String getInvoiceNo() {
@@ -167,44 +256,12 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.totalLines = totalLines;
     }
 
-    public BigDecimal getTaxAmount() {
-        return taxAmount;
-    }
-
-    public void setTaxAmount(BigDecimal taxAmount) {
-        this.taxAmount = taxAmount;
-    }
-
     public BigDecimal getGrandTotal() {
         return grandTotal;
     }
 
     public void setGrandTotal(BigDecimal grandTotal) {
         this.grandTotal = grandTotal;
-    }
-
-    public String getVerificationStatus() {
-        return verificationStatus;
-    }
-
-    public void setVerificationStatus(String verificationStatus) {
-        this.verificationStatus = verificationStatus;
-    }
-
-    public UUID getUid() {
-        return uid;
-    }
-
-    public void setUid(UUID uid) {
-        this.uid = uid;
-    }
-
-    public Boolean isActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 
     public BigDecimal getForeignGrandTotal() {
@@ -215,6 +272,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.foreignGrandTotal = foreignGrandTotal;
     }
 
+    public BigDecimal getTaxAmount() {
+        return taxAmount;
+    }
+
+    public void setTaxAmount(BigDecimal taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+
     public BigDecimal getForeignTaxAmount() {
         return foreignTaxAmount;
     }
@@ -223,12 +288,12 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.foreignTaxAmount = foreignTaxAmount;
     }
 
-    public LocalDate getDataSubmit() {
-        return dataSubmit;
+    public LocalDate getDateSubmit() {
+        return dateSubmit;
     }
 
-    public void setDataSubmit(LocalDate dataSubmit) {
-        this.dataSubmit = dataSubmit;
+    public void setDateSubmit(LocalDate dateSubmit) {
+        this.dateSubmit = dateSubmit;
     }
 
     public LocalDate getDateAcct() {
@@ -279,14 +344,6 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.dueDate = dueDate;
     }
 
-    public String getPayStatus() {
-        return payStatus;
-    }
-
-    public void setPayStatus(String payStatus) {
-        this.payStatus = payStatus;
-    }
-
     public BigDecimal getPayAmt() {
         return payAmt;
     }
@@ -309,6 +366,38 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     public void setDateApprove(LocalDate dateApprove) {
         this.dateApprove = dateApprove;
+    }
+
+    public String getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public void setVerificationStatus(String verificationStatus) {
+        this.verificationStatus = verificationStatus;
+    }
+
+    public String getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(String payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public UUID getUid() {
+        return uid;
+    }
+
+    public void setUid(UUID uid) {
+        this.uid = uid;
+    }
+
+    public Boolean isActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Long getAdOrganizationId() {
@@ -419,41 +508,35 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", verificationNo='" + getVerificationNo() + "'" +
             ", verificationDate='" + getVerificationDate() + "'" +
             ", description='" + getDescription() + "'" +
+            ", receiptNo='" + getReceiptNo() + "'" +
             ", invoiceNo='" + getInvoiceNo() + "'" +
             ", invoiceDate='" + getInvoiceDate() + "'" +
             ", taxInvoice='" + getTaxInvoice() + "'" +
             ", taxDate='" + getTaxDate() + "'" +
             ", totalLines=" + getTotalLines() +
-            ", taxAmount=" + getTaxAmount() +
             ", grandTotal=" + getGrandTotal() +
-            ", verificationStatus='" + getVerificationStatus() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
             ", foreignGrandTotal=" + getForeignGrandTotal() +
+            ", taxAmount=" + getTaxAmount() +
             ", foreignTaxAmount=" + getForeignTaxAmount() +
-            ", dataSubmit='" + getDataSubmit() + "'" +
+            ", dateSubmit='" + getDateSubmit() + "'" +
             ", dateAcct='" + getDateAcct() + "'" +
             ", withholdingAmt=" + getWithholdingAmt() +
             ", invoiceAp='" + getInvoiceAp() + "'" +
             ", docType='" + getDocType() + "'" +
             ", payDate='" + getPayDate() + "'" +
             ", dueDate='" + getDueDate() + "'" +
-            ", payStatus='" + getPayStatus() + "'" +
             ", payAmt=" + getPayAmt() +
             ", dateReject='" + getDateReject() + "'" +
             ", dateApprove='" + getDateApprove() + "'" +
+            ", verificationStatus='" + getVerificationStatus() + "'" +
+            ", payStatus='" + getPayStatus() + "'" +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName='" + getAdOrganizationName() + "'" +
             ", currencyId=" + getCurrencyId() +
-            ", currencyName='" + getCurrencyName() + "'" +
             ", vendorId=" + getVendorId() +
-            ", vendorName=" + getVendorName() +
             ", picId=" + getPicId() +
-            ", picName=" + getPicName() +
             ", vendorToId=" + getVendorToId() +
-            ", vendorToName=" + getVendorToName() +
             "}";
     }
-
-
 }
