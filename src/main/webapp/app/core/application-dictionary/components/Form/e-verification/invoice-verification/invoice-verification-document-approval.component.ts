@@ -3,7 +3,7 @@ import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import AlertMixin from '@/shared/alert/alert.mixin';
-import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
+import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import TaxInfo from './tax-info.vue';
 
 const VerificationDocApprProps = Vue.extend({

@@ -5,33 +5,24 @@ import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
+import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import EVerificationUpdate from './e-verification-update.vue';
-
-const EVerificationProps = Vue.extend({
-  props: {
-    eventBus: {
-      type: Object,
-      default: () => {}
-    },
-
-  }
-})
 
 @Component({
   components: {
     EVerificationUpdate
   }
 })
-export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, EVerificationProps) {
-  private index: boolean = true;
-  private disabledButton: boolean = false;
+export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+  index: boolean = true;
+  disabledButton: boolean = false;
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
     maxHeight: 450,
     height: 420
   };
+
   public itemsPerPage = 10;
   public queryCount: number = null;
   public page = 1;
@@ -39,35 +30,29 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public propOrder = 'id';
   public reverse = false;
   public totalItems = 0;
-  private baseApiUrl = "/api/m-verifications";
-  private baseApiUrlReference = "/api/ad-references";
-  private baseApiUrlReferenceList = "/api/ad-reference-lists";
 
+  private baseApiUrl = "/api/m-verifications";
   private filterQuery: string = '';
-  private processing = false;
+  public filter: any = {};
+  processing = false;
+  public gridData: Array<any> = [];
+  selectedRows: any = {};
+  public radioSelection: number = null;
 
   private dialogTitle = "";
   private dialogMessage = "";
   private dialogButton = "";
   private dialogValue = "";
   private dialogType = "";
+  public dialogConfirmationVisible: boolean = false;
 
-  public gridData: Array<any> = [];
-
-  public documentStatuses = [];
-  selectedRows: any = {};
-  public statusOptions: any[] = [
+  public documentStatuses: any[] = [
     { key: 'DRF', value: 'Draft' },
     { key: 'CNL', value: 'Canceled' },
     { key: 'SMT', value: 'Submited' },
     { key: 'APV', value: 'Approved' },
     { key: 'RJC', value: 'Rejected' }
   ];
-
-  public dialogConfirmationVisible: boolean = false;
-  public filter: any = {};
-  public vendorApprovalStatus: string = "vendorApprovalStatus";
-  public radioSelection: number = null;
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -77,17 +62,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     return settings.dateValueFormat;
   }
 
-  created(){
-    // this.retrieveGetReferences(this.vendorApprovalStatus);
-    this.retrieveDocumentStatuses();
-  }
-
   public mounted(): void {
     this.retrieveAllRecords();
-  }
-
-  beforeDestroy() {
-
   }
 
   private closeEVerificationUpdate(){
@@ -105,20 +81,22 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     this.transition();
   }
 
-  public changePageSize(size: number) {
-    this.itemsPerPage = size;
-    if(this.page!=1){
-      this.page = 0;
-    }
-    this.retrieveAllRecords();
-  }
-
   public sort(): Array<any> {
     const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
     if (this.propOrder !== 'id') {
       result.push('id');
     }
     return result;
+  }
+
+  // =====================================
+  // Pagination
+  public changePageSize(size: number) {
+    this.itemsPerPage = size;
+    if(this.page!=1){
+      this.page = 0;
+    }
+    this.retrieveAllRecords();
   }
 
   public loadPage(page: number): void {
@@ -139,6 +117,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public transition(): void {
     this.retrieveAllRecords();
   }
+  // =====================================
 
   public clear(): void {
     this.page = 1;
@@ -150,20 +129,15 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     this.selectedRows = row;
 
     this.statementButtonDisabled();
-    console.log(row);
-  }
-
-  public onSelectionChanged(value: any) {
-    //this.selectedRowsLine = value;
-    console.log(value);
+    //console.log(row);
   }
 
   public showDialogConfirmation(key: string) {
     if (this.radioSelection != null) {
 
-      if (key == "void") {
-        this.dialogTitle = "Confirm VOID status verification";
-        this.dialogMessage = "Update status verification to VOID ?";
+      if (key == "cancel") {
+        this.dialogTitle = "Confirm CANCEL status verification";
+        this.dialogMessage = "Update status verification to CANCEL ?";
         this.dialogButton = "Update";
         this.dialogValue = "CNL";
         this.dialogType = "danger";
@@ -221,16 +195,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       });
   }
 
-  private retrieveDocumentStatuses() {
-    this.documentStatuses = [
-      { code: 'APV', name: 'Approved' },
-      { code: 'DRF', name: 'Draft' },
-      { code: 'RJC', name: 'Rejected' },
-      { code: 'SMT', name: 'Submited' },
-      { code: 'CNL', name: 'Void' }
-    ]
-  }
-
   public retrieveAllRecords(): void {
     if ( ! this.baseApiUrl) {
       return;
@@ -249,7 +213,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         paginationQuery
       })
       .then(res => {
-        console.log(res);
         this.gridData = res.data.map((item: any) => {
           return item;
         });
@@ -259,9 +222,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         this.$emit('total-count-changed', this.queryCount);
 
         this.statementButtonDisabled();
-        this.$nextTick(() => {
+        this.selectedRows = {};
+        /*this.$nextTick(() => {
           console.log('taxInvoice refs: %O', this.$refs.taxInvoice);
-        })
+        })*/
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -276,54 +240,13 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   private statementButtonDisabled(){
-    if(this.selectedRows.verificationStatus == "Void"){
+    if(this.selectedRows.verificationStatus == "CNL"){
       this.disabledButton = true;
-    } else if(this.selectedRows.verificationStatus == "Submit"){
+    } else if(this.selectedRows.verificationStatus == "SMT"){
       this.disabledButton = true;
     }else{
       this.disabledButton = false;
     }
-  }
-
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-    this.retrieveAllRecords();
-  }
-
-  private retrieveGetReferences(param: string) {
-    this.dynamicWindowService(this.baseApiUrlReference)
-    .retrieve({
-      criteriaQuery: [`value.contains=`+param]
-    })
-    .then(res => {
-        let references = res.data.map(item => {
-            return{
-                id: item.id,
-                value: item.value,
-                name: item.name
-            };
-        });
-        this.retrieveGetReferenceLists(references);
-    });
-  }
-
-  private retrieveGetReferenceLists(param: any) {
-    this.dynamicWindowService(this.baseApiUrlReferenceList)
-    .retrieve({
-      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
-    })
-    .then(res => {
-        let referenceList = res.data.map(item => {
-            return{
-                key: item.value,
-                value: item.name
-            };
-        });
-
-        if(param[0].value == this.vendorApprovalStatus){
-          this.statusOptions = referenceList;
-        }
-    });
   }
 
   public verificationFilter() {
@@ -351,7 +274,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       }
       this.filterQuery += "verificationStatus.equals=" + this.filter.verificationStatus;
     }
-
     if (!!this.filter.verificationDateFrom) {
       if (this.filterQuery) {
         this.filterQuery += "&"
@@ -398,7 +320,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   formatDocumentStatus(value: string) {
-    return this.documentStatuses.find(status => status.code === value)?.name;
+    return this.documentStatuses.find(status => status.key === value)?.value;
   }
 
 }

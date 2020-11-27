@@ -3,7 +3,7 @@ import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
+import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import InvoiceVerificationDocumentApproval from './invoice-verification-document-approval.vue';
 
 const InvoiceVerificationProps = Vue.extend({
