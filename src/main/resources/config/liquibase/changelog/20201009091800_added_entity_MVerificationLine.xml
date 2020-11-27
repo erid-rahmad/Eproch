@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MVerificationLine.
     -->
@@ -202,6 +202,14 @@
         <addNotNullConstraint tableName="m_verification_line" columnName="receive_no" />
         <addColumn tableName="m_verification_line">
             <column name="line_no_mr" type="integer">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20201127020900-added5" author="dian-tri-budianto">
+        <addColumn tableName="m_verification_line">
+            <column name="pay_stat" type="varchar(10)">
                 <constraints nullable="true" />
             </column>
         </addColumn>

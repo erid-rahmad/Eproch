@@ -59,6 +59,8 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     @JsonProperty("receiptDate")
     private LocalDate receiveDate;
 
+    private String payStat;
+
     private UUID uid;
 
     private Boolean active;
@@ -101,7 +103,7 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
 
     @JsonProperty("cCurrencyName")
     private String cCurrencyName;
-    
+
     public Long getId() {
         return id;
     }
@@ -236,6 +238,14 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
 
     public void setReceiveDate(LocalDate receiveDate) {
         this.receiveDate = receiveDate;
+    }
+
+    public String getPayStat() {
+        return payStat;
+    }
+
+    public void setPayStat(String payStat) {
+        this.payStat = payStat;
     }
 
     public UUID getUid() {
@@ -425,14 +435,20 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
             ", lineNoMr=" + getLineNoMr() +
             ", conversionRate=" + getConversionRate() +
             ", receiveDate='" + getReceiveDate() + "'" +
+            ", payStat='" + getPayStat() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", verificationId=" + getVerificationId() +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", adOrganizationName=" + getAdOrganizationName() +
             ", productId=" + getProductId() +
+            ", productName=" + getProductName() +
             ", uomId=" + getUomId() +
+            ", uomName=" + getUomName() +
             ", cCostCenterId=" + getCCostCenterId() +
+            ", cCostCenterName=" + getCCostCenterName() +
             ", cCurrencyId=" + getCCurrencyId() +
+            ", cCurrencyName=" + getCCurrencyName() +
             "}";
     }
 }

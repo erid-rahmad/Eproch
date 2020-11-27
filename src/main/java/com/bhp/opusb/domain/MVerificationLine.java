@@ -27,7 +27,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "m_verification_line")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MVerificationLine implements Serializable {
+public class MVerificationLine extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -90,6 +90,9 @@ public class MVerificationLine implements Serializable {
 
     @Column(name = "receive_date")
     private LocalDate receiveDate;
+
+    @Column(name = "pay_stat")
+    private String payStat;
 
     @Column(name = "uid")
     private UUID uid;
@@ -344,6 +347,19 @@ public class MVerificationLine implements Serializable {
         this.receiveDate = receiveDate;
     }
 
+    public String getPayStat() {
+        return payStat;
+    }
+
+    public MVerificationLine payStat(String payStat) {
+        this.payStat = payStat;
+        return this;
+    }
+
+    public void setPayStat(String payStat) {
+        this.payStat = payStat;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -490,6 +506,7 @@ public class MVerificationLine implements Serializable {
             ", lineNoMr=" + getLineNoMr() +
             ", conversionRate=" + getConversionRate() +
             ", receiveDate='" + getReceiveDate() + "'" +
+            ", payStat='" + getPayStat() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

@@ -87,6 +87,10 @@
             "fieldType": "LocalDate"
         },
         {
+            "fieldName": "payStat",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

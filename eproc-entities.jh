@@ -421,19 +421,17 @@ entity MVerificationLine {
 	deliveryNo String required
 	description String
 	qty Long required
-
 	priceActual BigDecimal required
 	foreignActual BigDecimal
 	totalLines BigDecimal required
 	foreignTotalLines BigDecimal
 	taxAmount BigDecimal required
 	foreignTaxAmount BigDecimal
-
 	lineNo Integer
 	lineNoMr Integer
 	conversionRate BigDecimal
 	receiveDate LocalDate
-
+    payStat String
 	uid UUID
 	active Boolean
 }
