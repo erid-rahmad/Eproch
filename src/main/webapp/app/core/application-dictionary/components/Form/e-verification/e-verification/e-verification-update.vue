@@ -42,12 +42,12 @@
         </el-row>
 
         <el-row class="filter">
-            <el-form ref="form"  label-width="170px" size="mini">
+            <el-form ref="eVerificationUpdate" :model="formUpdate" label-width="170px" size="mini" :rules="rules">
                 <el-col :span="8">
-                    <el-form-item label="Invoice No." prop="invoiceNo">
-                        <el-input class="form-input" clearable v-model="formUpdate.invoiceNo"></el-input>
+                    <el-form-item label="Invoice No." prop="invoiceNo" required>
+                        <el-input class="form-input" clearable v-model="formUpdate.invoiceNo"/>
                     </el-form-item>
-                    <el-form-item label="Invoice Date" prop="invoiceDate">
+                    <el-form-item label="Invoice Date" prop="invoiceDate" required>
                         <el-date-picker
                             class="form-input"
                             clearable
@@ -57,7 +57,7 @@
                             :value-format="dateValueFormat"
                             placeholder="Pick a date" />
                     </el-form-item>
-                    <el-form-item label="Currency" prop="currencyId">
+                    <el-form-item label="Currency" prop="currencyId" required>
                         <el-select class="form-input" clearable filterable v-model="formUpdate.currencyId" placeholder="Currency" >
                             <el-option
                                 v-for="item in currencyOptions"
@@ -69,7 +69,7 @@
 
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="Tax Invoice No." prop="taxInvoice">
+                    <el-form-item label="Tax Invoice No." prop="taxInvoice" required>
                         <el-input
                             class="form-input"
                             clearable
@@ -78,7 +78,7 @@
                             placeholder="__.___.___._-___.___"
                             />
                     </el-form-item>
-                    <el-form-item label="Tax Invoice Date" prop="taxDate">
+                    <el-form-item label="Tax Invoice Date" prop="taxDate" required>
                         <el-date-picker
                             class="form-input"
                             clearable
@@ -89,7 +89,7 @@
                             placeholder="Pick a date" />
                     </el-form-item>
                     <el-form-item label="NPWP" prop="vendorName">
-                        <el-input class="form-input" disabled clearable v-model="formUpdate.vendorName"></el-input>
+                        <el-input class="form-input" disabled clearable v-model="formUpdate.vendorName"/>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -140,7 +140,7 @@
                     <el-table-column
                         align="center"
                         fixed
-                        width="50"
+                        width="55"
                     >
                         <template slot-scope="{ row, $index }">
                             <el-button
@@ -155,68 +155,95 @@
                     </el-table-column>
 
                     <el-table-column
-                        min-width="130"
+                        min-width="120"
+                        sortable
                         prop="poNo"
                         label="PO No."
                     />
                     <el-table-column
-                        min-width="150"
+                        min-width="120"
+                        sortable
                         prop="receiptNo"
                         label="Receipt No."
                     />
                     <el-table-column
-                        min-width="128"
+                        min-width="120"
+                        sortable
                         prop="deliveryNo"
                         label="Delivery No."
                     />
                     <el-table-column
-                        min-width="256"
+                        min-width="250"
+                        sortable
                         prop="mProductName"
                         label="Item Desc."
                     />
                     <el-table-column
-                        min-width="128"
+                        min-width="100"
+                        sortable
                         prop="cUomName"
                         label="UoM"
                     />
                     <el-table-column
-                        min-width="128"
+                        min-width="100"
+                        sortable
                         prop="qty"
                         label="Qty"
                     />
                     <el-table-column
-                        min-width="128"
+                        min-width="150"
+                        sortable
+                        prop="priceActual"
                         label="Unit Price"
+                        align="right"
                     >
                         <template slot-scope="{ row }">
                             {{ row.priceActual | formatCurrency }}
                         </template>
                     </el-table-column>
                     <el-table-column
-                        min-width="128"
+                        min-width="150"
+                        sortable
+                        prop="totalLines"
                         label="Taxable Amount"
+                        align="right"
                     >
                         <template slot-scope="{ row }">
                             {{ row.totalLines | formatCurrency }}
                         </template>
                     </el-table-column>
                     <el-table-column
-                        min-width="128"
+                        min-width="150"
+                        sortable
+                        prop="taxAmount"
                         label="PPN"
+                        align="right"
                     >
                         <template slot-scope="{ row }">
                             {{ row.taxAmount | formatCurrency }}
                         </template>
                     </el-table-column>
                     <el-table-column
-                        min-width="128"
+                        min-width="150"
+                        sortable
+                        prop="totalAmount"
                         label="Total Amount"
+                        align="right"
                     >
                         <template slot-scope="{ row }">
                             {{ row.totalAmount | formatCurrency }}
                         </template>
                     </el-table-column>
                 </el-table>
+                <el-pagination
+                    ref="pagination"
+                    background mini
+                    layout="sizes, prev, pager, next"
+                    :current-page.sync="page"
+                    :page-sizes="[10, 20, 50, 100]"
+                    :page-size="itemsPerPage"
+                    :total="queryCount"
+                    @size-change="changePageSize"/>
             </el-col>
         </el-row>
 

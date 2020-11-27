@@ -5,7 +5,7 @@ import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
+import ContextVariableAccessor from "../../../ContextVariableAccessor";
 
 const EVerificationProps = Vue.extend({
   props: {
@@ -25,6 +25,7 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
     maxHeight: 412,
     height: 310
   };
+
   private itemsPerPage = 10;
   private queryCount: number = null;
   private page = 1;
@@ -32,15 +33,13 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
   private propOrder = 'receiptDate';
   private reverse = false;
   private totalItems = 0;
+
   private baseApiUrlMatchPo = "/api/m-match-pos";
   private filterQuery: string = '';
   private processing = false;
 
   private gridData: Array<any> = [];
-  selectedRows: any[] = [];
-  private statusOptions: any = {};
   private filter: any = {};
-  private vendorApprovalStatus: string = "vendorApprovalStatus";
   private selectedMatchPo: any[] = [];
   private totalAmount: number = null;
 
@@ -203,7 +202,5 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
     this.filterQuery += `mMatchType.equals=1&cVendorId.equals=${accountStore.userDetails.cVendorId}`;
     this.retrieveAllRecordMatchPos();
   }
-
-
 
 }

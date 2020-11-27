@@ -6,7 +6,7 @@ import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
+import ContextVariableAccessor from "../../../../../../core/application-dictionary/components/ContextVariableAccessor";
 import ENofaUpdate from './e-nofa-update.vue';
 
 const ENovaProps = Vue.extend({

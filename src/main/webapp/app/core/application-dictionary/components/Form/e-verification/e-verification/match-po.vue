@@ -72,70 +72,89 @@
                             align="center"
                             fixed
                             type="selection"
-                            width="48"
+                            width="35"
                         />
                         <el-table-column
-                            min-width="130"
+                            min-width="120"
+                            sortable
                             prop="poNo"
                             label="PO No."
                         />
                         <el-table-column
-                            min-width="150"
+                            min-width="120"
+                            sortable
                             prop="receiptNo"
                             label="Receipt No."
                         />
                         <el-table-column
-                            min-width="150"
+                            min-width="120"
+                            sortable
                             prop="receiptDate"
                             label="Receipt Date"
                         />
                         <el-table-column
-                            min-width="128"
+                            min-width="120"
+                            sortable
                             prop="deliveryNo"
                             label="Delivery No."
                         />
                         <el-table-column
-                            min-width="256"
+                            min-width="250"
+                            sortable
                             prop="mProductName"
                             label="Item Desc."
                         />
                         <el-table-column
-                            min-width="128"
+                            min-width="100"
+                            sortable
                             prop="cUomName"
                             label="UoM"
                         />
                         <el-table-column
-                            min-width="128"
+                            min-width="100"
+                            sortable
                             prop="qty"
                             label="Qty"
                         />
                         <el-table-column
-                            min-width="128"
+                            min-width="150"
+                            sortable
+                            prop="priceActual"
                             label="Unit Price"
+                            align="right"
                         >
                           <template slot-scope="{ row }">
                             {{ row.priceActual | formatCurrency }}
                           </template>
                         </el-table-column>
                         <el-table-column
-                            min-width="128"
+                            min-width="150"
+                            sortable
+                            prop="totalLines"
                             label="Taxable Amount"
+                            align="right"
                         >
                           <template slot-scope="{ row }">
                             {{ row.totalLines | formatCurrency }}
                           </template>
                         </el-table-column>
                         <el-table-column
-                            min-width="128"
+                            min-width="150"
+                            sortable
+                            prop="taxAmount"
                             label="PPN (%)"
+                            align="right"
                         >
                           <template slot-scope="{ row }">
                             {{ row.taxAmount | formatCurrency }}
                           </template>
                         </el-table-column>
                         <el-table-column
-                            min-width="128"
+                            min-width="150"
+                            sortable
+                            prop="totalAmount"
                             label="Total Amount"
+                            align="right"
                         >
                           <template slot-scope="{ row }">
                             {{ row.totalAmount | formatCurrency }}

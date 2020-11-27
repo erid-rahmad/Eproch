@@ -6,7 +6,7 @@ import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../core/application-dictionary/components/ContextVariableAccessor";
+import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import UpdateVoucher from './update-voucher.vue';
 import DetailVerificationDocument from './detail-verification-document.vue';
 
