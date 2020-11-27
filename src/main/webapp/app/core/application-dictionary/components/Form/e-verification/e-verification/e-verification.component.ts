@@ -45,14 +45,11 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   private dialogValue = "";
   private dialogType = "";
   public dialogConfirmationVisible: boolean = false;
+  private baseApiUrlReference = "/api/ad-references";
+  private baseApiUrlReferenceList = "/api/ad-reference-lists";
+  private keyReference: string = "docStatus";
 
-  public documentStatuses: any[] = [
-    { key: 'DRF', value: 'Draft' },
-    { key: 'CNL', value: 'Canceled' },
-    { key: 'SMT', value: 'Submited' },
-    { key: 'APV', value: 'Approved' },
-    { key: 'RJC', value: 'Rejected' }
-  ];
+  public documentStatuses: any[] = [];
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -62,7 +59,11 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     return settings.dateValueFormat;
   }
 
-  public mounted(): void {
+  created(){
+    this.retrieveGetReferences(this.keyReference);
+  }
+
+  mounted(): void {
     this.retrieveAllRecords();
   }
 
@@ -136,8 +137,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     if (this.radioSelection != null) {
 
       if (key == "cancel") {
-        this.dialogTitle = "Confirm CANCEL status verification";
-        this.dialogMessage = "Update status verification to CANCEL ?";
+        this.dialogTitle = "Confirm VOID status verification";
+        this.dialogMessage = "Update status verification to VOID ?";
         this.dialogButton = "Update";
         this.dialogValue = "CNL";
         this.dialogType = "danger";
@@ -240,12 +241,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   private statementButtonDisabled(){
-    if(this.selectedRows.verificationStatus == "CNL"){
-      this.disabledButton = true;
-    } else if(this.selectedRows.verificationStatus == "SMT"){
-      this.disabledButton = true;
-    }else{
+    if(this.selectedRows.verificationStatus == "DRF"){
       this.disabledButton = false;
+    }else{
+      this.disabledButton = true;
     }
   }
 
@@ -321,6 +320,42 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   formatDocumentStatus(value: string) {
     return this.documentStatuses.find(status => status.key === value)?.value;
+  }
+
+  private retrieveGetReferences(param: string) {
+    this.dynamicWindowService(this.baseApiUrlReference)
+    .retrieve({
+      criteriaQuery: [`value.contains=`+param]
+    })
+    .then(res => {
+        let references = res.data.map(item => {
+            return{
+                id: item.id,
+                value: item.value,
+                name: item.name
+            };
+        });
+        this.retrieveGetReferenceLists(references);
+    });
+  }
+
+  private retrieveGetReferenceLists(param: any) {
+    this.dynamicWindowService(this.baseApiUrlReferenceList)
+    .retrieve({
+      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
+    })
+    .then(res => {
+        let referenceList = res.data.map(item => {
+            return{
+                key: item.value,
+                value: item.name
+            };
+        });
+
+        if(param[0].value == this.keyReference){
+          this.documentStatuses = referenceList;
+        }
+    });
   }
 
 }

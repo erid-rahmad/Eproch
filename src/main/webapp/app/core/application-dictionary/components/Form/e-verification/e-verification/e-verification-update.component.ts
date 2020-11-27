@@ -81,6 +81,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     this.retrieveGetCurrencies();
     this.formUpdate.vendorId = accountStore.userDetails.cVendorId;
     this.formUpdate.vendorName = accountStore.userDetails.cVendorName;
+    this.formUpdate.verificationStatus = "DRF";
 
     if (this.formUpdate.id) {
       this.filterQuery = `verificationId.equals=${this.formUpdate.id}`;
@@ -205,6 +206,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     this.dynamicWindowService(this.baseApiUrlEVerificationLine)
       .retrieve({
         criteriaQuery: this.filterQuery,
+        paginationQuery
       })
       .then(res => {
         this.gridData = res.data.map((item: any) => {

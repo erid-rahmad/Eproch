@@ -45,9 +45,8 @@ public class MVerificationService {
         // Ensure verification has generated ID.
         MVerification verification = mVerificationMapper.toEntity(verificationDTO.getForm());
         verification.active(true)
-            .adOrganization(organization)
-            .verificationStatus("DRF");
-            
+            .adOrganization(organization);
+
         mVerificationRepository.save(verification);
 
         // Batch save verification line.

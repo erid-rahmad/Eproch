@@ -102,7 +102,7 @@
                             min-width="250"
                             sortable
                             prop="mProductName"
-                            label="Item Desc."
+                            label="Item Description"
                         />
                         <el-table-column
                             min-width="100"
