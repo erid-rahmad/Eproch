@@ -16,10 +16,16 @@
       "detail": {
         "title": "C Location"
       },
-      "streetAddress": "Street Address",
+      "address1": "Address 1",
+      "address2": "Address 2",
+      "address3": "Address 3",
+      "address4": "Address 4",
       "postalCode": "Postal Code",
-      "taxInvoiceAddress": "Tax Invoice Address",
+      "phone": "Phone",
+      "fax": "Fax",
       "active": "Active",
+      "country": "Country",
+      "region": "Region",
       "city": "City"
     }
   }

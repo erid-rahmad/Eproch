@@ -93,8 +93,14 @@
             :disabled="!hasError(field)"
             :content="getErrorMessage(field)"
           >
+            <address-editor
+              v-if="isAddressField(field)"
+              v-show="displayed(row, field)"
+              v-model="row[column.property]"
+              @input="value => onInputChanged(field, value)"
+            />
             <el-select
-              v-if="isTableDirectLink(field)"
+              v-else-if="isTableDirectLink(field)"
               v-show="displayed(row, field)"
               :ref="column.property"
               v-model="row[column.property]"
@@ -140,9 +146,9 @@
             </el-select>
             <el-input
               v-else-if="isStringField(field)"
+              v-model="row[column.property]"
               v-show="displayed(row, field)"
               :ref="column.property"
-              v-model="row[column.property]"
               :class="column.property"
               class="input"
               :minlength="getMinLength(field)"

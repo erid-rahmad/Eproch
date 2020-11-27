@@ -129,6 +129,9 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
     }
 
     public String getLocationName() {
+        if (address1 == null) {
+            return null;
+        }
         StringBuilder address = new StringBuilder(address1);
         if (address2 != null) {
             address.append(", ").append(address2);

@@ -23,10 +23,10 @@ public class CRegionDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
-
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    private CCountryDTO country;
     private Long countryId;
     private String countryName;
     
@@ -86,6 +86,14 @@ public class CRegionDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public CCountryDTO getCountry() {
+        return country;
+    }
+
+    public void setCountry(CCountryDTO country) {
+        this.country = country;
+    }
+
     public Long getCountryId() {
         return countryId;
     }
@@ -101,8 +109,6 @@ public class CRegionDTO extends AbstractAuditingDTO {
     public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
-
-
 
     @Override
     public boolean equals(Object o) {

@@ -16,11 +16,17 @@
       "detail": {
         "title": "C Location"
       },
-      "streetAddress": "Street Address",
-      "postalCode": "Postal Code",
-      "taxInvoiceAddress": "Tax Invoice Address",
+      "address1": "Alamat 1",
+      "address2": "Alamat 2",
+      "address3": "Alamat 3",
+      "address4": "Alamat 4",
+      "postalCode": "Kode Pos",
+      "phone": "Telepon",
+      "fax": "Fax",
       "active": "Active",
-      "city": "City"
+      "country": "Negara",
+      "region": "Provinsi/Wilayah",
+      "city": "Kota"
     }
   }
 }
