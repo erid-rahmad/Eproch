@@ -386,32 +386,70 @@ entity CLocator {
 * vendor Invoice Verification
 */
 entity MVerification {
+	/** VHDOCM Invoice verification document no. */
 	verificationNo String required
+
+	/** VHTRDJ Transaction date */
 	verificationDate LocalDate required
+
 	description String
+
+	/** VHANUR */
+	receiptNo String maxlength(20)
 	invoiceNo String required
+
+	/** VHDIVJ */
 	invoiceDate LocalDate required
 	taxInvoice String
+
+	/** VHDSV Date service/tax. */
 	taxDate LocalDate
+
+	/** VHAEXP Total amount of receipt lines. */
 	totalLines BigDecimal required
-	taxAmount BigDecimal required
+
+	/** VHAREC Receipt amount (base currency). */
 	grandTotal BigDecimal required
+
+	/** VHFREC Receipt amount in foreign currency. */
+	foreignGrandTotal BigDecimal
+
+	/** VHSTAM Tax amount (base currency). */
+	taxAmount BigDecimal required
+
+	/** VHCTAM Tax amount in foreign currency. */
+	foreignTaxAmount BigDecimal
+
+	/** VHDTSUB */
+	dateSubmit LocalDate
+
+	/** VHDGJ GL date. */
+	dateAcct LocalDate
+	withholdingAmt BigDecimal
+	invoiceAp String
+	docType String
+
+	/** VHDMTJ Payment date. */
+	payDate LocalDate
+
+	/** VHDDJ Promised date/payment schedule. */
+	dueDate LocalDate
+
+	/** VHAA Total actual amount. */
+	payAmt BigDecimal
+
+	/** VHRJDJ */
+	dateReject LocalDate
+
+	/** VHAPRD */
+	dateApprove LocalDate
+
 	verificationStatus String required
+
+	payStatus String
+
 	uid UUID
 	active Boolean
-    foreignGrandTotal BigDecimal
-    foreignTaxAmount BigDecimal
-    dataSubmit LocalDate
-    dateAcct LocalDate
-    withholdingAmt BigDecimal
-    invoiceAp String
-    docType String
-    payDate LocalDate
-    dueDate LocalDate
-    payStatus String
-    payAmt BigDecimal
-    dateReject LocalDate
-    dateApprove LocalDate
 }
 
 entity MVerificationLine {
@@ -419,17 +457,39 @@ entity MVerificationLine {
 	poNo String required
 	receiveNo String required
 	deliveryNo String required
+
+	/** VDVRMK Supplier's remark. */
 	description String
+
 	qty Long required
+
+	/** VDPRRC Unit price. */
 	priceActual BigDecimal required
+
+	/** VDFRRC Unit price in foreign currency. */
 	foreignActual BigDecimal
+
+	/** VDAREC Receipt amount. */
 	totalLines BigDecimal required
+
+	/** VDFREC Receipt amount in foreign currency. */
 	foreignTotalLines BigDecimal
+
+	/** VDSTAM Tax amount. */
 	taxAmount BigDecimal required
+
+	/** VDCTAM Tax amount in foreign currency. */
 	foreignTaxAmount BigDecimal
+
+	/** VDLINN Invoice verification line no. */
 	lineNo Integer
+
+	/** VDLNID Receipt line no. */
 	lineNoMr Integer
+
 	conversionRate BigDecimal
+
+	/** VDRCDJ Receipt date. */
 	receiveDate LocalDate
     payStat String
 	uid UUID
@@ -665,7 +725,7 @@ relationship ManyToOne {
 	CPeriod{calendar required} to CCalendar
 	CPeriod{adOrganization required} to ADOrganization
 
-	//product or item master
+	// product or item master
 	CProductClassification{adOrganization required} to ADOrganization
 	CProductCategory{adOrganization required} to ADOrganization
 	CProductCategoryAccount{adOrganization required} to ADOrganization
@@ -681,15 +741,22 @@ relationship ManyToOne {
 	CProduct{expenseAcct required} to CElementValue
 	CProduct{uom required} to CUnitOfMeasure
 
-	//master data warehouse and locator
+	// master data warehouse and locator
 	CWarehouse{adOrganization required} to ADOrganization
 	CLocator{adOrganization required} to ADOrganization
 	CLocator{warehouse required} to CWarehouse
 
-	//releated vendor invoice verification
+	// releated vendor invoice verification
 	MVerification{adOrganization required} to ADOrganization
 	MVerification{currency required} to CCurrency
+
+	/**
+	 * VHAN8 for supplier code.
+	 * VHALPH for supplier name.
+	 */
 	MVerification{vendor required} to CVendor
+
+	/** VHURDT User reservation. */
 	MVerification{pic required} to AdUser
 	MVerification{vendorTo} to CVendor
 
@@ -705,8 +772,8 @@ relationship ManyToOne {
 	MVerificationTax{taxCategory required} to CTaxCategory
 	MVerificationTax{costCenter required} to CCostCenter
 
-    CTaxInvoice{adOrganization required} to ADOrganization
-    CTaxInvoice{vendor required} to CVendor
+	CTaxInvoice{adOrganization required} to ADOrganization
+	CTaxInvoice{vendor required} to CVendor
 
 	CVendorGroup{adOrganization required} to ADOrganization
 	CVendor{vendorGroup} to CVendorGroup
