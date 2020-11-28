@@ -1,39 +1,14 @@
 import settings from '@/settings';
 import AlertMixin from '@/shared/alert/alert.mixin';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import Inputmask from 'inputmask';
-import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
 
-Vue.directive('inputmask', {
-  bind: function(el, binding) {
-    var inputs = el.getElementsByTagName('INPUT')
-    var input = inputs[0]
-    if (inputs.length > 1) {
-      input = inputs[inputs.length - 1]
-    }
-    // new Inputmask(binding.value).mask(input)
-    new Inputmask({
-      autoUnmask: true,
-    }).mask(input)
-  },
-})
 
-const PaymentStatusProps = Vue.extend({
-  props: {
-
-  }
-})
-
-@Component({
-  components: {
-
-  }
-})
-export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, PaymentStatusProps) {
+@Component
+export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -66,7 +41,7 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
   private totalAmount: number = null;
 
   selectedRows: any = {};
-  public statusOptions: any = {};
+  public documentStatuses: any = [];
   public paymentStatusOptions: any = {};
 
   public dialogConfirmationVisible: boolean = false;
@@ -74,7 +49,6 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
   public docStatus: string = "docStatus";
   public paymentStatus: string = "paymentStatus";
   public radioSelection: number = null;
-  private voucher: any = {};
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -91,17 +65,6 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
 
   public mounted(): void {
     this.retrieveAllRecords();
-  }
-
-  beforeDestroy() {
-
-  }
-
-  private closeDetailVerification(){
-    //this.index = true;
-    //this.selectedRows = {};
-    //this.radioSelection = null;
-    //this.retrieveAllRecords();
   }
 
   public changeOrder(propOrder): void {
@@ -159,35 +122,6 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
     console.log(row);
   }
 
-  public onSelectionChanged(value: any) {
-    //this.selectedRowsLine = value;
-    console.log(value);
-  }
-
-  public showDialogConfirmation(key: string) {
-    if(this.radioSelection != null){
-
-      /* if(key == "detail"){
-        this.index = false;
-      }else if(key == "update"){
-        this.dialogConfirmationVisible = true;
-        this.setVerificationNo = this.gridData[0].verificationNo;
-      } */
-
-    }else{
-      const message = `Please Selected row`;
-      this.$notify({
-        title: 'Warning',
-        message: message.toString(),
-        type: 'warning',
-        duration: 3000
-      });
-    }
-
-  }
-
-
-
   public retrieveAllRecords(): void {
     if ( ! this.baseApiUrl) {
       return;
@@ -203,8 +137,6 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
     var joinFilterQuery = "";
     if(accountStore.userDetails.cVendorId){
       joinFilterQuery = "&vendorId.equals="+accountStore.userDetails.cVendorId;
-    }else{
-      joinFilterQuery = "";
     }
 
     this.dynamicWindowService(this.baseApiUrl)
@@ -272,7 +204,7 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
         });
 
         if(param[0].value == this.docStatus){
-          this.statusOptions = referenceList;
+          this.documentStatuses = referenceList;
         }else if(param[0].value == this.paymentStatus){
           this.paymentStatusOptions = referenceList;
         }
@@ -303,13 +235,13 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "verificationDate.lessThan="+this.filter.verificationDate;
+      this.filterQuery += "verificationDate.lessOrEqualThan="+this.filter.verificationDate;
     }
     if((this.filter.invoiceDate != null)&&(this.filter.invoiceDate != "")){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "invoiceDate.lessThan="+this.filter.invoiceDate;
+      this.filterQuery += "invoiceDate.lessOrEqualThan="+this.filter.invoiceDate;
     }
     if((this.filter.payStatus != null)&&(this.filter.payStatus != "")){
       if(this.filterQuery != ""){
@@ -321,5 +253,8 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
     this.retrieveAllRecords();
   }
 
+  formatDocumentStatus(value: string) {
+    return this.documentStatuses.find(status => status.key === value)?.value;
+  }
 
 }

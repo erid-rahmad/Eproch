@@ -13,13 +13,6 @@
 
                         <el-button
                             class="button"
-                            style="margin-left: 0px;"
-                            size="small"
-                            type="danger"
-                            icon="el-icon-close"/>
-
-                        <el-button
-                            class="button"
                             size="small"
                             type="primary"
                             icon="el-icon-download">
@@ -43,7 +36,7 @@
                             <el-form-item label="Status" prop="verificationStatus">
                                 <el-select class="form-input" clearable filterable v-model="filter.verificationStatus" placeholder="Status" >
                                     <el-option
-                                        v-for="item in statusOptions"
+                                        v-for="item in documentStatuses"
                                         :key="item.key"
                                         :label="item.value"
                                         :value="item.key" />
@@ -116,59 +109,91 @@
                             </el-table-column>
 
                             <el-table-column
-                                min-width="130"
+                                min-width="140"
+                                sortable
                                 prop="verificationNo"
                                 label="Verification No"/>
                             <el-table-column
-                                min-width="130"
+                                min-width="140"
+                                sortable
                                 prop="verificationDate"
                                 label="Verification Date"/>
                             <el-table-column
-                                min-width="100"
+                                min-width="120"
+                                sortable
                                 prop="verificationStatus"
-                                label="Status"/>
+                                label="Status">
+                                <template slot-scope="{ row }">
+                                    {{ formatDocumentStatus(row.verificationStatus) }}
+                                </template>
+                            </el-table-column>
 
                             <el-table-column
-                                min-width="128"
+                                min-width="120"
+                                sortable
                                 prop="payStatus"
                                 label="Pay Status"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="130"
+                                sortable
                                 prop="dueDate"
                                 label="Pay Schedule"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="140"
+                                sortable
                                 prop="payDate"
                                 label="Actual Pay Date"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="130"
+                                sortable
                                 prop="invoiceNo"
                                 label="Invoice No"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="130"
+                                sortable
                                 prop="invoiceDate"
                                 label="Invoice Date"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="110"
+                                sortable
                                 prop="currencyName"
                                 label="Currency"/>
 
                             <el-table-column
-                                min-width="128"
+                                min-width="150"
+                                sortable
                                 prop="totalLines"
-                                label="Taxable Amount"/>
+                                label="Taxable Amount"
+                                align="right">
+                                <template slot-scope="{ row }">
+                                    {{ row.totalLines | formatCurrency }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
+                                min-width="150"
+                                sortable
                                 prop="taxAmount"
-                                label="PPN"/>
+                                label="PPN"
+                                align="right">
+                                <template slot-scope="{ row }">
+                                    {{ row.taxAmount | formatCurrency }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
+                                min-width="150"
+                                sortable
                                 prop="taxAmount"
-                                label="PPH"/>
+                                label="PPH"
+                                align="right">
+                                <template slot-scope="{ row }">
+                                    {{ row.taxAmount | formatCurrency }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
-                                label="Total Amount">
-                                {{ totalAmount }}
+                                min-width="150"
+                                label="Total Amount"
+                                align="right">
+                                {{ totalAmount | formatCurrency }}
                             </el-table-column>
 
                         </el-table>
