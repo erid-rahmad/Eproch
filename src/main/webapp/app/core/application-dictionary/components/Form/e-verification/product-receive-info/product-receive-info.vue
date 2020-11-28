@@ -13,13 +13,6 @@
 
                         <el-button
                             class="button"
-                            style="margin-left: 0px;"
-                            size="small"
-                            type="danger"
-                            icon="el-icon-close"/>
-
-                        <el-button
-                            class="button"
                             size="small"
                             type="primary"
                             icon="el-icon-download">
@@ -122,57 +115,96 @@
                             </el-table-column>
 
                             <el-table-column
-                                min-width="130"
+                                min-width="180"
+                                sortable
                                 v-if="isVendor==null"
-                                prop="cvendorName"
-                                label="Vendor"/>
+                                prop="cVendorId"
+                                label="Vendor">
+                                <template slot-scope="{ row }">
+                                    {{ row.cVendorName }}
+                                </template>
+                            </el-table-column>
 
                             <el-table-column
-                                min-width="130"
+                                min-width="120"
+                                sortable
                                 prop="poNo"
                                 label="PO No."/>
                             <el-table-column
-                                min-width="130"
+                                min-width="120"
+                                sortable
                                 prop="receiptNo"
                                 label="Receive No."/>
                             <el-table-column
-                                min-width="100"
+                                min-width="120"
+                                sortable
                                 prop="receiptDate"
                                 label="Receive Date"/>
-
                             <el-table-column
-                                min-width="128"
+                                min-width="120"
+                                sortable
                                 prop="deliveryNo"
                                 label="Delivery No."/>
                             <el-table-column
-                                min-width="128"
-                                prop="description"
-                                label="Description"/>
+                                min-width="250"
+                                sortable
+                                prop="mProductName"
+                                label="Item Description"/>
                             <el-table-column
-                                min-width="128"
-                                prop="cuomName"
-                                label="UoM"/>
+                                min-width="100"
+                                sortable
+                                prop="cUomId"
+                                label="UoM">
+                                <template slot-scope="{ row }">
+                                    {{ row.cUomName }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
+                                min-width="100"
+                                sortable
                                 prop="qty"
                                 label="Qty"/>
-                            <el-table-column
-                                min-width="128"
-                                prop="priceActual"
-                                label="Unit Price"/>
 
                             <el-table-column
-                                min-width="128"
+                                min-width="150"
+                                sortable
+                                prop="priceActual"
+                                label="Unit Price"
+                                align="right">
+                                <template slot-scope="{ row }">
+                                    {{ row.priceActual | formatCurrency }}
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                min-width="150"
+                                sortable
                                 prop="totalLines"
-                                label="Taxable Amount"/>
+                                label="Taxable Amount"
+                                align="right">
+                                <template slot-scope="{ row }">
+                                    {{ row.totalLines | formatCurrency }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
+                                min-width="150"
+                                sortable
                                 prop="taxAmount"
-                                label="PPN"/>
+                                label="PPN"
+                                align="right">
+                                <template slot-scope="{ row }">
+                                    {{ row.taxAmount | formatCurrency }}
+                                </template>
+                            </el-table-column>
+
                             <el-table-column
-                                min-width="128"
+                                min-width="120"
+                                sortable
                                 prop="mMatchType"
-                                label="Status"/>
+                                label="Status">
+                                <template slot-scope="{ row }">
+                                    {{ formatDocumentStatus(row.mMatchType) }}
+                                </template>
+                            </el-table-column>
 
                         </el-table>
                         <el-pagination

@@ -8,17 +8,13 @@ import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
 
-@Component({
-  components: {
-
-  }
-})
+@Component
 export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
-    maxHeight: 450,
-    height: 420
+    maxHeight: 490,
+    height: 470
   };
 
   public itemsPerPage = 10;
@@ -48,8 +44,8 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
   private mMatchType: string = "";
 
   selectedRows: any = {};
-  public vendorOptions: any = {};
-  public statusOptions: any = {};
+  public vendorOptions: any = [];
+  public statusOptions: any = [];
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
@@ -68,22 +64,11 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
 
   created(){
     this.retrieveGetReferences(this.productReceiveStatus);
-    this.retrieveAllVendorRecords();
+    this.retrieveAllRecordsSelectOption(this.baseApiUrlVendor);
   }
 
   public mounted(): void {
     this.retrieveAllRecords();
-  }
-
-  beforeDestroy() {
-
-  }
-
-  private closeDetailVerification(){
-    //this.index = true;
-    //this.selectedRows = {};
-    //this.radioSelection = null;
-    //this.retrieveAllRecords();
   }
 
   public changeOrder(propOrder): void {
@@ -141,33 +126,6 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
     console.log(row);
   }
 
-  public onSelectionChanged(value: any) {
-    //this.selectedRowsLine = value;
-    console.log(value);
-  }
-
-  public showDialogConfirmation(key: string) {
-    if(this.radioSelection != null){
-
-      /* if(key == "detail"){
-        this.index = false;
-      }else if(key == "update"){
-        this.dialogConfirmationVisible = true;
-        this.setVerificationNo = this.gridData[0].verificationNo;
-      } */
-
-    }else{
-      const message = `Please Selected row`;
-      this.$notify({
-        title: 'Warning',
-        message: message.toString(),
-        type: 'warning',
-        duration: 3000
-      });
-    }
-
-  }
-
   public retrieveAllRecords(): void {
     if ( ! this.baseApiUrl) {
       return;
@@ -183,8 +141,6 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
     var joinFilterQuery = "";
     if(this.isVendor){
       joinFilterQuery = "&cVendorId.equals="+this.isVendor;
-    }else{
-      joinFilterQuery = "";
     }
 
     this.dynamicWindowService(this.baseApiUrl)
@@ -202,7 +158,6 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
             matchType = "Unapplied";
           }
           this.mMatchType = item.mMatchType;
-          console.log(item.mMatchType);
           this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });
@@ -265,20 +220,12 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
     });
   }
 
-  public retrieveAllVendorRecords(): void {
+  public retrieveAllRecordsSelectOption(baseUrl): void {
 
     this.processing = true;
-    const paginationQuery = {
-      page: this.page - 1,
-      size: this.itemsPerPage,
-      sort: this.sort()
-    };
 
-    this.dynamicWindowService(this.baseApiUrlVendor)
-      .retrieve({
-        //criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
-        paginationQuery
-      })
+    this.dynamicWindowService(baseUrl)
+      .retrieve()
       .then(res => {
 
         let referenceList = res.data.map(item => {
@@ -314,7 +261,7 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "receiptDate.greaterThan="+this.filter.receiveDateFrom;
+      this.filterQuery += "receiptDate.greaterOrEqualThan="+this.filter.receiveDateFrom;
     }
 
     if((this.filter.poNo != null)&&(this.filter.poNo != "")){
@@ -327,7 +274,7 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "receiptDate.lessThan="+this.filter.receiveDateTo;
+      this.filterQuery += "receiptDate.lessOrEqualThan="+this.filter.receiveDateTo;
     }
 
     if((this.filter.deliveryNo != null)&&(this.filter.deliveryNo != "")){
@@ -350,6 +297,10 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
     }
 
     this.retrieveAllRecords();
+  }
+
+  formatDocumentStatus(value: string) {
+    return this.statusOptions.find(status => status.key === value)?.value;
   }
 
 }

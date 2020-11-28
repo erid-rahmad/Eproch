@@ -198,6 +198,9 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     @JsonProperty("cVendorId")
     private Long cVendorId;
 
+    @JsonProperty("cVendorCode")
+    private String cVendorCode;
+
     @JsonProperty("cVendorName")
     private String cVendorName;
 
@@ -269,7 +272,7 @@ public class MMatchPODTO extends AbstractAuditingDTO {
 
     @JsonProperty("mLocatorName")
     private String mLocatorName;
- 
+
     public Long getId() {
         return id;
     }
@@ -522,6 +525,14 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.cVendorId = cVendorId;
     }
 
+    public String getCVendorCode() {
+        return cVendorCode;
+    }
+
+    public void setCVendorCode(String cVendorCode) {
+        this.cVendorCode = cVendorCode;
+    }
+
     public String getCVendorName() {
         return cVendorName;
     }
@@ -700,6 +711,8 @@ public class MMatchPODTO extends AbstractAuditingDTO {
             ", adOrganizationId=" + getAdOrganizationId() +
             ", cCostCenterId=" + getCCostCenterId() +
             ", cVendorId=" + getCVendorId() +
+            ", cVendorCode=" + getCVendorCode() +
+            ", cVendorName=" + getCVendorName() +
             ", cCurrencyId=" + getCCurrencyId() +
             ", cTaxCategoryId=" + getCTaxCategoryId() +
             ", cUomId=" + getCUomId() +
