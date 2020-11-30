@@ -11,6 +11,7 @@
                             <el-input
                                 placeholder="Please Input Verification No"
                                 clearable
+                                @keyup.enter.native="searchInvoiceVerification"
                                 v-model="filterForm.verificationNo">
                                 <el-button
                                     @click="searchInvoiceVerification"

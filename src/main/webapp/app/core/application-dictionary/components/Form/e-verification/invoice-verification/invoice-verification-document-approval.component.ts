@@ -1,3 +1,4 @@
+import settings from '@/settings';
 import { mixins } from 'vue-class-component';
 import Vue from 'vue'
 import { Component, Watch } from 'vue-property-decorator';
@@ -27,19 +28,14 @@ export default class InvoiceVerificationDocumentApproval extends mixins(Vue2Filt
     maxHeight: 250,
     height: 210
   };
+  rules = {
 
-  private itemsPerPage = 10;
-  private queryCount: number = null;
-  private page = 1;
-  private previousPage = 1;
-  private propOrder = 'id';
-  private reverse = false;
-  private totalItems = 0;
+  }
 
   private processing = false;
 
   private gridData: Array<any> = [];
-  public payStat: any = {};
+  public payStat: any = [];
   private filter: any = {};
 
   private baseApiUrlReference = "/api/ad-references";
@@ -49,61 +45,21 @@ export default class InvoiceVerificationDocumentApproval extends mixins(Vue2Filt
   private dialogTaxInfoVisible: boolean = false;
   private dialogTitle: string = "";
 
+  get dateDisplayFormat() {
+    return settings.dateDisplayFormat;
+  }
+
+  get dateValueFormat() {
+    return settings.dateValueFormat;
+  }
 
   get formHeader(){
-    this.gridData = this.dataVerificationAndLines.lines;
+    this.gridData = this.dataVerificationAndLines.line;
     return this.dataVerificationAndLines.form;
   };
 
   created(){
     this.retrieveGetReferences(this.keyPayStat);
-  }
-
-  mounted() {
-
-  }
-
-  public changeOrder(propOrder): void {
-    this.propOrder = propOrder.prop;
-    this.reverse = propOrder.order === 'ascending';
-    const {propOrder: property, reverse} = this;
-    this.$emit('order-changed', { property, reverse });
-    this.transition();
-  }
-
-  public changePageSize(size: number) {
-    this.itemsPerPage = size;
-    if(this.page!=1){
-      this.page = 0;
-    }
-    //this.retrieveAllRecordMatchPos();
-  }
-
-  public transition(): void {
-    //this.retrieveAllRecordMatchPos();
-  }
-
-  public sort(): Array<any> {
-    const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
-    if (this.propOrder !== 'id') {
-      result.push('id');
-    }
-    return result;
-  }
-
-  public loadPage(page: number): void {
-    if (page !== this.previousPage) {
-      this.previousPage = page;
-      this.transition();
-    }
-  }
-
-  @Watch('page')
-  onPageChange(page: number) {
-    if (page !== this.previousPage) {
-      this.previousPage = page;
-      this.transition();
-    }
   }
 
   public closeDialog(): void {
