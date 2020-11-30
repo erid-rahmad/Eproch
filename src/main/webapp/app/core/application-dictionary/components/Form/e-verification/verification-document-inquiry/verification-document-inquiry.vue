@@ -43,14 +43,14 @@
                             Verification Receipt Print
                         </el-button>
 
-                        <el-button
+                        <!--<el-button
                             class="button"
                             size="small"
                             type="primary"
                             icon="el-icon-edit"
                             @click="showDialogConfirmation('update')">
                             Update Voucher
-                        </el-button>
+                        </el-button>-->
 
                         <el-button
                             class="button"
@@ -201,92 +201,139 @@
                             </el-table-column>
 
                             <el-table-column
-                                min-width="170"
+                                min-width="250"
+                                sortable
                                 prop="vendorName"
                                 label="Vendor"/>
                             <el-table-column
-                                min-width="130"
+                                min-width="150"
+                                sortable
                                 prop="verificationNo"
                                 label="Verification No"/>
                             <el-table-column
-                                min-width="130"
+                                min-width="150"
+                                sortable
                                 prop="verificationDate"
                                 label="Verification Date"/>
                             <el-table-column
                                 min-width="100"
+                                sortable
                                 prop="verificationStatus"
-                                label="Status"/>
+                                label="Status">
+                                <template slot-scope="{ row }">
+                                    {{ formatDocumentStatus(row.verificationStatus) }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
+                                min-width="250"
+                                sortable
                                 prop="description"
                                 label="Notes"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="140"
+                                sortable
                                 prop="payStatus"
                                 label="Payment Status"/>
                             <el-table-column
-                                min-width="128"
-                                prop="payDate"
+                                min-width="150"
+                                sortable
+                                prop="dueDate"
                                 label="Payment Schedule"/>
                             <el-table-column
-                                min-width="128"
-                                prop="actualPayDate"
+                                min-width="140"
+                                sortable
+                                prop="payDate"
                                 label="Actual Pay Date"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="140"
+                                sortable
                                 prop="invoiceNo"
                                 label="Invoice No"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="120"
+                                sortable
                                 prop="invoiceDate"
                                 label="Invoice Date"/>
                             <el-table-column
-                                min-width="128"
-                                prop="glDate"
+                                min-width="120"
+                                sortable
+                                prop="dateAcct"
                                 label="GL Date"/>
 
                             <el-table-column
-                                min-width="128"
+                                min-width="140"
+                                sortable
                                 prop="taxInvoice"
-                                label="Tax Invoice No."/>
+                                label="Tax Invoice No.">
+                                <template slot-scope="{ row }">
+                                    <span v-inputmask="{'mask': '99.999.999.9-999.999'}">{{ row.taxInvoice }}</span>
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
+                                min-width="130"
+                                sortable
                                 prop="taxDate"
                                 label="Tax Inv. Date"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="100"
+                                sortable
                                 prop="currencyName"
                                 label="Currency"/>
 
                             <el-table-column
-                                min-width="128"
+                                min-width="150"
+                                sortable
                                 prop="totalLines"
-                                label="Taxable Amount"/>
+                                label="Taxable Amount"
+                                align="right">
+                                <template slot-scope="{ row }">
+                                    {{ row.totalLines | formatCurrency }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
+                                min-width="150"
+                                sortable
                                 prop="taxAmount"
-                                label="PPN"/>
+                                label="PPN"
+                                align="right">
+                                <template slot-scope="{ row }">
+                                    {{ row.taxAmount | formatCurrency }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
+                                min-width="150"
+                                sortable
                                 prop="taxAmount"
-                                label="PPH"/>
+                                label="PPH"
+                                align="right">
+                                <template slot-scope="{ row }">
+                                    {{ row.taxAmount | formatCurrency }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
-                                label="Total Amount">
-                                {{ totalAmount }}
+                                min-width="150"
+                                prop="totalAmount"
+                                label="Total Amount"
+                                align="right">
+                                <template slot-scope="{ row }">
+                                    {{ row.totalAmount | formatCurrency }}
+                                </template>
                             </el-table-column>
 
                             <el-table-column
-                                min-width="128"
-                                prop="voucherNo"
+                                min-width="130"
+                                sortable
+                                prop="invoiceAp"
                                 label="Voucher No"/>
                             <el-table-column
-                                min-width="128"
+                                min-width="130"
+                                sortable
                                 prop="docType"
                                 label="Doc. Type"/>
                             <el-table-column
-                                min-width="128"
-                                prop="docComp"
+                                min-width="170"
+                                sortable
+                                prop="adOrganizationName"
                                 label="Doc. Comp."/>
 
                         </el-table>

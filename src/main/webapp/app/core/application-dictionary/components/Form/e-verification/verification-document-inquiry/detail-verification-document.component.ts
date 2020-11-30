@@ -3,7 +3,7 @@ import AlertMixin from '@/shared/alert/alert.mixin';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import Vue from 'vue';
 import { mixins } from 'vue-class-component';
-import { Component } from 'vue-property-decorator';
+import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
 
@@ -17,18 +17,15 @@ const DetailVerificationDocumentProps = Vue.extend({
   }
 })
 
-@Component({
-  components: {
-
-  }
-})
+@Component
 export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, DetailVerificationDocumentProps) {
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
-    maxHeight: 470,
-    height: 470
+    maxHeight: 450,
+    height: 430
   };
+
   public itemsPerPage = 10;
   public queryCount: number = null;
   public page = 1;
@@ -36,30 +33,15 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
   public propOrder = 'id';
   public reverse = false;
   private totalItems = 0;
-  private methodSubmit: string = "";
-  private baseApiUrlEVerification = "/api/m-verifications";
+
   private baseApiUrlEVerificationLine = "/api/m-verification-lines";
-  private baseApiUrlCurrency = "/api/c-currencies";
-  private baseApiUrlVendor = "/api/c-vendors";
   public gridData: Array<any> = [];
 
-  public statusOptions: any = {};
-  public filter: any = {};
   private processing = false;
-  private fullscreenLoading: boolean = false;
-
-  public currencyOptions: any = {};
-  public vendorOptions: any = {};
-
-  public formUpdateTotalLines: number = 0;
-  public formUpdateTaxAmount: number = 0;
-  public formUpdateTotalAmount: number = 0;
-  public dialogMatchPoVisible: boolean = false;
   private totalAmount: number = null;
-
-  public matchPo = {};
-  public modeFilterMatchPo: any = {};
   private filterQuery: string = "";
+  selectedRows: any = {};
+  public radioSelection: number = null;
 
   eVerification = {
     form: {},
@@ -87,21 +69,20 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
 
   }
 
+  public singleSelection (row) {
+    this.radioSelection = this.gridData.indexOf(row);
+    this.selectedRows = row;
+
+    console.log("Single Selection %O", row);
+  }
+
+
   public changeOrder(propOrder): void {
     this.propOrder = propOrder.prop;
     this.reverse = propOrder.order === 'ascending';
     const {propOrder: property, reverse} = this;
     this.$emit('order-changed', { property, reverse });
     this.transition();
-  }
-
-  public changePageSize(size: number) {
-    this.itemsPerPage = size;
-    this.retrieveEVerificationLine();
-  }
-
-  public transition(): void {
-    this.retrieveEVerificationLine();
   }
 
   public sort(): Array<any> {
@@ -112,17 +93,38 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
     return result;
   }
 
-  public closeDetailVerification(){
-    this.$emit('close-detail-verification');
+  // =====================================
+  // Pagination
+  public changePageSize(size: number) {
+    this.itemsPerPage = size;
+    if(this.page!=1){
+      this.page = 0;
+    }
+    this.retrieveEVerificationLine();
   }
 
-  private notifWarning(message: string){
-    this.$notify({
-      title: 'Warning',
-      message: message,
-      type: 'warning',
-      duration: 3000
-    });
+  public loadPage(page: number): void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.transition();
+    }
+  }
+
+  @Watch('page')
+  onPageChange(page: number) {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.transition();
+    }
+  }
+
+  public transition(): void {
+    this.retrieveEVerificationLine();
+  }
+  // =====================================
+
+  public closeDetailVerification(){
+    this.$emit('close-detail-verification');
   }
 
   private retrieveEVerificationLine(): void {
@@ -140,15 +142,17 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
     this.dynamicWindowService(this.baseApiUrlEVerificationLine)
       .retrieve({
         criteriaQuery: this.filterQuery,
+        paginationQuery
       })
       .then(res => {
         //console.log(res);
         this.gridData = res.data.map((item: any) => {
-          this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
+          item.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });
 
         console.log(this.gridData);
+        this.calculateLines();
 
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
@@ -167,11 +171,20 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
       });
   }
 
+  private calculateLines() {
+    let totalLines = 0;
+    let totalAmount = 0;
+    let taxAmount = 0;
 
+    for (const row of this.gridData) {
+      totalLines += row.totalLines;
+      totalAmount += row.totalAmount;
+      taxAmount += row.taxAmount;
+    }
 
-
-
-
-
+    this.detailVerification.totalLines = totalLines;
+    this.detailVerification.taxAmount = taxAmount;
+    this.detailVerification.grandTotal = totalAmount;
+  }
 
 }

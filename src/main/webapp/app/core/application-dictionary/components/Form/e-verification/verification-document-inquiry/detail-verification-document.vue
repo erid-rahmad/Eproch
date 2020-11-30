@@ -1,9 +1,8 @@
 <template>
-    <div class="app-container verification-update">
+    <div class="app-container verification">
 
         <el-row class="header">
             <el-col :span="24">
-
 
                 <el-button
                     class="button"
@@ -21,64 +20,37 @@
         <el-row class="filter">
             <el-form ref="form"  label-width="170px" size="mini">
                 <el-col :span="8">
-                    <el-form-item label="Invoice No." prop="invoiceNo">
-                        <el-input class="form-input" clearable v-model="detailVerification.invoiceNo" disabled/>
+                    <el-form-item label="Invoice No. :" prop="invoiceNo">
+                        {{ detailVerification.invoiceNo }}
                     </el-form-item>
-                    <el-form-item label="Invoice Date" prop="invoiceDate">
-                        <el-date-picker
-                            class="form-input"
-                            clearable disabled
-                            v-model="detailVerification.invoiceDate"
-                            type="date"
-                            :format="dateDisplayFormat"
-                            :value-format="dateValueFormat"
-                            placeholder="Pick a date" />
+                    <el-form-item label="Invoice Date :" prop="invoiceDate">
+                        {{ detailVerification.invoiceDate }}
                     </el-form-item>
-                    <el-form-item label="Currency" prop="currencyName">
-                        <el-select class="form-input" clearable disabled filterable v-model="detailVerification.currencyName" placeholder="Currency" >
-                            <el-option
-                                v-for="item in currencyOptions"
-                                :key="item.key"
-                                :label="item.value"
-                                :value="item.key" />
-                        </el-select>
+                    <el-form-item label="Currency :" prop="currencyName">
+                        {{ detailVerification.currencyName }}
                     </el-form-item>
 
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="Tax Invoice No." prop="taxInvoice">
-                        <el-input
-                            class="form-input"
-                            clearable disabled
-                            v-model="detailVerification.taxInvoice"
-                            v-inputmask
-                            data-inputmask="'mask': '99.999.999.9-999.999'"
-                            placeholder="__.___.___._-___.___"
-                            />
+                    <el-form-item label="Tax Invoice No. :" prop="taxInvoice">
+                        <span v-inputmask="{'mask': '99.999.999.9-999.999'}">{{ detailVerification.taxInvoice }}</span>
                     </el-form-item>
-                    <el-form-item label="Tax Invoice Date" prop="taxDate">
-                        <el-date-picker
-                            class="form-input"
-                            clearable disabled
-                            v-model="detailVerification.taxDate"
-                            type="date"
-                            :format="dateDisplayFormat"
-                            :value-format="dateValueFormat"
-                            placeholder="Pick a date" />
+                    <el-form-item label="Tax Invoice Date :" prop="taxDate">
+                        {{ detailVerification.taxDate }}
                     </el-form-item>
-                    <el-form-item label="NPWP" prop="vendorName">
-                        <el-input class="form-input" disabled clearable v-model="detailVerification.vendorName"></el-input>
+                    <el-form-item label="NPWP :" prop="vendorName">
+                        {{ detailVerification.vendorName }}
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="Taxable Amount" prop="totalLines">
-                        <el-input class="form-input" disabled clearable v-model="detailVerification.totalLines"></el-input>
+                    <el-form-item label="Taxable Amount :" prop="totalLines" align="right">
+                        {{ detailVerification.totalLines | formatCurrency }}
                     </el-form-item>
-                    <el-form-item label="PPN" prop="taxAmount">
-                        <el-input class="form-input" disabled clearable v-model="detailVerification.taxAmount"></el-input>
+                    <el-form-item label="PPN :" prop="taxAmount" align="right">
+                        {{ detailVerification.taxAmount | formatCurrency }}
                     </el-form-item>
-                    <el-form-item label="Total Amount" prop="grandTotal">
-                        <el-input class="form-input" disabled clearable v-model="detailVerification.grandTotal"></el-input>
+                    <el-form-item label="Total Amount :" prop="grandTotal" align="right">
+                        {{ detailVerification.grandTotal | formatCurrency }}
                     </el-form-item>
                 </el-col>
             </el-form>
@@ -98,51 +70,98 @@
                     :default-sort="gridSchema.defaultSort"
                     :empty-text="gridSchema.emptyText"
                     :data="gridData"
+                    @row-click="singleSelection"
                     @sort-change="changeOrder">
 
                     <el-table-column
+                        align="center"
+                        fixed
+                        width="35">
+                        <template slot-scope="scope">
+                            <el-radio class="radio" v-model="radioSelection" :label="scope.$index">&nbsp;</el-radio>
+                        </template>
+                    </el-table-column>
+                    <el-table-column
                         min-width="130"
+                        sortable
                         prop="poNo"
                         label="PO No."/>
                     <el-table-column
-                        min-width="150"
+                        min-width="130"
+                        sortable
                         prop="receiptNo"
                         label="Receipt No."/>
                     <el-table-column
-                        min-width="128"
+                        min-width="130"
+                        sortable
                         prop="deliveryNo"
                         label="Delivery No."/>
                     <el-table-column
-                        min-width="256"
-                        prop="description"
+                        min-width="250"
+                        sortable
+                        prop="mProductName"
                         label="Description"/>
                     <el-table-column
-                        min-width="128"
-                        prop="uomName"
+                        min-width="100"
+                        sortable
+                        prop="cUomName"
                         label="UoM"/>
                     <el-table-column
-                        min-width="128"
+                        min-width="100"
+                        sortable
                         prop="qty"
                         label="Qty"/>
                     <el-table-column
-                        min-width="128"
+                        min-width="150"
+                        sortable
                         prop="priceActual"
-                        label="Unit Price"/>
+                        label="Unit Price"
+                        align="right">
+                        <template slot-scope="{ row }">
+                            {{ row.priceActual | formatCurrency }}
+                        </template>
+                    </el-table-column>
                     <el-table-column
-                        min-width="128"
+                        min-width="150"
+                        sortable
                         prop="totalLines"
-                        label="Taxable Amount"/>
+                        label="Taxable Amount"
+                        align="right">
+                        <template slot-scope="{ row }">
+                            {{ row.totalLines | formatCurrency }}
+                        </template>
+                    </el-table-column>
                     <el-table-column
-                        min-width="128"
+                        min-width="150"
+                        sortable
                         prop="taxAmount"
-                        label="PPN"/>
+                        label="PPN"
+                        align="right">
+                        <template slot-scope="{ row }">
+                            {{ row.taxAmount | formatCurrency }}
+                        </template>
+                    </el-table-column>
                     <el-table-column
-                        min-width="128"
-                        label="Total Amount">
-                        {{ totalAmount }}
+                        min-width="150"
+                        sortable
+                        label="Total Amount"
+                        align="right">
+                        <template slot-scope="{ row }">
+                            {{ row.totalAmount | formatCurrency }}
+                        </template>
                     </el-table-column>
 
                 </el-table>
+                <el-pagination
+                    ref="pagination"
+                    background
+                    layout="sizes, prev, pager, next"
+                    mini
+                    :current-page.sync="page"
+                    :page-sizes="[10, 20, 50, 100]"
+                    :page-size="itemsPerPage"
+                    :total="queryCount"
+                    @size-change="changePageSize"/>
 
             </el-col>
         </el-row>
@@ -156,53 +175,12 @@
 </script>
 
 <style lang="scss">
-    .compact .verification-update{
+    .compact .verification{
         padding: 0px;
-    }
-
-    .header {
-        color: #333;
-    }
-
-    .filter {
-        .form-input {
-            width: 100%;
-        }
     }
 
     .main {
         padding: 0px;
     }
 
-    .button {
-        margin-bottom: 5px;
-    }
-
-    .grid-view {
-        .el-table {
-            .is-error .el-input__inner {
-                border-color: #ff4949;
-            }
-
-            label.el-checkbox {
-                margin: 4px 0;
-            }
-
-            .switch, .checkbox, .selectRemote, .select, .input, .numeric, .date{
-                width: 100%;
-            }
-        }
-
-        .el-pagination {
-            background: #fff;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 5;
-
-            .el-input--mini .el-input__inner {
-                height: 22px;
-            }
-        }
-    }
 </style>
