@@ -14,12 +14,13 @@ import org.mapstruct.Mapping;
 public interface MMatchPOMapper extends EntityMapper<MMatchPODTO, MMatchPO> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.code", target = "adOrganizationCode")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "CCostCenter.id", target = "CCostCenterId")
     @Mapping(source = "CCostCenter.code", target = "CCostCenterName")
     @Mapping(source = "CVendor.id", target = "CVendorId")
     @Mapping(source = "CVendor.code", target = "CVendorCode")
-    @Mapping(source = "CVendor.name", target = "CVendorName")
+    @Mapping(source = "CVendor.name", target = "CVendorShortName")
     @Mapping(source = "CCurrency.id", target = "CCurrencyId")
     @Mapping(source = "CCurrency.code", target = "CCurrencyName")
     @Mapping(source = "CTaxCategory.id", target = "CTaxCategoryId")

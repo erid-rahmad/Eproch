@@ -1,0 +1,45 @@
+{
+    "name": "AiExchangeIn",
+    "fields": [
+        {
+            "fieldName": "entityType",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "entityId",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "payload",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "status",
+            "fieldType": "AiStatus",
+            "fieldValues": "ERROR,PARTIAL,SUCCESS",
+            "fieldValidateRules": [
+                "required"
+            ]
+        }
+    ],
+    "relationships": [],
+    "changelogDate": "20201129185800",
+    "entityTableName": "ai_exchange_in",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

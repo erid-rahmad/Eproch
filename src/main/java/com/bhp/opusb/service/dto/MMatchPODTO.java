@@ -31,6 +31,7 @@ public class MMatchPODTO extends AbstractAuditingDTO {
      */
     @Size(max = 2)
     @ApiModelProperty(value = "PRDCTO")
+    @JsonProperty("cDocType")
     private String cDocType;
 
     /**
@@ -183,6 +184,7 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "PRKCOO")
 
     private Long adOrganizationId;
+    private String adOrganizationCode;
     private String adOrganizationName;
 
     @JsonProperty("cCostCenterId")
@@ -201,8 +203,8 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     @JsonProperty("cVendorCode")
     private String cVendorCode;
 
-    @JsonProperty("cVendorName")
-    private String cVendorName;
+    @JsonProperty("cVendorShortName")
+    private String cVendorShortName;
 
     /**
      * PRCRCD
@@ -493,6 +495,14 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationCode() {
+        return adOrganizationCode;
+    }
+
+    public void setAdOrganizationCode(String adOrganizationCode) {
+        this.adOrganizationCode = adOrganizationCode;
+    }
+
     public String getAdOrganizationName() {
         return adOrganizationName;
     }
@@ -533,12 +543,17 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.cVendorCode = cVendorCode;
     }
 
-    public String getCVendorName() {
-        return cVendorName;
+    public String getCVendorShortName() {
+        return cVendorShortName;
     }
 
-    public void setCVendorName(String cVendorName) {
-        this.cVendorName = cVendorName;
+    public void setCVendorShortName(String cVendorShortName) {
+        this.cVendorShortName = cVendorShortName;
+    }
+
+    @JsonProperty("cVendorName")
+    public String getCVendorName() {
+        return cVendorCode + " - " + cVendorShortName;
     }
 
     public Long getCCurrencyId() {

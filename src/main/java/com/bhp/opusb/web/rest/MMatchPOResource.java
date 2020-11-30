@@ -3,7 +3,6 @@ package com.bhp.opusb.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -55,13 +54,9 @@ public class MMatchPOResource {
 
     private final MMatchPOQueryService mMatchPOQueryService;
 
-    private final ObjectMapper jsonMapper;
-
-    public MMatchPOResource(MMatchPOService mMatchPOService, MMatchPOQueryService mMatchPOQueryService,
-            ObjectMapper jsonMapper) {
+    public MMatchPOResource(MMatchPOService mMatchPOService, MMatchPOQueryService mMatchPOQueryService) {
         this.mMatchPOService = mMatchPOService;
         this.mMatchPOQueryService = mMatchPOQueryService;
-        this.jsonMapper = jsonMapper;
     }
 
     /**
@@ -96,14 +91,20 @@ public class MMatchPOResource {
      *         the mMatchPO has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping(path = "/m-match-pos/synchronize", consumes = {"application/octet-stream;charset=UTF-8", "application/json;charset=UTF-8"})
+    @PostMapping(
+        path = "/m-match-pos/synchronize",
+        consumes = {
+            "application/octet-stream;charset=UTF-8",
+            "application/json;charset=UTF-8"
+        },
+        produces = {
+            "application/json;charset=UTF-8"
+        })
     public ResponseEntity<MMatchPODTO> syncReceiverFile(@RequestBody byte[] message) throws URISyntaxException, JsonProcessingException {
         final String input = new String(message);
         log.debug("REST request to synchronize MMatchPO : {}", input);
 
-        @SuppressWarnings("unchecked")
-        Map<String, Object> payload = jsonMapper.readValue(input, Map.class);
-        MMatchPODTO result = mMatchPOService.synchronize(payload);
+        MMatchPODTO result = mMatchPOService.synchronize(input);
 
         return ResponseEntity.ok().body(result);
     }

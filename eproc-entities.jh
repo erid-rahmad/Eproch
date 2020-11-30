@@ -594,6 +594,13 @@ entity MMatchPO {
 	mMatchType String maxlength(1)
 }
 
+entity AiExchangeIn {
+	entityType String required
+	entityId Long
+	payload TextBlob required
+	status AiStatus required
+}
+
 /**
  * Enumeration.
  */
@@ -611,6 +618,10 @@ enum CTaxTransactionType {
 
 enum BusinessCategorySelection {
 	ALL, SELECTED, NONE
+}
+
+enum AiStatus {
+	ERROR, PARTIAL, SUCCESS
 }
 
 relationship OneToOne {
