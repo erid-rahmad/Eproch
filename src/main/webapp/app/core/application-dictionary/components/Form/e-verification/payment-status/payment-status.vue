@@ -191,9 +191,13 @@
                             </el-table-column>
                             <el-table-column
                                 min-width="150"
+                                sortable
+                                prop="totalAmount"
                                 label="Total Amount"
                                 align="right">
-                                {{ totalAmount | formatCurrency }}
+                                <template slot-scope="{ row }">
+                                    {{ row.totalAmount | formatCurrency }}
+                                </template>
                             </el-table-column>
 
                         </el-table>

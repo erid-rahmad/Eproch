@@ -129,6 +129,7 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
       })
       .finally(() => {
         this.processing = false;
+        this.selectedMatchPo = [];
       });
   }
 

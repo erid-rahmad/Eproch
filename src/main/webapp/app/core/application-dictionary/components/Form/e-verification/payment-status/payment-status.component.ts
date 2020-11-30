@@ -147,7 +147,7 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
       .then(res => {
         console.log(res);
         this.gridData = res.data.map((item: any) => {
-          this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
+          item.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });
 
@@ -165,6 +165,8 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
       })
       .finally(() => {
         this.processing = false;
+        this.radioSelection = null;
+        this.selectedRows = {};
       });
   }
 

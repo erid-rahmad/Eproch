@@ -237,6 +237,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       })
       .finally(() => {
         this.processing = false;
+        this.radioSelection = null;
+        this.selectedRows = {};
       });
   }
 
