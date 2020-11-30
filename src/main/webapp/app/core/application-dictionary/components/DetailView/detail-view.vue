@@ -40,6 +40,11 @@
               class="checkbox"
               @change="value => onInputChanged(col.field, value)"
             />
+            <address-editor
+              v-else-if="isAddressField(col.field)"
+              v-model="model[col.name]"
+              @input="value => onInputChanged(col.field, value)"
+            />
             <el-select
               v-else-if="isTableDirectLink(col.field)"
               v-model="model[col.name]"

@@ -27,7 +27,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "m_verification_line")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MVerificationLine implements Serializable {
+public class MVerificationLine extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -51,6 +51,9 @@ public class MVerificationLine implements Serializable {
     @Column(name = "delivery_no", nullable = false)
     private String deliveryNo;
 
+    /**
+     * VDVRMK Supplier's remark.
+     */
     @Column(name = "description")
     private String description;
 
@@ -58,38 +61,68 @@ public class MVerificationLine implements Serializable {
     @Column(name = "qty", nullable = false)
     private Long qty;
 
+    /**
+     * VDPRRC Unit price.
+     */
     @NotNull
     @Column(name = "price_actual", precision = 21, scale = 2, nullable = false)
     private BigDecimal priceActual;
 
+    /**
+     * VDFRRC Unit price in foreign currency.
+     */
     @Column(name = "foreign_actual", precision = 21, scale = 2)
     private BigDecimal foreignActual;
 
+    /**
+     * VDAREC Receipt amount.
+     */
     @NotNull
     @Column(name = "total_lines", precision = 21, scale = 2, nullable = false)
     private BigDecimal totalLines;
 
+    /**
+     * VDFREC Receipt amount in foreign currency.
+     */
     @Column(name = "foreign_total_lines", precision = 21, scale = 2)
     private BigDecimal foreignTotalLines;
 
+    /**
+     * VDSTAM Tax amount.
+     */
     @NotNull
     @Column(name = "tax_amount", precision = 21, scale = 2, nullable = false)
     private BigDecimal taxAmount;
 
+    /**
+     * VDCTAM Tax amount in foreign currency.
+     */
     @Column(name = "foreign_tax_amount", precision = 21, scale = 2)
     private BigDecimal foreignTaxAmount;
 
+    /**
+     * VDLINN Invoice verification line no.
+     */
     @Column(name = "line_no")
     private Integer lineNo;
 
+    /**
+     * VDLNID Receipt line no.
+     */
     @Column(name = "line_no_mr")
     private Integer lineNoMr;
 
     @Column(name = "conversion_rate", precision = 21, scale = 2)
     private BigDecimal conversionRate;
 
+    /**
+     * VDRCDJ Receipt date.
+     */
     @Column(name = "receive_date")
     private LocalDate receiveDate;
+
+    @Column(name = "pay_stat")
+    private String payStat;
 
     @Column(name = "uid")
     private UUID uid;
@@ -344,6 +377,19 @@ public class MVerificationLine implements Serializable {
         this.receiveDate = receiveDate;
     }
 
+    public String getPayStat() {
+        return payStat;
+    }
+
+    public MVerificationLine payStat(String payStat) {
+        this.payStat = payStat;
+        return this;
+    }
+
+    public void setPayStat(String payStat) {
+        this.payStat = payStat;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -490,6 +536,7 @@ public class MVerificationLine implements Serializable {
             ", lineNoMr=" + getLineNoMr() +
             ", conversionRate=" + getConversionRate() +
             ", receiveDate='" + getReceiveDate() + "'" +
+            ", payStat='" + getPayStat() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

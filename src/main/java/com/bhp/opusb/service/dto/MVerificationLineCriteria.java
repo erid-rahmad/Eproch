@@ -61,6 +61,8 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private LocalDateFilter receiveDate;
 
+    private StringFilter payStat;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -98,6 +100,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.lineNoMr = other.lineNoMr == null ? null : other.lineNoMr.copy();
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
         this.receiveDate = other.receiveDate == null ? null : other.receiveDate.copy();
+        this.payStat = other.payStat == null ? null : other.payStat.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.verificationId = other.verificationId == null ? null : other.verificationId.copy();
@@ -249,6 +252,14 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.receiveDate = receiveDate;
     }
 
+    public StringFilter getPayStat() {
+        return payStat;
+    }
+
+    public void setPayStat(StringFilter payStat) {
+        this.payStat = payStat;
+    }
+
     public UUIDFilter getUid() {
         return uid;
     }
@@ -341,6 +352,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
             Objects.equals(lineNoMr, that.lineNoMr) &&
             Objects.equals(conversionRate, that.conversionRate) &&
             Objects.equals(receiveDate, that.receiveDate) &&
+            Objects.equals(payStat, that.payStat) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(verificationId, that.verificationId) &&
@@ -371,6 +383,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         lineNoMr,
         conversionRate,
         receiveDate,
+        payStat,
         uid,
         active,
         verificationId,
@@ -402,6 +415,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
                 (lineNoMr != null ? "lineNoMr=" + lineNoMr + ", " : "") +
                 (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
                 (receiveDate != null ? "receiveDate=" + receiveDate + ", " : "") +
+                (payStat != null ? "payStat=" + payStat + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (verificationId != null ? "verificationId=" + verificationId + ", " : "") +

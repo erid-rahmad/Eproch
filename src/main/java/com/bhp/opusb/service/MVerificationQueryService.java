@@ -100,6 +100,9 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), MVerification_.description));
             }
+            if (criteria.getReceiptNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getReceiptNo(), MVerification_.receiptNo));
+            }
             if (criteria.getInvoiceNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getInvoiceNo(), MVerification_.invoiceNo));
             }
@@ -115,29 +118,20 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             if (criteria.getTotalLines() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getTotalLines(), MVerification_.totalLines));
             }
-            if (criteria.getTaxAmount() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getTaxAmount(), MVerification_.taxAmount));
-            }
             if (criteria.getGrandTotal() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getGrandTotal(), MVerification_.grandTotal));
-            }
-            if (criteria.getVerificationStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getVerificationStatus(), MVerification_.verificationStatus));
-            }
-            if (criteria.getUid() != null) {
-                specification = specification.and(buildSpecification(criteria.getUid(), MVerification_.uid));
-            }
-            if (criteria.getActive() != null) {
-                specification = specification.and(buildSpecification(criteria.getActive(), MVerification_.active));
             }
             if (criteria.getForeignGrandTotal() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getForeignGrandTotal(), MVerification_.foreignGrandTotal));
             }
+            if (criteria.getTaxAmount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getTaxAmount(), MVerification_.taxAmount));
+            }
             if (criteria.getForeignTaxAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getForeignTaxAmount(), MVerification_.foreignTaxAmount));
             }
-            if (criteria.getDataSubmit() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDataSubmit(), MVerification_.dataSubmit));
+            if (criteria.getDateSubmit() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateSubmit(), MVerification_.dateSubmit));
             }
             if (criteria.getDateAcct() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateAcct(), MVerification_.dateAcct));
@@ -157,9 +151,6 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             if (criteria.getDueDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDueDate(), MVerification_.dueDate));
             }
-            if (criteria.getPayStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getPayStatus(), MVerification_.payStatus));
-            }
             if (criteria.getPayAmt() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPayAmt(), MVerification_.payAmt));
             }
@@ -168,6 +159,18 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             }
             if (criteria.getDateApprove() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateApprove(), MVerification_.dateApprove));
+            }
+            if (criteria.getVerificationStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getVerificationStatus(), MVerification_.verificationStatus));
+            }
+            if (criteria.getPayStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPayStatus(), MVerification_.payStatus));
+            }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), MVerification_.uid));
+            }
+            if (criteria.getActive() != null) {
+                specification = specification.and(buildSpecification(criteria.getActive(), MVerification_.active));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),

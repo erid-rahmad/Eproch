@@ -104,6 +104,9 @@ public class MVerificationLineResourceIT {
     private static final LocalDate UPDATED_RECEIVE_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_RECEIVE_DATE = LocalDate.ofEpochDay(-1L);
 
+    private static final String DEFAULT_PAY_STAT = "AAAAAAAAAA";
+    private static final String UPDATED_PAY_STAT = "BBBBBBBBBB";
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -154,6 +157,7 @@ public class MVerificationLineResourceIT {
             .lineNoMr(DEFAULT_LINE_NO_MR)
             .conversionRate(DEFAULT_CONVERSION_RATE)
             .receiveDate(DEFAULT_RECEIVE_DATE)
+            .payStat(DEFAULT_PAY_STAT)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -242,6 +246,7 @@ public class MVerificationLineResourceIT {
             .lineNoMr(UPDATED_LINE_NO_MR)
             .conversionRate(UPDATED_CONVERSION_RATE)
             .receiveDate(UPDATED_RECEIVE_DATE)
+            .payStat(UPDATED_PAY_STAT)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -344,6 +349,7 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.getLineNoMr()).isEqualTo(DEFAULT_LINE_NO_MR);
         assertThat(testMVerificationLine.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
         assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(DEFAULT_RECEIVE_DATE);
+        assertThat(testMVerificationLine.getPayStat()).isEqualTo(DEFAULT_PAY_STAT);
         assertThat(testMVerificationLine.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMVerificationLine.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -529,6 +535,7 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].lineNoMr").value(hasItem(DEFAULT_LINE_NO_MR)))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.intValue())))
             .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())))
+            .andExpect(jsonPath("$.[*].payStat").value(hasItem(DEFAULT_PAY_STAT)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -560,6 +567,7 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.lineNoMr").value(DEFAULT_LINE_NO_MR))
             .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.intValue()))
             .andExpect(jsonPath("$.receiveDate").value(DEFAULT_RECEIVE_DATE.toString()))
+            .andExpect(jsonPath("$.payStat").value(DEFAULT_PAY_STAT))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -2131,6 +2139,84 @@ public class MVerificationLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMVerificationLinesByPayStatIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where payStat equals to DEFAULT_PAY_STAT
+        defaultMVerificationLineShouldBeFound("payStat.equals=" + DEFAULT_PAY_STAT);
+
+        // Get all the mVerificationLineList where payStat equals to UPDATED_PAY_STAT
+        defaultMVerificationLineShouldNotBeFound("payStat.equals=" + UPDATED_PAY_STAT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByPayStatIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where payStat not equals to DEFAULT_PAY_STAT
+        defaultMVerificationLineShouldNotBeFound("payStat.notEquals=" + DEFAULT_PAY_STAT);
+
+        // Get all the mVerificationLineList where payStat not equals to UPDATED_PAY_STAT
+        defaultMVerificationLineShouldBeFound("payStat.notEquals=" + UPDATED_PAY_STAT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByPayStatIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where payStat in DEFAULT_PAY_STAT or UPDATED_PAY_STAT
+        defaultMVerificationLineShouldBeFound("payStat.in=" + DEFAULT_PAY_STAT + "," + UPDATED_PAY_STAT);
+
+        // Get all the mVerificationLineList where payStat equals to UPDATED_PAY_STAT
+        defaultMVerificationLineShouldNotBeFound("payStat.in=" + UPDATED_PAY_STAT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByPayStatIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where payStat is not null
+        defaultMVerificationLineShouldBeFound("payStat.specified=true");
+
+        // Get all the mVerificationLineList where payStat is null
+        defaultMVerificationLineShouldNotBeFound("payStat.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVerificationLinesByPayStatContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where payStat contains DEFAULT_PAY_STAT
+        defaultMVerificationLineShouldBeFound("payStat.contains=" + DEFAULT_PAY_STAT);
+
+        // Get all the mVerificationLineList where payStat contains UPDATED_PAY_STAT
+        defaultMVerificationLineShouldNotBeFound("payStat.contains=" + UPDATED_PAY_STAT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByPayStatNotContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where payStat does not contain DEFAULT_PAY_STAT
+        defaultMVerificationLineShouldNotBeFound("payStat.doesNotContain=" + DEFAULT_PAY_STAT);
+
+        // Get all the mVerificationLineList where payStat does not contain UPDATED_PAY_STAT
+        defaultMVerificationLineShouldBeFound("payStat.doesNotContain=" + UPDATED_PAY_STAT);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMVerificationLinesByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationLineRepository.saveAndFlush(mVerificationLine);
@@ -2352,6 +2438,7 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].lineNoMr").value(hasItem(DEFAULT_LINE_NO_MR)))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.intValue())))
             .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())))
+            .andExpect(jsonPath("$.[*].payStat").value(hasItem(DEFAULT_PAY_STAT)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -2417,6 +2504,7 @@ public class MVerificationLineResourceIT {
             .lineNoMr(UPDATED_LINE_NO_MR)
             .conversionRate(UPDATED_CONVERSION_RATE)
             .receiveDate(UPDATED_RECEIVE_DATE)
+            .payStat(UPDATED_PAY_STAT)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MVerificationLineDTO mVerificationLineDTO = mVerificationLineMapper.toDto(updatedMVerificationLine);
@@ -2446,6 +2534,7 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.getLineNoMr()).isEqualTo(UPDATED_LINE_NO_MR);
         assertThat(testMVerificationLine.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
         assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(UPDATED_RECEIVE_DATE);
+        assertThat(testMVerificationLine.getPayStat()).isEqualTo(UPDATED_PAY_STAT);
         assertThat(testMVerificationLine.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMVerificationLine.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

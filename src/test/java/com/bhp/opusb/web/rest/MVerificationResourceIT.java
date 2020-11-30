@@ -53,6 +53,9 @@ public class MVerificationResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_RECEIPT_NO = "AAAAAAAAAA";
+    private static final String UPDATED_RECEIPT_NO = "BBBBBBBBBB";
+
     private static final String DEFAULT_INVOICE_NO = "AAAAAAAAAA";
     private static final String UPDATED_INVOICE_NO = "BBBBBBBBBB";
 
@@ -71,34 +74,25 @@ public class MVerificationResourceIT {
     private static final BigDecimal UPDATED_TOTAL_LINES = new BigDecimal(2);
     private static final BigDecimal SMALLER_TOTAL_LINES = new BigDecimal(1 - 1);
 
-    private static final BigDecimal DEFAULT_TAX_AMOUNT = new BigDecimal(1);
-    private static final BigDecimal UPDATED_TAX_AMOUNT = new BigDecimal(2);
-    private static final BigDecimal SMALLER_TAX_AMOUNT = new BigDecimal(1 - 1);
-
     private static final BigDecimal DEFAULT_GRAND_TOTAL = new BigDecimal(1);
     private static final BigDecimal UPDATED_GRAND_TOTAL = new BigDecimal(2);
     private static final BigDecimal SMALLER_GRAND_TOTAL = new BigDecimal(1 - 1);
-
-    private static final String DEFAULT_VERIFICATION_STATUS = "AAAAAAAAAA";
-    private static final String UPDATED_VERIFICATION_STATUS = "BBBBBBBBBB";
-
-    private static final UUID DEFAULT_UID = UUID.randomUUID();
-    private static final UUID UPDATED_UID = UUID.randomUUID();
-
-    private static final Boolean DEFAULT_ACTIVE = false;
-    private static final Boolean UPDATED_ACTIVE = true;
 
     private static final BigDecimal DEFAULT_FOREIGN_GRAND_TOTAL = new BigDecimal(1);
     private static final BigDecimal UPDATED_FOREIGN_GRAND_TOTAL = new BigDecimal(2);
     private static final BigDecimal SMALLER_FOREIGN_GRAND_TOTAL = new BigDecimal(1 - 1);
 
+    private static final BigDecimal DEFAULT_TAX_AMOUNT = new BigDecimal(1);
+    private static final BigDecimal UPDATED_TAX_AMOUNT = new BigDecimal(2);
+    private static final BigDecimal SMALLER_TAX_AMOUNT = new BigDecimal(1 - 1);
+
     private static final BigDecimal DEFAULT_FOREIGN_TAX_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_FOREIGN_TAX_AMOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_FOREIGN_TAX_AMOUNT = new BigDecimal(1 - 1);
 
-    private static final LocalDate DEFAULT_DATA_SUBMIT = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATA_SUBMIT = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_DATA_SUBMIT = LocalDate.ofEpochDay(-1L);
+    private static final LocalDate DEFAULT_DATE_SUBMIT = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_SUBMIT = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_SUBMIT = LocalDate.ofEpochDay(-1L);
 
     private static final LocalDate DEFAULT_DATE_ACCT = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_ACCT = LocalDate.now(ZoneId.systemDefault());
@@ -122,9 +116,6 @@ public class MVerificationResourceIT {
     private static final LocalDate UPDATED_DUE_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DUE_DATE = LocalDate.ofEpochDay(-1L);
 
-    private static final String DEFAULT_PAY_STATUS = "AAAAAAAAAA";
-    private static final String UPDATED_PAY_STATUS = "BBBBBBBBBB";
-
     private static final BigDecimal DEFAULT_PAY_AMT = new BigDecimal(1);
     private static final BigDecimal UPDATED_PAY_AMT = new BigDecimal(2);
     private static final BigDecimal SMALLER_PAY_AMT = new BigDecimal(1 - 1);
@@ -136,6 +127,18 @@ public class MVerificationResourceIT {
     private static final LocalDate DEFAULT_DATE_APPROVE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_APPROVE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DATE_APPROVE = LocalDate.ofEpochDay(-1L);
+
+    private static final String DEFAULT_VERIFICATION_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_VERIFICATION_STATUS = "BBBBBBBBBB";
+
+    private static final String DEFAULT_PAY_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_PAY_STATUS = "BBBBBBBBBB";
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
+
+    private static final Boolean DEFAULT_ACTIVE = false;
+    private static final Boolean UPDATED_ACTIVE = true;
 
     @Autowired
     private MVerificationRepository mVerificationRepository;
@@ -168,29 +171,30 @@ public class MVerificationResourceIT {
             .verificationNo(DEFAULT_VERIFICATION_NO)
             .verificationDate(DEFAULT_VERIFICATION_DATE)
             .description(DEFAULT_DESCRIPTION)
+            .receiptNo(DEFAULT_RECEIPT_NO)
             .invoiceNo(DEFAULT_INVOICE_NO)
             .invoiceDate(DEFAULT_INVOICE_DATE)
             .taxInvoice(DEFAULT_TAX_INVOICE)
             .taxDate(DEFAULT_TAX_DATE)
             .totalLines(DEFAULT_TOTAL_LINES)
-            .taxAmount(DEFAULT_TAX_AMOUNT)
             .grandTotal(DEFAULT_GRAND_TOTAL)
-            .verificationStatus(DEFAULT_VERIFICATION_STATUS)
-            .uid(DEFAULT_UID)
-            .active(DEFAULT_ACTIVE)
             .foreignGrandTotal(DEFAULT_FOREIGN_GRAND_TOTAL)
+            .taxAmount(DEFAULT_TAX_AMOUNT)
             .foreignTaxAmount(DEFAULT_FOREIGN_TAX_AMOUNT)
-            .dataSubmit(DEFAULT_DATA_SUBMIT)
+            .dateSubmit(DEFAULT_DATE_SUBMIT)
             .dateAcct(DEFAULT_DATE_ACCT)
             .withholdingAmt(DEFAULT_WITHHOLDING_AMT)
             .invoiceAp(DEFAULT_INVOICE_AP)
             .docType(DEFAULT_DOC_TYPE)
             .payDate(DEFAULT_PAY_DATE)
             .dueDate(DEFAULT_DUE_DATE)
-            .payStatus(DEFAULT_PAY_STATUS)
             .payAmt(DEFAULT_PAY_AMT)
             .dateReject(DEFAULT_DATE_REJECT)
-            .dateApprove(DEFAULT_DATE_APPROVE);
+            .dateApprove(DEFAULT_DATE_APPROVE)
+            .verificationStatus(DEFAULT_VERIFICATION_STATUS)
+            .payStatus(DEFAULT_PAY_STATUS)
+            .uid(DEFAULT_UID)
+            .active(DEFAULT_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -244,29 +248,30 @@ public class MVerificationResourceIT {
             .verificationNo(UPDATED_VERIFICATION_NO)
             .verificationDate(UPDATED_VERIFICATION_DATE)
             .description(UPDATED_DESCRIPTION)
+            .receiptNo(UPDATED_RECEIPT_NO)
             .invoiceNo(UPDATED_INVOICE_NO)
             .invoiceDate(UPDATED_INVOICE_DATE)
             .taxInvoice(UPDATED_TAX_INVOICE)
             .taxDate(UPDATED_TAX_DATE)
             .totalLines(UPDATED_TOTAL_LINES)
-            .taxAmount(UPDATED_TAX_AMOUNT)
             .grandTotal(UPDATED_GRAND_TOTAL)
-            .verificationStatus(UPDATED_VERIFICATION_STATUS)
-            .uid(UPDATED_UID)
-            .active(UPDATED_ACTIVE)
             .foreignGrandTotal(UPDATED_FOREIGN_GRAND_TOTAL)
+            .taxAmount(UPDATED_TAX_AMOUNT)
             .foreignTaxAmount(UPDATED_FOREIGN_TAX_AMOUNT)
-            .dataSubmit(UPDATED_DATA_SUBMIT)
+            .dateSubmit(UPDATED_DATE_SUBMIT)
             .dateAcct(UPDATED_DATE_ACCT)
             .withholdingAmt(UPDATED_WITHHOLDING_AMT)
             .invoiceAp(UPDATED_INVOICE_AP)
             .docType(UPDATED_DOC_TYPE)
             .payDate(UPDATED_PAY_DATE)
             .dueDate(UPDATED_DUE_DATE)
-            .payStatus(UPDATED_PAY_STATUS)
             .payAmt(UPDATED_PAY_AMT)
             .dateReject(UPDATED_DATE_REJECT)
-            .dateApprove(UPDATED_DATE_APPROVE);
+            .dateApprove(UPDATED_DATE_APPROVE)
+            .verificationStatus(UPDATED_VERIFICATION_STATUS)
+            .payStatus(UPDATED_PAY_STATUS)
+            .uid(UPDATED_UID)
+            .active(UPDATED_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -334,29 +339,30 @@ public class MVerificationResourceIT {
         assertThat(testMVerification.getVerificationNo()).isEqualTo(DEFAULT_VERIFICATION_NO);
         assertThat(testMVerification.getVerificationDate()).isEqualTo(DEFAULT_VERIFICATION_DATE);
         assertThat(testMVerification.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testMVerification.getReceiptNo()).isEqualTo(DEFAULT_RECEIPT_NO);
         assertThat(testMVerification.getInvoiceNo()).isEqualTo(DEFAULT_INVOICE_NO);
         assertThat(testMVerification.getInvoiceDate()).isEqualTo(DEFAULT_INVOICE_DATE);
         assertThat(testMVerification.getTaxInvoice()).isEqualTo(DEFAULT_TAX_INVOICE);
         assertThat(testMVerification.getTaxDate()).isEqualTo(DEFAULT_TAX_DATE);
         assertThat(testMVerification.getTotalLines()).isEqualTo(DEFAULT_TOTAL_LINES);
-        assertThat(testMVerification.getTaxAmount()).isEqualTo(DEFAULT_TAX_AMOUNT);
         assertThat(testMVerification.getGrandTotal()).isEqualTo(DEFAULT_GRAND_TOTAL);
-        assertThat(testMVerification.getVerificationStatus()).isEqualTo(DEFAULT_VERIFICATION_STATUS);
-        assertThat(testMVerification.getUid()).isEqualTo(DEFAULT_UID);
-        assertThat(testMVerification.isActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testMVerification.getForeignGrandTotal()).isEqualTo(DEFAULT_FOREIGN_GRAND_TOTAL);
+        assertThat(testMVerification.getTaxAmount()).isEqualTo(DEFAULT_TAX_AMOUNT);
         assertThat(testMVerification.getForeignTaxAmount()).isEqualTo(DEFAULT_FOREIGN_TAX_AMOUNT);
-        assertThat(testMVerification.getDataSubmit()).isEqualTo(DEFAULT_DATA_SUBMIT);
+        assertThat(testMVerification.getDateSubmit()).isEqualTo(DEFAULT_DATE_SUBMIT);
         assertThat(testMVerification.getDateAcct()).isEqualTo(DEFAULT_DATE_ACCT);
         assertThat(testMVerification.getWithholdingAmt()).isEqualTo(DEFAULT_WITHHOLDING_AMT);
         assertThat(testMVerification.getInvoiceAp()).isEqualTo(DEFAULT_INVOICE_AP);
         assertThat(testMVerification.getDocType()).isEqualTo(DEFAULT_DOC_TYPE);
         assertThat(testMVerification.getPayDate()).isEqualTo(DEFAULT_PAY_DATE);
         assertThat(testMVerification.getDueDate()).isEqualTo(DEFAULT_DUE_DATE);
-        assertThat(testMVerification.getPayStatus()).isEqualTo(DEFAULT_PAY_STATUS);
         assertThat(testMVerification.getPayAmt()).isEqualTo(DEFAULT_PAY_AMT);
         assertThat(testMVerification.getDateReject()).isEqualTo(DEFAULT_DATE_REJECT);
         assertThat(testMVerification.getDateApprove()).isEqualTo(DEFAULT_DATE_APPROVE);
+        assertThat(testMVerification.getVerificationStatus()).isEqualTo(DEFAULT_VERIFICATION_STATUS);
+        assertThat(testMVerification.getPayStatus()).isEqualTo(DEFAULT_PAY_STATUS);
+        assertThat(testMVerification.getUid()).isEqualTo(DEFAULT_UID);
+        assertThat(testMVerification.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
     @Test
@@ -477,10 +483,10 @@ public class MVerificationResourceIT {
 
     @Test
     @Transactional
-    public void checkTaxAmountIsRequired() throws Exception {
+    public void checkGrandTotalIsRequired() throws Exception {
         int databaseSizeBeforeTest = mVerificationRepository.findAll().size();
         // set the field null
-        mVerification.setTaxAmount(null);
+        mVerification.setGrandTotal(null);
 
         // Create the MVerification, which fails.
         MVerificationDTO mVerificationDTO = mVerificationMapper.toDto(mVerification);
@@ -496,10 +502,10 @@ public class MVerificationResourceIT {
 
     @Test
     @Transactional
-    public void checkGrandTotalIsRequired() throws Exception {
+    public void checkTaxAmountIsRequired() throws Exception {
         int databaseSizeBeforeTest = mVerificationRepository.findAll().size();
         // set the field null
-        mVerification.setGrandTotal(null);
+        mVerification.setTaxAmount(null);
 
         // Create the MVerification, which fails.
         MVerificationDTO mVerificationDTO = mVerificationMapper.toDto(mVerification);
@@ -546,29 +552,30 @@ public class MVerificationResourceIT {
             .andExpect(jsonPath("$.[*].verificationNo").value(hasItem(DEFAULT_VERIFICATION_NO)))
             .andExpect(jsonPath("$.[*].verificationDate").value(hasItem(DEFAULT_VERIFICATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].receiptNo").value(hasItem(DEFAULT_RECEIPT_NO)))
             .andExpect(jsonPath("$.[*].invoiceNo").value(hasItem(DEFAULT_INVOICE_NO)))
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].taxInvoice").value(hasItem(DEFAULT_TAX_INVOICE)))
             .andExpect(jsonPath("$.[*].taxDate").value(hasItem(DEFAULT_TAX_DATE.toString())))
             .andExpect(jsonPath("$.[*].totalLines").value(hasItem(DEFAULT_TOTAL_LINES.intValue())))
-            .andExpect(jsonPath("$.[*].taxAmount").value(hasItem(DEFAULT_TAX_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
-            .andExpect(jsonPath("$.[*].verificationStatus").value(hasItem(DEFAULT_VERIFICATION_STATUS)))
-            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].foreignGrandTotal").value(hasItem(DEFAULT_FOREIGN_GRAND_TOTAL.intValue())))
+            .andExpect(jsonPath("$.[*].taxAmount").value(hasItem(DEFAULT_TAX_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].foreignTaxAmount").value(hasItem(DEFAULT_FOREIGN_TAX_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].dataSubmit").value(hasItem(DEFAULT_DATA_SUBMIT.toString())))
+            .andExpect(jsonPath("$.[*].dateSubmit").value(hasItem(DEFAULT_DATE_SUBMIT.toString())))
             .andExpect(jsonPath("$.[*].dateAcct").value(hasItem(DEFAULT_DATE_ACCT.toString())))
             .andExpect(jsonPath("$.[*].withholdingAmt").value(hasItem(DEFAULT_WITHHOLDING_AMT.intValue())))
             .andExpect(jsonPath("$.[*].invoiceAp").value(hasItem(DEFAULT_INVOICE_AP)))
             .andExpect(jsonPath("$.[*].docType").value(hasItem(DEFAULT_DOC_TYPE)))
             .andExpect(jsonPath("$.[*].payDate").value(hasItem(DEFAULT_PAY_DATE.toString())))
             .andExpect(jsonPath("$.[*].dueDate").value(hasItem(DEFAULT_DUE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].payStatus").value(hasItem(DEFAULT_PAY_STATUS)))
             .andExpect(jsonPath("$.[*].payAmt").value(hasItem(DEFAULT_PAY_AMT.intValue())))
             .andExpect(jsonPath("$.[*].dateReject").value(hasItem(DEFAULT_DATE_REJECT.toString())))
-            .andExpect(jsonPath("$.[*].dateApprove").value(hasItem(DEFAULT_DATE_APPROVE.toString())));
+            .andExpect(jsonPath("$.[*].dateApprove").value(hasItem(DEFAULT_DATE_APPROVE.toString())))
+            .andExpect(jsonPath("$.[*].verificationStatus").value(hasItem(DEFAULT_VERIFICATION_STATUS)))
+            .andExpect(jsonPath("$.[*].payStatus").value(hasItem(DEFAULT_PAY_STATUS)))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
     @Test
@@ -585,29 +592,30 @@ public class MVerificationResourceIT {
             .andExpect(jsonPath("$.verificationNo").value(DEFAULT_VERIFICATION_NO))
             .andExpect(jsonPath("$.verificationDate").value(DEFAULT_VERIFICATION_DATE.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.receiptNo").value(DEFAULT_RECEIPT_NO))
             .andExpect(jsonPath("$.invoiceNo").value(DEFAULT_INVOICE_NO))
             .andExpect(jsonPath("$.invoiceDate").value(DEFAULT_INVOICE_DATE.toString()))
             .andExpect(jsonPath("$.taxInvoice").value(DEFAULT_TAX_INVOICE))
             .andExpect(jsonPath("$.taxDate").value(DEFAULT_TAX_DATE.toString()))
             .andExpect(jsonPath("$.totalLines").value(DEFAULT_TOTAL_LINES.intValue()))
-            .andExpect(jsonPath("$.taxAmount").value(DEFAULT_TAX_AMOUNT.intValue()))
             .andExpect(jsonPath("$.grandTotal").value(DEFAULT_GRAND_TOTAL.intValue()))
-            .andExpect(jsonPath("$.verificationStatus").value(DEFAULT_VERIFICATION_STATUS))
-            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
-            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.foreignGrandTotal").value(DEFAULT_FOREIGN_GRAND_TOTAL.intValue()))
+            .andExpect(jsonPath("$.taxAmount").value(DEFAULT_TAX_AMOUNT.intValue()))
             .andExpect(jsonPath("$.foreignTaxAmount").value(DEFAULT_FOREIGN_TAX_AMOUNT.intValue()))
-            .andExpect(jsonPath("$.dataSubmit").value(DEFAULT_DATA_SUBMIT.toString()))
+            .andExpect(jsonPath("$.dateSubmit").value(DEFAULT_DATE_SUBMIT.toString()))
             .andExpect(jsonPath("$.dateAcct").value(DEFAULT_DATE_ACCT.toString()))
             .andExpect(jsonPath("$.withholdingAmt").value(DEFAULT_WITHHOLDING_AMT.intValue()))
             .andExpect(jsonPath("$.invoiceAp").value(DEFAULT_INVOICE_AP))
             .andExpect(jsonPath("$.docType").value(DEFAULT_DOC_TYPE))
             .andExpect(jsonPath("$.payDate").value(DEFAULT_PAY_DATE.toString()))
             .andExpect(jsonPath("$.dueDate").value(DEFAULT_DUE_DATE.toString()))
-            .andExpect(jsonPath("$.payStatus").value(DEFAULT_PAY_STATUS))
             .andExpect(jsonPath("$.payAmt").value(DEFAULT_PAY_AMT.intValue()))
             .andExpect(jsonPath("$.dateReject").value(DEFAULT_DATE_REJECT.toString()))
-            .andExpect(jsonPath("$.dateApprove").value(DEFAULT_DATE_APPROVE.toString()));
+            .andExpect(jsonPath("$.dateApprove").value(DEFAULT_DATE_APPROVE.toString()))
+            .andExpect(jsonPath("$.verificationStatus").value(DEFAULT_VERIFICATION_STATUS))
+            .andExpect(jsonPath("$.payStatus").value(DEFAULT_PAY_STATUS))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
 
@@ -888,6 +896,84 @@ public class MVerificationResourceIT {
 
         // Get all the mVerificationList where description does not contain UPDATED_DESCRIPTION
         defaultMVerificationShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByReceiptNoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where receiptNo equals to DEFAULT_RECEIPT_NO
+        defaultMVerificationShouldBeFound("receiptNo.equals=" + DEFAULT_RECEIPT_NO);
+
+        // Get all the mVerificationList where receiptNo equals to UPDATED_RECEIPT_NO
+        defaultMVerificationShouldNotBeFound("receiptNo.equals=" + UPDATED_RECEIPT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByReceiptNoIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where receiptNo not equals to DEFAULT_RECEIPT_NO
+        defaultMVerificationShouldNotBeFound("receiptNo.notEquals=" + DEFAULT_RECEIPT_NO);
+
+        // Get all the mVerificationList where receiptNo not equals to UPDATED_RECEIPT_NO
+        defaultMVerificationShouldBeFound("receiptNo.notEquals=" + UPDATED_RECEIPT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByReceiptNoIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where receiptNo in DEFAULT_RECEIPT_NO or UPDATED_RECEIPT_NO
+        defaultMVerificationShouldBeFound("receiptNo.in=" + DEFAULT_RECEIPT_NO + "," + UPDATED_RECEIPT_NO);
+
+        // Get all the mVerificationList where receiptNo equals to UPDATED_RECEIPT_NO
+        defaultMVerificationShouldNotBeFound("receiptNo.in=" + UPDATED_RECEIPT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByReceiptNoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where receiptNo is not null
+        defaultMVerificationShouldBeFound("receiptNo.specified=true");
+
+        // Get all the mVerificationList where receiptNo is null
+        defaultMVerificationShouldNotBeFound("receiptNo.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVerificationsByReceiptNoContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where receiptNo contains DEFAULT_RECEIPT_NO
+        defaultMVerificationShouldBeFound("receiptNo.contains=" + DEFAULT_RECEIPT_NO);
+
+        // Get all the mVerificationList where receiptNo contains UPDATED_RECEIPT_NO
+        defaultMVerificationShouldNotBeFound("receiptNo.contains=" + UPDATED_RECEIPT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByReceiptNoNotContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where receiptNo does not contain DEFAULT_RECEIPT_NO
+        defaultMVerificationShouldNotBeFound("receiptNo.doesNotContain=" + DEFAULT_RECEIPT_NO);
+
+        // Get all the mVerificationList where receiptNo does not contain UPDATED_RECEIPT_NO
+        defaultMVerificationShouldBeFound("receiptNo.doesNotContain=" + UPDATED_RECEIPT_NO);
     }
 
 
@@ -1364,111 +1450,6 @@ public class MVerificationResourceIT {
 
     @Test
     @Transactional
-    public void getAllMVerificationsByTaxAmountIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where taxAmount equals to DEFAULT_TAX_AMOUNT
-        defaultMVerificationShouldBeFound("taxAmount.equals=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationList where taxAmount equals to UPDATED_TAX_AMOUNT
-        defaultMVerificationShouldNotBeFound("taxAmount.equals=" + UPDATED_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByTaxAmountIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where taxAmount not equals to DEFAULT_TAX_AMOUNT
-        defaultMVerificationShouldNotBeFound("taxAmount.notEquals=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationList where taxAmount not equals to UPDATED_TAX_AMOUNT
-        defaultMVerificationShouldBeFound("taxAmount.notEquals=" + UPDATED_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByTaxAmountIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where taxAmount in DEFAULT_TAX_AMOUNT or UPDATED_TAX_AMOUNT
-        defaultMVerificationShouldBeFound("taxAmount.in=" + DEFAULT_TAX_AMOUNT + "," + UPDATED_TAX_AMOUNT);
-
-        // Get all the mVerificationList where taxAmount equals to UPDATED_TAX_AMOUNT
-        defaultMVerificationShouldNotBeFound("taxAmount.in=" + UPDATED_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByTaxAmountIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where taxAmount is not null
-        defaultMVerificationShouldBeFound("taxAmount.specified=true");
-
-        // Get all the mVerificationList where taxAmount is null
-        defaultMVerificationShouldNotBeFound("taxAmount.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByTaxAmountIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where taxAmount is greater than or equal to DEFAULT_TAX_AMOUNT
-        defaultMVerificationShouldBeFound("taxAmount.greaterThanOrEqual=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationList where taxAmount is greater than or equal to UPDATED_TAX_AMOUNT
-        defaultMVerificationShouldNotBeFound("taxAmount.greaterThanOrEqual=" + UPDATED_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByTaxAmountIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where taxAmount is less than or equal to DEFAULT_TAX_AMOUNT
-        defaultMVerificationShouldBeFound("taxAmount.lessThanOrEqual=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationList where taxAmount is less than or equal to SMALLER_TAX_AMOUNT
-        defaultMVerificationShouldNotBeFound("taxAmount.lessThanOrEqual=" + SMALLER_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByTaxAmountIsLessThanSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where taxAmount is less than DEFAULT_TAX_AMOUNT
-        defaultMVerificationShouldNotBeFound("taxAmount.lessThan=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationList where taxAmount is less than UPDATED_TAX_AMOUNT
-        defaultMVerificationShouldBeFound("taxAmount.lessThan=" + UPDATED_TAX_AMOUNT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByTaxAmountIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where taxAmount is greater than DEFAULT_TAX_AMOUNT
-        defaultMVerificationShouldNotBeFound("taxAmount.greaterThan=" + DEFAULT_TAX_AMOUNT);
-
-        // Get all the mVerificationList where taxAmount is greater than SMALLER_TAX_AMOUNT
-        defaultMVerificationShouldBeFound("taxAmount.greaterThan=" + SMALLER_TAX_AMOUNT);
-    }
-
-
-    @Test
-    @Transactional
     public void getAllMVerificationsByGrandTotalIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
@@ -1574,188 +1555,6 @@ public class MVerificationResourceIT {
 
     @Test
     @Transactional
-    public void getAllMVerificationsByVerificationStatusIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where verificationStatus equals to DEFAULT_VERIFICATION_STATUS
-        defaultMVerificationShouldBeFound("verificationStatus.equals=" + DEFAULT_VERIFICATION_STATUS);
-
-        // Get all the mVerificationList where verificationStatus equals to UPDATED_VERIFICATION_STATUS
-        defaultMVerificationShouldNotBeFound("verificationStatus.equals=" + UPDATED_VERIFICATION_STATUS);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByVerificationStatusIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where verificationStatus not equals to DEFAULT_VERIFICATION_STATUS
-        defaultMVerificationShouldNotBeFound("verificationStatus.notEquals=" + DEFAULT_VERIFICATION_STATUS);
-
-        // Get all the mVerificationList where verificationStatus not equals to UPDATED_VERIFICATION_STATUS
-        defaultMVerificationShouldBeFound("verificationStatus.notEquals=" + UPDATED_VERIFICATION_STATUS);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByVerificationStatusIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where verificationStatus in DEFAULT_VERIFICATION_STATUS or UPDATED_VERIFICATION_STATUS
-        defaultMVerificationShouldBeFound("verificationStatus.in=" + DEFAULT_VERIFICATION_STATUS + "," + UPDATED_VERIFICATION_STATUS);
-
-        // Get all the mVerificationList where verificationStatus equals to UPDATED_VERIFICATION_STATUS
-        defaultMVerificationShouldNotBeFound("verificationStatus.in=" + UPDATED_VERIFICATION_STATUS);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByVerificationStatusIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where verificationStatus is not null
-        defaultMVerificationShouldBeFound("verificationStatus.specified=true");
-
-        // Get all the mVerificationList where verificationStatus is null
-        defaultMVerificationShouldNotBeFound("verificationStatus.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllMVerificationsByVerificationStatusContainsSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where verificationStatus contains DEFAULT_VERIFICATION_STATUS
-        defaultMVerificationShouldBeFound("verificationStatus.contains=" + DEFAULT_VERIFICATION_STATUS);
-
-        // Get all the mVerificationList where verificationStatus contains UPDATED_VERIFICATION_STATUS
-        defaultMVerificationShouldNotBeFound("verificationStatus.contains=" + UPDATED_VERIFICATION_STATUS);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByVerificationStatusNotContainsSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where verificationStatus does not contain DEFAULT_VERIFICATION_STATUS
-        defaultMVerificationShouldNotBeFound("verificationStatus.doesNotContain=" + DEFAULT_VERIFICATION_STATUS);
-
-        // Get all the mVerificationList where verificationStatus does not contain UPDATED_VERIFICATION_STATUS
-        defaultMVerificationShouldBeFound("verificationStatus.doesNotContain=" + UPDATED_VERIFICATION_STATUS);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByUidIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where uid equals to DEFAULT_UID
-        defaultMVerificationShouldBeFound("uid.equals=" + DEFAULT_UID);
-
-        // Get all the mVerificationList where uid equals to UPDATED_UID
-        defaultMVerificationShouldNotBeFound("uid.equals=" + UPDATED_UID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByUidIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where uid not equals to DEFAULT_UID
-        defaultMVerificationShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
-
-        // Get all the mVerificationList where uid not equals to UPDATED_UID
-        defaultMVerificationShouldBeFound("uid.notEquals=" + UPDATED_UID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByUidIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where uid in DEFAULT_UID or UPDATED_UID
-        defaultMVerificationShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
-
-        // Get all the mVerificationList where uid equals to UPDATED_UID
-        defaultMVerificationShouldNotBeFound("uid.in=" + UPDATED_UID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByUidIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where uid is not null
-        defaultMVerificationShouldBeFound("uid.specified=true");
-
-        // Get all the mVerificationList where uid is null
-        defaultMVerificationShouldNotBeFound("uid.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByActiveIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where active equals to DEFAULT_ACTIVE
-        defaultMVerificationShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
-
-        // Get all the mVerificationList where active equals to UPDATED_ACTIVE
-        defaultMVerificationShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByActiveIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where active not equals to DEFAULT_ACTIVE
-        defaultMVerificationShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
-
-        // Get all the mVerificationList where active not equals to UPDATED_ACTIVE
-        defaultMVerificationShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByActiveIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where active in DEFAULT_ACTIVE or UPDATED_ACTIVE
-        defaultMVerificationShouldBeFound("active.in=" + DEFAULT_ACTIVE + "," + UPDATED_ACTIVE);
-
-        // Get all the mVerificationList where active equals to UPDATED_ACTIVE
-        defaultMVerificationShouldNotBeFound("active.in=" + UPDATED_ACTIVE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByActiveIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where active is not null
-        defaultMVerificationShouldBeFound("active.specified=true");
-
-        // Get all the mVerificationList where active is null
-        defaultMVerificationShouldNotBeFound("active.specified=false");
-    }
-
-    @Test
-    @Transactional
     public void getAllMVerificationsByForeignGrandTotalIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
@@ -1856,6 +1655,111 @@ public class MVerificationResourceIT {
 
         // Get all the mVerificationList where foreignGrandTotal is greater than SMALLER_FOREIGN_GRAND_TOTAL
         defaultMVerificationShouldBeFound("foreignGrandTotal.greaterThan=" + SMALLER_FOREIGN_GRAND_TOTAL);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByTaxAmountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where taxAmount equals to DEFAULT_TAX_AMOUNT
+        defaultMVerificationShouldBeFound("taxAmount.equals=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationList where taxAmount equals to UPDATED_TAX_AMOUNT
+        defaultMVerificationShouldNotBeFound("taxAmount.equals=" + UPDATED_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByTaxAmountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where taxAmount not equals to DEFAULT_TAX_AMOUNT
+        defaultMVerificationShouldNotBeFound("taxAmount.notEquals=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationList where taxAmount not equals to UPDATED_TAX_AMOUNT
+        defaultMVerificationShouldBeFound("taxAmount.notEquals=" + UPDATED_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByTaxAmountIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where taxAmount in DEFAULT_TAX_AMOUNT or UPDATED_TAX_AMOUNT
+        defaultMVerificationShouldBeFound("taxAmount.in=" + DEFAULT_TAX_AMOUNT + "," + UPDATED_TAX_AMOUNT);
+
+        // Get all the mVerificationList where taxAmount equals to UPDATED_TAX_AMOUNT
+        defaultMVerificationShouldNotBeFound("taxAmount.in=" + UPDATED_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByTaxAmountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where taxAmount is not null
+        defaultMVerificationShouldBeFound("taxAmount.specified=true");
+
+        // Get all the mVerificationList where taxAmount is null
+        defaultMVerificationShouldNotBeFound("taxAmount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByTaxAmountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where taxAmount is greater than or equal to DEFAULT_TAX_AMOUNT
+        defaultMVerificationShouldBeFound("taxAmount.greaterThanOrEqual=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationList where taxAmount is greater than or equal to UPDATED_TAX_AMOUNT
+        defaultMVerificationShouldNotBeFound("taxAmount.greaterThanOrEqual=" + UPDATED_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByTaxAmountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where taxAmount is less than or equal to DEFAULT_TAX_AMOUNT
+        defaultMVerificationShouldBeFound("taxAmount.lessThanOrEqual=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationList where taxAmount is less than or equal to SMALLER_TAX_AMOUNT
+        defaultMVerificationShouldNotBeFound("taxAmount.lessThanOrEqual=" + SMALLER_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByTaxAmountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where taxAmount is less than DEFAULT_TAX_AMOUNT
+        defaultMVerificationShouldNotBeFound("taxAmount.lessThan=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationList where taxAmount is less than UPDATED_TAX_AMOUNT
+        defaultMVerificationShouldBeFound("taxAmount.lessThan=" + UPDATED_TAX_AMOUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByTaxAmountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where taxAmount is greater than DEFAULT_TAX_AMOUNT
+        defaultMVerificationShouldNotBeFound("taxAmount.greaterThan=" + DEFAULT_TAX_AMOUNT);
+
+        // Get all the mVerificationList where taxAmount is greater than SMALLER_TAX_AMOUNT
+        defaultMVerificationShouldBeFound("taxAmount.greaterThan=" + SMALLER_TAX_AMOUNT);
     }
 
 
@@ -1966,106 +1870,106 @@ public class MVerificationResourceIT {
 
     @Test
     @Transactional
-    public void getAllMVerificationsByDataSubmitIsEqualToSomething() throws Exception {
+    public void getAllMVerificationsByDateSubmitIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
 
-        // Get all the mVerificationList where dataSubmit equals to DEFAULT_DATA_SUBMIT
-        defaultMVerificationShouldBeFound("dataSubmit.equals=" + DEFAULT_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit equals to DEFAULT_DATE_SUBMIT
+        defaultMVerificationShouldBeFound("dateSubmit.equals=" + DEFAULT_DATE_SUBMIT);
 
-        // Get all the mVerificationList where dataSubmit equals to UPDATED_DATA_SUBMIT
-        defaultMVerificationShouldNotBeFound("dataSubmit.equals=" + UPDATED_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit equals to UPDATED_DATE_SUBMIT
+        defaultMVerificationShouldNotBeFound("dateSubmit.equals=" + UPDATED_DATE_SUBMIT);
     }
 
     @Test
     @Transactional
-    public void getAllMVerificationsByDataSubmitIsNotEqualToSomething() throws Exception {
+    public void getAllMVerificationsByDateSubmitIsNotEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
 
-        // Get all the mVerificationList where dataSubmit not equals to DEFAULT_DATA_SUBMIT
-        defaultMVerificationShouldNotBeFound("dataSubmit.notEquals=" + DEFAULT_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit not equals to DEFAULT_DATE_SUBMIT
+        defaultMVerificationShouldNotBeFound("dateSubmit.notEquals=" + DEFAULT_DATE_SUBMIT);
 
-        // Get all the mVerificationList where dataSubmit not equals to UPDATED_DATA_SUBMIT
-        defaultMVerificationShouldBeFound("dataSubmit.notEquals=" + UPDATED_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit not equals to UPDATED_DATE_SUBMIT
+        defaultMVerificationShouldBeFound("dateSubmit.notEquals=" + UPDATED_DATE_SUBMIT);
     }
 
     @Test
     @Transactional
-    public void getAllMVerificationsByDataSubmitIsInShouldWork() throws Exception {
+    public void getAllMVerificationsByDateSubmitIsInShouldWork() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
 
-        // Get all the mVerificationList where dataSubmit in DEFAULT_DATA_SUBMIT or UPDATED_DATA_SUBMIT
-        defaultMVerificationShouldBeFound("dataSubmit.in=" + DEFAULT_DATA_SUBMIT + "," + UPDATED_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit in DEFAULT_DATE_SUBMIT or UPDATED_DATE_SUBMIT
+        defaultMVerificationShouldBeFound("dateSubmit.in=" + DEFAULT_DATE_SUBMIT + "," + UPDATED_DATE_SUBMIT);
 
-        // Get all the mVerificationList where dataSubmit equals to UPDATED_DATA_SUBMIT
-        defaultMVerificationShouldNotBeFound("dataSubmit.in=" + UPDATED_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit equals to UPDATED_DATE_SUBMIT
+        defaultMVerificationShouldNotBeFound("dateSubmit.in=" + UPDATED_DATE_SUBMIT);
     }
 
     @Test
     @Transactional
-    public void getAllMVerificationsByDataSubmitIsNullOrNotNull() throws Exception {
+    public void getAllMVerificationsByDateSubmitIsNullOrNotNull() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
 
-        // Get all the mVerificationList where dataSubmit is not null
-        defaultMVerificationShouldBeFound("dataSubmit.specified=true");
+        // Get all the mVerificationList where dateSubmit is not null
+        defaultMVerificationShouldBeFound("dateSubmit.specified=true");
 
-        // Get all the mVerificationList where dataSubmit is null
-        defaultMVerificationShouldNotBeFound("dataSubmit.specified=false");
+        // Get all the mVerificationList where dateSubmit is null
+        defaultMVerificationShouldNotBeFound("dateSubmit.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllMVerificationsByDataSubmitIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllMVerificationsByDateSubmitIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
 
-        // Get all the mVerificationList where dataSubmit is greater than or equal to DEFAULT_DATA_SUBMIT
-        defaultMVerificationShouldBeFound("dataSubmit.greaterThanOrEqual=" + DEFAULT_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit is greater than or equal to DEFAULT_DATE_SUBMIT
+        defaultMVerificationShouldBeFound("dateSubmit.greaterThanOrEqual=" + DEFAULT_DATE_SUBMIT);
 
-        // Get all the mVerificationList where dataSubmit is greater than or equal to UPDATED_DATA_SUBMIT
-        defaultMVerificationShouldNotBeFound("dataSubmit.greaterThanOrEqual=" + UPDATED_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit is greater than or equal to UPDATED_DATE_SUBMIT
+        defaultMVerificationShouldNotBeFound("dateSubmit.greaterThanOrEqual=" + UPDATED_DATE_SUBMIT);
     }
 
     @Test
     @Transactional
-    public void getAllMVerificationsByDataSubmitIsLessThanOrEqualToSomething() throws Exception {
+    public void getAllMVerificationsByDateSubmitIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
 
-        // Get all the mVerificationList where dataSubmit is less than or equal to DEFAULT_DATA_SUBMIT
-        defaultMVerificationShouldBeFound("dataSubmit.lessThanOrEqual=" + DEFAULT_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit is less than or equal to DEFAULT_DATE_SUBMIT
+        defaultMVerificationShouldBeFound("dateSubmit.lessThanOrEqual=" + DEFAULT_DATE_SUBMIT);
 
-        // Get all the mVerificationList where dataSubmit is less than or equal to SMALLER_DATA_SUBMIT
-        defaultMVerificationShouldNotBeFound("dataSubmit.lessThanOrEqual=" + SMALLER_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit is less than or equal to SMALLER_DATE_SUBMIT
+        defaultMVerificationShouldNotBeFound("dateSubmit.lessThanOrEqual=" + SMALLER_DATE_SUBMIT);
     }
 
     @Test
     @Transactional
-    public void getAllMVerificationsByDataSubmitIsLessThanSomething() throws Exception {
+    public void getAllMVerificationsByDateSubmitIsLessThanSomething() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
 
-        // Get all the mVerificationList where dataSubmit is less than DEFAULT_DATA_SUBMIT
-        defaultMVerificationShouldNotBeFound("dataSubmit.lessThan=" + DEFAULT_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit is less than DEFAULT_DATE_SUBMIT
+        defaultMVerificationShouldNotBeFound("dateSubmit.lessThan=" + DEFAULT_DATE_SUBMIT);
 
-        // Get all the mVerificationList where dataSubmit is less than UPDATED_DATA_SUBMIT
-        defaultMVerificationShouldBeFound("dataSubmit.lessThan=" + UPDATED_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit is less than UPDATED_DATE_SUBMIT
+        defaultMVerificationShouldBeFound("dateSubmit.lessThan=" + UPDATED_DATE_SUBMIT);
     }
 
     @Test
     @Transactional
-    public void getAllMVerificationsByDataSubmitIsGreaterThanSomething() throws Exception {
+    public void getAllMVerificationsByDateSubmitIsGreaterThanSomething() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
 
-        // Get all the mVerificationList where dataSubmit is greater than DEFAULT_DATA_SUBMIT
-        defaultMVerificationShouldNotBeFound("dataSubmit.greaterThan=" + DEFAULT_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit is greater than DEFAULT_DATE_SUBMIT
+        defaultMVerificationShouldNotBeFound("dateSubmit.greaterThan=" + DEFAULT_DATE_SUBMIT);
 
-        // Get all the mVerificationList where dataSubmit is greater than SMALLER_DATA_SUBMIT
-        defaultMVerificationShouldBeFound("dataSubmit.greaterThan=" + SMALLER_DATA_SUBMIT);
+        // Get all the mVerificationList where dateSubmit is greater than SMALLER_DATE_SUBMIT
+        defaultMVerificationShouldBeFound("dateSubmit.greaterThan=" + SMALLER_DATE_SUBMIT);
     }
 
 
@@ -2647,84 +2551,6 @@ public class MVerificationResourceIT {
 
     @Test
     @Transactional
-    public void getAllMVerificationsByPayStatusIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where payStatus equals to DEFAULT_PAY_STATUS
-        defaultMVerificationShouldBeFound("payStatus.equals=" + DEFAULT_PAY_STATUS);
-
-        // Get all the mVerificationList where payStatus equals to UPDATED_PAY_STATUS
-        defaultMVerificationShouldNotBeFound("payStatus.equals=" + UPDATED_PAY_STATUS);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByPayStatusIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where payStatus not equals to DEFAULT_PAY_STATUS
-        defaultMVerificationShouldNotBeFound("payStatus.notEquals=" + DEFAULT_PAY_STATUS);
-
-        // Get all the mVerificationList where payStatus not equals to UPDATED_PAY_STATUS
-        defaultMVerificationShouldBeFound("payStatus.notEquals=" + UPDATED_PAY_STATUS);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByPayStatusIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where payStatus in DEFAULT_PAY_STATUS or UPDATED_PAY_STATUS
-        defaultMVerificationShouldBeFound("payStatus.in=" + DEFAULT_PAY_STATUS + "," + UPDATED_PAY_STATUS);
-
-        // Get all the mVerificationList where payStatus equals to UPDATED_PAY_STATUS
-        defaultMVerificationShouldNotBeFound("payStatus.in=" + UPDATED_PAY_STATUS);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByPayStatusIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where payStatus is not null
-        defaultMVerificationShouldBeFound("payStatus.specified=true");
-
-        // Get all the mVerificationList where payStatus is null
-        defaultMVerificationShouldNotBeFound("payStatus.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllMVerificationsByPayStatusContainsSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where payStatus contains DEFAULT_PAY_STATUS
-        defaultMVerificationShouldBeFound("payStatus.contains=" + DEFAULT_PAY_STATUS);
-
-        // Get all the mVerificationList where payStatus contains UPDATED_PAY_STATUS
-        defaultMVerificationShouldNotBeFound("payStatus.contains=" + UPDATED_PAY_STATUS);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByPayStatusNotContainsSomething() throws Exception {
-        // Initialize the database
-        mVerificationRepository.saveAndFlush(mVerification);
-
-        // Get all the mVerificationList where payStatus does not contain DEFAULT_PAY_STATUS
-        defaultMVerificationShouldNotBeFound("payStatus.doesNotContain=" + DEFAULT_PAY_STATUS);
-
-        // Get all the mVerificationList where payStatus does not contain UPDATED_PAY_STATUS
-        defaultMVerificationShouldBeFound("payStatus.doesNotContain=" + UPDATED_PAY_STATUS);
-    }
-
-
-    @Test
-    @Transactional
     public void getAllMVerificationsByPayAmtIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
@@ -3040,6 +2866,266 @@ public class MVerificationResourceIT {
 
     @Test
     @Transactional
+    public void getAllMVerificationsByVerificationStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where verificationStatus equals to DEFAULT_VERIFICATION_STATUS
+        defaultMVerificationShouldBeFound("verificationStatus.equals=" + DEFAULT_VERIFICATION_STATUS);
+
+        // Get all the mVerificationList where verificationStatus equals to UPDATED_VERIFICATION_STATUS
+        defaultMVerificationShouldNotBeFound("verificationStatus.equals=" + UPDATED_VERIFICATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByVerificationStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where verificationStatus not equals to DEFAULT_VERIFICATION_STATUS
+        defaultMVerificationShouldNotBeFound("verificationStatus.notEquals=" + DEFAULT_VERIFICATION_STATUS);
+
+        // Get all the mVerificationList where verificationStatus not equals to UPDATED_VERIFICATION_STATUS
+        defaultMVerificationShouldBeFound("verificationStatus.notEquals=" + UPDATED_VERIFICATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByVerificationStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where verificationStatus in DEFAULT_VERIFICATION_STATUS or UPDATED_VERIFICATION_STATUS
+        defaultMVerificationShouldBeFound("verificationStatus.in=" + DEFAULT_VERIFICATION_STATUS + "," + UPDATED_VERIFICATION_STATUS);
+
+        // Get all the mVerificationList where verificationStatus equals to UPDATED_VERIFICATION_STATUS
+        defaultMVerificationShouldNotBeFound("verificationStatus.in=" + UPDATED_VERIFICATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByVerificationStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where verificationStatus is not null
+        defaultMVerificationShouldBeFound("verificationStatus.specified=true");
+
+        // Get all the mVerificationList where verificationStatus is null
+        defaultMVerificationShouldNotBeFound("verificationStatus.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVerificationsByVerificationStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where verificationStatus contains DEFAULT_VERIFICATION_STATUS
+        defaultMVerificationShouldBeFound("verificationStatus.contains=" + DEFAULT_VERIFICATION_STATUS);
+
+        // Get all the mVerificationList where verificationStatus contains UPDATED_VERIFICATION_STATUS
+        defaultMVerificationShouldNotBeFound("verificationStatus.contains=" + UPDATED_VERIFICATION_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByVerificationStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where verificationStatus does not contain DEFAULT_VERIFICATION_STATUS
+        defaultMVerificationShouldNotBeFound("verificationStatus.doesNotContain=" + DEFAULT_VERIFICATION_STATUS);
+
+        // Get all the mVerificationList where verificationStatus does not contain UPDATED_VERIFICATION_STATUS
+        defaultMVerificationShouldBeFound("verificationStatus.doesNotContain=" + UPDATED_VERIFICATION_STATUS);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByPayStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where payStatus equals to DEFAULT_PAY_STATUS
+        defaultMVerificationShouldBeFound("payStatus.equals=" + DEFAULT_PAY_STATUS);
+
+        // Get all the mVerificationList where payStatus equals to UPDATED_PAY_STATUS
+        defaultMVerificationShouldNotBeFound("payStatus.equals=" + UPDATED_PAY_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByPayStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where payStatus not equals to DEFAULT_PAY_STATUS
+        defaultMVerificationShouldNotBeFound("payStatus.notEquals=" + DEFAULT_PAY_STATUS);
+
+        // Get all the mVerificationList where payStatus not equals to UPDATED_PAY_STATUS
+        defaultMVerificationShouldBeFound("payStatus.notEquals=" + UPDATED_PAY_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByPayStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where payStatus in DEFAULT_PAY_STATUS or UPDATED_PAY_STATUS
+        defaultMVerificationShouldBeFound("payStatus.in=" + DEFAULT_PAY_STATUS + "," + UPDATED_PAY_STATUS);
+
+        // Get all the mVerificationList where payStatus equals to UPDATED_PAY_STATUS
+        defaultMVerificationShouldNotBeFound("payStatus.in=" + UPDATED_PAY_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByPayStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where payStatus is not null
+        defaultMVerificationShouldBeFound("payStatus.specified=true");
+
+        // Get all the mVerificationList where payStatus is null
+        defaultMVerificationShouldNotBeFound("payStatus.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVerificationsByPayStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where payStatus contains DEFAULT_PAY_STATUS
+        defaultMVerificationShouldBeFound("payStatus.contains=" + DEFAULT_PAY_STATUS);
+
+        // Get all the mVerificationList where payStatus contains UPDATED_PAY_STATUS
+        defaultMVerificationShouldNotBeFound("payStatus.contains=" + UPDATED_PAY_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByPayStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where payStatus does not contain DEFAULT_PAY_STATUS
+        defaultMVerificationShouldNotBeFound("payStatus.doesNotContain=" + DEFAULT_PAY_STATUS);
+
+        // Get all the mVerificationList where payStatus does not contain UPDATED_PAY_STATUS
+        defaultMVerificationShouldBeFound("payStatus.doesNotContain=" + UPDATED_PAY_STATUS);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where uid equals to DEFAULT_UID
+        defaultMVerificationShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the mVerificationList where uid equals to UPDATED_UID
+        defaultMVerificationShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where uid not equals to DEFAULT_UID
+        defaultMVerificationShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the mVerificationList where uid not equals to UPDATED_UID
+        defaultMVerificationShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where uid in DEFAULT_UID or UPDATED_UID
+        defaultMVerificationShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the mVerificationList where uid equals to UPDATED_UID
+        defaultMVerificationShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where uid is not null
+        defaultMVerificationShouldBeFound("uid.specified=true");
+
+        // Get all the mVerificationList where uid is null
+        defaultMVerificationShouldNotBeFound("uid.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByActiveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where active equals to DEFAULT_ACTIVE
+        defaultMVerificationShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
+
+        // Get all the mVerificationList where active equals to UPDATED_ACTIVE
+        defaultMVerificationShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where active not equals to DEFAULT_ACTIVE
+        defaultMVerificationShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the mVerificationList where active not equals to UPDATED_ACTIVE
+        defaultMVerificationShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByActiveIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where active in DEFAULT_ACTIVE or UPDATED_ACTIVE
+        defaultMVerificationShouldBeFound("active.in=" + DEFAULT_ACTIVE + "," + UPDATED_ACTIVE);
+
+        // Get all the mVerificationList where active equals to UPDATED_ACTIVE
+        defaultMVerificationShouldNotBeFound("active.in=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByActiveIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where active is not null
+        defaultMVerificationShouldBeFound("active.specified=true");
+
+        // Get all the mVerificationList where active is null
+        defaultMVerificationShouldNotBeFound("active.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllMVerificationsByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = mVerification.getAdOrganization();
@@ -3132,29 +3218,30 @@ public class MVerificationResourceIT {
             .andExpect(jsonPath("$.[*].verificationNo").value(hasItem(DEFAULT_VERIFICATION_NO)))
             .andExpect(jsonPath("$.[*].verificationDate").value(hasItem(DEFAULT_VERIFICATION_DATE.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].receiptNo").value(hasItem(DEFAULT_RECEIPT_NO)))
             .andExpect(jsonPath("$.[*].invoiceNo").value(hasItem(DEFAULT_INVOICE_NO)))
             .andExpect(jsonPath("$.[*].invoiceDate").value(hasItem(DEFAULT_INVOICE_DATE.toString())))
             .andExpect(jsonPath("$.[*].taxInvoice").value(hasItem(DEFAULT_TAX_INVOICE)))
             .andExpect(jsonPath("$.[*].taxDate").value(hasItem(DEFAULT_TAX_DATE.toString())))
             .andExpect(jsonPath("$.[*].totalLines").value(hasItem(DEFAULT_TOTAL_LINES.intValue())))
-            .andExpect(jsonPath("$.[*].taxAmount").value(hasItem(DEFAULT_TAX_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
-            .andExpect(jsonPath("$.[*].verificationStatus").value(hasItem(DEFAULT_VERIFICATION_STATUS)))
-            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].foreignGrandTotal").value(hasItem(DEFAULT_FOREIGN_GRAND_TOTAL.intValue())))
+            .andExpect(jsonPath("$.[*].taxAmount").value(hasItem(DEFAULT_TAX_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].foreignTaxAmount").value(hasItem(DEFAULT_FOREIGN_TAX_AMOUNT.intValue())))
-            .andExpect(jsonPath("$.[*].dataSubmit").value(hasItem(DEFAULT_DATA_SUBMIT.toString())))
+            .andExpect(jsonPath("$.[*].dateSubmit").value(hasItem(DEFAULT_DATE_SUBMIT.toString())))
             .andExpect(jsonPath("$.[*].dateAcct").value(hasItem(DEFAULT_DATE_ACCT.toString())))
             .andExpect(jsonPath("$.[*].withholdingAmt").value(hasItem(DEFAULT_WITHHOLDING_AMT.intValue())))
             .andExpect(jsonPath("$.[*].invoiceAp").value(hasItem(DEFAULT_INVOICE_AP)))
             .andExpect(jsonPath("$.[*].docType").value(hasItem(DEFAULT_DOC_TYPE)))
             .andExpect(jsonPath("$.[*].payDate").value(hasItem(DEFAULT_PAY_DATE.toString())))
             .andExpect(jsonPath("$.[*].dueDate").value(hasItem(DEFAULT_DUE_DATE.toString())))
-            .andExpect(jsonPath("$.[*].payStatus").value(hasItem(DEFAULT_PAY_STATUS)))
             .andExpect(jsonPath("$.[*].payAmt").value(hasItem(DEFAULT_PAY_AMT.intValue())))
             .andExpect(jsonPath("$.[*].dateReject").value(hasItem(DEFAULT_DATE_REJECT.toString())))
-            .andExpect(jsonPath("$.[*].dateApprove").value(hasItem(DEFAULT_DATE_APPROVE.toString())));
+            .andExpect(jsonPath("$.[*].dateApprove").value(hasItem(DEFAULT_DATE_APPROVE.toString())))
+            .andExpect(jsonPath("$.[*].verificationStatus").value(hasItem(DEFAULT_VERIFICATION_STATUS)))
+            .andExpect(jsonPath("$.[*].payStatus").value(hasItem(DEFAULT_PAY_STATUS)))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
         restMVerificationMockMvc.perform(get("/api/m-verifications/count?sort=id,desc&" + filter))
@@ -3205,29 +3292,30 @@ public class MVerificationResourceIT {
             .verificationNo(UPDATED_VERIFICATION_NO)
             .verificationDate(UPDATED_VERIFICATION_DATE)
             .description(UPDATED_DESCRIPTION)
+            .receiptNo(UPDATED_RECEIPT_NO)
             .invoiceNo(UPDATED_INVOICE_NO)
             .invoiceDate(UPDATED_INVOICE_DATE)
             .taxInvoice(UPDATED_TAX_INVOICE)
             .taxDate(UPDATED_TAX_DATE)
             .totalLines(UPDATED_TOTAL_LINES)
-            .taxAmount(UPDATED_TAX_AMOUNT)
             .grandTotal(UPDATED_GRAND_TOTAL)
-            .verificationStatus(UPDATED_VERIFICATION_STATUS)
-            .uid(UPDATED_UID)
-            .active(UPDATED_ACTIVE)
             .foreignGrandTotal(UPDATED_FOREIGN_GRAND_TOTAL)
+            .taxAmount(UPDATED_TAX_AMOUNT)
             .foreignTaxAmount(UPDATED_FOREIGN_TAX_AMOUNT)
-            .dataSubmit(UPDATED_DATA_SUBMIT)
+            .dateSubmit(UPDATED_DATE_SUBMIT)
             .dateAcct(UPDATED_DATE_ACCT)
             .withholdingAmt(UPDATED_WITHHOLDING_AMT)
             .invoiceAp(UPDATED_INVOICE_AP)
             .docType(UPDATED_DOC_TYPE)
             .payDate(UPDATED_PAY_DATE)
             .dueDate(UPDATED_DUE_DATE)
-            .payStatus(UPDATED_PAY_STATUS)
             .payAmt(UPDATED_PAY_AMT)
             .dateReject(UPDATED_DATE_REJECT)
-            .dateApprove(UPDATED_DATE_APPROVE);
+            .dateApprove(UPDATED_DATE_APPROVE)
+            .verificationStatus(UPDATED_VERIFICATION_STATUS)
+            .payStatus(UPDATED_PAY_STATUS)
+            .uid(UPDATED_UID)
+            .active(UPDATED_ACTIVE);
         MVerificationDTO mVerificationDTO = mVerificationMapper.toDto(updatedMVerification);
 
         restMVerificationMockMvc.perform(put("/api/m-verifications")
@@ -3242,29 +3330,30 @@ public class MVerificationResourceIT {
         assertThat(testMVerification.getVerificationNo()).isEqualTo(UPDATED_VERIFICATION_NO);
         assertThat(testMVerification.getVerificationDate()).isEqualTo(UPDATED_VERIFICATION_DATE);
         assertThat(testMVerification.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testMVerification.getReceiptNo()).isEqualTo(UPDATED_RECEIPT_NO);
         assertThat(testMVerification.getInvoiceNo()).isEqualTo(UPDATED_INVOICE_NO);
         assertThat(testMVerification.getInvoiceDate()).isEqualTo(UPDATED_INVOICE_DATE);
         assertThat(testMVerification.getTaxInvoice()).isEqualTo(UPDATED_TAX_INVOICE);
         assertThat(testMVerification.getTaxDate()).isEqualTo(UPDATED_TAX_DATE);
         assertThat(testMVerification.getTotalLines()).isEqualTo(UPDATED_TOTAL_LINES);
-        assertThat(testMVerification.getTaxAmount()).isEqualTo(UPDATED_TAX_AMOUNT);
         assertThat(testMVerification.getGrandTotal()).isEqualTo(UPDATED_GRAND_TOTAL);
-        assertThat(testMVerification.getVerificationStatus()).isEqualTo(UPDATED_VERIFICATION_STATUS);
-        assertThat(testMVerification.getUid()).isEqualTo(UPDATED_UID);
-        assertThat(testMVerification.isActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testMVerification.getForeignGrandTotal()).isEqualTo(UPDATED_FOREIGN_GRAND_TOTAL);
+        assertThat(testMVerification.getTaxAmount()).isEqualTo(UPDATED_TAX_AMOUNT);
         assertThat(testMVerification.getForeignTaxAmount()).isEqualTo(UPDATED_FOREIGN_TAX_AMOUNT);
-        assertThat(testMVerification.getDataSubmit()).isEqualTo(UPDATED_DATA_SUBMIT);
+        assertThat(testMVerification.getDateSubmit()).isEqualTo(UPDATED_DATE_SUBMIT);
         assertThat(testMVerification.getDateAcct()).isEqualTo(UPDATED_DATE_ACCT);
         assertThat(testMVerification.getWithholdingAmt()).isEqualTo(UPDATED_WITHHOLDING_AMT);
         assertThat(testMVerification.getInvoiceAp()).isEqualTo(UPDATED_INVOICE_AP);
         assertThat(testMVerification.getDocType()).isEqualTo(UPDATED_DOC_TYPE);
         assertThat(testMVerification.getPayDate()).isEqualTo(UPDATED_PAY_DATE);
         assertThat(testMVerification.getDueDate()).isEqualTo(UPDATED_DUE_DATE);
-        assertThat(testMVerification.getPayStatus()).isEqualTo(UPDATED_PAY_STATUS);
         assertThat(testMVerification.getPayAmt()).isEqualTo(UPDATED_PAY_AMT);
         assertThat(testMVerification.getDateReject()).isEqualTo(UPDATED_DATE_REJECT);
         assertThat(testMVerification.getDateApprove()).isEqualTo(UPDATED_DATE_APPROVE);
+        assertThat(testMVerification.getVerificationStatus()).isEqualTo(UPDATED_VERIFICATION_STATUS);
+        assertThat(testMVerification.getPayStatus()).isEqualTo(UPDATED_PAY_STATUS);
+        assertThat(testMVerification.getUid()).isEqualTo(UPDATED_UID);
+        assertThat(testMVerification.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 
     @Test

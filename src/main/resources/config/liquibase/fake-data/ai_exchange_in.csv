@@ -1,0 +1,11 @@
+id;entity_type;entity_id;payload;status
+1;bleeding-edge Liberia;82620;../fake-data/blob/hipster.txt;SUCCESS
+2;Tactics orange;48131;../fake-data/blob/hipster.txt;SUCCESS
+3;feed Afghanistan Reduced;99629;../fake-data/blob/hipster.txt;PARTIAL
+4;Louisiana;75643;../fake-data/blob/hipster.txt;ERROR
+5;Sleek Rubber Salad hardware Sports;87996;../fake-data/blob/hipster.txt;ERROR
+6;deposit;57664;../fake-data/blob/hipster.txt;PARTIAL
+7;Branding Mauritania leverage;79678;../fake-data/blob/hipster.txt;SUCCESS
+8;dynamic;99764;../fake-data/blob/hipster.txt;PARTIAL
+9;driver Direct methodical;49450;../fake-data/blob/hipster.txt;SUCCESS
+10;Salad deposit Diverse;74330;../fake-data/blob/hipster.txt;ERROR

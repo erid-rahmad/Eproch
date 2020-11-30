@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.AiExchangeIn;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CLocator;
 import com.bhp.opusb.domain.CProduct;
@@ -19,6 +20,8 @@ import com.bhp.opusb.domain.CUnitOfMeasure;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CWarehouse;
 import com.bhp.opusb.domain.MMatchPO;
+import com.bhp.opusb.domain.enumeration.AiStatus;
+import com.bhp.opusb.repository.AiExchangeInRepository;
 import com.bhp.opusb.repository.CCurrencyRepository;
 import com.bhp.opusb.repository.CLocatorRepository;
 import com.bhp.opusb.repository.CProductRepository;
@@ -29,6 +32,8 @@ import com.bhp.opusb.repository.CWarehouseRepository;
 import com.bhp.opusb.repository.MMatchPORepository;
 import com.bhp.opusb.service.dto.MMatchPODTO;
 import com.bhp.opusb.service.mapper.MMatchPOMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -68,10 +73,17 @@ public class MMatchPOService {
     @Autowired
     private CProductService cProductService;
 
+    @Autowired
+    private AiExchangeInRepository aiExchangeInRepository;
+
+    @Autowired
+    private ObjectMapper jsonMapper;
+
     public MMatchPOService(MMatchPORepository mMatchPORepository, CCurrencyRepository cCurrencyRepository,
             CTaxCategoryRepository cTaxCategoryRepository, CUnitOfMeasureRepository cUnitOfMeasureRepository,
-            CVendorRepository cVendorRepository, CLocatorRepository cLocatorRepository, CWarehouseRepository cWarehouseRepository,
-            CProductRepository cProductRepository, MMatchPOMapper mMatchPOMapper) {
+            CVendorRepository cVendorRepository, CLocatorRepository cLocatorRepository,
+            CWarehouseRepository cWarehouseRepository, CProductRepository cProductRepository,
+            MMatchPOMapper mMatchPOMapper) {
         this.mMatchPORepository = mMatchPORepository;
         this.cCurrencyRepository = cCurrencyRepository;
         this.cTaxCategoryRepository = cTaxCategoryRepository;
@@ -96,8 +108,12 @@ public class MMatchPOService {
         return mMatchPOMapper.toDto(mMatchPO);
     }
 
-    public MMatchPODTO synchronize(Map<String, Object> payload) {
-        log.debug("Request to synchronize MMatchPO : {}", payload);
+    public MMatchPODTO synchronize(String message) throws JsonProcessingException {
+        log.debug("Request to synchronize MMatchPO : {}", message);
+
+        @SuppressWarnings("unchecked")
+        Map<String, Object> payload = jsonMapper.readValue(message, Map.class);
+        
         String matchType = (String) payload.get("PRMATC");
         String orgCode = (String) payload.get("PRKCOO");
         String docType = (String) payload.get("PRDCTO");
@@ -113,10 +129,31 @@ public class MMatchPOService {
         if (record.isPresent()) {
             mMatchPO = record.get();
             updateEntity(mMatchPO, payload, org);
+
+            if (mMatchPO.getCVendor() != null) {
+                aiExchangeInRepository.findFirstByEntityTypeAndEntityIdAndStatus(MMatchPO.class.getName(), mMatchPO.getId(), AiStatus.PARTIAL)
+                    .ifPresent(data -> 
+                        data.payload(message)
+                            .status(AiStatus.SUCCESS)
+                    );
+            }
         } else {
             mMatchPO = buildEntity(payload, org);
             mMatchPO = mMatchPORepository.save(mMatchPO);
+
+            if (mMatchPO.getCVendor() == null) {
+                AiExchangeIn exchangeIn = new AiExchangeIn()
+                    .entityId(mMatchPO.getId())
+                    .entityType(MMatchPO.class.getName())
+                    .payload(message)
+                    .status(AiStatus.PARTIAL);
+
+                aiExchangeInRepository.save(exchangeIn);
+            }
         }
+
+        
+        
         return mMatchPOMapper.toDto(mMatchPO);
     }
 

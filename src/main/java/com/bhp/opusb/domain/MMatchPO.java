@@ -1,6 +1,5 @@
 package com.bhp.opusb.domain;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -26,7 +25,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "m_match_po")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MMatchPO implements Serializable {
+public class MMatchPO extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 

@@ -25,9 +25,11 @@ public class CCityDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    private CCountryDTO country;
     private Long countryId;
     private String countryName;
 
+    private CRegionDTO region;
     private Long regionId;
     private String regionName;
     
@@ -79,6 +81,14 @@ public class CCityDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public CCountryDTO getCountry() {
+        return country;
+    }
+
+    public void setCountry(CCountryDTO country) {
+        this.country = country;
+    }
+
     public Long getCountryId() {
         return countryId;
     }
@@ -93,6 +103,14 @@ public class CCityDTO extends AbstractAuditingDTO {
 
     public void setCountryName(String countryName) {
         this.countryName = countryName;
+    }
+
+    public CRegionDTO getRegion() {
+        return region;
+    }
+
+    public void setRegion(CRegionDTO region) {
+        this.region = region;
     }
 
     public Long getRegionId() {
@@ -110,10 +128,6 @@ public class CCityDTO extends AbstractAuditingDTO {
     public void setRegionName(String regionName) {
         this.regionName = regionName;
     }
-    
-
-
-
 
     @Override
     public boolean equals(Object o) {

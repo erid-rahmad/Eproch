@@ -1,11 +1,12 @@
 import settings from '@/settings';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { IRegisterTabParameter, WindowStoreModule as windowStore } from '@/shared/config/store/window-store';
 import { ADColumnType } from '@/shared/model/ad-column.model';
 import { IADField } from '@/shared/model/ad-field.model';
 import { formatJson } from '@/utils';
 import { exportJson2Excel } from '@/utils/excel';
 import { normalizeField } from '@/utils/form';
-import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isPasswordField, isStringField, isTableDirectLink, isAttachmentField } from '@/utils/validate';
+import { hasReferenceList, isActiveStatusField, isAttachmentField, isBooleanField, isDateField, isDateTimeField, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
 import schema from 'async-validator';
 import { format, parseISO } from 'date-fns';
 import { ElPagination } from 'element-ui/types/pagination';
@@ -15,9 +16,8 @@ import pluralize from "pluralize";
 import { Component, Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import CalloutMixin from '../../mixins/CalloutMixin';
+import AddressEditor from "../AddressEditor/address-editor.vue";
 import ContextVariableAccessor from "../ContextVariableAccessor";
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import { ADWindowType } from '@/shared/model/ad-window.model';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -57,6 +57,9 @@ const GridViewProps = Vue.extend({
 });
 
 @Component({
+  components: {
+    AddressEditor
+  },
   methods: {
     isStringField,
     isPasswordField,
@@ -1034,6 +1037,15 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   public isTableDirectLink!: (field: IADField) => boolean;
   public isAttachmentField!: (field: IADField) => boolean;
 
+  isAddressField(field: IADField) {
+    if (field.virtualColumnName) {
+      return false;
+    }
+
+    const reference = field.adReference || field.adColumn.adReference;
+    return reference?.value === 'address';
+  }
+
   /**
    * Print the foreign-keyed field value.
    * @param row The record of the current row iteration.
@@ -1043,7 +1055,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     const fieldName = field.virtualColumnName || field.adColumn.name;
     const fieldType = field.type || field.adColumn.type;
 
-    if (this.isTableDirectLink(field)) {
+    if (this.isAddressField(field) || this.isTableDirectLink(field)) {
       const propName = fieldName.replace(/(UserId|Id)$/, 'Name');
       return row[propName] || row[fieldName];
     } else if (fieldType === ADColumnType.LOCAL_DATE) {

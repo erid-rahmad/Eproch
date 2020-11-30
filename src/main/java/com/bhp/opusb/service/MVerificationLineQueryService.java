@@ -139,6 +139,9 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getReceiveDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getReceiveDate(), MVerificationLine_.receiveDate));
             }
+            if (criteria.getPayStat() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getPayStat(), MVerificationLine_.payStat));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MVerificationLine_.uid));
             }

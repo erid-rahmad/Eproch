@@ -35,6 +35,8 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
+    private StringFilter receiptNo;
+
     private StringFilter invoiceNo;
 
     private LocalDateFilter invoiceDate;
@@ -45,21 +47,15 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter totalLines;
 
-    private BigDecimalFilter taxAmount;
-
     private BigDecimalFilter grandTotal;
-
-    private StringFilter verificationStatus;
-
-    private UUIDFilter uid;
-
-    private BooleanFilter active;
 
     private BigDecimalFilter foreignGrandTotal;
 
+    private BigDecimalFilter taxAmount;
+
     private BigDecimalFilter foreignTaxAmount;
 
-    private LocalDateFilter dataSubmit;
+    private LocalDateFilter dateSubmit;
 
     private LocalDateFilter dateAcct;
 
@@ -73,13 +69,19 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     private LocalDateFilter dueDate;
 
-    private StringFilter payStatus;
-
     private BigDecimalFilter payAmt;
 
     private LocalDateFilter dateReject;
 
     private LocalDateFilter dateApprove;
+
+    private StringFilter verificationStatus;
+
+    private StringFilter payStatus;
+
+    private UUIDFilter uid;
+
+    private BooleanFilter active;
 
     private LongFilter adOrganizationId;
 
@@ -99,29 +101,30 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.verificationNo = other.verificationNo == null ? null : other.verificationNo.copy();
         this.verificationDate = other.verificationDate == null ? null : other.verificationDate.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.receiptNo = other.receiptNo == null ? null : other.receiptNo.copy();
         this.invoiceNo = other.invoiceNo == null ? null : other.invoiceNo.copy();
         this.invoiceDate = other.invoiceDate == null ? null : other.invoiceDate.copy();
         this.taxInvoice = other.taxInvoice == null ? null : other.taxInvoice.copy();
         this.taxDate = other.taxDate == null ? null : other.taxDate.copy();
         this.totalLines = other.totalLines == null ? null : other.totalLines.copy();
-        this.taxAmount = other.taxAmount == null ? null : other.taxAmount.copy();
         this.grandTotal = other.grandTotal == null ? null : other.grandTotal.copy();
-        this.verificationStatus = other.verificationStatus == null ? null : other.verificationStatus.copy();
-        this.uid = other.uid == null ? null : other.uid.copy();
-        this.active = other.active == null ? null : other.active.copy();
         this.foreignGrandTotal = other.foreignGrandTotal == null ? null : other.foreignGrandTotal.copy();
+        this.taxAmount = other.taxAmount == null ? null : other.taxAmount.copy();
         this.foreignTaxAmount = other.foreignTaxAmount == null ? null : other.foreignTaxAmount.copy();
-        this.dataSubmit = other.dataSubmit == null ? null : other.dataSubmit.copy();
+        this.dateSubmit = other.dateSubmit == null ? null : other.dateSubmit.copy();
         this.dateAcct = other.dateAcct == null ? null : other.dateAcct.copy();
         this.withholdingAmt = other.withholdingAmt == null ? null : other.withholdingAmt.copy();
         this.invoiceAp = other.invoiceAp == null ? null : other.invoiceAp.copy();
         this.docType = other.docType == null ? null : other.docType.copy();
         this.payDate = other.payDate == null ? null : other.payDate.copy();
         this.dueDate = other.dueDate == null ? null : other.dueDate.copy();
-        this.payStatus = other.payStatus == null ? null : other.payStatus.copy();
         this.payAmt = other.payAmt == null ? null : other.payAmt.copy();
         this.dateReject = other.dateReject == null ? null : other.dateReject.copy();
         this.dateApprove = other.dateApprove == null ? null : other.dateApprove.copy();
+        this.verificationStatus = other.verificationStatus == null ? null : other.verificationStatus.copy();
+        this.payStatus = other.payStatus == null ? null : other.payStatus.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
+        this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
@@ -166,6 +169,14 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.description = description;
     }
 
+    public StringFilter getReceiptNo() {
+        return receiptNo;
+    }
+
+    public void setReceiptNo(StringFilter receiptNo) {
+        this.receiptNo = receiptNo;
+    }
+
     public StringFilter getInvoiceNo() {
         return invoiceNo;
     }
@@ -206,44 +217,12 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.totalLines = totalLines;
     }
 
-    public BigDecimalFilter getTaxAmount() {
-        return taxAmount;
-    }
-
-    public void setTaxAmount(BigDecimalFilter taxAmount) {
-        this.taxAmount = taxAmount;
-    }
-
     public BigDecimalFilter getGrandTotal() {
         return grandTotal;
     }
 
     public void setGrandTotal(BigDecimalFilter grandTotal) {
         this.grandTotal = grandTotal;
-    }
-
-    public StringFilter getVerificationStatus() {
-        return verificationStatus;
-    }
-
-    public void setVerificationStatus(StringFilter verificationStatus) {
-        this.verificationStatus = verificationStatus;
-    }
-
-    public UUIDFilter getUid() {
-        return uid;
-    }
-
-    public void setUid(UUIDFilter uid) {
-        this.uid = uid;
-    }
-
-    public BooleanFilter getActive() {
-        return active;
-    }
-
-    public void setActive(BooleanFilter active) {
-        this.active = active;
     }
 
     public BigDecimalFilter getForeignGrandTotal() {
@@ -254,6 +233,14 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.foreignGrandTotal = foreignGrandTotal;
     }
 
+    public BigDecimalFilter getTaxAmount() {
+        return taxAmount;
+    }
+
+    public void setTaxAmount(BigDecimalFilter taxAmount) {
+        this.taxAmount = taxAmount;
+    }
+
     public BigDecimalFilter getForeignTaxAmount() {
         return foreignTaxAmount;
     }
@@ -262,12 +249,12 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.foreignTaxAmount = foreignTaxAmount;
     }
 
-    public LocalDateFilter getDataSubmit() {
-        return dataSubmit;
+    public LocalDateFilter getDateSubmit() {
+        return dateSubmit;
     }
 
-    public void setDataSubmit(LocalDateFilter dataSubmit) {
-        this.dataSubmit = dataSubmit;
+    public void setDateSubmit(LocalDateFilter dateSubmit) {
+        this.dateSubmit = dateSubmit;
     }
 
     public LocalDateFilter getDateAcct() {
@@ -318,14 +305,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.dueDate = dueDate;
     }
 
-    public StringFilter getPayStatus() {
-        return payStatus;
-    }
-
-    public void setPayStatus(StringFilter payStatus) {
-        this.payStatus = payStatus;
-    }
-
     public BigDecimalFilter getPayAmt() {
         return payAmt;
     }
@@ -348,6 +327,38 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     public void setDateApprove(LocalDateFilter dateApprove) {
         this.dateApprove = dateApprove;
+    }
+
+    public StringFilter getVerificationStatus() {
+        return verificationStatus;
+    }
+
+    public void setVerificationStatus(StringFilter verificationStatus) {
+        this.verificationStatus = verificationStatus;
+    }
+
+    public StringFilter getPayStatus() {
+        return payStatus;
+    }
+
+    public void setPayStatus(StringFilter payStatus) {
+        this.payStatus = payStatus;
+    }
+
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
+    }
+
+    public BooleanFilter getActive() {
+        return active;
+    }
+
+    public void setActive(BooleanFilter active) {
+        this.active = active;
     }
 
     public LongFilter getAdOrganizationId() {
@@ -405,29 +416,30 @@ public class MVerificationCriteria implements Serializable, Criteria {
             Objects.equals(verificationNo, that.verificationNo) &&
             Objects.equals(verificationDate, that.verificationDate) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(receiptNo, that.receiptNo) &&
             Objects.equals(invoiceNo, that.invoiceNo) &&
             Objects.equals(invoiceDate, that.invoiceDate) &&
             Objects.equals(taxInvoice, that.taxInvoice) &&
             Objects.equals(taxDate, that.taxDate) &&
             Objects.equals(totalLines, that.totalLines) &&
-            Objects.equals(taxAmount, that.taxAmount) &&
             Objects.equals(grandTotal, that.grandTotal) &&
-            Objects.equals(verificationStatus, that.verificationStatus) &&
-            Objects.equals(uid, that.uid) &&
-            Objects.equals(active, that.active) &&
             Objects.equals(foreignGrandTotal, that.foreignGrandTotal) &&
+            Objects.equals(taxAmount, that.taxAmount) &&
             Objects.equals(foreignTaxAmount, that.foreignTaxAmount) &&
-            Objects.equals(dataSubmit, that.dataSubmit) &&
+            Objects.equals(dateSubmit, that.dateSubmit) &&
             Objects.equals(dateAcct, that.dateAcct) &&
             Objects.equals(withholdingAmt, that.withholdingAmt) &&
             Objects.equals(invoiceAp, that.invoiceAp) &&
             Objects.equals(docType, that.docType) &&
             Objects.equals(payDate, that.payDate) &&
             Objects.equals(dueDate, that.dueDate) &&
-            Objects.equals(payStatus, that.payStatus) &&
             Objects.equals(payAmt, that.payAmt) &&
             Objects.equals(dateReject, that.dateReject) &&
             Objects.equals(dateApprove, that.dateApprove) &&
+            Objects.equals(verificationStatus, that.verificationStatus) &&
+            Objects.equals(payStatus, that.payStatus) &&
+            Objects.equals(uid, that.uid) &&
+            Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(vendorId, that.vendorId) &&
@@ -442,29 +454,30 @@ public class MVerificationCriteria implements Serializable, Criteria {
         verificationNo,
         verificationDate,
         description,
+        receiptNo,
         invoiceNo,
         invoiceDate,
         taxInvoice,
         taxDate,
         totalLines,
-        taxAmount,
         grandTotal,
-        verificationStatus,
-        uid,
-        active,
         foreignGrandTotal,
+        taxAmount,
         foreignTaxAmount,
-        dataSubmit,
+        dateSubmit,
         dateAcct,
         withholdingAmt,
         invoiceAp,
         docType,
         payDate,
         dueDate,
-        payStatus,
         payAmt,
         dateReject,
         dateApprove,
+        verificationStatus,
+        payStatus,
+        uid,
+        active,
         adOrganizationId,
         currencyId,
         vendorId,
@@ -480,29 +493,30 @@ public class MVerificationCriteria implements Serializable, Criteria {
                 (verificationNo != null ? "verificationNo=" + verificationNo + ", " : "") +
                 (verificationDate != null ? "verificationDate=" + verificationDate + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (receiptNo != null ? "receiptNo=" + receiptNo + ", " : "") +
                 (invoiceNo != null ? "invoiceNo=" + invoiceNo + ", " : "") +
                 (invoiceDate != null ? "invoiceDate=" + invoiceDate + ", " : "") +
                 (taxInvoice != null ? "taxInvoice=" + taxInvoice + ", " : "") +
                 (taxDate != null ? "taxDate=" + taxDate + ", " : "") +
                 (totalLines != null ? "totalLines=" + totalLines + ", " : "") +
-                (taxAmount != null ? "taxAmount=" + taxAmount + ", " : "") +
                 (grandTotal != null ? "grandTotal=" + grandTotal + ", " : "") +
-                (verificationStatus != null ? "verificationStatus=" + verificationStatus + ", " : "") +
-                (uid != null ? "uid=" + uid + ", " : "") +
-                (active != null ? "active=" + active + ", " : "") +
                 (foreignGrandTotal != null ? "foreignGrandTotal=" + foreignGrandTotal + ", " : "") +
+                (taxAmount != null ? "taxAmount=" + taxAmount + ", " : "") +
                 (foreignTaxAmount != null ? "foreignTaxAmount=" + foreignTaxAmount + ", " : "") +
-                (dataSubmit != null ? "dataSubmit=" + dataSubmit + ", " : "") +
+                (dateSubmit != null ? "dateSubmit=" + dateSubmit + ", " : "") +
                 (dateAcct != null ? "dateAcct=" + dateAcct + ", " : "") +
                 (withholdingAmt != null ? "withholdingAmt=" + withholdingAmt + ", " : "") +
                 (invoiceAp != null ? "invoiceAp=" + invoiceAp + ", " : "") +
                 (docType != null ? "docType=" + docType + ", " : "") +
                 (payDate != null ? "payDate=" + payDate + ", " : "") +
                 (dueDate != null ? "dueDate=" + dueDate + ", " : "") +
-                (payStatus != null ? "payStatus=" + payStatus + ", " : "") +
                 (payAmt != null ? "payAmt=" + payAmt + ", " : "") +
                 (dateReject != null ? "dateReject=" + dateReject + ", " : "") +
                 (dateApprove != null ? "dateApprove=" + dateApprove + ", " : "") +
+                (verificationStatus != null ? "verificationStatus=" + verificationStatus + ", " : "") +
+                (payStatus != null ? "payStatus=" + payStatus + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
+                (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
