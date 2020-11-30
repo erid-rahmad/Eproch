@@ -167,9 +167,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       (this.$refs.eVerificationUpdate as ElForm).validate((passed, errors) => {
         if (passed) {
           this.fullscreenLoading = true;
-          setTimeout(() => {
-            this.submit();
-          }, 2000);
+          this.submit();
 
         } else {
           return false;

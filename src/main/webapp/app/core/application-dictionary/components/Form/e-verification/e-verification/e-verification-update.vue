@@ -163,9 +163,13 @@
                     <el-table-column
                         min-width="120"
                         sortable
-                        prop="receiptNo"
+                        prop="receiveNo"
                         label="Receipt No."
-                    />
+                    >
+                        <template slot-scope="{ row }">
+                            {{ row.receiptNo }}
+                        </template>
+                    </el-table-column>
                     <el-table-column
                         min-width="120"
                         sortable
@@ -174,13 +178,11 @@
                     />
                     <el-table-column
                         min-width="250"
-                        sortable
                         prop="mProductName"
                         label="Item Description"
                     />
                     <el-table-column
                         min-width="100"
-                        sortable
                         prop="cUomName"
                         label="UoM"
                     />
@@ -225,7 +227,6 @@
                     </el-table-column>
                     <el-table-column
                         min-width="150"
-                        sortable
                         prop="totalAmount"
                         label="Total Amount"
                         align="right"

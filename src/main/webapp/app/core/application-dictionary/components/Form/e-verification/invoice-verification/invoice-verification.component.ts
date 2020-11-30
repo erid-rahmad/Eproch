@@ -181,9 +181,7 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
       }
 
       this.fullscreenLoading = true;
-      setTimeout(() => {
-        this.submit();
-      }, 2000);
+      this.submit();
 
     }
 
