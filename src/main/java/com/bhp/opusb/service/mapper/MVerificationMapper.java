@@ -17,6 +17,7 @@ public interface MVerificationMapper extends EntityMapper<MVerificationDTO, MVer
     @Mapping(source = "currency.id", target = "currencyId")
     @Mapping(source = "currency.code", target = "currencyName")
     @Mapping(source = "vendor.id", target = "vendorId")
+    @Mapping(source = "vendor.code", target = "vendorCode")
     @Mapping(source = "vendor.name", target = "vendorName")
     @Mapping(source = "pic.id", target = "picId")
     @Mapping(source = "vendorTo.id", target = "vendorToId")

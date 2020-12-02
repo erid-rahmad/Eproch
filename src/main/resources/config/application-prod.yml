@@ -53,16 +53,18 @@ spring:
   liquibase:
     contexts: prod
   mail:
-    host: BHPCAS1SRV.berca.co.id
-    port: 587
-    username: admin.opusb@berca.co.id
-    password: cSWZKe%o~h@iaUg4
-    protocol: smtp
-    tls: true
-    properties.mail.smtp:
-      auth: true
-      starttls.enable: true
-      ssl.trust: BHPCAS1SRV.berca.co.id
+    host: 10.71.5.57
+    port: 1025
+    # host: BHPCAS1SRV.berca.co.id
+    # port: 587
+    # username: admin.opusb@berca.co.id
+    # password: cSWZKe%o~h@iaUg4
+    # protocol: smtp
+    # tls: true
+    # properties.mail.smtp:
+    #   auth: true
+    #   starttls.enable: true
+    #   ssl.trust: BHPCAS1SRV.berca.co.id
   thymeleaf:
     cache: true
 
@@ -149,7 +151,7 @@ jhipster:
 # ===================================================================
 
 application:
-  default-organization-id: 1
+  default-organization-id: 33851
   default-cost-center-id: 45651
   default-element-value-id: 19901
   default-product-type: I
@@ -159,3 +161,6 @@ application:
   default-product-expense-account-id: 19901
   attachment:
     upload-dir: /opt/opus-web-attachments
+  integration:
+    endpoint:
+      invoice-verification-url: http://localhost:20001/api/invoice-verification

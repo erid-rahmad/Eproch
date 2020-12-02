@@ -1,23 +1,22 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.MVerification;
 import com.bhp.opusb.domain.MVerificationLine;
 import com.bhp.opusb.repository.MVerificationLineRepository;
 import com.bhp.opusb.service.dto.MVerificationLineDTO;
 import com.bhp.opusb.service.mapper.MVerificationLineMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link MVerificationLine}.
@@ -29,7 +28,6 @@ public class MVerificationLineService {
     private final Logger log = LoggerFactory.getLogger(MVerificationLineService.class);
 
     private final MVerificationLineRepository mVerificationLineRepository;
-
     private final MVerificationLineMapper mVerificationLineMapper;
 
     public MVerificationLineService(MVerificationLineRepository mVerificationLineRepository, MVerificationLineMapper mVerificationLineMapper) {
@@ -52,11 +50,11 @@ public class MVerificationLineService {
 
     public List<MVerificationLineDTO> saveAll(List<MVerificationLineDTO> mVerificationLineDTOs, MVerification mVerification, ADOrganization organization) {
         List<MVerificationLine> verificationLines = mVerificationLineMapper.toEntity(mVerificationLineDTOs);
-        verificationLines.forEach(line -> {
+        verificationLines.forEach(line ->
             line.active(true)
                 .adOrganization(organization)
-                .verification(mVerification);
-        });
+                .verification(mVerification)
+        );
 
         return mVerificationLineRepository.saveAll(verificationLines)
             .stream()

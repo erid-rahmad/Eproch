@@ -164,6 +164,7 @@ public class MVerificationDTO extends AbstractAuditingDTO {
      */
     @ApiModelProperty(value = "VHAN8 for supplier code.\nVHALPH for supplier name.")
     private Long vendorId;
+    private String vendorCode;
     private String vendorName;
 
     /**
@@ -438,6 +439,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     public void setVendorId(Long cVendorId) {
         this.vendorId = cVendorId;
+    }
+
+    public String getVendorCode() {
+        return vendorCode;
+    }
+
+    public void setVendorCode(String vendorCode) {
+        this.vendorCode = vendorCode;
     }
 
     public String getVendorName() {
