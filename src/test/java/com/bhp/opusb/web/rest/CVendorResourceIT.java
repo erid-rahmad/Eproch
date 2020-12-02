@@ -397,25 +397,6 @@ public class CVendorResourceIT {
 
     @Test
     @Transactional
-    public void checkDocumentNoIsRequired() throws Exception {
-        int databaseSizeBeforeTest = cVendorRepository.findAll().size();
-        // set the field null
-        cVendor.setDocumentNo(null);
-
-        // Create the CVendor, which fails.
-        CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
-
-        restCVendorMockMvc.perform(post("/api/c-vendors")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(cVendorDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<CVendor> cVendorList = cVendorRepository.findAll();
-        assertThat(cVendorList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void checkDocumentActionIsRequired() throws Exception {
         int databaseSizeBeforeTest = cVendorRepository.findAll().size();
         // set the field null

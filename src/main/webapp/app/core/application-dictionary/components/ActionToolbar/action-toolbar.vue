@@ -118,7 +118,7 @@
       />
     </el-button-group>
     <el-dropdown
-      v-show="hasDocumentActions"
+      v-show="!isEditing && hasDocumentActions"
       ref="docActionButton"
       split-button
       :type="approved ? 'success' : 'primary'"

@@ -98,9 +98,8 @@ public class CVendor extends AbstractAuditingEntity {
     @Column(name = "date_trx", nullable = false)
     private LocalDate dateTrx;
 
-    @NotNull
     @Size(max = 30)
-    @Column(name = "document_no", length = 30, nullable = false)
+    @Column(name = "document_no", length = 30)
     private String documentNo;
 
     @NotNull

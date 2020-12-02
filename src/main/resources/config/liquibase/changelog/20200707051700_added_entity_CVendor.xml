@@ -226,4 +226,8 @@
         <dropColumn tableName="c_vendor" columnName="approval_status" />
     </changeSet>
 
+    <changeSet id="20201202091300" author="Ananta Aryadewa">
+        <dropNotNullConstraint tableName="c_vendor" columnName="document_no" />
+    </changeSet>
+
 </databaseChangeLog>

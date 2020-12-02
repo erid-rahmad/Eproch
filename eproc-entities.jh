@@ -178,7 +178,7 @@ entity CVendor {
 	paymentCategory String required maxlength(10)
 
 	dateTrx LocalDate required
-	documentNo String required maxlength(30)
+	documentNo String maxlength(30)
 	documentAction String required maxlength(10)
 	documentStatus String required maxlength(10)
 	approved Boolean
