@@ -23,7 +23,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-@Service
+@Service("mVerificationOutbound")
 public class MVerificationOutbound implements ProcessTrigger {
 
   private static final Logger logger = LoggerFactory.getLogger(MVerificationOutbound.class);
