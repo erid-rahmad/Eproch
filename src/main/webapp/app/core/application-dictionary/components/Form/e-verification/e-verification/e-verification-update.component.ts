@@ -76,19 +76,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       .then(res => this.enofaList = res.data)
   }
 
-  getLastVerification() {
-    var filterQuery = "vendorId.equals="+this.formUpdate.vendorId;
-    this.dynamicWindowService(this.baseApiUrlEVerification)
-      .retrieve({
-        criteriaQuery: "sort=taxInvoice,asc&"+filterQuery,
-      })
-      .then(res => {
-        for(const item of res.data){
-          this.lastTaxInvoice = item.taxInvoice;
-        }
-      });
-  }
-
   eVerification = {
     form: {},
     line: [],
@@ -109,7 +96,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     this.formUpdate.vendorName = accountStore.userDetails.cVendorName;
     this.formUpdate.verificationStatus = "DRF";
     this.retrieveEnofa();
-    this.getLastVerification();
 
     if (this.formUpdate.id) {
       this.filterQuery = `verificationId.equals=${this.formUpdate.id}`;
@@ -341,37 +327,46 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
   checkTaxInvoice(value) {
     console.log(this.enofaList);
-    for (var enofa=0; enofa<this.enofaList.length; enofa++) {
+    var length = this.enofaList.length;
+    for (var i=0; i < length; i++) {
       var startNo;
       var endNo;
-      if(data > lastTaxInvoice){
-        startNo = parseInt(this.enofaList[enofa].startNo);
-        endNo = parseInt(this.enofaList[enofa].endNo);
+
+      if(this.statTaxInvoice){
+        startNo = parseInt(this.enofaList[i].startNo);
+        endNo = parseInt(this.enofaList[i].endNo);
       }else{
-        startNo = parseInt(this.enofaList[enofa+1].startNo);
-        endNo = parseInt(this.enofaList[enofa+1].endNo);
+        startNo = parseInt(this.enofaList[i+1].startNo);
+        endNo = parseInt(this.enofaList[i+1].endNo);
       }
       var data = parseInt(value);
-      var lastTaxInvoice = parseInt(this.lastTaxInvoice);
 
       if(data>=startNo && data<=endNo){
-        this.$notify({
-          title: 'Success',
-          dangerouslyUseHTMLString: true,
-          message: 'Tax Invoice is correct',
-          type: 'success'
-        });
         this.statTaxInvoice = true;
         break;
       }else{
-        this.$notify({
-          title: 'Warning',
-          dangerouslyUseHTMLString: true,
-          message: 'Tax invoice not found in range',
-          type: 'warning'
-        });
-        this.statTaxInvoice = false;
-        break;
+        if(data >= startNo){
+          this.statTaxInvoice = false;
+
+          if(data > this.enofaList[length-1].endNo){
+            this.$notify({
+              title: 'Warning',
+              dangerouslyUseHTMLString: true,
+              message: 'Tax invoice not found in range',
+              type: 'warning'
+            });
+            break;
+          }
+
+        }else{
+          this.$notify({
+            title: 'Warning',
+            dangerouslyUseHTMLString: true,
+            message: 'Tax invoice not found in range',
+            type: 'warning'
+          });
+          break;
+        }
       }
     }
   }
