@@ -1,11 +1,12 @@
 <template>
     <div class="app-container">
         <el-form
-            :model="dataVerificationAndLines"
+            :model="formHeader"
             label-position="left"
             ref="form"
             label-width="120px"
-            size="mini">
+            size="mini"
+            :rules="rules">
             <el-row style="margin-top: 0px" class="form">
 
                     <el-col :span="8">
@@ -18,7 +19,7 @@
                         <el-form-item label="Currency" prop="currencyName">
                             : {{ formHeader.currencyName }}
                         </el-form-item>
-                        <el-form-item label-width="0px">
+                        <!--<el-form-item label-width="0px">
                             <el-button
                                 size="mini"
                                 icon="el-icon-info"
@@ -26,7 +27,7 @@
                                 @click="displayTaxInfo()">
                                     Tax Info
                             </el-button>
-                        </el-form-item>
+                        </el-form-item>-->
 
                     </el-col>
                     <el-col :span="8">
@@ -36,33 +37,33 @@
                         <el-form-item label="Invoice Date" prop="invoiceDate">
                             : {{ formHeader.invoiceDate }}
                         </el-form-item>
-                        <el-form-item label="GL Date" prop="glDate">
+                        <el-form-item label="GL Date" prop="dateAcct" required>
                             <el-date-picker
                                 style="width: 90%"
                                 class="form-input date"
                                 clearable
-                                v-model="formHeader.glDate"
+                                v-model="formHeader.dateAcct"
                                 type="date"
-                                format="yyyy/MM/dd"
-                                value-format="yyyy-MM-dd"
+                                :format="dateDisplayFormat"
+                                :value-format="dateValueFormat"
                                 placeholder="Pick a date"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="Tax Invoice No." prop="taxInvoice">
-                            : {{ formHeader.taxInvoice }}
+                            {{ formHeader.taxInvoice | facade('##.###.###.#-###.###') }}
                         </el-form-item>
                         <el-form-item label="Tax Invoice Date" prop="taxDate">
                             : {{ formHeader.taxDate }}
                         </el-form-item>
-                        <el-form-item label="Due Date" prop="dueDate">
+                        <el-form-item label="Due Date" prop="dueDate" required>
                             <el-date-picker
                                 class="form-input date"
                                 clearable
                                 v-model="formHeader.dueDate"
                                 type="date"
-                                format="yyyy/MM/dd"
-                                value-format="yyyy-MM-dd"
+                                :format="dateDisplayFormat"
+                                :value-format="dateValueFormat"
                                 placeholder="Pick a date"/>
                         </el-form-item>
                     </el-col>
@@ -80,16 +81,15 @@
                         style="width: 100%; height: 100%; padding-top: 0px;"
                         :height="gridSchema.height"
                         :empty-text="gridSchema.emptyText"
-                        :data="gridData"
-                        @sort-change="changeOrder">
+                        :data="gridData">
 
                         <el-table-column
-                            min-width="130"
+                            min-width="100"
                             prop="payStat"
                             label="Pay Stat">
 
                             <template slot-scope="props">
-                                <el-select class="form-input" v-model="props.row.payStat" placeholder="Pay Stat" size="mini">
+                                <el-select class="form-input" v-model="props.row.payStat" placeholder="Select" size="mini">
                                     <el-option
                                         v-for="item in payStat"
                                         :key="item.key"
@@ -100,63 +100,83 @@
 
                         </el-table-column>
                         <el-table-column
-                            min-width="130"
+                            min-width="140"
+                            sortable
                             prop="poNo"
                             label="PO No."/>
                         <el-table-column
-                            min-width="150"
+                            min-width="140"
+                            sortable
                             prop="receiptNo"
                             label="Receipt No."/>
                         <el-table-column
-                            min-width="256"
-                            prop="description"
+                            min-width="250"
+                            sortable
+                            prop="mProductName"
                             label="Item Description"/>
                         <el-table-column
-                            min-width="128"
-                            prop="uomName"
+                            min-width="100"
+                            sortable
+                            prop="cUomName"
                             label="UoM"/>
                         <el-table-column
-                            min-width="128"
+                            min-width="100"
+                            sortable
                             prop="qty"
                             label="Qty"/>
 
                         <el-table-column
-                            min-width="128"
+                            min-width="150"
+                            sortable
                             prop="priceActual"
-                            label="Unit Price"/>
-
+                            align="right"
+                            label="Unit Price">
+                            <template slot-scope="{ row }">
+                                {{ row.priceActual | formatCurrency }}
+                            </template>
+                        </el-table-column>
                         <el-table-column
-                            min-width="128"
+                            min-width="150"
+                            sortable
                             prop="totalLines"
-                            label="Amount"/>
-
+                            align="right"
+                            label="Amount">
+                            <template slot-scope="{ row }">
+                                {{ row.totalLines | formatCurrency }}
+                            </template>
+                        </el-table-column>
                         <el-table-column
-                            min-width="128"
+                            min-width="150"
+                            sortable
                             prop="taxAmount"
-                            label="VAT In"/>
+                            align="right"
+                            label="VAT In">
+                            <template slot-scope="{ row }">
+                                {{ row.taxAmount | formatCurrency }}
+                            </template>
+                        </el-table-column>
 
                     </el-table>
-
 
                 </el-col>
             </el-row>
             <el-row style="margin-top: 0px" class="form">
 
                     <el-col :span="8">
-                        <el-form-item label="Taxable Amount" prop="totalLines">
-                            : {{ formHeader.totalLines }}
+                        <el-form-item label="Taxable Amount :" prop="totalLines" align="right" style="margin-right: 100px;">
+                            {{ formHeader.totalLines | formatCurrency }}
                         </el-form-item>
-                        <el-form-item label="PPN" prop="taxAmount">
-                            : {{ formHeader.taxAmount }}
+                        <el-form-item label="PPN :" prop="taxAmount" align="right" style="margin-right: 100px;">
+                            {{ formHeader.taxAmount | formatCurrency }}
                         </el-form-item>
-                        <el-form-item label="Grand Total" prop="grandTotal">
-                            : {{ formHeader.grandTotal }}
+                        <el-form-item label="Grand Total :" prop="grandTotal" align="right" style="margin-right: 100px;">
+                            {{ formHeader.grandTotal | formatCurrency }}
                         </el-form-item>
 
                     </el-col>
                     <el-col :span="16">
-                        <el-form-item label="Notes" prop="note">
-                            <el-input class="form-input" clearable v-model="formHeader.note"></el-input>
+                        <el-form-item label="Notes" prop="description" required>
+                            <el-input class="form-input" clearable v-model="formHeader.description"></el-input>
                         </el-form-item>
                     </el-col>
 

@@ -1,7 +1,6 @@
 import settings from '@/settings';
 import AlertMixin from '@/shared/alert/alert.mixin';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import Inputmask from 'inputmask';
 import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
@@ -10,23 +9,8 @@ import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import UpdateVoucher from './update-voucher.vue';
 import DetailVerificationDocument from './detail-verification-document.vue';
 
-Vue.directive('inputmask', {
-  bind: function(el, binding) {
-    var inputs = el.getElementsByTagName('INPUT')
-    var input = inputs[0]
-    if (inputs.length > 1) {
-      input = inputs[inputs.length - 1]
-    }
-    // new Inputmask(binding.value).mask(input)
-    new Inputmask({
-      autoUnmask: true,
-    }).mask(input)
-  },
-})
-
 const VerificationDocumentInquiryProps = Vue.extend({
   props: {
-
 
   }
 })
@@ -42,8 +26,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
-    maxHeight: 450,
-    height: 420
+    maxHeight: 420,
+    height: 400
   };
 
   public itemsPerPage = 10;
@@ -58,6 +42,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   private baseApiUrlVendor = "/api/c-vendors";
   private baseApiUrlReference = "/api/ad-references";
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
+  public docStatus: string = "docStatus";
+  public paymentStatus: string = "paymentStatus";
 
   private filterQuery: string = '';
   private processing = false;
@@ -73,14 +59,13 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   private setVerificationNo: string = "";
 
   selectedRows: any = {};
-  public vendorOptions: any = {};
-  public statusOptions: any = {};
-  public paymentStatusOptions: any = {};
+  public vendorOptions: any = [];
+  public statusOptions: any = [];
+  public paymentStatusOptions: any = [];
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
-  public docStatus: string = "docStatus";
-  public paymentStatus: string = "paymentStatus";
+
   public radioSelection: number = null;
   private voucher: any = {};
 
@@ -108,8 +93,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   private closeDetailVerification(){
     this.index = true;
-    //this.selectedRows = {};
-    //this.radioSelection = null;
+    this.selectedRows = {};
+    this.radioSelection = null;
     //this.retrieveAllRecords();
   }
 
@@ -165,12 +150,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     this.radioSelection = this.gridData.indexOf(row);
     this.selectedRows = row;
 
-    console.log(row);
-  }
-
-  public onSelectionChanged(value: any) {
-    //this.selectedRowsLine = value;
-    console.log(value);
+    console.log("Single Selection %O", row);
   }
 
   public showDialogConfirmation(key: string) {
@@ -195,8 +175,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   }
 
-
-
   public retrieveAllRecords(): void {
     if ( ! this.baseApiUrl) {
       return;
@@ -211,14 +189,13 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        //criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
         criteriaQuery: this.filterQuery,
         paginationQuery
       })
       .then(res => {
-        console.log(res);
+
         this.gridData = res.data.map((item: any) => {
-          this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
+          item.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });
 
@@ -236,6 +213,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       })
       .finally(() => {
         this.processing = false;
+        this.radioSelection = null;
+        this.selectedRows = {};
       });
   }
 
@@ -324,72 +303,72 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
     this.filterQuery = "";
 
-    if((this.filter.verificationNo != null)&&(this.filter.verificationNo != "")){
+    if(!!this.filter.verificationNo){
       this.filterQuery = "verificationNo.equals="+this.filter.verificationNo;
     }
-    if((this.filter.invoiceNo != null)&&(this.filter.invoiceNo != "")){
+    if(!!this.filter.invoiceNo){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
       this.filterQuery += "invoiceNo.equals="+this.filter.invoiceNo;
     }
-    if((this.filter.taxInvoiceNo != null)&&(this.filter.taxInvoiceNo != "")){
+    if(!!this.filter.taxInvoiceNo){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
       this.filterQuery += "taxInvoiceNo.equals="+this.filter.taxInvoiceNo;
     }
-    if((this.filter.vendorName != null)&&(this.filter.vendorName != "")){
+    if(!!this.filter.vendorName){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
       this.filterQuery += "vendorId.equals="+this.filter.vendorName;
     }
 
-    if((this.filter.verificationDateFrom != null)&&(this.filter.verificationDateFrom != "")){
+    if(!!this.filter.verificationDateFrom){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "verificationDate.greaterThan="+this.filter.verificationDateFrom;
+      this.filterQuery += "verificationDate.greaterOrEqualThan="+this.filter.verificationDateFrom;
     }
-    if((this.filter.invoiceDateFrom != null)&&(this.filter.invoiceDateFrom != "")){
+    if(!!this.filter.invoiceDateFrom){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "invoiceDate.greaterThan="+this.filter.invoiceDateFrom;
+      this.filterQuery += "invoiceDate.greaterOrEqualThan="+this.filter.invoiceDateFrom;
     }
-    if((this.filter.taxInvoiceDateFrom != null)&&(this.filter.taxInvoiceDateFrom != "")){
+    if(!!this.filter.taxInvoiceDateFrom){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "taxInvoiceDate.greaterThan="+this.filter.taxInvoiceDateFrom;
+      this.filterQuery += "taxInvoiceDate.greaterOrEqualThan="+this.filter.taxInvoiceDateFrom;
     }
-    if((this.filter.verificationStatus != null)&&(this.filter.verificationStatus != "")){
+    if(!!this.filter.verificationStatus){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
       this.filterQuery += "verificationStatus.equals="+this.filter.verificationStatus;
     }
 
-    if((this.filter.verificationDateTo != null)&&(this.filter.verificationDateTo != "")){
+    if(!!this.filter.verificationDateTo){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "verificationDate.lessThan="+this.filter.verificationDateTo;
+      this.filterQuery += "verificationDate.lessOrEqualThan="+this.filter.verificationDateTo;
     }
-    if((this.filter.invoiceDateTo != null)&&(this.filter.invoiceDateTo != "")){
+    if(!!this.filter.invoiceDateTo){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "invoiceDate.lessThan="+this.filter.invoiceDateTo;
+      this.filterQuery += "invoiceDate.lessOrEqualThan="+this.filter.invoiceDateTo;
     }
-    if((this.filter.taxInvoiceDateTo != null)&&(this.filter.taxInvoiceDateTo != "")){
+    if(!!this.filter.taxInvoiceDateTo){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
-      this.filterQuery += "taxInvoiceDate.lessThan="+this.filter.taxInvoiceDateTo;
+      this.filterQuery += "taxInvoiceDate.lessOrEqualThan="+this.filter.taxInvoiceDateTo;
     }
-    if((this.filter.payStatus != null)&&(this.filter.payStatus != "")){
+    if(!!this.filter.payStatus){
       if(this.filterQuery != ""){
         this.filterQuery += "&"
       }
@@ -406,6 +385,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   private onUpdateVoucherApplied(){
     console.log(this.voucher);
     //proses save
+  }
+
+  formatDocumentStatus(value: string) {
+    return this.statusOptions.find(status => status.key === value)?.value;
   }
 
 }

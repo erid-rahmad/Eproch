@@ -33,7 +33,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   };
   rules = {
     taxInvoice: [
-      { min: 15, message: 'Length should be 15' }
+      { min: 15, message: 'Length should be 15 digit' }
     ]
   }
 
@@ -48,8 +48,12 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   private baseApiUrlEVerification = "/api/m-verifications";
   private baseApiUrlEVerificationLine = "/api/m-verification-lines";
   private baseApiUrlCurrency = "/api/c-currencies";
+  private baseApiUrlTaxInvoice = "/api/c-tax-invoices";
   public gridData: Array<any> = [];
   public removedLines: Array<any> = [];
+  enofaList: any[] = [];
+  lastTaxInvoice: string = "";
+  statTaxInvoice: boolean = false;
 
   private processing = false;
   private fullscreenLoading: boolean = false;
@@ -62,6 +66,28 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   public matchPo = {};
   public modeFilterMatchPo: any = {};
   private filterQuery: string = "";
+
+  retrieveEnofa() {
+    var filterQuery = "vendorId.equals="+this.formUpdate.vendorId;
+    this.dynamicWindowService(this.baseApiUrlTaxInvoice)
+      .retrieve({
+        criteriaQuery: "sort=id,asc&"+filterQuery,
+      })
+      .then(res => this.enofaList = res.data)
+  }
+
+  getLastVerification() {
+    var filterQuery = "vendorId.equals="+this.formUpdate.vendorId;
+    this.dynamicWindowService(this.baseApiUrlEVerification)
+      .retrieve({
+        criteriaQuery: "sort=taxInvoice,asc&"+filterQuery,
+      })
+      .then(res => {
+        for(const item of res.data){
+          this.lastTaxInvoice = item.taxInvoice;
+        }
+      });
+  }
 
   eVerification = {
     form: {},
@@ -82,6 +108,8 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     this.formUpdate.vendorId = accountStore.userDetails.cVendorId;
     this.formUpdate.vendorName = accountStore.userDetails.cVendorName;
     this.formUpdate.verificationStatus = "DRF";
+    this.retrieveEnofa();
+    this.getLastVerification();
 
     if (this.formUpdate.id) {
       this.filterQuery = `verificationId.equals=${this.formUpdate.id}`;
@@ -167,9 +195,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       (this.$refs.eVerificationUpdate as ElForm).validate((passed, errors) => {
         if (passed) {
           this.fullscreenLoading = true;
-          setTimeout(() => {
-            this.submit();
-          }, 2000);
+          this.submit();
 
         } else {
           return false;
@@ -259,9 +285,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
 
   addSelectedLines() {
-    let totalLines = 0;
-    let totalAmount = 0;
-    let taxAmount = 0;
     const lines = this.transformMatchPo((<any>this.$refs.matchPo)?.selectedLines || []);
 
     for (const line of lines) {
@@ -277,18 +300,26 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
   private calculateLines() {
     let totalLines = 0;
-    let totalAmount = 0;
+    let foreignTotalLines = 0;
     let taxAmount = 0;
+    let foreignTaxAmount = 0;
+    let totalAmount = 0;
+    let foreignTotalAmount = 0;
 
     for (const row of this.gridData) {
       totalLines += row.totalLines;
-      totalAmount += row.totalAmount;
       taxAmount += row.taxAmount;
+      totalAmount += totalLines + taxAmount;
+      foreignTotalLines += row.foreignTotalAmount;
+      foreignTaxAmount += row.foreignTaxAmount;
+      foreignTotalAmount += foreignTotalLines + foreignTaxAmount;
     }
 
     this.formUpdate.totalLines = totalLines;
     this.formUpdate.taxAmount = taxAmount;
     this.formUpdate.grandTotal = totalAmount;
+    this.formUpdate.foreignTaxAmount = foreignTaxAmount;
+    this.formUpdate.foreignGrandTotal = foreignTotalAmount;
   }
 
   onMatchPoOpen() {
@@ -308,6 +339,84 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     this.formUpdate.grandTotal -= row.totalAmount;
   }
 
+  checkTaxInvoice(value) {
+    console.log(this.enofaList);
+    for (var enofa=0; enofa<this.enofaList.length; enofa++) {
+      var startNo;
+      var endNo;
+      if(data > lastTaxInvoice){
+        startNo = parseInt(this.enofaList[enofa].startNo);
+        endNo = parseInt(this.enofaList[enofa].endNo);
+      }else{
+        startNo = parseInt(this.enofaList[enofa+1].startNo);
+        endNo = parseInt(this.enofaList[enofa+1].endNo);
+      }
+      var data = parseInt(value);
+      var lastTaxInvoice = parseInt(this.lastTaxInvoice);
+
+      if(data>=startNo && data<=endNo){
+        this.$notify({
+          title: 'Success',
+          dangerouslyUseHTMLString: true,
+          message: 'Tax Invoice is correct',
+          type: 'success'
+        });
+        this.statTaxInvoice = true;
+        break;
+      }else{
+        this.$notify({
+          title: 'Warning',
+          dangerouslyUseHTMLString: true,
+          message: 'Tax invoice not found in range',
+          type: 'warning'
+        });
+        this.statTaxInvoice = false;
+        break;
+      }
+    }
+  }
+
+  checkVerification(data){
+    var filterQuery = "vendorId.equals="+this.formUpdate.vendorId+"&taxInvoice.equals="+data;
+    this.dynamicWindowService(this.baseApiUrlEVerification)
+      .retrieve({
+        criteriaQuery: filterQuery,
+      })
+      .then(res => {
+        if(data.length == 15){
+          var length = res.data.length;
+          if(length){
+            this.$notify({
+              title: 'Warning',
+              dangerouslyUseHTMLString: true,
+              message: 'Tax invoice already used by Verification No. '+res.data[0].verificationNo,
+              type: 'warning'
+            });
+            this.statTaxInvoice = false;
+
+          }else{
+            this.checkTaxInvoice(data);
+          }
+        }else{
+          this.$notify({
+            title: 'Warning',
+            dangerouslyUseHTMLString: true,
+            message: 'Tax Invoice length should be 15 digit',
+            type: 'warning'
+          });
+          this.statTaxInvoice = false;
+        }
+
+      })
+      .catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message({
+          type: 'error',
+          message: err.detail || err.message
+        });
+      });
+  }
+
   submit() {
     this.formUpdate.picId = accountStore.userDetails.id;
 
@@ -317,58 +426,64 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
     console.log(this.eVerification);
 
-    if (this.formUpdate.id != null) {
-      this.dynamicWindowService(this.baseApiUrlEVerification + "/submit")
-        .update(this.eVerification)
-        .then(() => {
+    this.checkVerification(this.formUpdate.taxInvoice);
 
-          this.$notify({
-            title: 'Success',
-            dangerouslyUseHTMLString: true,
-            message: 'E-Verification form updated.',
-            type: 'success'
+    if(this.statTaxInvoice){
+      if (this.formUpdate.id != null) {
+        this.dynamicWindowService(this.baseApiUrlEVerification + "/submit")
+          .update(this.eVerification)
+          .then(() => {
+
+            this.$notify({
+              title: 'Success',
+              dangerouslyUseHTMLString: true,
+              message: 'E-Verification form updated.',
+              type: 'success'
+            });
+
+            this.closeEVerificationUpdate();
+
+          }).catch(error => {
+            this.$notify({
+              title: 'Error',
+              dangerouslyUseHTMLString: true,
+              message: error,
+              type: 'error',
+              duration: 3000
+            });
+          }).finally(() => {
+            this.fullscreenLoading = false;
           });
 
-          this.closeEVerificationUpdate();
+      } else {
+        this.dynamicWindowService(this.baseApiUrlEVerification + "/submit")
+          .create(this.eVerification)
+          .then(() => {
 
-        }).catch(error => {
-          this.$notify({
-            title: 'Error',
-            dangerouslyUseHTMLString: true,
-            message: error,
-            type: 'error',
-            duration: 3000
+            this.$notify({
+              title: 'Success',
+              dangerouslyUseHTMLString: true,
+              message: 'E-Verification form submitted.',
+              type: 'success'
+            });
+
+            this.closeEVerificationUpdate();
+
+          }).catch(error => {
+            this.$notify({
+              title: 'Error',
+              dangerouslyUseHTMLString: true,
+              message: error,
+              type: 'error',
+              duration: 3000
+            });
+          }).finally(() => {
+            this.fullscreenLoading = false;
           });
-        }).finally(() => {
-          this.fullscreenLoading = false;
-        });
 
-    } else {
-      this.dynamicWindowService(this.baseApiUrlEVerification + "/submit")
-        .create(this.eVerification)
-        .then(() => {
-
-          this.$notify({
-            title: 'Success',
-            dangerouslyUseHTMLString: true,
-            message: 'E-Verification form submitted.',
-            type: 'success'
-          });
-
-          this.closeEVerificationUpdate();
-
-        }).catch(error => {
-          this.$notify({
-            title: 'Error',
-            dangerouslyUseHTMLString: true,
-            message: error,
-            type: 'error',
-            duration: 3000
-          });
-        }).finally(() => {
-          this.fullscreenLoading = false;
-        });
-
+      }
+    }else{
+      this.fullscreenLoading = false;
     }
   }
 
@@ -393,7 +508,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       } = line;
 
       line.conversionRate = data.cConversionRate;
-      line.lineNo = data.lineNoMr;
+      line.lineNo = data.lineNoPo;
       return line;
     });
   }

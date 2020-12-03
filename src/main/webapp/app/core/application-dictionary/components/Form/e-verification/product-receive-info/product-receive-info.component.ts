@@ -176,6 +176,8 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
       })
       .finally(() => {
         this.processing = false;
+        this.radioSelection = null;
+        this.selectedRows = {};
       });
   }
 

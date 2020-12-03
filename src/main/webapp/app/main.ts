@@ -50,9 +50,11 @@ import VueRouter, { Route } from 'vue-router';
 import AdMenuService from './core/application-dictionary/components/Menu/menu.service';
 import { Store } from 'vuex';
 import TreeItem from './core/application-dictionary/components/TreeView/tree-item.vue';
+import InputFacade from 'vue-input-facade'
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
+Vue.use(InputFacade)
 Vue.config.productionTip = false;
 config.initVueApp(Vue);
 config.initFortAwesome(Vue);

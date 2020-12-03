@@ -363,17 +363,26 @@ public class MMatchPOService {
     }
 
     private CProduct buildProduct(Map<String, Object> payload, CUnitOfMeasure uom, final ADOrganization org) {
+        String name = StringUtils.trimToNull((String) payload.get("PRLITM"));
+
+        if (name == null) {
+            name = StringUtils.trimToNull((String) payload.get("PRAITM"));
+
+            if (name == null) {
+                return null;
+            }
+        }
+
         final String code = String.valueOf(payload.get("PRITM"));
-        final String name = StringUtils.trimToNull((String) payload.get("PRLITM"));
         final String description = StringUtils.trimToNull((String) payload.get("PRAITM"));
-        
-        return cProductRepository.findFirstByCodeAndAdOrganizationId(code, org.getId())
+        final String itemDesc = name;
+        return cProductRepository.findFirstByNameAndAdOrganizationId(itemDesc, org.getId())
             .orElseGet(() -> {
                 final CProduct product = new CProduct();
                 product.active(true)
                     .adOrganization(org)
-                    .code(code)
-                    .name(name)
+                    .code(code.equals("0") ? itemDesc : code)
+                    .name(itemDesc)
                     .description(description)
                     .type(cProductService.getDefaultType())
                     .assetAcct(cProductService.getDefaultAssetAccount())

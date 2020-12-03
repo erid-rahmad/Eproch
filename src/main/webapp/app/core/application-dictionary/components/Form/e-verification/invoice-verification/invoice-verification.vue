@@ -4,7 +4,7 @@
         <el-row class="main">
             <el-col :span="24">
                 <el-row style="height: 100%; display: grid;">
-                    <el-form ref="form" label-position="top" label-width="150px" size="mini" style="margin: 200px 300px 0px 300px;">
+                    <el-form ref="form" label-position="top" label-width="150px" size="mini" style="margin: 200px 300px 0px 300px;" @submit.native.prevent="searchInvoiceVerification">
 
                         <el-form-item prop="verificationNo">
                             <div class="sub-title" align="center" style="font-size: 24px">Verification No.</div>
@@ -52,7 +52,7 @@
                         size="mini"
                         icon="el-icon-check"
                         type="primary"
-                        @click="actionSubmit('approve')">
+                        @click="actionSubmit('APV')">
                             Approve
                     </el-button>
                     <el-button
@@ -60,7 +60,7 @@
                         size="mini"
                         icon="el-icon-warning-outline"
                         type="danger"
-                        @click="actionSubmit('reject')">
+                        @click="actionSubmit('RJC')">
                             Reject
                     </el-button>
 

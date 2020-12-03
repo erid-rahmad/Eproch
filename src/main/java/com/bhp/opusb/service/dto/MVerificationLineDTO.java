@@ -316,11 +316,7 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     }
 
     public String getVerificationName() {
-        return verificationName;
-    }
-
-    public void setVerificationName(String verificationName) {
-        this.verificationName = verificationName;
+        return getVerificationNo();
     }
 
     public Long getAdOrganizationId() {

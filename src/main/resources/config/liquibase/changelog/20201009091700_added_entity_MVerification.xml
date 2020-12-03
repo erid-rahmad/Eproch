@@ -204,7 +204,6 @@
             </column>
         </addColumn>
         <renameColumn tableName="m_verification" oldColumnName="data_submit" newColumnName="date_submit" remarks="VHDTSUB"/>
-        <addNotNullConstraint tableName="m_verification" columnName="foreign_grand_total" />
         <setColumnRemarks tableName="m_verification" columnName="verification_no" remarks="VHDOCM Invoice verification document no." />
         <setColumnRemarks tableName="m_verification" columnName="verification_date" remarks="VHTRDJ Transaction date" />
         <setColumnRemarks tableName="m_verification" columnName="invoice_date" remarks="VHDIVJ" />

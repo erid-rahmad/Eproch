@@ -76,6 +76,7 @@
                             v-model="formUpdate.taxInvoice"
                             v-inputmask="{'mask': '99.999.999.9-999.999'}"
                             placeholder="__.___.___._-___.___"
+                            @change="checkVerification"
                             />
                     </el-form-item>
                     <el-form-item label="Tax Invoice Date" prop="taxDate" required>
@@ -163,9 +164,13 @@
                     <el-table-column
                         min-width="120"
                         sortable
-                        prop="receiptNo"
+                        prop="receiveNo"
                         label="Receipt No."
-                    />
+                    >
+                        <template slot-scope="{ row }">
+                            {{ row.receiptNo }}
+                        </template>
+                    </el-table-column>
                     <el-table-column
                         min-width="120"
                         sortable
@@ -174,13 +179,11 @@
                     />
                     <el-table-column
                         min-width="250"
-                        sortable
                         prop="mProductName"
                         label="Item Description"
                     />
                     <el-table-column
                         min-width="100"
-                        sortable
                         prop="cUomName"
                         label="UoM"
                     />
@@ -225,7 +228,6 @@
                     </el-table-column>
                     <el-table-column
                         min-width="150"
-                        sortable
                         prop="totalAmount"
                         label="Total Amount"
                         align="right"

@@ -62,7 +62,6 @@ public class CVendorDTO extends AbstractAuditingDTO {
     @NotNull
     private LocalDate dateTrx;
 
-    @NotNull
     @Size(max = 30)
     private String documentNo;
 

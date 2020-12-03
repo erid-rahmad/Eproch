@@ -107,11 +107,7 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
         paginationQuery
       })
       .then(res => {
-        console.log('Match PO list:', res.data);
-        this.gridData = res.data.map((item: any) => {
-          item.totalAmount = item.totalLines + item.taxAmount;
-          return item;
-        });
+        this.gridData = res.data;
 
         if (this.modeFilterMatchPo.mode === 1) {
           this.totalItems = Number(res.headers['x-total-count']);
@@ -129,6 +125,7 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
       })
       .finally(() => {
         this.processing = false;
+        this.selectedMatchPo = [];
       });
   }
 

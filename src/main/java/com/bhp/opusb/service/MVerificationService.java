@@ -1,13 +1,17 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MVerification;
 import com.bhp.opusb.repository.MVerificationRepository;
 import com.bhp.opusb.service.dto.MVerificationDTO;
+import com.bhp.opusb.service.dto.MVerificationLineCriteria;
+import com.bhp.opusb.service.dto.MVerificationLineDTO;
 import com.bhp.opusb.service.dto.VerificationDTO;
 import com.bhp.opusb.service.mapper.MVerificationMapper;
+import com.bhp.opusb.service.trigger.process.integration.MVerificationOutbound;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +19,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import io.github.jhipster.service.filter.LongFilter;
 
 /**
  * Service Implementation for managing {@link MVerification}.
@@ -27,16 +33,20 @@ public class MVerificationService {
 
     private final ADOrganization organization;
     private final MVerificationRepository mVerificationRepository;
-
     private final MVerificationMapper mVerificationMapper;
     private final MVerificationLineService mVerificationLineService;
+    private final MVerificationLineQueryService mVerificationLineQueryService;
+    private final MVerificationOutbound mVerificationOutbound;
 
     public MVerificationService(MVerificationRepository mVerificationRepository,
             MVerificationMapper mVerificationMapper, MVerificationLineService mVerificationLineService,
-            ADOrganizationService adOrganizationService) {
+            MVerificationLineQueryService mVerificationLineQueryService, ADOrganizationService adOrganizationService,
+            MVerificationOutbound mVerificationOutbound) {
         this.mVerificationRepository = mVerificationRepository;
         this.mVerificationMapper = mVerificationMapper;
         this.mVerificationLineService = mVerificationLineService;
+        this.mVerificationLineQueryService = mVerificationLineQueryService;
+        this.mVerificationOutbound = mVerificationOutbound;
 
         organization = adOrganizationService.getDefaultOrganization();
     }
@@ -57,6 +67,36 @@ public class MVerificationService {
         }
 
         return verification;
+    }
+
+    /**
+     * TODO Use a generic method to update the document status for every entities.
+     * TODO Use the workflow engine for maintaining the flow state.
+     */
+    public void updateDocumentStatus(VerificationDTO verificationDTO) {
+        MVerificationDTO mVerificationDTO = verificationDTO.getForm();
+        List<MVerificationLineDTO> mVerificationLineDTOs = verificationDTO.getLine();
+        log.debug("Request to update MVerificationDTO's document status : {}", mVerificationDTO);
+        MVerification mVerification = mVerificationMapper.toEntity(mVerificationDTO);
+
+        mVerificationRepository.save(mVerification);
+        mVerificationLineService.saveAll(mVerificationLineDTOs, mVerification, organization);
+        
+        if (mVerification.getVerificationStatus().equals("APV")) {
+            findOne(mVerification.getId())
+                .ifPresent(header -> {
+                    MVerificationLineCriteria lineCriteria = new MVerificationLineCriteria();
+                    LongFilter idFilter = new LongFilter();
+                    idFilter.setEquals(header.getId());
+                    lineCriteria.setVerificationId(idFilter);
+                    List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
+                    
+                    if (!lines.isEmpty()) {
+                        mVerificationOutbound.sendPayload(header, lines);
+                    }
+                });
+            
+        }
     }
 
     /**

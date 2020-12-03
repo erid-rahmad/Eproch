@@ -5,13 +5,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * Properties specific to Opus Web App.
  * <p>
- * Properties are configured in the {@code application.yml} file.
- * See {@link io.github.jhipster.config.JHipsterProperties} for a good example.
+ * Properties are configured in the {@code application.yml} file. nk 
+ * o.github.jhipster.config.JHipsterProperties} for a good example.
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
 
   private final Attachment attachment = new Attachment();
+  private final Integration integration = new Integration();
 
   private long defaultOrganizationId = 1L;
   private long defaultCostCenterId = 1L;
@@ -24,6 +25,10 @@ public class ApplicationProperties {
 
   public Attachment getAttachment() {
     return attachment;
+  }
+
+  public Integration getIntegration() {
+    return integration;
   }
 
   public long getDefaultOrganizationId() {
@@ -99,6 +104,26 @@ public class ApplicationProperties {
 
     public void setUploadDir(String uploadDir) {
       this.uploadDir = uploadDir;
+    }
+  }
+
+  public static final class Integration {
+    private final Endpoint endpoint = new Endpoint();
+
+    public Endpoint getEndpoint() {
+      return endpoint;
+    }
+  }
+
+  public static final class Endpoint {
+    private String invoiceVerificationUrl;
+
+    public String getInvoiceVerificationUrl() {
+      return invoiceVerificationUrl;
+    }
+
+    public void setInvoiceVerificationUrl(String invoiceVerificationUrl) {
+      this.invoiceVerificationUrl = invoiceVerificationUrl;
     }
   }
 }
