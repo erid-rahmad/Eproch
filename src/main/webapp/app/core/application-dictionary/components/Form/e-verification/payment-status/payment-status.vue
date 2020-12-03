@@ -144,7 +144,7 @@
                                 prop="payDate"
                                 label="Actual Pay Date"/>
                             <el-table-column
-                                min-width="130"
+                                min-width="160"
                                 sortable
                                 prop="invoiceNo"
                                 label="Invoice No"/>

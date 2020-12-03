@@ -51,7 +51,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="Tax Invoice No." prop="taxInvoice">
-                            : <span v-inputmask="{'mask': '99.999.999.9-999.999'}">{{ formHeader.taxInvoice }}</span>
+                            {{ formHeader.taxInvoice | facade('##.###.###.#-###.###') }}
                         </el-form-item>
                         <el-form-item label="Tax Invoice Date" prop="taxDate">
                             : {{ formHeader.taxDate }}

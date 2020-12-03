@@ -115,7 +115,7 @@
                             </el-table-column>
 
                             <el-table-column
-                                min-width="180"
+                                min-width="200"
                                 sortable
                                 v-if="isVendor==null"
                                 prop="cVendorId"

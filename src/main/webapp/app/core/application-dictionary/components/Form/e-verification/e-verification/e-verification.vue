@@ -214,7 +214,7 @@
                             </template>
                         </el-table-column>
                         <el-table-column
-                            min-width="140"
+                            min-width="160"
                             prop="invoiceNo"
                             sortable
                             label="Invoice No"/>
@@ -230,7 +230,7 @@
                             label="Tax Invoice"
                         >
                             <template slot-scope="{ row }">
-                                <span v-inputmask="{'mask': '99.999.999.9-999.999'}">{{ row.taxInvoice }}</span>
+                                {{ row.taxInvoice | facade('##.###.###.#-###.###') }}
                             </template>
                         </el-table-column>
                         <el-table-column

@@ -4,14 +4,13 @@
         <el-row class="main">
             <el-col :span="24">
                 <el-row style="height: 100%; display: grid;">
-                    <el-form ref="form" label-position="top" label-width="150px" size="mini" style="margin: 200px 300px 0px 300px;">
+                    <el-form ref="form" label-position="top" label-width="150px" size="mini" style="margin: 200px 300px 0px 300px;" @submit.native.prevent="searchInvoiceVerification">
 
                         <el-form-item prop="verificationNo">
                             <div class="sub-title" align="center" style="font-size: 24px">Verification No.</div>
                             <el-input
                                 placeholder="Please Input Verification No"
                                 clearable
-                                @keyup.enter.native="searchInvoiceVerification"
                                 v-model="filterForm.verificationNo">
                                 <el-button
                                     @click="searchInvoiceVerification"
