@@ -19,7 +19,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -42,7 +41,6 @@ public class MVerificationOutbound implements ProcessTrigger {
     this.properties = properties;
   }
 
-  @Async
   public void sendPayload(MVerificationDTO header, List<MVerificationLineDTO> lines) {
     logger.debug("Preparing data to be dispatched to the external system.");
     final Map<String, Object> params = new HashMap<>(2);
