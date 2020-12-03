@@ -41,6 +41,7 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
 
   private filterQuery: string = '';
   private processing = false;
+  private remoteProcessing = false;
 
   private dialogType = "";
   private dialogTitle = "";
@@ -50,7 +51,6 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
   private dialogButtonIcon = "";
 
   public gridData: Array<any> = [];
-  private formInputFaktur = {};
 
   selectedRows: any = {};
   public vendorOptions: any = {};
@@ -67,24 +67,8 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
     return settings.dateValueFormat;
   }
 
-  created(){
-    this.retrieveAllVendorRecords();
-
-  }
-
   public mounted(): void {
     this.retrieveAllRecords();
-  }
-
-  beforeDestroy() {
-
-  }
-
-  private closeDetailVerification(){
-    //this.index = true;
-    //this.selectedRows = {};
-    //this.radioSelection = null;
-    //this.retrieveAllRecords();
   }
 
   public changeOrder(propOrder): void {
@@ -142,21 +126,16 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
     console.log(row);
   }
 
-  public onSelectionChanged(value: any) {
-    //this.selectedRowsLine = value;
-    //console.log(value);
-  }
-
-  private closeEVerificationUpdate(){
-    this.formInputFaktur = {};
+  private closetaxInvoiceUpdate(){
     this.dialogConfirmationVisible = false;
+    this.radioSelection = null;
+    this.selectedRows = {};
     this.retrieveAllRecords();
   }
 
   public showDialogConfirmation(key: string) {
     if(this.radioSelection != null){
       if(key == "detail"){
-        //this.index = false;
         this.dialogType = "";
         this.dialogTitle = "";
         this.dialogMessage = "";
@@ -207,41 +186,9 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
   }
 
   private dialogButtonAction(key){
-    if(key == "add"){
-      console.log(this.formInputFaktur);
-      this.save();
-    }else if(key == "remove"){
+    if(key == "remove"){
       this.remove();
     }
-  }
-
-  private save(){
-    this.dynamicWindowService(this.baseApiUrl)
-      .create(this.formInputFaktur)
-      .then(() => {
-
-        this.$notify({
-          title: 'Success',
-          dangerouslyUseHTMLString: true,
-          message: 'Success created.',
-          type: 'success'
-        });
-
-        this.closeEVerificationUpdate();
-
-      }).catch(error => {
-        this.$notify({
-          title: 'Error',
-          dangerouslyUseHTMLString: true,
-          message: error,
-          type: 'error',
-          duration: 3000
-        });
-      }).finally(() => {
-        //this.fullscreenLoading = false;
-        console.log("proses");
-      });
-
   }
 
   private remove(){
@@ -257,7 +204,7 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
           type: 'success'
         });
 
-        this.closeEVerificationUpdate();
+        this.closetaxInvoiceUpdate();
 
       }).catch(error => {
         this.$notify({
@@ -268,8 +215,9 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
           duration: 3000
         });
       }).finally(() => {
-        //this.fullscreenLoading = false;
-        console.log("proses");
+        this.processing = false;
+        this.radioSelection = null;
+        this.selectedRows = {};
       });
   }
 
@@ -277,14 +225,8 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
     console.log("export");
   }
 
-  public dataFormInputFaktur(data?: any){
-    this.formInputFaktur = data;
-  }
-
-
-
   public retrieveAllRecords(): void {
-    if ( ! this.baseApiUrl) {
+    if (!this.baseApiUrl) {
       return;
     }
 
@@ -295,16 +237,9 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
       sort: this.sort()
     };
 
-    var joinFilterQuery = "";
-    if(accountStore.userDetails.cVendorId){
-      joinFilterQuery = "&vendorId.equals="+accountStore.userDetails.cVendorId;
-    }else{
-      joinFilterQuery = "";
-    }
-
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: this.filterQuery+joinFilterQuery,
+        criteriaQuery: this.filterQuery,
         paginationQuery
       })
       .then(res => {
@@ -327,34 +262,27 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
       })
       .finally(() => {
         this.processing = false;
+        this.radioSelection = null;
+        //this.selectedRows = {};
       });
   }
 
-  public closeDialog(): void {
-    (<any>this.$refs.removeEntity).hide();
-    this.retrieveAllRecords();
-  }
+  public retrieveAllVendorRecords(query: any): void {
 
-  public retrieveAllVendorRecords(): void {
-
-    this.processing = true;
-    const paginationQuery = {
-      page: this.page - 1,
-      size: this.itemsPerPage,
-      sort: this.sort()
-    };
+    this.filterQuery = "&code.equals="+query;
+    this.remoteProcessing = true;
 
     this.dynamicWindowService(this.baseApiUrlVendor)
       .retrieve({
-        //criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
-        paginationQuery
+        criteriaQuery: this.filterQuery,
       })
       .then(res => {
 
         let referenceList = res.data.map(item => {
           return{
               key: item.id,
-              value: item.name
+              value: item.code,
+              name: item.name
           };
       });
 
@@ -369,15 +297,14 @@ export default class ENova extends mixins(Vue2Filters.mixin, AlertMixin, Context
         });
       })
       .finally(() => {
-        this.processing = false;
+        this.remoteProcessing = false;
       });
   }
 
   public verificationFilter(){
 
     this.filterQuery = "";
-
-    if((this.filter.vendor != null)&&(this.filter.vendor != "")){
+    if(!!this.filter.vendor){
       this.filterQuery = "vendorId.equals="+this.filter.vendor;
     }
 

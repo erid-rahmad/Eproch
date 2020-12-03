@@ -1,39 +1,78 @@
 <template>
     <div class="app-container">
         <el-form
-            ref="form"
+            ref="eNofaForm"
             label-width="100px"
-            size="mini">
-            <el-form-item label="Vendor" prop="vendorId">
-                <el-select
-                    class="form-input"
-                    filterable remote reserve-keyword
-                    v-model="form.vendorId"
-                    @change="setForm"
-                    :remote-method="retrieveAllVendorRecords"
-                    :loading="processing" >
-                    <el-option
-                        v-for="item in vendorOptions"
-                        :key="item.key"
-                        :label="item.value"
-                        :value="item.key" />
-                </el-select>
-            </el-form-item>
+            size="mini"
+            :model="form"
+            :rules="rules">
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="Address ID :" prop="vendorId" required>
+                        <el-select
+                            class="form-input"
+                            clearable filterable remote reserve-keyword
+                            v-model="form.vendorId"
+                            :remote-method="retrieveAllVendorRecords"
+                            :loading="processing" >
+                            <el-option
+                                v-for="item in vendorOptions"
+                                :key="item.key"
+                                :label="item.value+' - '+item.name"
+                                :value="item.key" />
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="Start No. :" prop="startNo" required>
+                        <el-input
+                            class="form-input"
+                            clearable
+                            placeholder="__.___.___._-___.___"
+                            minlength="15"
+                            v-model="form.startNo"
+                            v-inputmask="{'mask': '99.999.999.9-999.999'}"/>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="End No. :" prop="endNo" required>
+                        <el-input
+                            class="form-input"
+                            clearable
+                            placeholder="__.___.___._-___.___"
+                            minlength="15"
+                            v-model="form.endNo"
+                            v-inputmask="{'mask': '99.999.999.9-999.999'}"/>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row type="flex" justify="end">
+                <el-col :span="11">
+                    <el-form-item>
+                        <el-button
+                            style="margin-left: 0px;"
+                            size="mini"
+                            icon="el-icon-check"
+                            type="primary"
+                            v-loading.fullscreen.lock="fullscreenLoading"
+                            @click="confirmSave">
+                                Save
+                        </el-button>
+                        <el-button
+                            style="margin-left: 0px;"
+                            size="mini"
+                            icon="el-icon-close"
+                            @click="closeDialog">
+                                {{ $t('entity.action.cancel') }}
+                        </el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
 
-            <el-form-item label="Start No." prop="startNo">
-                <el-input
-                    class="form-input"
-                    clearable
-                    v-model="form.startNo"
-                    @change="setForm"/>
-            </el-form-item>
-            <el-form-item label="End No." prop="endNo">
-                <el-input
-                    class="form-input"
-                    clearable
-                    v-model="form.endNo"
-                    @change="setForm"/>
-            </el-form-item>
         </el-form>
     </div>
 </template>

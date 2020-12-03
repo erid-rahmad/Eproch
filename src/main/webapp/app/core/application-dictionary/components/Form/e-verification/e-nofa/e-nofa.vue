@@ -8,14 +8,6 @@
                             style="margin-left: 0px;"
                             size="small"
                             type="primary"
-                            @click="showDialogConfirmation('detail')"
-                            icon="el-icon-check"/>
-
-                        <el-button
-                            class="button"
-                            style="margin-left: 0px;"
-                            size="small"
-                            type="primary"
                             icon="el-icon-search"
                             @click.native.prevent="verificationFilter"/>
 
@@ -48,22 +40,49 @@
                 </el-row>
 
                 <el-row class="filter">
-                    <el-form ref="form"  label-width="170px" size="mini">
-                        <el-col :span="8">
+                    <el-col :span="24">
 
-                            <el-form-item label="Vendor" prop="vendor">
-                                <el-select class="form-input" clearable filterable v-model="filter.vendor" >
-                                    <el-option
-                                        v-for="item in vendorOptions"
-                                        :key="item.key"
-                                        :label="item.value"
-                                        :value="item.key" />
-                                </el-select>
-                            </el-form-item>
+                        <el-form ref="form" label-width="100px" size="mini" v-model="filter" @submit.native.prevent="verificationFilter">
+                            <el-row>
+                                <el-col :span="10">
 
-                        </el-col>
-                    </el-form>
+                                    <el-form-item label="Address ID :" prop="vendor">
+                                        <el-select
+                                            class="form-input"
+                                            clearable filterable remote reserve-keyword
+                                            v-model="filter.vendor"
+                                            :remote-method="retrieveAllVendorRecords"
+                                            :loading="remoteProcessing" >
+                                            <el-option
+                                                v-for="item in vendorOptions"
+                                                :key="item.key"
+                                                :label="item.value+' - '+item.name"
+                                                :value="item.key" />
+                                        </el-select>
+                                    </el-form-item>
 
+                                </el-col>
+                                <el-col :span="1">
+                                    <el-form-item label-width="5px">
+                                        <el-button
+                                            size="medium"
+                                            @click="verificationFilter"
+                                            :loading="remoteProcessing"
+                                            icon="el-icon-search"/>
+                                    </el-form-item>
+                                </el-col>
+                                <!--<el-col :span="18">
+                                    <el-form-item label-width="10px">
+                                        <el-input
+                                            class="form-input"
+                                            disabled
+                                            v-model="filter.vendorName"/>
+                                    </el-form-item>
+                                </el-col>-->
+                            </el-row>
+                        </el-form>
+
+                    </el-col>
                 </el-row>
 
                 <el-row class="main grid-view" ref="tableWrapper">
@@ -93,26 +112,40 @@
                             </el-table-column>
 
                             <el-table-column
-                                min-width="130"
+                                min-width="100"
+                                sortable
                                 prop="vendorCode"
                                 label="Address ID"/>
                             <el-table-column
-                                min-width="130"
+                                min-width="250"
+                                sortable
                                 prop="vendorName"
                                 label="Name"/>
-                            <el-table-column
-                                min-width="100"
-                                prop="startNo"
-                                label="Start No"/>
 
                             <el-table-column
-                                min-width="128"
-                                prop="endNo"
-                                label="End No"/>
+                                min-width="100"
+                                sortable
+                                prop="startNo"
+                                label="Start No">
+                                <template slot-scope="{ row }">
+                                    {{ row.startNo | facade('##.###.###.#-###.###') }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
-                                min-width="128"
+                                min-width="100"
+                                sortable
+                                prop="endNo"
+                                label="End No">
+                                <template slot-scope="{ row }">
+                                    {{ row.endNo | facade('##.###.###.#-###.###') }}
+                                </template>
+                            </el-table-column>
+                            <el-table-column
+                                min-width="130"
+                                sortable
                                 prop="createdDate"
-                                label="Created Date"/>
+                                label="Created Date">
+                            </el-table-column>
 
                         </el-table>
                         <el-pagination
@@ -131,7 +164,7 @@
             <!-- =========================================================================== -->
 
         <el-dialog
-            width="50%"
+            width="40%"
             :visible.sync="dialogConfirmationVisible"
             :title="dialogTitle">
 
@@ -141,7 +174,7 @@
                     <el-col :span="24" :offset="0">
                         <e-nofa-update
                             ref="addTaxInvoice"
-                            @get-form="dataFormInputFaktur"
+                            @close-dialog="closetaxInvoiceUpdate"
                         />
                     </el-col>
                 </el-row>
@@ -158,7 +191,7 @@
                     </el-col>
                 </el-row>
 
-                <div slot="footer">
+                <div slot="footer" v-if="dialogType!='add'">
                     <el-button
                         style="margin-left: 0px;"
                         size="mini"
@@ -186,41 +219,25 @@
 
 <style lang="scss">
     .el-table__fixed, .el-table__fixed-right{
-    box-shadow: none;
-    }
-
-    .header {
-        color: #333;
-    }
-
-    .filter {
-        .form-input {
-            width: 100%;
-        }
+        box-shadow: none;
     }
 
     .main {
         padding: 0px;
     }
 
-    .button {
-        margin-bottom: 5px;
+    .header{
+        .button {
+            margin-bottom: 5px;
+        }
     }
 
+    .form-input {
+        width: 100%;
+    }
+
+
     .grid-view {
-        .el-table {
-            .is-error .el-input__inner {
-                border-color: #ff4949;
-            }
-
-            label.el-checkbox {
-                margin: 4px 0;
-            }
-
-            .switch, .checkbox, .selectRemote, .select, .input, .numeric, .date{
-                width: 100%;
-            }
-        }
 
         .el-pagination {
             background: #fff;
