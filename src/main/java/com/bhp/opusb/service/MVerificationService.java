@@ -1,8 +1,6 @@
 package com.bhp.opusb.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.ADOrganization;
@@ -75,30 +73,29 @@ public class MVerificationService {
      * TODO Use a generic method to update the document status for every entities.
      * TODO Use the workflow engine for maintaining the flow state.
      */
-    public void updateDocumentStatus(MVerificationDTO mVerificationDTO) {
+    public void updateDocumentStatus(VerificationDTO verificationDTO) {
+        MVerificationDTO mVerificationDTO = verificationDTO.getForm();
+        List<MVerificationLineDTO> mVerificationLineDTOs = verificationDTO.getLine();
         log.debug("Request to update MVerificationDTO's document status : {}", mVerificationDTO);
         MVerification mVerification = mVerificationMapper.toEntity(mVerificationDTO);
 
         mVerificationRepository.save(mVerification);
+        mVerificationLineService.saveAll(mVerificationLineDTOs, mVerification, organization);
         
         if (mVerification.getVerificationStatus().equals("APV")) {
-            final Map<String, Object> headerParams = new HashMap<>(2);
-            headerParams.put("context", MVerificationOutbound.CONTEXT_HEADER);
-            headerParams.put("payload", mVerificationMapper.toDto(mVerification));
-            mVerificationOutbound.run(headerParams);
-
-            MVerificationLineCriteria lineCriteria = new MVerificationLineCriteria();
-            LongFilter idFilter = new LongFilter();
-            idFilter.setEquals(mVerification.getId());
-            lineCriteria.setVerificationId(idFilter);
-            List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
+            findOne(mVerification.getId())
+                .ifPresent(header -> {
+                    MVerificationLineCriteria lineCriteria = new MVerificationLineCriteria();
+                    LongFilter idFilter = new LongFilter();
+                    idFilter.setEquals(header.getId());
+                    lineCriteria.setVerificationId(idFilter);
+                    List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
+                    
+                    if (!lines.isEmpty()) {
+                        mVerificationOutbound.sendPayload(header, lines);
+                    }
+                });
             
-            if (!lines.isEmpty()) {
-                final Map<String, Object> lineParams = new HashMap<>(2);
-                lineParams.put("context", MVerificationOutbound.CONTEXT_LINES);
-                lineParams.put("payload", lines);
-                mVerificationOutbound.run(lineParams);
-            }
         }
     }
 

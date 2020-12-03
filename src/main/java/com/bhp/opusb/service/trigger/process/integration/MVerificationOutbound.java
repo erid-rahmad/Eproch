@@ -1,8 +1,12 @@
 package com.bhp.opusb.service.trigger.process.integration;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.service.dto.MVerificationDTO;
+import com.bhp.opusb.service.dto.MVerificationLineDTO;
 import com.bhp.opusb.service.dto.ProcessResult;
 import com.bhp.opusb.service.dto.TriggerResult;
 import com.bhp.opusb.service.trigger.ProcessTrigger;
@@ -15,6 +19,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -22,22 +27,38 @@ import org.springframework.web.client.RestTemplate;
 public class MVerificationOutbound implements ProcessTrigger {
 
   private static final Logger logger = LoggerFactory.getLogger(MVerificationOutbound.class);
+
+  public static final String KEY_CONTEXT = "context";
+  public static final String KEY_PAYLOAD = "payload";
+  public static final String CONTEXT_HEADER = "invoice-verification-header";
+  public static final String CONTEXT_LINES = "invoice-verification-lines";
+
   private final RestTemplate restTemplate = new RestTemplate();
   private final ObjectMapper objectMapper;
   private final ApplicationProperties properties;
-
-  public static final String CONTEXT_HEADER = "invoice-verification-header";
-  public static final String CONTEXT_LINES = "invoice-verification-lines";
 
   public MVerificationOutbound(ObjectMapper objectMapper, ApplicationProperties properties) {
     this.objectMapper = objectMapper;
     this.properties = properties;
   }
 
+  @Async
+  public void sendPayload(MVerificationDTO header, List<MVerificationLineDTO> lines) {
+    logger.debug("Preparing data to be dispatched to the external system.");
+    final Map<String, Object> params = new HashMap<>(2);
+    params.put(KEY_CONTEXT, MVerificationOutbound.CONTEXT_HEADER);
+    params.put(KEY_PAYLOAD, header);
+    run(params);
+
+    params.put(KEY_CONTEXT, MVerificationOutbound.CONTEXT_LINES);
+    params.put(KEY_PAYLOAD, lines);
+    run(params);
+  }
+
   @Override
   public TriggerResult run(Map<String, Object> params) {
-    final Object payload = params.get("payload");
-    final String context = (String) params.get("context");
+    final Object payload = params.get(KEY_PAYLOAD);
+    final String context = (String) params.get(KEY_CONTEXT);
     boolean success = true;
     String response = null;
 

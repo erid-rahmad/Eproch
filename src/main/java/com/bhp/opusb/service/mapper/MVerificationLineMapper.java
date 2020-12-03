@@ -13,7 +13,7 @@ import org.mapstruct.*;
 public interface MVerificationLineMapper extends EntityMapper<MVerificationLineDTO, MVerificationLine> {
 
     @Mapping(source = "verification.id", target = "verificationId")
-    @Mapping(source = "verification.verificationNo", target = "verificationName")
+    @Mapping(source = "verification.verificationNo", target = "verificationNo")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "product.id", target = "productId")
