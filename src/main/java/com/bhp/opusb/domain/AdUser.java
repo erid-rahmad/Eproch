@@ -37,12 +37,7 @@ public class AdUser extends AbstractAuditingEntity {
     private UUID uid;
 
     @Column(name = "active")
-    private Boolean active = true;
-
-    @NotNull
-    @Size(max = 15)
-    @Column(name = "code", length = 15, nullable = false)
-    private String code;
+    private Boolean active;
 
     @NotNull
     @Size(max = 20)
@@ -116,19 +111,6 @@ public class AdUser extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public AdUser code(String code) {
-        this.code = code;
-        return this;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getPhone() {
@@ -263,7 +245,6 @@ public class AdUser extends AbstractAuditingEntity {
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", code='" + getCode() + "'" +
             ", phone='" + getPhone() + "'" +
             ", position='" + getPosition() + "'" +
             ", vendor='" + isVendor() + "'" +

@@ -54,6 +54,10 @@ export const getJsonSchemaType = (columnType: string) => {
   return type || 'string';
 }
 
+export const isNewRecord = (row: any): boolean => {
+  return !row.id;
+}
+
 export const isTableDirectLink = (field: IADField): boolean => {
   const column = field.adColumn;
   const reference = field.adReference || column?.adReference;

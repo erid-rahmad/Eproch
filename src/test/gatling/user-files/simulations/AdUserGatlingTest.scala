@@ -74,7 +74,6 @@ class AdUserGatlingTest extends Simulation {
                 "id":null
                 , "uid":null
                 , "active":null
-                , "code":"SAMPLE_TEXT"
                 , "phone":"SAMPLE_TEXT"
                 , "position":"SAMPLE_TEXT"
                 , "vendor":null

@@ -2,14 +2,11 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
-import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -31,7 +28,7 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
-    private LongFilter picId;
+    private LongFilter picUserId;
 
     private LongFilter businessCategoryId;
 
@@ -44,7 +41,7 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.picId = other.picId == null ? null : other.picId.copy();
+        this.picUserId = other.picUserId == null ? null : other.picUserId.copy();
         this.businessCategoryId = other.businessCategoryId == null ? null : other.businessCategoryId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
@@ -78,12 +75,12 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
-    public LongFilter getPicId() {
-        return picId;
+    public LongFilter getPicUserId() {
+        return picUserId;
     }
 
-    public void setPicId(LongFilter picId) {
-        this.picId = picId;
+    public void setPicUserId(LongFilter picUserId) {
+        this.picUserId = picUserId;
     }
 
     public LongFilter getBusinessCategoryId() {
@@ -116,7 +113,7 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(picId, that.picId) &&
+            Objects.equals(picUserId, that.picUserId) &&
             Objects.equals(businessCategoryId, that.businessCategoryId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
     }
@@ -127,7 +124,7 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
         id,
         uid,
         active,
-        picId,
+        picUserId,
         businessCategoryId,
         adOrganizationId
         );
@@ -139,7 +136,7 @@ public class CPicBusinessCatCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (picId != null ? "picId=" + picId + ", " : "") +
+                (picUserId != null ? "picId=" + picUserId + ", " : "") +
                 (businessCategoryId != null ? "businessCategoryId=" + businessCategoryId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";

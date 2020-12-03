@@ -19,7 +19,6 @@ entity ADOrganizationInfo {
 entity AdUser {
 	uid UUID
 	active Boolean
-	code String required maxlength(15)
 	phone String required maxlength(20)
 	position String maxlength(30)
 

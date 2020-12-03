@@ -205,7 +205,6 @@ public class UserService {
         // Create and save the UserExtra entity
         AdUser pic = adUserMapper.toEntity(adUser)
             .active(newUser.getActivated())
-            .code(adUser.getUserLogin())
             .adOrganization(organization)
             .phone(adUser.getPhone())
             .position(adUser.getPosition())
@@ -361,6 +360,15 @@ public class UserService {
                 this.clearUserCaches(user);
                 log.debug("Changed password for User: {}", user);
             });
+    }
+
+    public void changePassword(Long userId, String newPassword) {
+        userRepository.findById(userId).ifPresent(user -> {
+            String encryptedPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encryptedPassword);
+            this.clearUserCaches(user);
+            log.debug("Changed password for User: {}", user);
+        });
     }
 
     @Transactional(readOnly = true)

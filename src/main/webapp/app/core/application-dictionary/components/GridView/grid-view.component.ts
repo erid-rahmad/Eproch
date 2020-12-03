@@ -6,7 +6,7 @@ import { IADField } from '@/shared/model/ad-field.model';
 import { formatJson } from '@/utils';
 import { exportJson2Excel } from '@/utils/excel';
 import { normalizeField } from '@/utils/form';
-import { hasReferenceList, isActiveStatusField, isAttachmentField, isBooleanField, isDateField, isDateTimeField, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
+import { hasReferenceList, isActiveStatusField, isAttachmentField, isBooleanField, isDateField, isDateTimeField, isNewRecord, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
 import schema from 'async-validator';
 import { format, parseISO } from 'date-fns';
 import { ElPagination } from 'element-ui/types/pagination';
@@ -18,6 +18,7 @@ import { mapActions } from 'vuex';
 import CalloutMixin from '../../mixins/CalloutMixin';
 import AddressEditor from "../AddressEditor/address-editor.vue";
 import ContextVariableAccessor from "../ContextVariableAccessor";
+import PasswordEditor from "../PasswordEditor/password-editor.vue";
 
 const GridViewProps = Vue.extend({
   props: {
@@ -58,9 +59,11 @@ const GridViewProps = Vue.extend({
 
 @Component({
   components: {
-    AddressEditor
+    AddressEditor,
+    PasswordEditor
   },
   methods: {
+    isNewRecord,
     isStringField,
     isPasswordField,
     isNumericField,
@@ -1026,6 +1029,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     return field?.adReference?.adreferenceLists || field.adColumn.adReference?.adreferenceLists;
   }
 
+  public isNewRecord!: (row: any) => boolean;
   public isStringField!: (field: IADField) => boolean;
   public isPasswordField!: (field: IADField) => boolean;
   public isNumericField!: (field: IADField) => boolean;

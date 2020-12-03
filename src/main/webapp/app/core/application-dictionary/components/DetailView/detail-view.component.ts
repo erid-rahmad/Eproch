@@ -3,7 +3,7 @@ import { IRegisterTabParameter, WindowStoreModule as windowStore } from '@/share
 import { ADColumnType } from '@/shared/model/ad-column.model';
 import { IADField } from '@/shared/model/ad-field.model';
 import { normalizeField } from '@/utils/form';
-import { hasReferenceList, isActiveStatusField, isBooleanField, isDateField, isDateTimeField, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
+import { hasReferenceList, isActiveStatusField, isAttachmentField, isBooleanField, isDateField, isDateTimeField, isNewRecord, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
 import { ElForm } from 'element-ui/types/form';
 import { cloneDeep, debounce, kebabCase } from 'lodash';
 import pluralize from 'pluralize';
@@ -13,6 +13,7 @@ import { mapActions } from 'vuex';
 import CalloutMixin from '../../mixins/CalloutMixin';
 import AddressEditor from "../AddressEditor/address-editor.vue";
 import ContextVariableAccessor from '../ContextVariableAccessor';
+import PasswordEditor from "../PasswordEditor/password-editor.vue";
 
 const DetailViewProps = Vue.extend({
   props: {
@@ -40,18 +41,21 @@ const DetailViewProps = Vue.extend({
 
 @Component({
   components: {
-    AddressEditor
+    AddressEditor,
+    PasswordEditor
   },
   methods: {
-    isStringField: isStringField,
-    isPasswordField: isPasswordField,
-    isNumericField: isNumericField,
-    isDateField: isDateField,
-    isDateTimeField: isDateTimeField,
-    isBooleanField: isBooleanField,
+    isNewRecord,
+    isStringField,
+    isPasswordField,
+    isNumericField,
+    isDateField,
+    isDateTimeField,
+    isBooleanField,
+    hasReferenceList,
+    isTableDirectLink,
+    isAttachmentField,
     isActivatorSwitch: isActiveStatusField,
-    hasReferenceList: hasReferenceList,
-    isTableDirectLink: isTableDirectLink,
     ...mapActions({
       registerTabState: 'windowStore/registerTab'
     })
@@ -174,7 +178,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
       const column = field.adColumn;
       const newRow = !field.columnNo || columnNo <= previousColumnNo;
 
-      if (newRow) {
+      if (!rows.length || newRow) {
         columns = [];
         rows.push({
           columns: columns
