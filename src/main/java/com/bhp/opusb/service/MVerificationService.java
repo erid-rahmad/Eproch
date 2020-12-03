@@ -11,6 +11,7 @@ import com.bhp.opusb.service.dto.MVerificationLineCriteria;
 import com.bhp.opusb.service.dto.MVerificationLineDTO;
 import com.bhp.opusb.service.dto.VerificationDTO;
 import com.bhp.opusb.service.mapper.MVerificationMapper;
+import com.bhp.opusb.service.trigger.ProcessTrigger;
 import com.bhp.opusb.service.trigger.process.integration.MVerificationOutbound;
 
 import org.slf4j.Logger;
@@ -37,12 +38,12 @@ public class MVerificationService {
     private final MVerificationMapper mVerificationMapper;
     private final MVerificationLineService mVerificationLineService;
     private final MVerificationLineQueryService mVerificationLineQueryService;
-    private final MVerificationOutbound mVerificationOutbound;
+    private final ProcessTrigger mVerificationOutbound;
 
     public MVerificationService(MVerificationRepository mVerificationRepository,
             MVerificationMapper mVerificationMapper, MVerificationLineService mVerificationLineService,
             MVerificationLineQueryService mVerificationLineQueryService, ADOrganizationService adOrganizationService,
-            @Qualifier("mVerificationOutbound") MVerificationOutbound mVerificationOutbound) {
+            @Qualifier("mVerificationOutbound") ProcessTrigger mVerificationOutbound) {
         this.mVerificationRepository = mVerificationRepository;
         this.mVerificationMapper = mVerificationMapper;
         this.mVerificationLineService = mVerificationLineService;
@@ -93,7 +94,7 @@ public class MVerificationService {
                     List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
                     
                     if (!lines.isEmpty()) {
-                        mVerificationOutbound.sendPayload(header, lines);
+                        ((MVerificationOutbound) mVerificationOutbound).sendPayload(header, lines);
                     }
                 });
             
