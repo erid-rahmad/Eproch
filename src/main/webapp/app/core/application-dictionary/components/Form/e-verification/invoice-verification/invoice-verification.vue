@@ -52,7 +52,7 @@
                         size="mini"
                         icon="el-icon-check"
                         type="primary"
-                        @click="actionSubmit('approve')">
+                        @click="actionSubmit('APV')">
                             Approve
                     </el-button>
                     <el-button
@@ -60,7 +60,7 @@
                         size="mini"
                         icon="el-icon-warning-outline"
                         type="danger"
-                        @click="actionSubmit('reject')">
+                        @click="actionSubmit('RJC')">
                             Reject
                     </el-button>
 

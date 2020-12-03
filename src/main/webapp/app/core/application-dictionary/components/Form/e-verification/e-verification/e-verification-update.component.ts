@@ -285,9 +285,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
 
   addSelectedLines() {
-    let totalLines = 0;
-    let totalAmount = 0;
-    let taxAmount = 0;
     const lines = this.transformMatchPo((<any>this.$refs.matchPo)?.selectedLines || []);
 
     for (const line of lines) {
@@ -303,18 +300,26 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
   private calculateLines() {
     let totalLines = 0;
-    let totalAmount = 0;
+    let foreignTotalLines = 0;
     let taxAmount = 0;
+    let foreignTaxAmount = 0;
+    let totalAmount = 0;
+    let foreignTotalAmount = 0;
 
     for (const row of this.gridData) {
       totalLines += row.totalLines;
-      totalAmount += row.totalAmount;
       taxAmount += row.taxAmount;
+      totalAmount += totalLines + taxAmount;
+      foreignTotalLines += row.foreignTotalAmount;
+      foreignTaxAmount += row.foreignTaxAmount;
+      foreignTotalAmount += foreignTotalLines + foreignTaxAmount;
     }
 
     this.formUpdate.totalLines = totalLines;
     this.formUpdate.taxAmount = taxAmount;
     this.formUpdate.grandTotal = totalAmount;
+    this.formUpdate.foreignTaxAmount = foreignTaxAmount;
+    this.formUpdate.foreignGrandTotal = foreignTotalAmount;
   }
 
   onMatchPoOpen() {
@@ -503,7 +508,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       } = line;
 
       line.conversionRate = data.cConversionRate;
-      line.lineNo = data.lineNoMr;
+      line.lineNo = data.lineNoPo;
       return line;
     });
   }

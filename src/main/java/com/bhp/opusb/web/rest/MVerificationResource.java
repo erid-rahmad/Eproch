@@ -78,7 +78,7 @@ public class MVerificationResource {
     @PutMapping("/m-verifications/submit")
     @ResponseStatus(HttpStatus.OK)
     public void submitUpdateEVerification(@Valid @RequestBody VerificationDTO verificationDTO) {
-        mVerificationService.submitEVerification(verificationDTO);
+        mVerificationService.updateDocumentStatus(verificationDTO);
     }
 
     /**

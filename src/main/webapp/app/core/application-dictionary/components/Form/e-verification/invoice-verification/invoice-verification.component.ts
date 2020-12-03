@@ -154,37 +154,31 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
       });
   }
 
-  private actionSubmit(buttonSubmit: any){
-    var message;
-    if(!this.eVerification.form.dateAcct){
+  actionSubmit(action: string) {
+    let message: string;
+    const approval = action === 'APV';
+
+    if (!this.eVerification.form.dateAcct) {
       message = "Please input GL Date";
       this.notifWarning(message);
-    }else if(!this.eVerification.form.dueDate){
+    } else if (!this.eVerification.form.dueDate) {
       message = "Please input Due Date";
       this.notifWarning(message);
-    }else if(!this.eVerification.form.description){
+    } else if (!this.eVerification.form.description) {
       message = "Please input Notes";
       this.notifWarning(message);
-    }else{
+    } else {
+      let now = new Date();
+      const offset = now.getTimezoneOffset();
 
-      var today = new Date();
-      var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-      //var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-      //var dateTime = date;
+      now = new Date(now.getTime() - (offset * 60 * 1000));
+      const dateTrx = now.toISOString().split('T')[0];
 
-      if(buttonSubmit == "approve"){
-        this.eVerification.form.verificationStatus = "APV";
-        this.eVerification.form.dateApprove = date;
-      }else if(buttonSubmit == "reject"){
-        this.eVerification.form.verificationStatus = "RJC";
-        this.eVerification.form.dateReject = date;
-      }
-
+      this.eVerification.form.verificationStatus = action;
+      this.eVerification.form[approval ? 'dateApprove' : 'dateReject'] = dateTrx;
       this.fullscreenLoading = true;
       this.submit();
-
     }
-
   }
 
   private notifWarning(message: string){

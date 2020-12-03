@@ -134,11 +134,14 @@ jhipster:
 # ===================================================================
 
 application:
-  default-organization-id: 1
-  default-cost-center-id: 19851
+  default-organization-id: 33851
+  default-cost-center-id: 45651
   default-element-value-id: 19901
   default-product-type: I
   default-product-classification-id: 33701
-  default-product-category-id: 33751
-  default-product-asset-account-id: 48151
-  default-product-expense-account-id: 48152
+  default-product-category-id: 45551
+  default-product-asset-account-id: 18601
+  default-product-expense-account-id: 19901
+  integration:
+    endpoint:
+      invoice-verification-url: http://localhost:20001/api/invoice-verification
