@@ -16,11 +16,11 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
     ],
     startNo: [
       { required: true, message: 'Please fill Start No' },
-      { min: 15, message: 'Length should be 15' }
+      { min: 13, message: 'Length should be 15' }
     ],
     endNo: [
       { required: true, message: 'Please fill End No' },
-      { min: 15, message: 'Length should be 15' }
+      { min: 13, message: 'Length should be 15' }
     ],
   }
 

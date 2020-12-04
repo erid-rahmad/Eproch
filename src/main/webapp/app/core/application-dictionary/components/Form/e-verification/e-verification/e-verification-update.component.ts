@@ -33,7 +33,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   };
   rules = {
     taxInvoice: [
-      { min: 15, message: 'Length should be 15 digit' }
+      { min: 13, message: 'Length should be 15 digit' }
     ]
   }
 
