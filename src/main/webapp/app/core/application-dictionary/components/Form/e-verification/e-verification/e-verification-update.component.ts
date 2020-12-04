@@ -421,7 +421,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
     console.log(this.eVerification);
 
-    this.checkVerification(this.formUpdate.taxInvoice);
 
     if(this.statTaxInvoice){
       if (this.formUpdate.id != null) {
