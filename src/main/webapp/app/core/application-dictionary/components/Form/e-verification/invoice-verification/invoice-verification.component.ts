@@ -157,27 +157,37 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
   actionSubmit(action: string) {
     let message: string;
     const approval = action === 'APV';
+    var submit = false;
 
-    if (!this.eVerification.form.dateAcct) {
-      message = "Please input GL Date";
-      this.notifWarning(message);
-    } else if (!this.eVerification.form.dueDate) {
-      message = "Please input Due Date";
-      this.notifWarning(message);
-    } else if (!this.eVerification.form.description) {
-      message = "Please input Notes";
-      this.notifWarning(message);
-    } else {
-      let now = new Date();
-      const offset = now.getTimezoneOffset();
+    if(approval){
+      if (!this.eVerification.form.dateAcct) {
+        message = "Please input GL Date";
+        this.notifWarning(message);
+      } else if (!this.eVerification.form.dueDate) {
+        message = "Please input Due Date";
+        this.notifWarning(message);
+      } else {
+        submit = true;
+      }
+    }else{
+      submit = true;
+    }
+    if(submit){
+      if (!this.eVerification.form.description) {
+        message = "Please input Notes";
+        this.notifWarning(message);
+      } else {
+        let now = new Date();
+        const offset = now.getTimezoneOffset();
 
-      now = new Date(now.getTime() - (offset * 60 * 1000));
-      const dateTrx = now.toISOString().split('T')[0];
+        now = new Date(now.getTime() - (offset * 60 * 1000));
+        const dateTrx = now.toISOString().split('T')[0];
 
-      this.eVerification.form.verificationStatus = action;
-      this.eVerification.form[approval ? 'dateApprove' : 'dateReject'] = dateTrx;
-      this.fullscreenLoading = true;
-      this.submit();
+        this.eVerification.form.verificationStatus = action;
+        this.eVerification.form[approval ? 'dateApprove' : 'dateReject'] = dateTrx;
+        this.fullscreenLoading = true;
+        this.submit();
+      }
     }
   }
 
