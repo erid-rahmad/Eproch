@@ -30,10 +30,9 @@
                         <el-input
                             class="form-input"
                             clearable
-                            placeholder="__.___.___._-___.___"
-                            minlength="15"
+                            placeholder="___-__.________"
                             v-model="form.startNo"
-                            v-inputmask="{'mask': '99.999.999.9-999.999'}"/>
+                            v-inputmask="{'mask': '999-99.99999999'}"/>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -43,10 +42,10 @@
                         <el-input
                             class="form-input"
                             clearable
-                            placeholder="__.___.___._-___.___"
+                            placeholder="___-__.________"
                             minlength="15"
                             v-model="form.endNo"
-                            v-inputmask="{'mask': '99.999.999.9-999.999'}"/>
+                            v-inputmask="{'mask': '999-99.99999999'}"/>
                     </el-form-item>
                 </el-col>
             </el-row>
