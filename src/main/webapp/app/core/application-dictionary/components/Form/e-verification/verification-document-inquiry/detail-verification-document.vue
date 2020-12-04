@@ -33,7 +33,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="Tax Invoice No. :" prop="taxInvoice">
-                        {{ detailVerification.taxInvoice | facade('##.###.###.#-###.###') }}
+                        {{ detailVerification.taxInvoice | facade('###-##.########') }}
                     </el-form-item>
                     <el-form-item label="Tax Invoice Date :" prop="taxDate">
                         {{ detailVerification.taxDate }}

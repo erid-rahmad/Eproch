@@ -51,7 +51,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="Tax Invoice No." prop="taxInvoice">
-                            {{ formHeader.taxInvoice | facade('##.###.###.#-###.###') }}
+                            {{ formHeader.taxInvoice | facade('###-##.########') }}
                         </el-form-item>
                         <el-form-item label="Tax Invoice Date" prop="taxDate">
                             : {{ formHeader.taxDate }}

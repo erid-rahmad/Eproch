@@ -128,7 +128,7 @@
                                 prop="startNo"
                                 label="Start No">
                                 <template slot-scope="{ row }">
-                                    {{ row.startNo | facade('##.###.###.#-###.###') }}
+                                    {{ row.startNo | facade('###-##.########') }}
                                 </template>
                             </el-table-column>
                             <el-table-column
@@ -137,7 +137,7 @@
                                 prop="endNo"
                                 label="End No">
                                 <template slot-scope="{ row }">
-                                    {{ row.endNo | facade('##.###.###.#-###.###') }}
+                                    {{ row.endNo | facade('###-##.########') }}
                                 </template>
                             </el-table-column>
                             <el-table-column

@@ -266,7 +266,7 @@
                                 prop="taxInvoice"
                                 label="Tax Invoice No.">
                                 <template slot-scope="{ row }">
-                                    {{ row.taxInvoice | facade('##.###.###.#-###.###') }}
+                                    {{ row.taxInvoice | facade('###-##.########') }}
                                 </template>
                             </el-table-column>
                             <el-table-column
