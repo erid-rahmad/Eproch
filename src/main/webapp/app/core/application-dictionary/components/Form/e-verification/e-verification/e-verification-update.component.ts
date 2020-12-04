@@ -502,9 +502,9 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         ...data
       } = line;
 
-      line.conversionRate = data.cConversionRate;
-      line.lineNo = data.lineNoPo;
-      return line;
+      data.conversionRate = line.cConversionRate;
+      data.lineNo = line.lineNoPo;
+      return data;
     });
   }
 
