@@ -76,6 +76,7 @@
                             v-model="formUpdate.taxInvoice"
                             v-inputmask="{'mask': '999-99.99999999'}"
                             placeholder="___-__.________"
+                            @change="checkVerification"
                             />
                     </el-form-item>
                     <el-form-item label="Tax Invoice Date" prop="taxDate" required>

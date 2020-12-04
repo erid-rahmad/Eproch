@@ -264,6 +264,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
       if (!lineExist) {
         this.gridData.push(line);
+        console.log(this.gridData);
       }
     }
     this.calculateLines();
@@ -278,6 +279,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
       if (!lineExist) {
         this.gridData.push(line);
+        console.log(this.gridData);
       }
     }
     this.calculateLines();
@@ -318,6 +320,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
     if (this.formUpdate.id) {
       this.removedLines.push(row);
+      console.log(this.removedLines);
     }
 
     this.formUpdate.totalLines -= row.totalLines;
@@ -332,13 +335,9 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       var startNo;
       var endNo;
 
-      if(this.statTaxInvoice){
-        startNo = parseInt(this.enofaList[i].startNo);
-        endNo = parseInt(this.enofaList[i].endNo);
-      }else{
-        startNo = parseInt(this.enofaList[i+1].startNo);
-        endNo = parseInt(this.enofaList[i+1].endNo);
-      }
+      startNo = parseInt(this.enofaList[i].startNo);
+      endNo = parseInt(this.enofaList[i].endNo);
+
       var data = parseInt(value);
 
       if(data>=startNo && data<=endNo){
@@ -348,7 +347,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         if(data >= startNo){
           this.statTaxInvoice = false;
 
-          if(data > this.enofaList[length-1].endNo){
+          if(data > parseInt(this.enofaList[length-1].endNo)){
             this.$notify({
               title: 'Warning',
               dangerouslyUseHTMLString: true,
@@ -372,7 +371,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
 
   checkVerification(data){
-    var filterQuery = "vendorId.equals="+this.formUpdate.vendorId+"&taxInvoice.equals="+data;
+    var filterQuery = "vendorId.equals="+this.formUpdate.vendorId+"&taxInvoice.equals="+data+"&verificationStatus.notEquals=RJC";
     this.dynamicWindowService(this.baseApiUrlEVerification)
       .retrieve({
         criteriaQuery: filterQuery,
@@ -396,7 +395,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
           this.$notify({
             title: 'Warning',
             dangerouslyUseHTMLString: true,
-            message: 'Tax Invoice length should be 15 digit',
+            message: 'Tax Invoice length should be 13 digit',
             type: 'warning'
           });
           this.statTaxInvoice = false;
@@ -421,7 +420,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
     console.log(this.eVerification);
 
-    this.statTaxInvoice = true;
+    this.checkVerification(this.formUpdate.taxInvoice);
 
     if(this.statTaxInvoice){
       if (this.formUpdate.id != null) {
