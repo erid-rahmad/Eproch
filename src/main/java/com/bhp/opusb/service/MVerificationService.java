@@ -62,11 +62,7 @@ public class MVerificationService {
         mVerificationRepository.save(verification);
 
         // Batch save verification line.
-        if (verificationDTO.getRemove().isEmpty()) {
-            mVerificationLineService.saveAll(verificationDTO.getLine(), verification, organization);
-        } else {
-            mVerificationLineService.removeAll(verificationDTO.getRemove());
-        }
+        mVerificationLineService.saveAll(verificationDTO.getLine(), verification, organization);
 
         return verification;
     }
@@ -83,7 +79,11 @@ public class MVerificationService {
 
         mVerificationRepository.save(mVerification);
         mVerificationLineService.saveAll(mVerificationLineDTOs, mVerification, organization);
-        
+
+        if (!verificationDTO.getRemove().isEmpty()) {
+            mVerificationLineService.removeAll(verificationDTO.getRemove());
+        }
+
         if (mVerification.getVerificationStatus().equals("APV")) {
             findOne(mVerification.getId())
                 .ifPresent(header -> {
@@ -92,12 +92,12 @@ public class MVerificationService {
                     idFilter.setEquals(header.getId());
                     lineCriteria.setVerificationId(idFilter);
                     List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
-                    
+
                     if (!lines.isEmpty()) {
                         ((MVerificationOutbound) mVerificationOutbound).sendPayload(header, lines);
                     }
                 });
-            
+
         }
     }
 
