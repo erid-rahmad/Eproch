@@ -97,9 +97,6 @@ public class AdUserQueryService extends QueryService<AdUser> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), AdUser_.active));
             }
-            if (criteria.getCode() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getCode(), AdUser_.code));
-            }
             if (criteria.getPhone() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPhone(), AdUser_.phone));
             }

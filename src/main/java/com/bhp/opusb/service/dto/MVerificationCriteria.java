@@ -87,9 +87,9 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     private LongFilter currencyId;
 
-    private LongFilter vendorId;
+    private LongFilter matchPoCurrencyId;
 
-    private LongFilter picId;
+    private LongFilter vendorId;
 
     private LongFilter vendorToId;
 
@@ -127,8 +127,8 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
+        this.matchPoCurrencyId = other.matchPoCurrencyId == null ? null : other.matchPoCurrencyId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
-        this.picId = other.picId == null ? null : other.picId.copy();
         this.vendorToId = other.vendorToId == null ? null : other.vendorToId.copy();
     }
 
@@ -377,20 +377,20 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.currencyId = currencyId;
     }
 
+    public LongFilter getMatchPoCurrencyId() {
+        return matchPoCurrencyId;
+    }
+
+    public void setMatchPoCurrencyId(LongFilter matchPoCurrencyId) {
+        this.matchPoCurrencyId = matchPoCurrencyId;
+    }
+
     public LongFilter getVendorId() {
         return vendorId;
     }
 
     public void setVendorId(LongFilter vendorId) {
         this.vendorId = vendorId;
-    }
-
-    public LongFilter getPicId() {
-        return picId;
-    }
-
-    public void setPicId(LongFilter picId) {
-        this.picId = picId;
     }
 
     public LongFilter getVendorToId() {
@@ -442,8 +442,8 @@ public class MVerificationCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(currencyId, that.currencyId) &&
+            Objects.equals(matchPoCurrencyId, that.matchPoCurrencyId) &&
             Objects.equals(vendorId, that.vendorId) &&
-            Objects.equals(picId, that.picId) &&
             Objects.equals(vendorToId, that.vendorToId);
     }
 
@@ -480,8 +480,8 @@ public class MVerificationCriteria implements Serializable, Criteria {
         active,
         adOrganizationId,
         currencyId,
+        matchPoCurrencyId,
         vendorId,
-        picId,
         vendorToId
         );
     }
@@ -519,8 +519,8 @@ public class MVerificationCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
+                (matchPoCurrencyId != null ? "matchPoCurrencyId=" + matchPoCurrencyId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
-                (picId != null ? "picId=" + picId + ", " : "") +
                 (vendorToId != null ? "vendorToId=" + vendorToId + ", " : "") +
             "}";
     }

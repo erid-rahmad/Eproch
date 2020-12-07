@@ -217,15 +217,24 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     private String cCurrencyName;
 
     /**
-     * PREXR1 is mapped to tax code.
-     * PRTXA1 is mapped to tax name.
+     * PREXR1 is mapped to tax category name.
      */
-    @ApiModelProperty(value = "PREXR1 is mapped to tax code.\nPRTXA1 is mapped to tax name.")
+    @ApiModelProperty(value = "PREXR1 is mapped to tax category name.")
     @JsonProperty("cTaxCategoryId")
     private Long cTaxCategoryId;
 
     @JsonProperty("cTaxCategoryName")
     private String cTaxCategoryName;
+
+    /**
+     * PRTXA1 is mapped to tax name.
+     */
+    @ApiModelProperty(value = "PRTXA1 is mapped to tax name.")
+    @JsonProperty("cTaxId")
+    private Long cTaxId;
+
+    @JsonProperty("cTaxName")
+    private String cTaxName;
 
     /**
      * PRUOM is mapped to code, name, and symbol.
@@ -588,6 +597,22 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.cTaxCategoryName = cTaxCategoryName;
     }
 
+    public Long getCTaxId() {
+        return cTaxId;
+    }
+
+    public void setCTaxId(Long cTaxId) {
+        this.cTaxId = cTaxId;
+    }
+
+    public String getCTaxName() {
+        return cTaxName;
+    }
+
+    public void setCTaxName(String cTaxName) {
+        this.cTaxName = cTaxName;
+    }
+
     public Long getCUomId() {
         return cUomId;
     }
@@ -726,10 +751,9 @@ public class MMatchPODTO extends AbstractAuditingDTO {
             ", adOrganizationId=" + getAdOrganizationId() +
             ", cCostCenterId=" + getCCostCenterId() +
             ", cVendorId=" + getCVendorId() +
-            ", cVendorCode=" + getCVendorCode() +
-            ", cVendorName=" + getCVendorName() +
             ", cCurrencyId=" + getCCurrencyId() +
             ", cTaxCategoryId=" + getCTaxCategoryId() +
+            ", cTaxId=" + getCTaxId() +
             ", cUomId=" + getCUomId() +
             ", mProductId=" + getMProductId() +
             ", mWarehouseId=" + getMWarehouseId() +

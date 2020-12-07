@@ -433,7 +433,6 @@ entity AdButton {
 entity AdUser {
 	uid UUID
 	active Boolean
-	code String required
 	phone String required
 
 	failedLoginCount Integer

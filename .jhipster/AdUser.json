@@ -10,15 +10,6 @@
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "code",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "15"
-        },
-        {
             "fieldName": "phone",
             "fieldType": "String",
             "fieldValidateRules": [

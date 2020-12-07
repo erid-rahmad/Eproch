@@ -27,10 +27,6 @@ public class AdUserDTO extends AbstractAuditingDTO {
     private Boolean active;
 
     @NotNull
-    @Size(max = 15)
-    private String code;
-
-    @NotNull
     @Size(max = 20)
     private String phone;
 
@@ -106,14 +102,6 @@ public class AdUserDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
     }
 
     public String getPhone() {
@@ -263,7 +251,6 @@ public class AdUserDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", code='" + getCode() + "'" +
             ", phone='" + getPhone() + "'" +
             ", position='" + getPosition() + "'" +
             ", vendor='" + isVendor() + "'" +

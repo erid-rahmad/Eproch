@@ -5,9 +5,13 @@ import java.util.Optional;
 
 import com.bhp.opusb.config.Constants;
 import com.bhp.opusb.domain.AdUser;
+import com.bhp.opusb.domain.AdUserAuthority;
 import com.bhp.opusb.domain.User;
+import com.bhp.opusb.repository.AdUserAuthorityRepository;
 import com.bhp.opusb.repository.AdUserRepository;
+import com.bhp.opusb.repository.ScAuthorityRepository;
 import com.bhp.opusb.repository.UserRepository;
+import com.bhp.opusb.security.AuthoritiesConstants;
 import com.bhp.opusb.security.SecurityUtils;
 import com.bhp.opusb.service.dto.AdUserDTO;
 import com.bhp.opusb.service.mapper.AdUserMapper;
@@ -34,12 +38,17 @@ public class AdUserService {
     private final AdUserRepository adUserRepository;
     private final UserRepository userRepository;
     private final AdUserMapper adUserMapper;
+    private final AdUserAuthorityRepository adUserAuthorityRepository;
+    private final ScAuthorityRepository scAuthorityRepository;
     private final PasswordEncoder passwordEncoder;
 
-    public AdUserService(AdUserRepository adUserRepository, UserRepository userRepository, AdUserMapper adUserMapper, PasswordEncoder passwordEncoder) {
+    public AdUserService(AdUserRepository adUserRepository, UserRepository userRepository, AdUserMapper adUserMapper,
+            AdUserAuthorityRepository adUserAuthorityRepository, ScAuthorityRepository scAuthorityRepository, PasswordEncoder passwordEncoder) {
         this.adUserRepository = adUserRepository;
         this.userRepository = userRepository;
         this.adUserMapper = adUserMapper;
+        this.adUserAuthorityRepository = adUserAuthorityRepository;
+        this.scAuthorityRepository = scAuthorityRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -51,8 +60,8 @@ public class AdUserService {
      */
     public AdUserDTO save(AdUserDTO adUserDTO) {
         log.debug("Request to save AdUser : {}", adUserDTO);
-        AdUser adUser = adUserMapper.toEntity(adUserDTO);
-        
+        final AdUser adUser = adUserMapper.toEntity(adUserDTO);
+
         if (adUserDTO.getId() == null) {
             User user = new User();
             user.setEmail(adUserDTO.getEmail());
@@ -69,10 +78,31 @@ public class AdUserService {
             user.setResetDate(Instant.now());
             userRepository.save(user);
             log.debug("User saved {}", user);
+
             adUser.setUser(user);
+            if (adUser.getCVendor() != null) {
+                adUser.vendor(true);
+            }
         }
         
-        adUser = adUserRepository.save(adUser);
+        adUserRepository.save(adUser);
+
+        // Add a SUPPLIER authority if he/she is a vendor.
+        if (Optional.ofNullable(adUser.isVendor()).orElse(false)) {
+            scAuthorityRepository.findByAuthorityName(AuthoritiesConstants.SUPPLIER)
+                .ifPresent(scAuthority -> {
+                    AdUserAuthority userAuthority = new AdUserAuthority().active(true)
+                        .adOrganization(adUser.getAdOrganization())
+                        .authority(scAuthority)
+                        .user(adUser);
+
+                    adUserAuthorityRepository.save(userAuthority);
+
+                    // Add ROLE_SUPPLIER to jhi_user_authority.
+                    adUser.getUser().getAuthorities().add(scAuthority.getAuthority());
+                });
+        }
+
         return adUserMapper.toDto(adUser);
     }
 

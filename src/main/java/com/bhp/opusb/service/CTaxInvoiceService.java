@@ -1,5 +1,6 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CTaxInvoice;
 import com.bhp.opusb.repository.CTaxInvoiceRepository;
 import com.bhp.opusb.service.dto.CTaxInvoiceDTO;
@@ -23,13 +24,16 @@ public class CTaxInvoiceService {
 
     private final Logger log = LoggerFactory.getLogger(CTaxInvoiceService.class);
 
+    private final ADOrganization organization;
     private final CTaxInvoiceRepository cTaxInvoiceRepository;
 
     private final CTaxInvoiceMapper cTaxInvoiceMapper;
 
-    public CTaxInvoiceService(CTaxInvoiceRepository cTaxInvoiceRepository, CTaxInvoiceMapper cTaxInvoiceMapper) {
+    public CTaxInvoiceService(CTaxInvoiceRepository cTaxInvoiceRepository, CTaxInvoiceMapper cTaxInvoiceMapper, ADOrganizationService adOrganizationService) {
         this.cTaxInvoiceRepository = cTaxInvoiceRepository;
         this.cTaxInvoiceMapper = cTaxInvoiceMapper;
+
+        organization = adOrganizationService.getDefaultOrganization();
     }
 
     /**
@@ -41,6 +45,9 @@ public class CTaxInvoiceService {
     public CTaxInvoiceDTO save(CTaxInvoiceDTO cTaxInvoiceDTO) {
         log.debug("Request to save CTaxInvoice : {}", cTaxInvoiceDTO);
         CTaxInvoice cTaxInvoice = cTaxInvoiceMapper.toEntity(cTaxInvoiceDTO);
+        cTaxInvoice.active(true)
+            .adOrganization(organization);
+
         cTaxInvoice = cTaxInvoiceRepository.save(cTaxInvoice);
         return cTaxInvoiceMapper.toDto(cTaxInvoice);
     }

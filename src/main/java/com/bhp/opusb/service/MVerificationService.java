@@ -1,6 +1,9 @@
 package com.bhp.opusb.service;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.ADOrganization;
@@ -11,7 +14,7 @@ import com.bhp.opusb.service.dto.MVerificationLineCriteria;
 import com.bhp.opusb.service.dto.MVerificationLineDTO;
 import com.bhp.opusb.service.dto.VerificationDTO;
 import com.bhp.opusb.service.mapper.MVerificationMapper;
-import com.bhp.opusb.service.trigger.process.integration.MVerificationOutbound;
+import com.bhp.opusb.service.trigger.process.integration.MVerificationMessageDispatcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,17 +39,17 @@ public class MVerificationService {
     private final MVerificationMapper mVerificationMapper;
     private final MVerificationLineService mVerificationLineService;
     private final MVerificationLineQueryService mVerificationLineQueryService;
-    private final MVerificationOutbound mVerificationOutbound;
+    private final AiMessageDispatcher messageDispatcher;
 
     public MVerificationService(MVerificationRepository mVerificationRepository,
             MVerificationMapper mVerificationMapper, MVerificationLineService mVerificationLineService,
             MVerificationLineQueryService mVerificationLineQueryService, ADOrganizationService adOrganizationService,
-            MVerificationOutbound mVerificationOutbound) {
+            AiMessageDispatcher messageDispatcher) {
         this.mVerificationRepository = mVerificationRepository;
         this.mVerificationMapper = mVerificationMapper;
         this.mVerificationLineService = mVerificationLineService;
         this.mVerificationLineQueryService = mVerificationLineQueryService;
-        this.mVerificationOutbound = mVerificationOutbound;
+        this.messageDispatcher= messageDispatcher;
 
         organization = adOrganizationService.getDefaultOrganization();
     }
@@ -60,11 +63,7 @@ public class MVerificationService {
         mVerificationRepository.save(verification);
 
         // Batch save verification line.
-        if (verificationDTO.getRemove().isEmpty()) {
-            mVerificationLineService.saveAll(verificationDTO.getLine(), verification, organization);
-        } else {
-            mVerificationLineService.removeAll(verificationDTO.getRemove());
-        }
+        mVerificationLineService.saveAll(verificationDTO.getLine(), verification, organization);
 
         return verification;
     }
@@ -79,9 +78,19 @@ public class MVerificationService {
         log.debug("Request to update MVerificationDTO's document status : {}", mVerificationDTO);
         MVerification mVerification = mVerificationMapper.toEntity(mVerificationDTO);
 
+        if (mVerification.getVerificationStatus().equals("APV") && mVerification.getDateApprove() == null) {
+            mVerification.setDateApprove(LocalDate.now());
+        } else if (mVerification.getVerificationStatus().equals("RJC") && mVerification.getDateReject() == null) {
+            mVerification.setDateReject(LocalDate.now());
+        }
+
         mVerificationRepository.save(mVerification);
         mVerificationLineService.saveAll(mVerificationLineDTOs, mVerification, organization);
-        
+
+        if (!verificationDTO.getRemove().isEmpty()) {
+            mVerificationLineService.removeAll(verificationDTO.getRemove());
+        }
+
         if (mVerification.getVerificationStatus().equals("APV")) {
             findOne(mVerification.getId())
                 .ifPresent(header -> {
@@ -90,12 +99,20 @@ public class MVerificationService {
                     idFilter.setEquals(header.getId());
                     lineCriteria.setVerificationId(idFilter);
                     List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
-                    
+
                     if (!lines.isEmpty()) {
-                        mVerificationOutbound.sendPayload(header, lines);
+                        final Map<String, Object> headerPayload = new HashMap<>(2);
+                        headerPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_HEADER);
+                        headerPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, header);
+                        messageDispatcher.dispatch("mVerificationMessageDispatcher", headerPayload);
+
+                        final Map<String, Object> linesPayload = new HashMap<>(2);
+                        linesPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_LINES);
+                        linesPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, lines);
+                        messageDispatcher.dispatch("mVerificationMessageDispatcher", linesPayload);
                     }
                 });
-            
+
         }
     }
 

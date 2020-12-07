@@ -5,7 +5,6 @@ import com.bhp.opusb.domain.MVerification;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CVendor;
-import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.repository.MVerificationRepository;
 import com.bhp.opusb.service.MVerificationService;
 import com.bhp.opusb.service.dto.MVerificationDTO;
@@ -216,6 +215,8 @@ public class MVerificationResourceIT {
         }
         mVerification.setCurrency(cCurrency);
         // Add required entity
+        mVerification.setMatchPoCurrency(cCurrency);
+        // Add required entity
         CVendor cVendor;
         if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
             cVendor = CVendorResourceIT.createEntity(em);
@@ -225,16 +226,6 @@ public class MVerificationResourceIT {
             cVendor = TestUtil.findAll(em, CVendor.class).get(0);
         }
         mVerification.setVendor(cVendor);
-        // Add required entity
-        AdUser adUser;
-        if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
-            adUser = AdUserResourceIT.createEntity(em);
-            em.persist(adUser);
-            em.flush();
-        } else {
-            adUser = TestUtil.findAll(em, AdUser.class).get(0);
-        }
-        mVerification.setPic(adUser);
         return mVerification;
     }
     /**
@@ -293,6 +284,8 @@ public class MVerificationResourceIT {
         }
         mVerification.setCurrency(cCurrency);
         // Add required entity
+        mVerification.setMatchPoCurrency(cCurrency);
+        // Add required entity
         CVendor cVendor;
         if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
             cVendor = CVendorResourceIT.createUpdatedEntity(em);
@@ -302,16 +295,6 @@ public class MVerificationResourceIT {
             cVendor = TestUtil.findAll(em, CVendor.class).get(0);
         }
         mVerification.setVendor(cVendor);
-        // Add required entity
-        AdUser adUser;
-        if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
-            adUser = AdUserResourceIT.createUpdatedEntity(em);
-            em.persist(adUser);
-            em.flush();
-        } else {
-            adUser = TestUtil.findAll(em, AdUser.class).get(0);
-        }
-        mVerification.setPic(adUser);
         return mVerification;
     }
 
@@ -3158,6 +3141,22 @@ public class MVerificationResourceIT {
 
     @Test
     @Transactional
+    public void getAllMVerificationsByMatchPoCurrencyIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CCurrency matchPoCurrency = mVerification.getMatchPoCurrency();
+        mVerificationRepository.saveAndFlush(mVerification);
+        Long matchPoCurrencyId = matchPoCurrency.getId();
+
+        // Get all the mVerificationList where matchPoCurrency equals to matchPoCurrencyId
+        defaultMVerificationShouldBeFound("matchPoCurrencyId.equals=" + matchPoCurrencyId);
+
+        // Get all the mVerificationList where matchPoCurrency equals to matchPoCurrencyId + 1
+        defaultMVerificationShouldNotBeFound("matchPoCurrencyId.equals=" + (matchPoCurrencyId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMVerificationsByVendorIsEqualToSomething() throws Exception {
         // Get already existing entity
         CVendor vendor = mVerification.getVendor();
@@ -3169,22 +3168,6 @@ public class MVerificationResourceIT {
 
         // Get all the mVerificationList where vendor equals to vendorId + 1
         defaultMVerificationShouldNotBeFound("vendorId.equals=" + (vendorId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMVerificationsByPicIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        AdUser pic = mVerification.getPic();
-        mVerificationRepository.saveAndFlush(mVerification);
-        Long picId = pic.getId();
-
-        // Get all the mVerificationList where pic equals to picId
-        defaultMVerificationShouldBeFound("picId.equals=" + picId);
-
-        // Get all the mVerificationList where pic equals to picId + 1
-        defaultMVerificationShouldNotBeFound("picId.equals=" + (picId + 1));
     }
 
 

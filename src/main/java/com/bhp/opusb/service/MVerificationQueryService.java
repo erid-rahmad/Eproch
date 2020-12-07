@@ -180,13 +180,13 @@ public class MVerificationQueryService extends QueryService<MVerification> {
                 specification = specification.and(buildSpecification(criteria.getCurrencyId(),
                     root -> root.join(MVerification_.currency, JoinType.LEFT).get(CCurrency_.id)));
             }
+            if (criteria.getMatchPoCurrencyId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMatchPoCurrencyId(),
+                    root -> root.join(MVerification_.matchPoCurrency, JoinType.LEFT).get(CCurrency_.id)));
+            }
             if (criteria.getVendorId() != null) {
                 specification = specification.and(buildSpecification(criteria.getVendorId(),
                     root -> root.join(MVerification_.vendor, JoinType.LEFT).get(CVendor_.id)));
-            }
-            if (criteria.getPicId() != null) {
-                specification = specification.and(buildSpecification(criteria.getPicId(),
-                    root -> root.join(MVerification_.pic, JoinType.LEFT).get(AdUser_.id)));
             }
             if (criteria.getVendorToId() != null) {
                 specification = specification.and(buildSpecification(criteria.getVendorToId(),

@@ -83,10 +83,10 @@
                         <el-form-item label="Tax Invoice No." prop="taxInvoiceNo">
                             <el-input
                                 v-model="filter.taxInvoiceNo"
-                                v-inputmask="{'mask': '99.999.999.9-999.999'}"
+                                v-inputmask="{'mask': '999-99.99999999'}"
                                 class="form-input"
                                 clearable
-                                placeholder="__.___.___._-___.___"
+                                placeholder="___-__.________"
                             />
                         </el-form-item>
                         <el-form-item label="Status" prop="verificationStatus">
@@ -230,7 +230,7 @@
                             label="Tax Invoice"
                         >
                             <template slot-scope="{ row }">
-                                {{ row.taxInvoice | facade('##.###.###.#-###.###') }}
+                                {{ row.taxInvoice | facade('###-##.########') }}
                             </template>
                         </el-table-column>
                         <el-table-column

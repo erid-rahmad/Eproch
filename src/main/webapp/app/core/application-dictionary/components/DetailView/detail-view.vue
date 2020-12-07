@@ -40,6 +40,11 @@
               class="checkbox"
               @change="value => onInputChanged(col.field, value)"
             />
+            <password-editor
+              v-else-if="isPasswordField(col.field)"
+              :disabled="isNewRecord(model)"
+              :user-id="model.userId"
+            />
             <address-editor
               v-else-if="isAddressField(col.field)"
               v-model="model[col.name]"

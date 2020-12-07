@@ -103,4 +103,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20201203144300" author="Ananta Aryadewa">
+        <dropColumn tableName="ad_user" columnName="code"/>
+    </changeSet>
+
 </databaseChangeLog>

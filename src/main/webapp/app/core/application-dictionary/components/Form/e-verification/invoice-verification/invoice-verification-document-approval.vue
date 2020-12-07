@@ -37,7 +37,7 @@
                         <el-form-item label="Invoice Date" prop="invoiceDate">
                             : {{ formHeader.invoiceDate }}
                         </el-form-item>
-                        <el-form-item label="GL Date" prop="dateAcct" required>
+                        <el-form-item label="GL Date" prop="dateAcct">
                             <el-date-picker
                                 style="width: 90%"
                                 class="form-input date"
@@ -51,12 +51,12 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="Tax Invoice No." prop="taxInvoice">
-                            {{ formHeader.taxInvoice | facade('##.###.###.#-###.###') }}
+                            {{ formHeader.taxInvoice | facade('###-##.########') }}
                         </el-form-item>
                         <el-form-item label="Tax Invoice Date" prop="taxDate">
                             : {{ formHeader.taxDate }}
                         </el-form-item>
-                        <el-form-item label="Due Date" prop="dueDate" required>
+                        <el-form-item label="Due Date" prop="dueDate">
                             <el-date-picker
                                 class="form-input date"
                                 clearable

@@ -6,40 +6,33 @@ import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../../../../core/application-dictionary/components/ContextVariableAccessor";
-
-const ENofaProps = Vue.extend({
-  props: {
-
-  }
-})
+import { ElForm } from 'element-ui/types/form';
 
 @Component
-export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, ENofaProps) {
-  gridSchema = {
-    defaultSort: {},
-    emptyText: 'No Records Found',
-    maxHeight: 412,
-    height: 310
-  };
-  private rules: {
+export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+  rules = {
     vendorId: [
-      { required: true, message: 'Please input Activity name', trigger: 'blur' },
+      { required: true, message: 'Please select Address ID' },
     ],
     startNo: [
-      { required: true, message: 'Please select Activity zone', trigger: 'change' }
+      { required: true, message: 'Please fill Start No' },
+      { min: 13, message: 'Length should be 13' }
     ],
     endNo: [
-      { required: true, message: 'Please pick a date', trigger: 'change' }
+      { required: true, message: 'Please fill End No' },
+      { min: 13, message: 'Length should be 13' }
     ],
   }
-  private baseApiUrl = "/api/c-vendors";
+
+  private baseApiUrl = "/api/c-tax-invoices";
+  private baseApiUrlVendor = "/api/c-vendors";
   private filterQuery: string = '';
   private processing = false;
+  private fullscreenLoading = false;
 
   private form: any = {};
   public filterBy = false;
-
-  public vendorOptions: any = {};
+  public vendorOptions: any = [];
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -50,15 +43,15 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
   }
 
   created(){
-    this.form.adOrganizationId = 1;
+
   }
 
   public retrieveAllVendorRecords(query: any): void {
 
-    this.filterQuery = "&name.contains="+query;
+    this.filterQuery = "&code.equals="+query;
     this.processing = true;
 
-    this.dynamicWindowService(this.baseApiUrl)
+    this.dynamicWindowService(this.baseApiUrlVendor)
       .retrieve({
         criteriaQuery: this.filterQuery,
       })
@@ -66,9 +59,11 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
         let referenceList = res.data.map(item => {
           return{
               key: item.id,
-              value: item.name
+              value: item.code,
+              name: item.name
           };
         });
+        console.log(referenceList);
 
         this.vendorOptions = referenceList;
       })
@@ -84,12 +79,51 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
       });
   }
 
-  private setForm(){
-    this.getForm();
+  confirmSave(){
+    (this.$refs.eNofaForm as ElForm).validate((passed, errors) => {
+      if (passed) {
+        this.fullscreenLoading = true;
+        this.save();
+
+      } else {
+        return false;
+      }
+    })
   }
 
-  public getForm(){
-    this.$emit('get-form', this.form);
+  private save(){
+    this.dynamicWindowService(this.baseApiUrl)
+      .create(this.form)
+      .then(() => {
+
+        this.$notify({
+          title: "Success",
+          dangerouslyUseHTMLString: true,
+          message: "Success created.",
+          type: "success",
+          duration: 3000
+        });
+
+        this.closeDialog();
+
+      }).catch(error => {
+        this.$notify({
+          title: "Error",
+          dangerouslyUseHTMLString: true,
+          message: error,
+          type: "error",
+          duration: 3000
+        });
+
+      }).finally(() => {
+        this.fullscreenLoading = false;
+        this.form = {};
+      });
+
+  }
+
+  closeDialog(){
+    this.$emit('close-dialog');
   }
 
 }

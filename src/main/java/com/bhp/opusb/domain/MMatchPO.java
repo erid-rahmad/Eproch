@@ -220,12 +220,18 @@ public class MMatchPO extends AbstractAuditingEntity {
     private CCurrency cCurrency;
 
     /**
-     * PREXR1 is mapped to tax code.
-     * PRTXA1 is mapped to tax name.
+     * PREXR1 is mapped to tax category name.
      */
     @ManyToOne
     @JsonIgnoreProperties("mMatchPOS")
     private CTaxCategory cTaxCategory;
+
+    /**
+     * PRTXA1 is mapped to tax name.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mMatchPOS")
+    private CTax cTax;
 
     /**
      * PRUOM is mapped to code, name, and symbol.
@@ -654,6 +660,19 @@ public class MMatchPO extends AbstractAuditingEntity {
 
     public void setCTaxCategory(CTaxCategory cTaxCategory) {
         this.cTaxCategory = cTaxCategory;
+    }
+
+    public CTax getCTax() {
+        return cTax;
+    }
+
+    public MMatchPO cTax(CTax cTax) {
+        this.cTax = cTax;
+        return this;
+    }
+
+    public void setCTax(CTax cTax) {
+        this.cTax = cTax;
     }
 
     public CUnitOfMeasure getCUom() {

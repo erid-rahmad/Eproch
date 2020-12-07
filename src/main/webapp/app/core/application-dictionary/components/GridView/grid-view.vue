@@ -73,6 +73,9 @@
           />
           <el-button
             v-else-if="isAttachmentField(field)"
+            v-show="displayed(row, field)"
+            :ref="column.property"
+            :class="column.property"
             class="btn-attachment"
             icon="el-icon-download"
             size="mini"
@@ -81,6 +84,12 @@
           >
             {{ getFileName(row, field) }}
           </el-button>
+          <password-editor
+            v-else-if="isPasswordField(field)"
+            v-show="displayed(row, field)"
+            :disabled="isNewRecord(row)"
+            :user-id="row.userId"
+          />
           <span
             v-else-if="!row.editing"
             v-show="displayed(row, field)"

@@ -184,10 +184,21 @@ public class MVerification extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mVerifications")
     private ADOrganization adOrganization;
 
+    /**
+     * VHCRCD Invoice verification's currency
+     */
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mVerifications")
     private CCurrency currency;
+
+    /**
+     * VHCRCE Match PO's currency
+     */
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mVerifications")
+    private CCurrency matchPoCurrency;
 
     /**
      * VHAN8 for supplier code.
@@ -199,13 +210,8 @@ public class MVerification extends AbstractAuditingEntity {
     private CVendor vendor;
 
     /**
-     * VHURDT User reservation.
+     * VHAN8L
      */
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("mVerifications")
-    private AdUser pic;
-
     @ManyToOne
     @JsonIgnoreProperties("mVerifications")
     private CVendor vendorTo;
@@ -596,6 +602,19 @@ public class MVerification extends AbstractAuditingEntity {
         this.currency = cCurrency;
     }
 
+    public CCurrency getMatchPoCurrency() {
+        return matchPoCurrency;
+    }
+
+    public MVerification matchPoCurrency(CCurrency cCurrency) {
+        this.matchPoCurrency = cCurrency;
+        return this;
+    }
+
+    public void setMatchPoCurrency(CCurrency cCurrency) {
+        this.matchPoCurrency = cCurrency;
+    }
+
     public CVendor getVendor() {
         return vendor;
     }
@@ -607,19 +626,6 @@ public class MVerification extends AbstractAuditingEntity {
 
     public void setVendor(CVendor cVendor) {
         this.vendor = cVendor;
-    }
-
-    public AdUser getPic() {
-        return pic;
-    }
-
-    public MVerification pic(AdUser adUser) {
-        this.pic = adUser;
-        return this;
-    }
-
-    public void setPic(AdUser adUser) {
-        this.pic = adUser;
     }
 
     public CVendor getVendorTo() {

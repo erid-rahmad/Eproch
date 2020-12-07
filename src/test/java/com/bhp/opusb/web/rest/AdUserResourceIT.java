@@ -47,9 +47,6 @@ public class AdUserResourceIT {
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
 
-    private static final String DEFAULT_CODE = "AAAAAAAAAA";
-    private static final String UPDATED_CODE = "BBBBBBBBBB";
-
     private static final String DEFAULT_PHONE = "AAAAAAAAAA";
     private static final String UPDATED_PHONE = "BBBBBBBBBB";
 
@@ -96,7 +93,6 @@ public class AdUserResourceIT {
         AdUser adUser = new AdUser()
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE)
-            .code(DEFAULT_CODE)
             .phone(DEFAULT_PHONE)
             .position(DEFAULT_POSITION)
             .vendor(DEFAULT_VENDOR)
@@ -129,7 +125,6 @@ public class AdUserResourceIT {
         AdUser adUser = new AdUser()
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
-            .code(UPDATED_CODE)
             .phone(UPDATED_PHONE)
             .position(UPDATED_POSITION)
             .vendor(UPDATED_VENDOR)
@@ -176,7 +171,6 @@ public class AdUserResourceIT {
         AdUser testAdUser = adUserList.get(adUserList.size() - 1);
         assertThat(testAdUser.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testAdUser.isActive()).isEqualTo(DEFAULT_ACTIVE);
-        assertThat(testAdUser.getCode()).isEqualTo(DEFAULT_CODE);
         assertThat(testAdUser.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testAdUser.getPosition()).isEqualTo(DEFAULT_POSITION);
         assertThat(testAdUser.isVendor()).isEqualTo(DEFAULT_VENDOR);
@@ -204,25 +198,6 @@ public class AdUserResourceIT {
         assertThat(adUserList).hasSize(databaseSizeBeforeCreate);
     }
 
-
-    @Test
-    @Transactional
-    public void checkCodeIsRequired() throws Exception {
-        int databaseSizeBeforeTest = adUserRepository.findAll().size();
-        // set the field null
-        adUser.setCode(null);
-
-        // Create the AdUser, which fails.
-        AdUserDTO adUserDTO = adUserMapper.toDto(adUser);
-
-        restAdUserMockMvc.perform(post("/api/ad-users")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(adUserDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<AdUser> adUserList = adUserRepository.findAll();
-        assertThat(adUserList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     @Transactional
@@ -256,7 +231,6 @@ public class AdUserResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(adUser.getId().intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].position").value(hasItem(DEFAULT_POSITION)))
             .andExpect(jsonPath("$.[*].vendor").value(hasItem(DEFAULT_VENDOR.booleanValue())))
@@ -277,7 +251,6 @@ public class AdUserResourceIT {
             .andExpect(jsonPath("$.id").value(adUser.getId().intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
-            .andExpect(jsonPath("$.code").value(DEFAULT_CODE))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
             .andExpect(jsonPath("$.position").value(DEFAULT_POSITION))
             .andExpect(jsonPath("$.vendor").value(DEFAULT_VENDOR.booleanValue()))
@@ -408,84 +381,6 @@ public class AdUserResourceIT {
         // Get all the adUserList where active is null
         defaultAdUserShouldNotBeFound("active.specified=false");
     }
-
-    @Test
-    @Transactional
-    public void getAllAdUsersByCodeIsEqualToSomething() throws Exception {
-        // Initialize the database
-        adUserRepository.saveAndFlush(adUser);
-
-        // Get all the adUserList where code equals to DEFAULT_CODE
-        defaultAdUserShouldBeFound("code.equals=" + DEFAULT_CODE);
-
-        // Get all the adUserList where code equals to UPDATED_CODE
-        defaultAdUserShouldNotBeFound("code.equals=" + UPDATED_CODE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllAdUsersByCodeIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        adUserRepository.saveAndFlush(adUser);
-
-        // Get all the adUserList where code not equals to DEFAULT_CODE
-        defaultAdUserShouldNotBeFound("code.notEquals=" + DEFAULT_CODE);
-
-        // Get all the adUserList where code not equals to UPDATED_CODE
-        defaultAdUserShouldBeFound("code.notEquals=" + UPDATED_CODE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllAdUsersByCodeIsInShouldWork() throws Exception {
-        // Initialize the database
-        adUserRepository.saveAndFlush(adUser);
-
-        // Get all the adUserList where code in DEFAULT_CODE or UPDATED_CODE
-        defaultAdUserShouldBeFound("code.in=" + DEFAULT_CODE + "," + UPDATED_CODE);
-
-        // Get all the adUserList where code equals to UPDATED_CODE
-        defaultAdUserShouldNotBeFound("code.in=" + UPDATED_CODE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllAdUsersByCodeIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        adUserRepository.saveAndFlush(adUser);
-
-        // Get all the adUserList where code is not null
-        defaultAdUserShouldBeFound("code.specified=true");
-
-        // Get all the adUserList where code is null
-        defaultAdUserShouldNotBeFound("code.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllAdUsersByCodeContainsSomething() throws Exception {
-        // Initialize the database
-        adUserRepository.saveAndFlush(adUser);
-
-        // Get all the adUserList where code contains DEFAULT_CODE
-        defaultAdUserShouldBeFound("code.contains=" + DEFAULT_CODE);
-
-        // Get all the adUserList where code contains UPDATED_CODE
-        defaultAdUserShouldNotBeFound("code.contains=" + UPDATED_CODE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllAdUsersByCodeNotContainsSomething() throws Exception {
-        // Initialize the database
-        adUserRepository.saveAndFlush(adUser);
-
-        // Get all the adUserList where code does not contain DEFAULT_CODE
-        defaultAdUserShouldNotBeFound("code.doesNotContain=" + DEFAULT_CODE);
-
-        // Get all the adUserList where code does not contain UPDATED_CODE
-        defaultAdUserShouldBeFound("code.doesNotContain=" + UPDATED_CODE);
-    }
-
 
     @Test
     @Transactional
@@ -913,7 +808,6 @@ public class AdUserResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(adUser.getId().intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].code").value(hasItem(DEFAULT_CODE)))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].position").value(hasItem(DEFAULT_POSITION)))
             .andExpect(jsonPath("$.[*].vendor").value(hasItem(DEFAULT_VENDOR.booleanValue())))
@@ -968,7 +862,6 @@ public class AdUserResourceIT {
         updatedAdUser
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE)
-            .code(UPDATED_CODE)
             .phone(UPDATED_PHONE)
             .position(UPDATED_POSITION)
             .vendor(UPDATED_VENDOR)
@@ -987,7 +880,6 @@ public class AdUserResourceIT {
         AdUser testAdUser = adUserList.get(adUserList.size() - 1);
         assertThat(testAdUser.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testAdUser.isActive()).isEqualTo(UPDATED_ACTIVE);
-        assertThat(testAdUser.getCode()).isEqualTo(UPDATED_CODE);
         assertThat(testAdUser.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testAdUser.getPosition()).isEqualTo(UPDATED_POSITION);
         assertThat(testAdUser.isVendor()).isEqualTo(UPDATED_VENDOR);

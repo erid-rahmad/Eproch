@@ -2,14 +2,15 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.InstantFilter;
+import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.InstantFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -30,8 +31,6 @@ public class AdUserCriteria implements Serializable, Criteria {
     private UUIDFilter uid;
 
     private BooleanFilter active;
-
-    private StringFilter code;
 
     private StringFilter phone;
 
@@ -56,7 +55,6 @@ public class AdUserCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.code = other.code == null ? null : other.code.copy();
         this.phone = other.phone == null ? null : other.phone.copy();
         this.position = other.position == null ? null : other.position.copy();
         this.vendor = other.vendor == null ? null : other.vendor.copy();
@@ -94,14 +92,6 @@ public class AdUserCriteria implements Serializable, Criteria {
 
     public void setActive(BooleanFilter active) {
         this.active = active;
-    }
-
-    public StringFilter getCode() {
-        return code;
-    }
-
-    public void setCode(StringFilter code) {
-        this.code = code;
     }
 
     public StringFilter getPhone() {
@@ -182,7 +172,6 @@ public class AdUserCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(code, that.code) &&
             Objects.equals(phone, that.phone) &&
             Objects.equals(position, that.position) &&
             Objects.equals(vendor, that.vendor) &&
@@ -199,7 +188,6 @@ public class AdUserCriteria implements Serializable, Criteria {
         id,
         uid,
         active,
-        code,
         phone,
         position,
         vendor,
@@ -217,7 +205,6 @@ public class AdUserCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (code != null ? "code=" + code + ", " : "") +
                 (phone != null ? "phone=" + phone + ", " : "") +
                 (position != null ? "position=" + position + ", " : "") +
                 (vendor != null ? "vendor=" + vendor + ", " : "") +

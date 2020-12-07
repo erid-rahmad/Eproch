@@ -15,17 +15,20 @@ import com.bhp.opusb.domain.AiExchangeIn;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CLocator;
 import com.bhp.opusb.domain.CProduct;
+import com.bhp.opusb.domain.CTax;
 import com.bhp.opusb.domain.CTaxCategory;
 import com.bhp.opusb.domain.CUnitOfMeasure;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CWarehouse;
 import com.bhp.opusb.domain.MMatchPO;
 import com.bhp.opusb.domain.enumeration.AiStatus;
+import com.bhp.opusb.domain.enumeration.CTaxTransactionType;
 import com.bhp.opusb.repository.AiExchangeInRepository;
 import com.bhp.opusb.repository.CCurrencyRepository;
 import com.bhp.opusb.repository.CLocatorRepository;
 import com.bhp.opusb.repository.CProductRepository;
 import com.bhp.opusb.repository.CTaxCategoryRepository;
+import com.bhp.opusb.repository.CTaxRepository;
 import com.bhp.opusb.repository.CUnitOfMeasureRepository;
 import com.bhp.opusb.repository.CVendorRepository;
 import com.bhp.opusb.repository.CWarehouseRepository;
@@ -56,6 +59,7 @@ public class MMatchPOService {
     private final MMatchPORepository mMatchPORepository;
     private final CCurrencyRepository cCurrencyRepository;
     private final CTaxCategoryRepository cTaxCategoryRepository;
+    private final CTaxRepository cTaxRepository;
     private final CUnitOfMeasureRepository cUnitOfMeasureRepository;
     private final CVendorRepository cVendorRepository;
     private final CLocatorRepository cLocatorRepository;
@@ -80,13 +84,14 @@ public class MMatchPOService {
     private ObjectMapper jsonMapper;
 
     public MMatchPOService(MMatchPORepository mMatchPORepository, CCurrencyRepository cCurrencyRepository,
-            CTaxCategoryRepository cTaxCategoryRepository, CUnitOfMeasureRepository cUnitOfMeasureRepository,
+            CTaxCategoryRepository cTaxCategoryRepository, CTaxRepository cTaxRepository, CUnitOfMeasureRepository cUnitOfMeasureRepository,
             CVendorRepository cVendorRepository, CLocatorRepository cLocatorRepository,
             CWarehouseRepository cWarehouseRepository, CProductRepository cProductRepository,
             MMatchPOMapper mMatchPOMapper) {
         this.mMatchPORepository = mMatchPORepository;
         this.cCurrencyRepository = cCurrencyRepository;
         this.cTaxCategoryRepository = cTaxCategoryRepository;
+        this.cTaxRepository = cTaxRepository;
         this.cUnitOfMeasureRepository = cUnitOfMeasureRepository;
         this.cVendorRepository = cVendorRepository;
         this.cLocatorRepository = cLocatorRepository;
@@ -212,6 +217,7 @@ public class MMatchPOService {
             // Lookup to master data.
             .cCurrency(buildCurrency(payload, org))
             .cTaxCategory(buildTaxCategory(payload, org))
+            .cTax(buildTax(payload, entity.getCTaxCategory(), org))
             .cUom(buildUnitOfMeasure(payload, org))
             .cVendor(buildVendor(String.valueOf(payload.get("PRAN8"))))
             .mWarehouse(buildWarehouse(payload, org))
@@ -225,7 +231,9 @@ public class MMatchPOService {
         entity.cConversionRate(toBigDecimal(payload, "PRCRR"))
             .cDocType((String) payload.get("PRDCTO"))
             .cDocTypeMr((String) payload.get("PRDCT"))
-            .dateAccount(julianDateToLocalDate((Integer) payload.get("PRDGL")))
+            .poDate(LocalDate.parse((String) payload.get("PRTRDJ")))
+            .receiptDate(LocalDate.parse((String) payload.get("PRRCDJ")))
+            .dateAccount(LocalDate.parse((String) payload.get("PRDGL")))
             .deliveryNo(nullableToString(payload.get("PRSHPN")))
             .description( StringUtils.trimToNull((String) payload.get("PRVRMK")) )
             .foreignActual(toBigDecimal(payload, "PRFRRC"))
@@ -238,11 +246,9 @@ public class MMatchPOService {
             .openForeignAmount(toBigDecimal(payload, "PRFAP"))
             .openQty(toBigDecimal(payload, "PRUOPN"))
             .orderSuffix((String) payload.get("PRSFXO"))
-            .poDate(julianDateToLocalDate((int) payload.get("PRTRDJ")))
             .poNo(nullableToString(payload.get("PRDOCO")))
             .priceActual(toBigDecimal(payload, "PRPRRC"))
             .qty(toBigDecimal(payload, "PRUREC"))
-            .receiptDate(julianDateToLocalDate((int) payload.get("PRRCDJ")))
             .receiptNo(nullableToString(payload.get("PRDOC")))
             .taxAmount(toBigDecimal(payload, "PRSTAM"))
             .taxable(stringToBoolean((String) payload.get("PRTX")))
@@ -253,6 +259,7 @@ public class MMatchPOService {
             .cCostCenter(cCostCenterService.getDefaultCostCenter())
             .cCurrency(buildCurrency(payload, org))
             .cTaxCategory(buildTaxCategory(payload, org))
+            .cTax(buildTax(payload, entity.getCTaxCategory(), org))
             .cUom(buildUnitOfMeasure(payload, org))
             .cVendor(buildVendor(String.valueOf(payload.get("PRAN8"))))
             .mProduct(buildProduct(payload, entity.getCUom(), org))
@@ -283,24 +290,42 @@ public class MMatchPOService {
     }
 
     private CTaxCategory buildTaxCategory(Map<String, Object> payload, final ADOrganization org) {
-        final String code = StringUtils.trimToNull((String) payload.get("PREXR1"));
+        final String name = StringUtils.trimToNull((String) payload.get("PREXR1"));
 
-        if (code == null) {
+        if (name == null) {
             return null;
         }
 
-        final String name = StringUtils.trimToNull((String) payload.get("PRTXA1"));
-
-        return cTaxCategoryRepository.findFirstByNameAndDescriptionAndAdOrganizationId(code, name, org.getId())
+        return cTaxCategoryRepository.findFirstByNameAndAdOrganization(name, org)
             .orElseGet(() -> {
                 final CTaxCategory taxCategory = new CTaxCategory();
                 taxCategory.active(true)
                     .adOrganization(org)
-                    .name(code)
+                    .name(name)
                     .description(name)
                     .isWithholding(true);
 
                 return cTaxCategoryRepository.save(taxCategory);
+            });
+    }
+
+    private CTax buildTax(Map<String, Object> payload, CTaxCategory taxCategory, final ADOrganization org) {
+        final String name = StringUtils.trimToNull((String) payload.get("PRTXA1"));
+        
+        if (name == null) {
+            return null;
+        }
+
+        return cTaxRepository.findFirstByNameAndTaxCategoryAndAdOrganization(name, taxCategory, org)
+            .orElseGet(() -> {
+                final CTax tax = new CTax()
+                    .active(true)
+                    .adOrganization(org)
+                    .name(name)
+                    .description(name)
+                    .taxCategory(taxCategory)
+                    .transactionType(CTaxTransactionType.BOTH);
+                return cTaxRepository.save(tax);
             });
     }
 
@@ -363,26 +388,17 @@ public class MMatchPOService {
     }
 
     private CProduct buildProduct(Map<String, Object> payload, CUnitOfMeasure uom, final ADOrganization org) {
-        String name = StringUtils.trimToNull((String) payload.get("PRLITM"));
+        final String code = StringUtils.trimToNull((String) payload.get("PRITM"));
+        final String name = StringUtils.trimToNull((String) payload.get("PDDSC1"));
+        final String description = StringUtils.trimToNull((String) payload.get("PDDSC2"));
 
-        if (name == null) {
-            name = StringUtils.trimToNull((String) payload.get("PRAITM"));
-
-            if (name == null) {
-                return null;
-            }
-        }
-
-        final String code = String.valueOf(payload.get("PRITM"));
-        final String description = StringUtils.trimToNull((String) payload.get("PRAITM"));
-        final String itemDesc = name;
-        return cProductRepository.findFirstByNameAndAdOrganizationId(itemDesc, org.getId())
+        return cProductRepository.findFirstByNameAndAdOrganizationId(name, org.getId())
             .orElseGet(() -> {
                 final CProduct product = new CProduct();
                 product.active(true)
                     .adOrganization(org)
-                    .code(code.equals("0") ? itemDesc : code)
-                    .name(itemDesc)
+                    .code(code.equals("0") ? name : code)
+                    .name(name)
                     .description(description)
                     .type(cProductService.getDefaultType())
                     .assetAcct(cProductService.getDefaultAssetAccount())

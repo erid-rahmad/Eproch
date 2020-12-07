@@ -7,7 +7,7 @@
         Added the constraints for entity MVerification.
     -->
     <changeSet id="20201009091700-2" author="jhipster">
-
+        
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="m_verification"
                                  constraintName="fk_m_verification_ad_organization_id"
@@ -59,5 +59,19 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_vendor"/>
 
+    </changeSet>
+
+    <changeSet id="20201207132800" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="match_po_currency_id"
+                                 baseTableName="m_verification"
+                                 constraintName="fk_m_verification_match_po_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_currency"/>
+
+    </changeSet>
+
+    <changeSet id="20201207133600" author="Ananta Aryadewa">
+        <dropColumn tableName="m_verification" columnName="pic_user_id"/>
     </changeSet>
 </databaseChangeLog>

@@ -156,25 +156,35 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    /**
+     * VHCRCD Invoice verification's currency
+     */
+    @ApiModelProperty(value = "VHCRCD Invoice verification's currency")
+
     private Long currencyId;
     private String currencyName;
 
     /**
+     * VHCRCE Match PO's currency
+     */
+    @ApiModelProperty(value = "VHCRCE Match PO's currency")
+    private Long matchPoCurrencyId;
+    private String matchPoCurrencyName;
+    /**
      * VHAN8 for supplier code.\nVHALPH for supplier name.
      */
     @ApiModelProperty(value = "VHAN8 for supplier code.\nVHALPH for supplier name.")
+
     private Long vendorId;
     private String vendorCode;
     private String vendorName;
 
     /**
-     * VHURDT User reservation.
+     * VHAN8L
      */
-    @ApiModelProperty(value = "VHURDT User reservation.")
-    private Long picId;
-    private Long picName;
-
+    @ApiModelProperty(value = "VHAN8L")
     private Long vendorToId;
+    private String vendorToCode;
     private String vendorToName;
 
     public Long getId() {
@@ -433,6 +443,22 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.currencyName = currencyName;
     }
 
+    public Long getMatchPoCurrencyId() {
+        return matchPoCurrencyId;
+    }
+
+    public void setMatchPoCurrencyId(Long cCurrencyId) {
+        this.matchPoCurrencyId = cCurrencyId;
+    }
+
+    public String getMatchPoCurrencyName() {
+        return matchPoCurrencyName;
+    }
+
+    public void setMatchPoCurrencyName(String matchPoCurrencyName) {
+        this.matchPoCurrencyName = matchPoCurrencyName;
+    }
+
     public Long getVendorId() {
         return vendorId;
     }
@@ -457,22 +483,6 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.vendorName = vendorName;
     }
 
-    public Long getPicId() {
-        return picId;
-    }
-
-    public void setPicId(Long adUserId) {
-        this.picId = adUserId;
-    }
-
-    public Long getPicName() {
-        return picName;
-    }
-
-    public void setPicName(Long picName) {
-        this.picName = picName;
-    }
-
     public Long getVendorToId() {
         return vendorToId;
     }
@@ -487,6 +497,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     public void setVendorToName(String vendorToName) {
         this.vendorToName = vendorToName;
+    }
+
+    public String getVendorToCode() {
+        return vendorToCode;
+    }
+
+    public void setVendorToCode(String vendorToCode) {
+        this.vendorToCode = vendorToCode;
     }
 
     @Override
@@ -543,8 +561,8 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", currencyId=" + getCurrencyId() +
+            ", matchPoCurrencyId=" + getMatchPoCurrencyId() +
             ", vendorId=" + getVendorId() +
-            ", picId=" + getPicId() +
             ", vendorToId=" + getVendorToId() +
             "}";
     }
