@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link MMatchPO} and its DTO {@link MMatchPODTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CCostCenterMapper.class, CVendorMapper.class, CCurrencyMapper.class, CTaxCategoryMapper.class, CUnitOfMeasureMapper.class, CProductMapper.class, CWarehouseMapper.class, CLocatorMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CCostCenterMapper.class, CVendorMapper.class, CCurrencyMapper.class, CTaxCategoryMapper.class, CTaxMapper.class, CUnitOfMeasureMapper.class, CProductMapper.class, CWarehouseMapper.class, CLocatorMapper.class})
 public interface MMatchPOMapper extends EntityMapper<MMatchPODTO, MMatchPO> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
@@ -25,6 +25,7 @@ public interface MMatchPOMapper extends EntityMapper<MMatchPODTO, MMatchPO> {
     @Mapping(source = "CCurrency.code", target = "CCurrencyName")
     @Mapping(source = "CTaxCategory.id", target = "CTaxCategoryId")
     @Mapping(source = "CTaxCategory.name", target = "CTaxCategoryName")
+    @Mapping(source = "CTax.id", target = "CTaxId")
     @Mapping(source = "CUom.id", target = "CUomId")
     @Mapping(source = "CUom.code", target = "CUomName")
     @Mapping(source = "MProduct.id", target = "MProductId")
@@ -42,6 +43,7 @@ public interface MMatchPOMapper extends EntityMapper<MMatchPODTO, MMatchPO> {
     @Mapping(source = "CVendorId", target = "CVendor")
     @Mapping(source = "CCurrencyId", target = "CCurrency")
     @Mapping(source = "CTaxCategoryId", target = "CTaxCategory")
+    @Mapping(source = "CTaxId", target = "CTax")
     @Mapping(source = "CUomId", target = "CUom")
     @Mapping(source = "MProductId", target = "MProduct")
     @Mapping(source = "MWarehouseId", target = "MWarehouse")

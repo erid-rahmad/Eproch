@@ -197,8 +197,16 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cTaxCategory",
             "otherEntityRelationshipName": "mMatchPO",
-            "javadoc": "PREXR1 is mapped to tax code.\\nPRTXA1 is mapped to tax name.",
+            "javadoc": "PREXR1 is mapped to tax category name.",
             "relationshipName": "cTaxCategory",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTax",
+            "otherEntityRelationshipName": "mMatchPO",
+            "javadoc": "PRTXA1 is mapped to tax name.",
+            "relationshipName": "cTax",
             "otherEntityField": "id"
         },
         {

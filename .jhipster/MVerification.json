@@ -169,7 +169,17 @@
             "otherEntityName": "cCurrency",
             "otherEntityRelationshipName": "mVerification",
             "relationshipValidateRules": "required",
+            "javadoc": "VHCRCD Invoice verification's currency",
             "relationshipName": "currency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mVerification",
+            "relationshipValidateRules": "required",
+            "javadoc": "VHCRCE Match PO's currency",
+            "relationshipName": "matchPoCurrency",
             "otherEntityField": "id"
         },
         {
@@ -183,17 +193,9 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "adUser",
-            "otherEntityRelationshipName": "mVerification",
-            "relationshipValidateRules": "required",
-            "javadoc": "VHURDT User reservation.",
-            "relationshipName": "pic",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "cVendor",
             "otherEntityRelationshipName": "mVerification",
+            "javadoc": "VHAN8L",
             "relationshipName": "vendorTo",
             "otherEntityField": "id"
         }

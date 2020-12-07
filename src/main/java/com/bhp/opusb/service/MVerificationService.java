@@ -1,6 +1,9 @@
 package com.bhp.opusb.service;
 
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.ADOrganization;
@@ -11,12 +14,10 @@ import com.bhp.opusb.service.dto.MVerificationLineCriteria;
 import com.bhp.opusb.service.dto.MVerificationLineDTO;
 import com.bhp.opusb.service.dto.VerificationDTO;
 import com.bhp.opusb.service.mapper.MVerificationMapper;
-import com.bhp.opusb.service.trigger.ProcessTrigger;
-import com.bhp.opusb.service.trigger.process.integration.MVerificationOutbound;
+import com.bhp.opusb.service.trigger.process.integration.MVerificationMessageDispatcher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,17 +39,17 @@ public class MVerificationService {
     private final MVerificationMapper mVerificationMapper;
     private final MVerificationLineService mVerificationLineService;
     private final MVerificationLineQueryService mVerificationLineQueryService;
-    private final ProcessTrigger mVerificationOutbound;
+    private final AiMessageDispatcher messageDispatcher;
 
     public MVerificationService(MVerificationRepository mVerificationRepository,
             MVerificationMapper mVerificationMapper, MVerificationLineService mVerificationLineService,
             MVerificationLineQueryService mVerificationLineQueryService, ADOrganizationService adOrganizationService,
-            @Qualifier("mVerificationOutbound") ProcessTrigger mVerificationOutbound) {
+            AiMessageDispatcher messageDispatcher) {
         this.mVerificationRepository = mVerificationRepository;
         this.mVerificationMapper = mVerificationMapper;
         this.mVerificationLineService = mVerificationLineService;
         this.mVerificationLineQueryService = mVerificationLineQueryService;
-        this.mVerificationOutbound = mVerificationOutbound;
+        this.messageDispatcher= messageDispatcher;
 
         organization = adOrganizationService.getDefaultOrganization();
     }
@@ -77,6 +78,12 @@ public class MVerificationService {
         log.debug("Request to update MVerificationDTO's document status : {}", mVerificationDTO);
         MVerification mVerification = mVerificationMapper.toEntity(mVerificationDTO);
 
+        if (mVerification.getVerificationStatus().equals("APV") && mVerification.getDateApprove() == null) {
+            mVerification.setDateApprove(LocalDate.now());
+        } else if (mVerification.getVerificationStatus().equals("RJC") && mVerification.getDateReject() == null) {
+            mVerification.setDateReject(LocalDate.now());
+        }
+
         mVerificationRepository.save(mVerification);
         mVerificationLineService.saveAll(mVerificationLineDTOs, mVerification, organization);
 
@@ -94,7 +101,15 @@ public class MVerificationService {
                     List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
 
                     if (!lines.isEmpty()) {
-                        ((MVerificationOutbound) mVerificationOutbound).sendPayload(header, lines);
+                        final Map<String, Object> headerPayload = new HashMap<>(2);
+                        headerPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_HEADER);
+                        headerPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, header);
+                        messageDispatcher.dispatch("mVerificationMessageDispatcher", headerPayload);
+
+                        final Map<String, Object> linesPayload = new HashMap<>(2);
+                        linesPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_LINES);
+                        linesPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, lines);
+                        messageDispatcher.dispatch("mVerificationMessageDispatcher", linesPayload);
                     }
                 });
 

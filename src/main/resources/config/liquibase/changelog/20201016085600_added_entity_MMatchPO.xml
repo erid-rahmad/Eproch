@@ -162,7 +162,6 @@
             <column name="description" type="string"/>
             <column name="m_match_type" type="string"/>
             <column name="ad_organization_id" type="numeric"/>
-            <column name="c_element_value_id" type="numeric"/>
             <column name="c_cost_center_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
@@ -311,6 +310,14 @@
             columnNames="m_match_type, ad_organization_id, c_doc_type, po_no, receipt_no, line_no_po, line_no_mr, order_suffix"
             constraintName="m_match_po_unique_fields"
         />
+    </changeSet>
+
+    <changeSet id="20201207132200" author="Ananta Aryadewa">
+        <addColumn tableName="m_match_po">
+            <column name="c_tax_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

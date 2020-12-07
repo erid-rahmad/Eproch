@@ -758,7 +758,12 @@ relationship ManyToOne {
 
 	// releated vendor invoice verification
 	MVerification{adOrganization required} to ADOrganization
+
+	/** VHCRCD Invoice verification's currency */
 	MVerification{currency required} to CCurrency
+
+	/** VHCRCE Match PO's currency */
+	MVerification{matchPoCurrency required} to CCurrency
 
 	/**
 	 * VHAN8 for supplier code.
@@ -766,8 +771,7 @@ relationship ManyToOne {
 	 */
 	MVerification{vendor required} to CVendor
 
-	/** VHURDT User reservation. */
-	MVerification{pic required} to AdUser
+	/** VHAN8L */
 	MVerification{vendorTo} to CVendor
 
 	MVerificationLine{verification required} to MVerification
@@ -805,11 +809,11 @@ relationship ManyToOne {
 	/** PRCRCD */
 	MMatchPO{cCurrency} to CCurrency
 
-	/**
-	 * PREXR1 is mapped to tax code.
-	 * PRTXA1 is mapped to tax name.
-	 */
+	/** PREXR1 is mapped to tax category name. */
 	MMatchPO{cTaxCategory} to CTaxCategory
+
+	/** PRTXA1 is mapped to tax name. */
+	MMatchPO{cTax} to CTax
 
 	/** PRUOM is mapped to code, name, and symbol. */
 	MMatchPO{cUom} to CUnitOfMeasure

@@ -7,6 +7,7 @@ import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CTaxCategory;
+import com.bhp.opusb.domain.CTax;
 import com.bhp.opusb.domain.CUnitOfMeasure;
 import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.CWarehouse;
@@ -2879,6 +2880,26 @@ public class MMatchPOResourceIT {
 
         // Get all the mMatchPOList where cTaxCategory equals to cTaxCategoryId + 1
         defaultMMatchPOShouldNotBeFound("cTaxCategoryId.equals=" + (cTaxCategoryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByCTaxIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+        CTax cTax = CTaxResourceIT.createEntity(em);
+        em.persist(cTax);
+        em.flush();
+        mMatchPO.setCTax(cTax);
+        mMatchPORepository.saveAndFlush(mMatchPO);
+        Long cTaxId = cTax.getId();
+
+        // Get all the mMatchPOList where cTax equals to cTaxId
+        defaultMMatchPOShouldBeFound("cTaxId.equals=" + cTaxId);
+
+        // Get all the mMatchPOList where cTax equals to cTaxId + 1
+        defaultMMatchPOShouldNotBeFound("cTaxId.equals=" + (cTaxId + 1));
     }
 
 

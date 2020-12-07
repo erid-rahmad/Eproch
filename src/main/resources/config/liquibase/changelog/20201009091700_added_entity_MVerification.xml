@@ -126,8 +126,8 @@
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="currency_id" type="numeric"/>
+            <column name="match_po_currency_id" type="numeric"/>
             <column name="vendor_id" type="numeric"/>
-            <column name="pic_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
@@ -219,6 +219,14 @@
         <setColumnRemarks tableName="m_verification" columnName="pay_date" remarks="VHDMTJ Payment date." />
         <setColumnRemarks tableName="m_verification" columnName="due_date" remarks="VHDDJ Promised date/payment schedule." />
         <setColumnRemarks tableName="m_verification" columnName="pay_amt" remarks="VHAA Total actual amount." />
+    </changeSet>
+
+    <changeSet id="20201207133100" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification">
+            <column name="match_po_currency_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

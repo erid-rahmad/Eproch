@@ -73,4 +73,14 @@
     <changeSet id="20201123080200" author="Ananta Aryadewa">
         <dropColumn tableName="m_match_po" columnName="c_element_value_id"></dropColumn>
     </changeSet>
+
+    <changeSet id="20201207131400" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="c_tax_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_c_tax_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_tax"/>
+
+    </changeSet>
 </databaseChangeLog>

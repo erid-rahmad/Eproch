@@ -88,6 +88,8 @@ public class MMatchPOCriteria implements Serializable, Criteria {
 
     private LongFilter cTaxCategoryId;
 
+    private LongFilter cTaxId;
+
     private LongFilter cUomId;
 
     private LongFilter mProductId;
@@ -131,6 +133,7 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.cVendorId = other.cVendorId == null ? null : other.cVendorId.copy();
         this.cCurrencyId = other.cCurrencyId == null ? null : other.cCurrencyId.copy();
         this.cTaxCategoryId = other.cTaxCategoryId == null ? null : other.cTaxCategoryId.copy();
+        this.cTaxId = other.cTaxId == null ? null : other.cTaxId.copy();
         this.cUomId = other.cUomId == null ? null : other.cUomId.copy();
         this.mProductId = other.mProductId == null ? null : other.mProductId.copy();
         this.mWarehouseId = other.mWarehouseId == null ? null : other.mWarehouseId.copy();
@@ -390,6 +393,14 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.cTaxCategoryId = cTaxCategoryId;
     }
 
+    public LongFilter getCTaxId() {
+        return cTaxId;
+    }
+
+    public void setCTaxId(LongFilter cTaxId) {
+        this.cTaxId = cTaxId;
+    }
+
     public LongFilter getCUomId() {
         return cUomId;
     }
@@ -464,6 +475,7 @@ public class MMatchPOCriteria implements Serializable, Criteria {
             Objects.equals(cVendorId, that.cVendorId) &&
             Objects.equals(cCurrencyId, that.cCurrencyId) &&
             Objects.equals(cTaxCategoryId, that.cTaxCategoryId) &&
+            Objects.equals(cTaxId, that.cTaxId) &&
             Objects.equals(cUomId, that.cUomId) &&
             Objects.equals(mProductId, that.mProductId) &&
             Objects.equals(mWarehouseId, that.mWarehouseId) &&
@@ -504,6 +516,7 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         cVendorId,
         cCurrencyId,
         cTaxCategoryId,
+        cTaxId,
         cUomId,
         mProductId,
         mWarehouseId,
@@ -545,6 +558,7 @@ public class MMatchPOCriteria implements Serializable, Criteria {
                 (cVendorId != null ? "cVendorId=" + cVendorId + ", " : "") +
                 (cCurrencyId != null ? "cCurrencyId=" + cCurrencyId + ", " : "") +
                 (cTaxCategoryId != null ? "cTaxCategoryId=" + cTaxCategoryId + ", " : "") +
+                (cTaxId != null ? "cTaxId=" + cTaxId + ", " : "") +
                 (cUomId != null ? "cUomId=" + cUomId + ", " : "") +
                 (mProductId != null ? "mProductId=" + mProductId + ", " : "") +
                 (mWarehouseId != null ? "mWarehouseId=" + mWarehouseId + ", " : "") +
