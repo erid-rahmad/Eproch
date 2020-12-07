@@ -223,7 +223,7 @@
                         align="right"
                     >
                         <template slot-scope="{ row }">
-                            {{ row.taxAmount | formatCurrency }}
+                            {{ row.cTaxRate | formatCurrency }}
                         </template>
                     </el-table-column>
                     <el-table-column

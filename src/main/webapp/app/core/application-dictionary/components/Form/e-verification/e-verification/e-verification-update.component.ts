@@ -297,13 +297,15 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
     for (const row of this.gridData) {
       totalLines += row.totalLines;
-      taxAmount += row.taxAmount;
+      taxAmount += row.cTaxRate;
       totalAmount += totalLines + taxAmount;
       foreignTotalLines += row.foreignTotalAmount;
       foreignTaxAmount += row.foreignTaxAmount;
       foreignTotalAmount += foreignTotalLines + foreignTaxAmount;
     }
 
+    this.formUpdate.currencyId = this.gridData[0]?.cCurrencyId;
+    this.formUpdate.matchPoCurrencyId = this.formUpdate.currencyId;
     this.formUpdate.totalLines = totalLines;
     this.formUpdate.taxAmount = taxAmount;
     this.formUpdate.grandTotal = totalAmount;
@@ -506,9 +508,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         openAmount,
         openForeignAmount,
         openQty,
-        orderSuffix,
         poDate,
-        taxable,
         ...data
       } = line;
 

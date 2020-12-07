@@ -141,12 +141,12 @@
                         <el-table-column
                             min-width="150"
                             sortable
-                            prop="taxAmount"
+                            prop="cTaxRate"
                             label="PPN (%)"
                             align="right"
                         >
                           <template slot-scope="{ row }">
-                            {{ row.taxAmount | formatCurrency }}
+                            {{ row.cTaxRate | formatCurrency }}
                           </template>
                         </el-table-column>
                         <el-table-column

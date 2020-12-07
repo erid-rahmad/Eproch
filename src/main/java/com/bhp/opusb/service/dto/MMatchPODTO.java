@@ -236,6 +236,9 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     @JsonProperty("cTaxName")
     private String cTaxName;
 
+    @JsonProperty("cTaxRate")
+    private BigDecimal cTaxRate;
+
     /**
      * PRUOM is mapped to code, name, and symbol.
      */
@@ -493,7 +496,8 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     }
 
     public BigDecimal getTotalAmount() {
-        return totalLines.add(taxAmount);
+        BigDecimal tax = totalLines.multiply(cTaxRate).divide(new BigDecimal("100"));
+        return totalLines.add(tax);
     }
 
     public Long getAdOrganizationId() {
@@ -611,6 +615,14 @@ public class MMatchPODTO extends AbstractAuditingDTO {
 
     public void setCTaxName(String cTaxName) {
         this.cTaxName = cTaxName;
+    }
+
+    public BigDecimal getCTaxRate() {
+        return cTaxRate;
+    }
+
+    public void setCTaxRate(BigDecimal cTaxRate) {
+        this.cTaxRate = cTaxRate;
     }
 
     public Long getCUomId() {
