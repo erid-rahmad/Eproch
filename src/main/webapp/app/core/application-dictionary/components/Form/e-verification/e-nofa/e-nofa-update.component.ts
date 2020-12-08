@@ -82,8 +82,18 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
   confirmSave(){
     (this.$refs.eNofaForm as ElForm).validate((passed, errors) => {
       if (passed) {
-        this.fullscreenLoading = true;
-        this.save();
+        if(this.form.startNo < this.form.endNo){
+          this.fullscreenLoading = true;
+          this.save();
+        }else{
+          this.$notify({
+            title: "Warning",
+            dangerouslyUseHTMLString: true,
+            message: "Start No. must be less than End No.",
+            type: "warning",
+            duration: 3000
+          });
+        }
 
       } else {
         return false;
