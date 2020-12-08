@@ -229,4 +229,16 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20201208133800" author="Ananta Aryadewa">
+        <setColumnRemarks tableName="m_verification" columnName="tax_invoice" remarks="VHTAX0"/>
+        <addColumn tableName="m_verification">
+            <column name="c_tax_category_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_tax_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

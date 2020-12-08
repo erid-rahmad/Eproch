@@ -73,10 +73,12 @@ class MVerificationLineGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "verificationNo":"SAMPLE_TEXT"
+                , "matchType":"SAMPLE_TEXT"
                 , "poNo":"SAMPLE_TEXT"
                 , "receiveNo":"SAMPLE_TEXT"
                 , "deliveryNo":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
+                , "orderSuffix":"SAMPLE_TEXT"
                 , "qty":null
                 , "priceActual":"0"
                 , "foreignActual":"0"
@@ -89,6 +91,9 @@ class MVerificationLineGatlingTest extends Simulation {
                 , "conversionRate":"0"
                 , "receiveDate":"2020-01-01T00:00:00.000Z"
                 , "payStat":"SAMPLE_TEXT"
+                , "taxable":null
+                , "cDocType":"SAMPLE_TEXT"
+                , "cDocTypeMr":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

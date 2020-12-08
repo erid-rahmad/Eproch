@@ -94,6 +94,9 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getVerificationNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getVerificationNo(), MVerificationLine_.verificationNo));
             }
+            if (criteria.getMatchType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getMatchType(), MVerificationLine_.matchType));
+            }
             if (criteria.getPoNo() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPoNo(), MVerificationLine_.poNo));
             }
@@ -105,6 +108,9 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), MVerificationLine_.description));
+            }
+            if (criteria.getOrderSuffix() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getOrderSuffix(), MVerificationLine_.orderSuffix));
             }
             if (criteria.getQty() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getQty(), MVerificationLine_.qty));
@@ -142,6 +148,15 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getPayStat() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPayStat(), MVerificationLine_.payStat));
             }
+            if (criteria.getTaxable() != null) {
+                specification = specification.and(buildSpecification(criteria.getTaxable(), MVerificationLine_.taxable));
+            }
+            if (criteria.getcDocType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getcDocType(), MVerificationLine_.cDocType));
+            }
+            if (criteria.getcDocTypeMr() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getcDocTypeMr(), MVerificationLine_.cDocTypeMr));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MVerificationLine_.uid));
             }
@@ -171,6 +186,14 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getCCurrencyId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCCurrencyId(),
                     root -> root.join(MVerificationLine_.cCurrency, JoinType.LEFT).get(CCurrency_.id)));
+            }
+            if (criteria.getCTaxCategoryId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCTaxCategoryId(),
+                    root -> root.join(MVerificationLine_.cTaxCategory, JoinType.LEFT).get(CTaxCategory_.id)));
+            }
+            if (criteria.getCTaxId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCTaxId(),
+                    root -> root.join(MVerificationLine_.cTax, JoinType.LEFT).get(CTax_.id)));
             }
         }
         return specification;

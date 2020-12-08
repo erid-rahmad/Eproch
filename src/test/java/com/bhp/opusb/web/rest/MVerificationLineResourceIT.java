@@ -8,6 +8,8 @@ import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.CUnitOfMeasure;
 import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.CCurrency;
+import com.bhp.opusb.domain.CTaxCategory;
+import com.bhp.opusb.domain.CTax;
 import com.bhp.opusb.repository.MVerificationLineRepository;
 import com.bhp.opusb.service.MVerificationLineService;
 import com.bhp.opusb.service.dto.MVerificationLineDTO;
@@ -48,6 +50,9 @@ public class MVerificationLineResourceIT {
     private static final String DEFAULT_VERIFICATION_NO = "AAAAAAAAAA";
     private static final String UPDATED_VERIFICATION_NO = "BBBBBBBBBB";
 
+    private static final String DEFAULT_MATCH_TYPE = "A";
+    private static final String UPDATED_MATCH_TYPE = "B";
+
     private static final String DEFAULT_PO_NO = "AAAAAAAAAA";
     private static final String UPDATED_PO_NO = "BBBBBBBBBB";
 
@@ -59,6 +64,9 @@ public class MVerificationLineResourceIT {
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ORDER_SUFFIX = "AAAAAAAAAA";
+    private static final String UPDATED_ORDER_SUFFIX = "BBBBBBBBBB";
 
     private static final Long DEFAULT_QTY = 1L;
     private static final Long UPDATED_QTY = 2L;
@@ -107,6 +115,15 @@ public class MVerificationLineResourceIT {
     private static final String DEFAULT_PAY_STAT = "AAAAAAAAAA";
     private static final String UPDATED_PAY_STAT = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_TAXABLE = false;
+    private static final Boolean UPDATED_TAXABLE = true;
+
+    private static final String DEFAULT_C_DOC_TYPE = "AA";
+    private static final String UPDATED_C_DOC_TYPE = "BB";
+
+    private static final String DEFAULT_C_DOC_TYPE_MR = "AA";
+    private static final String UPDATED_C_DOC_TYPE_MR = "BB";
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -142,10 +159,12 @@ public class MVerificationLineResourceIT {
     public static MVerificationLine createEntity(EntityManager em) {
         MVerificationLine mVerificationLine = new MVerificationLine()
             .verificationNo(DEFAULT_VERIFICATION_NO)
+            .matchType(DEFAULT_MATCH_TYPE)
             .poNo(DEFAULT_PO_NO)
             .receiveNo(DEFAULT_RECEIVE_NO)
             .deliveryNo(DEFAULT_DELIVERY_NO)
             .description(DEFAULT_DESCRIPTION)
+            .orderSuffix(DEFAULT_ORDER_SUFFIX)
             .qty(DEFAULT_QTY)
             .priceActual(DEFAULT_PRICE_ACTUAL)
             .foreignActual(DEFAULT_FOREIGN_ACTUAL)
@@ -158,6 +177,9 @@ public class MVerificationLineResourceIT {
             .conversionRate(DEFAULT_CONVERSION_RATE)
             .receiveDate(DEFAULT_RECEIVE_DATE)
             .payStat(DEFAULT_PAY_STAT)
+            .taxable(DEFAULT_TAXABLE)
+            .cDocType(DEFAULT_C_DOC_TYPE)
+            .cDocTypeMr(DEFAULT_C_DOC_TYPE_MR)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -231,10 +253,12 @@ public class MVerificationLineResourceIT {
     public static MVerificationLine createUpdatedEntity(EntityManager em) {
         MVerificationLine mVerificationLine = new MVerificationLine()
             .verificationNo(UPDATED_VERIFICATION_NO)
+            .matchType(UPDATED_MATCH_TYPE)
             .poNo(UPDATED_PO_NO)
             .receiveNo(UPDATED_RECEIVE_NO)
             .deliveryNo(UPDATED_DELIVERY_NO)
             .description(UPDATED_DESCRIPTION)
+            .orderSuffix(UPDATED_ORDER_SUFFIX)
             .qty(UPDATED_QTY)
             .priceActual(UPDATED_PRICE_ACTUAL)
             .foreignActual(UPDATED_FOREIGN_ACTUAL)
@@ -247,6 +271,9 @@ public class MVerificationLineResourceIT {
             .conversionRate(UPDATED_CONVERSION_RATE)
             .receiveDate(UPDATED_RECEIVE_DATE)
             .payStat(UPDATED_PAY_STAT)
+            .taxable(UPDATED_TAXABLE)
+            .cDocType(UPDATED_C_DOC_TYPE)
+            .cDocTypeMr(UPDATED_C_DOC_TYPE_MR)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -334,10 +361,12 @@ public class MVerificationLineResourceIT {
         assertThat(mVerificationLineList).hasSize(databaseSizeBeforeCreate + 1);
         MVerificationLine testMVerificationLine = mVerificationLineList.get(mVerificationLineList.size() - 1);
         assertThat(testMVerificationLine.getVerificationNo()).isEqualTo(DEFAULT_VERIFICATION_NO);
+        assertThat(testMVerificationLine.getMatchType()).isEqualTo(DEFAULT_MATCH_TYPE);
         assertThat(testMVerificationLine.getPoNo()).isEqualTo(DEFAULT_PO_NO);
         assertThat(testMVerificationLine.getReceiveNo()).isEqualTo(DEFAULT_RECEIVE_NO);
         assertThat(testMVerificationLine.getDeliveryNo()).isEqualTo(DEFAULT_DELIVERY_NO);
         assertThat(testMVerificationLine.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testMVerificationLine.getOrderSuffix()).isEqualTo(DEFAULT_ORDER_SUFFIX);
         assertThat(testMVerificationLine.getQty()).isEqualTo(DEFAULT_QTY);
         assertThat(testMVerificationLine.getPriceActual()).isEqualTo(DEFAULT_PRICE_ACTUAL);
         assertThat(testMVerificationLine.getForeignActual()).isEqualTo(DEFAULT_FOREIGN_ACTUAL);
@@ -350,6 +379,9 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
         assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(DEFAULT_RECEIVE_DATE);
         assertThat(testMVerificationLine.getPayStat()).isEqualTo(DEFAULT_PAY_STAT);
+        assertThat(testMVerificationLine.isTaxable()).isEqualTo(DEFAULT_TAXABLE);
+        assertThat(testMVerificationLine.getcDocType()).isEqualTo(DEFAULT_C_DOC_TYPE);
+        assertThat(testMVerificationLine.getcDocTypeMr()).isEqualTo(DEFAULT_C_DOC_TYPE_MR);
         assertThat(testMVerificationLine.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMVerificationLine.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -520,10 +552,12 @@ public class MVerificationLineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mVerificationLine.getId().intValue())))
             .andExpect(jsonPath("$.[*].verificationNo").value(hasItem(DEFAULT_VERIFICATION_NO)))
+            .andExpect(jsonPath("$.[*].matchType").value(hasItem(DEFAULT_MATCH_TYPE)))
             .andExpect(jsonPath("$.[*].poNo").value(hasItem(DEFAULT_PO_NO)))
             .andExpect(jsonPath("$.[*].receiveNo").value(hasItem(DEFAULT_RECEIVE_NO)))
             .andExpect(jsonPath("$.[*].deliveryNo").value(hasItem(DEFAULT_DELIVERY_NO)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].orderSuffix").value(hasItem(DEFAULT_ORDER_SUFFIX)))
             .andExpect(jsonPath("$.[*].qty").value(hasItem(DEFAULT_QTY.intValue())))
             .andExpect(jsonPath("$.[*].priceActual").value(hasItem(DEFAULT_PRICE_ACTUAL.intValue())))
             .andExpect(jsonPath("$.[*].foreignActual").value(hasItem(DEFAULT_FOREIGN_ACTUAL.intValue())))
@@ -536,6 +570,9 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.intValue())))
             .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())))
             .andExpect(jsonPath("$.[*].payStat").value(hasItem(DEFAULT_PAY_STAT)))
+            .andExpect(jsonPath("$.[*].taxable").value(hasItem(DEFAULT_TAXABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].cDocType").value(hasItem(DEFAULT_C_DOC_TYPE)))
+            .andExpect(jsonPath("$.[*].cDocTypeMr").value(hasItem(DEFAULT_C_DOC_TYPE_MR)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -552,10 +589,12 @@ public class MVerificationLineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mVerificationLine.getId().intValue()))
             .andExpect(jsonPath("$.verificationNo").value(DEFAULT_VERIFICATION_NO))
+            .andExpect(jsonPath("$.matchType").value(DEFAULT_MATCH_TYPE))
             .andExpect(jsonPath("$.poNo").value(DEFAULT_PO_NO))
             .andExpect(jsonPath("$.receiveNo").value(DEFAULT_RECEIVE_NO))
             .andExpect(jsonPath("$.deliveryNo").value(DEFAULT_DELIVERY_NO))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.orderSuffix").value(DEFAULT_ORDER_SUFFIX))
             .andExpect(jsonPath("$.qty").value(DEFAULT_QTY.intValue()))
             .andExpect(jsonPath("$.priceActual").value(DEFAULT_PRICE_ACTUAL.intValue()))
             .andExpect(jsonPath("$.foreignActual").value(DEFAULT_FOREIGN_ACTUAL.intValue()))
@@ -568,6 +607,9 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.intValue()))
             .andExpect(jsonPath("$.receiveDate").value(DEFAULT_RECEIVE_DATE.toString()))
             .andExpect(jsonPath("$.payStat").value(DEFAULT_PAY_STAT))
+            .andExpect(jsonPath("$.taxable").value(DEFAULT_TAXABLE.booleanValue()))
+            .andExpect(jsonPath("$.cDocType").value(DEFAULT_C_DOC_TYPE))
+            .andExpect(jsonPath("$.cDocTypeMr").value(DEFAULT_C_DOC_TYPE_MR))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -667,6 +709,84 @@ public class MVerificationLineResourceIT {
 
         // Get all the mVerificationLineList where verificationNo does not contain UPDATED_VERIFICATION_NO
         defaultMVerificationLineShouldBeFound("verificationNo.doesNotContain=" + UPDATED_VERIFICATION_NO);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByMatchTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where matchType equals to DEFAULT_MATCH_TYPE
+        defaultMVerificationLineShouldBeFound("matchType.equals=" + DEFAULT_MATCH_TYPE);
+
+        // Get all the mVerificationLineList where matchType equals to UPDATED_MATCH_TYPE
+        defaultMVerificationLineShouldNotBeFound("matchType.equals=" + UPDATED_MATCH_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByMatchTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where matchType not equals to DEFAULT_MATCH_TYPE
+        defaultMVerificationLineShouldNotBeFound("matchType.notEquals=" + DEFAULT_MATCH_TYPE);
+
+        // Get all the mVerificationLineList where matchType not equals to UPDATED_MATCH_TYPE
+        defaultMVerificationLineShouldBeFound("matchType.notEquals=" + UPDATED_MATCH_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByMatchTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where matchType in DEFAULT_MATCH_TYPE or UPDATED_MATCH_TYPE
+        defaultMVerificationLineShouldBeFound("matchType.in=" + DEFAULT_MATCH_TYPE + "," + UPDATED_MATCH_TYPE);
+
+        // Get all the mVerificationLineList where matchType equals to UPDATED_MATCH_TYPE
+        defaultMVerificationLineShouldNotBeFound("matchType.in=" + UPDATED_MATCH_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByMatchTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where matchType is not null
+        defaultMVerificationLineShouldBeFound("matchType.specified=true");
+
+        // Get all the mVerificationLineList where matchType is null
+        defaultMVerificationLineShouldNotBeFound("matchType.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVerificationLinesByMatchTypeContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where matchType contains DEFAULT_MATCH_TYPE
+        defaultMVerificationLineShouldBeFound("matchType.contains=" + DEFAULT_MATCH_TYPE);
+
+        // Get all the mVerificationLineList where matchType contains UPDATED_MATCH_TYPE
+        defaultMVerificationLineShouldNotBeFound("matchType.contains=" + UPDATED_MATCH_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByMatchTypeNotContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where matchType does not contain DEFAULT_MATCH_TYPE
+        defaultMVerificationLineShouldNotBeFound("matchType.doesNotContain=" + DEFAULT_MATCH_TYPE);
+
+        // Get all the mVerificationLineList where matchType does not contain UPDATED_MATCH_TYPE
+        defaultMVerificationLineShouldBeFound("matchType.doesNotContain=" + UPDATED_MATCH_TYPE);
     }
 
 
@@ -979,6 +1099,84 @@ public class MVerificationLineResourceIT {
 
         // Get all the mVerificationLineList where description does not contain UPDATED_DESCRIPTION
         defaultMVerificationLineShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByOrderSuffixIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where orderSuffix equals to DEFAULT_ORDER_SUFFIX
+        defaultMVerificationLineShouldBeFound("orderSuffix.equals=" + DEFAULT_ORDER_SUFFIX);
+
+        // Get all the mVerificationLineList where orderSuffix equals to UPDATED_ORDER_SUFFIX
+        defaultMVerificationLineShouldNotBeFound("orderSuffix.equals=" + UPDATED_ORDER_SUFFIX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByOrderSuffixIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where orderSuffix not equals to DEFAULT_ORDER_SUFFIX
+        defaultMVerificationLineShouldNotBeFound("orderSuffix.notEquals=" + DEFAULT_ORDER_SUFFIX);
+
+        // Get all the mVerificationLineList where orderSuffix not equals to UPDATED_ORDER_SUFFIX
+        defaultMVerificationLineShouldBeFound("orderSuffix.notEquals=" + UPDATED_ORDER_SUFFIX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByOrderSuffixIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where orderSuffix in DEFAULT_ORDER_SUFFIX or UPDATED_ORDER_SUFFIX
+        defaultMVerificationLineShouldBeFound("orderSuffix.in=" + DEFAULT_ORDER_SUFFIX + "," + UPDATED_ORDER_SUFFIX);
+
+        // Get all the mVerificationLineList where orderSuffix equals to UPDATED_ORDER_SUFFIX
+        defaultMVerificationLineShouldNotBeFound("orderSuffix.in=" + UPDATED_ORDER_SUFFIX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByOrderSuffixIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where orderSuffix is not null
+        defaultMVerificationLineShouldBeFound("orderSuffix.specified=true");
+
+        // Get all the mVerificationLineList where orderSuffix is null
+        defaultMVerificationLineShouldNotBeFound("orderSuffix.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVerificationLinesByOrderSuffixContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where orderSuffix contains DEFAULT_ORDER_SUFFIX
+        defaultMVerificationLineShouldBeFound("orderSuffix.contains=" + DEFAULT_ORDER_SUFFIX);
+
+        // Get all the mVerificationLineList where orderSuffix contains UPDATED_ORDER_SUFFIX
+        defaultMVerificationLineShouldNotBeFound("orderSuffix.contains=" + UPDATED_ORDER_SUFFIX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByOrderSuffixNotContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where orderSuffix does not contain DEFAULT_ORDER_SUFFIX
+        defaultMVerificationLineShouldNotBeFound("orderSuffix.doesNotContain=" + DEFAULT_ORDER_SUFFIX);
+
+        // Get all the mVerificationLineList where orderSuffix does not contain UPDATED_ORDER_SUFFIX
+        defaultMVerificationLineShouldBeFound("orderSuffix.doesNotContain=" + UPDATED_ORDER_SUFFIX);
     }
 
 
@@ -2217,6 +2415,214 @@ public class MVerificationLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMVerificationLinesByTaxableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxable equals to DEFAULT_TAXABLE
+        defaultMVerificationLineShouldBeFound("taxable.equals=" + DEFAULT_TAXABLE);
+
+        // Get all the mVerificationLineList where taxable equals to UPDATED_TAXABLE
+        defaultMVerificationLineShouldNotBeFound("taxable.equals=" + UPDATED_TAXABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTaxableIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxable not equals to DEFAULT_TAXABLE
+        defaultMVerificationLineShouldNotBeFound("taxable.notEquals=" + DEFAULT_TAXABLE);
+
+        // Get all the mVerificationLineList where taxable not equals to UPDATED_TAXABLE
+        defaultMVerificationLineShouldBeFound("taxable.notEquals=" + UPDATED_TAXABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTaxableIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxable in DEFAULT_TAXABLE or UPDATED_TAXABLE
+        defaultMVerificationLineShouldBeFound("taxable.in=" + DEFAULT_TAXABLE + "," + UPDATED_TAXABLE);
+
+        // Get all the mVerificationLineList where taxable equals to UPDATED_TAXABLE
+        defaultMVerificationLineShouldNotBeFound("taxable.in=" + UPDATED_TAXABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByTaxableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where taxable is not null
+        defaultMVerificationLineShouldBeFound("taxable.specified=true");
+
+        // Get all the mVerificationLineList where taxable is null
+        defaultMVerificationLineShouldNotBeFound("taxable.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocType equals to DEFAULT_C_DOC_TYPE
+        defaultMVerificationLineShouldBeFound("cDocType.equals=" + DEFAULT_C_DOC_TYPE);
+
+        // Get all the mVerificationLineList where cDocType equals to UPDATED_C_DOC_TYPE
+        defaultMVerificationLineShouldNotBeFound("cDocType.equals=" + UPDATED_C_DOC_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocType not equals to DEFAULT_C_DOC_TYPE
+        defaultMVerificationLineShouldNotBeFound("cDocType.notEquals=" + DEFAULT_C_DOC_TYPE);
+
+        // Get all the mVerificationLineList where cDocType not equals to UPDATED_C_DOC_TYPE
+        defaultMVerificationLineShouldBeFound("cDocType.notEquals=" + UPDATED_C_DOC_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocType in DEFAULT_C_DOC_TYPE or UPDATED_C_DOC_TYPE
+        defaultMVerificationLineShouldBeFound("cDocType.in=" + DEFAULT_C_DOC_TYPE + "," + UPDATED_C_DOC_TYPE);
+
+        // Get all the mVerificationLineList where cDocType equals to UPDATED_C_DOC_TYPE
+        defaultMVerificationLineShouldNotBeFound("cDocType.in=" + UPDATED_C_DOC_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocType is not null
+        defaultMVerificationLineShouldBeFound("cDocType.specified=true");
+
+        // Get all the mVerificationLineList where cDocType is null
+        defaultMVerificationLineShouldNotBeFound("cDocType.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocType contains DEFAULT_C_DOC_TYPE
+        defaultMVerificationLineShouldBeFound("cDocType.contains=" + DEFAULT_C_DOC_TYPE);
+
+        // Get all the mVerificationLineList where cDocType contains UPDATED_C_DOC_TYPE
+        defaultMVerificationLineShouldNotBeFound("cDocType.contains=" + UPDATED_C_DOC_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeNotContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocType does not contain DEFAULT_C_DOC_TYPE
+        defaultMVerificationLineShouldNotBeFound("cDocType.doesNotContain=" + DEFAULT_C_DOC_TYPE);
+
+        // Get all the mVerificationLineList where cDocType does not contain UPDATED_C_DOC_TYPE
+        defaultMVerificationLineShouldBeFound("cDocType.doesNotContain=" + UPDATED_C_DOC_TYPE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeMrIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocTypeMr equals to DEFAULT_C_DOC_TYPE_MR
+        defaultMVerificationLineShouldBeFound("cDocTypeMr.equals=" + DEFAULT_C_DOC_TYPE_MR);
+
+        // Get all the mVerificationLineList where cDocTypeMr equals to UPDATED_C_DOC_TYPE_MR
+        defaultMVerificationLineShouldNotBeFound("cDocTypeMr.equals=" + UPDATED_C_DOC_TYPE_MR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeMrIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocTypeMr not equals to DEFAULT_C_DOC_TYPE_MR
+        defaultMVerificationLineShouldNotBeFound("cDocTypeMr.notEquals=" + DEFAULT_C_DOC_TYPE_MR);
+
+        // Get all the mVerificationLineList where cDocTypeMr not equals to UPDATED_C_DOC_TYPE_MR
+        defaultMVerificationLineShouldBeFound("cDocTypeMr.notEquals=" + UPDATED_C_DOC_TYPE_MR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeMrIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocTypeMr in DEFAULT_C_DOC_TYPE_MR or UPDATED_C_DOC_TYPE_MR
+        defaultMVerificationLineShouldBeFound("cDocTypeMr.in=" + DEFAULT_C_DOC_TYPE_MR + "," + UPDATED_C_DOC_TYPE_MR);
+
+        // Get all the mVerificationLineList where cDocTypeMr equals to UPDATED_C_DOC_TYPE_MR
+        defaultMVerificationLineShouldNotBeFound("cDocTypeMr.in=" + UPDATED_C_DOC_TYPE_MR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeMrIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocTypeMr is not null
+        defaultMVerificationLineShouldBeFound("cDocTypeMr.specified=true");
+
+        // Get all the mVerificationLineList where cDocTypeMr is null
+        defaultMVerificationLineShouldNotBeFound("cDocTypeMr.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeMrContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocTypeMr contains DEFAULT_C_DOC_TYPE_MR
+        defaultMVerificationLineShouldBeFound("cDocTypeMr.contains=" + DEFAULT_C_DOC_TYPE_MR);
+
+        // Get all the mVerificationLineList where cDocTypeMr contains UPDATED_C_DOC_TYPE_MR
+        defaultMVerificationLineShouldNotBeFound("cDocTypeMr.contains=" + UPDATED_C_DOC_TYPE_MR);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesBycDocTypeMrNotContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where cDocTypeMr does not contain DEFAULT_C_DOC_TYPE_MR
+        defaultMVerificationLineShouldNotBeFound("cDocTypeMr.doesNotContain=" + DEFAULT_C_DOC_TYPE_MR);
+
+        // Get all the mVerificationLineList where cDocTypeMr does not contain UPDATED_C_DOC_TYPE_MR
+        defaultMVerificationLineShouldBeFound("cDocTypeMr.doesNotContain=" + UPDATED_C_DOC_TYPE_MR);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMVerificationLinesByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationLineRepository.saveAndFlush(mVerificationLine);
@@ -2414,6 +2820,46 @@ public class MVerificationLineResourceIT {
         defaultMVerificationLineShouldNotBeFound("cCurrencyId.equals=" + (cCurrencyId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByCTaxCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+        CTaxCategory cTaxCategory = CTaxCategoryResourceIT.createEntity(em);
+        em.persist(cTaxCategory);
+        em.flush();
+        mVerificationLine.setCTaxCategory(cTaxCategory);
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+        Long cTaxCategoryId = cTaxCategory.getId();
+
+        // Get all the mVerificationLineList where cTaxCategory equals to cTaxCategoryId
+        defaultMVerificationLineShouldBeFound("cTaxCategoryId.equals=" + cTaxCategoryId);
+
+        // Get all the mVerificationLineList where cTaxCategory equals to cTaxCategoryId + 1
+        defaultMVerificationLineShouldNotBeFound("cTaxCategoryId.equals=" + (cTaxCategoryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByCTaxIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+        CTax cTax = CTaxResourceIT.createEntity(em);
+        em.persist(cTax);
+        em.flush();
+        mVerificationLine.setCTax(cTax);
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+        Long cTaxId = cTax.getId();
+
+        // Get all the mVerificationLineList where cTax equals to cTaxId
+        defaultMVerificationLineShouldBeFound("cTaxId.equals=" + cTaxId);
+
+        // Get all the mVerificationLineList where cTax equals to cTaxId + 1
+        defaultMVerificationLineShouldNotBeFound("cTaxId.equals=" + (cTaxId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -2423,10 +2869,12 @@ public class MVerificationLineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mVerificationLine.getId().intValue())))
             .andExpect(jsonPath("$.[*].verificationNo").value(hasItem(DEFAULT_VERIFICATION_NO)))
+            .andExpect(jsonPath("$.[*].matchType").value(hasItem(DEFAULT_MATCH_TYPE)))
             .andExpect(jsonPath("$.[*].poNo").value(hasItem(DEFAULT_PO_NO)))
             .andExpect(jsonPath("$.[*].receiveNo").value(hasItem(DEFAULT_RECEIVE_NO)))
             .andExpect(jsonPath("$.[*].deliveryNo").value(hasItem(DEFAULT_DELIVERY_NO)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].orderSuffix").value(hasItem(DEFAULT_ORDER_SUFFIX)))
             .andExpect(jsonPath("$.[*].qty").value(hasItem(DEFAULT_QTY.intValue())))
             .andExpect(jsonPath("$.[*].priceActual").value(hasItem(DEFAULT_PRICE_ACTUAL.intValue())))
             .andExpect(jsonPath("$.[*].foreignActual").value(hasItem(DEFAULT_FOREIGN_ACTUAL.intValue())))
@@ -2439,6 +2887,9 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.intValue())))
             .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())))
             .andExpect(jsonPath("$.[*].payStat").value(hasItem(DEFAULT_PAY_STAT)))
+            .andExpect(jsonPath("$.[*].taxable").value(hasItem(DEFAULT_TAXABLE.booleanValue())))
+            .andExpect(jsonPath("$.[*].cDocType").value(hasItem(DEFAULT_C_DOC_TYPE)))
+            .andExpect(jsonPath("$.[*].cDocTypeMr").value(hasItem(DEFAULT_C_DOC_TYPE_MR)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -2489,10 +2940,12 @@ public class MVerificationLineResourceIT {
         em.detach(updatedMVerificationLine);
         updatedMVerificationLine
             .verificationNo(UPDATED_VERIFICATION_NO)
+            .matchType(UPDATED_MATCH_TYPE)
             .poNo(UPDATED_PO_NO)
             .receiveNo(UPDATED_RECEIVE_NO)
             .deliveryNo(UPDATED_DELIVERY_NO)
             .description(UPDATED_DESCRIPTION)
+            .orderSuffix(UPDATED_ORDER_SUFFIX)
             .qty(UPDATED_QTY)
             .priceActual(UPDATED_PRICE_ACTUAL)
             .foreignActual(UPDATED_FOREIGN_ACTUAL)
@@ -2505,6 +2958,9 @@ public class MVerificationLineResourceIT {
             .conversionRate(UPDATED_CONVERSION_RATE)
             .receiveDate(UPDATED_RECEIVE_DATE)
             .payStat(UPDATED_PAY_STAT)
+            .taxable(UPDATED_TAXABLE)
+            .cDocType(UPDATED_C_DOC_TYPE)
+            .cDocTypeMr(UPDATED_C_DOC_TYPE_MR)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MVerificationLineDTO mVerificationLineDTO = mVerificationLineMapper.toDto(updatedMVerificationLine);
@@ -2519,10 +2975,12 @@ public class MVerificationLineResourceIT {
         assertThat(mVerificationLineList).hasSize(databaseSizeBeforeUpdate);
         MVerificationLine testMVerificationLine = mVerificationLineList.get(mVerificationLineList.size() - 1);
         assertThat(testMVerificationLine.getVerificationNo()).isEqualTo(UPDATED_VERIFICATION_NO);
+        assertThat(testMVerificationLine.getMatchType()).isEqualTo(UPDATED_MATCH_TYPE);
         assertThat(testMVerificationLine.getPoNo()).isEqualTo(UPDATED_PO_NO);
         assertThat(testMVerificationLine.getReceiveNo()).isEqualTo(UPDATED_RECEIVE_NO);
         assertThat(testMVerificationLine.getDeliveryNo()).isEqualTo(UPDATED_DELIVERY_NO);
         assertThat(testMVerificationLine.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testMVerificationLine.getOrderSuffix()).isEqualTo(UPDATED_ORDER_SUFFIX);
         assertThat(testMVerificationLine.getQty()).isEqualTo(UPDATED_QTY);
         assertThat(testMVerificationLine.getPriceActual()).isEqualTo(UPDATED_PRICE_ACTUAL);
         assertThat(testMVerificationLine.getForeignActual()).isEqualTo(UPDATED_FOREIGN_ACTUAL);
@@ -2535,6 +2993,9 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
         assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(UPDATED_RECEIVE_DATE);
         assertThat(testMVerificationLine.getPayStat()).isEqualTo(UPDATED_PAY_STAT);
+        assertThat(testMVerificationLine.isTaxable()).isEqualTo(UPDATED_TAXABLE);
+        assertThat(testMVerificationLine.getcDocType()).isEqualTo(UPDATED_C_DOC_TYPE);
+        assertThat(testMVerificationLine.getcDocTypeMr()).isEqualTo(UPDATED_C_DOC_TYPE_MR);
         assertThat(testMVerificationLine.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMVerificationLine.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

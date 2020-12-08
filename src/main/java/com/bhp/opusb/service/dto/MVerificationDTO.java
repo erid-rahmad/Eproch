@@ -8,6 +8,8 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -54,6 +56,10 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "VHDIVJ", required = true)
     private LocalDate invoiceDate;
 
+    /**
+     * VHTAX0
+     */
+    @ApiModelProperty(value = "VHTAX0")
     private String taxInvoice;
 
     /**
@@ -178,6 +184,7 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     private Long vendorId;
     private String vendorCode;
     private String vendorName;
+    private String vendorTaxId;
 
     /**
      * VHAN8L
@@ -186,6 +193,24 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     private Long vendorToId;
     private String vendorToCode;
     private String vendorToName;
+
+    /**
+     * VHEXR1 is mapped to tax category name.
+     */
+    @ApiModelProperty(value = "VHEXR1 is mapped to tax category name.")
+    private Long cTaxCategoryId;
+
+    @JsonProperty("cTaxCategoryName")
+    private String cTaxCategoryName;
+
+    /**
+     * VHTXA1 is mapped to tax name.
+     */
+    @ApiModelProperty(value = "VHTXA1 is mapped to tax name.")
+    private Long cTaxId;
+    
+    @JsonProperty("cTaxName")
+    private String cTaxName;
 
     public Long getId() {
         return id;
@@ -483,6 +508,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.vendorName = vendorName;
     }
 
+    public String getVendorTaxId() {
+        return vendorTaxId;
+    }
+
+    public void setVendorTaxId(String vendorTaxId) {
+        this.vendorTaxId = vendorTaxId;
+    }
+
     public Long getVendorToId() {
         return vendorToId;
     }
@@ -505,6 +538,38 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     public void setVendorToCode(String vendorToCode) {
         this.vendorToCode = vendorToCode;
+    }
+
+    public Long getCTaxCategoryId() {
+        return cTaxCategoryId;
+    }
+
+    public void setCTaxCategoryId(Long cTaxCategoryId) {
+        this.cTaxCategoryId = cTaxCategoryId;
+    }
+
+    public String getcTaxCategoryName() {
+        return cTaxCategoryName;
+    }
+
+    public void setcTaxCategoryName(String cTaxCategoryName) {
+        this.cTaxCategoryName = cTaxCategoryName;
+    }
+
+    public Long getCTaxId() {
+        return cTaxId;
+    }
+
+    public void setCTaxId(Long cTaxId) {
+        this.cTaxId = cTaxId;
+    }
+
+    public String getcTaxName() {
+        return cTaxName;
+    }
+
+    public void setcTaxName(String cTaxName) {
+        this.cTaxName = cTaxName;
     }
 
     @Override
@@ -564,6 +629,8 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", matchPoCurrencyId=" + getMatchPoCurrencyId() +
             ", vendorId=" + getVendorId() +
             ", vendorToId=" + getVendorToId() +
+            ", cTaxCategoryId=" + getCTaxCategoryId() +
+            ", cTaxId=" + getCTaxId() +
             "}";
     }
 }

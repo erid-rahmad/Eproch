@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity MVerificationLine.
     -->
@@ -95,10 +95,12 @@
                   tableName="m_verification_line">
             <column name="id" type="numeric"/>
             <column name="verification_no" type="string"/>
+            <column name="match_type" type="string"/>
             <column name="po_no" type="string"/>
             <column name="receive_no" type="string"/>
             <column name="delivery_no" type="string"/>
             <column name="description" type="string"/>
+            <column name="order_suffix" type="string"/>
             <column name="qty" type="numeric"/>
             <column name="price_actual" type="numeric"/>
             <column name="foreign_actual" type="numeric"/>
@@ -110,6 +112,10 @@
             <column name="line_no_mr" type="numeric"/>
             <column name="conversion_rate" type="numeric"/>
             <column name="receive_date" type="date"/>
+            <column name="pay_stat" type="string"/>
+            <column name="taxable" type="boolean"/>
+            <column name="c_doc_type" type="string"/>
+            <column name="c_doc_type_mr" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="verification_id" type="numeric"/>
@@ -228,6 +234,36 @@
         <setColumnRemarks tableName="m_verification_line" columnName="line_no" remarks="VDLINN Invoice verification line no." />
         <setColumnRemarks tableName="m_verification_line" columnName="line_no_mr" remarks="VDLNID Receipt line no." />
         <setColumnRemarks tableName="m_verification_line" columnName="receive_date" remarks="VDRCDJ Receipt date." />
+    </changeSet>
+
+    <changeSet id="20201208134500" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification_line">
+            <column name="match_type" type="varchar(1)" remarks="VDMATC">
+                <constraints nullable="true" />
+            </column>
+            <column name="order_suffix" type="varchar(10)" remarks="VDSFXO">
+                <constraints nullable="true" />
+            </column>
+            <column name="taxable" type="boolean" remarks="VDTX Y means true, otherwise false">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_doc_type" type="varchar(2)" remarks="VDDCTO">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_doc_type_mr" type="varchar(2)" remarks="VDDCT">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_tax_category_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="c_tax_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <setColumnRemarks tableName="m_verification_line" columnName="verification_no" remarks="VDDOCM"/>
+        <setColumnRemarks tableName="m_verification_line" columnName="po_no" remarks="VDDOCO"/>
+        <setColumnRemarks tableName="m_verification_line" columnName="conversion_rate" remarks="VDCRR"/>
+        <setColumnRemarks tableName="m_verification_line" columnName="pay_stat" remarks="VDPST"/>
     </changeSet>
 
 </databaseChangeLog>

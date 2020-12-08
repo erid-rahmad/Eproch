@@ -498,9 +498,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     return lines.map(line => {
       const {
         cConversionRate,
-        cDocType,
-        cDocTypeMr,
-        cTaxCategory,
         cVendor,
         dateAccount,
         lineNoPo,

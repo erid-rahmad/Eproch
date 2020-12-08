@@ -1,6 +1,5 @@
 package com.bhp.opusb.domain;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -15,6 +14,7 @@ import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -36,9 +36,22 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    /**
+     * VDDOCM
+     */
     @Column(name = "verification_no")
     private String verificationNo;
 
+    /**
+     * VDMATC
+     */
+    @Size(max = 1)
+    @Column(name = "match_type", length = 1)
+    private String matchType;
+
+    /**
+     * VDDOCO
+     */
     @NotNull
     @Column(name = "po_no", nullable = false)
     private String poNo;
@@ -57,6 +70,16 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @Column(name = "description")
     private String description;
 
+    /**
+     * VDSFXO
+     */
+    @Size(max = 10)
+    @Column(name = "order_suffix", length = 10)
+    private String orderSuffix;
+
+    /**
+     * VDUREC
+     */
     @NotNull
     @Column(name = "qty", nullable = false)
     private Long qty;
@@ -112,6 +135,9 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @Column(name = "line_no_mr")
     private Integer lineNoMr;
 
+    /**
+     * VDCRR
+     */
     @Column(name = "conversion_rate", precision = 21, scale = 2)
     private BigDecimal conversionRate;
 
@@ -121,8 +147,31 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @Column(name = "receive_date")
     private LocalDate receiveDate;
 
+    /**
+     * VDPST
+     */
     @Column(name = "pay_stat")
     private String payStat;
+
+    /**
+     * VDTX Y means true, otherwise false
+     */
+    @Column(name = "taxable")
+    private Boolean taxable;
+
+    /**
+     * VDDCTO
+     */
+    @Size(max = 2)
+    @Column(name = "c_doc_type", length = 2)
+    private String cDocType;
+
+    /**
+     * VDDCT
+     */
+    @Size(max = 2)
+    @Column(name = "c_doc_type_mr", length = 2)
+    private String cDocTypeMr;
 
     @Column(name = "uid")
     private UUID uid;
@@ -145,6 +194,9 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mVerificationLines")
     private CProduct product;
 
+    /**
+     * VDUOM
+     */
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mVerificationLines")
@@ -155,10 +207,27 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mVerificationLines")
     private CCostCenter cCostCenter;
 
+    /**
+     * VDCRCD
+     */
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mVerificationLines")
     private CCurrency cCurrency;
+
+    /**
+     * VDEXR1 is mapped to tax category name.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mVerificationLines")
+    private CTaxCategory cTaxCategory;
+
+    /**
+     * VDTXA1 is mapped to tax name.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mVerificationLines")
+    private CTax cTax;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -180,6 +249,19 @@ public class MVerificationLine extends AbstractAuditingEntity {
 
     public void setVerificationNo(String verificationNo) {
         this.verificationNo = verificationNo;
+    }
+
+    public String getMatchType() {
+        return matchType;
+    }
+
+    public MVerificationLine matchType(String matchType) {
+        this.matchType = matchType;
+        return this;
+    }
+
+    public void setMatchType(String matchType) {
+        this.matchType = matchType;
     }
 
     public String getPoNo() {
@@ -232,6 +314,19 @@ public class MVerificationLine extends AbstractAuditingEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getOrderSuffix() {
+        return orderSuffix;
+    }
+
+    public MVerificationLine orderSuffix(String orderSuffix) {
+        this.orderSuffix = orderSuffix;
+        return this;
+    }
+
+    public void setOrderSuffix(String orderSuffix) {
+        this.orderSuffix = orderSuffix;
     }
 
     public Long getQty() {
@@ -390,6 +485,45 @@ public class MVerificationLine extends AbstractAuditingEntity {
         this.payStat = payStat;
     }
 
+    public Boolean isTaxable() {
+        return taxable;
+    }
+
+    public MVerificationLine taxable(Boolean taxable) {
+        this.taxable = taxable;
+        return this;
+    }
+
+    public void setTaxable(Boolean taxable) {
+        this.taxable = taxable;
+    }
+
+    public String getcDocType() {
+        return cDocType;
+    }
+
+    public MVerificationLine cDocType(String cDocType) {
+        this.cDocType = cDocType;
+        return this;
+    }
+
+    public void setcDocType(String cDocType) {
+        this.cDocType = cDocType;
+    }
+
+    public String getcDocTypeMr() {
+        return cDocTypeMr;
+    }
+
+    public MVerificationLine cDocTypeMr(String cDocTypeMr) {
+        this.cDocTypeMr = cDocTypeMr;
+        return this;
+    }
+
+    public void setcDocTypeMr(String cDocTypeMr) {
+        this.cDocTypeMr = cDocTypeMr;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -493,6 +627,32 @@ public class MVerificationLine extends AbstractAuditingEntity {
     public void setCCurrency(CCurrency cCurrency) {
         this.cCurrency = cCurrency;
     }
+
+    public CTaxCategory getCTaxCategory() {
+        return cTaxCategory;
+    }
+
+    public MVerificationLine cTaxCategory(CTaxCategory cTaxCategory) {
+        this.cTaxCategory = cTaxCategory;
+        return this;
+    }
+
+    public void setCTaxCategory(CTaxCategory cTaxCategory) {
+        this.cTaxCategory = cTaxCategory;
+    }
+
+    public CTax getCTax() {
+        return cTax;
+    }
+
+    public MVerificationLine cTax(CTax cTax) {
+        this.cTax = cTax;
+        return this;
+    }
+
+    public void setCTax(CTax cTax) {
+        this.cTax = cTax;
+    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
@@ -521,10 +681,12 @@ public class MVerificationLine extends AbstractAuditingEntity {
         return "MVerificationLine{" +
             "id=" + getId() +
             ", verificationNo='" + getVerificationNo() + "'" +
+            ", matchType='" + getMatchType() + "'" +
             ", poNo='" + getPoNo() + "'" +
             ", receiveNo='" + getReceiveNo() + "'" +
             ", deliveryNo='" + getDeliveryNo() + "'" +
             ", description='" + getDescription() + "'" +
+            ", orderSuffix='" + getOrderSuffix() + "'" +
             ", qty=" + getQty() +
             ", priceActual=" + getPriceActual() +
             ", foreignActual=" + getForeignActual() +
@@ -537,6 +699,9 @@ public class MVerificationLine extends AbstractAuditingEntity {
             ", conversionRate=" + getConversionRate() +
             ", receiveDate='" + getReceiveDate() + "'" +
             ", payStat='" + getPayStat() + "'" +
+            ", taxable='" + isTaxable() + "'" +
+            ", cDocType='" + getcDocType() + "'" +
+            ", cDocTypeMr='" + getcDocTypeMr() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

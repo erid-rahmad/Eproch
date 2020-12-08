@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -20,9 +21,24 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
+    /**
+     * VDDOCM
+     */
+    @ApiModelProperty(value = "VDDOCM")
     private String verificationNo;
 
+    /**
+     * VDMATC
+     */
+    @Size(max = 1)
+    @ApiModelProperty(value = "VDMATC")
+    private String matchType;
+
+    /**
+     * VDDOCO
+     */
     @NotNull
+    @ApiModelProperty(value = "VDDOCO", required = true)
     private String poNo;
 
     @NotNull
@@ -38,7 +54,18 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "VDVRMK Supplier's remark.")
     private String description;
 
+    /**
+     * VDSFXO
+     */
+    @Size(max = 10)
+    @ApiModelProperty(value = "VDSFXO")
+    private String orderSuffix;
+
+    /**
+     * VDUREC
+     */
     @NotNull
+    @ApiModelProperty(value = "VDUREC", required = true)
     private Long qty;
 
     /**
@@ -92,6 +119,10 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "VDLNID Receipt line no.")
     private Integer lineNoMr;
 
+    /**
+     * VDCRR
+     */
+    @ApiModelProperty(value = "VDCRR")
     private BigDecimal conversionRate;
 
     /**
@@ -101,7 +132,31 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     @JsonProperty("receiptDate")
     private LocalDate receiveDate;
 
+    /**
+     * VDPST
+     */
+    @ApiModelProperty(value = "VDPST")
     private String payStat;
+
+    /**
+     * VDTX Y means true, otherwise false
+     */
+    @ApiModelProperty(value = "VDTX Y means true, otherwise false")
+    private Boolean taxable;
+
+    /**
+     * VDDCTO
+     */
+    @Size(max = 2)
+    @ApiModelProperty(value = "VDDCTO")
+    private String cDocType;
+
+    /**
+     * VDDCT
+     */
+    @Size(max = 2)
+    @ApiModelProperty(value = "VDDCT")
+    private String cDocTypeMr;
 
     private UUID uid;
 
@@ -126,6 +181,10 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     @JsonProperty("mProductDescription")
     private String productDescription;
 
+    /**
+     * VDUOM
+     */
+    @ApiModelProperty(value = "VDUOM")
     @JsonProperty("cUomId")
     private Long uomId;
 
@@ -144,11 +203,36 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     @JsonProperty("cCostCenterShortName")
     private String cCostCenterShortName;
 
+    /**
+     * VDCRCD
+     */
+    @ApiModelProperty(value = "VDCRCD")
     @JsonProperty("cCurrencyId")
     private Long cCurrencyId;
 
     @JsonProperty("cCurrencyName")
     private String cCurrencyName;
+
+    /**
+     * VDEXR1 is mapped to tax category name.
+     */
+    @ApiModelProperty(value = "VDEXR1 is mapped to tax category name.")
+    private Long cTaxCategoryId;
+
+    @JsonProperty("cTaxCategoryName")
+    private String cTaxCategoryName;
+
+    /**
+     * VDTXA1 is mapped to tax name.
+     */
+    @ApiModelProperty(value = "VDTXA1 is mapped to tax name.")
+    private Long cTaxId;
+    
+    @JsonProperty("cTaxName")
+    private String cTaxName;
+
+    @JsonProperty("cTaxRate")
+    private BigDecimal cTaxRate;
 
     public Long getId() {
         return id;
@@ -164,6 +248,14 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
 
     public void setVerificationNo(String verificationNo) {
         this.verificationNo = verificationNo;
+    }
+
+    public String getMatchType() {
+        return matchType;
+    }
+
+    public void setMatchType(String matchType) {
+        this.matchType = matchType;
     }
 
     public String getPoNo() {
@@ -196,6 +288,14 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getOrderSuffix() {
+        return orderSuffix;
+    }
+
+    public void setOrderSuffix(String orderSuffix) {
+        this.orderSuffix = orderSuffix;
     }
 
     public Long getQty() {
@@ -292,6 +392,30 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
 
     public void setPayStat(String payStat) {
         this.payStat = payStat;
+    }
+
+    public Boolean isTaxable() {
+        return taxable;
+    }
+
+    public void setTaxable(Boolean taxable) {
+        this.taxable = taxable;
+    }
+
+    public String getcDocType() {
+        return cDocType;
+    }
+
+    public void setcDocType(String cDocType) {
+        this.cDocType = cDocType;
+    }
+
+    public String getcDocTypeMr() {
+        return cDocTypeMr;
+    }
+
+    public void setcDocTypeMr(String cDocTypeMr) {
+        this.cDocTypeMr = cDocTypeMr;
     }
 
     public UUID getUid() {
@@ -452,6 +576,46 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.cCurrencyName = cCurrencyName;
     }
 
+    public Long getCTaxCategoryId() {
+        return cTaxCategoryId;
+    }
+
+    public void setCTaxCategoryId(Long cTaxCategoryId) {
+        this.cTaxCategoryId = cTaxCategoryId;
+    }
+
+    public String getCTaxCategoryName() {
+        return cTaxCategoryName;
+    }
+
+    public void setCTaxCategoryName(String cTaxCategoryName) {
+        this.cTaxCategoryName = cTaxCategoryName;
+    }
+
+    public Long getCTaxId() {
+        return cTaxId;
+    }
+
+    public void setCTaxId(Long cTaxId) {
+        this.cTaxId = cTaxId;
+    }
+
+    public String getCTaxName() {
+        return cTaxName;
+    }
+
+    public void setCTaxName(String cTaxName) {
+        this.cTaxName = cTaxName;
+    }
+
+    public BigDecimal getCTaxRate() {
+        return cTaxRate;
+    }
+
+    public void setCTaxRate(BigDecimal cTaxRate) {
+        this.cTaxRate = cTaxRate;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -478,10 +642,12 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         return "MVerificationLineDTO{" +
             "id=" + getId() +
             ", verificationNo='" + getVerificationNo() + "'" +
+            ", matchType='" + getMatchType() + "'" +
             ", poNo='" + getPoNo() + "'" +
             ", receiveNo='" + getReceiveNo() + "'" +
             ", deliveryNo='" + getDeliveryNo() + "'" +
             ", description='" + getDescription() + "'" +
+            ", orderSuffix='" + getOrderSuffix() + "'" +
             ", qty=" + getQty() +
             ", priceActual=" + getPriceActual() +
             ", foreignActual=" + getForeignActual() +
@@ -494,19 +660,19 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
             ", conversionRate=" + getConversionRate() +
             ", receiveDate='" + getReceiveDate() + "'" +
             ", payStat='" + getPayStat() + "'" +
+            ", taxable='" + isTaxable() + "'" +
+            ", cDocType='" + getcDocType() + "'" +
+            ", cDocTypeMr='" + getcDocTypeMr() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", verificationId=" + getVerificationId() +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
             ", productId=" + getProductId() +
-            ", productName=" + getProductName() +
             ", uomId=" + getUomId() +
-            ", uomName=" + getUomName() +
             ", cCostCenterId=" + getCCostCenterId() +
-            ", cCostCenterName=" + getCCostCenterName() +
             ", cCurrencyId=" + getCCurrencyId() +
-            ", cCurrencyName=" + getCCurrencyName() +
+            ", cTaxCategoryId=" + getCTaxCategoryId() +
+            ", cTaxId=" + getCTaxId() +
             "}";
     }
 }

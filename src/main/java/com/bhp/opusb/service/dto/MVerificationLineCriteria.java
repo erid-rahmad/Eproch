@@ -31,6 +31,8 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private StringFilter verificationNo;
 
+    private StringFilter matchType;
+
     private StringFilter poNo;
 
     private StringFilter receiveNo;
@@ -38,6 +40,8 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
     private StringFilter deliveryNo;
 
     private StringFilter description;
+
+    private StringFilter orderSuffix;
 
     private LongFilter qty;
 
@@ -63,6 +67,12 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private StringFilter payStat;
 
+    private BooleanFilter taxable;
+
+    private StringFilter cDocType;
+
+    private StringFilter cDocTypeMr;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -79,16 +89,22 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private LongFilter cCurrencyId;
 
+    private LongFilter cTaxCategoryId;
+
+    private LongFilter cTaxId;
+
     public MVerificationLineCriteria() {
     }
 
     public MVerificationLineCriteria(MVerificationLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.verificationNo = other.verificationNo == null ? null : other.verificationNo.copy();
+        this.matchType = other.matchType == null ? null : other.matchType.copy();
         this.poNo = other.poNo == null ? null : other.poNo.copy();
         this.receiveNo = other.receiveNo == null ? null : other.receiveNo.copy();
         this.deliveryNo = other.deliveryNo == null ? null : other.deliveryNo.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.orderSuffix = other.orderSuffix == null ? null : other.orderSuffix.copy();
         this.qty = other.qty == null ? null : other.qty.copy();
         this.priceActual = other.priceActual == null ? null : other.priceActual.copy();
         this.foreignActual = other.foreignActual == null ? null : other.foreignActual.copy();
@@ -101,6 +117,9 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
         this.receiveDate = other.receiveDate == null ? null : other.receiveDate.copy();
         this.payStat = other.payStat == null ? null : other.payStat.copy();
+        this.taxable = other.taxable == null ? null : other.taxable.copy();
+        this.cDocType = other.cDocType == null ? null : other.cDocType.copy();
+        this.cDocTypeMr = other.cDocTypeMr == null ? null : other.cDocTypeMr.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.verificationId = other.verificationId == null ? null : other.verificationId.copy();
@@ -109,6 +128,8 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.uomId = other.uomId == null ? null : other.uomId.copy();
         this.cCostCenterId = other.cCostCenterId == null ? null : other.cCostCenterId.copy();
         this.cCurrencyId = other.cCurrencyId == null ? null : other.cCurrencyId.copy();
+        this.cTaxCategoryId = other.cTaxCategoryId == null ? null : other.cTaxCategoryId.copy();
+        this.cTaxId = other.cTaxId == null ? null : other.cTaxId.copy();
     }
 
     @Override
@@ -130,6 +151,14 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     public void setVerificationNo(StringFilter verificationNo) {
         this.verificationNo = verificationNo;
+    }
+
+    public StringFilter getMatchType() {
+        return matchType;
+    }
+
+    public void setMatchType(StringFilter matchType) {
+        this.matchType = matchType;
     }
 
     public StringFilter getPoNo() {
@@ -162,6 +191,14 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     public void setDescription(StringFilter description) {
         this.description = description;
+    }
+
+    public StringFilter getOrderSuffix() {
+        return orderSuffix;
+    }
+
+    public void setOrderSuffix(StringFilter orderSuffix) {
+        this.orderSuffix = orderSuffix;
     }
 
     public LongFilter getQty() {
@@ -260,6 +297,30 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.payStat = payStat;
     }
 
+    public BooleanFilter getTaxable() {
+        return taxable;
+    }
+
+    public void setTaxable(BooleanFilter taxable) {
+        this.taxable = taxable;
+    }
+
+    public StringFilter getcDocType() {
+        return cDocType;
+    }
+
+    public void setcDocType(StringFilter cDocType) {
+        this.cDocType = cDocType;
+    }
+
+    public StringFilter getcDocTypeMr() {
+        return cDocTypeMr;
+    }
+
+    public void setcDocTypeMr(StringFilter cDocTypeMr) {
+        this.cDocTypeMr = cDocTypeMr;
+    }
+
     public UUIDFilter getUid() {
         return uid;
     }
@@ -324,6 +385,22 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.cCurrencyId = cCurrencyId;
     }
 
+    public LongFilter getCTaxCategoryId() {
+        return cTaxCategoryId;
+    }
+
+    public void setCTaxCategoryId(LongFilter cTaxCategoryId) {
+        this.cTaxCategoryId = cTaxCategoryId;
+    }
+
+    public LongFilter getCTaxId() {
+        return cTaxId;
+    }
+
+    public void setCTaxId(LongFilter cTaxId) {
+        this.cTaxId = cTaxId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -337,10 +414,12 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(verificationNo, that.verificationNo) &&
+            Objects.equals(matchType, that.matchType) &&
             Objects.equals(poNo, that.poNo) &&
             Objects.equals(receiveNo, that.receiveNo) &&
             Objects.equals(deliveryNo, that.deliveryNo) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(orderSuffix, that.orderSuffix) &&
             Objects.equals(qty, that.qty) &&
             Objects.equals(priceActual, that.priceActual) &&
             Objects.equals(foreignActual, that.foreignActual) &&
@@ -353,6 +432,9 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
             Objects.equals(conversionRate, that.conversionRate) &&
             Objects.equals(receiveDate, that.receiveDate) &&
             Objects.equals(payStat, that.payStat) &&
+            Objects.equals(taxable, that.taxable) &&
+            Objects.equals(cDocType, that.cDocType) &&
+            Objects.equals(cDocTypeMr, that.cDocTypeMr) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(verificationId, that.verificationId) &&
@@ -360,7 +442,9 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
             Objects.equals(productId, that.productId) &&
             Objects.equals(uomId, that.uomId) &&
             Objects.equals(cCostCenterId, that.cCostCenterId) &&
-            Objects.equals(cCurrencyId, that.cCurrencyId);
+            Objects.equals(cCurrencyId, that.cCurrencyId) &&
+            Objects.equals(cTaxCategoryId, that.cTaxCategoryId) &&
+            Objects.equals(cTaxId, that.cTaxId);
     }
 
     @Override
@@ -368,10 +452,12 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         verificationNo,
+        matchType,
         poNo,
         receiveNo,
         deliveryNo,
         description,
+        orderSuffix,
         qty,
         priceActual,
         foreignActual,
@@ -384,6 +470,9 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         conversionRate,
         receiveDate,
         payStat,
+        taxable,
+        cDocType,
+        cDocTypeMr,
         uid,
         active,
         verificationId,
@@ -391,7 +480,9 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         productId,
         uomId,
         cCostCenterId,
-        cCurrencyId
+        cCurrencyId,
+        cTaxCategoryId,
+        cTaxId
         );
     }
 
@@ -400,10 +491,12 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         return "MVerificationLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (verificationNo != null ? "verificationNo=" + verificationNo + ", " : "") +
+                (matchType != null ? "matchType=" + matchType + ", " : "") +
                 (poNo != null ? "poNo=" + poNo + ", " : "") +
                 (receiveNo != null ? "receiveNo=" + receiveNo + ", " : "") +
                 (deliveryNo != null ? "deliveryNo=" + deliveryNo + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (orderSuffix != null ? "orderSuffix=" + orderSuffix + ", " : "") +
                 (qty != null ? "qty=" + qty + ", " : "") +
                 (priceActual != null ? "priceActual=" + priceActual + ", " : "") +
                 (foreignActual != null ? "foreignActual=" + foreignActual + ", " : "") +
@@ -416,6 +509,9 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
                 (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
                 (receiveDate != null ? "receiveDate=" + receiveDate + ", " : "") +
                 (payStat != null ? "payStat=" + payStat + ", " : "") +
+                (taxable != null ? "taxable=" + taxable + ", " : "") +
+                (cDocType != null ? "cDocType=" + cDocType + ", " : "") +
+                (cDocTypeMr != null ? "cDocTypeMr=" + cDocTypeMr + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (verificationId != null ? "verificationId=" + verificationId + ", " : "") +
@@ -424,6 +520,8 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
                 (uomId != null ? "uomId=" + uomId + ", " : "") +
                 (cCostCenterId != null ? "cCostCenterId=" + cCostCenterId + ", " : "") +
                 (cCurrencyId != null ? "cCurrencyId=" + cCurrencyId + ", " : "") +
+                (cTaxCategoryId != null ? "cTaxCategoryId=" + cTaxCategoryId + ", " : "") +
+                (cTaxId != null ? "cTaxId=" + cTaxId + ", " : "") +
             "}";
     }
 

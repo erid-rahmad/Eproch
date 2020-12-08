@@ -93,6 +93,10 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     private LongFilter vendorToId;
 
+    private LongFilter cTaxCategoryId;
+
+    private LongFilter cTaxId;
+
     public MVerificationCriteria() {
     }
 
@@ -130,6 +134,8 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.matchPoCurrencyId = other.matchPoCurrencyId == null ? null : other.matchPoCurrencyId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
         this.vendorToId = other.vendorToId == null ? null : other.vendorToId.copy();
+        this.cTaxCategoryId = other.cTaxCategoryId == null ? null : other.cTaxCategoryId.copy();
+        this.cTaxId = other.cTaxId == null ? null : other.cTaxId.copy();
     }
 
     @Override
@@ -401,6 +407,22 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.vendorToId = vendorToId;
     }
 
+    public LongFilter getCTaxCategoryId() {
+        return cTaxCategoryId;
+    }
+
+    public void setCTaxCategoryId(LongFilter cTaxCategoryId) {
+        this.cTaxCategoryId = cTaxCategoryId;
+    }
+
+    public LongFilter getCTaxId() {
+        return cTaxId;
+    }
+
+    public void setCTaxId(LongFilter cTaxId) {
+        this.cTaxId = cTaxId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -444,7 +466,9 @@ public class MVerificationCriteria implements Serializable, Criteria {
             Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(matchPoCurrencyId, that.matchPoCurrencyId) &&
             Objects.equals(vendorId, that.vendorId) &&
-            Objects.equals(vendorToId, that.vendorToId);
+            Objects.equals(vendorToId, that.vendorToId) &&
+            Objects.equals(cTaxCategoryId, that.cTaxCategoryId) &&
+            Objects.equals(cTaxId, that.cTaxId);
     }
 
     @Override
@@ -482,7 +506,9 @@ public class MVerificationCriteria implements Serializable, Criteria {
         currencyId,
         matchPoCurrencyId,
         vendorId,
-        vendorToId
+        vendorToId,
+        cTaxCategoryId,
+        cTaxId
         );
     }
 
@@ -522,6 +548,8 @@ public class MVerificationCriteria implements Serializable, Criteria {
                 (matchPoCurrencyId != null ? "matchPoCurrencyId=" + matchPoCurrencyId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
                 (vendorToId != null ? "vendorToId=" + vendorToId + ", " : "") +
+                (cTaxCategoryId != null ? "cTaxCategoryId=" + cTaxCategoryId + ", " : "") +
+                (cTaxId != null ? "cTaxId=" + cTaxId + ", " : "") +
             "}";
     }
 

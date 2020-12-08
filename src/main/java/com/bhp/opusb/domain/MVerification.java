@@ -73,6 +73,9 @@ public class MVerification extends AbstractAuditingEntity {
     @Column(name = "invoice_date", nullable = false)
     private LocalDate invoiceDate;
 
+    /**
+     * VHTAX0
+     */
     @Column(name = "tax_invoice")
     private String taxInvoice;
 
@@ -215,6 +218,20 @@ public class MVerification extends AbstractAuditingEntity {
     @ManyToOne
     @JsonIgnoreProperties("mVerifications")
     private CVendor vendorTo;
+
+    /**
+     * VHEXR1 is mapped to tax category name.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mVerifications")
+    private CTaxCategory cTaxCategory;
+
+    /**
+     * VHTXA1 is mapped to tax name.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("mVerifications")
+    private CTax cTax;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -639,6 +656,32 @@ public class MVerification extends AbstractAuditingEntity {
 
     public void setVendorTo(CVendor cVendor) {
         this.vendorTo = cVendor;
+    }
+
+    public CTaxCategory getCTaxCategory() {
+        return cTaxCategory;
+    }
+
+    public MVerification cTaxCategory(CTaxCategory cTaxCategory) {
+        this.cTaxCategory = cTaxCategory;
+        return this;
+    }
+
+    public void setCTaxCategory(CTaxCategory cTaxCategory) {
+        this.cTaxCategory = cTaxCategory;
+    }
+
+    public CTax getCTax() {
+        return cTax;
+    }
+
+    public MVerification cTax(CTax cTax) {
+        this.cTax = cTax;
+        return this;
+    }
+
+    public void setCTax(CTax cTax) {
+        this.cTax = cTax;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
