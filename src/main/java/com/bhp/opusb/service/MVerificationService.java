@@ -82,6 +82,8 @@ public class MVerificationService {
             mVerification.setDateApprove(LocalDate.now());
         } else if (mVerification.getVerificationStatus().equals("RJC") && mVerification.getDateReject() == null) {
             mVerification.setDateReject(LocalDate.now());
+        } else if (mVerification.getVerificationStatus().equals("SMT") && mVerification.getDateSubmit() == null) {
+            mVerification.setDateSubmit(LocalDate.now());
         }
 
         mVerificationRepository.save(mVerification);

@@ -495,7 +495,12 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.mMatchType = mMatchType;
     }
 
+    @JsonProperty("totalAmount")
     public BigDecimal getTotalAmount() {
+        if (cTaxRate == null) {
+            return totalLines;
+        }
+        
         BigDecimal tax = totalLines.multiply(cTaxRate).divide(new BigDecimal("100"));
         return totalLines.add(tax);
     }

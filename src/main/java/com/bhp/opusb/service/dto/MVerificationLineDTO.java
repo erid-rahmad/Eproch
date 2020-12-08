@@ -109,9 +109,9 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
 
 
     private Long verificationId;
-    private String verificationName;
 
     private Long adOrganizationId;
+    private String adOrganizationCode;
     private String adOrganizationName;
 
     @JsonProperty("mProductId")
@@ -128,6 +128,9 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
 
     @JsonProperty("cUomId")
     private Long uomId;
+
+    @JsonProperty("cUomCode")
+    private String uomCode;
 
     @JsonProperty("cUomName")
     private String uomName;
@@ -327,6 +330,14 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationCode() {
+        return adOrganizationCode;
+    }
+
+    public void setAdOrganizationCode(String adOrganizationCode) {
+        this.adOrganizationCode = adOrganizationCode;
+    }
+
     public String getAdOrganizationName() {
         return adOrganizationName;
     }
@@ -378,6 +389,14 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
 
     public void setUomId(Long cUnitOfMeasureId) {
         this.uomId = cUnitOfMeasureId;
+    }
+
+    public String getUomCode() {
+        return uomCode;
+    }
+
+    public void setUomCode(String uomCode) {
+        this.uomCode = uomCode;
     }
 
     public String getUomName() {

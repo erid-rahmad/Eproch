@@ -14,6 +14,7 @@ import org.mapstruct.Mapping;
 public interface MVerificationMapper extends EntityMapper<MVerificationDTO, MVerification> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.code", target = "adOrganizationCode")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "currency.id", target = "currencyId")
     @Mapping(source = "currency.code", target = "currencyName")
