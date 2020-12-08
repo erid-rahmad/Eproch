@@ -160,6 +160,7 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
 
     private Long adOrganizationId;
+    private String adOrganizationCode;
     private String adOrganizationName;
 
     /**
@@ -444,6 +445,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationCode() {
+        return adOrganizationCode;
+    }
+
+    public void setAdOrganizationCode(String adOrganizationCode) {
+        this.adOrganizationCode = adOrganizationCode;
+    }
+
     public String getAdOrganizationName() {
         return adOrganizationName;
     }
@@ -548,11 +557,11 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.cTaxCategoryId = cTaxCategoryId;
     }
 
-    public String getcTaxCategoryName() {
+    public String getCTaxCategoryName() {
         return cTaxCategoryName;
     }
 
-    public void setcTaxCategoryName(String cTaxCategoryName) {
+    public void setCTaxCategoryName(String cTaxCategoryName) {
         this.cTaxCategoryName = cTaxCategoryName;
     }
 
@@ -564,11 +573,11 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.cTaxId = cTaxId;
     }
 
-    public String getcTaxName() {
+    public String getCTaxName() {
         return cTaxName;
     }
 
-    public void setcTaxName(String cTaxName) {
+    public void setCTaxName(String cTaxName) {
         this.cTaxName = cTaxName;
     }
 
