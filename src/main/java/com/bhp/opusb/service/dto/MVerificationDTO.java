@@ -285,6 +285,10 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.taxDate = taxDate;
     }
 
+    public int getTaxPeriod() {
+        return taxDate.getMonth().getValue();
+    }
+
     public BigDecimal getTotalLines() {
         return totalLines;
     }
