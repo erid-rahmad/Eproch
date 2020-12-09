@@ -297,7 +297,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
     for (const row of this.gridData) {
       totalLines += row.totalLines;
-      taxAmount += row.cTaxRate;
+      taxAmount += row.taxAmount;
       totalAmount += totalLines + taxAmount;
       foreignTotalLines += row.foreignTotalAmount;
       foreignTaxAmount += row.foreignTaxAmount;

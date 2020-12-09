@@ -115,12 +115,6 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     private BigDecimal foreignTotalLines;
 
     /**
-     * PRSTAM
-     */
-    @ApiModelProperty(value = "PRSTAM")
-    private BigDecimal taxAmount;
-
-    /**
      * PRCTAM
      */
     @ApiModelProperty(value = "PRCTAM")
@@ -415,12 +409,13 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.foreignTotalLines = foreignTotalLines;
     }
 
+    @JsonProperty("taxAmount")
     public BigDecimal getTaxAmount() {
-        return taxAmount;
-    }
+        if (cTaxRate == null) {
+            return new BigDecimal("0");
+        }
 
-    public void setTaxAmount(BigDecimal taxAmount) {
-        this.taxAmount = taxAmount;
+        return totalLines.multiply(cTaxRate).divide(new BigDecimal("100"));
     }
 
     public BigDecimal getForeignTaxAmount() {
@@ -497,12 +492,7 @@ public class MMatchPODTO extends AbstractAuditingDTO {
 
     @JsonProperty("totalAmount")
     public BigDecimal getTotalAmount() {
-        if (cTaxRate == null) {
-            return totalLines;
-        }
-        
-        BigDecimal tax = totalLines.multiply(cTaxRate).divide(new BigDecimal("100"));
-        return totalLines.add(tax);
+        return totalLines.add(getTaxAmount());
     }
 
     public Long getAdOrganizationId() {

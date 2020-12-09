@@ -54,9 +54,12 @@ export default class InvoiceVerificationDocumentApproval extends mixins(Vue2Filt
   }
 
   get formHeader(){
-    this.gridData = this.dataVerificationAndLines.line;
     return this.dataVerificationAndLines.form;
-  };
+  }
+
+  get lines() {
+    return this.dataVerificationAndLines.line;
+  }
 
   created(){
     this.retrieveGetReferences(this.keyPayStat);
