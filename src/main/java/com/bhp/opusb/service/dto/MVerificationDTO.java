@@ -199,6 +199,7 @@ public class MVerificationDTO extends AbstractAuditingDTO {
      * VHEXR1 is mapped to tax category name.
      */
     @ApiModelProperty(value = "VHEXR1 is mapped to tax category name.")
+    @JsonProperty("cTaxCategoryId")
     private Long cTaxCategoryId;
 
     @JsonProperty("cTaxCategoryName")
@@ -208,6 +209,7 @@ public class MVerificationDTO extends AbstractAuditingDTO {
      * VHTXA1 is mapped to tax name.
      */
     @ApiModelProperty(value = "VHTXA1 is mapped to tax name.")
+    @JsonProperty("cTaxId")
     private Long cTaxId;
     
     @JsonProperty("cTaxName")
