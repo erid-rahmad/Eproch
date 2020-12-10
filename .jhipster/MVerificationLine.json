@@ -3,10 +3,21 @@
     "fields": [
         {
             "fieldName": "verificationNo",
+            "javadoc": "VDDOCM",
             "fieldType": "String"
         },
         {
+            "fieldName": "matchType",
+            "javadoc": "VDMATC",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1"
+        },
+        {
             "fieldName": "poNo",
+            "javadoc": "VDDOCO",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required"
@@ -32,7 +43,17 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "orderSuffix",
+            "javadoc": "VDSFXO",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
             "fieldName": "qty",
+            "javadoc": "VDUREC",
             "fieldType": "Long",
             "fieldValidateRules": [
                 "required"
@@ -89,6 +110,7 @@
         },
         {
             "fieldName": "conversionRate",
+            "javadoc": "VDCRR",
             "fieldType": "BigDecimal"
         },
         {
@@ -98,7 +120,31 @@
         },
         {
             "fieldName": "payStat",
+            "javadoc": "VDPST",
             "fieldType": "String"
+        },
+        {
+            "fieldName": "taxable",
+            "javadoc": "VDTX Y means true, otherwise false",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "cDocType",
+            "javadoc": "VDDCTO",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "2"
+        },
+        {
+            "fieldName": "cDocTypeMr",
+            "javadoc": "VDDCT",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "2"
         },
         {
             "fieldName": "uid",
@@ -139,6 +185,7 @@
             "otherEntityName": "cUnitOfMeasure",
             "otherEntityRelationshipName": "mVerificationLine",
             "relationshipValidateRules": "required",
+            "javadoc": "VDUOM",
             "relationshipName": "uom",
             "otherEntityField": "id"
         },
@@ -155,7 +202,24 @@
             "otherEntityName": "cCurrency",
             "otherEntityRelationshipName": "mVerificationLine",
             "relationshipValidateRules": "required",
+            "javadoc": "VDCRCD",
             "relationshipName": "cCurrency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTaxCategory",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "javadoc": "VDEXR1 is mapped to tax category name.",
+            "relationshipName": "cTaxCategory",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTax",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "javadoc": "VDTXA1 is mapped to tax name.",
+            "relationshipName": "cTax",
             "otherEntityField": "id"
         }
     ],

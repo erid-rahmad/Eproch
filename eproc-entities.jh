@@ -399,6 +399,8 @@ entity MVerification {
 
 	/** VHDIVJ */
 	invoiceDate LocalDate required
+
+	/** VHTAX0 */
 	taxInvoice String
 
 	/** VHDSV Date service/tax. */
@@ -452,14 +454,25 @@ entity MVerification {
 }
 
 entity MVerificationLine {
+	/** VDDOCM */
 	verificationNo String
+
+	/** VDMATC */
+	matchType String maxlength(1)
+
+	/** VDDOCO */
 	poNo String required
+
 	receiveNo String required
 	deliveryNo String required
 
 	/** VDVRMK Supplier's remark. */
 	description String
 
+	/** VDSFXO */
+	orderSuffix String maxlength(10)
+
+	/** VDUREC */
 	qty Long required
 
 	/** VDPRRC Unit price. */
@@ -486,11 +499,24 @@ entity MVerificationLine {
 	/** VDLNID Receipt line no. */
 	lineNoMr Integer
 
+	/** VDCRR */
 	conversionRate BigDecimal
 
 	/** VDRCDJ Receipt date. */
 	receiveDate LocalDate
-    payStat String
+
+	/** VDPST */
+	payStat String
+
+	/** VDTX Y means true, otherwise false */
+	taxable Boolean
+
+	/** VDDCTO */
+	cDocType String maxlength(2)
+
+	/** VDDCT */
+	cDocTypeMr String maxlength(2)
+
 	uid UUID
 	active Boolean
 }
@@ -774,12 +800,28 @@ relationship ManyToOne {
 	/** VHAN8L */
 	MVerification{vendorTo} to CVendor
 
+	/** VHEXR1 is mapped to tax category name. */
+	MVerification{cTaxCategory} to CTaxCategory
+
+	/** VHTXA1 is mapped to tax name. */
+	MVerification{cTax} to CTax
+
 	MVerificationLine{verification required} to MVerification
 	MVerificationLine{adOrganization required} to ADOrganization
 	MVerificationLine{product required} to CProduct
+
+	/** VDUOM */
 	MVerificationLine{uom required} to CUnitOfMeasure
 	MVerificationLine{cCostCenter required} to CCostCenter
+
+	/** VDCRCD */
 	MVerificationLine{cCurrency required} to CCurrency
+
+	/** VDEXR1 is mapped to tax category name. */
+	MVerificationLine{cTaxCategory} to CTaxCategory
+
+	/** VDTXA1 is mapped to tax name. */
+	MVerificationLine{cTax} to CTax
 
 	MVerificationTax{adOrganization required} to ADOrganization
 	MVerificationTax{currency required} to CCurrency

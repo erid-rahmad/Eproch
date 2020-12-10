@@ -26,6 +26,8 @@ public interface MMatchPOMapper extends EntityMapper<MMatchPODTO, MMatchPO> {
     @Mapping(source = "CTaxCategory.id", target = "CTaxCategoryId")
     @Mapping(source = "CTaxCategory.name", target = "CTaxCategoryName")
     @Mapping(source = "CTax.id", target = "CTaxId")
+    @Mapping(source = "CTax.name", target = "CTaxName")
+    @Mapping(source = "CTax.rate", target = "CTaxRate")
     @Mapping(source = "CUom.id", target = "CUomId")
     @Mapping(source = "CUom.code", target = "CUomName")
     @Mapping(source = "MProduct.id", target = "MProductId")

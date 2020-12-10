@@ -304,6 +304,10 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       foreignTotalAmount += foreignTotalLines + foreignTaxAmount;
     }
 
+    this.formUpdate.cTaxCategoryId = this.gridData[0]?.cTaxCategoryId;
+    this.formUpdate.cTaxId = this.gridData[0]?.cTaxId;
+    this.formUpdate.currencyId = this.gridData[0]?.cCurrencyId;
+    this.formUpdate.matchPoCurrencyId = this.formUpdate.currencyId;
     this.formUpdate.totalLines = totalLines;
     this.formUpdate.taxAmount = taxAmount;
     this.formUpdate.grandTotal = totalAmount;
@@ -496,9 +500,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     return lines.map(line => {
       const {
         cConversionRate,
-        cDocType,
-        cDocTypeMr,
-        cTaxCategory,
         cVendor,
         dateAccount,
         lineNoPo,
@@ -506,9 +507,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         openAmount,
         openForeignAmount,
         openQty,
-        orderSuffix,
         poDate,
-        taxable,
         ...data
       } = line;
 

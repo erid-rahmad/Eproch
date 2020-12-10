@@ -388,7 +388,7 @@ public class MMatchPOService {
     }
 
     private CProduct buildProduct(Map<String, Object> payload, CUnitOfMeasure uom, final ADOrganization org) {
-        final String code = StringUtils.trimToNull((String) payload.get("PRITM"));
+        final String code = String.valueOf(payload.get("PRITM"));
         final String name = StringUtils.trimToNull((String) payload.get("PDDSC1"));
         final String description = StringUtils.trimToNull((String) payload.get("PDDSC2"));
 

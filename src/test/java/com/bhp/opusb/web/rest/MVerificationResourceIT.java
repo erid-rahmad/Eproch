@@ -5,6 +5,8 @@ import com.bhp.opusb.domain.MVerification;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CVendor;
+import com.bhp.opusb.domain.CTaxCategory;
+import com.bhp.opusb.domain.CTax;
 import com.bhp.opusb.repository.MVerificationRepository;
 import com.bhp.opusb.service.MVerificationService;
 import com.bhp.opusb.service.dto.MVerificationDTO;
@@ -3188,6 +3190,46 @@ public class MVerificationResourceIT {
 
         // Get all the mVerificationList where vendorTo equals to vendorToId + 1
         defaultMVerificationShouldNotBeFound("vendorToId.equals=" + (vendorToId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByCTaxCategoryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+        CTaxCategory cTaxCategory = CTaxCategoryResourceIT.createEntity(em);
+        em.persist(cTaxCategory);
+        em.flush();
+        mVerification.setCTaxCategory(cTaxCategory);
+        mVerificationRepository.saveAndFlush(mVerification);
+        Long cTaxCategoryId = cTaxCategory.getId();
+
+        // Get all the mVerificationList where cTaxCategory equals to cTaxCategoryId
+        defaultMVerificationShouldBeFound("cTaxCategoryId.equals=" + cTaxCategoryId);
+
+        // Get all the mVerificationList where cTaxCategory equals to cTaxCategoryId + 1
+        defaultMVerificationShouldNotBeFound("cTaxCategoryId.equals=" + (cTaxCategoryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByCTaxIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+        CTax cTax = CTaxResourceIT.createEntity(em);
+        em.persist(cTax);
+        em.flush();
+        mVerification.setCTax(cTax);
+        mVerificationRepository.saveAndFlush(mVerification);
+        Long cTaxId = cTax.getId();
+
+        // Get all the mVerificationList where cTax equals to cTaxId
+        defaultMVerificationShouldBeFound("cTaxId.equals=" + cTaxId);
+
+        // Get all the mVerificationList where cTax equals to cTaxId + 1
+        defaultMVerificationShouldNotBeFound("cTaxId.equals=" + (cTaxId + 1));
     }
 
     /**

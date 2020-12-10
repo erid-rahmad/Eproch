@@ -141,7 +141,7 @@
                         <el-table-column
                             min-width="150"
                             sortable
-                            prop="taxAmount"
+                            prop="cTaxRate"
                             label="PPN (%)"
                             align="right"
                         >

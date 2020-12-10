@@ -74,14 +74,13 @@
 
                     <el-table
                         v-loading="processing"
-                        ref="gridData"
                         highlight-current-row
                         border stripe
                         size="mini"
                         style="width: 100%; height: 100%; padding-top: 0px;"
                         :height="gridSchema.height"
                         :empty-text="gridSchema.emptyText"
-                        :data="gridData">
+                        :data="lines">
 
                         <el-table-column
                             min-width="100"

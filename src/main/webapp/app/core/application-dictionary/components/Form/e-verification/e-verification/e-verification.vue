@@ -49,7 +49,8 @@
                         class="button"
                         size="small"
                         type="primary"
-                        icon="el-icon-printer">
+                        icon="el-icon-printer"
+                        @click="showDialogConfirmation('print')">
                         Print
                     </el-button>
                     <el-button

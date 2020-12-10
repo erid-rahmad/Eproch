@@ -47,6 +47,7 @@
         },
         {
             "fieldName": "taxInvoice",
+            "javadoc": "VHTAX0",
             "fieldType": "String"
         },
         {
@@ -197,6 +198,22 @@
             "otherEntityRelationshipName": "mVerification",
             "javadoc": "VHAN8L",
             "relationshipName": "vendorTo",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTaxCategory",
+            "otherEntityRelationshipName": "mVerification",
+            "javadoc": "VHEXR1 is mapped to tax category name.",
+            "relationshipName": "cTaxCategory",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTax",
+            "otherEntityRelationshipName": "mVerification",
+            "javadoc": "VHTXA1 is mapped to tax name.",
+            "relationshipName": "cTax",
             "otherEntityField": "id"
         }
     ],

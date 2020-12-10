@@ -1,10 +1,16 @@
 package com.bhp.opusb.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import javax.sql.DataSource;
 
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MVerification;
@@ -22,8 +28,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
 
 import io.github.jhipster.service.filter.LongFilter;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
 
 /**
  * Service Implementation for managing {@link MVerification}.
@@ -33,6 +45,7 @@ import io.github.jhipster.service.filter.LongFilter;
 public class MVerificationService {
 
     private final Logger log = LoggerFactory.getLogger(MVerificationService.class);
+    private final DataSource dataSource;
 
     private final ADOrganization organization;
     private final MVerificationRepository mVerificationRepository;
@@ -40,11 +53,13 @@ public class MVerificationService {
     private final MVerificationLineService mVerificationLineService;
     private final MVerificationLineQueryService mVerificationLineQueryService;
     private final AiMessageDispatcher messageDispatcher;
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMM");
 
-    public MVerificationService(MVerificationRepository mVerificationRepository,
+    public MVerificationService(MVerificationRepository mVerificationRepository, DataSource dataSource,
             MVerificationMapper mVerificationMapper, MVerificationLineService mVerificationLineService,
             MVerificationLineQueryService mVerificationLineQueryService, ADOrganizationService adOrganizationService,
             AiMessageDispatcher messageDispatcher) {
+        this.dataSource = dataSource;
         this.mVerificationRepository = mVerificationRepository;
         this.mVerificationMapper = mVerificationMapper;
         this.mVerificationLineService = mVerificationLineService;
@@ -54,11 +69,24 @@ public class MVerificationService {
         organization = adOrganizationService.getDefaultOrganization();
     }
 
+    public JasperPrint exportVerification(Long verificationId) throws IOException, SQLException, JRException {
+
+        File file = ResourceUtils.getFile("classpath:report/invoice-verification.jrxml");
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("verificationId", verificationId);
+        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
+        return print;
+
+    }
+
     public MVerification submitEVerification(VerificationDTO verificationDTO) {
         // Ensure verification has generated ID.
         MVerification verification = mVerificationMapper.toEntity(verificationDTO.getForm());
         verification.active(true)
-            .adOrganization(organization);
+            .adOrganization(organization)
+            .verificationNo(buildRunningNumber());
 
         mVerificationRepository.save(verification);
 
@@ -116,6 +144,16 @@ public class MVerificationService {
         }
     }
 
+    private String buildRunningNumber() {
+        LocalDate now = LocalDate.now();
+        LocalDate start = now.withDayOfMonth(1);
+        LocalDate end = now.withDayOfMonth(now.lengthOfMonth());
+
+        String prefix = now.format(dateTimeFormatter);
+        int numOfRecords = mVerificationRepository.countByVerificationDateBetween(start, end);
+        return prefix + (String.format("%04d", numOfRecords));
+    }
+
     /**
      * Save a mVerification.
      *
@@ -125,6 +163,11 @@ public class MVerificationService {
     public MVerificationDTO save(MVerificationDTO mVerificationDTO) {
         log.debug("Request to save MVerification : {}", mVerificationDTO);
         MVerification mVerification = mVerificationMapper.toEntity(mVerificationDTO);
+
+        if (mVerification.getVerificationStatus().equals("SMT") && mVerification.getDateSubmit() == null) {
+            mVerification.setDateSubmit(LocalDate.now());
+        }
+
         mVerification = mVerificationRepository.save(mVerification);
         return mVerificationMapper.toDto(mVerification);
     }

@@ -115,12 +115,6 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     private BigDecimal foreignTotalLines;
 
     /**
-     * PRSTAM
-     */
-    @ApiModelProperty(value = "PRSTAM")
-    private BigDecimal taxAmount;
-
-    /**
      * PRCTAM
      */
     @ApiModelProperty(value = "PRCTAM")
@@ -235,6 +229,9 @@ public class MMatchPODTO extends AbstractAuditingDTO {
 
     @JsonProperty("cTaxName")
     private String cTaxName;
+
+    @JsonProperty("cTaxRate")
+    private BigDecimal cTaxRate;
 
     /**
      * PRUOM is mapped to code, name, and symbol.
@@ -412,12 +409,13 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.foreignTotalLines = foreignTotalLines;
     }
 
+    @JsonProperty("taxAmount")
     public BigDecimal getTaxAmount() {
-        return taxAmount;
-    }
+        if (cTaxRate == null) {
+            return new BigDecimal("0");
+        }
 
-    public void setTaxAmount(BigDecimal taxAmount) {
-        this.taxAmount = taxAmount;
+        return totalLines.multiply(cTaxRate).divide(new BigDecimal("100"));
     }
 
     public BigDecimal getForeignTaxAmount() {
@@ -492,8 +490,9 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.mMatchType = mMatchType;
     }
 
+    @JsonProperty("totalAmount")
     public BigDecimal getTotalAmount() {
-        return totalLines.add(taxAmount);
+        return totalLines.add(getTaxAmount());
     }
 
     public Long getAdOrganizationId() {
@@ -611,6 +610,14 @@ public class MMatchPODTO extends AbstractAuditingDTO {
 
     public void setCTaxName(String cTaxName) {
         this.cTaxName = cTaxName;
+    }
+
+    public BigDecimal getCTaxRate() {
+        return cTaxRate;
+    }
+
+    public void setCTaxRate(BigDecimal cTaxRate) {
+        this.cTaxRate = cTaxRate;
     }
 
     public Long getCUomId() {

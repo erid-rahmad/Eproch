@@ -10,6 +10,10 @@ import com.bhp.opusb.service.MVerificationQueryService;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,9 +25,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +63,9 @@ public class MVerificationResource {
      * {@code POST  /m-verifications} : Create a new mVerification.
      *
      * @param mVerificationDTO the mVerificationDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mVerificationDTO, or with status {@code 400 (Bad Request)} if the mVerification has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
+     *         body the new mVerificationDTO, or with status
+     *         {@code 400 (Bad Request)} if the mVerification has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/m-verifications")
@@ -79,6 +90,26 @@ public class MVerificationResource {
     @ResponseStatus(HttpStatus.OK)
     public void submitUpdateEVerification(@Valid @RequestBody VerificationDTO verificationDTO) {
         mVerificationService.updateDocumentStatus(verificationDTO);
+    }
+
+    @GetMapping("/m-verifications/report/{verificationId}/{verificationNo}")
+    public void reportEVerification(@PathVariable Long verificationId, @PathVariable Long verificationNo, HttpServletResponse response)
+            throws IOException {
+
+        JasperPrint jasperPrint = null;
+        String fileName = "Verification - "+verificationNo+".pdf";
+
+        response.setContentType("application/octet-stream");
+        response.addHeader("Content-Disposition", "attachment; filename=\""+fileName+"\"");
+        OutputStream out = response.getOutputStream();
+
+        try {
+            jasperPrint = mVerificationService.exportVerification(verificationId);
+
+            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+        } catch (SQLException | JRException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
