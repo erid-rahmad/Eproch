@@ -689,7 +689,6 @@ public class MVerification extends AbstractAuditingEntity {
     public void prePersist() {
         this.uid = UUID.randomUUID();
         this.verificationDate = LocalDate.now();
-        this.verificationNo = String.valueOf(Timestamp.valueOf(LocalDateTime.now()).getTime());
     }
 
     @Override

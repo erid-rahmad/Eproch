@@ -304,6 +304,8 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       foreignTotalAmount += foreignTotalLines + foreignTaxAmount;
     }
 
+    this.formUpdate.cTaxCategoryId = this.gridData[0]?.cTaxCategoryId;
+    this.formUpdate.cTaxId = this.gridData[0]?.cTaxId;
     this.formUpdate.currencyId = this.gridData[0]?.cCurrencyId;
     this.formUpdate.matchPoCurrencyId = this.formUpdate.currencyId;
     this.formUpdate.totalLines = totalLines;

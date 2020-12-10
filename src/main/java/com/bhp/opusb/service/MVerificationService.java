@@ -1,6 +1,7 @@
 package com.bhp.opusb.service;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,6 +41,7 @@ public class MVerificationService {
     private final MVerificationLineService mVerificationLineService;
     private final MVerificationLineQueryService mVerificationLineQueryService;
     private final AiMessageDispatcher messageDispatcher;
+    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMM");
 
     public MVerificationService(MVerificationRepository mVerificationRepository,
             MVerificationMapper mVerificationMapper, MVerificationLineService mVerificationLineService,
@@ -58,7 +60,8 @@ public class MVerificationService {
         // Ensure verification has generated ID.
         MVerification verification = mVerificationMapper.toEntity(verificationDTO.getForm());
         verification.active(true)
-            .adOrganization(organization);
+            .adOrganization(organization)
+            .verificationNo(buildRunningNumber());
 
         mVerificationRepository.save(verification);
 
@@ -82,8 +85,6 @@ public class MVerificationService {
             mVerification.setDateApprove(LocalDate.now());
         } else if (mVerification.getVerificationStatus().equals("RJC") && mVerification.getDateReject() == null) {
             mVerification.setDateReject(LocalDate.now());
-        } else if (mVerification.getVerificationStatus().equals("SMT") && mVerification.getDateSubmit() == null) {
-            mVerification.setDateSubmit(LocalDate.now());
         }
 
         mVerificationRepository.save(mVerification);
@@ -118,6 +119,16 @@ public class MVerificationService {
         }
     }
 
+    private String buildRunningNumber() {
+        LocalDate now = LocalDate.now();
+        LocalDate start = now.withDayOfMonth(1);
+        LocalDate end = now.withDayOfMonth(now.lengthOfMonth());
+
+        String prefix = now.format(dateTimeFormatter);
+        int numOfRecords = mVerificationRepository.countByVerificationDateBetween(start, end);
+        return prefix + (String.format("%04d", numOfRecords));
+    }
+
     /**
      * Save a mVerification.
      *
@@ -127,6 +138,11 @@ public class MVerificationService {
     public MVerificationDTO save(MVerificationDTO mVerificationDTO) {
         log.debug("Request to save MVerification : {}", mVerificationDTO);
         MVerification mVerification = mVerificationMapper.toEntity(mVerificationDTO);
+
+        if (mVerification.getVerificationStatus().equals("SMT") && mVerification.getDateSubmit() == null) {
+            mVerification.setDateSubmit(LocalDate.now());
+        }
+
         mVerification = mVerificationRepository.save(mVerification);
         return mVerificationMapper.toDto(mVerification);
     }
