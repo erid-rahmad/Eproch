@@ -152,6 +152,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         this.dialogType = "primary";
 
         this.dialogConfirmationVisible = true;
+      } else if (key == "print") {
+        this.buttonPrint();
       } else if (key == "update") {
         this.index = false;
       }
@@ -194,6 +196,11 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       .finally(() => {
         this.processing = false;
       });
+  }
+
+  public buttonPrint(): void {
+    const data = { ...this.selectedRows };
+    window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}`, '_blank');
   }
 
   public retrieveAllRecords(): void {
