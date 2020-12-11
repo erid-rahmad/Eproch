@@ -87,6 +87,7 @@ class MVerificationLineGatlingTest extends Simulation {
                 , "taxAmount":"0"
                 , "foreignTaxAmount":"0"
                 , "lineNo":"0"
+                , "lineNoPo":"0"
                 , "lineNoMr":"0"
                 , "conversionRate":"0"
                 , "receiveDate":"2020-01-01T00:00:00.000Z"

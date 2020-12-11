@@ -496,6 +496,9 @@ entity MVerificationLine {
 	/** VDLINN Invoice verification line no. */
 	lineNo Integer
 
+	/** VDNLIN PO line no. */
+	lineNoPo Integer
+
 	/** VDLNID Receipt line no. */
 	lineNoMr Integer
 

@@ -104,6 +104,11 @@
             "fieldType": "Integer"
         },
         {
+            "fieldName": "lineNoPo",
+            "javadoc": "VDNLIN PO line no.",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "lineNoMr",
             "javadoc": "VDLNID Receipt line no.",
             "fieldType": "Integer"

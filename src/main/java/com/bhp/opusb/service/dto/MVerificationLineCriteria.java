@@ -59,6 +59,8 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private IntegerFilter lineNo;
 
+    private IntegerFilter lineNoPo;
+
     private IntegerFilter lineNoMr;
 
     private BigDecimalFilter conversionRate;
@@ -113,6 +115,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.taxAmount = other.taxAmount == null ? null : other.taxAmount.copy();
         this.foreignTaxAmount = other.foreignTaxAmount == null ? null : other.foreignTaxAmount.copy();
         this.lineNo = other.lineNo == null ? null : other.lineNo.copy();
+        this.lineNoPo = other.lineNoPo == null ? null : other.lineNoPo.copy();
         this.lineNoMr = other.lineNoMr == null ? null : other.lineNoMr.copy();
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
         this.receiveDate = other.receiveDate == null ? null : other.receiveDate.copy();
@@ -263,6 +266,14 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     public void setLineNo(IntegerFilter lineNo) {
         this.lineNo = lineNo;
+    }
+
+    public IntegerFilter getLineNoPo() {
+        return lineNoPo;
+    }
+
+    public void setLineNoPo(IntegerFilter lineNoPo) {
+        this.lineNoPo = lineNoPo;
     }
 
     public IntegerFilter getLineNoMr() {
@@ -428,6 +439,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
             Objects.equals(taxAmount, that.taxAmount) &&
             Objects.equals(foreignTaxAmount, that.foreignTaxAmount) &&
             Objects.equals(lineNo, that.lineNo) &&
+            Objects.equals(lineNoPo, that.lineNoPo) &&
             Objects.equals(lineNoMr, that.lineNoMr) &&
             Objects.equals(conversionRate, that.conversionRate) &&
             Objects.equals(receiveDate, that.receiveDate) &&
@@ -466,6 +478,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         taxAmount,
         foreignTaxAmount,
         lineNo,
+        lineNoPo,
         lineNoMr,
         conversionRate,
         receiveDate,
@@ -505,6 +518,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
                 (taxAmount != null ? "taxAmount=" + taxAmount + ", " : "") +
                 (foreignTaxAmount != null ? "foreignTaxAmount=" + foreignTaxAmount + ", " : "") +
                 (lineNo != null ? "lineNo=" + lineNo + ", " : "") +
+                (lineNoPo != null ? "lineNoPo=" + lineNoPo + ", " : "") +
                 (lineNoMr != null ? "lineNoMr=" + lineNoMr + ", " : "") +
                 (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
                 (receiveDate != null ? "receiveDate=" + receiveDate + ", " : "") +

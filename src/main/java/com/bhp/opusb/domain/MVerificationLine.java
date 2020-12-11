@@ -130,6 +130,12 @@ public class MVerificationLine extends AbstractAuditingEntity {
     private Integer lineNo;
 
     /**
+     * VDNLIN PO line no.
+     */
+    @Column(name = "line_no_po")
+    private Integer lineNoPo;
+
+    /**
      * VDLNID Receipt line no.
      */
     @Column(name = "line_no_mr")
@@ -433,6 +439,19 @@ public class MVerificationLine extends AbstractAuditingEntity {
         this.lineNo = lineNo;
     }
 
+    public Integer getLineNoPo() {
+        return lineNoPo;
+    }
+
+    public MVerificationLine lineNoPo(Integer lineNoPo) {
+        this.lineNoPo = lineNoPo;
+        return this;
+    }
+
+    public void setLineNoPo(Integer lineNoPo) {
+        this.lineNoPo = lineNoPo;
+    }
+
     public Integer getLineNoMr() {
         return lineNoMr;
     }
@@ -695,6 +714,7 @@ public class MVerificationLine extends AbstractAuditingEntity {
             ", taxAmount=" + getTaxAmount() +
             ", foreignTaxAmount=" + getForeignTaxAmount() +
             ", lineNo=" + getLineNo() +
+            ", lineNoPo=" + getLineNoPo() +
             ", lineNoMr=" + getLineNoMr() +
             ", conversionRate=" + getConversionRate() +
             ", receiveDate='" + getReceiveDate() + "'" +

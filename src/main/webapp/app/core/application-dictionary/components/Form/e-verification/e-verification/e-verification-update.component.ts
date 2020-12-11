@@ -429,13 +429,15 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
   submit() {
     this.formUpdate.picId = accountStore.userDetails.id;
+    let lineCount = 0;
+
+    for (const line of this.gridData) {
+      line.lineNo = ++lineCount;
+    }
 
     this.eVerification.form = this.formUpdate;
     this.eVerification.line = this.gridData;
     this.eVerification.remove = this.removedLines;
-
-    console.log(this.eVerification);
-    console.log(this.statTaxInvoice);
 
     if(this.statTaxInvoice){
       if (this.formUpdate.id != null) {
@@ -502,7 +504,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         cConversionRate,
         cVendor,
         dateAccount,
-        lineNoPo,
         mMatchType,
         openAmount,
         openForeignAmount,
@@ -512,7 +513,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       } = line;
 
       data.conversionRate = line.cConversionRate;
-      data.lineNo = line.lineNoPo;
       return data;
     });
   }

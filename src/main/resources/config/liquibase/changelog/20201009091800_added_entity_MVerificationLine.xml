@@ -266,4 +266,12 @@
         <setColumnRemarks tableName="m_verification_line" columnName="pay_stat" remarks="VDPST"/>
     </changeSet>
 
+    <changeSet id="20201211131300" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification_line">
+            <column name="line_no_po" type="integer" remarks="VDNLIN PO line no.">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

@@ -100,6 +100,10 @@ public class MVerificationLineResourceIT {
     private static final Integer UPDATED_LINE_NO = 2;
     private static final Integer SMALLER_LINE_NO = 1 - 1;
 
+    private static final Integer DEFAULT_LINE_NO_PO = 1;
+    private static final Integer UPDATED_LINE_NO_PO = 2;
+    private static final Integer SMALLER_LINE_NO_PO = 1 - 1;
+
     private static final Integer DEFAULT_LINE_NO_MR = 1;
     private static final Integer UPDATED_LINE_NO_MR = 2;
     private static final Integer SMALLER_LINE_NO_MR = 1 - 1;
@@ -173,6 +177,7 @@ public class MVerificationLineResourceIT {
             .taxAmount(DEFAULT_TAX_AMOUNT)
             .foreignTaxAmount(DEFAULT_FOREIGN_TAX_AMOUNT)
             .lineNo(DEFAULT_LINE_NO)
+            .lineNoPo(DEFAULT_LINE_NO_PO)
             .lineNoMr(DEFAULT_LINE_NO_MR)
             .conversionRate(DEFAULT_CONVERSION_RATE)
             .receiveDate(DEFAULT_RECEIVE_DATE)
@@ -267,6 +272,7 @@ public class MVerificationLineResourceIT {
             .taxAmount(UPDATED_TAX_AMOUNT)
             .foreignTaxAmount(UPDATED_FOREIGN_TAX_AMOUNT)
             .lineNo(UPDATED_LINE_NO)
+            .lineNoPo(UPDATED_LINE_NO_PO)
             .lineNoMr(UPDATED_LINE_NO_MR)
             .conversionRate(UPDATED_CONVERSION_RATE)
             .receiveDate(UPDATED_RECEIVE_DATE)
@@ -375,6 +381,7 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.getTaxAmount()).isEqualTo(DEFAULT_TAX_AMOUNT);
         assertThat(testMVerificationLine.getForeignTaxAmount()).isEqualTo(DEFAULT_FOREIGN_TAX_AMOUNT);
         assertThat(testMVerificationLine.getLineNo()).isEqualTo(DEFAULT_LINE_NO);
+        assertThat(testMVerificationLine.getLineNoPo()).isEqualTo(DEFAULT_LINE_NO_PO);
         assertThat(testMVerificationLine.getLineNoMr()).isEqualTo(DEFAULT_LINE_NO_MR);
         assertThat(testMVerificationLine.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
         assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(DEFAULT_RECEIVE_DATE);
@@ -566,6 +573,7 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].taxAmount").value(hasItem(DEFAULT_TAX_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].foreignTaxAmount").value(hasItem(DEFAULT_FOREIGN_TAX_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
+            .andExpect(jsonPath("$.[*].lineNoPo").value(hasItem(DEFAULT_LINE_NO_PO)))
             .andExpect(jsonPath("$.[*].lineNoMr").value(hasItem(DEFAULT_LINE_NO_MR)))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.intValue())))
             .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())))
@@ -603,6 +611,7 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.taxAmount").value(DEFAULT_TAX_AMOUNT.intValue()))
             .andExpect(jsonPath("$.foreignTaxAmount").value(DEFAULT_FOREIGN_TAX_AMOUNT.intValue()))
             .andExpect(jsonPath("$.lineNo").value(DEFAULT_LINE_NO))
+            .andExpect(jsonPath("$.lineNoPo").value(DEFAULT_LINE_NO_PO))
             .andExpect(jsonPath("$.lineNoMr").value(DEFAULT_LINE_NO_MR))
             .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.intValue()))
             .andExpect(jsonPath("$.receiveDate").value(DEFAULT_RECEIVE_DATE.toString()))
@@ -2022,6 +2031,111 @@ public class MVerificationLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMVerificationLinesByLineNoPoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoPo equals to DEFAULT_LINE_NO_PO
+        defaultMVerificationLineShouldBeFound("lineNoPo.equals=" + DEFAULT_LINE_NO_PO);
+
+        // Get all the mVerificationLineList where lineNoPo equals to UPDATED_LINE_NO_PO
+        defaultMVerificationLineShouldNotBeFound("lineNoPo.equals=" + UPDATED_LINE_NO_PO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoPoIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoPo not equals to DEFAULT_LINE_NO_PO
+        defaultMVerificationLineShouldNotBeFound("lineNoPo.notEquals=" + DEFAULT_LINE_NO_PO);
+
+        // Get all the mVerificationLineList where lineNoPo not equals to UPDATED_LINE_NO_PO
+        defaultMVerificationLineShouldBeFound("lineNoPo.notEquals=" + UPDATED_LINE_NO_PO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoPoIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoPo in DEFAULT_LINE_NO_PO or UPDATED_LINE_NO_PO
+        defaultMVerificationLineShouldBeFound("lineNoPo.in=" + DEFAULT_LINE_NO_PO + "," + UPDATED_LINE_NO_PO);
+
+        // Get all the mVerificationLineList where lineNoPo equals to UPDATED_LINE_NO_PO
+        defaultMVerificationLineShouldNotBeFound("lineNoPo.in=" + UPDATED_LINE_NO_PO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoPoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoPo is not null
+        defaultMVerificationLineShouldBeFound("lineNoPo.specified=true");
+
+        // Get all the mVerificationLineList where lineNoPo is null
+        defaultMVerificationLineShouldNotBeFound("lineNoPo.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoPoIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoPo is greater than or equal to DEFAULT_LINE_NO_PO
+        defaultMVerificationLineShouldBeFound("lineNoPo.greaterThanOrEqual=" + DEFAULT_LINE_NO_PO);
+
+        // Get all the mVerificationLineList where lineNoPo is greater than or equal to UPDATED_LINE_NO_PO
+        defaultMVerificationLineShouldNotBeFound("lineNoPo.greaterThanOrEqual=" + UPDATED_LINE_NO_PO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoPoIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoPo is less than or equal to DEFAULT_LINE_NO_PO
+        defaultMVerificationLineShouldBeFound("lineNoPo.lessThanOrEqual=" + DEFAULT_LINE_NO_PO);
+
+        // Get all the mVerificationLineList where lineNoPo is less than or equal to SMALLER_LINE_NO_PO
+        defaultMVerificationLineShouldNotBeFound("lineNoPo.lessThanOrEqual=" + SMALLER_LINE_NO_PO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoPoIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoPo is less than DEFAULT_LINE_NO_PO
+        defaultMVerificationLineShouldNotBeFound("lineNoPo.lessThan=" + DEFAULT_LINE_NO_PO);
+
+        // Get all the mVerificationLineList where lineNoPo is less than UPDATED_LINE_NO_PO
+        defaultMVerificationLineShouldBeFound("lineNoPo.lessThan=" + UPDATED_LINE_NO_PO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByLineNoPoIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where lineNoPo is greater than DEFAULT_LINE_NO_PO
+        defaultMVerificationLineShouldNotBeFound("lineNoPo.greaterThan=" + DEFAULT_LINE_NO_PO);
+
+        // Get all the mVerificationLineList where lineNoPo is greater than SMALLER_LINE_NO_PO
+        defaultMVerificationLineShouldBeFound("lineNoPo.greaterThan=" + SMALLER_LINE_NO_PO);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMVerificationLinesByLineNoMrIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationLineRepository.saveAndFlush(mVerificationLine);
@@ -2883,6 +2997,7 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].taxAmount").value(hasItem(DEFAULT_TAX_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].foreignTaxAmount").value(hasItem(DEFAULT_FOREIGN_TAX_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
+            .andExpect(jsonPath("$.[*].lineNoPo").value(hasItem(DEFAULT_LINE_NO_PO)))
             .andExpect(jsonPath("$.[*].lineNoMr").value(hasItem(DEFAULT_LINE_NO_MR)))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.intValue())))
             .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())))
@@ -2954,6 +3069,7 @@ public class MVerificationLineResourceIT {
             .taxAmount(UPDATED_TAX_AMOUNT)
             .foreignTaxAmount(UPDATED_FOREIGN_TAX_AMOUNT)
             .lineNo(UPDATED_LINE_NO)
+            .lineNoPo(UPDATED_LINE_NO_PO)
             .lineNoMr(UPDATED_LINE_NO_MR)
             .conversionRate(UPDATED_CONVERSION_RATE)
             .receiveDate(UPDATED_RECEIVE_DATE)
@@ -2989,6 +3105,7 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.getTaxAmount()).isEqualTo(UPDATED_TAX_AMOUNT);
         assertThat(testMVerificationLine.getForeignTaxAmount()).isEqualTo(UPDATED_FOREIGN_TAX_AMOUNT);
         assertThat(testMVerificationLine.getLineNo()).isEqualTo(UPDATED_LINE_NO);
+        assertThat(testMVerificationLine.getLineNoPo()).isEqualTo(UPDATED_LINE_NO_PO);
         assertThat(testMVerificationLine.getLineNoMr()).isEqualTo(UPDATED_LINE_NO_MR);
         assertThat(testMVerificationLine.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
         assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(UPDATED_RECEIVE_DATE);
