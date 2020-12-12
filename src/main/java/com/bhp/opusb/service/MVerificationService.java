@@ -71,7 +71,7 @@ public class MVerificationService {
 
     public JasperPrint exportVerification(Long verificationId) throws IOException, SQLException, JRException {
 
-        File file = ResourceUtils.getFile("classpath:report/invoice-verification.jrxml");
+        File file = ResourceUtils.getFile("classpath:templates/report/invoice-verification.jrxml");
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
 
         Map<String, Object> parameters = new HashMap<>();
