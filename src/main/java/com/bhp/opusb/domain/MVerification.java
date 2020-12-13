@@ -1,9 +1,7 @@
 package com.bhp.opusb.domain;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -218,6 +216,10 @@ public class MVerification extends AbstractAuditingEntity {
     @ManyToOne
     @JsonIgnoreProperties("mVerifications")
     private CVendor vendorTo;
+
+    @ManyToOne
+    @JsonIgnoreProperties("mVerifications")
+    private CVendorLocation vendorLocation;
 
     /**
      * VHEXR1 is mapped to tax category name.
@@ -656,6 +658,19 @@ public class MVerification extends AbstractAuditingEntity {
 
     public void setVendorTo(CVendor cVendor) {
         this.vendorTo = cVendor;
+    }
+
+    public CVendorLocation getVendorLocation() {
+        return vendorLocation;
+    }
+
+    public MVerification vendorLocation(CVendorLocation cVendorLocation) {
+        this.vendorLocation = cVendorLocation;
+        return this;
+    }
+
+    public void setVendorLocation(CVendorLocation cVendorLocation) {
+        this.vendorLocation = cVendorLocation;
     }
 
     public CTaxCategory getCTaxCategory() {

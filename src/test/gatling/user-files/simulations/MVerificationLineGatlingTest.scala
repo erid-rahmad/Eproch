@@ -89,6 +89,8 @@ class MVerificationLineGatlingTest extends Simulation {
                 , "lineNo":"0"
                 , "lineNoPo":"0"
                 , "lineNoMr":"0"
+                , "itemDesc1":"SAMPLE_TEXT"
+                , "itemDesc2":"SAMPLE_TEXT"
                 , "conversionRate":"0"
                 , "receiveDate":"2020-01-01T00:00:00.000Z"
                 , "payStat":"SAMPLE_TEXT"

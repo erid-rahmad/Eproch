@@ -496,11 +496,17 @@ entity MVerificationLine {
 	/** VDLINN Invoice verification line no. */
 	lineNo Integer
 
-	/** VDNLIN PO line no. */
+	/** VDLNID PO line no. */
 	lineNoPo Integer
 
-	/** VDLNID Receipt line no. */
+	/** VDNLIN Receipt line no. */
 	lineNoMr Integer
+
+	/** PRLITM  */
+	itemDesc1 String maxlength(25)
+
+	/** PRAITM */
+	itemDesc2 String maxlength(25)
 
 	/** VDCRR */
 	conversionRate BigDecimal
@@ -620,6 +626,12 @@ entity MMatchPO {
 
 	/** PRMATC */
 	mMatchType String maxlength(1)
+
+	/** PRLITM  */
+	itemDesc1 String maxlength(25)
+
+	/** PRAITM */
+	itemDesc2 String maxlength(25)
 }
 
 entity AiExchangeIn {
@@ -802,6 +814,16 @@ relationship ManyToOne {
 
 	/** VHAN8L */
 	MVerification{vendorTo} to CVendor
+
+	/*
+	 * VHADD1 for addr1
+	 * VHADD2 for addr2
+	 * VHADD3 for addr3
+	 * VHADD4 for addr4
+	 * VHCTY1 for cityName
+	 * VHADDZ for postalCode
+	 */
+	MVerification{vendorLocation} to CVendorLocation
 
 	/** VHEXR1 is mapped to tax category name. */
 	MVerification{cTaxCategory} to CTaxCategory

@@ -114,16 +114,30 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     private Integer lineNo;
 
     /**
-     * VDNLIN PO line no.
+     * VDLNID PO line no.
      */
-    @ApiModelProperty(value = "VDNLIN PO line no.")
+    @ApiModelProperty(value = "VDLNID PO line no.")
     private Integer lineNoPo;
 
     /**
-     * VDLNID Receipt line no.
+     * VDNLIN Receipt line no.
      */
-    @ApiModelProperty(value = "VDLNID Receipt line no.")
+    @ApiModelProperty(value = "VDNLIN Receipt line no.")
     private Integer lineNoMr;
+
+    /**
+     * PRLITM
+     */
+    @Size(max = 25)
+    @ApiModelProperty(value = "PRLITM")
+    private String itemDesc1;
+
+    /**
+     * PRAITM
+     */
+    @Size(max = 25)
+    @ApiModelProperty(value = "PRAITM")
+    private String itemDesc2;
 
     /**
      * VDCRR
@@ -383,6 +397,22 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
 
     public void setLineNoMr(Integer lineNoMr) {
         this.lineNoMr = lineNoMr;
+    }
+
+    public String getItemDesc1() {
+        return itemDesc1;
+    }
+
+    public void setItemDesc1(String itemDesc1) {
+        this.itemDesc1 = itemDesc1;
+    }
+
+    public String getItemDesc2() {
+        return itemDesc2;
+    }
+
+    public void setItemDesc2(String itemDesc2) {
+        this.itemDesc2 = itemDesc2;
     }
 
     public BigDecimal getConversionRate() {
@@ -673,6 +703,8 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
             ", lineNo=" + getLineNo() +
             ", lineNoPo=" + getLineNoPo() +
             ", lineNoMr=" + getLineNoMr() +
+            ", itemDesc1='" + getItemDesc1() + "'" +
+            ", itemDesc2='" + getItemDesc2() + "'" +
             ", conversionRate=" + getConversionRate() +
             ", receiveDate='" + getReceiveDate() + "'" +
             ", payStat='" + getPayStat() + "'" +

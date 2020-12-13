@@ -108,6 +108,12 @@ public class MVerificationLineResourceIT {
     private static final Integer UPDATED_LINE_NO_MR = 2;
     private static final Integer SMALLER_LINE_NO_MR = 1 - 1;
 
+    private static final String DEFAULT_ITEM_DESC_1 = "AAAAAAAAAA";
+    private static final String UPDATED_ITEM_DESC_1 = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ITEM_DESC_2 = "AAAAAAAAAA";
+    private static final String UPDATED_ITEM_DESC_2 = "BBBBBBBBBB";
+
     private static final BigDecimal DEFAULT_CONVERSION_RATE = new BigDecimal(1);
     private static final BigDecimal UPDATED_CONVERSION_RATE = new BigDecimal(2);
     private static final BigDecimal SMALLER_CONVERSION_RATE = new BigDecimal(1 - 1);
@@ -179,6 +185,8 @@ public class MVerificationLineResourceIT {
             .lineNo(DEFAULT_LINE_NO)
             .lineNoPo(DEFAULT_LINE_NO_PO)
             .lineNoMr(DEFAULT_LINE_NO_MR)
+            .itemDesc1(DEFAULT_ITEM_DESC_1)
+            .itemDesc2(DEFAULT_ITEM_DESC_2)
             .conversionRate(DEFAULT_CONVERSION_RATE)
             .receiveDate(DEFAULT_RECEIVE_DATE)
             .payStat(DEFAULT_PAY_STAT)
@@ -274,6 +282,8 @@ public class MVerificationLineResourceIT {
             .lineNo(UPDATED_LINE_NO)
             .lineNoPo(UPDATED_LINE_NO_PO)
             .lineNoMr(UPDATED_LINE_NO_MR)
+            .itemDesc1(UPDATED_ITEM_DESC_1)
+            .itemDesc2(UPDATED_ITEM_DESC_2)
             .conversionRate(UPDATED_CONVERSION_RATE)
             .receiveDate(UPDATED_RECEIVE_DATE)
             .payStat(UPDATED_PAY_STAT)
@@ -383,6 +393,8 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.getLineNo()).isEqualTo(DEFAULT_LINE_NO);
         assertThat(testMVerificationLine.getLineNoPo()).isEqualTo(DEFAULT_LINE_NO_PO);
         assertThat(testMVerificationLine.getLineNoMr()).isEqualTo(DEFAULT_LINE_NO_MR);
+        assertThat(testMVerificationLine.getItemDesc1()).isEqualTo(DEFAULT_ITEM_DESC_1);
+        assertThat(testMVerificationLine.getItemDesc2()).isEqualTo(DEFAULT_ITEM_DESC_2);
         assertThat(testMVerificationLine.getConversionRate()).isEqualTo(DEFAULT_CONVERSION_RATE);
         assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(DEFAULT_RECEIVE_DATE);
         assertThat(testMVerificationLine.getPayStat()).isEqualTo(DEFAULT_PAY_STAT);
@@ -575,6 +587,8 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
             .andExpect(jsonPath("$.[*].lineNoPo").value(hasItem(DEFAULT_LINE_NO_PO)))
             .andExpect(jsonPath("$.[*].lineNoMr").value(hasItem(DEFAULT_LINE_NO_MR)))
+            .andExpect(jsonPath("$.[*].itemDesc1").value(hasItem(DEFAULT_ITEM_DESC_1)))
+            .andExpect(jsonPath("$.[*].itemDesc2").value(hasItem(DEFAULT_ITEM_DESC_2)))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.intValue())))
             .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())))
             .andExpect(jsonPath("$.[*].payStat").value(hasItem(DEFAULT_PAY_STAT)))
@@ -613,6 +627,8 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.lineNo").value(DEFAULT_LINE_NO))
             .andExpect(jsonPath("$.lineNoPo").value(DEFAULT_LINE_NO_PO))
             .andExpect(jsonPath("$.lineNoMr").value(DEFAULT_LINE_NO_MR))
+            .andExpect(jsonPath("$.itemDesc1").value(DEFAULT_ITEM_DESC_1))
+            .andExpect(jsonPath("$.itemDesc2").value(DEFAULT_ITEM_DESC_2))
             .andExpect(jsonPath("$.conversionRate").value(DEFAULT_CONVERSION_RATE.intValue()))
             .andExpect(jsonPath("$.receiveDate").value(DEFAULT_RECEIVE_DATE.toString()))
             .andExpect(jsonPath("$.payStat").value(DEFAULT_PAY_STAT))
@@ -2241,6 +2257,162 @@ public class MVerificationLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMVerificationLinesByItemDesc1IsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc1 equals to DEFAULT_ITEM_DESC_1
+        defaultMVerificationLineShouldBeFound("itemDesc1.equals=" + DEFAULT_ITEM_DESC_1);
+
+        // Get all the mVerificationLineList where itemDesc1 equals to UPDATED_ITEM_DESC_1
+        defaultMVerificationLineShouldNotBeFound("itemDesc1.equals=" + UPDATED_ITEM_DESC_1);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc1IsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc1 not equals to DEFAULT_ITEM_DESC_1
+        defaultMVerificationLineShouldNotBeFound("itemDesc1.notEquals=" + DEFAULT_ITEM_DESC_1);
+
+        // Get all the mVerificationLineList where itemDesc1 not equals to UPDATED_ITEM_DESC_1
+        defaultMVerificationLineShouldBeFound("itemDesc1.notEquals=" + UPDATED_ITEM_DESC_1);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc1IsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc1 in DEFAULT_ITEM_DESC_1 or UPDATED_ITEM_DESC_1
+        defaultMVerificationLineShouldBeFound("itemDesc1.in=" + DEFAULT_ITEM_DESC_1 + "," + UPDATED_ITEM_DESC_1);
+
+        // Get all the mVerificationLineList where itemDesc1 equals to UPDATED_ITEM_DESC_1
+        defaultMVerificationLineShouldNotBeFound("itemDesc1.in=" + UPDATED_ITEM_DESC_1);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc1IsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc1 is not null
+        defaultMVerificationLineShouldBeFound("itemDesc1.specified=true");
+
+        // Get all the mVerificationLineList where itemDesc1 is null
+        defaultMVerificationLineShouldNotBeFound("itemDesc1.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc1ContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc1 contains DEFAULT_ITEM_DESC_1
+        defaultMVerificationLineShouldBeFound("itemDesc1.contains=" + DEFAULT_ITEM_DESC_1);
+
+        // Get all the mVerificationLineList where itemDesc1 contains UPDATED_ITEM_DESC_1
+        defaultMVerificationLineShouldNotBeFound("itemDesc1.contains=" + UPDATED_ITEM_DESC_1);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc1NotContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc1 does not contain DEFAULT_ITEM_DESC_1
+        defaultMVerificationLineShouldNotBeFound("itemDesc1.doesNotContain=" + DEFAULT_ITEM_DESC_1);
+
+        // Get all the mVerificationLineList where itemDesc1 does not contain UPDATED_ITEM_DESC_1
+        defaultMVerificationLineShouldBeFound("itemDesc1.doesNotContain=" + UPDATED_ITEM_DESC_1);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc2IsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc2 equals to DEFAULT_ITEM_DESC_2
+        defaultMVerificationLineShouldBeFound("itemDesc2.equals=" + DEFAULT_ITEM_DESC_2);
+
+        // Get all the mVerificationLineList where itemDesc2 equals to UPDATED_ITEM_DESC_2
+        defaultMVerificationLineShouldNotBeFound("itemDesc2.equals=" + UPDATED_ITEM_DESC_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc2IsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc2 not equals to DEFAULT_ITEM_DESC_2
+        defaultMVerificationLineShouldNotBeFound("itemDesc2.notEquals=" + DEFAULT_ITEM_DESC_2);
+
+        // Get all the mVerificationLineList where itemDesc2 not equals to UPDATED_ITEM_DESC_2
+        defaultMVerificationLineShouldBeFound("itemDesc2.notEquals=" + UPDATED_ITEM_DESC_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc2IsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc2 in DEFAULT_ITEM_DESC_2 or UPDATED_ITEM_DESC_2
+        defaultMVerificationLineShouldBeFound("itemDesc2.in=" + DEFAULT_ITEM_DESC_2 + "," + UPDATED_ITEM_DESC_2);
+
+        // Get all the mVerificationLineList where itemDesc2 equals to UPDATED_ITEM_DESC_2
+        defaultMVerificationLineShouldNotBeFound("itemDesc2.in=" + UPDATED_ITEM_DESC_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc2IsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc2 is not null
+        defaultMVerificationLineShouldBeFound("itemDesc2.specified=true");
+
+        // Get all the mVerificationLineList where itemDesc2 is null
+        defaultMVerificationLineShouldNotBeFound("itemDesc2.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc2ContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc2 contains DEFAULT_ITEM_DESC_2
+        defaultMVerificationLineShouldBeFound("itemDesc2.contains=" + DEFAULT_ITEM_DESC_2);
+
+        // Get all the mVerificationLineList where itemDesc2 contains UPDATED_ITEM_DESC_2
+        defaultMVerificationLineShouldNotBeFound("itemDesc2.contains=" + UPDATED_ITEM_DESC_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByItemDesc2NotContainsSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where itemDesc2 does not contain DEFAULT_ITEM_DESC_2
+        defaultMVerificationLineShouldNotBeFound("itemDesc2.doesNotContain=" + DEFAULT_ITEM_DESC_2);
+
+        // Get all the mVerificationLineList where itemDesc2 does not contain UPDATED_ITEM_DESC_2
+        defaultMVerificationLineShouldBeFound("itemDesc2.doesNotContain=" + UPDATED_ITEM_DESC_2);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMVerificationLinesByConversionRateIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationLineRepository.saveAndFlush(mVerificationLine);
@@ -2999,6 +3171,8 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
             .andExpect(jsonPath("$.[*].lineNoPo").value(hasItem(DEFAULT_LINE_NO_PO)))
             .andExpect(jsonPath("$.[*].lineNoMr").value(hasItem(DEFAULT_LINE_NO_MR)))
+            .andExpect(jsonPath("$.[*].itemDesc1").value(hasItem(DEFAULT_ITEM_DESC_1)))
+            .andExpect(jsonPath("$.[*].itemDesc2").value(hasItem(DEFAULT_ITEM_DESC_2)))
             .andExpect(jsonPath("$.[*].conversionRate").value(hasItem(DEFAULT_CONVERSION_RATE.intValue())))
             .andExpect(jsonPath("$.[*].receiveDate").value(hasItem(DEFAULT_RECEIVE_DATE.toString())))
             .andExpect(jsonPath("$.[*].payStat").value(hasItem(DEFAULT_PAY_STAT)))
@@ -3071,6 +3245,8 @@ public class MVerificationLineResourceIT {
             .lineNo(UPDATED_LINE_NO)
             .lineNoPo(UPDATED_LINE_NO_PO)
             .lineNoMr(UPDATED_LINE_NO_MR)
+            .itemDesc1(UPDATED_ITEM_DESC_1)
+            .itemDesc2(UPDATED_ITEM_DESC_2)
             .conversionRate(UPDATED_CONVERSION_RATE)
             .receiveDate(UPDATED_RECEIVE_DATE)
             .payStat(UPDATED_PAY_STAT)
@@ -3107,6 +3283,8 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.getLineNo()).isEqualTo(UPDATED_LINE_NO);
         assertThat(testMVerificationLine.getLineNoPo()).isEqualTo(UPDATED_LINE_NO_PO);
         assertThat(testMVerificationLine.getLineNoMr()).isEqualTo(UPDATED_LINE_NO_MR);
+        assertThat(testMVerificationLine.getItemDesc1()).isEqualTo(UPDATED_ITEM_DESC_1);
+        assertThat(testMVerificationLine.getItemDesc2()).isEqualTo(UPDATED_ITEM_DESC_2);
         assertThat(testMVerificationLine.getConversionRate()).isEqualTo(UPDATED_CONVERSION_RATE);
         assertThat(testMVerificationLine.getReceiveDate()).isEqualTo(UPDATED_RECEIVE_DATE);
         assertThat(testMVerificationLine.getPayStat()).isEqualTo(UPDATED_PAY_STAT);

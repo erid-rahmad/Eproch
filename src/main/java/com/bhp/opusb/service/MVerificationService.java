@@ -128,12 +128,14 @@ public class MVerificationService {
                     lineCriteria.setVerificationId(idFilter);
                     List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
 
-                    if (!lines.isEmpty()) {
-                        final Map<String, Object> headerPayload = new HashMap<>(2);
-                        headerPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_HEADER);
-                        headerPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, header);
-                        messageDispatcher.dispatch("mVerificationMessageDispatcher", headerPayload);
+                    // Dispatch the header to the external system.
+                    final Map<String, Object> headerPayload = new HashMap<>(2);
+                    headerPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_HEADER);
+                    headerPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, header);
+                    messageDispatcher.dispatch("mVerificationMessageDispatcher", headerPayload);
 
+                    // Dispatch the lines to the external system.
+                    if (!lines.isEmpty()) {
                         final Map<String, Object> linesPayload = new HashMap<>(2);
                         linesPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_LINES);
                         linesPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, lines);

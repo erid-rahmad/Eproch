@@ -298,7 +298,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     for (const row of this.gridData) {
       totalLines += row.totalLines;
       taxAmount += row.taxAmount;
-      totalAmount += totalLines + taxAmount;
+      totalAmount += row.totalAmount;
       foreignTotalLines += row.foreignTotalAmount;
       foreignTaxAmount += row.foreignTaxAmount;
       foreignTotalAmount += foreignTotalLines + foreignTaxAmount;
@@ -326,9 +326,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     if (this.formUpdate.id) {
       this.removedLines.push(row);
     }
-
-    console.log(this.gridData);
-    console.log(this.removedLines);
 
     this.formUpdate.totalLines -= row.totalLines;
     this.formUpdate.taxAmount -= row.taxAmount;
@@ -502,7 +499,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     return lines.map(line => {
       const {
         cConversionRate,
-        cVendor,
         dateAccount,
         mMatchType,
         openAmount,
@@ -513,6 +509,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       } = line;
 
       data.conversionRate = line.cConversionRate;
+      data.vendorId = line.cVendorId;
       return data;
     });
   }

@@ -274,4 +274,17 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20201213033400" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification_line">
+            <column name="item_desc_1" type="varchar(25)" remarks="PRLITM">
+                <constraints nullable="true" />
+            </column>
+            <column name="item_desc_2" type="varchar(25)" remarks="PRAITM">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <setColumnRemarks tableName="m_verification_line" columnName="line_no_po" remarks="VDLNID PO line no."/>
+        <setColumnRemarks tableName="m_verification_line" columnName="line_no_mr" remarks="VDNLIN Receipt line no."/>
+    </changeSet>
+
 </databaseChangeLog>

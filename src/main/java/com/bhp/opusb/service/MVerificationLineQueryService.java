@@ -142,6 +142,12 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getLineNoMr() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getLineNoMr(), MVerificationLine_.lineNoMr));
             }
+            if (criteria.getItemDesc1() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getItemDesc1(), MVerificationLine_.itemDesc1));
+            }
+            if (criteria.getItemDesc2() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getItemDesc2(), MVerificationLine_.itemDesc2));
+            }
             if (criteria.getConversionRate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getConversionRate(), MVerificationLine_.conversionRate));
             }

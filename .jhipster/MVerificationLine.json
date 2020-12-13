@@ -105,13 +105,31 @@
         },
         {
             "fieldName": "lineNoPo",
-            "javadoc": "VDNLIN PO line no.",
+            "javadoc": "VDLNID PO line no.",
             "fieldType": "Integer"
         },
         {
             "fieldName": "lineNoMr",
-            "javadoc": "VDLNID Receipt line no.",
+            "javadoc": "VDNLIN Receipt line no.",
             "fieldType": "Integer"
+        },
+        {
+            "fieldName": "itemDesc1",
+            "javadoc": "PRLITM",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "25"
+        },
+        {
+            "fieldName": "itemDesc2",
+            "javadoc": "PRAITM",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "25"
         },
         {
             "fieldName": "conversionRate",

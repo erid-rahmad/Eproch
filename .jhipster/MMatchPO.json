@@ -157,6 +157,24 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "1"
+        },
+        {
+            "fieldName": "itemDesc1",
+            "javadoc": "PRLITM",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "25"
+        },
+        {
+            "fieldName": "itemDesc2",
+            "javadoc": "PRAITM",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "25"
         }
     ],
     "relationships": [

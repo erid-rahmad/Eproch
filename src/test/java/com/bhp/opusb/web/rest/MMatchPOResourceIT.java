@@ -139,6 +139,12 @@ public class MMatchPOResourceIT {
     private static final String DEFAULT_M_MATCH_TYPE = "A";
     private static final String UPDATED_M_MATCH_TYPE = "B";
 
+    private static final String DEFAULT_ITEM_DESC_1 = "AAAAAAAAAA";
+    private static final String UPDATED_ITEM_DESC_1 = "BBBBBBBBBB";
+
+    private static final String DEFAULT_ITEM_DESC_2 = "AAAAAAAAAA";
+    private static final String UPDATED_ITEM_DESC_2 = "BBBBBBBBBB";
+
     @Autowired
     private MMatchPORepository mMatchPORepository;
 
@@ -191,7 +197,9 @@ public class MMatchPOResourceIT {
             .lineNoMr(DEFAULT_LINE_NO_MR)
             .taxable(DEFAULT_TAXABLE)
             .description(DEFAULT_DESCRIPTION)
-            .mMatchType(DEFAULT_M_MATCH_TYPE);
+            .mMatchType(DEFAULT_M_MATCH_TYPE)
+            .itemDesc1(DEFAULT_ITEM_DESC_1)
+            .itemDesc2(DEFAULT_ITEM_DESC_2);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -246,7 +254,9 @@ public class MMatchPOResourceIT {
             .lineNoMr(UPDATED_LINE_NO_MR)
             .taxable(UPDATED_TAXABLE)
             .description(UPDATED_DESCRIPTION)
-            .mMatchType(UPDATED_M_MATCH_TYPE);
+            .mMatchType(UPDATED_M_MATCH_TYPE)
+            .itemDesc1(UPDATED_ITEM_DESC_1)
+            .itemDesc2(UPDATED_ITEM_DESC_2);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -316,6 +326,8 @@ public class MMatchPOResourceIT {
         assertThat(testMMatchPO.isTaxable()).isEqualTo(DEFAULT_TAXABLE);
         assertThat(testMMatchPO.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testMMatchPO.getmMatchType()).isEqualTo(DEFAULT_M_MATCH_TYPE);
+        assertThat(testMMatchPO.getItemDesc1()).isEqualTo(DEFAULT_ITEM_DESC_1);
+        assertThat(testMMatchPO.getItemDesc2()).isEqualTo(DEFAULT_ITEM_DESC_2);
     }
 
     @Test
@@ -374,7 +386,9 @@ public class MMatchPOResourceIT {
             .andExpect(jsonPath("$.[*].lineNoMr").value(hasItem(DEFAULT_LINE_NO_MR)))
             .andExpect(jsonPath("$.[*].taxable").value(hasItem(DEFAULT_TAXABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].mMatchType").value(hasItem(DEFAULT_M_MATCH_TYPE)));
+            .andExpect(jsonPath("$.[*].mMatchType").value(hasItem(DEFAULT_M_MATCH_TYPE)))
+            .andExpect(jsonPath("$.[*].itemDesc1").value(hasItem(DEFAULT_ITEM_DESC_1)))
+            .andExpect(jsonPath("$.[*].itemDesc2").value(hasItem(DEFAULT_ITEM_DESC_2)));
     }
     
     @Test
@@ -412,7 +426,9 @@ public class MMatchPOResourceIT {
             .andExpect(jsonPath("$.lineNoMr").value(DEFAULT_LINE_NO_MR))
             .andExpect(jsonPath("$.taxable").value(DEFAULT_TAXABLE.booleanValue()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.mMatchType").value(DEFAULT_M_MATCH_TYPE));
+            .andExpect(jsonPath("$.mMatchType").value(DEFAULT_M_MATCH_TYPE))
+            .andExpect(jsonPath("$.itemDesc1").value(DEFAULT_ITEM_DESC_1))
+            .andExpect(jsonPath("$.itemDesc2").value(DEFAULT_ITEM_DESC_2));
     }
 
 
@@ -2793,6 +2809,162 @@ public class MMatchPOResourceIT {
 
     @Test
     @Transactional
+    public void getAllMMatchPOSByItemDesc1IsEqualToSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc1 equals to DEFAULT_ITEM_DESC_1
+        defaultMMatchPOShouldBeFound("itemDesc1.equals=" + DEFAULT_ITEM_DESC_1);
+
+        // Get all the mMatchPOList where itemDesc1 equals to UPDATED_ITEM_DESC_1
+        defaultMMatchPOShouldNotBeFound("itemDesc1.equals=" + UPDATED_ITEM_DESC_1);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc1IsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc1 not equals to DEFAULT_ITEM_DESC_1
+        defaultMMatchPOShouldNotBeFound("itemDesc1.notEquals=" + DEFAULT_ITEM_DESC_1);
+
+        // Get all the mMatchPOList where itemDesc1 not equals to UPDATED_ITEM_DESC_1
+        defaultMMatchPOShouldBeFound("itemDesc1.notEquals=" + UPDATED_ITEM_DESC_1);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc1IsInShouldWork() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc1 in DEFAULT_ITEM_DESC_1 or UPDATED_ITEM_DESC_1
+        defaultMMatchPOShouldBeFound("itemDesc1.in=" + DEFAULT_ITEM_DESC_1 + "," + UPDATED_ITEM_DESC_1);
+
+        // Get all the mMatchPOList where itemDesc1 equals to UPDATED_ITEM_DESC_1
+        defaultMMatchPOShouldNotBeFound("itemDesc1.in=" + UPDATED_ITEM_DESC_1);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc1IsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc1 is not null
+        defaultMMatchPOShouldBeFound("itemDesc1.specified=true");
+
+        // Get all the mMatchPOList where itemDesc1 is null
+        defaultMMatchPOShouldNotBeFound("itemDesc1.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc1ContainsSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc1 contains DEFAULT_ITEM_DESC_1
+        defaultMMatchPOShouldBeFound("itemDesc1.contains=" + DEFAULT_ITEM_DESC_1);
+
+        // Get all the mMatchPOList where itemDesc1 contains UPDATED_ITEM_DESC_1
+        defaultMMatchPOShouldNotBeFound("itemDesc1.contains=" + UPDATED_ITEM_DESC_1);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc1NotContainsSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc1 does not contain DEFAULT_ITEM_DESC_1
+        defaultMMatchPOShouldNotBeFound("itemDesc1.doesNotContain=" + DEFAULT_ITEM_DESC_1);
+
+        // Get all the mMatchPOList where itemDesc1 does not contain UPDATED_ITEM_DESC_1
+        defaultMMatchPOShouldBeFound("itemDesc1.doesNotContain=" + UPDATED_ITEM_DESC_1);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc2IsEqualToSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc2 equals to DEFAULT_ITEM_DESC_2
+        defaultMMatchPOShouldBeFound("itemDesc2.equals=" + DEFAULT_ITEM_DESC_2);
+
+        // Get all the mMatchPOList where itemDesc2 equals to UPDATED_ITEM_DESC_2
+        defaultMMatchPOShouldNotBeFound("itemDesc2.equals=" + UPDATED_ITEM_DESC_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc2IsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc2 not equals to DEFAULT_ITEM_DESC_2
+        defaultMMatchPOShouldNotBeFound("itemDesc2.notEquals=" + DEFAULT_ITEM_DESC_2);
+
+        // Get all the mMatchPOList where itemDesc2 not equals to UPDATED_ITEM_DESC_2
+        defaultMMatchPOShouldBeFound("itemDesc2.notEquals=" + UPDATED_ITEM_DESC_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc2IsInShouldWork() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc2 in DEFAULT_ITEM_DESC_2 or UPDATED_ITEM_DESC_2
+        defaultMMatchPOShouldBeFound("itemDesc2.in=" + DEFAULT_ITEM_DESC_2 + "," + UPDATED_ITEM_DESC_2);
+
+        // Get all the mMatchPOList where itemDesc2 equals to UPDATED_ITEM_DESC_2
+        defaultMMatchPOShouldNotBeFound("itemDesc2.in=" + UPDATED_ITEM_DESC_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc2IsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc2 is not null
+        defaultMMatchPOShouldBeFound("itemDesc2.specified=true");
+
+        // Get all the mMatchPOList where itemDesc2 is null
+        defaultMMatchPOShouldNotBeFound("itemDesc2.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc2ContainsSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc2 contains DEFAULT_ITEM_DESC_2
+        defaultMMatchPOShouldBeFound("itemDesc2.contains=" + DEFAULT_ITEM_DESC_2);
+
+        // Get all the mMatchPOList where itemDesc2 contains UPDATED_ITEM_DESC_2
+        defaultMMatchPOShouldNotBeFound("itemDesc2.contains=" + UPDATED_ITEM_DESC_2);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByItemDesc2NotContainsSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where itemDesc2 does not contain DEFAULT_ITEM_DESC_2
+        defaultMMatchPOShouldNotBeFound("itemDesc2.doesNotContain=" + DEFAULT_ITEM_DESC_2);
+
+        // Get all the mMatchPOList where itemDesc2 does not contain UPDATED_ITEM_DESC_2
+        defaultMMatchPOShouldBeFound("itemDesc2.doesNotContain=" + UPDATED_ITEM_DESC_2);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMMatchPOSByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = mMatchPO.getAdOrganization();
@@ -3014,7 +3186,9 @@ public class MMatchPOResourceIT {
             .andExpect(jsonPath("$.[*].lineNoMr").value(hasItem(DEFAULT_LINE_NO_MR)))
             .andExpect(jsonPath("$.[*].taxable").value(hasItem(DEFAULT_TAXABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].mMatchType").value(hasItem(DEFAULT_M_MATCH_TYPE)));
+            .andExpect(jsonPath("$.[*].mMatchType").value(hasItem(DEFAULT_M_MATCH_TYPE)))
+            .andExpect(jsonPath("$.[*].itemDesc1").value(hasItem(DEFAULT_ITEM_DESC_1)))
+            .andExpect(jsonPath("$.[*].itemDesc2").value(hasItem(DEFAULT_ITEM_DESC_2)));
 
         // Check, that the count call also returns 1
         restMMatchPOMockMvc.perform(get("/api/m-match-pos/count?sort=id,desc&" + filter))
@@ -3086,7 +3260,9 @@ public class MMatchPOResourceIT {
             .lineNoMr(UPDATED_LINE_NO_MR)
             .taxable(UPDATED_TAXABLE)
             .description(UPDATED_DESCRIPTION)
-            .mMatchType(UPDATED_M_MATCH_TYPE);
+            .mMatchType(UPDATED_M_MATCH_TYPE)
+            .itemDesc1(UPDATED_ITEM_DESC_1)
+            .itemDesc2(UPDATED_ITEM_DESC_2);
         MMatchPODTO mMatchPODTO = mMatchPOMapper.toDto(updatedMMatchPO);
 
         restMMatchPOMockMvc.perform(put("/api/m-match-pos")
@@ -3123,6 +3299,8 @@ public class MMatchPOResourceIT {
         assertThat(testMMatchPO.isTaxable()).isEqualTo(UPDATED_TAXABLE);
         assertThat(testMMatchPO.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testMMatchPO.getmMatchType()).isEqualTo(UPDATED_M_MATCH_TYPE);
+        assertThat(testMMatchPO.getItemDesc1()).isEqualTo(UPDATED_ITEM_DESC_1);
+        assertThat(testMMatchPO.getItemDesc2()).isEqualTo(UPDATED_ITEM_DESC_2);
     }
 
     @Test

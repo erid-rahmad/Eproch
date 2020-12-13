@@ -5,6 +5,7 @@ import com.bhp.opusb.domain.MVerification;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CVendor;
+import com.bhp.opusb.domain.CVendorLocation;
 import com.bhp.opusb.domain.CTaxCategory;
 import com.bhp.opusb.domain.CTax;
 import com.bhp.opusb.repository.MVerificationRepository;
@@ -3190,6 +3191,26 @@ public class MVerificationResourceIT {
 
         // Get all the mVerificationList where vendorTo equals to vendorToId + 1
         defaultMVerificationShouldNotBeFound("vendorToId.equals=" + (vendorToId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByVendorLocationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+        CVendorLocation vendorLocation = CVendorLocationResourceIT.createEntity(em);
+        em.persist(vendorLocation);
+        em.flush();
+        mVerification.setVendorLocation(vendorLocation);
+        mVerificationRepository.saveAndFlush(mVerification);
+        Long vendorLocationId = vendorLocation.getId();
+
+        // Get all the mVerificationList where vendorLocation equals to vendorLocationId
+        defaultMVerificationShouldBeFound("vendorLocationId.equals=" + vendorLocationId);
+
+        // Get all the mVerificationList where vendorLocation equals to vendorLocationId + 1
+        defaultMVerificationShouldNotBeFound("vendorLocationId.equals=" + (vendorLocationId + 1));
     }
 
 
