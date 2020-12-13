@@ -595,6 +595,11 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.cTaxName = cTaxName;
     }
 
+    @JsonProperty("shortCreatedBy")
+    public String shortCreatedBy() {
+        return getCreatedBy().length() > 10 ? getCreatedBy().substring(0, 9) : getCreatedBy();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
