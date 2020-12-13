@@ -193,6 +193,20 @@ public class MMatchPO extends AbstractAuditingEntity {
     private String mMatchType;
 
     /**
+     * PRLITM
+     */
+    @Size(max = 25)
+    @Column(name = "item_desc_1", length = 25)
+    private String itemDesc1;
+
+    /**
+     * PRAITM
+     */
+    @Size(max = 25)
+    @Column(name = "item_desc_2", length = 25)
+    private String itemDesc2;
+
+    /**
      * PRKCOO
      */
     @ManyToOne(optional = false)
@@ -597,6 +611,32 @@ public class MMatchPO extends AbstractAuditingEntity {
         this.mMatchType = mMatchType;
     }
 
+    public String getItemDesc1() {
+        return itemDesc1;
+    }
+
+    public MMatchPO itemDesc1(String itemDesc1) {
+        this.itemDesc1 = itemDesc1;
+        return this;
+    }
+
+    public void setItemDesc1(String itemDesc1) {
+        this.itemDesc1 = itemDesc1;
+    }
+
+    public String getItemDesc2() {
+        return itemDesc2;
+    }
+
+    public MMatchPO itemDesc2(String itemDesc2) {
+        this.itemDesc2 = itemDesc2;
+        return this;
+    }
+
+    public void setItemDesc2(String itemDesc2) {
+        this.itemDesc2 = itemDesc2;
+    }
+
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -773,6 +813,8 @@ public class MMatchPO extends AbstractAuditingEntity {
             ", taxable='" + isTaxable() + "'" +
             ", description='" + getDescription() + "'" +
             ", mMatchType='" + getmMatchType() + "'" +
+            ", itemDesc1='" + getItemDesc1() + "'" +
+            ", itemDesc2='" + getItemDesc2() + "'" +
             "}";
     }
 }

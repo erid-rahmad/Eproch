@@ -78,6 +78,10 @@ public class MMatchPOCriteria implements Serializable, Criteria {
 
     private StringFilter mMatchType;
 
+    private StringFilter itemDesc1;
+
+    private StringFilter itemDesc2;
+
     private LongFilter adOrganizationId;
 
     private LongFilter cCostCenterId;
@@ -128,6 +132,8 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.taxable = other.taxable == null ? null : other.taxable.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.mMatchType = other.mMatchType == null ? null : other.mMatchType.copy();
+        this.itemDesc1 = other.itemDesc1 == null ? null : other.itemDesc1.copy();
+        this.itemDesc2 = other.itemDesc2 == null ? null : other.itemDesc2.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.cCostCenterId = other.cCostCenterId == null ? null : other.cCostCenterId.copy();
         this.cVendorId = other.cVendorId == null ? null : other.cVendorId.copy();
@@ -353,6 +359,22 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.mMatchType = mMatchType;
     }
 
+    public StringFilter getItemDesc1() {
+        return itemDesc1;
+    }
+
+    public void setItemDesc1(StringFilter itemDesc1) {
+        this.itemDesc1 = itemDesc1;
+    }
+
+    public StringFilter getItemDesc2() {
+        return itemDesc2;
+    }
+
+    public void setItemDesc2(StringFilter itemDesc2) {
+        this.itemDesc2 = itemDesc2;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -470,6 +492,8 @@ public class MMatchPOCriteria implements Serializable, Criteria {
             Objects.equals(taxable, that.taxable) &&
             Objects.equals(description, that.description) &&
             Objects.equals(mMatchType, that.mMatchType) &&
+            Objects.equals(itemDesc1, that.itemDesc1) &&
+            Objects.equals(itemDesc2, that.itemDesc2) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(cCostCenterId, that.cCostCenterId) &&
             Objects.equals(cVendorId, that.cVendorId) &&
@@ -511,6 +535,8 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         taxable,
         description,
         mMatchType,
+        itemDesc1,
+        itemDesc2,
         adOrganizationId,
         cCostCenterId,
         cVendorId,
@@ -553,6 +579,8 @@ public class MMatchPOCriteria implements Serializable, Criteria {
                 (taxable != null ? "taxable=" + taxable + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (mMatchType != null ? "mMatchType=" + mMatchType + ", " : "") +
+                (itemDesc1 != null ? "itemDesc1=" + itemDesc1 + ", " : "") +
+                (itemDesc2 != null ? "itemDesc2=" + itemDesc2 + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (cCostCenterId != null ? "cCostCenterId=" + cCostCenterId + ", " : "") +
                 (cVendorId != null ? "cVendorId=" + cVendorId + ", " : "") +

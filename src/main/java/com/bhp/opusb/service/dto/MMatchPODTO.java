@@ -115,6 +115,12 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     private BigDecimal foreignTotalLines;
 
     /**
+     * PRSTAM
+     */
+    @ApiModelProperty(value = "PRSTAM")
+    private BigDecimal taxAmount;
+
+    /**
      * PRCTAM
      */
     @ApiModelProperty(value = "PRCTAM")
@@ -171,6 +177,20 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     @Size(max = 1)
     @ApiModelProperty(value = "PRMATC")
     private String mMatchType;
+
+    /**
+     * PRLITM
+     */
+    @Size(max = 25)
+    @ApiModelProperty(value = "PRLITM")
+    private String itemDesc1;
+
+    /**
+     * PRAITM
+     */
+    @Size(max = 25)
+    @ApiModelProperty(value = "PRAITM")
+    private String itemDesc2;
 
     /**
      * PRKCOO
@@ -495,6 +515,22 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         return totalLines.add(getTaxAmount());
     }
 
+    public String getItemDesc1() {
+        return itemDesc1;
+    }
+
+    public void setItemDesc1(String itemDesc1) {
+        this.itemDesc1 = itemDesc1;
+    }
+
+    public String getItemDesc2() {
+        return itemDesc2;
+    }
+
+    public void setItemDesc2(String itemDesc2) {
+        this.itemDesc2 = itemDesc2;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -755,6 +791,8 @@ public class MMatchPODTO extends AbstractAuditingDTO {
             ", taxable='" + isTaxable() + "'" +
             ", description='" + getDescription() + "'" +
             ", mMatchType='" + getmMatchType() + "'" +
+            ", itemDesc1='" + getItemDesc1() + "'" +
+            ", itemDesc2='" + getItemDesc2() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", cCostCenterId=" + getCCostCenterId() +
             ", cVendorId=" + getCVendorId() +

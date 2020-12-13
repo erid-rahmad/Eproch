@@ -2,11 +2,7 @@ package com.bhp.opusb.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Map;
 import java.util.Optional;
 
@@ -213,6 +209,8 @@ public class MMatchPOService {
             .taxAmount(toBigDecimal(payload, "PRSTAM"))
             .taxable(stringToBoolean((String) payload.get("PRTX")))
             .totalLines(toBigDecimal(payload, "PRAREC"))
+            .itemDesc1(nullableToString(payload.get("PRLITM")))
+            .itemDesc2(nullableToString(payload.get("PRAITM")))
 
             // Lookup to master data.
             .cCurrency(buildCurrency(payload, org))
@@ -253,6 +251,8 @@ public class MMatchPOService {
             .taxAmount(toBigDecimal(payload, "PRSTAM"))
             .taxable(stringToBoolean((String) payload.get("PRTX")))
             .totalLines(toBigDecimal(payload, "PRAREC"))
+            .itemDesc1(nullableToString(payload.get("PRLITM")))
+            .itemDesc2(nullableToString(payload.get("PRAITM")))
 
             // Lookup to master data.
             .adOrganization(org)
@@ -448,17 +448,5 @@ public class MMatchPOService {
 
     private boolean stringToBoolean(String value) {
         return "Y".equals(value);
-    }
-
-    private LocalDate julianDateToLocalDate(Integer julianDate) {
-        Date date = null;
-        String j = julianDate.toString();
-        try {
-            date = new SimpleDateFormat("Myydd").parse(j);
-            return date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        } catch (ParseException e) {
-            log.warn("Failed to convert julian date! {}", e.getLocalizedMessage());
-        }
-        return null;
     }
 }

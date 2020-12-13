@@ -91,4 +91,14 @@
 
     </changeSet>
 
+    <changeSet id="20201213034100" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="vendor_location_id"
+                                 baseTableName="m_verification"
+                                 constraintName="fk_m_verification_vendor_location_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor_location"/>
+
+    </changeSet>
+
 </databaseChangeLog>

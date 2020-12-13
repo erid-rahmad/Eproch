@@ -241,4 +241,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20201213033800" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification">
+            <column name="vendor_location_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

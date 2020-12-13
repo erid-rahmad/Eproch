@@ -192,6 +192,10 @@ public class MVerificationQueryService extends QueryService<MVerification> {
                 specification = specification.and(buildSpecification(criteria.getVendorToId(),
                     root -> root.join(MVerification_.vendorTo, JoinType.LEFT).get(CVendor_.id)));
             }
+            if (criteria.getVendorLocationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorLocationId(),
+                    root -> root.join(MVerification_.vendorLocation, JoinType.LEFT).get(CVendorLocation_.id)));
+            }
             if (criteria.getCTaxCategoryId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCTaxCategoryId(),
                     root -> root.join(MVerification_.cTaxCategory, JoinType.LEFT).get(CTaxCategory_.id)));

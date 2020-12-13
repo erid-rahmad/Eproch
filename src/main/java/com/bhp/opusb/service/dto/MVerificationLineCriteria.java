@@ -59,7 +59,13 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private IntegerFilter lineNo;
 
+    private IntegerFilter lineNoPo;
+
     private IntegerFilter lineNoMr;
+
+    private StringFilter itemDesc1;
+
+    private StringFilter itemDesc2;
 
     private BigDecimalFilter conversionRate;
 
@@ -113,7 +119,10 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.taxAmount = other.taxAmount == null ? null : other.taxAmount.copy();
         this.foreignTaxAmount = other.foreignTaxAmount == null ? null : other.foreignTaxAmount.copy();
         this.lineNo = other.lineNo == null ? null : other.lineNo.copy();
+        this.lineNoPo = other.lineNoPo == null ? null : other.lineNoPo.copy();
         this.lineNoMr = other.lineNoMr == null ? null : other.lineNoMr.copy();
+        this.itemDesc1 = other.itemDesc1 == null ? null : other.itemDesc1.copy();
+        this.itemDesc2 = other.itemDesc2 == null ? null : other.itemDesc2.copy();
         this.conversionRate = other.conversionRate == null ? null : other.conversionRate.copy();
         this.receiveDate = other.receiveDate == null ? null : other.receiveDate.copy();
         this.payStat = other.payStat == null ? null : other.payStat.copy();
@@ -265,12 +274,36 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.lineNo = lineNo;
     }
 
+    public IntegerFilter getLineNoPo() {
+        return lineNoPo;
+    }
+
+    public void setLineNoPo(IntegerFilter lineNoPo) {
+        this.lineNoPo = lineNoPo;
+    }
+
     public IntegerFilter getLineNoMr() {
         return lineNoMr;
     }
 
     public void setLineNoMr(IntegerFilter lineNoMr) {
         this.lineNoMr = lineNoMr;
+    }
+
+    public StringFilter getItemDesc1() {
+        return itemDesc1;
+    }
+
+    public void setItemDesc1(StringFilter itemDesc1) {
+        this.itemDesc1 = itemDesc1;
+    }
+
+    public StringFilter getItemDesc2() {
+        return itemDesc2;
+    }
+
+    public void setItemDesc2(StringFilter itemDesc2) {
+        this.itemDesc2 = itemDesc2;
     }
 
     public BigDecimalFilter getConversionRate() {
@@ -428,7 +461,10 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
             Objects.equals(taxAmount, that.taxAmount) &&
             Objects.equals(foreignTaxAmount, that.foreignTaxAmount) &&
             Objects.equals(lineNo, that.lineNo) &&
+            Objects.equals(lineNoPo, that.lineNoPo) &&
             Objects.equals(lineNoMr, that.lineNoMr) &&
+            Objects.equals(itemDesc1, that.itemDesc1) &&
+            Objects.equals(itemDesc2, that.itemDesc2) &&
             Objects.equals(conversionRate, that.conversionRate) &&
             Objects.equals(receiveDate, that.receiveDate) &&
             Objects.equals(payStat, that.payStat) &&
@@ -466,7 +502,10 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         taxAmount,
         foreignTaxAmount,
         lineNo,
+        lineNoPo,
         lineNoMr,
+        itemDesc1,
+        itemDesc2,
         conversionRate,
         receiveDate,
         payStat,
@@ -505,7 +544,10 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
                 (taxAmount != null ? "taxAmount=" + taxAmount + ", " : "") +
                 (foreignTaxAmount != null ? "foreignTaxAmount=" + foreignTaxAmount + ", " : "") +
                 (lineNo != null ? "lineNo=" + lineNo + ", " : "") +
+                (lineNoPo != null ? "lineNoPo=" + lineNoPo + ", " : "") +
                 (lineNoMr != null ? "lineNoMr=" + lineNoMr + ", " : "") +
+                (itemDesc1 != null ? "itemDesc1=" + itemDesc1 + ", " : "") +
+                (itemDesc2 != null ? "itemDesc2=" + itemDesc2 + ", " : "") +
                 (conversionRate != null ? "conversionRate=" + conversionRate + ", " : "") +
                 (receiveDate != null ? "receiveDate=" + receiveDate + ", " : "") +
                 (payStat != null ? "payStat=" + payStat + ", " : "") +

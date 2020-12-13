@@ -13,7 +13,6 @@ import com.bhp.opusb.service.dto.MMatchPOCriteria;
 import com.bhp.opusb.service.dto.MMatchPODTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,23 +62,19 @@ public class MMatchPOResource {
      * {@code POST  /m-match-pos} : Create a new mMatchPO.
      *
      * @param mMatchPODTO the mMatchPODTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-     *         body the new mMatchPODTO, or with status {@code 400 (Bad Request)} if
-     *         the mMatchPO has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mMatchPODTO, or with status {@code 400 (Bad Request)} if the mMatchPO has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/m-match-pos")
-    public ResponseEntity<MMatchPODTO> createMMatchPO(@Valid @RequestBody MMatchPODTO mMatchPODTO)
-            throws URISyntaxException {
+    public ResponseEntity<MMatchPODTO> createMMatchPO(@Valid @RequestBody MMatchPODTO mMatchPODTO) throws URISyntaxException {
         log.debug("REST request to save MMatchPO : {}", mMatchPODTO);
         if (mMatchPODTO.getId() != null) {
             throw new BadRequestAlertException("A new mMatchPO cannot already have an ID", ENTITY_NAME, "idexists");
         }
         MMatchPODTO result = mMatchPOService.save(mMatchPODTO);
-        return ResponseEntity
-                .created(new URI("/api/m-match-pos/" + result.getId())).headers(HeaderUtil
-                        .createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-                .body(result);
+        return ResponseEntity.created(new URI("/api/m-match-pos/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 
     /**

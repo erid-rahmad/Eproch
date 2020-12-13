@@ -114,10 +114,30 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     private Integer lineNo;
 
     /**
-     * VDLNID Receipt line no.
+     * VDLNID PO line no.
      */
-    @ApiModelProperty(value = "VDLNID Receipt line no.")
+    @ApiModelProperty(value = "VDLNID PO line no.")
+    private Integer lineNoPo;
+
+    /**
+     * VDNLIN Receipt line no.
+     */
+    @ApiModelProperty(value = "VDNLIN Receipt line no.")
     private Integer lineNoMr;
+
+    /**
+     * PRLITM
+     */
+    @Size(max = 25)
+    @ApiModelProperty(value = "PRLITM")
+    private String itemDesc1;
+
+    /**
+     * PRAITM
+     */
+    @Size(max = 25)
+    @ApiModelProperty(value = "PRAITM")
+    private String itemDesc2;
 
     /**
      * VDCRR
@@ -129,7 +149,6 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
      * VDRCDJ Receipt date.
      */
     @ApiModelProperty(value = "VDRCDJ Receipt date.")
-    @JsonProperty("receiptDate")
     private LocalDate receiveDate;
 
     /**
@@ -217,6 +236,7 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
      * VDEXR1 is mapped to tax category name.
      */
     @ApiModelProperty(value = "VDEXR1 is mapped to tax category name.")
+    @JsonProperty("cTaxCategoryId")
     private Long cTaxCategoryId;
 
     @JsonProperty("cTaxCategoryName")
@@ -226,6 +246,7 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
      * VDTXA1 is mapped to tax name.
      */
     @ApiModelProperty(value = "VDTXA1 is mapped to tax name.")
+    @JsonProperty("cTaxId")
     private Long cTaxId;
     
     @JsonProperty("cTaxName")
@@ -362,12 +383,36 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.lineNo = lineNo;
     }
 
+    public Integer getLineNoPo() {
+        return lineNoPo;
+    }
+
+    public void setLineNoPo(Integer lineNoPo) {
+        this.lineNoPo = lineNoPo;
+    }
+
     public Integer getLineNoMr() {
         return lineNoMr;
     }
 
     public void setLineNoMr(Integer lineNoMr) {
         this.lineNoMr = lineNoMr;
+    }
+
+    public String getItemDesc1() {
+        return itemDesc1;
+    }
+
+    public void setItemDesc1(String itemDesc1) {
+        this.itemDesc1 = itemDesc1;
+    }
+
+    public String getItemDesc2() {
+        return itemDesc2;
+    }
+
+    public void setItemDesc2(String itemDesc2) {
+        this.itemDesc2 = itemDesc2;
     }
 
     public BigDecimal getConversionRate() {
@@ -656,7 +701,10 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
             ", taxAmount=" + getTaxAmount() +
             ", foreignTaxAmount=" + getForeignTaxAmount() +
             ", lineNo=" + getLineNo() +
+            ", lineNoPo=" + getLineNoPo() +
             ", lineNoMr=" + getLineNoMr() +
+            ", itemDesc1='" + getItemDesc1() + "'" +
+            ", itemDesc2='" + getItemDesc2() + "'" +
             ", conversionRate=" + getConversionRate() +
             ", receiveDate='" + getReceiveDate() + "'" +
             ", payStat='" + getPayStat() + "'" +

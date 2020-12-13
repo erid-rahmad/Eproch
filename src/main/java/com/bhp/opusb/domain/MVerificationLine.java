@@ -130,10 +130,30 @@ public class MVerificationLine extends AbstractAuditingEntity {
     private Integer lineNo;
 
     /**
-     * VDLNID Receipt line no.
+     * VDLNID PO line no.
+     */
+    @Column(name = "line_no_po")
+    private Integer lineNoPo;
+
+    /**
+     * VDNLIN Receipt line no.
      */
     @Column(name = "line_no_mr")
     private Integer lineNoMr;
+
+    /**
+     * PRLITM
+     */
+    @Size(max = 25)
+    @Column(name = "item_desc_1", length = 25)
+    private String itemDesc1;
+
+    /**
+     * PRAITM
+     */
+    @Size(max = 25)
+    @Column(name = "item_desc_2", length = 25)
+    private String itemDesc2;
 
     /**
      * VDCRR
@@ -433,6 +453,19 @@ public class MVerificationLine extends AbstractAuditingEntity {
         this.lineNo = lineNo;
     }
 
+    public Integer getLineNoPo() {
+        return lineNoPo;
+    }
+
+    public MVerificationLine lineNoPo(Integer lineNoPo) {
+        this.lineNoPo = lineNoPo;
+        return this;
+    }
+
+    public void setLineNoPo(Integer lineNoPo) {
+        this.lineNoPo = lineNoPo;
+    }
+
     public Integer getLineNoMr() {
         return lineNoMr;
     }
@@ -444,6 +477,32 @@ public class MVerificationLine extends AbstractAuditingEntity {
 
     public void setLineNoMr(Integer lineNoMr) {
         this.lineNoMr = lineNoMr;
+    }
+
+    public String getItemDesc1() {
+        return itemDesc1;
+    }
+
+    public MVerificationLine itemDesc1(String itemDesc1) {
+        this.itemDesc1 = itemDesc1;
+        return this;
+    }
+
+    public void setItemDesc1(String itemDesc1) {
+        this.itemDesc1 = itemDesc1;
+    }
+
+    public String getItemDesc2() {
+        return itemDesc2;
+    }
+
+    public MVerificationLine itemDesc2(String itemDesc2) {
+        this.itemDesc2 = itemDesc2;
+        return this;
+    }
+
+    public void setItemDesc2(String itemDesc2) {
+        this.itemDesc2 = itemDesc2;
     }
 
     public BigDecimal getConversionRate() {
@@ -695,7 +754,10 @@ public class MVerificationLine extends AbstractAuditingEntity {
             ", taxAmount=" + getTaxAmount() +
             ", foreignTaxAmount=" + getForeignTaxAmount() +
             ", lineNo=" + getLineNo() +
+            ", lineNoPo=" + getLineNoPo() +
             ", lineNoMr=" + getLineNoMr() +
+            ", itemDesc1='" + getItemDesc1() + "'" +
+            ", itemDesc2='" + getItemDesc2() + "'" +
             ", conversionRate=" + getConversionRate() +
             ", receiveDate='" + getReceiveDate() + "'" +
             ", payStat='" + getPayStat() + "'" +

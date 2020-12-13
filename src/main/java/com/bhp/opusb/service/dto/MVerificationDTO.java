@@ -167,7 +167,6 @@ public class MVerificationDTO extends AbstractAuditingDTO {
      * VHCRCD Invoice verification's currency
      */
     @ApiModelProperty(value = "VHCRCD Invoice verification's currency")
-
     private Long currencyId;
     private String currencyName;
 
@@ -177,11 +176,11 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "VHCRCE Match PO's currency")
     private Long matchPoCurrencyId;
     private String matchPoCurrencyName;
+
     /**
      * VHAN8 for supplier code.\nVHALPH for supplier name.
      */
     @ApiModelProperty(value = "VHAN8 for supplier code.\nVHALPH for supplier name.")
-
     private Long vendorId;
     private String vendorCode;
     private String vendorName;
@@ -195,6 +194,7 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     private String vendorToCode;
     private String vendorToName;
 
+    private CVendorLocationDTO vendorLocation;
     /**
      * VHEXR1 is mapped to tax category name.
      */
@@ -555,6 +555,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.vendorToCode = vendorToCode;
     }
 
+    public CVendorLocationDTO getVendorLocation() {
+        return vendorLocation;
+    }
+
+    public void setVendorLocation(CVendorLocationDTO cVendorLocation) {
+        this.vendorLocation = cVendorLocation;
+    }
+
     public Long getCTaxCategoryId() {
         return cTaxCategoryId;
     }
@@ -644,6 +652,7 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", matchPoCurrencyId=" + getMatchPoCurrencyId() +
             ", vendorId=" + getVendorId() +
             ", vendorToId=" + getVendorToId() +
+            ", vendorLocationId=" + getVendorLocation() +
             ", cTaxCategoryId=" + getCTaxCategoryId() +
             ", cTaxId=" + getCTaxId() +
             "}";

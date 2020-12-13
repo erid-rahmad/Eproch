@@ -320,4 +320,15 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20201212065000" author="Ananta Aryadewa">
+        <addColumn tableName="m_match_po">
+            <column name="item_desc_1" type="varchar(25)" remarks="PRLITM">
+                <constraints nullable="true" />
+            </column>
+            <column name="item_desc_2" type="varchar(25)" remarks="PRAITM">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>
