@@ -266,7 +266,6 @@
                             <el-table-column
                                 min-width="140"
                                 sortable
-                                prop="taxInvoice"
                                 label="Tax Invoice No.">
                                 <template slot-scope="{ row }">
                                     {{ row.taxInvoice | facade('###-##.########') }}
@@ -286,7 +285,6 @@
                             <el-table-column
                                 min-width="150"
                                 sortable
-                                prop="totalLines"
                                 label="Taxable Amount"
                                 align="right">
                                 <template slot-scope="{ row }">
@@ -296,7 +294,6 @@
                             <el-table-column
                                 min-width="150"
                                 sortable
-                                prop="taxAmount"
                                 label="PPN"
                                 align="right">
                                 <template slot-scope="{ row }">
@@ -306,16 +303,14 @@
                             <el-table-column
                                 min-width="150"
                                 sortable
-                                prop="taxAmount"
                                 label="PPH"
                                 align="right">
                                 <template slot-scope="{ row }">
-                                    {{ row.taxAmount | formatCurrency }}
+                                    {{ row.withholdingAmt | formatCurrency }}
                                 </template>
                             </el-table-column>
                             <el-table-column
                                 min-width="150"
-                                prop="totalAmount"
                                 label="Total Amount"
                                 align="right">
                                 <template slot-scope="{ row }">
