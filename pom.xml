@@ -398,6 +398,13 @@
             <artifactId>jasperreports-fonts</artifactId>
             <version>6.16.0</version>
         </dependency>
+        <dependency>
+            <groupId>net.sourceforge.barbecue</groupId>
+            <artifactId>barbecue</artifactId>
+            <version>1.5-beta1</version>
+            <scope>runtime</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
