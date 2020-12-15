@@ -27,6 +27,8 @@ import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.security.AuthoritiesConstants;
 import com.bhp.opusb.security.SecurityUtils;
 import com.bhp.opusb.service.dto.AdUserDTO;
+import com.bhp.opusb.service.dto.MVerificationDTO;
+import com.bhp.opusb.service.dto.MVerificationLineDTO;
 import com.bhp.opusb.service.dto.UserDTO;
 import com.bhp.opusb.service.mapper.AdUserMapper;
 import com.bhp.opusb.service.mapper.CBusinessCategoryMapper;
@@ -36,7 +38,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -92,6 +93,12 @@ public class UserService {
     public void sendActivationEmail(CVendor vendor) {
         List<AdUser> users = adUserRepository.findBycVendor(vendor);
         Stream.ofAll(users).map(AdUser::getUser).forEach(mailService::sendActivationEmail);
+    }
+
+    public void sendNotifRejectVerification(MVerificationDTO mVerification, List<MVerificationLineDTO> mVerificationLine) {
+        List<AdUser> users = adUserRepository.findBycVendorId(mVerification.getVendorId());
+        String currentLogin = this.getUserWithAuthorities().get().getLogin();
+        Stream.ofAll(users).forEach(user -> mailService.sendNotifRejectVerification(user.getUser(), currentLogin, mVerification, mVerificationLine));
     }
 
     public Optional<User> activateRegistration(String key) {

@@ -54,17 +54,19 @@ public class MVerificationService {
     private final MVerificationLineQueryService mVerificationLineQueryService;
     private final AiMessageDispatcher messageDispatcher;
     private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMM");
+    private final UserService userService;
 
     public MVerificationService(MVerificationRepository mVerificationRepository, DataSource dataSource,
             MVerificationMapper mVerificationMapper, MVerificationLineService mVerificationLineService,
             MVerificationLineQueryService mVerificationLineQueryService, ADOrganizationService adOrganizationService,
-            AiMessageDispatcher messageDispatcher) {
+            AiMessageDispatcher messageDispatcher, UserService userService) {
         this.dataSource = dataSource;
         this.mVerificationRepository = mVerificationRepository;
         this.mVerificationMapper = mVerificationMapper;
         this.mVerificationLineService = mVerificationLineService;
         this.mVerificationLineQueryService = mVerificationLineQueryService;
         this.messageDispatcher= messageDispatcher;
+        this.userService = userService;
 
         organization = adOrganizationService.getDefaultOrganization();
     }
@@ -119,7 +121,7 @@ public class MVerificationService {
             mVerificationLineService.removeAll(verificationDTO.getRemove());
         }
 
-        if (mVerification.getVerificationStatus().equals("APV")) {
+        if (mVerification.getVerificationStatus().equals("APV") || mVerification.getVerificationStatus().equals("RJC")) {
             findOne(mVerification.getId())
                 .ifPresent(header -> {
                     MVerificationLineCriteria lineCriteria = new MVerificationLineCriteria();
@@ -128,18 +130,22 @@ public class MVerificationService {
                     lineCriteria.setVerificationId(idFilter);
                     List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
 
-                    // Dispatch the header to the external system.
-                    final Map<String, Object> headerPayload = new HashMap<>(2);
-                    headerPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_HEADER);
-                    headerPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, header);
-                    messageDispatcher.dispatch("mVerificationMessageDispatcher", headerPayload);
+                    if (mVerification.getVerificationStatus().equals("APV") && !lines.isEmpty()) {
+                        // Dispatch the header to the external system.
+                        final Map<String, Object> headerPayload = new HashMap<>(2);
+                        headerPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_HEADER);
+                        headerPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, header);
+                        messageDispatcher.dispatch("mVerificationMessageDispatcher", headerPayload);
 
-                    // Dispatch the lines to the external system.
-                    if (!lines.isEmpty()) {
-                        final Map<String, Object> linesPayload = new HashMap<>(2);
-                        linesPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_LINES);
-                        linesPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, lines);
-                        messageDispatcher.dispatch("mVerificationMessageDispatcher", linesPayload);
+                        // Dispatch the lines to the external system.
+                        if (!lines.isEmpty()) {
+                            final Map<String, Object> linesPayload = new HashMap<>(2);
+                            linesPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_LINES);
+                            linesPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, lines);
+                            messageDispatcher.dispatch("mVerificationMessageDispatcher", linesPayload);
+                        }
+                    } else if(mVerification.getVerificationStatus().equals("RJC")) {
+                        userService.sendNotifRejectVerification(header, lines);
                     }
                 });
 
