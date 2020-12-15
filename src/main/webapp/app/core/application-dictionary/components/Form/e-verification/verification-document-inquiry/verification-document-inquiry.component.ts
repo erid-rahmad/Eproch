@@ -59,9 +59,9 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   private setVerificationNo: string = "";
 
   selectedRows: any = {};
-  public vendorOptions: any = [];
-  public statusOptions: any = [];
-  public paymentStatusOptions: any = [];
+  public vendorOptions: any[] = [];
+  public statusOptions: any[] = [];
+  public paymentStatusOptions: any[] = [];
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
@@ -389,6 +389,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   formatDocumentStatus(value: string) {
     return this.statusOptions.find(status => status.key === value)?.value;
+  }
+
+  formatPaymentStatus(value: string) {
+    return this.paymentStatusOptions.find(status => status.key === value).value;
   }
 
 }

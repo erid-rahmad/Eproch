@@ -6,7 +6,8 @@
             "javadoc": "VHDOCM Invoice verification document no.",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
+                "required",
+                "unique"
             ]
         },
         {

@@ -218,7 +218,6 @@
                             <el-table-column
                                 min-width="100"
                                 sortable
-                                prop="verificationStatus"
                                 label="Status">
                                 <template slot-scope="{ row }">
                                     {{ formatDocumentStatus(row.verificationStatus) }}
@@ -232,8 +231,12 @@
                             <el-table-column
                                 min-width="140"
                                 sortable
-                                prop="payStatus"
-                                label="Payment Status"/>
+                                label="Payment Status"
+                            >
+                                <template slot-scope="{ row }">
+                                    {{ formatPaymentStatus(row.payStatus) }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
                                 min-width="150"
                                 sortable
