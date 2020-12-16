@@ -169,25 +169,26 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
       } else {
         submit = true;
       }
-    }else{
-      submit = true;
-    }
-    if(submit){
+    } else {
       if (!this.eVerification.form.description) {
         message = "Please input Notes";
         this.notifWarning(message);
       } else {
-        let now = new Date();
-        const offset = now.getTimezoneOffset();
-
-        now = new Date(now.getTime() - (offset * 60 * 1000));
-        const dateTrx = now.toISOString().split('T')[0];
-
-        this.eVerification.form.verificationStatus = action;
-        this.eVerification.form[approval ? 'dateApprove' : 'dateReject'] = dateTrx;
-        this.fullscreenLoading = true;
-        this.submit();
+        submit = true;
       }
+    }
+
+    if(submit){
+      let now = new Date();
+      const offset = now.getTimezoneOffset();
+
+      now = new Date(now.getTime() - (offset * 60 * 1000));
+      const dateTrx = now.toISOString().split('T')[0];
+
+      this.eVerification.form.verificationStatus = action;
+      this.eVerification.form[approval ? 'dateApprove' : 'dateReject'] = dateTrx;
+      this.fullscreenLoading = true;
+      this.submit();
     }
   }
 

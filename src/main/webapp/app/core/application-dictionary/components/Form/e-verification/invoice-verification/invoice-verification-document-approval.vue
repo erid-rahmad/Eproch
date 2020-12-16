@@ -174,7 +174,7 @@
 
                     </el-col>
                     <el-col :span="16">
-                        <el-form-item label="Notes" prop="description" required>
+                        <el-form-item label="Notes" prop="description">
                             <el-input class="form-input" clearable v-model="formHeader.description"></el-input>
                         </el-form-item>
                     </el-col>
