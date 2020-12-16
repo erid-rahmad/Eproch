@@ -9,7 +9,6 @@
                         style="margin-left: 0px;"
                         size="small"
                         type="primary"
-                        :disabled="disabledButton"
                         icon="el-icon-check"
                         @click="showDialogConfirmation('update')" />
                     <el-button
@@ -307,6 +306,7 @@
                     <e-verification-update
                         ref="formUpdate"
                         :form-update="selectedRows"
+                        :doc-status="documentStatuses"
                         @close-e-verification-update="closeEVerificationUpdate"
                     />
                 </el-col>

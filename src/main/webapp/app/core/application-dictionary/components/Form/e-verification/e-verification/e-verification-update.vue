@@ -11,6 +11,7 @@
                     type="primary"
                     icon="el-icon-check"
                     v-loading.fullscreen.lock="fullscreenLoading"
+                    v-if="isDraft"
                     @click="updateEVerification"/>
                 <el-button
                     class="button"
@@ -25,6 +26,7 @@
                     size="small"
                     type="primary"
                     icon="el-icon-plus"
+                    v-if="isDraft"
                     @click="displayMatchPo(1)">
                     Add
                 </el-button>
@@ -34,6 +36,7 @@
                     size="small"
                     type="primary"
                     icon="el-icon-plus"
+                    v-if="isDraft"
                     @click="displayMatchPo(2)">
                     Add by Receipt No.
                 </el-button>
@@ -45,12 +48,13 @@
             <el-form ref="eVerificationUpdate" :model="formUpdate" label-width="170px" size="mini" :rules="rules">
                 <el-col :span="8">
                     <el-form-item label="Invoice No." prop="invoiceNo" required>
-                        <el-input class="form-input" clearable v-model="formUpdate.invoiceNo"/>
+                        <el-input :disabled="!isDraft" class="form-input" clearable v-model="formUpdate.invoiceNo"/>
                     </el-form-item>
                     <el-form-item label="Invoice Date" prop="invoiceDate" required>
                         <el-date-picker
                             class="form-input"
                             clearable
+                            :disabled="!isDraft"
                             v-model="formUpdate.invoiceDate"
                             type="date"
                             :format="dateDisplayFormat"
@@ -58,7 +62,7 @@
                             placeholder="Pick a date" />
                     </el-form-item>
                     <el-form-item label="Currency" prop="currencyId" required>
-                        <el-select class="form-input" clearable filterable v-model="formUpdate.currencyId" placeholder="Currency" >
+                        <el-select :disabled="!isDraft" class="form-input" clearable filterable v-model="formUpdate.currencyId" placeholder="Currency" >
                             <el-option
                                 v-for="item in currencyOptions"
                                 :key="item.key"
@@ -66,13 +70,26 @@
                                 :value="item.key" />
                         </el-select>
                     </el-form-item>
-
+                    <el-form-item label="Verification No" prop="verificationNo" v-if="!isDraft">
+                        <el-input class="form-input" disabled clearable v-model="formUpdate.verificationNo"/>
+                    </el-form-item>
+                    <el-form-item label="Verification Date" prop="verificationDate" v-if="!isDraft">
+                        <el-date-picker
+                            class="form-input"
+                            clearable disabled
+                            v-model="formUpdate.verificationDate"
+                            type="date"
+                            :format="dateDisplayFormat"
+                            :value-format="dateValueFormat"
+                            placeholder="Pick a date" />
+                    </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="Tax Invoice No." prop="taxInvoice" required>
                         <el-input
                             class="form-input"
                             clearable
+                            :disabled="!isDraft"
                             v-model="formUpdate.taxInvoice"
                             v-inputmask="{'mask': '999-99.99999999'}"
                             placeholder="___-__.________"
@@ -85,12 +102,26 @@
                             clearable
                             v-model="formUpdate.taxDate"
                             type="date"
+                            :disabled="!isDraft"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"
                             placeholder="Pick a date" />
                     </el-form-item>
                     <el-form-item label="NPWP" prop="vendorName">
                         <el-input class="form-input" disabled clearable v-model="formUpdate.vendorName"/>
+                    </el-form-item>
+                    <el-form-item label="Status" prop="verificationStatus" v-if="!isDraft">
+                        <el-input class="form-input" disabled clearable :value="formatDocumentStatus(formUpdate.verificationStatus)"/>
+                    </el-form-item>
+                    <el-form-item label="Status Date" v-if="!isDraft">
+                        <el-date-picker
+                            class="form-input"
+                            clearable disabled
+                            :value="dateStatus(formUpdate.verificationStatus)"
+                            type="date"
+                            :format="dateDisplayFormat"
+                            :value-format="dateValueFormat"
+                            placeholder="Pick a date" />
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -142,6 +173,7 @@
                         align="center"
                         fixed
                         width="55"
+                        v-if="isDraft"
                     >
                         <template slot-scope="{ row, $index }">
                             <el-button

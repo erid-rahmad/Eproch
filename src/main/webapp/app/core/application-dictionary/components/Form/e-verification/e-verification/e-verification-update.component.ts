@@ -15,7 +15,10 @@ const EVerificationUpdateProps = Vue.extend({
       type: Object,
       default: () => {}
     },
-
+    docStatus: {
+      type: Array,
+      default: () => []
+    },
   }
 })
 
@@ -29,7 +32,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     defaultSort: {},
     emptyText: 'No Records Found',
     maxHeight: 470,
-    height: 450
+    height: 380
   };
   rules = {
     taxInvoice: [
@@ -54,6 +57,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   enofaList: any[] = [];
   lastTaxInvoice: string = "";
   statTaxInvoice: boolean = false;
+  isDraft: boolean = false;
 
   private processing = false;
   private fullscreenLoading: boolean = false;
@@ -94,8 +98,15 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     this.retrieveGetCurrencies();
     this.formUpdate.vendorId = accountStore.userDetails.cVendorId;
     this.formUpdate.vendorName = accountStore.userDetails.cVendorName;
-    this.formUpdate.verificationStatus = "DRF";
+    if(!this.formUpdate.verificationStatus || this.formUpdate.verificationStatus == "DRF") {
+      this.formUpdate.verificationStatus = "DRF";
+      this.isDraft = true;
+    } else {
+      this.isDraft = false;
+    }
+
     this.retrieveEnofa();
+    console.log(this.formUpdate);
 
     if (this.formUpdate.id) {
       this.filterQuery = `verificationId.equals=${this.formUpdate.id}`;
@@ -512,6 +523,24 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       data.vendorId = line.cVendorId;
       return data;
     });
+  }
+
+  formatDocumentStatus(value: string) {
+    return this.docStatus.find(status => status.key === value)?.value;
+  }
+
+  dateStatus(value: string){
+    var date = "";
+    if(value == "SMT"){
+      date = this.formUpdate.dateSubmit;
+    } else if(value == "RJC") {
+      date = this.formUpdate.dateReject;
+    } else if(value == "APV") {
+      date = this.formUpdate.dateApprove;
+    } else if(value == "CNL") {
+      date = this.formUpdate.lastModifiedDate;
+    }
+    return date;
   }
 
 }
