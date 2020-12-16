@@ -71,9 +71,16 @@ public class MVerificationService {
         organization = adOrganizationService.getDefaultOrganization();
     }
 
-    public JasperPrint exportVerification(Long verificationId) throws IOException, SQLException, JRException {
+    public JasperPrint exportVerification(Long verificationId, long key) throws IOException, SQLException, JRException {
 
-        File file = ResourceUtils.getFile("classpath:templates/report/invoice-verification.jrxml");
+        File file = null;
+
+        if (key == 1) {
+            file = ResourceUtils.getFile("classpath:templates/report/invoice-verification.jrxml");
+        } else if (key == 2) {
+            file = ResourceUtils.getFile("classpath:templates/report/summary-invoice-verification.jrxml");
+        }
+
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
 
         Map<String, Object> parameters = new HashMap<>();

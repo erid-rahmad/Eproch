@@ -92,19 +92,25 @@ public class MVerificationResource {
         mVerificationService.updateDocumentStatus(verificationDTO);
     }
 
-    @GetMapping("/m-verifications/report/{verificationId}/{verificationNo}")
-    public void reportEVerification(@PathVariable Long verificationId, @PathVariable Long verificationNo, HttpServletResponse response)
+    @GetMapping("/m-verifications/report/{verificationId}/{verificationNo}/{key}")
+    public void reportEVerification(@PathVariable Long verificationId, @PathVariable Long verificationNo, @PathVariable Long key, HttpServletResponse response)
             throws IOException {
 
         JasperPrint jasperPrint = null;
-        String fileName = "Verification - "+verificationNo+".pdf";
+        String fileName = "";
+
+        if (key == 1) {
+            fileName = "Verification - "+verificationNo+".pdf";
+        } else if(key == 2) {
+            fileName = "Summary Verification - "+verificationNo+".pdf";
+        }
 
         response.setContentType("application/octet-stream");
         response.addHeader("Content-Disposition", "attachment; filename=\""+fileName+"\"");
         OutputStream out = response.getOutputStream();
 
         try {
-            jasperPrint = mVerificationService.exportVerification(verificationId);
+            jasperPrint = mVerificationService.exportVerification(verificationId, key);
 
             JasperExportManager.exportReportToPdfStream(jasperPrint, out);
         } catch (SQLException | JRException e) {
