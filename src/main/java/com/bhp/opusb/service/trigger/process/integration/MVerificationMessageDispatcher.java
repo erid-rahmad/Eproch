@@ -85,7 +85,10 @@ public class MVerificationMessageDispatcher implements ProcessTrigger {
       header.setTaxAmount(multiply(header.getTaxAmount(), 100));
       header.setForeignGrandTotal(multiply(header.getForeignGrandTotal(), 100));
       header.setForeignTaxAmount(multiply(header.getForeignTaxAmount(), 100));
-      header.setDescription(description.length() > 30 ? description.substring(0, 29) : description);
+
+      if (description != null) {
+        header.setDescription(description.length() > 30 ? description.substring(0, 29) : description);
+      }
       
       cVendorLocationRepository.findFirstByInvoiceAddressTrueAndVendor_Id(header.getVendorId())
         .ifPresent(vendorLocation -> {
