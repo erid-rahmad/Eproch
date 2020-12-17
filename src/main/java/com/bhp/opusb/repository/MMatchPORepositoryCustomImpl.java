@@ -12,6 +12,7 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
+import javax.persistence.criteria.CriteriaBuilder.In;
 
 import com.bhp.opusb.domain.CVendor_;
 import com.bhp.opusb.domain.MMatchPO;
@@ -78,7 +79,10 @@ public class MMatchPORepositoryCustomImpl implements MMatchPORepositoryCustom {
 
   private Predicate[] buildSubqueryPredicates(CriteriaBuilder criteriaBuilder, Root<MMatchPO> wrapper, Root<MVerificationLine> subqueryRoot, Join<MVerificationLine, MVerification> join) {
     List<Predicate> predicates = new ArrayList<>(8);
-    predicates.add(criteriaBuilder.notEqual(join.get(MVerification_.verificationStatus), "CNL"));
+    In<String> appliedVerifications = criteriaBuilder.in(join.get(MVerification_.verificationStatus))
+      .value("DRF").value("SMT").value("APV");
+
+    predicates.add(appliedVerifications);
     predicates.add(criteriaBuilder.equal(wrapper.get(MMatchPO_.adOrganization), subqueryRoot.get(MVerificationLine_.adOrganization)));
     predicates.add(criteriaBuilder.equal(wrapper.get(MMatchPO_.cDocType), subqueryRoot.get(MVerificationLine_.cDocType)));
     predicates.add(criteriaBuilder.equal(wrapper.get(MMatchPO_.poNo), subqueryRoot.get(MVerificationLine_.poNo)));
