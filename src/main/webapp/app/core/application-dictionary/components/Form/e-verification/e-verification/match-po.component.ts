@@ -34,7 +34,7 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
   private reverse = false;
   private totalItems = 0;
 
-  private baseApiUrlMatchPo = "/api/m-match-pos";
+  private baseApiUrlMatchPo = '/api/m-match-pos/not-invoiced';
   private filterQuery: string = '';
   private processing = false;
 
@@ -167,7 +167,7 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
         if (this.filterQuery) {
           this.filterQuery += "&"
         }
-        this.filterQuery += "receiptDate.greaterOrEqualThan=" + this.filter.receiptDateFrom;
+        this.filterQuery += "receiptDate.greaterThanOrEqual=" + this.filter.receiptDateFrom;
       }
 
       if (!!this.filter.poNo) {
@@ -181,7 +181,7 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
         if (this.filterQuery) {
           this.filterQuery += "&"
         }
-        this.filterQuery += "receiptDate.lessOrEqualThan=" + this.filter.receiptDateTo;
+        this.filterQuery += "receiptDate.lessThanOrEqual=" + this.filter.receiptDateTo;
       }
 
       if (!!this.filter.deliveryNo) {

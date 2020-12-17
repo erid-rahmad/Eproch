@@ -152,9 +152,6 @@ public class MMatchPOService {
                 aiExchangeInRepository.save(exchangeIn);
             }
         }
-
-        
-        
         return mMatchPOMapper.toDto(mMatchPO);
     }
 
@@ -217,6 +214,7 @@ public class MMatchPOService {
             .cTaxCategory(buildTaxCategory(payload, org))
             .cTax(buildTax(payload, entity.getCTaxCategory(), org))
             .cUom(buildUnitOfMeasure(payload, org))
+            .mProduct(buildProduct(payload, entity.getCUom(), org))
             .cVendor(buildVendor(String.valueOf(payload.get("PRAN8"))))
             .mWarehouse(buildWarehouse(payload, org))
             .mLocator(buildLocator(payload, entity.getMWarehouse(), org));
@@ -397,7 +395,7 @@ public class MMatchPOService {
                 final CProduct product = new CProduct();
                 product.active(true)
                     .adOrganization(org)
-                    .code(code.equals("0") ? name : code)
+                    .code(code)
                     .name(name)
                     .description(description)
                     .type(cProductService.getDefaultType())

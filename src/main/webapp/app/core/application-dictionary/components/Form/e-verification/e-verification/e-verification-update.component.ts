@@ -72,7 +72,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   private filterQuery: string = "";
 
   retrieveEnofa() {
-    var filterQuery = "vendorId.equals="+this.formUpdate.vendorId;
+    let filterQuery = "vendorId.equals="+this.formUpdate.vendorId;
     this.dynamicWindowService(this.baseApiUrlTaxInvoice)
       .retrieve({
         criteriaQuery: "sort=id,asc&"+filterQuery,
@@ -164,7 +164,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   // =====================================
 
   public displayMatchPo(id){
-    var width, titleModal;
+    let width, titleModal;
     if(id == 1){
       width = "90%";
       titleModal = "Receipt Order";
@@ -186,7 +186,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
 
   updateEVerification(){
-    var message;
+    let message;
     if(this.gridData.length){
 
       (this.$refs.eVerificationUpdate as ElForm).validate((passed, errors) => {
@@ -344,55 +344,37 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
 
   checkTaxInvoice(value) {
-    console.log(this.enofaList);
-    var length = this.enofaList.length;
-    for (var i=0; i < length; i++) {
-      var startNo;
-      var endNo;
+    let length = this.enofaList.length;
+    for (let i = 0; i < length; i++) {
+      const startNo = parseInt(this.enofaList[i].startNo);
+      const endNo = parseInt(this.enofaList[i].endNo);
 
-      startNo = parseInt(this.enofaList[i].startNo);
-      endNo = parseInt(this.enofaList[i].endNo);
+      let data = parseInt(value);
 
-      var data = parseInt(value);
-
-      if(data>=startNo && data<=endNo){
+      if (data >= startNo && data <= endNo) {
         this.statTaxInvoice = true;
         break;
-      }else{
-        if(data >= startNo){
-          this.statTaxInvoice = false;
-
-          if(data > parseInt(this.enofaList[length-1].endNo)){
-            this.$notify({
-              title: 'Warning',
-              dangerouslyUseHTMLString: true,
-              message: 'Tax invoice not found in range',
-              type: 'warning'
-            });
-            break;
-          }
-
-        }else{
-          this.$notify({
-            title: 'Warning',
-            dangerouslyUseHTMLString: true,
-            message: 'Tax invoice not found in range',
-            type: 'warning'
-          });
-          break;
-        }
+      } else if (length - i > 1) {
+        // Check the next tax invoice number range set, if any.
+        continue;
       }
+
+      this.$notify({
+        title: 'Warning',
+        message: 'Tax invoice not found in range',
+        type: 'warning'
+      });
     }
   }
 
   checkVerification(data, id){
-    var filterQuery = "vendorId.equals="+this.formUpdate.vendorId+"&taxInvoice.equals="+data+"&verificationStatus.notEquals=RJC";
+    let filterQuery = "vendorId.equals="+this.formUpdate.vendorId+"&taxInvoice.equals="+data+"&verificationStatus.notEquals=RJC";
     this.dynamicWindowService(this.baseApiUrlEVerification)
       .retrieve({
         criteriaQuery: filterQuery,
       })
       .then(res => {
-        var length = res.data.length;
+        let length = res.data.length;
         //console.log(length)
         if(length){
           //console.log(id);
@@ -530,7 +512,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
 
   dateStatus(value: string){
-    var date = "";
+    let date = "";
     if(value == "SMT"){
       date = this.formUpdate.dateSubmit;
     } else if(value == "RJC") {

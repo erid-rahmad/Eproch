@@ -141,6 +141,21 @@ public class MMatchPOResource {
     }
 
     /**
+     * {@code GET  /m-match-pos} : get all the mMatchPOS that are not already invoiced.
+     *
+     * @param cVendorId
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of mMatchPOS in body.
+     */
+    @GetMapping("/m-match-pos/not-invoiced")
+    public ResponseEntity<List<MMatchPODTO>> getNotInvoicedMMatchPOS(MMatchPOCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get not-already-invoiced MMatchPOS by criteria: {}", criteria);
+        Page<MMatchPODTO> page = mMatchPOQueryService.findNewReceivedItems(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
      * {@code GET  /m-match-pos/count} : count all the mMatchPOS.
      *
      * @param criteria the criteria which the requested entities should match.

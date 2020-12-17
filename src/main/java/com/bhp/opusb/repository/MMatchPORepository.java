@@ -1,6 +1,5 @@
 package com.bhp.opusb.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.MMatchPO;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Repository;
  * Spring Data  repository for the MMatchPO entity.
  */
 @Repository
-public interface MMatchPORepository extends JpaRepository<MMatchPO, Long>, JpaSpecificationExecutor<MMatchPO> {
+public interface MMatchPORepository extends JpaRepository<MMatchPO, Long>, JpaSpecificationExecutor<MMatchPO>, MMatchPORepositoryCustom {
 
   @Query("SELECT m FROM MMatchPO m " +
     "WHERE m.mMatchType = ?1 " +
@@ -27,13 +26,4 @@ public interface MMatchPORepository extends JpaRepository<MMatchPO, Long>, JpaSp
     "AND m.orderSuffix = ?8")
   Optional<MMatchPO> findByKeys(String matchType, String orgId, String docType, String poNo, String receiptNo,
       Integer lineNoPo, Integer lineNoMr, String orderSuffix);
-
-  @Query("SELECT m FROM MMatchPO m " +
-    "WHERE (m.adOrganization.id, m.cDocType, m.poNo, m.receiptNo, m.lineNoPo, m.lineNoMr, m.orderSuffix) NOT IN ( " +
-      "SELECT mr.adOrganization.id, mr.cDocType, mr.poNo, mr.receiptNo, mr.lineNoPo, mr.lineNoMr, mr.orderSuffix " +
-      "FROM MMatchPO mr " +
-      "WHERE mr.mMatchType = '2' " +
-    ")" +
-    "AND m.cVendor.id = $1")
-  List<MMatchPO> findNewReceivedItems(Long vendorId);
 }
