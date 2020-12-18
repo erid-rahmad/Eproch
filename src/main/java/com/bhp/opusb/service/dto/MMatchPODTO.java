@@ -431,7 +431,7 @@ public class MMatchPODTO extends AbstractAuditingDTO {
 
     @JsonProperty("taxAmount")
     public BigDecimal getTaxAmount() {
-        if (cTaxRate == null) {
+        if (totalLines == null || cTaxRate == null) {
             return new BigDecimal("0");
         }
 
@@ -512,6 +512,10 @@ public class MMatchPODTO extends AbstractAuditingDTO {
 
     @JsonProperty("totalAmount")
     public BigDecimal getTotalAmount() {
+        if (totalLines == null) {
+            return new BigDecimal("0");
+        }
+
         return totalLines.add(getTaxAmount());
     }
 
@@ -706,6 +710,10 @@ public class MMatchPODTO extends AbstractAuditingDTO {
 
     @JsonProperty("mProductName")
     public String getMProductName() {
+        if (mProductCode == null) {
+            return null;
+        }
+        
         return mProductCode + " - " + mProductShortName;
     }
 

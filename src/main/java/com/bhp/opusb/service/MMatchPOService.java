@@ -119,12 +119,36 @@ public class MMatchPOService {
         String orgCode = (String) payload.get("PRKCOO");
         String docType = (String) payload.get("PRDCTO");
         String poNo = String.valueOf(payload.get("PRDOCO"));
-        String receiptNo = String.valueOf(payload.get("PRDOC"));
+        int receiptNo = (int) payload.get("PRDOC");
         int lineNoPo = (int) payload.get("PRLNID");
         int lineNoMr = (int) payload.get("PRNLIN");
         String orderSuffix = (String) payload.get("PRSFXO");
-        Optional<MMatchPO> record = mMatchPORepository.findByKeys(matchType, orgCode, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix);
-        ADOrganization org = adOrganizationService.findOrCreate((String) payload.get("PRKCOO"));
+
+        // Should delete the reversed match PO.
+        if (matchType.equals("4")) {
+            Optional<MMatchPO> record = mMatchPORepository.findReversedLine(orgCode, docType, poNo, BigDecimal.valueOf(receiptNo), lineNoPo, lineNoMr, orderSuffix);
+
+            if (record.isPresent()) {
+                log.debug("Deleting match PO record due to reverse event : {}", record.get());
+                mMatchPORepository.delete(record.get());
+            }
+
+            // Immediatelly return the DTO with the primary keys.
+            // These keys are required to update the PRLRT (last_run_time) field in the respective table.
+            MMatchPODTO dto = new MMatchPODTO();
+            dto.setAdOrganizationCode(orgCode);
+            dto.setcDocType(docType);
+            dto.setPoNo(poNo);
+            dto.setReceiptNo(String.valueOf(receiptNo));
+            dto.setLineNoPo(lineNoPo);
+            dto.setLineNoMr(lineNoMr);
+            dto.setOrderSuffix(orderSuffix);
+            dto.setmMatchType(matchType);
+            return dto;
+        }
+
+        Optional<MMatchPO> record = mMatchPORepository.findByKeys(matchType, orgCode, docType, poNo, String.valueOf(receiptNo), lineNoPo, lineNoMr, orderSuffix);
+        ADOrganization org = adOrganizationService.findOrCreate(orgCode);
         MMatchPO mMatchPO;
 
         if (record.isPresent()) {

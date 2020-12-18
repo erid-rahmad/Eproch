@@ -6,13 +6,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaBuilder.In;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
-import javax.persistence.criteria.CriteriaBuilder.In;
 
 import com.bhp.opusb.domain.CVendor_;
 import com.bhp.opusb.domain.MMatchPO;
@@ -23,8 +23,6 @@ import com.bhp.opusb.domain.MVerificationLine_;
 import com.bhp.opusb.domain.MVerification_;
 import com.bhp.opusb.service.dto.MMatchPOCriteria;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,8 +31,6 @@ import io.github.jhipster.service.filter.LocalDateFilter;
 
 public class MMatchPORepositoryCustomImpl implements MMatchPORepositoryCustom {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(MMatchPORepositoryCustomImpl.class);
-  
   private final EntityManager entityManager;
 
   public MMatchPORepositoryCustomImpl(EntityManager entityManager) {
