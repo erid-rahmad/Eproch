@@ -39,7 +39,8 @@
                             style="margin-left: 0px;"
                             size="small"
                             type="primary"
-                            icon="el-icon-printer">
+                            icon="el-icon-printer"
+                            @click="showDialogConfirmation('printVerificationReceipt')">
                             Verification Receipt Print
                         </el-button>
 

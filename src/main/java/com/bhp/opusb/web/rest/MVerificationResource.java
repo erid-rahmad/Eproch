@@ -93,16 +93,18 @@ public class MVerificationResource {
     }
 
     @GetMapping("/m-verifications/report/{verificationId}/{verificationNo}/{key}")
-    public void reportEVerification(@PathVariable Long verificationId, @PathVariable Long verificationNo, @PathVariable Long key, HttpServletResponse response)
+    public void reportEVerification(@PathVariable Long verificationId, @PathVariable Long verificationNo, @PathVariable String key, HttpServletResponse response)
             throws IOException {
 
         JasperPrint jasperPrint = null;
         String fileName = "";
 
-        if (key == 1) {
-            fileName = "Verification - "+verificationNo+".pdf";
-        } else if(key == 2) {
-            fileName = "Summary Verification - "+verificationNo+".pdf";
+        if (key.equals("invoice-verification")) {
+            fileName = "Invoice Verification - "+verificationNo+".pdf";
+        } else if(key.equals("summary-invoice-verification")) {
+            fileName = "Summary Invoice Verification - "+verificationNo+".pdf";
+        } else if(key.equals("invoice-verification-receipt")) {
+            fileName = "Receipt Invoice Verification - "+verificationNo+".pdf";
         }
 
         response.setContentType("application/octet-stream");
