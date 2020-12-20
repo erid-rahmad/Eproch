@@ -131,8 +131,12 @@
                             <el-table-column
                                 min-width="120"
                                 sortable
-                                prop="payStatus"
-                                label="Pay Status"/>
+                                label="Pay Status"
+                            >
+                                <template slot-scope="{ row }">
+                                    {{ formatPaymentStatus(row.payStatus) }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
                                 min-width="130"
                                 sortable

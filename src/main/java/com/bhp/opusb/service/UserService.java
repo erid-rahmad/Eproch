@@ -43,7 +43,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.security.RandomUtil;
-import io.vavr.collection.Stream;
 
 /**
  * Service class for managing users.
@@ -91,14 +90,28 @@ public class UserService {
     }
 
     public void sendActivationEmail(CVendor vendor) {
-        List<AdUser> users = adUserRepository.findBycVendor(vendor);
-        Stream.ofAll(users).map(AdUser::getUser).forEach(mailService::sendActivationEmail);
+        adUserRepository.findBycVendor(vendor)
+            .stream()
+            .map(AdUser::getUser)
+            .forEach(mailService::sendActivationEmail);
     }
 
     public void sendNotifRejectVerification(MVerificationDTO mVerification, List<MVerificationLineDTO> mVerificationLine) {
-        List<AdUser> users = adUserRepository.findBycVendorId(mVerification.getVendorId());
-        String currentLogin = this.getUserWithAuthorities().get().getLogin();
-        Stream.ofAll(users).forEach(user -> mailService.sendNotifRejectVerification(user.getUser(), currentLogin, mVerification, mVerificationLine));
+        adUserRepository.findBycVendorId(mVerification.getVendorId())
+            .stream()
+            .map(AdUser::getUser)
+            .forEach(user -> mailService.sendNotifRejectVerification(
+                user, SecurityUtils.getCurrentUserLogin().orElse(null), mVerification, mVerificationLine)
+            );
+    }
+
+    public void sendPaidInvoiceEmail(MVerificationDTO mVerificationDTO, List<MVerificationLineDTO> mVerificationLineDTOs) {
+        adUserRepository.findBycVendorId(mVerificationDTO.getVendorId())
+            .stream()
+            .map(AdUser::getUser)
+            .forEach(user -> mailService.sendPaidInvoiceEmail(
+                user, mVerificationDTO, mVerificationLineDTOs)
+            );
     }
 
     public Optional<User> activateRegistration(String key) {

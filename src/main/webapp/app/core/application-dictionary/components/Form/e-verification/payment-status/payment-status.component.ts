@@ -256,7 +256,11 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   formatDocumentStatus(value: string) {
-    return this.documentStatuses.find(status => status.key === value)?.value;
+    return this.documentStatuses.find(status => status.key === value)?.value || value;
+  }
+
+  formatPaymentStatus(value: string) {
+    return this.paymentStatusOptions.find(status => status.key === value)?.value || value;
   }
 
 }

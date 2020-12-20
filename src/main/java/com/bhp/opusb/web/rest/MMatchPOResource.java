@@ -78,12 +78,10 @@ public class MMatchPOResource {
     }
 
     /**
-     * {@code POST  /m-match-pos} : Create a new mMatchPO.
+     * {@code POST  /m-match-pos/synchronize} : Synchronize MMatchPO with the external source (BHp JDE).
      *
-     * @param mMatchPODTO the mMatchPODTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-     *         body the new mMatchPODTO, or with status {@code 400 (Bad Request)} if
-     *         the mMatchPO has already an ID.
+     * @param message the JSON formatted message representing F43121 record.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the created/updated mMatchPODTO.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping(
