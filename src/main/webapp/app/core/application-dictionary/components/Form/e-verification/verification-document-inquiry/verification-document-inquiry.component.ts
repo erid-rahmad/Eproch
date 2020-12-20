@@ -161,6 +161,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       }else if(key == "update"){
         this.dialogConfirmationVisible = true;
         this.setVerificationNo = this.gridData[0].verificationNo;
+      } else if(key == "printVerificationReceipt") {
+        this.buttonPrint("invoice-verification-receipt");
       }
 
     }else{
@@ -173,6 +175,11 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       });
     }
 
+  }
+
+  public buttonPrint(key): void {
+    const data = { ...this.selectedRows };
+    window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}/${key}`, '_blank');
   }
 
   public retrieveAllRecords(): void {

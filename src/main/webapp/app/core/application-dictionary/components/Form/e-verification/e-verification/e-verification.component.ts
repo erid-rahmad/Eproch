@@ -153,9 +153,9 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
         this.dialogConfirmationVisible = true;
       } else if (key == "print") {
-        this.buttonPrint(1);
+        this.buttonPrint("invoice-verification");
       } else if(key == "printSummary") {
-        this.buttonPrint(2);
+        this.buttonPrint("summary-invoice-verification");
       } else if (key == "update") {
         this.index = false;
       }

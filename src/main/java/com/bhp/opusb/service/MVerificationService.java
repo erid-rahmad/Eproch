@@ -81,14 +81,16 @@ public class MVerificationService {
         organization = adOrganizationService.getDefaultOrganization();
     }
 
-    public JasperPrint exportVerification(Long verificationId, long key) throws IOException, SQLException, JRException {
+    public JasperPrint exportVerification(Long verificationId, String key) throws IOException, SQLException, JRException {
 
         File file = null;
 
-        if (key == 1) {
+        if (key.equals("invoice-verification")) {
             file = ResourceUtils.getFile("classpath:templates/report/invoice-verification.jrxml");
-        } else if (key == 2) {
+        } else if (key.equals("summary-invoice-verification")) {
             file = ResourceUtils.getFile("classpath:templates/report/summary-invoice-verification.jrxml");
+        } else if (key.equals("invoice-verification-receipt")) {
+            file = ResourceUtils.getFile("classpath:templates/report/invoice-verification-receipt.jrxml");
         }
 
         JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
