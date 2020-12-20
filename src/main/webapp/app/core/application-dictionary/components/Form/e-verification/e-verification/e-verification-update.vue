@@ -44,25 +44,32 @@
             </el-col>
         </el-row>
 
-        <el-row class="filter">
-            <el-form ref="eVerificationUpdate" :model="formUpdate" label-width="170px" size="mini" :rules="rules">
+        <el-row class="filter" :gutter="24">
+            <el-form
+                ref="eVerificationUpdate"
+                label-position="left"
+                label-width="170px"
+                :model="header"
+                size="mini"
+                :rules="rules"
+            >
                 <el-col :span="8">
                     <el-form-item label="Invoice No." prop="invoiceNo" required>
-                        <el-input :disabled="!isDraft" class="form-input" clearable v-model="formUpdate.invoiceNo"/>
+                        <el-input :disabled="!isDraft" class="form-input" clearable v-model="header.invoiceNo"/>
                     </el-form-item>
                     <el-form-item label="Invoice Date" prop="invoiceDate" required>
                         <el-date-picker
                             class="form-input"
                             clearable
                             :disabled="!isDraft"
-                            v-model="formUpdate.invoiceDate"
+                            v-model="header.invoiceDate"
                             type="date"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"
                             placeholder="Pick a date" />
                     </el-form-item>
                     <el-form-item label="Currency" prop="currencyId" required>
-                        <el-select :disabled="!isDraft" class="form-input" clearable filterable v-model="formUpdate.currencyId" placeholder="Currency" >
+                        <el-select :disabled="!isDraft" class="form-input" clearable filterable v-model="header.currencyId" placeholder="Currency" >
                             <el-option
                                 v-for="item in currencyOptions"
                                 :key="item.key"
@@ -71,13 +78,13 @@
                         </el-select>
                     </el-form-item>
                     <el-form-item label="Verification No" prop="verificationNo" v-if="!isDraft">
-                        <el-input class="form-input" disabled clearable v-model="formUpdate.verificationNo"/>
+                        <el-input class="form-input" disabled clearable v-model="header.verificationNo"/>
                     </el-form-item>
                     <el-form-item label="Verification Date" prop="verificationDate" v-if="!isDraft">
                         <el-date-picker
                             class="form-input"
                             clearable disabled
-                            v-model="formUpdate.verificationDate"
+                            v-model="header.verificationDate"
                             type="date"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"
@@ -90,17 +97,17 @@
                             class="form-input"
                             clearable
                             :disabled="!isDraft"
-                            v-model="formUpdate.taxInvoice"
-                            v-inputmask="{'mask': '999-99.99999999'}"
+                            v-model="header.taxInvoice"
+                            v-cleave="{blocks: [3, 2, 8], delimiters: ['-', '.'], numericOnly: true}"
                             placeholder="___-__.________"
-                            @change="checkVerification($event, formUpdate.id)"
-                            />
+                            @change="checkVerification"
+                        />
                     </el-form-item>
                     <el-form-item label="Tax Invoice Date" prop="taxDate" required>
                         <el-date-picker
                             class="form-input"
                             clearable
-                            v-model="formUpdate.taxDate"
+                            v-model="header.taxDate"
                             type="date"
                             :disabled="!isDraft"
                             :format="dateDisplayFormat"
@@ -108,16 +115,16 @@
                             placeholder="Pick a date" />
                     </el-form-item>
                     <el-form-item label="NPWP" prop="vendorName">
-                        <el-input class="form-input" disabled clearable v-model="formUpdate.vendorName"/>
+                        <el-input class="form-input" disabled clearable v-model="header.vendorName"/>
                     </el-form-item>
                     <el-form-item label="Status" prop="verificationStatus" v-if="!isDraft">
-                        <el-input class="form-input" disabled clearable :value="formatDocumentStatus(formUpdate.verificationStatus)"/>
+                        <el-input class="form-input" disabled clearable :value="formatDocumentStatus(header.verificationStatus)"/>
                     </el-form-item>
                     <el-form-item label="Status Date" v-if="!isDraft">
                         <el-date-picker
                             class="form-input"
                             clearable disabled
-                            :value="dateStatus(formUpdate.verificationStatus)"
+                            :value="dateStatus(header.verificationStatus)"
                             type="date"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"
@@ -129,7 +136,7 @@
                         <el-input
                             class="form-input"
                             disabled
-                            v-model="formUpdate.totalLines"
+                            v-model="header.totalLines"
                             v-inputmask="{'alias': 'currency'}"
                         />
                     </el-form-item>
@@ -137,7 +144,7 @@
                         <el-input
                             class="form-input"
                             disabled
-                            v-model="formUpdate.taxAmount"
+                            v-model="header.taxAmount"
                             v-inputmask="{'alias': 'currency'}"
                         />
                     </el-form-item>
@@ -145,7 +152,7 @@
                         <el-input
                             class="form-input"
                             disabled
-                            v-model="formUpdate.grandTotal"
+                            v-model="header.grandTotal"
                             v-inputmask="{'alias': 'currency'}"
                         />
                     </el-form-item>

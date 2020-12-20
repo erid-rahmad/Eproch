@@ -5,6 +5,7 @@ import 'normalize.css';
 import ElementUI from 'element-ui';
 import SvgIcon from 'vue-svgicon';
 import VueHotkey from 'v-hotkey';
+import Schema from 'async-validator';
 
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import App from './app.vue';
@@ -54,6 +55,7 @@ import InputFacade from 'vue-input-facade'
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
+Schema.warning = function() {};
 Vue.use(InputFacade)
 Vue.config.productionTip = false;
 config.initVueApp(Vue);

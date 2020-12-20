@@ -72,8 +72,8 @@
                 </el-col>
             </el-row>
 
-            <el-row class="filter">
-                <el-form ref="form"  label-width="170px" size="mini">
+            <el-row class="filter" :gutter="24">
+                <el-form ref="form" label-position="left" label-width="170px" size="mini">
                     <el-col :span="8">
                         <el-form-item label="Verification No." prop="verificationNo">
                             <el-input class="form-input" clearable v-model="filter.verificationNo"/>

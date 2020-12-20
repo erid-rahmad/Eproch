@@ -16,6 +16,7 @@
     "axios": "0.19.0",
     "bootstrap": "4.4.1",
     "bootstrap-vue": "2.2.2",
+    "cleave.js": "^1.6.0",
     "date-fns": "2.9.0",
     "element-ui": "^2.13.0",
     "file-saver": "^2.0.2",
