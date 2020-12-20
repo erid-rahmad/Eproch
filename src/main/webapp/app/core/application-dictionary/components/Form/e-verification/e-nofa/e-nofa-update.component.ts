@@ -114,8 +114,12 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
   }
 
   private save(){
+    const data = {...this.form};
+    data.startNo.replace(/[-.]+/g, '');
+    data.endNo.replace(/[-.]+/g, '');
+    
     this.dynamicWindowService(this.baseApiUrl)
-      .create(this.form)
+      .create(data)
       .then(() => {
 
         this.$notify({

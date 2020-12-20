@@ -29,14 +29,14 @@ export const inputmask: DirectiveOptions = {
 
 export const cleave: DirectiveOptions = {
   inserted: (el, binding) => {
-    const input: HTMLInputElement = el.querySelector('input.el-input__inner');
-    input._cleave = new Cleave(input, binding.value || {})
+    const input = el.querySelector('input.el-input__inner');
+    (<any>input)._cleave = new Cleave(input, binding.value || {});
   },
   update: (el) => {
-    const input: HTMLInputElement = el.querySelector('input.el-input__inner');
+    const input = el.querySelector('input.el-input__inner');
     const event = new Event('input', {bubbles: true});
     setTimeout(function () {
-      input.value = input._cleave?.properties?.result;
+      (<any>input).value = (<any>input)._cleave?.properties?.result;
       input.dispatchEvent(event);
     }, 100);
   }
