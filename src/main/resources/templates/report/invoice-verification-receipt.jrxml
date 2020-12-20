@@ -74,19 +74,17 @@
 	</subDataset>
 	<parameter name="verificationId" class="java.lang.Long"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT a.verification_no, a.verification_date,  a.invoice_no, a.invoice_date,  a.tax_invoice , a.tax_date,  a.due_date, a.total_lines , a.tax_amount , a.grand_total,
-b.po_no , b.receive_no , b.description , b.qty , b.price_actual , b.total_lines as total_line,  b.tax_amount as tax_amt, b.pay_stat,
-c.code as code_currency,
-d.name as vendor_name, d.tax_id_no as npwp
-FROM m_verification as a,
-	m_verification_line as b,
-	c_currency as c,
-	c_vendor as d
-WHERE
-	 a.id = b.verification_id
-	 AND a.vendor_id = d.id
-	 AND a.currency_id = c.id
-	 AND a.id=280452]]>
+		<![CDATA[SELECT a.verification_no, a.verification_date, a.invoice_no, a.invoice_date, a.tax_invoice, a.tax_date, a.due_date, a.total_lines, a.tax_amount, a.grand_total,
+            numberToWords(CAST(substring(CAST(a.grand_total AS text), 1, length(CAST(a.grand_total AS text))-3) AS bigint)) as terbilang,
+            b.po_no, b.receive_no, b.description, b.qty, b.price_actual, b.total_lines AS total_line, b.tax_amount AS tax_amt, b.pay_stat,
+            c.code AS code_currency,
+            d.name AS vendor_name,d.tax_id_no AS npwp
+        FROM m_verification AS a,
+            m_verification_line AS b,
+            c_currency AS c,
+            c_vendor AS d
+        WHERE
+            a.id = b.verification_id AND a.vendor_id = d.id AND a.currency_id = c.id AND a.id = $P{verificationId}]]>
 	</queryString>
 	<field name="verification_no" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="verification_no"/>
@@ -146,6 +144,10 @@ WHERE
 		<property name="com.jaspersoft.studio.field.label" value="grand_total"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="m_verification"/>
 		<fieldDescription><![CDATA[VHAREC Receipt amount (base currency).]]></fieldDescription>
+	</field>
+	<field name="terbilang" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="terbilang"/>
+		<property name="com.jaspersoft.studio.field.label" value="terbilang"/>
 	</field>
 	<field name="po_no" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="po_no"/>
@@ -693,7 +695,7 @@ WHERE
 				</reportElement>
 				<text><![CDATA[Terbilang (Base)]]></text>
 			</staticText>
-			<textField textAdjust="StretchHeight" pattern="#,###" isBlankWhenNull="false">
+			<textField textAdjust="StretchHeight" isBlankWhenNull="false">
 				<reportElement style="Detail" positionType="Float" x="120" y="40" width="220" height="15" uuid="d3a86f18-bc3e-4742-9b5e-bbd83cbc9a67">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="444bef2e-59e8-4157-a72b-cd6840e36ebe"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
@@ -701,7 +703,7 @@ WHERE
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 				</reportElement>
 				<textElement textAlignment="Left"/>
-				<textFieldExpression><![CDATA["-"]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{terbilang}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="55" width="120" height="15" uuid="01ef01c6-f70e-4ebc-9054-aff0abb67362">
