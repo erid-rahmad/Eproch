@@ -332,14 +332,14 @@ WHERE
 	<summary>
 		<band height="60">
 			<staticText>
-				<reportElement x="0" y="10" width="120" height="15" uuid="59a961cc-e713-448f-9349-c546723ea2cb">
+				<reportElement x="270" y="10" width="120" height="15" uuid="59a961cc-e713-448f-9349-c546723ea2cb">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<text><![CDATA[Taxable Amount]]></text>
 			</staticText>
 			<textField textAdjust="StretchHeight" pattern="#,###" isBlankWhenNull="false">
-				<reportElement style="Detail" positionType="Float" x="120" y="10" width="150" height="15" uuid="52fdbced-f159-4bed-8542-4d67d31a50a0">
+				<reportElement style="Detail" positionType="Float" x="390" y="10" width="150" height="15" uuid="52fdbced-f159-4bed-8542-4d67d31a50a0">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5f047378-0f82-4397-b22b-d97484962450"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -350,14 +350,14 @@ WHERE
 				<textFieldExpression><![CDATA[$F{total_lines}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="25" width="120" height="15" uuid="c98a3972-2bd4-498c-aff5-a00a8aee6b5d">
+				<reportElement x="270" y="25" width="120" height="15" uuid="c98a3972-2bd4-498c-aff5-a00a8aee6b5d">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<text><![CDATA[PPN]]></text>
 			</staticText>
 			<textField textAdjust="StretchHeight" pattern="#,###" isBlankWhenNull="false">
-				<reportElement style="Detail" positionType="Float" x="120" y="25" width="150" height="15" uuid="d3a86f18-bc3e-4742-9b5e-bbd83cbc9a67">
+				<reportElement style="Detail" positionType="Float" x="390" y="25" width="150" height="15" uuid="d3a86f18-bc3e-4742-9b5e-bbd83cbc9a67">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="444bef2e-59e8-4157-a72b-cd6840e36ebe"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -367,14 +367,14 @@ WHERE
 				<textFieldExpression><![CDATA[$F{tax_amount}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="40" width="120" height="15" uuid="01ef01c6-f70e-4ebc-9054-aff0abb67362">
+				<reportElement x="270" y="40" width="120" height="15" uuid="01ef01c6-f70e-4ebc-9054-aff0abb67362">
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
 				<text><![CDATA[Total Amount]]></text>
 			</staticText>
 			<textField textAdjust="StretchHeight" pattern="#,###" isBlankWhenNull="false">
-				<reportElement style="Detail" positionType="Float" x="120" y="40" width="150" height="15" uuid="d61dfe5a-bd9c-4829-b4cc-f7b1d8140f03">
+				<reportElement style="Detail" positionType="Float" x="390" y="40" width="150" height="15" uuid="d61dfe5a-bd9c-4829-b4cc-f7b1d8140f03">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b4897de8-871e-4785-bfd4-38a9240036ab"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
