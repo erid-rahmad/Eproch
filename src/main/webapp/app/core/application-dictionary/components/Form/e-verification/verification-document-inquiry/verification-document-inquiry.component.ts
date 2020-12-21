@@ -161,6 +161,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       }else if(key == "update"){
         this.dialogConfirmationVisible = true;
         this.setVerificationNo = this.gridData[0].verificationNo;
+      } else if (key == "print") {
+        this.buttonPrint("invoice-verification");
+      } else if(key == "printSummary") {
+        this.buttonPrint("summary-invoice-verification");
       } else if(key == "printVerificationReceipt") {
         this.buttonPrint("invoice-verification-receipt");
       }
