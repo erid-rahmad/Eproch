@@ -5,10 +5,11 @@
             label-width="100px"
             size="mini"
             :model="form"
-            :rules="rules">
+            :rules="rules"
+        >
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="Address ID :" prop="vendorId" required>
+                    <el-form-item label="Address ID :" prop="vendorId">
                         <el-select
                             class="form-input"
                             clearable filterable remote reserve-keyword
@@ -26,26 +27,27 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="Start No. :" prop="startNo" required>
+                    <el-form-item label="Start No. :" prop="startNo">
                         <el-input
                             class="form-input"
                             clearable
                             placeholder="___-__.________"
                             v-model="form.startNo"
-                            v-inputmask="{'mask': '999-99.99999999'}"/>
+                            v-cleave="{blocks: [3, 2, 8], delimiters: ['-', '.'], numericOnly: true}"
+                        />
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="End No. :" prop="endNo" required>
+                    <el-form-item label="End No. :" prop="endNo">
                         <el-input
                             class="form-input"
                             clearable
                             placeholder="___-__.________"
-                            minlength="15"
                             v-model="form.endNo"
-                            v-inputmask="{'mask': '999-99.99999999'}"/>
+                            v-cleave="{blocks: [3, 2, 8], delimiters: ['-', '.'], numericOnly: true}"
+                        />
                     </el-form-item>
                 </el-col>
             </el-row>

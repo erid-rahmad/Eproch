@@ -386,7 +386,7 @@ entity CLocator {
 */
 entity MVerification {
 	/** VHDOCM Invoice verification document no. */
-	verificationNo String required
+	verificationNo String required unique
 
 	/** VHTRDJ Transaction date */
 	verificationDate LocalDate required

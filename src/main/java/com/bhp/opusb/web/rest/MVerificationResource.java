@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.MVerificationService;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.bhp.opusb.service.dto.MVerificationDTO;
 import com.bhp.opusb.service.dto.VerificationDTO;
 import com.bhp.opusb.service.dto.MVerificationCriteria;
@@ -92,19 +93,27 @@ public class MVerificationResource {
         mVerificationService.updateDocumentStatus(verificationDTO);
     }
 
-    @GetMapping("/m-verifications/report/{verificationId}/{verificationNo}")
-    public void reportEVerification(@PathVariable Long verificationId, @PathVariable Long verificationNo, HttpServletResponse response)
+    @GetMapping("/m-verifications/report/{verificationId}/{verificationNo}/{key}")
+    public void reportEVerification(@PathVariable Long verificationId, @PathVariable Long verificationNo, @PathVariable String key, HttpServletResponse response)
             throws IOException {
 
         JasperPrint jasperPrint = null;
-        String fileName = "Verification - "+verificationNo+".pdf";
+        String fileName = "";
+
+        if (key.equals("invoice-verification")) {
+            fileName = "Invoice Verification - "+verificationNo+".pdf";
+        } else if(key.equals("summary-invoice-verification")) {
+            fileName = "Summary Invoice Verification - "+verificationNo+".pdf";
+        } else if(key.equals("invoice-verification-receipt")) {
+            fileName = "Receipt Invoice Verification - "+verificationNo+".pdf";
+        }
 
         response.setContentType("application/octet-stream");
         response.addHeader("Content-Disposition", "attachment; filename=\""+fileName+"\"");
         OutputStream out = response.getOutputStream();
 
         try {
-            jasperPrint = mVerificationService.exportVerification(verificationId);
+            jasperPrint = mVerificationService.exportVerification(verificationId, key);
 
             JasperExportManager.exportReportToPdfStream(jasperPrint, out);
         } catch (SQLException | JRException e) {
@@ -131,6 +140,35 @@ public class MVerificationResource {
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, mVerificationDTO.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code POST  /m-verifications/synchronize} : Synchronize MMatchPO with the external source (BHp JDE).
+     *
+     * @param message the JSON formatted message representing F43121 record.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the created/updated mMatchPODTO.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping(
+        path = "/m-verifications/synchronize",
+        consumes = {
+            "application/octet-stream;charset=UTF-8",
+            "application/json;charset=UTF-8"
+        },
+        produces = {
+            "application/json;charset=UTF-8"
+        })
+    public ResponseEntity<MVerificationDTO> syncPaymentStatus(@RequestBody byte[] message) throws URISyntaxException, JsonProcessingException {
+        final String input = new String(message);
+        log.debug("REST request to synchronize MVerification : {}", input);
+
+        MVerificationDTO result = mVerificationService.synchronize(input);
+
+        if (result == null) {
+            return ResponseEntity.noContent().build();
+        }
+
+        return ResponseEntity.ok().body(result);
     }
 
     /**

@@ -153,7 +153,9 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
         this.dialogConfirmationVisible = true;
       } else if (key == "print") {
-        this.buttonPrint();
+        this.buttonPrint("invoice-verification");
+      } else if(key == "printSummary") {
+        this.buttonPrint("summary-invoice-verification");
       } else if (key == "update") {
         this.index = false;
       }
@@ -198,9 +200,9 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       });
   }
 
-  public buttonPrint(): void {
+  public buttonPrint(key): void {
     const data = { ...this.selectedRows };
-    window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}`, '_blank');
+    window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}/${key}`, '_blank');
   }
 
   public retrieveAllRecords(): void {

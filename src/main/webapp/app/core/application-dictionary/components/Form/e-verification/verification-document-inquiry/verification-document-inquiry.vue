@@ -39,7 +39,8 @@
                             style="margin-left: 0px;"
                             size="small"
                             type="primary"
-                            icon="el-icon-printer">
+                            icon="el-icon-printer"
+                            @click="showDialogConfirmation('printVerificationReceipt')">
                             Verification Receipt Print
                         </el-button>
 
@@ -218,7 +219,6 @@
                             <el-table-column
                                 min-width="100"
                                 sortable
-                                prop="verificationStatus"
                                 label="Status">
                                 <template slot-scope="{ row }">
                                     {{ formatDocumentStatus(row.verificationStatus) }}
@@ -232,8 +232,12 @@
                             <el-table-column
                                 min-width="140"
                                 sortable
-                                prop="payStatus"
-                                label="Payment Status"/>
+                                label="Payment Status"
+                            >
+                                <template slot-scope="{ row }">
+                                    {{ formatPaymentStatus(row.payStatus) }}
+                                </template>
+                            </el-table-column>
                             <el-table-column
                                 min-width="150"
                                 sortable
@@ -263,7 +267,6 @@
                             <el-table-column
                                 min-width="140"
                                 sortable
-                                prop="taxInvoice"
                                 label="Tax Invoice No.">
                                 <template slot-scope="{ row }">
                                     {{ row.taxInvoice | facade('###-##.########') }}
@@ -283,7 +286,6 @@
                             <el-table-column
                                 min-width="150"
                                 sortable
-                                prop="totalLines"
                                 label="Taxable Amount"
                                 align="right">
                                 <template slot-scope="{ row }">
@@ -293,7 +295,6 @@
                             <el-table-column
                                 min-width="150"
                                 sortable
-                                prop="taxAmount"
                                 label="PPN"
                                 align="right">
                                 <template slot-scope="{ row }">
@@ -303,16 +304,14 @@
                             <el-table-column
                                 min-width="150"
                                 sortable
-                                prop="taxAmount"
                                 label="PPH"
                                 align="right">
                                 <template slot-scope="{ row }">
-                                    {{ row.taxAmount | formatCurrency }}
+                                    {{ row.withholdingAmt | formatCurrency }}
                                 </template>
                             </el-table-column>
                             <el-table-column
                                 min-width="150"
-                                prop="totalAmount"
                                 label="Total Amount"
                                 align="right">
                                 <template slot-scope="{ row }">

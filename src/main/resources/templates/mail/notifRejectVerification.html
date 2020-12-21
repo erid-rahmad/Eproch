@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html
+	xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+	<head>
+		<title th:text="#{email.verification.title}">Verification Approval</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+        <style type="text/css">
+            .currency{
+                text-align: right;
+            }
+            .verificationHeader{
+                width: 15%;
+            }
+            .verificationColon{
+                width: 1%;
+            }
+            .verificationHeaderValue{
+                width: 34%;
+            }
+            table.verificationLine tr td {
+                padding: 5px;
+            }
+        </style>
+
+	</head>
+	<body>
+		<p th:text="${verification.vendorName}"></p>
+		<hr/>
+		<b th:text="#{email.verification.rejected}"></b>
+		<div th:text="#{email.verification.last_reject(${current_login})}"></div>
+        <div th:text="#{email.verification.reject_date(${#dates.format(#dates.createNow(), 'dd MMM yyyy HH:mm:ss')})}"></div>
+		<div th:text="#{email.verification.note(${verification.description})}"></div>
+        <div th:text="#{email.verification.created(${verification.createdBy})}"></div>
+		<div th:text="#{email.verification.created_date(${#dates.format(verification.createdDate, 'dd MMM yyyy HH:mm:ss')})}"></div>
+		<p>
+			<table style="width: 100%">
+				<tr>
+                    <td class="verificationHeader"><div th:text="#{email.verification.verification_no}">Verification No</div></td>
+                    <td class="verificationColon">:</td>
+                    <td class="verificationHeaderValue"><div th:text="${verification.verificationNo}"/></td>
+
+                    <td class="verificationHeader"><div th:text="#{email.verification.invoice_no}">Invoice No</div></td>
+                    <td class="verificationColon">:</td>
+                    <td class="verificationHeaderValue"><div th:text="${verification.invoiceNo}"/></td>
+				</tr>
+				<tr>
+                    <td><div th:text="#{email.verification.verification_date}">Verification Date</div></td>
+                    <td>:</td>
+                    <td><div th:text="${#temporals.format(verification.verificationDate, 'dd MMM yyyy')}"></div></td>
+
+                    <td><div th:text="#{email.verification.invoice_date}">Invoice Date</div></td>
+                    <td>:</td>
+                    <td><div th:text="${#temporals.format(verification.invoiceDate, 'dd MMM yyyy')}"></div></td>
+				</tr>
+				<tr>
+                    <td><div th:text="#{email.verification.currency}">Currency</div></td>
+                    <td>:</td>
+                    <td><div th:text="${verification.currencyName}"/></td>
+				</tr>
+			</table>
+		</p>
+		<p>
+			<table class="verificationLine" border="1px" style="border-collapse: collapse; width: 100%;">
+				<tr>
+					<td th:text="#{email.verification.po_no}"/>
+					<td th:text="#{email.verification.receive_no}"/>
+					<td th:text="#{email.verification.description}"/>
+					<td th:text="#{email.verification.uom}"/>
+					<td th:text="#{email.verification.qty}"/>
+					<td th:text="#{email.verification.unit_price}"/>
+					<td th:text="#{email.verification.taxable_amount}"/>
+					<td th:text="#{email.verification.ppn}"/>
+					<td th:text="#{email.verification.total_amount}"/>
+				</tr>
+				<tr th:each="verificationLine: ${verification_line}">
+					<td th:text="${verificationLine.poNo}" />
+					<td th:text="${verificationLine.receiveNo}" />
+					<td th:text="${verificationLine.productName}" />
+					<td th:text="${verificationLine.uomName}" />
+					<td th:text="${verificationLine.qty}" />
+					<td class="currency" th:inline="text">[[${#numbers.formatDecimal(verificationLine.priceActual, 0, 'COMMA', 0, 'POINT')}]]</td>
+                    <td class="currency" th:inline="text">[[${#numbers.formatDecimal(verificationLine.totalLines, 0, 'COMMA', 0, 'POINT')}]]</td>
+					<td class="currency" th:inline="text">[[${#numbers.formatDecimal(verificationLine.taxAmount, 0, 'COMMA', 0, 'POINT')}]]</td>
+                    <td class="currency" th:inline="text">[[${#numbers.formatDecimal(verificationLine.totalLines+verificationLine.taxAmount, 0, 'COMMA', 0, 'POINT')}]]</td>
+				</tr>
+			</table>
+		</p>
+		<p>
+			<table style="width: 100%;">
+				<tr>
+                    <td width="50%"></td>
+                    <td class="verificationHeader"><div th:text="#{email.verification.taxable_amount}">Taxable Amount</div></td>
+                    <td class="verificationColon">:</td>
+                    <td class="verificationHeaderValue currency" th:inline="text">
+                        [[${#numbers.formatDecimal(verification.totalLines, 0, 'COMMA', 0, 'POINT')}]]
+                    </td>
+				</tr>
+				<tr>
+                    <td width="50%"></td>
+                    <td><div th:text="#{email.verification.ppn}">PPN</div></td>
+                    <td>:</td>
+                    <td class="currency" th:inline="text">
+                        [[${#numbers.formatDecimal(verification.taxAmount, 0, 'COMMA', 0, 'POINT')}]]
+                    </td>
+				</tr>
+				<tr>
+                    <td width="50%"></td>
+                    <td><div th:text="#{email.verification.grand_total}">Grand Total</div></td>
+                    <td>:</td>
+                    <td class="currency" th:inline="text">
+                        [[${#numbers.formatDecimal(verification.grandTotal, 0, 'COMMA', 0, 'POINT')}]]
+                    </td>
+				</tr>
+			</table>
+		</p>
+	</body>
+</html>
+

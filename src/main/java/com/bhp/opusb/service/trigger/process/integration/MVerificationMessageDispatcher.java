@@ -77,12 +77,18 @@ public class MVerificationMessageDispatcher implements ProcessTrigger {
 
   private void enrichMessage(Object payload, String context) {
     if (context.equals(CONTEXT_HEADER)) {
-      MVerificationDTO header = (MVerificationDTO) payload;
+      final MVerificationDTO header = (MVerificationDTO) payload;
+      final String description = header.getDescription();
+
       header.setTotalLines(multiply(header.getTotalLines(), 100));
       header.setGrandTotal(multiply(header.getGrandTotal(), 100));
       header.setTaxAmount(multiply(header.getTaxAmount(), 100));
       header.setForeignGrandTotal(multiply(header.getForeignGrandTotal(), 100));
       header.setForeignTaxAmount(multiply(header.getForeignTaxAmount(), 100));
+
+      if (description != null) {
+        header.setDescription(description.length() > 30 ? description.substring(0, 29) : description);
+      }
       
       cVendorLocationRepository.findFirstByInvoiceAddressTrueAndVendor_Id(header.getVendorId())
         .ifPresent(vendorLocation -> {
@@ -90,7 +96,7 @@ public class MVerificationMessageDispatcher implements ProcessTrigger {
           header.setVendorLocation(vendorLocationDto);
         });
     } else if (context.equals(CONTEXT_LINES)) {
-      List<?> lines = (List<?>) payload;
+      final List<?> lines = (List<?>) payload;
       
       for (Object line : lines) {
         MVerificationLineDTO lineDto = (MVerificationLineDTO) line;

@@ -249,4 +249,8 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20201214101200" author="Ananta Aryadewa">
+        <addUniqueConstraint tableName="m_verification" columnNames="verification_no" constraintName="ux_m_verification_verification_no"/>
+    </changeSet>
+
 </databaseChangeLog>

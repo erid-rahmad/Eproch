@@ -40,7 +40,7 @@ public class MVerification extends AbstractAuditingEntity {
      * VHDOCM Invoice verification document no.
      */
     @NotNull
-    @Column(name = "verification_no", nullable = false)
+    @Column(name = "verification_no", nullable = false, unique = true)
     private String verificationNo;
 
     /**

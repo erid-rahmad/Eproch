@@ -18,4 +18,5 @@ public interface AdUserRepository extends JpaRepository<AdUser, Long>, JpaSpecif
 
   Optional<AdUser> findByUserLogin(String login);
   List<AdUser> findBycVendor(CVendor cVendor);
+  List<AdUser> findBycVendorId(Long id);
 }

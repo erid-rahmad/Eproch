@@ -27,6 +27,8 @@ import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.security.AuthoritiesConstants;
 import com.bhp.opusb.security.SecurityUtils;
 import com.bhp.opusb.service.dto.AdUserDTO;
+import com.bhp.opusb.service.dto.MVerificationDTO;
+import com.bhp.opusb.service.dto.MVerificationLineDTO;
 import com.bhp.opusb.service.dto.UserDTO;
 import com.bhp.opusb.service.mapper.AdUserMapper;
 import com.bhp.opusb.service.mapper.CBusinessCategoryMapper;
@@ -36,13 +38,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.security.RandomUtil;
-import io.vavr.collection.Stream;
 
 /**
  * Service class for managing users.
@@ -90,8 +90,28 @@ public class UserService {
     }
 
     public void sendActivationEmail(CVendor vendor) {
-        List<AdUser> users = adUserRepository.findBycVendor(vendor);
-        Stream.ofAll(users).map(AdUser::getUser).forEach(mailService::sendActivationEmail);
+        adUserRepository.findBycVendor(vendor)
+            .stream()
+            .map(AdUser::getUser)
+            .forEach(mailService::sendActivationEmail);
+    }
+
+    public void sendNotifRejectVerification(MVerificationDTO mVerification, List<MVerificationLineDTO> mVerificationLine) {
+        adUserRepository.findBycVendorId(mVerification.getVendorId())
+            .stream()
+            .map(AdUser::getUser)
+            .forEach(user -> mailService.sendNotifRejectVerification(
+                user, SecurityUtils.getCurrentUserLogin().orElse(null), mVerification, mVerificationLine)
+            );
+    }
+
+    public void sendPaidInvoiceEmail(MVerificationDTO mVerificationDTO, List<MVerificationLineDTO> mVerificationLineDTOs) {
+        adUserRepository.findBycVendorId(mVerificationDTO.getVendorId())
+            .stream()
+            .map(AdUser::getUser)
+            .forEach(user -> mailService.sendPaidInvoiceEmail(
+                user, mVerificationDTO, mVerificationLineDTOs)
+            );
     }
 
     public Optional<User> activateRegistration(String key) {

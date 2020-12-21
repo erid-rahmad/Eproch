@@ -59,9 +59,9 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   private setVerificationNo: string = "";
 
   selectedRows: any = {};
-  public vendorOptions: any = [];
-  public statusOptions: any = [];
-  public paymentStatusOptions: any = [];
+  public vendorOptions: any[] = [];
+  public statusOptions: any[] = [];
+  public paymentStatusOptions: any[] = [];
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
@@ -161,6 +161,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       }else if(key == "update"){
         this.dialogConfirmationVisible = true;
         this.setVerificationNo = this.gridData[0].verificationNo;
+      } else if(key == "printVerificationReceipt") {
+        this.buttonPrint("invoice-verification-receipt");
       }
 
     }else{
@@ -173,6 +175,11 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       });
     }
 
+  }
+
+  public buttonPrint(key): void {
+    const data = { ...this.selectedRows };
+    window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}/${key}`, '_blank');
   }
 
   public retrieveAllRecords(): void {
@@ -388,7 +395,11 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   formatDocumentStatus(value: string) {
-    return this.statusOptions.find(status => status.key === value)?.value;
+    return this.statusOptions.find(status => status.key === value)?.value || value;
+  }
+
+  formatPaymentStatus(value: string) {
+    return this.paymentStatusOptions.find(status => status.key === value)?.value || value;
   }
 
 }

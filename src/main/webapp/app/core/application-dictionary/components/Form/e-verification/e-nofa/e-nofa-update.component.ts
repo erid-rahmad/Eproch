@@ -12,17 +12,17 @@ import { ElForm } from 'element-ui/types/form';
 export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
   rules = {
     vendorId: [
-      { required: true, message: 'Please select Address ID' },
+      { required: true, message: 'Please select Address ID'},
     ],
     startNo: [
-      { required: true, message: 'Please fill Start No' },
-      { min: 13, message: 'Length should be 13' }
+      { required: true, message: 'Please fill Start No'},
+      { min: 15, message: 'Length must be 13 digits' }
     ],
     endNo: [
-      { required: true, message: 'Please fill End No' },
-      { min: 13, message: 'Length should be 13' }
+      { required: true, message: 'Please fill End No'},
+      { min: 15, message: 'Length must be 13 digits' }
     ],
-  }
+  };
 
   private baseApiUrl = "/api/c-tax-invoices";
   private baseApiUrlVendor = "/api/c-vendors";
@@ -33,6 +33,7 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
   private form: any = {};
   public filterBy = false;
   public vendorOptions: any = [];
+  enofaList: any[] = [];
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -43,7 +44,19 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
   }
 
   created(){
+    this.retrieveEnofa();
+  }
 
+  retrieveEnofa() {
+    this.dynamicWindowService(this.baseApiUrl)
+      .retrieve({
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['id']
+        }
+      })
+      .then(res => this.enofaList = res.data)
   }
 
   public retrieveAllVendorRecords(query: any): void {
@@ -63,7 +76,6 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
               name: item.name
           };
         });
-        console.log(referenceList);
 
         this.vendorOptions = referenceList;
       })
@@ -84,7 +96,7 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
       if (passed) {
         if(this.form.startNo < this.form.endNo){
           this.fullscreenLoading = true;
-          this.save();
+          this.checkRange();
         }else{
           this.$notify({
             title: "Warning",
@@ -102,8 +114,12 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
   }
 
   private save(){
+    const data = {...this.form};
+    data.startNo.replace(/[-.]+/g, '');
+    data.endNo.replace(/[-.]+/g, '');
+    
     this.dynamicWindowService(this.baseApiUrl)
-      .create(this.form)
+      .create(data)
       .then(() => {
 
         this.$notify({
@@ -130,6 +146,32 @@ export default class ENofa extends mixins(Vue2Filters.mixin, AlertMixin, Context
         this.form = {};
       });
 
+  }
+
+  public checkRange(): void {
+    const length = this.enofaList.length;
+    const formStartNo = parseInt(this.form.startNo.replace(/[-.]+/g, ''));
+    const formEndNo = parseInt(this.form.endNo.replace(/[-.]+/g, ''));
+    let proceed = true;
+
+    for (let i = 0; i < length; i++) {
+      const startNo = parseInt(this.enofaList[i].startNo);
+      const endNo = parseInt(this.enofaList[i].endNo);
+
+      if (formStartNo <= endNo && formEndNo >= startNo) {
+        proceed = false;
+        this.$message({
+          message: "The entered tax invoice range intersects another entry",
+          type: "error"
+        });
+        break;
+      }
+    }
+    
+    if (proceed) {
+      this.save();
+    }
+    this.fullscreenLoading = false;
   }
 
   closeDialog(){

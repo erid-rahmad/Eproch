@@ -149,6 +149,7 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
      * VDRCDJ Receipt date.
      */
     @ApiModelProperty(value = "VDRCDJ Receipt date.")
+    @JsonProperty("receiptDate")
     private LocalDate receiveDate;
 
     /**

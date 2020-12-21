@@ -9,7 +9,6 @@
                         style="margin-left: 0px;"
                         size="small"
                         type="primary"
-                        :disabled="disabledButton"
                         icon="el-icon-check"
                         @click="showDialogConfirmation('update')" />
                     <el-button
@@ -58,7 +57,8 @@
                         style="margin-left: 0px;"
                         size="small"
                         type="primary"
-                        icon="el-icon-printer">
+                        icon="el-icon-printer"
+                        @click="showDialogConfirmation('printSummary')">
                         Print (Summary)
                     </el-button>
                     <el-button
@@ -72,8 +72,8 @@
                 </el-col>
             </el-row>
 
-            <el-row class="filter">
-                <el-form ref="form"  label-width="170px" size="mini">
+            <el-row class="filter" :gutter="24">
+                <el-form ref="form" label-position="left" label-width="170px" size="mini">
                     <el-col :span="8">
                         <el-form-item label="Verification No." prop="verificationNo">
                             <el-input class="form-input" clearable v-model="filter.verificationNo"/>
@@ -306,6 +306,7 @@
                     <e-verification-update
                         ref="formUpdate"
                         :form-update="selectedRows"
+                        :doc-status="documentStatuses"
                         @close-e-verification-update="closeEVerificationUpdate"
                     />
                 </el-col>

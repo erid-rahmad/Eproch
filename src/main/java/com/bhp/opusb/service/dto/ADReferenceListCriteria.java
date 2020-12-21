@@ -39,6 +39,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
     private StringFilter adOrganizationName;
 
     private LongFilter adReferenceId;
+    private StringFilter adReferenceValue;
 
     public ADReferenceListCriteria() {
     }
@@ -53,6 +54,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adOrganizationName = other.adOrganizationName == null ? null : other.adOrganizationName.copy();
         this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
+        this.adReferenceValue = other.adReferenceValue == null ? null : other.adReferenceValue.copy();
     }
 
     @Override
@@ -132,6 +134,13 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
         this.adReferenceId = adReferenceId;
     }
 
+    public StringFilter getAdReferenceValue() {
+        return adReferenceValue;
+    }
+
+    public void setAdReferenceValue(StringFilter adReferenceValue) {
+        this.adReferenceValue = adReferenceValue;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -151,7 +160,8 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adOrganizationName, that.adOrganizationName) &&
-            Objects.equals(adReferenceId, that.adReferenceId);
+            Objects.equals(adReferenceId, that.adReferenceId) &&
+            Objects.equals(adReferenceValue, that.adReferenceValue);
     }
 
     @Override
@@ -165,7 +175,8 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
         active,
         adOrganizationId,
         adOrganizationName,
-        adReferenceId
+        adReferenceId,
+        adReferenceValue
         );
     }
 
@@ -181,6 +192,7 @@ public class ADReferenceListCriteria implements Serializable, Criteria {
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adOrganizationName != null ? "adOrganizationName=" + adOrganizationName + ", " : "") +
                 (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
+                (adReferenceValue != null ? "adReferenceValue=" + adReferenceValue + ", " : "") +
             "}";
     }
 

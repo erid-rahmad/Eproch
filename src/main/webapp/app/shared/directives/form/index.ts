@@ -1,6 +1,7 @@
 import Inputmask from 'inputmask'
 import { isObject } from 'lodash'
 import { DirectiveOptions } from 'vue'
+import Cleave from 'cleave.js'
 
 export const inputmask: DirectiveOptions = {
   inserted(el, binding) {
@@ -24,4 +25,19 @@ export const inputmask: DirectiveOptions = {
       }).mask(element)
     }
   }
-}
+};
+
+export const cleave: DirectiveOptions = {
+  inserted: (el, binding) => {
+    const input = el.querySelector('input.el-input__inner');
+    (<any>input)._cleave = new Cleave(input, binding.value || {});
+  },
+  update: (el) => {
+    const input = el.querySelector('input.el-input__inner');
+    const event = new Event('input', {bubbles: true});
+    setTimeout(function () {
+      (<any>input).value = (<any>input)._cleave?.properties?.result;
+      input.dispatchEvent(event);
+    }, 100);
+  }
+};

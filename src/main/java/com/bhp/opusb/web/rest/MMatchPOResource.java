@@ -78,12 +78,10 @@ public class MMatchPOResource {
     }
 
     /**
-     * {@code POST  /m-match-pos} : Create a new mMatchPO.
+     * {@code POST  /m-match-pos/synchronize} : Synchronize MMatchPO with the external source (BHp JDE).
      *
-     * @param mMatchPODTO the mMatchPODTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-     *         body the new mMatchPODTO, or with status {@code 400 (Bad Request)} if
-     *         the mMatchPO has already an ID.
+     * @param message the JSON formatted message representing F43121 record.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the created/updated mMatchPODTO.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping(
@@ -136,6 +134,21 @@ public class MMatchPOResource {
     public ResponseEntity<List<MMatchPODTO>> getAllMMatchPOS(MMatchPOCriteria criteria, Pageable pageable) {
         log.debug("REST request to get MMatchPOS by criteria: {}", criteria);
         Page<MMatchPODTO> page = mMatchPOQueryService.findByCriteria(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
+     * {@code GET  /m-match-pos} : get all the mMatchPOS that are not already invoiced.
+     *
+     * @param cVendorId
+     * @param pageable the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of mMatchPOS in body.
+     */
+    @GetMapping("/m-match-pos/not-invoiced")
+    public ResponseEntity<List<MMatchPODTO>> getNotInvoicedMMatchPOS(MMatchPOCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get not-already-invoiced MMatchPOS by criteria: {}", criteria);
+        Page<MMatchPODTO> page = mMatchPOQueryService.findNewReceivedItems(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }

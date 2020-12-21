@@ -69,6 +69,18 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
     }
 
     /**
+     * Return a {@link Page} of {@link MMatchPODTO} which are not already invoiced.
+     * @param vendorId
+     * @param page
+     * @return
+     */
+    public Page<MMatchPODTO> findNewReceivedItems(MMatchPOCriteria criteria, Pageable page) {
+        log.debug("find new received items by criteria : {}, page: {}", criteria, page);
+        return mMatchPORepository.findNonInvoicedMatchPOs(criteria, page)
+            .map(mMatchPOMapper::toDto);
+    }
+
+    /**
      * Return the number of matching entities in the database.
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the number of matching entities.
