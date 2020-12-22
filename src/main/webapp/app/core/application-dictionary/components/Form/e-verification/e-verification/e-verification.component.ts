@@ -20,7 +20,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     defaultSort: {},
     emptyText: 'No Records Found',
     maxHeight: 450,
-    height: 420
+    height: 400
   };
 
   public itemsPerPage = 10;

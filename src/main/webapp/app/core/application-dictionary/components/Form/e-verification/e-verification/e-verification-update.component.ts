@@ -32,7 +32,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     defaultSort: {},
     emptyText: 'No Records Found',
     maxHeight: 470,
-    height: 380
+    height: 370
   };
   rules = {
     taxInvoice: [
@@ -198,7 +198,11 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       (this.$refs.eVerificationUpdate as ElForm).validate((passed, errors) => {
         if (passed) {
           this.fullscreenLoading = true;
-          this.checkVerification(this.header.taxInvoice);
+          if(this.header.taxable){
+            this.checkVerification(this.header.taxInvoice);
+          } else {
+            this.statTaxInvoice = true;
+          }
           this.submit();
         } else {
           return false;
@@ -327,6 +331,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       cTaxId: firstRow?.cTaxId,
       currencyId: firstRow?.cCurrencyId,
       matchPoCurrencyId: firstRow?.cCurrencyId,
+      taxable: firstRow?.taxable,
       totalLines: totalLines,
       taxAmount: taxAmount,
       grandTotal: totalAmount,
@@ -407,7 +412,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
   async checkVerification(taxInvoice: string) {
     try {
-      await this.validateTaxInvoiceSlot(taxInvoice.replace(/[-.]/g, ''));
+      await this.validateTaxInvoiceSlot(taxInvoice.replace(/[-.]+/g, ''));
       this.statTaxInvoice = true;
     } catch (error) {
       this.statTaxInvoice = false;
@@ -419,7 +424,9 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
 
   submit() {
-    this.header.taxInvoice = this.header.taxInvoice.replace(/[-.]/g, '');
+    if(this.header.taxable){
+      this.header.taxInvoice = this.header.taxInvoice.replace(/[-.]+/g, '');
+    }
     this.header.picId = accountStore.userDetails.id;
     let lineCount = 0;
 

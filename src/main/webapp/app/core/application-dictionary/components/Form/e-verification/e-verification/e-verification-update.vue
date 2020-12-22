@@ -92,10 +92,9 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="Tax Invoice No." prop="taxInvoice" required>
+                    <el-form-item label="Tax Invoice No." prop="taxInvoice" :required="header.taxable" >
                         <el-input
                             class="form-input"
-                            clearable
                             :disabled="!isDraft"
                             v-model="header.taxInvoice"
                             v-cleave="{blocks: [3, 2, 8], delimiters: ['-', '.'], numericOnly: true}"

@@ -30,7 +30,6 @@
                     <el-form-item label="Start No. :" prop="startNo">
                         <el-input
                             class="form-input"
-                            clearable
                             placeholder="___-__.________"
                             v-model="form.startNo"
                             v-cleave="{blocks: [3, 2, 8], delimiters: ['-', '.'], numericOnly: true}"
@@ -43,7 +42,6 @@
                     <el-form-item label="End No. :" prop="endNo">
                         <el-input
                             class="form-input"
-                            clearable
                             placeholder="___-__.________"
                             v-model="form.endNo"
                             v-cleave="{blocks: [3, 2, 8], delimiters: ['-', '.'], numericOnly: true}"
