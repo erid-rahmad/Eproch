@@ -9,19 +9,13 @@ import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import UpdateVoucher from './update-voucher.vue';
 import DetailVerificationDocument from './detail-verification-document.vue';
 
-const VerificationDocumentInquiryProps = Vue.extend({
-  props: {
-
-  }
-})
-
 @Component({
   components: {
     UpdateVoucher,
     DetailVerificationDocument
   }
 })
-export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, VerificationDocumentInquiryProps) {
+export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
   private index: boolean = true;
   gridSchema = {
     defaultSort: {},
@@ -56,7 +50,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   public gridData: Array<any> = [];
   private totalAmount: number = null;
-  private setVerificationNo: string = "";
+  private setVerification: any = {};
 
   selectedRows: any = {};
   public vendorOptions: any[] = [];
@@ -67,7 +61,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public filter: any = {};
 
   public radioSelection: number = null;
-  private voucher: any = {};
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -95,7 +88,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     this.index = true;
     this.selectedRows = {};
     this.radioSelection = null;
-    //this.retrieveAllRecords();
+    this.dialogConfirmationVisible = false;
+    this.retrieveAllRecords();
   }
 
   public changeOrder(propOrder): void {
@@ -160,7 +154,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         this.index = false;
       }else if(key == "update"){
         this.dialogConfirmationVisible = true;
-        this.setVerificationNo = this.gridData[0].verificationNo;
+        this.setVerification = this.selectedRows;
       } else if (key == "print") {
         this.buttonPrint("invoice-verification");
       } else if(key == "printSummary") {
@@ -387,15 +381,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     }
 
     this.retrieveAllRecords();
-  }
-
-  public dataVoucher(data?: any){
-    this.voucher = data;
-  }
-
-  private onUpdateVoucherApplied(){
-    console.log(this.voucher);
-    //proses save
   }
 
   formatDocumentStatus(value: string) {

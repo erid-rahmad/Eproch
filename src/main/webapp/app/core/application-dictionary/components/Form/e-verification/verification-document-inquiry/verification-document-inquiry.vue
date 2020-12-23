@@ -46,14 +46,14 @@
                             Verification Receipt Print
                         </el-button>
 
-                        <!--<el-button
+                        <el-button
                             class="button"
                             size="small"
                             type="primary"
                             icon="el-icon-edit"
                             @click="showDialogConfirmation('update')">
                             Update Voucher
-                        </el-button>-->
+                        </el-button>
 
                         <el-button
                             class="button"
@@ -379,29 +379,12 @@
                     <el-col :span="24" :offset="0">
                         <update-voucher
                             ref="updateVoucher"
-                            :set-verification-no="setVerificationNo"
-                            @get-form-voucher="dataVoucher"
+                            :set-verification="setVerification"
+                            @close-dialog="closeDetailVerification"
                         />
                     </el-col>
                 </el-row>
 
-                <div slot="footer">
-                    <el-button
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-check"
-                        type="primary"
-                        @click="onUpdateVoucherApplied">
-                            Save
-                    </el-button>
-                    <el-button
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-close"
-                        @click="dialogConfirmationVisible = false">
-                            {{ $t('entity.action.cancel') }}
-                    </el-button>
-                </div>
             </template>
         </el-dialog>
 
