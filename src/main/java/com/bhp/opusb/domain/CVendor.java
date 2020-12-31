@@ -14,6 +14,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -27,7 +29,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
  */
 @Entity
 @Table(name = "c_vendor")
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class CVendor extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
@@ -94,6 +96,11 @@ public class CVendor extends AbstractAuditingEntity {
     @Column(name = "payment_category", length = 10, nullable = false)
     private String paymentCategory;
 
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "10")
+    @Column(name = "rating")
+    private Double rating;
+
     @NotNull
     @Column(name = "date_trx", nullable = false)
     private LocalDate dateTrx;
@@ -130,19 +137,19 @@ public class CVendor extends AbstractAuditingEntity {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("cVendors")
+    @JsonIgnoreProperties(value = "cVendors", allowSetters = true)
     private ADOrganization adOrganization;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("cVendors")
+    @JsonIgnoreProperties(value = "cVendors", allowSetters = true)
     private CDocumentType documentType;
 
     @ManyToOne
-    @JsonIgnoreProperties("cVendors")
+    @JsonIgnoreProperties(value = "cVendors", allowSetters = true)
     private CVendorGroup vendorGroup;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
+    // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
     }
@@ -333,6 +340,19 @@ public class CVendor extends AbstractAuditingEntity {
         this.paymentCategory = paymentCategory;
     }
 
+    public Double getRating() {
+        return rating;
+    }
+
+    public CVendor rating(Double rating) {
+        this.rating = rating;
+        return this;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
     public LocalDate getDateTrx() {
         return dateTrx;
     }
@@ -488,7 +508,7 @@ public class CVendor extends AbstractAuditingEntity {
     public void setVendorGroup(CVendorGroup cVendorGroup) {
         this.vendorGroup = cVendorGroup;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @PrePersist
     public void assignUUID() {
@@ -511,6 +531,7 @@ public class CVendor extends AbstractAuditingEntity {
         return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "CVendor{" +
@@ -529,6 +550,7 @@ public class CVendor extends AbstractAuditingEntity {
             ", fax='" + getFax() + "'" +
             ", website='" + getWebsite() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
+            ", rating=" + getRating() +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +

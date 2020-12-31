@@ -1,70 +1,66 @@
 {
-    "name": "ADWindow",
-    "fields": [
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "titleLogic",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "type",
-            "fieldType": "ADWindowType",
-            "fieldValues": "MAINTAIN,QUERY,TRANSACTION",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "accessLevel",
-            "fieldType": "AdAccessLevel",
-            "fieldValues": "SYS,SYS_CLN,CLN,CLN_ORG"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "aDTab",
-            "otherEntityRelationshipName": "adWindow",
-            "relationshipName": "aDTab"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "aDWindow",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200429152900",
-    "entityTableName": "ad_window",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true,
-    "skipClient": true
+  "name": "ADWindow",
+  "fields": [
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "titleLogic",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "ADWindowType",
+      "fieldValues": "MAINTAIN,QUERY,TRANSACTION",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "accessLevel",
+      "fieldType": "AdAccessLevel",
+      "fieldValues": "SYS,SYS_CLN,CLN,CLN_ORG"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "aDTab",
+      "otherEntityRelationshipName": "adWindow",
+      "relationshipName": "aDTab"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "aDWindow",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200429152900",
+  "entityTableName": "ad_window",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true,
+  "skipClient": true
 }

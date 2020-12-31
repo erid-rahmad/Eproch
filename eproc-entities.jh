@@ -74,6 +74,26 @@ entity CLocation {
 	uid UUID
 	active Boolean
 }
+
+/**
+ * The CGallery entity.
+ * @author A true hipster
+ */
+entity CGallery {
+	name String required maxlength(30)
+	description String maxlength(100)
+	uid UUID
+	active Boolean
+}
+
+entity CGalleryItem {
+	type CGalleryItemType required
+	sequence Integer required min(0)
+	preview Boolean
+	uid UUID
+	active Boolean
+}
+
 entity CBank {
 	name String required
 	value String required
@@ -175,6 +195,7 @@ entity CVendor {
 	fax String
 	website String maxlength(50)
 	paymentCategory String required maxlength(10)
+	rating Double min(0) max(10)
 
 	dateTrx LocalDate required
 	documentNo String maxlength(30)
@@ -551,6 +572,61 @@ entity CTaxInvoice {
 	active Boolean
 }
 
+entity MBrand {
+	name String required maxlength(50)
+	uid UUID
+	active Boolean
+}
+
+entity MShoppingCart {
+	uid UUID
+	active Boolean
+}
+
+entity MShoppingCartItem {
+	quantity BigDecimal required min(0)
+	uid UUID
+	active Boolean
+}
+
+entity MProductCatalog {
+	name String required maxlength(70)
+	description String
+	shortDescription String required maxlength(100)
+	height Double
+	length Double
+	width Double
+	weight Double
+	price BigDecimal
+	expiredDate LocalDate
+	
+	/** Next action for the document. */
+	documentAction String required maxlength(10)
+
+	/** Current document status. */
+	documentStatus String required maxlength(10)
+
+	/** Document is rejected if approved = false and processed = true. */
+	approved Boolean
+
+	/** Determine whether the document is already processed or not. */
+	processed Boolean
+
+	/** Mandatory if the document is rejected. */
+	rejectedReason String maxlength(50)
+
+	uid UUID
+	active Boolean
+}
+
+entity MProductPrice {
+	minQty BigDecimal
+	maxQty BigDecimal
+	price BigDecimal
+	uid UUID
+	active Boolean
+}
+
 entity MMatchPO {
 	/** PRSHPN */
 	deliveryNo String maxlength(20)
@@ -641,15 +717,18 @@ entity AiExchangeIn {
 	status AiStatus required
 }
 
-/**
- * Enumeration.
- */
+// Enums
+
 enum Depreciation {
 	STRAIGHT_LINE, DOUBLE_DECLINING
 }
 
 enum CBusinessCategorySector {
 	PRIMARY, SECONDARY, TERTIARY
+}
+
+enum CGalleryItemType {
+	DOCUMENT, IMAGE, VIDEO
 }
 
 enum CTaxTransactionType {
@@ -668,6 +747,7 @@ relationship OneToOne {
 	AdUser{user(login) required} to User
 	CCountry{currency required} to CCurrency
 	CVendor{taxIdFile} to CAttachment
+	CGalleryItem{cAttachment required} to CAttachment
 }
 /**
  * Both side will reference each other.
@@ -682,8 +762,14 @@ relationship OneToMany {
 	CRegion to CCity{region}
 	CBusinessCategory to CBusinessCategory{parentCategory}
 
-	//for product category
+	// for product category
 	CProductCategory to CProductCategory{parentCategory}
+
+	// Gallery items.
+	CGallery to CGalleryItem{cGallery required}
+
+	// Shopping cart.
+	MShoppingCart to MShoppingCartItem{mShoppingCart required}
 }
 
 /**
@@ -729,6 +815,8 @@ relationship ManyToOne {
 
 	CBusinessCategory{adOrganization required} to ADOrganization
 
+	CGallery{adOrganization required} to ADOrganization
+	CGalleryItem{adOrganization required} to ADOrganization
 	CAttachment{adOrganization required} to ADOrganization
 	CRegistrationDocType{adOrganization required} to ADOrganization
 
@@ -797,6 +885,18 @@ relationship ManyToOne {
 	CLocator{adOrganization required} to ADOrganization
 	CLocator{warehouse required} to CWarehouse
 
+	MProductCatalog{adOrganizationId required} to ADOrganization
+	MProductCatalog{cDocumentType required} to CDocumentType
+	MProductCatalog{cCurrency required} to CCurrency
+	MProductCatalog{cUom required} to CUnitOfMeasure
+	MProductCatalog{cVendor required} to CVendor
+	MProductCatalog{mProduct required} to CProduct
+
+	MShoppingCart{adOrganization required} to ADOrganization
+	MShoppingCart{adUser required} to AdUser
+	MShoppingCartItem{adOrganization required} to ADOrganization
+	MShoppingCartItem{mProduct required} to CProduct
+
 	// releated vendor invoice verification
 	MVerification{adOrganization required} to ADOrganization
 
@@ -858,12 +958,8 @@ relationship ManyToOne {
 
 	CVendorGroup{adOrganization required} to ADOrganization
 	CVendor{vendorGroup} to CVendorGroup
-}
 
-/**
- * Many to one relationship.
- */
-relationship ManyToOne {
+	// BHp MatchPO table
 	/** PRKCOO */
 	MMatchPO{adOrganization required} to ADOrganization
 

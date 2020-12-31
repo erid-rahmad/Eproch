@@ -1,68 +1,63 @@
 {
-    "name": "CBusinessCategory",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "unique"
-            ]
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "sector",
-            "fieldType": "CBusinessCategorySector",
-            "fieldValues": "PRIMARY,SECONDARY,TERTIARY",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "cBusinessCategory",
-            "otherEntityRelationshipName": "parentCategory",
-            "relationshipName": "cBusinessCategory"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "cBusinessCategory",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cBusinessCategory",
-            "otherEntityRelationshipName": "cBusinessCategory",
-            "relationshipName": "parentCategory",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200707051100",
-    "entityTableName": "c_business_category",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "CBusinessCategory",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "sector",
+      "fieldType": "CBusinessCategorySector",
+      "fieldValues": "PRIMARY,SECONDARY,TERTIARY",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "cBusinessCategory",
+      "otherEntityRelationshipName": "parentCategory",
+      "relationshipName": "cBusinessCategory"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "cBusinessCategory",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cBusinessCategory",
+      "otherEntityRelationshipName": "cBusinessCategory",
+      "relationshipName": "parentCategory",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200707051100",
+  "entityTableName": "c_business_category",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

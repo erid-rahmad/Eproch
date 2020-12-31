@@ -224,7 +224,7 @@
     <changeSet id="20201207133100" author="Ananta Aryadewa">
         <addColumn tableName="m_verification">
             <column name="match_po_currency_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="true" />
             </column>
         </addColumn>
     </changeSet>

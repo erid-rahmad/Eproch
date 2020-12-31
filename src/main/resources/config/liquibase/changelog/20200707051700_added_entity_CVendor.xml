@@ -230,4 +230,12 @@
         <dropNotNullConstraint tableName="c_vendor" columnName="document_no" />
     </changeSet>
 
+    <changeSet id="20200101052600" author="Ananta Aryadewa">
+        <addColumn tableName="c_vendor">
+            <column name="rating" type="double">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

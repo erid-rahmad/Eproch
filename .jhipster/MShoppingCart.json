@@ -1,0 +1,50 @@
+{
+  "name": "MShoppingCart",
+  "fields": [
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "mShoppingCartItem",
+      "otherEntityRelationshipName": "mShoppingCart",
+      "relationshipName": "mShoppingCartItem"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "mShoppingCart",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "adUser",
+      "otherEntityRelationshipName": "mShoppingCart",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adUser",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201230134909",
+  "entityTableName": "m_shopping_cart",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true,
+  "enableEntityAudit": true
+}

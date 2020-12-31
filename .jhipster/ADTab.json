@@ -1,150 +1,148 @@
 {
-    "name": "ADTab",
-    "fields": [
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "iconName",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "treeView",
-            "javadoc": "Whether or not to show the tree view in the layout.",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "targetEndpoint",
-            "javadoc": "Target API endpoint for the CRUD operations.\\nOverride the same property in AdTable.",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "singleRow",
-            "javadoc": "Indicates to use the form layout by default instead of\\ndisplaying the table layout first.",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "deletable",
-            "javadoc": "Whether or not the record is deletable from the table.",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "insertable",
-            "javadoc": "Whether or not to allow insert a new record to the table.",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "writable",
-            "javadoc": "Force read-only to the whole fields in the tab.",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "displayLogic",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "readOnlyLogic",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "filterQuery",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "orderQuery",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "tabSequence",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "aDTab",
-            "otherEntityRelationshipName": "parentTab",
-            "relationshipName": "aDTab"
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "aDField",
-            "otherEntityRelationshipName": "adTab",
-            "relationshipName": "aDField"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "aDTab",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDTable",
-            "otherEntityRelationshipName": "aDTab",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adTable",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDColumn",
-            "otherEntityRelationshipName": "aDTab",
-            "relationshipName": "parentColumn",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDColumn",
-            "otherEntityRelationshipName": "aDTab",
-            "relationshipName": "foreignColumn",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDWindow",
-            "otherEntityRelationshipName": "aDTab",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adWindow",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDTab",
-            "otherEntityRelationshipName": "aDTab",
-            "relationshipName": "parentTab",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200429153000",
-    "entityTableName": "ad_tab",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true,
-    "skipClient": true
+  "name": "ADTab",
+  "fields": [
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "iconName",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "treeView",
+      "javadoc": "Whether or not to show the tree view in the layout.",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "targetEndpoint",
+      "javadoc": "Target API endpoint for the CRUD operations.\\nOverride the same property in AdTable.",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "singleRow",
+      "javadoc": "Indicates to use the form layout by default instead of\\ndisplaying the table layout first.",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "deletable",
+      "javadoc": "Whether or not the record is deletable from the table.",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "insertable",
+      "javadoc": "Whether or not to allow insert a new record to the table.",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "writable",
+      "javadoc": "Force read-only to the whole fields in the tab.",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "displayLogic",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "readOnlyLogic",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "filterQuery",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "orderQuery",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "tabSequence",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "aDTab",
+      "otherEntityRelationshipName": "parentTab",
+      "relationshipName": "aDTab"
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "aDField",
+      "otherEntityRelationshipName": "adTab",
+      "relationshipName": "aDField"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "aDTab",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDTable",
+      "otherEntityRelationshipName": "aDTab",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adTable",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDColumn",
+      "otherEntityRelationshipName": "aDTab",
+      "relationshipName": "parentColumn",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDColumn",
+      "otherEntityRelationshipName": "aDTab",
+      "relationshipName": "foreignColumn",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDWindow",
+      "otherEntityRelationshipName": "aDTab",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adWindow",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDTab",
+      "otherEntityRelationshipName": "aDTab",
+      "relationshipName": "parentTab",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200429153000",
+  "entityTableName": "ad_tab",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "enableEntityAudit": true,
+  "skipClient": true
 }

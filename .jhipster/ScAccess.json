@@ -1,95 +1,93 @@
 {
-    "name": "ScAccess",
-    "fields": [
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "50"
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "canWrite",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "scAccess",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "scAccessType",
-            "otherEntityRelationshipName": "scAccess",
-            "relationshipValidateRules": "required",
-            "relationshipName": "type",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDWindow",
-            "otherEntityRelationshipName": "scAccess",
-            "relationshipName": "window",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "adForm",
-            "otherEntityRelationshipName": "scAccess",
-            "relationshipName": "form",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cDocumentType",
-            "otherEntityRelationshipName": "scAccess",
-            "relationshipName": "documentType",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDReferenceList",
-            "otherEntityRelationshipName": "scAccess",
-            "relationshipName": "referenceList",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "scAuthority",
-            "otherEntityRelationshipName": "scAccess",
-            "relationshipValidateRules": "required",
-            "relationshipName": "authority",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200916062900",
-    "entityTableName": "sc_access",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "ScAccess",
+  "fields": [
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "canWrite",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "scAccess",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "scAccessType",
+      "otherEntityRelationshipName": "scAccess",
+      "relationshipValidateRules": "required",
+      "relationshipName": "type",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDWindow",
+      "otherEntityRelationshipName": "scAccess",
+      "relationshipName": "window",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "adForm",
+      "otherEntityRelationshipName": "scAccess",
+      "relationshipName": "form",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cDocumentType",
+      "otherEntityRelationshipName": "scAccess",
+      "relationshipName": "documentType",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDReferenceList",
+      "otherEntityRelationshipName": "scAccess",
+      "relationshipName": "referenceList",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "scAuthority",
+      "otherEntityRelationshipName": "scAccess",
+      "relationshipValidateRules": "required",
+      "relationshipName": "authority",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200916062900",
+  "entityTableName": "sc_access",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

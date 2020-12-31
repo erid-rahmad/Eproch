@@ -1,65 +1,65 @@
 {
-    "name": "CVendorLocation",
-    "fields": [
-        {
-            "fieldName": "taxInvoiceAddress",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "shipAddress",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "invoiceAddress",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "payFromAddress",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cVendor",
-            "otherEntityRelationshipName": "cVendorLocation",
-            "relationshipName": "vendor",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cLocation",
-            "otherEntityRelationshipName": "cVendorLocation",
-            "relationshipName": "location",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "cVendorLocation",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200707051800",
-    "entityTableName": "c_vendor_location",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "CVendorLocation",
+  "fields": [
+    {
+      "fieldName": "taxInvoiceAddress",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "shipAddress",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "invoiceAddress",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "payFromAddress",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cVendor",
+      "otherEntityRelationshipName": "cVendorLocation",
+      "relationshipName": "vendor",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cLocation",
+      "otherEntityRelationshipName": "cVendorLocation",
+      "relationshipName": "location",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "cVendorLocation",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200707051800",
+  "entityTableName": "c_vendor_location",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

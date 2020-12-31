@@ -1,110 +1,100 @@
 {
-    "name": "MVerificationTax",
-    "fields": [
-        {
-            "fieldName": "taxPeriod",
-            "fieldType": "Long",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "traxCode",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "statusCode",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "docCode",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "year",
-            "fieldType": "Long",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "returnDocType",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "repSerNo",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "taxExpCode",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "dateSSP",
-            "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mVerificationTax",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cCurrency",
-            "otherEntityRelationshipName": "mVerificationTax",
-            "relationshipValidateRules": "required",
-            "relationshipName": "currency",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cTaxCategory",
-            "otherEntityRelationshipName": "mVerificationTax",
-            "relationshipValidateRules": "required",
-            "relationshipName": "taxCategory",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cCostCenter",
-            "otherEntityRelationshipName": "mVerificationTax",
-            "relationshipValidateRules": "required",
-            "relationshipName": "costCenter",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20201123064000",
-    "entityTableName": "m_verification_tax",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "MVerificationTax",
+  "fields": [
+    {
+      "fieldName": "taxPeriod",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "traxCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "statusCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "docCode",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "year",
+      "fieldType": "Long",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "returnDocType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "repSerNo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "taxExpCode",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "dateSSP",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "mVerificationTax",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cCurrency",
+      "otherEntityRelationshipName": "mVerificationTax",
+      "relationshipValidateRules": "required",
+      "relationshipName": "currency",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cTaxCategory",
+      "otherEntityRelationshipName": "mVerificationTax",
+      "relationshipValidateRules": "required",
+      "relationshipName": "taxCategory",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cCostCenter",
+      "otherEntityRelationshipName": "mVerificationTax",
+      "relationshipValidateRules": "required",
+      "relationshipName": "costCenter",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201123064000",
+  "entityTableName": "m_verification_tax",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

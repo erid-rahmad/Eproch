@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity MProductCatalog.
+    -->
+    <changeSet id="20201230135109-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id_id"
+                                 baseTableName="m_product_catalog"
+                                 constraintName="fk_m_product_catalog_ad_organization_id_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_document_type_id"
+                                 baseTableName="m_product_catalog"
+                                 constraintName="fk_m_product_catalog_c_document_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_document_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_currency_id"
+                                 baseTableName="m_product_catalog"
+                                 constraintName="fk_m_product_catalog_c_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_uom_id"
+                                 baseTableName="m_product_catalog"
+                                 constraintName="fk_m_product_catalog_c_uom_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_unit_of_measure"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_vendor_id"
+                                 baseTableName="m_product_catalog"
+                                 constraintName="fk_m_product_catalog_c_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
+
+        <addForeignKeyConstraint baseColumnNames="m_product_id"
+                                 baseTableName="m_product_catalog"
+                                 constraintName="fk_m_product_catalog_m_product_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_product"/>
+
+    </changeSet>
+</databaseChangeLog>

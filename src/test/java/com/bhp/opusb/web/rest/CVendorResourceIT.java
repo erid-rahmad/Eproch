@@ -37,7 +37,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link CVendorResource} REST controller.
  */
 @SpringBootTest(classes = OpusWebApp.class)
-
 @AutoConfigureMockMvc
 @WithMockUser
 public class CVendorResourceIT {
@@ -83,6 +82,10 @@ public class CVendorResourceIT {
 
     private static final String DEFAULT_PAYMENT_CATEGORY = "AAAAAAAAAA";
     private static final String UPDATED_PAYMENT_CATEGORY = "BBBBBBBBBB";
+
+    private static final Double DEFAULT_RATING = 0D;
+    private static final Double UPDATED_RATING = 1D;
+    private static final Double SMALLER_RATING = 0D - 1D;
 
     private static final LocalDate DEFAULT_DATE_TRX = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_TRX = LocalDate.now(ZoneId.systemDefault());
@@ -151,6 +154,7 @@ public class CVendorResourceIT {
             .fax(DEFAULT_FAX)
             .website(DEFAULT_WEBSITE)
             .paymentCategory(DEFAULT_PAYMENT_CATEGORY)
+            .rating(DEFAULT_RATING)
             .dateTrx(DEFAULT_DATE_TRX)
             .documentNo(DEFAULT_DOCUMENT_NO)
             .documentAction(DEFAULT_DOCUMENT_ACTION)
@@ -203,6 +207,7 @@ public class CVendorResourceIT {
             .fax(UPDATED_FAX)
             .website(UPDATED_WEBSITE)
             .paymentCategory(UPDATED_PAYMENT_CATEGORY)
+            .rating(UPDATED_RATING)
             .dateTrx(UPDATED_DATE_TRX)
             .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
@@ -243,7 +248,6 @@ public class CVendorResourceIT {
     @Transactional
     public void createCVendor() throws Exception {
         int databaseSizeBeforeCreate = cVendorRepository.findAll().size();
-
         // Create the CVendor
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
         restCVendorMockMvc.perform(post("/api/c-vendors")
@@ -269,6 +273,7 @@ public class CVendorResourceIT {
         assertThat(testCVendor.getFax()).isEqualTo(DEFAULT_FAX);
         assertThat(testCVendor.getWebsite()).isEqualTo(DEFAULT_WEBSITE);
         assertThat(testCVendor.getPaymentCategory()).isEqualTo(DEFAULT_PAYMENT_CATEGORY);
+        assertThat(testCVendor.getRating()).isEqualTo(DEFAULT_RATING);
         assertThat(testCVendor.getDateTrx()).isEqualTo(DEFAULT_DATE_TRX);
         assertThat(testCVendor.getDocumentNo()).isEqualTo(DEFAULT_DOCUMENT_NO);
         assertThat(testCVendor.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
@@ -310,6 +315,7 @@ public class CVendorResourceIT {
         // Create the CVendor, which fails.
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
 
+
         restCVendorMockMvc.perform(post("/api/c-vendors")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(cVendorDTO)))
@@ -328,6 +334,7 @@ public class CVendorResourceIT {
 
         // Create the CVendor, which fails.
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
+
 
         restCVendorMockMvc.perform(post("/api/c-vendors")
             .contentType(MediaType.APPLICATION_JSON)
@@ -348,6 +355,7 @@ public class CVendorResourceIT {
         // Create the CVendor, which fails.
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
 
+
         restCVendorMockMvc.perform(post("/api/c-vendors")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(cVendorDTO)))
@@ -366,6 +374,7 @@ public class CVendorResourceIT {
 
         // Create the CVendor, which fails.
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
+
 
         restCVendorMockMvc.perform(post("/api/c-vendors")
             .contentType(MediaType.APPLICATION_JSON)
@@ -386,6 +395,7 @@ public class CVendorResourceIT {
         // Create the CVendor, which fails.
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
 
+
         restCVendorMockMvc.perform(post("/api/c-vendors")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(cVendorDTO)))
@@ -405,6 +415,7 @@ public class CVendorResourceIT {
         // Create the CVendor, which fails.
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
 
+
         restCVendorMockMvc.perform(post("/api/c-vendors")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(cVendorDTO)))
@@ -423,6 +434,7 @@ public class CVendorResourceIT {
 
         // Create the CVendor, which fails.
         CVendorDTO cVendorDTO = cVendorMapper.toDto(cVendor);
+
 
         restCVendorMockMvc.perform(post("/api/c-vendors")
             .contentType(MediaType.APPLICATION_JSON)
@@ -458,6 +470,7 @@ public class CVendorResourceIT {
             .andExpect(jsonPath("$.[*].fax").value(hasItem(DEFAULT_FAX)))
             .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE)))
             .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)))
+            .andExpect(jsonPath("$.[*].rating").value(hasItem(DEFAULT_RATING.doubleValue())))
             .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
             .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
@@ -493,6 +506,7 @@ public class CVendorResourceIT {
             .andExpect(jsonPath("$.fax").value(DEFAULT_FAX))
             .andExpect(jsonPath("$.website").value(DEFAULT_WEBSITE))
             .andExpect(jsonPath("$.paymentCategory").value(DEFAULT_PAYMENT_CATEGORY))
+            .andExpect(jsonPath("$.rating").value(DEFAULT_RATING.doubleValue()))
             .andExpect(jsonPath("$.dateTrx").value(DEFAULT_DATE_TRX.toString()))
             .andExpect(jsonPath("$.documentNo").value(DEFAULT_DOCUMENT_NO))
             .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
@@ -1591,6 +1605,111 @@ public class CVendorResourceIT {
 
     @Test
     @Transactional
+    public void getAllCVendorsByRatingIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where rating equals to DEFAULT_RATING
+        defaultCVendorShouldBeFound("rating.equals=" + DEFAULT_RATING);
+
+        // Get all the cVendorList where rating equals to UPDATED_RATING
+        defaultCVendorShouldNotBeFound("rating.equals=" + UPDATED_RATING);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByRatingIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where rating not equals to DEFAULT_RATING
+        defaultCVendorShouldNotBeFound("rating.notEquals=" + DEFAULT_RATING);
+
+        // Get all the cVendorList where rating not equals to UPDATED_RATING
+        defaultCVendorShouldBeFound("rating.notEquals=" + UPDATED_RATING);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByRatingIsInShouldWork() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where rating in DEFAULT_RATING or UPDATED_RATING
+        defaultCVendorShouldBeFound("rating.in=" + DEFAULT_RATING + "," + UPDATED_RATING);
+
+        // Get all the cVendorList where rating equals to UPDATED_RATING
+        defaultCVendorShouldNotBeFound("rating.in=" + UPDATED_RATING);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByRatingIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where rating is not null
+        defaultCVendorShouldBeFound("rating.specified=true");
+
+        // Get all the cVendorList where rating is null
+        defaultCVendorShouldNotBeFound("rating.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByRatingIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where rating is greater than or equal to DEFAULT_RATING
+        defaultCVendorShouldBeFound("rating.greaterThanOrEqual=" + DEFAULT_RATING);
+
+        // Get all the cVendorList where rating is greater than or equal to (DEFAULT_RATING + 1)
+        defaultCVendorShouldNotBeFound("rating.greaterThanOrEqual=" + (DEFAULT_RATING + 1));
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByRatingIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where rating is less than or equal to DEFAULT_RATING
+        defaultCVendorShouldBeFound("rating.lessThanOrEqual=" + DEFAULT_RATING);
+
+        // Get all the cVendorList where rating is less than or equal to SMALLER_RATING
+        defaultCVendorShouldNotBeFound("rating.lessThanOrEqual=" + SMALLER_RATING);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByRatingIsLessThanSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where rating is less than DEFAULT_RATING
+        defaultCVendorShouldNotBeFound("rating.lessThan=" + DEFAULT_RATING);
+
+        // Get all the cVendorList where rating is less than (DEFAULT_RATING + 1)
+        defaultCVendorShouldBeFound("rating.lessThan=" + (DEFAULT_RATING + 1));
+    }
+
+    @Test
+    @Transactional
+    public void getAllCVendorsByRatingIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        cVendorRepository.saveAndFlush(cVendor);
+
+        // Get all the cVendorList where rating is greater than DEFAULT_RATING
+        defaultCVendorShouldNotBeFound("rating.greaterThan=" + DEFAULT_RATING);
+
+        // Get all the cVendorList where rating is greater than SMALLER_RATING
+        defaultCVendorShouldBeFound("rating.greaterThan=" + SMALLER_RATING);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllCVendorsByDateTrxIsEqualToSomething() throws Exception {
         // Initialize the database
         cVendorRepository.saveAndFlush(cVendor);
@@ -2229,6 +2348,7 @@ public class CVendorResourceIT {
             .andExpect(jsonPath("$.[*].fax").value(hasItem(DEFAULT_FAX)))
             .andExpect(jsonPath("$.[*].website").value(hasItem(DEFAULT_WEBSITE)))
             .andExpect(jsonPath("$.[*].paymentCategory").value(hasItem(DEFAULT_PAYMENT_CATEGORY)))
+            .andExpect(jsonPath("$.[*].rating").value(hasItem(DEFAULT_RATING.doubleValue())))
             .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
             .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
@@ -2261,7 +2381,6 @@ public class CVendorResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
     }
-
 
     @Test
     @Transactional
@@ -2298,6 +2417,7 @@ public class CVendorResourceIT {
             .fax(UPDATED_FAX)
             .website(UPDATED_WEBSITE)
             .paymentCategory(UPDATED_PAYMENT_CATEGORY)
+            .rating(UPDATED_RATING)
             .dateTrx(UPDATED_DATE_TRX)
             .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
@@ -2331,6 +2451,7 @@ public class CVendorResourceIT {
         assertThat(testCVendor.getFax()).isEqualTo(UPDATED_FAX);
         assertThat(testCVendor.getWebsite()).isEqualTo(UPDATED_WEBSITE);
         assertThat(testCVendor.getPaymentCategory()).isEqualTo(UPDATED_PAYMENT_CATEGORY);
+        assertThat(testCVendor.getRating()).isEqualTo(UPDATED_RATING);
         assertThat(testCVendor.getDateTrx()).isEqualTo(UPDATED_DATE_TRX);
         assertThat(testCVendor.getDocumentNo()).isEqualTo(UPDATED_DOCUMENT_NO);
         assertThat(testCVendor.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);

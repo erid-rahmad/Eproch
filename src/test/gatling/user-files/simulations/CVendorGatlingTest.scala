@@ -86,6 +86,7 @@ class CVendorGatlingTest extends Simulation {
                 , "fax":"SAMPLE_TEXT"
                 , "website":"SAMPLE_TEXT"
                 , "paymentCategory":"SAMPLE_TEXT"
+                , "rating":null
                 , "dateTrx":"2020-01-01T00:00:00.000Z"
                 , "documentNo":"SAMPLE_TEXT"
                 , "documentAction":"SAMPLE_TEXT"

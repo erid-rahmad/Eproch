@@ -1,67 +1,67 @@
 {
-    "name": "ScAuthority",
-    "fields": [
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "master",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "accessAllOrgs",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "useUserOrgs",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "authority",
-            "otherEntityRelationshipName": "scAuthority",
-            "relationshipValidateRules": "required",
-            "relationshipName": "authority",
-            "otherEntityField": "name",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "scAccess",
-            "otherEntityRelationshipName": "authority",
-            "relationshipName": "scAccess"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "scAuthority",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200915075000",
-    "javadoc": "Extends the JHipster's Authority entity",
-    "entityTableName": "sc_authority",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "ScAuthority",
+  "fields": [
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "master",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "accessAllOrgs",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "useUserOrgs",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "authority",
+      "otherEntityRelationshipName": "scAuthority",
+      "relationshipValidateRules": "required",
+      "relationshipName": "authority",
+      "otherEntityField": "name",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "one-to-many",
+      "otherEntityName": "scAccess",
+      "otherEntityRelationshipName": "authority",
+      "relationshipName": "scAccess"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "scAuthority",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200915075000",
+  "javadoc": "Extends the JHipster's Authority entity",
+  "entityTableName": "sc_authority",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

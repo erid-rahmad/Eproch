@@ -1,79 +1,73 @@
 {
-    "name": "CProductGroupAccount",
-    "fields": [
-        {
-            "fieldName": "depreciation",
-            "fieldType": "Depreciation",
-            "fieldValues": "STRAIGHT_LINE,DOUBLE_DECLINING",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "lifeYear",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "lifeMonth",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cElementValue",
-            "otherEntityRelationshipName": "cProductGroupAccount",
-            "relationshipName": "assetAccount",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cElementValue",
-            "otherEntityRelationshipName": "cProductGroupAccount",
-            "relationshipName": "depreciationAccount",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cProductGroup",
-            "otherEntityRelationshipName": "cProductGroupAccount",
-            "relationshipValidateRules": "required",
-            "relationshipName": "productGroup",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "cProductGroupAccount",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200903081000",
-    "entityTableName": "c_product_group_account",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "CProductGroupAccount",
+  "fields": [
+    {
+      "fieldName": "depreciation",
+      "fieldType": "Depreciation",
+      "fieldValues": "STRAIGHT_LINE,DOUBLE_DECLINING",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "lifeYear",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "lifeMonth",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cElementValue",
+      "otherEntityRelationshipName": "cProductGroupAccount",
+      "relationshipName": "assetAccount",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cElementValue",
+      "otherEntityRelationshipName": "cProductGroupAccount",
+      "relationshipName": "depreciationAccount",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cProductGroup",
+      "otherEntityRelationshipName": "cProductGroupAccount",
+      "relationshipValidateRules": "required",
+      "relationshipName": "productGroup",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "cProductGroupAccount",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200903081000",
+  "entityTableName": "c_product_group_account",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

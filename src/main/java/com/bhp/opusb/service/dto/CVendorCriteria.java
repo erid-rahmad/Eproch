@@ -56,6 +56,8 @@ public class CVendorCriteria implements Serializable, Criteria {
 
     private StringFilter paymentCategory;
 
+    private DoubleFilter rating;
+
     private LocalDateFilter dateTrx;
 
     private StringFilter documentNo;
@@ -99,6 +101,7 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.fax = other.fax == null ? null : other.fax.copy();
         this.website = other.website == null ? null : other.website.copy();
         this.paymentCategory = other.paymentCategory == null ? null : other.paymentCategory.copy();
+        this.rating = other.rating == null ? null : other.rating.copy();
         this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
         this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
         this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
@@ -238,6 +241,14 @@ public class CVendorCriteria implements Serializable, Criteria {
         this.paymentCategory = paymentCategory;
     }
 
+    public DoubleFilter getRating() {
+        return rating;
+    }
+
+    public void setRating(DoubleFilter rating) {
+        this.rating = rating;
+    }
+
     public LocalDateFilter getDateTrx() {
         return dateTrx;
     }
@@ -360,6 +371,7 @@ public class CVendorCriteria implements Serializable, Criteria {
             Objects.equals(fax, that.fax) &&
             Objects.equals(website, that.website) &&
             Objects.equals(paymentCategory, that.paymentCategory) &&
+            Objects.equals(rating, that.rating) &&
             Objects.equals(dateTrx, that.dateTrx) &&
             Objects.equals(documentNo, that.documentNo) &&
             Objects.equals(documentAction, that.documentAction) &&
@@ -392,6 +404,7 @@ public class CVendorCriteria implements Serializable, Criteria {
         fax,
         website,
         paymentCategory,
+        rating,
         dateTrx,
         documentNo,
         documentAction,
@@ -407,6 +420,7 @@ public class CVendorCriteria implements Serializable, Criteria {
         );
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "CVendorCriteria{" +
@@ -425,6 +439,7 @@ public class CVendorCriteria implements Serializable, Criteria {
                 (fax != null ? "fax=" + fax + ", " : "") +
                 (website != null ? "website=" + website + ", " : "") +
                 (paymentCategory != null ? "paymentCategory=" + paymentCategory + ", " : "") +
+                (rating != null ? "rating=" + rating + ", " : "") +
                 (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
                 (documentNo != null ? "documentNo=" + documentNo + ", " : "") +
                 (documentAction != null ? "documentAction=" + documentAction + ", " : "") +

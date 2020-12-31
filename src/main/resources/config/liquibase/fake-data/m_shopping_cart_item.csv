@@ -1,0 +1,11 @@
+id;quantity;uid;active;ad_organization_id;m_product_id;m_shopping_cart_id
+1;96459;60fe0af7-01bd-433b-9266-ab16300c6add;true;1;1;1
+2;28339;50cb3e5c-063c-4a81-ac3b-6234cd8ee792;true;2;2;2
+3;917;76707205-93a8-4133-949e-5bc5d15004a7;false;3;3;3
+4;72884;c103ff2b-dfb0-4a30-af6e-ed2957093a27;false;4;4;4
+5;91884;0f9acab7-9346-4378-ae79-51465a9ed2d0;false;5;5;5
+6;84278;55ff56a8-ab10-4880-ae94-417e55bff31d;true;6;6;6
+7;8498;4e0b42dc-a5e6-4309-8d23-ab8cd40edeba;false;7;7;7
+8;20769;f0eacb63-67d2-4d8e-8911-d1c6c7be8699;true;8;8;8
+9;66991;2e8c8794-5f0c-4b69-b819-a2fc964e9152;false;9;9;9
+10;15451;ace6afea-c6fd-48a4-9d3a-48b20d64212c;true;10;10;10

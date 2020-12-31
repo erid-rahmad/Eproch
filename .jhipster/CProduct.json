@@ -1,110 +1,102 @@
 {
-    "name": "CProduct",
-    "fields": [
-        {
-            "fieldName": "code",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "50"
-        },
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "type",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "1"
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "cProduct",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cProductClassification",
-            "otherEntityRelationshipName": "cProduct",
-            "relationshipName": "productClassification",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cProductCategory",
-            "otherEntityRelationshipName": "cProduct",
-            "relationshipValidateRules": "required",
-            "relationshipName": "productCategory",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cProductCategory",
-            "otherEntityRelationshipName": "cProduct",
-            "relationshipName": "productSubCategory",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cElementValue",
-            "otherEntityRelationshipName": "cProduct",
-            "relationshipValidateRules": "required",
-            "relationshipName": "assetAcct",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cElementValue",
-            "otherEntityRelationshipName": "cProduct",
-            "relationshipValidateRules": "required",
-            "relationshipName": "expenseAcct",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cUnitOfMeasure",
-            "otherEntityRelationshipName": "cProduct",
-            "relationshipValidateRules": "required",
-            "relationshipName": "uom",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20200922060500",
-    "entityTableName": "c_product",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "CProduct",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "type",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "1"
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "cProduct",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cProductClassification",
+      "otherEntityRelationshipName": "cProduct",
+      "relationshipName": "productClassification",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cProductCategory",
+      "otherEntityRelationshipName": "cProduct",
+      "relationshipValidateRules": "required",
+      "relationshipName": "productCategory",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cProductCategory",
+      "otherEntityRelationshipName": "cProduct",
+      "relationshipName": "productSubCategory",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cElementValue",
+      "otherEntityRelationshipName": "cProduct",
+      "relationshipValidateRules": "required",
+      "relationshipName": "assetAcct",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cElementValue",
+      "otherEntityRelationshipName": "cProduct",
+      "relationshipValidateRules": "required",
+      "relationshipName": "expenseAcct",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cUnitOfMeasure",
+      "otherEntityRelationshipName": "cProduct",
+      "relationshipValidateRules": "required",
+      "relationshipName": "uom",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20200922060500",
+  "entityTableName": "c_product",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

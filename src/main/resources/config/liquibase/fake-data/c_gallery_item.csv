@@ -1,0 +1,11 @@
+id;type;sequence;preview;uid;active;c_attachment_id;ad_organization_id;c_gallery_id
+1;VIDEO;18383;true;eec17664-1287-4391-b96f-b1522e931147;true;1;1;1
+2;VIDEO;31181;true;dff0d135-e47d-4ab0-a8d9-50f741215929;true;2;2;2
+3;VIDEO;75350;false;68c8a04e-1711-43ca-9e27-fba7c727dbec;true;3;3;3
+4;VIDEO;65248;true;7fd8292c-ce0d-4730-b82d-8c3ab7819100;true;4;4;4
+5;VIDEO;67644;true;a36db678-7d89-44d4-a89d-c3f92476f614;true;5;5;5
+6;DOCUMENT;25277;true;e3757974-c741-4133-ba67-d010011f31a0;false;6;6;6
+7;IMAGE;16584;true;02567dbc-8057-4670-9c22-1d1746280eb5;false;7;7;7
+8;DOCUMENT;25930;false;3992b27f-2191-4bd7-94a0-e424dbd147a5;true;8;8;8
+9;DOCUMENT;12035;true;5103088b-d104-487e-a938-9520b820ed74;false;9;9;9
+10;DOCUMENT;29419;false;6206f075-e060-4a21-80c6-96eedf48ccea;true;10;10;10

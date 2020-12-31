@@ -133,6 +133,9 @@ public class CVendorQueryService extends QueryService<CVendor> {
             if (criteria.getPaymentCategory() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPaymentCategory(), CVendor_.paymentCategory));
             }
+            if (criteria.getRating() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getRating(), CVendor_.rating));
+            }
             if (criteria.getDateTrx() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), CVendor_.dateTrx));
             }

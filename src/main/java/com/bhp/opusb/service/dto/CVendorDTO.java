@@ -1,19 +1,15 @@
 package com.bhp.opusb.service.dto;
 
 import java.time.LocalDate;
-import java.util.Objects;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CVendor} entity.
  */
-public class CVendorDTO extends AbstractAuditingDTO {
-
-    private static final long serialVersionUID = 1L;
-
+public class CVendorDTO extends AbstractAuditingDTO implements Serializable {
+    
     private Long id;
 
     @Size(max = 30)
@@ -59,6 +55,10 @@ public class CVendorDTO extends AbstractAuditingDTO {
     @Size(max = 10)
     private String paymentCategory;
 
+    @DecimalMin(value = "0")
+    @DecimalMax(value = "10")
+    private Double rating;
+
     @NotNull
     private LocalDate dateTrx;
 
@@ -83,17 +83,13 @@ public class CVendorDTO extends AbstractAuditingDTO {
 
 
     private Long taxIdFileId;
-    private String taxIdFileName;
 
     private Long adOrganizationId;
-    private String adOrganizationName;
-
-    private Long vendorGroupId;
-    private String vendorGroupName;
 
     private Long documentTypeId;
-    private String documentTypeName;
 
+    private Long vendorGroupId;
+    
     public Long getId() {
         return id;
     }
@@ -214,6 +210,14 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.paymentCategory = paymentCategory;
     }
 
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
+
     public LocalDate getDateTrx() {
         return dateTrx;
     }
@@ -286,44 +290,12 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.taxIdFileId = cAttachmentId;
     }
 
-    public String getTaxIdFileName() {
-        return taxIdFileName;
-    }
-
-    public void setTaxIdFileName(String taxIdFileName) {
-        this.taxIdFileName = taxIdFileName;
-    }
-
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
-    }
-
-    public String getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
-
-    public Long getVendorGroupId() {
-        return vendorGroupId;
-    }
-
-    public void setVendorGroupId(Long cVendorGroupId) {
-        this.vendorGroupId = cVendorGroupId;
-    }
-
-    public String getVendorGroupName() {
-        return vendorGroupName;
-    }
-
-    public void setVendorGroupName(String vendorGroupName) {
-        this.vendorGroupName = vendorGroupName;
     }
 
     public Long getDocumentTypeId() {
@@ -334,12 +306,12 @@ public class CVendorDTO extends AbstractAuditingDTO {
         this.documentTypeId = cDocumentTypeId;
     }
 
-    public String getDocumentTypeName() {
-        return documentTypeName;
+    public Long getVendorGroupId() {
+        return vendorGroupId;
     }
 
-    public void setDocumentTypeName(String documentTypeName) {
-        this.documentTypeName = documentTypeName;
+    public void setVendorGroupId(Long cVendorGroupId) {
+        this.vendorGroupId = cVendorGroupId;
     }
 
     @Override
@@ -347,22 +319,19 @@ public class CVendorDTO extends AbstractAuditingDTO {
         if (this == o) {
             return true;
         }
-        if (o == null || getClass() != o.getClass()) {
+        if (!(o instanceof CVendorDTO)) {
             return false;
         }
 
-        CVendorDTO cVendorDTO = (CVendorDTO) o;
-        if (cVendorDTO.getId() == null || getId() == null) {
-            return false;
-        }
-        return Objects.equals(getId(), cVendorDTO.getId());
+        return id != null && id.equals(((CVendorDTO) o).id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(getId());
+        return 31;
     }
 
+    // prettier-ignore
     @Override
     public String toString() {
         return "CVendorDTO{" +
@@ -381,6 +350,7 @@ public class CVendorDTO extends AbstractAuditingDTO {
             ", fax='" + getFax() + "'" +
             ", website='" + getWebsite() + "'" +
             ", paymentCategory='" + getPaymentCategory() + "'" +
+            ", rating=" + getRating() +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +
