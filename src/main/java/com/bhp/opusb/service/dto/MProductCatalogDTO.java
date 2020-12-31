@@ -76,7 +76,7 @@ public class MProductCatalogDTO extends AbstractAuditingDTO implements Serializa
     private Boolean active;
 
 
-    private Long adOrganizationIdId;
+    private Long adOrganizationId;
 
     private Long cDocumentTypeId;
 
@@ -224,12 +224,12 @@ public class MProductCatalogDTO extends AbstractAuditingDTO implements Serializa
         this.active = active;
     }
 
-    public Long getAdOrganizationIdId() {
-        return adOrganizationIdId;
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
     }
 
-    public void setAdOrganizationIdId(Long aDOrganizationId) {
-        this.adOrganizationIdId = aDOrganizationId;
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
     }
 
     public Long getCDocumentTypeId() {
@@ -310,7 +310,7 @@ public class MProductCatalogDTO extends AbstractAuditingDTO implements Serializa
             ", rejectedReason='" + getRejectedReason() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", adOrganizationIdId=" + getAdOrganizationIdId() +
+            ", adOrganizationId=" + getAdOrganizationId() +
             ", cDocumentTypeId=" + getCDocumentTypeId() +
             ", cCurrencyId=" + getCCurrencyId() +
             ", cUomId=" + getCUomId() +

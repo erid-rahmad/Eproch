@@ -12,7 +12,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CDocumentTypeMapper.class, CCurrencyMapper.class, CUnitOfMeasureMapper.class, CVendorMapper.class, CProductMapper.class})
 public interface MProductCatalogMapper extends EntityMapper<MProductCatalogDTO, MProductCatalog> {
 
-    @Mapping(source = "adOrganizationId.id", target = "adOrganizationIdId")
+    @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "cDocumentType.id", target = "cDocumentTypeId")
     @Mapping(source = "cCurrency.id", target = "cCurrencyId")
     @Mapping(source = "cUom.id", target = "cUomId")
@@ -20,7 +20,7 @@ public interface MProductCatalogMapper extends EntityMapper<MProductCatalogDTO, 
     @Mapping(source = "mProduct.id", target = "mProductId")
     MProductCatalogDTO toDto(MProductCatalog mProductCatalog);
 
-    @Mapping(source = "adOrganizationIdId", target = "adOrganizationId")
+    @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "cDocumentTypeId", target = "cDocumentType")
     @Mapping(source = "cCurrencyId", target = "cCurrency")
     @Mapping(source = "cUomId", target = "cUom")

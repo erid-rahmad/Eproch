@@ -885,7 +885,7 @@ relationship ManyToOne {
 	CLocator{adOrganization required} to ADOrganization
 	CLocator{warehouse required} to CWarehouse
 
-	MProductCatalog{adOrganizationId required} to ADOrganization
+	MProductCatalog{adOrganization required} to ADOrganization
 	MProductCatalog{cDocumentType required} to CDocumentType
 	MProductCatalog{cCurrency required} to CCurrency
 	MProductCatalog{cUom required} to CUnitOfMeasure

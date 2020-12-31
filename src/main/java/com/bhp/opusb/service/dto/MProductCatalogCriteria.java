@@ -61,7 +61,7 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
-    private LongFilter adOrganizationIdId;
+    private LongFilter adOrganizationId;
 
     private LongFilter cDocumentTypeId;
 
@@ -94,7 +94,7 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         this.rejectedReason = other.rejectedReason == null ? null : other.rejectedReason.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.adOrganizationIdId = other.adOrganizationIdId == null ? null : other.adOrganizationIdId.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.cDocumentTypeId = other.cDocumentTypeId == null ? null : other.cDocumentTypeId.copy();
         this.cCurrencyId = other.cCurrencyId == null ? null : other.cCurrencyId.copy();
         this.cUomId = other.cUomId == null ? null : other.cUomId.copy();
@@ -243,12 +243,12 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
-    public LongFilter getAdOrganizationIdId() {
-        return adOrganizationIdId;
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
     }
 
-    public void setAdOrganizationIdId(LongFilter adOrganizationIdId) {
-        this.adOrganizationIdId = adOrganizationIdId;
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
     }
 
     public LongFilter getCDocumentTypeId() {
@@ -319,7 +319,7 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
             Objects.equals(rejectedReason, that.rejectedReason) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(adOrganizationIdId, that.adOrganizationIdId) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(cDocumentTypeId, that.cDocumentTypeId) &&
             Objects.equals(cCurrencyId, that.cCurrencyId) &&
             Objects.equals(cUomId, that.cUomId) &&
@@ -347,7 +347,7 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         rejectedReason,
         uid,
         active,
-        adOrganizationIdId,
+        adOrganizationId,
         cDocumentTypeId,
         cCurrencyId,
         cUomId,
@@ -377,7 +377,7 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
                 (rejectedReason != null ? "rejectedReason=" + rejectedReason + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (adOrganizationIdId != null ? "adOrganizationIdId=" + adOrganizationIdId + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (cDocumentTypeId != null ? "cDocumentTypeId=" + cDocumentTypeId + ", " : "") +
                 (cCurrencyId != null ? "cCurrencyId=" + cCurrencyId + ", " : "") +
                 (cUomId != null ? "cUomId=" + cUomId + ", " : "") +

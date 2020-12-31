@@ -111,7 +111,7 @@ public class MProductCatalog extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = "mProductCatalogs", allowSetters = true)
-    private ADOrganization adOrganizationId;
+    private ADOrganization adOrganization;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -355,17 +355,17 @@ public class MProductCatalog extends AbstractAuditingEntity {
         this.active = active;
     }
 
-    public ADOrganization getAdOrganizationId() {
-        return adOrganizationId;
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
     }
 
-    public MProductCatalog adOrganizationId(ADOrganization aDOrganization) {
-        this.adOrganizationId = aDOrganization;
+    public MProductCatalog adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
         return this;
     }
 
-    public void setAdOrganizationId(ADOrganization aDOrganization) {
-        this.adOrganizationId = aDOrganization;
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
     }
 
     public CDocumentType getCDocumentType() {

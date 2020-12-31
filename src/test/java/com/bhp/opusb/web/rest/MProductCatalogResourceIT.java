@@ -151,7 +151,7 @@ public class MProductCatalogResourceIT {
         } else {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
-        mProductCatalog.setAdOrganizationId(aDOrganization);
+        mProductCatalog.setAdOrganization(aDOrganization);
         // Add required entity
         CDocumentType cDocumentType;
         if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
@@ -237,7 +237,7 @@ public class MProductCatalogResourceIT {
         } else {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
-        mProductCatalog.setAdOrganizationId(aDOrganization);
+        mProductCatalog.setAdOrganization(aDOrganization);
         // Add required entity
         CDocumentType cDocumentType;
         if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
@@ -1816,17 +1816,17 @@ public class MProductCatalogResourceIT {
 
     @Test
     @Transactional
-    public void getAllMProductCatalogsByAdOrganizationIdIsEqualToSomething() throws Exception {
+    public void getAllMProductCatalogsByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
-        ADOrganization adOrganizationId = mProductCatalog.getAdOrganizationId();
+        ADOrganization adOrganization = mProductCatalog.getAdOrganization();
         mProductCatalogRepository.saveAndFlush(mProductCatalog);
-        Long adOrganizationIdId = adOrganizationId.getId();
+        Long adOrganizationId = adOrganization.getId();
 
-        // Get all the mProductCatalogList where adOrganizationId equals to adOrganizationIdId
-        defaultMProductCatalogShouldBeFound("adOrganizationIdId.equals=" + adOrganizationIdId);
+        // Get all the mProductCatalogList where adOrganization equals to adOrganizationId
+        defaultMProductCatalogShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
 
-        // Get all the mProductCatalogList where adOrganizationId equals to adOrganizationIdId + 1
-        defaultMProductCatalogShouldNotBeFound("adOrganizationIdId.equals=" + (adOrganizationIdId + 1));
+        // Get all the mProductCatalogList where adOrganization equals to adOrganizationId + 1
+        defaultMProductCatalogShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
     }
 
 

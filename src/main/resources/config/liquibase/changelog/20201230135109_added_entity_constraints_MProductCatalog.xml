@@ -45,4 +45,16 @@
                                  referencedTableName="c_product"/>
 
     </changeSet>
+
+    <changeSet id="20200101055200" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="m_product_catalog" constraintName="fk_m_product_catalog_ad_organization_id_id"/>
+        <renameColumn tableName="m_product_catalog" oldColumnName="ad_organization_id_id" newColumnName="ad_organization_id" />
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_product_catalog"
+                                 constraintName="fk_m_product_catalog_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+    </changeSet>
 </databaseChangeLog>

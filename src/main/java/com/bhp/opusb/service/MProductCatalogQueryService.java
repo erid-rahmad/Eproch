@@ -139,9 +139,9 @@ public class MProductCatalogQueryService extends QueryService<MProductCatalog> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MProductCatalog_.active));
             }
-            if (criteria.getAdOrganizationIdId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAdOrganizationIdId(),
-                    root -> root.join(MProductCatalog_.adOrganizationId, JoinType.LEFT).get(ADOrganization_.id)));
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(MProductCatalog_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
             if (criteria.getCDocumentTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCDocumentTypeId(),
