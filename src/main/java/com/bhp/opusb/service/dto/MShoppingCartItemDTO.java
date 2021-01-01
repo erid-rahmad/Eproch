@@ -1,15 +1,18 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
+
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MShoppingCartItem} entity.
  */
-public class MShoppingCartItemDTO extends AbstractAuditingDTO implements Serializable {
+public class MShoppingCartItemDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -22,8 +25,12 @@ public class MShoppingCartItemDTO extends AbstractAuditingDTO implements Seriali
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long mProductId;
+    private String mProductCode;
+    private String mProductShortName;
+    private String mProductDescription;
 
     private Long mShoppingCartId;
     
@@ -67,12 +74,48 @@ public class MShoppingCartItemDTO extends AbstractAuditingDTO implements Seriali
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getMProductId() {
         return mProductId;
     }
 
     public void setMProductId(Long cProductId) {
         this.mProductId = cProductId;
+    }
+
+    public String getMProductCode() {
+        return mProductCode;
+    }
+
+    public void setMProductCode(String mProductCode) {
+        this.mProductCode = mProductCode;
+    }
+
+    public String getMProductShortName() {
+        return mProductShortName;
+    }
+
+    public void setMProductShortName(String mProductShortName) {
+        this.mProductShortName = mProductShortName;
+    }
+
+    public String getMProductDescription() {
+        return mProductDescription;
+    }
+
+    public void setMProductDescription(String mProductDescription) {
+        this.mProductDescription = mProductDescription;
+    }
+
+    public String getMProductName() {
+        return mProductCode + " - " + mProductShortName;
     }
 
     public Long getMShoppingCartId() {

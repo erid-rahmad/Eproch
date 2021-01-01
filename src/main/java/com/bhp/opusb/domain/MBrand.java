@@ -7,11 +7,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -41,6 +44,11 @@ public class MBrand extends AbstractAuditingEntity {
 
     @Column(name = "active")
     private Boolean active;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = "mBrands", allowSetters = true)
+    private ADOrganization adOrganization;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
@@ -88,6 +96,19 @@ public class MBrand extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public ADOrganization getAdOrganization() {
+        return adOrganization;
+    }
+
+    public MBrand adOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
+        return this;
+    }
+
+    public void setAdOrganization(ADOrganization aDOrganization) {
+        this.adOrganization = aDOrganization;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

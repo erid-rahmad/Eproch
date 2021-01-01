@@ -1,17 +1,21 @@
 package com.bhp.opusb.service.dto;
 
-import io.swagger.annotations.ApiModelProperty;
-import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MProductCatalog} entity.
  */
-public class MProductCatalogDTO extends AbstractAuditingDTO implements Serializable {
+public class MProductCatalogDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -77,16 +81,24 @@ public class MProductCatalogDTO extends AbstractAuditingDTO implements Serializa
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long cDocumentTypeId;
+    private String cDocumentTypeName;
 
     private Long cCurrencyId;
+    private String cCurrencyName;
 
     private Long cUomId;
+    private String cUomName;
 
     private Long cVendorId;
+    private String cVendorName;
 
     private Long mProductId;
+    private String mProductCode;
+    private String mProductShortName;
+    private String mProductDescription;
     
     public Long getId() {
         return id;
@@ -232,12 +244,28 @@ public class MProductCatalogDTO extends AbstractAuditingDTO implements Serializa
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getCDocumentTypeId() {
         return cDocumentTypeId;
     }
 
     public void setCDocumentTypeId(Long cDocumentTypeId) {
         this.cDocumentTypeId = cDocumentTypeId;
+    }
+
+    public String getCDocumentTypeName() {
+        return cDocumentTypeName;
+    }
+
+    public void setCDocumentTypeName(String cDocumentTypeName) {
+        this.cDocumentTypeName = cDocumentTypeName;
     }
 
     public Long getCCurrencyId() {
@@ -248,12 +276,28 @@ public class MProductCatalogDTO extends AbstractAuditingDTO implements Serializa
         this.cCurrencyId = cCurrencyId;
     }
 
+    public String getCCurrencyName() {
+        return cCurrencyName;
+    }
+
+    public void setCCurrencyName(String cCurrencyName) {
+        this.cCurrencyName = cCurrencyName;
+    }
     public Long getCUomId() {
         return cUomId;
     }
 
     public void setCUomId(Long cUnitOfMeasureId) {
         this.cUomId = cUnitOfMeasureId;
+    }
+
+
+    public String getCUomName() {
+        return cUomName;
+    }
+
+    public void setCUomName(String cUomName) {
+        this.cUomName = cUomName;
     }
 
     public Long getCVendorId() {
@@ -264,12 +308,48 @@ public class MProductCatalogDTO extends AbstractAuditingDTO implements Serializa
         this.cVendorId = cVendorId;
     }
 
+    public String getCVendorName() {
+        return cVendorName;
+    }
+
+    public void setCVendorName(String cVendorName) {
+        this.cVendorName = cVendorName;
+    }
+
     public Long getMProductId() {
         return mProductId;
     }
 
     public void setMProductId(Long cProductId) {
         this.mProductId = cProductId;
+    }
+
+    public String getMProductCode() {
+        return mProductCode;
+    }
+
+    public void setMProductCode(String mProductCode) {
+        this.mProductCode = mProductCode;
+    }
+
+    public String getMProductShortName() {
+        return mProductShortName;
+    }
+
+    public void setMProductShortName(String mProductShortName) {
+        this.mProductShortName = mProductShortName;
+    }
+
+    public String getMProductDescription() {
+        return mProductDescription;
+    }
+
+    public void setMProductDescription(String mProductDescription) {
+        this.mProductDescription = mProductDescription;
+    }
+
+    public String getMProductName() {
+        return mProductCode + " - " + mProductShortName;
     }
 
     @Override

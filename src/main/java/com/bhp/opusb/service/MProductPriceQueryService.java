@@ -106,6 +106,10 @@ public class MProductPriceQueryService extends QueryService<MProductPrice> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MProductPrice_.active));
             }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(MProductPrice_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
+            }
         }
         return specification;
     }

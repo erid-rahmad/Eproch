@@ -38,6 +38,8 @@ public class MProductPriceCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter adOrganizationId;
+
     public MProductPriceCriteria() {
     }
 
@@ -48,6 +50,7 @@ public class MProductPriceCriteria implements Serializable, Criteria {
         this.price = other.price == null ? null : other.price.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
     @Override
@@ -103,6 +106,14 @@ public class MProductPriceCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -119,7 +130,8 @@ public class MProductPriceCriteria implements Serializable, Criteria {
             Objects.equals(maxQty, that.maxQty) &&
             Objects.equals(price, that.price) &&
             Objects.equals(uid, that.uid) &&
-            Objects.equals(active, that.active);
+            Objects.equals(active, that.active) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
     @Override
@@ -130,7 +142,8 @@ public class MProductPriceCriteria implements Serializable, Criteria {
         maxQty,
         price,
         uid,
-        active
+        active,
+        adOrganizationId
         );
     }
 
@@ -144,6 +157,7 @@ public class MProductPriceCriteria implements Serializable, Criteria {
                 (price != null ? "price=" + price + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }
 

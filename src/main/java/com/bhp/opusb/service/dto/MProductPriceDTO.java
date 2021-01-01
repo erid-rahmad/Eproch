@@ -1,14 +1,15 @@
 package com.bhp.opusb.service.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.UUID;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MProductPrice} entity.
  */
-public class MProductPriceDTO extends AbstractAuditingDTO implements Serializable {
+public class MProductPriceDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     private BigDecimal minQty;
@@ -21,6 +22,9 @@ public class MProductPriceDTO extends AbstractAuditingDTO implements Serializabl
 
     private Boolean active;
 
+
+    private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -70,6 +74,14 @@ public class MProductPriceDTO extends AbstractAuditingDTO implements Serializabl
         this.active = active;
     }
 
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -97,6 +109,15 @@ public class MProductPriceDTO extends AbstractAuditingDTO implements Serializabl
             ", price=" + getPrice() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
             "}";
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 }

@@ -64,8 +64,17 @@
             <column name="name" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
+            <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200101130000" author="Ananta Aryadewa">
+        <addColumn tableName="m_brand">
+            <column name="ad_organization_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

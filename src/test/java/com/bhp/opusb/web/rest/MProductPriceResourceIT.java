@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MProductPrice;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.MProductPriceRepository;
 import com.bhp.opusb.service.MProductPriceService;
 import com.bhp.opusb.service.dto.MProductPriceDTO;
@@ -87,6 +88,16 @@ public class MProductPriceResourceIT {
             .price(DEFAULT_PRICE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        mProductPrice.setAdOrganization(aDOrganization);
         return mProductPrice;
     }
     /**
@@ -102,6 +113,16 @@ public class MProductPriceResourceIT {
             .price(UPDATED_PRICE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        mProductPrice.setAdOrganization(aDOrganization);
         return mProductPrice;
     }
 
@@ -627,6 +648,22 @@ public class MProductPriceResourceIT {
         // Get all the mProductPriceList where active is null
         defaultMProductPriceShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllMProductPricesByAdOrganizationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADOrganization adOrganization = mProductPrice.getAdOrganization();
+        mProductPriceRepository.saveAndFlush(mProductPrice);
+        Long adOrganizationId = adOrganization.getId();
+
+        // Get all the mProductPriceList where adOrganization equals to adOrganizationId
+        defaultMProductPriceShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
+
+        // Get all the mProductPriceList where adOrganization equals to adOrganizationId + 1
+        defaultMProductPriceShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */

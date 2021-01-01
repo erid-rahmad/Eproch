@@ -1,14 +1,17 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBrand} entity.
  */
-public class MBrandDTO extends AbstractAuditingDTO implements Serializable {
+public class MBrandDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -19,6 +22,9 @@ public class MBrandDTO extends AbstractAuditingDTO implements Serializable {
 
     private Boolean active;
 
+
+    private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -52,6 +58,22 @@ public class MBrandDTO extends AbstractAuditingDTO implements Serializable {
         this.active = active;
     }
 
+    public Long getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(Long aDOrganizationId) {
+        this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -77,6 +99,7 @@ public class MBrandDTO extends AbstractAuditingDTO implements Serializable {
             ", name='" + getName() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
             "}";
     }
 }

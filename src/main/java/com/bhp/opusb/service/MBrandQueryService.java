@@ -100,6 +100,10 @@ public class MBrandQueryService extends QueryService<MBrand> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MBrand_.active));
             }
+            if (criteria.getAdOrganizationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
+                    root -> root.join(MBrand_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
+            }
         }
         return specification;
     }

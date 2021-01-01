@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBrand;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.repository.MBrandRepository;
 import com.bhp.opusb.service.MBrandService;
 import com.bhp.opusb.service.dto.MBrandDTO;
@@ -75,6 +76,16 @@ public class MBrandResourceIT {
             .name(DEFAULT_NAME)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        mBrand.setAdOrganization(aDOrganization);
         return mBrand;
     }
     /**
@@ -88,6 +99,16 @@ public class MBrandResourceIT {
             .name(UPDATED_NAME)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        mBrand.setAdOrganization(aDOrganization);
         return mBrand;
     }
 
@@ -390,6 +411,22 @@ public class MBrandResourceIT {
         // Get all the mBrandList where active is null
         defaultMBrandShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllMBrandsByAdOrganizationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        ADOrganization adOrganization = mBrand.getAdOrganization();
+        mBrandRepository.saveAndFlush(mBrand);
+        Long adOrganizationId = adOrganization.getId();
+
+        // Get all the mBrandList where adOrganization equals to adOrganizationId
+        defaultMBrandShouldBeFound("adOrganizationId.equals=" + adOrganizationId);
+
+        // Get all the mBrandList where adOrganization equals to adOrganizationId + 1
+        defaultMBrandShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */

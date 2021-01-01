@@ -33,6 +33,8 @@ public class MBrandCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter adOrganizationId;
+
     public MBrandCriteria() {
     }
 
@@ -41,6 +43,7 @@ public class MBrandCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
     @Override
@@ -80,6 +83,14 @@ public class MBrandCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getAdOrganizationId() {
+        return adOrganizationId;
+    }
+
+    public void setAdOrganizationId(LongFilter adOrganizationId) {
+        this.adOrganizationId = adOrganizationId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -94,7 +105,8 @@ public class MBrandCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(uid, that.uid) &&
-            Objects.equals(active, that.active);
+            Objects.equals(active, that.active) &&
+            Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
     @Override
@@ -103,7 +115,8 @@ public class MBrandCriteria implements Serializable, Criteria {
         id,
         name,
         uid,
-        active
+        active,
+        adOrganizationId
         );
     }
 
@@ -115,6 +128,7 @@ public class MBrandCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }
 

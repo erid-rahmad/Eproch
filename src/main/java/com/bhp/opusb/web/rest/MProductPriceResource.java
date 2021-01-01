@@ -5,6 +5,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+
 import com.bhp.opusb.service.MProductPriceQueryService;
 import com.bhp.opusb.service.MProductPriceService;
 import com.bhp.opusb.service.dto.MProductPriceCriteria;
@@ -63,7 +65,7 @@ public class MProductPriceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/m-product-prices")
-    public ResponseEntity<MProductPriceDTO> createMProductPrice(@RequestBody MProductPriceDTO mProductPriceDTO) throws URISyntaxException {
+    public ResponseEntity<MProductPriceDTO> createMProductPrice(@Valid @RequestBody MProductPriceDTO mProductPriceDTO) throws URISyntaxException {
         log.debug("REST request to save MProductPrice : {}", mProductPriceDTO);
         if (mProductPriceDTO.getId() != null) {
             throw new BadRequestAlertException("A new mProductPrice cannot already have an ID", ENTITY_NAME, "idexists");
@@ -84,7 +86,7 @@ public class MProductPriceResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/m-product-prices")
-    public ResponseEntity<MProductPriceDTO> updateMProductPrice(@RequestBody MProductPriceDTO mProductPriceDTO) throws URISyntaxException {
+    public ResponseEntity<MProductPriceDTO> updateMProductPrice(@Valid @RequestBody MProductPriceDTO mProductPriceDTO) throws URISyntaxException {
         log.debug("REST request to update MProductPrice : {}", mProductPriceDTO);
         if (mProductPriceDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

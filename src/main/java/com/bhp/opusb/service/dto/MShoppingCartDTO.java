@@ -1,14 +1,14 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.UUID;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MShoppingCart} entity.
  */
-public class MShoppingCartDTO extends AbstractAuditingDTO implements Serializable {
+public class MShoppingCartDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     private UUID uid;
@@ -17,8 +17,10 @@ public class MShoppingCartDTO extends AbstractAuditingDTO implements Serializabl
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long adUserId;
+    private String adUserName;
     
     public Long getId() {
         return id;
@@ -52,12 +54,28 @@ public class MShoppingCartDTO extends AbstractAuditingDTO implements Serializabl
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getAdUserId() {
         return adUserId;
     }
 
     public void setAdUserId(Long adUserId) {
         this.adUserId = adUserId;
+    }
+
+    public String getAdUserName() {
+        return adUserName;
+    }
+
+    public void setAdUserName(String adUserName) {
+        this.adUserName = adUserName;
     }
 
     @Override
