@@ -1,15 +1,19 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.UUID;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 import com.bhp.opusb.domain.enumeration.CGalleryItemType;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CGalleryItem} entity.
  */
-public class CGalleryItemDTO extends AbstractAuditingDTO implements Serializable {
+public class CGalleryItemDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -27,10 +31,13 @@ public class CGalleryItemDTO extends AbstractAuditingDTO implements Serializable
 
 
     private Long cAttachmentId;
+    private String cAttachmentName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long cGalleryId;
+    private String cGalleryName;
     
     public Long getId() {
         return id;
@@ -88,6 +95,14 @@ public class CGalleryItemDTO extends AbstractAuditingDTO implements Serializable
         this.cAttachmentId = cAttachmentId;
     }
 
+    public String getCAttachmentName() {
+        return cAttachmentName;
+    }
+
+    public void setCAttachmentName(String cAttachmentName) {
+        this.cAttachmentName = cAttachmentName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -96,12 +111,28 @@ public class CGalleryItemDTO extends AbstractAuditingDTO implements Serializable
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getCGalleryId() {
         return cGalleryId;
     }
 
     public void setCGalleryId(Long cGalleryId) {
         this.cGalleryId = cGalleryId;
+    }
+
+    public String getCGalleryName() {
+        return cGalleryName;
+    }
+
+    public void setCGalleryName(String cGalleryName) {
+        this.cGalleryName = cGalleryName;
     }
 
     @Override

@@ -1,15 +1,20 @@
 package com.bhp.opusb.service.dto;
 
 import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.UUID;
+
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CVendor} entity.
  */
-public class CVendorDTO extends AbstractAuditingDTO implements Serializable {
+public class CVendorDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @Size(max = 30)
@@ -83,12 +88,16 @@ public class CVendorDTO extends AbstractAuditingDTO implements Serializable {
 
 
     private Long taxIdFileId;
+    private String taxIdFileName;
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long documentTypeId;
+    private String documentTypeName;
 
     private Long vendorGroupId;
+    private String vendorGroupName;
     
     public Long getId() {
         return id;
@@ -290,12 +299,28 @@ public class CVendorDTO extends AbstractAuditingDTO implements Serializable {
         this.taxIdFileId = cAttachmentId;
     }
 
+    public String getTaxIdFileName() {
+        return taxIdFileName;
+    }
+
+    public void setTaxIdFileName(String taxIdFileName) {
+        this.taxIdFileName = taxIdFileName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     public Long getDocumentTypeId() {
@@ -306,12 +331,28 @@ public class CVendorDTO extends AbstractAuditingDTO implements Serializable {
         this.documentTypeId = cDocumentTypeId;
     }
 
+    public String getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(String documentTypeName) {
+        this.documentTypeName = documentTypeName;
+    }
+
     public Long getVendorGroupId() {
         return vendorGroupId;
     }
 
     public void setVendorGroupId(Long cVendorGroupId) {
         this.vendorGroupId = cVendorGroupId;
+    }
+
+    public String getVendorGroupName() {
+        return vendorGroupName;
+    }
+
+    public void setVendorGroupName(String vendorGroupName) {
+        this.vendorGroupName = vendorGroupName;
     }
 
     @Override

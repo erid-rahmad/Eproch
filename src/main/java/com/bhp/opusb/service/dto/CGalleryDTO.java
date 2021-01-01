@@ -1,16 +1,20 @@
 package com.bhp.opusb.service.dto;
 
-import io.swagger.annotations.ApiModel;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import io.swagger.annotations.ApiModel;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CGallery} entity.
  */
 @ApiModel(description = "The CGallery entity.\n@author A true hipster")
-public class CGalleryDTO extends AbstractAuditingDTO implements Serializable {
+public class CGalleryDTO extends AbstractAuditingDTO {
     
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -26,6 +30,7 @@ public class CGalleryDTO extends AbstractAuditingDTO implements Serializable {
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
     
     public Long getId() {
         return id;
@@ -73,6 +78,14 @@ public class CGalleryDTO extends AbstractAuditingDTO implements Serializable {
 
     public void setAdOrganizationId(Long aDOrganizationId) {
         this.adOrganizationId = aDOrganizationId;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
     }
 
     @Override
