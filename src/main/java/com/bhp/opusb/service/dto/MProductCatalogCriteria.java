@@ -61,6 +61,10 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter cGalleryId;
+
+    private LongFilter mProductPriceId;
+
     private LongFilter adOrganizationId;
 
     private LongFilter cDocumentTypeId;
@@ -70,6 +74,8 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
     private LongFilter cUomId;
 
     private LongFilter cVendorId;
+
+    private LongFilter mBrandId;
 
     private LongFilter mProductId;
 
@@ -94,11 +100,14 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         this.rejectedReason = other.rejectedReason == null ? null : other.rejectedReason.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.cGalleryId = other.cGalleryId == null ? null : other.cGalleryId.copy();
+        this.mProductPriceId = other.mProductPriceId == null ? null : other.mProductPriceId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.cDocumentTypeId = other.cDocumentTypeId == null ? null : other.cDocumentTypeId.copy();
         this.cCurrencyId = other.cCurrencyId == null ? null : other.cCurrencyId.copy();
         this.cUomId = other.cUomId == null ? null : other.cUomId.copy();
         this.cVendorId = other.cVendorId == null ? null : other.cVendorId.copy();
+        this.mBrandId = other.mBrandId == null ? null : other.mBrandId.copy();
         this.mProductId = other.mProductId == null ? null : other.mProductId.copy();
     }
 
@@ -243,6 +252,22 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getCGalleryId() {
+        return cGalleryId;
+    }
+
+    public void setCGalleryId(LongFilter cGalleryId) {
+        this.cGalleryId = cGalleryId;
+    }
+
+    public LongFilter getMProductPriceId() {
+        return mProductPriceId;
+    }
+
+    public void setMProductPriceId(LongFilter mProductPriceId) {
+        this.mProductPriceId = mProductPriceId;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -283,6 +308,14 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         this.cVendorId = cVendorId;
     }
 
+    public LongFilter getMBrandId() {
+        return mBrandId;
+    }
+
+    public void setMBrandId(LongFilter mBrandId) {
+        this.mBrandId = mBrandId;
+    }
+
     public LongFilter getMProductId() {
         return mProductId;
     }
@@ -319,11 +352,14 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
             Objects.equals(rejectedReason, that.rejectedReason) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(cGalleryId, that.cGalleryId) &&
+            Objects.equals(mProductPriceId, that.mProductPriceId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(cDocumentTypeId, that.cDocumentTypeId) &&
             Objects.equals(cCurrencyId, that.cCurrencyId) &&
             Objects.equals(cUomId, that.cUomId) &&
             Objects.equals(cVendorId, that.cVendorId) &&
+            Objects.equals(mBrandId, that.mBrandId) &&
             Objects.equals(mProductId, that.mProductId);
     }
 
@@ -347,11 +383,14 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         rejectedReason,
         uid,
         active,
+        cGalleryId,
+        mProductPriceId,
         adOrganizationId,
         cDocumentTypeId,
         cCurrencyId,
         cUomId,
         cVendorId,
+        mBrandId,
         mProductId
         );
     }
@@ -377,11 +416,14 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
                 (rejectedReason != null ? "rejectedReason=" + rejectedReason + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (cGalleryId != null ? "cGalleryId=" + cGalleryId + ", " : "") +
+                (mProductPriceId != null ? "mProductPriceId=" + mProductPriceId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (cDocumentTypeId != null ? "cDocumentTypeId=" + cDocumentTypeId + ", " : "") +
                 (cCurrencyId != null ? "cCurrencyId=" + cCurrencyId + ", " : "") +
                 (cUomId != null ? "cUomId=" + cUomId + ", " : "") +
                 (cVendorId != null ? "cVendorId=" + cVendorId + ", " : "") +
+                (mBrandId != null ? "mBrandId=" + mBrandId + ", " : "") +
                 (mProductId != null ? "mProductId=" + mProductId + ", " : "") +
             "}";
     }

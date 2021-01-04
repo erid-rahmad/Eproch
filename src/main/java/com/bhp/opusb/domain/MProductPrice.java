@@ -14,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
@@ -54,7 +55,13 @@ public class MProductPrice extends AbstractAuditingEntity {
     @JsonIgnoreProperties(value = "mProductPrices", allowSetters = true)
     private ADOrganization adOrganization;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mProductPrices")
+    @JsonBackReference
+    private MProductCatalog mProductCatalog;
+
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -140,7 +147,20 @@ public class MProductPrice extends AbstractAuditingEntity {
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+
+    public MProductCatalog getMProductCatalog() {
+        return mProductCatalog;
+    }
+
+    public MProductPrice mProductCatalog(MProductCatalog mProductCatalog) {
+        this.mProductCatalog = mProductCatalog;
+        return this;
+    }
+
+    public void setMProductCatalog(MProductCatalog mProductCatalog) {
+        this.mProductCatalog = mProductCatalog;
+    }
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
     public void assignUUID() {

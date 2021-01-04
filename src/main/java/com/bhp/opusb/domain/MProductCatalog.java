@@ -2,6 +2,8 @@ package com.bhp.opusb.domain;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -9,7 +11,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -17,6 +22,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -108,6 +114,15 @@ public class MProductCatalog extends AbstractAuditingEntity {
     @Column(name = "active")
     private Boolean active;
 
+    @OneToOne
+    @JoinColumn(unique = true)
+    private CGallery cGallery;
+
+    @OneToMany(mappedBy = "mProductCatalog")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @JsonManagedReference
+    private Set<MProductPrice> mProductPrices = new HashSet<>();
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = "mProductCatalogs", allowSetters = true)
@@ -136,9 +151,14 @@ public class MProductCatalog extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = "mProductCatalogs", allowSetters = true)
+    private MBrand mBrand;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties(value = "mProductCatalogs", allowSetters = true)
     private CProduct mProduct;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -355,6 +375,44 @@ public class MProductCatalog extends AbstractAuditingEntity {
         this.active = active;
     }
 
+    public CGallery getCGallery() {
+        return cGallery;
+    }
+
+    public MProductCatalog cGallery(CGallery cGallery) {
+        this.cGallery = cGallery;
+        return this;
+    }
+
+    public void setCGallery(CGallery cGallery) {
+        this.cGallery = cGallery;
+    }
+
+    public Set<MProductPrice> getMProductPrices() {
+        return mProductPrices;
+    }
+
+    public MProductCatalog mProductPrices(Set<MProductPrice> mProductPrices) {
+        this.mProductPrices = mProductPrices;
+        return this;
+    }
+
+    public MProductCatalog addMProductPrice(MProductPrice mProductPrice) {
+        this.mProductPrices.add(mProductPrice);
+        mProductPrice.setMProductCatalog(this);
+        return this;
+    }
+
+    public MProductCatalog removeMProductPrice(MProductPrice mProductPrice) {
+        this.mProductPrices.remove(mProductPrice);
+        mProductPrice.setMProductCatalog(null);
+        return this;
+    }
+
+    public void setMProductPrices(Set<MProductPrice> mProductPrices) {
+        this.mProductPrices = mProductPrices;
+    }
+
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -418,6 +476,19 @@ public class MProductCatalog extends AbstractAuditingEntity {
 
     public void setCVendor(CVendor cVendor) {
         this.cVendor = cVendor;
+    }
+
+    public MBrand getMBrand() {
+        return mBrand;
+    }
+
+    public MProductCatalog mBrand(MBrand mBrand) {
+        this.mBrand = mBrand;
+        return this;
+    }
+
+    public void setMBrand(MBrand mBrand) {
+        this.mBrand = mBrand;
     }
 
     public CProduct getMProduct() {

@@ -1,147 +1,183 @@
 {
-  "name": "MProductCatalog",
-  "fields": [
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "maxlength"],
-      "fieldValidateRulesMaxlength": "70"
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "shortDescription",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "maxlength"],
-      "fieldValidateRulesMaxlength": "100"
-    },
-    {
-      "fieldName": "height",
-      "fieldType": "Double"
-    },
-    {
-      "fieldName": "length",
-      "fieldType": "Double"
-    },
-    {
-      "fieldName": "width",
-      "fieldType": "Double"
-    },
-    {
-      "fieldName": "weight",
-      "fieldType": "Double"
-    },
-    {
-      "fieldName": "price",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "expiredDate",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "documentAction",
-      "fieldType": "String",
-      "javadoc": "Next action for the document.",
-      "fieldValidateRules": ["required", "maxlength"],
-      "fieldValidateRulesMaxlength": "10"
-    },
-    {
-      "fieldName": "documentStatus",
-      "fieldType": "String",
-      "javadoc": "Current document status.",
-      "fieldValidateRules": ["required", "maxlength"],
-      "fieldValidateRulesMaxlength": "10"
-    },
-    {
-      "fieldName": "approved",
-      "fieldType": "Boolean",
-      "javadoc": "Document is rejected if approved = false and processed = true."
-    },
-    {
-      "fieldName": "processed",
-      "fieldType": "Boolean",
-      "javadoc": "Determine whether the document is already processed or not."
-    },
-    {
-      "fieldName": "rejectedReason",
-      "fieldType": "String",
-      "javadoc": "Mandatory if the document is rejected.",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "50"
-    },
-    {
-      "fieldName": "uid",
-      "fieldType": "UUID"
-    },
-    {
-      "fieldName": "active",
-      "fieldType": "Boolean"
-    }
-  ],
-  "relationships": [
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDOrganization",
-      "otherEntityRelationshipName": "mProductCatalog",
-      "relationshipValidateRules": "required",
-      "relationshipName": "adOrganization",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cDocumentType",
-      "otherEntityRelationshipName": "mProductCatalog",
-      "relationshipValidateRules": "required",
-      "relationshipName": "cDocumentType",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cCurrency",
-      "otherEntityRelationshipName": "mProductCatalog",
-      "relationshipValidateRules": "required",
-      "relationshipName": "cCurrency",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cUnitOfMeasure",
-      "otherEntityRelationshipName": "mProductCatalog",
-      "relationshipValidateRules": "required",
-      "relationshipName": "cUom",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cVendor",
-      "otherEntityRelationshipName": "mProductCatalog",
-      "relationshipValidateRules": "required",
-      "relationshipName": "cVendor",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cProduct",
-      "otherEntityRelationshipName": "mProductCatalog",
-      "relationshipValidateRules": "required",
-      "relationshipName": "mProduct",
-      "otherEntityField": "id"
-    }
-  ],
-  "changelogDate": "20201230135109",
-  "entityTableName": "m_product_catalog",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*",
-  "skipClient": true,
-  "enableEntityAudit": true
+    "name": "MProductCatalog",
+    "fields": [
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "70"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "shortDescription",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "100"
+        },
+        {
+            "fieldName": "height",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "length",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "width",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "weight",
+            "fieldType": "Double"
+        },
+        {
+            "fieldName": "price",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "expiredDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "documentAction",
+            "javadoc": "Next action for the document.",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "documentStatus",
+            "javadoc": "Current document status.",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "approved",
+            "javadoc": "Document is rejected if approved = false and processed = true.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "processed",
+            "javadoc": "Determine whether the document is already processed or not.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "rejectedReason",
+            "javadoc": "Mandatory if the document is rejected.",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "cGallery",
+            "otherEntityRelationshipName": "mProductCatalog",
+            "relationshipName": "cGallery",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "mProductPrice",
+            "otherEntityRelationshipName": "mProductCatalog",
+            "relationshipName": "mProductPrice"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mProductCatalog",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "mProductCatalog",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cDocumentType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mProductCatalog",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cCurrency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cUnitOfMeasure",
+            "otherEntityRelationshipName": "mProductCatalog",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cUom",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mProductCatalog",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cVendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBrand",
+            "otherEntityRelationshipName": "mProductCatalog",
+            "relationshipValidateRules": "required",
+            "relationshipName": "mBrand",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cProduct",
+            "otherEntityRelationshipName": "mProductCatalog",
+            "relationshipValidateRules": "required",
+            "relationshipName": "mProduct",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20201230135109",
+    "entityTableName": "m_product_catalog",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true,
+    "enableEntityAudit": true
 }

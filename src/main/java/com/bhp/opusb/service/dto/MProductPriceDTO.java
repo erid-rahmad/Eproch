@@ -25,7 +25,10 @@ public class MProductPriceDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
     private String adOrganizationName;
-    
+
+    private Long mProductCatalogId;
+    private String mProductCatalogName;
+
     public Long getId() {
         return id;
     }
@@ -82,6 +85,30 @@ public class MProductPriceDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
+    public Long getMProductCatalogId() {
+        return mProductCatalogId;
+    }
+
+    public void setMProductCatalogId(Long mProductCatalogId) {
+        this.mProductCatalogId = mProductCatalogId;
+    }
+
+    public String getMProductCatalogName() {
+        return mProductCatalogName;
+    }
+
+    public void setMProductCatalogName(String mProductCatalogName) {
+        this.mProductCatalogName = mProductCatalogName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -110,14 +137,7 @@ public class MProductPriceDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", mProductCatalogId=" + getMProductCatalogId() +
             "}";
-    }
-
-    public String getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
     }
 }

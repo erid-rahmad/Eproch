@@ -748,7 +748,9 @@ relationship OneToOne {
 	CCountry{currency required} to CCurrency
 	CVendor{taxIdFile} to CAttachment
 	CGalleryItem{cAttachment required} to CAttachment
+	MProductCatalog{cGallery} to CGallery
 }
+
 /**
  * Both side will reference each other.
  */
@@ -767,6 +769,9 @@ relationship OneToMany {
 
 	// Gallery items.
 	CGallery to CGalleryItem{cGallery required}
+
+	// Special prices of the product.
+	MProductCatalog to MProductPrice{mProductCatalog required}
 
 	// Shopping cart.
 	MShoppingCart to MShoppingCartItem{mShoppingCart required}
@@ -892,6 +897,7 @@ relationship ManyToOne {
 	MProductCatalog{cCurrency required} to CCurrency
 	MProductCatalog{cUom required} to CUnitOfMeasure
 	MProductCatalog{cVendor required} to CVendor
+	MProductCatalog{mBrand required} to MBrand
 	MProductCatalog{mProduct required} to CProduct
 
 	MProductPrice{adOrganization required} to ADOrganization

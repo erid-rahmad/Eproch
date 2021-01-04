@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MProductPrice;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.MProductCatalog;
 import com.bhp.opusb.repository.MProductPriceRepository;
 import com.bhp.opusb.service.MProductPriceService;
 import com.bhp.opusb.service.dto.MProductPriceDTO;
@@ -33,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link MProductPriceResource} REST controller.
  */
 @SpringBootTest(classes = OpusWebApp.class)
+
 @AutoConfigureMockMvc
 @WithMockUser
 public class MProductPriceResourceIT {
@@ -98,6 +100,16 @@ public class MProductPriceResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mProductPrice.setAdOrganization(aDOrganization);
+        // Add required entity
+        MProductCatalog mProductCatalog;
+        if (TestUtil.findAll(em, MProductCatalog.class).isEmpty()) {
+            mProductCatalog = MProductCatalogResourceIT.createEntity(em);
+            em.persist(mProductCatalog);
+            em.flush();
+        } else {
+            mProductCatalog = TestUtil.findAll(em, MProductCatalog.class).get(0);
+        }
+        mProductPrice.setMProductCatalog(mProductCatalog);
         return mProductPrice;
     }
     /**
@@ -123,6 +135,16 @@ public class MProductPriceResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mProductPrice.setAdOrganization(aDOrganization);
+        // Add required entity
+        MProductCatalog mProductCatalog;
+        if (TestUtil.findAll(em, MProductCatalog.class).isEmpty()) {
+            mProductCatalog = MProductCatalogResourceIT.createUpdatedEntity(em);
+            em.persist(mProductCatalog);
+            em.flush();
+        } else {
+            mProductCatalog = TestUtil.findAll(em, MProductCatalog.class).get(0);
+        }
+        mProductPrice.setMProductCatalog(mProductCatalog);
         return mProductPrice;
     }
 
@@ -135,6 +157,7 @@ public class MProductPriceResourceIT {
     @Transactional
     public void createMProductPrice() throws Exception {
         int databaseSizeBeforeCreate = mProductPriceRepository.findAll().size();
+
         // Create the MProductPrice
         MProductPriceDTO mProductPriceDTO = mProductPriceMapper.toDto(mProductPrice);
         restMProductPriceMockMvc.perform(post("/api/m-product-prices")
@@ -664,6 +687,22 @@ public class MProductPriceResourceIT {
         defaultMProductPriceShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllMProductPricesByMProductCatalogIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        MProductCatalog mProductCatalog = mProductPrice.getMProductCatalog();
+        mProductPriceRepository.saveAndFlush(mProductPrice);
+        Long mProductCatalogId = mProductCatalog.getId();
+
+        // Get all the mProductPriceList where mProductCatalog equals to mProductCatalogId
+        defaultMProductPriceShouldBeFound("mProductCatalogId.equals=" + mProductCatalogId);
+
+        // Get all the mProductPriceList where mProductCatalog equals to mProductCatalogId + 1
+        defaultMProductPriceShouldNotBeFound("mProductCatalogId.equals=" + (mProductCatalogId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -701,6 +740,7 @@ public class MProductPriceResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
     }
+
 
     @Test
     @Transactional

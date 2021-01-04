@@ -2,7 +2,7 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <!--
         Added the constraints for entity MProductPrice.
     -->
@@ -13,6 +13,16 @@
                                  constraintName="fk_m_product_price_ad_organization_id"
                                  referencedColumnNames="id"
                                  referencedTableName="ad_organization"/>
+
+    </changeSet>
+
+    <changeSet id="20200104114900" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="m_product_catalog_id"
+                                 baseTableName="m_product_price"
+                                 constraintName="fk_m_product_price_m_product_catalog_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_product_catalog"/>
 
     </changeSet>
 </databaseChangeLog>

@@ -3,7 +3,7 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     
@@ -63,7 +63,7 @@
             <column name="active" type="boolean">
                 <constraints nullable="true" />
             </column>
-            <column name="ad_organization_id_id" type="bigint">
+            <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <column name="c_document_type_id" type="bigint">
@@ -134,14 +134,31 @@
             <column name="rejected_reason" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
-            <column name="ad_organization_id_id" type="numeric"/>
+            <column name="ad_organization_id" type="numeric"/>
             <column name="c_document_type_id" type="numeric"/>
             <column name="c_currency_id" type="numeric"/>
             <column name="c_uom_id" type="numeric"/>
             <column name="c_vendor_id" type="numeric"/>
+            <column name="m_brand_id" type="numeric"/>
             <column name="m_product_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200104105200" author="Ananta Aryadewa">
+        <addColumn tableName="m_product_catalog">
+            <column name="c_gallery_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_m_product_catalog_c_gallery_id" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200104115000" author="Ananta Aryadewa">
+        <addColumn tableName="m_product_catalog">
+            <column name="m_brand_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

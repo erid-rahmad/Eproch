@@ -80,6 +80,9 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
     private Boolean active;
 
 
+    private Long cGalleryId;
+    private String cGalleryName;
+
     private Long adOrganizationId;
     private String adOrganizationName;
 
@@ -94,6 +97,9 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
 
     private Long cVendorId;
     private String cVendorName;
+
+    private Long mBrandId;
+    private String mBrandName;
 
     private Long mProductId;
     private String mProductCode;
@@ -236,6 +242,22 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
+    public Long getCGalleryId() {
+        return cGalleryId;
+    }
+
+    public void setCGalleryId(Long cGalleryId) {
+        this.cGalleryId = cGalleryId;
+    }
+
+    public String getCGalleryName() {
+        return cGalleryName;
+    }
+
+    public void setCGalleryName(String cGalleryName) {
+        this.cGalleryName = cGalleryName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -316,6 +338,22 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
         this.cVendorName = cVendorName;
     }
 
+    public Long getMBrandId() {
+        return mBrandId;
+    }
+
+    public void setMBrandId(Long mBrandId) {
+        this.mBrandId = mBrandId;
+    }
+
+    public String getMBrandName() {
+        return mBrandName;
+    }
+
+    public void setMBrandName(String mBrandName) {
+        this.mBrandName = mBrandName;
+    }
+
     public Long getMProductId() {
         return mProductId;
     }
@@ -390,11 +428,13 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
             ", rejectedReason='" + getRejectedReason() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", cGalleryId=" + getCGalleryId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", cDocumentTypeId=" + getCDocumentTypeId() +
             ", cCurrencyId=" + getCCurrencyId() +
             ", cUomId=" + getCUomId() +
             ", cVendorId=" + getCVendorId() +
+            ", mBrandId=" + getMBrandId() +
             ", mProductId=" + getMProductId() +
             "}";
     }

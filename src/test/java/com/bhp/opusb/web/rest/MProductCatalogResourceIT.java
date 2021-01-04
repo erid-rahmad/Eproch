@@ -2,11 +2,14 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MProductCatalog;
+import com.bhp.opusb.domain.CGallery;
+import com.bhp.opusb.domain.MProductPrice;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CUnitOfMeasure;
 import com.bhp.opusb.domain.CVendor;
+import com.bhp.opusb.domain.MBrand;
 import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.repository.MProductCatalogRepository;
 import com.bhp.opusb.service.MProductCatalogService;
@@ -40,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link MProductCatalogResource} REST controller.
  */
 @SpringBootTest(classes = OpusWebApp.class)
+
 @AutoConfigureMockMvc
 @WithMockUser
 public class MProductCatalogResourceIT {
@@ -193,6 +197,16 @@ public class MProductCatalogResourceIT {
         }
         mProductCatalog.setCVendor(cVendor);
         // Add required entity
+        MBrand mBrand;
+        if (TestUtil.findAll(em, MBrand.class).isEmpty()) {
+            mBrand = MBrandResourceIT.createEntity(em);
+            em.persist(mBrand);
+            em.flush();
+        } else {
+            mBrand = TestUtil.findAll(em, MBrand.class).get(0);
+        }
+        mProductCatalog.setMBrand(mBrand);
+        // Add required entity
         CProduct cProduct;
         if (TestUtil.findAll(em, CProduct.class).isEmpty()) {
             cProduct = CProductResourceIT.createEntity(em);
@@ -279,6 +293,16 @@ public class MProductCatalogResourceIT {
         }
         mProductCatalog.setCVendor(cVendor);
         // Add required entity
+        MBrand mBrand;
+        if (TestUtil.findAll(em, MBrand.class).isEmpty()) {
+            mBrand = MBrandResourceIT.createUpdatedEntity(em);
+            em.persist(mBrand);
+            em.flush();
+        } else {
+            mBrand = TestUtil.findAll(em, MBrand.class).get(0);
+        }
+        mProductCatalog.setMBrand(mBrand);
+        // Add required entity
         CProduct cProduct;
         if (TestUtil.findAll(em, CProduct.class).isEmpty()) {
             cProduct = CProductResourceIT.createUpdatedEntity(em);
@@ -300,6 +324,7 @@ public class MProductCatalogResourceIT {
     @Transactional
     public void createMProductCatalog() throws Exception {
         int databaseSizeBeforeCreate = mProductCatalogRepository.findAll().size();
+
         // Create the MProductCatalog
         MProductCatalogDTO mProductCatalogDTO = mProductCatalogMapper.toDto(mProductCatalog);
         restMProductCatalogMockMvc.perform(post("/api/m-product-catalogs")
@@ -360,7 +385,6 @@ public class MProductCatalogResourceIT {
         // Create the MProductCatalog, which fails.
         MProductCatalogDTO mProductCatalogDTO = mProductCatalogMapper.toDto(mProductCatalog);
 
-
         restMProductCatalogMockMvc.perform(post("/api/m-product-catalogs")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(mProductCatalogDTO)))
@@ -379,7 +403,6 @@ public class MProductCatalogResourceIT {
 
         // Create the MProductCatalog, which fails.
         MProductCatalogDTO mProductCatalogDTO = mProductCatalogMapper.toDto(mProductCatalog);
-
 
         restMProductCatalogMockMvc.perform(post("/api/m-product-catalogs")
             .contentType(MediaType.APPLICATION_JSON)
@@ -400,7 +423,6 @@ public class MProductCatalogResourceIT {
         // Create the MProductCatalog, which fails.
         MProductCatalogDTO mProductCatalogDTO = mProductCatalogMapper.toDto(mProductCatalog);
 
-
         restMProductCatalogMockMvc.perform(post("/api/m-product-catalogs")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(mProductCatalogDTO)))
@@ -419,7 +441,6 @@ public class MProductCatalogResourceIT {
 
         // Create the MProductCatalog, which fails.
         MProductCatalogDTO mProductCatalogDTO = mProductCatalogMapper.toDto(mProductCatalog);
-
 
         restMProductCatalogMockMvc.perform(post("/api/m-product-catalogs")
             .contentType(MediaType.APPLICATION_JSON)
@@ -1816,6 +1837,46 @@ public class MProductCatalogResourceIT {
 
     @Test
     @Transactional
+    public void getAllMProductCatalogsByCGalleryIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+        CGallery cGallery = CGalleryResourceIT.createEntity(em);
+        em.persist(cGallery);
+        em.flush();
+        mProductCatalog.setCGallery(cGallery);
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+        Long cGalleryId = cGallery.getId();
+
+        // Get all the mProductCatalogList where cGallery equals to cGalleryId
+        defaultMProductCatalogShouldBeFound("cGalleryId.equals=" + cGalleryId);
+
+        // Get all the mProductCatalogList where cGallery equals to cGalleryId + 1
+        defaultMProductCatalogShouldNotBeFound("cGalleryId.equals=" + (cGalleryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByMProductPriceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+        MProductPrice mProductPrice = MProductPriceResourceIT.createEntity(em);
+        em.persist(mProductPrice);
+        em.flush();
+        mProductCatalog.addMProductPrice(mProductPrice);
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+        Long mProductPriceId = mProductPrice.getId();
+
+        // Get all the mProductCatalogList where mProductPrice equals to mProductPriceId
+        defaultMProductCatalogShouldBeFound("mProductPriceId.equals=" + mProductPriceId);
+
+        // Get all the mProductCatalogList where mProductPrice equals to mProductPriceId + 1
+        defaultMProductCatalogShouldNotBeFound("mProductPriceId.equals=" + (mProductPriceId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMProductCatalogsByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = mProductCatalog.getAdOrganization();
@@ -1896,6 +1957,22 @@ public class MProductCatalogResourceIT {
 
     @Test
     @Transactional
+    public void getAllMProductCatalogsByMBrandIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        MBrand mBrand = mProductCatalog.getMBrand();
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+        Long mBrandId = mBrand.getId();
+
+        // Get all the mProductCatalogList where mBrand equals to mBrandId
+        defaultMProductCatalogShouldBeFound("mBrandId.equals=" + mBrandId);
+
+        // Get all the mProductCatalogList where mBrand equals to mBrandId + 1
+        defaultMProductCatalogShouldNotBeFound("mBrandId.equals=" + (mBrandId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMProductCatalogsByMProductIsEqualToSomething() throws Exception {
         // Get already existing entity
         CProduct mProduct = mProductCatalog.getMProduct();
@@ -1957,6 +2034,7 @@ public class MProductCatalogResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
     }
+
 
     @Test
     @Transactional

@@ -110,6 +110,10 @@ public class MProductPriceQueryService extends QueryService<MProductPrice> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MProductPrice_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getMProductCatalogId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMProductCatalogId(),
+                    root -> root.join(MProductPrice_.mProductCatalog, JoinType.LEFT).get(MProductCatalog_.id)));
+            }
         }
         return specification;
     }

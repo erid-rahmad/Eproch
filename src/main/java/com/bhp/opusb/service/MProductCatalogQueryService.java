@@ -139,6 +139,14 @@ public class MProductCatalogQueryService extends QueryService<MProductCatalog> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MProductCatalog_.active));
             }
+            if (criteria.getCGalleryId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCGalleryId(),
+                    root -> root.join(MProductCatalog_.cGallery, JoinType.LEFT).get(CGallery_.id)));
+            }
+            if (criteria.getMProductPriceId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMProductPriceId(),
+                    root -> root.join(MProductCatalog_.mProductPrices, JoinType.LEFT).get(MProductPrice_.id)));
+            }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MProductCatalog_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
@@ -158,6 +166,10 @@ public class MProductCatalogQueryService extends QueryService<MProductCatalog> {
             if (criteria.getCVendorId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCVendorId(),
                     root -> root.join(MProductCatalog_.cVendor, JoinType.LEFT).get(CVendor_.id)));
+            }
+            if (criteria.getMBrandId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMBrandId(),
+                    root -> root.join(MProductCatalog_.mBrand, JoinType.LEFT).get(MBrand_.id)));
             }
             if (criteria.getMProductId() != null) {
                 specification = specification.and(buildSpecification(criteria.getMProductId(),

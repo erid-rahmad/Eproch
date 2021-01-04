@@ -40,6 +40,8 @@ public class MProductPriceCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
+    private LongFilter mProductCatalogId;
+
     public MProductPriceCriteria() {
     }
 
@@ -51,6 +53,7 @@ public class MProductPriceCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.mProductCatalogId = other.mProductCatalogId == null ? null : other.mProductCatalogId.copy();
     }
 
     @Override
@@ -114,6 +117,14 @@ public class MProductPriceCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getMProductCatalogId() {
+        return mProductCatalogId;
+    }
+
+    public void setMProductCatalogId(LongFilter mProductCatalogId) {
+        this.mProductCatalogId = mProductCatalogId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -131,7 +142,8 @@ public class MProductPriceCriteria implements Serializable, Criteria {
             Objects.equals(price, that.price) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(mProductCatalogId, that.mProductCatalogId);
     }
 
     @Override
@@ -143,11 +155,11 @@ public class MProductPriceCriteria implements Serializable, Criteria {
         price,
         uid,
         active,
-        adOrganizationId
+        adOrganizationId,
+        mProductCatalogId
         );
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "MProductPriceCriteria{" +
@@ -158,6 +170,7 @@ public class MProductPriceCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (mProductCatalogId != null ? "mProductCatalogId=" + mProductCatalogId + ", " : "") +
             "}";
     }
 
