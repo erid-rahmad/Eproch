@@ -13,10 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
+import reactor.core.publisher.Mono;
 
 import com.bhp.opusb.domain.MProductCatalog;
 import com.bhp.opusb.domain.*; // for static metamodels
 import com.bhp.opusb.repository.MProductCatalogRepository;
+import com.bhp.opusb.service.dto.BhinnekaProductFeedDTO;
 import com.bhp.opusb.service.dto.MProductCatalogCriteria;
 import com.bhp.opusb.service.dto.MProductCatalogDTO;
 import com.bhp.opusb.service.mapper.MProductCatalogMapper;
@@ -34,11 +36,13 @@ public class MProductCatalogQueryService extends QueryService<MProductCatalog> {
     private final Logger log = LoggerFactory.getLogger(MProductCatalogQueryService.class);
 
     private final MProductCatalogRepository mProductCatalogRepository;
+    private final BhinnekaProductService bhinnekaProductService;
 
     private final MProductCatalogMapper mProductCatalogMapper;
 
-    public MProductCatalogQueryService(MProductCatalogRepository mProductCatalogRepository, MProductCatalogMapper mProductCatalogMapper) {
+    public MProductCatalogQueryService(MProductCatalogRepository mProductCatalogRepository, BhinnekaProductService bhinnekaProductService, MProductCatalogMapper mProductCatalogMapper) {
         this.mProductCatalogRepository = mProductCatalogRepository;
+        this.bhinnekaProductService = bhinnekaProductService;
         this.mProductCatalogMapper = mProductCatalogMapper;
     }
 
@@ -66,6 +70,17 @@ public class MProductCatalogQueryService extends QueryService<MProductCatalog> {
         final Specification<MProductCatalog> specification = createSpecification(criteria);
         return mProductCatalogRepository.findAll(specification, page)
             .map(mProductCatalogMapper::toDto);
+    }
+
+    /**
+     * 
+     * @param criteria
+     * @param page
+     * @return
+     */
+    public Page<MProductCatalogDTO> findInMarketplace(MProductCatalogCriteria criteria, Pageable page) {
+        Mono<BhinnekaProductFeedDTO> bhinnekaFeed = bhinnekaProductService.findByCriteria();
+        return bhinnekaFeed.map(feed -> feed.map(page)).block();
     }
 
     /**

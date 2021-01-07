@@ -113,6 +113,21 @@ public class MProductCatalogResource {
     }
 
     /**
+     * {@code GET  /m-product-catalogs} : get all the mProductCatalogs.
+     *
+     * @param pageable the pagination information.
+     * @param criteria the criteria which the requested entities should match.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of mProductCatalogs in body.
+     */
+    @GetMapping("/m-product-catalogs/marketplace")
+    public ResponseEntity<List<MProductCatalogDTO>> getMarketplaceCatalogs(MProductCatalogCriteria criteria, Pageable pageable) {
+        log.debug("REST request to get MProductCatalogs by criteria: {}", criteria);
+        Page<MProductCatalogDTO> page = mProductCatalogQueryService.findInMarketplace(criteria, pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    /**
      * {@code GET  /m-product-catalogs/count} : count all the mProductCatalogs.
      *
      * @param criteria the criteria which the requested entities should match.

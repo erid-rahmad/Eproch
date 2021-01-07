@@ -109,9 +109,14 @@ public class ApplicationProperties {
 
   public static final class Integration {
     private final Endpoint endpoint = new Endpoint();
+    private final Marketplace marketplace = new Marketplace();
 
     public Endpoint getEndpoint() {
       return endpoint;
+    }
+
+    public Marketplace getMarketplace() {
+      return marketplace;
     }
   }
 
@@ -124,6 +129,26 @@ public class ApplicationProperties {
 
     public void setInvoiceVerificationUrl(String invoiceVerificationUrl) {
       this.invoiceVerificationUrl = invoiceVerificationUrl;
+    }
+  }
+
+  public static final class Marketplace {
+    private final Bhinneka bhinneka = new Bhinneka();
+
+    public Bhinneka getBhinneka() {
+      return bhinneka;
+    }
+  }
+
+  public static final class Bhinneka {
+    private String productFeedUrl;
+
+    public String getProductFeedUrl() {
+      return productFeedUrl;
+    }
+
+    public void setProductFeedUrl(String productFeedUrl) {
+      this.productFeedUrl = productFeedUrl;
     }
   }
 }
