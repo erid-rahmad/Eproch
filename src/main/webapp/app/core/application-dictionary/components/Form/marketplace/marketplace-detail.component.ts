@@ -4,13 +4,17 @@ import { Component } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import DetailDescription from './components/detail-description.vue';
+import MarketplaceCart from './marketplace-cart.vue';
 
 @Component({
   components: {
-    DetailDescription
+    DetailDescription,
+    MarketplaceCart
   }
 })
 export default class Marketplace extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+
+  page: string = "";
 
   name = "BENQ Projector  MW612";
   sku = 3319807056;
@@ -58,6 +62,7 @@ export default class Marketplace extends mixins(Vue2Filters.mixin, AlertMixin, C
   }
 
   created() {
+    this.page = "detail";
     for(var i=0; i < this.imgLists.length; i++){
       this.imgListsPreview.push(this.imgLists[i].src);
     }
@@ -93,4 +98,11 @@ export default class Marketplace extends mixins(Vue2Filters.mixin, AlertMixin, C
     console.log(value)
   }
 
+  addToCart(){
+    this.page = "cart";
+  }
+
+  setDetail(){
+    this.page = "detail";
+  }
 }
