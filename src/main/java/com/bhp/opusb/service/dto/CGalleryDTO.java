@@ -1,9 +1,13 @@
 package com.bhp.opusb.service.dto;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModel;
 
@@ -31,6 +35,9 @@ public class CGalleryDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
     private String adOrganizationName;
+
+    @JsonProperty("cGalleryItems")
+    private List<CGalleryItemDTO> cGalleryItems = new ArrayList<>();
     
     public Long getId() {
         return id;
@@ -86,6 +93,19 @@ public class CGalleryDTO extends AbstractAuditingDTO {
 
     public void setAdOrganizationName(String adOrganizationName) {
         this.adOrganizationName = adOrganizationName;
+    }
+
+    public List<CGalleryItemDTO> getCGalleryItems() {
+        return cGalleryItems;
+    }
+
+    public void setCGalleryItems(List<CGalleryItemDTO> cGalleryItems) {
+        this.cGalleryItems = cGalleryItems;
+    }
+
+    public CGalleryDTO addCGalleryItem(CGalleryItemDTO cGalleryItem) {
+        cGalleryItems.add(cGalleryItem);
+        return this;
     }
 
     @Override

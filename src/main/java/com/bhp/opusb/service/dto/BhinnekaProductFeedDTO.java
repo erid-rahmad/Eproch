@@ -3,6 +3,8 @@ package com.bhp.opusb.service.dto;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.bhp.opusb.domain.enumeration.CAttachmentType;
+import com.bhp.opusb.domain.enumeration.CGalleryItemType;
 import com.bhp.opusb.service.dto.marketplace.MProductCatalogAdaptableDTO;
 
 import org.springframework.data.domain.Page;
@@ -100,7 +102,10 @@ public class BhinnekaProductFeedDTO implements MProductCatalogAdaptableDTO {
     final String vendorName = "Bhinneka";
     List<MProductCatalogDTO> products = getData().stream()
       .map(product -> {
-        MProductCatalogDTO dto = new MProductCatalogDTO();
+        final CGalleryDTO gallery = buildGallery(product);
+        final MProductCatalogDTO dto = new MProductCatalogDTO();
+
+        dto.setCGallery(gallery);
         dto.setMBrandName(product.getBrandName());
         dto.setName(product.getName());
         dto.setShortDescription(product.getDescription());
@@ -115,5 +120,35 @@ public class BhinnekaProductFeedDTO implements MProductCatalogAdaptableDTO {
       .collect(Collectors.toList());
 
     return new PageImpl<>(products, page, getMeta().getTotalRecords());
+  }
+
+  private CGalleryDTO buildGallery(BhinnekaProductDTO product) {
+    CGalleryDTO gallery = new CGalleryDTO();
+
+    // Thumbnail.
+    final CGalleryItemDTO itemPreview = new CGalleryItemDTO();
+    final CAttachmentDTO thumbnail = new CAttachmentDTO();
+    thumbnail.setType(CAttachmentType.REMOTE);
+    thumbnail.setImageSmall(product.getThumbnailURL60x60());
+    thumbnail.setImageMedium(product.getThumbnailURL160x160());
+    itemPreview.setCAttachment(thumbnail);
+    itemPreview.setSequence(0);
+    itemPreview.setPreview(true);
+    gallery.addCGalleryItem(itemPreview);
+
+    // Carousel
+    int sequence = 0;
+    for (String url : product.getImageURLs500x500()) {
+      final CGalleryItemDTO item = new CGalleryItemDTO();
+      final CAttachmentDTO image = new CAttachmentDTO();
+      image.setFileName(url);
+      image.setType(CAttachmentType.REMOTE);
+      item.setCAttachment(image);
+      item.setSequence(++sequence);
+      item.setType(CGalleryItemType.IMAGE);
+      gallery.addCGalleryItem(item);
+    }
+
+    return gallery;
   }
 }

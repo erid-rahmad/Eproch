@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.CAttachment;
 import com.bhp.opusb.service.dto.CAttachmentDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link CAttachment} and its DTO {@link CAttachmentDTO}.
@@ -13,6 +14,7 @@ import org.mapstruct.*;
 public interface CAttachmentMapper extends EntityMapper<CAttachmentDTO, CAttachment> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     CAttachmentDTO toDto(CAttachment cAttachment);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

@@ -6,6 +6,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.CGalleryItemType;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CGalleryItem} entity.
@@ -29,14 +30,22 @@ public class CGalleryItemDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
+    @JsonProperty("cAttachment")
+    private CAttachmentDTO cAttachment;
 
+    @JsonProperty("cAttachmentId")
     private Long cAttachmentId;
+
+    @JsonProperty("cAttachmentName")
     private String cAttachmentName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    @JsonProperty("cGalleryId")
     private Long cGalleryId;
+
+    @JsonProperty("cGalleryName")
     private String cGalleryName;
     
     public Long getId() {
@@ -85,6 +94,14 @@ public class CGalleryItemDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public CAttachmentDTO getCAttachment() {
+        return cAttachment;
+    }
+
+    public void setCAttachment(CAttachmentDTO cAttachment) {
+        this.cAttachment = cAttachment;
     }
 
     public Long getCAttachmentId() {

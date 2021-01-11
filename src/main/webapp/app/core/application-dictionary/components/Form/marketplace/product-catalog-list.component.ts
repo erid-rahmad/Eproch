@@ -1,8 +1,9 @@
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import { Component, Inject, Vue } from 'vue-property-decorator';
-import QuickFilter from "./quick-filter.vue";
+import FilterGroup from "./filter-group.vue";
 import QuickSearch from "./quick-search.vue";
 import ShoppingCart from "./shopping-cart.vue";
+import { mapActions } from 'vuex';
 
 interface IMProductCatalog {
   id?: number;
@@ -14,14 +15,37 @@ interface IMProductCatalog {
   width?: number;
   weight?: number;
   price?: number;
-  thumbnailSmall?: string;
+  cGallery?: ICGallery;
+}
+
+interface ICGallery {
+  cGalleryItems?: ICGalleryItem[];
+}
+
+interface ICGalleryItem {
+  cAttachment?: ICAttachment;
+  sequence?: number;
+  preview?: boolean;
+}
+
+interface ICAttachment {
+  fileName: string;
+  imageSmall: string;
+  imageMedium: string;
+  imageLarge: string;
 }
 
 @Component({
   components: {
-    QuickFilter,
+    FilterGroup,
     QuickSearch,
     ShoppingCart
+  },
+
+  methods: {
+    ...mapActions({
+      removeWindowState: 'windowStore/removeWindow'
+    })
   }
 })
 export default class ProductCatalogList extends Vue {
@@ -29,8 +53,12 @@ export default class ProductCatalogList extends Vue {
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  private removeWindowState!: (path: string) => Promise<void>;
+
   private catalogApi = '/api/m-product-catalogs/marketplace';
   private data: IMProductCatalog[] = [];
+  private unwatchStore: Function;
+  private fullPath: string = '';
 
   page = 1;
   propOrder = 'id';
@@ -38,23 +66,56 @@ export default class ProductCatalogList extends Vue {
   totalItems = 0;
   processing = false;
   rows: IMProductCatalog[] = [];
+  sortableFields: Record<string, string>[] = [
+    { name: 'lastModifiedDate,desc', label: 'Newest' },
+    { name: 'price,asc', label: 'Lowest Price' },
+    { name: 'price,desc', label: 'Highest Price' }
+  ];
 
   created() {
+    this.fullPath = this.$route.fullPath;
     this.retrieveProductCatalog(this.buildLayout);
+    this.unwatchStore = this.$store.watch(
+      (state) => state.tagsViewStore.deletedViews,
+      (views: string) => {
+        if (views.includes(this.fullPath)) {
+          this.$destroy();
+        }
+      }
+    );
+  }
+  
+  beforeDestroy() {
+    this.removeWindowState(this.fullPath);
+    this.unwatchStore();
   }
 
-  onQuickSearchCompleted(query) {
-
+  onFilterCategoryChanged(query: string) {
+    console.log('Category query:', query);
   }
+
+  onFilterBrandChanged(query: string) {
+    console.log('Brand query:', query);
+  }
+  onFilterPriceChanged() {}
+
+  onQuickSearchCompleted(query) {}
 
   onShoppingCartCanceled() {}
 
   onShoppingCartProcessed() {}
 
-
+  getThumbnailPreview(catalog: IMProductCatalog) {
+    const gallery = catalog.cGallery;
+    for (const item of gallery.cGalleryItems) {
+      if (item.preview) {
+        return item.cAttachment.imageMedium;
+      }
+    }
+  }
 
   private buildLayout(items: IMProductCatalog[]) {
-    const maxCols = 4;
+    const maxCols = 6;
     const rows = [];
     let columns: IMProductCatalog[] = [];
     let colNo = 1;

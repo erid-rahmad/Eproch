@@ -2,12 +2,12 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import com.bhp.opusb.domain.enumeration.CAttachmentType;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -22,12 +22,38 @@ import io.github.jhipster.service.filter.UUIDFilter;
  * fix type specific filters.
  */
 public class CAttachmentCriteria implements Serializable, Criteria {
+    /**
+     * Class for filtering CAttachmentType
+     */
+    public static class CAttachmentTypeFilter extends Filter<CAttachmentType> {
+
+        public CAttachmentTypeFilter() {
+        }
+
+        public CAttachmentTypeFilter(CAttachmentTypeFilter filter) {
+            super(filter);
+        }
+
+        @Override
+        public CAttachmentTypeFilter copy() {
+            return new CAttachmentTypeFilter(this);
+        }
+
+    }
 
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
+    private CAttachmentTypeFilter type;
+
     private StringFilter fileName;
+
+    private StringFilter imageSmall;
+
+    private StringFilter imageMedium;
+
+    private StringFilter imageLarge;
 
     private StringFilter mimeType;
 
@@ -46,7 +72,11 @@ public class CAttachmentCriteria implements Serializable, Criteria {
 
     public CAttachmentCriteria(CAttachmentCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.type = other.type == null ? null : other.type.copy();
         this.fileName = other.fileName == null ? null : other.fileName.copy();
+        this.imageSmall = other.imageSmall == null ? null : other.imageSmall.copy();
+        this.imageMedium = other.imageMedium == null ? null : other.imageMedium.copy();
+        this.imageLarge = other.imageLarge == null ? null : other.imageLarge.copy();
         this.mimeType = other.mimeType == null ? null : other.mimeType.copy();
         this.documentType = other.documentType == null ? null : other.documentType.copy();
         this.uploadDir = other.uploadDir == null ? null : other.uploadDir.copy();
@@ -68,12 +98,44 @@ public class CAttachmentCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
+    public CAttachmentTypeFilter getType() {
+        return type;
+    }
+
+    public void setType(CAttachmentTypeFilter type) {
+        this.type = type;
+    }
+
     public StringFilter getFileName() {
         return fileName;
     }
 
     public void setFileName(StringFilter fileName) {
         this.fileName = fileName;
+    }
+
+    public StringFilter getImageSmall() {
+        return imageSmall;
+    }
+
+    public void setImageSmall(StringFilter imageSmall) {
+        this.imageSmall = imageSmall;
+    }
+
+    public StringFilter getImageMedium() {
+        return imageMedium;
+    }
+
+    public void setImageMedium(StringFilter imageMedium) {
+        this.imageMedium = imageMedium;
+    }
+
+    public StringFilter getImageLarge() {
+        return imageLarge;
+    }
+
+    public void setImageLarge(StringFilter imageLarge) {
+        this.imageLarge = imageLarge;
     }
 
     public StringFilter getMimeType() {
@@ -136,7 +198,11 @@ public class CAttachmentCriteria implements Serializable, Criteria {
         final CAttachmentCriteria that = (CAttachmentCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(type, that.type) &&
             Objects.equals(fileName, that.fileName) &&
+            Objects.equals(imageSmall, that.imageSmall) &&
+            Objects.equals(imageMedium, that.imageMedium) &&
+            Objects.equals(imageLarge, that.imageLarge) &&
             Objects.equals(mimeType, that.mimeType) &&
             Objects.equals(documentType, that.documentType) &&
             Objects.equals(uploadDir, that.uploadDir) &&
@@ -149,7 +215,11 @@ public class CAttachmentCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        type,
         fileName,
+        imageSmall,
+        imageMedium,
+        imageLarge,
         mimeType,
         documentType,
         uploadDir,
@@ -163,7 +233,11 @@ public class CAttachmentCriteria implements Serializable, Criteria {
     public String toString() {
         return "CAttachmentCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (type != null ? "type=" + type + ", " : "") +
                 (fileName != null ? "fileName=" + fileName + ", " : "") +
+                (imageSmall != null ? "imageSmall=" + imageSmall + ", " : "") +
+                (imageMedium != null ? "imageMedium=" + imageMedium + ", " : "") +
+                (imageLarge != null ? "imageLarge=" + imageLarge + ", " : "") +
                 (mimeType != null ? "mimeType=" + mimeType + ", " : "") +
                 (documentType != null ? "documentType=" + documentType + ", " : "") +
                 (uploadDir != null ? "uploadDir=" + uploadDir + ", " : "") +

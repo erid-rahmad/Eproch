@@ -91,8 +91,20 @@ public class CAttachmentQueryService extends QueryService<CAttachment> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CAttachment_.id));
             }
+            if (criteria.getType() != null) {
+                specification = specification.and(buildSpecification(criteria.getType(), CAttachment_.type));
+            }
             if (criteria.getFileName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getFileName(), CAttachment_.fileName));
+            }
+            if (criteria.getImageSmall() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getImageSmall(), CAttachment_.imageSmall));
+            }
+            if (criteria.getImageMedium() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getImageMedium(), CAttachment_.imageMedium));
+            }
+            if (criteria.getImageLarge() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getImageLarge(), CAttachment_.imageLarge));
             }
             if (criteria.getMimeType() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getMimeType(), CAttachment_.mimeType));

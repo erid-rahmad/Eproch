@@ -4,9 +4,29 @@ import java.util.List;
 
 import javax.persistence.criteria.JoinType;
 
+import com.bhp.opusb.config.ApplicationProperties;
+// for static metamodels
+import com.bhp.opusb.domain.ADOrganization_;
+import com.bhp.opusb.domain.CCurrency_;
+import com.bhp.opusb.domain.CDocumentType_;
+import com.bhp.opusb.domain.CGallery_;
+import com.bhp.opusb.domain.CProduct_;
+import com.bhp.opusb.domain.CUnitOfMeasure_;
+import com.bhp.opusb.domain.CVendor_;
+import com.bhp.opusb.domain.MBrand_;
+import com.bhp.opusb.domain.MProductCatalog;
+import com.bhp.opusb.domain.MProductCatalog_;
+import com.bhp.opusb.domain.MProductPrice_;
+import com.bhp.opusb.repository.MProductCatalogRepository;
+import com.bhp.opusb.service.dto.BhinnekaProductFeedDTO;
+import com.bhp.opusb.service.dto.MProductCatalogCriteria;
+import com.bhp.opusb.service.dto.MProductCatalogDTO;
+import com.bhp.opusb.service.mapper.MProductCatalogMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -14,14 +34,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
 import reactor.core.publisher.Mono;
-
-import com.bhp.opusb.domain.MProductCatalog;
-import com.bhp.opusb.domain.*; // for static metamodels
-import com.bhp.opusb.repository.MProductCatalogRepository;
-import com.bhp.opusb.service.dto.BhinnekaProductFeedDTO;
-import com.bhp.opusb.service.dto.MProductCatalogCriteria;
-import com.bhp.opusb.service.dto.MProductCatalogDTO;
-import com.bhp.opusb.service.mapper.MProductCatalogMapper;
 
 /**
  * Service for executing complex queries for {@link MProductCatalog} entities in the database.
@@ -35,12 +47,14 @@ public class MProductCatalogQueryService extends QueryService<MProductCatalog> {
 
     private final Logger log = LoggerFactory.getLogger(MProductCatalogQueryService.class);
 
+    private final ApplicationProperties properties;
     private final MProductCatalogRepository mProductCatalogRepository;
     private final BhinnekaProductService bhinnekaProductService;
 
     private final MProductCatalogMapper mProductCatalogMapper;
 
-    public MProductCatalogQueryService(MProductCatalogRepository mProductCatalogRepository, BhinnekaProductService bhinnekaProductService, MProductCatalogMapper mProductCatalogMapper) {
+    public MProductCatalogQueryService(ApplicationProperties properties, MProductCatalogRepository mProductCatalogRepository, BhinnekaProductService bhinnekaProductService, MProductCatalogMapper mProductCatalogMapper) {
+        this.properties = properties;
         this.mProductCatalogRepository = mProductCatalogRepository;
         this.bhinnekaProductService = bhinnekaProductService;
         this.mProductCatalogMapper = mProductCatalogMapper;
@@ -79,8 +93,21 @@ public class MProductCatalogQueryService extends QueryService<MProductCatalog> {
      * @return
      */
     public Page<MProductCatalogDTO> findInMarketplace(MProductCatalogCriteria criteria, Pageable page) {
-        Mono<BhinnekaProductFeedDTO> bhinnekaFeed = bhinnekaProductService.findByCriteria();
-        return bhinnekaFeed.map(feed -> feed.map(page)).block();
+        Page<MProductCatalogDTO> mainCatalog = findByCriteria(criteria, page);
+
+        if (properties.getIntegration().getMarketplace().getBhinneka().getProductFeedUrl() != null) {
+            Mono<BhinnekaProductFeedDTO> bhinnekaFeed = bhinnekaProductService.findByCriteria();
+            Page<MProductCatalogDTO> bhinnekaCatalog = bhinnekaFeed.map(feed -> feed.map(page)).block();
+
+            if (bhinnekaCatalog != null) {
+                final List<MProductCatalogDTO> mainList = mainCatalog.getContent();
+                final List<MProductCatalogDTO> bhinnekaList = bhinnekaCatalog.getContent();
+                mainList.addAll(bhinnekaList);
+                return new PageImpl<>(mainList, page, mainCatalog.getTotalElements() + bhinnekaCatalog.getTotalElements());
+            }
+        }
+
+        return mainCatalog;
     }
 
     /**

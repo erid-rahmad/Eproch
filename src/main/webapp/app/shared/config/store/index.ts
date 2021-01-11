@@ -11,6 +11,7 @@ import { IAlertState } from './alert-store';
 import { ITranslationState } from './translation-store';
 import { IRegistrationState } from './registration-store';
 import { IWindowState } from "./window-store";
+import { IMarketplaceState } from "./marketplace-store";
 
 Vue.use(Vuex);
 
@@ -26,6 +27,7 @@ export interface IRootState {
   alertStore: IAlertState;
   registrationStore: IRegistrationState;
   windowStore: IWindowState;
+  marketplaceStore: IMarketplaceState;
 }
 
 // Declare empty store first, dynamically register all modules later.

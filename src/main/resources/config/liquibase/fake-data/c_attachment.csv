@@ -1,11 +1,11 @@
-id;file_name;mime_type;document_type;upload_dir;uid;active;ad_organization_id
-1;customer loyalty SQL;zero tolerance;Chicken Gorgeous Metal Mouse;New Mexico;01afad83-b674-4836-b8d0-074b70d54449;true;1
-2;Gloves Credit Card Account;Supervisor Sri Lanka Rupee programming;deposit optical incubate;Assurance;d9018ca8-24fc-4bfb-91c7-9dc7f78c95ad;false;2
-3;port next generation;Indiana;Arizona;Interactions Unbranded Frozen Chicken;2255f35f-d5b2-43cb-a190-f027ef60568b;false;3
-4;Small Steel Soap Interactions;intangible bandwidth;Compatible;wireless scalable;f669d583-83e2-4ba6-a3d1-282443aa1d1b;false;4
-5;Small Steel Buckinghamshire;Intelligent Tasty;SMTP Operations;Mount;95776289-c9e6-4051-bc16-77ab0c7cdc99;false;5
-6;Iceland Krona mobile Grocery;Program Syrian Pound;withdrawal Incredible;Monaco;127a09df-5001-49bb-8345-9ce3b175abb8;false;6
-7;content capability Iowa;Cambridgeshire relationships;copying Regional transmitter;Global Generic Wooden Mouse solution-oriented;43d8e12e-4434-4970-a198-edf399e6a279;false;7
-8;Concrete black;Engineer;back up invoice intangible;program Bike generate;f8519374-2970-44e9-bcf9-4e7260617340;true;8
-9;Small Granite Hat;Designer;Intranet;Representative interactive optimize;df349de1-afcf-429b-8b0c-5d9f205126d2;false;9
-10;Zloty;Refined Rubber Bacon;Licensed Concrete Chair;Keyboard;2c86164b-f4a1-4c07-a85e-bcad85ef7a76;true;10
+id;type;file_name;image_small;image_medium;image_large;mime_type;document_type;upload_dir;uid;active;ad_organization_id
+1;LOCAL;Designer;Australian Dollar;deposit;New Mexico;Generic Frozen Tuna;Bedfordshire system e-tailers;maroon Optional;d0074b70-d544-449c-a25a-bcf0a7deba1c;true;1
+2;REMOTE;Ergonomic Granite Cheese Moldovan Leu;toolset;Zimbabwe Dollar Tanzanian Shilling Licensed;South Dakota online;Mills quantify cross-platform;Mount port next generation;Indiana;390afe0e-ea22-455f-b5fd-5b23cbe190f0;false;2
+3;LOCAL;Buckinghamshire Grocery;Small Rubber Sausages;Money Market Account Ireland Lempira;Generic;Cedi mobile deploy;FTP Bedfordshire;cyan Fish;a6e3d128-2443-4aa1-91b7-b10117c6121f;false;3
+4;REMOTE;Berkshire platforms;Auto Loan Account Virginia;Incredible Wooden Bike bypass;Berkshire payment;connect;synthesizing New Jersey Frozen;extend Supervisor Prairie;f0bc7a51-5489-4127-a09d-f50019bb0345;true;4
+5;REMOTE;firewall Springs content;Soap;Luxembourg;relationships optical ubiquitous;transmitter circuit;Generic Wooden Mouse solution-oriented;fuchsia;8e12e443-4970-4a19-8edf-399e6a279251;false;5
+6;REMOTE;application;invoice;Puerto Rico;Decentralized ivory Vanuatu;attitude Savings Account;challenge Investment Account;user-facing;9fcf94e7-2606-4173-80f4-00882f83f9bf;true;6
+7;LOCAL;JSON Generic;mobile Soap driver;Licensed Plastic Pizza West Virginia Steel;Rustic exploit;streamline;withdrawal Refined Rubber Bacon blue;green Digitized Wooden;c86164bf-4a1c-407e-85eb-cad85ef7a76a;true;7
+8;LOCAL;Personal Loan Account Investment Account grey;deposit application;Checking Account Maryland Licensed;Gabon;embrace copy Liaison;black;monitor deposit;2f13761b-ca2c-4a93-b863-f3c4e518a148;true;8
+9;REMOTE;initiatives Public-key;reintermediate De-engineered;Sausages application;Platinum;user-facing Rustic;Electronics intuitive;Burgs wireless;6b9319e2-f765-4ac8-94e8-757e0ead43fc;false;9
+10;LOCAL;white Island;interface Supervisor Ergonomic Steel Mouse;Books productize Bahrain;Mexican Peso Mexican Unidad de Inversion (UDI);index;reinvent;content;8fcbc2c8-481d-4894-90cd-21835e3d315d;true;10

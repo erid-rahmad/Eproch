@@ -73,7 +73,11 @@
                   separator=";"
                   tableName="c_attachment">
             <column name="id" type="numeric"/>
+            <column name="type" type="string"/>
             <column name="file_name" type="string"/>
+            <column name="image_small" type="string"/>
+            <column name="image_medium" type="string"/>
+            <column name="image_large" type="string"/>
             <column name="mime_type" type="string"/>
             <column name="document_type" type="string"/>
             <column name="upload_dir" type="string"/>
@@ -82,6 +86,24 @@
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20200107104400" author="Ananta Aryadewa">
+        <addColumn tableName="c_attachment">
+            <column name="type" type="varchar(255)" defaultValue="LOCAL">
+                <constraints nullable="false" />
+            </column>
+            <column name="image_small" type="varchar(255)" remarks="The small version of the image (for image file type).">
+                <constraints nullable="true" />
+            </column>
+            <column name="image_medium" type="varchar(255)" remarks="The medium version of the image (for image file type).">
+                <constraints nullable="true" />
+            </column>
+            <column name="image_large" type="varchar(255)" remarks="The large version of the image (for image file type).">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <setColumnRemarks tableName="c_attachment" columnName="file_name" remarks="The original file name."/>
     </changeSet>
 
 </databaseChangeLog>

@@ -7,6 +7,8 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -79,31 +81,58 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
+    @JsonProperty("cGallery")
+    private CGalleryDTO cGallery;
 
+    @JsonProperty("cGalleryId")
     private Long cGalleryId;
+
+    @JsonProperty("cGalleryName")
     private String cGalleryName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    @JsonProperty("cDocumentTypeId")
     private Long cDocumentTypeId;
+
+    @JsonProperty("cDocumentTypeName")
     private String cDocumentTypeName;
 
+    @JsonProperty("cCurrencyId")
     private Long cCurrencyId;
+
+    @JsonProperty("cCurrencyName")
     private String cCurrencyName;
 
+    @JsonProperty("cUomId")
     private Long cUomId;
+
+    @JsonProperty("cUomName")
     private String cUomName;
 
+    @JsonProperty("cVendorId")
     private Long cVendorId;
+
+    @JsonProperty("cVendorName")
     private String cVendorName;
 
+    @JsonProperty("mBrandId")
     private Long mBrandId;
+
+    @JsonProperty("mBrandName")
     private String mBrandName;
 
+    @JsonProperty("mProductId")
     private Long mProductId;
+
+    @JsonProperty("mProductCode")
     private String mProductCode;
+
+    @JsonProperty("mProductShortName")
     private String mProductShortName;
+
+    @JsonProperty("mProductDescription")
     private String mProductDescription;
     
     public Long getId() {
@@ -240,6 +269,14 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public CGalleryDTO getCGallery() {
+        return cGallery;
+    }
+
+    public void setCGallery(CGalleryDTO cGallery) {
+        this.cGallery = cGallery;
     }
 
     public Long getCGalleryId() {

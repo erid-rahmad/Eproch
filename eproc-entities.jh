@@ -113,10 +113,26 @@ entity CBusinessCategory {
 }
 
 entity CAttachment {
+	type CAttachmentType required
+
+	/** The original file name. */
 	fileName String
+	
+	/** The small version of the image (for image file type). */
+	imageSmall String
+	
+	/** The medium version of the image (for image file type). */
+	imageMedium String
+	
+	/** The large version of the image (for image file type). */
+	imageLarge String
+	
 	mimeType String
 	documentType String
+
+	/* Used for the local attachment only. */
 	uploadDir String
+
 	uid UUID
 	active Boolean
 }
@@ -721,6 +737,10 @@ entity AiExchangeIn {
 
 enum Depreciation {
 	STRAIGHT_LINE, DOUBLE_DECLINING
+}
+
+enum CAttachmentType {
+	LOCAL, REMOTE
 }
 
 enum CBusinessCategorySector {

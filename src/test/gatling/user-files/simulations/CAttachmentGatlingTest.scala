@@ -72,7 +72,11 @@ class CAttachmentGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "type":"LOCAL"
                 , "fileName":"SAMPLE_TEXT"
+                , "imageSmall":"SAMPLE_TEXT"
+                , "imageMedium":"SAMPLE_TEXT"
+                , "imageLarge":"SAMPLE_TEXT"
                 , "mimeType":"SAMPLE_TEXT"
                 , "documentType":"SAMPLE_TEXT"
                 , "uploadDir":"SAMPLE_TEXT"
