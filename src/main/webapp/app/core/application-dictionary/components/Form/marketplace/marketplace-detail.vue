@@ -1,6 +1,6 @@
 <template>
     <div class="app-container">
-        <el-row>
+        <el-row v-if="page == 'detail'">
             <el-col :span="10">
 
                 <div class="image-preview block" key="cover" >
@@ -74,7 +74,7 @@
                         <b>Quantity</b>
                     </el-col>
                     <el-col :span="18">
-                        <el-input-number v-model="qty" @change="handleChangeQty" :min="1" :max="100" size="mini"/> Total: {{ totalPrice }}
+                        <el-input-number v-model="qty" @change="handleChangeQty" :min="1" :max="availableStock" size="mini"/> Total: {{ totalPrice }}
                     </el-col>
                 </el-row>
 
@@ -104,7 +104,7 @@
                         <el-button size="medium" type="warning" style="margin-left: 0px;" icon="el-icon-goods">
                             Pre Order
                         </el-button>
-                        <el-button size="medium" type="primary" style="margin-left: 0px;">
+                        <el-button size="medium" type="primary" style="margin-left: 0px;" @click="addToCart">
                             <svg-icon name="shopping" /> Add to cart
                         </el-button>
                     </el-col>
@@ -122,7 +122,7 @@
             </el-col>
         </el-row>
 
-        <el-row>
+        <el-row v-if="page == 'detail'">
             <el-col :span="24" class="column">
 
                 <el-tabs
@@ -145,6 +145,16 @@
                         </keep-alive>
                     </el-tab-pane>
                 </el-tabs>
+
+            </el-col>
+        </el-row>
+
+        <el-row v-if="page == 'cart'">
+            <el-col :span="24">
+
+                <marketplace-cart
+                    ref="cart"
+                    @get-detail="setDetail" />
 
             </el-col>
         </el-row>
