@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link CGalleryResource} REST controller.
  */
 @SpringBootTest(classes = OpusWebApp.class)
+
 @AutoConfigureMockMvc
 @WithMockUser
 public class CGalleryResourceIT {
@@ -127,6 +128,7 @@ public class CGalleryResourceIT {
     @Transactional
     public void createCGallery() throws Exception {
         int databaseSizeBeforeCreate = cGalleryRepository.findAll().size();
+
         // Create the CGallery
         CGalleryDTO cGalleryDTO = cGalleryMapper.toDto(cGallery);
         restCGalleryMockMvc.perform(post("/api/c-galleries")
@@ -174,7 +176,6 @@ public class CGalleryResourceIT {
 
         // Create the CGallery, which fails.
         CGalleryDTO cGalleryDTO = cGalleryMapper.toDto(cGallery);
-
 
         restCGalleryMockMvc.perform(post("/api/c-galleries")
             .contentType(MediaType.APPLICATION_JSON)
@@ -570,6 +571,7 @@ public class CGalleryResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
     }
+
 
     @Test
     @Transactional

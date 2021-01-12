@@ -1,18 +1,25 @@
 package com.bhp.opusb.service;
 
+import java.io.IOException;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.bhp.opusb.domain.MProductCatalog;
 import com.bhp.opusb.repository.MProductCatalogRepository;
 import com.bhp.opusb.service.dto.MProductCatalogDTO;
+import com.bhp.opusb.service.dto.marketplace.BhinnekaItemFilterDTO;
 import com.bhp.opusb.service.mapper.MProductCatalogMapper;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Service Implementation for managing {@link MProductCatalog}.
@@ -27,9 +34,13 @@ public class MProductCatalogService {
 
     private final MProductCatalogMapper mProductCatalogMapper;
 
-    public MProductCatalogService(MProductCatalogRepository mProductCatalogRepository, MProductCatalogMapper mProductCatalogMapper) {
+    private final ObjectMapper jsonMapper;
+
+    public MProductCatalogService(MProductCatalogRepository mProductCatalogRepository,
+            MProductCatalogMapper mProductCatalogMapper, ObjectMapper jsonMapper) {
         this.mProductCatalogRepository = mProductCatalogRepository;
         this.mProductCatalogMapper = mProductCatalogMapper;
+        this.jsonMapper = jsonMapper;
     }
 
     /**
@@ -54,10 +65,8 @@ public class MProductCatalogService {
     @Transactional(readOnly = true)
     public Page<MProductCatalogDTO> findAll(Pageable pageable) {
         log.debug("Request to get all MProductCatalogs");
-        return mProductCatalogRepository.findAll(pageable)
-            .map(mProductCatalogMapper::toDto);
+        return mProductCatalogRepository.findAll(pageable).map(mProductCatalogMapper::toDto);
     }
-
 
     /**
      * Get one mProductCatalog by id.
@@ -68,8 +77,7 @@ public class MProductCatalogService {
     @Transactional(readOnly = true)
     public Optional<MProductCatalogDTO> findOne(Long id) {
         log.debug("Request to get MProductCatalog : {}", id);
-        return mProductCatalogRepository.findById(id)
-            .map(mProductCatalogMapper::toDto);
+        return mProductCatalogRepository.findById(id).map(mProductCatalogMapper::toDto);
     }
 
     /**
@@ -80,5 +88,31 @@ public class MProductCatalogService {
     public void delete(Long id) {
         log.debug("Request to delete MProductCatalog : {}", id);
         mProductCatalogRepository.deleteById(id);
+    }
+
+    public int importBhinnekaCatalog(MultipartFile file) {
+        int importedRows = 0;
+        BhinnekaItemFilterDTO data = null;
+
+        try {
+            data = jsonMapper.readValue(file.getInputStream(), BhinnekaItemFilterDTO.class);
+            
+            if (data != null && data.getFilter() != null && data.getFilter().getResult() != null) {
+                mProductCatalogRepository.saveAll(
+                    data.getFilter().getResult().stream()
+                        .map(item -> mProductCatalogMapper.toEntity(item.toDto()))
+                        .collect(Collectors.toList())
+                );
+                importedRows = data.getFilter().getResult().size();
+            }
+        } catch (JsonParseException e) {
+            log.warn("Failed when parsing the uploaded JSON file", e);
+        } catch (JsonMappingException e) {
+            log.warn("Failed when mapping the uploaded JSON file", e);
+        } catch (IOException e) {
+            log.warn("Failed when processing the uploaded JSON file", e);
+        }
+        
+        return importedRows;
     }
 }

@@ -1,0 +1,29 @@
+{
+  "opusWebApp": {
+    "cGalleryItem": {
+      "home": {
+        "title": "C Gallery Items",
+        "createLabel": "Create a new C Gallery Item",
+        "createOrEditLabel": "Create or edit a C Gallery Item",
+        "notFound": "No C Gallery Items found"
+      },
+      "created": "A new C Gallery Item is created with identifier {{ param }}",
+      "updated": "A C Gallery Item is updated with identifier {{ param }}",
+      "deleted": "A C Gallery Item is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete C Gallery Item {{ id }}?"
+      },
+      "detail": {
+        "title": "C Gallery Item"
+      },
+      "type": "Type",
+      "sequence": "Sequence",
+      "preview": "Preview",
+      "uid": "Uid",
+      "active": "Active",
+      "cAttachment": "C Attachment",
+      "adOrganization": "Ad Organization",
+      "cGallery": "C Gallery"
+    }
+  }
+}

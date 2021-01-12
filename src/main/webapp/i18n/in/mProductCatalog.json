@@ -1,0 +1,53 @@
+{
+  "opusWebApp": {
+    "mProductCatalog": {
+      "home": {
+        "title": "M Product Catalogs",
+        "createLabel": "Buat M Product Catalog baru",
+        "createOrEditLabel": "Buat atau edit M Product Catalog",
+        "notFound": "No M Product Catalogs found"
+      },
+      "created": "M Product Catalog dengan id {{ param }} telah dibuat",
+      "updated": "M Product Catalog dengan id {{ param }} telah diperbaharui",
+      "deleted": "M Product Catalog dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus M Product Catalog {{ id }}?"
+      },
+      "detail": {
+        "title": "M Product Catalog"
+      },
+      "name": "Name",
+      "description": "Description",
+      "shortDescription": "Short Description",
+      "height": "Height",
+      "length": "Length",
+      "width": "Width",
+      "weight": "Weight",
+      "price": "Price",
+      "expiredDate": "Expired Date",
+      "documentAction": "Document Action",
+      "documentStatus": "Document Status",
+      "approved": "Approved",
+      "processed": "Processed",
+      "rejectedReason": "Rejected Reason",
+      "uid": "Uid",
+      "active": "Active",
+      "cGallery": "C Gallery",
+      "mProductPrice": "M Product Price",
+      "adOrganization": "Ad Organization",
+      "cDocumentType": "C Document Type",
+      "cCurrency": "C Currency",
+      "cUom": "C Uom",
+      "cVendor": "C Vendor",
+      "mBrand": "M Brand",
+      "mProduct": "M Product",
+      "help": {
+        "documentAction": "Next action for the document.",
+        "documentStatus": "Current document status.",
+        "approved": "Document is rejected if approved = false and processed = true.",
+        "processed": "Determine whether the document is already processed or not.",
+        "rejectedReason": "Mandatory if the document is rejected."
+      }
+    }
+  }
+}

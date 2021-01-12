@@ -1,0 +1,29 @@
+{
+  "opusWebApp": {
+    "cGalleryItem": {
+      "home": {
+        "title": "C Gallery Items",
+        "createLabel": "Buat C Gallery Item baru",
+        "createOrEditLabel": "Buat atau edit C Gallery Item",
+        "notFound": "No C Gallery Items found"
+      },
+      "created": "C Gallery Item dengan id {{ param }} telah dibuat",
+      "updated": "C Gallery Item dengan id {{ param }} telah diperbaharui",
+      "deleted": "C Gallery Item dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus C Gallery Item {{ id }}?"
+      },
+      "detail": {
+        "title": "C Gallery Item"
+      },
+      "type": "Type",
+      "sequence": "Sequence",
+      "preview": "Preview",
+      "uid": "Uid",
+      "active": "Active",
+      "cAttachment": "C Attachment",
+      "adOrganization": "Ad Organization",
+      "cGallery": "C Gallery"
+    }
+  }
+}

@@ -27,7 +27,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -125,6 +127,12 @@ public class MProductCatalogResource {
         Page<MProductCatalogDTO> page = mProductCatalogQueryService.findInMarketplace(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @PostMapping("/m-product-catalogs/marketplace/import")
+    public ResponseEntity<Void> uploadFile(@RequestParam MultipartFile file) {
+        mProductCatalogService.importBhinnekaCatalog(file);
+        return ResponseEntity.status(200).build();
     }
 
     /**

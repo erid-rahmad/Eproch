@@ -1034,4 +1034,4 @@ dto * with mapstruct except CRegDocTypeBusinessCategory
 // Set service options to all except few
 service * with serviceClass
 
-skipClient *
+skipClient * except MProductCatalog, CGallery, CGalleryItem, CAttachment

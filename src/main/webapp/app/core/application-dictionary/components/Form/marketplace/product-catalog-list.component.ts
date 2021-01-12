@@ -1,39 +1,11 @@
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import { Component, Inject, Vue } from 'vue-property-decorator';
+import { mapActions } from 'vuex';
 import FilterGroup from "./filter-group.vue";
 import QuickSearch from "./quick-search.vue";
 import ShoppingCart from "./shopping-cart.vue";
-import { mapActions } from 'vuex';
-
-interface IMProductCatalog {
-  id?: number;
-  name?: string;
-  description?: string;
-  shortDescription?: string;
-  height?: number;
-  length?: number;
-  width?: number;
-  weight?: number;
-  price?: number;
-  cGallery?: ICGallery;
-}
-
-interface ICGallery {
-  cGalleryItems?: ICGalleryItem[];
-}
-
-interface ICGalleryItem {
-  cAttachment?: ICAttachment;
-  sequence?: number;
-  preview?: boolean;
-}
-
-interface ICAttachment {
-  fileName: string;
-  imageSmall: string;
-  imageMedium: string;
-  imageLarge: string;
-}
+import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
+import { MarketplaceStoreModule as marketplaceStore } from "@/shared/config/store/marketplace-store";
 
 @Component({
   components: {
@@ -65,16 +37,19 @@ export default class ProductCatalogList extends Vue {
   reverse = false;
   totalItems = 0;
   processing = false;
-  rows: IMProductCatalog[] = [];
   sortableFields: Record<string, string>[] = [
     { name: 'lastModifiedDate,desc', label: 'Newest' },
     { name: 'price,asc', label: 'Lowest Price' },
     { name: 'price,desc', label: 'Highest Price' }
   ];
 
+  get rows() {
+    return this.buildLayout(marketplaceStore.products);
+  }
+
   created() {
     this.fullPath = this.$route.fullPath;
-    this.retrieveProductCatalog(this.buildLayout);
+    this.retrieveProductCatalog();
     this.unwatchStore = this.$store.watch(
       (state) => state.tagsViewStore.deletedViews,
       (views: string) => {
@@ -134,27 +109,13 @@ export default class ProductCatalogList extends Vue {
       ++colNo;
     }
 
-    this.rows = rows;
+    return rows;
   }
 
-  private retrieveProductCatalog(callback?: (items: IMProductCatalog[]) => void) {
+  private retrieveProductCatalog() {
     this.processing = true;
-    this.commonService(this.catalogApi)
-      .retrieve({
-        criteriaQuery: [],
-        paginationQuery: {
-          page: this.page - 1,
-          size: 10,
-          sort: [
-            'name'
-          ]
-        }
-      })
-      .then(res => {
-        this.data = res.data;
-        this.totalItems = Number(res.headers['x-total-count']);
-        callback && callback(this.data);
-      })
+
+    marketplaceStore.initCatalog()
       .catch(err => {
         console.error('Failed getting the product catalog. %O', err);
         this.$message({

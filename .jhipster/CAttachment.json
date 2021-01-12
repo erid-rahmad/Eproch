@@ -60,7 +60,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200707051300",
+    "changelogDate": "20210112063900",
     "entityTableName": "c_attachment",
     "dto": "mapstruct",
     "pagination": "pagination",
@@ -70,6 +70,5 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+    "applications": "*"
 }

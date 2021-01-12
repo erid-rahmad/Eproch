@@ -35,6 +35,7 @@ import com.bhp.opusb.domain.enumeration.CGalleryItemType;
  * Integration tests for the {@link CGalleryItemResource} REST controller.
  */
 @SpringBootTest(classes = OpusWebApp.class)
+
 @AutoConfigureMockMvc
 @WithMockUser
 public class CGalleryItemResourceIT {
@@ -175,6 +176,7 @@ public class CGalleryItemResourceIT {
     @Transactional
     public void createCGalleryItem() throws Exception {
         int databaseSizeBeforeCreate = cGalleryItemRepository.findAll().size();
+
         // Create the CGalleryItem
         CGalleryItemDTO cGalleryItemDTO = cGalleryItemMapper.toDto(cGalleryItem);
         restCGalleryItemMockMvc.perform(post("/api/c-gallery-items")
@@ -224,7 +226,6 @@ public class CGalleryItemResourceIT {
         // Create the CGalleryItem, which fails.
         CGalleryItemDTO cGalleryItemDTO = cGalleryItemMapper.toDto(cGalleryItem);
 
-
         restCGalleryItemMockMvc.perform(post("/api/c-gallery-items")
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(cGalleryItemDTO)))
@@ -243,7 +244,6 @@ public class CGalleryItemResourceIT {
 
         // Create the CGalleryItem, which fails.
         CGalleryItemDTO cGalleryItemDTO = cGalleryItemMapper.toDto(cGalleryItem);
-
 
         restCGalleryItemMockMvc.perform(post("/api/c-gallery-items")
             .contentType(MediaType.APPLICATION_JSON)
@@ -707,6 +707,7 @@ public class CGalleryItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
     }
+
 
     @Test
     @Transactional

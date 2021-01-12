@@ -51,12 +51,12 @@ import VueRouter, { Route } from 'vue-router';
 import AdMenuService from './core/application-dictionary/components/Menu/menu.service';
 import { Store } from 'vuex';
 import TreeItem from './core/application-dictionary/components/TreeView/tree-item.vue';
-import InputFacade from 'vue-input-facade'
+import InputFacade from 'vue-input-facade';
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
 /* tslint:enable */
 Schema.warning = function() {};
-Vue.use(InputFacade)
+Vue.use(InputFacade);
 Vue.config.productionTip = false;
 config.initVueApp(Vue);
 config.initFortAwesome(Vue);
@@ -76,7 +76,7 @@ const loginService = new LoginService();
 const menuService = new AdMenuService();
 const windowService = (baseApiUrl: string) => new DynamicWindowService(baseApiUrl);
 
-const accountServiceInitiator = (async (
+const accountServiceInitiator = async (
   vuexStore: Store<any>,
   dynWindowService: (baseApiUrl: string) => DynamicWindowService,
   i18nService: TranslationService,
@@ -87,7 +87,7 @@ const accountServiceInitiator = (async (
   const service = new AccountService(vuexStore, dynWindowService, i18nService, userTrackerService, adMenuService, vueRouter);
   await service.init();
   return service;
-});
+};
 
 Vue.use(ElementUI, {
   size: appStore.size, // Set element-ui default size
@@ -105,7 +105,7 @@ Vue.use(SvgIcon, {
 Vue.use(VueHotkey);
 
 accountServiceInitiator(store, windowService, translationService, trackerService, menuService, router)
-  .then((service) => {
+  .then(service => {
     const accountService = service;
     const routerValidation = new RouterValidation(router, i18n, accountService);
 
@@ -120,7 +120,7 @@ accountServiceInitiator(store, windowService, translationService, trackerService
 
     router.afterEach((to: Route) => {
       routerValidation.runAfterEachHook(to);
-    })
+    });
 
     /* tslint:disable */
     new Vue({
@@ -154,6 +154,6 @@ accountServiceInitiator(store, windowService, translationService, trackerService
       store
     });
   })
-  .catch((err) => {
+  .catch(err => {
     console.error('Failed to initialize Vue. ', err);
   });

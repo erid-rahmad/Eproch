@@ -1,0 +1,10 @@
+{
+  "opusWebApp": {
+    "CGalleryItemType": {
+      "null": "",
+      "DOCUMENT": "DOCUMENT",
+      "IMAGE": "IMAGE",
+      "VIDEO": "VIDEO"
+    }
+  }
+}

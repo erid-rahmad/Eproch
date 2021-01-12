@@ -1,69 +1,72 @@
 {
-  "name": "CGalleryItem",
-  "fields": [
-    {
-      "fieldName": "type",
-      "fieldType": "CGalleryItemType",
-      "fieldValues": "DOCUMENT,IMAGE,VIDEO",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "sequence",
-      "fieldType": "Integer",
-      "fieldValidateRules": ["required", "min"],
-      "fieldValidateRulesMin": "0"
-    },
-    {
-      "fieldName": "preview",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "uid",
-      "fieldType": "UUID"
-    },
-    {
-      "fieldName": "active",
-      "fieldType": "Boolean"
-    }
-  ],
-  "relationships": [
-    {
-      "relationshipType": "one-to-one",
-      "otherEntityName": "cAttachment",
-      "otherEntityRelationshipName": "cGalleryItem",
-      "relationshipValidateRules": "required",
-      "relationshipName": "cAttachment",
-      "otherEntityField": "id",
-      "ownerSide": true
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDOrganization",
-      "otherEntityRelationshipName": "cGalleryItem",
-      "relationshipValidateRules": "required",
-      "relationshipName": "adOrganization",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cGallery",
-      "otherEntityRelationshipName": "cGalleryItem",
-      "relationshipValidateRules": "required",
-      "relationshipName": "cGallery",
-      "otherEntityField": "id"
-    }
-  ],
-  "changelogDate": "20201230131109",
-  "entityTableName": "c_gallery_item",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*",
-  "skipClient": true,
-  "enableEntityAudit": true
+    "name": "CGalleryItem",
+    "fields": [
+        {
+            "fieldName": "type",
+            "fieldType": "CGalleryItemType",
+            "fieldValues": "DOCUMENT,IMAGE,VIDEO",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "sequence",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "0"
+        },
+        {
+            "fieldName": "preview",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "cGalleryItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cAttachment",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cGalleryItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cGallery",
+            "otherEntityRelationshipName": "cGalleryItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cGallery",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210112063600",
+    "entityTableName": "c_gallery_item",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
 }

@@ -167,7 +167,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20201230135109",
+    "changelogDate": "20210112071600",
     "entityTableName": "m_product_catalog",
     "dto": "mapstruct",
     "pagination": "pagination",
@@ -177,7 +177,5 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true,
-    "enableEntityAudit": true
+    "applications": "*"
 }

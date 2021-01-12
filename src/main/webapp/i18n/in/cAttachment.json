@@ -1,0 +1,38 @@
+{
+  "opusWebApp": {
+    "cAttachment": {
+      "home": {
+        "title": "C Attachments",
+        "createLabel": "Buat C Attachment baru",
+        "createOrEditLabel": "Buat atau edit C Attachment",
+        "notFound": "No C Attachments found"
+      },
+      "created": "C Attachment dengan id {{ param }} telah dibuat",
+      "updated": "C Attachment dengan id {{ param }} telah diperbaharui",
+      "deleted": "C Attachment dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus C Attachment {{ id }}?"
+      },
+      "detail": {
+        "title": "C Attachment"
+      },
+      "type": "Type",
+      "fileName": "File Name",
+      "imageSmall": "Image Small",
+      "imageMedium": "Image Medium",
+      "imageLarge": "Image Large",
+      "mimeType": "Mime Type",
+      "documentType": "Document Type",
+      "uploadDir": "Upload Dir",
+      "uid": "Uid",
+      "active": "Active",
+      "adOrganization": "Ad Organization",
+      "help": {
+        "fileName": "The original file name.",
+        "imageSmall": "The small version of the image (for image file type).",
+        "imageMedium": "The medium version of the image (for image file type).",
+        "imageLarge": "The large version of the image (for image file type)."
+      }
+    }
+  }
+}

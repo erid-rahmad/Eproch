@@ -39,6 +39,10 @@
         "cRegion": "C Region",
         "cCity": "C City",
         "cLocation": "C Location",
+        "cGallery": "C Gallery",
+        "cGalleryItem": "C Gallery Item",
+        "cAttachment": "C Attachment",
+        "mProductCatalog": "M Product Catalog",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
