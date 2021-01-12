@@ -18,7 +18,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "m_requisition")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MRequisition implements Serializable {
+public class MRequisition extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -55,12 +55,18 @@ public class MRequisition implements Serializable {
     @Column(name = "date_required")
     private LocalDate dateRequired;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "uid")
     private UUID uid;
 
     @Column(name = "active")
     private Boolean active;
 
+    /**
+     * Purchase Requisition
+     */
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mRequisitions")
@@ -173,6 +179,19 @@ public class MRequisition implements Serializable {
         this.dateRequired = dateRequired;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public MRequisition description(String description) {
+        this.description = description;
+        return this;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -265,6 +284,11 @@ public class MRequisition implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -291,6 +315,7 @@ public class MRequisition implements Serializable {
             ", isProcessed='" + isIsProcessed() + "'" +
             ", documentDate='" + getDocumentDate() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +
+            ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

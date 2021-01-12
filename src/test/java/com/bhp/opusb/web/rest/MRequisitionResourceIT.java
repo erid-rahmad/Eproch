@@ -63,6 +63,9 @@ public class MRequisitionResourceIT {
     private static final LocalDate UPDATED_DATE_REQUIRED = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DATE_REQUIRED = LocalDate.ofEpochDay(-1L);
 
+    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
+    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -103,6 +106,7 @@ public class MRequisitionResourceIT {
             .isProcessed(DEFAULT_IS_PROCESSED)
             .documentDate(DEFAULT_DOCUMENT_DATE)
             .dateRequired(DEFAULT_DATE_REQUIRED)
+            .description(DEFAULT_DESCRIPTION)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -171,6 +175,7 @@ public class MRequisitionResourceIT {
             .isProcessed(UPDATED_IS_PROCESSED)
             .documentDate(UPDATED_DOCUMENT_DATE)
             .dateRequired(UPDATED_DATE_REQUIRED)
+            .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -253,6 +258,7 @@ public class MRequisitionResourceIT {
         assertThat(testMRequisition.isIsProcessed()).isEqualTo(DEFAULT_IS_PROCESSED);
         assertThat(testMRequisition.getDocumentDate()).isEqualTo(DEFAULT_DOCUMENT_DATE);
         assertThat(testMRequisition.getDateRequired()).isEqualTo(DEFAULT_DATE_REQUIRED);
+        assertThat(testMRequisition.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testMRequisition.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMRequisition.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -333,6 +339,7 @@ public class MRequisitionResourceIT {
             .andExpect(jsonPath("$.[*].isProcessed").value(hasItem(DEFAULT_IS_PROCESSED.booleanValue())))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -354,6 +361,7 @@ public class MRequisitionResourceIT {
             .andExpect(jsonPath("$.isProcessed").value(DEFAULT_IS_PROCESSED.booleanValue()))
             .andExpect(jsonPath("$.documentDate").value(DEFAULT_DOCUMENT_DATE.toString()))
             .andExpect(jsonPath("$.dateRequired").value(DEFAULT_DATE_REQUIRED.toString()))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -850,6 +858,84 @@ public class MRequisitionResourceIT {
 
     @Test
     @Transactional
+    public void getAllMRequisitionsByDescriptionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where description equals to DEFAULT_DESCRIPTION
+        defaultMRequisitionShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the mRequisitionList where description equals to UPDATED_DESCRIPTION
+        defaultMRequisitionShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDescriptionIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where description not equals to DEFAULT_DESCRIPTION
+        defaultMRequisitionShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
+
+        // Get all the mRequisitionList where description not equals to UPDATED_DESCRIPTION
+        defaultMRequisitionShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDescriptionIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
+        defaultMRequisitionShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
+
+        // Get all the mRequisitionList where description equals to UPDATED_DESCRIPTION
+        defaultMRequisitionShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDescriptionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where description is not null
+        defaultMRequisitionShouldBeFound("description.specified=true");
+
+        // Get all the mRequisitionList where description is null
+        defaultMRequisitionShouldNotBeFound("description.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMRequisitionsByDescriptionContainsSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where description contains DEFAULT_DESCRIPTION
+        defaultMRequisitionShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
+
+        // Get all the mRequisitionList where description contains UPDATED_DESCRIPTION
+        defaultMRequisitionShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDescriptionNotContainsSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where description does not contain DEFAULT_DESCRIPTION
+        defaultMRequisitionShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
+
+        // Get all the mRequisitionList where description does not contain UPDATED_DESCRIPTION
+        defaultMRequisitionShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMRequisitionsByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
@@ -1045,6 +1131,7 @@ public class MRequisitionResourceIT {
             .andExpect(jsonPath("$.[*].isProcessed").value(hasItem(DEFAULT_IS_PROCESSED.booleanValue())))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -1100,6 +1187,7 @@ public class MRequisitionResourceIT {
             .isProcessed(UPDATED_IS_PROCESSED)
             .documentDate(UPDATED_DOCUMENT_DATE)
             .dateRequired(UPDATED_DATE_REQUIRED)
+            .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MRequisitionDTO mRequisitionDTO = mRequisitionMapper.toDto(updatedMRequisition);
@@ -1119,6 +1207,7 @@ public class MRequisitionResourceIT {
         assertThat(testMRequisition.isIsProcessed()).isEqualTo(UPDATED_IS_PROCESSED);
         assertThat(testMRequisition.getDocumentDate()).isEqualTo(UPDATED_DOCUMENT_DATE);
         assertThat(testMRequisition.getDateRequired()).isEqualTo(UPDATED_DATE_REQUIRED);
+        assertThat(testMRequisition.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testMRequisition.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMRequisition.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

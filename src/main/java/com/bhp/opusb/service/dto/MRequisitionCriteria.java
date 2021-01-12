@@ -40,6 +40,8 @@ public class MRequisitionCriteria implements Serializable, Criteria {
 
     private LocalDateFilter dateRequired;
 
+    private StringFilter description;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -65,6 +67,7 @@ public class MRequisitionCriteria implements Serializable, Criteria {
         this.isProcessed = other.isProcessed == null ? null : other.isProcessed.copy();
         this.documentDate = other.documentDate == null ? null : other.documentDate.copy();
         this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
+        this.description = other.description == null ? null : other.description.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -133,6 +136,14 @@ public class MRequisitionCriteria implements Serializable, Criteria {
 
     public void setDateRequired(LocalDateFilter dateRequired) {
         this.dateRequired = dateRequired;
+    }
+
+    public StringFilter getDescription() {
+        return description;
+    }
+
+    public void setDescription(StringFilter description) {
+        this.description = description;
     }
 
     public UUIDFilter getUid() {
@@ -209,6 +220,7 @@ public class MRequisitionCriteria implements Serializable, Criteria {
             Objects.equals(isProcessed, that.isProcessed) &&
             Objects.equals(documentDate, that.documentDate) &&
             Objects.equals(dateRequired, that.dateRequired) &&
+            Objects.equals(description, that.description) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -228,6 +240,7 @@ public class MRequisitionCriteria implements Serializable, Criteria {
         isProcessed,
         documentDate,
         dateRequired,
+        description,
         uid,
         active,
         adOrganizationId,
@@ -248,6 +261,7 @@ public class MRequisitionCriteria implements Serializable, Criteria {
                 (isProcessed != null ? "isProcessed=" + isProcessed + ", " : "") +
                 (documentDate != null ? "documentDate=" + documentDate + ", " : "") +
                 (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +
+                (description != null ? "description=" + description + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

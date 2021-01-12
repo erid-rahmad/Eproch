@@ -108,4 +108,12 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20210111021200-add" author="dian-tri-budianto">
+        <addColumn tableName="m_requisition">
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MRequisition} entity.
  */
-public class MRequisitionDTO implements Serializable {
+public class MRequisitionDTO extends AbstractAuditingDTO {
 
     private Long id;
 
@@ -38,10 +38,16 @@ public class MRequisitionDTO implements Serializable {
 
     private LocalDate dateRequired;
 
+    private String description;
+
     private UUID uid;
 
     private Boolean active;
 
+    /**
+     * Purchase Requisition
+     */
+    @ApiModelProperty(value = "Purchase Requisition")
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -112,6 +118,14 @@ public class MRequisitionDTO implements Serializable {
 
     public void setDateRequired(LocalDate dateRequired) {
         this.dateRequired = dateRequired;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public UUID getUid() {
@@ -241,6 +255,7 @@ public class MRequisitionDTO implements Serializable {
             ", isProcessed='" + isIsProcessed() + "'" +
             ", documentDate='" + getDocumentDate() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +
+            ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +

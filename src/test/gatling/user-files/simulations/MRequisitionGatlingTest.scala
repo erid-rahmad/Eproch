@@ -78,6 +78,7 @@ class MRequisitionGatlingTest extends Simulation {
                 , "isProcessed":null
                 , "documentDate":"2020-01-01T00:00:00.000Z"
                 , "dateRequired":"2020-01-01T00:00:00.000Z"
+                , "description":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

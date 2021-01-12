@@ -19,7 +19,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "m_requisition_line")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MRequisitionLine implements Serializable {
+public class MRequisitionLine extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -296,6 +296,11 @@ public class MRequisitionLine implements Serializable {
         this.vendor = cVendor;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @PrePersist
+    public void assignUUID() {
+        this.uid = UUID.randomUUID();
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -109,6 +109,9 @@ public class MRequisitionQueryService extends QueryService<MRequisition> {
             if (criteria.getDateRequired() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateRequired(), MRequisition_.dateRequired));
             }
+            if (criteria.getDescription() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDescription(), MRequisition_.description));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MRequisition_.uid));
             }

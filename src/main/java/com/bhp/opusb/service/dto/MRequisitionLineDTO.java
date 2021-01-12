@@ -10,7 +10,7 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MRequisitionLine} entity.
  */
-public class MRequisitionLineDTO implements Serializable {
+public class MRequisitionLineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
