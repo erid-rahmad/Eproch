@@ -1,0 +1,11 @@
+id;document_date;document_required;requisition_amount;quantity;unit_price;remark;uid;active;requisition_id;ad_organization_id;product_id;warehouse_id;cost_center_id;uom_id;vendor_id
+1;2021-01-10;2021-01-10;27397;45000;81309;Burgs;198d7b46-4057-4725-9974-6eafd85fe32c;false;1;1;1;1;1;1;1
+2;2021-01-10;2021-01-10;77869;46274;30721;AI;6fe69edd-976b-4503-89f1-e7fe22d974e9;true;2;2;2;2;2;2;2
+3;2021-01-10;2021-01-10;29537;38576;12555;Bacon Bahamian Dollar;4d0f3fdf-602c-491e-9e9e-bf28a61dd266;true;3;3;3;3;3;3;3
+4;2021-01-10;2021-01-11;78206;30346;96377;azure circuit;29865431-52fc-4397-b061-25d6db885d5a;true;4;4;4;4;4;4;4
+5;2021-01-10;2021-01-10;8800;68349;32857;West Virginia Bedfordshire incremental;76b047f0-8b5d-4266-8771-55ffe4c1b0af;true;5;5;5;5;5;5;5
+6;2021-01-10;2021-01-10;79689;47777;18952;Phased;4eac3c5d-d861-4382-8e89-a83d972cdf88;false;6;6;6;6;6;6;6
+7;2021-01-10;2021-01-10;16590;89742;14987;Innovative Personal Loan Account Chicken;3a952da6-3aee-40f2-aa9e-b312de5aca6e;false;7;7;7;7;7;7;7
+8;2021-01-10;2021-01-10;61982;23608;7356;deposit;da786d88-394d-473b-9308-66430f4b2e0e;true;8;8;8;8;8;8;8
+9;2021-01-10;2021-01-10;62093;33760;88180;Auto Loan Account;25cd6edb-23cc-47ed-8937-b28670742913;false;9;9;9;9;9;9;9
+10;2021-01-10;2021-01-10;42359;57753;23561;protocol;07c2178f-a2c0-4c83-be34-5b1afd074c19;false;10;10;10;10;10;10;10

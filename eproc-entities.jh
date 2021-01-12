@@ -615,7 +615,7 @@ entity MProductCatalog {
 	weight Double
 	price BigDecimal
 	expiredDate LocalDate
-	
+
 	/** Next action for the document. */
 	documentAction String required maxlength(10)
 
@@ -731,6 +731,33 @@ entity AiExchangeIn {
 	entityId Long
 	payload TextBlob required
 	status AiStatus required
+}
+
+entity MRequisition {
+
+	/** Next action for the document. */
+	documentAction String required maxlength(10)
+
+	/** Current document status. */
+	documentStatus String required maxlength(10)
+
+    isApproved Boolean
+    isProcessed Boolean
+    documentDate LocalDate
+	dateRequired LocalDate
+    uid UUID
+	active Boolean
+}
+
+entity MRequisitionLine {
+	documentDate LocalDate required
+	documentRequired LocalDate required
+    requisitionAmount BigDecimal required
+    quantity BigDecimal required
+    unitPrice BigDecimal required
+    remark String
+	uid UUID
+	active Boolean
 }
 
 // Enums
@@ -1023,6 +1050,20 @@ relationship ManyToOne {
 
 	/** PRLOCN is mapped to locator code. */
 	MMatchPO{mLocator} to CLocator
+
+	MRequisition{adOrganization required} to ADOrganization
+	MRequisition{documentType required} to CDocumentType
+	MRequisition{currency required} to CCurrency
+	MRequisition{warehouse required} to CWarehouse
+	MRequisition{costCenter required} to CCostCenter
+
+	MRequisitionLine{requisition required} to MRequisition
+	MRequisitionLine{adOrganization required} to ADOrganization
+	MRequisitionLine{product required} to CProduct
+	MRequisitionLine{warehouse required} to CWarehouse
+	MRequisitionLine{costCenter required} to CCostCenter
+	MRequisitionLine{uom required} to CUnitOfMeasure
+	MRequisitionLine{vendor required} to CVendor
 }
 
 // Allow filtering to all entities.
