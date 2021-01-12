@@ -1,0 +1,11 @@
+id;document_action;document_status;is_approved;is_processed;tax;document_date;date_required;description;uid;active;ad_organization_id;document_type_id;vendor_id;currency_id;warehouse_id;cost_center_id
+1;program;Global;true;true;false;2021-01-11;2021-01-12;Dynamic;4314af85-f8d1-4584-8d86-1bf5d816361f;true;1;1;1;1;1;1
+2;radical De;Licensed R;true;true;false;2021-01-11;2021-01-11;Loaf New Hampshire;2fa5c0eb-94a4-4937-81d1-ef1e1f5ddf78;true;2;2;2;2;2;2
+3;navigating;bypassing ;true;true;true;2021-01-12;2021-01-12;compress;51004a07-6018-46e7-b0ad-ad9b9a287e11;true;3;3;3;3;3;3
+4;Division P;Netherland;false;false;false;2021-01-11;2021-01-11;salmon Uganda Shilling Street;0408ed57-d75d-4cf1-a8a8-0eddfa6f70c8;false;4;4;4;4;4;4
+5;mobile sal;payment wi;false;true;false;2021-01-11;2021-01-11;Solomon Islands Dollar;c986d81e-70c5-40f2-b2d0-d311a8b1a7b6;false;5;5;5;5;5;5
+6;SCSI lime;intuitive ;false;false;true;2021-01-11;2021-01-11;hardware software Practical Concrete Keyboard;cc547c88-5792-4cf9-9728-97607834f091;true;6;6;6;6;6;6
+7;Small;Unbranded ;false;true;true;2021-01-11;2021-01-11;attitude circuit Illinois;54166365-b594-44c8-a789-01516e10c9e7;false;7;7;7;7;7;7
+8;online Pro;networks h;true;false;false;2021-01-11;2021-01-11;Supervisor initiatives;0ec3dfb5-3714-473f-b020-bd0375f85664;true;8;8;8;8;8;8
+9;Personal L;initiative;false;false;false;2021-01-11;2021-01-11;integrated;e7d27109-c074-4c68-8113-8c9f44ba3e12;true;9;9;9;9;9;9
+10;Rustic Cam;withdrawal;false;true;false;2021-01-11;2021-01-12;Generic Montana;dc6ff93b-adb2-4c29-adb0-f21741023d3e;false;10;10;10;10;10;10

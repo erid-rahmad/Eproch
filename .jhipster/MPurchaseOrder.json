@@ -1,0 +1,120 @@
+{
+    "name": "MPurchaseOrder",
+    "fields": [
+        {
+            "fieldName": "documentAction",
+            "javadoc": "Next action for the document.",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "documentStatus",
+            "javadoc": "Current document status.",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "isApproved",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "isProcessed",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "tax",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "documentDate",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateRequired",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "javadoc": "Purchase Order",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "documentType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "currency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cWarehouse",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "warehouse",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCostCenter",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "costCenter",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210112051200",
+    "entityTableName": "m_purchase_order",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
