@@ -50,6 +50,9 @@
                             <el-col :span="24">
                                 <small>{{ itemDetail.varian }}</small>
                             </el-col>
+                            <el-col :span="20">
+                                <el-input size="mini" placeholder="Notes" v-model="input"></el-input>
+                            </el-col>
                         </el-row>
 
                     </el-col>

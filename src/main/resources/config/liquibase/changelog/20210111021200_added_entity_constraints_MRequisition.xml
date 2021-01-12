@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MRequisition.
+    -->
+    <changeSet id="20210111021200-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_requisition"
+                                 constraintName="fk_m_requisition_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="document_type_id"
+                                 baseTableName="m_requisition"
+                                 constraintName="fk_m_requisition_document_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_document_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="currency_id"
+                                 baseTableName="m_requisition"
+                                 constraintName="fk_m_requisition_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="warehouse_id"
+                                 baseTableName="m_requisition"
+                                 constraintName="fk_m_requisition_warehouse_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_warehouse"/>
+
+        <addForeignKeyConstraint baseColumnNames="cost_center_id"
+                                 baseTableName="m_requisition"
+                                 constraintName="fk_m_requisition_cost_center_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_cost_center"/>
+
+    </changeSet>
+</databaseChangeLog>

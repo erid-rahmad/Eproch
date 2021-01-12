@@ -189,8 +189,8 @@
             <el-button
               style="margin-left: 0px;"
               size="mini"
-              icon="el-icon-delete" 
-              type="danger" 
+              icon="el-icon-delete"
+              type="danger"
               @click="deleteRecords"
             >
               {{ $t('entity.action.delete') }}
@@ -198,7 +198,7 @@
             <el-button
               style="margin-left: 0px;"
               size="mini"
-              icon="el-icon-close" 
+              icon="el-icon-close"
               @click="deleteConfirmationVisible = false"
             >
               {{ $t('entity.action.cancel') }}
@@ -207,7 +207,7 @@
         </template>
       </el-dialog>
       <el-dialog
-        width="20%"
+        width="40%"
         :visible.sync="docActionPopupVisible"
         :title="`${docAction.name} Document`"
       >
@@ -224,8 +224,8 @@
             <el-button
               style="margin-left: 0px;"
               size="mini"
-              icon="el-icon-check" 
-              :type="docAction.value === 'RJC' ? 'danger' : 'primary'" 
+              icon="el-icon-check"
+              :type="docAction.value === 'RJC' ? 'danger' : 'primary'"
               @click="applyDocumentAction"
             >
               {{ docAction.name }}
@@ -233,7 +233,7 @@
             <el-button
               style="margin-left: 0px;"
               size="mini"
-              icon="el-icon-close" 
+              icon="el-icon-close"
               @click="docActionPopupVisible = false"
             >
               {{ $t('entity.action.cancel') }}
@@ -329,7 +329,7 @@
   .splitpanes {
 
     .splitpanes__pane {
-      
+
       .main-pane {
         position: relative;
       }
@@ -352,7 +352,7 @@
 
 <style lang="scss" scoped>
 .tab-navigation-breadcrumb {
-  line-height: 32px;  
+  line-height: 32px;
   padding-left: 8px;
 
   .link-enabled {

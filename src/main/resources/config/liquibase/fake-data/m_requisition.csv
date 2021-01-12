@@ -1,0 +1,11 @@
+id;document_action;document_status;is_approved;is_processed;document_date;date_required;uid;active;ad_organization_id;document_type_id;currency_id;warehouse_id;cost_center_id
+1;withdrawal;integrate;false;true;2021-01-10;2021-01-10;71385681-e272-479b-9bd3-fc6bde1a29d8;true;1;1;1;1;1
+2;Identity S;monetize S;true;false;2021-01-11;2021-01-10;f9d0d864-f696-4035-a512-6312b5fd5636;true;2;2;2;2;2
+3;French Gui;tertiary S;true;false;2021-01-10;2021-01-10;fc0ed9a9-ffd2-4c36-a92a-97615b5dfebe;true;3;3;3;3;3
+4;Intelligen;invoice;true;true;2021-01-10;2021-01-10;c4b0f1b1-6222-4af3-a4e4-b74f5a202141;false;4;4;4;4;4
+5;workforce ;program Si;false;false;2021-01-10;2021-01-11;e08e71b3-19d9-4ab4-ab91-ed8bab208d85;false;5;5;5;5;5
+6;Burundi Fr;haptic cli;false;false;2021-01-10;2021-01-10;70708da5-01a7-4b81-af99-83bf97a01a85;false;6;6;6;6;6
+7;neural ove;Cambridges;true;false;2021-01-10;2021-01-10;8b20a11f-a047-40e6-9e47-06d403f149aa;false;7;7;7;7;7
+8;protocol G;calculate;false;false;2021-01-10;2021-01-10;0c65527e-3292-4f39-bd6c-488ae152a306;true;8;8;8;8;8
+9;supply-cha;Tactics;true;true;2021-01-10;2021-01-10;a05d0fb7-5310-4e62-93d0-48b89f56ff32;false;9;9;9;9;9
+10;holistic i;Curve Savi;true;true;2021-01-10;2021-01-10;988760d6-6890-45d8-8d30-d7eaeb731541;true;10;10;10;10;10
