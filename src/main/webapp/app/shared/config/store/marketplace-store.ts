@@ -31,8 +31,9 @@ function buildGallery(item: IProduct) {
 
   gallery.cGalleryItems = [];
   thumbnail.type = CAttachmentType.REMOTE;
-  thumbnail.imageSmall = item.image.small;
-  thumbnail.imageMedium = item.image.thumbnail;
+  thumbnail.imageSmall = item.image.thumbnail;
+  thumbnail.imageMedium = item.image.small;
+  thumbnail.imageLarge = item.image.large;
   itemPreview.cAttachment = thumbnail;
   itemPreview.sequence = 0;
   itemPreview.preview = true;
@@ -42,7 +43,7 @@ function buildGallery(item: IProduct) {
   for (const media of item.media.variant) {
     const image: CAttachment = new CAttachment(
       null, CAttachmentType.REMOTE, media.thumbnail,
-      media.small, media.thumbnail, media.thumbnail
+      media.thumbnail, media.small, media.large
     );
 
     const galleryItem: CGalleryItem = new CGalleryItem(
@@ -138,29 +139,32 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
       idb.brand, idb.category, idb.image, idb.merchant, idb.product,
       idb.productCategory, idb.productVariant, idb.productVariantMedia
     ], async () => {
-      // Save brand.
-      let brandId = null;
-      if (product.brand) {
-        brandId = await idb.brand.put({
-          id: product.brand.id,
-          name: product.brand.name
-        });
-        console.log('Brand saved. id:', brandId);
-      }
+      // Check for the existing product.
+      const defaultVariant = product.variants[0];
+      let productId = (await idb.productVariant
+        .where('id').equals(defaultVariant.id)
+        .first())?.productId;
 
-      // Save categories.
-      const categories = product.category.map(cat => {
-        return { id: cat.id, name: cat.name }
+      const isNew: boolean = !productId;
+
+      // Save brand.
+      const brandId = await idb.brand.put({
+        id: product.brand.id,
+        name: product.brand.name
       });
-      const categoryIds = await idb.category.bulkPut(categories, { allKeys: true });
-      console.log('Categories saved. ids:', categoryIds);
+      console.log('Brand saved. id:', brandId);
 
       // Save image.
-      const imageId = await idb.image.put({
-        small: product.image.small,
-        thumbnail: product.image.thumbnail
-      });
-      console.log('Image saved. id:', imageId);
+      let imageId = 0;
+      if (isNew) {
+        imageId = await idb.image.put({
+          large: product.image.small.replace('small', 'large'),
+          medium: product.image.small.replace('small', 'medium'),
+          small: product.image.thumbnail,
+          thumbnail: product.image.small
+        });
+        console.log('Image saved. id:', imageId);
+      }
 
       // Save merchant.
       const merchantId = await idb.merchant.put({
@@ -171,11 +175,7 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
       console.log('merchant saved. id:', merchantId);
 
       // Save product.
-      let productId = (await idb.productVariant
-        .where('id').equals(product.variants.find(p => p.name === 'default').id)
-        .first())?.productId;
-
-      if (!productId) {
+      if (isNew) {
         productId = await idb.product.put({
           name: product.name,
           description: product.description,
@@ -189,14 +189,22 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
         });
         console.log('product saved. id:', productId);
       }
-      
-      // Save categories.
-      idb.productCategory.bulkPut(
-        categoryIds.map(categoryId => {
-          return { productId, categoryId };
-        })
-      );
 
+      // Save categories.
+      if (isNew) {
+        const categories = product.category.map(cat => {
+          return { id: cat.id, name: cat.name }
+        });
+        const categoryIds = await idb.category.bulkPut(categories, { allKeys: true });
+
+        idb.productCategory.bulkPut(
+          categoryIds.map(categoryId => {
+            return { productId, categoryId };
+          })
+        );
+        console.log('Categories saved. ids:', categoryIds);
+      }
+      
       // Save product variants.
       const variants = product.variants.map(variant => {
         return {
@@ -218,16 +226,21 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
 
       idb.productVariant.bulkPut(variants);
 
-      const variantMedias = product.media.variant.map((mediaVariant, idx) => {
-        return {
-          name: mediaVariant.name,
-          small: mediaVariant.small,
-          thumbnail: mediaVariant.thumbnail,
-          productVariantId: variants.find(v => v.nameVariantMedia === mediaVariant.name)?.id
-        };
-      });
+      if (isNew) {
+        const variantMedias = product.media.variant.map((mediaVariant, idx) => {
+          return {
+            name: mediaVariant.name,
+            large: mediaVariant.small.replace('small', 'large'),
+            medium: mediaVariant.small.replace('small', 'medium'),
+            small: mediaVariant.thumbnail,
+            thumbnail: mediaVariant.small,
+            productVariantId: variants.find(v => v.nameVariantMedia === mediaVariant.name)?.id
+          };
+        });
 
-      idb.productVariantMedia.bulkPut(variantMedias);
+        idb.productVariantMedia.bulkPut(variantMedias);
+      }
+
       return product;
     })
     .then(result => {
@@ -246,6 +259,23 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   @Action
   public async removeProduct(id) {
     console.log('removeProduct is not yet implemented');
+  }
+
+  @Action
+  public async clearCatalog() {
+    idb.transaction('rw', [
+      idb.brand, idb.category, idb.image, idb.merchant, idb.product,
+      idb.productCategory, idb.productVariant, idb.productVariantMedia
+    ], async () => {
+      idb.productVariantMedia.clear();
+      idb.productVariant.clear();
+      idb.productCategory.clear();
+      idb.product.clear();
+      idb.merchant.clear();
+      idb.image.clear();
+      idb.category.clear();
+      idb.brand.clear();
+    });
   }
 }
 

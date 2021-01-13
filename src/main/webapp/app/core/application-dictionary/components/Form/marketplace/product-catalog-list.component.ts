@@ -87,6 +87,8 @@ export default class ProductCatalogList extends Vue {
         return item.cAttachment.imageMedium;
       }
     }
+
+    return gallery.cGalleryItems[0]?.cAttachment?.imageMedium;
   }
 
   private buildLayout(items: IMProductCatalog[]) {

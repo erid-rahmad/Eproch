@@ -26,6 +26,8 @@ export interface ICategory {
 }
 
 export interface IImage {
+  large: string;
+  medium: string;
   small: string;
   thumbnail: string;
 }
@@ -36,6 +38,8 @@ export interface IMedia {
 
 export interface IMediaVariant {
   name: string;
+  large: string;
+  medium: string;
   small: string;
   thumbnail: string;
 }

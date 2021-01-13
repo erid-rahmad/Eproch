@@ -2,6 +2,7 @@ import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-dec
 import store from '@/shared/config/store';
 import { TagsViewStoreModule as tagsViewStore } from "@/shared/config/store/tags-view-store";
 import { resetRouter } from '@/router';
+import { MarketplaceStoreModule as marketplaceStore } from "@/shared/config/store/marketplace-store";
 
 export interface IAccountState {
   logon: boolean;
@@ -74,6 +75,7 @@ class AccountStore extends VuexModule implements IAccountState {
   @Mutation
   private SET_LOGOUT() {
     resetRouter();
+    marketplaceStore.clearCatalog();
     tagsViewStore.delAllViews();
     this.userIdentity = null;
     this.authorities.clear();

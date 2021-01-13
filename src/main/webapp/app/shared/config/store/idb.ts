@@ -40,6 +40,8 @@ interface IImage {
   // Auto-incremented id.
   id?: number;
 
+  large: string;
+  medium: string;
   small: string;
   thumbnail: string;
 }
@@ -100,6 +102,8 @@ interface IProductVariantMedia {
   id?: number;
 
   name: string;
+  large: string;
+  medium: string;
   small: string;
   thumbnail: string;
 
