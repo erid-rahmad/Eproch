@@ -75,7 +75,14 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
     
     private retrieveBank() {        
         this.dynamicWindowService('/api/c-banks')
-            .retrieve()
+            .retrieve({
+                criteriaQuery: 'active.equals=true',
+                paginationQuery: {
+                    page: 0,
+                    size: 1000,
+                    sort: ['name']
+                }
+            })
             .then(res=>{
                 this.banks = res.data;
             });
@@ -83,7 +90,14 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
 
     private retrieveCurrency() {        
         this.dynamicWindowService('/api/c-currencies')
-            .retrieve()
+            .retrieve({
+                criteriaQuery: 'active.equals=true',
+                paginationQuery: {
+                    page: 0,
+                    size: 1000,
+                    sort: ['code']
+                }
+            })
             .then(res=>{
                 this.currencies = res.data;
             });
