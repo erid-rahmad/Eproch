@@ -2,6 +2,7 @@ import { Dexie } from "dexie";
 
 class EprocIDB extends Dexie {
   brand: Dexie.Table<IBrand, string>;
+  cartItem: Dexie.Table<ICartItem, number>;
   category: Dexie.Table<ICategory, string>;
   image: Dexie.Table<IImage, number>;
   merchant: Dexie.Table<IMerchant, string>;
@@ -13,17 +14,24 @@ class EprocIDB extends Dexie {
   constructor() {
     super('bhpMarketplace');
 
-    this.version(3).stores({
+    this.version(5).stores({
       brand: 'id, name',
-      category: 'id, name',
+      cartItem: '++id, &productId',
+      category: 'id, &name',
       image: '++id',
-      merchant: 'id, code, name',
+      merchant: 'id, &code, name',
       product: '++id, name, brandId, merchantId',
       productCategory: '++id, productId, categoryId',
       productVariant: 'id, productId, skuInternal, stockAvailable, sellingPrice, variantName',
       productVariantMedia: '++id, name, productVariantId'
     });
   }
+}
+
+interface ICartItem {
+  id?: number;
+  quantity: number;
+  productId: number;
 }
 
 interface IBrand {

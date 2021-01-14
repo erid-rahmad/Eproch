@@ -1,17 +1,15 @@
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
+import { MarketplaceStoreModule as marketplaceStore } from "@/shared/config/store/marketplace-store";
+import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import FilterGroup from "./filter-group.vue";
 import QuickSearch from "./quick-search.vue";
-import ShoppingCart from "./shopping-cart.vue";
-import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
-import { MarketplaceStoreModule as marketplaceStore } from "@/shared/config/store/marketplace-store";
 
 @Component({
   components: {
     FilterGroup,
-    QuickSearch,
-    ShoppingCart
+    QuickSearch
   },
 
   methods: {

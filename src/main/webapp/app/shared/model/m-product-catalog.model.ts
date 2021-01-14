@@ -1,4 +1,4 @@
-import { IMProductPrice } from '@/shared/model/m-product-price.model';
+import { ICGallery } from './c-gallery.model';
 
 export interface IMProductCatalog {
   id?: number;
@@ -24,15 +24,20 @@ export interface IMProductCatalog {
   rejectedReason?: string;
   uid?: string;
   active?: boolean;
+  cGallery?: ICGallery;
   cGalleryId?: number;
-  mProductPrices?: IMProductPrice[];
   adOrganizationId?: number;
   cDocumentTypeId?: number;
   cCurrencyId?: number;
+  cCurrencyName?: string;
   cUomId?: number;
+  cUomName?: string;
   cVendorId?: number;
+  cVendorName?: string;
   mBrandId?: number;
+  mBrandName?: string;
   mProductId?: number;
+  mProductName?: string;
 }
 
 export class MProductCatalog implements IMProductCatalog {
@@ -60,15 +65,20 @@ export class MProductCatalog implements IMProductCatalog {
     public rejectedReason?: string,
     public uid?: string,
     public active?: boolean,
+    public cGallery?: ICGallery,
     public cGalleryId?: number,
-    public mProductPrices?: IMProductPrice[],
     public adOrganizationId?: number,
     public cDocumentTypeId?: number,
     public cCurrencyId?: number,
+    public cCurrencyName?: string,
     public cUomId?: number,
+    public cUomName?: string,
     public cVendorId?: number,
+    public cVendorName?: string,
     public mBrandId?: number,
-    public mProductId?: number
+    public mBrandName?: string,
+    public mProductId?: number,
+    public mProductName?: string
   ) {
     this.preOrder = this.preOrder || false;
     this.sold = this.sold || false;

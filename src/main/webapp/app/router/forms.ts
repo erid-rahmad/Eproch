@@ -25,6 +25,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['eNofa', () => import(/* webpackChunkName: "invoiceVerification" */'@/core/application-dictionary/components/Form/e-verification/e-nofa/e-nofa.vue')],
 
   ['marketplace', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/marketplace/index.vue')],
+  ['shoppingCart', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/marketplace/shopping-cart.vue')],
   ['bhinnekaCatalogImporter', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/marketplace/bhinneka-catalog-importer.vue')],
   ['generatePo', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/generate-po/generate-po.vue')]
 ]);

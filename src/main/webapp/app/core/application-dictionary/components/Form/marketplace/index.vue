@@ -8,6 +8,7 @@
       ref="itemDetail"
       v-show="!browseCatalog"
       :data="selectedItem"
+      origin="catalog"
     />
   </div>
 </template>

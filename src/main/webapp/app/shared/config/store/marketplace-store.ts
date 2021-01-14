@@ -9,14 +9,19 @@ import { Action, getModule, Module, VuexModule, Mutation } from 'vuex-module-dec
 
 export interface IMarketplaceState {
   cart: any[];
-  products: MProductCatalog[];
+  products: IMProductCatalog[];
 }
 
 function buildProduct(item: IProduct) {
   const gallery: CGallery = buildGallery(item);
+  const defaultVariant = item.variants.length && item.variants[0];
   const product: MProductCatalog = new MProductCatalog(
-    null, item.name, item.description, item.description, 0, 0, 0, 1,
-    item.variants[0]?.sellingPrice);
+    item.id, item.name, item.description, item.description,
+    defaultVariant?.skuInternal, 0, 0, 0, 1,
+    defaultVariant?.sellingPrice, null, item.isPreOrder,
+    item.durationPreOrder, item.productWarranty, item.isSold,
+    defaultVariant?.stockAvailable, 'APV', 'DRF', true, true, null, null,
+    true, gallery);
 
   product.mBrandName = item.brand?.name;
   product.cGallery = gallery;
@@ -59,7 +64,15 @@ function buildGallery(item: IProduct) {
 @Module({ dynamic: true, store, name: 'marketplaceStore', namespaced: true })
 class MarketplaceStore extends VuexModule implements IMarketplaceState {
   cart: any[] = [];
-  products: MProductCatalog[] = [];
+  products: IMProductCatalog[] = [];
+
+  get cartItemCount() {
+    return 0;
+  }
+
+  get cartGrandTotal() {
+    return 0;
+  }
 
   @Mutation
   private ADD_PRODUCT(product: MProductCatalog) {
@@ -68,7 +81,27 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
 
   @Mutation
   private ADD_TO_CART(item: any) {
-    this.cart.push(item);
+    const product: IMProductCatalog = item.product;
+    const vendorName = product.cVendorName;
+    let itemsGroup = this.cart.find(group => group.vendorName === vendorName);
+
+    if (itemsGroup === void 0) {
+      itemsGroup = {
+        vendorName,
+        items: []
+      };
+
+      this.cart.push(itemsGroup);
+    }
+
+    const items: any[] = itemsGroup.items;
+    const cartItem = items.find(i => i.product.id === item.product.id);
+
+    if (cartItem === void 0) {
+      itemsGroup.items.push(item);
+    } else {
+      cartItem.quantity = item.quantity;
+    }
   }
 
   @Mutation
@@ -108,6 +141,7 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
             .toArray();
 
           const product: IProduct = {
+            id: item.id,
             brand,
             image,
             merchant,
@@ -152,11 +186,13 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
       const isNew: boolean = !productId;
 
       // Save brand.
-      const brandId = await idb.brand.put({
-        id: product.brand.id,
-        name: product.brand.name
-      });
-      console.log('Brand saved. id:', brandId);
+      let brandId = null;
+      if (product.brand) {
+        brandId = await idb.brand.put({
+          id: product.brand.id,
+          name: product.brand.name
+        });
+      }
 
       // Save image.
       let imageId = 0;
@@ -167,7 +203,6 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
           small: product.image.small,
           thumbnail: product.image.thumbnail
         });
-        console.log('Image saved. id:', imageId);
       }
 
       // Save merchant.
@@ -176,7 +211,6 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
         code: product.merchant.code,
         name: product.merchant.name
       });
-      console.log('merchant saved. id:', merchantId);
 
       // Save product.
       if (isNew) {
@@ -191,7 +225,6 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
           merchantId: merchantId,
           productWarranty: product.productWarranty
         });
-        console.log('product saved. id:', productId);
       }
 
       // Save categories.
@@ -206,7 +239,6 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
             return { productId, categoryId };
           })
         );
-        console.log('Categories saved. ids:', categoryIds);
       }
       
       // Save product variants.
@@ -245,6 +277,7 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
         idb.productVariantMedia.bulkPut(variantMedias);
       }
 
+      product.id = productId;
       return product;
     })
     .then(result => {
@@ -269,11 +302,26 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
       idb.image.clear();
       idb.category.clear();
       idb.brand.clear();
+      idb.cartItem.clear();
     });
   }
 
   @Action
   public async addToCart(item: any) {
+    console.log('Add product %s to cart', item.product.id);
+    idb.transaction('rw', idb.cartItem, () => {
+      idb.cartItem.where('productId').equals(item.product.id).first()
+        .then(cartItem => {
+          cartItem.quantity = item.quantity;
+          idb.cartItem.put(cartItem);
+        })
+        .catch(() => {
+          idb.cartItem.put({
+            productId: item.product.id,
+            quantity: item.quantity
+          });
+        });
+    });
     this.ADD_TO_CART(item);
   }
 }

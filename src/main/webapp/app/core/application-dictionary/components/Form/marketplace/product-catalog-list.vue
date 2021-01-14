@@ -8,13 +8,6 @@
           @completed="onQuickSearchCompleted"
         />
       </el-col>
-      <el-col :span="4">
-        <shopping-cart
-          ref="shoppingCart"
-          @canceled="onShoppingCartCanceled"
-          @processed="onShoppingCartProcessed"
-        />
-      </el-col>
     </el-row>
     <el-container v-loading="processing">
       <el-aside class="quick-filter">

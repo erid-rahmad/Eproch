@@ -1,12 +1,8 @@
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
-import { mixins } from 'vue-class-component';
-import { Vue, Component, Watch } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../ContextVariableAccessor";
-import DetailDescription from './components/detail-description.vue';
 import { MarketplaceStoreModule as marketplaceStore } from '@/shared/config/store/marketplace-store';
 import { CGalleryItem } from '@/shared/model/c-gallery-item.model';
+import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import DetailDescription from './components/detail-description.vue';
 
 const ProductDetailProps = Vue.extend({
   props: {
@@ -15,7 +11,12 @@ const ProductDetailProps = Vue.extend({
       default: () => {
         return {};
       }
-    }
+    },
+
+    /**
+     * Either catalog or cart.
+     */
+    origin: String
   }
 })
 
@@ -26,29 +27,36 @@ const ProductDetailProps = Vue.extend({
 })
 export default class ProductDetail extends ProductDetailProps {
 
-  sku = 3319807056;
-  rate = 3.7;
-  cicilan = "Mulai dari Rp 616.246/bulan.";
-  estimate = "Produk Inden";
+  rate = 0;
   storeInformation = "Dijual dan dikirim oleh Bhinneka, DKI Jakarta";
   qty = 1;
-  availableStock = 39;
   totalPrice = 0;
   warranty = "3 Years Local Official Distributor Warranty";
 
   defaultImg: string = null;
   imgListsPreview: string[] = [];
+  activeTab = 'desc';
+  tabs = [];
 
   private galleryItems: CGalleryItem[] = [];
-  private activeName = 'desc';
-  private tabTitleOptions = [
-    { name: 'Description', value: 'desc' },
-    { name: 'Product excellence', value: 'excl' },
-    { name: 'Specification', value: 'spec' },
-  ]
+
+  get isPreOrder() {
+    return this.shipmentEstimation === 'Pre Order';
+  }
+
+  get shipmentEstimation() {
+    const duration = this.data.preOrderDuration;
+    return duration < 7 ? `Shipping within ${duration} - 5 days` : 'Pre Order';
+  }
 
   @Watch('data')
   onDataChanged(data: IMProductCatalog) {
+    this.tabs.push({
+      id: 'desc',
+      name: 'Description',
+      content: data.description.replace('div', 'ul')
+    });
+
     this.galleryItems = data.cGallery.cGalleryItems;
 
     this.totalPrice = data.price;
@@ -63,8 +71,8 @@ export default class ProductDetail extends ProductDetailProps {
       .map(item => item.cAttachment.imageSmall);
   }
 
-  handleTabClick(tab, event) {
-    this.activeName = tab.name;
+  handleTabClick(tab) {
+    this.activeTab = tab.name;
   }
 
   clickImageThumbnail(src: string) {
@@ -97,7 +105,7 @@ export default class ProductDetail extends ProductDetailProps {
 
     marketplaceStore.addToCart({
       product,
-      qty: this.qty
+      quantity: this.qty
     })
   }
 
