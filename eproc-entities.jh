@@ -117,16 +117,16 @@ entity CAttachment {
 
 	/** The original file name. */
 	fileName String
-	
+
 	/** The small version of the image (for image file type). */
 	imageSmall String
-	
+
 	/** The medium version of the image (for image file type). */
 	imageMedium String
-	
+
 	/** The large version of the image (for image file type). */
 	imageLarge String
-	
+
 	mimeType String
 	documentType String
 
@@ -751,6 +751,7 @@ entity MRequisition {
     isProcessed Boolean
     documentDate LocalDate
 	dateRequired LocalDate
+    description String
     uid UUID
 	active Boolean
 }
@@ -759,6 +760,36 @@ entity MRequisitionLine {
 	documentDate LocalDate required
 	documentRequired LocalDate required
     requisitionAmount BigDecimal required
+    quantity BigDecimal required
+    unitPrice BigDecimal required
+    remark String
+	uid UUID
+	active Boolean
+}
+
+entity MPurchaseOrder {
+
+	/** Next action for the document. */
+	documentAction String required maxlength(10)
+
+	/** Current document status. */
+	documentStatus String required maxlength(10)
+
+    isApproved Boolean
+    isProcessed Boolean
+    tax Boolean
+    documentDate LocalDate
+	dateRequired LocalDate
+    description String
+    uid UUID
+	active Boolean
+}
+
+entity MPurchaseOrderLine {
+    taxId String
+	documentDate LocalDate required
+	documentRequired LocalDate required
+    orderAmount BigDecimal required
     quantity BigDecimal required
     unitPrice BigDecimal required
     remark String
@@ -1057,6 +1088,7 @@ relationship ManyToOne {
 	/** PRLOCN is mapped to locator code. */
 	MMatchPO{mLocator} to CLocator
 
+    /** Purchase Requisition */
 	MRequisition{adOrganization required} to ADOrganization
 	MRequisition{documentType required} to CDocumentType
 	MRequisition{currency required} to CCurrency
@@ -1070,6 +1102,23 @@ relationship ManyToOne {
 	MRequisitionLine{costCenter required} to CCostCenter
 	MRequisitionLine{uom required} to CUnitOfMeasure
 	MRequisitionLine{vendor required} to CVendor
+
+    /** Purchase Order */
+    MPurchaseOrder{adOrganization required} to ADOrganization
+	MPurchaseOrder{documentType required} to CDocumentType
+    MPurchaseOrder{vendor required} to CVendor
+	MPurchaseOrder{currency required} to CCurrency
+	MPurchaseOrder{warehouse required} to CWarehouse
+	MPurchaseOrder{costCenter required} to CCostCenter
+
+	MPurchaseOrderLine{purchaseOrder required} to MPurchaseOrder
+    MPurchaseOrderLine{requisition required} to MRequisition
+	MPurchaseOrderLine{adOrganization required} to ADOrganization
+	MPurchaseOrderLine{product required} to CProduct
+	MPurchaseOrderLine{warehouse required} to CWarehouse
+	MPurchaseOrderLine{costCenter required} to CCostCenter
+	MPurchaseOrderLine{uom required} to CUnitOfMeasure
+	MPurchaseOrderLine{vendor required} to CVendor
 }
 
 // Allow filtering to all entities.
