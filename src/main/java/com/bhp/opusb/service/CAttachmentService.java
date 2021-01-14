@@ -1,14 +1,19 @@
 package com.bhp.opusb.service;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Optional;
+
+import javax.imageio.ImageIO;
 
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.domain.ADOrganization;
@@ -19,7 +24,6 @@ import com.bhp.opusb.service.mapper.CAttachmentMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -58,6 +62,18 @@ public class CAttachmentService {
         } catch (IOException e) {
             log.error("Error creating directory", e);
         }
+    }
+
+    /**
+     * Load image from the specified url.
+     * @param url
+     */
+    public byte[] load(URL url) throws IOException {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        BufferedImage image = ImageIO.read(url);
+
+        ImageIO.write(image, "png", output);
+        return output.toByteArray();
     }
 
     public CAttachmentDTO storeFile(MultipartFile file) {

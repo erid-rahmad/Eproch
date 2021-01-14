@@ -18,6 +18,7 @@ logging:
     ROOT: DEBUG
     io.github.jhipster: DEBUG
     com.bhp.opusb: DEBUG
+    com.bhp.opusb.web.rest.CAttachmentResource: WARN
     org.apache.kafka.clients.NetworkClient: ERROR
 
 spring:

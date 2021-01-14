@@ -12,6 +12,8 @@ export interface IMarketplaceState {
   products: IMProductCatalog[];
 }
 
+const baseApiUrl = '/api/c-attachments/image/load-remote';
+
 function buildProduct(item: IProduct) {
   const gallery: CGallery = buildGallery(item);
   const defaultVariant = item.variants.length && item.variants[0];
@@ -140,6 +142,9 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
             .where('productVariantId').anyOf(variants.map(v => v.id))
             .toArray();
 
+          console.log('image:', image);
+          console.log('media:', variantMedia);
+
           const product: IProduct = {
             id: item.id,
             brand,
@@ -197,11 +202,12 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
       // Save image.
       let imageId = 0;
       if (isNew) {
+        const mediumSize = product.image.small.replace('thumbnail', 'medium');
         imageId = await idb.image.put({
-          large: product.image.small.replace('thumbnail', 'medium'),
-          medium: product.image.small.replace('thumbnail', 'medium'),
-          small: product.image.small,
-          thumbnail: product.image.thumbnail
+          large: `${baseApiUrl}?url=${mediumSize}`,
+          medium: `${baseApiUrl}?url=${mediumSize}`,
+          small: `${baseApiUrl}?url=${product.image.small}`,
+          thumbnail: `${baseApiUrl}?url=${product.image.thumbnail}`
         });
       }
 
@@ -264,12 +270,13 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
 
       if (isNew) {
         const variantMedias = product.media.variant.map((mediaVariant, idx) => {
+          const mediumSize = mediaVariant.small.replace('thumbnail', 'medium');
           return {
             name: mediaVariant.name,
-            large: mediaVariant.small.replace('thumbnail', 'large'),
-            medium: mediaVariant.small.replace('thumbnail', 'medium'),
-            small: mediaVariant.small,
-            thumbnail: mediaVariant.thumbnail,
+            large: `${baseApiUrl}?url=${mediumSize}`,
+            medium: `${baseApiUrl}?url=${mediumSize}`,
+            small: `${baseApiUrl}?url=${product.image.small}`,
+            thumbnail: `${baseApiUrl}?url=${product.image.thumbnail}`,
             productVariantId: variants.find(v => v.nameVariantMedia === mediaVariant.name)?.id
           };
         });

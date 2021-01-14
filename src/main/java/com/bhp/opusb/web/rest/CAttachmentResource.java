@@ -1,9 +1,9 @@
 package com.bhp.opusb.web.rest;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 
@@ -158,9 +158,21 @@ public class CAttachmentResource {
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 
+    @GetMapping("/c-attachments/image/load-remote")
+    public ResponseEntity<byte[]> loadRemote(@RequestParam("url") String imageUrl) {
+        log.debug("Request to load image from URL : {}", imageUrl);
+        try {
+            final URL url = new URL(imageUrl);
+            byte[] image = cAttachmentService.load(url);
+            return ResponseEntity.ok().body(image);
+        } catch (IOException e) {
+            log.warn("Failed to load image from {}", imageUrl);
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @PostMapping("/c-attachments/upload")
     public ResponseEntity<UploadFileResponse> uploadFile(@RequestParam MultipartFile file) throws URISyntaxException {
-
         CAttachmentDTO result = cAttachmentService.storeFile(file);
         String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
             .path("/api/c-attachments/download/")
