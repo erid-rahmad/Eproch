@@ -30,6 +30,8 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
     @Size(max = 100)
     private String shortDescription;
 
+    private String sku;
+
     private Double height;
 
     private Double length;
@@ -41,6 +43,16 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
     private BigDecimal price;
 
     private LocalDate expiredDate;
+
+    private Boolean preOrder;
+
+    private Integer preOrderDuration;
+
+    private String warranty;
+
+    private Boolean sold;
+
+    private Long stockAvailable;
 
     /**
      * Next action for the document.
@@ -167,6 +179,14 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
         this.shortDescription = shortDescription;
     }
 
+    public String getSku() {
+        return sku;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
     public Double getHeight() {
         return height;
     }
@@ -213,6 +233,46 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
 
     public void setExpiredDate(LocalDate expiredDate) {
         this.expiredDate = expiredDate;
+    }
+
+    public Boolean isPreOrder() {
+        return preOrder;
+    }
+
+    public void setPreOrder(Boolean preOrder) {
+        this.preOrder = preOrder;
+    }
+
+    public Integer getPreOrderDuration() {
+        return preOrderDuration;
+    }
+
+    public void setPreOrderDuration(Integer preOrderDuration) {
+        this.preOrderDuration = preOrderDuration;
+    }
+
+    public String getWarranty() {
+        return warranty;
+    }
+
+    public void setWarranty(String warranty) {
+        this.warranty = warranty;
+    }
+
+    public Boolean isSold() {
+        return sold;
+    }
+
+    public void setSold(Boolean sold) {
+        this.sold = sold;
+    }
+
+    public Long getStockAvailable() {
+        return stockAvailable;
+    }
+
+    public void setStockAvailable(Long stockAvailable) {
+        this.stockAvailable = stockAvailable;
     }
 
     public String getDocumentAction() {
@@ -452,12 +512,18 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", shortDescription='" + getShortDescription() + "'" +
+            ", sku='" + getSku() + "'" +
             ", height=" + getHeight() +
             ", length=" + getLength() +
             ", width=" + getWidth() +
             ", weight=" + getWeight() +
             ", price=" + getPrice() +
             ", expiredDate='" + getExpiredDate() + "'" +
+            ", preOrder='" + isPreOrder() + "'" +
+            ", preOrderDuration=" + getPreOrderDuration() +
+            ", warranty='" + getWarranty() + "'" +
+            ", sold='" + isSold() + "'" +
+            ", stockAvailable=" + getStockAvailable() +
             ", documentAction='" + getDocumentAction() + "'" +
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", approved='" + isApproved() + "'" +

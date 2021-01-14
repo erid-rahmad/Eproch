@@ -142,6 +142,9 @@ public class MProductCatalogQueryService extends QueryService<MProductCatalog> {
             if (criteria.getShortDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getShortDescription(), MProductCatalog_.shortDescription));
             }
+            if (criteria.getSku() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getSku(), MProductCatalog_.sku));
+            }
             if (criteria.getHeight() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getHeight(), MProductCatalog_.height));
             }
@@ -159,6 +162,21 @@ public class MProductCatalogQueryService extends QueryService<MProductCatalog> {
             }
             if (criteria.getExpiredDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getExpiredDate(), MProductCatalog_.expiredDate));
+            }
+            if (criteria.getPreOrder() != null) {
+                specification = specification.and(buildSpecification(criteria.getPreOrder(), MProductCatalog_.preOrder));
+            }
+            if (criteria.getPreOrderDuration() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getPreOrderDuration(), MProductCatalog_.preOrderDuration));
+            }
+            if (criteria.getWarranty() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getWarranty(), MProductCatalog_.warranty));
+            }
+            if (criteria.getSold() != null) {
+                specification = specification.and(buildSpecification(criteria.getSold(), MProductCatalog_.sold));
+            }
+            if (criteria.getStockAvailable() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getStockAvailable(), MProductCatalog_.stockAvailable));
             }
             if (criteria.getDocumentAction() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDocumentAction(), MProductCatalog_.documentAction));

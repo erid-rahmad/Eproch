@@ -24,6 +24,10 @@
             "fieldValidateRulesMaxlength": "100"
         },
         {
+            "fieldName": "sku",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "height",
             "fieldType": "Double"
         },
@@ -46,6 +50,26 @@
         {
             "fieldName": "expiredDate",
             "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "preOrder",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "preOrderDuration",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "warranty",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "sold",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "stockAvailable",
+            "fieldType": "Long"
         },
         {
             "fieldName": "documentAction",
@@ -167,7 +191,7 @@
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20210112071600",
+    "changelogDate": "20201230135109",
     "entityTableName": "m_product_catalog",
     "dto": "mapstruct",
     "pagination": "pagination",
@@ -177,5 +201,6 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*"
+    "applications": "*",
+    "enableEntityAudit": true
 }

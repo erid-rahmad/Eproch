@@ -3,7 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MShoppingCartItem;
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.CProduct;
+import com.bhp.opusb.domain.MProductCatalog;
 import com.bhp.opusb.domain.MShoppingCart;
 import com.bhp.opusb.repository.MShoppingCartItemRepository;
 import com.bhp.opusb.service.MShoppingCartItemService;
@@ -35,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * Integration tests for the {@link MShoppingCartItemResource} REST controller.
  */
 @SpringBootTest(classes = OpusWebApp.class)
+
 @AutoConfigureMockMvc
 @WithMockUser
 public class MShoppingCartItemResourceIT {
@@ -91,15 +92,15 @@ public class MShoppingCartItemResourceIT {
         }
         mShoppingCartItem.setAdOrganization(aDOrganization);
         // Add required entity
-        CProduct cProduct;
-        if (TestUtil.findAll(em, CProduct.class).isEmpty()) {
-            cProduct = CProductResourceIT.createEntity(em);
-            em.persist(cProduct);
+        MProductCatalog mProductCatalog;
+        if (TestUtil.findAll(em, MProductCatalog.class).isEmpty()) {
+            mProductCatalog = MProductCatalogResourceIT.createEntity(em);
+            em.persist(mProductCatalog);
             em.flush();
         } else {
-            cProduct = TestUtil.findAll(em, CProduct.class).get(0);
+            mProductCatalog = TestUtil.findAll(em, MProductCatalog.class).get(0);
         }
-        mShoppingCartItem.setMProduct(cProduct);
+        mShoppingCartItem.setMProductCatalog(mProductCatalog);
         // Add required entity
         MShoppingCart mShoppingCart;
         if (TestUtil.findAll(em, MShoppingCart.class).isEmpty()) {
@@ -134,15 +135,15 @@ public class MShoppingCartItemResourceIT {
         }
         mShoppingCartItem.setAdOrganization(aDOrganization);
         // Add required entity
-        CProduct cProduct;
-        if (TestUtil.findAll(em, CProduct.class).isEmpty()) {
-            cProduct = CProductResourceIT.createUpdatedEntity(em);
-            em.persist(cProduct);
+        MProductCatalog mProductCatalog;
+        if (TestUtil.findAll(em, MProductCatalog.class).isEmpty()) {
+            mProductCatalog = MProductCatalogResourceIT.createUpdatedEntity(em);
+            em.persist(mProductCatalog);
             em.flush();
         } else {
-            cProduct = TestUtil.findAll(em, CProduct.class).get(0);
+            mProductCatalog = TestUtil.findAll(em, MProductCatalog.class).get(0);
         }
-        mShoppingCartItem.setMProduct(cProduct);
+        mShoppingCartItem.setMProductCatalog(mProductCatalog);
         // Add required entity
         MShoppingCart mShoppingCart;
         if (TestUtil.findAll(em, MShoppingCart.class).isEmpty()) {
@@ -165,6 +166,7 @@ public class MShoppingCartItemResourceIT {
     @Transactional
     public void createMShoppingCartItem() throws Exception {
         int databaseSizeBeforeCreate = mShoppingCartItemRepository.findAll().size();
+
         // Create the MShoppingCartItem
         MShoppingCartItemDTO mShoppingCartItemDTO = mShoppingCartItemMapper.toDto(mShoppingCartItem);
         restMShoppingCartItemMockMvc.perform(post("/api/m-shopping-cart-items")
@@ -211,7 +213,6 @@ public class MShoppingCartItemResourceIT {
 
         // Create the MShoppingCartItem, which fails.
         MShoppingCartItemDTO mShoppingCartItemDTO = mShoppingCartItemMapper.toDto(mShoppingCartItem);
-
 
         restMShoppingCartItemMockMvc.perform(post("/api/m-shopping-cart-items")
             .contentType(MediaType.APPLICATION_JSON)
@@ -501,17 +502,17 @@ public class MShoppingCartItemResourceIT {
 
     @Test
     @Transactional
-    public void getAllMShoppingCartItemsByMProductIsEqualToSomething() throws Exception {
+    public void getAllMShoppingCartItemsByMProductCatalogIsEqualToSomething() throws Exception {
         // Get already existing entity
-        CProduct mProduct = mShoppingCartItem.getMProduct();
+        MProductCatalog mProductCatalog = mShoppingCartItem.getMProductCatalog();
         mShoppingCartItemRepository.saveAndFlush(mShoppingCartItem);
-        Long mProductId = mProduct.getId();
+        Long mProductCatalogId = mProductCatalog.getId();
 
-        // Get all the mShoppingCartItemList where mProduct equals to mProductId
-        defaultMShoppingCartItemShouldBeFound("mProductId.equals=" + mProductId);
+        // Get all the mShoppingCartItemList where mProductCatalog equals to mProductCatalogId
+        defaultMShoppingCartItemShouldBeFound("mProductCatalogId.equals=" + mProductCatalogId);
 
-        // Get all the mShoppingCartItemList where mProduct equals to mProductId + 1
-        defaultMShoppingCartItemShouldNotBeFound("mProductId.equals=" + (mProductId + 1));
+        // Get all the mShoppingCartItemList where mProductCatalog equals to mProductCatalogId + 1
+        defaultMShoppingCartItemShouldNotBeFound("mProductCatalogId.equals=" + (mProductCatalogId + 1));
     }
 
 
@@ -565,6 +566,7 @@ public class MShoppingCartItemResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(content().string("0"));
     }
+
 
     @Test
     @Transactional

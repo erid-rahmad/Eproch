@@ -609,12 +609,18 @@ entity MProductCatalog {
 	name String required maxlength(70)
 	description String
 	shortDescription String required maxlength(100)
+	sku String
 	height Double
 	length Double
 	width Double
 	weight Double
 	price BigDecimal
 	expiredDate LocalDate
+	preOrder Boolean
+	preOrderDuration Integer
+	warranty String
+	sold Boolean
+	stockAvailable Long
 
 	/** Next action for the document. */
 	documentAction String required maxlength(10)
@@ -952,7 +958,7 @@ relationship ManyToOne {
 	MShoppingCart{adOrganization required} to ADOrganization
 	MShoppingCart{adUser required} to AdUser
 	MShoppingCartItem{adOrganization required} to ADOrganization
-	MShoppingCartItem{mProduct required} to CProduct
+	MShoppingCartItem{mProductCatalog required} to MProductCatalog
 
 	// releated vendor invoice verification
 	MVerification{adOrganization required} to ADOrganization
@@ -1075,4 +1081,4 @@ dto * with mapstruct except CRegDocTypeBusinessCategory
 // Set service options to all except few
 service * with serviceClass
 
-skipClient * except MProductCatalog, CGallery, CGalleryItem, CAttachment
+skipClient * except MProductCatalog, CGallery, CGalleryItem, CAttachment, MShoppingCart, MShoppingCartItem

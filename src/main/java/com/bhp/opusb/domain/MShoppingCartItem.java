@@ -55,7 +55,7 @@ public class MShoppingCartItem extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = "mShoppingCartItems", allowSetters = true)
-    private CProduct mProduct;
+    private MProductCatalog mProductCatalog;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -124,17 +124,17 @@ public class MShoppingCartItem extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
 
-    public CProduct getMProduct() {
-        return mProduct;
+    public MProductCatalog getMProductCatalog() {
+        return mProductCatalog;
     }
 
-    public MShoppingCartItem mProduct(CProduct cProduct) {
-        this.mProduct = cProduct;
+    public MShoppingCartItem mProductCatalog(MProductCatalog mProductCatalog) {
+        this.mProductCatalog = mProductCatalog;
         return this;
     }
 
-    public void setMProduct(CProduct cProduct) {
-        this.mProduct = cProduct;
+    public void setMProductCatalog(MProductCatalog mProductCatalog) {
+        this.mProductCatalog = mProductCatalog;
     }
 
     public MShoppingCart getMShoppingCart() {

@@ -121,12 +121,18 @@
             <column name="name" type="string"/>
             <column name="description" type="string"/>
             <column name="short_description" type="string"/>
+            <column name="sku" type="string"/>
             <column name="height" type="numeric"/>
             <column name="length" type="numeric"/>
             <column name="width" type="numeric"/>
             <column name="weight" type="numeric"/>
             <column name="price" type="numeric"/>
             <column name="expired_date" type="date"/>
+            <column name="pre_order" type="boolean"/>
+            <column name="pre_order_duration" type="numeric"/>
+            <column name="warranty" type="string"/>
+            <column name="sold" type="boolean"/>
+            <column name="stock_available" type="numeric"/>
             <column name="document_action" type="string"/>
             <column name="document_status" type="string"/>
             <column name="approved" type="boolean"/>
@@ -157,6 +163,29 @@
         <addColumn tableName="m_product_catalog">
             <column name="m_brand_id" type="bigint">
                 <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20210114100400" author="Ananta Aryadewa">
+        <addColumn tableName="m_product_catalog">
+            <column name="sku" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="pre_order" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="pre_order_duration" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="warranty" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="sold" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="stock_available" type="bigint">
+                <constraints nullable="true" />
             </column>
         </addColumn>
     </changeSet>

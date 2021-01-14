@@ -8,7 +8,8 @@ Component.registerHooks([
 import Router, { RouteConfig } from 'vue-router';
 import Layout from '@/layout/index.vue';
 import { forms } from './forms';
-const DynamicWindow = () => import(/* webpackChunkName: "dynamicWindow" */ '@/core/application-dictionary/components/DynamicWindow/dynamic-window.vue');
+const DynamicWindow = () =>
+  import(/* webpackChunkName: "dynamicWindow" */ '@/core/application-dictionary/components/DynamicWindow/dynamic-window.vue');
 /* tslint:disable */
 // prettier-ignore
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here

@@ -57,6 +57,9 @@ public class MProductCatalogResourceIT {
     private static final String DEFAULT_SHORT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_SHORT_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_SKU = "AAAAAAAAAA";
+    private static final String UPDATED_SKU = "BBBBBBBBBB";
+
     private static final Double DEFAULT_HEIGHT = 1D;
     private static final Double UPDATED_HEIGHT = 2D;
     private static final Double SMALLER_HEIGHT = 1D - 1D;
@@ -80,6 +83,23 @@ public class MProductCatalogResourceIT {
     private static final LocalDate DEFAULT_EXPIRED_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_EXPIRED_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_EXPIRED_DATE = LocalDate.ofEpochDay(-1L);
+
+    private static final Boolean DEFAULT_PRE_ORDER = false;
+    private static final Boolean UPDATED_PRE_ORDER = true;
+
+    private static final Integer DEFAULT_PRE_ORDER_DURATION = 1;
+    private static final Integer UPDATED_PRE_ORDER_DURATION = 2;
+    private static final Integer SMALLER_PRE_ORDER_DURATION = 1 - 1;
+
+    private static final String DEFAULT_WARRANTY = "AAAAAAAAAA";
+    private static final String UPDATED_WARRANTY = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_SOLD = false;
+    private static final Boolean UPDATED_SOLD = true;
+
+    private static final Long DEFAULT_STOCK_AVAILABLE = 1L;
+    private static final Long UPDATED_STOCK_AVAILABLE = 2L;
+    private static final Long SMALLER_STOCK_AVAILABLE = 1L - 1L;
 
     private static final String DEFAULT_DOCUMENT_ACTION = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENT_ACTION = "BBBBBBBBBB";
@@ -133,12 +153,18 @@ public class MProductCatalogResourceIT {
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .shortDescription(DEFAULT_SHORT_DESCRIPTION)
+            .sku(DEFAULT_SKU)
             .height(DEFAULT_HEIGHT)
             .length(DEFAULT_LENGTH)
             .width(DEFAULT_WIDTH)
             .weight(DEFAULT_WEIGHT)
             .price(DEFAULT_PRICE)
             .expiredDate(DEFAULT_EXPIRED_DATE)
+            .preOrder(DEFAULT_PRE_ORDER)
+            .preOrderDuration(DEFAULT_PRE_ORDER_DURATION)
+            .warranty(DEFAULT_WARRANTY)
+            .sold(DEFAULT_SOLD)
+            .stockAvailable(DEFAULT_STOCK_AVAILABLE)
             .documentAction(DEFAULT_DOCUMENT_ACTION)
             .documentStatus(DEFAULT_DOCUMENT_STATUS)
             .approved(DEFAULT_APPROVED)
@@ -229,12 +255,18 @@ public class MProductCatalogResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .shortDescription(UPDATED_SHORT_DESCRIPTION)
+            .sku(UPDATED_SKU)
             .height(UPDATED_HEIGHT)
             .length(UPDATED_LENGTH)
             .width(UPDATED_WIDTH)
             .weight(UPDATED_WEIGHT)
             .price(UPDATED_PRICE)
             .expiredDate(UPDATED_EXPIRED_DATE)
+            .preOrder(UPDATED_PRE_ORDER)
+            .preOrderDuration(UPDATED_PRE_ORDER_DURATION)
+            .warranty(UPDATED_WARRANTY)
+            .sold(UPDATED_SOLD)
+            .stockAvailable(UPDATED_STOCK_AVAILABLE)
             .documentAction(UPDATED_DOCUMENT_ACTION)
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .approved(UPDATED_APPROVED)
@@ -339,12 +371,18 @@ public class MProductCatalogResourceIT {
         assertThat(testMProductCatalog.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testMProductCatalog.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testMProductCatalog.getShortDescription()).isEqualTo(DEFAULT_SHORT_DESCRIPTION);
+        assertThat(testMProductCatalog.getSku()).isEqualTo(DEFAULT_SKU);
         assertThat(testMProductCatalog.getHeight()).isEqualTo(DEFAULT_HEIGHT);
         assertThat(testMProductCatalog.getLength()).isEqualTo(DEFAULT_LENGTH);
         assertThat(testMProductCatalog.getWidth()).isEqualTo(DEFAULT_WIDTH);
         assertThat(testMProductCatalog.getWeight()).isEqualTo(DEFAULT_WEIGHT);
         assertThat(testMProductCatalog.getPrice()).isEqualTo(DEFAULT_PRICE);
         assertThat(testMProductCatalog.getExpiredDate()).isEqualTo(DEFAULT_EXPIRED_DATE);
+        assertThat(testMProductCatalog.isPreOrder()).isEqualTo(DEFAULT_PRE_ORDER);
+        assertThat(testMProductCatalog.getPreOrderDuration()).isEqualTo(DEFAULT_PRE_ORDER_DURATION);
+        assertThat(testMProductCatalog.getWarranty()).isEqualTo(DEFAULT_WARRANTY);
+        assertThat(testMProductCatalog.isSold()).isEqualTo(DEFAULT_SOLD);
+        assertThat(testMProductCatalog.getStockAvailable()).isEqualTo(DEFAULT_STOCK_AVAILABLE);
         assertThat(testMProductCatalog.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
         assertThat(testMProductCatalog.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
         assertThat(testMProductCatalog.isApproved()).isEqualTo(DEFAULT_APPROVED);
@@ -465,12 +503,18 @@ public class MProductCatalogResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].shortDescription").value(hasItem(DEFAULT_SHORT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].sku").value(hasItem(DEFAULT_SKU)))
             .andExpect(jsonPath("$.[*].height").value(hasItem(DEFAULT_HEIGHT.doubleValue())))
             .andExpect(jsonPath("$.[*].length").value(hasItem(DEFAULT_LENGTH.doubleValue())))
             .andExpect(jsonPath("$.[*].width").value(hasItem(DEFAULT_WIDTH.doubleValue())))
             .andExpect(jsonPath("$.[*].weight").value(hasItem(DEFAULT_WEIGHT.doubleValue())))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].expiredDate").value(hasItem(DEFAULT_EXPIRED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].preOrder").value(hasItem(DEFAULT_PRE_ORDER.booleanValue())))
+            .andExpect(jsonPath("$.[*].preOrderDuration").value(hasItem(DEFAULT_PRE_ORDER_DURATION)))
+            .andExpect(jsonPath("$.[*].warranty").value(hasItem(DEFAULT_WARRANTY)))
+            .andExpect(jsonPath("$.[*].sold").value(hasItem(DEFAULT_SOLD.booleanValue())))
+            .andExpect(jsonPath("$.[*].stockAvailable").value(hasItem(DEFAULT_STOCK_AVAILABLE.intValue())))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
@@ -494,12 +538,18 @@ public class MProductCatalogResourceIT {
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.shortDescription").value(DEFAULT_SHORT_DESCRIPTION))
+            .andExpect(jsonPath("$.sku").value(DEFAULT_SKU))
             .andExpect(jsonPath("$.height").value(DEFAULT_HEIGHT.doubleValue()))
             .andExpect(jsonPath("$.length").value(DEFAULT_LENGTH.doubleValue()))
             .andExpect(jsonPath("$.width").value(DEFAULT_WIDTH.doubleValue()))
             .andExpect(jsonPath("$.weight").value(DEFAULT_WEIGHT.doubleValue()))
             .andExpect(jsonPath("$.price").value(DEFAULT_PRICE.intValue()))
             .andExpect(jsonPath("$.expiredDate").value(DEFAULT_EXPIRED_DATE.toString()))
+            .andExpect(jsonPath("$.preOrder").value(DEFAULT_PRE_ORDER.booleanValue()))
+            .andExpect(jsonPath("$.preOrderDuration").value(DEFAULT_PRE_ORDER_DURATION))
+            .andExpect(jsonPath("$.warranty").value(DEFAULT_WARRANTY))
+            .andExpect(jsonPath("$.sold").value(DEFAULT_SOLD.booleanValue()))
+            .andExpect(jsonPath("$.stockAvailable").value(DEFAULT_STOCK_AVAILABLE.intValue()))
             .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
             .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
             .andExpect(jsonPath("$.approved").value(DEFAULT_APPROVED.booleanValue()))
@@ -760,6 +810,84 @@ public class MProductCatalogResourceIT {
 
         // Get all the mProductCatalogList where shortDescription does not contain UPDATED_SHORT_DESCRIPTION
         defaultMProductCatalogShouldBeFound("shortDescription.doesNotContain=" + UPDATED_SHORT_DESCRIPTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsBySkuIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where sku equals to DEFAULT_SKU
+        defaultMProductCatalogShouldBeFound("sku.equals=" + DEFAULT_SKU);
+
+        // Get all the mProductCatalogList where sku equals to UPDATED_SKU
+        defaultMProductCatalogShouldNotBeFound("sku.equals=" + UPDATED_SKU);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsBySkuIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where sku not equals to DEFAULT_SKU
+        defaultMProductCatalogShouldNotBeFound("sku.notEquals=" + DEFAULT_SKU);
+
+        // Get all the mProductCatalogList where sku not equals to UPDATED_SKU
+        defaultMProductCatalogShouldBeFound("sku.notEquals=" + UPDATED_SKU);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsBySkuIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where sku in DEFAULT_SKU or UPDATED_SKU
+        defaultMProductCatalogShouldBeFound("sku.in=" + DEFAULT_SKU + "," + UPDATED_SKU);
+
+        // Get all the mProductCatalogList where sku equals to UPDATED_SKU
+        defaultMProductCatalogShouldNotBeFound("sku.in=" + UPDATED_SKU);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsBySkuIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where sku is not null
+        defaultMProductCatalogShouldBeFound("sku.specified=true");
+
+        // Get all the mProductCatalogList where sku is null
+        defaultMProductCatalogShouldNotBeFound("sku.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProductCatalogsBySkuContainsSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where sku contains DEFAULT_SKU
+        defaultMProductCatalogShouldBeFound("sku.contains=" + DEFAULT_SKU);
+
+        // Get all the mProductCatalogList where sku contains UPDATED_SKU
+        defaultMProductCatalogShouldNotBeFound("sku.contains=" + UPDATED_SKU);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsBySkuNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where sku does not contain DEFAULT_SKU
+        defaultMProductCatalogShouldNotBeFound("sku.doesNotContain=" + DEFAULT_SKU);
+
+        // Get all the mProductCatalogList where sku does not contain UPDATED_SKU
+        defaultMProductCatalogShouldBeFound("sku.doesNotContain=" + UPDATED_SKU);
     }
 
 
@@ -1395,6 +1523,398 @@ public class MProductCatalogResourceIT {
 
     @Test
     @Transactional
+    public void getAllMProductCatalogsByPreOrderIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrder equals to DEFAULT_PRE_ORDER
+        defaultMProductCatalogShouldBeFound("preOrder.equals=" + DEFAULT_PRE_ORDER);
+
+        // Get all the mProductCatalogList where preOrder equals to UPDATED_PRE_ORDER
+        defaultMProductCatalogShouldNotBeFound("preOrder.equals=" + UPDATED_PRE_ORDER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrder not equals to DEFAULT_PRE_ORDER
+        defaultMProductCatalogShouldNotBeFound("preOrder.notEquals=" + DEFAULT_PRE_ORDER);
+
+        // Get all the mProductCatalogList where preOrder not equals to UPDATED_PRE_ORDER
+        defaultMProductCatalogShouldBeFound("preOrder.notEquals=" + UPDATED_PRE_ORDER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrder in DEFAULT_PRE_ORDER or UPDATED_PRE_ORDER
+        defaultMProductCatalogShouldBeFound("preOrder.in=" + DEFAULT_PRE_ORDER + "," + UPDATED_PRE_ORDER);
+
+        // Get all the mProductCatalogList where preOrder equals to UPDATED_PRE_ORDER
+        defaultMProductCatalogShouldNotBeFound("preOrder.in=" + UPDATED_PRE_ORDER);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrder is not null
+        defaultMProductCatalogShouldBeFound("preOrder.specified=true");
+
+        // Get all the mProductCatalogList where preOrder is null
+        defaultMProductCatalogShouldNotBeFound("preOrder.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderDurationIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrderDuration equals to DEFAULT_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldBeFound("preOrderDuration.equals=" + DEFAULT_PRE_ORDER_DURATION);
+
+        // Get all the mProductCatalogList where preOrderDuration equals to UPDATED_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldNotBeFound("preOrderDuration.equals=" + UPDATED_PRE_ORDER_DURATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderDurationIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrderDuration not equals to DEFAULT_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldNotBeFound("preOrderDuration.notEquals=" + DEFAULT_PRE_ORDER_DURATION);
+
+        // Get all the mProductCatalogList where preOrderDuration not equals to UPDATED_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldBeFound("preOrderDuration.notEquals=" + UPDATED_PRE_ORDER_DURATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderDurationIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrderDuration in DEFAULT_PRE_ORDER_DURATION or UPDATED_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldBeFound("preOrderDuration.in=" + DEFAULT_PRE_ORDER_DURATION + "," + UPDATED_PRE_ORDER_DURATION);
+
+        // Get all the mProductCatalogList where preOrderDuration equals to UPDATED_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldNotBeFound("preOrderDuration.in=" + UPDATED_PRE_ORDER_DURATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderDurationIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrderDuration is not null
+        defaultMProductCatalogShouldBeFound("preOrderDuration.specified=true");
+
+        // Get all the mProductCatalogList where preOrderDuration is null
+        defaultMProductCatalogShouldNotBeFound("preOrderDuration.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderDurationIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrderDuration is greater than or equal to DEFAULT_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldBeFound("preOrderDuration.greaterThanOrEqual=" + DEFAULT_PRE_ORDER_DURATION);
+
+        // Get all the mProductCatalogList where preOrderDuration is greater than or equal to UPDATED_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldNotBeFound("preOrderDuration.greaterThanOrEqual=" + UPDATED_PRE_ORDER_DURATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderDurationIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrderDuration is less than or equal to DEFAULT_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldBeFound("preOrderDuration.lessThanOrEqual=" + DEFAULT_PRE_ORDER_DURATION);
+
+        // Get all the mProductCatalogList where preOrderDuration is less than or equal to SMALLER_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldNotBeFound("preOrderDuration.lessThanOrEqual=" + SMALLER_PRE_ORDER_DURATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderDurationIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrderDuration is less than DEFAULT_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldNotBeFound("preOrderDuration.lessThan=" + DEFAULT_PRE_ORDER_DURATION);
+
+        // Get all the mProductCatalogList where preOrderDuration is less than UPDATED_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldBeFound("preOrderDuration.lessThan=" + UPDATED_PRE_ORDER_DURATION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByPreOrderDurationIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where preOrderDuration is greater than DEFAULT_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldNotBeFound("preOrderDuration.greaterThan=" + DEFAULT_PRE_ORDER_DURATION);
+
+        // Get all the mProductCatalogList where preOrderDuration is greater than SMALLER_PRE_ORDER_DURATION
+        defaultMProductCatalogShouldBeFound("preOrderDuration.greaterThan=" + SMALLER_PRE_ORDER_DURATION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByWarrantyIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where warranty equals to DEFAULT_WARRANTY
+        defaultMProductCatalogShouldBeFound("warranty.equals=" + DEFAULT_WARRANTY);
+
+        // Get all the mProductCatalogList where warranty equals to UPDATED_WARRANTY
+        defaultMProductCatalogShouldNotBeFound("warranty.equals=" + UPDATED_WARRANTY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByWarrantyIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where warranty not equals to DEFAULT_WARRANTY
+        defaultMProductCatalogShouldNotBeFound("warranty.notEquals=" + DEFAULT_WARRANTY);
+
+        // Get all the mProductCatalogList where warranty not equals to UPDATED_WARRANTY
+        defaultMProductCatalogShouldBeFound("warranty.notEquals=" + UPDATED_WARRANTY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByWarrantyIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where warranty in DEFAULT_WARRANTY or UPDATED_WARRANTY
+        defaultMProductCatalogShouldBeFound("warranty.in=" + DEFAULT_WARRANTY + "," + UPDATED_WARRANTY);
+
+        // Get all the mProductCatalogList where warranty equals to UPDATED_WARRANTY
+        defaultMProductCatalogShouldNotBeFound("warranty.in=" + UPDATED_WARRANTY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByWarrantyIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where warranty is not null
+        defaultMProductCatalogShouldBeFound("warranty.specified=true");
+
+        // Get all the mProductCatalogList where warranty is null
+        defaultMProductCatalogShouldNotBeFound("warranty.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProductCatalogsByWarrantyContainsSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where warranty contains DEFAULT_WARRANTY
+        defaultMProductCatalogShouldBeFound("warranty.contains=" + DEFAULT_WARRANTY);
+
+        // Get all the mProductCatalogList where warranty contains UPDATED_WARRANTY
+        defaultMProductCatalogShouldNotBeFound("warranty.contains=" + UPDATED_WARRANTY);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByWarrantyNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where warranty does not contain DEFAULT_WARRANTY
+        defaultMProductCatalogShouldNotBeFound("warranty.doesNotContain=" + DEFAULT_WARRANTY);
+
+        // Get all the mProductCatalogList where warranty does not contain UPDATED_WARRANTY
+        defaultMProductCatalogShouldBeFound("warranty.doesNotContain=" + UPDATED_WARRANTY);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsBySoldIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where sold equals to DEFAULT_SOLD
+        defaultMProductCatalogShouldBeFound("sold.equals=" + DEFAULT_SOLD);
+
+        // Get all the mProductCatalogList where sold equals to UPDATED_SOLD
+        defaultMProductCatalogShouldNotBeFound("sold.equals=" + UPDATED_SOLD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsBySoldIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where sold not equals to DEFAULT_SOLD
+        defaultMProductCatalogShouldNotBeFound("sold.notEquals=" + DEFAULT_SOLD);
+
+        // Get all the mProductCatalogList where sold not equals to UPDATED_SOLD
+        defaultMProductCatalogShouldBeFound("sold.notEquals=" + UPDATED_SOLD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsBySoldIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where sold in DEFAULT_SOLD or UPDATED_SOLD
+        defaultMProductCatalogShouldBeFound("sold.in=" + DEFAULT_SOLD + "," + UPDATED_SOLD);
+
+        // Get all the mProductCatalogList where sold equals to UPDATED_SOLD
+        defaultMProductCatalogShouldNotBeFound("sold.in=" + UPDATED_SOLD);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsBySoldIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where sold is not null
+        defaultMProductCatalogShouldBeFound("sold.specified=true");
+
+        // Get all the mProductCatalogList where sold is null
+        defaultMProductCatalogShouldNotBeFound("sold.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByStockAvailableIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where stockAvailable equals to DEFAULT_STOCK_AVAILABLE
+        defaultMProductCatalogShouldBeFound("stockAvailable.equals=" + DEFAULT_STOCK_AVAILABLE);
+
+        // Get all the mProductCatalogList where stockAvailable equals to UPDATED_STOCK_AVAILABLE
+        defaultMProductCatalogShouldNotBeFound("stockAvailable.equals=" + UPDATED_STOCK_AVAILABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByStockAvailableIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where stockAvailable not equals to DEFAULT_STOCK_AVAILABLE
+        defaultMProductCatalogShouldNotBeFound("stockAvailable.notEquals=" + DEFAULT_STOCK_AVAILABLE);
+
+        // Get all the mProductCatalogList where stockAvailable not equals to UPDATED_STOCK_AVAILABLE
+        defaultMProductCatalogShouldBeFound("stockAvailable.notEquals=" + UPDATED_STOCK_AVAILABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByStockAvailableIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where stockAvailable in DEFAULT_STOCK_AVAILABLE or UPDATED_STOCK_AVAILABLE
+        defaultMProductCatalogShouldBeFound("stockAvailable.in=" + DEFAULT_STOCK_AVAILABLE + "," + UPDATED_STOCK_AVAILABLE);
+
+        // Get all the mProductCatalogList where stockAvailable equals to UPDATED_STOCK_AVAILABLE
+        defaultMProductCatalogShouldNotBeFound("stockAvailable.in=" + UPDATED_STOCK_AVAILABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByStockAvailableIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where stockAvailable is not null
+        defaultMProductCatalogShouldBeFound("stockAvailable.specified=true");
+
+        // Get all the mProductCatalogList where stockAvailable is null
+        defaultMProductCatalogShouldNotBeFound("stockAvailable.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByStockAvailableIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where stockAvailable is greater than or equal to DEFAULT_STOCK_AVAILABLE
+        defaultMProductCatalogShouldBeFound("stockAvailable.greaterThanOrEqual=" + DEFAULT_STOCK_AVAILABLE);
+
+        // Get all the mProductCatalogList where stockAvailable is greater than or equal to UPDATED_STOCK_AVAILABLE
+        defaultMProductCatalogShouldNotBeFound("stockAvailable.greaterThanOrEqual=" + UPDATED_STOCK_AVAILABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByStockAvailableIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where stockAvailable is less than or equal to DEFAULT_STOCK_AVAILABLE
+        defaultMProductCatalogShouldBeFound("stockAvailable.lessThanOrEqual=" + DEFAULT_STOCK_AVAILABLE);
+
+        // Get all the mProductCatalogList where stockAvailable is less than or equal to SMALLER_STOCK_AVAILABLE
+        defaultMProductCatalogShouldNotBeFound("stockAvailable.lessThanOrEqual=" + SMALLER_STOCK_AVAILABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByStockAvailableIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where stockAvailable is less than DEFAULT_STOCK_AVAILABLE
+        defaultMProductCatalogShouldNotBeFound("stockAvailable.lessThan=" + DEFAULT_STOCK_AVAILABLE);
+
+        // Get all the mProductCatalogList where stockAvailable is less than UPDATED_STOCK_AVAILABLE
+        defaultMProductCatalogShouldBeFound("stockAvailable.lessThan=" + UPDATED_STOCK_AVAILABLE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProductCatalogsByStockAvailableIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mProductCatalogRepository.saveAndFlush(mProductCatalog);
+
+        // Get all the mProductCatalogList where stockAvailable is greater than DEFAULT_STOCK_AVAILABLE
+        defaultMProductCatalogShouldNotBeFound("stockAvailable.greaterThan=" + DEFAULT_STOCK_AVAILABLE);
+
+        // Get all the mProductCatalogList where stockAvailable is greater than SMALLER_STOCK_AVAILABLE
+        defaultMProductCatalogShouldBeFound("stockAvailable.greaterThan=" + SMALLER_STOCK_AVAILABLE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMProductCatalogsByDocumentActionIsEqualToSomething() throws Exception {
         // Initialize the database
         mProductCatalogRepository.saveAndFlush(mProductCatalog);
@@ -1997,12 +2517,18 @@ public class MProductCatalogResourceIT {
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].shortDescription").value(hasItem(DEFAULT_SHORT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].sku").value(hasItem(DEFAULT_SKU)))
             .andExpect(jsonPath("$.[*].height").value(hasItem(DEFAULT_HEIGHT.doubleValue())))
             .andExpect(jsonPath("$.[*].length").value(hasItem(DEFAULT_LENGTH.doubleValue())))
             .andExpect(jsonPath("$.[*].width").value(hasItem(DEFAULT_WIDTH.doubleValue())))
             .andExpect(jsonPath("$.[*].weight").value(hasItem(DEFAULT_WEIGHT.doubleValue())))
             .andExpect(jsonPath("$.[*].price").value(hasItem(DEFAULT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].expiredDate").value(hasItem(DEFAULT_EXPIRED_DATE.toString())))
+            .andExpect(jsonPath("$.[*].preOrder").value(hasItem(DEFAULT_PRE_ORDER.booleanValue())))
+            .andExpect(jsonPath("$.[*].preOrderDuration").value(hasItem(DEFAULT_PRE_ORDER_DURATION)))
+            .andExpect(jsonPath("$.[*].warranty").value(hasItem(DEFAULT_WARRANTY)))
+            .andExpect(jsonPath("$.[*].sold").value(hasItem(DEFAULT_SOLD.booleanValue())))
+            .andExpect(jsonPath("$.[*].stockAvailable").value(hasItem(DEFAULT_STOCK_AVAILABLE.intValue())))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
@@ -2060,12 +2586,18 @@ public class MProductCatalogResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .shortDescription(UPDATED_SHORT_DESCRIPTION)
+            .sku(UPDATED_SKU)
             .height(UPDATED_HEIGHT)
             .length(UPDATED_LENGTH)
             .width(UPDATED_WIDTH)
             .weight(UPDATED_WEIGHT)
             .price(UPDATED_PRICE)
             .expiredDate(UPDATED_EXPIRED_DATE)
+            .preOrder(UPDATED_PRE_ORDER)
+            .preOrderDuration(UPDATED_PRE_ORDER_DURATION)
+            .warranty(UPDATED_WARRANTY)
+            .sold(UPDATED_SOLD)
+            .stockAvailable(UPDATED_STOCK_AVAILABLE)
             .documentAction(UPDATED_DOCUMENT_ACTION)
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .approved(UPDATED_APPROVED)
@@ -2087,12 +2619,18 @@ public class MProductCatalogResourceIT {
         assertThat(testMProductCatalog.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testMProductCatalog.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testMProductCatalog.getShortDescription()).isEqualTo(UPDATED_SHORT_DESCRIPTION);
+        assertThat(testMProductCatalog.getSku()).isEqualTo(UPDATED_SKU);
         assertThat(testMProductCatalog.getHeight()).isEqualTo(UPDATED_HEIGHT);
         assertThat(testMProductCatalog.getLength()).isEqualTo(UPDATED_LENGTH);
         assertThat(testMProductCatalog.getWidth()).isEqualTo(UPDATED_WIDTH);
         assertThat(testMProductCatalog.getWeight()).isEqualTo(UPDATED_WEIGHT);
         assertThat(testMProductCatalog.getPrice()).isEqualTo(UPDATED_PRICE);
         assertThat(testMProductCatalog.getExpiredDate()).isEqualTo(UPDATED_EXPIRED_DATE);
+        assertThat(testMProductCatalog.isPreOrder()).isEqualTo(UPDATED_PRE_ORDER);
+        assertThat(testMProductCatalog.getPreOrderDuration()).isEqualTo(UPDATED_PRE_ORDER_DURATION);
+        assertThat(testMProductCatalog.getWarranty()).isEqualTo(UPDATED_WARRANTY);
+        assertThat(testMProductCatalog.isSold()).isEqualTo(UPDATED_SOLD);
+        assertThat(testMProductCatalog.getStockAvailable()).isEqualTo(UPDATED_STOCK_AVAILABLE);
         assertThat(testMProductCatalog.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);
         assertThat(testMProductCatalog.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
         assertThat(testMProductCatalog.isApproved()).isEqualTo(UPDATED_APPROVED);

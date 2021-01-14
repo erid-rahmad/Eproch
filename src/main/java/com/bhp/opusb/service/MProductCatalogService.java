@@ -65,7 +65,8 @@ public class MProductCatalogService {
     @Transactional(readOnly = true)
     public Page<MProductCatalogDTO> findAll(Pageable pageable) {
         log.debug("Request to get all MProductCatalogs");
-        return mProductCatalogRepository.findAll(pageable).map(mProductCatalogMapper::toDto);
+        return mProductCatalogRepository.findAll(pageable)
+            .map(mProductCatalogMapper::toDto);
     }
 
     /**
@@ -77,7 +78,8 @@ public class MProductCatalogService {
     @Transactional(readOnly = true)
     public Optional<MProductCatalogDTO> findOne(Long id) {
         log.debug("Request to get MProductCatalog : {}", id);
-        return mProductCatalogRepository.findById(id).map(mProductCatalogMapper::toDto);
+        return mProductCatalogRepository.findById(id)
+            .map(mProductCatalogMapper::toDto);
     }
 
     /**

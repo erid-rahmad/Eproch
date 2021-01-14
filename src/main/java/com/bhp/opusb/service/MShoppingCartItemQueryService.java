@@ -104,9 +104,9 @@ public class MShoppingCartItemQueryService extends QueryService<MShoppingCartIte
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MShoppingCartItem_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
-            if (criteria.getMProductId() != null) {
-                specification = specification.and(buildSpecification(criteria.getMProductId(),
-                    root -> root.join(MShoppingCartItem_.mProduct, JoinType.LEFT).get(CProduct_.id)));
+            if (criteria.getMProductCatalogId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMProductCatalogId(),
+                    root -> root.join(MShoppingCartItem_.mProductCatalog, JoinType.LEFT).get(MProductCatalog_.id)));
             }
             if (criteria.getMShoppingCartId() != null) {
                 specification = specification.and(buildSpecification(criteria.getMShoppingCartId(),

@@ -58,7 +58,6 @@ public class MShoppingCartItemService {
             .map(mShoppingCartItemMapper::toDto);
     }
 
-
     /**
      * Get one mShoppingCartItem by id.
      *

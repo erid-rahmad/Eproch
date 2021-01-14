@@ -55,6 +55,9 @@ public class MProductCatalog extends AbstractAuditingEntity {
     @Column(name = "short_description", length = 100, nullable = false)
     private String shortDescription;
 
+    @Column(name = "sku")
+    private String sku;
+
     @Column(name = "height")
     private Double height;
 
@@ -72,6 +75,21 @@ public class MProductCatalog extends AbstractAuditingEntity {
 
     @Column(name = "expired_date")
     private LocalDate expiredDate;
+
+    @Column(name = "pre_order")
+    private Boolean preOrder;
+
+    @Column(name = "pre_order_duration")
+    private Integer preOrderDuration;
+
+    @Column(name = "warranty")
+    private String warranty;
+
+    @Column(name = "sold")
+    private Boolean sold;
+
+    @Column(name = "stock_available")
+    private Long stockAvailable;
 
     /**
      * Next action for the document.
@@ -206,6 +224,19 @@ public class MProductCatalog extends AbstractAuditingEntity {
         this.shortDescription = shortDescription;
     }
 
+    public String getSku() {
+        return sku;
+    }
+
+    public MProductCatalog sku(String sku) {
+        this.sku = sku;
+        return this;
+    }
+
+    public void setSku(String sku) {
+        this.sku = sku;
+    }
+
     public Double getHeight() {
         return height;
     }
@@ -282,6 +313,71 @@ public class MProductCatalog extends AbstractAuditingEntity {
 
     public void setExpiredDate(LocalDate expiredDate) {
         this.expiredDate = expiredDate;
+    }
+
+    public Boolean isPreOrder() {
+        return preOrder;
+    }
+
+    public MProductCatalog preOrder(Boolean preOrder) {
+        this.preOrder = preOrder;
+        return this;
+    }
+
+    public void setPreOrder(Boolean preOrder) {
+        this.preOrder = preOrder;
+    }
+
+    public Integer getPreOrderDuration() {
+        return preOrderDuration;
+    }
+
+    public MProductCatalog preOrderDuration(Integer preOrderDuration) {
+        this.preOrderDuration = preOrderDuration;
+        return this;
+    }
+
+    public void setPreOrderDuration(Integer preOrderDuration) {
+        this.preOrderDuration = preOrderDuration;
+    }
+
+    public String getWarranty() {
+        return warranty;
+    }
+
+    public MProductCatalog warranty(String warranty) {
+        this.warranty = warranty;
+        return this;
+    }
+
+    public void setWarranty(String warranty) {
+        this.warranty = warranty;
+    }
+
+    public Boolean isSold() {
+        return sold;
+    }
+
+    public MProductCatalog sold(Boolean sold) {
+        this.sold = sold;
+        return this;
+    }
+
+    public void setSold(Boolean sold) {
+        this.sold = sold;
+    }
+
+    public Long getStockAvailable() {
+        return stockAvailable;
+    }
+
+    public MProductCatalog stockAvailable(Long stockAvailable) {
+        this.stockAvailable = stockAvailable;
+        return this;
+    }
+
+    public void setStockAvailable(Long stockAvailable) {
+        this.stockAvailable = stockAvailable;
     }
 
     public String getDocumentAction() {
@@ -534,12 +630,18 @@ public class MProductCatalog extends AbstractAuditingEntity {
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", shortDescription='" + getShortDescription() + "'" +
+            ", sku='" + getSku() + "'" +
             ", height=" + getHeight() +
             ", length=" + getLength() +
             ", width=" + getWidth() +
             ", weight=" + getWeight() +
             ", price=" + getPrice() +
             ", expiredDate='" + getExpiredDate() + "'" +
+            ", preOrder='" + isPreOrder() + "'" +
+            ", preOrderDuration=" + getPreOrderDuration() +
+            ", warranty='" + getWarranty() + "'" +
+            ", sold='" + isSold() + "'" +
+            ", stockAvailable=" + getStockAvailable() +
             ", documentAction='" + getDocumentAction() + "'" +
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", approved='" + isApproved() + "'" +

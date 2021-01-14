@@ -2,7 +2,7 @@
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
     <!--
         Added the constraints for entity MShoppingCartItem.
     -->
@@ -25,6 +25,18 @@
                                  constraintName="fk_m_shopping_cart_item_m_shopping_cart_id"
                                  referencedColumnNames="id"
                                  referencedTableName="m_shopping_cart"/>
+
+    </changeSet>
+
+    <changeSet id="20200114075800" author="Ananta Aryadewa">
+
+        <dropColumn tableName="m_shopping_cart_item" columnName="m_product_id"/>
+        
+        <addForeignKeyConstraint baseColumnNames="m_product_catalog_id"
+                                 baseTableName="m_shopping_cart_item"
+                                 constraintName="fk_m_shopping_cart_item_m_product_catalog_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_product_catalog"/>
 
     </changeSet>
 </databaseChangeLog>

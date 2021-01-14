@@ -35,6 +35,8 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
 
     private StringFilter shortDescription;
 
+    private StringFilter sku;
+
     private DoubleFilter height;
 
     private DoubleFilter length;
@@ -46,6 +48,16 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
     private BigDecimalFilter price;
 
     private LocalDateFilter expiredDate;
+
+    private BooleanFilter preOrder;
+
+    private IntegerFilter preOrderDuration;
+
+    private StringFilter warranty;
+
+    private BooleanFilter sold;
+
+    private LongFilter stockAvailable;
 
     private StringFilter documentAction;
 
@@ -87,12 +99,18 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.shortDescription = other.shortDescription == null ? null : other.shortDescription.copy();
+        this.sku = other.sku == null ? null : other.sku.copy();
         this.height = other.height == null ? null : other.height.copy();
         this.length = other.length == null ? null : other.length.copy();
         this.width = other.width == null ? null : other.width.copy();
         this.weight = other.weight == null ? null : other.weight.copy();
         this.price = other.price == null ? null : other.price.copy();
         this.expiredDate = other.expiredDate == null ? null : other.expiredDate.copy();
+        this.preOrder = other.preOrder == null ? null : other.preOrder.copy();
+        this.preOrderDuration = other.preOrderDuration == null ? null : other.preOrderDuration.copy();
+        this.warranty = other.warranty == null ? null : other.warranty.copy();
+        this.sold = other.sold == null ? null : other.sold.copy();
+        this.stockAvailable = other.stockAvailable == null ? null : other.stockAvailable.copy();
         this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
         this.documentStatus = other.documentStatus == null ? null : other.documentStatus.copy();
         this.approved = other.approved == null ? null : other.approved.copy();
@@ -148,6 +166,14 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         this.shortDescription = shortDescription;
     }
 
+    public StringFilter getSku() {
+        return sku;
+    }
+
+    public void setSku(StringFilter sku) {
+        this.sku = sku;
+    }
+
     public DoubleFilter getHeight() {
         return height;
     }
@@ -194,6 +220,46 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
 
     public void setExpiredDate(LocalDateFilter expiredDate) {
         this.expiredDate = expiredDate;
+    }
+
+    public BooleanFilter getPreOrder() {
+        return preOrder;
+    }
+
+    public void setPreOrder(BooleanFilter preOrder) {
+        this.preOrder = preOrder;
+    }
+
+    public IntegerFilter getPreOrderDuration() {
+        return preOrderDuration;
+    }
+
+    public void setPreOrderDuration(IntegerFilter preOrderDuration) {
+        this.preOrderDuration = preOrderDuration;
+    }
+
+    public StringFilter getWarranty() {
+        return warranty;
+    }
+
+    public void setWarranty(StringFilter warranty) {
+        this.warranty = warranty;
+    }
+
+    public BooleanFilter getSold() {
+        return sold;
+    }
+
+    public void setSold(BooleanFilter sold) {
+        this.sold = sold;
+    }
+
+    public LongFilter getStockAvailable() {
+        return stockAvailable;
+    }
+
+    public void setStockAvailable(LongFilter stockAvailable) {
+        this.stockAvailable = stockAvailable;
     }
 
     public StringFilter getDocumentAction() {
@@ -339,12 +405,18 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(shortDescription, that.shortDescription) &&
+            Objects.equals(sku, that.sku) &&
             Objects.equals(height, that.height) &&
             Objects.equals(length, that.length) &&
             Objects.equals(width, that.width) &&
             Objects.equals(weight, that.weight) &&
             Objects.equals(price, that.price) &&
             Objects.equals(expiredDate, that.expiredDate) &&
+            Objects.equals(preOrder, that.preOrder) &&
+            Objects.equals(preOrderDuration, that.preOrderDuration) &&
+            Objects.equals(warranty, that.warranty) &&
+            Objects.equals(sold, that.sold) &&
+            Objects.equals(stockAvailable, that.stockAvailable) &&
             Objects.equals(documentAction, that.documentAction) &&
             Objects.equals(documentStatus, that.documentStatus) &&
             Objects.equals(approved, that.approved) &&
@@ -370,12 +442,18 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         name,
         description,
         shortDescription,
+        sku,
         height,
         length,
         width,
         weight,
         price,
         expiredDate,
+        preOrder,
+        preOrderDuration,
+        warranty,
+        sold,
+        stockAvailable,
         documentAction,
         documentStatus,
         approved,
@@ -395,7 +473,6 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
         );
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "MProductCatalogCriteria{" +
@@ -403,12 +480,18 @@ public class MProductCatalogCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (shortDescription != null ? "shortDescription=" + shortDescription + ", " : "") +
+                (sku != null ? "sku=" + sku + ", " : "") +
                 (height != null ? "height=" + height + ", " : "") +
                 (length != null ? "length=" + length + ", " : "") +
                 (width != null ? "width=" + width + ", " : "") +
                 (weight != null ? "weight=" + weight + ", " : "") +
                 (price != null ? "price=" + price + ", " : "") +
                 (expiredDate != null ? "expiredDate=" + expiredDate + ", " : "") +
+                (preOrder != null ? "preOrder=" + preOrder + ", " : "") +
+                (preOrderDuration != null ? "preOrderDuration=" + preOrderDuration + ", " : "") +
+                (warranty != null ? "warranty=" + warranty + ", " : "") +
+                (sold != null ? "sold=" + sold + ", " : "") +
+                (stockAvailable != null ? "stockAvailable=" + stockAvailable + ", " : "") +
                 (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
                 (documentStatus != null ? "documentStatus=" + documentStatus + ", " : "") +
                 (approved != null ? "approved=" + approved + ", " : "") +

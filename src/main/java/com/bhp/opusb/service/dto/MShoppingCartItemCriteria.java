@@ -36,7 +36,7 @@ public class MShoppingCartItemCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
-    private LongFilter mProductId;
+    private LongFilter mProductCatalogId;
 
     private LongFilter mShoppingCartId;
 
@@ -49,7 +49,7 @@ public class MShoppingCartItemCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.mProductId = other.mProductId == null ? null : other.mProductId.copy();
+        this.mProductCatalogId = other.mProductCatalogId == null ? null : other.mProductCatalogId.copy();
         this.mShoppingCartId = other.mShoppingCartId == null ? null : other.mShoppingCartId.copy();
     }
 
@@ -98,12 +98,12 @@ public class MShoppingCartItemCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getMProductId() {
-        return mProductId;
+    public LongFilter getMProductCatalogId() {
+        return mProductCatalogId;
     }
 
-    public void setMProductId(LongFilter mProductId) {
-        this.mProductId = mProductId;
+    public void setMProductCatalogId(LongFilter mProductCatalogId) {
+        this.mProductCatalogId = mProductCatalogId;
     }
 
     public LongFilter getMShoppingCartId() {
@@ -130,7 +130,7 @@ public class MShoppingCartItemCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(mProductId, that.mProductId) &&
+            Objects.equals(mProductCatalogId, that.mProductCatalogId) &&
             Objects.equals(mShoppingCartId, that.mShoppingCartId);
     }
 
@@ -142,12 +142,11 @@ public class MShoppingCartItemCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
-        mProductId,
+        mProductCatalogId,
         mShoppingCartId
         );
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "MShoppingCartItemCriteria{" +
@@ -156,7 +155,7 @@ public class MShoppingCartItemCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (mProductId != null ? "mProductId=" + mProductId + ", " : "") +
+                (mProductCatalogId != null ? "mProductCatalogId=" + mProductCatalogId + ", " : "") +
                 (mShoppingCartId != null ? "mShoppingCartId=" + mShoppingCartId + ", " : "") +
             "}";
     }

@@ -6,6 +6,8 @@ import java.util.UUID;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MShoppingCartItem} entity.
  */
@@ -27,11 +29,13 @@ public class MShoppingCartItemDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
-    private Long mProductId;
-    private String mProductCode;
-    private String mProductShortName;
-    private String mProductDescription;
+    @JsonProperty("mProductCatalogId")
+    private Long mProductCatalogId;
 
+    @JsonProperty("mProductCatalogName")
+    private String mProductCatalogName;
+
+    @JsonProperty("mShoppingCartId")
     private Long mShoppingCartId;
     
     public Long getId() {
@@ -82,40 +86,20 @@ public class MShoppingCartItemDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getMProductId() {
-        return mProductId;
+    public Long getMProductCatalogId() {
+        return mProductCatalogId;
     }
 
-    public void setMProductId(Long cProductId) {
-        this.mProductId = cProductId;
+    public void setMProductCatalogId(Long mProductCatalogId) {
+        this.mProductCatalogId = mProductCatalogId;
     }
 
-    public String getMProductCode() {
-        return mProductCode;
+    public String getMProductCatalogName() {
+        return mProductCatalogName;
     }
 
-    public void setMProductCode(String mProductCode) {
-        this.mProductCode = mProductCode;
-    }
-
-    public String getMProductShortName() {
-        return mProductShortName;
-    }
-
-    public void setMProductShortName(String mProductShortName) {
-        this.mProductShortName = mProductShortName;
-    }
-
-    public String getMProductDescription() {
-        return mProductDescription;
-    }
-
-    public void setMProductDescription(String mProductDescription) {
-        this.mProductDescription = mProductDescription;
-    }
-
-    public String getMProductName() {
-        return mProductCode + " - " + mProductShortName;
+    public void setMProductCatalogName(String mProductCatalogName) {
+        this.mProductCatalogName = mProductCatalogName;
     }
 
     public Long getMShoppingCartId() {
@@ -152,7 +136,7 @@ public class MShoppingCartItemDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", mProductId=" + getMProductId() +
+            ", mProductCatalogId=" + getMProductCatalogId() +
             ", mShoppingCartId=" + getMShoppingCartId() +
             "}";
     }

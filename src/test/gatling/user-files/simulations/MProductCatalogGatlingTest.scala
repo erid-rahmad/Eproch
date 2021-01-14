@@ -75,12 +75,18 @@ class MProductCatalogGatlingTest extends Simulation {
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
                 , "shortDescription":"SAMPLE_TEXT"
+                , "sku":"SAMPLE_TEXT"
                 , "height":null
                 , "length":null
                 , "width":null
                 , "weight":null
                 , "price":"0"
                 , "expiredDate":"2020-01-01T00:00:00.000Z"
+                , "preOrder":null
+                , "preOrderDuration":"0"
+                , "warranty":"SAMPLE_TEXT"
+                , "sold":null
+                , "stockAvailable":null
                 , "documentAction":"SAMPLE_TEXT"
                 , "documentStatus":"SAMPLE_TEXT"
                 , "approved":null

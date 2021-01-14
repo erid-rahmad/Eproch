@@ -10,20 +10,18 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link MShoppingCartItem} and its DTO {@link MShoppingCartItemDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CProductMapper.class, MShoppingCartMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, MProductCatalogMapper.class, MShoppingCartMapper.class})
 public interface MShoppingCartItemMapper extends EntityMapper<MShoppingCartItemDTO, MShoppingCartItem> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
-    @Mapping(source = "MProduct.id", target = "MProductId")
-    @Mapping(source = "MProduct.code", target = "MProductCode")
-    @Mapping(source = "MProduct.name", target = "MProductShortName")
-    @Mapping(source = "MProduct.description", target = "MProductDescription")
+    @Mapping(source = "MProductCatalog.id", target = "MProductCatalogId")
+    @Mapping(source = "MProductCatalog.name", target = "MProductCatalogName")
     @Mapping(source = "MShoppingCart.id", target = "MShoppingCartId")
     MShoppingCartItemDTO toDto(MShoppingCartItem mShoppingCartItem);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
-    @Mapping(source = "MProductId", target = "MProduct")
+    @Mapping(source = "MProductCatalogId", target = "MProductCatalog")
     @Mapping(source = "MShoppingCartId", target = "MShoppingCart")
     MShoppingCartItem toEntity(MShoppingCartItemDTO mShoppingCartItemDTO);
 
