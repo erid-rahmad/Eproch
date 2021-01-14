@@ -39,7 +39,7 @@ public class CAttachment extends AbstractAuditingEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "type", nullable = false)
-    private CAttachmentType type;
+    private CAttachmentType type = CAttachmentType.LOCAL;
 
     /**
      * The original file name.
