@@ -1,55 +1,45 @@
 import AlertMixin from '@/shared/alert/alert.mixin';
+import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
 import { mixins } from 'vue-class-component';
-import { Component } from 'vue-property-decorator';
+import { Vue, Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import DetailDescription from './components/detail-description.vue';
-import MarketplaceCart from './marketplace-cart.vue';
+import { MarketplaceStoreModule as marketplaceStore } from '@/shared/config/store/marketplace-store';
+import { CGalleryItem } from '@/shared/model/c-gallery-item.model';
+
+const ProductDetailProps = Vue.extend({
+  props: {
+    data: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    }
+  }
+})
 
 @Component({
   components: {
-    DetailDescription,
-    MarketplaceCart
+    DetailDescription
   }
 })
-export default class Marketplace extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class ProductDetail extends ProductDetailProps {
 
-  page: string = "";
-
-  name = "BENQ Projector  MW612";
   sku = 3319807056;
   rate = 3.7;
-  price = "Rp 14.080.000";
   cicilan = "Mulai dari Rp 616.246/bulan.";
   estimate = "Produk Inden";
   storeInformation = "Dijual dan dikirim oleh Bhinneka, DKI Jakarta";
   qty = 1;
   availableStock = 39;
-  totalPrice = "Rp 14.080.000";
+  totalPrice = 0;
   warranty = "3 Years Local Official Distributor Warranty";
 
-  defaultImg = 'https://static.bmdstatic.com/pk/product/medium/5a6587b8bc0a7.jpg';
-  imgListsPreview = [];
-  imgLists = [
-    {
-      id: "2",
-      src: 'https://static.bmdstatic.com/pk/product/medium/5a6587b8bc0a7.jpg',
-      alt: "asd123"
-    }, {
-      id: "3",
-      src: 'https://static.bmdstatic.com/pk/product/medium/SANWA-Infrared-Thermometer-IR60i--3318112175-2017719143915.jpg',
-      alt: "asd123"
-    }, {
-      id: "4",
-      src: 'https://static.bmdstatic.com/pk/product/medium/5e65a8c02fc4e.jpg',
-      alt: "asd123"
-    }, {
-      id: "5",
-      src: 'https://static.bmdstatic.com/pk/product/medium/5f64736994cec.jpg',
-      alt: "asd123"
-    }
-  ]
+  defaultImg: string = null;
+  imgListsPreview: string[] = [];
 
+  private galleryItems: CGalleryItem[] = [];
   private activeName = 'desc';
   private tabTitleOptions = [
     { name: 'Description', value: 'desc' },
@@ -57,23 +47,27 @@ export default class Marketplace extends mixins(Vue2Filters.mixin, AlertMixin, C
     { name: 'Specification', value: 'spec' },
   ]
 
+  @Watch('data')
+  onDataChanged(data: IMProductCatalog) {
+    this.galleryItems = data.cGallery.cGalleryItems;
+
+    this.totalPrice = data.price;
+
+    console.log('data:', data);
+    this.defaultImg = this.galleryItems
+      .find(item => item.preview)
+      .cAttachment.imageLarge;
+
+    this.imgListsPreview = this.galleryItems
+      .filter(item => !item.preview)
+      .map(item => item.cAttachment.imageSmall);
+  }
+
   handleTabClick(tab, event) {
     this.activeName = tab.name;
   }
 
-  created() {
-    this.page = "detail";
-    for(var i=0; i < this.imgLists.length; i++){
-      this.imgListsPreview.push(this.imgLists[i].src);
-    }
-  }
-
-/*  clickImageThumbnail(img: string){
-    console.log(img);
-    this.defaultImg = img;
-  }*/
-
-  clickImageThumbnail(src) {
+  clickImageThumbnail(src: string) {
     this.defaultImg = src;
 
     let newList = []; // define a new array
@@ -94,15 +88,19 @@ export default class Marketplace extends mixins(Vue2Filters.mixin, AlertMixin, C
     console.log(this.imgListsPreview);
   }
 
-  handleChangeQty(value) {
-    console.log(value)
+  handleChangeQty(qty: number) {
+    this.totalPrice = this.data.price * qty;
   }
 
-  addToCart(){
-    this.page = "cart";
+  addToCart() {
+    const product = {...this.data};
+
+    marketplaceStore.addToCart({
+      product,
+      qty: this.qty
+    })
   }
 
   setDetail(){
-    this.page = "detail";
   }
 }

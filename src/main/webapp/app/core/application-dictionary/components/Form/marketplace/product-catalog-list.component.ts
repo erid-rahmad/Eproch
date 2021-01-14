@@ -76,6 +76,10 @@ export default class ProductCatalogList extends Vue {
 
   onQuickSearchCompleted(query) {}
 
+  onItemSelected(item: IMProductCatalog) {
+    this.$emit('item-selected', item);
+  }
+
   onShoppingCartCanceled() {}
 
   onShoppingCartProcessed() {}

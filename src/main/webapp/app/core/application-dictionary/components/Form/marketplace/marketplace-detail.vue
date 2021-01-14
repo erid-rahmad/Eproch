@@ -1,6 +1,6 @@
 <template>
-    <div class="app-container">
-        <el-row v-if="page == 'detail'">
+    <div class="product-detail">
+        <el-row>
             <el-col :span="10">
 
                 <div class="image-preview block" key="cover" >
@@ -12,12 +12,12 @@
                 </div>
 
                 <el-row :gutter="5" type="flex" justify="center">
-                    <el-col :span="4" v-for="img in imgLists" :key="img.src">
+                    <el-col :span="4" v-for="(img, i) in imgListsPreview" :key="i">
                         <el-image
                             class="image-thumbnail"
                             fit="cover"
-                            @click="clickImageThumbnail(img.src)"
-                            :src="img.src"/>
+                            @click="clickImageThumbnail(img)"
+                            :src="img"/>
                     </el-col>
                 </el-row>
 
@@ -26,7 +26,7 @@
             <el-col :span="14">
                 <el-row style="margin-top: 10px;">
                     <el-col :span="24">
-                        <h3><b>{{ name }}</b></h3>
+                        <h3><strong>{{ data.name }}</strong></h3>
                     </el-col>
                 </el-row>
 
@@ -44,16 +44,16 @@
 
                 <el-row>
                     <el-col :span="6">
-                        <b>Price</b>
+                        <strong>Price</strong>
                     </el-col>
                     <el-col :span="18">
-                        <h1><b>{{ price }}</b></h1>
+                        <h1><strong>Rp {{ data.price | formatCurrency('id') }}</strong></h1>
                     </el-col>
                 </el-row>
 
                 <el-row>
                     <el-col :span="6">
-                        <b>Credit</b>
+                        <strong>Credit</strong>
                     </el-col>
                     <el-col :span="18">
                         {{ cicilan }}
@@ -62,7 +62,7 @@
 
                 <el-row>
                     <el-col :span="6">
-                        <b>Estimate</b>
+                        <strong>Estimate</strong>
                     </el-col>
                     <el-col :span="18">
                         {{ estimate }}
@@ -71,16 +71,16 @@
 
                 <el-row>
                     <el-col :span="6">
-                        <b>Quantity</b>
+                        <strong>Quantity</strong>
                     </el-col>
                     <el-col :span="18">
-                        <el-input-number v-model="qty" @change="handleChangeQty" :min="1" :max="availableStock" size="mini"/> Total: {{ totalPrice }}
+                        <el-input-number v-model="qty" @change="handleChangeQty" :min="1" :max="availableStock" size="mini"/> Total: Rp. {{ totalPrice | formatCurrency('id') }}
                     </el-col>
                 </el-row>
 
                 <el-row>
                     <el-col :span="6">
-                        <b>Available Stock</b>
+                        <strong>Available Stock</strong>
                     </el-col>
                     <el-col :span="18">
                         {{ availableStock }}
@@ -89,7 +89,7 @@
 
                 <el-row>
                     <el-col :span="6">
-                        <b>Store Information</b>
+                        <strong>Store Information</strong>
                     </el-col>
                     <el-col :span="18">
                         {{ storeInformation }}
@@ -112,7 +112,7 @@
 
                 <el-row>
                     <el-col :span="6">
-                        <b>Warranty</b>
+                        <strong>Warranty</strong>
                     </el-col>
                     <el-col :span="18">
                         {{ warranty }}
@@ -122,7 +122,7 @@
             </el-col>
         </el-row>
 
-        <el-row v-if="page == 'detail'">
+        <el-row>
             <el-col :span="24" class="column">
 
                 <el-tabs
@@ -145,16 +145,6 @@
                         </keep-alive>
                     </el-tab-pane>
                 </el-tabs>
-
-            </el-col>
-        </el-row>
-
-        <el-row v-if="page == 'cart'">
-            <el-col :span="24">
-
-                <marketplace-cart
-                    ref="cart"
-                    @get-detail="setDetail" />
 
             </el-col>
         </el-row>

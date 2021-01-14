@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container marketplace">
+  <div class="product-catalog-list">
     <el-row :gutter="24">
       <el-col :span="8">
         <quick-search
@@ -94,6 +94,7 @@
             >
               <el-card
                 :body-style="{padding: '0'}"
+                @click.native="onItemSelected(col)"
               >
                 <div
                   slot="header"

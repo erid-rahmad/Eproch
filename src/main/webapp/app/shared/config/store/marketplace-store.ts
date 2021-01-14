@@ -4,11 +4,11 @@ import { idb } from "@/shared/config/store/idb";
 import { CAttachment, CAttachmentType } from '@/shared/model/c-attachment.model';
 import { CGalleryItem, CGalleryItemType } from '@/shared/model/c-gallery-item.model';
 import { CGallery } from '@/shared/model/c-gallery.model';
-import { MProductCatalog } from '@/shared/model/m-product-catalog.model';
+import { MProductCatalog, IMProductCatalog } from '@/shared/model/m-product-catalog.model';
 import { Action, getModule, Module, VuexModule, Mutation } from 'vuex-module-decorators';
 
 export interface IMarketplaceState {
-  cart: any;
+  cart: any[];
   products: MProductCatalog[];
 }
 
@@ -33,7 +33,7 @@ function buildGallery(item: IProduct) {
   thumbnail.type = CAttachmentType.REMOTE;
   thumbnail.imageSmall = item.image.thumbnail;
   thumbnail.imageMedium = item.image.small;
-  thumbnail.imageLarge = item.image.large;
+  thumbnail.imageLarge = item.image.medium;
   itemPreview.cAttachment = thumbnail;
   itemPreview.sequence = 0;
   itemPreview.preview = true;
@@ -43,7 +43,7 @@ function buildGallery(item: IProduct) {
   for (const media of item.media.variant) {
     const image: CAttachment = new CAttachment(
       null, CAttachmentType.REMOTE, media.thumbnail,
-      media.thumbnail, media.small, media.large
+      media.thumbnail, media.small, media.medium
     );
 
     const galleryItem: CGalleryItem = new CGalleryItem(
@@ -58,12 +58,17 @@ function buildGallery(item: IProduct) {
 
 @Module({ dynamic: true, store, name: 'marketplaceStore', namespaced: true })
 class MarketplaceStore extends VuexModule implements IMarketplaceState {
-  cart: any = {};
+  cart: any[] = [];
   products: MProductCatalog[] = [];
 
   @Mutation
   private ADD_PRODUCT(product: MProductCatalog) {
     this.products.push(product);
+  }
+
+  @Mutation
+  private ADD_TO_CART(item: any) {
+    this.cart.push(item);
   }
 
   @Mutation
@@ -134,7 +139,6 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
 
   @Action
   public async addProduct(product: IProduct) {
-    console.log('addProduct', product);
     idb.transaction('rw', [
       idb.brand, idb.category, idb.image, idb.merchant, idb.product,
       idb.productCategory, idb.productVariant, idb.productVariantMedia
@@ -158,10 +162,10 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
       let imageId = 0;
       if (isNew) {
         imageId = await idb.image.put({
-          large: product.image.small.replace('small', 'large'),
-          medium: product.image.small.replace('small', 'medium'),
-          small: product.image.thumbnail,
-          thumbnail: product.image.small
+          large: product.image.small.replace('thumbnail', 'medium'),
+          medium: product.image.small.replace('thumbnail', 'medium'),
+          small: product.image.small,
+          thumbnail: product.image.thumbnail
         });
         console.log('Image saved. id:', imageId);
       }
@@ -230,10 +234,10 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
         const variantMedias = product.media.variant.map((mediaVariant, idx) => {
           return {
             name: mediaVariant.name,
-            large: mediaVariant.small.replace('small', 'large'),
-            medium: mediaVariant.small.replace('small', 'medium'),
-            small: mediaVariant.thumbnail,
-            thumbnail: mediaVariant.small,
+            large: mediaVariant.small.replace('thumbnail', 'large'),
+            medium: mediaVariant.small.replace('thumbnail', 'medium'),
+            small: mediaVariant.small,
+            thumbnail: mediaVariant.thumbnail,
             productVariantId: variants.find(v => v.nameVariantMedia === mediaVariant.name)?.id
           };
         });
@@ -252,16 +256,6 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   }
 
   @Action
-  public async updateProduct(product: Record<string, any>) {
-    console.log('updateProduct is not yet implemented');
-  }
-
-  @Action
-  public async removeProduct(id) {
-    console.log('removeProduct is not yet implemented');
-  }
-
-  @Action
   public async clearCatalog() {
     idb.transaction('rw', [
       idb.brand, idb.category, idb.image, idb.merchant, idb.product,
@@ -276,6 +270,11 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
       idb.category.clear();
       idb.brand.clear();
     });
+  }
+
+  @Action
+  public async addToCart(item: any) {
+    this.ADD_TO_CART(item);
   }
 }
 
