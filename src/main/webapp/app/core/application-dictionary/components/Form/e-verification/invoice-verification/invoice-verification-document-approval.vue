@@ -219,8 +219,3 @@
 
 <script lang="ts" src="./invoice-verification-document-approval.component.ts">
 </script>
-
-<style lang="scss">
-
-
-</style>
