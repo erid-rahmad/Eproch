@@ -384,6 +384,10 @@ export default class CompanyProfile extends CompanyProps {
     this.company.file = file;
   }
 
+  handlePreview(file) {
+    window.open(file.response.downloadUri, '_blank');
+  }
+
   handleRemove(files, fileList) {
     this.company.file = "";
   }

@@ -42,9 +42,9 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
     listReleatedDocumentTypes = [];
     listAllDocumentTypes = [];
     listDocumentTypesById = [];
-    
+
     private activeTableDirectField: any = null;
-    
+
     @Watch('doc')
     setDocument(document){
         this.document = document;
@@ -53,7 +53,7 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
     created(){
         this.setDocument(this.doc);
     }
-    
+
     mounted() {
         this.eventBus.$on('save-document', this.save);
         this.eventBus.$on('reset-document-form', this.reset);
@@ -65,24 +65,24 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
     }
 
     get documentTypes() {
-        
+
         //let docTypes = this.mandatory ? registrationStore.mandatoryDocumentTypes : registrationStore.additionalDocumentTypes;
         //console.log(this.listAllDocumentTypes);
         //console.log(this.listReleatedDocumentTypes);
 
         return [...[], ...this.listAllDocumentTypes, ...this.listReleatedDocumentTypes]
-    }     
-    
+    }
+
     public handleDocumentTypeChange(id: number) {
         this.dynamicWindowService('/api/c-registration-doc-types')
             .retrieve({
                 criteriaQuery: `id.equals=${id}`
             })
             .then(res => {
-                
+
                 this.document.typeName = res.data[0].name;
                 this.hasExpirationDate = res.data[0].hasExpirationDate;
-                
+
             });
     }
 
@@ -96,7 +96,7 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
         (<ElForm>this.$refs.document).validate((passed, errors) => {
             if (passed) {
                 const data = { ...this.document };
-                
+
                 this.eventBus.$emit('push-document', data);
                 this.reset();
             } else {
@@ -105,13 +105,17 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
         });
     }
 
-    get fileList() {        
+    get fileList() {
         if ( ! this.document.file) return [];
         return [this.document.file];
     }
 
     onUploadChange(file: any) {
         this.document.file = file;
+    }
+
+    handlePreview(file) {
+      window.open(file.response.downloadUri, '_blank');
     }
 
     handleRemove(files, fileList) {
@@ -154,7 +158,7 @@ export default class SupportingDocumentsUpdate extends SupportingDocumentsProps 
           });
           return isLt5M;
         }
-    
+
         // File type restriction
         const name = file.name ? file.name : '';
         const ext = name
