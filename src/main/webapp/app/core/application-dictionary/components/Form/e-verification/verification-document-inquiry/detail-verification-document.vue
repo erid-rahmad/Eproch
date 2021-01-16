@@ -57,7 +57,7 @@
 
         </el-row>
 
-        <el-row class="main grid-view" ref="tableWrapper">
+        <el-row class="main" ref="tableWrapper">
             <el-col :span="24">
                 <el-table
                     v-loading="processing"
@@ -65,7 +65,7 @@
                     highlight-current-row
                     border stripe
                     size="mini"
-                    style="width: 100%: height: 100%"
+                    style="width: 100%; height: 100%"
                     :height="gridSchema.height"
                     :default-sort="gridSchema.defaultSort"
                     :empty-text="gridSchema.emptyText"

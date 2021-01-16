@@ -82,7 +82,7 @@
 
                 </el-row>
 
-                <el-row class="main grid-view" ref="tableWrapper">
+                <el-row class="main" ref="tableWrapper">
                     <el-col :span="24">
                         <el-table
                             v-loading="processing"
@@ -90,7 +90,7 @@
                             highlight-current-row
                             border stripe
                             size="mini"
-                            style="width: 100%: height: 100%"
+                            style="width: 100%; height: 100%"
                             :height="gridSchema.height"
                             :max-height="gridSchema.maxHeight"
                             :default-sort="gridSchema.defaultSort"
@@ -283,31 +283,5 @@
         margin-bottom: 5px;
     }
 
-    .grid-view {
-        .el-table {
-            .is-error .el-input__inner {
-                border-color: #ff4949;
-            }
 
-            label.el-checkbox {
-                margin: 4px 0;
-            }
-
-            .switch, .checkbox, .selectRemote, .select, .input, .numeric, .date{
-                width: 100%;
-            }
-        }
-
-        .el-pagination {
-            background: #fff;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 5;
-
-            .el-input--mini .el-input__inner {
-                height: 22px;
-            }
-        }
-    }
 </style>

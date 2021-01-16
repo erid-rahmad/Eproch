@@ -53,7 +53,7 @@
                 </el-form>
 
             </el-row>
-            <el-row class="main grid-view" ref="tableWrapper">
+            <el-row class="main" ref="tableWrapper">
                 <el-col :span="24">
                     <el-table
                         v-loading="processing"
