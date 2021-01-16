@@ -115,8 +115,15 @@
                                     <el-input class="form-input" v-model="company.npwpName" :disabled="true" />
                                 </el-form-item>
                                 <el-form-item :label="$t('register.basic.basic.npwpFile')" prop="file">
-                                    <span v-if="company.file">{{ company.file.name }}</span>
+                                    <el-link
+                                        target="_blank"
+                                        v-if="company.file"
+                                        :href="'' + company.file.response.downloadUri+''"
+                                        :underline="false">
+                                        {{ company.file.name }}
+                                    </el-link>
                                 </el-form-item>
+
                             </div>
                             <div v-else>
                                 <el-tooltip class="item" effect="dark" :content="$t('register.basic.basic.taxInformationNumber')" placement="top">
@@ -294,7 +301,19 @@
                             <el-table-column
                                 prop="file.name"
                                 :label="$t('register.document.form.file')"
-                            />
+                                show-overflow-tooltip
+                            >
+                                <template scope="props">
+                                    <el-link
+                                        target="_blank"
+                                        v-if="props.row.file"
+                                        :href="'' + props.row.file.response.downloadUri+''"
+                                        :underline="false">
+                                        {{ props.row.file.response.attachment.fileName }}
+                                    </el-link>
+                                </template>
+                            </el-table-column>
+
                         </el-table>
                     </div>
 
@@ -321,7 +340,19 @@
                             <el-table-column
                                 prop="file.name"
                                 :label="$t('register.document.form.file')"
-                            />
+                                show-overflow-tooltip
+                            >
+                                <template scope="props">
+                                    <el-link
+                                        target="_blank"
+                                        v-if="props.row.file"
+                                        :href="'' + props.row.file.response.downloadUri+''"
+                                        :underline="false">
+                                        {{ props.row.file.response.attachment.fileName }}
+                                    </el-link>
+                                </template>
+                            </el-table-column>
+
                         </el-table>
                     </div>
             </el-collapse-item>
@@ -464,7 +495,19 @@
                             prop="supportingfile.name"
                             min-width="128"
                             :label="$t('register.payment.supportingfile')"
-                        />
+                            show-overflow-tooltip
+                        >
+                            <template scope="props">
+                                <el-link
+                                    target="_blank"
+                                    v-if="props.row.supportingfile"
+                                    :href="'' + props.row.supportingfile.response.downloadUri+''"
+                                    :underline="false">
+                                    {{ props.row.supportingfile.response.attachment.fileName }}
+                                </el-link>
+                            </template>
+                        </el-table-column>
+
                     </el-table>
                 </div>
             </el-collapse-item>

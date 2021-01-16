@@ -6,13 +6,13 @@
         size="mini"
         :model="document"
         :rules="rules">
-        <el-form-item 
-            :label="$t('register.document.form.documentType')" 
-            prop="typeId" 
+        <el-form-item
+            :label="$t('register.document.form.documentType')"
+            prop="typeId"
             required>
             <el-select
                 filterable
-                :disabled="mandatory === true" 
+                :disabled="mandatory === true"
                 style="width:100%"
                 v-model="document.typeId"
                 :placeholder="$t('register.form.select')"
@@ -26,16 +26,16 @@
             </el-select>
         </el-form-item>
 
-        <el-form-item 
-            :label="$t('register.document.form.documentNo')" 
-            prop="documentNo" 
+        <el-form-item
+            :label="$t('register.document.form.documentNo')"
+            prop="documentNo"
             required>
             <el-input v-model="document.documentNo" />
         </el-form-item>
 
-        <el-form-item 
+        <el-form-item
             :label="$t('register.document.form.expirationDate')"
-            prop="expirationDate" 
+            prop="expirationDate"
             :required="hasExpirationDate">
             <el-date-picker
                 ref="documentExpirationDate"
@@ -46,7 +46,7 @@
                 :placeholder="$t('register.form.datePicker')"/>
         </el-form-item>
 
-        <el-form-item 
+        <el-form-item
             :label="$t('register.document.form.file')"
             prop="file"
             required>
@@ -59,6 +59,7 @@
                 :limit="limit"
                 :before-upload="handleBeforeUpload"
                 :on-change="onUploadChange"
+                :on-preview="handlePreview"
                 :on-exceed="handleExceed"
                 :on-remove="handleRemove"
                 :on-error="onUploadError"
