@@ -15,6 +15,7 @@
 	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
 	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="eProc-danone"/>
 	<style name="TableRowStyle" mode="Opaque">
 		<box leftPadding="2" rightPadding="2">
 			<pen lineColor="#FFFFFF"/>
@@ -52,7 +53,7 @@
 		<box leftPadding="2" rightPadding="2"/>
 	</style>
 	<style name="From-To-Style" pattern="" fontSize="12"/>
-	<parameter name="poNo" class="java.lang.Integer"/>
+	<parameter name="poNo" class="java.lang.Long"/>
 	<queryString>
 		<![CDATA[SELECT
 	po.id as poNo,
@@ -141,17 +142,17 @@ WHERE
 		<property name="com.jaspersoft.studio.field.label" value="product"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="c_product"/>
 	</field>
-	<field name="qty" class="java.math.BigDecimal">
+	<field name="qty" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="qty"/>
 		<property name="com.jaspersoft.studio.field.label" value="qty"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="m_purchase_order_line"/>
 	</field>
-	<field name="unitprice" class="java.math.BigDecimal">
+	<field name="unitprice" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="unitprice"/>
 		<property name="com.jaspersoft.studio.field.label" value="unitprice"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="m_purchase_order_line"/>
 	</field>
-	<field name="amount" class="java.math.BigDecimal">
+	<field name="amount" class="java.lang.Long">
 		<property name="com.jaspersoft.studio.field.name" value="amount"/>
 		<property name="com.jaspersoft.studio.field.label" value="amount"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="m_purchase_order_line"/>
@@ -392,7 +393,7 @@ WHERE
 	</columnHeader>
 	<detail>
 		<band height="23" splitType="Stretch">
-			<textField textAdjust="StretchHeight" pattern="#,##0.00" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" pattern="#,##0" isBlankWhenNull="true">
 				<reportElement style="TableRowStyle" stretchType="RelativeToBandHeight" x="261" y="0" width="72" height="23" uuid="8ed0dda2-b168-4fcb-ab4e-6f7977ce0d4b"/>
 				<box leftPadding="2" rightPadding="2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -400,21 +401,21 @@ WHERE
 				</textElement>
 				<textFieldExpression><![CDATA[$F{qty}]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="StretchHeight" pattern="#,##0.00" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" pattern="#,##0" isBlankWhenNull="true">
 				<reportElement style="TableRowStyle" stretchType="RelativeToBandHeight" x="335" y="0" width="116" height="23" uuid="abc96c55-5730-4e32-8e82-97de5fff74a0"/>
 				<box leftPadding="2" rightPadding="2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{unitprice}.doubleValue())/1.1]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{unitprice}/1.1]]></textFieldExpression>
 			</textField>
-			<textField textAdjust="StretchHeight" pattern="#,##0.00" isBlankWhenNull="true">
+			<textField textAdjust="StretchHeight" pattern="#,##0" isBlankWhenNull="true">
 				<reportElement style="TableRowStyle" stretchType="RelativeToBandHeight" x="453" y="0" width="121" height="23" uuid="d4867795-5aa3-48af-8039-a90819d9e793"/>
 				<box leftPadding="2" rightPadding="2"/>
 				<textElement textAlignment="Right" verticalAlignment="Middle">
 					<font size="10"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{qty}.doubleValue()) * ($F{unitprice}.doubleValue()/1.1)]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{qty} * $F{unitprice}/1.1]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight">
 				<reportElement style="TableRowStyle" stretchType="RelativeToBandHeight" x="8" y="0" width="21" height="23" uuid="56402b5a-585a-463c-9af0-e8d049630e82"/>
