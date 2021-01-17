@@ -16,6 +16,7 @@
           :next-document-action="nextDocumentAction"
           :record-count="totalRecords"
           :window-type="windowType"
+          :window-name="windowName"
           @add-record="onAddRecord"
           @apply-document-action="onApplyDocumentAction"
           @cancel="onActionCanceled"

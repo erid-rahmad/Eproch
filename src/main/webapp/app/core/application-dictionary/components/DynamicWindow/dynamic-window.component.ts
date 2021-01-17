@@ -42,7 +42,7 @@ import { AccountStoreModule as accountStore } from '@/shared/config/store/accoun
 export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   @Inject('aDWindowService')
   private aDWindowService: () => ADWindowService;
-  
+
   @Inject('aDTabService')
   private aDTabService: () => ADTabService;
 
@@ -54,6 +54,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
   public windowId: number = 0;
   windowType = null;
+  windowName = null;
   accessLevel = null;
   public gridView = true;
   private childTabs: IADTab[] = [];
@@ -146,10 +147,11 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     );
 
     this.debouncedUpdateChildTabs = debounce(this.updateChildTabs, 500);
-    
+
     this.retrieveWindowDetail()
       .then(res => {
         this.windowType = res.type;
+        this.windowName = res.name;
         this.accessLevel = res.accessLevel;
         this.retrieveTabs(null);
       });
@@ -592,7 +594,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       const maxLength = field.maxLength || column?.maxLength;
       const minValue = field.minValue || column?.minValue;
       const maxValue = field.maxValue || column?.maxValue;
-      
+
       validationSchema[fieldName] = {
         required: field.mandatory || column?.mandatory
       }

@@ -7,6 +7,7 @@ import { ElDropdown } from 'element-ui/types/dropdown';
 const ActionToolbarProps = Vue.extend({
   props: {
     windowType: String,
+    windowName: String,
     approved: Boolean,
     documentTypeId: Number,
     nextDocumentAction: String,
@@ -194,6 +195,14 @@ export default class ActionToolbar extends ActionToolbarProps {
   public exportRecord() {
     if (!this.activeWindow) return;
     this.eventBus.$emit('export-record', {
+      isGridView: this.gridView
+    });
+  }
+
+  public printRecord() {
+    console.log(this.windowType);
+    if (!this.activeWindow) return;
+    this.eventBus.$emit('print-record', {
       isGridView: this.gridView
     });
   }
