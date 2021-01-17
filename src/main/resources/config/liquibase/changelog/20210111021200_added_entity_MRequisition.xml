@@ -116,4 +116,21 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20210111021200-update" author="dian-tri-budianto">
+        <addColumn tableName="m_requisition">
+            <column name="date_promised" type="date">
+                <constraints nullable="true"/>
+            </column>
+            <column name="document_no" type="varchar(30)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+
+        <renameColumn tableName="m_requisition" oldColumnName="is_approved" newColumnName="approved" />
+        <renameColumn tableName="m_requisition" oldColumnName="is_processed" newColumnName="processed" />
+        <renameColumn tableName="m_requisition" oldColumnName="document_date" newColumnName="date_trx" />
+        <dropNotNullConstraint tableName="m_requisition" columnName="date_trx" />
+        <dropNotNullConstraint tableName="m_requisition" columnName="date_required" />
+    </changeSet>
+
 </databaseChangeLog>

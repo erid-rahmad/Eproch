@@ -94,8 +94,11 @@ public class MRequisitionLineQueryService extends QueryService<MRequisitionLine>
             if (criteria.getDocumentDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDocumentDate(), MRequisitionLine_.documentDate));
             }
-            if (criteria.getDocumentRequired() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDocumentRequired(), MRequisitionLine_.documentRequired));
+            if (criteria.getDatePromised() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDatePromised(), MRequisitionLine_.datePromised));
+            }
+            if (criteria.getDateRequired() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateRequired(), MRequisitionLine_.dateRequired));
             }
             if (criteria.getRequisitionAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getRequisitionAmount(), MRequisitionLine_.requisitionAmount));

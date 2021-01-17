@@ -7,8 +7,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import java.io.Serializable;
-import java.util.Objects;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -27,33 +25,31 @@ public class MRequisition extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    /**
-     * Next action for the document.
-     */
+    @Column(name = "date_trx", nullable = false)
+    private LocalDate dateTrx;
+
+    @Size(max = 30)
+    @Column(name = "document_no", length = 30)
+    private String documentNo;
+
     @NotNull
     @Size(max = 10)
     @Column(name = "document_action", length = 10, nullable = false)
     private String documentAction;
 
-    /**
-     * Current document status.
-     */
     @NotNull
     @Size(max = 10)
     @Column(name = "document_status", length = 10, nullable = false)
     private String documentStatus;
 
-    @Column(name = "is_approved")
-    private Boolean isApproved;
+    @Column(name = "approved")
+    private Boolean approved;
 
-    @Column(name = "is_processed")
-    private Boolean isProcessed;
+    @Column(name = "processed")
+    private Boolean processed;
 
-    @Column(name = "document_date")
-    private LocalDate documentDate;
-
-    @Column(name = "date_required")
-    private LocalDate dateRequired;
+    @Column(name = "date_promised")
+    private LocalDate datePromised;
 
     @Column(name = "description")
     private String description;
@@ -101,6 +97,32 @@ public class MRequisition extends AbstractAuditingEntity {
         this.id = id;
     }
 
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public MRequisition dateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+        return this;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public MRequisition documentNo(String documentNo) {
+        this.documentNo = documentNo;
+        return this;
+    }
+
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
     public String getDocumentAction() {
         return documentAction;
     }
@@ -127,56 +149,43 @@ public class MRequisition extends AbstractAuditingEntity {
         this.documentStatus = documentStatus;
     }
 
-    public Boolean isIsApproved() {
-        return isApproved;
+    public Boolean isApproved() {
+        return approved;
     }
 
-    public MRequisition isApproved(Boolean isApproved) {
-        this.isApproved = isApproved;
+    public MRequisition approved(Boolean approved) {
+        this.approved = approved;
         return this;
     }
 
-    public void setIsApproved(Boolean isApproved) {
-        this.isApproved = isApproved;
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
     }
 
-    public Boolean isIsProcessed() {
-        return isProcessed;
+    public Boolean isProcessed() {
+        return processed;
     }
 
-    public MRequisition isProcessed(Boolean isProcessed) {
-        this.isProcessed = isProcessed;
+    public MRequisition processed(Boolean processed) {
+        this.processed = processed;
         return this;
     }
 
-    public void setIsProcessed(Boolean isProcessed) {
-        this.isProcessed = isProcessed;
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
     }
 
-    public LocalDate getDocumentDate() {
-        return documentDate;
+    public LocalDate getDatePromised() {
+        return datePromised;
     }
 
-    public MRequisition documentDate(LocalDate documentDate) {
-        this.documentDate = documentDate;
+    public MRequisition datePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
         return this;
     }
 
-    public void setDocumentDate(LocalDate documentDate) {
-        this.documentDate = documentDate;
-    }
-
-    public LocalDate getDateRequired() {
-        return dateRequired;
-    }
-
-    public MRequisition dateRequired(LocalDate dateRequired) {
-        this.dateRequired = dateRequired;
-        return this;
-    }
-
-    public void setDateRequired(LocalDate dateRequired) {
-        this.dateRequired = dateRequired;
+    public void setDatePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
     }
 
     public String getDescription() {
@@ -309,12 +318,13 @@ public class MRequisition extends AbstractAuditingEntity {
     public String toString() {
         return "MRequisition{" +
             "id=" + getId() +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +
             ", documentStatus='" + getDocumentStatus() + "'" +
-            ", isApproved='" + isIsApproved() + "'" +
-            ", isProcessed='" + isIsProcessed() + "'" +
-            ", documentDate='" + getDocumentDate() + "'" +
-            ", dateRequired='" + getDateRequired() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
+            ", datePromised='" + getDatePromised() + "'" +
             ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +

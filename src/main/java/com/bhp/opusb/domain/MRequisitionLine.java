@@ -7,8 +7,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import java.io.Serializable;
-import java.util.Objects;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
@@ -28,13 +26,14 @@ public class MRequisitionLine extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @NotNull
-    @Column(name = "document_date", nullable = false)
+    @Column(name = "document_date")
     private LocalDate documentDate;
 
-    @NotNull
-    @Column(name = "document_required", nullable = false)
-    private LocalDate documentRequired;
+    @Column(name = "date_promised")
+    private LocalDate datePromised;
+
+    @Column(name = "date_required")
+    private LocalDate dateRequired;
 
     @NotNull
     @Column(name = "requisition_amount", precision = 21, scale = 2, nullable = false)
@@ -72,13 +71,11 @@ public class MRequisitionLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mRequisitionLines")
     private CProduct product;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("mRequisitionLines")
     private CWarehouse warehouse;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("mRequisitionLines")
     private CCostCenter costCenter;
 
@@ -87,8 +84,7 @@ public class MRequisitionLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mRequisitionLines")
     private CUnitOfMeasure uom;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("mRequisitionLines")
     private CVendor vendor;
 
@@ -114,17 +110,30 @@ public class MRequisitionLine extends AbstractAuditingEntity {
         this.documentDate = documentDate;
     }
 
-    public LocalDate getDocumentRequired() {
-        return documentRequired;
+    public LocalDate getDatePromised() {
+        return datePromised;
     }
 
-    public MRequisitionLine documentRequired(LocalDate documentRequired) {
-        this.documentRequired = documentRequired;
+    public MRequisitionLine datePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
         return this;
     }
 
-    public void setDocumentRequired(LocalDate documentRequired) {
-        this.documentRequired = documentRequired;
+    public void setDatePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
+    }
+
+    public LocalDate getDateRequired() {
+        return dateRequired;
+    }
+
+    public MRequisitionLine dateRequired(LocalDate dateRequired) {
+        this.dateRequired = dateRequired;
+        return this;
+    }
+
+    public void setDateRequired(LocalDate dateRequired) {
+        this.dateRequired = dateRequired;
     }
 
     public BigDecimal getRequisitionAmount() {
@@ -323,7 +332,8 @@ public class MRequisitionLine extends AbstractAuditingEntity {
         return "MRequisitionLine{" +
             "id=" + getId() +
             ", documentDate='" + getDocumentDate() + "'" +
-            ", documentRequired='" + getDocumentRequired() + "'" +
+            ", datePromised='" + getDatePromised() + "'" +
+            ", dateRequired='" + getDateRequired() + "'" +
             ", requisitionAmount=" + getRequisitionAmount() +
             ", quantity=" + getQuantity() +
             ", unitPrice=" + getUnitPrice() +

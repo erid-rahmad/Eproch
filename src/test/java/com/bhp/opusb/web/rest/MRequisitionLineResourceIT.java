@@ -50,9 +50,13 @@ public class MRequisitionLineResourceIT {
     private static final LocalDate UPDATED_DOCUMENT_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DOCUMENT_DATE = LocalDate.ofEpochDay(-1L);
 
-    private static final LocalDate DEFAULT_DOCUMENT_REQUIRED = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DOCUMENT_REQUIRED = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_DOCUMENT_REQUIRED = LocalDate.ofEpochDay(-1L);
+    private static final LocalDate DEFAULT_DATE_PROMISED = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_PROMISED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_PROMISED = LocalDate.ofEpochDay(-1L);
+
+    private static final LocalDate DEFAULT_DATE_REQUIRED = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_REQUIRED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_REQUIRED = LocalDate.ofEpochDay(-1L);
 
     private static final BigDecimal DEFAULT_REQUISITION_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_REQUISITION_AMOUNT = new BigDecimal(2);
@@ -104,7 +108,8 @@ public class MRequisitionLineResourceIT {
     public static MRequisitionLine createEntity(EntityManager em) {
         MRequisitionLine mRequisitionLine = new MRequisitionLine()
             .documentDate(DEFAULT_DOCUMENT_DATE)
-            .documentRequired(DEFAULT_DOCUMENT_REQUIRED)
+            .datePromised(DEFAULT_DATE_PROMISED)
+            .dateRequired(DEFAULT_DATE_REQUIRED)
             .requisitionAmount(DEFAULT_REQUISITION_AMOUNT)
             .quantity(DEFAULT_QUANTITY)
             .unitPrice(DEFAULT_UNIT_PRICE)
@@ -142,26 +147,6 @@ public class MRequisitionLineResourceIT {
         }
         mRequisitionLine.setProduct(cProduct);
         // Add required entity
-        CWarehouse cWarehouse;
-        if (TestUtil.findAll(em, CWarehouse.class).isEmpty()) {
-            cWarehouse = CWarehouseResourceIT.createEntity(em);
-            em.persist(cWarehouse);
-            em.flush();
-        } else {
-            cWarehouse = TestUtil.findAll(em, CWarehouse.class).get(0);
-        }
-        mRequisitionLine.setWarehouse(cWarehouse);
-        // Add required entity
-        CCostCenter cCostCenter;
-        if (TestUtil.findAll(em, CCostCenter.class).isEmpty()) {
-            cCostCenter = CCostCenterResourceIT.createEntity(em);
-            em.persist(cCostCenter);
-            em.flush();
-        } else {
-            cCostCenter = TestUtil.findAll(em, CCostCenter.class).get(0);
-        }
-        mRequisitionLine.setCostCenter(cCostCenter);
-        // Add required entity
         CUnitOfMeasure cUnitOfMeasure;
         if (TestUtil.findAll(em, CUnitOfMeasure.class).isEmpty()) {
             cUnitOfMeasure = CUnitOfMeasureResourceIT.createEntity(em);
@@ -171,16 +156,6 @@ public class MRequisitionLineResourceIT {
             cUnitOfMeasure = TestUtil.findAll(em, CUnitOfMeasure.class).get(0);
         }
         mRequisitionLine.setUom(cUnitOfMeasure);
-        // Add required entity
-        CVendor cVendor;
-        if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
-            cVendor = CVendorResourceIT.createEntity(em);
-            em.persist(cVendor);
-            em.flush();
-        } else {
-            cVendor = TestUtil.findAll(em, CVendor.class).get(0);
-        }
-        mRequisitionLine.setVendor(cVendor);
         return mRequisitionLine;
     }
     /**
@@ -192,7 +167,8 @@ public class MRequisitionLineResourceIT {
     public static MRequisitionLine createUpdatedEntity(EntityManager em) {
         MRequisitionLine mRequisitionLine = new MRequisitionLine()
             .documentDate(UPDATED_DOCUMENT_DATE)
-            .documentRequired(UPDATED_DOCUMENT_REQUIRED)
+            .datePromised(UPDATED_DATE_PROMISED)
+            .dateRequired(UPDATED_DATE_REQUIRED)
             .requisitionAmount(UPDATED_REQUISITION_AMOUNT)
             .quantity(UPDATED_QUANTITY)
             .unitPrice(UPDATED_UNIT_PRICE)
@@ -230,26 +206,6 @@ public class MRequisitionLineResourceIT {
         }
         mRequisitionLine.setProduct(cProduct);
         // Add required entity
-        CWarehouse cWarehouse;
-        if (TestUtil.findAll(em, CWarehouse.class).isEmpty()) {
-            cWarehouse = CWarehouseResourceIT.createUpdatedEntity(em);
-            em.persist(cWarehouse);
-            em.flush();
-        } else {
-            cWarehouse = TestUtil.findAll(em, CWarehouse.class).get(0);
-        }
-        mRequisitionLine.setWarehouse(cWarehouse);
-        // Add required entity
-        CCostCenter cCostCenter;
-        if (TestUtil.findAll(em, CCostCenter.class).isEmpty()) {
-            cCostCenter = CCostCenterResourceIT.createUpdatedEntity(em);
-            em.persist(cCostCenter);
-            em.flush();
-        } else {
-            cCostCenter = TestUtil.findAll(em, CCostCenter.class).get(0);
-        }
-        mRequisitionLine.setCostCenter(cCostCenter);
-        // Add required entity
         CUnitOfMeasure cUnitOfMeasure;
         if (TestUtil.findAll(em, CUnitOfMeasure.class).isEmpty()) {
             cUnitOfMeasure = CUnitOfMeasureResourceIT.createUpdatedEntity(em);
@@ -259,16 +215,6 @@ public class MRequisitionLineResourceIT {
             cUnitOfMeasure = TestUtil.findAll(em, CUnitOfMeasure.class).get(0);
         }
         mRequisitionLine.setUom(cUnitOfMeasure);
-        // Add required entity
-        CVendor cVendor;
-        if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
-            cVendor = CVendorResourceIT.createUpdatedEntity(em);
-            em.persist(cVendor);
-            em.flush();
-        } else {
-            cVendor = TestUtil.findAll(em, CVendor.class).get(0);
-        }
-        mRequisitionLine.setVendor(cVendor);
         return mRequisitionLine;
     }
 
@@ -294,7 +240,8 @@ public class MRequisitionLineResourceIT {
         assertThat(mRequisitionLineList).hasSize(databaseSizeBeforeCreate + 1);
         MRequisitionLine testMRequisitionLine = mRequisitionLineList.get(mRequisitionLineList.size() - 1);
         assertThat(testMRequisitionLine.getDocumentDate()).isEqualTo(DEFAULT_DOCUMENT_DATE);
-        assertThat(testMRequisitionLine.getDocumentRequired()).isEqualTo(DEFAULT_DOCUMENT_REQUIRED);
+        assertThat(testMRequisitionLine.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
+        assertThat(testMRequisitionLine.getDateRequired()).isEqualTo(DEFAULT_DATE_REQUIRED);
         assertThat(testMRequisitionLine.getRequisitionAmount()).isEqualTo(DEFAULT_REQUISITION_AMOUNT);
         assertThat(testMRequisitionLine.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testMRequisitionLine.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
@@ -323,44 +270,6 @@ public class MRequisitionLineResourceIT {
         assertThat(mRequisitionLineList).hasSize(databaseSizeBeforeCreate);
     }
 
-
-    @Test
-    @Transactional
-    public void checkDocumentDateIsRequired() throws Exception {
-        int databaseSizeBeforeTest = mRequisitionLineRepository.findAll().size();
-        // set the field null
-        mRequisitionLine.setDocumentDate(null);
-
-        // Create the MRequisitionLine, which fails.
-        MRequisitionLineDTO mRequisitionLineDTO = mRequisitionLineMapper.toDto(mRequisitionLine);
-
-        restMRequisitionLineMockMvc.perform(post("/api/m-requisition-lines")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(mRequisitionLineDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<MRequisitionLine> mRequisitionLineList = mRequisitionLineRepository.findAll();
-        assertThat(mRequisitionLineList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
-    public void checkDocumentRequiredIsRequired() throws Exception {
-        int databaseSizeBeforeTest = mRequisitionLineRepository.findAll().size();
-        // set the field null
-        mRequisitionLine.setDocumentRequired(null);
-
-        // Create the MRequisitionLine, which fails.
-        MRequisitionLineDTO mRequisitionLineDTO = mRequisitionLineMapper.toDto(mRequisitionLine);
-
-        restMRequisitionLineMockMvc.perform(post("/api/m-requisition-lines")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(mRequisitionLineDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<MRequisitionLine> mRequisitionLineList = mRequisitionLineRepository.findAll();
-        assertThat(mRequisitionLineList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     @Transactional
@@ -431,7 +340,8 @@ public class MRequisitionLineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mRequisitionLine.getId().intValue())))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].documentRequired").value(hasItem(DEFAULT_DOCUMENT_REQUIRED.toString())))
+            .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
+            .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
             .andExpect(jsonPath("$.[*].requisitionAmount").value(hasItem(DEFAULT_REQUISITION_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
@@ -452,7 +362,8 @@ public class MRequisitionLineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mRequisitionLine.getId().intValue()))
             .andExpect(jsonPath("$.documentDate").value(DEFAULT_DOCUMENT_DATE.toString()))
-            .andExpect(jsonPath("$.documentRequired").value(DEFAULT_DOCUMENT_REQUIRED.toString()))
+            .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
+            .andExpect(jsonPath("$.dateRequired").value(DEFAULT_DATE_REQUIRED.toString()))
             .andExpect(jsonPath("$.requisitionAmount").value(DEFAULT_REQUISITION_AMOUNT.intValue()))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.intValue()))
@@ -588,106 +499,211 @@ public class MRequisitionLineResourceIT {
 
     @Test
     @Transactional
-    public void getAllMRequisitionLinesByDocumentRequiredIsEqualToSomething() throws Exception {
+    public void getAllMRequisitionLinesByDatePromisedIsEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
 
-        // Get all the mRequisitionLineList where documentRequired equals to DEFAULT_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldBeFound("documentRequired.equals=" + DEFAULT_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised equals to DEFAULT_DATE_PROMISED
+        defaultMRequisitionLineShouldBeFound("datePromised.equals=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionLineList where documentRequired equals to UPDATED_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldNotBeFound("documentRequired.equals=" + UPDATED_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised equals to UPDATED_DATE_PROMISED
+        defaultMRequisitionLineShouldNotBeFound("datePromised.equals=" + UPDATED_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionLinesByDocumentRequiredIsNotEqualToSomething() throws Exception {
+    public void getAllMRequisitionLinesByDatePromisedIsNotEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
 
-        // Get all the mRequisitionLineList where documentRequired not equals to DEFAULT_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldNotBeFound("documentRequired.notEquals=" + DEFAULT_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised not equals to DEFAULT_DATE_PROMISED
+        defaultMRequisitionLineShouldNotBeFound("datePromised.notEquals=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionLineList where documentRequired not equals to UPDATED_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldBeFound("documentRequired.notEquals=" + UPDATED_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised not equals to UPDATED_DATE_PROMISED
+        defaultMRequisitionLineShouldBeFound("datePromised.notEquals=" + UPDATED_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionLinesByDocumentRequiredIsInShouldWork() throws Exception {
+    public void getAllMRequisitionLinesByDatePromisedIsInShouldWork() throws Exception {
         // Initialize the database
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
 
-        // Get all the mRequisitionLineList where documentRequired in DEFAULT_DOCUMENT_REQUIRED or UPDATED_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldBeFound("documentRequired.in=" + DEFAULT_DOCUMENT_REQUIRED + "," + UPDATED_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised in DEFAULT_DATE_PROMISED or UPDATED_DATE_PROMISED
+        defaultMRequisitionLineShouldBeFound("datePromised.in=" + DEFAULT_DATE_PROMISED + "," + UPDATED_DATE_PROMISED);
 
-        // Get all the mRequisitionLineList where documentRequired equals to UPDATED_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldNotBeFound("documentRequired.in=" + UPDATED_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised equals to UPDATED_DATE_PROMISED
+        defaultMRequisitionLineShouldNotBeFound("datePromised.in=" + UPDATED_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionLinesByDocumentRequiredIsNullOrNotNull() throws Exception {
+    public void getAllMRequisitionLinesByDatePromisedIsNullOrNotNull() throws Exception {
         // Initialize the database
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
 
-        // Get all the mRequisitionLineList where documentRequired is not null
-        defaultMRequisitionLineShouldBeFound("documentRequired.specified=true");
+        // Get all the mRequisitionLineList where datePromised is not null
+        defaultMRequisitionLineShouldBeFound("datePromised.specified=true");
 
-        // Get all the mRequisitionLineList where documentRequired is null
-        defaultMRequisitionLineShouldNotBeFound("documentRequired.specified=false");
+        // Get all the mRequisitionLineList where datePromised is null
+        defaultMRequisitionLineShouldNotBeFound("datePromised.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionLinesByDocumentRequiredIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllMRequisitionLinesByDatePromisedIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
 
-        // Get all the mRequisitionLineList where documentRequired is greater than or equal to DEFAULT_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldBeFound("documentRequired.greaterThanOrEqual=" + DEFAULT_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised is greater than or equal to DEFAULT_DATE_PROMISED
+        defaultMRequisitionLineShouldBeFound("datePromised.greaterThanOrEqual=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionLineList where documentRequired is greater than or equal to UPDATED_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldNotBeFound("documentRequired.greaterThanOrEqual=" + UPDATED_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised is greater than or equal to UPDATED_DATE_PROMISED
+        defaultMRequisitionLineShouldNotBeFound("datePromised.greaterThanOrEqual=" + UPDATED_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionLinesByDocumentRequiredIsLessThanOrEqualToSomething() throws Exception {
+    public void getAllMRequisitionLinesByDatePromisedIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
 
-        // Get all the mRequisitionLineList where documentRequired is less than or equal to DEFAULT_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldBeFound("documentRequired.lessThanOrEqual=" + DEFAULT_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised is less than or equal to DEFAULT_DATE_PROMISED
+        defaultMRequisitionLineShouldBeFound("datePromised.lessThanOrEqual=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionLineList where documentRequired is less than or equal to SMALLER_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldNotBeFound("documentRequired.lessThanOrEqual=" + SMALLER_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised is less than or equal to SMALLER_DATE_PROMISED
+        defaultMRequisitionLineShouldNotBeFound("datePromised.lessThanOrEqual=" + SMALLER_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionLinesByDocumentRequiredIsLessThanSomething() throws Exception {
+    public void getAllMRequisitionLinesByDatePromisedIsLessThanSomething() throws Exception {
         // Initialize the database
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
 
-        // Get all the mRequisitionLineList where documentRequired is less than DEFAULT_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldNotBeFound("documentRequired.lessThan=" + DEFAULT_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised is less than DEFAULT_DATE_PROMISED
+        defaultMRequisitionLineShouldNotBeFound("datePromised.lessThan=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionLineList where documentRequired is less than UPDATED_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldBeFound("documentRequired.lessThan=" + UPDATED_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised is less than UPDATED_DATE_PROMISED
+        defaultMRequisitionLineShouldBeFound("datePromised.lessThan=" + UPDATED_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionLinesByDocumentRequiredIsGreaterThanSomething() throws Exception {
+    public void getAllMRequisitionLinesByDatePromisedIsGreaterThanSomething() throws Exception {
         // Initialize the database
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
 
-        // Get all the mRequisitionLineList where documentRequired is greater than DEFAULT_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldNotBeFound("documentRequired.greaterThan=" + DEFAULT_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised is greater than DEFAULT_DATE_PROMISED
+        defaultMRequisitionLineShouldNotBeFound("datePromised.greaterThan=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionLineList where documentRequired is greater than SMALLER_DOCUMENT_REQUIRED
-        defaultMRequisitionLineShouldBeFound("documentRequired.greaterThan=" + SMALLER_DOCUMENT_REQUIRED);
+        // Get all the mRequisitionLineList where datePromised is greater than SMALLER_DATE_PROMISED
+        defaultMRequisitionLineShouldBeFound("datePromised.greaterThan=" + SMALLER_DATE_PROMISED);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByDateRequiredIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where dateRequired equals to DEFAULT_DATE_REQUIRED
+        defaultMRequisitionLineShouldBeFound("dateRequired.equals=" + DEFAULT_DATE_REQUIRED);
+
+        // Get all the mRequisitionLineList where dateRequired equals to UPDATED_DATE_REQUIRED
+        defaultMRequisitionLineShouldNotBeFound("dateRequired.equals=" + UPDATED_DATE_REQUIRED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByDateRequiredIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where dateRequired not equals to DEFAULT_DATE_REQUIRED
+        defaultMRequisitionLineShouldNotBeFound("dateRequired.notEquals=" + DEFAULT_DATE_REQUIRED);
+
+        // Get all the mRequisitionLineList where dateRequired not equals to UPDATED_DATE_REQUIRED
+        defaultMRequisitionLineShouldBeFound("dateRequired.notEquals=" + UPDATED_DATE_REQUIRED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByDateRequiredIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where dateRequired in DEFAULT_DATE_REQUIRED or UPDATED_DATE_REQUIRED
+        defaultMRequisitionLineShouldBeFound("dateRequired.in=" + DEFAULT_DATE_REQUIRED + "," + UPDATED_DATE_REQUIRED);
+
+        // Get all the mRequisitionLineList where dateRequired equals to UPDATED_DATE_REQUIRED
+        defaultMRequisitionLineShouldNotBeFound("dateRequired.in=" + UPDATED_DATE_REQUIRED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByDateRequiredIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where dateRequired is not null
+        defaultMRequisitionLineShouldBeFound("dateRequired.specified=true");
+
+        // Get all the mRequisitionLineList where dateRequired is null
+        defaultMRequisitionLineShouldNotBeFound("dateRequired.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByDateRequiredIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where dateRequired is greater than or equal to DEFAULT_DATE_REQUIRED
+        defaultMRequisitionLineShouldBeFound("dateRequired.greaterThanOrEqual=" + DEFAULT_DATE_REQUIRED);
+
+        // Get all the mRequisitionLineList where dateRequired is greater than or equal to UPDATED_DATE_REQUIRED
+        defaultMRequisitionLineShouldNotBeFound("dateRequired.greaterThanOrEqual=" + UPDATED_DATE_REQUIRED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByDateRequiredIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where dateRequired is less than or equal to DEFAULT_DATE_REQUIRED
+        defaultMRequisitionLineShouldBeFound("dateRequired.lessThanOrEqual=" + DEFAULT_DATE_REQUIRED);
+
+        // Get all the mRequisitionLineList where dateRequired is less than or equal to SMALLER_DATE_REQUIRED
+        defaultMRequisitionLineShouldNotBeFound("dateRequired.lessThanOrEqual=" + SMALLER_DATE_REQUIRED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByDateRequiredIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where dateRequired is less than DEFAULT_DATE_REQUIRED
+        defaultMRequisitionLineShouldNotBeFound("dateRequired.lessThan=" + DEFAULT_DATE_REQUIRED);
+
+        // Get all the mRequisitionLineList where dateRequired is less than UPDATED_DATE_REQUIRED
+        defaultMRequisitionLineShouldBeFound("dateRequired.lessThan=" + UPDATED_DATE_REQUIRED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByDateRequiredIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where dateRequired is greater than DEFAULT_DATE_REQUIRED
+        defaultMRequisitionLineShouldNotBeFound("dateRequired.greaterThan=" + DEFAULT_DATE_REQUIRED);
+
+        // Get all the mRequisitionLineList where dateRequired is greater than SMALLER_DATE_REQUIRED
+        defaultMRequisitionLineShouldBeFound("dateRequired.greaterThan=" + SMALLER_DATE_REQUIRED);
     }
 
 
@@ -1239,8 +1255,12 @@ public class MRequisitionLineResourceIT {
     @Test
     @Transactional
     public void getAllMRequisitionLinesByWarehouseIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        CWarehouse warehouse = mRequisitionLine.getWarehouse();
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+        CWarehouse warehouse = CWarehouseResourceIT.createEntity(em);
+        em.persist(warehouse);
+        em.flush();
+        mRequisitionLine.setWarehouse(warehouse);
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
         Long warehouseId = warehouse.getId();
 
@@ -1255,8 +1275,12 @@ public class MRequisitionLineResourceIT {
     @Test
     @Transactional
     public void getAllMRequisitionLinesByCostCenterIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        CCostCenter costCenter = mRequisitionLine.getCostCenter();
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+        CCostCenter costCenter = CCostCenterResourceIT.createEntity(em);
+        em.persist(costCenter);
+        em.flush();
+        mRequisitionLine.setCostCenter(costCenter);
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
         Long costCenterId = costCenter.getId();
 
@@ -1287,8 +1311,12 @@ public class MRequisitionLineResourceIT {
     @Test
     @Transactional
     public void getAllMRequisitionLinesByVendorIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        CVendor vendor = mRequisitionLine.getVendor();
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+        CVendor vendor = CVendorResourceIT.createEntity(em);
+        em.persist(vendor);
+        em.flush();
+        mRequisitionLine.setVendor(vendor);
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
         Long vendorId = vendor.getId();
 
@@ -1308,7 +1336,8 @@ public class MRequisitionLineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mRequisitionLine.getId().intValue())))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].documentRequired").value(hasItem(DEFAULT_DOCUMENT_REQUIRED.toString())))
+            .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
+            .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
             .andExpect(jsonPath("$.[*].requisitionAmount").value(hasItem(DEFAULT_REQUISITION_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
@@ -1363,7 +1392,8 @@ public class MRequisitionLineResourceIT {
         em.detach(updatedMRequisitionLine);
         updatedMRequisitionLine
             .documentDate(UPDATED_DOCUMENT_DATE)
-            .documentRequired(UPDATED_DOCUMENT_REQUIRED)
+            .datePromised(UPDATED_DATE_PROMISED)
+            .dateRequired(UPDATED_DATE_REQUIRED)
             .requisitionAmount(UPDATED_REQUISITION_AMOUNT)
             .quantity(UPDATED_QUANTITY)
             .unitPrice(UPDATED_UNIT_PRICE)
@@ -1382,7 +1412,8 @@ public class MRequisitionLineResourceIT {
         assertThat(mRequisitionLineList).hasSize(databaseSizeBeforeUpdate);
         MRequisitionLine testMRequisitionLine = mRequisitionLineList.get(mRequisitionLineList.size() - 1);
         assertThat(testMRequisitionLine.getDocumentDate()).isEqualTo(UPDATED_DOCUMENT_DATE);
-        assertThat(testMRequisitionLine.getDocumentRequired()).isEqualTo(UPDATED_DOCUMENT_REQUIRED);
+        assertThat(testMRequisitionLine.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
+        assertThat(testMRequisitionLine.getDateRequired()).isEqualTo(UPDATED_DATE_REQUIRED);
         assertThat(testMRequisitionLine.getRequisitionAmount()).isEqualTo(UPDATED_REQUISITION_AMOUNT);
         assertThat(testMRequisitionLine.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testMRequisitionLine.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);

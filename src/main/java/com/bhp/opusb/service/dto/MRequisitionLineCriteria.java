@@ -31,7 +31,9 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
 
     private LocalDateFilter documentDate;
 
-    private LocalDateFilter documentRequired;
+    private LocalDateFilter datePromised;
+
+    private LocalDateFilter dateRequired;
 
     private BigDecimalFilter requisitionAmount;
 
@@ -65,7 +67,8 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
     public MRequisitionLineCriteria(MRequisitionLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.documentDate = other.documentDate == null ? null : other.documentDate.copy();
-        this.documentRequired = other.documentRequired == null ? null : other.documentRequired.copy();
+        this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
+        this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
         this.requisitionAmount = other.requisitionAmount == null ? null : other.requisitionAmount.copy();
         this.quantity = other.quantity == null ? null : other.quantity.copy();
         this.unitPrice = other.unitPrice == null ? null : other.unitPrice.copy();
@@ -102,12 +105,20 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
         this.documentDate = documentDate;
     }
 
-    public LocalDateFilter getDocumentRequired() {
-        return documentRequired;
+    public LocalDateFilter getDatePromised() {
+        return datePromised;
     }
 
-    public void setDocumentRequired(LocalDateFilter documentRequired) {
-        this.documentRequired = documentRequired;
+    public void setDatePromised(LocalDateFilter datePromised) {
+        this.datePromised = datePromised;
+    }
+
+    public LocalDateFilter getDateRequired() {
+        return dateRequired;
+    }
+
+    public void setDateRequired(LocalDateFilter dateRequired) {
+        this.dateRequired = dateRequired;
     }
 
     public BigDecimalFilter getRequisitionAmount() {
@@ -227,7 +238,8 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(documentDate, that.documentDate) &&
-            Objects.equals(documentRequired, that.documentRequired) &&
+            Objects.equals(datePromised, that.datePromised) &&
+            Objects.equals(dateRequired, that.dateRequired) &&
             Objects.equals(requisitionAmount, that.requisitionAmount) &&
             Objects.equals(quantity, that.quantity) &&
             Objects.equals(unitPrice, that.unitPrice) &&
@@ -248,7 +260,8 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         documentDate,
-        documentRequired,
+        datePromised,
+        dateRequired,
         requisitionAmount,
         quantity,
         unitPrice,
@@ -270,7 +283,8 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
         return "MRequisitionLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (documentDate != null ? "documentDate=" + documentDate + ", " : "") +
-                (documentRequired != null ? "documentRequired=" + documentRequired + ", " : "") +
+                (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
+                (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +
                 (requisitionAmount != null ? "requisitionAmount=" + requisitionAmount + ", " : "") +
                 (quantity != null ? "quantity=" + quantity + ", " : "") +
                 (unitPrice != null ? "unitPrice=" + unitPrice + ", " : "") +

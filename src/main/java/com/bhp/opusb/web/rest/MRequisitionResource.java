@@ -144,7 +144,7 @@ public class MRequisitionResource {
 
     /**
      * TODO Make a single endpoint for document status update.
-     * {@code PUT  /c-vendors} : Apply the document action to an existing cVendor.
+     * {@code PUT  /c-requisitions} : Apply the document action to an existing mRequisitions.
      *
      * @param mRequisitionDTO the mRequisitionDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated mRequisitionDTO,

@@ -1,11 +1,11 @@
-id;document_action;document_status;is_approved;is_processed;document_date;date_required;description;uid;active;ad_organization_id;document_type_id;currency_id;warehouse_id;cost_center_id
-1;withdrawal;integrate;false;true;2021-01-10;2021-01-10;Concrete Guernsey;681e2727-9b9b-4d3f-86bd-e1a29d8ccf58;true;1;1;1;1;1
-2;Facilitato;approach G;false;true;2021-01-10;2021-01-10;Intelligent Frozen Soap;d0d864f6-9603-45e5-9263-12b5fd56368d;true;2;2;2;2;2
-3;e-enable;capacitor;false;true;2021-01-10;2021-01-10;Accounts;1bbfc0ed-9a9f-4fd2-8362-92a97615b5df;true;3;3;3;3;3
-4;EXE protoc;platforms ;false;true;2021-01-10;2021-01-10;iterate copy back up;f1b16222-af3a-44e4-b74f-5a202141194f;true;4;4;4;4;4
-5;Legacy sky;Ball Harbo;true;false;2021-01-10;2021-01-10;Handmade Cross-platform;9d9ab46b-91ed-48ba-b208-d8542b18d842;false;5;5;5;5;5
-6;Berkshire;Practical ;false;false;2021-01-11;2021-01-10;firewall Rustic Frozen Towels;983bf97a-01a8-454b-8cc2-6987d3c972f8;true;6;6;6;6;6
-7;Generic St;deposit in;false;true;2021-01-10;2021-01-10;Tools compressing;03f149aa-35b0-4063-8905-e70c65527e32;true;7;7;7;7;7
-8;Manager;Assistant ;false;true;2021-01-10;2021-01-10;Incredible Tuna red;6f1675f5-9dbd-4a05-90fb-75310e62d3d0;false;8;8;8;8;8
-9;generate W;methodolog;true;false;2021-01-10;2021-01-11;holistic invoice;87292aa3-3988-4760-9668-905d88d30d7e;true;9;9;9;9;9
-10;Kuwaiti Di;Security;false;true;2021-01-11;2021-01-10;monetize Fresh;da3b5019-d0cc-4dab-a217-5f764745a79b;true;10;10;10;10;10
+id;date_trx;document_no;document_action;document_status;approved;processed;date_promised;description;uid;active;ad_organization_id;document_type_id;currency_id;warehouse_id;cost_center_id
+1;2021-01-10;Down-sized integrate;navigate;Coves sky ;false;false;2021-01-10;Marketing;7279b9bd-3fc6-4bde-9a29-d8ccf58c2fd6;false;1;1;1;1;1
+2;2021-01-11;content;Human Stee;HTTP conne;false;false;2021-01-10;Massachusetts Intelligent Plastic Salad;5126312b-5fd5-4636-8d84-6e0bf4ee12fc;false;2;2;2;2;2
+3;2021-01-10;Consultant Unbranded Fresh Soa;Assistant ;Georgia;true;true;2021-01-10;Incredible card;dfebe8b1-3e77-421c-9ad9-e6ec4b0f1b16;false;3;3;3;3;3
+4;2021-01-10;invoice;withdrawal;Reduced Fo;true;false;2021-01-11;Incredible Steel Computer;94fc6eb3-8c24-475f-8e08-e71b319d9ab4;false;4;4;4;4;4
+5;2021-01-10;Unbranded EXE;payment St;B2B Metal;false;true;2021-01-10;client-server Ergonomic;7770708d-a501-4a7b-812f-9983bf97a01a;true;5;5;5;5;5
+6;2021-01-10;application;override e;indigo Inv;true;true;2021-01-10;Checking Account;1fa0470e-6de4-4706-9403-f149aa35b006;false;6;6;6;6;6
+7;2021-01-10;Incredible Fresh Table License;Granite CS;Savings Ac;true;false;2021-01-10;navigating open-source Martinique;ae152a30-6f16-475f-99db-da05d0fb7531;false;7;7;7;7;7
+8;2021-01-10;Fresh cyan;interactiv;Micronesia;true;false;2021-01-10;virtual;fae87292-aa33-4988-b60d-668905d88d30;true;8;8;8;8;8
+9;2021-01-10;invoice Kuwaiti Dinar Centrali;artificial;Gorgeous B;false;false;2021-01-10;THX magenta vertical;19d0ccda-be21-475f-b647-45a79bca60e5;true;9;9;9;9;9
+10;2021-01-10;reboot Bedfordshire;Developer ;copy mint ;false;false;2021-01-10;e-business Regional optimize;39ad4ad8-b542-47e4-ad0a-390c594b65ee;false;10;10;10;10;10
