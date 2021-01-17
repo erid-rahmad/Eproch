@@ -38,6 +38,7 @@ export interface IMProductCatalog {
   mBrandName?: string;
   mProductId?: number;
   mProductName?: string;
+  vendorId?: string;
 }
 
 export class MProductCatalog implements IMProductCatalog {
@@ -78,7 +79,8 @@ export class MProductCatalog implements IMProductCatalog {
     public mBrandId?: number,
     public mBrandName?: string,
     public mProductId?: number,
-    public mProductName?: string
+    public mProductName?: string,
+    public vendorId?: string
   ) {
     this.preOrder = this.preOrder || false;
     this.sold = this.sold || false;

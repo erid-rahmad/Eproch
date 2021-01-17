@@ -14,6 +14,7 @@
       <template v-if="device!=='mobile'">
         <header-search class="right-menu-item" />
         <error-log class="errLog-container right-menu-item hover-effect" />
+        <quick-cart class="right-menu-item hover-effect" />
         <screenfull class="right-menu-item hover-effect" />
         <el-tooltip
           :content="$t('navbar.size')"
@@ -56,64 +57,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
-import { AppStoreModule as appStore } from '@/shared/config/store/app-store'
-import { AccountStoreModule as accountStore} from '@/shared/config/store/account-store'
-import { UserStoreModule as userStore } from '@/shared/config/store/user-store'
-import Breadcrumb from '@/shared/components/Breadcrumb/index.vue'
-import ErrorLog from '@/shared/components/ErrorLog/index.vue'
-import Hamburger from '@/shared/components/Hamburger/index.vue'
-import HeaderSearch from '@/shared/components/HeaderSearch/index.vue'
-import LangSelect from '@/shared/components/LangSelect/index.vue'
-import Screenfull from '@/shared/components/Screenfull/index.vue'
-import SizeSelect from '@/shared/components/SizeSelect/index.vue'
-
-@Component({
-  name: 'Navbar',
-  components: {
-    Breadcrumb,
-    ErrorLog,
-    Hamburger,
-    HeaderSearch,
-    LangSelect,
-    Screenfull,
-    SizeSelect
-  }
-})
-export default class extends Vue {
-  get sidebar() {
-    return appStore.sidebar
-  }
-
-  get authenticated(): boolean {
-    return accountStore.authenticated;
-  }
-
-  get device() {
-    return appStore.device.toString()
-  }
-
-  get avatar() {
-    return userStore.avatar
-  }
-
-  private toggleSideBar() {
-    appStore.ToggleSideBar(false);
-  }
-
-  private logout() {
-    this.$router.replace({
-      path: '/redirect/'
-    });
-    this.$nextTick(() => {
-      localStorage.removeItem('jhi-authenticationToken');
-      sessionStorage.removeItem('jhi-authenticationToken');
-      accountStore.logout();
-    });
-  }
-}
-</script>
+<script lang="ts" src="./index.component.ts"></script>
 
 <style lang="scss" scoped>
 .navbar {

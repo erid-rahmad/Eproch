@@ -1,65 +1,15 @@
 import { MarketplaceStoreModule as marketplaceStore } from "@/shared/config/store/marketplace-store";
 import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
-import { Component, Vue } from 'vue-property-decorator';
-import ProductDetail from "./marketplace-detail.vue";
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import { View } from './index.component';
 
-const ShoppingCartProps = Vue.extend({
-  props: {
-    fields: {
-      type: Array,
-      default: () => {
-        return [];
-      }
-    }
-  }
-})
-
-@Component({
-  components: {
-    'item-detail': ProductDetail
-  }
-})
-export default class ShoppingCart extends ShoppingCartProps {
+@Component
+export default class ShoppingCart extends Vue {
 
   checked: boolean = false;
-  showDetail: boolean = false;
-  selectedItem: IMProductCatalog = {};
-
-  /* data = [
-    {
-      storeId: 1,
-      store: "Bhinneka",
-      item: [
-        {
-          itemId: 1,
-          img: "https://static.bmdstatic.com/pk/product/medium/5f59da3f28c6a.jpg",
-          name: "FITBIT Sense",
-          price: "Rp 5.899.000",
-          specialPrice: "",
-          totalAmount: "Rp 5.899.000",
-          varian: "Color Carbon/Graphite",
-          qty: "12"
-        }, {
-          itemId: 2,
-          img: "https://static.bmdstatic.com/pk/product/medium/BROTHER-Printer-HL-L6200DW--SKU07016127-201684103149.jpg",
-          name: "BROTHER Printer HL-L6200DW",
-          price: "Rp 5.449.000",
-          totalAmount: "Rp 5.449.000",
-          varian: "",
-          qty: "3"
-        }
-      ]
-    },
-  ] */
-
-  img = [
-    {
-      src: "https://static.bmdstatic.com/pk/product/medium/5a6587b8bc0a7.jpg"
-    }
-  ]
+  subtotal: number = 0;
 
   get cart() {
-    console.log('get cart data', marketplaceStore.cart);
     return marketplaceStore.cart;
   }
 
@@ -71,16 +21,55 @@ export default class ShoppingCart extends ShoppingCartProps {
     return marketplaceStore.cartItemCount;
   }
   
+  @Watch('cart', { deep: true })
+  calculateSubtotal(cart: any[]) {
+    const items: any[] = [];
+    
+    for (const group of cart) {
+      for (const item of group.items) {
+        items.push(item);
+      }
+    }
+
+    if (!items.length) {
+      this.subtotal = 0;
+    } else if (items.length === 1) {
+      const item = items[0];
+      this.subtotal = item.quantity * item.product.price;
+    } else {
+      this.subtotal = items.reduce((prev, next) => {
+        console.log('next:', next);
+        if (typeof prev === 'number') {
+          return prev + (next.quantity * next.product.price)
+        }
+        return (prev.quantity * prev.product.price) + (next.quantity * next.product.price);
+      });
+    }
+  }
+
   handleChangeQty(value) {
     console.log(value)
   }
 
   continueShopping() {
-    console.log("tes continue shopping")
+    marketplaceStore.setShoppingCartView(false);
+    this.$emit('closed');
   }
 
-  getDetail() {
-    this.$emit("get-detail");
+  getDetail(productCatalog: IMProductCatalog) {
+    marketplaceStore.setShoppingCartView(false);
+    this.$emit('item-selected', {
+      item: productCatalog,
+      origin: View.Cart
+    });
+  }
+
+  removeAll() {
+    marketplaceStore.clearCart();
+  }
+
+  removeItem(item: any) {
+    marketplaceStore.removeFromCart(item);
   }
 
 }

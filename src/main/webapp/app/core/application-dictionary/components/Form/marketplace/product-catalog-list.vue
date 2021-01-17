@@ -79,6 +79,7 @@
             <el-col
               v-for="(col, j) in row.columns"
               :key="`row_${i}_col_${j}`"
+              class="item"
               :xs="24"
               :sm="12"
               :md="8"
@@ -93,7 +94,11 @@
                   slot="header"
                   class="product-preview"
                 >
-                  <img :src="getThumbnailPreview(col)" :alt="col.name"/>
+                  <el-image
+                    :alt="col.name"
+                    lazy
+                    :src="getThumbnailPreview(col)"
+                  />
                 </div>
                 <div class="summary-box">
                   <div class="product-name">{{ col.name }}</div>
@@ -121,8 +126,9 @@
     .catalog-list {
       padding-top: 4px;
       
-      .el-row {
-        margin-bottom: 16px;
+      .item {
+        padding-bottom: 16px;
+        padding-top: 16px;
       }
 
       .el-card {

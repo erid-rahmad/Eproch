@@ -6,6 +6,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -164,7 +166,9 @@ public class CAttachmentResource {
         try {
             final URL url = new URL(imageUrl);
             byte[] image = cAttachmentService.load(url);
-            return ResponseEntity.ok().body(image);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setCacheControl(CacheControl.maxAge(3, TimeUnit.DAYS));
+            return ResponseEntity.ok().headers(headers).body(image);
         } catch (IOException e) {
             log.warn("Failed to load image from {}", imageUrl);
             return ResponseEntity.notFound().build();

@@ -3,6 +3,7 @@ import { CGalleryItem } from '@/shared/model/c-gallery-item.model';
 import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
 import { Component, Vue, Watch } from 'vue-property-decorator';
 import DetailDescription from './components/detail-description.vue';
+import { View } from './index.component';
 
 const ProductDetailProps = Vue.extend({
   props: {
@@ -16,7 +17,7 @@ const ProductDetailProps = Vue.extend({
     /**
      * Either catalog or cart.
      */
-    origin: String
+    origin: Number
   }
 })
 
@@ -51,14 +52,14 @@ export default class ProductDetail extends ProductDetailProps {
 
   @Watch('data')
   onDataChanged(data: IMProductCatalog) {
-    this.tabs.push({
+    this.tabs = [{
       id: 'desc',
       name: 'Description',
       content: data.description.replace('div', 'ul')
-    });
+    }];
 
     this.galleryItems = data.cGallery.cGalleryItems;
-
+    this.qty = 1;
     this.totalPrice = data.price;
 
     console.log('data:', data);
@@ -109,6 +110,10 @@ export default class ProductDetail extends ProductDetailProps {
     })
   }
 
-  setDetail(){
+  goToPreviousPage() {
+    if (this.origin === View.Cart) {
+      marketplaceStore.setShoppingCartView(true);
+    }
+    this.$emit('closed', this.origin);
   }
 }

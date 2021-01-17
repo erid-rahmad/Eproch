@@ -5,6 +5,7 @@ import { Component, Inject, Vue } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import FilterGroup from "./filter-group.vue";
 import QuickSearch from "./quick-search.vue";
+import { View } from './index.component';
 
 @Component({
   components: {
@@ -75,7 +76,10 @@ export default class ProductCatalogList extends Vue {
   onQuickSearchCompleted(query) {}
 
   onItemSelected(item: IMProductCatalog) {
-    this.$emit('item-selected', item);
+    this.$emit('item-selected', {
+      item,
+      origin: View.Catalog
+    });
   }
 
   onShoppingCartCanceled() {}
@@ -94,12 +98,12 @@ export default class ProductCatalogList extends Vue {
   }
 
   private buildLayout(items: IMProductCatalog[]) {
-    const maxCols = 6;
+    // const maxCols = 6;
     const rows = [];
     let columns: IMProductCatalog[] = [];
     let colNo = 1;
     for (let item of items) {
-      const newRow = colNo === 1 || colNo > maxCols;
+      const newRow = colNo === 1;
 
       if (newRow) {
         colNo = 1;

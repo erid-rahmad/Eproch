@@ -14,7 +14,7 @@ class EprocIDB extends Dexie {
   constructor() {
     super('bhpMarketplace');
 
-    this.version(5).stores({
+    this.version(7).stores({
       brand: 'id, name',
       cartItem: '++id, &productId',
       category: 'id, &name',
@@ -32,6 +32,8 @@ interface ICartItem {
   id?: number;
   quantity: number;
   productId: number;
+  vendorId: number;
+  vendorName: string;
 }
 
 interface IBrand {

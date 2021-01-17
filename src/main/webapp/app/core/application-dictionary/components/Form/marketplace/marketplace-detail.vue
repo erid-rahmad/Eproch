@@ -1,5 +1,19 @@
 <template>
   <div class="product-detail">
+    <el-row
+      class="page-control"
+      :gutter="24"
+    >
+      <el-col :span="6">
+        <el-button
+          class="btn-back"
+          icon="el-icon-arrow-left"
+          @click="goToPreviousPage"
+        >
+          Back
+        </el-button>
+      </el-col>
+    </el-row>
     <el-row :gutter="24">
       <el-col :span="10">
         <div class="image-preview block" key="cover">
@@ -82,7 +96,6 @@
         <el-row>
           <el-col :span="6"> &nbsp; </el-col>
           <el-col :span="18">
-            <el-button v-if="isPreOrder" size="medium" type="warning" style="margin-left: 0px" icon="el-icon-goods"> Pre Order </el-button>
             <el-button size="medium" type="primary" style="margin-left: 0px" @click="addToCart">
               <svg-icon name="shopping" /> Add to cart
             </el-button>
@@ -109,13 +122,11 @@
             :label="tab.name"
             :name="tab.id"
           >
-            <keep-alive>
-              <detail-description
-                :content="tab.content"
-                content-type="html"
-                :title="tab.name"
-              />
-            </keep-alive>
+            <detail-description
+              :content="tab.content"
+              content-type="html"
+              :title="tab.name"
+            />
           </el-tab-pane>
         </el-tabs>
       </el-col>
@@ -127,6 +138,13 @@
 </script>
 
 <style lang="scss" scoped>
+.product-detail {
+  padding-top: 16px;
+
+  .btn-back {
+    margin-left: 10px;
+  }
+}
 .image-preview {
   padding: 10px;
 

@@ -1,14 +1,21 @@
 <template>
   <div class="app-container marketplace">
     <marketplace-catalog
-      v-show="browseCatalog"
+      v-show="isProductCatalogView"
       @item-selected="showProductDetail"
     />
-    <item-detail
+    <product-detail
       ref="itemDetail"
-      v-show="!browseCatalog"
+      v-show="isProductDetailView"
       :data="selectedItem"
-      origin="catalog"
+      :origin="origin"
+      @closed="onProductDetailClosed"
+    />
+    <shopping-cart
+      ref="shoppingCart"
+      v-show="isShoppingCart"
+      @item-selected="showProductDetail"
+      @closed="onShoppingCartClosed"
     />
   </div>
 </template>

@@ -6,8 +6,10 @@ import { CGalleryItem, CGalleryItemType } from '@/shared/model/c-gallery-item.mo
 import { CGallery } from '@/shared/model/c-gallery.model';
 import { MProductCatalog, IMProductCatalog } from '@/shared/model/m-product-catalog.model';
 import { Action, getModule, Module, VuexModule, Mutation } from 'vuex-module-decorators';
+import { stat } from 'fs';
 
 export interface IMarketplaceState {
+  isShoppingCart: boolean;
   cart: any[];
   products: IMProductCatalog[];
 }
@@ -27,6 +29,7 @@ function buildProduct(item: IProduct) {
 
   product.mBrandName = item.brand?.name;
   product.cGallery = gallery;
+  product.vendorId = item.merchant.id;
   product.cVendorName = item.merchant.name;
   return product;
 }
@@ -65,6 +68,7 @@ function buildGallery(item: IProduct) {
 
 @Module({ dynamic: true, store, name: 'marketplaceStore', namespaced: true })
 class MarketplaceStore extends VuexModule implements IMarketplaceState {
+  isShoppingCart: boolean = false;
   cart: any[] = [];
   products: IMProductCatalog[] = [];
 
@@ -74,6 +78,56 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
 
   get cartGrandTotal() {
     return 0;
+  }
+
+  get product() {
+    return async (key: number) => {
+      return await idb.transaction('r', [
+        idb.brand, idb.category, idb.image, idb.merchant, idb.product,
+        idb.productCategory, idb.productVariant, idb.productVariantMedia
+      ], async () => {
+        const item = await idb.product.get(key);
+        let brand = null;
+        if (item.brandId) {
+          brand = await idb.brand.get(item.brandId);
+        }
+
+        const image = await idb.image.get(item.imageId);
+        const merchant = await idb.merchant.get(item.merchantId);
+
+        const productCategories = await idb.productCategory
+          .where('productId').equals(item.id)
+          .toArray();
+
+        const categories = await idb.category.bulkGet(productCategories.map(c => c.categoryId));
+
+        const variants = await idb.productVariant
+          .where('productId').equals(item.id)
+          .toArray();
+
+        const variantMedia = await idb.productVariantMedia
+          .where('productVariantId').anyOf(variants.map(v => v.id))
+          .toArray();
+
+        return {
+          id: item.id,
+          brand,
+          image,
+          merchant,
+          category: categories,
+          name: item.name,
+          description: item.description,
+          isPreOrder: item.isPreOrder,
+          durationPreOrder: item.durationPreOrder,
+          isSold: item.isSold,
+          productWarranty: item.productWarranty,
+          media: {
+            variant: variantMedia
+          },
+          variants
+        } as IProduct;
+      });
+    };
   }
 
   @Mutation
@@ -87,7 +141,7 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
     const vendorName = product.cVendorName;
     let itemsGroup = this.cart.find(group => group.vendorName === vendorName);
 
-    if (itemsGroup === void 0) {
+    if (!itemsGroup) {
       itemsGroup = {
         vendorName,
         items: []
@@ -99,7 +153,7 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
     const items: any[] = itemsGroup.items;
     const cartItem = items.find(i => i.product.id === item.product.id);
 
-    if (cartItem === void 0) {
+    if (!cartItem) {
       itemsGroup.items.push(item);
     } else {
       cartItem.quantity = item.quantity;
@@ -107,8 +161,30 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   }
 
   @Mutation
+  private CLEAR_CART() {
+    this.cart = [];
+  }
+
+  @Mutation
+  private REMOVE_FROM_CART(item: any) {
+    const product: IMProductCatalog = item.product;
+    const vendorName = product.cVendorName;
+    let itemsGroup = this.cart.find(group => group.vendorName === vendorName);
+
+    if (!!itemsGroup) {
+      const items: any[] = itemsGroup.items;
+      items.splice(items.findIndex(i => i.product.id === item.product.id), 1);
+    }
+  }
+
+  @Mutation
   private SET_PRODUCTS(products: MProductCatalog[]) {
     this.products = products;
+  }
+
+  @Mutation
+  private SET_SHOPPING_CART_VIEW(state: boolean) {
+    this.isShoppingCart = state;
   }
 
   @Action
@@ -119,50 +195,7 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
     ], async () => {
       const products = (await idb.product.toArray())
         .map(async item => {
-          let brand = null;
-          if (item.brandId) {
-            brand = await idb.brand.get(item.brandId);
-          }
-
-          const image = await idb.image.get(item.imageId);
-          const merchant = await idb.merchant.get(item.merchantId);
-
-          // console.log('brand: %O, image: %O, merchant: %O', brand, image, merchant);
-          const productCategories = await idb.productCategory
-            .where('productId').equals(item.id)
-            .toArray();
-
-          const categories = await idb.category.bulkGet(productCategories.map(c => c.categoryId));
-
-          const variants = await idb.productVariant
-            .where('productId').equals(item.id)
-            .toArray();
-
-          const variantMedia = await idb.productVariantMedia
-            .where('productVariantId').anyOf(variants.map(v => v.id))
-            .toArray();
-
-          console.log('image:', image);
-          console.log('media:', variantMedia);
-
-          const product: IProduct = {
-            id: item.id,
-            brand,
-            image,
-            merchant,
-            category: categories,
-            name: item.name,
-            description: item.description,
-            isPreOrder: item.isPreOrder,
-            durationPreOrder: item.durationPreOrder,
-            isSold: item.isSold,
-            productWarranty: item.productWarranty,
-            media: {
-              variant: variantMedia
-            },
-            variants
-          };
-          return product;
+          return this.product(item.id);
         });
 
       return Promise.all(products);
@@ -173,6 +206,24 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
     })
     .catch(e => {
       console.log('Failed getting marketplace catalog.', e);
+    });
+  }
+
+  @Action
+  public async initCart() {
+    idb.transaction('r', [
+      idb.brand, idb.cartItem, idb.category, idb.image, idb.merchant, idb.product,
+      idb.productCategory, idb.productVariant, idb.productVariantMedia
+    ], async () => {
+      (await idb.cartItem.toArray())
+        .forEach(async item => {
+          const product = await this.product(item.productId);
+          this.ADD_TO_CART({
+            id: item.id,
+            product: buildProduct(product),
+            quantity: item.quantity
+          });
+        });
     });
   }
 
@@ -299,8 +350,9 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   public async clearCatalog() {
     idb.transaction('rw', [
       idb.brand, idb.category, idb.image, idb.merchant, idb.product,
-      idb.productCategory, idb.productVariant, idb.productVariantMedia
-    ], async () => {
+      idb.productCategory, idb.productVariant, idb.productVariantMedia,
+      idb.cartItem
+    ], () => {
       idb.productVariantMedia.clear();
       idb.productVariant.clear();
       idb.productCategory.clear();
@@ -309,27 +361,74 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
       idb.image.clear();
       idb.category.clear();
       idb.brand.clear();
-      idb.cartItem.clear();
+      idb.cartItem.clear().then(() => {
+        this.CLEAR_CART();
+      });
     });
   }
 
   @Action
   public async addToCart(item: any) {
-    console.log('Add product %s to cart', item.product.id);
     idb.transaction('rw', idb.cartItem, () => {
-      idb.cartItem.where('productId').equals(item.product.id).first()
+      const product = <IMProductCatalog>item.product;
+
+      idb.cartItem.where('productId').equals(product.id).first()
         .then(cartItem => {
-          cartItem.quantity = item.quantity;
-          idb.cartItem.put(cartItem);
+          let data: any;
+
+          if (!cartItem) {
+            data = {
+              productId: product.id,
+              vendorId: product.vendorId,
+              vendorName: product.cVendorName,
+              quantity: item.quantity
+            };
+          } else {
+            data = cartItem;
+            data.quantity = item.quantity;
+          }
+
+          idb.cartItem.put(data)
+            .then(key => {
+              item.id = key;
+              this.ADD_TO_CART(item);
+            });
         })
         .catch(() => {
-          idb.cartItem.put({
-            productId: item.product.id,
-            quantity: item.quantity
-          });
+          console.log('Failed to add item.', item);
         });
     });
-    this.ADD_TO_CART(item);
+  }
+
+  @Action
+  public async clearCart() {
+    idb.transaction('rw', idb.cartItem, () => {
+      idb.cartItem.clear()
+        .then(() => {
+          this.CLEAR_CART();
+        });
+    })
+    .catch(() => {
+      console.log('Failed to clear cart.');
+    });
+  }
+
+  @Action
+  public async removeFromCart(item: any) {
+    idb.transaction('rw', idb.cartItem, () => {
+      idb.cartItem.delete(item.id)
+        .then(() => {
+          this.REMOVE_FROM_CART(item);
+        });
+    })
+    .catch(() => {
+      console.log('Failed to delete item.', item);
+    });
+  }
+
+  @Action
+  public async setShoppingCartView(state: boolean) {
+    this.SET_SHOPPING_CART_VIEW(state);
   }
 }
 

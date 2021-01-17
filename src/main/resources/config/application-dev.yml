@@ -18,7 +18,8 @@ logging:
     ROOT: DEBUG
     io.github.jhipster: DEBUG
     com.bhp.opusb: DEBUG
-    com.bhp.opusb.web.rest.CAttachmentResource: WARN
+    com.bhp.opusb.web.rest.CAttachmentResource: INFO
+    com.bhp.opusb.service.CAttachmentService: INFO
     org.apache.kafka.clients.NetworkClient: ERROR
 
 spring:
@@ -26,6 +27,7 @@ spring:
     active: dev
     include:
       - swagger
+      - no-liquibase
       # Uncomment to activate TLS for the dev profile
       #- tls
   devtools:
