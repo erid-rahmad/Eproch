@@ -7,8 +7,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import java.io.Serializable;
-import java.util.Objects;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -27,36 +25,34 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    /**
-     * Next action for the document.
-     */
+    @Column(name = "date_trx", nullable = false)
+    private LocalDate dateTrx;
+
+    @Size(max = 30)
+    @Column(name = "document_no", length = 30)
+    private String documentNo;
+
     @NotNull
     @Size(max = 10)
     @Column(name = "document_action", length = 10, nullable = false)
     private String documentAction;
 
-    /**
-     * Current document status.
-     */
     @NotNull
     @Size(max = 10)
     @Column(name = "document_status", length = 10, nullable = false)
     private String documentStatus;
 
-    @Column(name = "is_approved")
-    private Boolean isApproved;
+    @Column(name = "approved")
+    private Boolean approved;
 
-    @Column(name = "is_processed")
-    private Boolean isProcessed;
+    @Column(name = "processed")
+    private Boolean processed;
 
     @Column(name = "tax")
     private Boolean tax;
 
-    @Column(name = "document_date")
-    private LocalDate documentDate;
-
-    @Column(name = "date_required")
-    private LocalDate dateRequired;
+    @Column(name = "date_promised")
+    private LocalDate datePromised;
 
     @Column(name = "description")
     private String description;
@@ -109,6 +105,32 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
         this.id = id;
     }
 
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public MPurchaseOrder dateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+        return this;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public MPurchaseOrder documentNo(String documentNo) {
+        this.documentNo = documentNo;
+        return this;
+    }
+
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
     public String getDocumentAction() {
         return documentAction;
     }
@@ -135,30 +157,30 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
         this.documentStatus = documentStatus;
     }
 
-    public Boolean isIsApproved() {
-        return isApproved;
+    public Boolean isApproved() {
+        return approved;
     }
 
-    public MPurchaseOrder isApproved(Boolean isApproved) {
-        this.isApproved = isApproved;
+    public MPurchaseOrder approved(Boolean approved) {
+        this.approved = approved;
         return this;
     }
 
-    public void setIsApproved(Boolean isApproved) {
-        this.isApproved = isApproved;
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
     }
 
-    public Boolean isIsProcessed() {
-        return isProcessed;
+    public Boolean isProcessed() {
+        return processed;
     }
 
-    public MPurchaseOrder isProcessed(Boolean isProcessed) {
-        this.isProcessed = isProcessed;
+    public MPurchaseOrder processed(Boolean processed) {
+        this.processed = processed;
         return this;
     }
 
-    public void setIsProcessed(Boolean isProcessed) {
-        this.isProcessed = isProcessed;
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
     }
 
     public Boolean isTax() {
@@ -174,30 +196,17 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
         this.tax = tax;
     }
 
-    public LocalDate getDocumentDate() {
-        return documentDate;
+    public LocalDate getDatePromised() {
+        return datePromised;
     }
 
-    public MPurchaseOrder documentDate(LocalDate documentDate) {
-        this.documentDate = documentDate;
+    public MPurchaseOrder datePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
         return this;
     }
 
-    public void setDocumentDate(LocalDate documentDate) {
-        this.documentDate = documentDate;
-    }
-
-    public LocalDate getDateRequired() {
-        return dateRequired;
-    }
-
-    public MPurchaseOrder dateRequired(LocalDate dateRequired) {
-        this.dateRequired = dateRequired;
-        return this;
-    }
-
-    public void setDateRequired(LocalDate dateRequired) {
-        this.dateRequired = dateRequired;
+    public void setDatePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
     }
 
     public String getDescription() {
@@ -343,13 +352,14 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
     public String toString() {
         return "MPurchaseOrder{" +
             "id=" + getId() +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +
             ", documentStatus='" + getDocumentStatus() + "'" +
-            ", isApproved='" + isIsApproved() + "'" +
-            ", isProcessed='" + isIsProcessed() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
             ", tax='" + isTax() + "'" +
-            ", documentDate='" + getDocumentDate() + "'" +
-            ", dateRequired='" + getDateRequired() + "'" +
+            ", datePromised='" + getDatePromised() + "'" +
             ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +

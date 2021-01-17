@@ -72,13 +72,14 @@ class MPurchaseOrderGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "dateTrx":"2020-01-01T00:00:00.000Z"
+                , "documentNo":"SAMPLE_TEXT"
                 , "documentAction":"SAMPLE_TEXT"
                 , "documentStatus":"SAMPLE_TEXT"
-                , "isApproved":null
-                , "isProcessed":null
+                , "approved":null
+                , "processed":null
                 , "tax":null
-                , "documentDate":"2020-01-01T00:00:00.000Z"
-                , "dateRequired":"2020-01-01T00:00:00.000Z"
+                , "datePromised":"2020-01-01T00:00:00.000Z"
                 , "description":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null

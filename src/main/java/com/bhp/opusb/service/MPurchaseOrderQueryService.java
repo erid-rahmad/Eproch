@@ -91,26 +91,29 @@ public class MPurchaseOrderQueryService extends QueryService<MPurchaseOrder> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MPurchaseOrder_.id));
             }
+            if (criteria.getDateTrx() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), MPurchaseOrder_.dateTrx));
+            }
+            if (criteria.getDocumentNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentNo(), MPurchaseOrder_.documentNo));
+            }
             if (criteria.getDocumentAction() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDocumentAction(), MPurchaseOrder_.documentAction));
             }
             if (criteria.getDocumentStatus() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDocumentStatus(), MPurchaseOrder_.documentStatus));
             }
-            if (criteria.getIsApproved() != null) {
-                specification = specification.and(buildSpecification(criteria.getIsApproved(), MPurchaseOrder_.isApproved));
+            if (criteria.getApproved() != null) {
+                specification = specification.and(buildSpecification(criteria.getApproved(), MPurchaseOrder_.approved));
             }
-            if (criteria.getIsProcessed() != null) {
-                specification = specification.and(buildSpecification(criteria.getIsProcessed(), MPurchaseOrder_.isProcessed));
+            if (criteria.getProcessed() != null) {
+                specification = specification.and(buildSpecification(criteria.getProcessed(), MPurchaseOrder_.processed));
             }
             if (criteria.getTax() != null) {
                 specification = specification.and(buildSpecification(criteria.getTax(), MPurchaseOrder_.tax));
             }
-            if (criteria.getDocumentDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDocumentDate(), MPurchaseOrder_.documentDate));
-            }
-            if (criteria.getDateRequired() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDateRequired(), MPurchaseOrder_.dateRequired));
+            if (criteria.getDatePromised() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDatePromised(), MPurchaseOrder_.datePromised));
             }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), MPurchaseOrder_.description));

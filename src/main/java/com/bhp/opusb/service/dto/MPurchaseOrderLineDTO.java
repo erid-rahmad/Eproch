@@ -2,6 +2,7 @@ package com.bhp.opusb.service.dto;
 
 import java.time.LocalDate;
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
@@ -15,11 +16,11 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
 
     private String taxId;
 
-    @NotNull
     private LocalDate documentDate;
 
-    @NotNull
-    private LocalDate documentRequired;
+    private LocalDate datePromised;
+
+    private LocalDate dateRequired;
 
     @NotNull
     private BigDecimal orderAmount;
@@ -83,12 +84,20 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
         this.documentDate = documentDate;
     }
 
-    public LocalDate getDocumentRequired() {
-        return documentRequired;
+    public LocalDate getDatePromised() {
+        return datePromised;
     }
 
-    public void setDocumentRequired(LocalDate documentRequired) {
-        this.documentRequired = documentRequired;
+    public void setDatePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
+    }
+
+    public LocalDate getDateRequired() {
+        return dateRequired;
+    }
+
+    public void setDateRequired(LocalDate dateRequired) {
+        this.dateRequired = dateRequired;
     }
 
     public BigDecimal getOrderAmount() {
@@ -278,7 +287,8 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", taxId='" + getTaxId() + "'" +
             ", documentDate='" + getDocumentDate() + "'" +
-            ", documentRequired='" + getDocumentRequired() + "'" +
+            ", datePromised='" + getDatePromised() + "'" +
+            ", dateRequired='" + getDateRequired() + "'" +
             ", orderAmount=" + getOrderAmount() +
             ", quantity=" + getQuantity() +
             ", unitPrice=" + getUnitPrice() +

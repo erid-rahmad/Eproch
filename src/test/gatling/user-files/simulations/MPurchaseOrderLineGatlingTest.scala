@@ -74,7 +74,8 @@ class MPurchaseOrderLineGatlingTest extends Simulation {
                 "id":null
                 , "taxId":"SAMPLE_TEXT"
                 , "documentDate":"2020-01-01T00:00:00.000Z"
-                , "documentRequired":"2020-01-01T00:00:00.000Z"
+                , "datePromised":"2020-01-01T00:00:00.000Z"
+                , "dateRequired":"2020-01-01T00:00:00.000Z"
                 , "orderAmount":"0"
                 , "quantity":"0"
                 , "unitPrice":"0"

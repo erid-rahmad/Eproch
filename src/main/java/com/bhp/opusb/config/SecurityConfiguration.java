@@ -99,6 +99,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/api/c-attachments/image/load-remote",
                 "/api/c-attachments/download/**",
                 "/api/m-verifications/report/**",
+                "/api/m-purchase-orders/report/**",
                 "/api/ad-references",
                 "/api/ad-reference-lists"
             ).permitAll()

@@ -2,8 +2,19 @@
     "name": "MPurchaseOrder",
     "fields": [
         {
+            "fieldName": "dateTrx",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "documentNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
             "fieldName": "documentAction",
-            "javadoc": "Next action for the document.",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required",
@@ -13,7 +24,6 @@
         },
         {
             "fieldName": "documentStatus",
-            "javadoc": "Current document status.",
             "fieldType": "String",
             "fieldValidateRules": [
                 "required",
@@ -22,11 +32,11 @@
             "fieldValidateRulesMaxlength": "10"
         },
         {
-            "fieldName": "isApproved",
+            "fieldName": "approved",
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "isProcessed",
+            "fieldName": "processed",
             "fieldType": "Boolean"
         },
         {
@@ -34,11 +44,7 @@
             "fieldType": "Boolean"
         },
         {
-            "fieldName": "documentDate",
-            "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "dateRequired",
+            "fieldName": "datePromised",
             "fieldType": "LocalDate"
         },
         {

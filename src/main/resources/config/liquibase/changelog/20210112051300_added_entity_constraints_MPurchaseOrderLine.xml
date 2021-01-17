@@ -7,7 +7,7 @@
         Added the constraints for entity MPurchaseOrderLine.
     -->
     <changeSet id="20210112051300-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="purchase_order_id"
                                  baseTableName="m_purchase_order_line"
                                  constraintName="fk_m_purchase_order_line_purchase_order_id"

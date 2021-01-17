@@ -7,17 +7,15 @@
         },
         {
             "fieldName": "documentDate",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "LocalDate"
         },
         {
-            "fieldName": "documentRequired",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldName": "datePromised",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateRequired",
+            "fieldType": "LocalDate"
         },
         {
             "fieldName": "orderAmount",
@@ -66,7 +64,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "mRequisition",
             "otherEntityRelationshipName": "mPurchaseOrderLine",
-            "relationshipValidateRules": "required",
             "relationshipName": "requisition",
             "otherEntityField": "id"
         },
@@ -90,7 +87,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cWarehouse",
             "otherEntityRelationshipName": "mPurchaseOrderLine",
-            "relationshipValidateRules": "required",
             "relationshipName": "warehouse",
             "otherEntityField": "id"
         },
@@ -98,7 +94,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cCostCenter",
             "otherEntityRelationshipName": "mPurchaseOrderLine",
-            "relationshipValidateRules": "required",
             "relationshipName": "costCenter",
             "otherEntityField": "id"
         },
@@ -114,7 +109,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cVendor",
             "otherEntityRelationshipName": "mPurchaseOrderLine",
-            "relationshipValidateRules": "required",
             "relationshipName": "vendor",
             "otherEntityField": "id"
         }

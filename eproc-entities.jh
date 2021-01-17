@@ -740,25 +740,23 @@ entity AiExchangeIn {
 }
 
 entity MRequisition {
-
-	/** Next action for the document. */
+	dateTrx LocalDate
+	documentNo String maxlength(30)
 	documentAction String required maxlength(10)
-
-	/** Current document status. */
 	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
 
-    isApproved Boolean
-    isProcessed Boolean
-    documentDate LocalDate
-	dateRequired LocalDate
+    datePromised LocalDate
     description String
     uid UUID
 	active Boolean
 }
 
 entity MRequisitionLine {
-	documentDate LocalDate required
-	documentRequired LocalDate required
+	documentDate LocalDate
+    datePromised LocalDate
+	dateRequired LocalDate
     requisitionAmount BigDecimal required
     quantity BigDecimal required
     unitPrice BigDecimal required
@@ -768,18 +766,15 @@ entity MRequisitionLine {
 }
 
 entity MPurchaseOrder {
-
-	/** Next action for the document. */
+    dateTrx LocalDate
+	documentNo String maxlength(30)
 	documentAction String required maxlength(10)
-
-	/** Current document status. */
 	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
 
-    isApproved Boolean
-    isProcessed Boolean
     tax Boolean
-    documentDate LocalDate
-	dateRequired LocalDate
+    datePromised LocalDate
     description String
     uid UUID
 	active Boolean
@@ -787,8 +782,9 @@ entity MPurchaseOrder {
 
 entity MPurchaseOrderLine {
     taxId String
-	documentDate LocalDate required
-	documentRequired LocalDate required
+	documentDate LocalDate
+    datePromised LocalDate
+	dateRequired LocalDate
     orderAmount BigDecimal required
     quantity BigDecimal required
     unitPrice BigDecimal required
@@ -1098,10 +1094,10 @@ relationship ManyToOne {
 	MRequisitionLine{requisition required} to MRequisition
 	MRequisitionLine{adOrganization required} to ADOrganization
 	MRequisitionLine{product required} to CProduct
-	MRequisitionLine{warehouse required} to CWarehouse
-	MRequisitionLine{costCenter required} to CCostCenter
+	MRequisitionLine{warehouse} to CWarehouse
+	MRequisitionLine{costCenter} to CCostCenter
 	MRequisitionLine{uom required} to CUnitOfMeasure
-	MRequisitionLine{vendor required} to CVendor
+	MRequisitionLine{vendor} to CVendor
 
     /** Purchase Order */
     MPurchaseOrder{adOrganization required} to ADOrganization
@@ -1112,13 +1108,13 @@ relationship ManyToOne {
 	MPurchaseOrder{costCenter required} to CCostCenter
 
 	MPurchaseOrderLine{purchaseOrder required} to MPurchaseOrder
-    MPurchaseOrderLine{requisition required} to MRequisition
+    MPurchaseOrderLine{requisition} to MRequisition
 	MPurchaseOrderLine{adOrganization required} to ADOrganization
 	MPurchaseOrderLine{product required} to CProduct
-	MPurchaseOrderLine{warehouse required} to CWarehouse
-	MPurchaseOrderLine{costCenter required} to CCostCenter
+    MPurchaseOrderLine{warehouse} to CWarehouse
+	MPurchaseOrderLine{costCenter} to CCostCenter
 	MPurchaseOrderLine{uom required} to CUnitOfMeasure
-	MPurchaseOrderLine{vendor required} to CVendor
+    MPurchaseOrderLine{vendor} to CVendor
 }
 
 // Allow filtering to all entities.

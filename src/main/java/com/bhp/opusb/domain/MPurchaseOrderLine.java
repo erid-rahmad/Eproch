@@ -29,13 +29,14 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     @Column(name = "tax_id")
     private String taxId;
 
-    @NotNull
-    @Column(name = "document_date", nullable = false)
+    @Column(name = "document_date")
     private LocalDate documentDate;
 
-    @NotNull
-    @Column(name = "document_required", nullable = false)
-    private LocalDate documentRequired;
+    @Column(name = "date_promised")
+    private LocalDate datePromised;
+
+    @Column(name = "date_required")
+    private LocalDate dateRequired;
 
     @NotNull
     @Column(name = "order_amount", precision = 21, scale = 2, nullable = false)
@@ -63,8 +64,7 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private MPurchaseOrder purchaseOrder;
 
-    @ManyToOne(optional = false)
-    @NotNull
+    @ManyToOne
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private MRequisition requisition;
 
@@ -79,12 +79,10 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     private CProduct product;
 
     @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private CWarehouse warehouse;
 
     @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private CCostCenter costCenter;
 
@@ -94,7 +92,6 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     private CUnitOfMeasure uom;
 
     @ManyToOne(optional = false)
-    @NotNull
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private CVendor vendor;
 
@@ -133,17 +130,30 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
         this.documentDate = documentDate;
     }
 
-    public LocalDate getDocumentRequired() {
-        return documentRequired;
+    public LocalDate getDatePromised() {
+        return datePromised;
     }
 
-    public MPurchaseOrderLine documentRequired(LocalDate documentRequired) {
-        this.documentRequired = documentRequired;
+    public MPurchaseOrderLine datePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
         return this;
     }
 
-    public void setDocumentRequired(LocalDate documentRequired) {
-        this.documentRequired = documentRequired;
+    public void setDatePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
+    }
+
+    public LocalDate getDateRequired() {
+        return dateRequired;
+    }
+
+    public MPurchaseOrderLine dateRequired(LocalDate dateRequired) {
+        this.dateRequired = dateRequired;
+        return this;
+    }
+
+    public void setDateRequired(LocalDate dateRequired) {
+        this.dateRequired = dateRequired;
     }
 
     public BigDecimal getOrderAmount() {
@@ -356,7 +366,8 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
             "id=" + getId() +
             ", taxId='" + getTaxId() + "'" +
             ", documentDate='" + getDocumentDate() + "'" +
-            ", documentRequired='" + getDocumentRequired() + "'" +
+            ", datePromised='" + getDatePromised() + "'" +
+            ", dateRequired='" + getDateRequired() + "'" +
             ", orderAmount=" + getOrderAmount() +
             ", quantity=" + getQuantity() +
             ", unitPrice=" + getUnitPrice() +

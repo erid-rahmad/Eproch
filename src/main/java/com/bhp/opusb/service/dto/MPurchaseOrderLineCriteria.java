@@ -33,7 +33,9 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
 
     private LocalDateFilter documentDate;
 
-    private LocalDateFilter documentRequired;
+    private LocalDateFilter datePromised;
+
+    private LocalDateFilter dateRequired;
 
     private BigDecimalFilter orderAmount;
 
@@ -70,7 +72,8 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.taxId = other.taxId == null ? null : other.taxId.copy();
         this.documentDate = other.documentDate == null ? null : other.documentDate.copy();
-        this.documentRequired = other.documentRequired == null ? null : other.documentRequired.copy();
+        this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
+        this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
         this.orderAmount = other.orderAmount == null ? null : other.orderAmount.copy();
         this.quantity = other.quantity == null ? null : other.quantity.copy();
         this.unitPrice = other.unitPrice == null ? null : other.unitPrice.copy();
@@ -116,12 +119,20 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
         this.documentDate = documentDate;
     }
 
-    public LocalDateFilter getDocumentRequired() {
-        return documentRequired;
+    public LocalDateFilter getDatePromised() {
+        return datePromised;
     }
 
-    public void setDocumentRequired(LocalDateFilter documentRequired) {
-        this.documentRequired = documentRequired;
+    public void setDatePromised(LocalDateFilter datePromised) {
+        this.datePromised = datePromised;
+    }
+
+    public LocalDateFilter getDateRequired() {
+        return dateRequired;
+    }
+
+    public void setDateRequired(LocalDateFilter dateRequired) {
+        this.dateRequired = dateRequired;
     }
 
     public BigDecimalFilter getOrderAmount() {
@@ -250,7 +261,8 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(taxId, that.taxId) &&
             Objects.equals(documentDate, that.documentDate) &&
-            Objects.equals(documentRequired, that.documentRequired) &&
+            Objects.equals(datePromised, that.datePromised) &&
+            Objects.equals(dateRequired, that.dateRequired) &&
             Objects.equals(orderAmount, that.orderAmount) &&
             Objects.equals(quantity, that.quantity) &&
             Objects.equals(unitPrice, that.unitPrice) &&
@@ -273,7 +285,8 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
         id,
         taxId,
         documentDate,
-        documentRequired,
+        datePromised,
+        dateRequired,
         orderAmount,
         quantity,
         unitPrice,
@@ -297,7 +310,8 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (taxId != null ? "taxId=" + taxId + ", " : "") +
                 (documentDate != null ? "documentDate=" + documentDate + ", " : "") +
-                (documentRequired != null ? "documentRequired=" + documentRequired + ", " : "") +
+                (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
+                (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +
                 (orderAmount != null ? "orderAmount=" + orderAmount + ", " : "") +
                 (quantity != null ? "quantity=" + quantity + ", " : "") +
                 (unitPrice != null ? "unitPrice=" + unitPrice + ", " : "") +

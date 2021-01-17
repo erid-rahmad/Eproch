@@ -14,31 +14,26 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    /**
-     * Next action for the document.
-     */
+    private LocalDate dateTrx;
+
+    @Size(max = 30)
+    private String documentNo;
+
     @NotNull
     @Size(max = 10)
-    @ApiModelProperty(value = "Next action for the document.", required = true)
     private String documentAction;
 
-    /**
-     * Current document status.
-     */
     @NotNull
     @Size(max = 10)
-    @ApiModelProperty(value = "Current document status.", required = true)
     private String documentStatus;
 
-    private Boolean isApproved;
+    private Boolean approved;
 
-    private Boolean isProcessed;
+    private Boolean processed;
 
     private Boolean tax;
 
-    private LocalDate documentDate;
-
-    private LocalDate dateRequired;
+    private LocalDate datePromised;
 
     private String description;
 
@@ -77,6 +72,22 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
     public String getDocumentAction() {
         return documentAction;
     }
@@ -93,20 +104,20 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
         this.documentStatus = documentStatus;
     }
 
-    public Boolean isIsApproved() {
-        return isApproved;
+    public Boolean isApproved() {
+        return approved;
     }
 
-    public void setIsApproved(Boolean isApproved) {
-        this.isApproved = isApproved;
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
     }
 
-    public Boolean isIsProcessed() {
-        return isProcessed;
+    public Boolean isProcessed() {
+        return processed;
     }
 
-    public void setIsProcessed(Boolean isProcessed) {
-        this.isProcessed = isProcessed;
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
     }
 
     public Boolean isTax() {
@@ -117,20 +128,12 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
         this.tax = tax;
     }
 
-    public LocalDate getDocumentDate() {
-        return documentDate;
+    public LocalDate getDatePromised() {
+        return datePromised;
     }
 
-    public void setDocumentDate(LocalDate documentDate) {
-        this.documentDate = documentDate;
-    }
-
-    public LocalDate getDateRequired() {
-        return dateRequired;
-    }
-
-    public void setDateRequired(LocalDate dateRequired) {
-        this.dateRequired = dateRequired;
+    public void setDatePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
     }
 
     public String getDescription() {
@@ -278,13 +281,14 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MPurchaseOrderDTO{" +
             "id=" + getId() +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +
             ", documentStatus='" + getDocumentStatus() + "'" +
-            ", isApproved='" + isIsApproved() + "'" +
-            ", isProcessed='" + isIsProcessed() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
             ", tax='" + isTax() + "'" +
-            ", documentDate='" + getDocumentDate() + "'" +
-            ", dateRequired='" + getDateRequired() + "'" +
+            ", datePromised='" + getDatePromised() + "'" +
             ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +

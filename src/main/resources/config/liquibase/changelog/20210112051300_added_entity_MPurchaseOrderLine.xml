@@ -124,4 +124,20 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20210112051300-update" author="dian-tri-budianto">
+        <addColumn tableName="m_purchase_order_line">
+            <column name="date_promised" type="date">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
+        <renameColumn tableName="m_purchase_order_line" oldColumnName="document_required" newColumnName="date_required" />
+        <dropNotNullConstraint tableName="m_purchase_order_line" columnName="date_required" />
+        <dropNotNullConstraint tableName="m_purchase_order_line" columnName="document_date" />
+
+        <dropNotNullConstraint tableName="m_purchase_order_line" columnName="warehouse_id" />
+        <dropNotNullConstraint tableName="m_purchase_order_line" columnName="cost_center_id" />
+        <dropNotNullConstraint tableName="m_purchase_order_line" columnName="vendor_id" />
+    </changeSet>
+
 </databaseChangeLog>

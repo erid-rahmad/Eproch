@@ -9,6 +9,10 @@ import com.bhp.opusb.service.MPurchaseOrderQueryService;
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,9 +24,14 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -140,5 +149,26 @@ public class MPurchaseOrderResource {
         log.debug("REST request to delete MPurchaseOrder : {}", id);
         mPurchaseOrderService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
+    }
+
+    @GetMapping("/m-purchase-orders/report/{poNo}")
+    public void reportPurchaseOrder(@PathVariable Long poNo, HttpServletResponse response) throws IOException {
+
+        JasperPrint jasperPrint = null;
+        String fileName = "";
+
+        fileName = "Purchase Order - "+poNo+".pdf";
+
+        response.setContentType("application/octet-stream");
+        response.addHeader("Content-Disposition", "attachment; filename=\""+fileName+"\"");
+        OutputStream out = response.getOutputStream();
+
+        try {
+            jasperPrint = mPurchaseOrderService.exportPurchaseOrder(poNo);
+
+            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
+        } catch (SQLException | JRException e) {
+            e.printStackTrace();
+        }
     }
 }

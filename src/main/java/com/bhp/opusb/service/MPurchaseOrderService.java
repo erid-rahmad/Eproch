@@ -11,8 +11,22 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
 
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
+
+import javax.sql.DataSource;
 
 /**
  * Service Implementation for managing {@link MPurchaseOrder}.
@@ -22,14 +36,15 @@ import java.util.Optional;
 public class MPurchaseOrderService {
 
     private final Logger log = LoggerFactory.getLogger(MPurchaseOrderService.class);
-
+    private final DataSource dataSource;
     private final MPurchaseOrderRepository mPurchaseOrderRepository;
 
     private final MPurchaseOrderMapper mPurchaseOrderMapper;
 
-    public MPurchaseOrderService(MPurchaseOrderRepository mPurchaseOrderRepository, MPurchaseOrderMapper mPurchaseOrderMapper) {
+    public MPurchaseOrderService(MPurchaseOrderRepository mPurchaseOrderRepository, MPurchaseOrderMapper mPurchaseOrderMapper, DataSource dataSource) {
         this.mPurchaseOrderRepository = mPurchaseOrderRepository;
         this.mPurchaseOrderMapper = mPurchaseOrderMapper;
+        this.dataSource = dataSource;
     }
 
     /**
@@ -79,5 +94,20 @@ public class MPurchaseOrderService {
     public void delete(Long id) {
         log.debug("Request to delete MPurchaseOrder : {}", id);
         mPurchaseOrderRepository.deleteById(id);
+    }
+
+    public JasperPrint exportPurchaseOrder(Long poNo) throws IOException, SQLException, JRException {
+
+        File file = null;
+
+        file = ResourceUtils.getFile("classpath:templates/report/purchase-order.jrxml");
+
+        JasperReport jasperReport = JasperCompileManager.compileReport(file.getAbsolutePath());
+
+        Map<String, Object> parameters = new HashMap<>();
+        parameters.put("poNo", poNo);
+        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
+        return print;
+
     }
 }

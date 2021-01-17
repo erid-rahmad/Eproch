@@ -55,6 +55,7 @@ class AccountStore extends VuexModule implements IAccountState {
   @Mutation
   private SET_USER_DETAILS(user: any) {
     this.userDetails = user;
+    this.properties.set('userLogin', user.userLogin);
   }
 
   @Mutation
