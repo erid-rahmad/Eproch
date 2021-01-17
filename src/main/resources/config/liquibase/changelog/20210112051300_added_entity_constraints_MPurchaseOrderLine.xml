@@ -57,4 +57,15 @@
                                  referencedTableName="c_vendor"/>
 
     </changeSet>
+
+    <changeSet id="20210112051300-5" author="dian-tri-budianto">
+
+        <addForeignKeyConstraint baseColumnNames="tax_id"
+                                 baseTableName="m_purchase_order_line"
+                                 constraintName="fk_m_purchase_order_line_tax_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_tax"/>
+
+    </changeSet>
+
 </databaseChangeLog>

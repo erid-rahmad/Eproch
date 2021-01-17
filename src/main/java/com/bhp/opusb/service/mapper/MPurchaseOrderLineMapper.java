@@ -9,11 +9,13 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link MPurchaseOrderLine} and its DTO {@link MPurchaseOrderLineDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MPurchaseOrderMapper.class, MRequisitionMapper.class, ADOrganizationMapper.class, CProductMapper.class, CWarehouseMapper.class, CCostCenterMapper.class, CUnitOfMeasureMapper.class, CVendorMapper.class})
+@Mapper(componentModel = "spring", uses = {MPurchaseOrderMapper.class, MRequisitionMapper.class, CTaxMapper.class, ADOrganizationMapper.class, CProductMapper.class, CWarehouseMapper.class, CCostCenterMapper.class, CUnitOfMeasureMapper.class, CVendorMapper.class})
 public interface MPurchaseOrderLineMapper extends EntityMapper<MPurchaseOrderLineDTO, MPurchaseOrderLine> {
 
     @Mapping(source = "purchaseOrder.id", target = "purchaseOrderId")
     @Mapping(source = "requisition.id", target = "requisitionId")
+    @Mapping(source = "tax.id", target = "taxId")
+    @Mapping(source = "tax.name", target = "taxName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "product.id", target = "productId")
@@ -30,6 +32,7 @@ public interface MPurchaseOrderLineMapper extends EntityMapper<MPurchaseOrderLin
 
     @Mapping(source = "purchaseOrderId", target = "purchaseOrder")
     @Mapping(source = "requisitionId", target = "requisition")
+    @Mapping(source = "taxId", target = "tax")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "productId", target = "product")
     @Mapping(source = "warehouseId", target = "warehouse")

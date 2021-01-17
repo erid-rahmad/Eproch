@@ -140,4 +140,8 @@
         <dropNotNullConstraint tableName="m_purchase_order_line" columnName="vendor_id" />
     </changeSet>
 
+    <changeSet id="20210112051300-update-2" author="dian-tri-budianto">
+        <modifyDataType tableName="m_purchase_order_line" newDataType="bigint" columnName="tax_id"/>
+    </changeSet>
+
 </databaseChangeLog>

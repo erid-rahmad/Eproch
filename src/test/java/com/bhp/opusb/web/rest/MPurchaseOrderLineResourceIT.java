@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MPurchaseOrderLine;
 import com.bhp.opusb.domain.MPurchaseOrder;
 import com.bhp.opusb.domain.MRequisition;
+import com.bhp.opusb.domain.CTax;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.CWarehouse;
@@ -46,9 +47,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 public class MPurchaseOrderLineResourceIT {
-
-    private static final String DEFAULT_TAX_ID = "AAAAAAAAAA";
-    private static final String UPDATED_TAX_ID = "BBBBBBBBBB";
 
     private static final LocalDate DEFAULT_DOCUMENT_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DOCUMENT_DATE = LocalDate.now(ZoneId.systemDefault());
@@ -111,7 +109,6 @@ public class MPurchaseOrderLineResourceIT {
      */
     public static MPurchaseOrderLine createEntity(EntityManager em) {
         MPurchaseOrderLine mPurchaseOrderLine = new MPurchaseOrderLine()
-            .taxId(DEFAULT_TAX_ID)
             .documentDate(DEFAULT_DOCUMENT_DATE)
             .datePromised(DEFAULT_DATE_PROMISED)
             .dateRequired(DEFAULT_DATE_REQUIRED)
@@ -171,7 +168,6 @@ public class MPurchaseOrderLineResourceIT {
      */
     public static MPurchaseOrderLine createUpdatedEntity(EntityManager em) {
         MPurchaseOrderLine mPurchaseOrderLine = new MPurchaseOrderLine()
-            .taxId(UPDATED_TAX_ID)
             .documentDate(UPDATED_DOCUMENT_DATE)
             .datePromised(UPDATED_DATE_PROMISED)
             .dateRequired(UPDATED_DATE_REQUIRED)
@@ -245,7 +241,6 @@ public class MPurchaseOrderLineResourceIT {
         List<MPurchaseOrderLine> mPurchaseOrderLineList = mPurchaseOrderLineRepository.findAll();
         assertThat(mPurchaseOrderLineList).hasSize(databaseSizeBeforeCreate + 1);
         MPurchaseOrderLine testMPurchaseOrderLine = mPurchaseOrderLineList.get(mPurchaseOrderLineList.size() - 1);
-        assertThat(testMPurchaseOrderLine.getTaxId()).isEqualTo(DEFAULT_TAX_ID);
         assertThat(testMPurchaseOrderLine.getDocumentDate()).isEqualTo(DEFAULT_DOCUMENT_DATE);
         assertThat(testMPurchaseOrderLine.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
         assertThat(testMPurchaseOrderLine.getDateRequired()).isEqualTo(DEFAULT_DATE_REQUIRED);
@@ -346,7 +341,6 @@ public class MPurchaseOrderLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mPurchaseOrderLine.getId().intValue())))
-            .andExpect(jsonPath("$.[*].taxId").value(hasItem(DEFAULT_TAX_ID)))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
@@ -369,7 +363,6 @@ public class MPurchaseOrderLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mPurchaseOrderLine.getId().intValue()))
-            .andExpect(jsonPath("$.taxId").value(DEFAULT_TAX_ID))
             .andExpect(jsonPath("$.documentDate").value(DEFAULT_DOCUMENT_DATE.toString()))
             .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
             .andExpect(jsonPath("$.dateRequired").value(DEFAULT_DATE_REQUIRED.toString()))
@@ -398,84 +391,6 @@ public class MPurchaseOrderLineResourceIT {
 
         defaultMPurchaseOrderLineShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMPurchaseOrderLineShouldNotBeFound("id.lessThan=" + id);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByTaxIdIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where taxId equals to DEFAULT_TAX_ID
-        defaultMPurchaseOrderLineShouldBeFound("taxId.equals=" + DEFAULT_TAX_ID);
-
-        // Get all the mPurchaseOrderLineList where taxId equals to UPDATED_TAX_ID
-        defaultMPurchaseOrderLineShouldNotBeFound("taxId.equals=" + UPDATED_TAX_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByTaxIdIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where taxId not equals to DEFAULT_TAX_ID
-        defaultMPurchaseOrderLineShouldNotBeFound("taxId.notEquals=" + DEFAULT_TAX_ID);
-
-        // Get all the mPurchaseOrderLineList where taxId not equals to UPDATED_TAX_ID
-        defaultMPurchaseOrderLineShouldBeFound("taxId.notEquals=" + UPDATED_TAX_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByTaxIdIsInShouldWork() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where taxId in DEFAULT_TAX_ID or UPDATED_TAX_ID
-        defaultMPurchaseOrderLineShouldBeFound("taxId.in=" + DEFAULT_TAX_ID + "," + UPDATED_TAX_ID);
-
-        // Get all the mPurchaseOrderLineList where taxId equals to UPDATED_TAX_ID
-        defaultMPurchaseOrderLineShouldNotBeFound("taxId.in=" + UPDATED_TAX_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByTaxIdIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where taxId is not null
-        defaultMPurchaseOrderLineShouldBeFound("taxId.specified=true");
-
-        // Get all the mPurchaseOrderLineList where taxId is null
-        defaultMPurchaseOrderLineShouldNotBeFound("taxId.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByTaxIdContainsSomething() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where taxId contains DEFAULT_TAX_ID
-        defaultMPurchaseOrderLineShouldBeFound("taxId.contains=" + DEFAULT_TAX_ID);
-
-        // Get all the mPurchaseOrderLineList where taxId contains UPDATED_TAX_ID
-        defaultMPurchaseOrderLineShouldNotBeFound("taxId.contains=" + UPDATED_TAX_ID);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByTaxIdNotContainsSomething() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where taxId does not contain DEFAULT_TAX_ID
-        defaultMPurchaseOrderLineShouldNotBeFound("taxId.doesNotContain=" + DEFAULT_TAX_ID);
-
-        // Get all the mPurchaseOrderLineList where taxId does not contain UPDATED_TAX_ID
-        defaultMPurchaseOrderLineShouldBeFound("taxId.doesNotContain=" + UPDATED_TAX_ID);
     }
 
 
@@ -1329,6 +1244,26 @@ public class MPurchaseOrderLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMPurchaseOrderLinesByTaxIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
+        CTax tax = CTaxResourceIT.createEntity(em);
+        em.persist(tax);
+        em.flush();
+        mPurchaseOrderLine.setTax(tax);
+        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
+        Long taxId = tax.getId();
+
+        // Get all the mPurchaseOrderLineList where tax equals to taxId
+        defaultMPurchaseOrderLineShouldBeFound("taxId.equals=" + taxId);
+
+        // Get all the mPurchaseOrderLineList where tax equals to taxId + 1
+        defaultMPurchaseOrderLineShouldNotBeFound("taxId.equals=" + (taxId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMPurchaseOrderLinesByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = mPurchaseOrderLine.getAdOrganization();
@@ -1442,7 +1377,6 @@ public class MPurchaseOrderLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mPurchaseOrderLine.getId().intValue())))
-            .andExpect(jsonPath("$.[*].taxId").value(hasItem(DEFAULT_TAX_ID)))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
@@ -1499,7 +1433,6 @@ public class MPurchaseOrderLineResourceIT {
         // Disconnect from session so that the updates on updatedMPurchaseOrderLine are not directly saved in db
         em.detach(updatedMPurchaseOrderLine);
         updatedMPurchaseOrderLine
-            .taxId(UPDATED_TAX_ID)
             .documentDate(UPDATED_DOCUMENT_DATE)
             .datePromised(UPDATED_DATE_PROMISED)
             .dateRequired(UPDATED_DATE_REQUIRED)
@@ -1520,7 +1453,6 @@ public class MPurchaseOrderLineResourceIT {
         List<MPurchaseOrderLine> mPurchaseOrderLineList = mPurchaseOrderLineRepository.findAll();
         assertThat(mPurchaseOrderLineList).hasSize(databaseSizeBeforeUpdate);
         MPurchaseOrderLine testMPurchaseOrderLine = mPurchaseOrderLineList.get(mPurchaseOrderLineList.size() - 1);
-        assertThat(testMPurchaseOrderLine.getTaxId()).isEqualTo(UPDATED_TAX_ID);
         assertThat(testMPurchaseOrderLine.getDocumentDate()).isEqualTo(UPDATED_DOCUMENT_DATE);
         assertThat(testMPurchaseOrderLine.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
         assertThat(testMPurchaseOrderLine.getDateRequired()).isEqualTo(UPDATED_DATE_REQUIRED);
