@@ -1,5 +1,3 @@
-import { ICProductCategory } from '@/shared/model/c-product-category.model';
-
 export interface ICProductCategory {
   id?: number;
   code?: string;
