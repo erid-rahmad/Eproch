@@ -204,8 +204,9 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       .applyDocAction(record)
       .then(status => {
         this.refreshWindow();
+        this.docActionPopupVisible = false;
         this.$message({
-          message: `Document has been successfully ${record.approvalStatus.toLowerCase() }ed`,
+          message: `Document has been successfully ${this.docAction.name.toLowerCase()}ed`,
           type: 'success'
         });
       })
