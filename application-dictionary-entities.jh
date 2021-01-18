@@ -427,13 +427,67 @@ entity AdButton {
 	icon String
 }
 
+// Start of Dashboard related entities.
+/**
+ * The AdWatchList entity.
+ * @author Ananta Aryadewa
+ */
+entity AdWatchList {
+	name String maxlength(30) required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity AdWatchListItem {
+	code String maxlength(10) required
+	name String maxlength(50) required
+	description String
+
+	/** The name of Spring bean. */
+	serviceName String
+
+	/** RESTful API endpoint. */
+	restApiEndpoint String
+
+	/** Websocket endpoint. */
+	websocketEndpoint String
+
+	/** Action to be performed when selecting the item. */
+	actionType AdWatchListActionType required
+
+	/** URL to be opened when selecting the item. */
+	actionUrl String maxlength(50)
+
+	/** Filter query to be applied to the target menu/url. */
+	filterQuery String
+
+	/** Accent color (HEX color code) to be applied to the item. */
+	accentColor String maxlength(7)
+
+	/** Icon path to be applied to the item. */
+	icon String maxlength(100)
+
+	uid UUID
+	active Boolean
+}
+
+enum AdWatchListActionType {
+	MENU, URL
+}
+// End of Dashboard related entities.
+
 /**
  * The extended User entity.
  */
 entity AdUser {
 	uid UUID
 	active Boolean
-	phone String required
+	phone String required maxlength(20)
+	position String maxlength(30)
+
+	/** Whether it is a vendor or not */
+	vendor Boolean
 
 	failedLoginCount Integer
 	lastLoginDate Instant
@@ -530,6 +584,7 @@ relationship OneToMany {
 	AdTask to AdTaskProcess{adTask required}
 	AdTrigger to AdTriggerParam{adTrigger required}
 	AdTaskSchedulerGroup to AdTaskScheduler{group}
+	AdWatchList to AdWatchListItem{adWatchList required}
 
   ScAuthority to ScAccess{authority required}
 }
@@ -589,6 +644,12 @@ relationship ManyToOne {
 	AdButton{adTab required} to ADTab
 	AdButton{adTrigger} to AdTrigger
 
+	AdWatchList{adOrganization required} to ADOrganization
+	AdWatchListItem{adOrganization required} to ADOrganization
+
+	/** Menu to be opened when selecting the item. */
+	AdWatchListItem{adMenu} to AdMenu
+
 	AdUser{adOrganization required} to ADOrganization
 
 	AdUserAuthority{adOrganization required} to ADOrganization
@@ -629,4 +690,4 @@ dto * with mapstruct
 // Set service options to all except few
 service * with serviceClass
 
-skipClient *
+skipClient * except AdWatchList, AdWatchListItem

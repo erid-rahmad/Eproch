@@ -1,0 +1,27 @@
+{
+  "opusWebApp": {
+    "adWatchList": {
+      "home": {
+        "title": "Ad Watch Lists",
+        "createLabel": "Buat Ad Watch List baru",
+        "createOrEditLabel": "Buat atau edit Ad Watch List",
+        "notFound": "No Ad Watch Lists found"
+      },
+      "created": "Ad Watch List dengan id {{ param }} telah dibuat",
+      "updated": "Ad Watch List dengan id {{ param }} telah diperbaharui",
+      "deleted": "Ad Watch List dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Ad Watch List {{ id }}?"
+      },
+      "detail": {
+        "title": "Ad Watch List"
+      },
+      "name": "Name",
+      "description": "Description",
+      "uid": "Uid",
+      "active": "Active",
+      "adWatchListItem": "Ad Watch List Item",
+      "adOrganization": "Ad Organization"
+    }
+  }
+}

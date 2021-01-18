@@ -556,17 +556,30 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
               }
               this.childTabs.push(tab);
             } else {
-              // Header tab is immediatelly pushed to the tab stack.
-              if (this.isVendor) {
-                const vendorIdField = tab.adTableName === 'c_vendor' ? 'id' : 'vendorId';
-                tab.nativeFilterQuery = tab.filterQuery;
-                tab.filterQuery = buildCriteriaQueryString([
-                  `${vendorIdField}.equals=${accountStore.userDetails.cVendorId}`,
-                  tab.nativeFilterQuery // Include current query.
-                ]);
-                console.log('isVendor. nativeQuery: %s, overriden query: %s', tab.nativeFilterQuery, tab.filterQuery);
+              const fullPath = this.$route.fullPath;
+              const tmpFilterQuery = sessionStorage.getItem(`filterQuery__${fullPath}`);
+
+              tab.nativeFilterQuery = tab.filterQuery;
+
+              if (tmpFilterQuery !== null) {
+                sessionStorage.removeItem(`filterQuery__${fullPath}`);
               }
 
+              if (this.isVendor) {
+                const vendorIdField = tab.adTableName === 'c_vendor' ? 'id' : 'vendorId';
+
+                tab.filterQuery = buildCriteriaQueryString([
+                  `${vendorIdField}.equals=${accountStore.userDetails.cVendorId}`,
+                  tmpFilterQuery,
+                  tab.nativeFilterQuery // Include current query.
+                ]);
+              } else {
+                tab.filterQuery = buildCriteriaQueryString([
+                  tmpFilterQuery, tab.nativeFilterQuery
+                ]);
+              }
+
+              // Header tab is immediatelly pushed to the tab stack.
               this.tabStack.push(tab);
             }
           }

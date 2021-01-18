@@ -104,6 +104,8 @@
     <include file="config/liquibase/changelog/20210111021300_added_entity_MRequisitionLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210112051200_added_entity_MPurchaseOrder.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210112051300_added_entity_MPurchaseOrderLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210118150600_added_entity_AdWatchList.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210118150700_added_entity_AdWatchListItem.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -190,6 +192,8 @@
     <include file="config/liquibase/changelog/20210111021300_added_entity_constraints_MRequisitionLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210112051200_added_entity_constraints_MPurchaseOrder.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210112051300_added_entity_constraints_MPurchaseOrderLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210118150700_added_entity_constraints_AdWatchListItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210118150600_added_entity_constraints_AdWatchList.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 
     <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>

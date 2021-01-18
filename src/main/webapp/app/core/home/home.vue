@@ -1,5 +1,8 @@
 <template>
-  <div class="wscn-http-container">
+  <div
+    v-if="!authenticated"
+    class="wscn-http-container"
+  >
     <div class="wscn-http">
       <div class="pic">
         <img
@@ -68,18 +71,28 @@
           v-if="!authenticated" 
           v-on:click="openLogin()" 
           class="text__return-home">
-          <i class="el-icon-user-solid"></i> Sign In
+          <em class="el-icon-user-solid"></em> Sign In
         </a>
 
         <router-link 
             v-if="!authenticated"
             class="text__return-home"
             to="/register">
-            <i class="el-icon-s-shop"></i> Register New Account
+            <em class="el-icon-s-shop"></em> Register New Account
         </router-link>
 
       </div>
     </div>
+  </div>
+  <div
+    v-else
+    class="main-dashboard"
+  >
+    <watch-list
+      v-if="isNotVendor"
+      name="Default"
+      title="Watch List"
+    />
   </div>
 </template>
 
@@ -87,6 +100,12 @@
 </script>
 
 <style lang="scss" scoped>
+.main-dashboard {
+  padding: 24px;
+  background: #f0f2f5;
+  height: calc(100vh - 84px);
+}
+
 .wscn-http-container {
   transform: translate(-50%,-50%);
   position: absolute;

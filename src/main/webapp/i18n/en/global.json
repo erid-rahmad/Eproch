@@ -45,6 +45,8 @@
         "mProductCatalog": "M Product Catalog",
         "cProductCategory": "C Product Category",
         "cProduct": "C Product",
+        "adWatchList": "Ad Watch List",
+        "adWatchListItem": "Ad Watch List Item",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
