@@ -1,0 +1,29 @@
+{
+  "opusWebApp": {
+    "cProductCategory": {
+      "home": {
+        "title": "C Product Categories",
+        "createLabel": "Create a new C Product Category",
+        "createOrEditLabel": "Create or edit a C Product Category",
+        "notFound": "No C Product Categories found"
+      },
+      "created": "A new C Product Category is created with identifier {{ param }}",
+      "updated": "A C Product Category is updated with identifier {{ param }}",
+      "deleted": "A C Product Category is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete C Product Category {{ id }}?"
+      },
+      "detail": {
+        "title": "C Product Category"
+      },
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "uid": "Uid",
+      "active": "Active",
+      "cProductCategory": "C Product Category",
+      "adOrganization": "Ad Organization",
+      "parentCategory": "Parent Category"
+    }
+  }
+}

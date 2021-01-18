@@ -1,4 +1,5 @@
 import { ICGallery } from './c-gallery.model';
+import { ICProduct } from './c-product.model';
 
 export interface IMProductCatalog {
   id?: number;
@@ -36,6 +37,7 @@ export interface IMProductCatalog {
   cVendorName?: string;
   mBrandId?: number;
   mBrandName?: string;
+  mProduct?: ICProduct;
   mProductId?: number;
   mProductName?: string;
   vendorId?: string;
@@ -78,6 +80,7 @@ export class MProductCatalog implements IMProductCatalog {
     public cVendorName?: string,
     public mBrandId?: number,
     public mBrandName?: string,
+    public mProduct?: ICProduct,
     public mProductId?: number,
     public mProductName?: string,
     public vendorId?: string

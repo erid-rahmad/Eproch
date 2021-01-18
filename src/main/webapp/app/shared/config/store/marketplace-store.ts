@@ -1,12 +1,13 @@
-import { IProduct } from '@/core/application-dictionary/components/Form/marketplace/model/bhinneka-catalog.model';
+import { IProduct, ICategory } from '@/core/application-dictionary/components/Form/marketplace/model/bhinneka-catalog.model';
 import store from '@/shared/config/store';
 import { idb } from "@/shared/config/store/idb";
 import { CAttachment, CAttachmentType } from '@/shared/model/c-attachment.model';
 import { CGalleryItem, CGalleryItemType } from '@/shared/model/c-gallery-item.model';
 import { CGallery } from '@/shared/model/c-gallery.model';
-import { MProductCatalog, IMProductCatalog } from '@/shared/model/m-product-catalog.model';
-import { Action, getModule, Module, VuexModule, Mutation } from 'vuex-module-decorators';
-import { stat } from 'fs';
+import { CProduct, ICProduct } from '@/shared/model/c-product.model';
+import { IMProductCatalog, MProductCatalog } from '@/shared/model/m-product-catalog.model';
+import { Action, getModule, Module, Mutation, VuexModule } from 'vuex-module-decorators';
+import { isEmpty } from 'lodash';
 
 export interface IMarketplaceState {
   isShoppingCart: boolean;
@@ -14,12 +15,34 @@ export interface IMarketplaceState {
   products: IMProductCatalog[];
 }
 
+export interface ICategoryTree {
+  label: string;
+  children: ICategoryTree[];
+}
+
+export interface IFilterCriteria {
+  brands: string[];
+  categories: string[];
+  name: string;
+  price: IPriceFilter;
+}
+
+interface IPriceFilter {
+  min?: number;
+  max?: number;
+}
+
 const baseApiUrl = '/api/c-attachments/image/load-remote';
 
 function buildProduct(item: IProduct) {
   const gallery: CGallery = buildGallery(item);
   const defaultVariant = item.variants.length && item.variants[0];
-  const product: MProductCatalog = new MProductCatalog(
+  const categories = item.category;
+  const category = categories[0];
+  const subcategory = categories[1];
+  const lastCategory = categories[categories.length - 1];
+
+  const productCatalog: MProductCatalog = new MProductCatalog(
     item.id, item.name, item.description, item.description,
     defaultVariant?.skuInternal, 0, 0, 0, 1,
     defaultVariant?.sellingPrice, null, item.isPreOrder,
@@ -27,11 +50,18 @@ function buildProduct(item: IProduct) {
     defaultVariant?.stockAvailable, 'APV', 'DRF', true, true, null, null,
     true, gallery);
 
-  product.mBrandName = item.brand?.name;
-  product.cGallery = gallery;
-  product.vendorId = item.merchant.id;
-  product.cVendorName = item.merchant.name;
-  return product;
+  const product: ICProduct = new CProduct(null, lastCategory.id, lastCategory.name);
+  product.productCategoryCode = category.id;
+  product.productCategoryName = category.name;
+  product.productSubCategoryCode = subcategory.id;
+  product.productSubCategoryName = subcategory.name;
+
+  productCatalog.mProduct = product;
+  productCatalog.mBrandName = item.brand?.name;
+  productCatalog.cGallery = gallery;
+  productCatalog.vendorId = item.merchant.id;
+  productCatalog.cVendorName = item.merchant.name;
+  return productCatalog;
 }
 
 function buildGallery(item: IProduct) {
@@ -71,6 +101,9 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   isShoppingCart: boolean = false;
   cart: any[] = [];
   products: IMProductCatalog[] = [];
+  filteredProducts: IMProductCatalog[] = [];
+  brands: string[] = [];
+  categories: ICategoryTree[] = [];
 
   get cartItemCount() {
     return 0;
@@ -178,8 +211,24 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   }
 
   @Mutation
+  private SET_BRANDS(brands: string[]) {
+    this.brands = [...new Set(brands)].sort((a, b) => a < b ? -1 : 1);
+  }
+
+  @Mutation
+  private SET_CATEGORY_TREE(products: IProduct[]) {
+    // products.map(product => product.category);
+  }
+
+  @Mutation
   private SET_PRODUCTS(products: MProductCatalog[]) {
     this.products = products;
+  }
+
+  @Mutation
+  private SET_FILTERED_PRODUCTS(filteredProducts: MProductCatalog[]) {
+    console.log('Set filtered products', filteredProducts.length);
+    this.filteredProducts = filteredProducts;
   }
 
   @Mutation
@@ -188,7 +237,7 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   }
 
   @Action
-  public async initCatalog() {   
+  public async initCatalog() {
     idb.transaction('r', [
       idb.brand, idb.category, idb.image, idb.merchant, idb.product,
       idb.productCategory, idb.productVariant, idb.productVariantMedia
@@ -197,15 +246,67 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
         .map(async item => {
           return this.product(item.id);
         });
-
       return Promise.all(products);
     })
     .then(result => {
-      console.log('result no variants:', result.find(item => !item.variants.length));
       this.SET_PRODUCTS(result.map(product => buildProduct(product)));
+      this.SET_FILTERED_PRODUCTS(this.products);
+      this.SET_BRANDS(result.map(product => product.brand?.name || 'Unknown'));
+      this.SET_CATEGORY_TREE(result);
     })
     .catch(e => {
       console.log('Failed getting marketplace catalog.', e);
+    });
+  }
+
+  @Action
+  public async applyCatalogFilter({brands, categories, name, price}: IFilterCriteria) {   
+    const products = this.products.filter(product => {
+      const filterByBrand: boolean = brands.length > 0;
+      const filterByCategory: boolean = categories.length > 0;
+      const filterByName: boolean = !!name;
+      let result: boolean = true;
+
+      // Filter product by brand name.
+      if (result && filterByBrand) {
+        result = brands.some(value => product.mBrandName === value);
+      }
+
+      // Filter product by category.
+      if (result && filterByCategory) {
+        result = categories.some(value => product.mProduct.name === value);
+      }
+
+      if (result && !isEmpty(price)) {
+        const minPrice = price.min || 0;
+        const maxPrice = price.max || Infinity;
+        result = product.price >= minPrice && product.price <= maxPrice;
+      }
+
+      // Search by name, brand (override the previous brand filter), or short description.
+      if (result && filterByName) {
+        const query = name.toLowerCase();
+        result = product.mProduct.name.toLowerCase().includes(query)
+          || product.name.toLowerCase().includes(query)
+          || product.description.toLowerCase().includes(query);
+      }
+      
+      return result;
+    });
+
+    this.SET_FILTERED_PRODUCTS(products);
+  }
+
+  @Action
+  public async applySorting(orderBy: string) {
+    this.filteredProducts.sort((p1, p2) => {
+      if (orderBy === 'lowestPrice') {
+        return p1.price < p2.price ? -1 : 1;
+      } else if (orderBy === 'highestPrice') {
+        return p1.price < p2.price ? 1 : -1;
+      }
+
+      return p1.id < p2.id ? 1 : -1;
     });
   }
 

@@ -1,0 +1,29 @@
+{
+  "opusWebApp": {
+    "cProductCategory": {
+      "home": {
+        "title": "C Product Categories",
+        "createLabel": "Buat C Product Category baru",
+        "createOrEditLabel": "Buat atau edit C Product Category",
+        "notFound": "No C Product Categories found"
+      },
+      "created": "C Product Category dengan id {{ param }} telah dibuat",
+      "updated": "C Product Category dengan id {{ param }} telah diperbaharui",
+      "deleted": "C Product Category dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus C Product Category {{ id }}?"
+      },
+      "detail": {
+        "title": "C Product Category"
+      },
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "uid": "Uid",
+      "active": "Active",
+      "cProductCategory": "C Product Category",
+      "adOrganization": "Ad Organization",
+      "parentCategory": "Parent Category"
+    }
+  }
+}

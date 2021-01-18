@@ -1,23 +1,29 @@
 package com.bhp.opusb.service;
 
+import java.util.Objects;
+import java.util.Optional;
+
 import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CElementValue;
 import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.CProductCategory;
 import com.bhp.opusb.domain.CProductCategoryAccount;
 import com.bhp.opusb.domain.CProductClassification;
+import com.bhp.opusb.repository.CElementValueRepository;
+import com.bhp.opusb.repository.CProductCategoryAccountRepository;
+import com.bhp.opusb.repository.CProductCategoryRepository;
 import com.bhp.opusb.repository.CProductRepository;
 import com.bhp.opusb.service.dto.CProductDTO;
 import com.bhp.opusb.service.mapper.CProductMapper;
+import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link CProduct}.
@@ -28,17 +34,28 @@ public class CProductService {
 
     private final Logger log = LoggerFactory.getLogger(CProductService.class);
 
+    private final ADOrganizationService adOrganizationService;
     private final CProductRepository cProductRepository;
+    private final CProductCategoryRepository cProductCategoryRepository;
+    private final CProductCategoryAccountRepository cProductCategoryAccountRepository;
+    private final CElementValueRepository cElementValueRepository;
 
     private final CProductMapper cProductMapper;
 
-    private final ApplicationProperties applicationProperties;
+    private final ApplicationProperties properties;
 
-    public CProductService(CProductRepository cProductRepository, CProductMapper cProductMapper,
-    ApplicationProperties applicationProperties) {
+    public CProductService(ADOrganizationService adOrganizationService, CProductRepository cProductRepository,
+            CProductCategoryRepository cProductCategoryRepository,
+            CProductCategoryAccountRepository cProductCategoryAccountRepository,
+            CElementValueRepository cElementValueRepository, CProductMapper cProductMapper,
+            ApplicationProperties applicationProperties) {
+        this.adOrganizationService = adOrganizationService;
         this.cProductRepository = cProductRepository;
+        this.cProductCategoryRepository = cProductCategoryRepository;
+        this.cProductCategoryAccountRepository = cProductCategoryAccountRepository;
+        this.cElementValueRepository = cElementValueRepository;
         this.cProductMapper = cProductMapper;
-        this.applicationProperties = applicationProperties;
+        this.properties = applicationProperties;
     }
 
     /**
@@ -51,6 +68,89 @@ public class CProductService {
         log.debug("Request to save CProduct : {}", cProductDTO);
         CProduct cProduct = cProductMapper.toEntity(cProductDTO);
         cProduct = cProductRepository.save(cProduct);
+        return cProductMapper.toDto(cProduct);
+    }
+
+    /**
+     * Initialize product, category, and subcategory from marketplace.
+     *
+     * @param cProductDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public CProductDTO save(String productCode, String productName, String categoryCode, String categoryName, String subcategoryCode, String subcategoryName) {
+        log.debug("Request to initialize categories.");
+        ADOrganization org = adOrganizationService.getDefaultOrganization();
+        Optional<CElementValue> assetAccount = cElementValueRepository.findById(properties.getDefaultProductAssetAccountId());
+
+        if (!assetAccount.isPresent()) {
+            throw new BadRequestAlertException("There is no asset account with the given ID", "cElementValue", "idnotexists");
+        }
+        
+        Optional<CElementValue> expenseAccount = cElementValueRepository.findById(properties.getDefaultProductExpenseAccountId());
+
+        if (!expenseAccount.isPresent()) {
+            throw new BadRequestAlertException("There is no expense account with the given ID", "cElementValue", "idnotexists");
+        }
+        
+        // Add top level category.
+        CProductCategory category = cProductCategoryRepository.findFirstByCode(categoryCode)
+            .orElseGet(() -> {
+                CProductCategory cat = new CProductCategory();
+                cat.active(true)
+                    .adOrganization(org)
+                    .code(categoryCode)
+                    .name(categoryName);
+
+                cProductCategoryRepository.save(cat);
+
+                CProductCategoryAccount categoryAccount = buildCategoryAccount(org, cat, assetAccount.get(), expenseAccount.get());
+                cProductCategoryAccountRepository.save(categoryAccount);
+
+                return cat;
+            });
+
+        // Add sub category.
+        CProductCategory subcategory = cProductCategoryRepository.findFirstByCode(subcategoryCode)
+            .orElseGet(() -> {
+                CProductCategory cat = new CProductCategory();
+                cat.active(true)
+                    .adOrganization(org)
+                    .code(subcategoryCode)
+                    .name(subcategoryName)
+                    .parentCategory(category);
+
+                cProductCategoryRepository.save(cat);
+
+                CProductCategoryAccount categoryAccount = buildCategoryAccount(org, cat, assetAccount.get(), expenseAccount.get());
+                cProductCategoryAccountRepository.save(categoryAccount);
+
+                return cat;
+            });
+
+        if (!Objects.equals(subcategory.getParentCategory(), category)) {
+            category.getCProductCategories().clear();
+            category.addCProductCategory(subcategory);
+        }
+
+        CProduct cProduct = cProductRepository.findFirstByCode(productCode)
+            .orElseGet(() -> {
+                CProduct prod = new CProduct();
+                prod.active(true)
+                    .adOrganization(org)
+                    .code(productCode)
+                    .name(productName)
+                    .productCategory(category)
+                    .productSubCategory(subcategory)
+                    .assetAcct(assetAccount.get())
+                    .expenseAcct(expenseAccount.get());
+
+                return cProductRepository.save(prod);
+            });
+
+        if (!Objects.equals(cProduct.getProductCategory(), category)) {
+            cProduct.productCategory(category).productSubCategory(subcategory);
+        }
+
         return cProductMapper.toDto(cProduct);
     }
 
@@ -92,29 +192,40 @@ public class CProductService {
 
     public CProductClassification getDefaultClassification() {
         CProductClassification classification = new CProductClassification();
-        classification.setId(applicationProperties.getDefaultProductClassificationId());
+        classification.setId(properties.getDefaultProductClassificationId());
         return classification;
     }
 
     public CProductCategory getDefaultCategory() {
         CProductCategory category = new CProductCategory();
-        category.setId(applicationProperties.getDefaultProductCategoryId());
+        category.setId(properties.getDefaultProductCategoryId());
         return category;
     }
 
     public CElementValue getDefaultAssetAccount() {
         CElementValue account = new CElementValue();
-        account.setId(applicationProperties.getDefaultProductAssetAccountId());
+        account.setId(properties.getDefaultProductAssetAccountId());
         return account;
     }
 
     public CElementValue getDefaultExpenseAccount() {
         CElementValue account = new CElementValue();
-        account.setId(applicationProperties.getDefaultProductExpenseAccountId());
+        account.setId(properties.getDefaultProductExpenseAccountId());
         return account;
     }
 
     public String getDefaultType() {
-        return applicationProperties.getDefaultProductType();
+        return properties.getDefaultProductType();
+    }
+
+    private CProductCategoryAccount buildCategoryAccount(ADOrganization org, CProductCategory category, CElementValue assetAccount, CElementValue expenseAccount) {
+        CProductCategoryAccount categoryAssetAccount = new CProductCategoryAccount();
+        categoryAssetAccount.active(true)
+            .adOrganization(org)
+            .assetAcct(assetAccount)
+            .expenseAcct(expenseAccount)
+            .productCategory(category);
+
+        return categoryAssetAccount;
     }
 }

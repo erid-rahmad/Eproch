@@ -1,0 +1,34 @@
+{
+  "opusWebApp": {
+    "cProduct": {
+      "home": {
+        "title": "C Products",
+        "createLabel": "Create a new C Product",
+        "createOrEditLabel": "Create or edit a C Product",
+        "notFound": "No C Products found"
+      },
+      "created": "A new C Product is created with identifier {{ param }}",
+      "updated": "A C Product is updated with identifier {{ param }}",
+      "deleted": "A C Product is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete C Product {{ id }}?"
+      },
+      "detail": {
+        "title": "C Product"
+      },
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "type": "Type",
+      "uid": "Uid",
+      "active": "Active",
+      "adOrganization": "Ad Organization",
+      "productClassification": "Product Classification",
+      "productCategory": "Product Category",
+      "productSubCategory": "Product Sub Category",
+      "assetAcct": "Asset Acct",
+      "expenseAcct": "Expense Acct",
+      "uom": "Uom"
+    }
+  }
+}

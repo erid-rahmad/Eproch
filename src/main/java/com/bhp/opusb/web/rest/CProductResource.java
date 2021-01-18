@@ -1,30 +1,39 @@
 package com.bhp.opusb.web.rest;
 
-import com.bhp.opusb.service.CProductService;
-import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
-import com.bhp.opusb.service.dto.CProductDTO;
-import com.bhp.opusb.service.dto.CProductCriteria;
-import com.bhp.opusb.service.CProductQueryService;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import javax.validation.Valid;
+
+import com.bhp.opusb.service.CProductQueryService;
+import com.bhp.opusb.service.CProductService;
+import com.bhp.opusb.service.dto.CProductCriteria;
+import com.bhp.opusb.service.dto.CProductDTO;
+import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.bhp.opusb.domain.CProduct}.
@@ -66,6 +75,37 @@ public class CProductResource {
         return ResponseEntity.created(new URI("/api/c-products/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code POST  /c-products/init-categories} : Create a new cProduct along with its categories.
+     * This method is used to initialize the marketplace categories.
+     *
+     * @param cProductDTO the cProductDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new cProductDTO, or with status {@code 400 (Bad Request)} if the cProduct has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/c-products/init-categories")
+    public ResponseEntity<CProductDTO> initCategories(@Valid @RequestBody Map<String, String> data) throws URISyntaxException {
+        log.debug("REST request to initialize categories : {}", data);
+        final String productCode = data.get("productCode");
+        final String productName = data.get("productName");
+        final String categoryCode = data.get("categoryCode");
+        final String categoryName = data.get("categoryName");
+        final String subcategoryCode = data.get("subcategoryCode");
+        final String subcategoryName = data.get("subcategoryName");
+
+        if (productCode == null || productName == null || categoryCode == null || categoryName == null
+                || subcategoryCode == null || subcategoryName == null) {
+            throw new BadRequestAlertException(
+                    "Missing some mandatory fields: product/category/subcategory code and name.", ENTITY_NAME,
+                    "mandatoryCodeName");
+        }
+
+        CProductDTO result = cProductService.save(productCode, productName, categoryCode, categoryName, subcategoryCode,
+                subcategoryName);
+
+        return ResponseEntity.ok().body(result);
     }
 
     /**

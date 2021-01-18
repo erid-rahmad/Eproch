@@ -43,6 +43,8 @@
         "cGalleryItem": "C Gallery Item",
         "cAttachment": "C Attachment",
         "mProductCatalog": "M Product Catalog",
+        "cProductCategory": "C Product Category",
+        "cProduct": "C Product",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

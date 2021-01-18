@@ -1,27 +1,19 @@
 <template>
   <div class="product-catalog-list">
-    <el-row :gutter="24">
-      <el-col :span="8">
-        <quick-search
-          ref="quickSearch"
-          :fields="['name', 'mBrandName', 'shortDescription']"
-          @completed="onQuickSearchCompleted"
-        />
-      </el-col>
-    </el-row>
     <el-container v-loading="processing">
       <el-aside class="quick-filter">
         <div>
           <span><svg-icon name="icomoo/348-filter"/> Filter</span>
         </div>
         <filter-group
-          :list-items="['Laptop', 'Projector', 'Printer']"
+          :tree-items="categories"
           name="mProductCategory"
           title="Category"
+          type="tree"
           @changed="onFilterCategoryChanged"
         />
         <filter-group
-          :list-items="['Dell', 'BENQ', 'Asus', 'Maspion', 'Panasonic']"
+          :list-items="brands"
           multiple
           name="mBrandName"
           title="Brand"
@@ -35,36 +27,59 @@
           pattern="currency"
           @changed="onFilterPriceChanged"
         />
+        <hr/>
+        <el-button
+          size="mini"
+          style="width: 100%"
+          type="primary"
+          @click="applyFilter"
+        >
+          Apply
+        </el-button>
       </el-aside>
       <el-container>
         <el-header
           class="display-toolbar"
           height="auto"
         >
-          <el-col :offset="8" :span="8">
+          <el-col :offset="6" :span="6">
             <el-pagination
               layout="prev, pager, next"
               small
               :total="totalItems"
             />
           </el-col>
-          <el-col :span="8">
+          <el-col :span="12">
             <el-form
               inline
+              size="mini"
               style="text-align: right"
             >
-              <el-form-item
-                label="Sort by"
-                size="mini"
-              >
-                <el-select v-model="propOrder">
+              <el-form-item label="Sort by">
+                <el-select
+                  v-model="propOrder"
+                  @change="onSorted"
+                >
                   <el-option
                     v-for="field in sortableFields"
-                    :key="field.label"
+                    :key="field.name"
                     :label="field.label"
                     :value="field.name"
                   />
                 </el-select>
+              </el-form-item>
+              <el-form-item style="padding-top: 1px">
+                <el-input
+                  v-model="filterCriteria.name"
+                  clearable
+                  placeholder="Search Product"
+                >
+                  <el-button
+                    slot="append"
+                    icon="el-icon-search"
+                    @click="applyFilter"
+                  />
+                </el-input>
               </el-form-item>
             </el-form>
           </el-col>

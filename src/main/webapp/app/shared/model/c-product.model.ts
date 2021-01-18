@@ -9,7 +9,11 @@ export interface ICProduct {
   adOrganizationId?: number;
   productClassificationId?: number;
   productCategoryId?: number;
+  productCategoryCode?: string;
+  productCategoryName?: string;
   productSubCategoryId?: number;
+  productSubCategoryCode?: string;
+  productSubCategoryName?: string;
   assetAcctId?: number;
   expenseAcctId?: number;
   uomId?: number;
@@ -27,7 +31,11 @@ export class CProduct implements ICProduct {
     public adOrganizationId?: number,
     public productClassificationId?: number,
     public productCategoryId?: number,
+    public productCategoryCode?: string,
+    public productCategoryName?: string,
     public productSubCategoryId?: number,
+    public productSubCategoryCode?: string,
+    public productSubCategoryName?: string,
     public assetAcctId?: number,
     public expenseAcctId?: number,
     public uomId?: number

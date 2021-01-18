@@ -1,4 +1,5 @@
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
+import { ElTree } from 'element-ui/types/tree';
 
 const FilterGroupProps = Vue.extend({
   props: {
@@ -34,6 +35,13 @@ const FilterGroupProps = Vue.extend({
      */
     title: String,
 
+    treeItems: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
+
     /**
      * Available types: list, dropdown, range.
      */
@@ -57,12 +65,27 @@ const FilterGroupProps = Vue.extend({
 })
 export default class FilterGroup extends FilterGroupProps {
   checkedItems: string[] = [];
+  
+  defaultTreeProps = {
+    label: 'label',
+    children: 'children'
+  };
+
   range = {
     min: null,
     max: null
   };
 
-  onCheckedItemsChanged(items: string[]) {
-    this.$emit('changed', items.map(item => `mBrandName.in=${item}`).join('&'));
+  @Watch('range', { deep: true })
+  onRangeChanged(range) {
+    this.$emit('changed', range);
+  }
+
+  onCheckedItemsChanged(items: any[]) {
+    this.$emit('changed', items);
+  }
+
+  onTreeChanged() {
+    this.$emit('changed', (<ElTree<any, any>>this.$refs.tree).getCheckedNodes(true));
   }
 }

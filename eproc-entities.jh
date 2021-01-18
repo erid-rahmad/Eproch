@@ -747,48 +747,48 @@ entity MRequisition {
 	approved Boolean
 	processed Boolean
 
-    datePromised LocalDate
-    description String
-    uid UUID
+	datePromised LocalDate
+	description String
+	uid UUID
 	active Boolean
 }
 
 entity MRequisitionLine {
 	documentDate LocalDate
-    datePromised LocalDate
+	datePromised LocalDate
 	dateRequired LocalDate
-    requisitionAmount BigDecimal required
-    quantity BigDecimal required
-    unitPrice BigDecimal required
-    remark String
+	requisitionAmount BigDecimal required
+	quantity BigDecimal required
+	unitPrice BigDecimal required
+	remark String
 	uid UUID
 	active Boolean
 }
 
 entity MPurchaseOrder {
-    dateTrx LocalDate
+	dateTrx LocalDate
 	documentNo String maxlength(30)
 	documentAction String required maxlength(10)
 	documentStatus String required maxlength(10)
 	approved Boolean
 	processed Boolean
 
-    tax Boolean
-    datePromised LocalDate
-    description String
-    uid UUID
+	tax Boolean
+	datePromised LocalDate
+	description String
+	uid UUID
 	active Boolean
 }
 
 entity MPurchaseOrderLine {
-    taxId String
+	taxId String
 	documentDate LocalDate
-    datePromised LocalDate
+	datePromised LocalDate
 	dateRequired LocalDate
-    orderAmount BigDecimal required
-    quantity BigDecimal required
-    unitPrice BigDecimal required
-    remark String
+	orderAmount BigDecimal required
+	quantity BigDecimal required
+	unitPrice BigDecimal required
+	remark String
 	uid UUID
 	active Boolean
 }
@@ -1099,22 +1099,22 @@ relationship ManyToOne {
 	MRequisitionLine{uom required} to CUnitOfMeasure
 	MRequisitionLine{vendor} to CVendor
 
-    /** Purchase Order */
-    MPurchaseOrder{adOrganization required} to ADOrganization
+	/** Purchase Order */
+	MPurchaseOrder{adOrganization required} to ADOrganization
 	MPurchaseOrder{documentType required} to CDocumentType
-    MPurchaseOrder{vendor required} to CVendor
+	MPurchaseOrder{vendor required} to CVendor
 	MPurchaseOrder{currency required} to CCurrency
 	MPurchaseOrder{warehouse required} to CWarehouse
 	MPurchaseOrder{costCenter required} to CCostCenter
 
 	MPurchaseOrderLine{purchaseOrder required} to MPurchaseOrder
-    MPurchaseOrderLine{requisition} to MRequisition
+	MPurchaseOrderLine{requisition} to MRequisition
 	MPurchaseOrderLine{adOrganization required} to ADOrganization
 	MPurchaseOrderLine{product required} to CProduct
-    MPurchaseOrderLine{warehouse} to CWarehouse
+	MPurchaseOrderLine{warehouse} to CWarehouse
 	MPurchaseOrderLine{costCenter} to CCostCenter
 	MPurchaseOrderLine{uom required} to CUnitOfMeasure
-    MPurchaseOrderLine{vendor} to CVendor
+	MPurchaseOrderLine{vendor} to CVendor
 }
 
 // Allow filtering to all entities.
@@ -1126,4 +1126,4 @@ dto * with mapstruct except CRegDocTypeBusinessCategory
 // Set service options to all except few
 service * with serviceClass
 
-skipClient * except MProductCatalog, CGallery, CGalleryItem, CAttachment, MShoppingCart, MShoppingCartItem
+skipClient * except CProduct, CProductCategory, MProductCatalog, CGallery, CGalleryItem, CAttachment, MShoppingCart, MShoppingCartItem
