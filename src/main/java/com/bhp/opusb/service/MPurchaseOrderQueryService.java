@@ -109,6 +109,9 @@ public class MPurchaseOrderQueryService extends QueryService<MPurchaseOrder> {
             if (criteria.getProcessed() != null) {
                 specification = specification.and(buildSpecification(criteria.getProcessed(), MPurchaseOrder_.processed));
             }
+            if (criteria.getGrandTotal() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getGrandTotal(), MPurchaseOrder_.grandTotal));
+            }
             if (criteria.getTax() != null) {
                 specification = specification.and(buildSpecification(criteria.getTax(), MPurchaseOrder_.tax));
             }

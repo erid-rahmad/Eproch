@@ -3,7 +3,7 @@ package com.bhp.opusb.service.dto;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import javax.validation.constraints.*;
-import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -30,6 +30,8 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
     private Boolean approved;
 
     private Boolean processed;
+
+    private BigDecimal grandTotal;
 
     private Boolean tax;
 
@@ -118,6 +120,14 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
 
     public void setProcessed(Boolean processed) {
         this.processed = processed;
+    }
+
+    public BigDecimal getGrandTotal() {
+        return grandTotal;
+    }
+
+    public void setGrandTotal(BigDecimal grandTotal) {
+        this.grandTotal = grandTotal;
     }
 
     public Boolean isTax() {
@@ -287,6 +297,7 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", approved='" + isApproved() + "'" +
             ", processed='" + isProcessed() + "'" +
+            ", grandTotal=" + getGrandTotal() +
             ", tax='" + isTax() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
             ", description='" + getDescription() + "'" +

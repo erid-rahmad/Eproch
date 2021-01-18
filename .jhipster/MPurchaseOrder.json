@@ -40,6 +40,10 @@
             "fieldType": "Boolean"
         },
         {
+            "fieldName": "grandTotal",
+            "fieldType": "BigDecimal"
+        },
+        {
             "fieldName": "tax",
             "fieldType": "Boolean"
         },

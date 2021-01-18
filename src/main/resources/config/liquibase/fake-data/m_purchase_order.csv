@@ -1,11 +1,11 @@
-id;date_trx;document_no;document_action;document_status;approved;processed;tax;date_promised;description;uid;active;ad_organization_id;document_type_id;vendor_id;currency_id;warehouse_id;cost_center_id
-1;2021-01-12;GB Global haptic;digital Fr;contextual;true;true;true;2021-01-11;Cambridgeshire Incredible Equatorial Guinea;cd861bf5-d816-4361-b984-c92a1d64e95a;true;1;1;1;1;1;1
-2;2021-01-11;interfaces Florida;Indian Rup;monitoring;false;false;true;2021-01-12;Unbranded Security SDD;f5ddf78d-6d6b-42cd-94f0-bc9abb203c45;false;2;2;2;2;2;2
-3;2021-01-12;moratorium;Landing;Awesome Co;false;true;false;2021-01-11;Peso Uruguayo Uruguay Peso en Unidades Indexadas Credit Card Account North Dakota;287e11d5-e7fc-49b0-9616-6ded29ad7d04;false;3;3;3;3;3;3
-4;2021-01-11;PCI Street Islands;mobile Cot;Unbranded ;false;true;false;2021-01-12;Avon invoice Manager;8fa9a5b9-6b6b-4f4b-bc98-6d81e70c50f2;true;4;4;4;4;4;4
-5;2021-01-12;Licensed Concrete Computer Gen;Lebanese P;enhance Ca;true;true;false;2021-01-12;Junctions Central;6b6fc565-d174-42cc-947c-885792cf9972;true;5;5;5;5;5;5
-6;2021-01-11;streamline Borders;user-facin;Colorado;true;false;false;2021-01-12;Unbranded Avon maroon;5ae4dc51-be84-4541-a636-5b5944c8e789;false;6;6;6;6;6;6
-7;2021-01-12;Practical;Small blue;Consultant;true;false;false;2021-01-11;navigating revolutionary;0a34468f-0620-4ec3-9fb5-371473fb020b;true;7;7;7;7;7;7
-8;2021-01-12;Inlet;Guadeloupe;Personal L;false;false;false;2021-01-12;attitude-oriented conglomeration;a05ce7d2-7109-4c07-8c68-41138c9f44ba;false;8;8;8;8;8;8
-9;2021-01-11;Frozen;Rustic Cam;withdrawal;false;true;false;2021-01-11;Course;a98dc6ff-93ba-4db2-829a-db0f21741023;true;9;9;9;9;9;9
-10;2021-01-11;Team-oriented Practical Fresh ;Human Metr;compressin;false;false;true;2021-01-11;streamline;6c148df1-ce38-45a0-b10e-011291e9de5c;false;10;10;10;10;10;10
+id;date_trx;document_no;document_action;document_status;approved;processed;grand_total;tax;date_promised;description;uid;active;ad_organization_id;document_type_id;vendor_id;currency_id;warehouse_id;cost_center_id
+1;2021-01-12;GB Global haptic;digital Fr;contextual;true;true;54388;false;2021-01-11;bypassing internet solution;4cd861bf-5d81-4636-9f98-4c92a1d64e95;true;1;1;1;1;1;1
+2;2021-01-11;Loaf New Hampshire;Developer;back up In;true;false;66130;false;2021-01-11;Borders;1d1ef1e1-f5dd-4f78-96d6-b2cd14f0bc9a;true;2;2;2;2;2;2
+3;2021-01-11;Intelligent Soft Ball;Steel;moratorium;false;false;42531;false;2021-01-12;metrics infomediaries;0adad9b9-a287-4e11-95e7-fc9b056166de;true;3;3;3;3;3;3
+4;2021-01-12;Uganda Shilling Street;analyzer;Human web-;true;false;37056;true;2021-01-11;Cotton Oman Avon;eddfa6f7-0c80-4acf-b8fa-9a5b96b6bf4b;true;4;4;4;4;4;4
+5;2021-01-11;Berkshire connecting;Central;navigate;false;true;18622;true;2021-01-12;Licensed Concrete Computer Generic Reunion;1a7b638d-e3bc-4526-b6e7-6b6fc565d174;false;5;5;5;5;5;5
+6;2021-01-11;encryption schemas Borders;e-markets ;New Mexico;false;false;5530;false;2021-01-11;user-facing;091e010f-1e70-4365-ae4d-c51be8454166;false;6;6;6;6;6;6
+7;2021-01-11;navigate Indiana;generate;Mountains ;false;false;90172;false;2021-01-12;Personal Loan Account Hollow Consultant;73a71f6d-6510-4a34-868f-0620ec3dfb53;false;7;7;7;7;7;7
+8;2021-01-12;Bedfordshire;Argentine ;turquoise;false;true;52369;false;2021-01-11;modular generating;fd5c8572-2941-453a-85ce-7d27109c074c;false;8;8;8;8;8;8
+9;2021-01-11;Ergonomic;South Dako;Engineer n;true;false;93266;false;2021-01-12;evolve Shoes Principal;a5cd740f-4507-41a9-8dc6-ff93badb2c29;true;9;9;9;9;9;9
+10;2021-01-11;Industrial Wooden Forks;Games;AGP;true;false;88372;false;2021-01-11;non-volatile Passage Human;ffed46a2-d24f-4616-86c1-48df1ce385a0;true;10;10;10;10;10;10

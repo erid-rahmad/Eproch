@@ -137,4 +137,12 @@
         <dropNotNullConstraint tableName="m_purchase_order" columnName="date_required" />
     </changeSet>
 
+    <changeSet id="20210112051200-update-2" author="dian-tri-budianto">
+        <addColumn tableName="m_purchase_order">
+            <column name="grand_total" type="decimal(21,2)">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

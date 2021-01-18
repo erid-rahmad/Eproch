@@ -7,6 +7,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -47,6 +48,9 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
 
     @Column(name = "processed")
     private Boolean processed;
+
+    @Column(name = "grand_total", precision = 21, scale = 2)
+    private BigDecimal grandTotal;
 
     @Column(name = "tax")
     private Boolean tax;
@@ -181,6 +185,19 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
 
     public void setProcessed(Boolean processed) {
         this.processed = processed;
+    }
+
+    public BigDecimal getGrandTotal() {
+        return grandTotal;
+    }
+
+    public MPurchaseOrder grandTotal(BigDecimal grandTotal) {
+        this.grandTotal = grandTotal;
+        return this;
+    }
+
+    public void setGrandTotal(BigDecimal grandTotal) {
+        this.grandTotal = grandTotal;
     }
 
     public Boolean isTax() {
@@ -358,6 +375,7 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", approved='" + isApproved() + "'" +
             ", processed='" + isProcessed() + "'" +
+            ", grandTotal=" + getGrandTotal() +
             ", tax='" + isTax() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
             ", description='" + getDescription() + "'" +

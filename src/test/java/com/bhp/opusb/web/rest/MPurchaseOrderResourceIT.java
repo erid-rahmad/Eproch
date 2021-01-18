@@ -25,6 +25,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.List;
@@ -62,6 +63,10 @@ public class MPurchaseOrderResourceIT {
 
     private static final Boolean DEFAULT_PROCESSED = false;
     private static final Boolean UPDATED_PROCESSED = true;
+
+    private static final BigDecimal DEFAULT_GRAND_TOTAL = new BigDecimal(1);
+    private static final BigDecimal UPDATED_GRAND_TOTAL = new BigDecimal(2);
+    private static final BigDecimal SMALLER_GRAND_TOTAL = new BigDecimal(1 - 1);
 
     private static final Boolean DEFAULT_TAX = false;
     private static final Boolean UPDATED_TAX = true;
@@ -113,6 +118,7 @@ public class MPurchaseOrderResourceIT {
             .documentStatus(DEFAULT_DOCUMENT_STATUS)
             .approved(DEFAULT_APPROVED)
             .processed(DEFAULT_PROCESSED)
+            .grandTotal(DEFAULT_GRAND_TOTAL)
             .tax(DEFAULT_TAX)
             .datePromised(DEFAULT_DATE_PROMISED)
             .description(DEFAULT_DESCRIPTION)
@@ -194,6 +200,7 @@ public class MPurchaseOrderResourceIT {
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
+            .grandTotal(UPDATED_GRAND_TOTAL)
             .tax(UPDATED_TAX)
             .datePromised(UPDATED_DATE_PROMISED)
             .description(UPDATED_DESCRIPTION)
@@ -289,6 +296,7 @@ public class MPurchaseOrderResourceIT {
         assertThat(testMPurchaseOrder.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
         assertThat(testMPurchaseOrder.isApproved()).isEqualTo(DEFAULT_APPROVED);
         assertThat(testMPurchaseOrder.isProcessed()).isEqualTo(DEFAULT_PROCESSED);
+        assertThat(testMPurchaseOrder.getGrandTotal()).isEqualTo(DEFAULT_GRAND_TOTAL);
         assertThat(testMPurchaseOrder.isTax()).isEqualTo(DEFAULT_TAX);
         assertThat(testMPurchaseOrder.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
         assertThat(testMPurchaseOrder.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
@@ -372,6 +380,7 @@ public class MPurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].tax").value(hasItem(DEFAULT_TAX.booleanValue())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
@@ -396,6 +405,7 @@ public class MPurchaseOrderResourceIT {
             .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
             .andExpect(jsonPath("$.approved").value(DEFAULT_APPROVED.booleanValue()))
             .andExpect(jsonPath("$.processed").value(DEFAULT_PROCESSED.booleanValue()))
+            .andExpect(jsonPath("$.grandTotal").value(DEFAULT_GRAND_TOTAL.intValue()))
             .andExpect(jsonPath("$.tax").value(DEFAULT_TAX.booleanValue()))
             .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
@@ -868,6 +878,111 @@ public class MPurchaseOrderResourceIT {
 
     @Test
     @Transactional
+    public void getAllMPurchaseOrdersByGrandTotalIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where grandTotal equals to DEFAULT_GRAND_TOTAL
+        defaultMPurchaseOrderShouldBeFound("grandTotal.equals=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mPurchaseOrderList where grandTotal equals to UPDATED_GRAND_TOTAL
+        defaultMPurchaseOrderShouldNotBeFound("grandTotal.equals=" + UPDATED_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByGrandTotalIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where grandTotal not equals to DEFAULT_GRAND_TOTAL
+        defaultMPurchaseOrderShouldNotBeFound("grandTotal.notEquals=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mPurchaseOrderList where grandTotal not equals to UPDATED_GRAND_TOTAL
+        defaultMPurchaseOrderShouldBeFound("grandTotal.notEquals=" + UPDATED_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByGrandTotalIsInShouldWork() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where grandTotal in DEFAULT_GRAND_TOTAL or UPDATED_GRAND_TOTAL
+        defaultMPurchaseOrderShouldBeFound("grandTotal.in=" + DEFAULT_GRAND_TOTAL + "," + UPDATED_GRAND_TOTAL);
+
+        // Get all the mPurchaseOrderList where grandTotal equals to UPDATED_GRAND_TOTAL
+        defaultMPurchaseOrderShouldNotBeFound("grandTotal.in=" + UPDATED_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByGrandTotalIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where grandTotal is not null
+        defaultMPurchaseOrderShouldBeFound("grandTotal.specified=true");
+
+        // Get all the mPurchaseOrderList where grandTotal is null
+        defaultMPurchaseOrderShouldNotBeFound("grandTotal.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByGrandTotalIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where grandTotal is greater than or equal to DEFAULT_GRAND_TOTAL
+        defaultMPurchaseOrderShouldBeFound("grandTotal.greaterThanOrEqual=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mPurchaseOrderList where grandTotal is greater than or equal to UPDATED_GRAND_TOTAL
+        defaultMPurchaseOrderShouldNotBeFound("grandTotal.greaterThanOrEqual=" + UPDATED_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByGrandTotalIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where grandTotal is less than or equal to DEFAULT_GRAND_TOTAL
+        defaultMPurchaseOrderShouldBeFound("grandTotal.lessThanOrEqual=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mPurchaseOrderList where grandTotal is less than or equal to SMALLER_GRAND_TOTAL
+        defaultMPurchaseOrderShouldNotBeFound("grandTotal.lessThanOrEqual=" + SMALLER_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByGrandTotalIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where grandTotal is less than DEFAULT_GRAND_TOTAL
+        defaultMPurchaseOrderShouldNotBeFound("grandTotal.lessThan=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mPurchaseOrderList where grandTotal is less than UPDATED_GRAND_TOTAL
+        defaultMPurchaseOrderShouldBeFound("grandTotal.lessThan=" + UPDATED_GRAND_TOTAL);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByGrandTotalIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+
+        // Get all the mPurchaseOrderList where grandTotal is greater than DEFAULT_GRAND_TOTAL
+        defaultMPurchaseOrderShouldNotBeFound("grandTotal.greaterThan=" + DEFAULT_GRAND_TOTAL);
+
+        // Get all the mPurchaseOrderList where grandTotal is greater than SMALLER_GRAND_TOTAL
+        defaultMPurchaseOrderShouldBeFound("grandTotal.greaterThan=" + SMALLER_GRAND_TOTAL);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMPurchaseOrdersByTaxIsEqualToSomething() throws Exception {
         // Initialize the database
         mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
@@ -1314,6 +1429,7 @@ public class MPurchaseOrderResourceIT {
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].tax").value(hasItem(DEFAULT_TAX.booleanValue())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
@@ -1372,6 +1488,7 @@ public class MPurchaseOrderResourceIT {
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
+            .grandTotal(UPDATED_GRAND_TOTAL)
             .tax(UPDATED_TAX)
             .datePromised(UPDATED_DATE_PROMISED)
             .description(UPDATED_DESCRIPTION)
@@ -1394,6 +1511,7 @@ public class MPurchaseOrderResourceIT {
         assertThat(testMPurchaseOrder.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
         assertThat(testMPurchaseOrder.isApproved()).isEqualTo(UPDATED_APPROVED);
         assertThat(testMPurchaseOrder.isProcessed()).isEqualTo(UPDATED_PROCESSED);
+        assertThat(testMPurchaseOrder.getGrandTotal()).isEqualTo(UPDATED_GRAND_TOTAL);
         assertThat(testMPurchaseOrder.isTax()).isEqualTo(UPDATED_TAX);
         assertThat(testMPurchaseOrder.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
         assertThat(testMPurchaseOrder.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
