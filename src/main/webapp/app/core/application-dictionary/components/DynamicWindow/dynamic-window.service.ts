@@ -21,6 +21,20 @@ export default class DynamicWindowService {
     public baseApiUrl: string
   ) {}
 
+  public count(criteriaQuery?: string | string[] | object): Promise<any> {
+    return new Promise<any>((resolve, reject) => {
+      const queryParams = buildCriteriaQueryString(criteriaQuery);
+      axios
+        .get(`${this.baseApiUrl}/count?${queryParams}`)
+        .then(function(res) {
+          resolve(res.data);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
   public find(id: number): Promise<any> {
     return new Promise<any>((resolve, reject) => {
       axios

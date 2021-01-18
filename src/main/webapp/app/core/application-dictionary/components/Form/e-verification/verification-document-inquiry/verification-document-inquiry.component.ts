@@ -40,6 +40,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public paymentStatus: string = "paymentStatus";
 
   private filterQuery: string = '';
+  private tmpFilterQuery: string = '';
   private processing = false;
 
   private dialogTitle = "";
@@ -186,15 +187,22 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     }
 
     this.processing = true;
+    const fullPath = this.$route.fullPath;
     const paginationQuery = {
       page: this.page - 1,
       size: this.itemsPerPage,
       sort: this.sort()
     };
+    
+    this.tmpFilterQuery = sessionStorage.getItem(`filterQuery__${fullPath}`);
+
+    if (this.tmpFilterQuery !== null) {
+      sessionStorage.removeItem(`filterQuery__${fullPath}`);
+    }
 
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: this.filterQuery,
+        criteriaQuery: [this.filterQuery, this.tmpFilterQuery],
         paginationQuery
       })
       .then(res => {
@@ -234,7 +242,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
     this.dynamicWindowService(this.baseApiUrlVendor)
       .retrieve({
-        //criteriaQuery: this.filterQuery+"&vendorId.equals="+accountStore.userDetails.cVendorId,
         paginationQuery
       })
       .then(res => {
@@ -307,6 +314,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public verificationFilter(){
 
     this.filterQuery = "";
+
+    if (!!this.tmpFilterQuery) {
+      this.filterQuery = this.tmpFilterQuery;
+    }
 
     if(!!this.filter.verificationNo){
       this.filterQuery = "verificationNo.equals="+this.filter.verificationNo;

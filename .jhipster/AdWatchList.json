@@ -1,37 +1,22 @@
 {
-    "name": "ADWindow",
+    "name": "AdWatchList",
     "fields": [
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
         {
             "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
+                "maxlength",
                 "required"
-            ]
+            ],
+            "fieldValidateRulesMaxlength": "30"
         },
         {
             "fieldName": "description",
             "fieldType": "String"
         },
         {
-            "fieldName": "titleLogic",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "type",
-            "fieldType": "ADWindowType",
-            "fieldValues": "MAINTAIN,QUERY,TRANSACTION",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "accessLevel",
-            "fieldType": "AdAccessLevel",
-            "fieldValues": "SYS,SYS_CLN,CLN,CLN_ORG,CLN_VND"
+            "fieldName": "uid",
+            "fieldType": "UUID"
         },
         {
             "fieldName": "active",
@@ -41,21 +26,22 @@
     "relationships": [
         {
             "relationshipType": "one-to-many",
-            "otherEntityName": "aDTab",
-            "otherEntityRelationshipName": "adWindow",
-            "relationshipName": "aDTab"
+            "otherEntityName": "adWatchListItem",
+            "otherEntityRelationshipName": "adWatchList",
+            "relationshipName": "adWatchListItem"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "aDWindow",
+            "otherEntityRelationshipName": "adWatchList",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20200429152900",
-    "entityTableName": "ad_window",
+    "changelogDate": "20210118153300",
+    "javadoc": "The AdWatchList entity.\\n@author Ananta Aryadewa",
+    "entityTableName": "ad_watch_list",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",
@@ -64,7 +50,5 @@
     "readOnly": false,
     "embedded": false,
     "clientRootFolder": "",
-    "applications": "*",
-    "enableEntityAudit": true,
-    "skipClient": true
+    "applications": "*"
 }

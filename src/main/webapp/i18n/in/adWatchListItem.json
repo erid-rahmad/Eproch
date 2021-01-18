@@ -1,0 +1,47 @@
+{
+  "opusWebApp": {
+    "adWatchListItem": {
+      "home": {
+        "title": "Ad Watch List Items",
+        "createLabel": "Buat Ad Watch List Item baru",
+        "createOrEditLabel": "Buat atau edit Ad Watch List Item",
+        "notFound": "No Ad Watch List Items found"
+      },
+      "created": "Ad Watch List Item dengan id {{ param }} telah dibuat",
+      "updated": "Ad Watch List Item dengan id {{ param }} telah diperbaharui",
+      "deleted": "Ad Watch List Item dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Ad Watch List Item {{ id }}?"
+      },
+      "detail": {
+        "title": "Ad Watch List Item"
+      },
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "serviceName": "Service Name",
+      "restApiEndpoint": "Rest Api Endpoint",
+      "websocketEndpoint": "Websocket Endpoint",
+      "actionType": "Action Type",
+      "actionUrl": "Action Url",
+      "filterQuery": "Filter Query",
+      "accentColor": "Accent Color",
+      "icon": "Icon",
+      "uid": "Uid",
+      "active": "Active",
+      "adOrganization": "Ad Organization",
+      "adMenu": "Ad Menu",
+      "adWatchList": "Ad Watch List",
+      "help": {
+        "serviceName": "The name of Spring bean.",
+        "restApiEndpoint": "RESTful API endpoint.",
+        "websocketEndpoint": "Websocket endpoint.",
+        "actionType": "Action to be performed when selecting the item.",
+        "actionUrl": "URL to be opened when selecting the item.",
+        "filterQuery": "Filter query to be applied to the target menu/url.",
+        "accentColor": "Accent color (HEX color code) to be applied to the item.",
+        "icon": "Icon path to be applied to the item."
+      }
+    }
+  }
+}
