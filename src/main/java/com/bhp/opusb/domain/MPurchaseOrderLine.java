@@ -26,9 +26,6 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "tax_id")
-    private String taxId;
-
     @Column(name = "document_date")
     private LocalDate documentDate;
 
@@ -68,6 +65,10 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private MRequisition requisition;
 
+    @ManyToOne
+    @JsonIgnoreProperties("mPurchaseOrderLines")
+    private CTax tax;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mPurchaseOrderLines")
@@ -102,19 +103,6 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTaxId() {
-        return taxId;
-    }
-
-    public MPurchaseOrderLine taxId(String taxId) {
-        this.taxId = taxId;
-        return this;
-    }
-
-    public void setTaxId(String taxId) {
-        this.taxId = taxId;
     }
 
     public LocalDate getDocumentDate() {
@@ -260,6 +248,19 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
         this.requisition = mRequisition;
     }
 
+    public CTax getTax() {
+        return tax;
+    }
+
+    public MPurchaseOrderLine tax(CTax cTax) {
+        this.tax = cTax;
+        return this;
+    }
+
+    public void setTax(CTax cTax) {
+        this.tax = cTax;
+    }
+
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -364,7 +365,6 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     public String toString() {
         return "MPurchaseOrderLine{" +
             "id=" + getId() +
-            ", taxId='" + getTaxId() + "'" +
             ", documentDate='" + getDocumentDate() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +

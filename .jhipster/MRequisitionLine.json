@@ -3,17 +3,15 @@
     "fields": [
         {
             "fieldName": "documentDate",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldType": "LocalDate"
         },
         {
-            "fieldName": "documentRequired",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldName": "datePromised",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateRequired",
+            "fieldType": "LocalDate"
         },
         {
             "fieldName": "requisitionAmount",
@@ -78,7 +76,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cWarehouse",
             "otherEntityRelationshipName": "mRequisitionLine",
-            "relationshipValidateRules": "required",
             "relationshipName": "warehouse",
             "otherEntityField": "id"
         },
@@ -86,7 +83,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cCostCenter",
             "otherEntityRelationshipName": "mRequisitionLine",
-            "relationshipValidateRules": "required",
             "relationshipName": "costCenter",
             "otherEntityField": "id"
         },
@@ -102,7 +98,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cVendor",
             "otherEntityRelationshipName": "mRequisitionLine",
-            "relationshipValidateRules": "required",
             "relationshipName": "vendor",
             "otherEntityField": "id"
         }

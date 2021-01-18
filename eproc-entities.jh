@@ -781,7 +781,6 @@ entity MPurchaseOrder {
 }
 
 entity MPurchaseOrderLine {
-	taxId String
 	documentDate LocalDate
 	datePromised LocalDate
 	dateRequired LocalDate
@@ -1109,6 +1108,7 @@ relationship ManyToOne {
 
 	MPurchaseOrderLine{purchaseOrder required} to MPurchaseOrder
 	MPurchaseOrderLine{requisition} to MRequisition
+	MPurchaseOrderLine{tax} to CTax
 	MPurchaseOrderLine{adOrganization required} to ADOrganization
 	MPurchaseOrderLine{product required} to CProduct
 	MPurchaseOrderLine{warehouse} to CWarehouse

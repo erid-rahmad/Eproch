@@ -28,17 +28,19 @@ public class MRequisitionCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
+    private LocalDateFilter dateTrx;
+
+    private StringFilter documentNo;
+
     private StringFilter documentAction;
 
     private StringFilter documentStatus;
 
-    private BooleanFilter isApproved;
+    private BooleanFilter approved;
 
-    private BooleanFilter isProcessed;
+    private BooleanFilter processed;
 
-    private LocalDateFilter documentDate;
-
-    private LocalDateFilter dateRequired;
+    private LocalDateFilter datePromised;
 
     private StringFilter description;
 
@@ -61,12 +63,13 @@ public class MRequisitionCriteria implements Serializable, Criteria {
 
     public MRequisitionCriteria(MRequisitionCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
+        this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
         this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
         this.documentStatus = other.documentStatus == null ? null : other.documentStatus.copy();
-        this.isApproved = other.isApproved == null ? null : other.isApproved.copy();
-        this.isProcessed = other.isProcessed == null ? null : other.isProcessed.copy();
-        this.documentDate = other.documentDate == null ? null : other.documentDate.copy();
-        this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
+        this.approved = other.approved == null ? null : other.approved.copy();
+        this.processed = other.processed == null ? null : other.processed.copy();
+        this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
@@ -90,6 +93,22 @@ public class MRequisitionCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
+    public LocalDateFilter getDateTrx() {
+        return dateTrx;
+    }
+
+    public void setDateTrx(LocalDateFilter dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public StringFilter getDocumentNo() {
+        return documentNo;
+    }
+
+    public void setDocumentNo(StringFilter documentNo) {
+        this.documentNo = documentNo;
+    }
+
     public StringFilter getDocumentAction() {
         return documentAction;
     }
@@ -106,36 +125,28 @@ public class MRequisitionCriteria implements Serializable, Criteria {
         this.documentStatus = documentStatus;
     }
 
-    public BooleanFilter getIsApproved() {
-        return isApproved;
+    public BooleanFilter getApproved() {
+        return approved;
     }
 
-    public void setIsApproved(BooleanFilter isApproved) {
-        this.isApproved = isApproved;
+    public void setApproved(BooleanFilter approved) {
+        this.approved = approved;
     }
 
-    public BooleanFilter getIsProcessed() {
-        return isProcessed;
+    public BooleanFilter getProcessed() {
+        return processed;
     }
 
-    public void setIsProcessed(BooleanFilter isProcessed) {
-        this.isProcessed = isProcessed;
+    public void setProcessed(BooleanFilter processed) {
+        this.processed = processed;
     }
 
-    public LocalDateFilter getDocumentDate() {
-        return documentDate;
+    public LocalDateFilter getDatePromised() {
+        return datePromised;
     }
 
-    public void setDocumentDate(LocalDateFilter documentDate) {
-        this.documentDate = documentDate;
-    }
-
-    public LocalDateFilter getDateRequired() {
-        return dateRequired;
-    }
-
-    public void setDateRequired(LocalDateFilter dateRequired) {
-        this.dateRequired = dateRequired;
+    public void setDatePromised(LocalDateFilter datePromised) {
+        this.datePromised = datePromised;
     }
 
     public StringFilter getDescription() {
@@ -214,12 +225,13 @@ public class MRequisitionCriteria implements Serializable, Criteria {
         final MRequisitionCriteria that = (MRequisitionCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(dateTrx, that.dateTrx) &&
+            Objects.equals(documentNo, that.documentNo) &&
             Objects.equals(documentAction, that.documentAction) &&
             Objects.equals(documentStatus, that.documentStatus) &&
-            Objects.equals(isApproved, that.isApproved) &&
-            Objects.equals(isProcessed, that.isProcessed) &&
-            Objects.equals(documentDate, that.documentDate) &&
-            Objects.equals(dateRequired, that.dateRequired) &&
+            Objects.equals(approved, that.approved) &&
+            Objects.equals(processed, that.processed) &&
+            Objects.equals(datePromised, that.datePromised) &&
             Objects.equals(description, that.description) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
@@ -234,12 +246,13 @@ public class MRequisitionCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        dateTrx,
+        documentNo,
         documentAction,
         documentStatus,
-        isApproved,
-        isProcessed,
-        documentDate,
-        dateRequired,
+        approved,
+        processed,
+        datePromised,
         description,
         uid,
         active,
@@ -255,12 +268,13 @@ public class MRequisitionCriteria implements Serializable, Criteria {
     public String toString() {
         return "MRequisitionCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
+                (documentNo != null ? "documentNo=" + documentNo + ", " : "") +
                 (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
                 (documentStatus != null ? "documentStatus=" + documentStatus + ", " : "") +
-                (isApproved != null ? "isApproved=" + isApproved + ", " : "") +
-                (isProcessed != null ? "isProcessed=" + isProcessed + ", " : "") +
-                (documentDate != null ? "documentDate=" + documentDate + ", " : "") +
-                (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +
+                (approved != null ? "approved=" + approved + ", " : "") +
+                (processed != null ? "processed=" + processed + ", " : "") +
+                (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +

@@ -27,12 +27,9 @@ public class MRequisitionService {
 
     private final MRequisitionMapper mRequisitionMapper;
 
-    private final UserService userService;
-
-    public MRequisitionService(MRequisitionRepository mRequisitionRepository, MRequisitionMapper mRequisitionMapper, UserService userService) {
+    public MRequisitionService(MRequisitionRepository mRequisitionRepository, MRequisitionMapper mRequisitionMapper) {
         this.mRequisitionRepository = mRequisitionRepository;
         this.mRequisitionMapper = mRequisitionMapper;
-        this.userService = userService;
     }
 
     /**
@@ -93,9 +90,7 @@ public class MRequisitionService {
         MRequisition mRequisition = mRequisitionMapper.toEntity(mRequisitionDTO);
         String action = mRequisition.getDocumentAction();
         String status = mRequisition.getDocumentStatus();
-        System.out.println("========================================================================================= "+action + "-" + status);
 
         mRequisitionRepository.updateDocumentStatus(mRequisition.getId(), action, status);
-        //userService.sendActivationEmail(mRequisition);
     }
 }

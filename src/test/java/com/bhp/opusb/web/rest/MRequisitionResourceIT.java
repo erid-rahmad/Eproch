@@ -43,25 +43,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MRequisitionResourceIT {
 
+    private static final LocalDate DEFAULT_DATE_TRX = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_TRX = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_TRX = LocalDate.ofEpochDay(-1L);
+
+    private static final String DEFAULT_DOCUMENT_NO = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_NO = "BBBBBBBBBB";
+
     private static final String DEFAULT_DOCUMENT_ACTION = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENT_ACTION = "BBBBBBBBBB";
 
     private static final String DEFAULT_DOCUMENT_STATUS = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENT_STATUS = "BBBBBBBBBB";
 
-    private static final Boolean DEFAULT_IS_APPROVED = false;
-    private static final Boolean UPDATED_IS_APPROVED = true;
+    private static final Boolean DEFAULT_APPROVED = false;
+    private static final Boolean UPDATED_APPROVED = true;
 
-    private static final Boolean DEFAULT_IS_PROCESSED = false;
-    private static final Boolean UPDATED_IS_PROCESSED = true;
+    private static final Boolean DEFAULT_PROCESSED = false;
+    private static final Boolean UPDATED_PROCESSED = true;
 
-    private static final LocalDate DEFAULT_DOCUMENT_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DOCUMENT_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_DOCUMENT_DATE = LocalDate.ofEpochDay(-1L);
-
-    private static final LocalDate DEFAULT_DATE_REQUIRED = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATE_REQUIRED = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_DATE_REQUIRED = LocalDate.ofEpochDay(-1L);
+    private static final LocalDate DEFAULT_DATE_PROMISED = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_PROMISED = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_PROMISED = LocalDate.ofEpochDay(-1L);
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -100,12 +103,13 @@ public class MRequisitionResourceIT {
      */
     public static MRequisition createEntity(EntityManager em) {
         MRequisition mRequisition = new MRequisition()
+            .dateTrx(DEFAULT_DATE_TRX)
+            .documentNo(DEFAULT_DOCUMENT_NO)
             .documentAction(DEFAULT_DOCUMENT_ACTION)
             .documentStatus(DEFAULT_DOCUMENT_STATUS)
-            .isApproved(DEFAULT_IS_APPROVED)
-            .isProcessed(DEFAULT_IS_PROCESSED)
-            .documentDate(DEFAULT_DOCUMENT_DATE)
-            .dateRequired(DEFAULT_DATE_REQUIRED)
+            .approved(DEFAULT_APPROVED)
+            .processed(DEFAULT_PROCESSED)
+            .datePromised(DEFAULT_DATE_PROMISED)
             .description(DEFAULT_DESCRIPTION)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
@@ -169,12 +173,13 @@ public class MRequisitionResourceIT {
      */
     public static MRequisition createUpdatedEntity(EntityManager em) {
         MRequisition mRequisition = new MRequisition()
+            .dateTrx(UPDATED_DATE_TRX)
+            .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
             .documentStatus(UPDATED_DOCUMENT_STATUS)
-            .isApproved(UPDATED_IS_APPROVED)
-            .isProcessed(UPDATED_IS_PROCESSED)
-            .documentDate(UPDATED_DOCUMENT_DATE)
-            .dateRequired(UPDATED_DATE_REQUIRED)
+            .approved(UPDATED_APPROVED)
+            .processed(UPDATED_PROCESSED)
+            .datePromised(UPDATED_DATE_PROMISED)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
@@ -252,12 +257,13 @@ public class MRequisitionResourceIT {
         List<MRequisition> mRequisitionList = mRequisitionRepository.findAll();
         assertThat(mRequisitionList).hasSize(databaseSizeBeforeCreate + 1);
         MRequisition testMRequisition = mRequisitionList.get(mRequisitionList.size() - 1);
+        assertThat(testMRequisition.getDateTrx()).isEqualTo(DEFAULT_DATE_TRX);
+        assertThat(testMRequisition.getDocumentNo()).isEqualTo(DEFAULT_DOCUMENT_NO);
         assertThat(testMRequisition.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
         assertThat(testMRequisition.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
-        assertThat(testMRequisition.isIsApproved()).isEqualTo(DEFAULT_IS_APPROVED);
-        assertThat(testMRequisition.isIsProcessed()).isEqualTo(DEFAULT_IS_PROCESSED);
-        assertThat(testMRequisition.getDocumentDate()).isEqualTo(DEFAULT_DOCUMENT_DATE);
-        assertThat(testMRequisition.getDateRequired()).isEqualTo(DEFAULT_DATE_REQUIRED);
+        assertThat(testMRequisition.isApproved()).isEqualTo(DEFAULT_APPROVED);
+        assertThat(testMRequisition.isProcessed()).isEqualTo(DEFAULT_PROCESSED);
+        assertThat(testMRequisition.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
         assertThat(testMRequisition.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testMRequisition.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMRequisition.isActive()).isEqualTo(DEFAULT_ACTIVE);
@@ -333,12 +339,13 @@ public class MRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mRequisition.getId().intValue())))
+            .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
+            .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
-            .andExpect(jsonPath("$.[*].isApproved").value(hasItem(DEFAULT_IS_APPROVED.booleanValue())))
-            .andExpect(jsonPath("$.[*].isProcessed").value(hasItem(DEFAULT_IS_PROCESSED.booleanValue())))
-            .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
+            .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
+            .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -355,12 +362,13 @@ public class MRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mRequisition.getId().intValue()))
+            .andExpect(jsonPath("$.dateTrx").value(DEFAULT_DATE_TRX.toString()))
+            .andExpect(jsonPath("$.documentNo").value(DEFAULT_DOCUMENT_NO))
             .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
             .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
-            .andExpect(jsonPath("$.isApproved").value(DEFAULT_IS_APPROVED.booleanValue()))
-            .andExpect(jsonPath("$.isProcessed").value(DEFAULT_IS_PROCESSED.booleanValue()))
-            .andExpect(jsonPath("$.documentDate").value(DEFAULT_DOCUMENT_DATE.toString()))
-            .andExpect(jsonPath("$.dateRequired").value(DEFAULT_DATE_REQUIRED.toString()))
+            .andExpect(jsonPath("$.approved").value(DEFAULT_APPROVED.booleanValue()))
+            .andExpect(jsonPath("$.processed").value(DEFAULT_PROCESSED.booleanValue()))
+            .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
@@ -383,6 +391,189 @@ public class MRequisitionResourceIT {
 
         defaultMRequisitionShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMRequisitionShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDateTrxIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where dateTrx equals to DEFAULT_DATE_TRX
+        defaultMRequisitionShouldBeFound("dateTrx.equals=" + DEFAULT_DATE_TRX);
+
+        // Get all the mRequisitionList where dateTrx equals to UPDATED_DATE_TRX
+        defaultMRequisitionShouldNotBeFound("dateTrx.equals=" + UPDATED_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDateTrxIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where dateTrx not equals to DEFAULT_DATE_TRX
+        defaultMRequisitionShouldNotBeFound("dateTrx.notEquals=" + DEFAULT_DATE_TRX);
+
+        // Get all the mRequisitionList where dateTrx not equals to UPDATED_DATE_TRX
+        defaultMRequisitionShouldBeFound("dateTrx.notEquals=" + UPDATED_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDateTrxIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where dateTrx in DEFAULT_DATE_TRX or UPDATED_DATE_TRX
+        defaultMRequisitionShouldBeFound("dateTrx.in=" + DEFAULT_DATE_TRX + "," + UPDATED_DATE_TRX);
+
+        // Get all the mRequisitionList where dateTrx equals to UPDATED_DATE_TRX
+        defaultMRequisitionShouldNotBeFound("dateTrx.in=" + UPDATED_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDateTrxIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where dateTrx is not null
+        defaultMRequisitionShouldBeFound("dateTrx.specified=true");
+
+        // Get all the mRequisitionList where dateTrx is null
+        defaultMRequisitionShouldNotBeFound("dateTrx.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDateTrxIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where dateTrx is greater than or equal to DEFAULT_DATE_TRX
+        defaultMRequisitionShouldBeFound("dateTrx.greaterThanOrEqual=" + DEFAULT_DATE_TRX);
+
+        // Get all the mRequisitionList where dateTrx is greater than or equal to UPDATED_DATE_TRX
+        defaultMRequisitionShouldNotBeFound("dateTrx.greaterThanOrEqual=" + UPDATED_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDateTrxIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where dateTrx is less than or equal to DEFAULT_DATE_TRX
+        defaultMRequisitionShouldBeFound("dateTrx.lessThanOrEqual=" + DEFAULT_DATE_TRX);
+
+        // Get all the mRequisitionList where dateTrx is less than or equal to SMALLER_DATE_TRX
+        defaultMRequisitionShouldNotBeFound("dateTrx.lessThanOrEqual=" + SMALLER_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDateTrxIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where dateTrx is less than DEFAULT_DATE_TRX
+        defaultMRequisitionShouldNotBeFound("dateTrx.lessThan=" + DEFAULT_DATE_TRX);
+
+        // Get all the mRequisitionList where dateTrx is less than UPDATED_DATE_TRX
+        defaultMRequisitionShouldBeFound("dateTrx.lessThan=" + UPDATED_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDateTrxIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where dateTrx is greater than DEFAULT_DATE_TRX
+        defaultMRequisitionShouldNotBeFound("dateTrx.greaterThan=" + DEFAULT_DATE_TRX);
+
+        // Get all the mRequisitionList where dateTrx is greater than SMALLER_DATE_TRX
+        defaultMRequisitionShouldBeFound("dateTrx.greaterThan=" + SMALLER_DATE_TRX);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDocumentNoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where documentNo equals to DEFAULT_DOCUMENT_NO
+        defaultMRequisitionShouldBeFound("documentNo.equals=" + DEFAULT_DOCUMENT_NO);
+
+        // Get all the mRequisitionList where documentNo equals to UPDATED_DOCUMENT_NO
+        defaultMRequisitionShouldNotBeFound("documentNo.equals=" + UPDATED_DOCUMENT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDocumentNoIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where documentNo not equals to DEFAULT_DOCUMENT_NO
+        defaultMRequisitionShouldNotBeFound("documentNo.notEquals=" + DEFAULT_DOCUMENT_NO);
+
+        // Get all the mRequisitionList where documentNo not equals to UPDATED_DOCUMENT_NO
+        defaultMRequisitionShouldBeFound("documentNo.notEquals=" + UPDATED_DOCUMENT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDocumentNoIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where documentNo in DEFAULT_DOCUMENT_NO or UPDATED_DOCUMENT_NO
+        defaultMRequisitionShouldBeFound("documentNo.in=" + DEFAULT_DOCUMENT_NO + "," + UPDATED_DOCUMENT_NO);
+
+        // Get all the mRequisitionList where documentNo equals to UPDATED_DOCUMENT_NO
+        defaultMRequisitionShouldNotBeFound("documentNo.in=" + UPDATED_DOCUMENT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDocumentNoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where documentNo is not null
+        defaultMRequisitionShouldBeFound("documentNo.specified=true");
+
+        // Get all the mRequisitionList where documentNo is null
+        defaultMRequisitionShouldNotBeFound("documentNo.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMRequisitionsByDocumentNoContainsSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where documentNo contains DEFAULT_DOCUMENT_NO
+        defaultMRequisitionShouldBeFound("documentNo.contains=" + DEFAULT_DOCUMENT_NO);
+
+        // Get all the mRequisitionList where documentNo contains UPDATED_DOCUMENT_NO
+        defaultMRequisitionShouldNotBeFound("documentNo.contains=" + UPDATED_DOCUMENT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionsByDocumentNoNotContainsSomething() throws Exception {
+        // Initialize the database
+        mRequisitionRepository.saveAndFlush(mRequisition);
+
+        // Get all the mRequisitionList where documentNo does not contain DEFAULT_DOCUMENT_NO
+        defaultMRequisitionShouldNotBeFound("documentNo.doesNotContain=" + DEFAULT_DOCUMENT_NO);
+
+        // Get all the mRequisitionList where documentNo does not contain UPDATED_DOCUMENT_NO
+        defaultMRequisitionShouldBeFound("documentNo.doesNotContain=" + UPDATED_DOCUMENT_NO);
     }
 
 
@@ -544,315 +735,210 @@ public class MRequisitionResourceIT {
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByIsApprovedIsEqualToSomething() throws Exception {
+    public void getAllMRequisitionsByApprovedIsEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where isApproved equals to DEFAULT_IS_APPROVED
-        defaultMRequisitionShouldBeFound("isApproved.equals=" + DEFAULT_IS_APPROVED);
+        // Get all the mRequisitionList where approved equals to DEFAULT_APPROVED
+        defaultMRequisitionShouldBeFound("approved.equals=" + DEFAULT_APPROVED);
 
-        // Get all the mRequisitionList where isApproved equals to UPDATED_IS_APPROVED
-        defaultMRequisitionShouldNotBeFound("isApproved.equals=" + UPDATED_IS_APPROVED);
+        // Get all the mRequisitionList where approved equals to UPDATED_APPROVED
+        defaultMRequisitionShouldNotBeFound("approved.equals=" + UPDATED_APPROVED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByIsApprovedIsNotEqualToSomething() throws Exception {
+    public void getAllMRequisitionsByApprovedIsNotEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where isApproved not equals to DEFAULT_IS_APPROVED
-        defaultMRequisitionShouldNotBeFound("isApproved.notEquals=" + DEFAULT_IS_APPROVED);
+        // Get all the mRequisitionList where approved not equals to DEFAULT_APPROVED
+        defaultMRequisitionShouldNotBeFound("approved.notEquals=" + DEFAULT_APPROVED);
 
-        // Get all the mRequisitionList where isApproved not equals to UPDATED_IS_APPROVED
-        defaultMRequisitionShouldBeFound("isApproved.notEquals=" + UPDATED_IS_APPROVED);
+        // Get all the mRequisitionList where approved not equals to UPDATED_APPROVED
+        defaultMRequisitionShouldBeFound("approved.notEquals=" + UPDATED_APPROVED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByIsApprovedIsInShouldWork() throws Exception {
+    public void getAllMRequisitionsByApprovedIsInShouldWork() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where isApproved in DEFAULT_IS_APPROVED or UPDATED_IS_APPROVED
-        defaultMRequisitionShouldBeFound("isApproved.in=" + DEFAULT_IS_APPROVED + "," + UPDATED_IS_APPROVED);
+        // Get all the mRequisitionList where approved in DEFAULT_APPROVED or UPDATED_APPROVED
+        defaultMRequisitionShouldBeFound("approved.in=" + DEFAULT_APPROVED + "," + UPDATED_APPROVED);
 
-        // Get all the mRequisitionList where isApproved equals to UPDATED_IS_APPROVED
-        defaultMRequisitionShouldNotBeFound("isApproved.in=" + UPDATED_IS_APPROVED);
+        // Get all the mRequisitionList where approved equals to UPDATED_APPROVED
+        defaultMRequisitionShouldNotBeFound("approved.in=" + UPDATED_APPROVED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByIsApprovedIsNullOrNotNull() throws Exception {
+    public void getAllMRequisitionsByApprovedIsNullOrNotNull() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where isApproved is not null
-        defaultMRequisitionShouldBeFound("isApproved.specified=true");
+        // Get all the mRequisitionList where approved is not null
+        defaultMRequisitionShouldBeFound("approved.specified=true");
 
-        // Get all the mRequisitionList where isApproved is null
-        defaultMRequisitionShouldNotBeFound("isApproved.specified=false");
+        // Get all the mRequisitionList where approved is null
+        defaultMRequisitionShouldNotBeFound("approved.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByIsProcessedIsEqualToSomething() throws Exception {
+    public void getAllMRequisitionsByProcessedIsEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where isProcessed equals to DEFAULT_IS_PROCESSED
-        defaultMRequisitionShouldBeFound("isProcessed.equals=" + DEFAULT_IS_PROCESSED);
+        // Get all the mRequisitionList where processed equals to DEFAULT_PROCESSED
+        defaultMRequisitionShouldBeFound("processed.equals=" + DEFAULT_PROCESSED);
 
-        // Get all the mRequisitionList where isProcessed equals to UPDATED_IS_PROCESSED
-        defaultMRequisitionShouldNotBeFound("isProcessed.equals=" + UPDATED_IS_PROCESSED);
+        // Get all the mRequisitionList where processed equals to UPDATED_PROCESSED
+        defaultMRequisitionShouldNotBeFound("processed.equals=" + UPDATED_PROCESSED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByIsProcessedIsNotEqualToSomething() throws Exception {
+    public void getAllMRequisitionsByProcessedIsNotEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where isProcessed not equals to DEFAULT_IS_PROCESSED
-        defaultMRequisitionShouldNotBeFound("isProcessed.notEquals=" + DEFAULT_IS_PROCESSED);
+        // Get all the mRequisitionList where processed not equals to DEFAULT_PROCESSED
+        defaultMRequisitionShouldNotBeFound("processed.notEquals=" + DEFAULT_PROCESSED);
 
-        // Get all the mRequisitionList where isProcessed not equals to UPDATED_IS_PROCESSED
-        defaultMRequisitionShouldBeFound("isProcessed.notEquals=" + UPDATED_IS_PROCESSED);
+        // Get all the mRequisitionList where processed not equals to UPDATED_PROCESSED
+        defaultMRequisitionShouldBeFound("processed.notEquals=" + UPDATED_PROCESSED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByIsProcessedIsInShouldWork() throws Exception {
+    public void getAllMRequisitionsByProcessedIsInShouldWork() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where isProcessed in DEFAULT_IS_PROCESSED or UPDATED_IS_PROCESSED
-        defaultMRequisitionShouldBeFound("isProcessed.in=" + DEFAULT_IS_PROCESSED + "," + UPDATED_IS_PROCESSED);
+        // Get all the mRequisitionList where processed in DEFAULT_PROCESSED or UPDATED_PROCESSED
+        defaultMRequisitionShouldBeFound("processed.in=" + DEFAULT_PROCESSED + "," + UPDATED_PROCESSED);
 
-        // Get all the mRequisitionList where isProcessed equals to UPDATED_IS_PROCESSED
-        defaultMRequisitionShouldNotBeFound("isProcessed.in=" + UPDATED_IS_PROCESSED);
+        // Get all the mRequisitionList where processed equals to UPDATED_PROCESSED
+        defaultMRequisitionShouldNotBeFound("processed.in=" + UPDATED_PROCESSED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByIsProcessedIsNullOrNotNull() throws Exception {
+    public void getAllMRequisitionsByProcessedIsNullOrNotNull() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where isProcessed is not null
-        defaultMRequisitionShouldBeFound("isProcessed.specified=true");
+        // Get all the mRequisitionList where processed is not null
+        defaultMRequisitionShouldBeFound("processed.specified=true");
 
-        // Get all the mRequisitionList where isProcessed is null
-        defaultMRequisitionShouldNotBeFound("isProcessed.specified=false");
+        // Get all the mRequisitionList where processed is null
+        defaultMRequisitionShouldNotBeFound("processed.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByDocumentDateIsEqualToSomething() throws Exception {
+    public void getAllMRequisitionsByDatePromisedIsEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where documentDate equals to DEFAULT_DOCUMENT_DATE
-        defaultMRequisitionShouldBeFound("documentDate.equals=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised equals to DEFAULT_DATE_PROMISED
+        defaultMRequisitionShouldBeFound("datePromised.equals=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionList where documentDate equals to UPDATED_DOCUMENT_DATE
-        defaultMRequisitionShouldNotBeFound("documentDate.equals=" + UPDATED_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised equals to UPDATED_DATE_PROMISED
+        defaultMRequisitionShouldNotBeFound("datePromised.equals=" + UPDATED_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByDocumentDateIsNotEqualToSomething() throws Exception {
+    public void getAllMRequisitionsByDatePromisedIsNotEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where documentDate not equals to DEFAULT_DOCUMENT_DATE
-        defaultMRequisitionShouldNotBeFound("documentDate.notEquals=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised not equals to DEFAULT_DATE_PROMISED
+        defaultMRequisitionShouldNotBeFound("datePromised.notEquals=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionList where documentDate not equals to UPDATED_DOCUMENT_DATE
-        defaultMRequisitionShouldBeFound("documentDate.notEquals=" + UPDATED_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised not equals to UPDATED_DATE_PROMISED
+        defaultMRequisitionShouldBeFound("datePromised.notEquals=" + UPDATED_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByDocumentDateIsInShouldWork() throws Exception {
+    public void getAllMRequisitionsByDatePromisedIsInShouldWork() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where documentDate in DEFAULT_DOCUMENT_DATE or UPDATED_DOCUMENT_DATE
-        defaultMRequisitionShouldBeFound("documentDate.in=" + DEFAULT_DOCUMENT_DATE + "," + UPDATED_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised in DEFAULT_DATE_PROMISED or UPDATED_DATE_PROMISED
+        defaultMRequisitionShouldBeFound("datePromised.in=" + DEFAULT_DATE_PROMISED + "," + UPDATED_DATE_PROMISED);
 
-        // Get all the mRequisitionList where documentDate equals to UPDATED_DOCUMENT_DATE
-        defaultMRequisitionShouldNotBeFound("documentDate.in=" + UPDATED_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised equals to UPDATED_DATE_PROMISED
+        defaultMRequisitionShouldNotBeFound("datePromised.in=" + UPDATED_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByDocumentDateIsNullOrNotNull() throws Exception {
+    public void getAllMRequisitionsByDatePromisedIsNullOrNotNull() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where documentDate is not null
-        defaultMRequisitionShouldBeFound("documentDate.specified=true");
+        // Get all the mRequisitionList where datePromised is not null
+        defaultMRequisitionShouldBeFound("datePromised.specified=true");
 
-        // Get all the mRequisitionList where documentDate is null
-        defaultMRequisitionShouldNotBeFound("documentDate.specified=false");
+        // Get all the mRequisitionList where datePromised is null
+        defaultMRequisitionShouldNotBeFound("datePromised.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByDocumentDateIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllMRequisitionsByDatePromisedIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where documentDate is greater than or equal to DEFAULT_DOCUMENT_DATE
-        defaultMRequisitionShouldBeFound("documentDate.greaterThanOrEqual=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised is greater than or equal to DEFAULT_DATE_PROMISED
+        defaultMRequisitionShouldBeFound("datePromised.greaterThanOrEqual=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionList where documentDate is greater than or equal to UPDATED_DOCUMENT_DATE
-        defaultMRequisitionShouldNotBeFound("documentDate.greaterThanOrEqual=" + UPDATED_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised is greater than or equal to UPDATED_DATE_PROMISED
+        defaultMRequisitionShouldNotBeFound("datePromised.greaterThanOrEqual=" + UPDATED_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByDocumentDateIsLessThanOrEqualToSomething() throws Exception {
+    public void getAllMRequisitionsByDatePromisedIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where documentDate is less than or equal to DEFAULT_DOCUMENT_DATE
-        defaultMRequisitionShouldBeFound("documentDate.lessThanOrEqual=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised is less than or equal to DEFAULT_DATE_PROMISED
+        defaultMRequisitionShouldBeFound("datePromised.lessThanOrEqual=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionList where documentDate is less than or equal to SMALLER_DOCUMENT_DATE
-        defaultMRequisitionShouldNotBeFound("documentDate.lessThanOrEqual=" + SMALLER_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised is less than or equal to SMALLER_DATE_PROMISED
+        defaultMRequisitionShouldNotBeFound("datePromised.lessThanOrEqual=" + SMALLER_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByDocumentDateIsLessThanSomething() throws Exception {
+    public void getAllMRequisitionsByDatePromisedIsLessThanSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where documentDate is less than DEFAULT_DOCUMENT_DATE
-        defaultMRequisitionShouldNotBeFound("documentDate.lessThan=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised is less than DEFAULT_DATE_PROMISED
+        defaultMRequisitionShouldNotBeFound("datePromised.lessThan=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionList where documentDate is less than UPDATED_DOCUMENT_DATE
-        defaultMRequisitionShouldBeFound("documentDate.lessThan=" + UPDATED_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised is less than UPDATED_DATE_PROMISED
+        defaultMRequisitionShouldBeFound("datePromised.lessThan=" + UPDATED_DATE_PROMISED);
     }
 
     @Test
     @Transactional
-    public void getAllMRequisitionsByDocumentDateIsGreaterThanSomething() throws Exception {
+    public void getAllMRequisitionsByDatePromisedIsGreaterThanSomething() throws Exception {
         // Initialize the database
         mRequisitionRepository.saveAndFlush(mRequisition);
 
-        // Get all the mRequisitionList where documentDate is greater than DEFAULT_DOCUMENT_DATE
-        defaultMRequisitionShouldNotBeFound("documentDate.greaterThan=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mRequisitionList where datePromised is greater than DEFAULT_DATE_PROMISED
+        defaultMRequisitionShouldNotBeFound("datePromised.greaterThan=" + DEFAULT_DATE_PROMISED);
 
-        // Get all the mRequisitionList where documentDate is greater than SMALLER_DOCUMENT_DATE
-        defaultMRequisitionShouldBeFound("documentDate.greaterThan=" + SMALLER_DOCUMENT_DATE);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMRequisitionsByDateRequiredIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mRequisitionRepository.saveAndFlush(mRequisition);
-
-        // Get all the mRequisitionList where dateRequired equals to DEFAULT_DATE_REQUIRED
-        defaultMRequisitionShouldBeFound("dateRequired.equals=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mRequisitionList where dateRequired equals to UPDATED_DATE_REQUIRED
-        defaultMRequisitionShouldNotBeFound("dateRequired.equals=" + UPDATED_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMRequisitionsByDateRequiredIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mRequisitionRepository.saveAndFlush(mRequisition);
-
-        // Get all the mRequisitionList where dateRequired not equals to DEFAULT_DATE_REQUIRED
-        defaultMRequisitionShouldNotBeFound("dateRequired.notEquals=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mRequisitionList where dateRequired not equals to UPDATED_DATE_REQUIRED
-        defaultMRequisitionShouldBeFound("dateRequired.notEquals=" + UPDATED_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMRequisitionsByDateRequiredIsInShouldWork() throws Exception {
-        // Initialize the database
-        mRequisitionRepository.saveAndFlush(mRequisition);
-
-        // Get all the mRequisitionList where dateRequired in DEFAULT_DATE_REQUIRED or UPDATED_DATE_REQUIRED
-        defaultMRequisitionShouldBeFound("dateRequired.in=" + DEFAULT_DATE_REQUIRED + "," + UPDATED_DATE_REQUIRED);
-
-        // Get all the mRequisitionList where dateRequired equals to UPDATED_DATE_REQUIRED
-        defaultMRequisitionShouldNotBeFound("dateRequired.in=" + UPDATED_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMRequisitionsByDateRequiredIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mRequisitionRepository.saveAndFlush(mRequisition);
-
-        // Get all the mRequisitionList where dateRequired is not null
-        defaultMRequisitionShouldBeFound("dateRequired.specified=true");
-
-        // Get all the mRequisitionList where dateRequired is null
-        defaultMRequisitionShouldNotBeFound("dateRequired.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMRequisitionsByDateRequiredIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mRequisitionRepository.saveAndFlush(mRequisition);
-
-        // Get all the mRequisitionList where dateRequired is greater than or equal to DEFAULT_DATE_REQUIRED
-        defaultMRequisitionShouldBeFound("dateRequired.greaterThanOrEqual=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mRequisitionList where dateRequired is greater than or equal to UPDATED_DATE_REQUIRED
-        defaultMRequisitionShouldNotBeFound("dateRequired.greaterThanOrEqual=" + UPDATED_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMRequisitionsByDateRequiredIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mRequisitionRepository.saveAndFlush(mRequisition);
-
-        // Get all the mRequisitionList where dateRequired is less than or equal to DEFAULT_DATE_REQUIRED
-        defaultMRequisitionShouldBeFound("dateRequired.lessThanOrEqual=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mRequisitionList where dateRequired is less than or equal to SMALLER_DATE_REQUIRED
-        defaultMRequisitionShouldNotBeFound("dateRequired.lessThanOrEqual=" + SMALLER_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMRequisitionsByDateRequiredIsLessThanSomething() throws Exception {
-        // Initialize the database
-        mRequisitionRepository.saveAndFlush(mRequisition);
-
-        // Get all the mRequisitionList where dateRequired is less than DEFAULT_DATE_REQUIRED
-        defaultMRequisitionShouldNotBeFound("dateRequired.lessThan=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mRequisitionList where dateRequired is less than UPDATED_DATE_REQUIRED
-        defaultMRequisitionShouldBeFound("dateRequired.lessThan=" + UPDATED_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMRequisitionsByDateRequiredIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        mRequisitionRepository.saveAndFlush(mRequisition);
-
-        // Get all the mRequisitionList where dateRequired is greater than DEFAULT_DATE_REQUIRED
-        defaultMRequisitionShouldNotBeFound("dateRequired.greaterThan=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mRequisitionList where dateRequired is greater than SMALLER_DATE_REQUIRED
-        defaultMRequisitionShouldBeFound("dateRequired.greaterThan=" + SMALLER_DATE_REQUIRED);
+        // Get all the mRequisitionList where datePromised is greater than SMALLER_DATE_PROMISED
+        defaultMRequisitionShouldBeFound("datePromised.greaterThan=" + SMALLER_DATE_PROMISED);
     }
 
 
@@ -1125,12 +1211,13 @@ public class MRequisitionResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mRequisition.getId().intValue())))
+            .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
+            .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
-            .andExpect(jsonPath("$.[*].isApproved").value(hasItem(DEFAULT_IS_APPROVED.booleanValue())))
-            .andExpect(jsonPath("$.[*].isProcessed").value(hasItem(DEFAULT_IS_PROCESSED.booleanValue())))
-            .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
-            .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
+            .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
+            .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -1181,12 +1268,13 @@ public class MRequisitionResourceIT {
         // Disconnect from session so that the updates on updatedMRequisition are not directly saved in db
         em.detach(updatedMRequisition);
         updatedMRequisition
+            .dateTrx(UPDATED_DATE_TRX)
+            .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
             .documentStatus(UPDATED_DOCUMENT_STATUS)
-            .isApproved(UPDATED_IS_APPROVED)
-            .isProcessed(UPDATED_IS_PROCESSED)
-            .documentDate(UPDATED_DOCUMENT_DATE)
-            .dateRequired(UPDATED_DATE_REQUIRED)
+            .approved(UPDATED_APPROVED)
+            .processed(UPDATED_PROCESSED)
+            .datePromised(UPDATED_DATE_PROMISED)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
@@ -1201,12 +1289,13 @@ public class MRequisitionResourceIT {
         List<MRequisition> mRequisitionList = mRequisitionRepository.findAll();
         assertThat(mRequisitionList).hasSize(databaseSizeBeforeUpdate);
         MRequisition testMRequisition = mRequisitionList.get(mRequisitionList.size() - 1);
+        assertThat(testMRequisition.getDateTrx()).isEqualTo(UPDATED_DATE_TRX);
+        assertThat(testMRequisition.getDocumentNo()).isEqualTo(UPDATED_DOCUMENT_NO);
         assertThat(testMRequisition.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);
         assertThat(testMRequisition.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
-        assertThat(testMRequisition.isIsApproved()).isEqualTo(UPDATED_IS_APPROVED);
-        assertThat(testMRequisition.isIsProcessed()).isEqualTo(UPDATED_IS_PROCESSED);
-        assertThat(testMRequisition.getDocumentDate()).isEqualTo(UPDATED_DOCUMENT_DATE);
-        assertThat(testMRequisition.getDateRequired()).isEqualTo(UPDATED_DATE_REQUIRED);
+        assertThat(testMRequisition.isApproved()).isEqualTo(UPDATED_APPROVED);
+        assertThat(testMRequisition.isProcessed()).isEqualTo(UPDATED_PROCESSED);
+        assertThat(testMRequisition.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
         assertThat(testMRequisition.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testMRequisition.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMRequisition.isActive()).isEqualTo(UPDATED_ACTIVE);

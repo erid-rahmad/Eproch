@@ -14,11 +14,11 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    @NotNull
     private LocalDate documentDate;
 
-    @NotNull
-    private LocalDate documentRequired;
+    private LocalDate datePromised;
+
+    private LocalDate dateRequired;
 
     @NotNull
     private BigDecimal requisitionAmount;
@@ -72,12 +72,20 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
         this.documentDate = documentDate;
     }
 
-    public LocalDate getDocumentRequired() {
-        return documentRequired;
+    public LocalDate getDatePromised() {
+        return datePromised;
     }
 
-    public void setDocumentRequired(LocalDate documentRequired) {
-        this.documentRequired = documentRequired;
+    public void setDatePromised(LocalDate datePromised) {
+        this.datePromised = datePromised;
+    }
+
+    public LocalDate getDateRequired() {
+        return dateRequired;
+    }
+
+    public void setDateRequired(LocalDate dateRequired) {
+        this.dateRequired = dateRequired;
     }
 
     public BigDecimal getRequisitionAmount() {
@@ -258,7 +266,8 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
         return "MRequisitionLineDTO{" +
             "id=" + getId() +
             ", documentDate='" + getDocumentDate() + "'" +
-            ", documentRequired='" + getDocumentRequired() + "'" +
+            ", datePromised='" + getDatePromised() + "'" +
+            ", dateRequired='" + getDateRequired() + "'" +
             ", requisitionAmount=" + getRequisitionAmount() +
             ", quantity=" + getQuantity() +
             ", unitPrice=" + getUnitPrice() +

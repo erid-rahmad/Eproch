@@ -73,7 +73,8 @@ class MRequisitionLineGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "documentDate":"2020-01-01T00:00:00.000Z"
-                , "documentRequired":"2020-01-01T00:00:00.000Z"
+                , "datePromised":"2020-01-01T00:00:00.000Z"
+                , "dateRequired":"2020-01-01T00:00:00.000Z"
                 , "requisitionAmount":"0"
                 , "quantity":"0"
                 , "unitPrice":"0"

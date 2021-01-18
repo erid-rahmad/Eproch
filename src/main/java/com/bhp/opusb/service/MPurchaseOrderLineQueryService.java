@@ -91,9 +91,6 @@ public class MPurchaseOrderLineQueryService extends QueryService<MPurchaseOrderL
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MPurchaseOrderLine_.id));
             }
-            if (criteria.getTaxId() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getTaxId(), MPurchaseOrderLine_.taxId));
-            }
             if (criteria.getDocumentDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDocumentDate(), MPurchaseOrderLine_.documentDate));
             }
@@ -128,6 +125,10 @@ public class MPurchaseOrderLineQueryService extends QueryService<MPurchaseOrderL
             if (criteria.getRequisitionId() != null) {
                 specification = specification.and(buildSpecification(criteria.getRequisitionId(),
                     root -> root.join(MPurchaseOrderLine_.requisition, JoinType.LEFT).get(MRequisition_.id)));
+            }
+            if (criteria.getTaxId() != null) {
+                specification = specification.and(buildSpecification(criteria.getTaxId(),
+                    root -> root.join(MPurchaseOrderLine_.tax, JoinType.LEFT).get(CTax_.id)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),

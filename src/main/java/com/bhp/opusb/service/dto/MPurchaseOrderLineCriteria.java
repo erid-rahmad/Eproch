@@ -29,8 +29,6 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter taxId;
-
     private LocalDateFilter documentDate;
 
     private LocalDateFilter datePromised;
@@ -53,6 +51,8 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
 
     private LongFilter requisitionId;
 
+    private LongFilter taxId;
+
     private LongFilter adOrganizationId;
 
     private LongFilter productId;
@@ -70,7 +70,6 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
 
     public MPurchaseOrderLineCriteria(MPurchaseOrderLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.taxId = other.taxId == null ? null : other.taxId.copy();
         this.documentDate = other.documentDate == null ? null : other.documentDate.copy();
         this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
         this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
@@ -82,6 +81,7 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.purchaseOrderId = other.purchaseOrderId == null ? null : other.purchaseOrderId.copy();
         this.requisitionId = other.requisitionId == null ? null : other.requisitionId.copy();
+        this.taxId = other.taxId == null ? null : other.taxId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.productId = other.productId == null ? null : other.productId.copy();
         this.warehouseId = other.warehouseId == null ? null : other.warehouseId.copy();
@@ -101,14 +101,6 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getTaxId() {
-        return taxId;
-    }
-
-    public void setTaxId(StringFilter taxId) {
-        this.taxId = taxId;
     }
 
     public LocalDateFilter getDocumentDate() {
@@ -199,6 +191,14 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
         this.requisitionId = requisitionId;
     }
 
+    public LongFilter getTaxId() {
+        return taxId;
+    }
+
+    public void setTaxId(LongFilter taxId) {
+        this.taxId = taxId;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -259,7 +259,6 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
         final MPurchaseOrderLineCriteria that = (MPurchaseOrderLineCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(taxId, that.taxId) &&
             Objects.equals(documentDate, that.documentDate) &&
             Objects.equals(datePromised, that.datePromised) &&
             Objects.equals(dateRequired, that.dateRequired) &&
@@ -271,6 +270,7 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(purchaseOrderId, that.purchaseOrderId) &&
             Objects.equals(requisitionId, that.requisitionId) &&
+            Objects.equals(taxId, that.taxId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(productId, that.productId) &&
             Objects.equals(warehouseId, that.warehouseId) &&
@@ -283,7 +283,6 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
-        taxId,
         documentDate,
         datePromised,
         dateRequired,
@@ -295,6 +294,7 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
         active,
         purchaseOrderId,
         requisitionId,
+        taxId,
         adOrganizationId,
         productId,
         warehouseId,
@@ -308,7 +308,6 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
     public String toString() {
         return "MPurchaseOrderLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (taxId != null ? "taxId=" + taxId + ", " : "") +
                 (documentDate != null ? "documentDate=" + documentDate + ", " : "") +
                 (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
                 (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +
@@ -320,6 +319,7 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (purchaseOrderId != null ? "purchaseOrderId=" + purchaseOrderId + ", " : "") +
                 (requisitionId != null ? "requisitionId=" + requisitionId + ", " : "") +
+                (taxId != null ? "taxId=" + taxId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (productId != null ? "productId=" + productId + ", " : "") +
                 (warehouseId != null ? "warehouseId=" + warehouseId + ", " : "") +

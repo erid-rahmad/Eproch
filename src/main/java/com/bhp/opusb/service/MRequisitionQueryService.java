@@ -91,23 +91,26 @@ public class MRequisitionQueryService extends QueryService<MRequisition> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MRequisition_.id));
             }
+            if (criteria.getDateTrx() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), MRequisition_.dateTrx));
+            }
+            if (criteria.getDocumentNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentNo(), MRequisition_.documentNo));
+            }
             if (criteria.getDocumentAction() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDocumentAction(), MRequisition_.documentAction));
             }
             if (criteria.getDocumentStatus() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDocumentStatus(), MRequisition_.documentStatus));
             }
-            if (criteria.getIsApproved() != null) {
-                specification = specification.and(buildSpecification(criteria.getIsApproved(), MRequisition_.isApproved));
+            if (criteria.getApproved() != null) {
+                specification = specification.and(buildSpecification(criteria.getApproved(), MRequisition_.approved));
             }
-            if (criteria.getIsProcessed() != null) {
-                specification = specification.and(buildSpecification(criteria.getIsProcessed(), MRequisition_.isProcessed));
+            if (criteria.getProcessed() != null) {
+                specification = specification.and(buildSpecification(criteria.getProcessed(), MRequisition_.processed));
             }
-            if (criteria.getDocumentDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDocumentDate(), MRequisition_.documentDate));
-            }
-            if (criteria.getDateRequired() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDateRequired(), MRequisition_.dateRequired));
+            if (criteria.getDatePromised() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDatePromised(), MRequisition_.datePromised));
             }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), MRequisition_.description));

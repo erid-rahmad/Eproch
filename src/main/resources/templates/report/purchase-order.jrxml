@@ -56,7 +56,7 @@
 	<parameter name="poNo" class="java.lang.Long"/>
 	<queryString>
 		<![CDATA[SELECT
-	po.id as poNo,
+	po.document_no as poNo,
 	po.created_date as poDate,
 	po.created_by as requestor,
 	vend.name as vendor,

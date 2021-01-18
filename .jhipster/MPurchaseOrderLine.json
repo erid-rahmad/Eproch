@@ -2,10 +2,6 @@
     "name": "MPurchaseOrderLine",
     "fields": [
         {
-            "fieldName": "taxId",
-            "fieldType": "String"
-        },
-        {
             "fieldName": "documentDate",
             "fieldType": "LocalDate"
         },
@@ -65,6 +61,13 @@
             "otherEntityName": "mRequisition",
             "otherEntityRelationshipName": "mPurchaseOrderLine",
             "relationshipName": "requisition",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTax",
+            "otherEntityRelationshipName": "mPurchaseOrderLine",
+            "relationshipName": "tax",
             "otherEntityField": "id"
         },
         {

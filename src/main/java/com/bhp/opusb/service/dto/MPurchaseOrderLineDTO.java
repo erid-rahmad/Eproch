@@ -14,8 +14,6 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    private String taxId;
-
     private LocalDate documentDate;
 
     private LocalDate datePromised;
@@ -42,6 +40,9 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
 
     private Long requisitionId;
 
+    private Long taxId;
+    private String taxName;
+
     private Long adOrganizationId;
     private String adOrganizationName;
 
@@ -66,14 +67,6 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getTaxId() {
-        return taxId;
-    }
-
-    public void setTaxId(String taxId) {
-        this.taxId = taxId;
     }
 
     public LocalDate getDocumentDate() {
@@ -162,6 +155,22 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
 
     public void setRequisitionId(Long mRequisitionId) {
         this.requisitionId = mRequisitionId;
+    }
+
+    public Long getTaxId() {
+        return taxId;
+    }
+
+    public void setTaxId(Long cTaxId) {
+        this.taxId = cTaxId;
+    }
+
+    public String getTaxName() {
+        return taxName;
+    }
+
+    public void setTaxName(String cTaxName) {
+        this.taxName = cTaxName;
     }
 
     public Long getAdOrganizationId() {
@@ -285,7 +294,6 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MPurchaseOrderLineDTO{" +
             "id=" + getId() +
-            ", taxId='" + getTaxId() + "'" +
             ", documentDate='" + getDocumentDate() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +
@@ -297,6 +305,8 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", purchaseOrderId=" + getPurchaseOrderId() +
             ", requisitionId=" + getRequisitionId() +
+            ", taxId=" + getTaxId() +
+            ", taxName=" + getTaxName() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName=" + getAdOrganizationName() +
             ", productId=" + getProductId() +
