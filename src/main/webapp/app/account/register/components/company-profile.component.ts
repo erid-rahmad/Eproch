@@ -399,10 +399,7 @@ export default class CompanyProfile extends CompanyProps {
   onUploadSuccess(response: any) {
       console.log('File uploaded successfully ', response);
       this.company.fileId = response.attachment.id;
-      //(this.$refs.company as ElForm).validate(this.company.file);
-      (this.$refs.company as ElForm).validate((passed, errors) => {
-        this.company.file != '';
-      });
+      (this.$refs.company as ElForm).clearValidate('file');
   }
 
   handleExceed(files, fileList) {
