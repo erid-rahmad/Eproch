@@ -92,7 +92,7 @@ WHERE
 	prod.id = po_line.product_id and
 	po.id = $P{poNo}]]>
 	</queryString>
-	<field name="pono" class="java.lang.Long">
+	<field name="pono" class="java.lang.String">
 		<property name="com.jaspersoft.studio.field.name" value="pono"/>
 		<property name="com.jaspersoft.studio.field.label" value="pono"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="m_purchase_order"/>
