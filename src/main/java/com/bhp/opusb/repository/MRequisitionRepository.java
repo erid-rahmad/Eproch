@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 public interface MRequisitionRepository extends JpaRepository<MRequisition, Long>, JpaSpecificationExecutor<MRequisition> {
 
     @Modifying
-    @Query("UPDATE MRequisition v SET v.documentAction = :action, v.documentStatus = :status, v.isApproved = true, v.isProcessed = true WHERE v.id = :id")
+    @Query("UPDATE MRequisition v SET v.documentAction = :action, v.documentStatus = :status, v.approved = true, v.processed = true WHERE v.id = :id")
     void updateDocumentStatus(@Param("id") long id, @Param("action") String action, @Param("status") String status);
 }
