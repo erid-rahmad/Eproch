@@ -193,6 +193,12 @@ public class MVerificationLine extends AbstractAuditingEntity {
     @Column(name = "c_doc_type_mr", length = 2)
     private String cDocTypeMr;
 
+    /**
+     * Whether the respective receipt line is reversed or not.
+     */
+    @Column(name = "receipt_reversed")
+    private Boolean receiptReversed;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -583,6 +589,19 @@ public class MVerificationLine extends AbstractAuditingEntity {
         this.cDocTypeMr = cDocTypeMr;
     }
 
+    public Boolean isReceiptReversed() {
+        return receiptReversed;
+    }
+
+    public MVerificationLine receiptReversed(Boolean receiptReversed) {
+        this.receiptReversed = receiptReversed;
+        return this;
+    }
+
+    public void setReceiptReversed(Boolean receiptReversed) {
+        this.receiptReversed = receiptReversed;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -764,6 +783,7 @@ public class MVerificationLine extends AbstractAuditingEntity {
             ", taxable='" + isTaxable() + "'" +
             ", cDocType='" + getcDocType() + "'" +
             ", cDocTypeMr='" + getcDocTypeMr() + "'" +
+            ", receiptReversed='" + isReceiptReversed() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

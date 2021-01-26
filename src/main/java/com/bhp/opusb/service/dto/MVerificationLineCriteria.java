@@ -79,6 +79,8 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private StringFilter cDocTypeMr;
 
+    private BooleanFilter receiptReversed;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -129,6 +131,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.taxable = other.taxable == null ? null : other.taxable.copy();
         this.cDocType = other.cDocType == null ? null : other.cDocType.copy();
         this.cDocTypeMr = other.cDocTypeMr == null ? null : other.cDocTypeMr.copy();
+        this.receiptReversed = other.receiptReversed == null ? null : other.receiptReversed.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.verificationId = other.verificationId == null ? null : other.verificationId.copy();
@@ -354,6 +357,14 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.cDocTypeMr = cDocTypeMr;
     }
 
+    public BooleanFilter getReceiptReversed() {
+        return receiptReversed;
+    }
+
+    public void setReceiptReversed(BooleanFilter receiptReversed) {
+        this.receiptReversed = receiptReversed;
+    }
+
     public UUIDFilter getUid() {
         return uid;
     }
@@ -471,6 +482,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
             Objects.equals(taxable, that.taxable) &&
             Objects.equals(cDocType, that.cDocType) &&
             Objects.equals(cDocTypeMr, that.cDocTypeMr) &&
+            Objects.equals(receiptReversed, that.receiptReversed) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(verificationId, that.verificationId) &&
@@ -512,6 +524,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         taxable,
         cDocType,
         cDocTypeMr,
+        receiptReversed,
         uid,
         active,
         verificationId,
@@ -554,6 +567,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
                 (taxable != null ? "taxable=" + taxable + ", " : "") +
                 (cDocType != null ? "cDocType=" + cDocType + ", " : "") +
                 (cDocTypeMr != null ? "cDocTypeMr=" + cDocTypeMr + ", " : "") +
+                (receiptReversed != null ? "receiptReversed=" + receiptReversed + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (verificationId != null ? "verificationId=" + verificationId + ", " : "") +

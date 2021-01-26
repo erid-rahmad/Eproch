@@ -170,6 +170,11 @@
             "fieldValidateRulesMaxlength": "2"
         },
         {
+            "fieldName": "receiptReversed",
+            "javadoc": "Whether the respective receipt line is reversed or not.",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +22,7 @@ import com.bhp.opusb.service.dto.PaymentStatusDTO;
 import com.bhp.opusb.service.dto.VerificationDTO;
 import com.bhp.opusb.service.mapper.MVerificationMapper;
 import com.bhp.opusb.service.trigger.process.integration.MVerificationMessageDispatcher;
+import com.bhp.opusb.util.DocumentUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -53,6 +53,7 @@ public class MVerificationService {
     private final DataSource dataSource;
 
     private final ADOrganization organization;
+    private final MMatchPOQueryService mMatchPOQueryService;
     private final MVerificationRepository mVerificationRepository;
     private final MVerificationMapper mVerificationMapper;
     private final MVerificationLineService mVerificationLineService;
@@ -60,21 +61,22 @@ public class MVerificationService {
     private final AiMessageDispatcher messageDispatcher;
     private final UserService userService;
     private final ADOrganizationService adOrganizationService;
-    private final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMM");
 
     @Autowired
     private ObjectMapper jsonMapper;
 
-    public MVerificationService(MVerificationRepository mVerificationRepository, DataSource dataSource,
-            MVerificationMapper mVerificationMapper, MVerificationLineService mVerificationLineService,
+    public MVerificationService(DataSource dataSource, MMatchPOQueryService mMatchPOQueryService,
+            MVerificationRepository mVerificationRepository, MVerificationMapper mVerificationMapper,
+            MVerificationLineService mVerificationLineService,
             MVerificationLineQueryService mVerificationLineQueryService, ADOrganizationService adOrganizationService,
             AiMessageDispatcher messageDispatcher, UserService userService) {
         this.dataSource = dataSource;
+        this.mMatchPOQueryService = mMatchPOQueryService;
         this.mVerificationRepository = mVerificationRepository;
         this.mVerificationMapper = mVerificationMapper;
         this.mVerificationLineService = mVerificationLineService;
         this.mVerificationLineQueryService = mVerificationLineQueryService;
-        this.messageDispatcher= messageDispatcher;
+        this.messageDispatcher = messageDispatcher;
         this.userService = userService;
         this.adOrganizationService = adOrganizationService;
 
@@ -97,88 +99,100 @@ public class MVerificationService {
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("verificationId", verificationId);
-        JasperPrint print = JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
-        return print;
+        return JasperFillManager.fillReport(jasperReport, parameters, dataSource.getConnection());
 
-    }
-
-    public MVerification submitEVerification(VerificationDTO verificationDTO) {
-        // Ensure verification has generated ID.
-        MVerification verification = mVerificationMapper.toEntity(verificationDTO.getForm());
-        verification.active(true)
-            .adOrganization(organization)
-            .verificationNo(buildRunningNumber());
-
-        mVerificationRepository.save(verification);
-
-        // Batch save verification line.
-        mVerificationLineService.saveAll(verificationDTO.getLine(), verification, organization);
-
-        return verification;
     }
 
     /**
-     * TODO Use a generic method to update the document status for every entities.
-     * TODO Use the workflow engine for maintaining the flow state.
+     * Save the invoice verification document as DRAFT, including its lines.
+     * @param verificationDTO
+     * @return
      */
-    public void updateDocumentStatus(VerificationDTO verificationDTO) {
-        MVerificationDTO mVerificationDTO = verificationDTO.getForm();
-        List<MVerificationLineDTO> mVerificationLineDTOs = verificationDTO.getLine();
-        log.debug("Request to update MVerificationDTO's document status : {}", mVerificationDTO);
-        MVerification mVerification = mVerificationMapper.toEntity(mVerificationDTO);
-
-        if (mVerification.getVerificationStatus().equals("APV") && mVerification.getDateApprove() == null) {
-            mVerification.setDateApprove(LocalDate.now());
-        } else if (mVerification.getVerificationStatus().equals("RJC") && mVerification.getDateReject() == null) {
-            mVerification.setDateReject(LocalDate.now());
+    public MVerificationDTO saveDocument(VerificationDTO verificationDTO) {
+        log.debug("Request to save MVerification document : {}", verificationDTO);
+        final MVerification verification = mVerificationMapper.toEntity(verificationDTO.getForm());
+        final String documentStatus = verification.getVerificationStatus();
+        final boolean approval = DocumentUtil.isApprove(documentStatus);
+        final boolean rejection = DocumentUtil.isReject(documentStatus);
+        
+        if (DocumentUtil.isNew(documentStatus)) {
+            verification.active(true)
+                .adOrganization(organization)
+                .dateTrx(verification.getInvoiceDate())
+                .documentNo(DocumentUtil.buildRunningNumber(mVerificationRepository))
+                .documentAction(DocumentUtil.STATUS_SUBMIT)
+                .documentStatus(DocumentUtil.STATUS_DRAFT)
+                .verificationNo(verification.getDocumentNo())
+                .verificationStatus(DocumentUtil.STATUS_DRAFT);
+        } else if (approval) {
+            verification.dateApprove(LocalDate.now())
+                .documentAction(DocumentUtil.STATUS_APPROVE)
+                .documentStatus(DocumentUtil.STATUS_APPROVE)
+                .approved(true)
+                .processed(true);
+        } else if (rejection) {
+            verification.dateReject(LocalDate.now())
+                .documentAction(DocumentUtil.STATUS_REJECT)
+                .documentStatus(DocumentUtil.STATUS_REJECT)
+                .approved(false)
+                .processed(true);
         }
 
-        mVerificationRepository.save(mVerification);
-        mVerificationLineService.saveAll(mVerificationLineDTOs, mVerification, organization);
-
-        if (!verificationDTO.getRemove().isEmpty()) {
-            mVerificationLineService.removeAll(verificationDTO.getRemove());
+        // Validate each line againts its receipt line, only if it is not the rejection process.
+        if (! rejection) {
+            for (MVerificationLineDTO lineDTO : verificationDTO.getLines()) {
+                if (! mMatchPOQueryService.isValidMatchPO(lineDTO.getAdOrganizationCode(), lineDTO.getcDocType(),
+                        lineDTO.getPoNo(), lineDTO.getReceiveNo(), lineDTO.getLineNoPo(), lineDTO.getLineNoMr(),
+                        lineDTO.getOrderSuffix())) {
+                    throw new PoReceiptReversedException(lineDTO);
+                }
+            }
         }
 
-        if (mVerification.getVerificationStatus().equals("APV") || mVerification.getVerificationStatus().equals("RJC")) {
-            findOne(mVerification.getId())
-                .ifPresent(header -> {
-                    MVerificationLineCriteria lineCriteria = new MVerificationLineCriteria();
-                    LongFilter idFilter = new LongFilter();
-                    idFilter.setEquals(header.getId());
-                    lineCriteria.setVerificationId(idFilter);
-                    List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
+        mVerificationRepository.save(verification.receiptReversed(false));
+        mVerificationLineService.saveAll(verificationDTO.getLines(), verification, organization);
 
-                    if (mVerification.getVerificationStatus().equals("APV") && !lines.isEmpty()) {
-                        // Dispatch the header to the external system.
-                        final Map<String, Object> headerPayload = new HashMap<>(2);
-                        headerPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_HEADER);
-                        headerPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, header);
-                        messageDispatcher.dispatch("mVerificationMessageDispatcher", headerPayload);
-
-                        // Dispatch the lines to the external system.
-                        if (!lines.isEmpty()) {
-                            final Map<String, Object> linesPayload = new HashMap<>(2);
-                            linesPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_LINES);
-                            linesPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, lines);
-                            messageDispatcher.dispatch("mVerificationMessageDispatcher", linesPayload);
-                        }
-                    } else if(mVerification.getVerificationStatus().equals("RJC")) {
-                        userService.sendNotifRejectVerification(header, lines);
-                    }
-                });
-
+        if (! verificationDTO.getRemovedLines().isEmpty()) {
+            mVerificationLineService.removeAll(verificationDTO.getRemovedLines());
         }
+
+        if (approval || rejection) {
+            sendDocument(verification);
+        }
+
+        return mVerificationMapper.toDto(verification);
     }
 
-    private String buildRunningNumber() {
-        LocalDate now = LocalDate.now();
-        LocalDate start = now.withDayOfMonth(1);
-        LocalDate end = now.withDayOfMonth(now.lengthOfMonth());
+    public void sendDocument(MVerification verification) {
+        final String documentStatus = verification.getVerificationStatus();
 
-        String prefix = now.format(dateTimeFormatter);
-        int numOfRecords = mVerificationRepository.countByVerificationDateBetween(start, end);
-        return prefix + (String.format("%04d", numOfRecords));
+        findOne(verification.getId())
+            .ifPresent(header -> {
+                MVerificationLineCriteria lineCriteria = new MVerificationLineCriteria();
+                LongFilter idFilter = new LongFilter();
+
+                idFilter.setEquals(header.getId());
+                lineCriteria.setVerificationId(idFilter);
+                List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
+
+                if (DocumentUtil.isApprove(documentStatus) && ! lines.isEmpty()) {
+                    // Dispatch the header to the external system.
+                    final Map<String, Object> headerPayload = new HashMap<>(2);
+                    headerPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_HEADER);
+                    headerPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, header);
+                    messageDispatcher.dispatch(MVerificationMessageDispatcher.BEAN_NAME, headerPayload);
+
+                    // Dispatch the lines to the external system.
+                    if (!lines.isEmpty()) {
+                        final Map<String, Object> linesPayload = new HashMap<>(2);
+                        linesPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_LINES);
+                        linesPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, lines);
+                        messageDispatcher.dispatch(MVerificationMessageDispatcher.BEAN_NAME, linesPayload);
+                    }
+                } else if(DocumentUtil.isReject(documentStatus)) {
+                    userService.sendNotifRejectVerification(header, lines);
+                }
+            });
     }
 
     /**
@@ -191,11 +205,33 @@ public class MVerificationService {
         log.debug("Request to save MVerification : {}", mVerificationDTO);
         MVerification mVerification = mVerificationMapper.toEntity(mVerificationDTO);
 
-        if (mVerification.getVerificationStatus().equals("SMT") && mVerification.getDateSubmit() == null) {
-            mVerification.setDateSubmit(LocalDate.now());
+        mVerification.documentStatus(mVerification.getVerificationStatus())
+            .documentAction(mVerification.getVerificationStatus());
+
+        // Just update the submission date if required.
+        if (DocumentUtil.isSubmit(mVerificationDTO.getVerificationStatus())) {
+            MVerificationLineCriteria lineCriteria = new MVerificationLineCriteria();
+            LongFilter idFilter = new LongFilter();
+
+            idFilter.setEquals(mVerification.getId());
+            lineCriteria.setVerificationId(idFilter);
+            List<MVerificationLineDTO> lines = mVerificationLineQueryService.findByCriteria(lineCriteria);
+
+            // Validate each line againts its receipt line.
+            for (MVerificationLineDTO lineDTO : lines) {
+                if (! mMatchPOQueryService.isValidMatchPO(lineDTO.getAdOrganizationCode(), lineDTO.getcDocType(),
+                        lineDTO.getPoNo(), lineDTO.getReceiveNo(), lineDTO.getLineNoPo(), lineDTO.getLineNoMr(),
+                        lineDTO.getOrderSuffix())) {
+                    throw new PoReceiptReversedException(lineDTO);
+                }
+            }
+
+            if (mVerification.getDateSubmit() == null || mVerification.getDateReject() != null) {
+                mVerification.setDateSubmit(LocalDate.now());
+            }
         }
 
-        mVerification = mVerificationRepository.save(mVerification);
+        mVerification = mVerificationRepository.save(mVerification.receiptReversed(false));
         return mVerificationMapper.toDto(mVerification);
     }
 

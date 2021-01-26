@@ -70,8 +70,10 @@
                     :default-sort="gridSchema.defaultSort"
                     :empty-text="gridSchema.emptyText"
                     :data="gridData"
+                    :row-class-name="rowClassName"
                     @row-click="singleSelection"
-                    @sort-change="changeOrder">
+                    @sort-change="changeOrder"
+                >
 
                     <el-table-column
                         align="center"
@@ -175,12 +177,15 @@
 </script>
 
 <style lang="scss">
-    .compact .verification{
-        padding: 0px;
-    }
+.compact .verification{
+    padding: 0px;
+}
 
-    .main {
-        padding: 0px;
-    }
+.main {
+    padding: 0px;
 
+    .el-table .danger-row {
+        background: oldlace;
+    }
+}
 </style>

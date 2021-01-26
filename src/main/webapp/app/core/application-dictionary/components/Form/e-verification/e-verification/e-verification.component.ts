@@ -36,7 +36,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public filter: any = {};
   processing = false;
   public gridData: Array<any> = [];
-  selectedRows: any = {};
+  selectedRow: any = {};
   public radioSelection: number = null;
 
   private dialogTitle = "";
@@ -69,7 +69,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   private closeEVerificationUpdate(){
     this.index = true;
-    this.selectedRows = {};
+    this.selectedRow = {};
     this.radioSelection = null;
     this.retrieveAllRecords();
   }
@@ -120,34 +120,40 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
   // =====================================
 
+  rowClassName({row}) {
+    if (row.documentStatus !== 'CNL' && row.receiptReversed) {
+      return 'danger-row';
+    }
+
+    return '';
+  }
+
   public clear(): void {
     this.page = 1;
     this.retrieveAllRecords();
   }
 
-  public singleSelection (row) {
+  public singleSelection(row) {
     this.radioSelection = this.gridData.indexOf(row);
-    this.selectedRows = row;
-
-    this.statementButtonDisabled();
-    //console.log(row);
+    this.selectedRow = row;
+    this.toggleToolbarButtons();
   }
 
   public showDialogConfirmation(key: string) {
     if (this.radioSelection != null) {
 
       if (key == "cancel") {
-        this.dialogTitle = "Confirm VOID status verification";
-        this.dialogMessage = "Update status verification to VOID ?";
-        this.dialogButton = "Update";
+        this.dialogTitle = "Cancel Invoice Verification";
+        this.dialogMessage = "Are you sure you want to cancel the document?";
+        this.dialogButton = "Cancel";
         this.dialogValue = "CNL";
         this.dialogType = "danger";
 
         this.dialogConfirmationVisible = true;
       } else if (key == "submit") {
-        this.dialogTitle = "Confirm SUBMIT status verification";
-        this.dialogMessage = "Update status verification to SUBMIT ?";
-        this.dialogButton = "Update";
+        this.dialogTitle = "Submit Invoice Verification";
+        this.dialogMessage = "Are you sure you want to submit the document?";
+        this.dialogButton = "Submit";
         this.dialogValue = "SMT";
         this.dialogType = "primary";
 
@@ -160,48 +166,88 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         this.index = false;
       }
     } else {
-      const message = `Please Selected row`;
-      this.$notify({
-        title: 'Warning',
-        message: message.toString(),
-        type: 'warning',
-        duration: 3000
+      this.$message({
+        message: 'Please select a row',
+        type: 'info'
       });
     }
   }
-
+/* 
+{
+  "PRKCOO": "00001",
+  "PRAN8": 233,
+  "PRDOCO": 86642,
+  "PRDCTO": "O1",
+  "PRSFXO": "000",
+  "PRLNID": 2,
+  "PRNLIN": 1,
+  "PRITM": 21,
+  "PRLITM": "D5989C                   ",
+  "PRAITM": "D5989C                   ",
+  "PDDSC1": "HP RACK STORAGE /12 NOV A3    ",
+  "PDDSC2": "                              ",
+  "PRVRMK": "                              ",
+  "PRLOCN": "MAINAP              ",
+  "PRTRDJ": 120351,
+  "PRUOM": "EA",
+  "PRUREC": 1,
+  "PRPRRC": 1000000,
+  "PRAOPN": 0,
+  "PRAREC": 1000000,
+  "PRCRR": 0,
+  "PRCRCD": "IDR",
+  "PRSTAM": 0,
+  "PRCTAM": 0,
+  "PRFRRC": 0,
+  "PRFAP": 0,
+  "PRFREC": 0,
+  "PRTX": "Y",
+  "PREXR1": "V ",
+  "PRTXA1": "PPPN 10%  ",
+  "PRUOPN": 0,
+  "PRMATC": "1",
+  "PRRCDJ": 120351,
+  "PRDGL": 120351,
+  "PRMCU": "        1010",
+  "PRKCO": "00001",
+  "PRDOC": 80313,
+  "PRDCT": "OV",
+  "PRSHPN": 0
+}
+*/
   public buttonDialogUpdateRecords(): void {
-    const data = { ...this.selectedRows };
+    const data = { ...this.selectedRow };
     data.verificationStatus = this.dialogValue;
 
     this.dynamicWindowService(this.baseApiUrl)
       .update(data)
       .then(res => {
-        this.statementButtonDisabled();
+        const message = this.dialogValue === 'SMT'
+          ? 'Invoice verification has been submitted'
+          : 'Invoice verification has been canceled'
+
+        this.toggleToolbarButtons();
         this.retrieveAllRecords();
         this.radioSelection = null;
-        this.dialogConfirmationVisible = false;
-        this.$notify({
-          title: 'Success',
-          message: this.dialogMessage,
-          type: 'success',
-          duration: 3000
+        this.$message({
+          message: message,
+          type: 'success'
         });
       })
       .catch(err => {
-        console.error('Failed getting the record. %O', err);
         this.$message({
-          type: 'error',
-          message: err.detail || err.message
+          message: err.response?.data?.detail || err.message,
+          type: 'error'
         });
       })
       .finally(() => {
         this.processing = false;
+        this.dialogConfirmationVisible = false;
       });
   }
 
   public buttonPrint(key): void {
-    const data = { ...this.selectedRows };
+    const data = { ...this.selectedRow };
     window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}/${key}`, '_blank');
   }
 
@@ -231,11 +277,8 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         this.queryCount = this.totalItems;
         this.$emit('total-count-changed', this.queryCount);
 
-        this.statementButtonDisabled();
-        this.selectedRows = {};
-        /*this.$nextTick(() => {
-          console.log('taxInvoice refs: %O', this.$refs.taxInvoice);
-        })*/
+        this.toggleToolbarButtons();
+        this.selectedRow = {};
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -247,16 +290,13 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       .finally(() => {
         this.processing = false;
         this.radioSelection = null;
-        this.selectedRows = {};
+        this.selectedRow = {};
       });
   }
 
-  private statementButtonDisabled(){
-    if(this.selectedRows.verificationStatus == "DRF"){
-      this.disabledButton = false;
-    }else{
-      this.disabledButton = true;
-    }
+  private toggleToolbarButtons() {
+    const docStatus = this.selectedRow.verificationStatus;
+    this.disabledButton = docStatus !== 'DRF' && docStatus !== 'RJC';
   }
 
   public verificationFilter() {
@@ -326,7 +366,7 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
 
   public addEVerification() {
     this.index = false;
-    this.selectedRows = {};
+    this.selectedRow = {};
   }
 
   formatDocumentStatus(value: string) {

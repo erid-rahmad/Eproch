@@ -449,6 +449,16 @@ entity MVerification {
 
 	payStatus String
 
+	dateTrx LocalDate required
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+
+	/** Whether or not it contains one or more reversed receipt lines. */
+	receiptReversed Boolean
+
 	uid UUID
 	active Boolean
 }
@@ -526,6 +536,8 @@ entity MVerificationLine {
 	/** VDDCT */
 	cDocTypeMr String maxlength(2)
 
+	/** Whether the respective receipt line is reversed or not. */
+	receiptReversed Boolean
 	uid UUID
 	active Boolean
 }

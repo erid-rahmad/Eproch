@@ -79,6 +79,20 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     private StringFilter payStatus;
 
+    private LocalDateFilter dateTrx;
+
+    private StringFilter documentNo;
+
+    private StringFilter documentAction;
+
+    private StringFilter documentStatus;
+
+    private BooleanFilter approved;
+
+    private BooleanFilter processed;
+
+    private BooleanFilter receiptReversed;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -129,6 +143,13 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.dateApprove = other.dateApprove == null ? null : other.dateApprove.copy();
         this.verificationStatus = other.verificationStatus == null ? null : other.verificationStatus.copy();
         this.payStatus = other.payStatus == null ? null : other.payStatus.copy();
+        this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
+        this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
+        this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
+        this.documentStatus = other.documentStatus == null ? null : other.documentStatus.copy();
+        this.approved = other.approved == null ? null : other.approved.copy();
+        this.processed = other.processed == null ? null : other.processed.copy();
+        this.receiptReversed = other.receiptReversed == null ? null : other.receiptReversed.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -354,6 +375,62 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.payStatus = payStatus;
     }
 
+    public LocalDateFilter getDateTrx() {
+        return dateTrx;
+    }
+
+    public void setDateTrx(LocalDateFilter dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public StringFilter getDocumentNo() {
+        return documentNo;
+    }
+
+    public void setDocumentNo(StringFilter documentNo) {
+        this.documentNo = documentNo;
+    }
+
+    public StringFilter getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(StringFilter documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public StringFilter getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(StringFilter documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public BooleanFilter getApproved() {
+        return approved;
+    }
+
+    public void setApproved(BooleanFilter approved) {
+        this.approved = approved;
+    }
+
+    public BooleanFilter getProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(BooleanFilter processed) {
+        this.processed = processed;
+    }
+
+    public BooleanFilter getReceiptReversed() {
+        return receiptReversed;
+    }
+
+    public void setReceiptReversed(BooleanFilter receiptReversed) {
+        this.receiptReversed = receiptReversed;
+    }
+
     public UUIDFilter getUid() {
         return uid;
     }
@@ -471,6 +548,13 @@ public class MVerificationCriteria implements Serializable, Criteria {
             Objects.equals(dateApprove, that.dateApprove) &&
             Objects.equals(verificationStatus, that.verificationStatus) &&
             Objects.equals(payStatus, that.payStatus) &&
+            Objects.equals(dateTrx, that.dateTrx) &&
+            Objects.equals(documentNo, that.documentNo) &&
+            Objects.equals(documentAction, that.documentAction) &&
+            Objects.equals(documentStatus, that.documentStatus) &&
+            Objects.equals(approved, that.approved) &&
+            Objects.equals(processed, that.processed) &&
+            Objects.equals(receiptReversed, that.receiptReversed) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -512,6 +596,13 @@ public class MVerificationCriteria implements Serializable, Criteria {
         dateApprove,
         verificationStatus,
         payStatus,
+        dateTrx,
+        documentNo,
+        documentAction,
+        documentStatus,
+        approved,
+        processed,
+        receiptReversed,
         uid,
         active,
         adOrganizationId,
@@ -554,6 +645,13 @@ public class MVerificationCriteria implements Serializable, Criteria {
                 (dateApprove != null ? "dateApprove=" + dateApprove + ", " : "") +
                 (verificationStatus != null ? "verificationStatus=" + verificationStatus + ", " : "") +
                 (payStatus != null ? "payStatus=" + payStatus + ", " : "") +
+                (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
+                (documentNo != null ? "documentNo=" + documentNo + ", " : "") +
+                (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
+                (documentStatus != null ? "documentStatus=" + documentStatus + ", " : "") +
+                (approved != null ? "approved=" + approved + ", " : "") +
+                (processed != null ? "processed=" + processed + ", " : "") +
+                (receiptReversed != null ? "receiptReversed=" + receiptReversed + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

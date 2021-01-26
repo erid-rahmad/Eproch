@@ -97,6 +97,7 @@ class MVerificationLineGatlingTest extends Simulation {
                 , "taxable":null
                 , "cDocType":"SAMPLE_TEXT"
                 , "cDocTypeMr":"SAMPLE_TEXT"
+                , "receiptReversed":null
                 , "uid":null
                 , "active":null
                 }""")).asJson

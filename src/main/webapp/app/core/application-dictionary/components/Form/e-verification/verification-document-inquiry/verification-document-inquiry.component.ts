@@ -136,6 +136,14 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     this.retrieveAllRecords();
   }
 
+  rowClassName({row}) {
+    if (row.documentStatus !== 'CNL' && row.receiptReversed) {
+      return 'danger-row';
+    }
+
+    return '';
+  }
+
   public clear(): void {
     this.page = 1;
     this.retrieveAllRecords();
@@ -144,33 +152,29 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public singleSelection (row) {
     this.radioSelection = this.gridData.indexOf(row);
     this.selectedRows = row;
-
-    console.log("Single Selection %O", row);
   }
 
   public showDialogConfirmation(key: string) {
-    if(this.radioSelection != null){
+    if (this.radioSelection != null) {
 
-      if(key == "detail"){
+      if (key == "detail") {
         this.index = false;
-      }else if(key == "update"){
+      } else if (key == "update") {
         this.dialogConfirmationVisible = true;
         this.setVerification = this.selectedRows;
       } else if (key == "print") {
         this.buttonPrint("invoice-verification");
-      } else if(key == "printSummary") {
+      } else if (key == "printSummary") {
         this.buttonPrint("summary-invoice-verification");
-      } else if(key == "printVerificationReceipt") {
+      } else if (key == "printVerificationReceipt") {
         this.buttonPrint("invoice-verification-receipt");
       }
 
-    }else{
-      const message = `Please Selected row`;
-      this.$notify({
-        title: 'Warning',
+    } else {
+      const message = `Please select a row`;
+      this.$message({
         message: message.toString(),
-        type: 'warning',
-        duration: 3000
+        type: 'warning'
       });
     }
 

@@ -97,6 +97,13 @@ class MVerificationGatlingTest extends Simulation {
                 , "dateApprove":"2020-01-01T00:00:00.000Z"
                 , "verificationStatus":"SAMPLE_TEXT"
                 , "payStatus":"SAMPLE_TEXT"
+                , "dateTrx":"2020-01-01T00:00:00.000Z"
+                , "documentNo":"SAMPLE_TEXT"
+                , "documentAction":"SAMPLE_TEXT"
+                , "documentStatus":"SAMPLE_TEXT"
+                , "approved":null
+                , "processed":null
+                , "receiptReversed":null
                 , "uid":null
                 , "active":null
                 }""")).asJson

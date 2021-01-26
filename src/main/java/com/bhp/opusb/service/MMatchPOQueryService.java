@@ -4,6 +4,24 @@ import java.util.List;
 
 import javax.persistence.criteria.JoinType;
 
+// for static metamodels
+import com.bhp.opusb.domain.ADOrganization_;
+import com.bhp.opusb.domain.CCostCenter_;
+import com.bhp.opusb.domain.CCurrency_;
+import com.bhp.opusb.domain.CLocator_;
+import com.bhp.opusb.domain.CProduct_;
+import com.bhp.opusb.domain.CTaxCategory_;
+import com.bhp.opusb.domain.CTax_;
+import com.bhp.opusb.domain.CUnitOfMeasure_;
+import com.bhp.opusb.domain.CVendor_;
+import com.bhp.opusb.domain.CWarehouse_;
+import com.bhp.opusb.domain.MMatchPO;
+import com.bhp.opusb.domain.MMatchPO_;
+import com.bhp.opusb.repository.MMatchPORepository;
+import com.bhp.opusb.service.dto.MMatchPOCriteria;
+import com.bhp.opusb.service.dto.MMatchPODTO;
+import com.bhp.opusb.service.mapper.MMatchPOMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -13,13 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
-
-import com.bhp.opusb.domain.MMatchPO;
-import com.bhp.opusb.domain.*; // for static metamodels
-import com.bhp.opusb.repository.MMatchPORepository;
-import com.bhp.opusb.service.dto.MMatchPOCriteria;
-import com.bhp.opusb.service.dto.MMatchPODTO;
-import com.bhp.opusb.service.mapper.MMatchPOMapper;
 
 /**
  * Service for executing complex queries for {@link MMatchPO} entities in the database.
@@ -74,6 +85,7 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
      * @param page
      * @return
      */
+    @Transactional(readOnly = true)
     public Page<MMatchPODTO> findNewReceivedItems(MMatchPOCriteria criteria, Pageable page) {
         log.debug("find new received items by criteria : {}, page: {}", criteria, page);
         return mMatchPORepository.findNonInvoicedMatchPOs(criteria, page)
@@ -90,6 +102,22 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
         log.debug("count by criteria : {}", criteria);
         final Specification<MMatchPO> specification = createSpecification(criteria);
         return mMatchPORepository.count(specification);
+    }
+
+    /**
+     * Checks whether the submitted verification line is valid or not.
+     * @param orgCode
+     * @param docType
+     * @param poNo
+     * @param receiptNo
+     * @param lineNoPo
+     * @param lineNoMr
+     * @param orderSuffix
+     * @return
+     */
+    public boolean isValidMatchPO(String orgCode, String docType, String poNo, String receiptNo, int lineNoPo, int lineNoMr, String orderSuffix) {
+        return mMatchPORepository.findByKeys("1", orgCode, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix)
+            .isPresent();
     }
 
     /**

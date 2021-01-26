@@ -178,6 +178,12 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "VDDCT")
     private String cDocTypeMr;
 
+    /**
+     * Whether the respective receipt line is reversed or not.
+     */
+    @ApiModelProperty(value = "Whether the respective receipt line is reversed or not.")
+    private Boolean receiptReversed;
+
     private UUID uid;
 
     private Boolean active;
@@ -464,6 +470,14 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
         this.cDocTypeMr = cDocTypeMr;
     }
 
+    public Boolean isReceiptReversed() {
+        return receiptReversed;
+    }
+
+    public void setReceiptReversed(Boolean receiptReversed) {
+        this.receiptReversed = receiptReversed;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -712,6 +726,7 @@ public class MVerificationLineDTO extends AbstractAuditingDTO {
             ", taxable='" + isTaxable() + "'" +
             ", cDocType='" + getcDocType() + "'" +
             ", cDocTypeMr='" + getcDocTypeMr() + "'" +
+            ", receiptReversed='" + isReceiptReversed() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", verificationId=" + getVerificationId() +

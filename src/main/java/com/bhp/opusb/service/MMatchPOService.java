@@ -2,7 +2,6 @@ package com.bhp.opusb.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDate;
 import java.util.Map;
 import java.util.Optional;
 
@@ -17,6 +16,7 @@ import com.bhp.opusb.domain.CUnitOfMeasure;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CWarehouse;
 import com.bhp.opusb.domain.MMatchPO;
+import com.bhp.opusb.domain.MVerification;
 import com.bhp.opusb.domain.enumeration.AiStatus;
 import com.bhp.opusb.domain.enumeration.CTaxTransactionType;
 import com.bhp.opusb.repository.AiExchangeInRepository;
@@ -29,12 +29,14 @@ import com.bhp.opusb.repository.CUnitOfMeasureRepository;
 import com.bhp.opusb.repository.CVendorRepository;
 import com.bhp.opusb.repository.CWarehouseRepository;
 import com.bhp.opusb.repository.MMatchPORepository;
+import com.bhp.opusb.repository.MVerificationLineRepository;
 import com.bhp.opusb.service.dto.MMatchPODTO;
+import com.bhp.opusb.service.dto.jde.PoReceiverFileDTO;
 import com.bhp.opusb.service.mapper.MMatchPOMapper;
+import com.bhp.opusb.util.DocumentUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,7 @@ public class MMatchPOService {
     private final CLocatorRepository cLocatorRepository;
     private final CWarehouseRepository cWarehouseRepository;
     private final CProductRepository cProductRepository;
+    private final MVerificationLineRepository mVerificationLineRepository;
 
     private final MMatchPOMapper mMatchPOMapper;
 
@@ -83,7 +86,7 @@ public class MMatchPOService {
             CTaxCategoryRepository cTaxCategoryRepository, CTaxRepository cTaxRepository, CUnitOfMeasureRepository cUnitOfMeasureRepository,
             CVendorRepository cVendorRepository, CLocatorRepository cLocatorRepository,
             CWarehouseRepository cWarehouseRepository, CProductRepository cProductRepository,
-            MMatchPOMapper mMatchPOMapper) {
+            MVerificationLineRepository mVerificationLineRepository, MMatchPOMapper mMatchPOMapper) {
         this.mMatchPORepository = mMatchPORepository;
         this.cCurrencyRepository = cCurrencyRepository;
         this.cTaxCategoryRepository = cTaxCategoryRepository;
@@ -93,6 +96,7 @@ public class MMatchPOService {
         this.cLocatorRepository = cLocatorRepository;
         this.cWarehouseRepository = cWarehouseRepository;
         this.cProductRepository = cProductRepository;
+        this.mVerificationLineRepository = mVerificationLineRepository;
         this.mMatchPOMapper = mMatchPOMapper;
     }
 
@@ -109,32 +113,49 @@ public class MMatchPOService {
         return mMatchPOMapper.toDto(mMatchPO);
     }
 
+    /**
+     * Synchronize the JDE receiver file (table F43121) record.
+     * @param message
+     * @return
+     * @throws JsonProcessingException
+     */
     public MMatchPODTO synchronize(String message) throws JsonProcessingException {
         log.debug("Request to synchronize MMatchPO : {}", message);
-
-        @SuppressWarnings("unchecked")
-        Map<String, Object> payload = jsonMapper.readValue(message, Map.class);
+        PoReceiverFileDTO payload = jsonMapper.readValue(message, PoReceiverFileDTO.class);
         
-        String matchType = (String) payload.get("PRMATC");
-        String orgCode = (String) payload.get("PRKCOO");
-        String docType = (String) payload.get("PRDCTO");
-        String poNo = String.valueOf(payload.get("PRDOCO"));
-        int receiptNo = (int) payload.get("PRDOC");
-        int lineNoPo = (int) payload.get("PRLNID");
-        int lineNoMr = (int) payload.get("PRNLIN");
-        String orderSuffix = (String) payload.get("PRSFXO");
+        String matchType = payload.getMatchType();
+        String orgCode = payload.getOrgCode();
+        String docType = payload.getDocTypePo();
+        String poNo = payload.getPoNo();
+        int receiptNo = Integer.parseInt(payload.getReceiptNo());
+        int lineNoPo = payload.getLineNoPo();
+        int lineNoMr = payload.getLineNoMr();
+        String orderSuffix = payload.getOrderSuffix();
+        ADOrganization org = adOrganizationService.findOrCreate(orgCode);
 
         // Should delete the reversed match PO.
         if (matchType.equals("4")) {
-            Optional<MMatchPO> record = mMatchPORepository.findReversedLine(orgCode, docType, poNo, BigDecimal.valueOf(receiptNo), lineNoPo, lineNoMr, orderSuffix);
+            mMatchPORepository
+                .findReversedLine(orgCode, docType, poNo, BigDecimal.valueOf(receiptNo), lineNoPo, lineNoMr, orderSuffix)
+                .ifPresent(matchPo -> {
+                    mVerificationLineRepository.getFirstReversedLine(org, docType, poNo, BigDecimal.valueOf(receiptNo), lineNoPo, lineNoMr, orderSuffix)
+                        .ifPresent(line -> {
+                            line.receiptReversed(true);
 
-            if (record.isPresent()) {
-                log.debug("Deleting match PO record due to reverse event : {}", record.get());
-                mMatchPORepository.delete(record.get());
-            }
+                            MVerification header = line.getVerification();
 
-            // Immediatelly return the DTO with the primary keys.
-            // These keys are required to update the PRLRT (last_run_time) field in the respective table.
+                            if (Boolean.FALSE.equals(header.isReceiptReversed()) && ! header.getDocumentStatus().equals(DocumentUtil.STATUS_VOID)) {
+                                header.receiptReversed(true);
+                            }
+                        });
+
+                    log.debug("Deleting match PO record due to reverse event : {}", matchPo);
+                    mMatchPORepository.delete(matchPo);
+                });
+
+            // Immediatelly return the DTO with the composite primary keys.
+            // These keys are required to update the PRLRT (last_run_time) field in the
+            // respective table.
             MMatchPODTO dto = new MMatchPODTO();
             dto.setAdOrganizationCode(orgCode);
             dto.setcDocType(docType);
@@ -147,8 +168,9 @@ public class MMatchPOService {
             return dto;
         }
 
-        Optional<MMatchPO> record = mMatchPORepository.findByKeys(matchType, orgCode, docType, poNo, String.valueOf(receiptNo), lineNoPo, lineNoMr, orderSuffix);
-        ADOrganization org = adOrganizationService.findOrCreate(orgCode);
+        Optional<MMatchPO> record = mMatchPORepository.findByKeys(matchType, orgCode, docType, poNo,
+                String.valueOf(receiptNo), lineNoPo, lineNoMr, orderSuffix);
+
         MMatchPO mMatchPO;
 
         if (record.isPresent()) {
@@ -215,23 +237,23 @@ public class MMatchPOService {
         mMatchPORepository.deleteById(id);
     }
 
-    private void updateEntity(MMatchPO entity, Map<String, Object> payload, ADOrganization org) {
+    private void updateEntity(MMatchPO entity, PoReceiverFileDTO payload, ADOrganization org) {
         log.debug("Updating the existing MMatchPO : {}", entity);
-        entity.cConversionRate(toBigDecimal(payload, "PRCRR"))
-            .deliveryNo(nullableToString(payload.get("PRSHPN")))
-            .foreignActual(toBigDecimal(payload, "PRFRRC"))
-            .foreignTaxAmount(toBigDecimal(payload, "PRCTAM"))
-            .foreignTotalLines(toBigDecimal(payload, "PRFREC"))
-            .openAmount(toBigDecimal(payload, "PRAOPN"))
-            .openForeignAmount(toBigDecimal(payload, "PRFAP"))
-            .openQty(toBigDecimal(payload, "PRUOPN"))
-            .priceActual(toBigDecimal(payload, "PRPRRC"))
-            .qty(toBigDecimal(payload, "PRUREC"))
-            .taxAmount(toBigDecimal(payload, "PRSTAM"))
-            .taxable(stringToBoolean((String) payload.get("PRTX")))
-            .totalLines(toBigDecimal(payload, "PRAREC"))
-            .itemDesc1(nullableToString(payload.get("PRLITM")))
-            .itemDesc2(nullableToString(payload.get("PRAITM")))
+        entity.cConversionRate(payload.getConversionRate())
+            .deliveryNo(payload.getDeliveryNo())
+            .foreignActual(payload.getForeignActual())
+            .foreignTaxAmount(payload.getForeignTaxAmount())
+            .foreignTotalLines(payload.getForeignTotalLines())
+            .openAmount(payload.getOpenAmount())
+            .openForeignAmount(payload.getOpenForeignAmount())
+            .openQty(payload.getOpenQty())
+            .priceActual(payload.getPriceActual())
+            .qty(payload.getQty())
+            .taxAmount(payload.getTaxAmount())
+            .taxable(stringToBoolean(payload.getTaxable()))
+            .totalLines(payload.getTotalLines())
+            .itemDesc1(payload.getItemDesc1())
+            .itemDesc2(payload.getItemDesc2())
 
             // Lookup to master data.
             .cCurrency(buildCurrency(payload, org))
@@ -239,42 +261,42 @@ public class MMatchPOService {
             .cTax(buildTax(payload, entity.getCTaxCategory(), org))
             .cUom(buildUnitOfMeasure(payload, org))
             .mProduct(buildProduct(payload, entity.getCUom(), org))
-            .cVendor(buildVendor(String.valueOf(payload.get("PRAN8"))))
+            .cVendor(buildVendor(String.valueOf(payload.getAddressNo())))
             .mWarehouse(buildWarehouse(payload, org))
             .mLocator(buildLocator(payload, entity.getMWarehouse(), org));
     }
 
-    private MMatchPO buildEntity(Map<String, Object> payload, ADOrganization org) {
+    private MMatchPO buildEntity(PoReceiverFileDTO payload, ADOrganization org) {
         log.debug("Creating a new MMatchPO");
         MMatchPO entity = new MMatchPO();
 
-        entity.cConversionRate(toBigDecimal(payload, "PRCRR"))
-            .cDocType((String) payload.get("PRDCTO"))
-            .cDocTypeMr((String) payload.get("PRDCT"))
-            .poDate(LocalDate.parse((String) payload.get("PRTRDJ")))
-            .receiptDate(LocalDate.parse((String) payload.get("PRRCDJ")))
-            .dateAccount(LocalDate.parse((String) payload.get("PRDGL")))
-            .deliveryNo(nullableToString(payload.get("PRSHPN")))
-            .description( StringUtils.trimToNull((String) payload.get("PRVRMK")) )
-            .foreignActual(toBigDecimal(payload, "PRFRRC"))
-            .foreignTaxAmount(toBigDecimal(payload, "PRCTAM"))
-            .foreignTotalLines(toBigDecimal(payload, "PRFREC"))
-            .lineNoMr((int) payload.get("PRNLIN"))
-            .lineNoPo((int) payload.get("PRLNID"))
-            .mMatchType((String) payload.get("PRMATC"))
-            .openAmount(toBigDecimal(payload, "PRAOPN"))
-            .openForeignAmount(toBigDecimal(payload, "PRFAP"))
-            .openQty(toBigDecimal(payload, "PRUOPN"))
-            .orderSuffix((String) payload.get("PRSFXO"))
-            .poNo(nullableToString(payload.get("PRDOCO")))
-            .priceActual(toBigDecimal(payload, "PRPRRC"))
-            .qty(toBigDecimal(payload, "PRUREC"))
-            .receiptNo(nullableToString(payload.get("PRDOC")))
-            .taxAmount(toBigDecimal(payload, "PRSTAM"))
-            .taxable(stringToBoolean((String) payload.get("PRTX")))
-            .totalLines(toBigDecimal(payload, "PRAREC"))
-            .itemDesc1(nullableToString(payload.get("PRLITM")))
-            .itemDesc2(nullableToString(payload.get("PRAITM")))
+        entity.cConversionRate(payload.getConversionRate())
+            .cDocType(payload.getDocTypePo())
+            .cDocTypeMr(payload.getDocTypeMr())
+            .poDate(payload.getPoDate())
+            .receiptDate(payload.getReceiptDate())
+            .dateAccount(payload.getDateAccount())
+            .deliveryNo(payload.getDeliveryNo())
+            .description(payload.getDescription())
+            .foreignActual(payload.getForeignActual())
+            .foreignTaxAmount(payload.getForeignTaxAmount())
+            .foreignTotalLines(payload.getForeignTotalLines())
+            .lineNoMr(payload.getLineNoMr())
+            .lineNoPo(payload.getLineNoPo())
+            .mMatchType(payload.getMatchType())
+            .openAmount(payload.getOpenAmount())
+            .openForeignAmount(payload.getOpenForeignAmount())
+            .openQty(payload.getOpenQty())
+            .orderSuffix(payload.getOrderSuffix())
+            .poNo(nullableToString(payload.getPoNo()))
+            .priceActual(payload.getPriceActual())
+            .qty(payload.getQty())
+            .receiptNo(payload.getReceiptNo())
+            .taxAmount(payload.getTaxAmount())
+            .taxable(stringToBoolean(payload.getTaxable()))
+            .totalLines(payload.getTotalLines())
+            .itemDesc1(payload.getItemDesc1())
+            .itemDesc2(payload.getItemDesc2())
 
             // Lookup to master data.
             .adOrganization(org)
@@ -283,7 +305,7 @@ public class MMatchPOService {
             .cTaxCategory(buildTaxCategory(payload, org))
             .cTax(buildTax(payload, entity.getCTaxCategory(), org))
             .cUom(buildUnitOfMeasure(payload, org))
-            .cVendor(buildVendor(String.valueOf(payload.get("PRAN8"))))
+            .cVendor(buildVendor(String.valueOf(payload.getAddressNo())))
             .mProduct(buildProduct(payload, entity.getCUom(), org))
             .mWarehouse(buildWarehouse(payload, org))
             .mLocator(buildLocator(payload, entity.getMWarehouse(), org));
@@ -291,146 +313,147 @@ public class MMatchPOService {
         return entity;
     }
 
-    private CCurrency buildCurrency(Map<String, Object> payload, final ADOrganization org) {
-        final String code = (String) payload.get("PRCRCD");
-
-        if (code == null) {
-            return null;
-        }
-
-        return cCurrencyRepository.findFirstByCode(code)
-            .orElseGet(() -> {
-                final CCurrency currency = new CCurrency();
-                currency.active(true)
-                    .adOrganization(org)
-                    .code(code)
-                    .name(code)
-                    .symbol(code);
-
-                return cCurrencyRepository.save(currency);
-            });
-    }
-
-    private CTaxCategory buildTaxCategory(Map<String, Object> payload, final ADOrganization org) {
-        final String name = StringUtils.trimToNull((String) payload.get("PREXR1"));
-
-        if (name == null) {
-            return null;
-        }
-
-        return cTaxCategoryRepository.findFirstByNameAndAdOrganization(name, org)
-            .orElseGet(() -> {
-                final CTaxCategory taxCategory = new CTaxCategory();
-                taxCategory.active(true)
-                    .adOrganization(org)
-                    .name(name)
-                    .description(name)
-                    .isWithholding(true);
-
-                return cTaxCategoryRepository.save(taxCategory);
-            });
-    }
-
-    private CTax buildTax(Map<String, Object> payload, CTaxCategory taxCategory, final ADOrganization org) {
-        final String name = StringUtils.trimToNull((String) payload.get("PRTXA1"));
-        
-        if (name == null) {
-            return null;
-        }
-
-        return cTaxRepository.findFirstByNameAndTaxCategoryAndAdOrganization(name, taxCategory, org)
-            .orElseGet(() -> {
-                final CTax tax = new CTax()
+    private CCurrency buildCurrency(PoReceiverFileDTO payload, final ADOrganization org) {
+        return Optional.ofNullable(payload.getCurrencyCode())
+            .map(code -> cCurrencyRepository.findFirstByCode(code)
+                .orElseGet(() -> cCurrencyRepository.save(
+                    new CCurrency()
                     .active(true)
                     .adOrganization(org)
-                    .name(name)
-                    .description(name)
-                    .taxCategory(taxCategory)
-                    .transactionType(CTaxTransactionType.BOTH);
-                return cTaxRepository.save(tax);
-            });
+                    .code(code)
+                    .name(code)
+                    .symbol(code)
+                )
+            ))
+            .orElseGet(() -> null);
     }
 
-    private CUnitOfMeasure buildUnitOfMeasure(Map<String, Object> payload, final ADOrganization org) {
-        final String code = (String) payload.get("PRUOM");
+    private CTaxCategory buildTaxCategory(PoReceiverFileDTO payload, final ADOrganization org) {
+        return Optional.ofNullable(payload.getTaxCategory()).map(name -> {
+            final String value = name.trim();
+            if (value.length() == 0) {
+                return null;
+            }
 
-        return cUnitOfMeasureRepository.findFirstByCodeAndAdOrganizationId(code, org.getId())
-            .orElseGet(() -> {
-                final CUnitOfMeasure uom = new CUnitOfMeasure();
-                uom.active(true)
+            return cTaxCategoryRepository.findFirstByNameAndAdOrganization(value, org)
+                .orElseGet(() -> cTaxCategoryRepository.save(
+                    new CTaxCategory()
+                    .active(true)
+                    .adOrganization(org)
+                    .name(value)
+                    .description(value)
+                    .isWithholding(true)
+                ));
+            })
+            .orElseGet(() -> null);
+    }
+
+    private CTax buildTax(PoReceiverFileDTO payload, CTaxCategory taxCategory, final ADOrganization org) {
+        return Optional.ofNullable(payload.getTax()).map(name -> {
+            final String value = name.trim();
+            if (value.length() == 0) {
+                return null;
+            }
+
+            return cTaxRepository.findFirstByNameAndTaxCategoryAndAdOrganization(value, taxCategory, org)
+                .orElseGet(() -> cTaxRepository.save(
+                    new CTax()
+                    .active(true)
+                    .adOrganization(org)
+                    .name(value)
+                    .description(value)
+                    .taxCategory(taxCategory)
+                    .transactionType(CTaxTransactionType.BOTH)
+                ));
+            })
+            .orElseGet(() -> null);
+    }
+
+    private CUnitOfMeasure buildUnitOfMeasure(PoReceiverFileDTO payload, final ADOrganization org) {
+        return Optional.ofNullable(payload.getUom())
+            .map(code -> cUnitOfMeasureRepository.findFirstByCodeAndAdOrganizationId(code, org.getId())
+                .orElseGet(() -> cUnitOfMeasureRepository.save(
+                    new CUnitOfMeasure()
+                    .active(true)
                     .adOrganization(org)
                     .code(code)
                     .name(code)
-                    .symbol(code);
-
-                return cUnitOfMeasureRepository.save(uom);
-            });
+                    .symbol(code)
+                )
+            ))
+            .orElseGet(() -> null);
     }
 
-    private CWarehouse buildWarehouse(Map<String, Object> payload, final ADOrganization org) {
-        final String code = StringUtils.trimToNull((String) payload.get("PRMCU"));
+    private CWarehouse buildWarehouse(PoReceiverFileDTO payload, final ADOrganization org) {
+        return Optional.ofNullable(payload.getWarehouse())
+            .map(code -> {
+                final String value = code.trim();
+                if (value.length() == 0) {
+                    return null;
+                }
 
-        if (code == null) {
-            return null;
-        }
-
-        return cWarehouseRepository.findFirstByCodeAndAdOrganizationId(code, org.getId())
-            .orElseGet(() -> {
-                final CWarehouse warehouse = new CWarehouse();
-                warehouse.active(true)
-                    .adOrganization(org)
-                    .code(code)
-                    .name(code);
-
-                return cWarehouseRepository.save(warehouse);
-            });
+                return cWarehouseRepository.findFirstByCodeAndAdOrganizationId(value, org.getId())
+                    .orElseGet(() -> cWarehouseRepository.save(
+                        new CWarehouse()
+                        .active(true)
+                        .adOrganization(org)
+                        .code(value)
+                        .name(value)
+                    ));
+            })
+            .orElseGet(() -> null);
     }
 
-    private CLocator buildLocator(Map<String, Object> payload, CWarehouse warehouse, final ADOrganization org) {
-        final String code = StringUtils.trimToNull((String) payload.get("PRLOCN"));
+    private CLocator buildLocator(PoReceiverFileDTO payload, CWarehouse warehouse, final ADOrganization org) {
+        return Optional.ofNullable(payload.getLocator())
+            .map(code -> {
+                final String value = code.trim();
+                if (value.length() == 0) {
+                    return null;
+                }
 
-        if (code == null) {
-            return null;
-        }
-
-        return cLocatorRepository.findFirstByCodeAndWarehouseIdAndAdOrganizationId(code, warehouse.getId(), org.getId())
-            .orElseGet(() -> {
-                final CLocator locator = new CLocator();
-                locator.active(true)
-                    .adOrganization(org)
-                    .code(code)
-                    .warehouse(warehouse);
-
-                return cLocatorRepository.save(locator);
-            });
+                return cLocatorRepository.findFirstByCodeAndWarehouseIdAndAdOrganizationId(code, warehouse.getId(), org.getId())
+                    .orElseGet(() -> cLocatorRepository.save(
+                        new CLocator()
+                        .active(true)
+                        .adOrganization(org)
+                        .code(code)
+                        .warehouse(warehouse)
+                    ));
+            })
+            .orElseGet(() -> null);
     }
 
     private CVendor buildVendor(String code) {
         return cVendorRepository.findFirstByCode(code).orElse(null);
     }
 
-    private CProduct buildProduct(Map<String, Object> payload, CUnitOfMeasure uom, final ADOrganization org) {
-        final String code = String.valueOf(payload.get("PRITM"));
-        final String name = StringUtils.trimToNull((String) payload.get("PDDSC1"));
-        final String description = StringUtils.trimToNull((String) payload.get("PDDSC2"));
+    private CProduct buildProduct(PoReceiverFileDTO payload, CUnitOfMeasure uom, final ADOrganization org) {
+        final String code = payload.getItemCode();
+
+        final String name = Optional.ofNullable(payload.getProductDesc1())
+            .map(String::trim)
+            .orElseGet(() -> null);
+
+        final String description = Optional.ofNullable(payload.getProductDesc2())
+            .map(String::trim)
+            .orElseGet(() -> null);
 
         return cProductRepository.findFirstByNameAndAdOrganizationId(name, org.getId())
-            .orElseGet(() -> {
-                final CProduct product = new CProduct();
-                product.active(true)
-                    .adOrganization(org)
-                    .code(code)
-                    .name(name)
-                    .description(description)
-                    .type(cProductService.getDefaultType())
-                    .assetAcct(cProductService.getDefaultAssetAccount())
-                    .expenseAcct(cProductService.getDefaultExpenseAccount())
-                    .productCategory(cProductService.getDefaultCategory())
-                    .productClassification(cProductService.getDefaultClassification())
-                    .uom(uom);
-
-                return cProductRepository.save(product);
-            });
+            .orElseGet(() -> cProductRepository.save(
+                new CProduct()
+                .active(true)
+                .adOrganization(org)
+                .code(code)
+                .name(name)
+                .description(description)
+                .type(cProductService.getDefaultType())
+                .assetAcct(cProductService.getDefaultAssetAccount())
+                .expenseAcct(cProductService.getDefaultExpenseAccount())
+                .productCategory(cProductService.getDefaultCategory())
+                .productClassification(cProductService.getDefaultClassification())
+                .uom(uom)
+            ));
     }
 
     private BigDecimal toBigDecimal(Map<String, Object> payload, String fieldName) {

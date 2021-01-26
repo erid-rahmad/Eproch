@@ -42,9 +42,9 @@ spring:
         server-uri: http://localhost:9393
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/OpusWebApp
-    username: OpusWebApp
-    password: 
+    url: jdbc:postgresql://localhost:5432/bhp_eproc
+    username: aaryadewa
+    password: aaryadewa
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -66,16 +66,22 @@ spring:
     contexts: dev
   mail:
     host: localhost
-    port: 25
-    username:
-    password:
+    port: 1025
+    # username: ananta.aryadewa@gmail.com
+    # password: gealwmjdskowqnow
+    # protocol: smtp
+    # tls: true
+    # properties.mail.smtp:
+    #   auth: true
+    #   starttls.enable: true
+    #   ssl.trust: smtp.gmail.com
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:
     cache: false
 
 server:
-  port: 8080
+  port: 8090
 
 # ===================================================================
 # JHipster specific properties
@@ -142,6 +148,8 @@ application:
   default-product-category-id: 45551
   default-product-asset-account-id: 18601
   default-product-expense-account-id: 19901
+  attachment:
+    upload-dir: /home/aaryadewa/Server/opusb/data/attachments
   integration:
     endpoint:
       invoice-verification-url: http://localhost:20001/api/invoice-verification

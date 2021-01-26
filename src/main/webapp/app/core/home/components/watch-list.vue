@@ -8,9 +8,9 @@
       <el-col
         v-for="card in cards"
         :key="card.id"
-        :xs="12"
-        :sm="8"
-        :lg="6"
+        :md="12"
+        :lg="8"
+        :xl="6"
         class="card-panel-col"
       >
         <div

@@ -166,6 +166,9 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             if (criteria.getcDocTypeMr() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getcDocTypeMr(), MVerificationLine_.cDocTypeMr));
             }
+            if (criteria.getReceiptReversed() != null) {
+                specification = specification.and(buildSpecification(criteria.getReceiptReversed(), MVerificationLine_.receiptReversed));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MVerificationLine_.uid));
             }

@@ -134,6 +134,9 @@ public class MVerificationLineResourceIT {
     private static final String DEFAULT_C_DOC_TYPE_MR = "AA";
     private static final String UPDATED_C_DOC_TYPE_MR = "BB";
 
+    private static final Boolean DEFAULT_RECEIPT_REVERSED = false;
+    private static final Boolean UPDATED_RECEIPT_REVERSED = true;
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -193,6 +196,7 @@ public class MVerificationLineResourceIT {
             .taxable(DEFAULT_TAXABLE)
             .cDocType(DEFAULT_C_DOC_TYPE)
             .cDocTypeMr(DEFAULT_C_DOC_TYPE_MR)
+            .receiptReversed(DEFAULT_RECEIPT_REVERSED)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -290,6 +294,7 @@ public class MVerificationLineResourceIT {
             .taxable(UPDATED_TAXABLE)
             .cDocType(UPDATED_C_DOC_TYPE)
             .cDocTypeMr(UPDATED_C_DOC_TYPE_MR)
+            .receiptReversed(UPDATED_RECEIPT_REVERSED)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -401,6 +406,7 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.isTaxable()).isEqualTo(DEFAULT_TAXABLE);
         assertThat(testMVerificationLine.getcDocType()).isEqualTo(DEFAULT_C_DOC_TYPE);
         assertThat(testMVerificationLine.getcDocTypeMr()).isEqualTo(DEFAULT_C_DOC_TYPE_MR);
+        assertThat(testMVerificationLine.isReceiptReversed()).isEqualTo(DEFAULT_RECEIPT_REVERSED);
         assertThat(testMVerificationLine.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMVerificationLine.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -595,6 +601,7 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].taxable").value(hasItem(DEFAULT_TAXABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].cDocType").value(hasItem(DEFAULT_C_DOC_TYPE)))
             .andExpect(jsonPath("$.[*].cDocTypeMr").value(hasItem(DEFAULT_C_DOC_TYPE_MR)))
+            .andExpect(jsonPath("$.[*].receiptReversed").value(hasItem(DEFAULT_RECEIPT_REVERSED.booleanValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -635,6 +642,7 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.taxable").value(DEFAULT_TAXABLE.booleanValue()))
             .andExpect(jsonPath("$.cDocType").value(DEFAULT_C_DOC_TYPE))
             .andExpect(jsonPath("$.cDocTypeMr").value(DEFAULT_C_DOC_TYPE_MR))
+            .andExpect(jsonPath("$.receiptReversed").value(DEFAULT_RECEIPT_REVERSED.booleanValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -2909,6 +2917,58 @@ public class MVerificationLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMVerificationLinesByReceiptReversedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where receiptReversed equals to DEFAULT_RECEIPT_REVERSED
+        defaultMVerificationLineShouldBeFound("receiptReversed.equals=" + DEFAULT_RECEIPT_REVERSED);
+
+        // Get all the mVerificationLineList where receiptReversed equals to UPDATED_RECEIPT_REVERSED
+        defaultMVerificationLineShouldNotBeFound("receiptReversed.equals=" + UPDATED_RECEIPT_REVERSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByReceiptReversedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where receiptReversed not equals to DEFAULT_RECEIPT_REVERSED
+        defaultMVerificationLineShouldNotBeFound("receiptReversed.notEquals=" + DEFAULT_RECEIPT_REVERSED);
+
+        // Get all the mVerificationLineList where receiptReversed not equals to UPDATED_RECEIPT_REVERSED
+        defaultMVerificationLineShouldBeFound("receiptReversed.notEquals=" + UPDATED_RECEIPT_REVERSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByReceiptReversedIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where receiptReversed in DEFAULT_RECEIPT_REVERSED or UPDATED_RECEIPT_REVERSED
+        defaultMVerificationLineShouldBeFound("receiptReversed.in=" + DEFAULT_RECEIPT_REVERSED + "," + UPDATED_RECEIPT_REVERSED);
+
+        // Get all the mVerificationLineList where receiptReversed equals to UPDATED_RECEIPT_REVERSED
+        defaultMVerificationLineShouldNotBeFound("receiptReversed.in=" + UPDATED_RECEIPT_REVERSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationLinesByReceiptReversedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationLineRepository.saveAndFlush(mVerificationLine);
+
+        // Get all the mVerificationLineList where receiptReversed is not null
+        defaultMVerificationLineShouldBeFound("receiptReversed.specified=true");
+
+        // Get all the mVerificationLineList where receiptReversed is null
+        defaultMVerificationLineShouldNotBeFound("receiptReversed.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllMVerificationLinesByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationLineRepository.saveAndFlush(mVerificationLine);
@@ -3179,6 +3239,7 @@ public class MVerificationLineResourceIT {
             .andExpect(jsonPath("$.[*].taxable").value(hasItem(DEFAULT_TAXABLE.booleanValue())))
             .andExpect(jsonPath("$.[*].cDocType").value(hasItem(DEFAULT_C_DOC_TYPE)))
             .andExpect(jsonPath("$.[*].cDocTypeMr").value(hasItem(DEFAULT_C_DOC_TYPE_MR)))
+            .andExpect(jsonPath("$.[*].receiptReversed").value(hasItem(DEFAULT_RECEIPT_REVERSED.booleanValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -3253,6 +3314,7 @@ public class MVerificationLineResourceIT {
             .taxable(UPDATED_TAXABLE)
             .cDocType(UPDATED_C_DOC_TYPE)
             .cDocTypeMr(UPDATED_C_DOC_TYPE_MR)
+            .receiptReversed(UPDATED_RECEIPT_REVERSED)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MVerificationLineDTO mVerificationLineDTO = mVerificationLineMapper.toDto(updatedMVerificationLine);
@@ -3291,6 +3353,7 @@ public class MVerificationLineResourceIT {
         assertThat(testMVerificationLine.isTaxable()).isEqualTo(UPDATED_TAXABLE);
         assertThat(testMVerificationLine.getcDocType()).isEqualTo(UPDATED_C_DOC_TYPE);
         assertThat(testMVerificationLine.getcDocTypeMr()).isEqualTo(UPDATED_C_DOC_TYPE_MR);
+        assertThat(testMVerificationLine.isReceiptReversed()).isEqualTo(UPDATED_RECEIPT_REVERSED);
         assertThat(testMVerificationLine.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMVerificationLine.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

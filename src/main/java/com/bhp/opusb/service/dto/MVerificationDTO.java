@@ -154,6 +154,30 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     private String payStatus;
 
+    @NotNull
+    private LocalDate dateTrx;
+
+    @Size(max = 30)
+    private String documentNo;
+
+    @NotNull
+    @Size(max = 10)
+    private String documentAction;
+
+    @NotNull
+    @Size(max = 10)
+    private String documentStatus;
+
+    private Boolean approved;
+
+    private Boolean processed;
+
+    /**
+     * Whether or not it contains one or more reversed receipt lines.
+     */
+    @ApiModelProperty(value = "Whether or not it contains one or more reversed receipt lines.")
+    private Boolean receiptReversed;
+
     private UUID uid;
 
     private Boolean active;
@@ -427,6 +451,62 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.payStatus = payStatus;
     }
 
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public Boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public Boolean isProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
+    public Boolean isReceiptReversed() {
+        return receiptReversed;
+    }
+
+    public void setReceiptReversed(Boolean receiptReversed) {
+        this.receiptReversed = receiptReversed;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -650,6 +730,13 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", dateApprove='" + getDateApprove() + "'" +
             ", verificationStatus='" + getVerificationStatus() + "'" +
             ", payStatus='" + getPayStatus() + "'" +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
+            ", receiptReversed='" + isReceiptReversed() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +

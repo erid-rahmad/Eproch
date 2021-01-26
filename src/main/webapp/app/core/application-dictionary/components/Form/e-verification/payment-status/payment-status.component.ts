@@ -41,8 +41,8 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
   private totalAmount: number = null;
 
   selectedRows: any = {};
-  public documentStatuses: any = [];
-  public paymentStatusOptions: any = {};
+  public documentStatuses: any[] = [];
+  public paymentStatusOptions: any[] = [];
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
@@ -110,6 +110,14 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
     this.retrieveAllRecords();
   }
 
+  rowClassName({row}) {
+    if (row.documentStatus !== 'CNL' && row.receiptReversed) {
+      return 'danger-row';
+    }
+
+    return '';
+  }
+
   public clear(): void {
     this.page = 1;
     this.retrieveAllRecords();
@@ -118,8 +126,6 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
   public singleSelection (row) {
     this.radioSelection = this.gridData.indexOf(row);
     this.selectedRows = row;
-
-    console.log(row);
   }
 
   public retrieveAllRecords(): void {
@@ -145,7 +151,6 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
         paginationQuery
       })
       .then(res => {
-        console.log(res);
         this.gridData = res.data.map((item: any) => {
           item.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;

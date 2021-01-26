@@ -53,12 +53,12 @@ export default class InvoiceVerificationDocumentApproval extends mixins(Vue2Filt
     return settings.dateValueFormat;
   }
 
-  get formHeader(){
+  get formHeader() {
     return this.dataVerificationAndLines.form;
   }
 
   get lines() {
-    return this.dataVerificationAndLines.line;
+    return this.dataVerificationAndLines.lines;
   }
 
   created(){
