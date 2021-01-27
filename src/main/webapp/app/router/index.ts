@@ -163,4 +163,5 @@ export function resetRouter() {
 
 export default router;
 export const defaultLayout = Layout;
+export const nestedLayout = () => import(/* webpackChunkName: "core" */'@/layout/nested-layout.vue');
 export const dynamicWindow = DynamicWindow;
