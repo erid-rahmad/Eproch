@@ -8,7 +8,8 @@ Component.registerHooks([
 import Router, { RouteConfig } from 'vue-router';
 import Layout from '@/layout/index.vue';
 import { forms } from './forms';
-const DynamicWindow = () => import(/* webpackChunkName: "dynamicWindow" */ '@/core/application-dictionary/components/DynamicWindow/dynamic-window.vue');
+const DynamicWindow = () => import(/* webpackChunkName: "core" */ '@/core/application-dictionary/components/DynamicWindow/dynamic-window.vue');
+const NestedLayout = () => import(/* webpackChunkName: "core" */'@/layout/nested-layout.vue');
 /* tslint:disable */
 // prettier-ignore
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
@@ -163,5 +164,5 @@ export function resetRouter() {
 
 export default router;
 export const defaultLayout = Layout;
-export const nestedLayout = () => import(/* webpackChunkName: "core" */'@/layout/nested-layout.vue');
+export const nestedLayout = NestedLayout;
 export const dynamicWindow = DynamicWindow;
