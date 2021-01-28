@@ -25,6 +25,7 @@ spring:
     active: dev
     include:
       - swagger
+      - no-liquibase
       # Uncomment to activate TLS for the dev profile
       #- tls
   devtools:
@@ -42,9 +43,9 @@ spring:
         server-uri: http://localhost:9393
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/bhp_eproc
-    username: aaryadewa
-    password: aaryadewa
+    url: jdbc:postgresql://localhost:5432/OpusWebApp
+    username: OpusWebApp
+    password: 
     hikari:
       poolName: Hikari
       auto-commit: false
