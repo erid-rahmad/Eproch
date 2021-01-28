@@ -30,7 +30,7 @@ public class AdTriggerService {
 
     private final AdTriggerMapper adTriggerMapper;
 
-    private ProcessTriggerFactory processTriggerFactory;
+    private final ProcessTriggerFactory processTriggerFactory;
 
     @Autowired
     public AdTriggerService(AdTriggerRepository adTriggerRepository, AdTriggerMapper adTriggerMapper, ProcessTriggerFactory processTriggerFactory) {
@@ -95,9 +95,8 @@ public class AdTriggerService {
      */
     public TriggerResult executeProcess(String serviceName, Map<String, Object> params) {
         if (log.isDebugEnabled()) {
-            params.entrySet().stream().forEach((entry) -> {
-                log.debug("> {}: {}", entry.getKey(), entry.getValue());
-            });
+            params.entrySet().stream()
+                .forEach(entry -> log.debug("> {}: {}", entry.getKey(), entry.getValue()));
         }
         return this.processTriggerFactory.get(serviceName).run(params);
     }
