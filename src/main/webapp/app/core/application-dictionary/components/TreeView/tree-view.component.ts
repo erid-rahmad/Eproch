@@ -75,7 +75,12 @@ export default class TreeView extends TreeViewProps {
     this.loading = true;
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: 'parentMenuId.specified=false'
+        criteriaQuery: 'parentMenuId.specified=false',
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['sequence', 'name']
+        }
       })
       .then(res => {
         this.list = res.data;
