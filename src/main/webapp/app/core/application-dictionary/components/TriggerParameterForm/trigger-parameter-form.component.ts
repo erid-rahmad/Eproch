@@ -83,8 +83,7 @@ export default class TriggerParameterForm extends Mixins(ContextVariableAccessor
     this.dynamicWindowService(`/api/ad-triggers/process/${this.data.value}`)
       .create(this.parameter)
       .then(res => {
-        console.log('Process results:', res);
-        this.$message.success('Process has been successfully executed');
+        this.$emit('process-completed', res);
       })
       .catch(err => {
         this.$message.error(err);
@@ -92,7 +91,7 @@ export default class TriggerParameterForm extends Mixins(ContextVariableAccessor
       .finally(() => {
         this.processing = false;
         this.visible = false;
-      })
+      });
   }
 
   get referenceListItems() {
