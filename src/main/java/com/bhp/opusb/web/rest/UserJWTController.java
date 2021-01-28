@@ -50,7 +50,7 @@ public class UserJWTController {
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        boolean rememberMe = (loginVM.isRememberMe() == null) ? false : loginVM.isRememberMe();
+        boolean rememberMe = Boolean.TRUE.equals(loginVM.isRememberMe());
         Optional<AdUser> adUser = adUserRepository.findByUserLogin(authentication.getName());
         String jwt = tokenProvider.createToken(authentication, adUser, rememberMe);
         HttpHeaders httpHeaders = new HttpHeaders();

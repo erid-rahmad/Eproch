@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.CLocation;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CVendorLocation;
@@ -86,24 +85,21 @@ public class CVendorService {
     public List<User> registerVendor(RegistrationDTO registrationDTO) {
         // Ensure vendor has generated ID.
         CVendor vendor = registrationMapper.toVendor(registrationDTO.getCompanyProfile());
-        List<CDocumentType> documentTypes = cDocumentTypeRepository.findByName("Supplier Registration");
+        cDocumentTypeRepository.findFirstByName("Supplier Registration")
+            .ifPresent(vendor::setDocumentType);
         
-        if ( ! documentTypes.isEmpty()) {
-            vendor.setDocumentType(documentTypes.get(0));
-        }
-
         cVendorRepository.save(vendor);
 
         CLocation location = registrationMapper.toLocation(registrationDTO.getCompanyProfile());
         CVendorLocation vendorLocation = pairVendorLocation(vendor, location, false, true, true, true);
 
-        if(registrationDTO.getCompanyProfile().getSameAddress()){
+        if (Boolean.TRUE.equals(registrationDTO.getCompanyProfile().getSameAddress())) {
             // Batch save locations.
             cLocationRepository.saveAll(Arrays.asList(location));
 
             // Make links between vendor and locations.
             cVendorLocationRepository.saveAll(Arrays.asList(vendorLocation));
-        }else{
+        } else {
             // Batch save locations TAX.
             CLocation taxLocation = registrationMapper.toTaxLocation(registrationDTO.getCompanyProfile());
             cLocationRepository.saveAll(Arrays.asList(location, taxLocation));
