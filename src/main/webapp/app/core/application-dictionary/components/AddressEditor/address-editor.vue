@@ -54,6 +54,7 @@
           <el-form-item :label="$t('opusWebApp.cLocation.country')"  prop="country">
             <el-select
               v-model="country"
+              :auto-complete="false"
               class="form-input"
               clearable
               filterable
@@ -78,6 +79,7 @@
           <el-form-item :label="$t('opusWebApp.cLocation.region')"  prop="region">
             <el-select
               v-model="region"
+              :auto-complete="false"
               class="form-input"
               clearable
               :disabled="!country"
@@ -100,6 +102,7 @@
           <el-form-item :label="$t('opusWebApp.cLocation.city')"  prop="cityId" required>
             <el-select
               v-model="location.cityId"
+              :auto-complete="false"
               class="form-input"
               clearable
               :disabled="countryHasRegion ? !region : !country"
