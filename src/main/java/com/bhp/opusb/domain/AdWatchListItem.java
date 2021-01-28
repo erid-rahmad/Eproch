@@ -22,6 +22,8 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  * A AdWatchListItem.
@@ -111,6 +113,7 @@ public class AdWatchListItem extends AbstractAuditingEntity {
     private Boolean active = true;
 
     @ManyToOne(optional = false)
+    @Fetch(FetchMode.JOIN)
     @NotNull
     @JsonIgnoreProperties("adWatchListItems")
     private ADOrganization adOrganization;
@@ -119,6 +122,7 @@ public class AdWatchListItem extends AbstractAuditingEntity {
      * Menu to be opened when selecting the item.
      */
     @ManyToOne
+    @Fetch(FetchMode.JOIN)
     @JsonIgnoreProperties("adWatchListItems")
     private AdMenu adMenu;
 

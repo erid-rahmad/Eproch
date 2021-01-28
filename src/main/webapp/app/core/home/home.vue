@@ -88,11 +88,7 @@
     v-else
     class="main-dashboard"
   >
-    <watch-list
-      v-if="isNotVendor"
-      name="Default"
-      title="Watch List"
-    />
+    <dash-board/>
   </div>
 </template>
 

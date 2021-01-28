@@ -2,6 +2,8 @@ import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-dec
 import store from '@/shared/config/store';
 import { TagsViewStoreModule as tagsViewStore } from "@/shared/config/store/tags-view-store";
 import { resetRouter } from '@/router';
+import { IPaDashboardItem } from '@/shared/model/pa-dashboard-item.model';
+import { IPaDashboard } from '@/shared/model/pa-dashboard.model';
 
 export interface IAccountState {
   logon: boolean;
@@ -24,6 +26,7 @@ class AccountStore extends VuexModule implements IAccountState {
   public activeProfiles = [];
   public authorities = new Set<string>();
   public grantedDocActions = new Map<number, Set<number>>();
+  public grantedDashboards = new Map<string, Set<number>>();
 
   // TODO Get organization ID from userIdentity.
   public properties = new Map<string, any>([
@@ -60,14 +63,30 @@ class AccountStore extends VuexModule implements IAccountState {
   @Mutation
   private SET_GRANTED_RESOURCES(accesses: Array<any>) {
     for (const access of accesses) {
+      // Grant access to document actions.
       if (access.typeName === 'DOC_ACTION') {
-        console.log('Granted docActions: %O', access);
         let docActions = this.grantedDocActions.get(access.documentTypeId);
+
         if (docActions === void 0) {
           docActions = new Set<number>();
           this.grantedDocActions.set(access.documentTypeId, docActions);
         }
         docActions.add(access.referenceListId);
+      }
+      
+      // Grant access to dashboards.
+      else if (access.typeName === 'DASHBOARD') {
+        const dashboardKey = `${access.paDashboardId}_${access.paDashboardName}`;
+        let dashboardItems = this.grantedDashboards.get(dashboardKey);
+
+        console.log('Granted dashboard. name: %s, itemId: %d',
+          dashboardKey, access.paDashboardItemId);
+
+        if (dashboardItems === void 0) {
+          dashboardItems = new Set<number>();
+          this.grantedDashboards.set(dashboardKey, dashboardItems);
+        }
+        dashboardItems.add(access.paDashboardItemId);
       }
     }
   }
@@ -80,6 +99,8 @@ class AccountStore extends VuexModule implements IAccountState {
     this.authorities.clear();
     this.authenticated = false;
     this.logon = false;
+    this.grantedDashboards.clear();
+    this.grantedDocActions.clear();
   }
 
   @Mutation

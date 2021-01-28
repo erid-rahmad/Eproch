@@ -60,4 +60,19 @@
 
     </changeSet>
 
+    <changeSet id="20200127095800" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="pa_dashboard_id"
+                                 baseTableName="sc_access"
+                                 constraintName="fk_sc_access_pa_dashboard_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="pa_dashboard"/>
+
+        <addForeignKeyConstraint baseColumnNames="pa_dashboard_item_id"
+                                 baseTableName="sc_access"
+                                 constraintName="fk_sc_access_pa_dashboard_item_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="pa_dashboard_item"/>
+
+    </changeSet>
 </databaseChangeLog>

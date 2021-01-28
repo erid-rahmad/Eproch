@@ -56,7 +56,7 @@
 <script lang="ts" src="./watch-list.component.ts"></script>
 <style lang="scss" scoped>
 .panel-group {
-  margin-top: 18px;
+  margin-bottom: 18px;
 
   .card-panel-col {
     margin-bottom: 32px;

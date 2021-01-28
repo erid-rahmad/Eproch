@@ -5,6 +5,8 @@ import java.util.UUID;
 
 import javax.validation.constraints.Size;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.ScAccess} entity.
  */
@@ -25,21 +27,48 @@ public class ScAccessDTO extends AbstractAuditingDTO {
 
     private Boolean canWrite;
 
+
     private Long adOrganizationId;
     private String adOrganizationName;
 
     private Long typeId;
     private String typeName;
-
+    
+    /**
+     * Used for restricting access to specific window.
+     */
+    @ApiModelProperty(value = "Used for restricting access to specific window.")
     private Long windowId;
     private String windowName;
 
+    /**
+     * Used for restricting access to specific form.
+     */
+    @ApiModelProperty(value = "Used for restricting access to specific form.")
     private Long formId;
     private String formName;
 
+    /**
+     * Used for restricting access to specific dashboard item.
+     */
+    @ApiModelProperty(value = "Used for restricting access to specific dashboard item.")
+    private Long paDashboardId;
+    private String paDashboardName;
+
+    private Long paDashboardItemId;
+    private String paDashboardItemName;
+    
+    /**
+     * Used for restricting access to specific document actions.
+     */
+    @ApiModelProperty(value = "Used for restricting access to specific document actions.")
     private Long documentTypeId;
     private String documentTypeName;
 
+    /**
+     * Used for restricting access to specific document actions.
+     */
+    @ApiModelProperty(value = "Used for restricting access to specific document actions.")
     private Long referenceListId;
     private String referenceListName;
 
@@ -158,6 +187,38 @@ public class ScAccessDTO extends AbstractAuditingDTO {
         this.formName = formName;
     }
 
+    public Long getPaDashboardId() {
+        return paDashboardId;
+    }
+
+    public void setPaDashboardId(Long paDashboardId) {
+        this.paDashboardId = paDashboardId;
+    }
+
+    public String getPaDashboardName() {
+        return paDashboardName;
+    }
+
+    public void setPaDashboardName(String paDashboardName) {
+        this.paDashboardName = paDashboardName;
+    }
+
+    public Long getPaDashboardItemId() {
+        return paDashboardItemId;
+    }
+
+    public void setPaDashboardItemId(Long paDashboardItemId) {
+        this.paDashboardItemId = paDashboardItemId;
+    }
+
+    public String getPaDashboardItemName() {
+        return paDashboardItemName;
+    }
+
+    public void setPaDashboardItemName(String paDashboardItemName) {
+        this.paDashboardItemName = paDashboardItemName;
+    }
+
     public Long getDocumentTypeId() {
         return documentTypeId;
     }
@@ -239,9 +300,9 @@ public class ScAccessDTO extends AbstractAuditingDTO {
             ", adOrganizationId=" + getAdOrganizationId() +
             ", typeId=" + getTypeId() +
             ", windowId=" + getWindowId() +
-            ", windowName=" + getWindowName() +
             ", formId=" + getFormId() +
-            ", formName=" + getFormName() +
+            ", paDashboardId=" + getPaDashboardId() +
+            ", paDashboardItemId=" + getPaDashboardItemId() +
             ", documentTypeId=" + getDocumentTypeId() +
             ", referenceListId=" + getReferenceListId() +
             ", authorityId=" + getAuthorityId() +

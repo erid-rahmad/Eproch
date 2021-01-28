@@ -4,6 +4,7 @@ import { IAdWatchList } from '@/shared/model/ad-watch-list.model';
 import VueCountTo from "vue-count-to";
 import { Component, Inject, Vue, Watch } from 'vue-property-decorator';
 import buildCriteriaQueryString from '@/shared/filter/filters';
+import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
 
 enum DisplayType {
   Card = 'card',
@@ -54,8 +55,16 @@ export default class WatchList extends WatchListProps {
     this.retrieveWatchListItems(this.name);
   }
 
-  onCardClicked(card: IAdWatchListItem) {
-    if (card.actionType === AdWatchListActionType.URL) {
+  async onCardClicked(card: IAdWatchListItem) {
+    if (! card.count) {
+      return;
+    }
+    
+    if (card.actionType === AdWatchListActionType.MENU) {
+      card.actionUrl = await this.commonService('/api/ad-menus/full-path').find(card.adMenu.id);
+    }
+
+    if (card.actionUrl) {
       const timestamp = Date.now();
       const filterQuery = buildCriteriaQueryString([card.filterQuery, 'active.equals=true']);
       sessionStorage.setItem(`filterQuery__${card.actionUrl}?t=${timestamp}`, filterQuery);
@@ -66,8 +75,6 @@ export default class WatchList extends WatchListProps {
           t: `${timestamp}`
         }
       });
-    } else {
-      console.log('Action MENU is not implemented yet');
     }
   }
 
@@ -99,7 +106,8 @@ export default class WatchList extends WatchListProps {
     this.commonService(item.restApiEndpoint)
       .count([
         'active.equals=true',
-        item.filterQuery || null
+        item.filterQuery || null,
+        accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
       ])
       .then(count => {
         const card = {...item};
