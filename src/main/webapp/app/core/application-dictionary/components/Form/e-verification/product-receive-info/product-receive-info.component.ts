@@ -1,15 +1,12 @@
+import WatchListMixin from '@/core/application-dictionary/mixins/WatchListMixin';
 import settings from '@/settings';
-import AlertMixin from '@/shared/alert/alert.mixin';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import Inputmask from 'inputmask';
-import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
 
 @Component
-export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, WatchListMixin) {
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -25,7 +22,6 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
   public reverse = false;
   public totalItems = 0;
 
-  private baseApiUrl = "/api/m-match-pos";
   private baseApiUrlVendor = "/api/c-vendors";
   private baseApiUrlReference = "/api/ad-references";
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
@@ -52,14 +48,16 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
   public productReceiveStatus: string = "productReceiveStatus";
   public radioSelection: number = null;
 
-  private isVendor = accountStore.userDetails.cVendorId;
-
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
   }
 
   get dateValueFormat() {
     return settings.dateValueFormat;
+  }
+
+  get isVendor() {
+    return accountStore.userDetails.vendor;
   }
 
   created(){
@@ -127,10 +125,6 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
   }
 
   public retrieveAllRecords(): void {
-    if ( ! this.baseApiUrl) {
-      return;
-    }
-
     this.processing = true;
     const paginationQuery = {
       page: this.page - 1,
@@ -138,26 +132,27 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
       sort: this.sort()
     };
 
-    var joinFilterQuery = "";
-    if(this.isVendor){
-      joinFilterQuery = "&cVendorId.equals="+this.isVendor;
-    }
+    const watchListQuery = this.getWatchListQuery();
 
-    this.dynamicWindowService(this.baseApiUrl)
+    if (watchListQuery) {
+      watchListQuery.split('&').forEach(field => {
+        const key = field.substring(0, field.indexOf('.'));
+        const value = field.substring(field.indexOf('=') + 1);
+        this.$set(this.filter, key, value);
+      });
+    }
+    
+    this.dynamicWindowService('/api/m-match-pos')
       .retrieve({
-        criteriaQuery: this.filterQuery+joinFilterQuery,
+        criteriaQuery: [
+          this.filterQuery,
+          this.isVendor ? `cVendorId.equals=${accountStore.userDetails.cVendorId}` : null
+        ],
         paginationQuery
       })
       .then(res => {
         console.log(res);
         this.gridData = res.data.map((item: any) => {
-          var matchType;
-          if(item.mMatchType == 1){
-            matchType = "Applied";
-          }else{
-            matchType = "Unapplied";
-          }
-          this.mMatchType = item.mMatchType;
           this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });

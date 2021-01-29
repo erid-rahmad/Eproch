@@ -79,9 +79,6 @@ class AccountStore extends VuexModule implements IAccountState {
         const dashboardKey = `${access.paDashboardId}_${access.paDashboardName}`;
         let dashboardItems = this.grantedDashboards.get(dashboardKey);
 
-        console.log('Granted dashboard. name: %s, itemId: %d',
-          dashboardKey, access.paDashboardItemId);
-
         if (dashboardItems === void 0) {
           dashboardItems = new Set<number>();
           this.grantedDashboards.set(dashboardKey, dashboardItems);

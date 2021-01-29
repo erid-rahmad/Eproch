@@ -8,6 +8,7 @@ export interface IWindowState {
    * Each item in the map is identified by window URL fullPath.
    */
   windows: Map<string, Map<string, object>>;
+  tmpQuery: string;
 }
 
 export interface IRegisterTabParameter {
@@ -65,8 +66,13 @@ export interface IMandatoryFieldParameter {
 class WindowStore extends VuexModule implements IWindowState {
   
   windows: Map<string, Map<string, object>> = new Map();
+  tmpQuery: string = null;
   conditionalTabs: Map<string, Map<string, IADTab>> = new Map();
   mandatoryFields: Map<string, Map<string, Record<string, IADField>>> = new Map();
+
+  public get watchlistQuery() {
+    return this.tmpQuery;
+  }
 
   public get tabs() {
     return (key: string): Map<string, object> => this.windows.get(key);
@@ -97,6 +103,16 @@ class WindowStore extends VuexModule implements IWindowState {
       const tab = this.tab(path, tabId);
       return tab ? tab[field] : null;
     }
+  }
+
+  @Mutation
+  private SET_WATCHLIST_QUERY(filterQuery: string) {
+    this.tmpQuery = filterQuery;
+  }
+
+  @Mutation
+  private REMOVE_FILTER_QUERY() {
+    this.tmpQuery = null;
   }
 
   @Mutation
@@ -138,6 +154,16 @@ class WindowStore extends VuexModule implements IWindowState {
     this.mandatoryFields.delete(path);
     this.conditionalTabs.delete(path);
     this.windows.delete(path);
+  }
+
+  @Action
+  public async setWatchlistQuery(filterQuery: string) {
+    this.SET_WATCHLIST_QUERY(filterQuery);
+  }
+
+  @Action
+  public async removeWatchlistQuery() {
+    this.REMOVE_FILTER_QUERY();
   }
 
   @Action

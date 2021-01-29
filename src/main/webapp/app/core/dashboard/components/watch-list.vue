@@ -6,8 +6,8 @@
       class="panel-group"
     >
       <el-col
-        v-for="card in cards"
-        :key="card.id"
+        v-for="item in items"
+        :key="item.id"
         :md="12"
         :lg="8"
         :xl="6"
@@ -15,21 +15,21 @@
       >
         <div
           class="card-panel"
-          @click="onCardClicked(card)"
+          @click="onCardClicked(item)"
         >
           <div class="card-panel-icon-wrapper">
             <svg-icon
-              :name="card.icon"
+              :name="item.icon"
               class="card-panel-icon"
             />
           </div>
           <div class="card-panel-description">
             <div class="card-panel-text">
-              {{ card.name }}
+              {{ item.name }}
             </div>
             <count-to
               :start-val="0"
-              :end-val="card.count"
+              :end-val="item.count"
               class="card-panel-num"
             />
           </div>

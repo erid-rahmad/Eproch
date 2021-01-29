@@ -5,6 +5,7 @@ import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import InvoiceVerificationDocumentApproval from './invoice-verification-document-approval.vue';
 import { ElForm } from 'element-ui/types/form';
+import { ElInput } from 'element-ui/types/input';
 
 @Component({
   components: {
@@ -47,8 +48,12 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
   private dialogInvoiceVerificationVisible: boolean = false;
   private dialogTitle: string = "";
 
-  created(){
+  created() {
     this.retrieveGetReferences(this.keyReference);
+  }
+
+  mounted() {
+    (<ElInput>this.$refs.searchField).focus();
   }
 
   searchInvoiceVerification() {

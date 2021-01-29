@@ -13,6 +13,7 @@
                     >
                         <el-form-item prop="verificationNo" label="Verification No." required>
                             <el-input
+                                ref="searchField"
                                 v-model="filterForm.verificationNo"
                                 placeholder="Please Input Verification No."
                                 clearable

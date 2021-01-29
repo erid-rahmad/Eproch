@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container">
+    <div class="app-container verification-document-inquiry">
         <div v-if="index">
             <el-row class="header">
                 <el-col :span="24">
@@ -123,7 +123,7 @@
                         <el-form-item label="Status" prop="verificationStatus">
                             <el-select class="form-input" clearable filterable v-model="filter.verificationStatus" placeholder="Status" >
                                 <el-option
-                                    v-for="item in statusOptions"
+                                    v-for="item in documentStatusOptions"
                                     :key="item.key"
                                     :label="item.value"
                                     :value="item.key" />
@@ -181,7 +181,7 @@
                 <el-col :span="24">
                     <el-table
                         v-loading="processing"
-                        ref="gridData"
+                        ref="mainTable"
                         highlight-current-row
                         border stripe
                         size="mini"
@@ -198,10 +198,13 @@
 
                         <el-table-column
                             align="center"
+                            class-name="no-ellipsis"
                             fixed
-                            width="35">
-                            <template slot-scope="scope">
-                                <el-radio class="radio" v-model="radioSelection" :label="scope.$index">&nbsp;</el-radio>
+                            width="36"
+                        >
+                            <template slot="header"></template>
+                            <template slot-scope="{ $index }">
+                                <el-radio class="radio" v-model="radioSelection" :label="$index">&nbsp;</el-radio>
                             </template>
                         </el-table-column>
 
@@ -246,7 +249,7 @@
                             min-width="150"
                             sortable
                             prop="dueDate"
-                            label="Payment Schedule"/>
+                            label="Payment Schd."/>
                         <el-table-column
                             min-width="140"
                             sortable
@@ -344,7 +347,7 @@
                         ref="pagination"
                         background
                         layout="sizes, prev, pager, next"
-                        mini
+                        small
                         :current-page.sync="page"
                         :page-sizes="[10, 20, 50, 100]"
                         :page-size="itemsPerPage"
@@ -362,7 +365,7 @@
                 <el-col :span="24" :offset="0">
                     <detail-verification-document
                         ref="form"
-                        :detail-verification="selectedRows"
+                        :detail-verification="selectedRow"
                         @close-detail-verification="closeDetailVerification"
                     />
                 </el-col>
@@ -381,7 +384,7 @@
                     <el-col :span="24" :offset="0">
                         <update-voucher
                             ref="updateVoucher"
-                            :set-verification="setVerification"
+                            :set-verification="selectedRow"
                             @close-dialog="closeDetailVerification"
                         />
                     </el-col>
@@ -399,6 +402,10 @@
 <style lang="scss">
 .el-table__fixed, .el-table__fixed-right{
     box-shadow: none;
+}
+
+.el-table .cell.no-ellipsis {
+    text-overflow: inherit;
 }
 
 .header {

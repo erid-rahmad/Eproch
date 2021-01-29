@@ -183,6 +183,7 @@
             <el-row class="main" ref="tableWrapper">
                 <el-col :span="24">
                     <el-table
+                        ref="mainTable"
                         v-loading="processing"
                         highlight-current-row
                         border stripe
@@ -199,10 +200,13 @@
 
                         <el-table-column
                             align="center"
+                            class-name="no-ellipsis"
                             fixed
-                            width="35">
-                            <template slot-scope="scope">
-                                <el-radio class="radio" v-model="radioSelection" :label="scope.$index">&nbsp;</el-radio>
+                            width="36"
+                        >
+                            <template slot="header"></template>
+                            <template slot-scope="{ $index }">
+                                <el-radio class="radio" v-model="radioSelection" :label="$index">&nbsp;</el-radio>
                             </template>
                         </el-table-column>
 
@@ -372,6 +376,10 @@
 }
 .el-table__fixed, .el-table__fixed-right {
     box-shadow: none;
+}
+
+.el-table .cell.no-ellipsis {
+    text-overflow: inherit;
 }
 
 .header {

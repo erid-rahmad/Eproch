@@ -19,6 +19,8 @@ import TreeView from '../TreeView/tree-view.vue';
 import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
 import { IADField } from '@/shared/model/ad-field.model';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { WindowStoreModule as windowStore } from '@/shared/config/store/window-store';
+import WatchListMixin from '../../mixins/WatchListMixin';
 
 @Component({
   components: {
@@ -39,7 +41,7 @@ import { AccountStoreModule as accountStore } from '@/shared/config/store/accoun
     })
   }
 })
-export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
+export default class DynamicWindow extends Mixins(ContextVariableAccessor, WatchListMixin) {
   @Inject('aDWindowService')
   private aDWindowService: () => ADWindowService;
 
@@ -561,14 +563,9 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
               }
               this.childTabs.push(tab);
             } else {
-              const fullPath = this.$route.fullPath;
-              const tmpFilterQuery = sessionStorage.getItem(`filterQuery__${fullPath}`);
+              const tmpFilterQuery = this.getWatchListQuery();
 
               tab.nativeFilterQuery = tab.filterQuery;
-
-              if (tmpFilterQuery !== null) {
-                sessionStorage.removeItem(`filterQuery__${fullPath}`);
-              }
 
               if (this.isVendor) {
                 const vendorIdField = tab.adTableName === 'c_vendor' ? 'id' : 'vendorId';

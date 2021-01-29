@@ -5,6 +5,7 @@ import VueCountTo from "vue-count-to";
 import { Component, Inject, Vue, Watch } from 'vue-property-decorator';
 import buildCriteriaQueryString from '@/shared/filter/filters';
 import { AccountStoreModule as accountStore } from "@/shared/config/store/account-store";
+import { WindowStoreModule as windowStore } from "@/shared/config/store/window-store";
 
 enum DisplayType {
   Card = 'card',
@@ -29,7 +30,6 @@ export default class WatchList extends WatchListProps {
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
   items: IAdWatchListItem[] = [];
-  cards: IAdWatchListItem[] = [];
 
   get isCard() {
     return this.type === DisplayType.Card;
@@ -45,9 +45,8 @@ export default class WatchList extends WatchListProps {
 
   @Watch('items', { deep: true })
   onItemsChanged(items: IAdWatchListItem[]) {
-    console.log('watch list items updated. items count:', items.length);
-    items.forEach(item => {
-      this.retrieveWatchListCounter(item);
+    items.forEach((item, index) => {
+      this.retrieveWatchListCounter(item, index);
     });
   }
 
@@ -66,15 +65,15 @@ export default class WatchList extends WatchListProps {
 
     if (card.actionUrl) {
       const timestamp = Date.now();
-      const filterQuery = buildCriteriaQueryString([card.filterQuery, 'active.equals=true']);
-      sessionStorage.setItem(`filterQuery__${card.actionUrl}?t=${timestamp}`, filterQuery);
-
-      this.$router.push({
-        path: card.actionUrl,
-        query: {
-          t: `${timestamp}`
-        }
-      });
+      windowStore.setWatchlistQuery(card.filterQuery)
+        .then(() => {
+          this.$router.push({
+            path: card.actionUrl,
+            query: {
+              t: `${timestamp}`
+            }
+          });
+        });
     }
   }
 
@@ -99,20 +98,21 @@ export default class WatchList extends WatchListProps {
       })
       .catch(err => {
         console.log('Failed to get the watch list.', err);
+        this.$message({
+          message: 'Failed to get the watch list',
+          type: 'warning'
+        });
       });
   }
 
-  private retrieveWatchListCounter(item: IAdWatchListItem) {
+  private retrieveWatchListCounter(item: IAdWatchListItem, index?: number) {
     this.commonService(item.restApiEndpoint)
       .count([
-        'active.equals=true',
         item.filterQuery || null,
         accountStore.userDetails.vendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
       ])
       .then(count => {
-        const card = {...item};
-        card.count = count;
-        this.cards.push(card);
-      })
+        this.$set(this.items[index], 'count', count);
+      });
   }
 }
