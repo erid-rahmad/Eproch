@@ -81,13 +81,12 @@ export default class AdMenuService {
 
       axios
         .get(`${baseApiUrl}?${queryParams}`)
-        .then(function(res) {
+        .then(res => {
           const routes: IMenu[] = res.data.map(((route: any) => {
             return this.buildRouter(route);
-          }).bind(this));
-          console.log('routes: %O', routes);
+          }));
           resolve({data: routes});
-        }.bind(this))
+        })
         .catch(err => {
           reject(err);
         });
