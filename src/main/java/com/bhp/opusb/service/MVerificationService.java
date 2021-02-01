@@ -257,6 +257,8 @@ public class MVerificationService {
                 mMatchPOService.openMatchPO(line.getAdOrganizationCode(), line.getcDocType(), line.getPoNo(),
                         line.getReceiveNo(), line.getLineNoPo(), line.getLineNoMr(), line.getOrderSuffix());
             });
+        } else if (DocumentUtil.isReopen(documentStatus)) {
+            eventName = "INVOICE_REOPENED";
         }
 
         mVerification = mVerificationRepository.save(mVerification.receiptReversed(false));

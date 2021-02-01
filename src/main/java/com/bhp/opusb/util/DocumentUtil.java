@@ -42,6 +42,10 @@ public class DocumentUtil {
     return STATUS_VOID.equals(documentStatus);
   }
 
+  public static boolean isReopen(String documentStatus) {
+    return STATUS_REOPEN.equals(documentStatus);
+  }
+
   public static String buildRunningNumber(GenericDocumentRepository<?, ?> repository) {
     LocalDate now = LocalDate.now();
     LocalDate start = now.withDayOfMonth(1);

@@ -114,7 +114,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     const docStatus = this.header.verificationStatus;
 
     this.retrieveCurrencies();
-    this.isDraft = !docStatus || docStatus === 'DRF' || docStatus === 'RJC';
+    this.isDraft = !docStatus || docStatus === 'DRF' || docStatus === 'RJC' || docStatus === 'ROP';
 
     if (this.header.id) {
       this.filterQuery = `verificationId.equals=${this.header.id}`;

@@ -76,7 +76,8 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
       .retrieve({
         criteriaQuery: [
           `verificationNo.equals=${no}`,
-          'verificationStatus.equals=SMT'
+          'verificationStatus.in=SMT',
+          'verificationStatus.in=ROP'
         ]
       })
       .then(res => {
