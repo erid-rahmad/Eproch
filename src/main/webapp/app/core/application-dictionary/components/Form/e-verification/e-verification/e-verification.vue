@@ -107,7 +107,7 @@
                                 <el-option
                                     v-for="item in documentStatuses"
                                     :key="item.key"
-                                    :label="item.value"
+                                    :label="item.label"
                                     :value="item.key" />
                             </el-select>
                         </el-form-item>
@@ -335,7 +335,7 @@
 
         <el-dialog
             width="30%"
-            :visible.sync="dialogConfirmationVisible"
+            :visible.sync="confirmDocStatusUpdate"
             :title="dialogTitle">
 
             <template>
@@ -346,7 +346,7 @@
                         size="mini"
                         icon="el-icon-check"
                         :type="dialogType"
-                        @click="buttonDialogUpdateRecords"
+                        @click="updateDocumentStatus"
                     >
                         {{ dialogButton }}
                     </el-button>
@@ -354,7 +354,7 @@
                         style="margin-left: 0px;"
                         size="mini"
                         icon="el-icon-close"
-                        @click="dialogConfirmationVisible = false"
+                        @click="confirmDocStatusUpdate = false"
                     >
                         No
                     </el-button>

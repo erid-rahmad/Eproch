@@ -1,14 +1,14 @@
+import WatchListMixin from '@/core/application-dictionary/mixins/WatchListMixin';
 import settings from '@/settings';
-import AlertMixin from '@/shared/alert/alert.mixin';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { ElTable } from 'element-ui/types/table';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
 
 
 @Component
-export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class PaymentStatus extends mixins(ContextVariableAccessor, WatchListMixin) {
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -29,26 +29,23 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
 
   private filterQuery: string = '';
-  private processing = false;
-
-  private dialogTitle = "";
-  private dialogMessage = "";
-  private dialogButton = "";
-  private dialogValue = "";
-  private dialogType = "";
+  processing = false;
 
   public gridData: Array<any> = [];
   private totalAmount: number = null;
 
-  selectedRows: any = {};
-  public documentStatuses: any[] = [];
+  selectedRow: any = {};
+  public documentStatusOptions: any[] = [];
   public paymentStatusOptions: any[] = [];
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
-  public docStatus: string = "docStatus";
-  public paymentStatus: string = "paymentStatus";
   public radioSelection: number = null;
+  confirmReopen: boolean = false;
+
+  get canReopen() {
+    return this.selectedRow?.apReversed && this.selectedRow?.documentStatus !== 'ROP';
+  }
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -59,11 +56,11 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   created(){
-    this.retrieveGetReferences(this.docStatus);
-    this.retrieveGetReferences(this.paymentStatus);
+    this.initDocumentStatusOptions();
+    this.initPaymentStatusOptions();
   }
 
-  public mounted(): void {
+  mounted() {
     this.retrieveAllRecords();
   }
 
@@ -125,14 +122,38 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
 
   public singleSelection (row) {
     this.radioSelection = this.gridData.indexOf(row);
-    this.selectedRows = row;
+    this.selectedRow = row;
+  }
+
+  public reopenDocument() {
+    const data = { ...this.selectedRow };
+    data.verificationStatus = 'ROP';
+
+    this.dynamicWindowService(this.baseApiUrl)
+      .update(data)
+      .then(() => {
+        const message = 'Invoice verification has been reopened'
+
+        this.retrieveAllRecords();
+        this.$message({
+          message: message,
+          type: 'success'
+        });
+      })
+      .catch(err => {
+        this.$message({
+          message: err.response?.data?.detail || err.message,
+          type: 'error'
+        });
+      })
+      .finally(() => {
+        this.processing = false;
+        this.confirmReopen = false;
+      });
   }
 
   public retrieveAllRecords(): void {
-    if ( ! this.baseApiUrl) {
-      return;
-    }
-
+    this.clearSelection();
     this.processing = true;
     const paginationQuery = {
       page: this.page - 1,
@@ -140,14 +161,23 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
       sort: this.sort()
     };
 
-    var joinFilterQuery = "";
-    if(accountStore.userDetails.cVendorId){
-      joinFilterQuery = "&vendorId.equals="+accountStore.userDetails.cVendorId;
+    const watchListQuery = this.getWatchListQuery();
+
+    if (watchListQuery) {
+      watchListQuery.split('&').forEach(field => {
+        const key = field.substring(0, field.indexOf('.'));
+        const value = field.substring(field.indexOf('=') + 1);
+        this.$set(this.filter, key, value);
+      });
     }
 
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: this.filterQuery+joinFilterQuery,
+        criteriaQuery: [
+          this.filterQuery,
+          watchListQuery,
+          `vendorId.equals=${accountStore.userDetails.cVendorId}`
+        ],
         paginationQuery
       })
       .then(res => {
@@ -171,8 +201,14 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
       .finally(() => {
         this.processing = false;
         this.radioSelection = null;
-        this.selectedRows = {};
+        this.selectedRow = {};
       });
+  }
+
+  private clearSelection() {
+    (<ElTable>this.$refs.mainTable)?.setCurrentRow();
+    this.radioSelection = null;
+    this.selectedRow = null;
   }
 
   public closeDialog(): void {
@@ -180,42 +216,30 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
     this.retrieveAllRecords();
   }
 
-  private retrieveGetReferences(param: string) {
-    this.dynamicWindowService(this.baseApiUrlReference)
-    .retrieve({
-      criteriaQuery: [`value.contains=`+param]
-    })
-    .then(res => {
-        let references = res.data.map(item => {
-            return{
-                id: item.id,
-                value: item.value,
-                name: item.name
-            };
-        });
-        this.retrieveGetReferenceLists(references);
-    });
+  private initDocumentStatusOptions() {
+    this.dynamicWindowService(null)
+      .retrieveReferenceLists('docStatus')
+      .then(res => {
+        this.documentStatusOptions = res.map(item => 
+          ({
+              key: item.value,
+              label: item.name
+          })
+        );
+      });
   }
 
-  private retrieveGetReferenceLists(param: any) {
-    this.dynamicWindowService(this.baseApiUrlReferenceList)
-    .retrieve({
-      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
-    })
-    .then(res => {
-        let referenceList = res.data.map(item => {
-            return{
-                key: item.value,
-                value: item.name
-            };
-        });
-
-        if(param[0].value == this.docStatus){
-          this.documentStatuses = referenceList;
-        }else if(param[0].value == this.paymentStatus){
-          this.paymentStatusOptions = referenceList;
-        }
-    });
+  private initPaymentStatusOptions() {
+    this.dynamicWindowService(null)
+      .retrieveReferenceLists('paymentStatus')
+      .then(res => {
+        this.paymentStatusOptions = res.map(item => 
+          ({
+              key: item.value,
+              label: item.name
+          })
+        );
+      });
   }
 
   public verificationFilter(){
@@ -261,11 +285,11 @@ export default class PaymentStatus extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   formatDocumentStatus(value: string) {
-    return this.documentStatuses.find(status => status.key === value)?.value || value;
+    return this.documentStatusOptions.find(status => status.key === value)?.label || value;
   }
 
   formatPaymentStatus(value: string) {
-    return this.paymentStatusOptions.find(status => status.key === value)?.value || value;
+    return this.paymentStatusOptions.find(status => status.key === value)?.label || value;
   }
 
 }

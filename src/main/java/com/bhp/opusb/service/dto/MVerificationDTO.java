@@ -178,6 +178,12 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "Whether or not it contains one or more reversed receipt lines.")
     private Boolean receiptReversed;
 
+    /**
+     * Whether or not it contains one or more reversed invoice AP lines.
+     */
+    @ApiModelProperty(value = "Whether or not it contains one or more reversed invoice AP lines.")
+    private Boolean apReversed;
+
     private UUID uid;
 
     private Boolean active;
@@ -507,6 +513,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.receiptReversed = receiptReversed;
     }
 
+    public Boolean isApReversed() {
+        return apReversed;
+    }
+
+    public void setApReversed(Boolean apReversed) {
+        this.apReversed = apReversed;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -737,6 +751,7 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", approved='" + isApproved() + "'" +
             ", processed='" + isProcessed() + "'" +
             ", receiptReversed='" + isReceiptReversed() + "'" +
+            ", apReversed='" + isApReversed() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
@@ -744,7 +759,7 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", matchPoCurrencyId=" + getMatchPoCurrencyId() +
             ", vendorId=" + getVendorId() +
             ", vendorToId=" + getVendorToId() +
-            ", vendorLocationId=" + getVendorLocation() +
+            ", vendorLocation=" + getVendorLocation() +
             ", cTaxCategoryId=" + getCTaxCategoryId() +
             ", cTaxId=" + getCTaxId() +
             "}";

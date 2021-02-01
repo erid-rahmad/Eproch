@@ -39,12 +39,12 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   selectedRow: any = {};
   public radioSelection: number = null;
 
-  private dialogTitle = "";
-  private dialogMessage = "";
-  private dialogButton = "";
+  dialogTitle: string = null;
+  dialogMessage: string = null;
+  dialogButton: string = null;
+  dialogType: string = null;
   private dialogValue = "";
-  private dialogType = "";
-  public dialogConfirmationVisible: boolean = false;
+  public confirmDocStatusUpdate: boolean = false;
 
   public documentStatuses: any[] = [];
 
@@ -57,7 +57,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   }
 
   created(){
-    this.retrieveReferenceLists('docStatus');
+    this.initDocumentStatusOptions();
     this.retrieveAllRecords();
   }
 
@@ -146,14 +146,14 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
       this.dialogButton = "Cancel";
       this.dialogValue = "CNL";
       this.dialogType = "danger";
-      this.dialogConfirmationVisible = true;
+      this.confirmDocStatusUpdate = true;
     } else if (key == "submit") {
       this.dialogTitle = "Submit Invoice Verification";
       this.dialogMessage = "Are you sure you want to submit the document?";
       this.dialogButton = "Submit";
       this.dialogValue = "SMT";
       this.dialogType = "primary";
-      this.dialogConfirmationVisible = true;
+      this.confirmDocStatusUpdate = true;
     } else if (key == "print") {
       this.buttonPrint("invoice-verification");
     } else if(key == "printSummary") {
@@ -163,7 +163,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
     }
   }
   
-  public buttonDialogUpdateRecords(): void {
+  public updateDocumentStatus(): void {
     const data = { ...this.selectedRow };
     data.verificationStatus = this.dialogValue;
 
@@ -176,7 +176,6 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
 
         this.toggleToolbarButtons();
         this.retrieveAllRecords();
-        this.clearSelection();
         this.$message({
           message: message,
           type: 'success'
@@ -190,7 +189,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
       })
       .finally(() => {
         this.processing = false;
-        this.dialogConfirmationVisible = false;
+        this.confirmDocStatusUpdate = false;
       });
   }
 
@@ -303,25 +302,20 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   }
 
   formatDocumentStatus(value: string) {
-    return this.documentStatuses.find(status => status.key === value)?.value;
+    return this.documentStatuses.find(status => status.key === value)?.label || value;
   }
 
-  private retrieveReferenceLists(code: string) {
-    this.dynamicWindowService('/api/ad-reference-lists')
-    .retrieve({
-      criteriaQuery: [
-        `active.equals=true`,
-        `adReferenceValue.equals=${code}`
-      ]
-    })
-    .then(res => {
-      this.documentStatuses = res.data.map((item: any) => 
-        ({
-            key: item.value,
-            value: item.name
-        })
-      );
-    });
+  private initDocumentStatusOptions() {
+    this.dynamicWindowService(null)
+      .retrieveReferenceLists('docStatus')
+      .then(res => {
+        this.documentStatuses = res.map(item => 
+          ({
+              key: item.value,
+              label: item.name
+          })
+        );
+      });
   }
 
 }

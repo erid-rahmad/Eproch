@@ -9,6 +9,7 @@ public class DocumentUtil {
 
   public static final String STATUS_APPROVE = "APV";
   public static final String STATUS_DRAFT = "DRF";
+  public static final String STATUS_REOPEN = "ROP";
   public static final String STATUS_REJECT = "RJC";
   public static final String STATUS_SUBMIT = "SMT";
   public static final String STATUS_VOID = "CNL";

@@ -195,6 +195,11 @@
             "fieldType": "Boolean"
         },
         {
+            "fieldName": "apReversed",
+            "javadoc": "Whether or not it contains one or more reversed invoice AP lines.",
+            "fieldType": "Boolean"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

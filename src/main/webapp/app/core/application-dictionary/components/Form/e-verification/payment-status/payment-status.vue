@@ -9,15 +9,28 @@
                     size="small"
                     type="primary"
                     icon="el-icon-search"
-                    @click.native.prevent="verificationFilter"/>
+                    @click.native.prevent="verificationFilter"
+                />
 
                 <el-button
+                    v-if="canReopen"
                     class="button"
                     size="small"
                     type="primary"
-                    icon="el-icon-download">
-                    Export
+                    icon="el-icon-download"
+                    @click="confirmReopen = true"
+                >
+                    Reopen
                 </el-button>
+
+                <!-- <el-button
+                    class="button"
+                    size="small"
+                    type="primary"
+                    icon="el-icon-download"
+                >
+                    Export
+                </el-button> -->
 
             </el-col>
         </el-row>
@@ -41,10 +54,11 @@
                     <el-form-item label="Status" prop="verificationStatus">
                         <el-select class="form-input" clearable filterable v-model="filter.verificationStatus" placeholder="Status" >
                             <el-option
-                                v-for="item in documentStatuses"
+                                v-for="item in documentStatusOptions"
                                 :key="item.key"
-                                :label="item.value"
-                                :value="item.key" />
+                                :label="item.label"
+                                :value="item.key"
+                            />
                         </el-select>
                     </el-form-item>
 
@@ -77,7 +91,7 @@
                             <el-option
                                 v-for="item in paymentStatusOptions"
                                 :key="item.key"
-                                :label="item.value"
+                                :label="item.label"
                                 :value="item.key" />
                         </el-select>
                     </el-form-item>
@@ -91,7 +105,7 @@
             <el-col :span="24">
                 <el-table
                     v-loading="processing"
-                    ref="gridData"
+                    ref="mainTable"
                     highlight-current-row
                     border stripe
                     size="mini"
@@ -225,6 +239,35 @@
                 />
             </el-col>
         </el-row>
+
+        <el-dialog
+            width="30%"
+            :visible.sync="confirmReopen"
+            title="Reopen Document">
+
+            <template>
+                <span>Do you want to reopen this document?</span>
+                <div slot="footer">
+                    <el-button
+                        style="margin-left: 0px;"
+                        size="mini"
+                        icon="el-icon-check"
+                        type="warning"
+                        @click="reopenDocument"
+                    >
+                        Reopen
+                    </el-button>
+                    <el-button
+                        style="margin-left: 0px;"
+                        size="mini"
+                        icon="el-icon-close"
+                        @click="confirmReopen = false"
+                    >
+                        No
+                    </el-button>
+                </div>
+            </template>
+        </el-dialog>
 
         <el-dialog
             width="50%"

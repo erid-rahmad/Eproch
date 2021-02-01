@@ -208,6 +208,12 @@ public class MVerification extends AbstractAuditingEntity {
     @Column(name = "receipt_reversed")
     private Boolean receiptReversed;
 
+    /**
+     * Whether or not it contains one or more reversed invoice AP lines.
+     */
+    @Column(name = "ap_reversed")
+    private Boolean apReversed;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -694,6 +700,19 @@ public class MVerification extends AbstractAuditingEntity {
         this.receiptReversed = receiptReversed;
     }
 
+    public Boolean isApReversed() {
+        return apReversed;
+    }
+
+    public MVerification apReversed(Boolean apReversed) {
+        this.apReversed = apReversed;
+        return this;
+    }
+
+    public void setApReversed(Boolean apReversed) {
+        this.apReversed = apReversed;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -883,6 +902,7 @@ public class MVerification extends AbstractAuditingEntity {
             ", approved='" + isApproved() + "'" +
             ", processed='" + isProcessed() + "'" +
             ", receiptReversed='" + isReceiptReversed() + "'" +
+            ", apReversed='" + isApReversed() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

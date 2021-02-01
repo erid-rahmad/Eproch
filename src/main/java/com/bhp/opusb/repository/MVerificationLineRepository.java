@@ -22,16 +22,37 @@ public interface MVerificationLineRepository extends JpaRepository<MVerification
    * The line is uniquely identified by its orgCode, docType, poNo, lineNoPo, lineNoMr, and orderSuffix.
    * The incoming reversed line to match has higher receiptNo.
    */
-  @Query("SELECT vl FROM MVerificationLine vl " +
+  @Query("SELECT vl " +
+    "FROM MVerificationLine vl " +
     "WHERE vl.adOrganization = ?1 " +
     "AND vl.cDocType = ?2 " +
     "AND vl.poNo = ?3 " +
     "AND TO_NUMBER(vl.receiveNo, '999999999') < ?4 " +
     "AND vl.lineNoPo = ?5 " +
     "AND vl.lineNoMr = ?6 " +
-    "AND vl.orderSuffix = ?7"
+    "AND vl.orderSuffix = ?7 " +
+    "AND vl.verification.documentStatus IN ('DRF', 'SMT', 'ROP')"
   )
-  Optional<MVerificationLine> getFirstReversedLine(ADOrganization org, String docType, String poNo,
+  Optional<MVerificationLine> getFirstReversedReceiptLine(ADOrganization org, String docType, String poNo,
+      BigDecimal receiptNo, Integer lineNoPo, Integer lineNoMr, String orderSuffix);
+
+  /**
+   * Find the respective line that matches the incoming reversed AP invoice line (matchType = 3).
+   * The line is uniquely identified by its orgCode, docType, poNo, lineNoPo, lineNoMr, and orderSuffix.
+   * The incoming reversed line to match has higher receiptNo.
+   */
+  @Query("SELECT vl " +
+    "FROM MVerificationLine vl " +
+    "WHERE vl.adOrganization = ?1 " +
+    "AND vl.cDocType = ?2 " +
+    "AND vl.poNo = ?3 " +
+    "AND TO_NUMBER(vl.receiveNo, '999999999') < ?4 " +
+    "AND vl.lineNoPo = ?5 " +
+    "AND vl.lineNoMr = ?6 " +
+    "AND vl.orderSuffix = ?7 " +
+    "AND vl.verification.documentStatus = 'APV'"
+  )
+  Optional<MVerificationLine> getFirstReversedAPInvoiceLine(ADOrganization org, String docType, String poNo,
       BigDecimal receiptNo, Integer lineNoPo, Integer lineNoMr, String orderSuffix);
 
 }

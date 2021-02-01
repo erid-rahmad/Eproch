@@ -23,63 +23,85 @@
         </el-row>
 
         <el-row class="filter" :gutter="24">
-            <el-form ref="form" label-position="left" label-width="170px" size="mini">
+            <el-form
+                ref="form"
+                label-position="left"
+                label-width="170px"
+                :model="filter"
+                size="mini"
+            >
                 <el-col :span="8">
-
-                    <el-form-item label="Receive No." prop="receiveNo">
-                        <el-input class="form-input" clearable v-model="filter.receiveNo"/>
+                    <el-form-item label="Receive No." prop="receiptNo">
+                        <el-input class="form-input" clearable v-model="filter.receiptNo"/>
                     </el-form-item>
-                    <el-form-item label="Receive Date - From" prop="receiveDateFrom">
+                    <el-form-item label="Receive Date - From" prop="receiptDateFrom">
                         <el-date-picker
                             class="form-input"
                             clearable
-                            v-model="filter.receiveDateFrom"
+                            v-model="filter.receiptDateFrom"
                             type="date"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"
                             placeholder="Pick a date"/>
                     </el-form-item>
-
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="PO No." prop="poNo">
                         <el-input class="form-input" clearable v-model="filter.poNo"/>
                     </el-form-item>
-
-                    <el-form-item label="Receive Date - To" prop="receiveDateTo">
+                    <el-form-item label="Receive Date - To" prop="receiptDateTo">
                         <el-date-picker
                             class="form-input"
                             clearable
-                            v-model="filter.receiveDateTo"
+                            v-model="filter.receiptDateTo"
                             type="date"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"
                             placeholder="Pick a date"/>
                     </el-form-item>
-
                 </el-col>
                 <el-col :span="8">
-
-                    <el-form-item v-if="isVendor!=null" label="Delivery No." prop="deliveryNo">
-                        <el-input class="form-input" clearable v-model="filter.deliveryNo"/>
+                    <el-form-item
+                        v-if="!isVendor"
+                        label="Delivery No."
+                        prop="deliveryNo"
+                    >
+                        <el-input
+                            v-model="filter.deliveryNo"
+                            class="form-input"
+                            clearable
+                        />
                     </el-form-item>
-
-                    <el-form-item v-else label="Vendor" prop="vendor">
-                        <el-select class="form-input" clearable filterable v-model="filter.vendor" >
+                    <el-form-item
+                        v-else
+                        label="Vendor"
+                        prop="vendorId"
+                    >
+                        <el-select
+                            v-model="filter.vendorId"
+                            class="form-input"
+                            clearable
+                            filterable
+                        >
                             <el-option
                                 v-for="item in vendorOptions"
                                 :key="item.key"
-                                :label="item.value"
+                                :label="item.label"
                                 :value="item.key" />
                         </el-select>
                     </el-form-item>
-
-                    <el-form-item label="Status" prop="productReceiveStatus">
-                        <el-select class="form-input" clearable filterable v-model="filter.productReceiveStatus" placeholder="Select" >
+                    <el-form-item label="Status" prop="invoiced">
+                        <el-select
+                            v-model="filter.invoiced"
+                            class="form-input"
+                            clearable
+                            filterable
+                            placeholder="Select"
+                        >
                             <el-option
                                 v-for="item in statusOptions"
                                 :key="item.key"
-                                :label="item.value"
+                                :label="item.label"
                                 :value="item.key" />
                         </el-select>
                     </el-form-item>
@@ -205,7 +227,7 @@
                         prop="mMatchType"
                         label="Status">
                         <template slot-scope="{ row }">
-                            {{ formatDocumentStatus(row.mMatchType) }}
+                            {{ formatDocumentStatus(row.invoiced) }}
                         </template>
                     </el-table-column>
 

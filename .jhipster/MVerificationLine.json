@@ -171,7 +171,12 @@
         },
         {
             "fieldName": "receiptReversed",
-            "javadoc": "Whether the respective receipt line is reversed or not.",
+            "javadoc": "Whether or not the respective receipt line is reversed.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "apReversed",
+            "javadoc": "Whether or not the respective AP invoice line is reversed.",
             "fieldType": "Boolean"
         },
         {

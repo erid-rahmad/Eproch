@@ -104,6 +104,7 @@ class MVerificationGatlingTest extends Simulation {
                 , "approved":null
                 , "processed":null
                 , "receiptReversed":null
+                , "apReversed":null
                 , "uid":null
                 , "active":null
                 }""")).asJson

@@ -77,6 +77,10 @@ export default class WatchList extends WatchListProps {
     }
   }
 
+  public refresh() {
+    this.onItemsChanged(this.items);
+  }
+
   private retrieveWatchListItems(name: string) {
     this.commonService('/api/ad-watch-lists')
       .retrieve({

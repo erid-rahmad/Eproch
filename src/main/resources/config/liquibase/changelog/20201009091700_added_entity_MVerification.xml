@@ -290,4 +290,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20200130161500" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification">
+            <column name="ap_reversed" type="boolean" remarks="Whether or not it contains one or more reversed invoice AP lines.">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

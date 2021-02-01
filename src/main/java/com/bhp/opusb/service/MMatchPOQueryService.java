@@ -105,22 +105,6 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
     }
 
     /**
-     * Checks whether the submitted verification line is valid or not.
-     * @param orgCode
-     * @param docType
-     * @param poNo
-     * @param receiptNo
-     * @param lineNoPo
-     * @param lineNoMr
-     * @param orderSuffix
-     * @return
-     */
-    public boolean isValidMatchPO(String orgCode, String docType, String poNo, String receiptNo, int lineNoPo, int lineNoMr, String orderSuffix) {
-        return mMatchPORepository.findByKeys("1", orgCode, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix)
-            .isPresent();
-    }
-
-    /**
      * Function to convert {@link MMatchPOCriteria} to a {@link Specification}
      * @param criteria The object which holds all the filters, which the entities should match.
      * @return the matching {@link Specification} of the entity.
@@ -212,6 +196,9 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
             if (criteria.getItemDesc2() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getItemDesc2(), MMatchPO_.itemDesc2));
             }
+            if (criteria.getInvoiced() != null) {
+                specification = specification.and(buildSpecification(criteria.getInvoiced(), MMatchPO_.invoiced));
+            }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MMatchPO_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
@@ -220,9 +207,9 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
                 specification = specification.and(buildSpecification(criteria.getCCostCenterId(),
                     root -> root.join(MMatchPO_.cCostCenter, JoinType.LEFT).get(CCostCenter_.id)));
             }
-            if (criteria.getCVendorId() != null) {
-                specification = specification.and(buildSpecification(criteria.getCVendorId(),
-                    root -> root.join(MMatchPO_.cVendor, JoinType.LEFT).get(CVendor_.id)));
+            if (criteria.getVendorId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorId(),
+                    root -> root.join(MMatchPO_.vendor, JoinType.LEFT).get(CVendor_.id)));
             }
             if (criteria.getCCurrencyId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCCurrencyId(),

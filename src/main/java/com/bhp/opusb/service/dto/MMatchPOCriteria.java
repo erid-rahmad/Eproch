@@ -82,11 +82,13 @@ public class MMatchPOCriteria implements Serializable, Criteria {
 
     private StringFilter itemDesc2;
 
+    private BooleanFilter invoiced;
+
     private LongFilter adOrganizationId;
 
     private LongFilter cCostCenterId;
 
-    private LongFilter cVendorId;
+    private LongFilter vendorId;
 
     private LongFilter cCurrencyId;
 
@@ -134,9 +136,10 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.mMatchType = other.mMatchType == null ? null : other.mMatchType.copy();
         this.itemDesc1 = other.itemDesc1 == null ? null : other.itemDesc1.copy();
         this.itemDesc2 = other.itemDesc2 == null ? null : other.itemDesc2.copy();
+        this.invoiced = other.invoiced == null ? null : other.invoiced.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.cCostCenterId = other.cCostCenterId == null ? null : other.cCostCenterId.copy();
-        this.cVendorId = other.cVendorId == null ? null : other.cVendorId.copy();
+        this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
         this.cCurrencyId = other.cCurrencyId == null ? null : other.cCurrencyId.copy();
         this.cTaxCategoryId = other.cTaxCategoryId == null ? null : other.cTaxCategoryId.copy();
         this.cTaxId = other.cTaxId == null ? null : other.cTaxId.copy();
@@ -375,6 +378,14 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.itemDesc2 = itemDesc2;
     }
 
+    public BooleanFilter getInvoiced() {
+        return invoiced;
+    }
+
+    public void setInvoiced(BooleanFilter invoiced) {
+        this.invoiced = invoiced;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -391,12 +402,12 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         this.cCostCenterId = cCostCenterId;
     }
 
-    public LongFilter getCVendorId() {
-        return cVendorId;
+    public LongFilter getVendorId() {
+        return vendorId;
     }
 
-    public void setCVendorId(LongFilter cVendorId) {
-        this.cVendorId = cVendorId;
+    public void setVendorId(LongFilter vendorId) {
+        this.vendorId = vendorId;
     }
 
     public LongFilter getCCurrencyId() {
@@ -494,9 +505,10 @@ public class MMatchPOCriteria implements Serializable, Criteria {
             Objects.equals(mMatchType, that.mMatchType) &&
             Objects.equals(itemDesc1, that.itemDesc1) &&
             Objects.equals(itemDesc2, that.itemDesc2) &&
+            Objects.equals(invoiced, that.invoiced) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(cCostCenterId, that.cCostCenterId) &&
-            Objects.equals(cVendorId, that.cVendorId) &&
+            Objects.equals(vendorId, that.vendorId) &&
             Objects.equals(cCurrencyId, that.cCurrencyId) &&
             Objects.equals(cTaxCategoryId, that.cTaxCategoryId) &&
             Objects.equals(cTaxId, that.cTaxId) &&
@@ -537,9 +549,10 @@ public class MMatchPOCriteria implements Serializable, Criteria {
         mMatchType,
         itemDesc1,
         itemDesc2,
+        invoiced,
         adOrganizationId,
         cCostCenterId,
-        cVendorId,
+        vendorId,
         cCurrencyId,
         cTaxCategoryId,
         cTaxId,
@@ -581,9 +594,10 @@ public class MMatchPOCriteria implements Serializable, Criteria {
                 (mMatchType != null ? "mMatchType=" + mMatchType + ", " : "") +
                 (itemDesc1 != null ? "itemDesc1=" + itemDesc1 + ", " : "") +
                 (itemDesc2 != null ? "itemDesc2=" + itemDesc2 + ", " : "") +
+                (invoiced != null ? "invoiced=" + invoiced + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (cCostCenterId != null ? "cCostCenterId=" + cCostCenterId + ", " : "") +
-                (cVendorId != null ? "cVendorId=" + cVendorId + ", " : "") +
+                (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
                 (cCurrencyId != null ? "cCurrencyId=" + cCurrencyId + ", " : "") +
                 (cTaxCategoryId != null ? "cTaxCategoryId=" + cTaxCategoryId + ", " : "") +
                 (cTaxId != null ? "cTaxId=" + cTaxId + ", " : "") +

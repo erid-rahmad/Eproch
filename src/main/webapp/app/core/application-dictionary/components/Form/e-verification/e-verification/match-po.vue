@@ -78,7 +78,6 @@
                             align="center"
                             fixed
                             type="selection"
-                            width="35"
                         />
                         <el-table-column
                             min-width="120"

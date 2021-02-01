@@ -193,6 +193,12 @@ public class MMatchPODTO extends AbstractAuditingDTO {
     private String itemDesc2;
 
     /**
+     * Whether it's already applied in an invoice or not.
+     */
+    @ApiModelProperty(value = "Whether it's already applied in an invoice or not.")
+    private Boolean invoiced;
+
+    /**
      * PRKCOO
      */
     @ApiModelProperty(value = "PRKCOO")
@@ -211,14 +217,9 @@ public class MMatchPODTO extends AbstractAuditingDTO {
      * PRAN8 is mapped to vendor code.
      */
     @ApiModelProperty(value = "PRAN8 is mapped to vendor code.")
-    @JsonProperty("cVendorId")
-    private Long cVendorId;
-
-    @JsonProperty("cVendorCode")
-    private String cVendorCode;
-
-    @JsonProperty("cVendorShortName")
-    private String cVendorShortName;
+    private Long vendorId;
+    private String vendorCode;
+    private String vendorShortName;
 
     /**
      * PRCRCD
@@ -300,6 +301,23 @@ public class MMatchPODTO extends AbstractAuditingDTO {
 
     @JsonProperty("mLocatorName")
     private String mLocatorName;
+
+    public MMatchPODTO() {
+        super();
+    }
+
+    public MMatchPODTO(@Size(max = 2) String cDocType, @Size(max = 20) String poNo, @Size(max = 20) String receiptNo,
+            @Size(max = 10) String orderSuffix, Integer lineNoPo, Integer lineNoMr, @Size(max = 1) String mMatchType,
+            String adOrganizationCode) {
+        this.cDocType = cDocType;
+        this.poNo = poNo;
+        this.receiptNo = receiptNo;
+        this.orderSuffix = orderSuffix;
+        this.lineNoPo = lineNoPo;
+        this.lineNoMr = lineNoMr;
+        this.mMatchType = mMatchType;
+        this.adOrganizationCode = adOrganizationCode;
+    }
 
     public Long getId() {
         return id;
@@ -535,6 +553,14 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.itemDesc2 = itemDesc2;
     }
 
+    public Boolean isInvoiced() {
+        return invoiced;
+    }
+
+    public void setInvoiced(Boolean invoiced) {
+        this.invoiced = invoiced;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -575,33 +601,33 @@ public class MMatchPODTO extends AbstractAuditingDTO {
         this.cCostCenterName = cCostCenterName;
     }
 
-    public Long getCVendorId() {
-        return cVendorId;
+    public Long getVendorId() {
+        return vendorId;
     }
 
-    public void setCVendorId(Long cVendorId) {
-        this.cVendorId = cVendorId;
+    public void setVendorId(Long vendorId) {
+        this.vendorId = vendorId;
     }
 
-    public String getCVendorCode() {
-        return cVendorCode;
+    public String getVendorCode() {
+        return vendorCode;
     }
 
-    public void setCVendorCode(String cVendorCode) {
-        this.cVendorCode = cVendorCode;
+    public void setVendorCode(String vendorCode) {
+        this.vendorCode = vendorCode;
     }
 
-    public String getCVendorShortName() {
-        return cVendorShortName;
+    public String getVendorShortName() {
+        return vendorShortName;
     }
 
-    public void setCVendorShortName(String cVendorShortName) {
-        this.cVendorShortName = cVendorShortName;
+    public void setVendorShortName(String vendorShortName) {
+        this.vendorShortName = vendorShortName;
     }
 
-    @JsonProperty("cVendorName")
-    public String getCVendorName() {
-        return cVendorCode + " - " + cVendorShortName;
+    @JsonProperty("vendorName")
+    public String getVendorName() {
+        return vendorCode + " - " + vendorShortName;
     }
 
     public Long getCCurrencyId() {
@@ -801,9 +827,10 @@ public class MMatchPODTO extends AbstractAuditingDTO {
             ", mMatchType='" + getmMatchType() + "'" +
             ", itemDesc1='" + getItemDesc1() + "'" +
             ", itemDesc2='" + getItemDesc2() + "'" +
+            ", invoiced='" + isInvoiced() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", cCostCenterId=" + getCCostCenterId() +
-            ", cVendorId=" + getCVendorId() +
+            ", vendorId=" + getVendorId() +
             ", cCurrencyId=" + getCCurrencyId() +
             ", cTaxCategoryId=" + getCTaxCategoryId() +
             ", cTaxId=" + getCTaxId() +

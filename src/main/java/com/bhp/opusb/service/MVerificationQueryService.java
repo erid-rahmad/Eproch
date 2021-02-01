@@ -187,6 +187,9 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             if (criteria.getReceiptReversed() != null) {
                 specification = specification.and(buildSpecification(criteria.getReceiptReversed(), MVerification_.receiptReversed));
             }
+            if (criteria.getApReversed() != null) {
+                specification = specification.and(buildSpecification(criteria.getApReversed(), MVerification_.apReversed));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MVerification_.uid));
             }

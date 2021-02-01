@@ -158,6 +158,9 @@ public class MVerificationResourceIT {
     private static final Boolean DEFAULT_RECEIPT_REVERSED = false;
     private static final Boolean UPDATED_RECEIPT_REVERSED = true;
 
+    private static final Boolean DEFAULT_AP_REVERSED = false;
+    private static final Boolean UPDATED_AP_REVERSED = true;
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -224,6 +227,7 @@ public class MVerificationResourceIT {
             .approved(DEFAULT_APPROVED)
             .processed(DEFAULT_PROCESSED)
             .receiptReversed(DEFAULT_RECEIPT_REVERSED)
+            .apReversed(DEFAULT_AP_REVERSED)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -300,6 +304,7 @@ public class MVerificationResourceIT {
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
             .receiptReversed(UPDATED_RECEIPT_REVERSED)
+            .apReversed(UPDATED_AP_REVERSED)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -390,6 +395,7 @@ public class MVerificationResourceIT {
         assertThat(testMVerification.isApproved()).isEqualTo(DEFAULT_APPROVED);
         assertThat(testMVerification.isProcessed()).isEqualTo(DEFAULT_PROCESSED);
         assertThat(testMVerification.isReceiptReversed()).isEqualTo(DEFAULT_RECEIPT_REVERSED);
+        assertThat(testMVerification.isApReversed()).isEqualTo(DEFAULT_AP_REVERSED);
         assertThat(testMVerification.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMVerification.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -667,6 +673,7 @@ public class MVerificationResourceIT {
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
             .andExpect(jsonPath("$.[*].receiptReversed").value(hasItem(DEFAULT_RECEIPT_REVERSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].apReversed").value(hasItem(DEFAULT_AP_REVERSED.booleanValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -714,6 +721,7 @@ public class MVerificationResourceIT {
             .andExpect(jsonPath("$.approved").value(DEFAULT_APPROVED.booleanValue()))
             .andExpect(jsonPath("$.processed").value(DEFAULT_PROCESSED.booleanValue()))
             .andExpect(jsonPath("$.receiptReversed").value(DEFAULT_RECEIPT_REVERSED.booleanValue()))
+            .andExpect(jsonPath("$.apReversed").value(DEFAULT_AP_REVERSED.booleanValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -3617,6 +3625,58 @@ public class MVerificationResourceIT {
 
     @Test
     @Transactional
+    public void getAllMVerificationsByApReversedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where apReversed equals to DEFAULT_AP_REVERSED
+        defaultMVerificationShouldBeFound("apReversed.equals=" + DEFAULT_AP_REVERSED);
+
+        // Get all the mVerificationList where apReversed equals to UPDATED_AP_REVERSED
+        defaultMVerificationShouldNotBeFound("apReversed.equals=" + UPDATED_AP_REVERSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByApReversedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where apReversed not equals to DEFAULT_AP_REVERSED
+        defaultMVerificationShouldNotBeFound("apReversed.notEquals=" + DEFAULT_AP_REVERSED);
+
+        // Get all the mVerificationList where apReversed not equals to UPDATED_AP_REVERSED
+        defaultMVerificationShouldBeFound("apReversed.notEquals=" + UPDATED_AP_REVERSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByApReversedIsInShouldWork() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where apReversed in DEFAULT_AP_REVERSED or UPDATED_AP_REVERSED
+        defaultMVerificationShouldBeFound("apReversed.in=" + DEFAULT_AP_REVERSED + "," + UPDATED_AP_REVERSED);
+
+        // Get all the mVerificationList where apReversed equals to UPDATED_AP_REVERSED
+        defaultMVerificationShouldNotBeFound("apReversed.in=" + UPDATED_AP_REVERSED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMVerificationsByApReversedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mVerificationRepository.saveAndFlush(mVerification);
+
+        // Get all the mVerificationList where apReversed is not null
+        defaultMVerificationShouldBeFound("apReversed.specified=true");
+
+        // Get all the mVerificationList where apReversed is null
+        defaultMVerificationShouldNotBeFound("apReversed.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllMVerificationsByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mVerificationRepository.saveAndFlush(mVerification);
@@ -3902,6 +3962,7 @@ public class MVerificationResourceIT {
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
             .andExpect(jsonPath("$.[*].receiptReversed").value(hasItem(DEFAULT_RECEIPT_REVERSED.booleanValue())))
+            .andExpect(jsonPath("$.[*].apReversed").value(hasItem(DEFAULT_AP_REVERSED.booleanValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -3983,6 +4044,7 @@ public class MVerificationResourceIT {
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
             .receiptReversed(UPDATED_RECEIPT_REVERSED)
+            .apReversed(UPDATED_AP_REVERSED)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MVerificationDTO mVerificationDTO = mVerificationMapper.toDto(updatedMVerification);
@@ -4028,6 +4090,7 @@ public class MVerificationResourceIT {
         assertThat(testMVerification.isApproved()).isEqualTo(UPDATED_APPROVED);
         assertThat(testMVerification.isProcessed()).isEqualTo(UPDATED_PROCESSED);
         assertThat(testMVerification.isReceiptReversed()).isEqualTo(UPDATED_RECEIPT_REVERSED);
+        assertThat(testMVerification.isApReversed()).isEqualTo(UPDATED_AP_REVERSED);
         assertThat(testMVerification.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMVerification.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

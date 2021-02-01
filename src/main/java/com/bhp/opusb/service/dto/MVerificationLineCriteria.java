@@ -2,16 +2,15 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.BigDecimalFilter;
-import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -81,6 +80,8 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
 
     private BooleanFilter receiptReversed;
 
+    private BooleanFilter apReversed;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -132,6 +133,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.cDocType = other.cDocType == null ? null : other.cDocType.copy();
         this.cDocTypeMr = other.cDocTypeMr == null ? null : other.cDocTypeMr.copy();
         this.receiptReversed = other.receiptReversed == null ? null : other.receiptReversed.copy();
+        this.apReversed = other.apReversed == null ? null : other.apReversed.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.verificationId = other.verificationId == null ? null : other.verificationId.copy();
@@ -365,6 +367,14 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         this.receiptReversed = receiptReversed;
     }
 
+    public BooleanFilter getApReversed() {
+        return apReversed;
+    }
+
+    public void setApReversed(BooleanFilter apReversed) {
+        this.apReversed = apReversed;
+    }
+
     public UUIDFilter getUid() {
         return uid;
     }
@@ -483,6 +493,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
             Objects.equals(cDocType, that.cDocType) &&
             Objects.equals(cDocTypeMr, that.cDocTypeMr) &&
             Objects.equals(receiptReversed, that.receiptReversed) &&
+            Objects.equals(apReversed, that.apReversed) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(verificationId, that.verificationId) &&
@@ -525,6 +536,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
         cDocType,
         cDocTypeMr,
         receiptReversed,
+        apReversed,
         uid,
         active,
         verificationId,
@@ -568,6 +580,7 @@ public class MVerificationLineCriteria implements Serializable, Criteria {
                 (cDocType != null ? "cDocType=" + cDocType + ", " : "") +
                 (cDocTypeMr != null ? "cDocTypeMr=" + cDocTypeMr + ", " : "") +
                 (receiptReversed != null ? "receiptReversed=" + receiptReversed + ", " : "") +
+                (apReversed != null ? "apReversed=" + apReversed + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (verificationId != null ? "verificationId=" + verificationId + ", " : "") +

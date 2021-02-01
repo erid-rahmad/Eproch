@@ -505,7 +505,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       } = line;
 
       data.conversionRate = line.cConversionRate;
-      data.vendorId = line.cVendorId;
       return data;
     });
   }

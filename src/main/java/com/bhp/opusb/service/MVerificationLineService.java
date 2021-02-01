@@ -27,11 +27,14 @@ public class MVerificationLineService {
     private final Logger log = LoggerFactory.getLogger(MVerificationLineService.class);
 
     private final MVerificationLineRepository mVerificationLineRepository;
+    private final MMatchPOService mMatchPOService;
 
     private final MVerificationLineMapper mVerificationLineMapper;
 
-    public MVerificationLineService(MVerificationLineRepository mVerificationLineRepository, MVerificationLineMapper mVerificationLineMapper) {
+    public MVerificationLineService(MVerificationLineRepository mVerificationLineRepository,
+            MMatchPOService mMatchPOService, MVerificationLineMapper mVerificationLineMapper) {
         this.mVerificationLineRepository = mVerificationLineRepository;
+        this.mMatchPOService = mMatchPOService;
         this.mVerificationLineMapper = mVerificationLineMapper;
     }
 
@@ -61,6 +64,10 @@ public class MVerificationLineService {
 
     public void removeAll(List<MVerificationLineDTO> mVerificationLineDTOs) {
         mVerificationLineRepository.deleteAll(mVerificationLineMapper.toEntity(mVerificationLineDTOs));
+        mVerificationLineDTOs.forEach(
+            line -> mMatchPOService.openMatchPO(line.getAdOrganizationCode(), line.getcDocType(), line.getPoNo(),
+                    line.getReceiveNo(), line.getLineNoPo(), line.getLineNoMr(), line.getOrderSuffix())
+        );
     }
 
     /**

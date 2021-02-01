@@ -21,6 +21,7 @@
     >
       <watch-list
         v-if="item.paDashboardItem.type === 'WATCHLIST'"
+        ref="widget"
         :name="item.paDashboardItem.adWatchListName"
       />
     </div>

@@ -2,6 +2,7 @@ package com.bhp.opusb.service;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -42,6 +43,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -81,6 +83,9 @@ public class MMatchPOService {
 
     @Autowired
     private ObjectMapper jsonMapper;
+
+    @Autowired
+    private SimpMessageSendingOperations messagingTemplate;
 
     public MMatchPOService(MMatchPORepository mMatchPORepository, CCurrencyRepository cCurrencyRepository,
             CTaxCategoryRepository cTaxCategoryRepository, CTaxRepository cTaxRepository, CUnitOfMeasureRepository cUnitOfMeasureRepository,
@@ -127,49 +132,24 @@ public class MMatchPOService {
         String orgCode = payload.getOrgCode();
         String docType = payload.getDocTypePo();
         String poNo = payload.getPoNo();
-        int receiptNo = Integer.parseInt(payload.getReceiptNo());
+        String receiptNo = payload.getReceiptNo();
         int lineNoPo = payload.getLineNoPo();
         int lineNoMr = payload.getLineNoMr();
         String orderSuffix = payload.getOrderSuffix();
         ADOrganization org = adOrganizationService.findOrCreate(orgCode);
 
-        // Should delete the reversed match PO.
-        if (matchType.equals("4")) {
-            mMatchPORepository
-                .findReversedLine(orgCode, docType, poNo, BigDecimal.valueOf(receiptNo), lineNoPo, lineNoMr, orderSuffix)
-                .ifPresent(matchPo -> {
-                    mVerificationLineRepository.getFirstReversedLine(org, docType, poNo, BigDecimal.valueOf(receiptNo), lineNoPo, lineNoMr, orderSuffix)
-                        .ifPresent(line -> {
-                            line.receiptReversed(true);
-
-                            MVerification header = line.getVerification();
-
-                            if (Boolean.FALSE.equals(header.isReceiptReversed()) && ! header.getDocumentStatus().equals(DocumentUtil.STATUS_VOID)) {
-                                header.receiptReversed(true);
-                            }
-                        });
-
-                    log.debug("Deleting match PO record due to reverse event : {}", matchPo);
-                    mMatchPORepository.delete(matchPo);
-                });
-
-            // Immediatelly return the DTO with the composite primary keys.
-            // These keys are required to update the PRLRT (last_run_time) field in the
-            // respective table.
-            MMatchPODTO dto = new MMatchPODTO();
-            dto.setAdOrganizationCode(orgCode);
-            dto.setcDocType(docType);
-            dto.setPoNo(poNo);
-            dto.setReceiptNo(String.valueOf(receiptNo));
-            dto.setLineNoPo(lineNoPo);
-            dto.setLineNoMr(lineNoMr);
-            dto.setOrderSuffix(orderSuffix);
-            dto.setmMatchType(matchType);
-            return dto;
+        // Should mark any invoice verification documents that have been AP reversed.
+        if (matchType.equals("3")) {
+            return processReversedApInvoice(org, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix);
         }
 
-        Optional<MMatchPO> record = mMatchPORepository.findByKeys(matchType, orgCode, docType, poNo,
-                String.valueOf(receiptNo), lineNoPo, lineNoMr, orderSuffix);
+        // Should delete the reversed match PO.
+        else if (matchType.equals("4")) {
+            return processReversedReceiptLine(org, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix);
+        }
+        
+        Optional<MMatchPO> record = mMatchPORepository.findByKeys(matchType, org.getCode(), docType, poNo,
+                receiptNo, lineNoPo, lineNoMr, orderSuffix);
 
         MMatchPO mMatchPO;
 
@@ -177,7 +157,7 @@ public class MMatchPOService {
             mMatchPO = record.get();
             updateEntity(mMatchPO, payload, org);
 
-            if (mMatchPO.getCVendor() != null) {
+            if (mMatchPO.getVendor() != null) {
                 aiExchangeInRepository.findFirstByEntityTypeAndEntityIdAndStatus(MMatchPO.class.getName(), mMatchPO.getId(), AiStatus.PARTIAL)
                     .ifPresent(data -> 
                         data.payload(message)
@@ -188,7 +168,7 @@ public class MMatchPOService {
             mMatchPO = buildEntity(payload, org);
             mMatchPO = mMatchPORepository.save(mMatchPO);
 
-            if (mMatchPO.getCVendor() == null) {
+            if (mMatchPO.getVendor() == null) {
                 AiExchangeIn exchangeIn = new AiExchangeIn()
                     .entityId(mMatchPO.getId())
                     .entityType(MMatchPO.class.getName())
@@ -237,6 +217,128 @@ public class MMatchPOService {
         mMatchPORepository.deleteById(id);
     }
 
+    /**
+     * Marks match PO as uninvoiced.
+     */
+    public void openMatchPO(String orgCode, String docType, String poNo, String receiptNo,
+            int lineNoPo, int lineNoMr, String orderSuffix) {
+
+        log.debug("Mark match PO as uninvoiced. orgCode: {}, docType: {}, poNo: {}, receiptNo: {}, lineNoPO: {}, lineNoMR: {}, orderSuffix: {}",
+            orgCode, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix);
+
+        mMatchPORepository.findByKeys("1", orgCode, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix)
+            .ifPresent(matchPo -> matchPo.invoiced(false));
+    }
+
+    /**
+     * Marks match PO as invoiced.
+     */
+    public void closeMatchPO(String orgCode, String docType, String poNo, String receiptNo,
+            int lineNoPo, int lineNoMr, String orderSuffix) {
+
+        log.debug("Mark match PO as invoiced. orgCode: {}, docType: {}, poNo: {}, receiptNo: {}, lineNoPO: {}, lineNoMR: {}, orderSuffix: {}",
+            orgCode, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix);
+
+        mMatchPORepository.findByKeys("1", orgCode, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix)
+            .ifPresent(matchPo -> matchPo.invoiced(true));
+    }
+
+    /**
+     * Checks whether the submitted verification line is valid or not.
+     * @param orgCode
+     * @param docType
+     * @param poNo
+     * @param receiptNo
+     * @param lineNoPo
+     * @param lineNoMr
+     * @param orderSuffix
+     * @return
+     */
+    public boolean isValidMatchPO(String orgCode, String docType, String poNo, String receiptNo, int lineNoPo, int lineNoMr, String orderSuffix) {
+        return mMatchPORepository.findByKeys("1", orgCode, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix)
+            .isPresent();
+    }
+
+    public Optional<MMatchPODTO> findByKeys(String orgCode, String docType, String poNo, String receiptNo, int lineNoPo, int lineNoMr, String orderSuffix) {
+        return mMatchPORepository.findByKeys("1", orgCode, docType, poNo, receiptNo, lineNoPo, lineNoMr, orderSuffix).map(mMatchPOMapper::toDto);
+    }
+
+    public List<MMatchPODTO> saveAll(List<MMatchPODTO> mMatchPODTOs) {
+        List<MMatchPO> mMatchPOs = mMatchPOMapper.toEntity(mMatchPODTOs);
+        return mMatchPOMapper.toDto(mMatchPORepository.saveAll(mMatchPOs));
+    }
+
+    /**
+     * Marks any invoice verification documents that have any of its line reversed.
+     */
+    private MMatchPODTO processReversedReceiptLine(ADOrganization org, String docType, String poNo, String receiptNo,
+            int lineNoPo, int lineNoMr, String orderSuffix) {
+        final BigDecimal bdReceiptNo = new BigDecimal(receiptNo);
+
+        mMatchPORepository.findReversedLine(org.getCode(), docType, poNo, bdReceiptNo, lineNoPo, lineNoMr, orderSuffix)
+            .ifPresent(matchPo -> {
+                mVerificationLineRepository
+                    .getFirstReversedReceiptLine(org, docType, poNo, bdReceiptNo, lineNoPo, lineNoMr, orderSuffix)
+                    .ifPresent(line -> {
+                        line.setReceiptReversed(true);
+
+                        MVerification header = line.getVerification();
+
+                        if (Boolean.FALSE.equals(header.isReceiptReversed())
+                                && !header.getDocumentStatus().equals(DocumentUtil.STATUS_VOID)) {
+                            header.receiptReversed(true);
+                            messagingTemplate.convertAndSend("/topic/dashboard", "RECEIPT_REVERSED");
+                        }
+                    });
+
+                log.debug("Deleting match PO record due to reverse event : {}", matchPo);
+                mMatchPORepository.delete(matchPo);
+            });
+
+        // Immediatelly return the DTO with the composite primary keys.
+        // These keys are required to update the PRLRT (last_run_time) field in the
+        // respective table.
+        return new MMatchPODTO(docType, poNo, receiptNo, orderSuffix, lineNoPo, lineNoMr, "4", org.getCode());
+    }
+
+    /**
+     * Marks any invoice verification documents that have any of its line reversed.
+     */
+    private MMatchPODTO processReversedApInvoice(ADOrganization org, String docType, String poNo, String receiptNo,
+            int lineNoPo, int lineNoMr, String orderSuffix) {
+        final BigDecimal bdReceiptNo = new BigDecimal(receiptNo);
+
+        mMatchPORepository.findReversedLine(org.getCode(), docType, poNo, bdReceiptNo, lineNoPo, lineNoMr, orderSuffix)
+            .ifPresent(matchPo -> {
+                mVerificationLineRepository
+                    .getFirstReversedAPInvoiceLine(org, docType, poNo, bdReceiptNo, lineNoPo, lineNoMr, orderSuffix)
+                    .ifPresent(line -> {
+                        line.setApReversed(true);
+
+                        MVerification header = line.getVerification();
+                        log.debug("AP invoice reversed");
+
+                        if (Boolean.FALSE.equals(header.isApReversed())
+                                && DocumentUtil.isApprove(header.getDocumentStatus())) {
+
+                            log.debug("Mark header as apReversed {}", header);
+                            header.apReversed(true)
+                                .docType(null)
+                                .invoiceAp(null)
+                                .payStatus(null)
+                                .payDate(null);
+
+                            messagingTemplate.convertAndSend("/topic/dashboard", "AP_INVOICE_REVERSED");
+                        }
+                    });
+            });
+
+        // Immediatelly return the DTO with the composite primary keys.
+        // These keys are required to update the PRLRT (last_run_time) field in the
+        // respective table.
+        return new MMatchPODTO(docType, poNo, receiptNo, orderSuffix, lineNoPo, lineNoMr, "3", org.getCode());
+    }
+
     private void updateEntity(MMatchPO entity, PoReceiverFileDTO payload, ADOrganization org) {
         log.debug("Updating the existing MMatchPO : {}", entity);
         entity.cConversionRate(payload.getConversionRate())
@@ -261,16 +363,16 @@ public class MMatchPOService {
             .cTax(buildTax(payload, entity.getCTaxCategory(), org))
             .cUom(buildUnitOfMeasure(payload, org))
             .mProduct(buildProduct(payload, entity.getCUom(), org))
-            .cVendor(buildVendor(String.valueOf(payload.getAddressNo())))
+            .vendor(buildVendor(String.valueOf(payload.getAddressNo())))
             .mWarehouse(buildWarehouse(payload, org))
             .mLocator(buildLocator(payload, entity.getMWarehouse(), org));
     }
 
     private MMatchPO buildEntity(PoReceiverFileDTO payload, ADOrganization org) {
         log.debug("Creating a new MMatchPO");
-        MMatchPO entity = new MMatchPO();
+        MMatchPO mMatchPO = new MMatchPO();
 
-        entity.cConversionRate(payload.getConversionRate())
+        mMatchPO.cConversionRate(payload.getConversionRate())
             .cDocType(payload.getDocTypePo())
             .cDocTypeMr(payload.getDocTypeMr())
             .poDate(payload.getPoDate())
@@ -297,20 +399,21 @@ public class MMatchPOService {
             .totalLines(payload.getTotalLines())
             .itemDesc1(payload.getItemDesc1())
             .itemDesc2(payload.getItemDesc2())
+            .invoiced(false)
 
             // Lookup to master data.
             .adOrganization(org)
             .cCostCenter(cCostCenterService.getDefaultCostCenter())
             .cCurrency(buildCurrency(payload, org))
             .cTaxCategory(buildTaxCategory(payload, org))
-            .cTax(buildTax(payload, entity.getCTaxCategory(), org))
+            .cTax(buildTax(payload, mMatchPO.getCTaxCategory(), org))
             .cUom(buildUnitOfMeasure(payload, org))
-            .cVendor(buildVendor(String.valueOf(payload.getAddressNo())))
-            .mProduct(buildProduct(payload, entity.getCUom(), org))
+            .vendor(buildVendor(String.valueOf(payload.getAddressNo())))
+            .mProduct(buildProduct(payload, mMatchPO.getCUom(), org))
             .mWarehouse(buildWarehouse(payload, org))
-            .mLocator(buildLocator(payload, entity.getMWarehouse(), org));
+            .mLocator(buildLocator(payload, mMatchPO.getMWarehouse(), org));
 
-        return entity;
+        return mMatchPO;
     }
 
     private CCurrency buildCurrency(PoReceiverFileDTO payload, final ADOrganization org) {
