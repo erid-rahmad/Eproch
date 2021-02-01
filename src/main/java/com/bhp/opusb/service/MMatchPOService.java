@@ -325,7 +325,7 @@ public class MMatchPOService {
                             header.apReversed(true)
                                 .docType(null)
                                 .invoiceAp(null)
-                                .payStatus(null)
+                                .payStatus("U")
                                 .payDate(null);
 
                             messagingTemplate.convertAndSend("/topic/dashboard", "AP_INVOICE_REVERSED");
