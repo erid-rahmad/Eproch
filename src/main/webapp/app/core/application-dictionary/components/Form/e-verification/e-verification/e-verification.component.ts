@@ -254,7 +254,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
 
   private toggleToolbarButtons() {
     const docStatus = this.selectedRow?.verificationStatus;
-    this.disabledButton = docStatus !== 'DRF' && docStatus !== 'RJC';
+    this.disabledButton = docStatus !== 'DRF' && docStatus !== 'RJC' && docStatus !== 'ROP';
   }
 
   public verificationFilter() {
