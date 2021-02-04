@@ -107,7 +107,12 @@ export default class ProductDetail extends ProductDetailProps {
     marketplaceStore.addToCart({
       product,
       quantity: this.qty
-    })
+    });
+  }
+
+  addToCompare() {
+    marketplaceStore.addToCompare(this.data);
+    this.$emit('compared');
   }
 
   goToPreviousPage() {

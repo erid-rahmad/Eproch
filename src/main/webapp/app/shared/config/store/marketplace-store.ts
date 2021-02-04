@@ -13,6 +13,7 @@ export interface IMarketplaceState {
   isShoppingCart: boolean;
   cart: any[];
   products: IMProductCatalog[];
+  comparisonList: IMProductCatalog[];
 }
 
 export interface ICategoryTree {
@@ -42,7 +43,7 @@ function buildProduct(item: IProduct) {
   const subcategory = categories[1];
   const lastCategory = categories[categories.length - 1];
 
-  const productCatalog: MProductCatalog = new MProductCatalog(
+  const productCatalog: IMProductCatalog = new MProductCatalog(
     item.id, item.name, item.description, item.description,
     defaultVariant?.skuInternal, 0, 0, 0, 1,
     defaultVariant?.sellingPrice, null, item.isPreOrder,
@@ -101,6 +102,7 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   isShoppingCart: boolean = false;
   cart: any[] = [];
   products: IMProductCatalog[] = [];
+  comparisonList: IMProductCatalog[] = [];
   filteredProducts: IMProductCatalog[] = [];
   brands: string[] = [];
   categories: ICategoryTree[] = [];
@@ -163,9 +165,74 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
     };
   }
 
+  get filterProducts() {
+    return ({brands, categories, name, price}: IFilterCriteria) => {
+      return this.products.filter(product => {
+        const filterByBrand: boolean = brands.length > 0;
+        const filterByCategory: boolean = categories.length > 0;
+        const filterByName: boolean = !!name;
+        let result: boolean = true;
+  
+        // Filter product by brand name.
+        if (result && filterByBrand) {
+          result = brands.some(value => product.mBrandName === value);
+        }
+  
+        // Filter product by category.
+        if (result && filterByCategory) {
+          result = categories.some(value => product.mProduct.name === value);
+        }
+  
+        if (result && !isEmpty(price)) {
+          const minPrice = price.min || 0;
+          const maxPrice = price.max || Infinity;
+          result = product.price >= minPrice && product.price <= maxPrice;
+        }
+  
+        // Search by name, brand (override the previous brand filter), or short description.
+        if (result && filterByName) {
+          const query = name.toLowerCase();
+          result = product.mProduct.name.toLowerCase().includes(query)
+            || product.name.toLowerCase().includes(query)
+            || product.description.toLowerCase().includes(query);
+        }
+        
+        return result;
+      });
+    };
+  }
+
   @Mutation
-  private ADD_PRODUCT(product: MProductCatalog) {
+  private ADD_PRODUCT(product: IMProductCatalog) {
     this.products.push(product);
+  }
+
+  @Mutation
+  private ADD_TO_COMPARE(product: IMProductCatalog) {
+    if (this.comparisonList.some(item => item.id === product.id)) {
+      return;
+    }
+
+    if (this.comparisonList.length <= 3) {
+      this.comparisonList.push(product);
+    } else {
+      this.comparisonList.splice(this.comparisonList.length - 1, 1, product);
+    }
+  }
+
+  @Mutation
+  private UPDATE_COMPARATOR({item, index}) {
+    this.comparisonList.splice(index, 1, item);
+  }
+
+  @Mutation
+  private REMOVE_FROM_COMPARE(product: IMProductCatalog) {
+    this.comparisonList.splice(this.comparisonList.indexOf(product), 1);
+  }
+
+  @Mutation
+  private CLEAR_COMPARISON_LIST() {
+    this.comparisonList = [];
   }
 
   @Mutation
@@ -221,12 +288,12 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   }
 
   @Mutation
-  private SET_PRODUCTS(products: MProductCatalog[]) {
+  private SET_PRODUCTS(products: IMProductCatalog[]) {
     this.products = products;
   }
 
   @Mutation
-  private SET_FILTERED_PRODUCTS(filteredProducts: MProductCatalog[]) {
+  private SET_FILTERED_PRODUCTS(filteredProducts: IMProductCatalog[]) {
     console.log('Set filtered products', filteredProducts.length);
     this.filteredProducts = filteredProducts;
   }
@@ -260,41 +327,8 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   }
 
   @Action
-  public async applyCatalogFilter({brands, categories, name, price}: IFilterCriteria) {   
-    const products = this.products.filter(product => {
-      const filterByBrand: boolean = brands.length > 0;
-      const filterByCategory: boolean = categories.length > 0;
-      const filterByName: boolean = !!name;
-      let result: boolean = true;
-
-      // Filter product by brand name.
-      if (result && filterByBrand) {
-        result = brands.some(value => product.mBrandName === value);
-      }
-
-      // Filter product by category.
-      if (result && filterByCategory) {
-        result = categories.some(value => product.mProduct.name === value);
-      }
-
-      if (result && !isEmpty(price)) {
-        const minPrice = price.min || 0;
-        const maxPrice = price.max || Infinity;
-        result = product.price >= minPrice && product.price <= maxPrice;
-      }
-
-      // Search by name, brand (override the previous brand filter), or short description.
-      if (result && filterByName) {
-        const query = name.toLowerCase();
-        result = product.mProduct.name.toLowerCase().includes(query)
-          || product.name.toLowerCase().includes(query)
-          || product.description.toLowerCase().includes(query);
-      }
-      
-      return result;
-    });
-
-    this.SET_FILTERED_PRODUCTS(products);
+  public async applyCatalogFilter(filter: IFilterCriteria) {
+    this.SET_FILTERED_PRODUCTS(this.filterProducts(filter));
   }
 
   @Action
@@ -466,6 +500,26 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
         this.CLEAR_CART();
       });
     });
+  }
+
+  @Action
+  public async addToCompare(item: IMProductCatalog) {
+    this.ADD_TO_COMPARE(item);
+  }
+
+  @Action
+  public async updateComparator(comparator: any) {
+    this.UPDATE_COMPARATOR(comparator);
+  }
+
+  @Action
+  public async removeFromCompare(item: IMProductCatalog) {
+    this.REMOVE_FROM_COMPARE(item);
+  }
+
+  @Action
+  public async clearComparisonList() {
+    this.CLEAR_COMPARISON_LIST();
   }
 
   @Action

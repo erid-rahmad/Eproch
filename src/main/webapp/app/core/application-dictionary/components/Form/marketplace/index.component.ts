@@ -1,9 +1,10 @@
 import { Component, Vue } from 'vue-property-decorator';
-import ProductCatalogList from "./product-catalog-list.vue";
-import ProductDetail from "./marketplace-detail.vue";
+import ProductCatalogList from './product-catalog-list.vue';
+import ProductDetail from './marketplace-detail.vue';
+import ComparisonWindow from './comparison-window.vue'
 import { IMProductCatalog, MProductCatalog } from '@/shared/model/m-product-catalog.model';
-import ShoppingCart from "./shopping-cart.vue";
-import { MarketplaceStoreModule as marketplaceStore } from "@/shared/config/store/marketplace-store";
+import ShoppingCart from './shopping-cart.vue';
+import { MarketplaceStoreModule as marketplaceStore } from '@/shared/config/store/marketplace-store';
 
 export enum View {
   Catalog = 1,
@@ -13,6 +14,7 @@ export enum View {
 
 @Component({
   components: {
+    ComparisonWindow,
     'marketplace-catalog': ProductCatalogList,
     ProductDetail,
     ShoppingCart
@@ -22,6 +24,7 @@ export default class MarketplaceMain extends Vue {
   private activeView: View = View.Catalog;
   origin: View = View.Catalog;
   selectedItem: IMProductCatalog = new MProductCatalog();
+  showComparisonWindow: boolean = false;
 
   get isProductCatalogView() {
     return !this.isShoppingCart && this.activeView === View.Catalog;
@@ -39,12 +42,20 @@ export default class MarketplaceMain extends Vue {
     console.log('query string:', this.$route.query);
   }
 
+  onProductCompared() {
+    this.showComparisonWindow = true;
+  }
+
   onProductDetailClosed(origin: View) {
     this.activeView = origin;
   }
 
   onShoppingCartClosed() {
     this.activeView = View.Catalog;
+  }
+
+  clearComparisonList() {
+    marketplaceStore.clearComparisonList();
   }
 
   showProductDetail({item, origin}) {

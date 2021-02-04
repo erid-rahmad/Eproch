@@ -10,6 +10,7 @@
       :data="selectedItem"
       :origin="origin"
       @closed="onProductDetailClosed"
+      @compared="onProductCompared"
     />
     <shopping-cart
       ref="shoppingCart"
@@ -17,6 +18,24 @@
       @item-selected="showProductDetail"
       @closed="onShoppingCartClosed"
     />
+    <el-dialog
+      :visible.sync="showComparisonWindow"
+      title="Compare Products"
+      width="80%"
+    >
+      <div slot="title">
+        <span>Compare Product </span>
+        <el-button
+          size="mini"
+          style="margin-left: 8px"
+          type="primary"
+          @click="clearComparisonList"
+        >
+          Clear
+        </el-button>
+      </div>
+      <comparison-window/>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" src="./index.component.ts"></script>

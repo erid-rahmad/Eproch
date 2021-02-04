@@ -8,6 +8,7 @@
         <el-button
           class="btn-back"
           icon="el-icon-arrow-left"
+          size="small"
           @click="goToPreviousPage"
         >
           Back
@@ -96,8 +97,21 @@
         <el-row>
           <el-col :span="6"> &nbsp; </el-col>
           <el-col :span="18">
-            <el-button size="medium" type="primary" style="margin-left: 0px" @click="addToCart">
-              <svg-icon name="shopping" /> Add to cart
+            <el-button
+              size="small"
+              style="margin-left: 0px"
+              type="primary"
+              @click="addToCart"
+            >
+              <svg-icon name="shopping" /> Add to Cart
+            </el-button>
+            <el-button
+              icon="el-icon-c-scale-to-original"
+              size="small"
+              style="margin-left: 0px"
+              @click="addToCompare"
+            >
+              Add to Compare
             </el-button>
           </el-col>
         </el-row>

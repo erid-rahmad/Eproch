@@ -9,7 +9,7 @@
         <el-col :span="12" align="end">
           <el-button
             icon="el-icon-delete"
-            plain
+            size="small"
             type="danger"
             @click="removeAll"
           >
@@ -45,7 +45,7 @@
           />
         </el-col>
 
-        <el-col :span="15">
+        <el-col :span="12">
           <el-row>
             <el-col :span="24">
               <strong
@@ -59,7 +59,7 @@
               class="currency"
               :span="24"
             >
-              Rp {{ item.product.price | formatCurrency('id') }}
+              <strong>Rp {{ item.product.price | formatCurrency('id') }}</strong>
             </el-col>
             <el-col :span="20">
               <el-input
@@ -70,15 +70,15 @@
             </el-col>
           </el-row>
         </el-col>
-        <el-col :span="1">
+        <el-col :span="2">
           <el-button
             icon="el-icon-delete"
-            plain
+            size="mini"
             type="danger"
             @click="removeItem(item)"
           />
         </el-col>
-        <el-col :span="3">
+        <el-col :span="4">
           <el-input-number
             v-model="item.quantity"
             :min="1"
@@ -86,7 +86,7 @@
             @change="handleChangeQty"
           />
         </el-col>
-        <el-col :span="2">
+        <el-col :span="3">
           <strong style="color: #409eff">
             Rp. {{ (item.quantity * item.product.price) | formatCurrency('id') }}
           </strong>
@@ -99,8 +99,7 @@
         <el-col :span="12">
           <el-button
             icon="el-icon-goods"
-            plain
-            type="primary"
+            size="small"
             @click="continueShopping"
           >
             Continue Shopping
@@ -114,9 +113,9 @@
             </el-col>
             <el-col :span="7">
               <el-button
-                type="success"
                 icon="el-icon-shopping-cart-full"
-                plain
+                size="small"
+                type="primary"
               >
                 Purchase Requisition
               </el-button>
