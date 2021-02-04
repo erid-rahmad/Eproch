@@ -109,11 +109,11 @@ export default class SupportingDocuments extends DocumentProps {
     }
 
     private getAllDocumentType(mandatory: boolean, run: number){
-        let query;
+        let query = ['active.equals=true'];
         if(mandatory){
-            query = `mandatoryBusinessCategories.equals=ALL`;
+            query.push(`mandatoryBusinessCategories.equals=ALL`);
         }else{
-            query = `additionalBusinessCategories.equals=ALL`;
+            query.push(`additionalBusinessCategories.equals=ALL`);
         }
         this.dynamicWindowService('/api/c-registration-doc-types')
             .retrieve({

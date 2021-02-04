@@ -58,6 +58,7 @@ export default class BusinessCategories extends BusinessCategoriesProps {
         // TODO Use custom API that is doesn't limit the record.
         this.dynamicWindowService('/api/c-business-categories')
         .retrieve({
+            criteriaQuery: 'active.equals=true',
             paginationQuery: {
                 size: 1000,
                 page: 0,

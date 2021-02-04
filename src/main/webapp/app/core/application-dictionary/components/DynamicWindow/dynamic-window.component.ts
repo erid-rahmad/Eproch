@@ -4,7 +4,7 @@ import ADWindowService from '@/entities/ad-window/ad-window.service';
 import buildCriteriaQueryString from '@/shared/filter/filters';
 import { ADTab, IADTab } from '@/shared/model/ad-tab.model';
 import { getValidatorType } from '@/utils/validate';
-import _, { debounce } from 'lodash';
+import { debounce, isFinite, isFunction } from 'lodash';
 import { Pane, Splitpanes } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
@@ -19,6 +19,8 @@ import TreeView from '../TreeView/tree-view.vue';
 import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
 import { IADField } from '@/shared/model/ad-field.model';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { WindowStoreModule as windowStore } from '@/shared/config/store/window-store';
+import WatchListMixin from '../../mixins/WatchListMixin';
 
 @Component({
   components: {
@@ -39,10 +41,10 @@ import { AccountStoreModule as accountStore } from '@/shared/config/store/accoun
     })
   }
 })
-export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
+export default class DynamicWindow extends Mixins(ContextVariableAccessor, WatchListMixin) {
   @Inject('aDWindowService')
   private aDWindowService: () => ADWindowService;
-  
+
   @Inject('aDTabService')
   private aDTabService: () => ADTabService;
 
@@ -54,6 +56,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
   public windowId: number = 0;
   windowType = null;
+  windowName = null;
   accessLevel = null;
   public gridView = true;
   private childTabs: IADTab[] = [];
@@ -146,10 +149,11 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
     );
 
     this.debouncedUpdateChildTabs = debounce(this.updateChildTabs, 500);
-    
+
     this.retrieveWindowDetail()
       .then(res => {
         this.windowType = res.type;
+        this.windowName = res.name;
         this.accessLevel = res.accessLevel;
         this.retrieveTabs(null);
       });
@@ -202,8 +206,9 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       .applyDocAction(record)
       .then(status => {
         this.refreshWindow();
+        this.docActionPopupVisible = false;
         this.$message({
-          message: `Document has been successfully ${record.approvalStatus.toLowerCase() }ed`,
+          message: `Document has been successfully ${this.docAction.name.toLowerCase()}ed`,
           type: 'success'
         });
       })
@@ -276,6 +281,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   public onProcessCompleted(response: any) {
+    this.$message.success('Process has been successfully executed');
     this.refreshWindow();
   }
 
@@ -365,6 +371,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   public refreshWindow() {
     this.reloadTreeView();
     (<any>this.$refs.mainGrid).clear();
+
+    if (this.hasChildTabs && this.currentTab) {
+      this.$refs.lineGrid[parseInt(this.currentTab)].clear();
+    }
   }
 
   public runTrigger(model: any) {
@@ -497,17 +507,17 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
     parentTabId = args[0];
     if (args[1] !== undefined) {
-      if (_.isFunction(args[1])) {
+      if (isFunction(args[1])) {
         if (args[2] !== undefined)
           throw new Error('second argument must be a number');
 
         callback = args[1];
-      } else if (_.isFinite(args[1])) {
+      } else if (isFinite(args[1])) {
         tabId = args[1];
       }
     }
     if (args[2] !== undefined) {
-      if (!_.isFunction(args[2]))
+      if (! isFunction(args[2]))
         throw new Error('third argument must be a function');
 
       callback = args[2];
@@ -553,17 +563,25 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
               }
               this.childTabs.push(tab);
             } else {
-              // Header tab is immediatelly pushed to the tab stack.
+              const tmpFilterQuery = this.getWatchListQuery();
+
+              tab.nativeFilterQuery = tab.filterQuery;
+
               if (this.isVendor) {
                 const vendorIdField = tab.adTableName === 'c_vendor' ? 'id' : 'vendorId';
-                tab.nativeFilterQuery = tab.filterQuery;
+
                 tab.filterQuery = buildCriteriaQueryString([
                   `${vendorIdField}.equals=${accountStore.userDetails.cVendorId}`,
+                  tmpFilterQuery,
                   tab.nativeFilterQuery // Include current query.
                 ]);
-                console.log('isVendor. nativeQuery: %s, overriden query: %s', tab.nativeFilterQuery, tab.filterQuery);
+              } else {
+                tab.filterQuery = buildCriteriaQueryString([
+                  tmpFilterQuery, tab.nativeFilterQuery
+                ]);
               }
 
+              // Header tab is immediatelly pushed to the tab stack.
               this.tabStack.push(tab);
             }
           }
@@ -592,7 +610,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
       const maxLength = field.maxLength || column?.maxLength;
       const minValue = field.minValue || column?.minValue;
       const maxValue = field.maxValue || column?.maxValue;
-      
+
       validationSchema[fieldName] = {
         required: field.mandatory || column?.mandatory
       }

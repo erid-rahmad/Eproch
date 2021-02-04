@@ -1,10 +1,16 @@
+import LoginService from '@/account/login.service';
+import DashBoard from "@/core/dashboard/dashboard.vue";
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import Component from 'vue-class-component';
 import { Inject, Vue } from 'vue-property-decorator';
-import LoginService from '@/account/login.service';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
-@Component
-export default class Home extends Vue {
+@Component({
+  components: {
+    DashBoard
+  }
+})
+export default class MainDashboard extends Vue {
+
   @Inject('loginService')
   private loginService: () => LoginService;
 

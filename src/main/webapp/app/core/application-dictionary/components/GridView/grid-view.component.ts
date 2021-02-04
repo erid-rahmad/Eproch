@@ -130,7 +130,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   private currentRecord: any = {};
   private editing: boolean = false;
   private newRecord: boolean = false;
-  
+
   private currentRowIndex = 0;
   private validationSchema: any = {};
   private dynamicValidationSchema: any = {};
@@ -284,6 +284,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   // Start of the component's lifecycle events.
   created() {
     this.toolbarEventBus?.$on('export-record', this.exportRecord);
+    this.toolbarEventBus?.$on('print-record', this.printRecord);
     this.debouncedHeightResizer = debounce(this.resizeTableHeight, 300);
     this.onObservableTabPropertiesChange(this.observableTabProperties);
   }
@@ -301,6 +302,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   beforeDestroy() {
     this.gridResizeObserver.unobserve(<Element> this.$refs.tableWrapper);
     this.toolbarEventBus?.$off('export-record', this.exportRecord);
+    this.toolbarEventBus?.$off('print-record', this.printRecord);
   }
   // End of lifecycle events.
 
@@ -440,7 +442,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       return this.dynamicWindowService(this.baseApiUrl).delete(row.id);
     })).then((results) => {
       const deletedCount = results.filter(res => res.status === 'fulfilled').length
-      
+
       if (deletedCount) {
         const message = this.$t(`opusWebApp.applicationDictionary.recordsDeleted`, {
           tabName: this.tabName,
@@ -547,7 +549,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   /**
    * Update the validation rule for a referenced field. Triggered once the records
    * has been loaded.
-   * @param field 
+   * @param field
    */
   private updateReferenceQueries(fields: IADField[]) {
     fields
@@ -567,7 +569,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         defaultTabId: this.tabName,
         text: validationRule.query
       });
-      
+
       if (referenceFilter?.includes('{select', 0)) {
         referenceFilter = await this.parseValidationQuery({
           defaultTabId: this.tabName,
@@ -584,8 +586,16 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   private exportRecord(data?: any) {
     if (! this.mainTab && data?.tabId !== this.tabId)
       return;
-      
+
     this.showExportDialog = true;
+  }
+
+  private printRecord(data?: any) {
+    if (! this.mainTab && data?.tabId !== this.tabId)
+      return;
+
+    console.log(this.currentRecord);
+    window.open(`/api/m-purchase-orders/report/${this.currentRecord.id}`, '_blank');
   }
 
   public setTableDirectReference(field: any): void {
@@ -750,7 +760,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   private save(callback?: (record?: any) => void) {
     const {
       editing,
-      createdBy,
       createdDate,
       lastModifiedBy,
       lastModifiedDate,
@@ -775,7 +784,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
           if (this.$refs[field])
             (<any> this.$refs[field][0])?.$el.classList.remove('is-error');
         }
-        
+
         this.saveRecord(record, callback);
       }
     });
@@ -829,7 +838,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
     if ( ! this.baseApiUrl) {
       return;
     }
-    
+
     this.processing = true;
     const paginationQuery = {
       page: this.page - 1,
@@ -856,7 +865,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         this.$emit('total-count-changed', this.queryCount);
 
         // TODO Skip selecting the first row when the user is navigating
-        // back to the previous page by using the record-navigator. 
+        // back to the previous page by using the record-navigator.
         if (this.gridData.length) {
           const rowExists = this.gridData[this.currentRowIndex] !== void 0;
           this.setRow(this.gridData[rowExists ? this.currentRowIndex : 0]);
@@ -890,7 +899,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   /**
    * This method is invoked each time user typing in el-select component
    * with remote attribute enabled.
-   * @param query 
+   * @param query
    */
   public fetchTableDirectData(query: string) {
     const field = this.activeTableDirectField;
@@ -997,7 +1006,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       defaultTabId: this.tabName,
       field
     });
-    
+
     return ! this.tab.writable || ! field.writable || notUpdatable || conditionallyReadonly;
   }
 
@@ -1084,7 +1093,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
 
   public downloadAttachment(row: any, field: IADField) {
     const fileName = `${row[field.adColumn.name]}-${this.getFileName(row, field)}`;
-    window.open(`/api/c-attachments/download/${fileName}`, '_blank'); 
+    window.open(`/api/c-attachments/download/${fileName}`, '_blank');
   }
-  
+
 }

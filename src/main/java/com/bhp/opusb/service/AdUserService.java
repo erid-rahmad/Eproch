@@ -1,6 +1,9 @@
 package com.bhp.opusb.service;
 
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import com.bhp.opusb.config.Constants;
@@ -88,20 +91,24 @@ public class AdUserService {
         adUserRepository.save(adUser);
 
         // Add a SUPPLIER authority if he/she is a vendor.
-        if (Optional.ofNullable(adUser.isVendor()).orElse(false)) {
-            scAuthorityRepository.findByAuthorityName(AuthoritiesConstants.SUPPLIER)
-                .ifPresent(scAuthority -> {
-                    AdUserAuthority userAuthority = new AdUserAuthority().active(true)
-                        .adOrganization(adUser.getAdOrganization())
-                        .authority(scAuthority)
-                        .user(adUser);
+        List<String> authNames = new ArrayList<>(Arrays.asList(AuthoritiesConstants.USER));
 
-                    adUserAuthorityRepository.save(userAuthority);
-
-                    // Add ROLE_SUPPLIER to jhi_user_authority.
-                    adUser.getUser().getAuthorities().add(scAuthority.getAuthority());
-                });
+        if (Boolean.TRUE.equals(adUser.isVendor())) {
+            authNames.add(AuthoritiesConstants.SUPPLIER);
         }
+
+        scAuthorityRepository.findByAuthorityNameIn(authNames)
+            .forEach(scAuthority -> {
+                AdUserAuthority userAuthority = new AdUserAuthority().active(true)
+                    .adOrganization(adUser.getAdOrganization())
+                    .authority(scAuthority)
+                    .user(adUser);
+
+                adUserAuthorityRepository.save(userAuthority);
+
+                // Add ROLE_SUPPLIER to jhi_user_authority.
+                adUser.getUser().getAuthorities().add(scAuthority.getAuthority());
+            });
 
         return adUserMapper.toDto(adUser);
     }

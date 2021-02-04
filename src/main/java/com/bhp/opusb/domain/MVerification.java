@@ -38,6 +38,7 @@ public class MVerification extends AbstractAuditingEntity {
 
     /**
      * VHDOCM Invoice verification document no.
+     * @deprecated Please use the standard field: documentNo.
      */
     @NotNull
     @Column(name = "verification_no", nullable = false, unique = true)
@@ -167,12 +168,51 @@ public class MVerification extends AbstractAuditingEntity {
     @Column(name = "date_approve")
     private LocalDate dateApprove;
 
+    /**
+     * @deprecated Please use the standard field: documentStatus.
+     */
     @NotNull
     @Column(name = "verification_status", nullable = false)
     private String verificationStatus;
 
     @Column(name = "pay_status")
     private String payStatus;
+
+    @NotNull
+    @Column(name = "date_trx", nullable = false)
+    private LocalDate dateTrx;
+
+    @Size(max = 30)
+    @Column(name = "document_no", length = 30)
+    private String documentNo;
+
+    @NotNull
+    @Size(max = 10)
+    @Column(name = "document_action", length = 10, nullable = false)
+    private String documentAction;
+
+    @NotNull
+    @Size(max = 10)
+    @Column(name = "document_status", length = 10, nullable = false)
+    private String documentStatus;
+
+    @Column(name = "approved")
+    private Boolean approved;
+
+    @Column(name = "processed")
+    private Boolean processed;
+
+    /**
+     * Whether or not it contains one or more reversed receipt lines.
+     */
+    @Column(name = "receipt_reversed")
+    private Boolean receiptReversed;
+
+    /**
+     * Whether or not it contains one or more reversed invoice AP lines.
+     */
+    @Column(name = "ap_reversed")
+    private Boolean apReversed;
 
     @Column(name = "uid")
     private UUID uid;
@@ -569,6 +609,110 @@ public class MVerification extends AbstractAuditingEntity {
         this.payStatus = payStatus;
     }
 
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public MVerification dateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+        return this;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public MVerification documentNo(String documentNo) {
+        this.documentNo = documentNo;
+        return this;
+    }
+
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public MVerification documentAction(String documentAction) {
+        this.documentAction = documentAction;
+        return this;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public MVerification documentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+        return this;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public Boolean isApproved() {
+        return approved;
+    }
+
+    public MVerification approved(Boolean approved) {
+        this.approved = approved;
+        return this;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public Boolean isProcessed() {
+        return processed;
+    }
+
+    public MVerification processed(Boolean processed) {
+        this.processed = processed;
+        return this;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
+    public Boolean isReceiptReversed() {
+        return receiptReversed;
+    }
+
+    public MVerification receiptReversed(Boolean receiptReversed) {
+        this.receiptReversed = receiptReversed;
+        return this;
+    }
+
+    public void setReceiptReversed(Boolean receiptReversed) {
+        this.receiptReversed = receiptReversed;
+    }
+
+    public Boolean isApReversed() {
+        return apReversed;
+    }
+
+    public MVerification apReversed(Boolean apReversed) {
+        this.apReversed = apReversed;
+        return this;
+    }
+
+    public void setApReversed(Boolean apReversed) {
+        this.apReversed = apReversed;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -751,6 +895,14 @@ public class MVerification extends AbstractAuditingEntity {
             ", dateApprove='" + getDateApprove() + "'" +
             ", verificationStatus='" + getVerificationStatus() + "'" +
             ", payStatus='" + getPayStatus() + "'" +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
+            ", receiptReversed='" + isReceiptReversed() + "'" +
+            ", apReversed='" + isApReversed() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

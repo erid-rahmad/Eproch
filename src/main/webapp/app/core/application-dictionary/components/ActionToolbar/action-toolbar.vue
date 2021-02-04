@@ -58,12 +58,20 @@
         type="primary"
         @click="openSearchWindow"
       />
-      <el-button 
+      <el-button
         icon="el-icon-download"
         size="small"
         title="Export"
         type="primary"
         @click="exportRecord"
+      />
+      <el-button
+        icon="el-icon-printer"
+        size="small"
+        title="Print"
+        type="primary"
+        v-if="windowName == 'Purchase Order'"
+        @click="printRecord"
       />
     </el-button-group>
     <el-dropdown

@@ -38,7 +38,7 @@ public class AdCalloutService {
      * @param adCalloutDTO the entity to save.
      * @return the persisted entity.
      */
-    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADField.adCalloutTargets", allEntries = true)
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADField.adCallouts", allEntries = true)
     public AdCalloutDTO save(AdCalloutDTO adCalloutDTO) {
         log.debug("Request to save AdCallout : {}", adCalloutDTO);
         AdCallout adCallout = adCalloutMapper.toEntity(adCalloutDTO);
@@ -77,7 +77,7 @@ public class AdCalloutService {
      *
      * @param id the id of the entity.
      */
-    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADField.adCalloutTargets", allEntries = true)
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADField.adCallouts", allEntries = true)
     public void delete(Long id) {
         log.debug("Request to delete AdCallout : {}", id);
         adCalloutRepository.deleteById(id);

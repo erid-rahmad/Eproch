@@ -118,6 +118,7 @@
                 :limit="limit"
                 :before-upload="handleBeforeUpload"
                 :on-change="onUploadChange"
+                :on-preview="handlePreview"
                 :on-exceed="handleExceed"
                 :on-remove="handleRemove"
                 :on-error="onUploadError"

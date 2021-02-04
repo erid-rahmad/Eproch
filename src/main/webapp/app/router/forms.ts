@@ -17,12 +17,12 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['systemMetric', () => import(/* webpackChunkName: "system" */'../admin/metrics/metrics.vue')],
   ['systemTracker', () => import(/* webpackChunkName: "system" */'../admin/tracker/tracker.vue')],
 
-  ['eVerification', () => import(/* webpackChunkName: "system" */'../core/application-dictionary/components/Form/e-verification/e-verification/e-verification.vue')],
-  ['invoiceVerification', () => import(/* webpackChunkName: "system" */'../core/application-dictionary/components/Form/e-verification/invoice-verification/invoice-verification.vue')],
-  ['verificationDocumentInquiry', () => import(/* webpackChunkName: "system" */'../core/application-dictionary/components/Form/e-verification/verification-document-inquiry/verification-document-inquiry.vue')],
-  ['paymentStatus', () => import(/* webpackChunkName: "system" */'../core/application-dictionary/components/Form/e-verification/payment-status/payment-status.vue')],
-  ['productReceiveInfo', () => import(/* webpackChunkName: "system" */'../core/application-dictionary/components/Form/e-verification/product-receive-info/product-receive-info.vue')],
-  ['eNofa', () => import(/* webpackChunkName: "system" */'../core/application-dictionary/components/Form/e-verification/e-nofa/e-nofa.vue')],
+  ['eVerification', () => import(/* webpackChunkName: "eVerification" */'../core/application-dictionary/components/Form/e-verification/e-verification/e-verification.vue')],
+  ['invoiceVerification', () => import(/* webpackChunkName: "eVerification" */'../core/application-dictionary/components/Form/e-verification/invoice-verification/invoice-verification.vue')],
+  ['verificationDocumentInquiry', () => import(/* webpackChunkName: "eVerification" */'../core/application-dictionary/components/Form/e-verification/verification-document-inquiry/verification-document-inquiry.vue')],
+  ['paymentStatus', () => import(/* webpackChunkName: "eVerification" */'../core/application-dictionary/components/Form/e-verification/payment-status/payment-status.vue')],
+  ['productReceiveInfo', () => import(/* webpackChunkName: "eVerification" */'../core/application-dictionary/components/Form/e-verification/product-receive-info/product-receive-info.vue')],
+  ['eNofa', () => import(/* webpackChunkName: "eVerification" */'../core/application-dictionary/components/Form/e-verification/e-nofa/e-nofa.vue')],
 ]);
 
 export const blankForm = () => import(/* webpackChunckName: "blankForm" */'@/core/application-dictionary/components/Form/index.vue');

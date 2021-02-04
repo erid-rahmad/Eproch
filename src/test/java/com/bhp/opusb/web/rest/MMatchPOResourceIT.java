@@ -145,6 +145,9 @@ public class MMatchPOResourceIT {
     private static final String DEFAULT_ITEM_DESC_2 = "AAAAAAAAAA";
     private static final String UPDATED_ITEM_DESC_2 = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_INVOICED = false;
+    private static final Boolean UPDATED_INVOICED = true;
+
     @Autowired
     private MMatchPORepository mMatchPORepository;
 
@@ -199,7 +202,8 @@ public class MMatchPOResourceIT {
             .description(DEFAULT_DESCRIPTION)
             .mMatchType(DEFAULT_M_MATCH_TYPE)
             .itemDesc1(DEFAULT_ITEM_DESC_1)
-            .itemDesc2(DEFAULT_ITEM_DESC_2);
+            .itemDesc2(DEFAULT_ITEM_DESC_2)
+            .invoiced(DEFAULT_INVOICED);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -256,7 +260,8 @@ public class MMatchPOResourceIT {
             .description(UPDATED_DESCRIPTION)
             .mMatchType(UPDATED_M_MATCH_TYPE)
             .itemDesc1(UPDATED_ITEM_DESC_1)
-            .itemDesc2(UPDATED_ITEM_DESC_2);
+            .itemDesc2(UPDATED_ITEM_DESC_2)
+            .invoiced(UPDATED_INVOICED);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -328,6 +333,7 @@ public class MMatchPOResourceIT {
         assertThat(testMMatchPO.getmMatchType()).isEqualTo(DEFAULT_M_MATCH_TYPE);
         assertThat(testMMatchPO.getItemDesc1()).isEqualTo(DEFAULT_ITEM_DESC_1);
         assertThat(testMMatchPO.getItemDesc2()).isEqualTo(DEFAULT_ITEM_DESC_2);
+        assertThat(testMMatchPO.isInvoiced()).isEqualTo(DEFAULT_INVOICED);
     }
 
     @Test
@@ -388,7 +394,8 @@ public class MMatchPOResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].mMatchType").value(hasItem(DEFAULT_M_MATCH_TYPE)))
             .andExpect(jsonPath("$.[*].itemDesc1").value(hasItem(DEFAULT_ITEM_DESC_1)))
-            .andExpect(jsonPath("$.[*].itemDesc2").value(hasItem(DEFAULT_ITEM_DESC_2)));
+            .andExpect(jsonPath("$.[*].itemDesc2").value(hasItem(DEFAULT_ITEM_DESC_2)))
+            .andExpect(jsonPath("$.[*].invoiced").value(hasItem(DEFAULT_INVOICED.booleanValue())));
     }
     
     @Test
@@ -428,7 +435,8 @@ public class MMatchPOResourceIT {
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.mMatchType").value(DEFAULT_M_MATCH_TYPE))
             .andExpect(jsonPath("$.itemDesc1").value(DEFAULT_ITEM_DESC_1))
-            .andExpect(jsonPath("$.itemDesc2").value(DEFAULT_ITEM_DESC_2));
+            .andExpect(jsonPath("$.itemDesc2").value(DEFAULT_ITEM_DESC_2))
+            .andExpect(jsonPath("$.invoiced").value(DEFAULT_INVOICED.booleanValue()));
     }
 
 
@@ -2965,6 +2973,58 @@ public class MMatchPOResourceIT {
 
     @Test
     @Transactional
+    public void getAllMMatchPOSByInvoicedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where invoiced equals to DEFAULT_INVOICED
+        defaultMMatchPOShouldBeFound("invoiced.equals=" + DEFAULT_INVOICED);
+
+        // Get all the mMatchPOList where invoiced equals to UPDATED_INVOICED
+        defaultMMatchPOShouldNotBeFound("invoiced.equals=" + UPDATED_INVOICED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByInvoicedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where invoiced not equals to DEFAULT_INVOICED
+        defaultMMatchPOShouldNotBeFound("invoiced.notEquals=" + DEFAULT_INVOICED);
+
+        // Get all the mMatchPOList where invoiced not equals to UPDATED_INVOICED
+        defaultMMatchPOShouldBeFound("invoiced.notEquals=" + UPDATED_INVOICED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByInvoicedIsInShouldWork() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where invoiced in DEFAULT_INVOICED or UPDATED_INVOICED
+        defaultMMatchPOShouldBeFound("invoiced.in=" + DEFAULT_INVOICED + "," + UPDATED_INVOICED);
+
+        // Get all the mMatchPOList where invoiced equals to UPDATED_INVOICED
+        defaultMMatchPOShouldNotBeFound("invoiced.in=" + UPDATED_INVOICED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMMatchPOSByInvoicedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mMatchPORepository.saveAndFlush(mMatchPO);
+
+        // Get all the mMatchPOList where invoiced is not null
+        defaultMMatchPOShouldBeFound("invoiced.specified=true");
+
+        // Get all the mMatchPOList where invoiced is null
+        defaultMMatchPOShouldNotBeFound("invoiced.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllMMatchPOSByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = mMatchPO.getAdOrganization();
@@ -2997,21 +3057,21 @@ public class MMatchPOResourceIT {
 
     @Test
     @Transactional
-    public void getAllMMatchPOSByCVendorIsEqualToSomething() throws Exception {
+    public void getAllMMatchPOSByVendorIsEqualToSomething() throws Exception {
         // Initialize the database
         mMatchPORepository.saveAndFlush(mMatchPO);
-        CVendor cVendor = CVendorResourceIT.createEntity(em);
-        em.persist(cVendor);
+        CVendor vendor = CVendorResourceIT.createEntity(em);
+        em.persist(vendor);
         em.flush();
-        mMatchPO.setCVendor(cVendor);
+        mMatchPO.setVendor(vendor);
         mMatchPORepository.saveAndFlush(mMatchPO);
-        Long cVendorId = cVendor.getId();
+        Long vendorId = vendor.getId();
 
-        // Get all the mMatchPOList where cVendor equals to cVendorId
-        defaultMMatchPOShouldBeFound("cVendorId.equals=" + cVendorId);
+        // Get all the mMatchPOList where vendor equals to vendorId
+        defaultMMatchPOShouldBeFound("vendorId.equals=" + vendorId);
 
-        // Get all the mMatchPOList where cVendor equals to cVendorId + 1
-        defaultMMatchPOShouldNotBeFound("cVendorId.equals=" + (cVendorId + 1));
+        // Get all the mMatchPOList where vendor equals to vendorId + 1
+        defaultMMatchPOShouldNotBeFound("vendorId.equals=" + (vendorId + 1));
     }
 
 
@@ -3188,7 +3248,8 @@ public class MMatchPOResourceIT {
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].mMatchType").value(hasItem(DEFAULT_M_MATCH_TYPE)))
             .andExpect(jsonPath("$.[*].itemDesc1").value(hasItem(DEFAULT_ITEM_DESC_1)))
-            .andExpect(jsonPath("$.[*].itemDesc2").value(hasItem(DEFAULT_ITEM_DESC_2)));
+            .andExpect(jsonPath("$.[*].itemDesc2").value(hasItem(DEFAULT_ITEM_DESC_2)))
+            .andExpect(jsonPath("$.[*].invoiced").value(hasItem(DEFAULT_INVOICED.booleanValue())));
 
         // Check, that the count call also returns 1
         restMMatchPOMockMvc.perform(get("/api/m-match-pos/count?sort=id,desc&" + filter))
@@ -3262,7 +3323,8 @@ public class MMatchPOResourceIT {
             .description(UPDATED_DESCRIPTION)
             .mMatchType(UPDATED_M_MATCH_TYPE)
             .itemDesc1(UPDATED_ITEM_DESC_1)
-            .itemDesc2(UPDATED_ITEM_DESC_2);
+            .itemDesc2(UPDATED_ITEM_DESC_2)
+            .invoiced(UPDATED_INVOICED);
         MMatchPODTO mMatchPODTO = mMatchPOMapper.toDto(updatedMMatchPO);
 
         restMMatchPOMockMvc.perform(put("/api/m-match-pos")
@@ -3301,6 +3363,7 @@ public class MMatchPOResourceIT {
         assertThat(testMMatchPO.getmMatchType()).isEqualTo(UPDATED_M_MATCH_TYPE);
         assertThat(testMMatchPO.getItemDesc1()).isEqualTo(UPDATED_ITEM_DESC_1);
         assertThat(testMMatchPO.getItemDesc2()).isEqualTo(UPDATED_ITEM_DESC_2);
+        assertThat(testMMatchPO.isInvoiced()).isEqualTo(UPDATED_INVOICED);
     }
 
     @Test

@@ -2,6 +2,7 @@ import { VuexModule, Module, Mutation, Action, getModule } from 'vuex-module-dec
 import { getSidebarStatus, getSize, setSidebarStatus, setSize } from '@/utils/cookies'
 import store from '@/shared/config/store'
 import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store'
+import { IPaDashboardItem } from '@/shared/model/pa-dashboard-item.model'
 
 export enum DeviceType {
   Mobile,
@@ -9,13 +10,15 @@ export enum DeviceType {
 }
 
 export interface IAppState {
-  device: DeviceType
+  device: DeviceType;
   sidebar: {
     opened: boolean
     withoutAnimation: boolean
-  }
-  language: string
-  size: string
+  };
+  language: string;
+  size: string;
+
+  dashboardItems: IPaDashboardItem[];
 }
 
 @Module({ dynamic: true, store, name: 'appStore', namespaced: true })
@@ -23,10 +26,11 @@ class AppStore extends VuexModule implements IAppState {
   public sidebar = {
     opened: getSidebarStatus() !== 'closed',
     withoutAnimation: false
-  }
-  public device = DeviceType.Desktop
-  public language = translationStore.language
-  public size = getSize() || 'medium'
+  };
+  public device = DeviceType.Desktop;
+  public language = translationStore.language;
+  public size = getSize() || 'medium';
+  public dashboardItems: IPaDashboardItem[] = [];
 
   @Mutation
   private TOGGLE_SIDEBAR(withoutAnimation: boolean) {
@@ -63,6 +67,11 @@ class AppStore extends VuexModule implements IAppState {
     setSize(this.size)
   }
 
+  @Mutation
+  private SET_DASHBOARD_ITEMS(items: IPaDashboardItem[]) {
+    this.dashboardItems = items;
+  }
+
   @Action
   public ToggleSideBar(withoutAnimation: boolean) {
     this.TOGGLE_SIDEBAR(withoutAnimation)
@@ -86,6 +95,11 @@ class AppStore extends VuexModule implements IAppState {
   @Action
   public SetSize(size: string) {
     this.SET_SIZE(size)
+  }
+
+  @Action
+  public setDashboardItems(items: IPaDashboardItem[]) {
+    this.SET_DASHBOARD_ITEMS(items);
   }
 }
 

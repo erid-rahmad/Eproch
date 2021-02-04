@@ -57,7 +57,7 @@
 
         </el-row>
 
-        <el-row class="main grid-view" ref="tableWrapper">
+        <el-row class="main" ref="tableWrapper">
             <el-col :span="24">
                 <el-table
                     v-loading="processing"
@@ -65,20 +65,25 @@
                     highlight-current-row
                     border stripe
                     size="mini"
-                    style="width: 100%: height: 100%"
+                    style="width: 100%; height: 100%"
                     :height="gridSchema.height"
                     :default-sort="gridSchema.defaultSort"
                     :empty-text="gridSchema.emptyText"
                     :data="gridData"
+                    :row-class-name="rowClassName"
                     @row-click="singleSelection"
-                    @sort-change="changeOrder">
+                    @sort-change="changeOrder"
+                >
 
                     <el-table-column
                         align="center"
+                        class-name="no-ellipsis"
                         fixed
-                        width="35">
-                        <template slot-scope="scope">
-                            <el-radio class="radio" v-model="radioSelection" :label="scope.$index">&nbsp;</el-radio>
+                        width="36"
+                    >
+                        <template slot="header"></template>
+                        <template slot-scope="{ $index }">
+                            <el-radio class="radio" v-model="radioSelection" :label="$index">&nbsp;</el-radio>
                         </template>
                     </el-table-column>
                     <el-table-column
@@ -156,7 +161,7 @@
                     ref="pagination"
                     background
                     layout="sizes, prev, pager, next"
-                    mini
+                    small
                     :current-page.sync="page"
                     :page-sizes="[10, 20, 50, 100]"
                     :page-size="itemsPerPage"
@@ -171,16 +176,22 @@
     </div>
 </template>
 
-<script lang="ts" src="./detail-verification-document.component.ts">
-</script>
+<script lang="ts" src="./detail-verification-document.component.ts"></script>
 
 <style lang="scss">
-    .compact .verification{
-        padding: 0px;
-    }
+.compact .verification{
+    padding: 0px;
+}
 
-    .main {
-        padding: 0px;
-    }
+.el-table .cell.no-ellipsis {
+    text-overflow: inherit;
+}
 
+.main {
+    padding: 0px;
+
+    .el-table .danger-row {
+        background: oldlace;
+    }
+}
 </style>

@@ -31,7 +31,7 @@
         {
             "fieldName": "accessLevel",
             "fieldType": "AdAccessLevel",
-            "fieldValues": "SYS,SYS_CLN,CLN,CLN_ORG"
+            "fieldValues": "SYS,SYS_CLN,CLN,CLN_ORG,CLN_VND"
         },
         {
             "fieldName": "active",

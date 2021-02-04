@@ -71,21 +71,13 @@
                                             icon="el-icon-search"/>
                                     </el-form-item>
                                 </el-col>
-                                <!--<el-col :span="18">
-                                    <el-form-item label-width="10px">
-                                        <el-input
-                                            class="form-input"
-                                            disabled
-                                            v-model="filter.vendorName"/>
-                                    </el-form-item>
-                                </el-col>-->
                             </el-row>
                         </el-form>
 
                     </el-col>
                 </el-row>
 
-                <el-row class="main grid-view" ref="tableWrapper">
+                <el-row class="main" ref="tableWrapper">
                     <el-col :span="24">
                         <el-table
                             v-loading="processing"
@@ -93,7 +85,7 @@
                             highlight-current-row
                             border stripe
                             size="mini"
-                            style="width: 100%: height: 100%"
+                            style="width: 100%; height: 100%"
                             :height="gridSchema.height"
                             :max-height="gridSchema.maxHeight"
                             :default-sort="gridSchema.defaultSort"
@@ -237,18 +229,5 @@
     }
 
 
-    .grid-view {
 
-        .el-pagination {
-            background: #fff;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            z-index: 5;
-
-            .el-input--mini .el-input__inner {
-                height: 22px;
-            }
-        }
-    }
 </style>

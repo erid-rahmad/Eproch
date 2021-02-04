@@ -1,18 +1,24 @@
 package com.bhp.opusb.service;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.bhp.opusb.domain.ScAccess;
 import com.bhp.opusb.repository.ScAccessRepository;
 import com.bhp.opusb.service.dto.ScAccessDTO;
 import com.bhp.opusb.service.mapper.ScAccessMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link ScAccess}.
@@ -56,6 +62,18 @@ public class ScAccessService {
         log.debug("Request to get all ScAccesses");
         return scAccessRepository.findAll(pageable)
             .map(scAccessMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<ScAccessDTO> getPageAccesses() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        final List<String> authorities = authentication.getAuthorities().stream()
+            .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
+
+        return scAccessMapper.toDto(
+            scAccessRepository.findByAuthority_Authority_NameInAndType_NameIn(authorities, Arrays.asList("FORM", "WINDOW"))
+        );
     }
 
     /**

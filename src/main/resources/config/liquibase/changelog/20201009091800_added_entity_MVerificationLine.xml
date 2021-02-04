@@ -287,4 +287,21 @@
         <setColumnRemarks tableName="m_verification_line" columnName="line_no_mr" remarks="VDNLIN Receipt line no."/>
     </changeSet>
 
+    <changeSet id="20200125094300" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification_line">
+            <column name="receipt_reversed" type="boolean" remarks="Whether the respective receipt line is reversed or not.">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200130155900" author="Ananta Aryadewa">
+        <setColumnRemarks tableName="m_verification_line" columnName="receipt_reversed" remarks="Whether or not the respective receipt line is reversed."/>
+        <addColumn tableName="m_verification_line">
+            <column name="ap_reversed" type="boolean" remarks="Whether or not the respective receipt line is reversed.">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

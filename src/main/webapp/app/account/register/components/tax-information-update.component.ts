@@ -36,7 +36,14 @@ export default class TaxInformationUpdate extends TaxInformationUpdateProps {
 
   private retrieveTax() {
     this.dynamicWindowService('/api/c-tax-categories')
-      .retrieve()
+      .retrieve({
+        criteriaQuery: 'active.equals=true',
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['name']
+        }
+      })
       .then(res => {
         this.taxes = res.data;
       });

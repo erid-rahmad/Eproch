@@ -166,6 +166,30 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             if (criteria.getPayStatus() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPayStatus(), MVerification_.payStatus));
             }
+            if (criteria.getDateTrx() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), MVerification_.dateTrx));
+            }
+            if (criteria.getDocumentNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentNo(), MVerification_.documentNo));
+            }
+            if (criteria.getDocumentAction() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentAction(), MVerification_.documentAction));
+            }
+            if (criteria.getDocumentStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentStatus(), MVerification_.documentStatus));
+            }
+            if (criteria.getApproved() != null) {
+                specification = specification.and(buildSpecification(criteria.getApproved(), MVerification_.approved));
+            }
+            if (criteria.getProcessed() != null) {
+                specification = specification.and(buildSpecification(criteria.getProcessed(), MVerification_.processed));
+            }
+            if (criteria.getReceiptReversed() != null) {
+                specification = specification.and(buildSpecification(criteria.getReceiptReversed(), MVerification_.receiptReversed));
+            }
+            if (criteria.getApReversed() != null) {
+                specification = specification.and(buildSpecification(criteria.getApReversed(), MVerification_.apReversed));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MVerification_.uid));
             }

@@ -47,6 +47,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "aDWindow",
             "otherEntityRelationshipName": "scAccess",
+            "javadoc": "Used for restricting access to specific window.",
             "relationshipName": "window",
             "otherEntityField": "id"
         },
@@ -54,13 +55,30 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "adForm",
             "otherEntityRelationshipName": "scAccess",
+            "javadoc": "Used for restricting access to specific form.",
             "relationshipName": "form",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paDashboard",
+            "otherEntityRelationshipName": "scAccess",
+            "javadoc": "Used for restricting access to specific dashboard item.",
+            "relationshipName": "paDashboard",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paDashboardItem",
+            "otherEntityRelationshipName": "scAccess",
+            "relationshipName": "paDashboardItem",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "cDocumentType",
             "otherEntityRelationshipName": "scAccess",
+            "javadoc": "Used for restricting access to specific document actions.",
             "relationshipName": "documentType",
             "otherEntityField": "id"
         },
@@ -68,6 +86,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "aDReferenceList",
             "otherEntityRelationshipName": "scAccess",
+            "javadoc": "Used for restricting access to specific document actions.",
             "relationshipName": "referenceList",
             "otherEntityField": "id"
         },

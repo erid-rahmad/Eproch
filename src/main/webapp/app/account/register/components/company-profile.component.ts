@@ -170,7 +170,10 @@ export default class CompanyProfile extends CompanyProps {
   private retrieveReferences(param: string) {
     this.dynamicWindowService('/api/ad-references')
       .retrieve({
-        criteriaQuery: [`value.contains=` + param]
+        criteriaQuery: [
+          'active.equals=true',
+          `value.contains=${param}`
+        ]
       })
       .then(res => {
         let references = res.data.map(item => {
@@ -187,7 +190,15 @@ export default class CompanyProfile extends CompanyProps {
   private retrieveReferenceLists(param: any) {
     this.dynamicWindowService('/api/ad-reference-lists')
       .retrieve({
-        criteriaQuery: [`adReferenceId.equals=` + param[0].id]
+        criteriaQuery: [
+          'active.equals=true',
+          `adReferenceId.equals=${param[0].id}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['name']
+        }
       })
       .then(res => {
         let referenceList = res.data.map(item => {
@@ -208,9 +219,10 @@ export default class CompanyProfile extends CompanyProps {
   private retrieveCountry() {
     this.dynamicWindowService('/api/c-countries')
       .retrieve({
+        criteriaQuery: 'active.equals=true',
         paginationQuery: {
           page: 0,
-          size: 10000,
+          size: 1000,
           sort: ['name']
         }
       })
@@ -258,10 +270,13 @@ export default class CompanyProfile extends CompanyProps {
 
     this.dynamicWindowService('/api/c-regions')
       .retrieve({
-        criteriaQuery: [`countryId.equals=${country.id}`],
+        criteriaQuery: [
+          'active.equals=true',
+          `countryId.equals=${country.id}`
+        ],
         paginationQuery: {
           page: 0,
-          size: 10000,
+          size: 1000,
           sort: ['name']
         }
       })
@@ -280,14 +295,14 @@ export default class CompanyProfile extends CompanyProps {
       return;
     }
 
-    let filterQuery: string;
+    let filterQuery: string[] = ['active.equals=true'];
     this.onRegionClear(i);
 
     if (countryId) {
-      filterQuery = `countryId.equals=${countryId}`;
+      filterQuery.push(`countryId.equals=${countryId}`);
     } else if (value !== null) {
       const region = JSON.parse(value);
-      filterQuery = `regionId.equals=${region.id}`;
+      filterQuery.push(`regionId.equals=${region.id}`);
     }
 
     if (i === 1) {
@@ -304,7 +319,7 @@ export default class CompanyProfile extends CompanyProps {
 
     this.dynamicWindowService('/api/c-cities')
       .retrieve({
-        criteriaQuery: filterQuery || null,
+        criteriaQuery: filterQuery,
         paginationQuery: {
           page: 0,
           size: 10000,
@@ -369,6 +384,10 @@ export default class CompanyProfile extends CompanyProps {
     this.company.file = file;
   }
 
+  handlePreview(file) {
+    window.open(file.response.downloadUri, '_blank');
+  }
+
   handleRemove(files, fileList) {
     this.company.file = "";
   }
@@ -380,10 +399,7 @@ export default class CompanyProfile extends CompanyProps {
   onUploadSuccess(response: any) {
       console.log('File uploaded successfully ', response);
       this.company.fileId = response.attachment.id;
-      //(this.$refs.company as ElForm).validate(this.company.file);
-      (this.$refs.company as ElForm).validate((passed, errors) => {
-        this.company.file != '';
-      });
+      (this.$refs.company as ElForm).clearValidate('file');
   }
 
   handleExceed(files, fileList) {

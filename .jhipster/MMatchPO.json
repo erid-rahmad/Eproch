@@ -175,6 +175,11 @@
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "25"
+        },
+        {
+            "fieldName": "invoiced",
+            "javadoc": "Whether it's already applied in an invoice or not.",
+            "fieldType": "Boolean"
         }
     ],
     "relationships": [
@@ -200,7 +205,7 @@
             "otherEntityName": "cVendor",
             "otherEntityRelationshipName": "mMatchPO",
             "javadoc": "PRAN8 is mapped to vendor code.",
-            "relationshipName": "cVendor",
+            "relationshipName": "vendor",
             "otherEntityField": "id"
         },
         {

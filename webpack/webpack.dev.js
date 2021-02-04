@@ -33,7 +33,7 @@ module.exports = merge(baseWebpackConfig, {
     port: 9060,
     proxy: [
       {
-        context: ['/api', '/services', '/management', '/swagger-resources', '/v2/api-docs', '/h2-console', '/auth'],
+        context: ['/api', '/services', '/management', '/swagger-resources', '/v2/api-docs', '/h2-console', '/auth', '/websocket'],
         target: 'http://127.0.0.1:8080',
         secure: false,
         headers: { host: 'localhost:9000' }
@@ -63,13 +63,13 @@ module.exports = merge(baseWebpackConfig, {
             heartbeatTimeout: 60000
           }
         }
-        /*
+        
         ,ghostMode: { // uncomment this part to disable BrowserSync ghostMode; https://github.com/jhipster/generator-jhipster/issues/11116
           clicks: false,
           location: false,
           forms: false,
           scroll: false
-        } */
+        }
       },
       {
         reload: false

@@ -179,6 +179,10 @@ aside {
       background: none;
     }
   }
+
+  .el-input--mini .el-input__inner {
+    height: 22px;
+  }
 }
 
 .table-container {

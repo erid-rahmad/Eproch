@@ -449,6 +449,19 @@ entity MVerification {
 
 	payStatus String
 
+	dateTrx LocalDate required
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+
+	/** Whether or not it contains one or more reversed receipt lines. */
+	receiptReversed Boolean
+
+	/** Whether or not it contains one or more reversed invoice AP lines. */
+	apReversed Boolean
+
 	uid UUID
 	active Boolean
 }
@@ -525,6 +538,12 @@ entity MVerificationLine {
 
 	/** VDDCT */
 	cDocTypeMr String maxlength(2)
+
+	/** Whether or not the respective receipt line is reversed. */
+	receiptReversed Boolean
+
+	/** Whether or not the respective AP invoice line is reversed. */
+	apReversed Boolean
 
 	uid UUID
 	active Boolean
@@ -632,6 +651,9 @@ entity MMatchPO {
 
 	/** PRAITM */
 	itemDesc2 String maxlength(25)
+
+	/** Whether it's already applied in an invoice or not. */
+	invoiced Boolean
 }
 
 entity AiExchangeIn {
@@ -871,7 +893,7 @@ relationship ManyToOne {
 	MMatchPO{cCostCenter required} to CCostCenter
 
 	/** PRAN8 is mapped to vendor code. */
-	MMatchPO{cVendor} to CVendor
+	MMatchPO{vendor} to CVendor
 
 	/** PRCRCD */
 	MMatchPO{cCurrency} to CCurrency

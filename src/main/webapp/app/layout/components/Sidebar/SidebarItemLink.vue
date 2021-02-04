@@ -18,6 +18,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { isExternal } from '@/utils/validate'
+import { RawLocation } from 'vue-router';
 
 @Component({
   name: 'SidebarItemLink'
@@ -25,15 +26,20 @@ import { isExternal } from '@/utils/validate'
 export default class extends Vue {
   @Prop({ required: true }) private to!: string
 
-  private isExternal = isExternal
+  isExternal = isExternal
 
-  private pushPath() {
-    this.$router.push({
+  pushPath() {
+    const location: RawLocation = {
       path: this.to,
-      query: {
-        t: '' + Date.now()
-      }
-    })
+    };
+
+    if (this.to !== '/') {
+      location.query = {
+        t: '' + Date.now(),
+      };
+    }
+
+    this.$router.push(location);
   }
 }
 </script>

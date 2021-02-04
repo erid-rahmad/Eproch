@@ -57,8 +57,6 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
   }
 
   created(){
-    console.log(this.detailVerification);
-
     if(this.detailVerification.id != null){
       this.filterQuery = "verificationId.equals="+this.detailVerification.id;
       this.retrieveEVerificationLine();
@@ -72,8 +70,6 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
   public singleSelection (row) {
     this.radioSelection = this.gridData.indexOf(row);
     this.selectedRows = row;
-
-    console.log("Single Selection %O", row);
   }
 
 
@@ -123,6 +119,14 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
   }
   // =====================================
 
+  rowClassName({row}) {
+    if (row.documentStatus !== 'CNL' && row.receiptReversed) {
+      return 'danger-row';
+    }
+
+    return '';
+  }
+
   public closeDetailVerification(){
     this.$emit('close-detail-verification');
   }
@@ -145,13 +149,11 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
         paginationQuery
       })
       .then(res => {
-        //console.log(res);
         this.gridData = res.data.map((item: any) => {
           item.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });
 
-        console.log(this.gridData);
         this.calculateLines();
 
         this.totalItems = Number(res.headers['x-total-count']);

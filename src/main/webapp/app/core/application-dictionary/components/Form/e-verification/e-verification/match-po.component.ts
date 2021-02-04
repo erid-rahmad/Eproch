@@ -80,7 +80,7 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   public preloadData() {
-    this.filterQuery = `mMatchType.equals=1&cVendorId.equals=${accountStore.userDetails.cVendorId}`;
+    this.filterQuery = `mMatchType.equals=1&vendorId.equals=${accountStore.userDetails.cVendorId}`;
     this.retrieveAllRecordMatchPos();
   }
 
@@ -196,7 +196,7 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
       this.filterQuery += '&';
     }
 
-    this.filterQuery += `mMatchType.equals=1&cVendorId.equals=${accountStore.userDetails.cVendorId}`;
+    this.filterQuery += `mMatchType.equals=1&vendorId.equals=${accountStore.userDetails.cVendorId}`;
     this.retrieveAllRecordMatchPos();
   }
 

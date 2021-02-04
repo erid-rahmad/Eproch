@@ -331,4 +331,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20200130160200" author="Ananta Aryadewa">
+        <addColumn tableName="m_match_po">
+            <column name="invoiced" type="boolean" remarks="Whether it's already applied in an invoice or not.">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

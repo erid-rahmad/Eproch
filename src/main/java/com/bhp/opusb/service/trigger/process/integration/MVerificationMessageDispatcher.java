@@ -28,8 +28,9 @@ import org.springframework.web.client.RestTemplate;
 @Service("mVerificationMessageDispatcher")
 public class MVerificationMessageDispatcher implements ProcessTrigger {
 
-  private static final Logger logger = LoggerFactory.getLogger(MVerificationMessageDispatcher.class);
+  private final Logger logger = LoggerFactory.getLogger(MVerificationMessageDispatcher.class);
 
+  public static final String BEAN_NAME = "mVerificationMessageDispatcher";
   public static final String KEY_CONTEXT = "context";
   public static final String KEY_PAYLOAD = "payload";
   public static final String CONTEXT_HEADER = "invoice-verification-header";

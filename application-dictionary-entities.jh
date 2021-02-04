@@ -427,13 +427,110 @@ entity AdButton {
 	icon String
 }
 
+// Start of Dashboard related entities.
+/**
+ * The PaDashboard entity.
+ * @author Ananta Aryadewa
+ */
+entity PaDashboard {
+	name String required maxlength(20)
+	description String
+
+	/** The minimum number of columns. */
+	minColumns Integer
+
+	/** The maximum number of columns. Set to -1 for unlimited columns. */
+	maxColumns Integer
+	
+	uid UUID
+	active Boolean
+}
+
+/**
+ * The PaDashboardItem entity.
+ * @author Ananta Aryadewa
+ */
+entity PaDashboardItem {
+	name String required maxlength(30)
+	description String
+	columnNo Integer required
+	rowNo Integer required
+	type PaDashboardItemType required
+	uid UUID
+	active Boolean
+}
+
+/**
+ * Per-user dashboard preference.
+ * @author Ananta Aryadewa
+ */
+entity PaDashboardPreference {
+	columnNo Integer required
+	rowNo Integer required
+	uid UUID
+	active Boolean
+}
+
+/**
+ * The AdWatchList entity.
+ * @author Ananta Aryadewa
+ */
+entity AdWatchList {
+	name String maxlength(30) required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity AdWatchListItem {
+	code String maxlength(10) required
+	name String maxlength(50) required
+	description String
+
+	/** The name of Spring bean. */
+	serviceName String
+
+	/** RESTful API endpoint. */
+	restApiEndpoint String
+
+	/** Websocket endpoint. */
+	websocketEndpoint String
+
+	/** Action to be performed when selecting the item. */
+	actionType AdWatchListActionType required
+
+	/** URL to be opened when selecting the item. */
+	actionUrl String maxlength(50)
+
+	/** Filter query to be applied to the target menu/url. */
+	filterQuery String
+
+	/** Accent color (HEX color code) to be applied to the item. */
+	accentColor String maxlength(7)
+
+	/** Icon path to be applied to the item. */
+	icon String maxlength(100)
+
+	uid UUID
+	active Boolean
+}
+
+enum AdWatchListActionType {
+	MENU, URL
+}
+// End of Dashboard related entities.
+
 /**
  * The extended User entity.
  */
 entity AdUser {
 	uid UUID
 	active Boolean
-	phone String required
+	phone String required maxlength(20)
+	position String maxlength(30)
+
+	/** Whether it is a vendor or not */
+	vendor Boolean
 
 	failedLoginCount Integer
 	lastLoginDate Instant
@@ -506,6 +603,10 @@ enum AdTriggerType {
 	PROCESS, REPORT, WORKFLOW
 }
 
+enum PaDashboardItemType {
+	CHART, WATCHLIST, CUSTOM
+}
+
 /**
  * One to one relationship.
  */
@@ -530,6 +631,7 @@ relationship OneToMany {
 	AdTask to AdTaskProcess{adTask required}
 	AdTrigger to AdTriggerParam{adTrigger required}
 	AdTaskSchedulerGroup to AdTaskScheduler{group}
+	AdWatchList to AdWatchListItem{adWatchList required}
 
   ScAuthority to ScAccess{authority required}
 }
@@ -589,27 +691,47 @@ relationship ManyToOne {
 	AdButton{adTab required} to ADTab
 	AdButton{adTrigger} to AdTrigger
 
+	AdWatchList{adOrganization required} to ADOrganization
+	AdWatchListItem{adOrganization required} to ADOrganization
+
+	/** Menu to be opened when selecting the item. */
+	AdWatchListItem{adMenu} to AdMenu
+
 	AdUser{adOrganization required} to ADOrganization
 
 	AdUserAuthority{adOrganization required} to ADOrganization
 	AdUserAuthority{user required} to AdUser
 	AdUserAuthority{authority required} to ScAuthority
 
+	PaDashboard{adOrganization required} to ADOrganization
+
+	PaDashboardItem{adOrganization required} to ADOrganization
+	PaDashboardItem{adWatchList} to AdWatchList
+	PaDashboardItem{paDashboard required} to PaDashboard
+
+	PaDashboardPreference{adOrganization required} to ADOrganization
+	PaDashboardPreference{adUser required} to AdUser
+	PaDashboardPreference{paDashboardItem required} to PaDashboardItem
+
   ScAuthority{adOrganization required} to ADOrganization
 
   ScAccess{adOrganization required} to ADOrganization
   ScAccess{type required} to ScAccessType
 
-	// Used for restricting access to specific window.
+	/** Used for restricting access to specific window. */
   ScAccess{window} to ADWindow
 
-	// Used for restricting access to specific form.
+	/** Used for restricting access to specific form. */
 	ScAccess{form} to AdForm
 
-	// Used for restricting access to specific document actions.
+	/** Used for restricting access to specific dashboard item. */
+	ScAccess{paDashboard} to PaDashboard
+	ScAccess{paDashboardItem} to PaDashboardItem
+
+	/** Used for restricting access to specific document actions. */
 	ScAccess{documentType} to CDocumentType
 
-	// Used for restricting access to specific document actions.
+	/** Used for restricting access to specific document actions. */
 	ScAccess{referenceList} to ADReferenceList
 
   ScAccessType{adOrganization required} to ADOrganization
@@ -629,4 +751,4 @@ dto * with mapstruct
 // Set service options to all except few
 service * with serviceClass
 
-skipClient *
+skipClient * except PaDashboard, PaDashboardItem, PaDashboardPreference, AdWatchList, AdWatchListItem

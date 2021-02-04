@@ -4,6 +4,23 @@ import java.util.List;
 
 import javax.persistence.criteria.JoinType;
 
+// for static metamodels
+import com.bhp.opusb.domain.ADOrganization_;
+import com.bhp.opusb.domain.CCostCenter_;
+import com.bhp.opusb.domain.CCurrency_;
+import com.bhp.opusb.domain.CProduct_;
+import com.bhp.opusb.domain.CTaxCategory_;
+import com.bhp.opusb.domain.CTax_;
+import com.bhp.opusb.domain.CUnitOfMeasure_;
+import com.bhp.opusb.domain.MVerification;
+import com.bhp.opusb.domain.MVerificationLine;
+import com.bhp.opusb.domain.MVerificationLine_;
+import com.bhp.opusb.domain.MVerification_;
+import com.bhp.opusb.repository.MVerificationLineRepository;
+import com.bhp.opusb.service.dto.MVerificationLineCriteria;
+import com.bhp.opusb.service.dto.MVerificationLineDTO;
+import com.bhp.opusb.service.mapper.MVerificationLineMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -13,13 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
-
-import com.bhp.opusb.domain.MVerificationLine;
-import com.bhp.opusb.domain.*; // for static metamodels
-import com.bhp.opusb.repository.MVerificationLineRepository;
-import com.bhp.opusb.service.dto.MVerificationLineCriteria;
-import com.bhp.opusb.service.dto.MVerificationLineDTO;
-import com.bhp.opusb.service.mapper.MVerificationLineMapper;
+import io.github.jhipster.service.filter.LongFilter;
 
 /**
  * Service for executing complex queries for {@link MVerificationLine} entities in the database.
@@ -52,6 +63,22 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
         log.debug("find by criteria : {}", criteria);
         final Specification<MVerificationLine> specification = createSpecification(criteria);
         return mVerificationLineMapper.toDto(mVerificationLineRepository.findAll(specification));
+    }
+
+    /**
+     * Return a {@link List} of {@link MVerificationLineDTO} of a specific MVerificationDTO.
+     * @param criteria The object which holds all the filters, which the entities should match.
+     * @return the matching entities.
+     */
+    @Transactional(readOnly = true)
+    public List<MVerificationLineDTO> findByHeader(MVerification mVerification) {
+        log.debug("find by header : {}", mVerification.getId());
+        MVerificationLineCriteria criteria = new MVerificationLineCriteria();
+        LongFilter idFilter = new LongFilter();
+
+        idFilter.setEquals(mVerification.getId());
+        criteria.setVerificationId(idFilter);
+        return findByCriteria(criteria);
     }
 
     /**
@@ -165,6 +192,12 @@ public class MVerificationLineQueryService extends QueryService<MVerificationLin
             }
             if (criteria.getcDocTypeMr() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getcDocTypeMr(), MVerificationLine_.cDocTypeMr));
+            }
+            if (criteria.getReceiptReversed() != null) {
+                specification = specification.and(buildSpecification(criteria.getReceiptReversed(), MVerificationLine_.receiptReversed));
+            }
+            if (criteria.getApReversed() != null) {
+                specification = specification.and(buildSpecification(criteria.getApReversed(), MVerificationLine_.apReversed));
             }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MVerificationLine_.uid));

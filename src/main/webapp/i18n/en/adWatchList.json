@@ -1,0 +1,27 @@
+{
+  "opusWebApp": {
+    "adWatchList": {
+      "home": {
+        "title": "Ad Watch Lists",
+        "createLabel": "Create a new Ad Watch List",
+        "createOrEditLabel": "Create or edit a Ad Watch List",
+        "notFound": "No Ad Watch Lists found"
+      },
+      "created": "A new Ad Watch List is created with identifier {{ param }}",
+      "updated": "A Ad Watch List is updated with identifier {{ param }}",
+      "deleted": "A Ad Watch List is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Ad Watch List {{ id }}?"
+      },
+      "detail": {
+        "title": "Ad Watch List"
+      },
+      "name": "Name",
+      "description": "Description",
+      "uid": "Uid",
+      "active": "Active",
+      "adWatchListItem": "Ad Watch List Item",
+      "adOrganization": "Ad Organization"
+    }
+  }
+}

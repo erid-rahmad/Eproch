@@ -47,6 +47,11 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
+    /**
+     * Derived from ScAccess.canWrite field.
+     */
+    private Boolean canWrite;
+
 
     private Long adWindowId;
     private String adWindowName;
@@ -172,6 +177,14 @@ public class AdMenuDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Boolean isCanWrite() {
+        return canWrite;
+    }
+
+    public void setCanWrite(Boolean canWrite) {
+        this.canWrite = canWrite;
     }
 
     public Long getAdWindowId() {

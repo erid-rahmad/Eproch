@@ -1,0 +1,65 @@
+{
+    "name": "PaDashboardPreference",
+    "fields": [
+        {
+            "fieldName": "columnNo",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "rowNo",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "paDashboardPreference",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adUser",
+            "otherEntityRelationshipName": "paDashboardPreference",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adUser",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "paDashboardItem",
+            "otherEntityRelationshipName": "paDashboardPreference",
+            "relationshipValidateRules": "required",
+            "relationshipName": "paDashboardItem",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210127052300",
+    "javadoc": "Per-user dashboard preference.\\n@author Ananta Aryadewa",
+    "entityTableName": "pa_dashboard_preference",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*"
+}

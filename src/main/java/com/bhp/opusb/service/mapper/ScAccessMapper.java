@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link ScAccess} and its DTO {@link ScAccessDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, ScAccessTypeMapper.class, ADWindowMapper.class, AdFormMapper.class, CDocumentTypeMapper.class, ADReferenceListMapper.class, ScAuthorityMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, ScAccessTypeMapper.class, ADWindowMapper.class, AdFormMapper.class, PaDashboardMapper.class, PaDashboardItemMapper.class, CDocumentTypeMapper.class, ADReferenceListMapper.class, ScAuthorityMapper.class})
 public interface ScAccessMapper extends EntityMapper<ScAccessDTO, ScAccess> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
@@ -21,6 +21,10 @@ public interface ScAccessMapper extends EntityMapper<ScAccessDTO, ScAccess> {
     @Mapping(source = "window.name", target = "windowName")
     @Mapping(source = "form.id", target = "formId")
     @Mapping(source = "form.name", target = "formName")
+    @Mapping(source = "paDashboard.id", target = "paDashboardId")
+    @Mapping(source = "paDashboard.name", target = "paDashboardName")
+    @Mapping(source = "paDashboardItem.id", target = "paDashboardItemId")
+    @Mapping(source = "paDashboardItem.name", target = "paDashboardItemName")
     @Mapping(source = "documentType.id", target = "documentTypeId")
     @Mapping(source = "documentType.name", target = "documentTypeName")
     @Mapping(source = "referenceList.id", target = "referenceListId")
@@ -33,6 +37,8 @@ public interface ScAccessMapper extends EntityMapper<ScAccessDTO, ScAccess> {
     @Mapping(source = "typeId", target = "type")
     @Mapping(source = "windowId", target = "window")
     @Mapping(source = "formId", target = "form")
+    @Mapping(source = "paDashboardId", target = "paDashboard")
+    @Mapping(source = "paDashboardItemId", target = "paDashboardItem")
     @Mapping(source = "documentTypeId", target = "documentType")
     @Mapping(source = "referenceListId", target = "referenceList")
     @Mapping(source = "authorityId", target = "authority")

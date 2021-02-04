@@ -1,0 +1,28 @@
+{
+  "opusWebApp": {
+    "paDashboardPreference": {
+      "home": {
+        "title": "Pa Dashboard Preferences",
+        "createLabel": "Buat Pa Dashboard Preference baru",
+        "createOrEditLabel": "Buat atau edit Pa Dashboard Preference",
+        "notFound": "No Pa Dashboard Preferences found"
+      },
+      "created": "Pa Dashboard Preference dengan id {{ param }} telah dibuat",
+      "updated": "Pa Dashboard Preference dengan id {{ param }} telah diperbaharui",
+      "deleted": "Pa Dashboard Preference dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Pa Dashboard Preference {{ id }}?"
+      },
+      "detail": {
+        "title": "Pa Dashboard Preference"
+      },
+      "columnNo": "Column No",
+      "rowNo": "Row No",
+      "uid": "Uid",
+      "active": "Active",
+      "adOrganization": "Ad Organization",
+      "adUser": "Ad User",
+      "paDashboardItem": "Pa Dashboard Item"
+    }
+  }
+}

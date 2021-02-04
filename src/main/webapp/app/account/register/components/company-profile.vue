@@ -61,17 +61,6 @@
                 </el-col>
             </el-row>
 
-            <!--<el-row :gutter="columnSpacing">
-                <el-col :span="24">
-                    <el-form-item required>
-                        <el-switch
-                            style="padding-left: 20px;"
-                            v-model="company.branch"
-                            :active-text="$t('register.basic.basic.branch')"
-                        />
-                    </el-form-item>
-                </el-col>
-            </el-row>-->
         </el-col>
 
 
@@ -114,6 +103,7 @@
                                 :limit="limit"
                                 :before-upload="handleBeforeUpload"
                                 :on-change="onUploadChange"
+                                :on-preview="handlePreview"
                                 :on-exceed="handleExceed"
                                 :on-remove="handleRemove"
                                 :on-error="onUploadError"
@@ -371,15 +361,7 @@
             v-model="company.fax" />
         </el-form-item>
       </el-col>
-      <!--<el-col :span="6">
-        <el-form-item :label="$t('register.basic.contact.email')" prop="email" required>
-          <el-input
-            class="form-input"
-            clearable
-            v-model="company.email" />
-        </el-form-item>
-      </el-col>-->
-      <el-col :span="6">
+      <el-col :span="12">
         <el-form-item :label="$t('register.basic.contact.website')" prop="website">
           <el-input
             class="form-input"

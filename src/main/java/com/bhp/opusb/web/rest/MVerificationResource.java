@@ -1,34 +1,5 @@
 package com.bhp.opusb.web.rest;
 
-import com.bhp.opusb.service.MVerificationService;
-import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.bhp.opusb.service.dto.MVerificationDTO;
-import com.bhp.opusb.service.dto.VerificationDTO;
-import com.bhp.opusb.service.dto.MVerificationCriteria;
-import com.bhp.opusb.service.MVerificationQueryService;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -36,6 +7,42 @@ import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
+import com.bhp.opusb.service.MVerificationQueryService;
+import com.bhp.opusb.service.MVerificationService;
+import com.bhp.opusb.service.dto.MVerificationCriteria;
+import com.bhp.opusb.service.dto.MVerificationDTO;
+import com.bhp.opusb.service.dto.VerificationDTO;
+import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  * REST controller for managing {@link com.bhp.opusb.domain.MVerification}.
@@ -64,9 +71,7 @@ public class MVerificationResource {
      * {@code POST  /m-verifications} : Create a new mVerification.
      *
      * @param mVerificationDTO the mVerificationDTO to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with
-     *         body the new mVerificationDTO, or with status
-     *         {@code 400 (Bad Request)} if the mVerification has already an ID.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mVerificationDTO, or with status {@code 400 (Bad Request)} if the mVerification has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/m-verifications")
@@ -81,16 +86,35 @@ public class MVerificationResource {
             .body(result);
     }
 
-    @PostMapping("/m-verifications/submit")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void submitEVerification(@Valid @RequestBody VerificationDTO verificationDTO) {
-        mVerificationService.submitEVerification(verificationDTO);
+    /**
+     * Create a new Document (header and lines).
+     * @param verificationDTO
+     * @return
+     * @throws URISyntaxException
+     */
+    @PostMapping("/m-verifications/create-document")
+    @PreAuthorize("hasRole('SUPPLIER')")
+    public ResponseEntity<MVerificationDTO> createDocument(@Valid @RequestBody VerificationDTO verificationDTO) throws URISyntaxException {
+        log.debug("REST request to save MVerification document : {}", verificationDTO);
+        MVerificationDTO result = mVerificationService.saveDocument(verificationDTO);
+        return ResponseEntity.created(new URI("/api/m-verifications/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 
-    @PutMapping("/m-verifications/submit")
-    @ResponseStatus(HttpStatus.OK)
-    public void submitUpdateEVerification(@Valid @RequestBody VerificationDTO verificationDTO) {
-        mVerificationService.updateDocumentStatus(verificationDTO);
+    /**
+     * Update an existing Document (header and lines).
+     * @param verificationDTO
+     * @return
+     * @throws URISyntaxException
+     */
+    @PutMapping("/m-verifications/update-document")
+    public ResponseEntity<MVerificationDTO> updateDocument(@Valid @RequestBody VerificationDTO verificationDTO) {
+        log.debug("REST request to update MVerification document : {}", verificationDTO);
+        MVerificationDTO result = mVerificationService.saveDocument(verificationDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 
     @GetMapping("/m-verifications/report/{verificationId}/{verificationNo}/{key}")

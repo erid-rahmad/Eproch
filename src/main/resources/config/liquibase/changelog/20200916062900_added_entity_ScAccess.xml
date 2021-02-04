@@ -110,4 +110,15 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20200127100700" author="Ananta Aryadewa">
+        <addColumn tableName="sc_access">
+            <column name="pa_dashboard_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="pa_dashboard_item_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

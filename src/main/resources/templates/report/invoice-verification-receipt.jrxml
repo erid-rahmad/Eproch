@@ -651,7 +651,7 @@
 		<band height="310">
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<staticText>
-				<reportElement x="200" y="0" width="70" height="15" uuid="59a961cc-e713-448f-9349-c546723ea2cb">
+				<reportElement x="150" y="0" width="70" height="15" uuid="59a961cc-e713-448f-9349-c546723ea2cb">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -659,7 +659,7 @@
 				<text><![CDATA[Subtotal]]></text>
 			</staticText>
 			<textField textAdjust="StretchHeight" pattern="#,###" isBlankWhenNull="false">
-				<reportElement style="Detail" positionType="Float" x="270" y="0" width="70" height="15" uuid="52fdbced-f159-4bed-8542-4d67d31a50a0">
+				<reportElement style="Detail" positionType="Float" x="220" y="0" width="120" height="15" uuid="52fdbced-f159-4bed-8542-4d67d31a50a0">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5f047378-0f82-4397-b22b-d97484962450"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -670,7 +670,7 @@
 				<textFieldExpression><![CDATA[$F{total_lines}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="200" y="15" width="70" height="15" uuid="b41b710a-a719-4160-bb7c-185bc683a120">
+				<reportElement x="150" y="15" width="70" height="15" uuid="b41b710a-a719-4160-bb7c-185bc683a120">
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 					<property name="com.jaspersoft.studio.unit.x" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -678,7 +678,7 @@
 				<text><![CDATA[Grand Total]]></text>
 			</staticText>
 			<textField textAdjust="StretchHeight" pattern="#,###" isBlankWhenNull="false">
-				<reportElement style="Detail" positionType="Float" x="270" y="15" width="70" height="15" uuid="f593e6ad-cba5-4d9e-8784-930e1f5f2c53">
+				<reportElement style="Detail" positionType="Float" x="220" y="15" width="120" height="15" uuid="f593e6ad-cba5-4d9e-8784-930e1f5f2c53">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="5f047378-0f82-4397-b22b-d97484962450"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -696,7 +696,7 @@
 				<text><![CDATA[Terbilang (Base)]]></text>
 			</staticText>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="false">
-				<reportElement style="Detail" positionType="Float" x="120" y="40" width="220" height="15" uuid="d3a86f18-bc3e-4742-9b5e-bbd83cbc9a67">
+				<reportElement style="Detail" positionType="Float" x="120" y="40" width="434" height="15" uuid="d3a86f18-bc3e-4742-9b5e-bbd83cbc9a67">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="444bef2e-59e8-4157-a72b-cd6840e36ebe"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
@@ -713,7 +713,7 @@
 				<text><![CDATA[Jatuh Tempo]]></text>
 			</staticText>
 			<textField textAdjust="StretchHeight" pattern="dd MMM yyyy" isBlankWhenNull="false">
-				<reportElement style="Detail" positionType="Float" x="120" y="55" width="220" height="15" uuid="d61dfe5a-bd9c-4829-b4cc-f7b1d8140f03">
+				<reportElement style="Detail" positionType="Float" x="120" y="55" width="434" height="15" uuid="d61dfe5a-bd9c-4829-b4cc-f7b1d8140f03">
 					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b4897de8-871e-4785-bfd4-38a9240036ab"/>
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>

@@ -34,7 +34,7 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
     private limit: number = 1;
     private action: string = "/api/c-attachments/upload";
     private accept: string = ".jpg, .jpeg, .png, .pdf, .doc, .docx";
-    
+
     @Watch('pays')
     setPayment(payment){
         this.pay = payment;
@@ -72,24 +72,38 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
             }
         });
     }
-    
-    private retrieveBank() {        
+
+    private retrieveBank() {
         this.dynamicWindowService('/api/c-banks')
-            .retrieve()
+            .retrieve({
+                criteriaQuery: 'active.equals=true',
+                paginationQuery: {
+                    page: 0,
+                    size: 1000,
+                    sort: ['name']
+                }
+            })
             .then(res=>{
                 this.banks = res.data;
             });
     }
 
-    private retrieveCurrency() {        
+    private retrieveCurrency() {
         this.dynamicWindowService('/api/c-currencies')
-            .retrieve()
+            .retrieve({
+                criteriaQuery: 'active.equals=true',
+                paginationQuery: {
+                    page: 0,
+                    size: 1000,
+                    sort: ['code']
+                }
+            })
             .then(res=>{
                 this.currencies = res.data;
             });
-                
+
     }
-    
+
     get fileList() {
         if ( ! this.pay.supportingfile) return [];
         return [this.pay.supportingfile];
@@ -97,6 +111,10 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
 
     onUploadChange(file: any) {
         this.pay.supportingfile = file;
+    }
+
+    handlePreview(file) {
+      window.open(file.response.downloadUri, '_blank');
     }
 
     handleRemove(files, fileList) {
@@ -110,9 +128,7 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
     onUploadSuccess(response: any) {
         console.log('File uploaded successfully ', response);
         this.pay.fileId = response.attachment.id;
-        (<ElForm>this.$refs.pay).validate((passed, errors) => {
-            this.pay.supportingfile != '';
-        });
+        (<ElForm>this.$refs.pay).clearValidate('supportingfile');
     }
 
     handleExceed(files, fileList) {
@@ -125,9 +141,9 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
           });
           return false;
         }
-        
+
     }
-    
+
     handleBeforeUpload(file: any) {
         // File size limitation
         const isLt5M = file.size / 1024 / 1024 < 5;
@@ -140,7 +156,7 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
           });
           return isLt5M;
         }
-    
+
         // File type restriction
         const name = file.name ? file.name : '';
         const ext = name
@@ -156,7 +172,7 @@ export default class PaymentInformationUpdate extends PaymentInformationUpdatePr
           });
           return !isExt;
         }
-        
+
     }
 
 }
