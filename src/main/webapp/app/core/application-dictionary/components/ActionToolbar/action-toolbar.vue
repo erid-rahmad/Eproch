@@ -4,7 +4,7 @@
       <el-button
         v-show="!isEditing"
         icon="el-icon-plus"
-        size="small"
+        size="mini"
         title="New (alt + a)"
         type="primary"
         @click="addRecord"
@@ -12,7 +12,7 @@
       <el-button
         v-show="recordCount && !isEditing"
         icon="el-icon-document-copy"
-        size="small"
+        size="mini"
         title="Copy (alt + d)"
         type="primary"
         @click="copyRecord"
@@ -22,7 +22,7 @@
       <el-button
         v-show="isEditing"
         icon="el-icon-check"
-        size="small"
+        size="mini"
         title="Save (alt + s)"
         type="primary"
         @click="saveRecord"
@@ -30,14 +30,14 @@
       <el-button
         v-show="isEditing"
         icon="el-icon-close"
-        size="small"
+        size="mini"
         title="Cancel (alt + z)"
         @click="cancelOperation"
       />
       <el-button
         v-show="recordCount && !isEditing"
         icon="el-icon-delete"
-        size="small"
+        size="mini"
         title="Delete (alt + del)"
         type="danger"
         @click="deleteRecord"
@@ -46,28 +46,28 @@
     <el-button-group v-show="!isEditing">
       <el-button
         icon="el-icon-refresh"
-        size="small"
+        size="mini"
         title="Refresh (alt + r)"
         type="primary"
         @click="refreshData"
       />
       <el-button
         icon="el-icon-search"
-        size="small"
+        size="mini"
         title="Search (alt + f)"
         type="primary"
         @click="openSearchWindow"
       />
       <el-button
         icon="el-icon-download"
-        size="small"
+        size="mini"
         title="Export"
         type="primary"
         @click="exportRecord"
       />
       <el-button
         icon="el-icon-printer"
-        size="small"
+        size="mini"
         title="Print"
         type="primary"
         v-if="windowName == 'Purchase Order'"
@@ -77,11 +77,11 @@
     <el-dropdown
       v-if="buttons.length"
       v-show="!isEditing"
-      size="small"
+      size="mini"
       @command="runProcess"
     >
       <el-button
-        size="small"
+        size="mini"
         type="primary"
       >
         <font-awesome-icon :icon="['fas', 'bolt']"/>
@@ -101,7 +101,7 @@
       <el-button
         icon="el-icon-s-grid"
         :plain="!gridView"
-        size="small"
+        size="mini"
         title="Toggle Layout (alt + g)"
         type="primary"
         @click="switchView"
@@ -110,7 +110,7 @@
         v-show="!isEditing"
         :disabled="atWindowRoot"
         icon="el-icon-arrow-up"
-        size="small"
+        size="mini"
         title="Go to Parent Tab (alt + up)"
         type="primary"
         @click="goToParentTab"
@@ -119,7 +119,7 @@
         v-show="!isEditing"
         :disabled="atLastTab"
         icon="el-icon-arrow-down"
-        size="small"
+        size="mini"
         title="Go to Child Tab (alt + down)"
         type="primary"
         @click="goToChildTab"
@@ -128,6 +128,7 @@
     <el-dropdown
       v-show="!isEditing && hasDocumentActions"
       ref="docActionButton"
+      size="mini"
       split-button
       :type="approved ? 'success' : 'primary'"
       @click="applyNextDocumentAction"
