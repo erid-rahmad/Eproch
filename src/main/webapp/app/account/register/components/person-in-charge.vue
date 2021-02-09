@@ -14,6 +14,7 @@
                 <el-button
                     type="primary"
                     icon="el-icon-plus"
+                    size="mini"
                     @click.native.prevent="addPerson('contacts')">
                     {{ $t('entity.action.add') }}
                 </el-button>
@@ -22,6 +23,7 @@
                 ref="contacts"
                 max-height="250"
                 style="width: 100%"
+                size="mini"
                 :data="contacts"
             >
                 <el-table-column
@@ -99,6 +101,7 @@
             <div class="toolbar float-top-right">
                 <el-button
                     type="primary"
+                    size="mini"
                     icon="el-icon-plus"
                     @click.native.prevent="addPerson('functionaries')">
                     {{ $t('entity.action.add') }}
@@ -108,6 +111,7 @@
                 ref="functionaries"
                 max-height="250"
                 style="width: 100%"
+                size="mini"
                 :data="functionaries"
             >
                 <el-table-column
@@ -172,8 +176,8 @@
                 </el-col>
             </el-row>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="hideDialog" icon="el-icon-close">{{ $t('entity.action.cancel') }}</el-button>
-                <el-button :loading="loading" type="primary" @click="saveDocument" icon="el-icon-check">{{ $t('entity.action.save') }}</el-button>
+                <el-button @click="hideDialog" size="mini" icon="el-icon-close">{{ $t('entity.action.cancel') }}</el-button>
+                <el-button :loading="loading" size="mini" type="primary" @click="saveDocument" icon="el-icon-check">{{ $t('entity.action.save') }}</el-button>
             </span>
         </el-dialog>
     </div>

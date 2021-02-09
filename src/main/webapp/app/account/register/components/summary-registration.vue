@@ -284,6 +284,7 @@
                             ref="mainDocuments"
                             max-height="250"
                             style="width: 100%"
+                            size="mini"
                             :data="mainDocuments"
                         >
                             <el-table-column
@@ -323,6 +324,7 @@
                             ref="additionalDocuments"
                             max-height="250"
                             style="width: 100%"
+                            size="mini"
                             :data="additionalDocuments"
                         >
                             <el-table-column
@@ -364,6 +366,7 @@
                         ref="contacts"
                         max-height="250"
                         style="width: 100%"
+                        size="mini"
                         :data="contacts"
                     >
                         <el-table-column
@@ -408,6 +411,7 @@
                         ref="functionaries"
                         max-height="250"
                         style="width: 100%"
+                        size="mini"
                         :data="functionaries"
                     >
                         <el-table-column
@@ -441,6 +445,7 @@
                         ref="payments"
                         max-height="250"
                         style="width: 100%"
+                        size="mini"
                         :data="payments"
                     >
                         <el-table-column
@@ -541,6 +546,7 @@
                     <el-table
                         max-height="250"
                         style="width: 100%"
+                        size="mini"
                         :data="taxes">
                         <el-table-column
                             fixed
