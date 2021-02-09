@@ -1,6 +1,7 @@
 package com.bhp.opusb.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.bhp.opusb.domain.CDocumentType;
 
@@ -15,4 +16,5 @@ import org.springframework.stereotype.Repository;
 public interface CDocumentTypeRepository extends JpaRepository<CDocumentType, Long>, JpaSpecificationExecutor<CDocumentType> {
 
   List<CDocumentType> findByName(String name);
+  Optional<CDocumentType> findFirstByName(String name);
 }

@@ -15,5 +15,6 @@ import org.springframework.stereotype.Repository;
 public interface CProductRepository extends JpaRepository<CProduct, Long>, JpaSpecificationExecutor<CProduct> {
 
   Optional<CProduct> findFirstByCode(String code);
+  Optional<CProduct> findFirstByName(String name);
   Optional<CProduct> findFirstByNameAndAdOrganizationId(String code, Long orgId);
 }

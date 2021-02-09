@@ -15,4 +15,6 @@ import org.springframework.stereotype.Repository;
 public interface CUnitOfMeasureRepository extends JpaRepository<CUnitOfMeasure, Long>, JpaSpecificationExecutor<CUnitOfMeasure> {
 
   Optional<CUnitOfMeasure> findFirstByCodeAndAdOrganizationId(String code, Long orgId);
+
+  Optional<CUnitOfMeasure> findFirstByName(String name);
 }

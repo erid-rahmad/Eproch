@@ -15,4 +15,5 @@ import org.springframework.stereotype.Repository;
 public interface CCurrencyRepository extends JpaRepository<CCurrency, Long>, JpaSpecificationExecutor<CCurrency> {
 
   Optional<CCurrency> findFirstByCode(String code);
+  Optional<CCurrency> findFirstByName(String name);
 }

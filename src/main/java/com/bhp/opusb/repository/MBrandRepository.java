@@ -1,5 +1,7 @@
 package com.bhp.opusb.repository;
 
+import java.util.Optional;
+
 import com.bhp.opusb.domain.MBrand;
 
 import org.springframework.data.jpa.repository.*;
@@ -11,4 +13,6 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface MBrandRepository extends JpaRepository<MBrand, Long>, JpaSpecificationExecutor<MBrand> {
+
+    Optional<MBrand> findFirstByName(String name);
 }
