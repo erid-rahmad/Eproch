@@ -22,11 +22,12 @@
             </div>
             -->
             <!--<p v-if="hasErrors" :text="errors.mainDocuments.message" class="error">All mandatory documents must be uploaded</p>-->
-            
+
             <el-table
                 ref="mainDocuments"
                 max-height="250"
                 style="width: 100%"
+                size="mini"
                 :rules="rules"
                 :data="mainDocuments"
             >
@@ -49,10 +50,10 @@
                     show-overflow-tooltip
                 >
                     <template scope="props">
-                        <el-link 
+                        <el-link
                             target="_blank"
-                            v-if="props.row.file" 
-                            :href="'' + props.row.file.response.downloadUri+''" 
+                            v-if="props.row.file"
+                            :href="'' + props.row.file.response.downloadUri+''"
                             :underline="false">
                             {{ props.row.file.response.attachment.fileName }}
                         </el-link>
@@ -83,7 +84,7 @@
                     </template>
                 </el-table-column>
             </el-table>
-            
+
         </div>
         <el-divider content-position="left"><h4>{{ $t('register.document.additional.title') }}</h4></el-divider>
         <p>
@@ -96,15 +97,17 @@
         </p>
         <div class="table-container">
             <div class="toolbar float-top-right">
-                <el-button 
-                    type="primary" 
-                    icon="el-icon-plus" 
+                <el-button
+                    type="primary"
+                    size="mini"
+                    icon="el-icon-plus"
                     @click.native.prevent="addDocument('additionalDocuments')">
                     {{ $t('entity.action.add') }}
                 </el-button>
             </div>
             <el-table
                 ref="additionalDocuments"
+                size="mini"
                 max-height="250"
                 style="width: 100%"
                 :data="additionalDocuments"
@@ -128,10 +131,10 @@
                     show-overflow-tooltip
                 >
                     <template scope="props">
-                        <el-link 
+                        <el-link
                             target="_blank"
-                            v-if="props.row.file" 
-                            :href="'' + props.row.file.response.downloadUri+''" 
+                            v-if="props.row.file"
+                            :href="'' + props.row.file.response.downloadUri+''"
                             :underline="false">
                             {{ props.row.file.response.attachment.fileName }}
                         </el-link>
@@ -180,8 +183,8 @@
                 </el-col>
             </el-row>
             <span slot="footer" class="dialog-footer">
-                <el-button @click="hideDialog" icon="el-icon-close">{{ $t('entity.action.cancel') }}</el-button>
-                <el-button :loading="loading" type="primary" @click="saveDocument" icon="el-icon-check">{{ $t('entity.action.save') }}</el-button>
+                <el-button @click="hideDialog" size="mini" icon="el-icon-close">{{ $t('entity.action.cancel') }}</el-button>
+                <el-button :loading="loading" size="mini" type="primary" @click="saveDocument" icon="el-icon-check">{{ $t('entity.action.save') }}</el-button>
             </span>
         </el-dialog>
     </div>

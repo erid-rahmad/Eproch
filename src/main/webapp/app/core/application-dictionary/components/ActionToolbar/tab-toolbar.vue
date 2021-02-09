@@ -30,7 +30,7 @@
       />
       <el-button
         v-show="!disabled && isEditing"
-        size="small"
+        size="mini"
         icon="el-icon-close"
         title="Cancel (shift + alt + z)"
         @click="cancelOperation"
