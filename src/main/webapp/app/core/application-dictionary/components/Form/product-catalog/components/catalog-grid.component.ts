@@ -114,6 +114,7 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
   }
 
   public refreshCatalogGrid(){
+    this.selectedRows = [];
     this.retrieveAllRecords();
   }
 
@@ -158,8 +159,6 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
           if(item.cGallery != null){
             if(item.cGallery.cGalleryItems.length){
               console.log(item.cGallery.cGalleryItems.length);
-              item.img = item.cGallery.cGalleryItems[0].cAttachment.fileName;
-              item.imgId = item.cGallery.cGalleryItems[0].cAttachment.id;
 							item.imgList = item.cGallery.cGalleryItems;
             }
           }
@@ -185,8 +184,17 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
       });
   }
 
-  displayImage(imgId, img){
-    return `http://localhost:9000/api/c-attachments/download/${imgId}-${img}`;
+  displayImage(imgList){
+    var x = 0;
+    var img = "";
+
+    for(x; x<imgList.length; x++){
+      if(imgList[x].preview){
+        img = `http://localhost:9000/api/c-attachments/download/${imgList[x].cAttachment.id}-${imgList[x].cAttachment.fileName}`;
+      }
+    }
+
+    return img;
   }
 
   displayImageList(imgList){

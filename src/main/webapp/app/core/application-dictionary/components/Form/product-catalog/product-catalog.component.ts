@@ -58,15 +58,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   onClick(value: string) {
     this.dialogType = value;
 
-    if(value == 'remove'){
-      this.dialogConfirmationVisible = true;
-      this.dialogTitle = "Remove Catalog";
-      this.dialogMessage = "Are you sure ?";
-      this.dialogButtonIcon = "el-icon-delete";
-      this.dialogButtonType = "danger";
-      this.dialogButton = "Remove";
-
-    } else if(value == 'import'){
+    if(value == 'import'){
       this.dialogConfirmationVisible = true;
       this.dialogTitle = "Import Catalog";
       this.dialogButtonIcon = "el-icon-upload2";
@@ -83,8 +75,29 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     } else if(value == 'filter') {
       this.activeName = "ALL";
       (<any>this.$refs.catalogGrid[0]).retrieveAllRecords();
-    } else {
+    } else if(value == 'add'){
       this.index = false;
+
+    } else {
+      if(this.setRows.length){
+        if(value == "remove"){
+          this.dialogConfirmationVisible = true;
+          this.dialogTitle = "Remove Catalog";
+          this.dialogMessage = "Are you sure to delete the selected record(s)?";
+          this.dialogButtonIcon = "el-icon-delete";
+          this.dialogButtonType = "danger";
+          this.dialogButton = "Remove";
+
+        }
+      } else {
+        const message = "Please select at least one item";
+        this.$notify({
+          title: 'Warning',
+          message: message.toString(),
+          type: 'warning',
+          duration: 3000
+        });
+      }
     }
 
   }
@@ -99,6 +112,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
 
   closeProductInformation(){
     this.index = true;
+    this.setRows = [];
   }
 
   private retrieveGetReferences(param: string) {

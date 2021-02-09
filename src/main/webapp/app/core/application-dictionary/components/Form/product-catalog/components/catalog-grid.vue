@@ -29,7 +29,7 @@
                     <div class="demo-image__preview">
                         <el-image
                             fit="cover"
-                            :src="displayImage(row.imgId, row.img)"
+                            :src="displayImage(row.imgList)"
                             :preview-src-list="displayImageList(row.imgList)">
                         </el-image>
                     </div>
@@ -75,7 +75,11 @@
                 min-width="100"
                 sortable
                 prop="price"
-                label="Price"/>
+                label="Price">
+                <template slot-scope="{ row }">
+                    {{ row.price | formatCurrency }}
+                </template>
+            </el-table-column>
 
         </el-table>
         <el-pagination
