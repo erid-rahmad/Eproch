@@ -7,7 +7,7 @@
                 <el-button
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-check"
                     v-loading.fullscreen.lock="fullscreenLoading"
@@ -16,14 +16,14 @@
                 <el-button
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="danger"
                     icon="el-icon-close"
                     @click="closeEVerificationUpdate"/>
 
                 <el-button
                     class="button"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-plus"
                     v-if="isDraft"
@@ -33,7 +33,7 @@
                 <el-button
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-plus"
                     v-if="isDraft"

@@ -7,7 +7,7 @@
                 <el-button
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="danger"
                     icon="el-icon-close"
                     @click="closeDetailVerification">

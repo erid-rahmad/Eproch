@@ -7,21 +7,21 @@
                         <el-button
                             class="button"
                             style="margin-left: 0px;"
-                            size="small"
+                            size="mini"
                             type="primary"
                             icon="el-icon-check"
                             @click="showDialogConfirmation('detail')" />
                         <el-button
                             class="button"
                             style="margin-left: 0px;"
-                            size="small"
+                            size="mini"
                             type="primary"
                             icon="el-icon-search"
                             @click.native.prevent="verificationFilter"/>
 
                         <el-button
                             class="button"
-                            size="small"
+                            size="mini"
                             type="primary"
                             icon="el-icon-printer"
                             @click="showDialogConfirmation('print')">
@@ -30,7 +30,7 @@
                         <el-button
                             class="button"
                             style="margin-left: 0px;"
-                            size="small"
+                            size="mini"
                             type="primary"
                             icon="el-icon-printer"
                             @click="showDialogConfirmation('printSummary')">
@@ -39,7 +39,7 @@
                         <el-button
                             class="button"
                             style="margin-left: 0px;"
-                            size="small"
+                            size="mini"
                             type="primary"
                             icon="el-icon-printer"
                             @click="showDialogConfirmation('printVerificationReceipt')">
@@ -48,7 +48,7 @@
 
                         <el-button
                             class="button"
-                            size="small"
+                            size="mini"
                             type="primary"
                             icon="el-icon-edit"
                             @click="showDialogConfirmation('update')">
@@ -58,7 +58,7 @@
                         <el-button
                             class="button"
                             style="margin-left: 0px;"
-                            size="small"
+                            size="mini"
                             type="primary"
                             icon="el-icon-download">
                             Export

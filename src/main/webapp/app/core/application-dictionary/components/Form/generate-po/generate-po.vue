@@ -6,7 +6,7 @@
                 <el-button
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-check"
                     @click="generatePurchaseOrder">

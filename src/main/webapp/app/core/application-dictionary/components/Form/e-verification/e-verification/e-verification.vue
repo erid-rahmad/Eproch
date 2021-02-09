@@ -7,28 +7,28 @@
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
-                        size="small"
+                        size="mini"
                         type="primary"
                         icon="el-icon-check"
                         @click="showDialogConfirmation('update')" />
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
-                        size="small"
+                        size="mini"
                         type="primary"
                         icon="el-icon-search"
                         @click.native.prevent="verificationFilter"/>
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
-                        size="small"
+                        size="mini"
                         type="primary"
                         @click="addEVerification()"
                         icon="el-icon-plus"/>
 
                     <el-button
                         class="button"
-                        size="small"
+                        size="mini"
                         type="danger"
                         icon="el-icon-delete"
                         :disabled="disabledButton"
@@ -36,7 +36,7 @@
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
-                        size="small"
+                        size="mini"
                         type="primary"
                         icon="el-icon-position"
                         :disabled="disabledButton"
@@ -46,7 +46,7 @@
 
                     <el-button
                         class="button"
-                        size="small"
+                        size="mini"
                         type="primary"
                         icon="el-icon-printer"
                         @click="showDialogConfirmation('print')">
@@ -55,7 +55,7 @@
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
-                        size="small"
+                        size="mini"
                         type="primary"
                         icon="el-icon-printer"
                         @click="showDialogConfirmation('printSummary')">
@@ -64,7 +64,7 @@
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
-                        size="small"
+                        size="mini"
                         type="primary"
                         icon="el-icon-download">
                         Export

@@ -9,7 +9,7 @@
         <el-col :span="12" align="end">
           <el-button
             icon="el-icon-delete"
-            size="small"
+            size="mini"
             type="danger"
             @click="removeAll"
           >
@@ -18,7 +18,7 @@
         </el-col>
       </el-row>
     </el-card>
-    
+
     <el-card
       v-for="itemCart in cart"
       :key="itemCart.vendorName"
@@ -99,7 +99,7 @@
         <el-col :span="12">
           <el-button
             icon="el-icon-goods"
-            size="small"
+            size="mini"
             @click="continueShopping"
           >
             Continue Shopping
@@ -114,7 +114,7 @@
             <el-col :span="7">
               <el-button
                 icon="el-icon-shopping-cart-full"
-                size="small"
+                size="mini"
                 type="primary"
               >
                 Purchase Requisition
@@ -130,7 +130,7 @@
 <style lang="scss" scoped>
 .shopping-cart {
   padding: 24px;
-  
+
   .el-card {
     margin-bottom: 16px;
 
@@ -140,7 +140,7 @@
       .currency {
         color: #409eff;
       }
-      
+
       .link {
         cursor: pointer;
       }

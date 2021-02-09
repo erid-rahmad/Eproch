@@ -6,7 +6,7 @@
                         <el-button
                             class="button"
                             style="margin-left: 0px;"
-                            size="small"
+                            size="mini"
                             type="primary"
                             icon="el-icon-search"
                             @click.native.prevent="verificationFilter"/>
@@ -14,7 +14,7 @@
                         <el-button
                             class="button"
                             style="margin-left: 0px;"
-                            size="small"
+                            size="mini"
                             type="primary"
                             @click="showDialogConfirmation('add')"
                             icon="el-icon-plus"/>
@@ -22,14 +22,14 @@
                         <el-button
                             class="button"
                             style="margin-left: 0px;"
-                            size="small"
+                            size="mini"
                             type="danger"
                             @click="showDialogConfirmation('remove')"
                             icon="el-icon-delete"/>
 
                         <el-button
                             class="button"
-                            size="small"
+                            size="mini"
                             type="primary"
                             @click="showDialogConfirmation('export')"
                             icon="el-icon-download">
@@ -65,7 +65,7 @@
                                 <el-col :span="1">
                                     <el-form-item label-width="5px">
                                         <el-button
-                                            size="medium"
+                                            size="mini"
                                             @click="verificationFilter"
                                             :loading="remoteProcessing"
                                             icon="el-icon-search"/>

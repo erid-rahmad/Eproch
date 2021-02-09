@@ -32,7 +32,7 @@
           </el-button>
           <el-button
             style="margin-left: 10px;"
-            size="small"
+            size="mini"
             type="success"
             @click="uploadFile"
           >
