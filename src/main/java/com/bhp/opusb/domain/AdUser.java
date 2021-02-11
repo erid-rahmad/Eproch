@@ -39,9 +39,8 @@ public class AdUser extends AbstractAuditingEntity {
     @Column(name = "active")
     private Boolean active;
 
-    @NotNull
     @Size(max = 20)
-    @Column(name = "phone", length = 20, nullable = false)
+    @Column(name = "phone", length = 20)
     private String phone;
 
     @Size(max = 30)
