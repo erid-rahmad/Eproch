@@ -526,7 +526,7 @@ enum AdWatchListActionType {
 entity AdUser {
 	uid UUID
 	active Boolean
-	phone String required maxlength(20)
+	phone String maxlength(20)
 	position String maxlength(30)
 
 	/** Whether it is a vendor or not */
