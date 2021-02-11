@@ -76,7 +76,6 @@
             <column name="user_id" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
-            <column name="code" type="string"/>
             <column name="phone" type="string"/>
             <column name="position" type="string"/>
             <column name="vendor" type="boolean"/>
@@ -105,6 +104,10 @@
 
     <changeSet id="20201203144300" author="Ananta Aryadewa">
         <dropColumn tableName="ad_user" columnName="code"/>
+    </changeSet>
+
+    <changeSet id="20210209174700" author="Ananta Aryadewa">
+        <dropNotNullConstraint tableName="ad_user" columnName="phone" />
     </changeSet>
 
 </databaseChangeLog>

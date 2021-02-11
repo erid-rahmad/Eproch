@@ -97,24 +97,11 @@
     </changeSet>
 
     <changeSet id="20200818020900" author="Ananta Aryadewa">
-        <dropColumn tableName="c_vendor_tax" columnName="tax_category_id"/>
         <renameColumn tableName="c_vendor_tax" oldColumnName="invoice" newColumnName="e_invoice" />
-        <renameColumn tableName="c_vendor_tax" oldColumnName="tax_rate_id" newColumnName="tax_id" />
         <modifyDataType tableName="c_vendor_tax" columnName="rate" newDataType="decimal(21,2)" />
     </changeSet>
 
-    <changeSet id="20201028020900-added1" author="jhipster-entity-audit">
-        <addColumn tableName="c_vendor_tax">
-            <column name="tax_category_id" type="bigint">
-                <constraints nullable="true"/>
-            </column>
-        </addColumn>
-
-        <dropNotNullConstraint tableName="c_vendor_tax" columnName="tax_id" />
-    </changeSet>
-
     <changeSet id="20201030020900-added1" author="Ananta Aryadewa">
-        <dropColumn tableName="c_vendor_tax" columnName="tax_id"/>
         <dropColumn tableName="c_vendor_tax" columnName="rate"/>
     </changeSet>
 

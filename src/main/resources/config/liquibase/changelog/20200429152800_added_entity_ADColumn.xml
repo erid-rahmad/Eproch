@@ -156,6 +156,33 @@
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
+    
+    <changeSet id="20200602152800-1" author="jhipster">
+        <addColumn tableName="ad_column">
+            <column name="display_logic" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="always_updatable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="copyable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="identifier" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="default_selection" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="selection_sequence" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_validation_rule_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </addColumn>
+    </changeSet>
 
     <changeSet id="20200629111200" author="Ananta Aryadewa">
         <addNotNullConstraint tableName="ad_column" columnName="sql_name"/>

@@ -60,7 +60,7 @@ public class FieldGeneratorProcessTrigger implements ProcessTrigger {
     ADTab tab = tabRecord.get();
     ADTable table = tableRepository.getOne(tab.getAdTable().getId());
 
-    Set<ADColumn> columns = table.getADColumns();
+    List<ADColumn> columns = table.getADColumns();
     List<ADField> fields = Stream.ofAll(columns)
       // Exclude system fields, virtual columns, and any existing fields.
       .filter(column -> !isSystemFields(column.getSqlName())

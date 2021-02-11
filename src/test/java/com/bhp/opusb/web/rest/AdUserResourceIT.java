@@ -201,25 +201,6 @@ public class AdUserResourceIT {
 
     @Test
     @Transactional
-    public void checkPhoneIsRequired() throws Exception {
-        int databaseSizeBeforeTest = adUserRepository.findAll().size();
-        // set the field null
-        adUser.setPhone(null);
-
-        // Create the AdUser, which fails.
-        AdUserDTO adUserDTO = adUserMapper.toDto(adUser);
-
-        restAdUserMockMvc.perform(post("/api/ad-users")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(adUserDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<AdUser> adUserList = adUserRepository.findAll();
-        assertThat(adUserList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllAdUsers() throws Exception {
         // Initialize the database
         adUserRepository.saveAndFlush(adUser);

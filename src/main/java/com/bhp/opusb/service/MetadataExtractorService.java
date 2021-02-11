@@ -1,9 +1,8 @@
 package com.bhp.opusb.service;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.bhp.opusb.config.integrator.MetadataExtractorIntegrator;
@@ -28,18 +27,17 @@ public class MetadataExtractorService {
         .map((persistentClass) -> {
           String entityName = persistentClass.getEntityName();
           ADTable table = new ADTable(persistentClass.getTable().getName());
-          Set<ADColumn> columns = getColumns(entityName);
-          table.setADColumns(columns);
+          table.setADColumns(getColumns(entityName));
           return table;
         })
         .collect(Collectors.toList());
   }
 
-  public Set<ADColumn> getColumns(String entityName) {
+  public List<ADColumn> getColumns(String entityName) {
     Metadata metadata = MetadataExtractorIntegrator.INSTANCE.getMetadata();
     PersistentClass persistentClass = metadata.getEntityBinding(entityName);
     Iterator<?> columnIterator = persistentClass.getTable().getColumnIterator();
-    Set<ADColumn> result = new HashSet<>();
+    List<ADColumn> result = new ArrayList<>();
 
     log.info("Getting columns for entityName: {}", entityName);
     while(columnIterator.hasNext()) {

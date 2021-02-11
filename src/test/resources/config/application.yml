@@ -13,6 +13,10 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
+logging:
+  level:
+    com.bhp.opusb: DEBUG
+
 spring:
   application:
     name: OpusWebApp
@@ -55,6 +59,21 @@ spring:
   mvc:
     favicon:
       enabled: false
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: always
+    overwrite-existing-jobs: true
+    properties:
+      org.quartz.scheduler.instanceId: AUTO
+      org.quartz.threadPool.threadCount: 2
+      org.quartz.jobStore:
+        class: org.quartz.impl.jdbcjobstore.JobStoreTX
+        driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+        isClustered: false
+      org.quartz.plugin:
+        shutdownhook:
+          class: org.quartz.plugins.management.ShutdownHookPlugin
   task:
     execution:
       thread-name-prefix: opus-web-app-task-
@@ -123,4 +142,6 @@ kafka:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
 
-# application:
+application:
+  attachment:
+    upload-dir: /home/aaryadewa/Server/attachment/eproc/test/

@@ -157,4 +157,21 @@ export default class DynamicWindowService {
         });
     });
   }
+
+  public import(data: FormData) {
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .post('/api/ad-tables/import', data, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then(function(res) {
+          resolve(res);
+        })
+        .catch(function(err) {
+          reject(err);
+        });
+    })
+  }
 }

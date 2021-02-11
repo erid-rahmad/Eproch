@@ -123,6 +123,17 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20200602153000-1" author="jhipster">
+        <addColumn tableName="ad_tab">
+            <column name="icon_name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="tab_sequence" type="integer">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
     <changeSet id="20200629111500" author="Ananta Aryadewa">
         <addColumn tableName="ad_tab">
             <column name="uid" type="${uuidType}">

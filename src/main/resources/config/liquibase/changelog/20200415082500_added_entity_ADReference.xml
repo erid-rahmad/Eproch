@@ -78,6 +78,14 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20200602082500-1" author="jhipster">
+        <addColumn tableName="ad_reference">
+            <column name="ad_organization_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
     <changeSet id="20200629110600" author="Ananta Aryadewa">
         <addColumn tableName="ad_reference">
             <column name="uid" type="${uuidType}">

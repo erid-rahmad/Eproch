@@ -57,6 +57,10 @@ export default class ActionToolbar extends ActionToolbarProps {
     this.$emit('run-trigger', triggerDef);
   }
 
+  private get activeWindow() {
+    return this.fullPath === this.$route.fullPath;
+  }
+
   get defaultDocumentAction() {
     if (this.approved) {
       return 'Approved';
@@ -88,7 +92,9 @@ export default class ActionToolbar extends ActionToolbarProps {
       'alt+d': this.copyRecord,
       'alt+s': this.saveRecord,
       'alt+del': this.deleteRecord,
-      'alt+z': this.cancelOperation
+      'alt+z': this.cancelOperation,
+      'alt+i': this.importRecord,
+      'alt+e': this.exportRecord
     };
   }
 
@@ -127,7 +133,6 @@ export default class ActionToolbar extends ActionToolbarProps {
   created() {
     this.fullPath = this.$route.fullPath;
     this.eventBus.$on('record-saved', this.onSaveSuccess);
-    console.log('action-toolbar created. granted docActions: %O', accountStore.grantedDocActions);
   }
 
   beforeDestroy() {
@@ -192,11 +197,16 @@ export default class ActionToolbar extends ActionToolbarProps {
     });
   }
 
+  public importRecord() {
+    if (this.activeWindow && !this.editing) {
+      this.$emit('import');
+    }
+  }
+
   public exportRecord() {
-    if (!this.activeWindow) return;
-    this.eventBus.$emit('export-record', {
-      isGridView: this.gridView
-    });
+    if (this.activeWindow && !this.editing) {
+      this.$emit('export');
+    }
   }
 
   public printRecord() {
@@ -242,10 +252,6 @@ export default class ActionToolbar extends ActionToolbarProps {
     this.$emit('toggle-view', {
       gridView
     });
-  }
-
-  private get activeWindow() {
-    return this.fullPath === this.$route.fullPath;
   }
 
   private retrieveDocumentActions(docTypeId: number) {
