@@ -792,6 +792,43 @@ entity MPurchaseOrderLine {
 	active Boolean
 }
 
+entity CBiddingType {
+    name String required
+	description String
+	costEvaluationSelection Boolean
+    selectedWinner Boolean
+	uid UUID
+	active Boolean
+}
+
+entity CEventType {
+	name String required
+    description String
+	uid UUID
+	active Boolean
+}
+
+entity CEventTypeline {
+	event String required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CBiddingCriteria {
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CBiddingSubCriteria {
+	name String required
+	description String
+	uid UUID
+	active Boolean
+}
+
 // Enums
 
 enum Depreciation {
@@ -1115,6 +1152,21 @@ relationship ManyToOne {
 	MPurchaseOrderLine{costCenter} to CCostCenter
 	MPurchaseOrderLine{uom required} to CUnitOfMeasure
 	MPurchaseOrderLine{vendor} to CVendor
+
+	CBiddingType{adOrganization required} to ADOrganization
+	CBiddingType{productClassification required} to CProductClassification
+
+	CEventType{adOrganization required} to ADOrganization
+	CEventType{bindingType required} to CBiddingType
+
+	CEventTypeline{adOrganization required} to ADOrganization
+    CEventTypeline{eventType required} to CEventType
+
+	CBiddingCriteria{adOrganization required} to ADOrganization
+
+	CBiddingSubCriteria{adOrganization required} to ADOrganization
+	CBiddingSubCriteria{biddingCriteria required} to CBiddingCriteria
+	CBiddingSubCriteria{adUser required} to AdUser
 }
 
 // Allow filtering to all entities.
