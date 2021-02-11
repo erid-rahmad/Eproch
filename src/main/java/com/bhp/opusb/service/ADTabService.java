@@ -1,7 +1,10 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.domain.ADTab;
+import com.bhp.opusb.domain.ADTable;
 import com.bhp.opusb.repository.ADTabRepository;
+import com.bhp.opusb.repository.ADTableRepository;
 import com.bhp.opusb.service.dto.ADTabDTO;
 import com.bhp.opusb.service.mapper.ADTabMapper;
 import org.slf4j.Logger;
@@ -12,7 +15,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link ADTab}.
@@ -24,11 +31,12 @@ public class ADTabService {
     private final Logger log = LoggerFactory.getLogger(ADTabService.class);
 
     private final ADTabRepository aDTabRepository;
-
+    private final ADTableRepository adTableRepository;
     private final ADTabMapper aDTabMapper;
 
-    public ADTabService(ADTabRepository aDTabRepository, ADTabMapper aDTabMapper) {
+    public ADTabService(ADTabRepository aDTabRepository, ADTableRepository adTableRepository, ADTabMapper aDTabMapper) {
         this.aDTabRepository = aDTabRepository;
+        this.adTableRepository = adTableRepository;
         this.aDTabMapper = aDTabMapper;
     }
 
@@ -69,6 +77,57 @@ public class ADTabService {
         log.debug("Request to get ADTab : {}", id);
         return aDTabRepository.findById(id)
             .map(aDTabMapper::toDto);
+    }
+
+    /**
+     * Get the deeply nested tab tree of a window.
+     * @param id the id of the window.
+     * @return the tree structure of the tab.
+     */
+    @Transactional(readOnly = true)
+    public Map<String, Object> getTabTree(Long tabId) {
+        Map<String, Object> tabTree = new LinkedHashMap<>();
+        aDTabRepository.findById(tabId).ifPresent(tab -> mapColumns(tabTree, tab, null));
+
+        return tabTree;
+    }
+
+    private void mapColumns(Map<String, Object> tabTree, ADTab tab, ADTab parentTab) {
+        ADTable table = tab.getAdTable();
+
+        tabTree.put("tableName", table.getName());
+        for (ADColumn column : table.getADColumns()) {
+            if (Boolean.TRUE.equals(column.isForeignKey())) {
+                adTableRepository.findFirstByName(column.getImportedTable())
+                    .ifPresent(linkedTable -> {
+                        if (parentTab == null || ! parentTab.getAdTable().equals(linkedTable)) {
+                            tabTree.put(column.getSqlName() + "@" + linkedTable.getName(), buildLinkedTab(linkedTable));
+                        }
+                    });
+            } else {
+                tabTree.put(column.getSqlName(), column.getType());
+            }
+        }
+
+        if (!tab.getADTabs().isEmpty()) {
+            tabTree.put("children", buildTabChildren(tab));
+        }
+    }
+
+    private Map<String, Object> buildLinkedTab(ADTable linkedTable) {
+        Map<String, Object> tab = new LinkedHashMap<>();
+        for (ADColumn column : linkedTable.getADColumns()) {
+            tab.put(column.getSqlName(), column.getType());
+        }
+        return tab;
+    }
+
+    private List<Map<String, Object>> buildTabChildren(ADTab parentTab) {
+        return parentTab.getADTabs().stream().map(tab -> {
+            Map<String, Object> tabTree = new LinkedHashMap<>();
+            mapColumns(tabTree, tab, parentTab);
+            return tabTree;
+        }).collect(Collectors.toList());
     }
 
     /**

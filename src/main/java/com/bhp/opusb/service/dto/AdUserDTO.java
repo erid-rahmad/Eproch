@@ -26,7 +26,6 @@ public class AdUserDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
-    @NotNull
     @Size(max = 20)
     private String phone;
 

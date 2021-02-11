@@ -1,7 +1,10 @@
 import ADColumnService from '@/entities/ad-column/ad-column.service';
 import ADTabService from '@/entities/ad-tab/ad-tab.service';
 import ADWindowService from '@/entities/ad-window/ad-window.service';
+import ImportWizard from '@/shared/components/ImportWizard/index.vue';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import buildCriteriaQueryString from '@/shared/filter/filters';
+import { IADField } from '@/shared/model/ad-field.model';
 import { ADTab, IADTab } from '@/shared/model/ad-tab.model';
 import { getValidatorType } from '@/utils/validate';
 import { debounce, isFinite, isFunction } from 'lodash';
@@ -9,6 +12,7 @@ import { Pane, Splitpanes } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
+import WatchListMixin from '../../mixins/WatchListMixin';
 import ActionToolbar from '../ActionToolbar/action-toolbar.vue';
 import TabToolbar from "../ActionToolbar/tab-toolbar.vue";
 import ContextVariableAccessor from "../ContextVariableAccessor";
@@ -17,16 +21,13 @@ import GridView from "../GridView/grid-view.vue";
 import SearchPanel from "../SearchPanel/search-panel.vue";
 import TreeView from '../TreeView/tree-view.vue';
 import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
-import { IADField } from '@/shared/model/ad-field.model';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import { WindowStoreModule as windowStore } from '@/shared/config/store/window-store';
-import WatchListMixin from '../../mixins/WatchListMixin';
 
 @Component({
   components: {
     Splitpanes,
     Pane,
     ActionToolbar,
+    ImportWizard,
     TabToolbar,
     DetailView,
     GridView,
@@ -87,11 +88,13 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor, Watch
   docActionMessage: string = null;
   docActionPopupVisible: boolean = false;
 
+  importWizardVisible: boolean = false;
+
   /**
    * Stack of the main tab. The last item in the stack
    * is considered as main tab.
    */
-  public tabStack: any[] = [];
+  public tabStack: IADTab[] = [];
 
   /**
    * Prevents load the same child tabs multiple times.
@@ -280,6 +283,35 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor, Watch
     }
   }
 
+  public onExportClicked() {
+    console.log('Export is not yet implemented.');
+  }
+
+  public onImportClicked() {
+    this.importWizardVisible = true;
+  }
+
+  public onImportError(error?: any) {
+    console.log('Import error.', error);
+    this.$message({
+      message: 'Error when importing the records',
+      type: 'error'
+    });
+  }
+
+  public onImportSubmitted() {
+    this.importWizardVisible = false;
+    this.$message('Records is being processed in the background');
+  }
+
+  public onImportWizardOpened() {
+    (<any>this.$refs.importWizard).retrieveTabTree(this.mainTab.id);
+  }
+
+  public onImportWizardClosed() {
+    (<any>this.$refs.importWizard).reset();
+  }
+
   public onProcessCompleted(response: any) {
     this.$message.success('Process has been successfully executed');
     this.refreshWindow();
@@ -308,6 +340,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor, Watch
 
   public hideDeleteConfirmation() {
     this.deleteConfirmationVisible = false;
+  }
+
+  public importData() {
+    (<any>this.$refs.importWizard).submit();
   }
 
   public deleteRecords() {
@@ -496,7 +532,6 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor, Watch
    * @param parentTabId Main/header tab don't have it.
    */
   private retrieveTabs(...args: any[]): Promise<any[]> {
-  /* private retrieveTabs(parentTabId?: number, tabId?: number, callback?: (tab: IADTab, index: number) => void): void { */
     let parentTabId: number;
     let tabId: number;
     let callback: (tab: IADTab, index: number) => Promise<void>;
@@ -546,7 +581,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor, Watch
           sort: ['tabSequence,asc', 'name,asc']
         })
         .then(async (res) => {
-          let tabs = res.data;
+          let tabs: IADTab[] = res.data;
           for (let [index, tab] of tabs.entries()) {
             if (callback) {
               // Invoke the callback for modifying the tab if necessary.

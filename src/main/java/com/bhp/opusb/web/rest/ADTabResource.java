@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -110,6 +111,13 @@ public class ADTabResource {
         Page<ADTabDTO> page = aDTabQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/ad-tabs/tree/{id}")
+    public ResponseEntity<Map<String, Object>> getTabTree(@PathVariable Long id) {
+        log.debug("REST request to get tab tree of tab ID : {}", id);
+        Map<String, Object> tabTree = aDTabService.getTabTree(id);
+        return ResponseEntity.ok().body(tabTree);
     }
 
     /**

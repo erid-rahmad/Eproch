@@ -69,9 +69,12 @@ public class DatabaseMetadataRepository {
           table.setLastModifiedDate(null);
 
           log.debug("Find table {}", tableName);
-          List<ADTable> record = adTableRepository.findByName(tableName);
+          Optional<ADTable> record = adTableRepository.findFirstByName(tableName);
 
-          if (record.isEmpty()) {
+          if (record.isPresent()) {
+            log.debug("table exists");
+            synchronizeColumns(record.get(), reference, metaData);
+          } else {
             log.debug("table doesn't exists");
             String type = rs.getString("TABLE_TYPE");
             table.adOrganization(organization).view(type.equals("VIEW")).active(true);
@@ -79,9 +82,6 @@ public class DatabaseMetadataRepository {
             adTableRepository.save(table);
             adColumnRepository.saveAll(table.getADColumns());
             result.add(table);
-          } else {
-            log.debug("table exists");
-            synchronizeColumns(record.get(0), reference, metaData);
           }
 
         }

@@ -90,7 +90,7 @@
             </column>
         </addColumn>
     </changeSet>
-    <!--
+    
     <changeSet id="20200619072400-1-add-column" author="dian-tri-budianto">
         <addColumn tableName="c_country">
             <column name="uid" type="${uuidType}">
@@ -105,6 +105,6 @@
     <changeSet id="20200710174005" author="Ananta Aryadewa">
         <addNotNullConstraint tableName="c_country" columnName="ad_organization_id" />
     </changeSet>
-    -->
+   
 
 </databaseChangeLog>

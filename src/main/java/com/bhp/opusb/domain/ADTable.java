@@ -1,7 +1,7 @@
 package com.bhp.opusb.domain;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.persistence.Column;
@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -69,8 +70,9 @@ public class ADTable extends AbstractAuditingEntity {
     @OneToMany(mappedBy = "adTable")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Where(clause = "active = true")
+    @OrderBy("name")
     @JsonManagedReference
-    private Set<ADColumn> aDColumns = new HashSet<>();
+    private List<ADColumn> aDColumns = new ArrayList<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -171,11 +173,11 @@ public class ADTable extends AbstractAuditingEntity {
         this.active = active;
     }
 
-    public Set<ADColumn> getADColumns() {
+    public List<ADColumn> getADColumns() {
         return aDColumns;
     }
 
-    public ADTable aDColumns(Set<ADColumn> aDColumns) {
+    public ADTable aDColumns(List<ADColumn> aDColumns) {
         this.aDColumns = aDColumns;
         return this;
     }
@@ -192,7 +194,7 @@ public class ADTable extends AbstractAuditingEntity {
         return this;
     }
 
-    public void setADColumns(Set<ADColumn> aDColumns) {
+    public void setADColumns(List<ADColumn> aDColumns) {
         this.aDColumns = aDColumns;
     }
 

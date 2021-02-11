@@ -1,6 +1,6 @@
 package com.bhp.opusb.repository;
 
-import java.util.List;
+import java.util.Optional;
 
 import com.bhp.opusb.domain.ADTable;
 
@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ADTableRepository extends JpaRepository<ADTable, Long>, JpaSpecificationExecutor<ADTable> {
 
-  List<ADTable> findByName(String name);
+  Optional<ADTable> findFirstByName(String name);
 }

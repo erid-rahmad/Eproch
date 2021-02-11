@@ -82,7 +82,7 @@
         </loadData>
     </changeSet>
 
-    <!-- <changeSet id="20200619072800-1-add-column" author="dian-tri-budianto">
+    <changeSet id="20200619072800-1-add-column" author="dian-tri-budianto">
         <addColumn tableName="c_location">
             <column name="uid" type="${uuidType}">
                 <constraints nullable="true" />
@@ -91,7 +91,7 @@
                 <constraints nullable="true" />
             </column>
         </addColumn>
-    </changeSet> -->
+    </changeSet>
 
     <changeSet id="20200710174002" author="Ananta Aryadewa">
         <addNotNullConstraint tableName="c_location" columnName="ad_organization_id" />

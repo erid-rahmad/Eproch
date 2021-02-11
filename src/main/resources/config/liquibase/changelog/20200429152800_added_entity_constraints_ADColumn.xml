@@ -34,6 +34,10 @@
 
     </changeSet>
 
+    <changeSet id="20200602152800-2" author="jhipster">
+        <dropColumn tableName="ad_column" columnName="ad_client_id" />
+    </changeSet>
+
     <changeSet id="20200917170600" author="Ananta Aryadewa">
 
         <addForeignKeyConstraint baseColumnNames="ad_validation_rule_id"

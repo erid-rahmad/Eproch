@@ -13,7 +13,6 @@
             "fieldName": "phone",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required",
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "20"

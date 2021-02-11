@@ -82,6 +82,14 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20200602152900-1" author="jhipster">
+        <addColumn tableName="ad_window">
+            <column name="title_logic" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
     <changeSet id="20200629110000" author="Ananta Aryadewa">
         <addColumn tableName="ad_window">
             <column name="uid" type="${uuidType}">

@@ -23,6 +23,8 @@
           @copy="onCopyRecord"
           @delete="showDeleteConfirmation"
           @edit-mode-change="onEditModeChanged"
+          @export="onExportClicked"
+          @import="onImportClicked"
           @open-search-panel="openSearchPanel"
           @refresh="refreshWindow"
           @run-trigger="runTrigger"
@@ -241,6 +243,37 @@
             </el-button>
           </div>
         </template>
+      </el-dialog>
+      <el-dialog
+        :visible.sync="importWizardVisible"
+        title="Import Data"
+        width="80%"
+        @opened="onImportWizardOpened"
+        @closed="onImportWizardClosed"
+      >
+        <import-wizard
+          ref="importWizard"
+          :table-name="mainTab.adTableName"
+          @submitted="onImportSubmitted"
+          @error="onImportError"
+        ></import-wizard>
+        <div slot="footer">
+          <el-button
+            icon="el-icon-check"
+            size="mini"
+            type="primary"
+            @click="importData"
+          >
+            {{ $t('entity.action.import') }}
+          </el-button>
+          <el-button
+            icon="el-icon-close"
+            size="mini"
+            @click="importWizardVisible = false"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+        </div>
       </el-dialog>
     </div>
   </div>

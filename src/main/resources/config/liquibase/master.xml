@@ -25,7 +25,6 @@
     <include file="config/liquibase/changelog/20200429153000_added_entity_ADTab.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200429153100_added_entity_ADField.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200429153200_added_entity_ADFieldGroup.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200601164200_added_entity_AdValidationRule.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200619072400_added_entity_CCountry.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200619072500_added_entity_CCurrency.xml" relativeToChangelogFile="false"/>
@@ -76,8 +75,6 @@
     <include file="config/liquibase/changelog/20200918073400_added_entity_CProductCategoryAccount.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200921090000_added_entity_CProductClassification.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200922060500_added_entity_CProduct.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200923060900_added_entity_COrganization.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200923061000_added_entity_COrganizationInfo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200923061100_added_entity_CWarehouse.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200923061200_added_entity_CLocator.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200925064700_added_entity_AdCallout.xml" relativeToChangelogFile="false"/>
@@ -157,8 +154,6 @@
     <include file="config/liquibase/changelog/20200918073400_added_entity_constraints_CProductCategoryAccount.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200921090000_added_entity_constraints_CProductClassification.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200922060500_added_entity_constraints_CProduct.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200923060900_added_entity_constraints_COrganization.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200923061000_added_entity_constraints_COrganizationInfo.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200923061100_added_entity_constraints_CWarehouse.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200923061200_added_entity_constraints_CLocator.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200925064700_added_entity_constraints_AdCallout.xml" relativeToChangelogFile="false"/>
@@ -179,13 +174,4 @@
     <include file="config/liquibase/changelog/20210127032100_added_entity_constraints_PaDashboardItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210127032200_added_entity_constraints_PaDashboardPreference.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
-
-    <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200602082600_updated_entity_ADReferenceList.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200602152700_updated_entity_ADTable.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200602152800_updated_entity_ADColumn.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200602152900_updated_entity_ADWindow.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200602153000_updated_entity_ADTab.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200602153100_updated_entity_ADField.xml" relativeToChangelogFile="false"/>
-    <include file="config/liquibase/changelog/20200602192000_updated_entity_ADOrganization.xml" relativeToChangelogFile="false"/>
 </databaseChangeLog>
