@@ -36,6 +36,8 @@
 
     <changeSet id="20200818021200" author="Ananta Aryadewa">
 
+        <dropColumn tableName="c_vendor_tax" columnName="tax_category_id"/>
+        <renameColumn tableName="c_vendor_tax" oldColumnName="tax_rate_id" newColumnName="tax_id" />
         <addForeignKeyConstraint baseColumnNames="tax_id"
                                  baseTableName="c_vendor_tax"
                                  constraintName="fk_c_vendor_tax_tax_id"
@@ -46,14 +48,19 @@
 
     <changeSet id="20201028020900-added-foreignkey1" author="dian-tri-budianto">
 
+        <addColumn tableName="c_vendor_tax">
+            <column name="tax_category_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
+        </addColumn>
+
         <addForeignKeyConstraint baseColumnNames="tax_category_id"
                                  baseTableName="c_vendor_tax"
                                  constraintName="fk_c_vendor_tax_tax_category_id"
                                  referencedColumnNames="id"
                                  referencedTableName="c_tax_category"/>
 
-        <dropForeignKeyConstraint baseTableName="c_vendor_tax"
-                                 constraintName="fk_c_vendor_tax_tax_id"/>
+        <dropColumn tableName="c_vendor_tax" columnName="tax_id"/>
 
     </changeSet>
 

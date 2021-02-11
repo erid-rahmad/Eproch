@@ -74,6 +74,8 @@
     "form": {
       "username.label": "Username",
       "username.placeholder": "Username anda",
+      "password.label": "Password",
+      "password.placeholder": "Password anda",
       "currentpassword.label": "Password sekarang",
       "currentpassword.placeholder": "Password sekarang",
       "newpassword.label": "Password baru",
@@ -92,6 +94,7 @@
         },
         "register": {
           "noaccount": "Anda belum punya akun?",
+          "label": "Mendaftar",
           "link": "Buat akun baru anda disini"
         }
       },
@@ -136,7 +139,13 @@
       "edit": "Ubah",
       "open": "Buka",
       "save": "Simpan",
-      "view": "Lihat"
+      "add": "Tambah",
+      "get": "Ambil",
+      "filter": "Filter",
+      "submit": "Submit",
+      "view": "Lihat",
+      "import": "Impor",
+      "export": "Ekspor"
     },
     "detail": {
       "field": "Inputan",
@@ -155,7 +164,8 @@
       "maxbytes": "Inputan ini tidak boleh lebih dari {{ max }} bytes.",
       "pattern": "Inputan ini harus mengikuti pola {{ pattern }}.",
       "number": "Inputan ini harus angka.",
-      "datetimelocal": "Inputan ini harus tanggal dan jam."
+      "datetimelocal": "Inputan ini harus tanggal dan jam.",
+      "patternLogin": "Inputan ini hanya menerima huruf, angka dan alamat e-mail."
     }
   },
   "error": {

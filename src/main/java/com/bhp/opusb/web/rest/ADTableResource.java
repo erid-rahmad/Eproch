@@ -1,5 +1,6 @@
 package com.bhp.opusb.web.rest;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -9,8 +10,10 @@ import javax.validation.Valid;
 
 import com.bhp.opusb.service.ADTableQueryService;
 import com.bhp.opusb.service.ADTableService;
+import com.bhp.opusb.service.ImportExportService;
 import com.bhp.opusb.service.dto.ADTableCriteria;
 import com.bhp.opusb.service.dto.ADTableDTO;
+import com.bhp.opusb.service.dto.ImportParameterDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 
 import org.slf4j.Logger;
@@ -27,7 +30,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -49,11 +54,13 @@ public class ADTableResource {
     private String applicationName;
 
     private final ADTableService aDTableService;
+    private final ImportExportService importExportService;
 
     private final ADTableQueryService aDTableQueryService;
 
-    public ADTableResource(ADTableService aDTableService, ADTableQueryService aDTableQueryService) {
+    public ADTableResource(ADTableService aDTableService, ImportExportService importExportService, ADTableQueryService aDTableQueryService) {
         this.aDTableService = aDTableService;
+        this.importExportService = importExportService;
         this.aDTableQueryService = aDTableQueryService;
     }
 
@@ -74,6 +81,13 @@ public class ADTableResource {
         return ResponseEntity.created(new URI("/api/ad-tables/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @PostMapping("/ad-tables/import")
+    public ResponseEntity<Void> uploadFile(@RequestParam MultipartFile file, @RequestParam ImportParameterDTO config) throws IOException {
+        log.debug("REST request to import ADTable. file: {}, config: {}", file, config);
+        importExportService.importCsv(file.getInputStream(), config);
+        return ResponseEntity.ok().build();
     }
 
     /**
