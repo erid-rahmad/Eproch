@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,7 +20,6 @@ import com.bhp.opusb.service.mapper.CAttachmentMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
@@ -55,8 +55,10 @@ public class CAttachmentService {
 
         try {
             Files.createDirectory(uploadPath);
+        } catch(FileAlreadyExistsException e) {
+            log.info("Upload path is already exist. Not creating.");
         } catch (IOException e) {
-            log.error("Error creating directory", e);
+            log.warn("Error creating directory. {}", e.getLocalizedMessage());
         }
     }
 
