@@ -106,8 +106,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 "/api/c-attachments/upload"
             ).permitAll()
             .antMatchers("/api/**").authenticated()
-            .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
-            .antMatchers("/websocket/**").permitAll()
+            .antMatchers("/websocket/tracker").hasAuthority(AuthoritiesConstants.SYSTEM)
+            .antMatchers("/websocket/**").hasAuthority(AuthoritiesConstants.USER)
             .antMatchers("/management/health").permitAll()
             .antMatchers("/management/info").permitAll()
             .antMatchers("/management/prometheus").permitAll()

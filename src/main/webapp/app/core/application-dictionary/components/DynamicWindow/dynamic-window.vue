@@ -4,7 +4,7 @@
       class="window-control-bar"
       :gutter="0"
     >
-      <el-col :span="12">
+      <el-col :span="24">
         <action-toolbar
           ref="mainToolbar"
           :approved="approved"
@@ -49,8 +49,6 @@
             </el-breadcrumb-item>
           </transition-group>
         </el-breadcrumb>
-      </el-col>
-      <el-col :span="12">
         <el-pagination
           ref="toolbarPagination"
           layout="prev, jumper, total, next"
