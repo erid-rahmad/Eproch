@@ -2,15 +2,14 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.InstantFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.InstantFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -43,6 +42,7 @@ public class AdUserCriteria implements Serializable, Criteria {
     private InstantFilter lastLoginDate;
 
     private LongFilter userId;
+    private StringFilter userLogin;
 
     private LongFilter cVendorId;
 
@@ -61,6 +61,7 @@ public class AdUserCriteria implements Serializable, Criteria {
         this.failedLoginCount = other.failedLoginCount == null ? null : other.failedLoginCount.copy();
         this.lastLoginDate = other.lastLoginDate == null ? null : other.lastLoginDate.copy();
         this.userId = other.userId == null ? null : other.userId.copy();
+        this.userLogin = other.userLogin == null ? null : other.userLogin.copy();
         this.cVendorId = other.cVendorId == null ? null : other.cVendorId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
@@ -142,6 +143,14 @@ public class AdUserCriteria implements Serializable, Criteria {
         this.userId = userId;
     }
 
+    public StringFilter getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(StringFilter userLogin) {
+        this.userLogin = userLogin;
+    }
+
     public LongFilter getCVendorId() {
         return cVendorId;
     }
@@ -178,6 +187,7 @@ public class AdUserCriteria implements Serializable, Criteria {
             Objects.equals(failedLoginCount, that.failedLoginCount) &&
             Objects.equals(lastLoginDate, that.lastLoginDate) &&
             Objects.equals(userId, that.userId) &&
+            Objects.equals(userLogin, that.userLogin) &&
             Objects.equals(cVendorId, that.cVendorId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
     }
@@ -194,6 +204,7 @@ public class AdUserCriteria implements Serializable, Criteria {
         failedLoginCount,
         lastLoginDate,
         userId,
+        userLogin,
         cVendorId,
         adOrganizationId
         );
@@ -211,6 +222,7 @@ public class AdUserCriteria implements Serializable, Criteria {
                 (failedLoginCount != null ? "failedLoginCount=" + failedLoginCount + ", " : "") +
                 (lastLoginDate != null ? "lastLoginDate=" + lastLoginDate + ", " : "") +
                 (userId != null ? "userId=" + userId + ", " : "") +
+                (userLogin != null ? "userLogin=" + userLogin + ", " : "") +
                 (cVendorId != null ? "cVendorId=" + cVendorId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";

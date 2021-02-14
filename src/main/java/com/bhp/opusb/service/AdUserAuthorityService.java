@@ -1,8 +1,8 @@
 package com.bhp.opusb.service;
 
+import java.util.Objects;
 import java.util.Optional;
 
-import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.AdUserAuthority;
 import com.bhp.opusb.domain.Authority;
 import com.bhp.opusb.domain.ScAuthority;
@@ -10,11 +10,13 @@ import com.bhp.opusb.domain.User;
 import com.bhp.opusb.repository.AdUserAuthorityRepository;
 import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.ScAuthorityRepository;
+import com.bhp.opusb.repository.UserRepository;
 import com.bhp.opusb.service.dto.AdUserAuthorityDTO;
 import com.bhp.opusb.service.mapper.AdUserAuthorityMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,13 +39,16 @@ public class AdUserAuthorityService {
 
     private final AdUserAuthorityMapper adUserAuthorityMapper;
 
+    private final CacheManager cacheManager;
+
     public AdUserAuthorityService(AdUserAuthorityRepository adUserAuthorityRepository,
             AdUserAuthorityMapper adUserAuthorityMapper, AdUserRepository adUserRepository,
-            ScAuthorityRepository scAuthorityRepository) {
+            ScAuthorityRepository scAuthorityRepository, CacheManager cacheManager) {
         this.adUserAuthorityRepository = adUserAuthorityRepository;
         this.adUserRepository = adUserRepository;
         this.scAuthorityRepository = scAuthorityRepository;
         this.adUserAuthorityMapper = adUserAuthorityMapper;
+        this.cacheManager = cacheManager;
     }
 
     /**
@@ -64,6 +69,7 @@ public class AdUserAuthorityService {
             .ifPresent(user -> {
                 if (authorityRecord.isPresent()) {
                     user.getUser().getAuthorities().add(authorityRecord.get().getAuthority());
+                    clearUserCaches(user.getUser());
                 }
             });
 
@@ -103,15 +109,20 @@ public class AdUserAuthorityService {
      */
     public void delete(Long id) {
         log.debug("Request to delete AdUserAuthority : {}", id);
-        Optional<AdUserAuthority> record = adUserAuthorityRepository.findById(id);
-
-        if (record.isPresent()) {
-            AdUserAuthority userAuthority = record.get();
-            Authority authority = userAuthority.getAuthority().getAuthority();
-            User user = userAuthority.getUser().getUser();
-            user.getAuthorities().remove(authority);
+        adUserAuthorityRepository.findById(id)
+            .ifPresent(userAuthority -> {
+                Authority authority = userAuthority.getAuthority().getAuthority();
+                User user = userAuthority.getUser().getUser();
+                user.getAuthorities().remove(authority);
+                adUserAuthorityRepository.delete(userAuthority);
+                clearUserCaches(user);
+            });
+    }
+    
+    private void clearUserCaches(User user) {
+        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
+        if (user.getEmail() != null) {
+            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
-
-        adUserAuthorityRepository.deleteById(id);
     }
 }
