@@ -11,6 +11,8 @@ public class ImportParameterDTO implements Serializable {
   private String delimiter = ",";
   private String lineSeparator = "\n";
   private long maxRows = -1;
+  private boolean insertOnly = false;
+  private int batchSize = 20;
   private Map<String, ImportCsvColumn> fieldsMap;
 
   public String getTableName() {
@@ -45,6 +47,22 @@ public class ImportParameterDTO implements Serializable {
     this.maxRows = maxRows;
   }
 
+  public boolean isInsertOnly() {
+    return insertOnly;
+  }
+
+  public void setInsertOnly(boolean insertOnly) {
+    this.insertOnly = insertOnly;
+  }
+
+  public int getBatchSize() {
+    return batchSize;
+  }
+
+  public void setBatchSize(int batchSize) {
+    this.batchSize = batchSize;
+  }
+
   public Map<String, ImportCsvColumn> getFieldsMap() {
     return fieldsMap;
   }
@@ -61,5 +79,4 @@ public class ImportParameterDTO implements Serializable {
       ", tableName=" + tableName +
     "]";
   }
-
 }
