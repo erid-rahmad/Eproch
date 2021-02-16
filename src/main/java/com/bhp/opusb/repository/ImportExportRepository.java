@@ -79,7 +79,6 @@ public class ImportExportRepository {
   public long findOne(String tableName, Map<String, Object> values) {
     long id = 0;
     Map<String, Object> keyFields = new HashMap<>();
-    log.debug("Find one {}, fields: {}", tableName, values);
 
     for (Map.Entry<String, Object> entry : values.entrySet()) {
       if ((tableName.equals("c_product") && entry.getKey().equals("name"))
@@ -100,10 +99,11 @@ public class ImportExportRepository {
         .where(keyFields)
         .build();
 
+      log.debug("Find one {}. sql: {}, fields: {}", tableName, builder.getSql(), keyFields);
       id = jdbcTemplate.queryForObject(builder.getSql(), builder.getParameters().toArray(), Long.class);
       log.debug("{} record found with ID: {}", tableName, id);
     } catch (DataAccessException e) {
-      log.info("Record not found.");
+      log.info("Record not found. {}", e.getMessage());
     }
 
     return id;
