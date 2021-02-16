@@ -254,6 +254,6 @@ public class ImportExportRepository {
    */
   private boolean isUniqueField(String fieldName) {
     return fieldName.equals("id") || fieldName.equals("code") || fieldName.equals("name") || fieldName.equals("value")
-        || fieldName.equals("login") || fieldName.equals("email") || fieldName.equals("document_no");
+        || fieldName.equals("login") || fieldName.equals("email") || fieldName.equals("document_no") || fieldName.endsWith("_id");
   }
 }
