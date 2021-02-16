@@ -39,10 +39,7 @@ export default class ImportWizard extends ImportWizardProps {
 
   private dragging: boolean = false;
 
-  private excludedColumns = new Set([
-    'id', 'created_by', 'created_date', 'last_modified_by', 'last_modified_date',
-    'uid'
-  ]);
+  private excludedColumns = new Set([ 'uid' ]);
 
   loadingColumnDefinitions: boolean = false;
   columnDefinitions: any[] = [];

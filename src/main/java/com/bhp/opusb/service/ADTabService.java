@@ -97,6 +97,8 @@ public class ADTabService {
 
         tabTree.put("tableName", table.getName());
         for (ADColumn column : table.getADColumns()) {
+            tabTree.put(column.getSqlName(), column.getType());
+
             if (Boolean.TRUE.equals(column.isForeignKey())) {
                 adTableRepository.findFirstByName(column.getImportedTable())
                     .ifPresent(linkedTable -> {
@@ -104,8 +106,6 @@ public class ADTabService {
                             tabTree.put(column.getSqlName() + "@" + linkedTable.getName(), buildLinkedTab(linkedTable));
                         }
                     });
-            } else {
-                tabTree.put(column.getSqlName(), column.getType());
             }
         }
 
