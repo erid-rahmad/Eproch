@@ -79,6 +79,7 @@ public class ImportExportRepository {
   public long findOne(String tableName, Map<String, Object> values) {
     long id = 0;
     Map<String, Object> keyFields = new HashMap<>();
+    log.debug("Find one {}, fields: {}", tableName, values);
 
     for (Map.Entry<String, Object> entry : values.entrySet()) {
       if ((tableName.equals("c_product") && entry.getKey().equals("name"))
@@ -89,7 +90,7 @@ public class ImportExportRepository {
     }
 
     if (keyFields.isEmpty()) {
-      log.warn("There is no index key for looking up the record");
+      log.debug("There is no index key for looking up the record");
       return id;
     }
 
@@ -100,6 +101,7 @@ public class ImportExportRepository {
         .build();
 
       id = jdbcTemplate.queryForObject(builder.getSql(), builder.getParameters().toArray(), Long.class);
+      log.debug("{} record found with ID: {}", tableName, id);
     } catch (DataAccessException e) {
       log.info("Record not found.");
     }
@@ -167,7 +169,6 @@ public class ImportExportRepository {
    * @param records
    */
   public void save(String sql, List<List<Object>> records) {
-    log.debug("Batch save the records. total: {}", records.size());
     jdbcTemplate.batchUpdate(sql, records, 20, (ps, fields) -> {
       for (int i = 0; i < fields.size(); ++i) {
         ps.setObject(i + 1, fields.get(i));
@@ -183,8 +184,9 @@ public class ImportExportRepository {
    * @param parametersOnly
    * @return
    */
-  private Either<SqlBuilder, List<Object>> buildSql(String tableName, Map<String, Object> record, boolean insertOnly, boolean parametersOnly) {
-    final Map<String, Map<String, Object>> linkedTableMap = new LinkedHashMap<>();
+  private Either<SqlBuilder, List<Object>> buildSql(String tableName, Map<String, Object> record, boolean insertOnly,
+      boolean parametersOnly) {
+    final Map<String, Map<String, Object>> linkedTableMap = new HashMap<>();
     final Map<String, Object> tableFields = new LinkedHashMap<>();
 
     for (Map.Entry<String, Object> entry : record.entrySet()) {
@@ -192,32 +194,25 @@ public class ImportExportRepository {
       final Object value = entry.getValue();
 
       if (key.contains(".")) {
-        if (value == null) {
-          continue;
-        }
-
         final int separatorIndex = key.indexOf(".");
         final String linkedTableKey = key.substring(0, separatorIndex);
-        final String[] linkedKeys = linkedTableKey.split("@");
         final String linkedTableField = key.substring(separatorIndex + 1);
-        final String temporaryKey = "#" + linkedKeys[1];
-        final Map<String, Object> linkedTableRecord = linkedTableMap.computeIfAbsent(linkedKeys[1], mapKey -> new LinkedHashMap<>());
 
-        linkedTableRecord.put(linkedTableField, value);
-        tableFields.computeIfAbsent(temporaryKey, tmp -> linkedKeys[0]);
+        linkedTableMap.computeIfAbsent(linkedTableKey, mapKey -> new LinkedHashMap<>()).put(linkedTableField, value);
       } else {
         tableFields.put(key, value);
       }
     }
 
-    linkedTableMap.forEach((table, data) -> {
+    linkedTableMap.forEach((fieldKey, data) -> {
+      final String[] linkedKeys = fieldKey.split("@");
+
       if (hasUniqueFields(data)) {
-        long id = findOrCreate(table, data);
-        String linkedFieldName = (String) tableFields.get("#" + table);
-        tableFields.put(linkedFieldName, id);
+        long id = findOrCreate(linkedKeys[1], data);
+        tableFields.put(linkedKeys[0], id);
+      } else {
+        tableFields.put(linkedKeys[0], null);
       }
-      
-      tableFields.remove("#" + table);
     });
 
     if (insertOnly) {
@@ -249,7 +244,7 @@ public class ImportExportRepository {
    * Checks whether the map of fields contains unique fields.
    */
   private boolean hasUniqueFields(Map<String, Object> fields) {
-    return fields.entrySet().stream().anyMatch(entry -> isUniqueField(entry.getKey()));
+    return fields.entrySet().stream().anyMatch(entry -> entry.getValue() != null && isUniqueField(entry.getKey()));
   }
 
   /**
@@ -259,6 +254,6 @@ public class ImportExportRepository {
    */
   private boolean isUniqueField(String fieldName) {
     return fieldName.equals("id") || fieldName.equals("code") || fieldName.equals("name") || fieldName.equals("value")
-        || fieldName.equals("login") || fieldName.equals("email");
+        || fieldName.equals("login") || fieldName.equals("email") || fieldName.equals("document_no");
   }
 }

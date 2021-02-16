@@ -27,6 +27,10 @@ public class AdColumnUtil {
    * @return
    */
   public static Object formatValue(String rawValue, ADColumnType fieldType) {
+    if (rawValue == null) {
+      return null;
+    }
+
     Object result = rawValue;
 
     if (ADColumnType.INTEGER.equals(fieldType)) {
@@ -56,8 +60,8 @@ public class AdColumnUtil {
     } else if (ADColumnType.BIG_DECIMAL.equals(fieldType)) {
       result = new BigDecimal(rawValue);
     } else if (ADColumnType.BOOLEAN.equals(fieldType)) {
-      result = rawValue != null && (rawValue.equals("1") || rawValue.equalsIgnoreCase("Y")
-          || rawValue.equalsIgnoreCase("YES") || rawValue.equalsIgnoreCase("TRUE"));
+      result = rawValue.equals("1") || rawValue.equalsIgnoreCase("Y")
+          || rawValue.equalsIgnoreCase("YES") || rawValue.equalsIgnoreCase("TRUE");
     } else if (ADColumnType.LOCAL_DATE.equals(fieldType)) {
       // e.g. yyyy-MM-dd
       result = LocalDate.parse(rawValue, DateTimeFormatter.ISO_LOCAL_DATE);
