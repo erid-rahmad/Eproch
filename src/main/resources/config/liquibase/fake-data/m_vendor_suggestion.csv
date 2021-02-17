@@ -1,0 +1,11 @@
+id;uid;active;bidding_id;ad_organization_id;business_sub_category_id;vendor_id
+1;4f9b05c9-1115-4cbd-94a9-621adf4def0d;true;1;1;1;1
+2;0cea4dad-67df-4fe7-8011-c1b40fc98239;false;2;2;2;2
+3;82c82605-c1c3-4763-925e-e21d534dc275;false;3;3;3;3
+4;094314e1-fe35-4ebd-b9d9-ec7e90f87ecf;true;4;4;4;4
+5;d3a61f3d-7746-4151-85b6-ae588bbb73ec;false;5;5;5;5
+6;bebe2fb0-0376-4319-9ab6-1cf6695883f5;true;6;6;6;6
+7;2ad5b46b-72ac-4071-b0de-bedf86206fbd;true;7;7;7;7
+8;2e2f52c9-d6ca-4df3-bff8-abbe55503f18;true;8;8;8;8
+9;3ce8a3f0-3739-48e8-9d2f-e7c89c55b2e3;false;9;9;9;9
+10;68ce288b-ff8a-4dd4-bf1e-f115f25ece03;false;10;10;10;10

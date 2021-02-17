@@ -1,0 +1,11 @@
+id;uid;active;bidding_id;ad_organization_id;attachment_id
+1;e22ed881-96fd-4cf6-bfe1-f3138400f016;false;1;1;1
+2;ac331ebc-96da-462c-8315-90b341590a48;false;2;2;2
+3;48b3c059-cd42-4609-baef-064450ecb840;true;3;3;3
+4;def83316-c948-4237-acb3-e53131ffea88;true;4;4;4
+5;697975ed-0bec-4e56-9014-7e07cc70650e;true;5;5;5
+6;7e21576b-6928-44e8-b831-284ec52a1ecd;false;6;6;6
+7;5ddae400-8992-4822-908f-ed9c00e0517f;true;7;7;7
+8;a77e50d8-961a-46fb-a3cd-6246ab6c6090;false;8;8;8
+9;69cad5bd-f889-4fe1-8b2f-75b1b95ec067;true;9;9;9
+10;28d91bc7-1b49-4ad8-aa89-b33400660039;false;10;10;10

@@ -829,6 +829,67 @@ entity CBiddingSubCriteria {
 	active Boolean
 }
 
+entity MBidding {
+    biddingNo String required unique
+	name String required
+    vendorSelection String
+	ceilingPrice BigDecimal
+    estimatedPrice BigDecimal
+    documentAction String required maxlength(10)
+	documentStatus String required maxlength(10)
+	approved Boolean
+	processed Boolean
+	dateReject LocalDate
+	dateApprove LocalDate
+	uid UUID
+	active Boolean
+}
+
+entity MBiddingLine {
+    quantity BigDecimal required
+    ceilingPrice BigDecimal required
+    totalCeilingPrice BigDecimal
+    deliveryDate LocalDate required
+    remark String
+    grandTotal BigDecimal
+    uid UUID
+	active Boolean
+}
+
+entity MProjectInformation {
+    uid UUID
+	active Boolean
+}
+
+entity MBiddingSchedule {
+    startDate LocalDate
+    endDate LocalDate
+    uid UUID
+	active Boolean
+}
+
+entity MDocumentSchedule {
+    docEvent String required
+    uid UUID
+	active Boolean
+}
+
+entity MVendorInvitation {
+    uid UUID
+	active Boolean
+}
+
+entity MVendorSuggestion {
+    uid UUID
+	active Boolean
+}
+
+entity MVendorScoring {
+    percentage BigDecimal
+    uid UUID
+	active Boolean
+}
+
 // Enums
 
 enum Depreciation {
@@ -1167,6 +1228,49 @@ relationship ManyToOne {
 	CBiddingSubCriteria{adOrganization required} to ADOrganization
 	CBiddingSubCriteria{biddingCriteria required} to CBiddingCriteria
 	CBiddingSubCriteria{adUser required} to AdUser
+
+    MBidding{adOrganization required} to ADOrganization
+    MBidding{costCenter required} to CCostCenter
+    MBidding{requisition required} to MRequisition
+    MBidding{biddingType required} to CBiddingType
+    MBidding{eventType required} to CEventType
+    MBidding{adUser required} to AdUser
+
+    MBiddingLine{bidding required} to MBidding
+    MBiddingLine{adOrganization required} to ADOrganization
+    MBiddingLine{costCenter required} to CCostCenter
+    MBiddingLine{product required} to CProduct
+    MBiddingLine{uom required} to CUnitOfMeasure
+
+    MProjectInformation{bidding required} to MBidding
+    MProjectInformation{adOrganization required} to ADOrganization
+    MProjectInformation{attachment required} to CAttachment
+
+    MBiddingSchedule{bidding required} to MBidding
+    MBiddingSchedule{adOrganization required} to ADOrganization
+    MBiddingSchedule{eventTypeLine required} to CEventTypeline
+
+    MDocumentSchedule{bidding required} to MBidding
+    MDocumentSchedule{adOrganization required} to ADOrganization
+    MDocumentSchedule{vendorSubmission required} to MBiddingSchedule
+    MDocumentSchedule{vendorEvaluation required} to MBiddingSchedule
+
+    MVendorInvitation{bidding required} to MBidding
+    MVendorInvitation{adOrganization required} to ADOrganization
+    MVendorInvitation{businessClassification required} to CBusinessCategory
+    MVendorInvitation{businessCategory required} to CBusinessCategory
+    MVendorInvitation{businessSubCategory required} to CBusinessCategory
+
+    MVendorSuggestion{bidding required} to MBidding
+    MVendorSuggestion{adOrganization required} to ADOrganization
+    MVendorSuggestion{businessSubCategory required} to CBusinessCategory
+    MVendorSuggestion{vendor required} to CVendor
+
+    MVendorScoring{bidding required} to MBidding
+    MVendorScoring{adOrganization required} to ADOrganization
+    MVendorScoring{biddingCriteria required} to CBiddingCriteria
+    MVendorScoring{biddingSubCriteria required} to CBiddingSubCriteria
+    MVendorScoring{adUser required} to AdUser
 }
 
 // Allow filtering to all entities.
