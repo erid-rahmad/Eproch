@@ -136,7 +136,7 @@ public class MVerificationService {
         } else if (approval) {
             eventName = "INVOICE_APPROVED";
             verification.dateApprove(LocalDate.now())
-                .payStatus("U")
+                .payStatus("N")
                 .documentAction(DocumentUtil.STATUS_APPROVE)
                 .documentStatus(DocumentUtil.STATUS_APPROVE)
                 .approved(true)

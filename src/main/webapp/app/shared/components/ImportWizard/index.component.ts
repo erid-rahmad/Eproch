@@ -10,6 +10,8 @@ interface ICsvImportParameter {
   fieldsMap: Record<string, ICsvFieldsMap>;
   maxRows: number;
   tableName: string;
+  insertOnly: boolean;
+  batchSize: number;
 }
 
 interface ICsvFieldsMap {
@@ -37,10 +39,7 @@ export default class ImportWizard extends ImportWizardProps {
 
   private dragging: boolean = false;
 
-  private excludedColumns = new Set([
-    'id', 'created_by', 'created_date', 'last_modified_by', 'last_modified_date',
-    'uid'
-  ]);
+  private excludedColumns = new Set([ 'uid' ]);
 
   loadingColumnDefinitions: boolean = false;
   columnDefinitions: any[] = [];
@@ -49,7 +48,9 @@ export default class ImportWizard extends ImportWizardProps {
     delimiter: ',',
     fieldsMap: {},
     maxRows: -1,
-    tableName: null
+    tableName: null,
+    insertOnly: false,
+    batchSize: 20
   };
 
   delimiterOptions = [
@@ -82,7 +83,6 @@ export default class ImportWizard extends ImportWizardProps {
   }
 
   onDropToHeader(headerIndex: number, result: any) {
-    console.log('header column index', headerIndex);
 
     this.tableHeaders = this.tableHeaders.map((header, index) => {
       if (index === headerIndex) {
@@ -103,7 +103,7 @@ export default class ImportWizard extends ImportWizardProps {
     this.tableData = results
     this.tableHeaders = headers.map(header => {
       let targetColumn = this.columnDefinitions.find(def => {
-        const colName = def.name === 'value' ? 'code' : def.name;
+        const colName = def.value === 'value' ? 'code' : def.value;
         return colName === header.toLowerCase();
       });
 
@@ -122,7 +122,6 @@ export default class ImportWizard extends ImportWizardProps {
 
   highlightCell(index: number, highlight: boolean = true) {
     if (this.dragging) {
-      console.log('over', index);
       // Highlight the hovered column.
       const newHeader = {...this.tableHeaders[index]};
       newHeader.highlight = highlight;
@@ -156,29 +155,35 @@ export default class ImportWizard extends ImportWizardProps {
         continue;
       }
 
-      const value = item[key];
+      const record = item[key];
 
       if (key.includes('@')) {
-        const linkedDefs = this.mapColumnDefinition(value, key);
+        const linkedDefs = this.mapColumnDefinition(record, key);
         defs = defs.concat(linkedDefs);
       } else {
         if (this.excludedColumns.has(key)) {
           continue;
         }
 
+        const type = record;
         let name = key;
         let label = key;
+        let value = key;
 
         if (prefix) {
+          let linkedFieldName = prefix.split('@')[0];
+          linkedFieldName = linkedFieldName.substring(0, linkedFieldName.lastIndexOf('_'));
           name = `${prefix}.${key}`;
-          label = `<em class="linked-table">${prefix.split('@')[1]}</em>_${key}`;
+          label = `<em class="linked-table">${linkedFieldName}</em>_${key}`;
+          value = `${linkedFieldName}_${key}`;
         }
 
         defs.push({
           id: generateRandomString(10),
           name,
           label,
-          type: value
+          type,
+          value
         });
       }
     }
@@ -247,7 +252,6 @@ export default class ImportWizard extends ImportWizardProps {
   private applyDrag(arr: any[], dragResult: any) {
     const { removedIndex, addedIndex, payload } = dragResult;
 
-    console.log('removed: %s, added: %s, payload: %O', removedIndex, addedIndex, payload);
     if ((removedIndex === null && addedIndex === null) || removedIndex === addedIndex) {
       return arr;
     }

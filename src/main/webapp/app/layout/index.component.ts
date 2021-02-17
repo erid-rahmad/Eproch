@@ -1,14 +1,15 @@
-import { Component, Inject, Watch } from 'vue-property-decorator'
-import { mixins } from 'vue-class-component'
-import { DeviceType, AppStoreModule as appStore } from '@/shared/config/store/app-store'
-import { SettingsStoreModule as settingsStore } from '@/shared/config/store/settings-store'
-import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
+import NotificationService from '@/core/notification/notification.service'
 import RightPanel from '@/shared/components/RightPanel/index.vue'
-import ResizeMixin from './mixin/resize'
-import { AccountStoreModule as accountStore} from '@/shared/config/store/account-store'
-import TranslationService from '../locale/translation.service'
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store'
+import { AppStoreModule as appStore, DeviceType } from '@/shared/config/store/app-store'
+import { SettingsStoreModule as settingsStore } from '@/shared/config/store/settings-store'
 import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store'
-import NotificationService from '@/core/notification/notification.service';
+import { formatNotificationTitle } from '@/utils/string-utils'
+import { mixins } from 'vue-class-component'
+import { Component, Inject, Watch } from 'vue-property-decorator'
+import TranslationService from '../locale/translation.service'
+import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
+import ResizeMixin from './mixin/resize'
 
 @Component({
   name: 'Layout',
@@ -26,7 +27,7 @@ export default class extends mixins(ResizeMixin) {
   @Inject('translationService') private translationService: () => TranslationService;
   private currentLanguage = translationStore.language;
 
-  private notificationService: NotificationService;
+  private notificationService: NotificationService = new NotificationService();
   
   get authenticated(): boolean {
     return accountStore.authenticated;
@@ -54,26 +55,40 @@ export default class extends mixins(ResizeMixin) {
   }
 
   @Watch('authenticated')
-  onAuthenticatedChanged(authenticated) {
+  onAuthenticatedChanged(authenticated: boolean) {
+    this.init(authenticated);
+  }
+
+  created() {
+    this.translationService().refreshTranslation(this.currentLanguage);
+  }
+
+  mounted() {
+    this.init(this.authenticated);
+  }
+
+  beforeDestroy() {
+    this.notificationService.unsubscribe();
+    this.notificationService.disconnect();
+  }
+
+  private init(authenticated: boolean) {
     if (authenticated) {
       this.notificationService.connect();
       this.notificationService.subscribe(accountStore.userDetails.userLogin);
       this.notificationService.receive().subscribe(data => {
         this.$notify({
+          duration: 0,
           message: data.message,
-          title: data.type,
+          showClose: true,
+          title: formatNotificationTitle(data.type),
           type: data.status?.toLowerCase() || 'info'
-        })
+        });
       });
     } else {
       this.notificationService.unsubscribe();
       this.notificationService.disconnect();
     }
-  }
-
-  created() {
-    this.translationService().refreshTranslation(this.currentLanguage);
-    this.notificationService = new NotificationService();
   }
 
   handleClickOutside() {

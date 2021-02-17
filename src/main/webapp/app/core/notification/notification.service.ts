@@ -29,7 +29,7 @@ export default class NotificationService {
     }
     const socket = new SockJS(url);
     this.stompClient = Stomp.over(socket);
-    this.stompClient.connect({}, () => this.afterConnect());
+    this.stompClient.connect(this.buildHeaders(authToken), () => this.afterConnect());
   }
 
   public afterConnect() {
@@ -55,9 +55,8 @@ export default class NotificationService {
   public subscribe(username: string): void {
     this.connection.then(() => {
       this.subscriber = this.stompClient.subscribe(`/queue/notification/${username}`, data => {
-        console.log('notified', data);
-        this.listenerObserver.next(data.body);
-      });
+        this.listenerObserver.next(JSON.parse(data.body));
+      }, this.buildHeaders());
     });
   }
 
@@ -75,5 +74,9 @@ export default class NotificationService {
 
   public createConnection(): Promise<any> {
     return new Promise(resolve => (this.connectedPromise = resolve));
+  }
+
+  private buildHeaders(token: string = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken')) {
+    return token ? { Authorization: token } : {};
   }
 }

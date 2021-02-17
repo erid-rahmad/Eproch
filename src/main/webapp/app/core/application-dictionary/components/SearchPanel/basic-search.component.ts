@@ -64,7 +64,7 @@ export default class BasicSearch extends BasicSearchProps {
     for (let field of this.fields) {
       const column = field.adColumn;
       const fieldName = field.virtualColumnName || column?.name;
-      const queryName = this.row[column.name];
+      const queryName = this.row[fieldName];
 
       if (!queryName)
         continue;

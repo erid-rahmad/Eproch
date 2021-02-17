@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import com.bhp.opusb.config.Constants;
@@ -21,6 +22,7 @@ import com.bhp.opusb.service.mapper.AdUserMapper;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -45,14 +47,18 @@ public class AdUserService {
     private final ScAuthorityRepository scAuthorityRepository;
     private final PasswordEncoder passwordEncoder;
 
+    private final CacheManager cacheManager;
+
     public AdUserService(AdUserRepository adUserRepository, UserRepository userRepository, AdUserMapper adUserMapper,
-            AdUserAuthorityRepository adUserAuthorityRepository, ScAuthorityRepository scAuthorityRepository, PasswordEncoder passwordEncoder) {
+            AdUserAuthorityRepository adUserAuthorityRepository, ScAuthorityRepository scAuthorityRepository,
+            PasswordEncoder passwordEncoder, CacheManager cacheManager) {
         this.adUserRepository = adUserRepository;
         this.userRepository = userRepository;
         this.adUserMapper = adUserMapper;
         this.adUserAuthorityRepository = adUserAuthorityRepository;
         this.scAuthorityRepository = scAuthorityRepository;
         this.passwordEncoder = passwordEncoder;
+        this.cacheManager = cacheManager;
     }
 
     /**
@@ -90,9 +96,10 @@ public class AdUserService {
         
         adUserRepository.save(adUser);
 
-        // Add a SUPPLIER authority if he/she is a vendor.
+        // Add a USER authority for all authenticated users.
         List<String> authNames = new ArrayList<>(Arrays.asList(AuthoritiesConstants.USER));
 
+        // Add a SUPPLIER authority if he/she is a vendor.
         if (Boolean.TRUE.equals(adUser.isVendor())) {
             authNames.add(AuthoritiesConstants.SUPPLIER);
         }
@@ -110,6 +117,7 @@ public class AdUserService {
                 adUser.getUser().getAuthorities().add(scAuthority.getAuthority());
             });
 
+        clearUserCaches(adUser.getUser());
         return adUserMapper.toDto(adUser);
     }
 
@@ -150,6 +158,14 @@ public class AdUserService {
             User user = adUser.getUser();
             adUserRepository.delete(adUser);
             userRepository.delete(user);
+            clearUserCaches(user);
         });
+    }
+    
+    private void clearUserCaches(User user) {
+        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
+        if (user.getEmail() != null) {
+            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+        }
     }
 }

@@ -28,6 +28,14 @@ public class SqlBuilder {
     }
   }
 
+  public static List<Object> buildParameters(Map<String, Object> values) {
+    final List<Object> parameters = new ArrayList<>();
+    for (Map.Entry<String, Object> entry : values.entrySet()) {
+      parameters.add(entry.getValue());
+    }
+    return parameters;
+  }
+
   public static SqlBuilder insertInto(String tableName) {
     return new SqlBuilder(tableName, StatementType.INSERT);
   }
@@ -104,8 +112,8 @@ public class SqlBuilder {
     return sql;
   }
 
-  public Object[] getParameters() {
-    return parameters.toArray();
+  public List<Object> getParameters() {
+    return parameters;
   }
 
   public SqlBuilder build() {

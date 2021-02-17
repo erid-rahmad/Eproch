@@ -14,7 +14,7 @@
           size="mini"
         >
           <el-form-item
-            class="field-limit"
+            class="field-table-name"
             label="Table Name"
             prop="tableName"
           >
@@ -38,7 +38,7 @@
             </el-select>
           </el-form-item>
           <el-form-item
-            class="field-limit"
+            class="field-max-rows"
             label="Max. Rows"
             prop="maxRows"
           >
@@ -47,6 +47,26 @@
               controls-position="right"
               :min="-1"
             ></el-input-number>
+          </el-form-item>
+          <el-form-item
+            class="field-batch-size"
+            label="Batch Size"
+            prop="matchSize"
+          >
+            <el-input-number
+              v-model="csv.batchSize"
+              controls-position="right"
+              :min="1"
+            ></el-input-number>
+          </el-form-item>
+          <el-form-item
+            class="field-insert-only"
+            prop="insertOnly"
+            title="No need to lookup for the existing record"
+          >
+            <el-checkbox v-model="csv.insertOnly">
+              Insert Only
+            </el-checkbox>
           </el-form-item>
         </el-form>
         <upload-excel
