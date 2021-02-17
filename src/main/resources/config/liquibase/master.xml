@@ -109,6 +109,19 @@
     <include file="config/liquibase/changelog/20210127032000_added_entity_PaDashboard.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210127032100_added_entity_PaDashboardItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210127032200_added_entity_PaDashboardPreference.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210209124500_added_entity_CBiddingType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210209124600_added_entity_CEventType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210209124700_added_entity_CEventTypeline.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210209124800_added_entity_CBiddingCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210209124900_added_entity_CBiddingSubCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210211091700_added_entity_MBidding.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210211091800_added_entity_MBiddingLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210211091900_added_entity_MBiddingSchedule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210211092000_added_entity_MVendorInvitation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210211092100_added_entity_MVendorScoring.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210215032500_added_entity_MProjectInformation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210215032700_added_entity_MDocumentSchedule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210215032900_added_entity_MVendorSuggestion.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -200,6 +213,19 @@
     <include file="config/liquibase/changelog/20210127032000_added_entity_constraints_PaDashboard.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210127032100_added_entity_constraints_PaDashboardItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210127032200_added_entity_constraints_PaDashboardPreference.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210209124500_added_entity_constraints_CBiddingType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210209124600_added_entity_constraints_CEventType.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210209124700_added_entity_constraints_CEventTypeline.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210209124800_added_entity_constraints_CBiddingCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210209124900_added_entity_constraints_CBiddingSubCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210211091700_added_entity_constraints_MBidding.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210211091800_added_entity_constraints_MBiddingLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210211091900_added_entity_constraints_MBiddingSchedule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210211092000_added_entity_constraints_MVendorInvitation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210211092100_added_entity_constraints_MVendorScoring.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210215032500_added_entity_constraints_MProjectInformation.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210215032900_added_entity_constraints_MVendorSuggestion.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210215032700_added_entity_constraints_MDocumentSchedule.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 
     <include file="config/liquibase/changelog/20200602082500_updated_entity_ADReference.xml" relativeToChangelogFile="false"/>

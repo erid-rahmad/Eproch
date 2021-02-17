@@ -1,0 +1,11 @@
+id;quantity;ceiling_price;total_ceiling_price;delivery_date;remark;grand_total;uid;active;bidding_id;ad_organization_id;cost_center_id;product_id;uom_id
+1;15047;3206;3779;2021-02-10;tan;83652;2bf13b87-c7ef-42fc-80b5-e368f078d896;true;1;1;1;1;1
+2;44950;81781;46878;2021-02-10;Hong Kong Dollar;32985;0a8d4b0d-87ea-428d-a941-eb364975d3e4;true;2;2;2;2;2
+3;50507;2831;34111;2021-02-11;grey Regional;78005;9a804a0a-2fe9-4f2c-b788-7215088a4e30;false;3;3;3;3;3
+4;4974;91937;51876;2021-02-11;Colorado Administrator Rue;38957;187d1f47-6ef0-4cb5-a509-c40c55edd874;true;4;4;4;4;4
+5;4605;51061;84553;2021-02-11;zero administration;62726;7b6b607d-d2bd-4bad-a996-52d9d211f346;false;5;5;5;5;5
+6;97145;52481;98224;2021-02-10;AI;48792;c6d7ec59-030a-4acf-a899-5416aba4de8d;true;6;6;6;6;6
+7;36698;81704;65005;2021-02-11;parse solutions mission-critical;48922;c9271cb4-869c-4609-b841-348ced28ff6d;true;7;7;7;7;7
+8;66058;96234;41486;2021-02-11;global;15596;e23e2167-63fb-4cf9-9353-12814d30c389;false;8;8;8;8;8
+9;26688;44190;9163;2021-02-11;Tenge cutting-edge 1080p;75478;a3dbbd33-f849-4089-8940-be40447cf0d7;false;9;9;9;9;9
+10;2829;33397;76584;2021-02-10;circuit;96275;b80dbd69-1a62-4ff2-ac34-bbbd41441780;false;10;10;10;10;10

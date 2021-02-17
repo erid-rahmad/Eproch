@@ -29,17 +29,16 @@ export default class PersonInChargeUpdate extends PersonInChargeUpdateProps {
 
     public rules = {
         userLogin: {
-            min: 8,
             pattern: '^[_.@A-Za-z0-9-]*$'
         },
         email: {
             type: 'email'
         }
     };
-    
+
     public businessCategories = [];
     public person = {};
-    
+
     @Watch('user')
     setPerson(person) {
         this.person = person;

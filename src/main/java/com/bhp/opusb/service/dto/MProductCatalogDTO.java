@@ -2,12 +2,15 @@ package com.bhp.opusb.service.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.opencsv.bean.CsvDate;
 
 import io.swagger.annotations.ApiModelProperty;
 
@@ -15,7 +18,7 @@ import io.swagger.annotations.ApiModelProperty;
  * A DTO for the {@link com.bhp.opusb.domain.MProductCatalog} entity.
  */
 public class MProductCatalogDTO extends AbstractAuditingDTO {
-    
+
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -42,6 +45,7 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
 
     private BigDecimal price;
 
+    @CsvDate(value = "yyyy-MM-dd")
     private LocalDate expiredDate;
 
     private Boolean preOrder;
@@ -138,6 +142,18 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
     @JsonProperty("mProductId")
     private Long mProductId;
 
+    @JsonProperty("mProductSubCategoryId")
+    private Long mProductSubCategoryId;
+
+    @JsonProperty("mProductSubCategoryName")
+    private String mProductSubCategoryName;
+
+    @JsonProperty("mProductCategoryId")
+    private Long mProductCategoryId;
+
+    @JsonProperty("mProductCategoryName")
+    private String mProductCategoryName;
+
     @JsonProperty("mProductCode")
     private String mProductCode;
 
@@ -146,7 +162,9 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
 
     @JsonProperty("mProductDescription")
     private String mProductDescription;
-    
+
+    private Set<MProductPriceDTO> mProductPrices = new HashSet<>();
+
     public Long getId() {
         return id;
     }
@@ -485,6 +503,46 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
 
     public String getMProductName() {
         return mProductCode + " - " + mProductShortName;
+    }
+
+    public Set<MProductPriceDTO> getmProductPrices() {
+        return mProductPrices;
+    }
+
+    public void setmProductPrices(Set<MProductPriceDTO> mProductPrices) {
+        this.mProductPrices = mProductPrices;
+    }
+
+    public Long getMProductSubCategoryId() {
+        return mProductSubCategoryId;
+    }
+
+    public void setMProductSubCategoryId(Long mProductSubCategoryId) {
+        this.mProductSubCategoryId = mProductSubCategoryId;
+    }
+
+    public String getMProductSubCategoryName() {
+        return mProductSubCategoryName;
+    }
+
+    public void setMProductSubCategoryName(String mProductSubCategoryName) {
+        this.mProductSubCategoryName = mProductSubCategoryName;
+    }
+
+    public Long getMProductCategoryId() {
+        return mProductCategoryId;
+    }
+
+    public void setMProductCategoryId(Long mProductCategoryId) {
+        this.mProductCategoryId = mProductCategoryId;
+    }
+
+    public String getMProductCategoryName() {
+        return mProductCategoryName;
+    }
+
+    public void setMProductCategoryName(String mProductCategoryName) {
+        this.mProductCategoryName = mProductCategoryName;
     }
 
     @Override

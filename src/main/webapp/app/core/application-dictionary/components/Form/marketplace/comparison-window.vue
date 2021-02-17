@@ -38,7 +38,7 @@
                 <el-button
                   slot="append"
                   icon="el-icon-delete"
-                  size="small"
+                  size="mini"
                   type="danger"
                   @click="removeItem(item)"
                 />

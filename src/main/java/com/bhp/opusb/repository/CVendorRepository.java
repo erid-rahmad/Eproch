@@ -23,4 +23,6 @@ public interface CVendorRepository extends JpaRepository<CVendor, Long>, JpaSpec
   @Query("UPDATE CVendor v SET v.documentAction = :action, v.documentStatus = :status, v.approved = true, v.processed = true WHERE v.id = :id")
   void updateDocumentStatus(@Param("id") long id, @Param("action") String action, @Param("status") String status);
 
+  Optional<CVendor> findFirstByName(String name);
+
 }

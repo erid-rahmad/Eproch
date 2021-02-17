@@ -8,7 +8,7 @@
         <el-button
           class="btn-back"
           icon="el-icon-arrow-left"
-          size="small"
+          size="mini"
           @click="goToPreviousPage"
         >
           Back
@@ -98,7 +98,7 @@
           <el-col :span="6"> &nbsp; </el-col>
           <el-col :span="18">
             <el-button
-              size="small"
+              size="mini"
               style="margin-left: 0px"
               type="primary"
               @click="addToCart"
@@ -107,7 +107,7 @@
             </el-button>
             <el-button
               icon="el-icon-c-scale-to-original"
-              size="small"
+              size="mini"
               style="margin-left: 0px"
               @click="addToCompare"
             >

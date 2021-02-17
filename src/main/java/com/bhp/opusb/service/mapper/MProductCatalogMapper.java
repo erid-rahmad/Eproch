@@ -29,6 +29,10 @@ public interface MProductCatalogMapper extends EntityMapper<MProductCatalogDTO, 
     @Mapping(source = "MProduct.id", target = "MProductId")
     @Mapping(source = "MProduct.code", target = "MProductCode")
     @Mapping(source = "MProduct.name", target = "MProductShortName")
+    @Mapping(source = "MProduct.productCategory.id", target = "MProductCategoryId")
+    @Mapping(source = "MProduct.productCategory.name", target = "MProductCategoryName")
+    @Mapping(source = "MProduct.productSubCategory.id", target = "MProductSubCategoryId")
+    @Mapping(source = "MProduct.productSubCategory.name", target = "MProductSubCategoryName")
     @Mapping(source = "MProduct.description", target = "MProductDescription")
     MProductCatalogDTO toDto(MProductCatalog mProductCatalog);
 

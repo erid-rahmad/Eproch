@@ -1,5 +1,6 @@
 import { ICGallery } from './c-gallery.model';
 import { ICProduct } from './c-product.model';
+import { ICProductCategory } from './c-product-category.model';
 
 export interface IMProductCatalog {
   id?: number;
@@ -40,7 +41,10 @@ export interface IMProductCatalog {
   mProduct?: ICProduct;
   mProductId?: number;
   mProductName?: string;
+  mProductCategories?: number[];
   vendorId?: string;
+  mProductPrices?: any[];
+  mProductImages?: any[];
 }
 
 export class MProductCatalog implements IMProductCatalog {
@@ -83,7 +87,10 @@ export class MProductCatalog implements IMProductCatalog {
     public mProduct?: ICProduct,
     public mProductId?: number,
     public mProductName?: string,
-    public vendorId?: string
+    public mProductCategories?: number[],
+    public vendorId?: string,
+    public mProductPrices?: any[],
+    public mProductImages?: any[]
   ) {
     this.preOrder = this.preOrder || false;
     this.sold = this.sold || false;

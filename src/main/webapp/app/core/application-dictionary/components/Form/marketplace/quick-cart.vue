@@ -48,7 +48,7 @@
           style="text-align: right"
         >
           <el-button
-            size="small"
+            size="mini"
             type="primary"
             @click="showCart"
           >
