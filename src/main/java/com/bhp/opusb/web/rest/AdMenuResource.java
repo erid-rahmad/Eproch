@@ -128,8 +128,20 @@ public class AdMenuResource {
     @GetMapping("/ad-menus/main-menu")
     public ResponseEntity<List<AdMenuDTO>> getMainMenu() {
         log.debug("REST request to get parent AdMenus");
-        List<AdMenuDTO> menus = adMenuQueryService.findAllParentMenus();
+        List<AdMenuDTO> menus = adMenuQueryService.getMainMenu();
         return ResponseEntity.ok().body(menus);
+    }
+
+    /**
+     * {@code GET /ad-menus/full-path/:id} : get the fullpath to the specific menu.
+     * 
+     * @param id the ID of the target menu.
+     */
+    @GetMapping("/ad-menus/full-path/{id}")
+    public ResponseEntity<String> getFullPath(@PathVariable Long id) {
+        log.debug("REST request to get fullpath to submenu : {}", id);
+        String fullPath = adMenuService.getFullPath(id);
+        return ResponseEntity.ok().body(fullPath);
     }
 
     /**

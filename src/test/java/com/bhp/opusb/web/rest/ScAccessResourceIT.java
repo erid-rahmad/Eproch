@@ -6,6 +6,8 @@ import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.ScAccessType;
 import com.bhp.opusb.domain.ADWindow;
 import com.bhp.opusb.domain.AdForm;
+import com.bhp.opusb.domain.PaDashboard;
+import com.bhp.opusb.domain.PaDashboardItem;
 import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.ADReferenceList;
 import com.bhp.opusb.domain.ScAuthority;
@@ -655,6 +657,46 @@ public class ScAccessResourceIT {
 
         // Get all the scAccessList where form equals to formId + 1
         defaultScAccessShouldNotBeFound("formId.equals=" + (formId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllScAccessesByPaDashboardIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scAccessRepository.saveAndFlush(scAccess);
+        PaDashboard paDashboard = PaDashboardResourceIT.createEntity(em);
+        em.persist(paDashboard);
+        em.flush();
+        scAccess.setPaDashboard(paDashboard);
+        scAccessRepository.saveAndFlush(scAccess);
+        Long paDashboardId = paDashboard.getId();
+
+        // Get all the scAccessList where paDashboard equals to paDashboardId
+        defaultScAccessShouldBeFound("paDashboardId.equals=" + paDashboardId);
+
+        // Get all the scAccessList where paDashboard equals to paDashboardId + 1
+        defaultScAccessShouldNotBeFound("paDashboardId.equals=" + (paDashboardId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllScAccessesByPaDashboardItemIsEqualToSomething() throws Exception {
+        // Initialize the database
+        scAccessRepository.saveAndFlush(scAccess);
+        PaDashboardItem paDashboardItem = PaDashboardItemResourceIT.createEntity(em);
+        em.persist(paDashboardItem);
+        em.flush();
+        scAccess.setPaDashboardItem(paDashboardItem);
+        scAccessRepository.saveAndFlush(scAccess);
+        Long paDashboardItemId = paDashboardItem.getId();
+
+        // Get all the scAccessList where paDashboardItem equals to paDashboardItemId
+        defaultScAccessShouldBeFound("paDashboardItemId.equals=" + paDashboardItemId);
+
+        // Get all the scAccessList where paDashboardItem equals to paDashboardItemId + 1
+        defaultScAccessShouldNotBeFound("paDashboardItemId.equals=" + (paDashboardItemId + 1));
     }
 
 

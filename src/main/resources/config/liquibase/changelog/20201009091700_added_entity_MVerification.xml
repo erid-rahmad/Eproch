@@ -122,6 +122,12 @@
             <column name="date_approve" type="date"/>
             <column name="verification_status" type="string"/>
             <column name="pay_status" type="string"/>
+            <column name="date_trx" type="date"/>
+            <column name="document_no" type="string"/>
+            <column name="document_action" type="string"/>
+            <column name="document_status" type="string"/>
+            <column name="approved" type="boolean"/>
+            <column name="processed" type="boolean"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
@@ -251,6 +257,45 @@
 
     <changeSet id="20201214101200" author="Ananta Aryadewa">
         <addUniqueConstraint tableName="m_verification" columnNames="verification_no" constraintName="ux_m_verification_verification_no"/>
+    </changeSet>
+
+    <changeSet id="20200122231600" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification">
+            <column name="date_trx" type="date" defaultValueComputed="CURRENT_DATE">
+                <constraints nullable="false" />
+            </column>
+            <column name="document_no" type="varchar(30)">
+                <constraints nullable="true" />
+            </column>
+            <column name="document_action" type="varchar(10)" defaultValue="DRF">
+                <constraints nullable="false" />
+            </column>
+            <column name="document_status" type="varchar(10)" defaultValue="DRF">
+                <constraints nullable="false" />
+            </column>
+            <column name="approved" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="processed" type="boolean">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200125140400" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification">
+            <column name="receipt_reversed" type="boolean" remarks="Whether or not it contains one or more reversed receipt lines.">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20200130161500" author="Ananta Aryadewa">
+        <addColumn tableName="m_verification">
+            <column name="ap_reversed" type="boolean" remarks="Whether or not it contains one or more reversed invoice AP lines.">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

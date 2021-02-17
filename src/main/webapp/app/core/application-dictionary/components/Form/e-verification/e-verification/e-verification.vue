@@ -1,30 +1,34 @@
 <template>
-    <div class="app-container">
+    <div class="app-container e-verification">
         <div v-if="index">
             <el-row class="header">
                 <el-col :span="24">
-
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
                         size="small"
                         type="primary"
                         icon="el-icon-check"
-                        @click="showDialogConfirmation('update')" />
+                        @click="showDialogConfirmation('update')"
+                    />
+                    
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
                         size="small"
                         type="primary"
                         icon="el-icon-search"
-                        @click.native.prevent="verificationFilter"/>
+                        @click.native.prevent="verificationFilter"
+                    />
+
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
                         size="small"
                         type="primary"
                         @click="addEVerification()"
-                        icon="el-icon-plus"/>
+                        icon="el-icon-plus"
+                    />
 
                     <el-button
                         class="button"
@@ -32,7 +36,9 @@
                         type="danger"
                         icon="el-icon-delete"
                         :disabled="disabledButton"
-                        @click="showDialogConfirmation('cancel')" />
+                        @click="showDialogConfirmation('cancel')"
+                    />
+
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
@@ -40,7 +46,8 @@
                         type="primary"
                         icon="el-icon-position"
                         :disabled="disabledButton"
-                        @click="showDialogConfirmation('submit')">
+                        @click="showDialogConfirmation('submit')"
+                    >
                         Submit
                     </el-button>
 
@@ -49,24 +56,29 @@
                         size="small"
                         type="primary"
                         icon="el-icon-printer"
-                        @click="showDialogConfirmation('print')">
+                        @click="showDialogConfirmation('print')"
+                    >
                         Print
                     </el-button>
+
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
                         size="small"
                         type="primary"
                         icon="el-icon-printer"
-                        @click="showDialogConfirmation('printSummary')">
+                        @click="showDialogConfirmation('printSummary')"
+                    >
                         Print (Summary)
                     </el-button>
+
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
                         size="small"
                         type="primary"
-                        icon="el-icon-download">
+                        icon="el-icon-download"
+                    >
                         Export
                     </el-button>
                 </el-col>
@@ -95,7 +107,7 @@
                                 <el-option
                                     v-for="item in documentStatuses"
                                     :key="item.key"
-                                    :label="item.value"
+                                    :label="item.label"
                                     :value="item.key" />
                             </el-select>
                         </el-form-item>
@@ -171,8 +183,8 @@
             <el-row class="main" ref="tableWrapper">
                 <el-col :span="24">
                     <el-table
+                        ref="mainTable"
                         v-loading="processing"
-                        ref="taxInvoice"
                         highlight-current-row
                         border stripe
                         size="mini"
@@ -181,15 +193,20 @@
                         :default-sort="gridSchema.defaultSort"
                         :empty-text="gridSchema.emptyText"
                         :data="gridData"
+                        :row-class-name="rowClassName"
                         @row-click="singleSelection"
-                        @sort-change="changeOrder">
+                        @sort-change="changeOrder"
+                    >
 
                         <el-table-column
                             align="center"
+                            class-name="no-ellipsis"
                             fixed
-                            width="35">
-                            <template slot-scope="scope">
-                                <el-radio class="radio" v-model="radioSelection" :label="scope.$index">&nbsp;</el-radio>
+                            width="36"
+                        >
+                            <template slot="header"></template>
+                            <template slot-scope="{ $index }">
+                                <el-radio class="radio" v-model="radioSelection" :label="$index">&nbsp;</el-radio>
                             </template>
                         </el-table-column>
 
@@ -291,8 +308,10 @@
                         :current-page.sync="page"
                         :page-sizes="[10, 20, 50, 100]"
                         :page-size="itemsPerPage"
+                        small
                         :total="queryCount"
-                        @size-change="changePageSize"/>
+                        @size-change="changePageSize"
+                    />
                 </el-col>
             </el-row>
         </div>
@@ -305,7 +324,7 @@
                 <el-col :span="24" :offset="0">
                     <e-verification-update
                         ref="formUpdate"
-                        :form-update="selectedRows"
+                        :form-update="selectedRow"
                         :doc-status="documentStatuses"
                         @close-e-verification-update="closeEVerificationUpdate"
                     />
@@ -316,7 +335,7 @@
 
         <el-dialog
             width="30%"
-            :visible.sync="dialogConfirmationVisible"
+            :visible.sync="confirmDocStatusUpdate"
             :title="dialogTitle">
 
             <template>
@@ -327,15 +346,17 @@
                         size="mini"
                         icon="el-icon-check"
                         :type="dialogType"
-                        @click="buttonDialogUpdateRecords">
-                            {{ dialogButton }}
+                        @click="updateDocumentStatus"
+                    >
+                        {{ dialogButton }}
                     </el-button>
                     <el-button
                         style="margin-left: 0px;"
                         size="mini"
                         icon="el-icon-close"
-                        @click="dialogConfirmationVisible = false">
-                            {{ $t('entity.action.cancel') }}
+                        @click="confirmDocStatusUpdate = false"
+                    >
+                        No
                     </el-button>
                 </div>
             </template>
@@ -348,25 +369,38 @@
 </script>
 
 <style lang="scss">
-    .el-table__fixed, .el-table__fixed-right{
+.e-verification {
+    .el-pagination .el-input--mini .el-input__inner {
+        height: 22px;
+    }
+}
+.el-table__fixed, .el-table__fixed-right {
     box-shadow: none;
-    }
+}
 
-    .header {
-        color: #333;
-    }
+.el-table .cell.no-ellipsis {
+    text-overflow: inherit;
+}
 
-    .filter {
-        .form-input {
-            width: 100%;
-        }
-    }
+.header {
+    color: #333;
+}
 
-    .main {
-        padding: 0px;
+.filter {
+    .form-input {
+        width: 100%;
     }
+}
 
-    .button {
-        margin-bottom: 5px;
+.main {
+    padding: 0px;
+
+    .el-table .danger-row {
+        background: oldlace;
     }
+}
+
+.button {
+    margin-bottom: 5px;
+}
 </style>

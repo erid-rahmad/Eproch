@@ -1,222 +1,292 @@
 {
-  "name": "MVerification",
-  "fields": [
-    {
-      "fieldName": "verificationNo",
-      "javadoc": "VHDOCM Invoice verification document no.",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "unique"]
-    },
-    {
-      "fieldName": "verificationDate",
-      "javadoc": "VHTRDJ Transaction date",
-      "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "receiptNo",
-      "javadoc": "VHANUR",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "20"
-    },
-    {
-      "fieldName": "invoiceNo",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "invoiceDate",
-      "javadoc": "VHDIVJ",
-      "fieldType": "LocalDate",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "taxInvoice",
-      "javadoc": "VHTAX0",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "taxDate",
-      "javadoc": "VHDSV Date service/tax.",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "totalLines",
-      "javadoc": "VHAEXP Total amount of receipt lines.",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "grandTotal",
-      "javadoc": "VHAREC Receipt amount (base currency).",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "foreignGrandTotal",
-      "javadoc": "VHFREC Receipt amount in foreign currency.",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "taxAmount",
-      "javadoc": "VHSTAM Tax amount (base currency).",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "foreignTaxAmount",
-      "javadoc": "VHCTAM Tax amount in foreign currency.",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "dateSubmit",
-      "javadoc": "VHDTSUB",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "dateAcct",
-      "javadoc": "VHDGJ GL date.",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "withholdingAmt",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "invoiceAp",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "docType",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "payDate",
-      "javadoc": "VHDMTJ Payment date.",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "dueDate",
-      "javadoc": "VHDDJ Promised date/payment schedule.",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "payAmt",
-      "javadoc": "VHAA Total actual amount.",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "dateReject",
-      "javadoc": "VHRJDJ",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "dateApprove",
-      "javadoc": "VHAPRD",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "verificationStatus",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "payStatus",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "uid",
-      "fieldType": "UUID"
-    },
-    {
-      "fieldName": "active",
-      "fieldType": "Boolean"
-    }
-  ],
-  "relationships": [
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDOrganization",
-      "otherEntityRelationshipName": "mVerification",
-      "relationshipValidateRules": "required",
-      "relationshipName": "adOrganization",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cCurrency",
-      "otherEntityRelationshipName": "mVerification",
-      "relationshipValidateRules": "required",
-      "javadoc": "VHCRCD Invoice verification's currency",
-      "relationshipName": "currency",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cCurrency",
-      "otherEntityRelationshipName": "mVerification",
-      "relationshipValidateRules": "required",
-      "javadoc": "VHCRCE Match PO's currency",
-      "relationshipName": "matchPoCurrency",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cVendor",
-      "otherEntityRelationshipName": "mVerification",
-      "relationshipValidateRules": "required",
-      "javadoc": "VHAN8 for supplier code.\\nVHALPH for supplier name.",
-      "relationshipName": "vendor",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cVendor",
-      "otherEntityRelationshipName": "mVerification",
-      "javadoc": "VHAN8L",
-      "relationshipName": "vendorTo",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cVendorLocation",
-      "otherEntityRelationshipName": "mVerification",
-      "relationshipName": "vendorLocation",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cTaxCategory",
-      "otherEntityRelationshipName": "mVerification",
-      "javadoc": "VHEXR1 is mapped to tax category name.",
-      "relationshipName": "cTaxCategory",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cTax",
-      "otherEntityRelationshipName": "mVerification",
-      "javadoc": "VHTXA1 is mapped to tax name.",
-      "relationshipName": "cTax",
-      "otherEntityField": "id"
-    }
-  ],
-  "changelogDate": "20201009091700",
-  "javadoc": "vendor Invoice Verification",
-  "entityTableName": "m_verification",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*",
-  "skipClient": true
+    "name": "MVerification",
+    "fields": [
+        {
+            "fieldName": "verificationNo",
+            "javadoc": "VHDOCM Invoice verification document no.",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "unique"
+            ]
+        },
+        {
+            "fieldName": "verificationDate",
+            "javadoc": "VHTRDJ Transaction date",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "receiptNo",
+            "javadoc": "VHANUR",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
+            "fieldName": "invoiceNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "invoiceDate",
+            "javadoc": "VHDIVJ",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "taxInvoice",
+            "javadoc": "VHTAX0",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "taxDate",
+            "javadoc": "VHDSV Date service/tax.",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "totalLines",
+            "javadoc": "VHAEXP Total amount of receipt lines.",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "grandTotal",
+            "javadoc": "VHAREC Receipt amount (base currency).",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "foreignGrandTotal",
+            "javadoc": "VHFREC Receipt amount in foreign currency.",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "taxAmount",
+            "javadoc": "VHSTAM Tax amount (base currency).",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "foreignTaxAmount",
+            "javadoc": "VHCTAM Tax amount in foreign currency.",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "dateSubmit",
+            "javadoc": "VHDTSUB",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateAcct",
+            "javadoc": "VHDGJ GL date.",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "withholdingAmt",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "invoiceAp",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "docType",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "payDate",
+            "javadoc": "VHDMTJ Payment date.",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dueDate",
+            "javadoc": "VHDDJ Promised date/payment schedule.",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "payAmt",
+            "javadoc": "VHAA Total actual amount.",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "dateReject",
+            "javadoc": "VHRJDJ",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "dateApprove",
+            "javadoc": "VHAPRD",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "verificationStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "payStatus",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "dateTrx",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "documentNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "documentAction",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "documentStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "approved",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "processed",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "receiptReversed",
+            "javadoc": "Whether or not it contains one or more reversed receipt lines.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "apReversed",
+            "javadoc": "Whether or not it contains one or more reversed invoice AP lines.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mVerification",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mVerification",
+            "relationshipValidateRules": "required",
+            "javadoc": "VHCRCD Invoice verification's currency",
+            "relationshipName": "currency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mVerification",
+            "relationshipValidateRules": "required",
+            "javadoc": "VHCRCE Match PO's currency",
+            "relationshipName": "matchPoCurrency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mVerification",
+            "relationshipValidateRules": "required",
+            "javadoc": "VHAN8 for supplier code.\\nVHALPH for supplier name.",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mVerification",
+            "javadoc": "VHAN8L",
+            "relationshipName": "vendorTo",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendorLocation",
+            "otherEntityRelationshipName": "mVerification",
+            "relationshipName": "vendorLocation",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTaxCategory",
+            "otherEntityRelationshipName": "mVerification",
+            "javadoc": "VHEXR1 is mapped to tax category name.",
+            "relationshipName": "cTaxCategory",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTax",
+            "otherEntityRelationshipName": "mVerification",
+            "javadoc": "VHTXA1 is mapped to tax name.",
+            "relationshipName": "cTax",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20201009091700",
+    "javadoc": "vendor Invoice Verification",
+    "entityTableName": "m_verification",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
 }

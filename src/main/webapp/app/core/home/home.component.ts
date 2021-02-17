@@ -1,12 +1,12 @@
 import LoginService from '@/account/login.service';
+import DashBoard from "@/core/dashboard/dashboard.vue";
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import Component from 'vue-class-component';
 import { Inject, Vue } from 'vue-property-decorator';
-import WatchList from "./components/watch-list.vue";
 
 @Component({
   components: {
-    WatchList
+    DashBoard
   }
 })
 export default class MainDashboard extends Vue {

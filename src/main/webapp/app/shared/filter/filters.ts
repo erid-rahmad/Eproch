@@ -1,19 +1,19 @@
-import _ from 'lodash';
+import { isArray, isPlainObject, isString } from 'lodash';
 
 export default function buildCriteriaQueryString(options: any) {
   if (options) {
     let query = '';
 
-    if (_.isPlainObject(options)) {
+    if (isPlainObject(options)) {
       for (let key in options) {
         if (query.length > 0) {
           query += '&';
         }
         query += key + '=' + options[key];
       }
-    } else if (_.isArray(options)) {
-      query = options.filter(option => option !== null).join('&');
-    } else if (_.isString(options)) {
+    } else if (isArray(options)) {
+      query = options.filter(option => option !== null && option !== void 0).join('&');
+    } else if (isString(options)) {
       query = options;
     }
 

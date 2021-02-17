@@ -207,6 +207,12 @@ public class MMatchPO extends AbstractAuditingEntity {
     private String itemDesc2;
 
     /**
+     * Whether it's already applied in an invoice or not.
+     */
+    @Column(name = "invoiced")
+    private Boolean invoiced;
+
+    /**
      * PRKCOO
      */
     @ManyToOne(optional = false)
@@ -224,7 +230,7 @@ public class MMatchPO extends AbstractAuditingEntity {
      */
     @ManyToOne
     @JsonIgnoreProperties("mMatchPOS")
-    private CVendor cVendor;
+    private CVendor vendor;
 
     /**
      * PRCRCD
@@ -637,6 +643,19 @@ public class MMatchPO extends AbstractAuditingEntity {
         this.itemDesc2 = itemDesc2;
     }
 
+    public Boolean isInvoiced() {
+        return invoiced;
+    }
+
+    public MMatchPO invoiced(Boolean invoiced) {
+        this.invoiced = invoiced;
+        return this;
+    }
+
+    public void setInvoiced(Boolean invoiced) {
+        this.invoiced = invoiced;
+    }
+
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -663,17 +682,17 @@ public class MMatchPO extends AbstractAuditingEntity {
         this.cCostCenter = cCostCenter;
     }
 
-    public CVendor getCVendor() {
-        return cVendor;
+    public CVendor getVendor() {
+        return vendor;
     }
 
-    public MMatchPO cVendor(CVendor cVendor) {
-        this.cVendor = cVendor;
+    public MMatchPO vendor(CVendor cVendor) {
+        this.vendor = cVendor;
         return this;
     }
 
-    public void setCVendor(CVendor cVendor) {
-        this.cVendor = cVendor;
+    public void setVendor(CVendor cVendor) {
+        this.vendor = cVendor;
     }
 
     public CCurrency getCCurrency() {
@@ -815,6 +834,7 @@ public class MMatchPO extends AbstractAuditingEntity {
             ", mMatchType='" + getmMatchType() + "'" +
             ", itemDesc1='" + getItemDesc1() + "'" +
             ", itemDesc2='" + getItemDesc2() + "'" +
+            ", invoiced='" + isInvoiced() + "'" +
             "}";
     }
 }

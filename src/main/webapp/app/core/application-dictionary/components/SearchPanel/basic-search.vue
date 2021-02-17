@@ -2,8 +2,10 @@
     <div class="basic-search">
 
         <el-form 
-          label-width="100px" 
-          size="mini">
+          label-width="100px"
+          :model="row"
+          size="mini"
+        >
 
             <el-form-item 
               v-for="field in listFields"

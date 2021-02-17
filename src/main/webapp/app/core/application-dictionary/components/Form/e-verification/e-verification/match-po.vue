@@ -1,11 +1,17 @@
 <template>
     <div class="app-container">
         <div v-if="modeFilterMatchPo.mode==1">
-            <el-row style="margin-top: 0px" class="filter">
+            <el-row
+                class="filter"
+                :gutter="24"
+                style="margin-top: 0px"
+            >
                 <el-form
                     ref="form"
+                    label-position="left"
                     label-width="170px"
-                    size="mini">
+                    size="mini"
+                >
                     <el-col :span="8">
                         <el-form-item label="Receipt No." prop="receiptNo">
                             <el-input class="form-input" clearable v-model="filter.receiptNo"/>
@@ -72,7 +78,6 @@
                             align="center"
                             fixed
                             type="selection"
-                            width="35"
                         />
                         <el-table-column
                             min-width="120"
@@ -165,14 +170,13 @@
                         ref="pagination"
                         background
                         layout="sizes, prev, pager, next"
-                        mini
+                        small
                         :current-page.sync="page"
                         :page-sizes="[10, 20, 50, 100]"
                         :page-size="itemsPerPage"
                         :total="queryCount"
-                        @size-change="changePageSize"/>
-
-
+                        @size-change="changePageSize"
+                    />
                 </el-col>
             </el-row>
         </div>
@@ -180,7 +184,8 @@
             <el-form
                 ref="form"
                 label-width="100px"
-                size="mini">
+                size="mini"
+            >
                     <el-form-item label="Receipt No." prop="filterByReceiptNo">
                         <el-input
                             class="form-input"

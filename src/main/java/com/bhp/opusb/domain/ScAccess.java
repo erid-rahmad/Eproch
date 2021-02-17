@@ -60,18 +60,41 @@ public class ScAccess extends AbstractAuditingEntity {
     @JsonIgnoreProperties("scAccesses")
     private ScAccessType type;
 
+    /**
+     * Used for restricting access to specific window.
+     */
     @ManyToOne
     @JsonIgnoreProperties("scAccesses")
     private ADWindow window;
 
+    /**
+     * Used for restricting access to specific form.
+     */
     @ManyToOne
     @JsonIgnoreProperties("scAccesses")
     private AdForm form;
 
+    /**
+     * Used for restricting access to specific dashboard item.
+     */
+    @ManyToOne
+    @JsonIgnoreProperties("scAccesses")
+    private PaDashboard paDashboard;
+
+    @ManyToOne
+    @JsonIgnoreProperties("scAccesses")
+    private PaDashboardItem paDashboardItem;
+
+    /**
+     * Used for restricting access to specific document actions.
+     */
     @ManyToOne
     @JsonIgnoreProperties("scAccesses")
     private CDocumentType documentType;
 
+    /**
+     * Used for restricting access to specific document actions.
+     */
     @ManyToOne
     @JsonIgnoreProperties("scAccesses")
     private ADReferenceList referenceList;
@@ -205,6 +228,32 @@ public class ScAccess extends AbstractAuditingEntity {
 
     public void setForm(AdForm adForm) {
         this.form = adForm;
+    }
+
+    public PaDashboard getPaDashboard() {
+        return paDashboard;
+    }
+
+    public ScAccess paDashboard(PaDashboard paDashboard) {
+        this.paDashboard = paDashboard;
+        return this;
+    }
+
+    public void setPaDashboard(PaDashboard paDashboard) {
+        this.paDashboard = paDashboard;
+    }
+
+    public PaDashboardItem getPaDashboardItem() {
+        return paDashboardItem;
+    }
+
+    public ScAccess paDashboardItem(PaDashboardItem paDashboardItem) {
+        this.paDashboardItem = paDashboardItem;
+        return this;
+    }
+
+    public void setPaDashboardItem(PaDashboardItem paDashboardItem) {
+        this.paDashboardItem = paDashboardItem;
     }
 
     public CDocumentType getDocumentType() {

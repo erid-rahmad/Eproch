@@ -34,11 +34,12 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     maxHeight: 470,
     height: 370
   };
-  rules = {
+
+  validationRules = {
     taxInvoice: [
       { min: 15, message: 'Length must be 13 digits' }
     ]
-  }
+  };
 
   public itemsPerPage = 10;
   public queryCount: number = null;
@@ -48,15 +49,15 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   public reverse = false;
   private totalItems = 0;
 
-  private baseApiUrlEVerification = "/api/m-verifications";
+  private baseApiUrl = "/api/m-verifications";
   private baseApiUrlEVerificationLine = "/api/m-verification-lines";
   private baseApiUrlCurrency = "/api/c-currencies";
   private baseApiUrlTaxInvoice = "/api/c-tax-invoices";
+  private enofaList: any[] = [];
+
   public gridData: Array<any> = [];
   public removedLines: Array<any> = [];
-  enofaList: any[] = [];
   lastTaxInvoice: string = "";
-  statTaxInvoice: boolean = false;
   isDraft: boolean = false;
 
   private processing = false;
@@ -73,23 +74,27 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
   header: Record<string, any> = {};
 
-  retrieveEnofa() {
-    this.dynamicWindowService(this.baseApiUrlTaxInvoice)
-      .retrieve({
-        criteriaQuery: [`vendorId.equals=${this.header.vendorId}`],
-        paginationQuery: {
-          sort: ['id,asc'],
-          page: 0,
-          size: 1000
-        }
-      })
-      .then(res => this.enofaList = res.data);
-  }
-
-  eVerification = {
-    form: {},
-    line: [],
-    remove: []
+  private async retrieveEnofa() {
+    try {
+      const res = await this.dynamicWindowService(this.baseApiUrlTaxInvoice)
+        .retrieve({
+          criteriaQuery: [`vendorId.equals=${this.header.vendorId}`],
+          paginationQuery: {
+            sort: ['id,asc'],
+            page: 0,
+            size: 1000
+          }
+        });
+        
+      this.enofaList = res.data;
+      return res.data;
+    } catch(err) {
+      this.$message({
+        message: 'Failed retrieving tax invoices list.',
+        type: 'warning'
+      });
+      return this.enofaList;
+    }
   }
 
   get dateDisplayFormat() {
@@ -106,15 +111,10 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       vendorName: accountStore.userDetails.cVendorName
     });
 
-    this.retrieveCurrencies();
-    this.retrieveEnofa();
+    const docStatus = this.header.verificationStatus;
 
-    if (!this.header.verificationStatus || this.header.verificationStatus == "DRF") {
-      this.$set(this.header, 'verificationStatus', 'DRF');
-      this.isDraft = true;
-    } else {
-      this.isDraft = false;
-    }
+    this.retrieveCurrencies();
+    this.isDraft = !docStatus || docStatus === 'DRF' || docStatus === 'RJC' || docStatus === 'ROP';
 
     if (this.header.id) {
       this.filterQuery = `verificationId.equals=${this.header.id}`;
@@ -171,19 +171,29 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
   // =====================================
 
-  public displayMatchPo(id){
-    let width, titleModal;
-    if(id == 1){
+  rowClassName({row}) {
+    if (row.documentStatus !== 'CNL' && row.receiptReversed) {
+      return 'danger-row';
+    }
+
+    return '';
+  }
+
+  public displayMatchPo(id) {
+    let width;
+    let titleModal;
+
+    if (id == 1) {
       width = "90%";
       titleModal = "Receipt Order";
-    }else{
+    } else {
       width = "40%";
-      titleModal = "Add By Receipt No";
+      titleModal = "Add by Receipt No";
     }
     this.modeFilterMatchPo = {
       mode: id,
-      width: width,
-      titleModal: titleModal,
+      width,
+      titleModal,
       filterByReceiptNo: ''
     };
     this.dialogMatchPoVisible = true;
@@ -193,37 +203,28 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     this.$emit('close-e-verification-update');
   }
 
+  /**
+   * Save invoice verification record.
+   */
   updateEVerification() {
     if (this.gridData.length) {
-      (this.$refs.eVerificationUpdate as ElForm).validate((passed, errors) => {
+      (this.$refs.eVerificationUpdate as ElForm).validate((passed) => {
         if (passed) {
-          this.fullscreenLoading = true;
-          if(this.header.taxable){
-            this.checkVerification(this.header.taxInvoice);
-          } else {
-            this.statTaxInvoice = true;
+          if (this.header.taxInvoice) {
+            this.checkVerification(this.header.taxInvoice)
+              .then(() => {
+                this.fullscreenLoading = true;
+                this.submit();
+              });
           }
-          this.submit();
-        } else {
-          return false;
         }
-      })
-
+      });
     } else {
       this.$message({
-        message: 'Please add at least an invoice line',
+        message: 'Please add at least one invoice line',
         type: 'error'
-      })
+      });
     }
-  }
-
-  private notifWarning(message: string){
-    this.$notify({
-      title: 'Warning',
-      message: message,
-      type: 'warning',
-      duration: 3000
-    });
   }
 
   private retrieveEVerificationLine(): void {
@@ -282,13 +283,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   addAllLines(data: any[]) {
     const lines = this.transformMatchPo(data);
 
-    for (const line of lines) {
-      const lineExist = (this.gridData.some((vLine: any) => vLine.id === line.id));
-
-      if (!lineExist) {
-        this.gridData.push(line);
-      }
-    }
+    this.mergeLines(lines);
     this.calculateLines();
     this.dialogMatchPoVisible = false;
   }
@@ -296,15 +291,27 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   addSelectedLines() {
     const lines = this.transformMatchPo((<any>this.$refs.matchPo)?.selectedLines || []);
 
-    for (const line of lines) {
-      const lineExist = (this.gridData.some((vLine: any) => vLine.id === line.id));
-
-      if (!lineExist) {
-        this.gridData.push(line);
-      }
-    }
+    this.mergeLines(lines);
     this.calculateLines();
     this.dialogMatchPoVisible = false;
+  }
+
+  private mergeLines(lines: any[]) {
+    const newLines = [];
+
+    for (const line of lines) {
+      const lineExist = (this.gridData.some((vLine: any) => {
+        
+        return vLine.poNo === line.poNo && vLine.receiptNo === line.receiptNo
+          && vLine.lineNoPo === line.lineNoPo && vLine.lineNoMr === line.lineNoMr
+          && vLine.cDocType === line.cDocType;
+      }));
+
+      if (!lineExist) {
+        newLines.push(line);
+      }
+    }
+    this.gridData = [...this.gridData, ...newLines];
   }
 
   private calculateLines() {
@@ -359,14 +366,13 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     });
   }
 
-  checkTaxInvoice(value: string) {
+  async checkTaxInvoice(value: string) {
     const data = parseInt(value);
-    let length = this.enofaList.length;
+    const enofaList = await this.retrieveEnofa();
 
-
-    for (let i = 0; i < length; i++) {
-      const startNo = parseInt(this.enofaList[i].startNo);
-      const endNo = parseInt(this.enofaList[i].endNo);
+    for (const enofa of enofaList) {
+      const startNo = parseInt(enofa.startNo);
+      const endNo = parseInt(enofa.endNo);
 
       if (data >= startNo && data <= endNo) {
         return true;
@@ -376,11 +382,11 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     return false;
   }
 
-  validateTaxInvoiceSlot(taxInvoice: string) {
+  validateTaxInvoiceSlot(taxInvoice: string): Promise<any> {
     const queryId = this.header.id ? [`id.notEquals=${this.header.id}`] : [];
 
     return new Promise((resolve, reject) => {
-      this.dynamicWindowService(this.baseApiUrlEVerification)
+      this.dynamicWindowService(this.baseApiUrl)
         .retrieve({
           criteriaQuery: [
             `vendorId.equals=${this.header.vendorId}`,
@@ -396,12 +402,12 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
             sort: ['id']
           }
         })
-        .then(res => {
+        .then(async res => {
           const list = res.data;
 
           if (list.length) {
             reject(`Tax Invoice is already used in verification no.: ${list[0].verificationNo}`);
-          } else if (this.checkTaxInvoice(taxInvoice)) {
+          } else if (await this.checkTaxInvoice(taxInvoice)) {
             resolve(true);
           } else {
             reject('There is no entry available for the specified Tax Invoice');
@@ -410,87 +416,78 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     });
   }
 
-  async checkVerification(taxInvoice: string) {
-    try {
-      await this.validateTaxInvoiceSlot(taxInvoice.replace(/[-.]+/g, ''));
-      this.statTaxInvoice = true;
-    } catch (error) {
-      this.statTaxInvoice = false;
-      this.$message({
-        message: error,
-        type: 'error'
-      });
-    }
+  checkVerification(taxInvoice: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.validateTaxInvoiceSlot(taxInvoice.replace(/[-.]+/g, ''))
+        .then(result => {
+          resolve(result)
+        })
+        .catch(err => {
+          this.$message({
+            message: err,
+            type: 'error'
+          });
+          reject(err);
+        });
+    });
   }
 
   submit() {
-    if(this.header.taxable){
-      this.header.taxInvoice = this.header.taxInvoice.replace(/[-.]+/g, '');
-    }
-    this.header.picId = accountStore.userDetails.id;
     let lineCount = 0;
 
+    this.header.picId = accountStore.userDetails.id;
+
+    // Remove non-numeric character in taxIncoive.
+    if (this.header.taxable) {
+      this.header.taxInvoice = this.header.taxInvoice.replace(/[-.]+/g, '');
+    }
+    
     for (const line of this.gridData) {
       line.lineNo = ++lineCount;
     }
 
     const data = {
       form: this.header,
-      line: this.gridData,
-      remove: this.removedLines
+      lines: this.gridData,
+      removedLines: this.removedLines
     }
 
-    if (this.statTaxInvoice) {
-      if (this.header.id != null) {
-        this.dynamicWindowService(this.baseApiUrlEVerification + "/submit")
-          .update(data)
-          .then(() => {
-
-            this.$notify({
-              title: 'Success',
-              dangerouslyUseHTMLString: true,
-              message: 'E-Verification form updated.',
-              type: 'success'
-            });
-
-            this.closeEVerificationUpdate();
-
-          }).catch(error => {
-            this.$notify({
-              title: 'Error',
-              message: error,
-              type: 'error',
-            });
-          }).finally(() => {
-            this.fullscreenLoading = false;
+    if (this.header.id) {
+      this.dynamicWindowService(`${this.baseApiUrl}/update-document`)
+        .update(data)
+        .then(res => {
+          this.$message({
+            message: `Invoice verification #${res.verificationNo} has been updated successfully.`,
+            type: 'success'
           });
 
-      } else {
-        this.dynamicWindowService(this.baseApiUrlEVerification + "/submit")
-          .create(data)
-          .then(() => {
-
-            this.$notify({
-              title: 'Success',
-              message: 'E-Verification form submitted.',
-              type: 'success'
-            });
-
-            this.closeEVerificationUpdate();
-
-          }).catch(error => {
-            this.$notify({
-              title: 'Error',
-              message: error,
-              type: 'error',
-            });
-          }).finally(() => {
-            this.fullscreenLoading = false;
+          this.closeEVerificationUpdate();
+        }).catch(err => {
+          this.$message({
+            message: err.response?.data?.detail || err,
+            type: 'error',
           });
-
-      }
+        }).finally(() => {
+          this.fullscreenLoading = false;
+        });
     } else {
-      this.fullscreenLoading = false;
+      this.dynamicWindowService(`${this.baseApiUrl}/create-document`)
+        .create(data)
+        .then(res => {
+          this.$message({
+            message: `Invoice verification has been created successfully. Verification no. ${res.verificationNo}`,
+            type: 'success'
+          });
+
+          this.closeEVerificationUpdate();
+        }).catch(err => {
+          this.$message({
+            message: err.response?.data?.detail || err.message,
+            type: 'error',
+          });
+        }).finally(() => {
+          this.fullscreenLoading = false;
+        });
     }
   }
 
@@ -508,7 +505,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       } = line;
 
       data.conversionRate = line.cConversionRate;
-      data.vendorId = line.cVendorId;
       return data;
     });
   }
@@ -517,15 +513,15 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     return this.docStatus.find(status => status.key === value)?.value;
   }
 
-  dateStatus(value: string){
+  dateStatus(value: string) {
     let date = "";
-    if(value == "SMT"){
+    if (value == "SMT") {
       date = this.header.dateSubmit;
-    } else if(value == "RJC") {
+    } else if (value == "RJC") {
       date = this.header.dateReject;
-    } else if(value == "APV") {
+    } else if (value == "APV") {
       date = this.header.dateApprove;
-    } else if(value == "CNL") {
+    } else if (value == "CNL") {
       date = this.header.lastModifiedDate;
     }
     return date;

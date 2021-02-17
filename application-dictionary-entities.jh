@@ -429,6 +429,49 @@ entity AdButton {
 
 // Start of Dashboard related entities.
 /**
+ * The PaDashboard entity.
+ * @author Ananta Aryadewa
+ */
+entity PaDashboard {
+	name String required maxlength(20)
+	description String
+
+	/** The minimum number of columns. */
+	minColumns Integer
+
+	/** The maximum number of columns. Set to -1 for unlimited columns. */
+	maxColumns Integer
+	
+	uid UUID
+	active Boolean
+}
+
+/**
+ * The PaDashboardItem entity.
+ * @author Ananta Aryadewa
+ */
+entity PaDashboardItem {
+	name String required maxlength(30)
+	description String
+	columnNo Integer required
+	rowNo Integer required
+	type PaDashboardItemType required
+	uid UUID
+	active Boolean
+}
+
+/**
+ * Per-user dashboard preference.
+ * @author Ananta Aryadewa
+ */
+entity PaDashboardPreference {
+	columnNo Integer required
+	rowNo Integer required
+	uid UUID
+	active Boolean
+}
+
+/**
  * The AdWatchList entity.
  * @author Ananta Aryadewa
  */
@@ -560,6 +603,10 @@ enum AdTriggerType {
 	PROCESS, REPORT, WORKFLOW
 }
 
+enum PaDashboardItemType {
+	CHART, WATCHLIST, CUSTOM
+}
+
 /**
  * One to one relationship.
  */
@@ -656,21 +703,35 @@ relationship ManyToOne {
 	AdUserAuthority{user required} to AdUser
 	AdUserAuthority{authority required} to ScAuthority
 
+	PaDashboard{adOrganization required} to ADOrganization
+
+	PaDashboardItem{adOrganization required} to ADOrganization
+	PaDashboardItem{adWatchList} to AdWatchList
+	PaDashboardItem{paDashboard required} to PaDashboard
+
+	PaDashboardPreference{adOrganization required} to ADOrganization
+	PaDashboardPreference{adUser required} to AdUser
+	PaDashboardPreference{paDashboardItem required} to PaDashboardItem
+
   ScAuthority{adOrganization required} to ADOrganization
 
   ScAccess{adOrganization required} to ADOrganization
   ScAccess{type required} to ScAccessType
 
-	// Used for restricting access to specific window.
+	/** Used for restricting access to specific window. */
   ScAccess{window} to ADWindow
 
-	// Used for restricting access to specific form.
+	/** Used for restricting access to specific form. */
 	ScAccess{form} to AdForm
 
-	// Used for restricting access to specific document actions.
+	/** Used for restricting access to specific dashboard item. */
+	ScAccess{paDashboard} to PaDashboard
+	ScAccess{paDashboardItem} to PaDashboardItem
+
+	/** Used for restricting access to specific document actions. */
 	ScAccess{documentType} to CDocumentType
 
-	// Used for restricting access to specific document actions.
+	/** Used for restricting access to specific document actions. */
 	ScAccess{referenceList} to ADReferenceList
 
   ScAccessType{adOrganization required} to ADOrganization
@@ -690,4 +751,4 @@ dto * with mapstruct
 // Set service options to all except few
 service * with serviceClass
 
-skipClient * except AdWatchList, AdWatchListItem
+skipClient * except PaDashboard, PaDashboardItem, PaDashboardPreference, AdWatchList, AdWatchListItem

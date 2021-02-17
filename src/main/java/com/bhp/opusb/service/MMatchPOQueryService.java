@@ -4,6 +4,24 @@ import java.util.List;
 
 import javax.persistence.criteria.JoinType;
 
+// for static metamodels
+import com.bhp.opusb.domain.ADOrganization_;
+import com.bhp.opusb.domain.CCostCenter_;
+import com.bhp.opusb.domain.CCurrency_;
+import com.bhp.opusb.domain.CLocator_;
+import com.bhp.opusb.domain.CProduct_;
+import com.bhp.opusb.domain.CTaxCategory_;
+import com.bhp.opusb.domain.CTax_;
+import com.bhp.opusb.domain.CUnitOfMeasure_;
+import com.bhp.opusb.domain.CVendor_;
+import com.bhp.opusb.domain.CWarehouse_;
+import com.bhp.opusb.domain.MMatchPO;
+import com.bhp.opusb.domain.MMatchPO_;
+import com.bhp.opusb.repository.MMatchPORepository;
+import com.bhp.opusb.service.dto.MMatchPOCriteria;
+import com.bhp.opusb.service.dto.MMatchPODTO;
+import com.bhp.opusb.service.mapper.MMatchPOMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -13,13 +31,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
-
-import com.bhp.opusb.domain.MMatchPO;
-import com.bhp.opusb.domain.*; // for static metamodels
-import com.bhp.opusb.repository.MMatchPORepository;
-import com.bhp.opusb.service.dto.MMatchPOCriteria;
-import com.bhp.opusb.service.dto.MMatchPODTO;
-import com.bhp.opusb.service.mapper.MMatchPOMapper;
 
 /**
  * Service for executing complex queries for {@link MMatchPO} entities in the database.
@@ -74,6 +85,7 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
      * @param page
      * @return
      */
+    @Transactional(readOnly = true)
     public Page<MMatchPODTO> findNewReceivedItems(MMatchPOCriteria criteria, Pageable page) {
         log.debug("find new received items by criteria : {}, page: {}", criteria, page);
         return mMatchPORepository.findNonInvoicedMatchPOs(criteria, page)
@@ -184,6 +196,9 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
             if (criteria.getItemDesc2() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getItemDesc2(), MMatchPO_.itemDesc2));
             }
+            if (criteria.getInvoiced() != null) {
+                specification = specification.and(buildSpecification(criteria.getInvoiced(), MMatchPO_.invoiced));
+            }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MMatchPO_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
@@ -192,9 +207,9 @@ public class MMatchPOQueryService extends QueryService<MMatchPO> {
                 specification = specification.and(buildSpecification(criteria.getCCostCenterId(),
                     root -> root.join(MMatchPO_.cCostCenter, JoinType.LEFT).get(CCostCenter_.id)));
             }
-            if (criteria.getCVendorId() != null) {
-                specification = specification.and(buildSpecification(criteria.getCVendorId(),
-                    root -> root.join(MMatchPO_.cVendor, JoinType.LEFT).get(CVendor_.id)));
+            if (criteria.getVendorId() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorId(),
+                    root -> root.join(MMatchPO_.vendor, JoinType.LEFT).get(CVendor_.id)));
             }
             if (criteria.getCCurrencyId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCCurrencyId(),

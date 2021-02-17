@@ -44,6 +44,10 @@ public class ScAccessCriteria implements Serializable, Criteria {
 
     private LongFilter formId;
 
+    private LongFilter paDashboardId;
+
+    private LongFilter paDashboardItemId;
+
     private LongFilter documentTypeId;
 
     private LongFilter referenceListId;
@@ -66,6 +70,8 @@ public class ScAccessCriteria implements Serializable, Criteria {
         this.typeName = other.typeName == null ? null : other.typeName.copy();
         this.windowId = other.windowId == null ? null : other.windowId.copy();
         this.formId = other.formId == null ? null : other.formId.copy();
+        this.paDashboardId = other.paDashboardId == null ? null : other.paDashboardId.copy();
+        this.paDashboardItemId = other.paDashboardItemId == null ? null : other.paDashboardItemId.copy();
         this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
         this.referenceListId = other.referenceListId == null ? null : other.referenceListId.copy();
         this.authorityId = other.authorityId == null ? null : other.authorityId.copy();
@@ -165,6 +171,22 @@ public class ScAccessCriteria implements Serializable, Criteria {
         this.formId = formId;
     }
 
+    public LongFilter getPaDashboardId() {
+        return paDashboardId;
+    }
+
+    public void setPaDashboardId(LongFilter paDashboardId) {
+        this.paDashboardId = paDashboardId;
+    }
+
+    public LongFilter getPaDashboardItemId() {
+        return paDashboardItemId;
+    }
+
+    public void setPaDashboardItemId(LongFilter paDashboardItemId) {
+        this.paDashboardItemId = paDashboardItemId;
+    }
+
     public LongFilter getDocumentTypeId() {
         return documentTypeId;
     }
@@ -218,6 +240,8 @@ public class ScAccessCriteria implements Serializable, Criteria {
             Objects.equals(typeName, that.typeName) &&
             Objects.equals(windowId, that.windowId) &&
             Objects.equals(formId, that.formId) &&
+            Objects.equals(paDashboardId, that.paDashboardId) &&
+            Objects.equals(paDashboardItemId, that.paDashboardItemId) &&
             Objects.equals(documentTypeId, that.documentTypeId) &&
             Objects.equals(referenceListId, that.referenceListId) &&
             Objects.equals(authorityId, that.authorityId) &&
@@ -238,6 +262,8 @@ public class ScAccessCriteria implements Serializable, Criteria {
         typeName,
         windowId,
         formId,
+        paDashboardId,
+        paDashboardItemId,
         documentTypeId,
         referenceListId,
         authorityId,
@@ -256,11 +282,15 @@ public class ScAccessCriteria implements Serializable, Criteria {
                 (canWrite != null ? "canWrite=" + canWrite + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (typeId != null ? "typeId=" + typeId + ", " : "") +
+                (typeName != null ? "typeName=" + typeName + ", " : "") +
                 (windowId != null ? "windowId=" + windowId + ", " : "") +
                 (formId != null ? "formId=" + formId + ", " : "") +
+                (paDashboardId != null ? "paDashboardId=" + paDashboardId + ", " : "") +
+                (paDashboardItemId != null ? "paDashboardItemId=" + paDashboardItemId + ", " : "") +
                 (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
                 (referenceListId != null ? "referenceListId=" + referenceListId + ", " : "") +
                 (authorityId != null ? "authorityId=" + authorityId + ", " : "") +
+                (authorityName != null ? "authorityName=" + authorityName + ", " : "") +
             "}";
     }
 

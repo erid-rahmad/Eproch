@@ -99,6 +99,7 @@ class MMatchPOGatlingTest extends Simulation {
                 , "mMatchType":"SAMPLE_TEXT"
                 , "itemDesc1":"SAMPLE_TEXT"
                 , "itemDesc2":"SAMPLE_TEXT"
+                , "invoiced":null
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_mMatchPO_url"))).exitHereIfFailed

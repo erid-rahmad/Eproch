@@ -83,4 +83,16 @@
                                  referencedTableName="c_tax"/>
 
     </changeSet>
+
+    <changeSet id="20200130155500" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="m_match_po" constraintName="fk_m_match_po_c_vendor_id"/>
+        <renameColumn tableName="m_match_po" oldColumnName="c_vendor_id" newColumnName="vendor_id"/>
+        
+        <addForeignKeyConstraint baseColumnNames="vendor_id"
+                                 baseTableName="m_match_po"
+                                 constraintName="fk_m_match_po_vendor_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor"/>
+
+    </changeSet>
 </databaseChangeLog>

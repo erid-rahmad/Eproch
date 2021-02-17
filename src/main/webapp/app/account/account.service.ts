@@ -55,9 +55,7 @@ export default class AccountService {
         response = await axios.get('api/accesses');
         accountStore.setGrantedResources(response.data);
 
-        const routes = await this.menuService.retrieve({
-          criteriaQuery: 'parentMenuId.specified=false'
-        });
+        const routes = await this.menuService.retrieve();
         
         await permissionStore.updateRoutes(routes.data);
         this.router.addRoutes(permissionStore.dynamicRoutes);

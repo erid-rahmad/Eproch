@@ -1,0 +1,10 @@
+{
+  "opusWebApp": {
+    "PaDashboardItemType": {
+      "null": "",
+      "CHART": "CHART",
+      "WATCHLIST": "WATCHLIST",
+      "CUSTOM": "CUSTOM"
+    }
+  }
+}

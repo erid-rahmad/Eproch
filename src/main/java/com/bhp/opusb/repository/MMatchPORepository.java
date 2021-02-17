@@ -26,7 +26,7 @@ public interface MMatchPORepository extends JpaRepository<MMatchPO, Long>, JpaSp
     "AND m.lineNoMr = ?7 " +
     "AND m.orderSuffix = ?8"
   )
-  Optional<MMatchPO> findByKeys(String matchType, String orgId, String docType, String poNo, String receiptNo,
+  Optional<MMatchPO> findByKeys(String matchType, String orgCode, String docType, String poNo, String receiptNo,
       Integer lineNoPo, Integer lineNoMr, String orderSuffix);
 
   /**
@@ -44,6 +44,6 @@ public interface MMatchPORepository extends JpaRepository<MMatchPO, Long>, JpaSp
     "AND m.lineNoMr = ?6 " +
     "AND m.orderSuffix = ?7"
   )
-  Optional<MMatchPO> findReversedLine(String orgId, String docType, String poNo, BigDecimal receiptNo, Integer lineNoPo,
+  Optional<MMatchPO> findReversedLine(String orgCode, String docType, String poNo, BigDecimal receiptNo, Integer lineNoPo,
       Integer lineNoMr, String orderSuffix);
 }

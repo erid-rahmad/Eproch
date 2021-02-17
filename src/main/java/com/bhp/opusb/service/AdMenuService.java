@@ -86,6 +86,32 @@ public class AdMenuService {
     }
 
     /**
+     * Get the fullpath to the specific submenu ID.
+     * @param id The ID of the target menu.
+     */
+    @Transactional(readOnly = true)
+    public String getFullPath(Long id) {
+        final StringBuilder fullPath = new StringBuilder();
+        boolean hasParent = false;
+
+        Optional<AdMenu> record = adMenuRepository.findById(id);
+        if (record.isPresent()) {
+            AdMenu menu = record.get();
+
+            fullPath.append(menu.getPath());
+            hasParent = menu.getParentMenu() != null;
+
+            while (hasParent) {
+                menu = menu.getParentMenu();
+                fullPath.insert(0, menu.getPath() + "/");
+                hasParent = menu.getParentMenu() != null;
+            }
+        }
+
+        return fullPath.toString();
+    }
+
+    /**
      * Delete the adMenu by id.
      *
      * @param id the id of the entity.

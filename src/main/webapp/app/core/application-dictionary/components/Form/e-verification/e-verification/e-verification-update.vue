@@ -5,39 +5,45 @@
             <el-col :span="24">
 
                 <el-button
+                    v-if="isDraft"
+                    v-loading.fullscreen.lock="fullscreenLoading"
                     class="button"
                     style="margin-left: 0px;"
                     size="small"
                     type="primary"
                     icon="el-icon-check"
-                    v-loading.fullscreen.lock="fullscreenLoading"
-                    v-if="isDraft"
-                    @click="updateEVerification"/>
+                    @click="updateEVerification"
+                />
+
                 <el-button
                     class="button"
                     style="margin-left: 0px;"
                     size="small"
                     type="danger"
                     icon="el-icon-close"
-                    @click="closeEVerificationUpdate"/>
+                    @click="closeEVerificationUpdate"
+                />
 
                 <el-button
+                    v-if="isDraft"
                     class="button"
                     size="small"
                     type="primary"
                     icon="el-icon-plus"
-                    v-if="isDraft"
-                    @click="displayMatchPo(1)">
+                    @click="displayMatchPo(1)"
+                >
                     Add
                 </el-button>
+
                 <el-button
+                    v-if="isDraft"
                     class="button"
                     style="margin-left: 0px;"
                     size="small"
                     type="primary"
                     icon="el-icon-plus"
-                    v-if="isDraft"
-                    @click="displayMatchPo(2)">
+                    @click="displayMatchPo(2)"
+                >
                     Add by Receipt No.
                 </el-button>
 
@@ -50,37 +56,50 @@
                 label-position="left"
                 label-width="170px"
                 :model="header"
+                :rules="validationRules"
                 size="mini"
-                :rules="rules"
             >
                 <el-col :span="8">
                     <el-form-item label="Invoice No." prop="invoiceNo" required>
-                        <el-input :disabled="!isDraft" class="form-input" clearable v-model="header.invoiceNo"/>
+                        <el-input
+                            v-model="header.invoiceNo"
+                            :disabled="!isDraft"
+                            class="form-input"
+                            clearable
+                        />
                     </el-form-item>
                     <el-form-item label="Invoice Date" prop="invoiceDate" required>
                         <el-date-picker
+                            v-model="header.invoiceDate"
                             class="form-input"
                             clearable
                             :disabled="!isDraft"
-                            v-model="header.invoiceDate"
                             type="date"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"
                             placeholder="Pick a date" />
                     </el-form-item>
                     <el-form-item label="Currency" prop="currencyId" required>
-                        <el-select :disabled="!isDraft" class="form-input" clearable filterable v-model="header.currencyId" placeholder="Currency" >
+                        <el-select
+                            v-model="header.currencyId"
+                            :disabled="!isDraft"
+                            class="form-input"
+                            clearable
+                            filterable
+                            placeholder="Currency"
+                        >
                             <el-option
                                 v-for="item in currencyOptions"
                                 :key="item.key"
                                 :label="item.value"
-                                :value="item.key" />
+                                :value="item.key"
+                            />
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="Verification No" prop="verificationNo" v-if="!isDraft">
+                    <el-form-item v-if="!isDraft" label="Verification No" prop="verificationNo">
                         <el-input class="form-input" disabled clearable v-model="header.verificationNo"/>
                     </el-form-item>
-                    <el-form-item label="Verification Date" prop="verificationDate" v-if="!isDraft">
+                    <el-form-item v-if="!isDraft" label="Verification Date" prop="verificationDate">
                         <el-date-picker
                             class="form-input"
                             clearable disabled
@@ -116,10 +135,10 @@
                     <el-form-item label="NPWP" prop="vendorName">
                         <el-input class="form-input" disabled clearable v-model="header.vendorName"/>
                     </el-form-item>
-                    <el-form-item label="Status" prop="verificationStatus" v-if="!isDraft">
+                    <el-form-item v-if="!isDraft" label="Status" prop="verificationStatus">
                         <el-input class="form-input" disabled clearable :value="formatDocumentStatus(header.verificationStatus)"/>
                     </el-form-item>
-                    <el-form-item label="Status Date" v-if="!isDraft">
+                    <el-form-item v-if="!isDraft" label="Status Date">
                         <el-date-picker
                             class="form-input"
                             clearable disabled
@@ -127,7 +146,8 @@
                             type="date"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"
-                            placeholder="Pick a date" />
+                            placeholder="Pick a date"
+                        />
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -164,7 +184,6 @@
             <el-col :span="24">
                 <el-table
                     v-loading="processing"
-                    ref="gridData"
                     highlight-current-row
                     border stripe
                     size="mini"
@@ -173,13 +192,15 @@
                     :default-sort="gridSchema.defaultSort"
                     :empty-text="gridSchema.emptyText"
                     :data="gridData"
-                    @sort-change="changeOrder">
+                    :row-class-name="rowClassName"
+                    @sort-change="changeOrder"
+                >
 
                     <el-table-column
+                        v-if="isDraft"
                         align="center"
                         fixed
                         width="55"
-                        v-if="isDraft"
                     >
                         <template slot-scope="{ row, $index }">
                             <el-button
@@ -332,25 +353,29 @@
 </script>
 
 <style lang="scss">
-    .compact .verification-update{
-        padding: 0px;
-    }
+.compact .verification-update {
+    padding: 0px;
+}
 
-    .header {
-        color: #333;
-    }
+.header {
+    color: #333;
+}
 
-    .filter {
-        .form-input {
-            width: 100%;
-        }
+.filter {
+    .form-input {
+        width: 100%;
     }
+}
 
-    .main {
-        padding: 0px;
-    }
+.main {
+    padding: 0px;
 
-    .button {
-        margin-bottom: 5px;
+    .el-table .danger-row {
+        background: oldlace;
     }
+}
+
+.button {
+    margin-bottom: 5px;
+}
 </style>

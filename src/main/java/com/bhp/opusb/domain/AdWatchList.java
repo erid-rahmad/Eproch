@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -22,6 +23,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  * The AdWatchList entity.\n@author Ananta Aryadewa
@@ -53,11 +56,14 @@ public class AdWatchList extends AbstractAuditingEntity {
     private Boolean active = true;
 
     @OneToMany(mappedBy = "adWatchList")
+    @Fetch(FetchMode.JOIN)
+    @OrderBy("id")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @JsonManagedReference
     private List<AdWatchListItem> adWatchListItems = new ArrayList<>();
 
     @ManyToOne(optional = false)
+    @Fetch(FetchMode.JOIN)
     @NotNull
     @JsonIgnoreProperties("adWatchLists")
     private ADOrganization adOrganization;

@@ -19,6 +19,7 @@ export interface IAdWatchListItem {
   uid?: string;
   active?: boolean;
   adOrganizationId?: number;
+  adMenu?: any;
   adMenuId?: number;
   adWatchListId?: number;
   count?: number;
@@ -41,6 +42,7 @@ export class AdWatchListItem implements IAdWatchListItem {
     public uid?: string,
     public active?: boolean,
     public adOrganizationId?: number,
+    public adMenu?: any,
     public adMenuId?: number,
     public adWatchListId?: number,
     public count?: number

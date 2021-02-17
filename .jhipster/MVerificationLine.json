@@ -1,235 +1,271 @@
 {
-  "name": "MVerificationLine",
-  "fields": [
-    {
-      "fieldName": "verificationNo",
-      "javadoc": "VDDOCM",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "matchType",
-      "javadoc": "VDMATC",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "1"
-    },
-    {
-      "fieldName": "poNo",
-      "javadoc": "VDDOCO",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "receiveNo",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "deliveryNo",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "description",
-      "javadoc": "VDVRMK Supplier's remark.",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "orderSuffix",
-      "javadoc": "VDSFXO",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "10"
-    },
-    {
-      "fieldName": "qty",
-      "javadoc": "VDUREC",
-      "fieldType": "Long",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "priceActual",
-      "javadoc": "VDPRRC Unit price.",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "foreignActual",
-      "javadoc": "VDFRRC Unit price in foreign currency.",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "totalLines",
-      "javadoc": "VDAREC Receipt amount.",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "foreignTotalLines",
-      "javadoc": "VDFREC Receipt amount in foreign currency.",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "taxAmount",
-      "javadoc": "VDSTAM Tax amount.",
-      "fieldType": "BigDecimal",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "foreignTaxAmount",
-      "javadoc": "VDCTAM Tax amount in foreign currency.",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "lineNo",
-      "javadoc": "VDLINN Invoice verification line no.",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "lineNoPo",
-      "javadoc": "VDLNID PO line no.",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "lineNoMr",
-      "javadoc": "VDNLIN Receipt line no.",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "itemDesc1",
-      "javadoc": "PRLITM",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "25"
-    },
-    {
-      "fieldName": "itemDesc2",
-      "javadoc": "PRAITM",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "25"
-    },
-    {
-      "fieldName": "conversionRate",
-      "javadoc": "VDCRR",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "receiveDate",
-      "javadoc": "VDRCDJ Receipt date.",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "payStat",
-      "javadoc": "VDPST",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "taxable",
-      "javadoc": "VDTX Y means true, otherwise false",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "cDocType",
-      "javadoc": "VDDCTO",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "2"
-    },
-    {
-      "fieldName": "cDocTypeMr",
-      "javadoc": "VDDCT",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "2"
-    },
-    {
-      "fieldName": "uid",
-      "fieldType": "UUID"
-    },
-    {
-      "fieldName": "active",
-      "fieldType": "Boolean"
-    }
-  ],
-  "relationships": [
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "mVerification",
-      "otherEntityRelationshipName": "mVerificationLine",
-      "relationshipValidateRules": "required",
-      "relationshipName": "verification",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDOrganization",
-      "otherEntityRelationshipName": "mVerificationLine",
-      "relationshipValidateRules": "required",
-      "relationshipName": "adOrganization",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cProduct",
-      "otherEntityRelationshipName": "mVerificationLine",
-      "relationshipValidateRules": "required",
-      "relationshipName": "product",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cUnitOfMeasure",
-      "otherEntityRelationshipName": "mVerificationLine",
-      "relationshipValidateRules": "required",
-      "javadoc": "VDUOM",
-      "relationshipName": "uom",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cCostCenter",
-      "otherEntityRelationshipName": "mVerificationLine",
-      "relationshipValidateRules": "required",
-      "relationshipName": "cCostCenter",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cCurrency",
-      "otherEntityRelationshipName": "mVerificationLine",
-      "relationshipValidateRules": "required",
-      "javadoc": "VDCRCD",
-      "relationshipName": "cCurrency",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cTaxCategory",
-      "otherEntityRelationshipName": "mVerificationLine",
-      "javadoc": "VDEXR1 is mapped to tax category name.",
-      "relationshipName": "cTaxCategory",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cTax",
-      "otherEntityRelationshipName": "mVerificationLine",
-      "javadoc": "VDTXA1 is mapped to tax name.",
-      "relationshipName": "cTax",
-      "otherEntityField": "id"
-    }
-  ],
-  "changelogDate": "20201009091800",
-  "entityTableName": "m_verification_line",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*",
-  "skipClient": true
+    "name": "MVerificationLine",
+    "fields": [
+        {
+            "fieldName": "verificationNo",
+            "javadoc": "VDDOCM",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "matchType",
+            "javadoc": "VDMATC",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1"
+        },
+        {
+            "fieldName": "poNo",
+            "javadoc": "VDDOCO",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "receiveNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "deliveryNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "javadoc": "VDVRMK Supplier's remark.",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "orderSuffix",
+            "javadoc": "VDSFXO",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "qty",
+            "javadoc": "VDUREC",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "priceActual",
+            "javadoc": "VDPRRC Unit price.",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "foreignActual",
+            "javadoc": "VDFRRC Unit price in foreign currency.",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "totalLines",
+            "javadoc": "VDAREC Receipt amount.",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "foreignTotalLines",
+            "javadoc": "VDFREC Receipt amount in foreign currency.",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "taxAmount",
+            "javadoc": "VDSTAM Tax amount.",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "foreignTaxAmount",
+            "javadoc": "VDCTAM Tax amount in foreign currency.",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "lineNo",
+            "javadoc": "VDLINN Invoice verification line no.",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "lineNoPo",
+            "javadoc": "VDLNID PO line no.",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "lineNoMr",
+            "javadoc": "VDNLIN Receipt line no.",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "itemDesc1",
+            "javadoc": "PRLITM",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "25"
+        },
+        {
+            "fieldName": "itemDesc2",
+            "javadoc": "PRAITM",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "25"
+        },
+        {
+            "fieldName": "conversionRate",
+            "javadoc": "VDCRR",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "receiveDate",
+            "javadoc": "VDRCDJ Receipt date.",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "payStat",
+            "javadoc": "VDPST",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "taxable",
+            "javadoc": "VDTX Y means true, otherwise false",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "cDocType",
+            "javadoc": "VDDCTO",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "2"
+        },
+        {
+            "fieldName": "cDocTypeMr",
+            "javadoc": "VDDCT",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "2"
+        },
+        {
+            "fieldName": "receiptReversed",
+            "javadoc": "Whether or not the respective receipt line is reversed.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "apReversed",
+            "javadoc": "Whether or not the respective AP invoice line is reversed.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mVerification",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "verification",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cProduct",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "product",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cUnitOfMeasure",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "relationshipValidateRules": "required",
+            "javadoc": "VDUOM",
+            "relationshipName": "uom",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCostCenter",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cCostCenter",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "relationshipValidateRules": "required",
+            "javadoc": "VDCRCD",
+            "relationshipName": "cCurrency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTaxCategory",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "javadoc": "VDEXR1 is mapped to tax category name.",
+            "relationshipName": "cTaxCategory",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cTax",
+            "otherEntityRelationshipName": "mVerificationLine",
+            "javadoc": "VDTXA1 is mapped to tax name.",
+            "relationshipName": "cTax",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20201009091800",
+    "entityTableName": "m_verification_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
 }

@@ -1,15 +1,14 @@
+import WatchListMixin from '@/core/application-dictionary/mixins/WatchListMixin';
 import settings from '@/settings';
-import AlertMixin from '@/shared/alert/alert.mixin';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import Inputmask from 'inputmask';
-import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
+import buildCriteriaQueryString from '@/shared/filter/filters';
+import { ElTable } from 'element-ui/types/table';
 
 @Component
-export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, WatchListMixin) {
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -25,11 +24,6 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
   public reverse = false;
   public totalItems = 0;
 
-  private baseApiUrl = "/api/m-match-pos";
-  private baseApiUrlVendor = "/api/c-vendors";
-  private baseApiUrlReference = "/api/ad-references";
-  private baseApiUrlReferenceList = "/api/ad-reference-lists";
-
   private filterQuery: string = '';
   private processing = false;
 
@@ -43,16 +37,13 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
   private totalAmount: number = null;
   private mMatchType: string = "";
 
-  selectedRows: any = {};
+  selectedRow: any = {};
   public vendorOptions: any = [];
   public statusOptions: any = [];
 
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
-  public productReceiveStatus: string = "productReceiveStatus";
   public radioSelection: number = null;
-
-  private isVendor = accountStore.userDetails.cVendorId;
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -62,12 +53,13 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
     return settings.dateValueFormat;
   }
 
-  created(){
-    this.retrieveGetReferences(this.productReceiveStatus);
-    this.retrieveAllRecordsSelectOption(this.baseApiUrlVendor);
+  get isVendor() {
+    return accountStore.userDetails.vendor;
   }
 
-  public mounted(): void {
+  created(){
+    this.initStatusOptions();
+    this.initVendorOptions();
     this.retrieveAllRecords();
   }
 
@@ -119,18 +111,13 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
     this.retrieveAllRecords();
   }
 
-  public singleSelection (row) {
+  public singleSelection(row) {
     this.radioSelection = this.gridData.indexOf(row);
-    this.selectedRows = row;
-
-    console.log(row);
+    this.selectedRow = row;
   }
 
   public retrieveAllRecords(): void {
-    if ( ! this.baseApiUrl) {
-      return;
-    }
-
+    this.clearSelection();
     this.processing = true;
     const paginationQuery = {
       page: this.page - 1,
@@ -138,26 +125,28 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
       sort: this.sort()
     };
 
-    var joinFilterQuery = "";
-    if(this.isVendor){
-      joinFilterQuery = "&cVendorId.equals="+this.isVendor;
-    }
+    const watchListQuery = this.getWatchListQuery();
 
-    this.dynamicWindowService(this.baseApiUrl)
+    if (watchListQuery) {
+      watchListQuery.split('&').forEach(field => {
+        const key = field.substring(0, field.indexOf('.'));
+        const value = field.substring(field.indexOf('=') + 1);
+        this.$set(this.filter, key, value);
+      });
+    }
+    
+    this.dynamicWindowService('/api/m-match-pos')
       .retrieve({
-        criteriaQuery: this.filterQuery+joinFilterQuery,
+        criteriaQuery: [
+          'mMatchType.equals=1',
+          this.filterQuery,
+          this.isVendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
+        ],
         paginationQuery
       })
       .then(res => {
         console.log(res);
         this.gridData = res.data.map((item: any) => {
-          var matchType;
-          if(item.mMatchType == 1){
-            matchType = "Applied";
-          }else{
-            matchType = "Unapplied";
-          }
-          this.mMatchType = item.mMatchType;
           this.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
         });
@@ -165,7 +154,6 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
         this.$emit('total-count-changed', this.queryCount);
-
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -176,9 +164,13 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
       })
       .finally(() => {
         this.processing = false;
-        this.radioSelection = null;
-        this.selectedRows = {};
       });
+  }
+
+  private clearSelection() {
+    (<ElTable>this.$refs.mainTable)?.setCurrentRow();
+    this.radioSelection = null;
+    this.selectedRow = null;
   }
 
   public closeDialog(): void {
@@ -186,123 +178,68 @@ export default class ProductReceiveInfo extends mixins(Vue2Filters.mixin, AlertM
     this.retrieveAllRecords();
   }
 
-  private retrieveGetReferences(param: string) {
-    this.dynamicWindowService(this.baseApiUrlReference)
-    .retrieve({
-      criteriaQuery: [`value.contains=`+param]
-    })
-    .then(res => {
-        let references = res.data.map(item => {
-            return{
-                id: item.id,
-                value: item.value,
-                name: item.name
-            };
-        });
-        this.retrieveGetReferenceLists(references);
-    });
-  }
-
-  private retrieveGetReferenceLists(param: any) {
-    this.dynamicWindowService(this.baseApiUrlReferenceList)
-    .retrieve({
-      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
-    })
-    .then(res => {
-        let referenceList = res.data.map(item => {
-            return{
-                key: item.value,
-                value: item.name
-            };
-        });
-
-        if(param[0].value == this.productReceiveStatus){
-          this.statusOptions = referenceList;
-        }
-    });
-  }
-
-  public retrieveAllRecordsSelectOption(baseUrl): void {
-
-    this.processing = true;
-
-    this.dynamicWindowService(baseUrl)
-      .retrieve()
+  private initStatusOptions() {
+    this.dynamicWindowService(null)
+      .retrieveReferenceLists('productReceiveStatus')
       .then(res => {
-
-        let referenceList = res.data.map(item => {
-          return{
-              key: item.id,
-              value: item.name
-          };
-      });
-
-      this.vendorOptions = referenceList;
-
-      })
-      .catch(err => {
-        console.error('Failed getting the record. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
-        });
-      })
-      .finally(() => {
-        this.processing = false;
+        this.statusOptions = res.map(item => 
+          ({
+              key: item.value,
+              label: item.name
+          })
+        );
       });
   }
 
-  public verificationFilter(){
+  public initVendorOptions(): void {
+    this.dynamicWindowService('/api/c-vendors')
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true'
+        ]
+      })
+      .then(res => {
+        this.vendorOptions = res.data.map((item: any) =>
+          ({
+              key: item.id,
+              label: item.name
+          })
+        );
+      });
+  }
 
-    this.filterQuery = "";
+  public verificationFilter() {
+    const form = this.filter;
+    const query = [];
 
-    if((this.filter.receiveNo != null)&&(this.filter.receiveNo != "")){
-      this.filterQuery = "receiptNo.equals="+this.filter.receiveNo;
+    if (!!form.receiptNo) {
+      query.push(`receiptNo.equals=${form.receiptNo}`);
     }
-    if((this.filter.receiveDateFrom != null)&&(this.filter.receiveDateFrom != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "receiptDate.greaterOrEqualThan="+this.filter.receiveDateFrom;
+    if (!!form.receiptDateFrom) {
+      query.push(`receiptDate.greaterOrEqualThan=${form.receiptDateFrom}`)
     }
-
-    if((this.filter.poNo != null)&&(this.filter.poNo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "poNo.equals="+this.filter.poNo;
+    if (!!form.receiptDateTo) {
+      query.push(`receiptDate.lessOrEqualThan=${form.receiptDateTo}`)
     }
-    if((this.filter.receiveDateTo != null)&&(this.filter.receiveDateTo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "receiptDate.lessOrEqualThan="+this.filter.receiveDateTo;
+    if (!!form.poNo) {
+      query.push(`poNo.equals=${form.poNo}`)
     }
-
-    if((this.filter.deliveryNo != null)&&(this.filter.deliveryNo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "deliveryNo.equals="+this.filter.deliveryNo;
+    if (!!form.deliveryNo) {
+      query.push(`deliveryNo.equals=${form.deliveryNo}`);
     }
-    if((this.filter.vendor != null)&&(this.filter.vendor != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "cVendorId.equals="+this.filter.vendor;
+    if (!!form.vendorId) {
+      query.push(`vendorId.equals=${form.vendorId}`);
     }
-    if((this.filter.productReceiveStatus != null)&&(this.filter.productReceiveStatus != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "mMatchType.equals="+this.filter.productReceiveStatus;
+    if (!!form.invoiced) {
+      query.push(`invoiced.equals=${form.invoiced}`);
     }
 
+    this.filterQuery = buildCriteriaQueryString(query);
     this.retrieveAllRecords();
   }
 
   formatDocumentStatus(value: string) {
-    return this.statusOptions.find(status => status.key === value)?.value;
+    return this.statusOptions.find(status => status.key === `${value}`)?.label;
   }
 
 }

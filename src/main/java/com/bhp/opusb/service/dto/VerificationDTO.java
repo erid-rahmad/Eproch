@@ -1,11 +1,12 @@
 package com.bhp.opusb.service.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class VerificationDTO {
     MVerificationDTO form;
-    List<MVerificationLineDTO> line;
-    List<MVerificationLineDTO> remove;
+    List<MVerificationLineDTO> lines;
+    List<MVerificationLineDTO> removedLines = new ArrayList<>();
 
     public MVerificationDTO getForm() {
         return form;
@@ -15,19 +16,19 @@ public class VerificationDTO {
         this.form = form;
     }
 
-    public List<MVerificationLineDTO> getLine() {
-        return line;
+    public List<MVerificationLineDTO> getLines() {
+        return lines;
     }
 
-    public void setLine(List<MVerificationLineDTO> line) {
-        this.line = line;
+    public void setLines(List<MVerificationLineDTO> lines) {
+        this.lines = lines;
     }
 
-    public List<MVerificationLineDTO> getRemove() {
-        return remove;
+    public List<MVerificationLineDTO> getRemovedLines() {
+        return removedLines;
     }
 
-    public void setRemove(List<MVerificationLineDTO> remove) {
-        this.remove = remove;
+    public void setRemovedLines(List<MVerificationLineDTO> removedLines) {
+        this.removedLines = removedLines;
     }
 }

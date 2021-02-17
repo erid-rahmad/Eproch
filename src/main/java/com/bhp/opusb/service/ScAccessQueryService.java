@@ -126,6 +126,14 @@ public class ScAccessQueryService extends QueryService<ScAccess> {
                 specification = specification.and(buildSpecification(criteria.getFormId(),
                     root -> root.join(ScAccess_.form, JoinType.LEFT).get(AdForm_.id)));
             }
+            if (criteria.getPaDashboardId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPaDashboardId(),
+                    root -> root.join(ScAccess_.paDashboard, JoinType.LEFT).get(PaDashboard_.id)));
+            }
+            if (criteria.getPaDashboardItemId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPaDashboardItemId(),
+                    root -> root.join(ScAccess_.paDashboardItem, JoinType.LEFT).get(PaDashboardItem_.id)));
+            }
             if (criteria.getDocumentTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
                     root -> root.join(ScAccess_.documentType, JoinType.LEFT).get(CDocumentType_.id)));

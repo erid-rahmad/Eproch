@@ -1,9 +1,10 @@
 package com.bhp.opusb.service;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import javax.persistence.criteria.JoinType;
 
@@ -16,7 +17,6 @@ import com.bhp.opusb.domain.AdMenu_;
 import com.bhp.opusb.repository.AdMenuRepository;
 import com.bhp.opusb.service.dto.AdMenuCriteria;
 import com.bhp.opusb.service.dto.AdMenuDTO;
-import com.bhp.opusb.service.dto.ScAccessCriteria;
 import com.bhp.opusb.service.dto.ScAccessDTO;
 import com.bhp.opusb.service.mapper.AdMenuMapper;
 
@@ -26,15 +26,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
-import io.github.jhipster.service.filter.StringFilter;
-import io.vavr.collection.Stream;
 
 /**
  * Service for executing complex queries for {@link AdMenu} entities in the database.
@@ -49,16 +44,16 @@ public class AdMenuQueryService extends QueryService<AdMenu> {
     private final Logger log = LoggerFactory.getLogger(AdMenuQueryService.class);
 
     private final AdMenuRepository adMenuRepository;
-    private final ScAccessQueryService scAccessQueryService;
+    private final ScAccessService scAccessService;
 
     private final AdMenuMapper adMenuMapper;
 
     public AdMenuQueryService(
-        AdMenuRepository adMenuRepository, ScAccessQueryService scAccessQueryService,
+        AdMenuRepository adMenuRepository, ScAccessService scAccessService,
         AdMenuMapper adMenuMapper
     ) {
         this.adMenuRepository = adMenuRepository;
-        this.scAccessQueryService = scAccessQueryService;
+        this.scAccessService = scAccessService;
         this.adMenuMapper = adMenuMapper;
     }
 
@@ -88,51 +83,46 @@ public class AdMenuQueryService extends QueryService<AdMenu> {
             .map(adMenuMapper::toDto);
     }
 
+    /**
+     * Get the user's main menu.
+     */
     @Transactional(readOnly = true)
-    public List<AdMenuDTO> findAllParentMenus() {
-        log.debug("find all parent menus");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public List<AdMenuDTO> getMainMenu() {
+        log.debug("Get all accessible menus");
 
-        final List<String> authorities = Stream.ofAll(authentication.getAuthorities())
-            .map(GrantedAuthority::getAuthority).toJavaList();
+        final List<ScAccessDTO> accesses = scAccessService.getPageAccesses();
 
-        ScAccessCriteria authorityCriteria = new ScAccessCriteria();
-        StringFilter nameFilter = new StringFilter();
-        nameFilter.setIn(authorities);
-        authorityCriteria.setAuthorityName(nameFilter);
+        final Map<Long, ScAccessDTO> formAccesses = accesses.stream()
+            .filter(access -> access.getFormId() != null)
+            .collect(Collectors.toMap(ScAccessDTO::getFormId, access -> access));
 
-        // TODO Tune the repository to eagerly load the sc_access records.
-        final List<ScAccessDTO> accesses = scAccessQueryService.findByCriteria(authorityCriteria);
-        final Set<Long> accessibleFormId = new HashSet<>();
-        final Set<Long> accessibleWindowId = new HashSet<>();
+        final Map<Long, ScAccessDTO> windowAccesses = accesses.stream()
+            .filter(access -> access.getWindowId() != null)
+            .collect(Collectors.toMap(ScAccessDTO::getWindowId, access -> access));
 
-        for (ScAccessDTO access : accesses) {
-            if (access.getFormId() != null) {
-                accessibleFormId.add(access.getFormId());
-            } else if (access.getWindowId() != null) {
-                accessibleWindowId.add(access.getWindowId());
-            }
-        }
+        final List<AdMenuDTO> menus = adMenuMapper
+                .toDto(adMenuRepository.findByParentMenuIsNullAndActiveTrue(Sort.by("sequence").ascending()));
 
-        // TODO Tune the repository to eagerly load the ad_menu records.
-        final List<AdMenuDTO> menus = adMenuMapper.toDto(adMenuRepository.findByParentMenuIsNullAndActiveTrue(Sort.by("sequence").ascending()));
-        return filterMenu(menus, accessibleFormId, accessibleWindowId);
+        return filterMenu(menus, formAccesses, windowAccesses);
     }
 
-    private List<AdMenuDTO> filterMenu(List<AdMenuDTO> menus, Set<Long> accessibleFormId,
-            Set<Long> accessibleWindowId) {
+    private List<AdMenuDTO> filterMenu(List<AdMenuDTO> menus, Map<Long, ScAccessDTO> formAccesses, Map<Long, ScAccessDTO> windowAccesses) {
+        final List<AdMenuDTO> filteredMenus = new ArrayList<>();
 
-        List<AdMenuDTO> filteredMenus = new ArrayList<>();
         for (AdMenuDTO menu : menus) {
-            if (menu.getAction() == null || isIdAccessible(menu.getAdFormId(), accessibleFormId)
-                    || isIdAccessible(menu.getAdWindowId(), accessibleWindowId)) {
+            final ScAccessDTO access = getAccess(menu, formAccesses, windowAccesses);
 
+            if (menu.getAction() == null || access != null) {
                 if (menu.hasSubmenus()) {
-                    menu.setAdMenus(filterMenu(menu.getAdMenus(), accessibleFormId, accessibleWindowId));
+                    menu.setAdMenus(filterMenu(menu.getAdMenus(), formAccesses, windowAccesses));
+
                     if (menu.hasSubmenus()) {
                         filteredMenus.add(menu);
                     }
                 } else {
+                    if (access != null) {
+                        menu.setCanWrite(access.isCanWrite());
+                    }
                     filteredMenus.add(menu);
                 }
             }
@@ -140,8 +130,14 @@ public class AdMenuQueryService extends QueryService<AdMenu> {
         return filteredMenus;
     }
 
-    private boolean isIdAccessible(Long id, Set<Long> accessibleIds) {
-        return id != null && accessibleIds.contains(id);
+    private ScAccessDTO getAccess(AdMenuDTO menu, Map<Long, ScAccessDTO> formAccesses,
+            Map<Long, ScAccessDTO> windowAccesses) {
+        if (menu.getAction() == null) {
+            return null;
+        }
+
+        return menu.getAdFormId() != null ? formAccesses.get(menu.getAdFormId())
+                : windowAccesses.get(menu.getAdWindowId());
     }
 
     /**

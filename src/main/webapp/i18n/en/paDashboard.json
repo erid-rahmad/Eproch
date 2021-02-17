@@ -1,0 +1,32 @@
+{
+  "opusWebApp": {
+    "paDashboard": {
+      "home": {
+        "title": "Pa Dashboards",
+        "createLabel": "Create a new Pa Dashboard",
+        "createOrEditLabel": "Create or edit a Pa Dashboard",
+        "notFound": "No Pa Dashboards found"
+      },
+      "created": "A new Pa Dashboard is created with identifier {{ param }}",
+      "updated": "A Pa Dashboard is updated with identifier {{ param }}",
+      "deleted": "A Pa Dashboard is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Pa Dashboard {{ id }}?"
+      },
+      "detail": {
+        "title": "Pa Dashboard"
+      },
+      "name": "Name",
+      "description": "Description",
+      "minColumns": "Min Columns",
+      "maxColumns": "Max Columns",
+      "uid": "Uid",
+      "active": "Active",
+      "adOrganization": "Ad Organization",
+      "help": {
+        "minColumns": "The minimum number of columns.",
+        "maxColumns": "The maximum number of columns. Set to -1 for unlimited columns."
+      }
+    }
+  }
+}

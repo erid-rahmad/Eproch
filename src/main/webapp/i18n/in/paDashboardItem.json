@@ -1,0 +1,31 @@
+{
+  "opusWebApp": {
+    "paDashboardItem": {
+      "home": {
+        "title": "Pa Dashboard Items",
+        "createLabel": "Buat Pa Dashboard Item baru",
+        "createOrEditLabel": "Buat atau edit Pa Dashboard Item",
+        "notFound": "No Pa Dashboard Items found"
+      },
+      "created": "Pa Dashboard Item dengan id {{ param }} telah dibuat",
+      "updated": "Pa Dashboard Item dengan id {{ param }} telah diperbaharui",
+      "deleted": "Pa Dashboard Item dengan id {{ param }} telah dihapus",
+      "delete": {
+        "question": "Apakah anda yakin ingin menghapus Pa Dashboard Item {{ id }}?"
+      },
+      "detail": {
+        "title": "Pa Dashboard Item"
+      },
+      "name": "Name",
+      "description": "Description",
+      "columnNo": "Column No",
+      "rowNo": "Row No",
+      "type": "Type",
+      "uid": "Uid",
+      "active": "Active",
+      "adOrganization": "Ad Organization",
+      "adWatchList": "Ad Watch List",
+      "paDashboard": "Pa Dashboard"
+    }
+  }
+}

@@ -47,6 +47,9 @@
         "cProduct": "C Product",
         "adWatchList": "Ad Watch List",
         "adWatchListItem": "Ad Watch List Item",
+        "paDashboard": "Pa Dashboard",
+        "paDashboardItem": "Pa Dashboard Item",
+        "paDashboardPreference": "Pa Dashboard Preference",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

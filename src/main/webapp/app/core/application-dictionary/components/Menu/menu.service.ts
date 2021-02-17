@@ -1,4 +1,4 @@
-import { defaultLayout, dynamicWindow } from '@/router';
+import { defaultLayout, dynamicWindow, nestedLayout } from '@/router';
 import buildCriteriaQueryString from '@/shared/filter/filters';
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 import axios from 'axios';
@@ -56,9 +56,9 @@ export default class AdMenuService {
     return router;
   }
 
-  private getComponent({action, adFormName}) {
+  private getComponent({action, adFormName, parentMenuId}) {
     if (! action) {
-      return defaultLayout;
+      return parentMenuId ? nestedLayout : defaultLayout;
     } else if (action === 'WINDOW') {
       return dynamicWindow;
     } else if (action === 'FORM') {
@@ -81,13 +81,12 @@ export default class AdMenuService {
 
       axios
         .get(`${baseApiUrl}?${queryParams}`)
-        .then(function(res) {
+        .then(res => {
           const routes: IMenu[] = res.data.map(((route: any) => {
             return this.buildRouter(route);
-          }).bind(this));
-          console.log('routes: %O', routes);
+          }));
           resolve({data: routes});
-        }.bind(this))
+        })
         .catch(err => {
           reject(err);
         });

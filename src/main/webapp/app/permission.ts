@@ -77,7 +77,6 @@ export default class RouterValidation {
             DialogEventBus.$emit('show-login');
           }
         } else {
-          console.log('User is authenticated and has authorities.');
           next();
         }
       }
@@ -85,12 +84,10 @@ export default class RouterValidation {
       // Has no token
       if (whiteList.indexOf(to.path) !== -1) {
         // In the free login whitelist, go directly
-        console.log(`${to.path} is in white list.`);
         next();
       } else {
         // Other pages that do not have permission to access are redirected to the login page.
         sessionStorage.setItem('requested-url', to.fullPath);
-        console.log('Forbidden!');
         next(`/forbidden`);
         if (!this.accountService.hasToken()) {
           DialogEventBus.$emit('show-login');

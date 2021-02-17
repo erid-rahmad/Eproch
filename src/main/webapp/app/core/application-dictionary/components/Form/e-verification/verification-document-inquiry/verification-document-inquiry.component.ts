@@ -1,13 +1,12 @@
+import WatchListMixin from '@/core/application-dictionary/mixins/WatchListMixin';
 import settings from '@/settings';
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import Vue from 'vue';
+import buildCriteriaQueryString from '@/shared/filter/filters';
+import { ElTable } from 'element-ui/types/table';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
-import UpdateVoucher from './update-voucher.vue';
 import DetailVerificationDocument from './detail-verification-document.vue';
+import UpdateVoucher from './update-voucher.vue';
 
 @Component({
   components: {
@@ -15,7 +14,7 @@ import DetailVerificationDocument from './detail-verification-document.vue';
     DetailVerificationDocument
   }
 })
-export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class EVerification extends mixins(ContextVariableAccessor, WatchListMixin) {
   private index: boolean = true;
   gridSchema = {
     defaultSort: {},
@@ -33,9 +32,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   public totalItems = 0;
 
   private baseApiUrl = "/api/m-verifications";
-  private baseApiUrlVendor = "/api/c-vendors";
-  private baseApiUrlReference = "/api/ad-references";
-  private baseApiUrlReferenceList = "/api/ad-reference-lists";
   public docStatus: string = "docStatus";
   public paymentStatus: string = "paymentStatus";
 
@@ -50,12 +46,10 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   private dialogType = "";
 
   public gridData: Array<any> = [];
-  private totalAmount: number = null;
-  private setVerification: any = {};
 
-  selectedRows: any = {};
+  selectedRow: any = {};
   public vendorOptions: any[] = [];
-  public statusOptions: any[] = [];
+  public documentStatusOptions: any[] = [];
   public paymentStatusOptions: any[] = [];
 
   public dialogConfirmationVisible: boolean = false;
@@ -72,23 +66,14 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
   }
 
   created(){
-    this.retrieveGetReferences(this.docStatus);
-    this.retrieveGetReferences(this.paymentStatus);
-    this.retrieveAllVendorRecords();
-  }
-
-  public mounted(): void {
+    this.retrieveReferenceLists('docStatus');
+    this.retrieveReferenceLists('paymentStatus');
+    this.retrieveVendorOptions();
     this.retrieveAllRecords();
   }
 
-  beforeDestroy() {
-
-  }
-
-  private closeDetailVerification(){
+  closeDetailVerification() {
     this.index = true;
-    this.selectedRows = {};
-    this.radioSelection = null;
     this.dialogConfirmationVisible = false;
     this.retrieveAllRecords();
   }
@@ -136,77 +121,76 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     this.retrieveAllRecords();
   }
 
+  rowClassName({row}) {
+    if (row.documentStatus !== 'CNL' && row.receiptReversed) {
+      return 'danger-row';
+    }
+
+    return '';
+  }
+
   public clear(): void {
     this.page = 1;
     this.retrieveAllRecords();
   }
 
-  public singleSelection (row) {
+  public singleSelection(row) {
     this.radioSelection = this.gridData.indexOf(row);
-    this.selectedRows = row;
-
-    console.log("Single Selection %O", row);
+    this.selectedRow = row;
   }
 
   public showDialogConfirmation(key: string) {
-    if(this.radioSelection != null){
-
-      if(key == "detail"){
-        this.index = false;
-      }else if(key == "update"){
-        this.dialogConfirmationVisible = true;
-        this.setVerification = this.selectedRows;
-      } else if (key == "print") {
-        this.buttonPrint("invoice-verification");
-      } else if(key == "printSummary") {
-        this.buttonPrint("summary-invoice-verification");
-      } else if(key == "printVerificationReceipt") {
-        this.buttonPrint("invoice-verification-receipt");
-      }
-
-    }else{
-      const message = `Please Selected row`;
-      this.$notify({
-        title: 'Warning',
-        message: message.toString(),
-        type: 'warning',
-        duration: 3000
+    if (!this.selectedRow) {
+      this.$message({
+        message: 'Please select a row',
+        type: 'warning'
       });
+      return
     }
 
+    if (key == "detail") {
+      this.index = false;
+    } else if (key == "update") {
+      this.dialogConfirmationVisible = true;
+    } else if (key == "print") {
+      this.buttonPrint("invoice-verification");
+    } else if (key == "printSummary") {
+      this.buttonPrint("summary-invoice-verification");
+    } else if (key == "printVerificationReceipt") {
+      this.buttonPrint("invoice-verification-receipt");
+    }
   }
 
   public buttonPrint(key): void {
-    const data = { ...this.selectedRows };
+    const data = { ...this.selectedRow };
     window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}/${key}`, '_blank');
   }
 
   public retrieveAllRecords(): void {
-    if ( ! this.baseApiUrl) {
-      return;
-    }
-
+    this.clearSelection();
     this.processing = true;
-    const fullPath = this.$route.fullPath;
     const paginationQuery = {
       page: this.page - 1,
       size: this.itemsPerPage,
       sort: this.sort()
     };
     
-    this.tmpFilterQuery = sessionStorage.getItem(`filterQuery__${fullPath}`);
+    const watchListQuery = this.getWatchListQuery();
 
-    if (this.tmpFilterQuery !== null) {
-      sessionStorage.removeItem(`filterQuery__${fullPath}`);
+    if (watchListQuery) {
+      watchListQuery.split('&').forEach(field => {
+        const key = field.substring(0, field.indexOf('.'));
+        const value = field.substring(field.indexOf('=') + 1);
+        this.$set(this.filter, key, value);
+      });
     }
-
+    
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: [this.filterQuery, this.tmpFilterQuery],
+        criteriaQuery: [this.filterQuery, watchListQuery],
         paginationQuery
       })
       .then(res => {
-
         this.gridData = res.data.map((item: any) => {
           item.totalAmount = parseInt(item.totalLines) + parseInt(item.taxAmount);
           return item;
@@ -215,7 +199,6 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
         this.$emit('total-count-changed', this.queryCount);
-
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -226,38 +209,35 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
       })
       .finally(() => {
         this.processing = false;
-        this.radioSelection = null;
-        this.selectedRows = {};
       });
   }
 
-  public retrieveAllVendorRecords(): void {
+  private clearSelection() {
+    (<ElTable>this.$refs.mainTable)?.setCurrentRow();
+    this.radioSelection = null;
+    this.selectedRow = null;
+  }
 
+  public retrieveVendorOptions(): void {
     this.processing = true;
-    const paginationQuery = {
-      page: this.page - 1,
-      size: this.itemsPerPage,
-      sort: this.sort()
-    };
 
-    this.dynamicWindowService(this.baseApiUrlVendor)
+    this.dynamicWindowService('/api/c-vendors')
       .retrieve({
-        paginationQuery
+        criteriaQuery: 'active.equals=true',
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['name']
+        }
       })
       .then(res => {
-
-        let referenceList = res.data.map(item => {
-          return{
-              key: item.id,
-              value: item.name
-          };
-      });
-
-      this.vendorOptions = referenceList;
-
+        this.vendorOptions = res.data.map(item => ({
+          key: item.id,
+          value: item.name
+        }));
       })
       .catch(err => {
-        console.error('Failed getting the record. %O', err);
+        console.error('Failed getting vendor options. %O', err);
         this.$message({
           type: 'error',
           message: err.detail || err.message
@@ -273,129 +253,77 @@ export default class EVerification extends mixins(Vue2Filters.mixin, AlertMixin,
     this.retrieveAllRecords();
   }
 
-  private retrieveGetReferences(param: string) {
-    this.dynamicWindowService(this.baseApiUrlReference)
+  private retrieveReferenceLists(code: string) {
+    this.dynamicWindowService('/api/ad-reference-lists')
     .retrieve({
-      criteriaQuery: [`value.contains=`+param]
+      criteriaQuery: [
+        `active.equals=true`,
+        `adReferenceValue.equals=${code}`
+      ],
+      paginationQuery: {
+        page: 0,
+        size: 100,
+        sort: ['name']
+      }
     })
     .then(res => {
-        let references = res.data.map(item => {
-            return{
-                id: item.id,
-                value: item.value,
-                name: item.name
-            };
-        });
-        this.retrieveGetReferenceLists(references);
+      const prop = code === 'docStatus' ? 'documentStatusOptions' : 'paymentStatusOptions';
+      this[prop] = res.data.map((item: any) => 
+        ({
+            key: item.value,
+            value: item.name
+        })
+      );
     });
   }
 
-  private retrieveGetReferenceLists(param: any) {
-    this.dynamicWindowService(this.baseApiUrlReferenceList)
-    .retrieve({
-      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
-    })
-    .then(res => {
-        let referenceList = res.data.map(item => {
-            return{
-                key: item.value,
-                value: item.name
-            };
-        });
+  public verificationFilter() {
+    const form = this.filter;
+    const query = [];
 
-        if(param[0].value == this.docStatus){
-          this.statusOptions = referenceList;
-        }else if(param[0].value == this.paymentStatus){
-          this.paymentStatusOptions = referenceList;
-        }
-    });
-  }
-
-  public verificationFilter(){
-
-    this.filterQuery = "";
-
-    if (!!this.tmpFilterQuery) {
-      this.filterQuery = this.tmpFilterQuery;
+    if (!!this.filter.verificationNo) {
+      query.push(`verificationNo.equals=${form.verificationNo}`);
     }
-
-    if(!!this.filter.verificationNo){
-      this.filterQuery = "verificationNo.equals="+this.filter.verificationNo;
+    if (!!this.filter.invoiceNo) {
+      query.push(`invoiceNo.equals=${form.invoiceNo}`);
     }
-    if(!!this.filter.invoiceNo){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "invoiceNo.equals="+this.filter.invoiceNo;
+    if (!!this.filter.taxInvoiceNo) {
+      query.push(`taxInvoiceNo.equals=${form.taxInvoiceNo}`);
     }
-    if(!!this.filter.taxInvoiceNo){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "taxInvoiceNo.equals="+this.filter.taxInvoiceNo;
+    if (!!this.filter.vendorName) {
+      query.push(`vendorId.equals=${form.vendorName}`);
     }
-    if(!!this.filter.vendorName){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "vendorId.equals="+this.filter.vendorName;
+    if (!!this.filter.verificationStatus) {
+      query.push(`verificationStatus.equals=${form.verificationStatus}`);
+    }
+    if (!!this.filter.verificationDateFrom) {
+      query.push(`verificationDate.greaterOrEqualThan=${form.verificationDateFrom}`);
+    }
+    if (!!this.filter.verificationDateTo) {
+      query.push(`verificationDate.lessOrEqualThan=${form.verificationDateTo}`);
+    }
+    if (!!this.filter.invoiceDateFrom) {
+      query.push(`invoiceDate.greaterOrEqualThan=${form.invoiceDateFrom}`);
+    }
+    if (!!this.filter.invoiceDateTo) {
+      query.push(`invoiceDate.lessOrEqualThan=${form.invoiceDateTo}`);
+    }
+    if (!!this.filter.taxInvoiceDateFrom) {
+      query.push(`taxInvoiceDate.greaterOrEqualThan=${form.taxInvoiceDateFrom}`);
+    }
+    if (!!this.filter.taxInvoiceDateTo) {
+      query.push(`taxInvoiceDate.lessOrEqualThan=${form.taxInvoiceDateTo}`);
+    }
+    if (!!this.filter.payStatus) {
+      query.push(`payStatus.equals=${form.payStatus}`);
     }
 
-    if(!!this.filter.verificationDateFrom){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "verificationDate.greaterOrEqualThan="+this.filter.verificationDateFrom;
-    }
-    if(!!this.filter.invoiceDateFrom){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "invoiceDate.greaterOrEqualThan="+this.filter.invoiceDateFrom;
-    }
-    if(!!this.filter.taxInvoiceDateFrom){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "taxInvoiceDate.greaterOrEqualThan="+this.filter.taxInvoiceDateFrom;
-    }
-    if(!!this.filter.verificationStatus){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "verificationStatus.equals="+this.filter.verificationStatus;
-    }
-
-    if(!!this.filter.verificationDateTo){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "verificationDate.lessOrEqualThan="+this.filter.verificationDateTo;
-    }
-    if(!!this.filter.invoiceDateTo){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "invoiceDate.lessOrEqualThan="+this.filter.invoiceDateTo;
-    }
-    if(!!this.filter.taxInvoiceDateTo){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "taxInvoiceDate.lessOrEqualThan="+this.filter.taxInvoiceDateTo;
-    }
-    if(!!this.filter.payStatus){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "payStatus.equals="+this.filter.payStatus;
-    }
-
+    this.filterQuery = buildCriteriaQueryString(query);
     this.retrieveAllRecords();
   }
 
   formatDocumentStatus(value: string) {
-    return this.statusOptions.find(status => status.key === value)?.value || value;
+    return this.documentStatusOptions.find(status => status.key === value)?.value || value;
   }
 
   formatPaymentStatus(value: string) {

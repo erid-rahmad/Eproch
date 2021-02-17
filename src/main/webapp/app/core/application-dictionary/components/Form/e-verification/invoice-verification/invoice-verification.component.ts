@@ -4,6 +4,8 @@ import { Component } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
 import InvoiceVerificationDocumentApproval from './invoice-verification-document-approval.vue';
+import { ElForm } from 'element-ui/types/form';
+import { ElInput } from 'element-ui/types/input';
 
 @Component({
   components: {
@@ -35,79 +37,61 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
       dueDate: "",
       description: "",
     },
-    line: [],
+    lines: [],
     taxInfo: {},
-    remove: [],
+    removedLines: [],
   }
 
   private filterForm: any = {};
-  private filterQuery: string = "";
   private fullscreenLoading: boolean = false;
 
   private dialogInvoiceVerificationVisible: boolean = false;
   private dialogTitle: string = "";
 
-  created(){
+  created() {
     this.retrieveGetReferences(this.keyReference);
   }
 
-  private searchInvoiceVerification(){
-    if((this.filterForm.verificationNo == null)||(this.filterForm.verificationNo == "")){
-      this.$notify({
-        title: 'Warning',
-        dangerouslyUseHTMLString: true,
-        message: 'Please fill form Verification No.',
-        type: 'warning'
-      });
-
-    }else{
-      this.dialogTitle = "Verification Document Approval"
-      this.fullscreenLoading = true;
-      this.filterQuery = "verificationNo.equals="+this.filterForm.verificationNo;
-      this.searchVerification();
-    }
+  mounted() {
+    (<ElInput>this.$refs.searchField).focus();
   }
 
-  private searchVerification(): void {
-    if ( ! this.baseApiUrl) {
+  searchInvoiceVerification() {
+    (<ElForm>this.$refs.form).validate(valid => {
+      if (valid) {
+        this.dialogTitle = "Verification Document Approval"
+        this.fullscreenLoading = true;
+        this.searchVerification(this.filterForm.verificationNo);
+      }
+      return valid;
+    });
+  }
+
+  private searchVerification(no: string): void {
+    if (!this.baseApiUrl) {
       return;
     }
 
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: this.filterQuery
+        criteriaQuery: [
+          `verificationNo.equals=${no}`,
+          'verificationStatus.in=SMT',
+          'verificationStatus.in=ROP'
+        ]
       })
       .then(res => {
-
-        if(res.data.length == 0){
-          this.$notify({
-            title: 'Warning',
-            dangerouslyUseHTMLString: true,
-            message: 'Data not found',
-            type: 'warning'
+        if ( ! res.data.length) {
+          this.$message({
+            message: 'Record is not found',
+            type: 'info'
           });
+        } else {
+          const item = res.data[0];
 
-        }else{
-          if(res.data[0].verificationStatus == "SMT"){
-            res.data.map((item: any) => {
-              this.$set(this.eVerification, 'form', item);
-              return item;
-            });
-
-            this.filterQuery = "";
-            this.filterQuery = "verificationId.equals="+this.eVerification.form.id;
-            this.searchVerificationLine();
-          }else{
-            this.$notify({
-              title: 'Warning',
-              dangerouslyUseHTMLString: true,
-              message: 'Status Verification is '+this.formatDocumentStatus(res.data[0].verificationStatus),
-              type: 'warning'
-            });
-          }
-
-        }
-
+          this.$set(this.eVerification, 'form', item);
+          this.searchVerificationLine(item.id);
+      }
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -121,32 +105,31 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
       });
   }
 
-  private searchVerificationLine(): void {
+  private searchVerificationLine(headerId: number): void {
     if ( ! this.baseApiUrlLine) {
       return;
     }
 
     this.dynamicWindowService(this.baseApiUrlLine)
       .retrieve({
-        criteriaQuery: this.filterQuery
+        criteriaQuery: `verificationId.equals=${headerId}`,
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['lineNo']
+        }
       })
       .then(res => {
-
         this.dialogInvoiceVerificationVisible = true;
-
-        this.$set(this.eVerification, 'line', res.data.map((item: any) => {
-          item.payStat = "A";
+        this.$set(this.eVerification, 'lines', res.data.map((item: any) => {
+          item.payStat = 'A';
           return item;
         }));
-
-        console.log(this.eVerification);
-
       })
       .catch(err => {
-        console.error('Failed getting the record. %O', err);
         this.$message({
           type: 'error',
-          message: err.detail || err.message
+          message: err.response?.data?.detail || err.message
         });
       })
       .finally(() => {
@@ -157,28 +140,31 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
   actionSubmit(action: string) {
     let message: string;
     const approval = action === 'APV';
-    var submit = false;
+    let submit = false;
 
-    if(approval){
+    if (approval) {
       if (!this.eVerification.form.dateAcct) {
         message = "Please input GL Date";
-        this.notifWarning(message);
+        this.showErrorMessage(message);
       } else if (!this.eVerification.form.dueDate) {
         message = "Please input Due Date";
-        this.notifWarning(message);
+        this.showErrorMessage(message);
       } else {
+        this.$set(this.eVerification.form, 'description', null);
         submit = true;
       }
     } else {
       if (!this.eVerification.form.description) {
         message = "Please input Notes";
-        this.notifWarning(message);
+        this.showErrorMessage(message);
       } else {
+        this.$set(this.eVerification.form, 'dateAcct', null);
+        this.$set(this.eVerification.form, 'dueDate', null);
         submit = true;
       }
     }
 
-    if(submit){
+    if (submit) {
       let now = new Date();
       const offset = now.getTimezoneOffset();
 
@@ -188,44 +174,34 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
       this.eVerification.form.verificationStatus = action;
       this.eVerification.form[approval ? 'dateApprove' : 'dateReject'] = dateTrx;
       this.fullscreenLoading = true;
-      this.submit();
+      this.submit(approval);
     }
   }
 
-  private notifWarning(message: string){
-    this.$notify({
-      title: 'Warning',
+  private showErrorMessage(message: string) {
+    this.$message({
       message: message,
-      type: 'warning',
-      duration: 3000
+      type: 'error'
     });
   }
 
-  submit() {
-
-    this.dynamicWindowService(this.baseApiUrl + "/submit")
+  submit(approval: boolean) {
+    this.dynamicWindowService(this.baseApiUrl + "/update-document")
       .update(this.eVerification)
       .then(() => {
-
-        this.$notify({
-          title: 'Success',
-          dangerouslyUseHTMLString: true,
-          message: 'E-Verification form updated.',
+        this.$message({
+          message: `Invoice verification has been ${approval ? 'approved' : 'rejected'}`,
           type: 'success'
         });
-
-        this.dialogInvoiceVerificationVisible = false;
-
-      }).catch(error => {
-        this.$notify({
-          title: 'Error',
-          dangerouslyUseHTMLString: true,
-          message: error,
-          type: 'error',
-          duration: 3000
+      })
+      .catch(err => {
+        this.$message({
+          message: err.response?.data?.detail || err.message,
+          type: 'error'
         });
       }).finally(() => {
         this.fullscreenLoading = false;
+        this.dialogInvoiceVerificationVisible = false;
       });
 
   }

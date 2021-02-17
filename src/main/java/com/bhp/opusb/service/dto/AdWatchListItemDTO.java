@@ -95,6 +95,7 @@ public class AdWatchListItemDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "Menu to be opened when selecting the item.")
     private Long adMenuId;
     private String adMenuName;
+    private AdMenuDTO adMenu;
 
     private Long adWatchListId;
     private String adWatchListName;
@@ -241,6 +242,14 @@ public class AdWatchListItemDTO extends AbstractAuditingDTO {
 
     public void setAdMenuName(String adMenuName) {
         this.adMenuName = adMenuName;
+    }
+
+    public AdMenuDTO getAdMenu() {
+        return adMenu;
+    }
+
+    public void setAdMenu(AdMenuDTO adMenu) {
+        this.adMenu = adMenu;
     }
 
     public Long getAdWatchListId() {

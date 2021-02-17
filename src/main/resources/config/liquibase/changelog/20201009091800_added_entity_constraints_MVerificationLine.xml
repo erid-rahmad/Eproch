@@ -76,4 +76,8 @@
 
     </changeSet>
 
+    <changeSet id="20200130160800" author="Ananta Aryadewa">
+        <dropColumn tableName="m_verification_line" columnName="c_element_id"/>
+    </changeSet>
+
 </databaseChangeLog>

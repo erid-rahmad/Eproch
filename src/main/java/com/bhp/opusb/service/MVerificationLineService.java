@@ -2,7 +2,6 @@ package com.bhp.opusb.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MVerification;
@@ -28,10 +27,14 @@ public class MVerificationLineService {
     private final Logger log = LoggerFactory.getLogger(MVerificationLineService.class);
 
     private final MVerificationLineRepository mVerificationLineRepository;
+    private final MMatchPOService mMatchPOService;
+
     private final MVerificationLineMapper mVerificationLineMapper;
 
-    public MVerificationLineService(MVerificationLineRepository mVerificationLineRepository, MVerificationLineMapper mVerificationLineMapper) {
+    public MVerificationLineService(MVerificationLineRepository mVerificationLineRepository,
+            MMatchPOService mMatchPOService, MVerificationLineMapper mVerificationLineMapper) {
         this.mVerificationLineRepository = mVerificationLineRepository;
+        this.mMatchPOService = mMatchPOService;
         this.mVerificationLineMapper = mVerificationLineMapper;
     }
 
@@ -56,15 +59,15 @@ public class MVerificationLineService {
                 .verification(mVerification)
         );
 
-        return mVerificationLineRepository.saveAll(verificationLines)
-            .stream()
-            .map(mVerificationLineMapper::toDto)
-            .collect(Collectors.toList());
+        return mVerificationLineMapper.toDto(mVerificationLineRepository.saveAll(verificationLines));
     }
 
     public void removeAll(List<MVerificationLineDTO> mVerificationLineDTOs) {
-        List<MVerificationLine> verificationLines = mVerificationLineMapper.toEntity(mVerificationLineDTOs);
-        mVerificationLineRepository.deleteAll(verificationLines);
+        mVerificationLineRepository.deleteAll(mVerificationLineMapper.toEntity(mVerificationLineDTOs));
+        mVerificationLineDTOs.forEach(
+            line -> mMatchPOService.openMatchPO(line.getAdOrganizationCode(), line.getcDocType(), line.getPoNo(),
+                    line.getReceiveNo(), line.getLineNoPo(), line.getLineNoMr(), line.getOrderSuffix())
+        );
     }
 
     /**

@@ -4,7 +4,7 @@ import ADWindowService from '@/entities/ad-window/ad-window.service';
 import buildCriteriaQueryString from '@/shared/filter/filters';
 import { ADTab, IADTab } from '@/shared/model/ad-tab.model';
 import { getValidatorType } from '@/utils/validate';
-import _, { debounce } from 'lodash';
+import { debounce, isFinite, isFunction } from 'lodash';
 import { Pane, Splitpanes } from 'splitpanes';
 import 'splitpanes/dist/splitpanes.css';
 import { Component, Inject, Mixins, Vue, Watch } from 'vue-property-decorator';
@@ -19,6 +19,8 @@ import TreeView from '../TreeView/tree-view.vue';
 import TriggerParameterForm from "../TriggerParameterForm/trigger-parameter-form.vue";
 import { IADField } from '@/shared/model/ad-field.model';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { WindowStoreModule as windowStore } from '@/shared/config/store/window-store';
+import WatchListMixin from '../../mixins/WatchListMixin';
 
 @Component({
   components: {
@@ -39,7 +41,7 @@ import { AccountStoreModule as accountStore } from '@/shared/config/store/accoun
     })
   }
 })
-export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
+export default class DynamicWindow extends Mixins(ContextVariableAccessor, WatchListMixin) {
   @Inject('aDWindowService')
   private aDWindowService: () => ADWindowService;
 
@@ -279,6 +281,7 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   }
 
   public onProcessCompleted(response: any) {
+    this.$message.success('Process has been successfully executed');
     this.refreshWindow();
   }
 
@@ -368,6 +371,10 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
   public refreshWindow() {
     this.reloadTreeView();
     (<any>this.$refs.mainGrid).clear();
+
+    if (this.hasChildTabs && this.currentTab) {
+      this.$refs.lineGrid[parseInt(this.currentTab)].clear();
+    }
   }
 
   public runTrigger(model: any) {
@@ -500,17 +507,17 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
 
     parentTabId = args[0];
     if (args[1] !== undefined) {
-      if (_.isFunction(args[1])) {
+      if (isFunction(args[1])) {
         if (args[2] !== undefined)
           throw new Error('second argument must be a number');
 
         callback = args[1];
-      } else if (_.isFinite(args[1])) {
+      } else if (isFinite(args[1])) {
         tabId = args[1];
       }
     }
     if (args[2] !== undefined) {
-      if (!_.isFunction(args[2]))
+      if (! isFunction(args[2]))
         throw new Error('third argument must be a function');
 
       callback = args[2];
@@ -556,14 +563,9 @@ export default class DynamicWindow extends Mixins(ContextVariableAccessor) {
               }
               this.childTabs.push(tab);
             } else {
-              const fullPath = this.$route.fullPath;
-              const tmpFilterQuery = sessionStorage.getItem(`filterQuery__${fullPath}`);
+              const tmpFilterQuery = this.getWatchListQuery();
 
               tab.nativeFilterQuery = tab.filterQuery;
-
-              if (tmpFilterQuery !== null) {
-                sessionStorage.removeItem(`filterQuery__${fullPath}`);
-              }
 
               if (this.isVendor) {
                 const vendorIdField = tab.adTableName === 'c_vendor' ? 'id' : 'vendorId';

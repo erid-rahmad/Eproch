@@ -22,6 +22,7 @@ import com.bhp.opusb.domain.MVerificationLine;
 import com.bhp.opusb.domain.MVerificationLine_;
 import com.bhp.opusb.domain.MVerification_;
 import com.bhp.opusb.service.dto.MMatchPOCriteria;
+import com.bhp.opusb.util.DocumentUtil;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -76,7 +77,11 @@ public class MMatchPORepositoryCustomImpl implements MMatchPORepositoryCustom {
   private Predicate[] buildSubqueryPredicates(CriteriaBuilder criteriaBuilder, Root<MMatchPO> wrapper, Root<MVerificationLine> subqueryRoot, Join<MVerificationLine, MVerification> join) {
     List<Predicate> predicates = new ArrayList<>(8);
     In<String> appliedVerifications = criteriaBuilder.in(join.get(MVerification_.verificationStatus))
-      .value("DRF").value("SMT").value("APV");
+      .value(DocumentUtil.STATUS_DRAFT)
+      .value(DocumentUtil.STATUS_REOPEN)
+      .value(DocumentUtil.STATUS_SUBMIT)
+      .value(DocumentUtil.STATUS_APPROVE)
+      .value(DocumentUtil.STATUS_REJECT);
 
     predicates.add(appliedVerifications);
     predicates.add(criteriaBuilder.equal(wrapper.get(MMatchPO_.adOrganization), subqueryRoot.get(MVerificationLine_.adOrganization)));
@@ -92,10 +97,10 @@ public class MMatchPORepositoryCustomImpl implements MMatchPORepositoryCustom {
   private Predicate[] buildMatchPoPredicates(CriteriaBuilder criteriaBuilder, MMatchPOCriteria criteria, Root<MMatchPO> root, Subquery<MVerificationLine> subQuery) {
     List<Predicate> queryPredicates = new ArrayList<>(8);
 
-    if (criteria.getCVendorId() != null) {
+    if (criteria.getVendorId() != null) {
       queryPredicates.add(criteriaBuilder.equal(
-        root.join(MMatchPO_.cVendor, JoinType.INNER).get(CVendor_.id),
-        criteria.getCVendorId().getEquals()
+        root.join(MMatchPO_.vendor, JoinType.INNER).get(CVendor_.id),
+        criteria.getVendorId().getEquals()
       ));
     }
     if (criteria.getPoNo() != null) {

@@ -1,6 +1,7 @@
 import axios from 'axios';
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 import buildCriteriaQueryString from '@/shared/filter/filters';
+import { IADReferenceList } from '@/shared/model/ad-reference-list.model';
 
 const delay: number = 0;
 
@@ -18,7 +19,7 @@ export interface IRetrieveParameter {
 export default class DynamicWindowService {
   
   constructor(
-    public baseApiUrl: string
+    public baseApiUrl?: string
   ) {}
 
   public count(criteriaQuery?: string | string[] | object): Promise<any> {
@@ -63,6 +64,28 @@ export default class DynamicWindowService {
         .get(`${this.baseApiUrl}?${queryParams}`)
         .then(function(res) {
           resolve(res);
+        })
+        .catch(err => {
+          reject(err);
+        });
+    });
+  }
+
+  public retrieveReferenceLists(code: string) {
+    return new Promise<IADReferenceList[]>((resolve, reject) => {
+      const criteriaQuery = [
+        'active.equals=true',
+        `adReferenceValue.equals=${code}`
+      ]
+      const paginationQuery: IPaginationQuery = {
+        page: 0, size: 1000, sort: ['name']
+      }
+
+      const queryString = buildCriteriaQueryString(criteriaQuery) + '&' + buildPaginationQueryOpts(paginationQuery);
+
+      axios.get(`/api/ad-reference-lists?` + queryString)
+        .then(function(res) {
+          resolve(res.data as IADReferenceList[]);
         })
         .catch(err => {
           reject(err);
