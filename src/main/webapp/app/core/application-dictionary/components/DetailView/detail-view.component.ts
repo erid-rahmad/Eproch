@@ -289,6 +289,12 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
         });
       }
 
+      // Avoid exception when creating a new record, which will invoke
+      // the backend API with a bad request.
+      if (referenceFilter.includes('=null')) {
+        referenceFilter = null;
+      }
+
       if (referenceFilter) {
         this.referenceFilterQueries.set(field.id, referenceFilter);
       }

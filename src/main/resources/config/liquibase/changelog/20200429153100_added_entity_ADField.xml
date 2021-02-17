@@ -154,6 +154,32 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20200602153100-1" author="jhipster">
+        <addColumn tableName="ad_field">
+            <column name="read_only_logic" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="updatable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="always_updatable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="copyable" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="default_value" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="format_pattern" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_validation_rule_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
     <changeSet id="20200629104400" author="Ananta Aryadewa">
         <addColumn tableName="ad_field">
             <column name="uid" type="${uuidType}">

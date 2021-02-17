@@ -25,67 +25,7 @@
   </div>
 </template>
 
-<script lang="ts">
-import { Component, Inject } from 'vue-property-decorator'
-import { mixins } from 'vue-class-component'
-import { DeviceType, AppStoreModule as appStore } from '@/shared/config/store/app-store'
-import { SettingsStoreModule as settingsStore } from '@/shared/config/store/settings-store'
-import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
-import RightPanel from '@/shared/components/RightPanel/index.vue'
-import ResizeMixin from './mixin/resize'
-import { AccountStoreModule as accountStore} from '@/shared/config/store/account-store'
-import TranslationService from '../locale/translation.service'
-import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store'
-
-@Component({
-  name: 'Layout',
-  components: {
-    AppMain,
-    Navbar,
-    RightPanel,
-    Settings,
-    Sidebar,
-    TagsView
-  }
-})
-export default class extends mixins(ResizeMixin) {
-  @Inject('translationService') private translationService: () => TranslationService;
-  private currentLanguage = translationStore.language;
-  
-  created() {
-    this.translationService().refreshTranslation(this.currentLanguage);
-  }
-
-  get authenticated(): boolean {
-    return accountStore.authenticated;
-  }
-
-  get classObj() {
-    return {
-      hideSidebar: !this.sidebar.opened,
-      openSidebar: this.sidebar.opened,
-      withoutAnimation: this.sidebar.withoutAnimation,
-      mobile: this.device === DeviceType.Mobile
-    }
-  }
-
-  get showSettings() {
-    return settingsStore.showSettings
-  }
-
-  get showTagsView() {
-    return this.authenticated && settingsStore.showTagsView
-  }
-
-  get fixedHeader() {
-    return settingsStore.fixedHeader
-  }
-
-  private handleClickOutside() {
-    appStore.CloseSideBar(false)
-  }
-}
-</script>
+<script lang="ts" src="./index.component.ts"></script>
 
 <style lang="scss" scoped>
 .app-wrapper {

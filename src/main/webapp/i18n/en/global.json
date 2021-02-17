@@ -150,7 +150,9 @@
       "get": "Get",
       "filter": "Filter",
       "submit": "Submit",
-      "view": "View"
+      "view": "View",
+      "import": "Import",
+      "export": "Export"
     },
     "detail": {
       "field": "Field",

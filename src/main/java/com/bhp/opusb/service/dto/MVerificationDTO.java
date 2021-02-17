@@ -317,7 +317,10 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.taxDate = taxDate;
     }
 
-    public int getTaxPeriod() {
+    public Integer getTaxPeriod() {
+        if (taxDate == null) {
+            return null;
+        }
         return taxDate.getMonth().getValue();
     }
 

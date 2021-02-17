@@ -15,4 +15,9 @@
                                  referencedTableName="ad_client"/>
 
     </changeSet>
+
+    <changeSet id="20200602192000-1" author="jhipster">
+        <dropColumn tableName="ad_organization" columnName="ad_client_id" />
+    </changeSet>
+
 </databaseChangeLog>

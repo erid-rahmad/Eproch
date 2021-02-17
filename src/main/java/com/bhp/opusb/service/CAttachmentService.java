@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,8 +60,10 @@ public class CAttachmentService {
 
         try {
             Files.createDirectory(uploadPath);
+        } catch(FileAlreadyExistsException e) {
+            log.info("Upload path is already exist. Not creating.");
         } catch (IOException e) {
-            log.error("Error creating directory", e);
+            log.warn("Error creating directory. {}", e.getLocalizedMessage());
         }
     }
 

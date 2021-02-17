@@ -1,6 +1,8 @@
 package com.bhp.opusb.domain;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -12,6 +14,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -111,7 +114,8 @@ public class ADTab extends AbstractAuditingEntity {
     @OneToMany(mappedBy = "parentTab")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Where(clause = "active = true")
-    private Set<ADTab> aDTabs = new HashSet<>();
+    @OrderBy("tab_sequence")
+    private List<ADTab> aDTabs = new ArrayList<>();
 
     @OneToMany(mappedBy = "adTab", fetch = FetchType.EAGER)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -363,11 +367,11 @@ public class ADTab extends AbstractAuditingEntity {
         this.active = active;
     }
 
-    public Set<ADTab> getADTabs() {
+    public List<ADTab> getADTabs() {
         return aDTabs;
     }
 
-    public ADTab aDTabs(Set<ADTab> aDTabs) {
+    public ADTab aDTabs(List<ADTab> aDTabs) {
         this.aDTabs = aDTabs;
         return this;
     }
@@ -384,7 +388,7 @@ public class ADTab extends AbstractAuditingEntity {
         return this;
     }
 
-    public void setADTabs(Set<ADTab> aDTabs) {
+    public void setADTabs(List<ADTab> aDTabs) {
         this.aDTabs = aDTabs;
     }
 

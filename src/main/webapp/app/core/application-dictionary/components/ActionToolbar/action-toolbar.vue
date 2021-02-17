@@ -146,6 +146,26 @@
         </el-dropdown-item>
       </el-dropdown-menu>
     </el-dropdown>
+    <el-button-group>
+      <el-button
+        v-show="!isEditing"
+        size="small"
+        title="Import (alt + i)"
+        type="primary"
+        @click="importRecord"
+      >
+        <svg-icon name="icomoo/198-download2"></svg-icon> Import
+      </el-button>
+      <el-button
+        v-show="!isEditing"
+        size="small"
+        title="Export (alt + e)"
+        type="primary"
+        @click="exportRecord"
+      >
+        <svg-icon name="icomoo/199-upload2"></svg-icon> Export
+      </el-button>
+    </el-button-group>
   </div>
 </template>
 <script lang="ts" src="./action-toolbar.component.ts"></script>
