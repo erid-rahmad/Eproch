@@ -30,7 +30,10 @@ export default class StepsForm extends Vue {
       biddingInformationLine: [],
       projectInformation: [],
     },
-    biddingSchedule: [],
+    biddingSchedule: {
+      eventSchedule: [],
+      documentSchedule: []
+    },
     vendorInvitation: [],
     vendorScoring: []
   }
@@ -49,7 +52,11 @@ export default class StepsForm extends Vue {
 
   next() {
     console.log(this.active);
-    console.log(this.bidding.biddingInformation);
+    if(this.active == 0){
+      console.log(this.bidding.biddingInformation);
+    }else if(this.active == 1){
+      console.log(this.bidding.biddingSchedule);
+    }
     ++this.active;
     // Trigger the validation of the current form.
     //this.eventBus.$emit('validate-form', this.active);

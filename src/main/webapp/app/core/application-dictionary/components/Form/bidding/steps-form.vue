@@ -21,7 +21,8 @@
         <bidding-schedule
           class="step-panel"
           v-if="active === 1"
-          />
+          :biddingInformation="bidding.biddingInformation"
+          :biddingSchedule="bidding.biddingSchedule"/>
 
         <vendor-invitation
           class="step-panel"
@@ -52,7 +53,7 @@
         style="margin-bottom: 12px;"
         :disabled="active === 0"
         @click="previous">
-        Prev
+        Previous
       </el-button>
 
       <el-button
