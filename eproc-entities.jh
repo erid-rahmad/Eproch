@@ -833,6 +833,7 @@ entity CEventType {
 entity CEventTypeline {
 	event String required
 	description String
+    sequence Integer required min(0)
 	uid UUID
 	active Boolean
 }

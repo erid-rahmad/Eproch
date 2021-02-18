@@ -74,6 +74,7 @@ class CEventTypelineGatlingTest extends Simulation {
                 "id":null
                 , "event":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
+                , "sequence":"0"
                 , "uid":null
                 , "active":null
                 }""")).asJson

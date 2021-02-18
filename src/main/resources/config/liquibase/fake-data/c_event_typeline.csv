@@ -1,11 +1,11 @@
-id;event;description;uid;active;ad_organization_id;event_type_id
-1;haptic Corporate deposit;dot-com hack;6ab6d0fe-b907-40be-b92c-fa386155dd69;true;1;1
-2;Garden;EXE asymmetric Savings Account;21fa708b-b0cf-42f2-959b-cdc19b4e2677;false;2;2
-3;disintermediate;Unbranded Cotton Tuna Group Auto Loan Account;bccd376d-551f-4578-9e2f-5310161281be;false;3;3
-4;Bedfordshire;Polarised Station;11d9644b-afe1-4066-8c94-2582d853448a;false;4;4
-5;invoice;Unbranded Frozen Table;c336e092-de44-4888-a03c-2469738d4baa;false;5;5
-6;District Chief;Handmade schemas;c22805ed-2bf7-42f1-a3d2-21b40f46eadc;true;6;6
-7;Fresh Rustic Wooden Computer;orange Computers eyeballs;51e9e116-9625-4ad9-b72d-9e913e8e8654;true;7;7
-8;Berkshire Cordoba Oro Human;seize District;4d95497f-ad28-4101-8b1c-5b1d36dc49d1;false;8;8
-9;Human Games;Switzerland Checking Account;c59bd058-b988-4a27-82cc-9a73e922b903;true;9;9
-10;Coordinator;Borders;75b5ec71-cddc-49f5-8ea2-c910c3ccdc00;false;10;10
+id;event;description;sequence;uid;active;ad_organization_id;event_type_id
+1;haptic Corporate deposit;dot-com hack;41162;ab6d0feb-9070-4bef-92cf-a386155dd699;false;1;1
+2;out-of-the-box;Fiji Generic Digitized;6730;fa708bb0-cf2f-4255-9bcd-c19b4e267722;false;2;2
+3;Associate District;Group Auto Loan Account;72675;ccd376d5-51f5-478d-a2f5-310161281be0;false;3;3
+4;even-keeled Polarised;back-end Refined Rubber Shirt;28142;4bafe106-68c9-4425-82d8-53448a35ad30;true;4;4
+5;deliverables Distributed cultivate;Savings Account;84371;e44888e0-3c24-4697-b8d4-baa4ae6ee91b;false;5;5
+6;override Hat Incredible Fresh Bacon;Palladium;49977;2f123d22-1b40-4f46-aadc-881e0221b340;false;6;6
+7;Future-proofed Unbranded;Senior Practical;59340;625ad937-2d9e-4913-a8e8-654bf77a9ee5;false;7;7
+8;District solution-oriented;encoding Investment Account;94724;ad28101c-b1c5-4b1d-b6dc-49d15aee0288;true;8;8
+9;Licensed knowledge base;backing up knowledge base hard drive;51417;8a2782cc-9a73-4e92-ab90-3b1f637a75b5;true;9;9
+10;Avon program synthesizing;Paradigm Turkmenistan;66099;2c910c3c-cdc0-4076-831e-afc5593493d3;true;10;10

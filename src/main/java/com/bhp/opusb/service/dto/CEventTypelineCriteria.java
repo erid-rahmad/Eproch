@@ -31,6 +31,8 @@ public class CEventTypelineCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
+    private IntegerFilter sequence;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -46,6 +48,7 @@ public class CEventTypelineCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.event = other.event == null ? null : other.event.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.sequence = other.sequence == null ? null : other.sequence.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -79,6 +82,14 @@ public class CEventTypelineCriteria implements Serializable, Criteria {
 
     public void setDescription(StringFilter description) {
         this.description = description;
+    }
+
+    public IntegerFilter getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(IntegerFilter sequence) {
+        this.sequence = sequence;
     }
 
     public UUIDFilter getUid() {
@@ -127,6 +138,7 @@ public class CEventTypelineCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(event, that.event) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(sequence, that.sequence) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -139,6 +151,7 @@ public class CEventTypelineCriteria implements Serializable, Criteria {
         id,
         event,
         description,
+        sequence,
         uid,
         active,
         adOrganizationId,
@@ -152,6 +165,7 @@ public class CEventTypelineCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (event != null ? "event=" + event + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (sequence != null ? "sequence=" + sequence + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

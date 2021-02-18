@@ -31,6 +31,11 @@ public class CEventTypeline extends AbstractAuditingEntity {
     @Column(name = "description")
     private String description;
 
+    @NotNull
+    @Min(value = 0)
+    @Column(name = "sequence", nullable = false)
+    private Integer sequence;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -80,6 +85,19 @@ public class CEventTypeline extends AbstractAuditingEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public CEventTypeline sequence(Integer sequence) {
+        this.sequence = sequence;
+        return this;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 
     public UUID getUid() {
@@ -162,6 +180,7 @@ public class CEventTypeline extends AbstractAuditingEntity {
             "id=" + getId() +
             ", event='" + getEvent() + "'" +
             ", description='" + getDescription() + "'" +
+            ", sequence=" + getSequence() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

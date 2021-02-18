@@ -13,6 +13,15 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "sequence",
+            "fieldType": "Integer",
+            "fieldValidateRules": [
+                "required",
+                "min"
+            ],
+            "fieldValidateRulesMin": "0"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

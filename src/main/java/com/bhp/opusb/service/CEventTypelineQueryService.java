@@ -97,6 +97,9 @@ public class CEventTypelineQueryService extends QueryService<CEventTypeline> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), CEventTypeline_.description));
             }
+            if (criteria.getSequence() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getSequence(), CEventTypeline_.sequence));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CEventTypeline_.uid));
             }

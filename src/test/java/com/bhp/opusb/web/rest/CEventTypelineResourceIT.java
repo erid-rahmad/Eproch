@@ -44,6 +44,10 @@ public class CEventTypelineResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final Integer DEFAULT_SEQUENCE = 0;
+    private static final Integer UPDATED_SEQUENCE = 1;
+    private static final Integer SMALLER_SEQUENCE = 0 - 1;
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -80,6 +84,7 @@ public class CEventTypelineResourceIT {
         CEventTypeline cEventTypeline = new CEventTypeline()
             .event(DEFAULT_EVENT)
             .description(DEFAULT_DESCRIPTION)
+            .sequence(DEFAULT_SEQUENCE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -114,6 +119,7 @@ public class CEventTypelineResourceIT {
         CEventTypeline cEventTypeline = new CEventTypeline()
             .event(UPDATED_EVENT)
             .description(UPDATED_DESCRIPTION)
+            .sequence(UPDATED_SEQUENCE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -162,6 +168,7 @@ public class CEventTypelineResourceIT {
         CEventTypeline testCEventTypeline = cEventTypelineList.get(cEventTypelineList.size() - 1);
         assertThat(testCEventTypeline.getEvent()).isEqualTo(DEFAULT_EVENT);
         assertThat(testCEventTypeline.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testCEventTypeline.getSequence()).isEqualTo(DEFAULT_SEQUENCE);
         assertThat(testCEventTypeline.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCEventTypeline.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -208,6 +215,25 @@ public class CEventTypelineResourceIT {
 
     @Test
     @Transactional
+    public void checkSequenceIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cEventTypelineRepository.findAll().size();
+        // set the field null
+        cEventTypeline.setSequence(null);
+
+        // Create the CEventTypeline, which fails.
+        CEventTypelineDTO cEventTypelineDTO = cEventTypelineMapper.toDto(cEventTypeline);
+
+        restCEventTypelineMockMvc.perform(post("/api/c-event-typelines")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(cEventTypelineDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CEventTypeline> cEventTypelineList = cEventTypelineRepository.findAll();
+        assertThat(cEventTypelineList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllCEventTypelines() throws Exception {
         // Initialize the database
         cEventTypelineRepository.saveAndFlush(cEventTypeline);
@@ -219,6 +245,7 @@ public class CEventTypelineResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEventTypeline.getId().intValue())))
             .andExpect(jsonPath("$.[*].event").value(hasItem(DEFAULT_EVENT)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].sequence").value(hasItem(DEFAULT_SEQUENCE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -236,6 +263,7 @@ public class CEventTypelineResourceIT {
             .andExpect(jsonPath("$.id").value(cEventTypeline.getId().intValue()))
             .andExpect(jsonPath("$.event").value(DEFAULT_EVENT))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.sequence").value(DEFAULT_SEQUENCE))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -418,6 +446,111 @@ public class CEventTypelineResourceIT {
 
     @Test
     @Transactional
+    public void getAllCEventTypelinesBySequenceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cEventTypelineRepository.saveAndFlush(cEventTypeline);
+
+        // Get all the cEventTypelineList where sequence equals to DEFAULT_SEQUENCE
+        defaultCEventTypelineShouldBeFound("sequence.equals=" + DEFAULT_SEQUENCE);
+
+        // Get all the cEventTypelineList where sequence equals to UPDATED_SEQUENCE
+        defaultCEventTypelineShouldNotBeFound("sequence.equals=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventTypelinesBySequenceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cEventTypelineRepository.saveAndFlush(cEventTypeline);
+
+        // Get all the cEventTypelineList where sequence not equals to DEFAULT_SEQUENCE
+        defaultCEventTypelineShouldNotBeFound("sequence.notEquals=" + DEFAULT_SEQUENCE);
+
+        // Get all the cEventTypelineList where sequence not equals to UPDATED_SEQUENCE
+        defaultCEventTypelineShouldBeFound("sequence.notEquals=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventTypelinesBySequenceIsInShouldWork() throws Exception {
+        // Initialize the database
+        cEventTypelineRepository.saveAndFlush(cEventTypeline);
+
+        // Get all the cEventTypelineList where sequence in DEFAULT_SEQUENCE or UPDATED_SEQUENCE
+        defaultCEventTypelineShouldBeFound("sequence.in=" + DEFAULT_SEQUENCE + "," + UPDATED_SEQUENCE);
+
+        // Get all the cEventTypelineList where sequence equals to UPDATED_SEQUENCE
+        defaultCEventTypelineShouldNotBeFound("sequence.in=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventTypelinesBySequenceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cEventTypelineRepository.saveAndFlush(cEventTypeline);
+
+        // Get all the cEventTypelineList where sequence is not null
+        defaultCEventTypelineShouldBeFound("sequence.specified=true");
+
+        // Get all the cEventTypelineList where sequence is null
+        defaultCEventTypelineShouldNotBeFound("sequence.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventTypelinesBySequenceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        cEventTypelineRepository.saveAndFlush(cEventTypeline);
+
+        // Get all the cEventTypelineList where sequence is greater than or equal to DEFAULT_SEQUENCE
+        defaultCEventTypelineShouldBeFound("sequence.greaterThanOrEqual=" + DEFAULT_SEQUENCE);
+
+        // Get all the cEventTypelineList where sequence is greater than or equal to UPDATED_SEQUENCE
+        defaultCEventTypelineShouldNotBeFound("sequence.greaterThanOrEqual=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventTypelinesBySequenceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        cEventTypelineRepository.saveAndFlush(cEventTypeline);
+
+        // Get all the cEventTypelineList where sequence is less than or equal to DEFAULT_SEQUENCE
+        defaultCEventTypelineShouldBeFound("sequence.lessThanOrEqual=" + DEFAULT_SEQUENCE);
+
+        // Get all the cEventTypelineList where sequence is less than or equal to SMALLER_SEQUENCE
+        defaultCEventTypelineShouldNotBeFound("sequence.lessThanOrEqual=" + SMALLER_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventTypelinesBySequenceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        cEventTypelineRepository.saveAndFlush(cEventTypeline);
+
+        // Get all the cEventTypelineList where sequence is less than DEFAULT_SEQUENCE
+        defaultCEventTypelineShouldNotBeFound("sequence.lessThan=" + DEFAULT_SEQUENCE);
+
+        // Get all the cEventTypelineList where sequence is less than UPDATED_SEQUENCE
+        defaultCEventTypelineShouldBeFound("sequence.lessThan=" + UPDATED_SEQUENCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventTypelinesBySequenceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        cEventTypelineRepository.saveAndFlush(cEventTypeline);
+
+        // Get all the cEventTypelineList where sequence is greater than DEFAULT_SEQUENCE
+        defaultCEventTypelineShouldNotBeFound("sequence.greaterThan=" + DEFAULT_SEQUENCE);
+
+        // Get all the cEventTypelineList where sequence is greater than SMALLER_SEQUENCE
+        defaultCEventTypelineShouldBeFound("sequence.greaterThan=" + SMALLER_SEQUENCE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllCEventTypelinesByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         cEventTypelineRepository.saveAndFlush(cEventTypeline);
@@ -561,6 +694,7 @@ public class CEventTypelineResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEventTypeline.getId().intValue())))
             .andExpect(jsonPath("$.[*].event").value(hasItem(DEFAULT_EVENT)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].sequence").value(hasItem(DEFAULT_SEQUENCE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -612,6 +746,7 @@ public class CEventTypelineResourceIT {
         updatedCEventTypeline
             .event(UPDATED_EVENT)
             .description(UPDATED_DESCRIPTION)
+            .sequence(UPDATED_SEQUENCE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CEventTypelineDTO cEventTypelineDTO = cEventTypelineMapper.toDto(updatedCEventTypeline);
@@ -627,6 +762,7 @@ public class CEventTypelineResourceIT {
         CEventTypeline testCEventTypeline = cEventTypelineList.get(cEventTypelineList.size() - 1);
         assertThat(testCEventTypeline.getEvent()).isEqualTo(UPDATED_EVENT);
         assertThat(testCEventTypeline.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testCEventTypeline.getSequence()).isEqualTo(UPDATED_SEQUENCE);
         assertThat(testCEventTypeline.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCEventTypeline.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

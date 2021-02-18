@@ -16,6 +16,10 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
 
     private String description;
 
+    @NotNull
+    @Min(value = 0)
+    private Integer sequence;
+
     private UUID uid;
 
     private Boolean active;
@@ -49,6 +53,14 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 
     public UUID getUid() {
@@ -126,6 +138,7 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", event='" + getEvent() + "'" +
             ", description='" + getDescription() + "'" +
+            ", sequence=" + getSequence() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
