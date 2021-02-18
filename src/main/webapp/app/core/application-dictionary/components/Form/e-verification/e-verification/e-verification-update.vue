@@ -370,8 +370,18 @@
 .main {
     padding: 0px;
 
-    .el-table .danger-row {
-        background: oldlace;
+    .el-table .el-table__body,
+    .el-table--striped .el-table__body {
+
+        .danger-row td,
+        tr.el-table__row--striped.danger-row td {
+            background: #ffc1c1;
+        }
+
+        .warning-row td,
+        tr.el-table__row--striped.warning-row td {
+            background: #fff2cd;
+        }
     }
 }
 
