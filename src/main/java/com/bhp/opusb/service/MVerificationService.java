@@ -287,7 +287,7 @@ public class MVerificationService {
         if (record.isPresent()) {
             MVerification mVerification = record.get();
 
-            if (Boolean.FALSE.equals(mVerification.isApReversed())) {
+            if (Boolean.TRUE.equals(mVerification.isApReversed())) {
                 return null;
             }
 
