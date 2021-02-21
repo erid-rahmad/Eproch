@@ -54,6 +54,6 @@ public class DocumentUtil {
     long numOfRecords = repository.countByDateTrxBetween(start, end);
     String prefix = now.format(DATETIME_FORMATTER);
 
-    return prefix + (String.format("%04d", numOfRecords));
+    return prefix + (String.format("%04d", numOfRecords + 1));
   }
 }
