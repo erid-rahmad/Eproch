@@ -42,8 +42,8 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
     docEvent: "",
     vendorSubmission: "",
     vendorEvaluation: "",
-    vendorSub: "",
-    vendorEval: ""
+    vendorSubmissionObj: "",
+    vendorEvaluationObj: ""
   };
 
   created() {
@@ -57,7 +57,7 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
 
     this.dynamicWindowService(this.baseApiUrlEventTypeLine)
       .retrieve({
-        criteriaQuery: `eventTypeId.equals=${eventTypeId}`
+        criteriaQuery: `eventTypeId.equals=${eventTypeId}&sort=sequence`
       })
       .then(res => {
 
@@ -66,7 +66,7 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
         }));
 
         this.eventScheduleOptions = this.biddingSchedule.eventSchedule;
-        console.log(this.biddingInformation);
+        //console.log(this.biddingInformation);
 
       })
       .catch(err => {
@@ -91,14 +91,11 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
 
   saveDocument(){
 
-    //this.documentSchedule.vendorSub = this.documentSchedule.vendorSubmission.event + ' (Start: '+this.documentSchedule.vendorSubmission.startDate+' - End: '+ this.documentSchedule.vendorSubmission.endDate+ ')';
-    //this.documentSchedule.vendorEval = this.documentSchedule.vendorEvaluation.event + ' (Start: '+this.documentSchedule.vendorEvaluation.startDate+' - End: '+ this.documentSchedule.vendorEvaluation.endDate+ ')';
+    this.documentSchedule.vendorSubmissionObj = this.eventScheduleOptions.find(item => item.id === this.documentSchedule.vendorSubmission);
+    this.documentSchedule.vendorEvaluationObj = this.eventScheduleOptions.find(item => item.id === this.documentSchedule.vendorEvaluation);
 
-    this.documentSchedule.vendorSub = this.eventScheduleOptions.find(item => item.id === this.documentSchedule.vendorSubmission);
-    this.documentSchedule.vendorEval = this.eventScheduleOptions.find(item => item.id === this.documentSchedule.vendorEvaluation);
-
-    console.log(this.documentSchedule);
-    console.log(this.biddingSchedule);
+    //console.log(this.documentSchedule);
+    //console.log(this.biddingSchedule);
 
     this.biddingSchedule.documentSchedule.push(this.documentSchedule);
     this.dialogConfirmationVisible = false;
@@ -106,8 +103,8 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
       docEvent: "",
       vendorSubmission: "",
       vendorEvaluation: "",
-      vendorSub: "",
-      vendorEval: ""
+      vendorSubmissionObj: "",
+      vendorEvaluationObj: ""
     };
   }
 

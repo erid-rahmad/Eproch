@@ -27,12 +27,14 @@
         <vendor-invitation
           class="step-panel"
           v-if="active === 2"
-          />
+          :biddingInformation="bidding.biddingInformation"
+          :vendorInvitation="bidding.vendorInvitation"/>
 
         <vendor-scoring
           class="step-panel"
           v-if="active === 3"
-          />
+          :biddingInformation="bidding.biddingInformation"
+          :vendorScoring="bidding.vendorScoring"/>
       </keep-alive>
     </div>
 

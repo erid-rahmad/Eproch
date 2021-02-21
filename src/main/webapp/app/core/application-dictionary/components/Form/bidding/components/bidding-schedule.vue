@@ -4,7 +4,7 @@
         <el-divider content-position="left"><h4>Event Schedule</h4></el-divider>
 
         <el-row :gutter="24">
-            <el-col :span="18">
+            <el-col :span="20">
                 <el-table
                     v-loading="processing"
                     ref="biddingSchedule"
@@ -76,7 +76,7 @@
         <el-divider content-position="left"><h4>Document Submission Schedule</h4></el-divider>
 
         <el-row :gutter="24">
-            <el-col :span="18">
+            <el-col :span="20">
                 <el-table
                     v-loading="processing"
                     ref="biddingSchedule"
@@ -107,9 +107,9 @@
                         min-width="100"
                         label="Vendor Submission">
                         <template slot-scope="{ row }">
-                            {{ row.vendorSub.event }}
+                            {{ row.vendorSubmissionObj.event }}
                             <br/>
-                            Start: {{ row.vendorSub.startDate }} - End: {{ row.vendorSub.endDate }}
+                            Start: {{ row.vendorSubmissionObj.startDate }} - End: {{ row.vendorSubmissionObj.endDate }}
                         </template>
                     </el-table-column>
 
@@ -117,9 +117,9 @@
                         min-width="100"
                         label="Vendor Evaluation">
                         <template slot-scope="{ row }">
-                            {{ row.vendorEval.event }}
+                            {{ row.vendorEvaluationObj.event }}
                             <br/>
-                            Start: {{ row.vendorEval.startDate }} - End: {{ row.vendorEval.endDate }}
+                            Start: {{ row.vendorEvaluationObj.startDate }} - End: {{ row.vendorEvaluationObj.endDate }}
                         </template>
                     </el-table-column>
 
