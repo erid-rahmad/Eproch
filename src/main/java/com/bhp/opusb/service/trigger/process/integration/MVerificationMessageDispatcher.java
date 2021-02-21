@@ -5,6 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.domain.AiExchangeOut;
+import com.bhp.opusb.domain.MVerification;
+import com.bhp.opusb.domain.enumeration.AiStatus;
+import com.bhp.opusb.repository.AiExchangeOutRepository;
 import com.bhp.opusb.repository.CVendorLocationRepository;
 import com.bhp.opusb.service.dto.CVendorLocationDTO;
 import com.bhp.opusb.service.dto.MVerificationDTO;
@@ -23,6 +27,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 @Service("mVerificationMessageDispatcher")
@@ -40,13 +45,16 @@ public class MVerificationMessageDispatcher implements ProcessTrigger {
   private final ObjectMapper objectMapper;
   private final ApplicationProperties properties;
   private final CVendorLocationRepository cVendorLocationRepository;
+  private final AiExchangeOutRepository aiExchangeOutRepository;
   private final CVendorLocationMapper cVendorLocationMapper;
 
   public MVerificationMessageDispatcher(ObjectMapper objectMapper, ApplicationProperties properties,
-      CVendorLocationRepository cVendorLocationRepository, CVendorLocationMapper cVendorLocationMapper) {
+      CVendorLocationRepository cVendorLocationRepository, AiExchangeOutRepository aiExchangeOutRepository,
+      CVendorLocationMapper cVendorLocationMapper) {
     this.objectMapper = objectMapper;
     this.properties = properties;
     this.cVendorLocationRepository = cVendorLocationRepository;
+    this.aiExchangeOutRepository = aiExchangeOutRepository;
     this.cVendorLocationMapper = cVendorLocationMapper;
   }
 
@@ -64,8 +72,24 @@ public class MVerificationMessageDispatcher implements ProcessTrigger {
         enrichMessage(payload, context);
         message = objectMapper.writeValueAsString(params);
         response = dispatchMessage(message, context);
-      } catch (JsonProcessingException e) {
-        logger.error("Failed dispatching invoice verification. {}. {}", e.getLocalizedMessage(), payload);
+      } catch (JsonProcessingException | RestClientException e) {
+        logger.warn("Failed dispatching invoice verification. {}. {}", e.getLocalizedMessage(), payload);
+
+        if (context.equals(CONTEXT_HEADER)) {
+          AiExchangeOut exchangeOut = new AiExchangeOut();
+          String entityType;
+          long id;
+
+          entityType = MVerification.class.getName();
+          id = ((MVerificationDTO) payload).getId();
+          exchangeOut.entityType(entityType)
+            .entityId(id)
+            .payload(message)
+            .status(AiStatus.ERROR);
+          
+          aiExchangeOutRepository.save(exchangeOut);
+        }
+
         success = false;
       }
 
@@ -121,7 +145,7 @@ public class MVerificationMessageDispatcher implements ProcessTrigger {
     return source.multiply(new BigDecimal(multiplier));
   }
 
-  private String dispatchMessage(String message, String context) {
+  private String dispatchMessage(String message, String context) throws RestClientException {
     final String url = properties.getIntegration().getEndpoint().getInvoiceVerificationUrl();
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
