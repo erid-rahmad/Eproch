@@ -2,25 +2,14 @@
     <div class="app-container payment-status">
         <el-row class="header">
             <el-col :span="24">
-
                 <el-button
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-search"
                     @click.native.prevent="verificationFilter"
                 />
-
-                <!-- <el-button
-                    class="button"
-                    size="small"
-                    type="primary"
-                    icon="el-icon-download"
-                >
-                    Export
-                </el-button> -->
-
             </el-col>
         </el-row>
 
