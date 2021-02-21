@@ -136,11 +136,12 @@ public class MVerificationService {
         } else if (approval) {
             eventName = "INVOICE_APPROVED";
             verification.dateApprove(LocalDate.now())
-                .payStatus("N")
+                .payStatus(PaymentStatusDTO.STATUS_UNPROCESSED)
                 .documentAction(DocumentUtil.STATUS_APPROVE)
                 .documentStatus(DocumentUtil.STATUS_APPROVE)
                 .approved(true)
-                .processed(true);
+                .processed(true)
+                .apReversed(false);
         } else if (rejection) {
             eventName = "INVOICE_REJECTED";
             verification.dateReject(LocalDate.now())
@@ -253,10 +254,10 @@ public class MVerificationService {
             }
         } else if (DocumentUtil.isVoid(documentStatus)) {
             eventName = "INVOICE_VOIDED";
-            mVerificationLineQueryService.findByHeader(mVerification).forEach(line -> {
+            mVerificationLineQueryService.findByHeader(mVerification).forEach(line ->
                 mMatchPOService.openMatchPO(line.getAdOrganizationCode(), line.getcDocType(), line.getPoNo(),
-                        line.getReceiveNo(), line.getLineNoPo(), line.getLineNoMr(), line.getOrderSuffix());
-            });
+                        line.getReceiveNo(), line.getLineNoPo(), line.getLineNoMr(), line.getOrderSuffix())
+            );
         } else if (DocumentUtil.isReopen(documentStatus)) {
             eventName = "INVOICE_REOPENED";
         }
@@ -285,11 +286,17 @@ public class MVerificationService {
 
         if (record.isPresent()) {
             MVerification mVerification = record.get();
+
+            if (Boolean.TRUE.equals(mVerification.isApReversed())) {
+                return null;
+            }
+
             String currentStatus = mVerification.getPayStatus();
             String incomingStatus = payload.getStatus();
 
+            // Status = A (Approved for Payment). Update vouceher no., doc type, and status.
             if (incomingStatus.equals(PaymentStatusDTO.STATUS_APPROVED)
-                    && (currentStatus == null || PaymentStatusDTO.STATUS_UNPROCESSED.equals(currentStatus))) {
+                    && PaymentStatusDTO.STATUS_UNPROCESSED.equals(currentStatus)) {
 
                 log.debug("Set invoice status to {}", incomingStatus);
                 final ADOrganization org = adOrganizationService.findOrCreate(payload.getOrgCode());
@@ -297,8 +304,12 @@ public class MVerificationService {
                     .invoiceAp(payload.getDocumentNo()) // Voucher No.
                     .docType(payload.getDocumentType())
                     .adOrganization(org);
-            } else if (incomingStatus.equals(PaymentStatusDTO.STATUS_PAID)
+            }
+            
+            // Status = P (Paid in Full). Update payment date, amount, and status.
+            else if (incomingStatus.equals(PaymentStatusDTO.STATUS_PAID)
                     && ! PaymentStatusDTO.STATUS_PAID.equals(currentStatus)) {
+
                 final String updatedBy = payload.getUpdatedBy();
 
                 log.debug("Set invoice status to {}", incomingStatus);
@@ -313,10 +324,15 @@ public class MVerificationService {
                 if (updatedBy != null && ! updatedBy.isEmpty()) {
                     mVerification.setLastModifiedBy(updatedBy.trim());
                 }
-            } else if ( ! Objects.equals(mVerification.getInvoiceAp(), payload.getDocumentNo())) {
+            }
+            
+            // Perhaps won't be executed because of unchanged data in F560411H when voucher no. is updated.
+            else if ( ! Objects.equals(mVerification.getInvoiceAp(), payload.getDocumentNo())) {
                 log.debug("Update voucher number from {} to {}", mVerification.getInvoiceAp(), payload.getDocumentNo());
                 final ADOrganization org = adOrganizationService.findOrCreate(payload.getOrgCode());
-                mVerification.invoiceAp(payload.getDocumentNo())
+                mVerification
+                    .payStatus(incomingStatus)
+                    .invoiceAp(payload.getDocumentNo())
                     .docType(payload.getDocumentType())
                     .adOrganization(org);
             }

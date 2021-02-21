@@ -168,6 +168,10 @@ aside {
 }
 
 // Element UI overrides.
+.el-button--warning {
+  color: #1f2d3d;
+}
+
 .el-pagination {
   padding: 8px;
 
@@ -246,7 +250,7 @@ aside {
     }
   }
 
-  button {
+  .el-button--mini {
     padding: 5px 10px;
   }
 }

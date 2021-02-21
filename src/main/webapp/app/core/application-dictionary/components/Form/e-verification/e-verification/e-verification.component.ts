@@ -115,6 +115,8 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   rowClassName({row}) {
     if (row.documentStatus !== 'CNL' && row.receiptReversed) {
       return 'danger-row';
+    } else if (row.apReversed) {
+      return 'warning-row';
     }
 
     return '';

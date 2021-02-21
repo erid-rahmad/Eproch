@@ -57,6 +57,16 @@ export const constantRoutes: RouteConfig[] = [
     ]
   },
   {
+    path: '/login',
+    component: () => import(/* webpackChunkName: "account" */ '@/account/login-form/index.vue'),
+    meta: { hidden: true }
+  },
+  {
+    path: '/auth-redirect',
+    component: () => import(/* webpackChunkName: "account" */ '@/account/login-form/auth-redirect.vue'),
+    meta: { hidden: true },
+  },
+  {
     path: '/',
     component: Layout,
     children: [
