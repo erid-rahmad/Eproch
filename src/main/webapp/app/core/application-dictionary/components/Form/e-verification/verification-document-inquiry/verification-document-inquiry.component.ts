@@ -217,10 +217,12 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
         this.$set(this.filter, key, value);
       });
     }
+
+    this.filterQuery = buildCriteriaQueryString([this.filterQuery, watchListQuery]);
     
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: [this.filterQuery, watchListQuery],
+        criteriaQuery: this.filterQuery,
         paginationQuery
       })
       .then(res => {

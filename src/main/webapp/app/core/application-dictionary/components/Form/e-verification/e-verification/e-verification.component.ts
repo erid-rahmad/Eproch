@@ -219,13 +219,15 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
       });
     }
 
+    this.filterQuery = buildCriteriaQueryString([
+      this.filterQuery,
+      watchListQuery,
+      `vendorId.equals=${accountStore.userDetails.cVendorId}`
+    ]);
+    
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: [
-          this.filterQuery,
-          watchListQuery,
-          `vendorId.equals=${accountStore.userDetails.cVendorId}`
-        ],
+        criteriaQuery: this.filterQuery,
         paginationQuery
       })
       .then(res => {

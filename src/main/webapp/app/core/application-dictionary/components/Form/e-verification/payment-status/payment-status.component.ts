@@ -5,6 +5,7 @@ import { ElTable } from 'element-ui/types/table';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
+import buildCriteriaQueryString from '@/shared/filter/filters';
 
 
 @Component
@@ -141,13 +142,15 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
       });
     }
 
+    this.filterQuery = buildCriteriaQueryString([
+      this.filterQuery,
+      watchListQuery,
+      `vendorId.equals=${accountStore.userDetails.cVendorId}`
+    ]);
+    
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: [
-          this.filterQuery,
-          watchListQuery,
-          `vendorId.equals=${accountStore.userDetails.cVendorId}`
-        ],
+        criteriaQuery: this.filterQuery,
         paginationQuery
       })
       .then(res => {
@@ -212,45 +215,32 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
       });
   }
 
-  public verificationFilter(){
+  public verificationFilter() {
+    const form = this.filter;
+    const query = [];
 
     this.filterQuery = "";
 
-    if((this.filter.verificationNo != null)&&(this.filter.verificationNo != "")){
-      this.filterQuery = "verificationNo.equals="+this.filter.verificationNo;
+    if (!!form.verificationNo) {
+      query.push(`verificationNo.equals=${form.verificationNo}`);
     }
-    if((this.filter.invoiceNo != null)&&(this.filter.invoiceNo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "invoiceNo.equals="+this.filter.invoiceNo;
+    if (!!form.invoiceNo) {
+      query.push(`invoiceNo.equals=${form.invoiceNo}`);
     }
-    if((this.filter.verificationStatus != null)&&(this.filter.verificationStatus != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "verificationStatus.equals="+this.filter.verificationStatus;
+    if (!!form.verificationStatus) {
+      query.push(`verificationStatus.equals=${form.verificationStatus}`);
     }
-
-    if((this.filter.verificationDate != null)&&(this.filter.verificationDate != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "verificationDate.lessOrEqualThan="+this.filter.verificationDate;
+    if (!!form.verificationDate) {
+      query.push(`verificationDate.lessOrEqualThan=${form.verificationDate}`);
     }
-    if((this.filter.invoiceDate != null)&&(this.filter.invoiceDate != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "invoiceDate.lessOrEqualThan="+this.filter.invoiceDate;
+    if (!!form.invoiceDate) {
+      query.push(`invoiceDate.lessOrEqualThan=${form.invoiceDate}`);
     }
-    if((this.filter.payStatus != null)&&(this.filter.payStatus != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "payStatus.equals="+this.filter.payStatus;
+    if (!!form.payStatus) {
+      query.push(`payStatus.equals=${form.payStatus}`);
     }
 
+    this.filterQuery = buildCriteriaQueryString(query);
     this.retrieveAllRecords();
   }
 

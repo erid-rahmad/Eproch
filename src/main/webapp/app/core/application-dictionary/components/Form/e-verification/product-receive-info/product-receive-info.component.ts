@@ -135,13 +135,16 @@ export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, 
       });
     }
     
+    this.filterQuery = buildCriteriaQueryString([
+      'mMatchType.equals=1',
+      this.filterQuery,
+      watchListQuery,
+      this.isVendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
+    ]);
+    
     this.dynamicWindowService('/api/m-match-pos')
       .retrieve({
-        criteriaQuery: [
-          'mMatchType.equals=1',
-          this.filterQuery,
-          this.isVendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
-        ],
+        criteriaQuery: this.filterQuery,
         paginationQuery
       })
       .then(res => {
