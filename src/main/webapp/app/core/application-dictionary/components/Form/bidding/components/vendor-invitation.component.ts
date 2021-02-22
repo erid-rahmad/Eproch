@@ -36,6 +36,8 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
   dialogConfirmationVisibleVendorSuggestion: boolean = false;
 
   public vendorOptions: any = {};
+  public subCategoryOptions: any = {};
+
   businessCategory: any = {};
   businessCategoriesId = [];
   businessCategoriesName = [];
@@ -56,7 +58,7 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
   vendorSuggestion:any = {
     vendor: '',
     vendorObj: '',
-    subCategoryId: '',
+    subCategoryObj: '',
     subCategory: '',
     addressId: '',
     address: ''
@@ -78,7 +80,8 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
   created() {
     console.log(this.vendorSelection);
     this.retrieveBusinessCategories();
-    this.retrieveVendor(0, 1);
+    //this.retrieveVendor(0, 1);
+    this.retrieveSubBusinessCategory();
 
     if(this.vendorSelection == 'Open'){
       this.buttonDisable = true;
@@ -121,16 +124,9 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
           this.vendorInvitation.vendorBusinessCategory.push(this.vendorBusinessCategory);
 
           if(this.vendorSelection == 'Open'){
-            //console.log('1');
-            //console.log(this.vendorBusinessCategory.businessClassificationId);
-            //console.log(this.vendorBusinessCategory.businessClassificationName);
-            this.retrieveBusinessCategory(this.vendorBusinessCategory.businessClassificationId, 2);
+            //this.retrieveBusinessCategory(this.vendorBusinessCategory.businessClassificationId, 2);
           }else if(this.vendorSelection == 'Invitation Only'){
-            //console.log('2');
-            //console.log(this.vendorBusinessCategory.businessSubCategoryId);
-            //console.log(this.vendorBusinessCategory.businessSubCategoryName);
-            //this.retrieveBusinessCategory(this.vendorBusinessCategory.businessSubCategoryId, 3);
-            this.retrieveVendorBySubCategory(this.vendorBusinessCategory.businessSubCategoryId);
+            //this.retrieveVendorBySubCategory(this.vendorBusinessCategory.businessSubCategoryId);
           }
         }
 
@@ -141,7 +137,9 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
   }
 
   saveVendorSuggestion(){
-    this.vendorSuggestion.vendorObj = this.vendorOptions.find(item => item.id === this.vendorSuggestion.vendor);
+    this.vendorSuggestion.vendorObj = this.vendorOptions.find(item => item.vendorId === this.vendorSuggestion.vendor);
+    this.vendorSuggestion.subCategoryObj = this.subCategoryOptions.find(item => item.id === this.vendorSuggestion.subCategory);
+    console.log(this.vendorSuggestion);
     this.vendorInvitation.vendorSuggestion.push(this.vendorSuggestion);
 
     this.dialogConfirmationVisibleVendorSuggestion = false;
@@ -149,7 +147,7 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
     this.vendorSuggestion = {
       vendor: '',
       vendorObj: '',
-      subCategoryId: '',
+      subCategoryObj: '',
       subCategory: '',
       addressId: '',
       address: ''
@@ -191,14 +189,37 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
   private retrieveVendorBySubCategory(businessCategory) {
     this.dynamicWindowService('/api/c-vendor-business-cats')
       .retrieve({
-        criteriaQuery: `businessCategoryId.equals=${businessCategory}`
+        criteriaQuery: `active.equals=true&businessCategoryId.equals=${businessCategory}`
       })
       .then(res => {
-        res.data.map((item: any) => {
-          this.retrieveVendor(item.vendorId, 2);
-          //console.log(item);
-          return item;
-        });
+        if(businessCategory){
+          this.vendorOptions = res.data;
+          console.log(res.data)
+          /*res.data.map((item: any) => {
+            this.retrieveVendor(item.vendorId, 2);
+            this.vendorSuggestion.vendorObj = this.vendorOptions.find(item => item.id === this.vendorSuggestion.vendor);
+            //console.log(item);
+            return item;
+          });*/
+        }
+      });
+  }
+
+  private retrieveSubBusinessCategory(): void {
+    let filterQuery = "";
+    filterQuery = "active.equals=true&sector.equals=TERTIARY";
+
+    this.dynamicWindowService("/api/c-business-categories")
+      .retrieve({
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        },
+        criteriaQuery: filterQuery
+      })
+      .then(res => {
+        this.subCategoryOptions = res.data;
       });
   }
 
@@ -214,9 +235,9 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
         criteriaQuery: filterQuery
       })
       .then(res => {
-        if(key == 1){
-          this.vendorOptions = res.data;
-        }else{
+        //if(key == 1){
+          //this.vendorOptions = res.data;
+        /*}else{
           res.data.map((item: any) => {
             //this.retrieveVendor(item.vendorId, 2);
             //console.log(item);
@@ -227,18 +248,37 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
 
             return item;
           });
-
-        }
+        }*/
       });
   }
 
   getVendorDetail(vendorId){
-    this.retrieveVendorSubCategory(vendorId);
+    //this.retrieveVendorSubCategory(vendorId);
     this.retrieveVendorAddress(vendorId);
   }
 
+  getVendor(businessCategory){
+    console.log(businessCategory);
+    this.retrieveVendorBySubCategory(businessCategory);
+    this.vendorSuggestion.vendor = "";
+    this.vendorSuggestion.address = "";
+  }
+
+  clearSubCategory(){
+    this.vendorSuggestion.vendor = "";
+    this.vendorSuggestion.vendorObj = "";
+    this.vendorOptions = {}
+    this.vendorSuggestion.address = "";
+    this.vendorSuggestion.addressId = "";
+  }
+
+  clearVendor(){
+    this.vendorSuggestion.address = "";
+    this.vendorSuggestion.addressId = "";
+  }
+
   // retrieve vendor sub category
-  private retrieveVendorSubCategory(vendorId) {
+  /*private retrieveVendorSubCategory(vendorId) {
     this.dynamicWindowService('/api/c-vendor-business-cats')
       .retrieve({
         criteriaQuery: `vendorId.equals=${vendorId}`
@@ -246,7 +286,7 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
       .then(res => {
         this.retrieveBusinessCategory(res.data[0].businessCategoryId, 1);
       });
-  }
+  }*/
 
   private retrieveBusinessCategory(businessCategoryId, key) {
     this.dynamicWindowService('/api/c-business-categories')
@@ -261,7 +301,6 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
           //select business category primary
         } else if(key == 3){
           //select business category tertiary
-          //let
         }
       });
   }
@@ -273,7 +312,9 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
         criteriaQuery: `vendorId.equals=${vendorId}`
       })
       .then(res => {
-        this.retrieveLocation(res.data[0].locationId);
+        if(vendorId){
+          this.retrieveLocation(res.data[0].locationId);
+        }
       });
   }
 

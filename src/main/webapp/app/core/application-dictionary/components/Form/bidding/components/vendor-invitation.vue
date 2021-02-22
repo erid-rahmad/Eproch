@@ -91,14 +91,17 @@
                         min-width="100"
                         label="Vendor">
                         <template slot-scope="{ row }">
-                            {{ row.vendorObj.name }}
+                            {{ row.vendorObj.vendorName }}
                         </template>
                     </el-table-column>
 
                     <el-table-column
                         min-width="100"
-                        prop="subCategory"
-                        label="Sub Category"/>
+                        label="Sub Category">
+                        <template slot-scope="{ row }">
+                            {{ row.subCategoryObj.name }}
+                        </template>
+                    </el-table-column>
 
                     <el-table-column
                         min-width="100"
@@ -187,16 +190,17 @@
                     <el-form ref="vendorSuggestion" label-position="left" label-width="150px" size="mini" :model="vendorSuggestion">
                         <el-row :gutter="24">
                             <el-col :span="24">
-                                <el-form-item label="Vendor" prop="vendor" required>
+                                <el-form-item label="SubCategory" prop="subCategory" required>
                                     <el-select
                                         style="width: 100%"
-                                        v-model="vendorSuggestion.vendor"
+                                        v-model="vendorSuggestion.subCategory"
                                         class="form-input"
                                         clearable filterable
                                         :placeholder="$t('register.form.select')"
-                                        @change="getVendorDetail($event)">
+                                        @clear="clearSubCategory"
+                                        @change="getVendor($event)">
                                         <el-option
-                                            v-for="item in vendorOptions"
+                                            v-for="item in subCategoryOptions"
                                             :key="item.id"
                                             :label="item.name"
                                             :value="item.id" />
@@ -206,8 +210,21 @@
                         </el-row>
                         <el-row :gutter="24">
                             <el-col :span="24">
-                                <el-form-item label="SubCategory" prop="subCategory" required>
-                                    <el-input class="form-input" clearable v-model="vendorSuggestion.subCategory" disabled />
+                                <el-form-item label="Vendor" prop="vendor" required>
+                                    <el-select
+                                        style="width: 100%"
+                                        v-model="vendorSuggestion.vendor"
+                                        class="form-input"
+                                        clearable filterable
+                                        :placeholder="$t('register.form.select')"
+                                        @clear="clearVendor"
+                                        @change="getVendorDetail($event)">
+                                        <el-option
+                                            v-for="item in vendorOptions"
+                                            :key="item.vendorId"
+                                            :label="item.vendorName"
+                                            :value="item.vendorId" />
+                                    </el-select>
                                 </el-form-item>
                             </el-col>
                         </el-row>
