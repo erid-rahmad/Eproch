@@ -1029,7 +1029,9 @@ relationship ManyToOne {
 	CVendor{documentType required} to CDocumentType
 
 	CVendorBusinessCat{vendor required} to CVendor
-	CVendorBusinessCat{businessCategory required} to CBusinessCategory
+	CVendorBusinessCat{businessClassification required} to CBusinessCategory
+    CVendorBusinessCat{businessCategory required} to CBusinessCategory
+    CVendorBusinessCat{subBusinessCategory required} to CBusinessCategory
 	CVendorBusinessCat{adOrganization required} to ADOrganization
 
 	CPicBusinessCat{pic required} to AdUser

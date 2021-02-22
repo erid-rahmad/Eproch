@@ -94,7 +94,11 @@ public class CVendorBusinessCatResourceIT {
         } else {
             cBusinessCategory = TestUtil.findAll(em, CBusinessCategory.class).get(0);
         }
+        cVendorBusinessCat.setBusinessClassification(cBusinessCategory);
+        // Add required entity
         cVendorBusinessCat.setBusinessCategory(cBusinessCategory);
+        // Add required entity
+        cVendorBusinessCat.setSubBusinessCategory(cBusinessCategory);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -136,7 +140,11 @@ public class CVendorBusinessCatResourceIT {
         } else {
             cBusinessCategory = TestUtil.findAll(em, CBusinessCategory.class).get(0);
         }
+        cVendorBusinessCat.setBusinessClassification(cBusinessCategory);
+        // Add required entity
         cVendorBusinessCat.setBusinessCategory(cBusinessCategory);
+        // Add required entity
+        cVendorBusinessCat.setSubBusinessCategory(cBusinessCategory);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -368,6 +376,22 @@ public class CVendorBusinessCatResourceIT {
 
     @Test
     @Transactional
+    public void getAllCVendorBusinessCatsByBusinessClassificationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CBusinessCategory businessClassification = cVendorBusinessCat.getBusinessClassification();
+        cVendorBusinessCatRepository.saveAndFlush(cVendorBusinessCat);
+        Long businessClassificationId = businessClassification.getId();
+
+        // Get all the cVendorBusinessCatList where businessClassification equals to businessClassificationId
+        defaultCVendorBusinessCatShouldBeFound("businessClassificationId.equals=" + businessClassificationId);
+
+        // Get all the cVendorBusinessCatList where businessClassification equals to businessClassificationId + 1
+        defaultCVendorBusinessCatShouldNotBeFound("businessClassificationId.equals=" + (businessClassificationId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllCVendorBusinessCatsByBusinessCategoryIsEqualToSomething() throws Exception {
         // Get already existing entity
         CBusinessCategory businessCategory = cVendorBusinessCat.getBusinessCategory();
@@ -379,6 +403,22 @@ public class CVendorBusinessCatResourceIT {
 
         // Get all the cVendorBusinessCatList where businessCategory equals to businessCategoryId + 1
         defaultCVendorBusinessCatShouldNotBeFound("businessCategoryId.equals=" + (businessCategoryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorBusinessCatsBySubBusinessCategoryIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CBusinessCategory subBusinessCategory = cVendorBusinessCat.getSubBusinessCategory();
+        cVendorBusinessCatRepository.saveAndFlush(cVendorBusinessCat);
+        Long subBusinessCategoryId = subBusinessCategory.getId();
+
+        // Get all the cVendorBusinessCatList where subBusinessCategory equals to subBusinessCategoryId
+        defaultCVendorBusinessCatShouldBeFound("subBusinessCategoryId.equals=" + subBusinessCategoryId);
+
+        // Get all the cVendorBusinessCatList where subBusinessCategory equals to subBusinessCategoryId + 1
+        defaultCVendorBusinessCatShouldNotBeFound("subBusinessCategoryId.equals=" + (subBusinessCategoryId + 1));
     }
 
 

@@ -33,7 +33,11 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
 
     private LongFilter vendorId;
 
+    private LongFilter businessClassificationId;
+
     private LongFilter businessCategoryId;
+
+    private LongFilter subBusinessCategoryId;
 
     private LongFilter adOrganizationId;
 
@@ -45,7 +49,9 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
+        this.businessClassificationId = other.businessClassificationId == null ? null : other.businessClassificationId.copy();
         this.businessCategoryId = other.businessCategoryId == null ? null : other.businessCategoryId.copy();
+        this.subBusinessCategoryId = other.subBusinessCategoryId == null ? null : other.subBusinessCategoryId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
@@ -86,12 +92,28 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
         this.vendorId = vendorId;
     }
 
+    public LongFilter getBusinessClassificationId() {
+        return businessClassificationId;
+    }
+
+    public void setBusinessClassificationId(LongFilter businessClassificationId) {
+        this.businessClassificationId = businessClassificationId;
+    }
+
     public LongFilter getBusinessCategoryId() {
         return businessCategoryId;
     }
 
     public void setBusinessCategoryId(LongFilter businessCategoryId) {
         this.businessCategoryId = businessCategoryId;
+    }
+
+    public LongFilter getSubBusinessCategoryId() {
+        return subBusinessCategoryId;
+    }
+
+    public void setSubBusinessCategoryId(LongFilter subBusinessCategoryId) {
+        this.subBusinessCategoryId = subBusinessCategoryId;
     }
 
     public LongFilter getAdOrganizationId() {
@@ -117,7 +139,9 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(vendorId, that.vendorId) &&
+            Objects.equals(businessClassificationId, that.businessClassificationId) &&
             Objects.equals(businessCategoryId, that.businessCategoryId) &&
+            Objects.equals(subBusinessCategoryId, that.subBusinessCategoryId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
     }
 
@@ -128,7 +152,9 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
         uid,
         active,
         vendorId,
+        businessClassificationId,
         businessCategoryId,
+        subBusinessCategoryId,
         adOrganizationId
         );
     }
@@ -140,7 +166,9 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
+                (businessClassificationId != null ? "businessClassificationId=" + businessClassificationId + ", " : "") +
                 (businessCategoryId != null ? "businessCategoryId=" + businessCategoryId + ", " : "") +
+                (subBusinessCategoryId != null ? "subBusinessCategoryId=" + subBusinessCategoryId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";
     }

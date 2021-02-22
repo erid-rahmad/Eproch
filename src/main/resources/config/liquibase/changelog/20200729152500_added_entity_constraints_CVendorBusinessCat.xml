@@ -7,7 +7,7 @@
         Added the constraints for entity CVendorBusinessCat.
     -->
     <changeSet id="20200729152500-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="vendor_id"
                                  baseTableName="c_vendor_business_cat"
                                  constraintName="fk_c_vendor_business_cat_vendor_id"
@@ -25,6 +25,22 @@
                                  constraintName="fk_c_vendor_business_cat_ad_organization_id"
                                  referencedColumnNames="id"
                                  referencedTableName="ad_organization"/>
+
+    </changeSet>
+
+    <changeSet id="20200729152500-add-constraint" author="dian-tri-budianto">
+
+        <addForeignKeyConstraint baseColumnNames="business_classification_id"
+                                 baseTableName="c_vendor_business_cat"
+                                 constraintName="fk_c_vendor_business_cat_business_classification_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_business_category"/>
+
+        <addForeignKeyConstraint baseColumnNames="sub_business_category_id"
+                                 baseTableName="c_vendor_business_cat"
+                                 constraintName="fk_c_vendor_business_cat_sub_business_category_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_business_category"/>
 
     </changeSet>
 </databaseChangeLog>

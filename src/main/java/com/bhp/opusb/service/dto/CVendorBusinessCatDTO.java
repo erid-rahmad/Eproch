@@ -1,7 +1,5 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -9,7 +7,9 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.CVendorBusinessCat} entity.
  */
 public class CVendorBusinessCatDTO extends AbstractAuditingDTO {
-    
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     private UUID uid;
@@ -18,13 +18,20 @@ public class CVendorBusinessCatDTO extends AbstractAuditingDTO {
 
 
     private Long vendorId;
+    private String vendorName;
+
+    private Long businessClassificationId;
+    private String businessClassificationName;
 
     private Long businessCategoryId;
     private String businessCategoryName;
 
+    private Long subBusinessCategoryId;
+    private String subBusinessCategoryName;
+
     private Long adOrganizationId;
     private String adOrganizationName;
-    
+
     public Long getId() {
         return id;
     }
@@ -57,6 +64,30 @@ public class CVendorBusinessCatDTO extends AbstractAuditingDTO {
         this.vendorId = cVendorId;
     }
 
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public Long getBusinessClassificationId() {
+        return businessClassificationId;
+    }
+
+    public void setBusinessClassificationId(Long cBusinessCategoryId) {
+        this.businessClassificationId = cBusinessCategoryId;
+    }
+
+    public String getBusinessClassificationName() {
+        return businessClassificationName;
+    }
+
+    public void setBusinessClassificationName(String businessClassificationName) {
+        this.businessClassificationName = businessClassificationName;
+    }
+
     public Long getBusinessCategoryId() {
         return businessCategoryId;
     }
@@ -71,6 +102,22 @@ public class CVendorBusinessCatDTO extends AbstractAuditingDTO {
 
     public void setBusinessCategoryName(String businessCategoryName) {
         this.businessCategoryName = businessCategoryName;
+    }
+
+    public Long getSubBusinessCategoryId() {
+        return subBusinessCategoryId;
+    }
+
+    public void setSubBusinessCategoryId(Long cBusinessCategoryId) {
+        this.subBusinessCategoryId = cBusinessCategoryId;
+    }
+
+    public String getSubBusinessCategoryName() {
+        return subBusinessCategoryName;
+    }
+
+    public void setSubBusinessCategoryName(String subBusinessCategoryName) {
+        this.subBusinessCategoryName = subBusinessCategoryName;
     }
 
     public Long getAdOrganizationId() {
@@ -117,8 +164,13 @@ public class CVendorBusinessCatDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", vendorId=" + getVendorId() +
+            ", vendorName=" + getVendorName() +
+            ", businessClassificationId=" + getBusinessClassificationId() +
+            ", businessClassificationName=" + getBusinessClassificationName() +
             ", businessCategoryId=" + getBusinessCategoryId() +
             ", businessCategoryName=" + getBusinessCategoryName() +
+            ", subBusinessCategoryId=" + getSubBusinessCategoryId() +
+            ", subBusinessCategoryName=" + getSubBusinessCategoryName() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName=" + getAdOrganizationName() +
             "}";

@@ -7,8 +7,6 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import java.io.Serializable;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -40,7 +38,17 @@ public class CVendorBusinessCat extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("cVendorBusinessCats")
+    private CBusinessCategory businessClassification;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cVendorBusinessCats")
     private CBusinessCategory businessCategory;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cVendorBusinessCats")
+    private CBusinessCategory subBusinessCategory;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -95,6 +103,19 @@ public class CVendorBusinessCat extends AbstractAuditingEntity {
         this.vendor = cVendor;
     }
 
+    public CBusinessCategory getBusinessClassification() {
+        return businessClassification;
+    }
+
+    public CVendorBusinessCat businessClassification(CBusinessCategory cBusinessCategory) {
+        this.businessClassification = cBusinessCategory;
+        return this;
+    }
+
+    public void setBusinessClassification(CBusinessCategory cBusinessCategory) {
+        this.businessClassification = cBusinessCategory;
+    }
+
     public CBusinessCategory getBusinessCategory() {
         return businessCategory;
     }
@@ -106,6 +127,19 @@ public class CVendorBusinessCat extends AbstractAuditingEntity {
 
     public void setBusinessCategory(CBusinessCategory cBusinessCategory) {
         this.businessCategory = cBusinessCategory;
+    }
+
+    public CBusinessCategory getSubBusinessCategory() {
+        return subBusinessCategory;
+    }
+
+    public CVendorBusinessCat subBusinessCategory(CBusinessCategory cBusinessCategory) {
+        this.subBusinessCategory = cBusinessCategory;
+        return this;
+    }
+
+    public void setSubBusinessCategory(CBusinessCategory cBusinessCategory) {
+        this.subBusinessCategory = cBusinessCategory;
     }
 
     public ADOrganization getAdOrganization() {
