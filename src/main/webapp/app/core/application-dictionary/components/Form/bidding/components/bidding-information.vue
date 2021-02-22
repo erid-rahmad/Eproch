@@ -201,7 +201,7 @@
 
         <el-divider content-position="left"><h4>Project Information</h4></el-divider>
         <el-row>
-            <el-col :span="12">
+            <el-col :span="18">
 
                 <el-table
                     v-loading="processing"
@@ -217,7 +217,7 @@
                     :data="biddingInformation.projectInformation">
 
                     <el-table-column
-                        min-width="30"
+                        min-width="20"
                         label="No">
                         <template slot-scope="row">
                             {{ row.$index+1 }}
@@ -230,11 +230,21 @@
                         label="Information"/>
 
                     <el-table-column
-                        min-width="50"
-                        prop="attachment.fileName"
-                        label="Attachment"/>
+                        min-width="80"
+                        label="Attachment">
+                        <template slot-scope="{ row }">
+                            <el-button
+                                class="btn-attachment"
+                                icon="el-icon-download"
+                                size="mini"
+                                type="primary"
+                                @click="downloadAttachment(row)">
+                                    {{ row.attachment.fileName }}
+                            </el-button>
+                        </template>
+                    </el-table-column>
 
-                    <el-table-column align="center" min-width="50">
+                    <el-table-column align="center" min-width="20">
                         <template slot="header">
                             <el-button
                                 size="mini"

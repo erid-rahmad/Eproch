@@ -195,7 +195,7 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
 
     this.dynamicWindowService(this.baseApiUrlRequisition)
       .retrieve({
-        criteriaQuery: `approved.equals=true&active.equals=true&id.equals=${this.biddingInformation.referenceNo}`
+        criteriaQuery: `approved.equals=true&active.equals=true&documentNo.equals=${this.biddingInformation.referenceNo}`
       }).then(res => {
 
         if(res.data.length == 0){
@@ -292,24 +292,27 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   saveProject(){
-    console.log(this.projectInformation);
-    this.biddingInformation.projectInformation.push(this.projectInformation);
-    this.dialogConfirmationVisible = false;
-    this.projectInformation = {
-      information: "",
-      attachment: ""
-    };
-  }
-
-  handleDownload(file) {
-    console.log(file);
-    //window.open(file.response.downloadUri, '_blank');
+    (this.$refs.projectInformation as ElForm).validate((passed, errors) => {
+      if(passed){
+        console.log(this.projectInformation);
+        this.biddingInformation.projectInformation.push(this.projectInformation);
+        this.dialogConfirmationVisible = false;
+        this.projectInformation = {
+          information: "",
+          attachment: ""
+        };
+      }else{
+        console.log(errors);
+      }
+    });
   }
 
   handlePreview(file) {
-    console.log(file)
-    //this.dialogImageUrl = file.url;
-    //this.dialogVisible = true;
+    window.open(file.response.downloadUri, '_blank');
+  }
+
+  downloadAttachment(row){
+    window.open(`http://localhost:9000/api/c-attachments/download/${row.attachment.id}-${row.attachment.fileName}`, '_blank');
   }
 
   handleRemove(file, fileList) {
@@ -375,7 +378,7 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
   //=======================================================================
 
   validate() {
-    (this.$refs.productCatalog as ElForm).validate((passed, errors) => {
+    (this.$refs.biddingInformation as ElForm).validate((passed, errors) => {
       if(passed){
         //this.submit();
       }else{
