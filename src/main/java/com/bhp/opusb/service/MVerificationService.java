@@ -128,7 +128,7 @@ public class MVerificationService {
             verification.active(true)
                 .adOrganization(organization)
                 .dateTrx(verification.getInvoiceDate())
-                .documentNo(DocumentUtil.buildRunningNumber(mVerificationRepository))
+                .documentNo(DocumentUtil.buildRunningNumber(verification.getInvoiceDate(), mVerificationRepository))
                 .documentAction(DocumentUtil.STATUS_SUBMIT)
                 .documentStatus(DocumentUtil.STATUS_DRAFT)
                 .verificationNo(verification.getDocumentNo())
