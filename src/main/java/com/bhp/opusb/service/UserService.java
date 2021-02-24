@@ -97,7 +97,7 @@ public class UserService {
     }
 
     public void sendNotifRejectVerification(MVerificationDTO mVerification, List<MVerificationLineDTO> mVerificationLine) {
-        adUserRepository.findBycVendorId(mVerification.getVendorId())
+        adUserRepository.findBycVendorIdAndActiveTrue(mVerification.getVendorId())
             .stream()
             .map(AdUser::getUser)
             .forEach(user -> mailService.sendNotifRejectVerification(
@@ -106,7 +106,7 @@ public class UserService {
     }
 
     public void sendPaidInvoiceEmail(MVerificationDTO mVerificationDTO, List<MVerificationLineDTO> mVerificationLineDTOs) {
-        adUserRepository.findBycVendorId(mVerificationDTO.getVendorId())
+        adUserRepository.findBycVendorIdAndActiveTrue(mVerificationDTO.getVendorId())
             .stream()
             .map(AdUser::getUser)
             .forEach(user -> mailService.sendPaidInvoiceEmail(
