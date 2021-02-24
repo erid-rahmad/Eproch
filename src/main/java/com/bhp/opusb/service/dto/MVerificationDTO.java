@@ -2,6 +2,8 @@ package com.bhp.opusb.service.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -244,6 +246,8 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     
     @JsonProperty("cTaxName")
     private String cTaxName;
+
+    private List<MVerificationLineDTO> lines = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -690,6 +694,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     public void setCTaxName(String cTaxName) {
         this.cTaxName = cTaxName;
+    }
+
+    public List<MVerificationLineDTO> getLines() {
+        return lines;
+    }
+
+    public void setLines(List<MVerificationLineDTO> lines) {
+        this.lines = lines;
     }
 
     @JsonProperty("shortCreatedBy")

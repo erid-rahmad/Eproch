@@ -127,8 +127,8 @@ public class MVerificationService {
             eventName = "INVOICE_CREATED";
             verification.active(true)
                 .adOrganization(organization)
-                .dateTrx(verification.getInvoiceDate())
-                .documentNo(DocumentUtil.buildRunningNumber(verification.getInvoiceDate(), mVerificationRepository))
+                .dateTrx(verification.getVerificationDate())
+                .documentNo(DocumentUtil.buildRunningNumber(verification.getVerificationDate(), mVerificationRepository))
                 .documentAction(DocumentUtil.STATUS_SUBMIT)
                 .documentStatus(DocumentUtil.STATUS_DRAFT)
                 .verificationNo(verification.getDocumentNo())
@@ -202,18 +202,10 @@ public class MVerificationService {
 
                 if (DocumentUtil.isApprove(documentStatus) && ! lines.isEmpty()) {
                     // Dispatch the header to the external system.
-                    final Map<String, Object> headerPayload = new HashMap<>(2);
-                    headerPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_HEADER);
+                    header.setLines(lines);
+                    final Map<String, Object> headerPayload = new HashMap<>(1);
                     headerPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, header);
                     messageDispatcher.dispatch(MVerificationMessageDispatcher.BEAN_NAME, headerPayload);
-
-                    // Dispatch the lines to the external system.
-                    if (!lines.isEmpty()) {
-                        final Map<String, Object> linesPayload = new HashMap<>(2);
-                        linesPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_LINES);
-                        linesPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, lines);
-                        messageDispatcher.dispatch(MVerificationMessageDispatcher.BEAN_NAME, linesPayload);
-                    }
                 } else if(DocumentUtil.isReject(documentStatus)) {
                     userService.sendNotifRejectVerification(header, lines);
                 }

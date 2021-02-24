@@ -1,7 +1,6 @@
 package com.bhp.opusb.service.trigger.process.integration;
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.Map;
 
 import com.bhp.opusb.config.ApplicationProperties;
@@ -36,7 +35,6 @@ public class MVerificationMessageDispatcher implements ProcessTrigger {
   private final Logger logger = LoggerFactory.getLogger(MVerificationMessageDispatcher.class);
 
   public static final String BEAN_NAME = "mVerificationMessageDispatcher";
-  public static final String KEY_CONTEXT = "context";
   public static final String KEY_PAYLOAD = "payload";
   public static final String CONTEXT_HEADER = "invoice-verification-header";
   public static final String CONTEXT_LINES = "invoice-verification-lines";
@@ -60,35 +58,25 @@ public class MVerificationMessageDispatcher implements ProcessTrigger {
 
   @Override
   public TriggerResult run(Map<String, Object> params) {
-    final Object payload = params.get(KEY_PAYLOAD);
-    final String context = (String) params.get(KEY_CONTEXT);
+    final MVerificationDTO payload = (MVerificationDTO) params.get(KEY_PAYLOAD);
     boolean success = true;
     String response = null;
 
-    if (context != null && payload != null) {
+    if (payload != null) {
       String message = null;
 
       try {
-        enrichMessage(payload, context);
-        message = objectMapper.writeValueAsString(params);
-        response = dispatchMessage(message, context);
+        enrichMessage(payload);
+        message = objectMapper.writeValueAsString(payload);
+        response = dispatchMessage(message);
       } catch (JsonProcessingException | RestClientException e) {
         logger.warn("Failed dispatching invoice verification. {}. {}", e.getLocalizedMessage(), payload);
 
-        if (context.equals(CONTEXT_HEADER)) {
-          AiExchangeOut exchangeOut = new AiExchangeOut();
-          String entityType;
-          long id;
-
-          entityType = MVerification.class.getName();
-          id = ((MVerificationDTO) payload).getId();
-          exchangeOut.entityType(entityType)
-            .entityId(id)
-            .payload(message)
-            .status(AiStatus.ERROR);
-          
-          aiExchangeOutRepository.save(exchangeOut);
-        }
+        aiExchangeOutRepository.save(new AiExchangeOut()
+          .entityType(MVerification.class.getName())
+          .entityId(payload.getId())
+          .payload(message)
+          .status(AiStatus.ERROR));
 
         success = false;
       }
@@ -96,45 +84,38 @@ public class MVerificationMessageDispatcher implements ProcessTrigger {
       return new ProcessResult().add("success", success).add("response", success ? response : payload);
     }
 
-    return new ProcessResult().add("error", true).add("message",
-        "There is no context or payload in the given params. " + params);
+    return new ProcessResult().add("error", true).add("message", "There is no payload specified");
   }
 
-  private void enrichMessage(Object payload, String context) {
-    if (context.equals(CONTEXT_HEADER)) {
-      final MVerificationDTO header = (MVerificationDTO) payload;
-      final String description = header.getDescription();
+  private void enrichMessage(MVerificationDTO payload) {
+      final String description = payload.getDescription();
 
-      header.setTotalLines(multiply(header.getTotalLines(), 100));
-      header.setGrandTotal(multiply(header.getGrandTotal(), 100));
-      header.setTaxAmount(multiply(header.getTaxAmount(), 100));
-      header.setForeignGrandTotal(multiply(header.getForeignGrandTotal(), 100));
-      header.setForeignTaxAmount(multiply(header.getForeignTaxAmount(), 100));
+      payload.setTotalLines(multiply(payload.getTotalLines(), 100));
+      payload.setGrandTotal(multiply(payload.getGrandTotal(), 100));
+      payload.setTaxAmount(multiply(payload.getTaxAmount(), 100));
+      payload.setForeignGrandTotal(multiply(payload.getForeignGrandTotal(), 100));
+      payload.setForeignTaxAmount(multiply(payload.getForeignTaxAmount(), 100));
 
       if (description != null) {
-        header.setDescription(description.length() > 30 ? description.substring(0, 29) : description);
+        payload.setDescription(description.length() > 30 ? description.substring(0, 29) : description);
       }
       
-      cVendorLocationRepository.findFirstByInvoiceAddressTrueAndVendor_Id(header.getVendorId())
+      cVendorLocationRepository.findFirstByInvoiceAddressTrueAndVendor_Id(payload.getVendorId())
         .ifPresent(vendorLocation -> {
           CVendorLocationDTO vendorLocationDto = cVendorLocationMapper.toDto(vendorLocation);
-          header.setVendorLocation(vendorLocationDto);
+          payload.setVendorLocation(vendorLocationDto);
         });
-    } else if (context.equals(CONTEXT_LINES)) {
-      final List<?> lines = (List<?>) payload;
-      
-      for (Object line : lines) {
-        MVerificationLineDTO lineDto = (MVerificationLineDTO) line;
-        lineDto.setLineNo(lineDto.getLineNo() * 1000);
-        lineDto.setLineNoPo(lineDto.getLineNoPo() * 1000);
-        lineDto.setPriceActual(multiply(lineDto.getPriceActual(), 10000));
-        lineDto.setTotalLines(multiply(lineDto.getTotalLines(), 100));
-        lineDto.setTaxAmount(multiply(lineDto.getTaxAmount(), 100));
-        lineDto.setForeignActual(multiply(lineDto.getForeignActual(), 10000));
-        lineDto.setForeignTotalLines(multiply(lineDto.getForeignTotalLines(), 100));
-        lineDto.setForeignTaxAmount(multiply(lineDto.getForeignTaxAmount(), 100));
+
+      for (MVerificationLineDTO line : payload.getLines()) {
+        line.setLineNo(line.getLineNo() * 1000);
+        line.setLineNoPo(line.getLineNoPo() * 1000);
+        line.setPriceActual(multiply(line.getPriceActual(), 10000));
+        line.setTotalLines(multiply(line.getTotalLines(), 100));
+        line.setTaxAmount(multiply(line.getTaxAmount(), 100));
+        line.setForeignActual(multiply(line.getForeignActual(), 10000));
+        line.setForeignTotalLines(multiply(line.getForeignTotalLines(), 100));
+        line.setForeignTaxAmount(multiply(line.getForeignTaxAmount(), 100));
       }
-    }
   }
 
   private BigDecimal multiply(BigDecimal source, int multiplier) {
@@ -145,13 +126,13 @@ public class MVerificationMessageDispatcher implements ProcessTrigger {
     return source.multiply(new BigDecimal(multiplier));
   }
 
-  private String dispatchMessage(String message, String context) throws RestClientException {
+  private String dispatchMessage(String message) throws RestClientException {
     final String url = properties.getIntegration().getEndpoint().getInvoiceVerificationUrl();
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
-    headers.set("ai-exchange-out", context);
+    headers.set("ai-exchange-out", MVerification.class.getSimpleName());
 
-    logger.debug("Dispatching context#{} to the external system. payload: {}", context, message);
+    logger.debug("Dispatching message to external system. body: {}", message);
     HttpEntity<String> request = new HttpEntity<>(message, headers);
     final ResponseEntity<String> response = restTemplate.postForEntity(url, request, String.class);
 
