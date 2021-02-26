@@ -12,6 +12,8 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CDocumentTypeMapper.class, CVendorMapper.class, CCurrencyMapper.class, CWarehouseMapper.class, CCostCenterMapper.class})
 public interface MPurchaseOrderMapper extends EntityMapper<MPurchaseOrderDTO, MPurchaseOrder> {
 
+
+
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "documentType.id", target = "documentTypeId")

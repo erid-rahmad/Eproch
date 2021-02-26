@@ -1,8 +1,10 @@
 package com.bhp.opusb.service.dto;
 
+import com.bhp.opusb.domain.MRequisitionLine;
 import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
 import javax.validation.constraints.*;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -37,6 +39,44 @@ public class MRequisitionDTO extends AbstractAuditingDTO {
     private UUID uid;
 
     private Boolean active;
+
+    private List<MRequisitionLine> mRequisitionLineList;
+
+    @Override
+    public String toString() {
+        return "MRequisitionDTO{" +
+            "id=" + id +
+            ", dateTrx=" + dateTrx +
+            ", documentNo='" + documentNo + '\'' +
+            ", documentAction='" + documentAction + '\'' +
+            ", documentStatus='" + documentStatus + '\'' +
+            ", approved=" + approved +
+            ", processed=" + processed +
+            ", datePromised=" + datePromised +
+            ", description='" + description + '\'' +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", mRequisitionLineList=" + mRequisitionLineList +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", documentTypeId=" + documentTypeId +
+            ", documentTypeName='" + documentTypeName + '\'' +
+            ", currencyId=" + currencyId +
+            ", currencyName='" + currencyName + '\'' +
+            ", warehouseId=" + warehouseId +
+            ", warehouseName='" + warehouseName + '\'' +
+            ", costCenterId=" + costCenterId +
+            ", costCenterName='" + costCenterName + '\'' +
+            '}';
+    }
+
+    public List<MRequisitionLine> getmRequisitionLineList() {
+        return mRequisitionLineList;
+    }
+
+    public void setmRequisitionLineList(List<MRequisitionLine> mRequisitionLineList) {
+        this.mRequisitionLineList = mRequisitionLineList;
+    }
 
     /**
      * Purchase Requisition
@@ -247,30 +287,4 @@ public class MRequisitionDTO extends AbstractAuditingDTO {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "MRequisitionDTO{" +
-            "id=" + getId() +
-            ", dateTrx='" + getDateTrx() + "'" +
-            ", documentNo='" + getDocumentNo() + "'" +
-            ", documentAction='" + getDocumentAction() + "'" +
-            ", documentStatus='" + getDocumentStatus() + "'" +
-            ", approved='" + isApproved() + "'" +
-            ", processed='" + isProcessed() + "'" +
-            ", datePromised='" + getDatePromised() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
-            ", documentTypeId=" + getDocumentTypeId() +
-            ", documentTypeName=" + getDocumentTypeName() +
-            ", currencyId=" + getCurrencyId() +
-            ", currencyName=" + getCurrencyName() +
-            ", warehouseId=" + getWarehouseId() +
-            ", warehouseName=" + getWarehouseName() +
-            ", costCenterId=" + getCostCenterId() +
-            ", costCenterName=" + getCostCenterName() +
-            "}";
-    }
 }

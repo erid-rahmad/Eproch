@@ -3,6 +3,7 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.MRequisitionLine;
 import com.bhp.opusb.repository.MRequisitionLineRepository;
 import com.bhp.opusb.service.dto.MRequisitionLineDTO;
+import com.bhp.opusb.service.mapper.EntityMapper;
 import com.bhp.opusb.service.mapper.MRequisitionLineMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -56,6 +58,17 @@ public class MRequisitionLineService {
         log.debug("Request to get all MRequisitionLines");
         return mRequisitionLineRepository.findAll(pageable)
             .map(mRequisitionLineMapper::toDto);
+    }
+
+    public List<MRequisitionLine> findAlle() {
+        log.debug("Request to get all MRequisitionLines");
+        return mRequisitionLineRepository.findAll();
+
+    }
+    @Transactional(readOnly = true)
+    public List<MRequisitionLine> mRequisitionLineList(long id){
+        List<MRequisitionLine> mRequisitionLines = mRequisitionLineRepository.mReqlinebyidpr(id);
+        return mRequisitionLines;
     }
 
     /**

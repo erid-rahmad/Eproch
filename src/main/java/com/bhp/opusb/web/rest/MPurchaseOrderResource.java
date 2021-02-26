@@ -108,6 +108,7 @@ public class MPurchaseOrderResource {
     @GetMapping("/m-purchase-orders")
     public ResponseEntity<List<MPurchaseOrderDTO>> getAllMPurchaseOrders(MPurchaseOrderCriteria criteria, Pageable pageable) {
         log.debug("REST request to get MPurchaseOrders by criteria: {}", criteria);
+        log.debug("this get 1");
         Page<MPurchaseOrderDTO> page = mPurchaseOrderQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -122,6 +123,7 @@ public class MPurchaseOrderResource {
     @GetMapping("/m-purchase-orders/count")
     public ResponseEntity<Long> countMPurchaseOrders(MPurchaseOrderCriteria criteria) {
         log.debug("REST request to count MPurchaseOrders by criteria: {}", criteria);
+        log.info("this get 2");
         return ResponseEntity.ok().body(mPurchaseOrderQueryService.countByCriteria(criteria));
     }
 

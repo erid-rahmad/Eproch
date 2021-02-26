@@ -3,16 +3,20 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.MRequisition;
 import com.bhp.opusb.repository.MRequisitionRepository;
 import com.bhp.opusb.service.dto.MRequisitionDTO;
+import com.bhp.opusb.service.dto.MRequisitionLineDTO;
 import com.bhp.opusb.service.mapper.MRequisitionMapper;
+import com.bhp.opusb.util.MapperJSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * Service Implementation for managing {@link MRequisition}.
@@ -27,6 +31,9 @@ public class MRequisitionService {
 
     private final MRequisitionMapper mRequisitionMapper;
 
+    @Autowired
+    MRequisitionLineService mRequisitionLineService;
+
     public MRequisitionService(MRequisitionRepository mRequisitionRepository, MRequisitionMapper mRequisitionMapper) {
         this.mRequisitionRepository = mRequisitionRepository;
         this.mRequisitionMapper = mRequisitionMapper;
@@ -40,6 +47,10 @@ public class MRequisitionService {
      */
     public MRequisitionDTO save(MRequisitionDTO mRequisitionDTO) {
         log.debug("Request to save MRequisition : {}", mRequisitionDTO);
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        String documentno = "PO-"+number;
+        mRequisitionDTO.setDocumentNo(documentno);
         MRequisition mRequisition = mRequisitionMapper.toEntity(mRequisitionDTO);
         mRequisition = mRequisitionRepository.save(mRequisition);
         return mRequisitionMapper.toDto(mRequisition);
@@ -66,9 +77,14 @@ public class MRequisitionService {
      */
     @Transactional(readOnly = true)
     public Optional<MRequisitionDTO> findOne(Long id) {
-        log.debug("Request to get MRequisition : {}", id);
-        return mRequisitionRepository.findById(id)
+        Optional<MRequisitionDTO> mRequisitionDTO = mRequisitionRepository.findById(id)
             .map(mRequisitionMapper::toDto);
+        try {mRequisitionDTO.get().setmRequisitionLineList(mRequisitionLineService
+                .mRequisitionLineList(mRequisitionDTO.get().getId()));
+        }catch (Exception e){
+
+        }
+        return mRequisitionDTO;
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MPurchaseOrderLine;
+import com.bhp.opusb.domain.MRequisitionLine;
 import com.bhp.opusb.repository.MPurchaseOrderLineRepository;
 import com.bhp.opusb.service.dto.MPurchaseOrderLineDTO;
 import com.bhp.opusb.service.mapper.MPurchaseOrderLineMapper;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -69,6 +71,12 @@ public class MPurchaseOrderLineService {
         log.debug("Request to get MPurchaseOrderLine : {}", id);
         return mPurchaseOrderLineRepository.findById(id)
             .map(mPurchaseOrderLineMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MPurchaseOrderLine> mPOLineList(long id){
+        List<MPurchaseOrderLine> mRequisitionLines = mPurchaseOrderLineRepository.mPOlinebyidpr(id);
+        return mRequisitionLines;
     }
 
     /**
