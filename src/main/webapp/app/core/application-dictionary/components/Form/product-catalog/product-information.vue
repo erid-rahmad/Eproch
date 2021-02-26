@@ -38,6 +38,7 @@
                                     class="cascader"
                                     ref="productCategories"
                                     v-model="productCatalog.mProductId"
+                                    :show-all-levels="true"
                                     :options="productCategoryOptions"
                                     :props="props"
                                     @change="setProductId"/>
@@ -231,6 +232,7 @@
                     <el-form-item label="Product Image" prop="images">
 
                         <product-images
+                            :setImgCatalog="setRowProductCatalog.cGallery"
                             @galleryImage="setGalleryId" />
 
                     </el-form-item>

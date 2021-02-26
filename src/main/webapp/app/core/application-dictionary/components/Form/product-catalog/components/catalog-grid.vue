@@ -22,6 +22,20 @@
                 width="48"/>
 
             <el-table-column
+                fixed
+                width="48">
+                <template slot-scope="{ row }">
+                    <el-link
+                        type="primary"
+                        size="mini"
+                        icon="el-icon-edit"
+                        plain
+                        :title="$t('entity.action.edit')"
+                        @click="editRow(row)"/>
+                </template>
+            </el-table-column>
+
+            <el-table-column
                 min-width="100"
                 sortable
                 label="Image">
@@ -31,6 +45,9 @@
                             fit="cover"
                             :src="displayImage(row.imgList)"
                             :preview-src-list="displayImageList(row.imgList)">
+                            <div slot="error" class="image-slot">
+                                <i class="el-icon-picture-outline"></i>
+                            </div>
                         </el-image>
                     </div>
                 </template>

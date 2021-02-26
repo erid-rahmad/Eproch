@@ -3,10 +3,21 @@ import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../../ContextVariableAccessor";
+import Vue from 'vue';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
+const ImgCatalogProp = Vue.extend({
+  props: {
+    setImgCatalog: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    },
+  }
+})
 @Component
-export default class ProductImage extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class ProductImage extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, ImgCatalogProp) {
   dialogImageUrl: string = '';
   dialogVisible: boolean = false;
   disabled: boolean = false;
@@ -23,6 +34,9 @@ export default class ProductImage extends mixins(Vue2Filters.mixin, AlertMixin, 
   filterQuery: string = '';
 
   created() {
+    //console.log(accountStore.userDetails);
+    //console.log(accountStore.userIdentity);
+    //console.log(this.setImgCatalog);
   }
 
   handlePictureCardPreview(file) {
@@ -43,8 +57,11 @@ export default class ProductImage extends mixins(Vue2Filters.mixin, AlertMixin, 
 
   handleRemove(file, fileList) {
     console.log(file, fileList);
-
-    this.retrieveGalleryItem(file.response.attachment.id, fileList.length);
+    if(file.response){
+      this.retrieveGalleryItem(file.response.attachment.id, fileList.length);
+    }else{
+      this.retrieveGalleryItem(file.cAttachment.id, fileList.length);
+    }
   }
 
   onUploadError(err: any) {
@@ -74,10 +91,10 @@ export default class ProductImage extends mixins(Vue2Filters.mixin, AlertMixin, 
         criteriaQuery: this.filterQuery,
       })
       .then(res => {
-        console.log(res);
+        //console.log(res);
 
         res.data.map((item: any) => {
-          console.log("retrieve gallery item "+item);
+          //console.log("retrieve gallery item "+item);
 
           if(length == 0){
             this.removeGallery(item.cGalleryId);
@@ -93,7 +110,7 @@ export default class ProductImage extends mixins(Vue2Filters.mixin, AlertMixin, 
 
   createGallery(){
     this.galleryImages = {
-      name: accountStore.userDetails.cVendorName,
+      name: accountStore.userDetails.name,
       description: "",
       adOrganizationId: 1,
       active: true
@@ -120,12 +137,18 @@ export default class ProductImage extends mixins(Vue2Filters.mixin, AlertMixin, 
     this.galleryImagesItem.type = "IMAGE";
     this.galleryImagesItem.adOrganizationId = 1;
     this.galleryImagesItem.active = true;
+    if(this.galleryImagesItem.cGalleryId == null){
+      this.galleryImagesItem.cGalleryId = this.setImgCatalog.id;
+      console.log("= = = = = "+this.setImgCatalog.id);
+      console.log(this.galleryImagesItem);
+    }
 
     this.dynamicWindowService(this.baseApiUrlGalleryItem)
     .create(this.galleryImagesItem)
     .then((response) => {
 
-      console.log(response);
+      //console.log(response);
+      //console.log(this.galleryImagesItem);
 
     }).catch(error => {
       this.$notify({
@@ -174,6 +197,21 @@ export default class ProductImage extends mixins(Vue2Filters.mixin, AlertMixin, 
       });
       return false;
     }
+  }
+
+  get fileList() {
+    if ( !this.setImgCatalog) return [];
+    if ( !this.setImgCatalog.cGalleryItems) return [];
+
+    let images = this.setImgCatalog.cGalleryItems;
+
+    let img;
+    for(var i=0; i<images.length; i++){
+      img = this.setImgCatalog.cGalleryItems;
+      img[i].url = `/api/c-attachments/download/${img[i].cAttachment.id}-${img[i].cAttachment.fileName}`;
+    }
+
+    return img;
   }
 
   handleBeforeUpload(file: any) {

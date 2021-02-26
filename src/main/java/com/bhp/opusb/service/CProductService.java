@@ -85,13 +85,13 @@ public class CProductService {
         if (!assetAccount.isPresent()) {
             throw new BadRequestAlertException("There is no asset account with the given ID", "cElementValue", "idnotexists");
         }
-        
+
         Optional<CElementValue> expenseAccount = cElementValueRepository.findById(properties.getDefaultProductExpenseAccountId());
 
         if (!expenseAccount.isPresent()) {
             throw new BadRequestAlertException("There is no expense account with the given ID", "cElementValue", "idnotexists");
         }
-        
+
         // Add top level category.
         CProductCategory category = cProductCategoryRepository.findFirstByCode(categoryCode)
             .orElseGet(() -> {
@@ -199,6 +199,12 @@ public class CProductService {
     public CProductCategory getDefaultCategory() {
         CProductCategory category = new CProductCategory();
         category.setId(properties.getDefaultProductCategoryId());
+        return category;
+    }
+
+    public CProductCategory getDefaultSubCategory() {
+        CProductCategory category = new CProductCategory();
+        category.setId(properties.getDefaultProductSubCategoryId());
         return category;
     }
 

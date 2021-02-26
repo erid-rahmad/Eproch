@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.bhp.opusb.domain.CProduct;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.opencsv.bean.CsvDate;
 
@@ -138,6 +139,9 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
 
     @JsonProperty("mBrandName")
     private String mBrandName;
+
+    @JsonProperty("mProduct")
+    private CProduct mProduct;
 
     @JsonProperty("mProductId")
     private Long mProductId;
@@ -469,6 +473,14 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
         this.mBrandName = mBrandName;
     }
 
+    public CProduct getMProduct() {
+        return mProduct;
+    }
+
+    public void setMProduct(CProduct mProduct) {
+        this.mProduct = mProduct;
+    }
+
     public Long getMProductId() {
         return mProductId;
     }
@@ -597,6 +609,7 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
             ", cVendorId=" + getCVendorId() +
             ", mBrandId=" + getMBrandId() +
             ", mProductId=" + getMProductId() +
+            ", mProduct=" + getMProduct() +
             "}";
     }
 }

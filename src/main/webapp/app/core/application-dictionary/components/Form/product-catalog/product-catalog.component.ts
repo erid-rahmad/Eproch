@@ -17,6 +17,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   refresh: string = "";
   private tabTitleOptions = [];
   setRows = [];
+  setRow = {};
 
   private baseApiUrlCatalog = "/api/m-product-catalogs";
   private baseApiUrlReference = "/api/ad-references";
@@ -50,7 +51,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   }
 
   handleClick(tab, event) {
-    console.log(tab)
+    //console.log(tab)
     this.activeName = tab.name;
 
   }
@@ -77,6 +78,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
       (<any>this.$refs.catalogGrid[0]).retrieveAllRecords();
     } else if(value == 'add'){
       this.index = false;
+      this.setRow = {};
 
     } else {
       if(this.setRows.length){
@@ -113,6 +115,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   closeProductInformation(){
     this.index = true;
     this.setRows = [];
+    this.setRow = {};
   }
 
   private retrieveGetReferences(param: string) {
@@ -149,6 +152,11 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
           this.tabTitleOptions = referenceList;
         }
     });
+  }
+
+  selectedRow(value){
+    this.index = false;
+    this.setRow = value;
   }
 
   selectedRows(value){

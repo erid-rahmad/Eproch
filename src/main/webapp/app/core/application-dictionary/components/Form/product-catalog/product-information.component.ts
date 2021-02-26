@@ -7,8 +7,20 @@ import ContextVariableAccessor from "../../ContextVariableAccessor";
 import ProductImages from './components/form/product-images.vue';
 import SpecialPrice from './components/form/special-price.vue';
 import ProductVideo from './components/form/product-video.vue';
+import Vue from 'vue';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
+
+const ProductCatalogProp = Vue.extend({
+  props: {
+    setRowProductCatalog: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    },
+  }
+})
 
 @Component({
   components: {
@@ -17,7 +29,7 @@ import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
     ProductVideo
   }
 })
-export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, ProductCatalogProp) {
 
   rules = {}
 
@@ -26,7 +38,6 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     lazyLoad: async (node, resolve) => {
       const { level } = node;
       const { data } = node;
-      console.log(level);
       if(level == 1) {
         const list = await this.retrieveProductSubCategories(data.value);
         resolve(list);
@@ -59,6 +70,17 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.retrieveUom();
     this.retrieveCurrency();
     this.retrieveBrand();
+
+    if(this.setRowProductCatalog != null){
+      this.productCatalog = this.setRowProductCatalog;
+      /*this.productCatalog.mProductCategory = [];
+      this.productCatalog.mProductCategory.push(this.productCatalog.mProductCategoryId);
+      this.productCatalog.mProductCategory.push(this.productCatalog.mProductSubCategoryId);
+      this.productCatalog.mProductCategory.push(this.productCatalog.mProductId);*/
+      console.log(this.productCatalog);
+    }else{
+      this.productCatalog = {};
+    }
   }
 
   back() {
@@ -66,6 +88,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   setProductId(value){
+    console.log(value);
     this.productCatalog.mProductId = value[value.length-1];
   }
 
@@ -74,41 +97,72 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   submit(){
-    this.productCatalog.documentAction = "APR";
-    this.productCatalog.documentStatus = "DRF";
-    this.productCatalog.active = true;
-    this.productCatalog.adOrganizationId = 1;
-    this.productCatalog.cDocumentTypeId = 655951;
-    this.productCatalog.cVendorId = accountStore.userDetails.cVendorId;
-    this.productCatalog.cGalleryId = this.galleryId;
-
-    console.log(this.productGallery);
-    console.log(this.productCatalog);
 
     this.fullscreenLoading = true;
 
-    this.dynamicWindowService(this.baseApiUrl)
-      .create(this.productCatalog)
-      .then(() => {
 
-        this.$notify({
-          title: 'Success',
-          message: 'Product Catalog submitted.',
-          type: 'success'
+    if(this.setRowProductCatalog == null){
+      this.productCatalog.documentAction = "APR";
+      this.productCatalog.documentStatus = "DRF";
+      this.productCatalog.active = true;
+      this.productCatalog.adOrganizationId = 1;
+      this.productCatalog.cDocumentTypeId = 655951;
+      this.productCatalog.cVendorId = accountStore.userDetails.cVendorId;
+      this.productCatalog.cGalleryId = this.galleryId;
+
+      console.log(this.productGallery);
+      console.log(this.productCatalog);
+
+      this.dynamicWindowService(this.baseApiUrl)
+        .create(this.productCatalog)
+        .then(() => {
+
+          this.$notify({
+            title: 'Success',
+            message: 'Product Catalog submitted.',
+            type: 'success'
+          });
+
+          this.back();
+
+        }).catch(error => {
+          this.$notify({
+            title: 'Error',
+            message: error,
+            type: 'error',
+          });
+
+        }).finally(() => {
+          this.fullscreenLoading = false;
         });
+    }else{
+      if(this.galleryId != 0){
+        this.productCatalog.cGalleryId = this.galleryId;
+      }
 
-        this.back();
+      this.dynamicWindowService(this.baseApiUrl)
+        .update(this.productCatalog)
+        .then(() => {
 
-      }).catch(error => {
-        this.$notify({
-          title: 'Error',
-          message: error,
-          type: 'error',
+          this.$notify({
+            title: 'Success',
+            message: 'Product Catalog updated.',
+            type: 'success'
+          });
+
+          this.back();
+
+        }).catch(error => {
+          this.$notify({
+            title: 'Error',
+            message: error,
+            type: 'error',
+          });
+
+        }).finally(() => {
+          this.fullscreenLoading = false;
         });
-
-      }).finally(() => {
-        this.fullscreenLoading = false;
-      });
+    }
 
   }
 
