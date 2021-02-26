@@ -385,12 +385,6 @@ entity CLocator {
 * vendor Invoice Verification
 */
 entity MVerification {
-	/** VHDOCM Invoice verification document no. */
-	verificationNo String required unique
-
-	/** VHTRDJ Transaction date */
-	verificationDate LocalDate required
-
 	description String
 
 	/** VHANUR */
@@ -427,7 +421,11 @@ entity MVerification {
 	/** VHDGJ GL date. */
 	dateAcct LocalDate
 	withholdingAmt BigDecimal
+
+	/** VHDOC */
 	invoiceAp String
+
+	/** VHDCT  */
 	docType String
 
 	/** VHDMTJ Payment date. */
@@ -445,12 +443,15 @@ entity MVerification {
 	/** VHAPRD */
 	dateApprove LocalDate
 
-	verificationStatus String required
-
+	/** VHPST */
 	payStatus String
 
+	/** VHTRDJ Transaction date */
 	dateTrx LocalDate required
+
+	/** VHDOCM Invoice verification document no. */
 	documentNo String maxlength(30)
+
 	documentAction String required maxlength(10)
 	documentStatus String required maxlength(10)
 	approved Boolean

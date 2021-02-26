@@ -169,12 +169,12 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
 
   public buttonPrint(key): void {
     const data = { ...this.selectedRow };
-    window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}/${key}`, '_blank');
+    window.open(`/api/m-verifications/report/${data.id}/${data.documentNo}/${key}`, '_blank');
   }
 
   public reopenDocument() {
     const data = { ...this.selectedRow };
-    data.verificationStatus = 'ROP';
+    data.documentStatus = 'ROP';
 
     this.dynamicWindowService(this.baseApiUrl)
       .update(data)
@@ -316,8 +316,8 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
     const form = this.filter;
     const query = [];
 
-    if (!!this.filter.verificationNo) {
-      query.push(`verificationNo.equals=${form.verificationNo}`);
+    if (!!this.filter.documentNo) {
+      query.push(`documentNo.equals=${form.documentNo}`);
     }
     if (!!this.filter.invoiceNo) {
       query.push(`invoiceNo.equals=${form.invoiceNo}`);
@@ -328,14 +328,14 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
     if (!!this.filter.vendorName) {
       query.push(`vendorId.equals=${form.vendorName}`);
     }
-    if (!!this.filter.verificationStatus) {
-      query.push(`verificationStatus.equals=${form.verificationStatus}`);
+    if (!!this.filter.documentStatus) {
+      query.push(`documentStatus.equals=${form.documentStatus}`);
     }
     if (!!this.filter.verificationDateFrom) {
-      query.push(`verificationDate.greaterOrEqualThan=${form.verificationDateFrom}`);
+      query.push(`dateTrx.greaterOrEqualThan=${form.verificationDateFrom}`);
     }
     if (!!this.filter.verificationDateTo) {
-      query.push(`verificationDate.lessOrEqualThan=${form.verificationDateTo}`);
+      query.push(`dateTrx.lessOrEqualThan=${form.verificationDateTo}`);
     }
     if (!!this.filter.invoiceDateFrom) {
       query.push(`invoiceDate.greaterOrEqualThan=${form.invoiceDateFrom}`);

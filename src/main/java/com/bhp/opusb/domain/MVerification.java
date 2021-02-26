@@ -27,7 +27,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "m_verification")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MVerification extends AbstractAuditingEntity {
+public class MVerification extends AbstractTransactionalEntity<MVerification> {
 
     private static final long serialVersionUID = 1L;
 
@@ -35,21 +35,6 @@ public class MVerification extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-
-    /**
-     * VHDOCM Invoice verification document no.
-     * @deprecated Please use the standard field: documentNo.
-     */
-    @NotNull
-    @Column(name = "verification_no", nullable = false, unique = true)
-    private String verificationNo;
-
-    /**
-     * VHTRDJ Transaction date
-     */
-    @NotNull
-    @Column(name = "verification_date", nullable = false)
-    private LocalDate verificationDate;
 
     @Column(name = "description")
     private String description;
@@ -132,9 +117,15 @@ public class MVerification extends AbstractAuditingEntity {
     @Column(name = "withholding_amt", precision = 21, scale = 2)
     private BigDecimal withholdingAmt;
 
+    /**
+     * VHDOC
+     */
     @Column(name = "invoice_ap")
     private String invoiceAp;
 
+    /**
+     * VHDCT
+     */
     @Column(name = "doc_type")
     private String docType;
 
@@ -169,38 +160,10 @@ public class MVerification extends AbstractAuditingEntity {
     private LocalDate dateApprove;
 
     /**
-     * @deprecated Please use the standard field: documentStatus.
+     * VHPST
      */
-    @NotNull
-    @Column(name = "verification_status", nullable = false)
-    private String verificationStatus;
-
     @Column(name = "pay_status")
     private String payStatus;
-
-    @NotNull
-    @Column(name = "date_trx", nullable = false)
-    private LocalDate dateTrx;
-
-    @Size(max = 30)
-    @Column(name = "document_no", length = 30)
-    private String documentNo;
-
-    @NotNull
-    @Size(max = 10)
-    @Column(name = "document_action", length = 10, nullable = false)
-    private String documentAction;
-
-    @NotNull
-    @Size(max = 10)
-    @Column(name = "document_status", length = 10, nullable = false)
-    private String documentStatus;
-
-    @Column(name = "approved")
-    private Boolean approved;
-
-    @Column(name = "processed")
-    private Boolean processed;
 
     /**
      * Whether or not it contains one or more reversed receipt lines.
@@ -242,8 +205,7 @@ public class MVerification extends AbstractAuditingEntity {
     private CCurrency matchPoCurrency;
 
     /**
-     * VHAN8 for supplier code.
-     * VHALPH for supplier name.
+     * VHAN8 for supplier code.\nVHALPH for supplier name.
      */
     @ManyToOne(optional = false)
     @NotNull
@@ -282,32 +244,6 @@ public class MVerification extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getVerificationNo() {
-        return verificationNo;
-    }
-
-    public MVerification verificationNo(String verificationNo) {
-        this.verificationNo = verificationNo;
-        return this;
-    }
-
-    public void setVerificationNo(String verificationNo) {
-        this.verificationNo = verificationNo;
-    }
-
-    public LocalDate getVerificationDate() {
-        return verificationDate;
-    }
-
-    public MVerification verificationDate(LocalDate verificationDate) {
-        this.verificationDate = verificationDate;
-        return this;
-    }
-
-    public void setVerificationDate(LocalDate verificationDate) {
-        this.verificationDate = verificationDate;
     }
 
     public String getDescription() {
@@ -583,19 +519,6 @@ public class MVerification extends AbstractAuditingEntity {
         this.dateApprove = dateApprove;
     }
 
-    public String getVerificationStatus() {
-        return verificationStatus;
-    }
-
-    public MVerification verificationStatus(String verificationStatus) {
-        this.verificationStatus = verificationStatus;
-        return this;
-    }
-
-    public void setVerificationStatus(String verificationStatus) {
-        this.verificationStatus = verificationStatus;
-    }
-
     public String getPayStatus() {
         return payStatus;
     }
@@ -607,84 +530,6 @@ public class MVerification extends AbstractAuditingEntity {
 
     public void setPayStatus(String payStatus) {
         this.payStatus = payStatus;
-    }
-
-    public LocalDate getDateTrx() {
-        return dateTrx;
-    }
-
-    public MVerification dateTrx(LocalDate dateTrx) {
-        this.dateTrx = dateTrx;
-        return this;
-    }
-
-    public void setDateTrx(LocalDate dateTrx) {
-        this.dateTrx = dateTrx;
-    }
-
-    public String getDocumentNo() {
-        return documentNo;
-    }
-
-    public MVerification documentNo(String documentNo) {
-        this.documentNo = documentNo;
-        return this;
-    }
-
-    public void setDocumentNo(String documentNo) {
-        this.documentNo = documentNo;
-    }
-
-    public String getDocumentAction() {
-        return documentAction;
-    }
-
-    public MVerification documentAction(String documentAction) {
-        this.documentAction = documentAction;
-        return this;
-    }
-
-    public void setDocumentAction(String documentAction) {
-        this.documentAction = documentAction;
-    }
-
-    public String getDocumentStatus() {
-        return documentStatus;
-    }
-
-    public MVerification documentStatus(String documentStatus) {
-        this.documentStatus = documentStatus;
-        return this;
-    }
-
-    public void setDocumentStatus(String documentStatus) {
-        this.documentStatus = documentStatus;
-    }
-
-    public Boolean isApproved() {
-        return approved;
-    }
-
-    public MVerification approved(Boolean approved) {
-        this.approved = approved;
-        return this;
-    }
-
-    public void setApproved(Boolean approved) {
-        this.approved = approved;
-    }
-
-    public Boolean isProcessed() {
-        return processed;
-    }
-
-    public MVerification processed(Boolean processed) {
-        this.processed = processed;
-        return this;
-    }
-
-    public void setProcessed(Boolean processed) {
-        this.processed = processed;
     }
 
     public Boolean isReceiptReversed() {
@@ -847,7 +692,6 @@ public class MVerification extends AbstractAuditingEntity {
     @PrePersist
     public void prePersist() {
         this.uid = UUID.randomUUID();
-        this.verificationDate = LocalDate.now();
     }
 
     @Override
@@ -870,8 +714,6 @@ public class MVerification extends AbstractAuditingEntity {
     public String toString() {
         return "MVerification{" +
             "id=" + getId() +
-            ", verificationNo='" + getVerificationNo() + "'" +
-            ", verificationDate='" + getVerificationDate() + "'" +
             ", description='" + getDescription() + "'" +
             ", receiptNo='" + getReceiptNo() + "'" +
             ", invoiceNo='" + getInvoiceNo() + "'" +
@@ -893,7 +735,6 @@ public class MVerification extends AbstractAuditingEntity {
             ", payAmt=" + getPayAmt() +
             ", dateReject='" + getDateReject() + "'" +
             ", dateApprove='" + getDateApprove() + "'" +
-            ", verificationStatus='" + getVerificationStatus() + "'" +
             ", payStatus='" + getPayStatus() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +

@@ -95,6 +95,7 @@ public class AdUserService {
         }
         
         adUserRepository.save(adUser);
+        adUser.getUser().setEmail(adUserDTO.getEmail());
 
         // Add a USER authority for all authenticated users.
         List<String> authNames = new ArrayList<>(Arrays.asList(AuthoritiesConstants.USER));

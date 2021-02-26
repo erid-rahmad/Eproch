@@ -91,12 +91,6 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MVerification_.id));
             }
-            if (criteria.getVerificationNo() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getVerificationNo(), MVerification_.verificationNo));
-            }
-            if (criteria.getVerificationDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getVerificationDate(), MVerification_.verificationDate));
-            }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), MVerification_.description));
             }
@@ -159,9 +153,6 @@ public class MVerificationQueryService extends QueryService<MVerification> {
             }
             if (criteria.getDateApprove() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateApprove(), MVerification_.dateApprove));
-            }
-            if (criteria.getVerificationStatus() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getVerificationStatus(), MVerification_.verificationStatus));
             }
             if (criteria.getPayStatus() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPayStatus(), MVerification_.payStatus));

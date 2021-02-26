@@ -49,10 +49,14 @@ public class DocumentUtil {
   public static String buildRunningNumber(LocalDate dateTrx, GenericDocumentRepository<?, ?> repository) {
     LocalDate start = dateTrx.withDayOfMonth(1);
     LocalDate end = dateTrx.withDayOfMonth(dateTrx.lengthOfMonth());
+    Long lastNumber = repository.getMaxDocumentNoWithinDates(start, end);
 
-    long numOfRecords = repository.countByDateTrxBetween(start, end);
+    if (lastNumber != null) {
+      return String.valueOf(lastNumber + 1);
+    }
+
     String prefix = dateTrx.format(DATETIME_FORMATTER);
 
-    return prefix + (String.format("%04d", numOfRecords + 1));
+    return prefix + (String.format("%04d", 1));
   }
 }

@@ -10,8 +10,8 @@
             <el-row style="margin-top: 0px" class="filter">
 
                 <el-col :span="24">
-                    <el-form-item label="Verification No." prop="verificationNo">
-                        <el-input class="form-input" v-model="getVerification.verificationNo" disabled />
+                    <el-form-item label="Verification No." prop="documentNo">
+                        <el-input class="form-input" v-model="getVerification.documentNo" disabled />
                     </el-form-item>
                     <el-form-item label="Voucher No." prop="invoiceAp">
                         <el-input

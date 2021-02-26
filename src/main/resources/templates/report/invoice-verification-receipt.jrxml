@@ -74,7 +74,7 @@
 	</subDataset>
 	<parameter name="verificationId" class="java.lang.Long"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT a.verification_no, a.verification_date, a.invoice_no, a.invoice_date, a.tax_invoice, a.tax_date, a.due_date, a.total_lines, a.tax_amount, a.grand_total,
+		<![CDATA[SELECT a.document_no, a.date_trx, a.invoice_no, a.invoice_date, a.tax_invoice, a.tax_date, a.due_date, a.total_lines, a.tax_amount, a.grand_total,
             numberToWords(CAST(substring(CAST(a.grand_total AS text), 1, length(CAST(a.grand_total AS text))-3) AS bigint)) as terbilang,
             b.po_no, b.receive_no, b.description, b.qty, b.price_actual, b.total_lines AS total_line, b.tax_amount AS tax_amt, b.pay_stat,
             c.code AS code_currency,
@@ -86,15 +86,15 @@
         WHERE
             a.id = b.verification_id AND a.vendor_id = d.id AND a.currency_id = c.id AND a.id = $P{verificationId}]]>
 	</queryString>
-	<field name="verification_no" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="verification_no"/>
-		<property name="com.jaspersoft.studio.field.label" value="verification_no"/>
+	<field name="document_no" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="document_no"/>
+		<property name="com.jaspersoft.studio.field.label" value="document_no"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="m_verification"/>
 		<fieldDescription><![CDATA[VHDOCM Invoice verification document no.]]></fieldDescription>
 	</field>
-	<field name="verification_date" class="java.sql.Date">
-		<property name="com.jaspersoft.studio.field.name" value="verification_date"/>
-		<property name="com.jaspersoft.studio.field.label" value="verification_date"/>
+	<field name="date_trx" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="date_trx"/>
+		<property name="com.jaspersoft.studio.field.label" value="date_trx"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="m_verification"/>
 		<fieldDescription><![CDATA[VHTRDJ Transaction date]]></fieldDescription>
 	</field>
@@ -289,7 +289,7 @@
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.y" value="px"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{verification_date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{date_trx}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement style="Detail" positionType="Float" x="120" y="95" width="434" height="15" uuid="28742416-97bf-49ba-a6c7-a1b65633c475">
@@ -494,7 +494,7 @@
 				<textElement>
 					<paragraph leftIndent="2" rightIndent="2" spacingBefore="2" spacingAfter="2"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{verification_no}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{document_no}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" pattern="dd MMM yyyy" isBlankWhenNull="true">
 				<reportElement style="Detail" positionType="Float" x="80" y="0" width="70" height="40" uuid="c8241417-b65d-4f2a-b312-6f0955560489">

@@ -167,7 +167,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   
   public updateDocumentStatus(): void {
     const data = { ...this.selectedRow };
-    data.verificationStatus = this.dialogValue;
+    data.documentStatus = this.dialogValue;
 
     this.dynamicWindowService(this.baseApiUrl)
       .update(data)
@@ -197,7 +197,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
 
   public buttonPrint(key): void {
     const data = { ...this.selectedRow };
-    window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}/${key}`, '_blank');
+    window.open(`/api/m-verifications/report/${data.id}/${data.documentNo}/${key}`, '_blank');
   }
 
   public retrieveAllRecords(): void {
@@ -257,7 +257,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   }
 
   private toggleToolbarButtons() {
-    const docStatus = this.selectedRow?.verificationStatus;
+    const docStatus = this.selectedRow?.documentStatus;
     this.disabledButton = docStatus !== 'DRF' && docStatus !== 'RJC' && docStatus !== 'ROP';
   }
 
@@ -265,8 +265,8 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
     const form = this.filter;
     const query = [];
 
-    if (!!form.verificationNo) {
-      query.push(`verificationNo.equals=${form.verificationNo}`);
+    if (!!form.documentNo) {
+      query.push(`documentNo.equals=${form.documentNo}`);
     }
     if (!!form.invoiceNo) {
       query.push(`invoiceNo.equals=${form.invoiceNo}`);
@@ -274,14 +274,14 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
     if (!!form.taxInvoiceNo) {
       query.push(`taxInvoiceNo.equals=${form.taxInvoiceNo}`);
     }
-    if (!!form.verificationStatus) {
-      query.push(`verificationStatus.equals=${form.verificationStatus}`);
+    if (!!form.documentStatus) {
+      query.push(`documentStatus.equals=${form.documentStatus}`);
     }
     if (!!form.verificationDateFrom) {
-      query.push(`verificationDate.greaterOrEqualThan=${form.verificationDateFrom}`);
+      query.push(`dateTrx.greaterOrEqualThan=${form.verificationDateFrom}`);
     }
     if (!!form.verificationDateTo) {
-      query.push(`verificationDate.lessOrEqualThan=${form.verificationDateTo}`);
+      query.push(`dateTrx.lessOrEqualThan=${form.verificationDateTo}`);
     }
     if (!!form.invoiceDateFrom) {
       query.push(`invoiceDate.greaterOrEqualThan=${form.invoiceDateFrom}`);

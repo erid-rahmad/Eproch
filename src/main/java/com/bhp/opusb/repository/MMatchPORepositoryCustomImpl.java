@@ -14,6 +14,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.persistence.criteria.Subquery;
 
+import com.bhp.opusb.domain.AbstractTransactionalEntity_;
 import com.bhp.opusb.domain.CVendor_;
 import com.bhp.opusb.domain.MMatchPO;
 import com.bhp.opusb.domain.MMatchPO_;
@@ -76,7 +77,7 @@ public class MMatchPORepositoryCustomImpl implements MMatchPORepositoryCustom {
 
   private Predicate[] buildSubqueryPredicates(CriteriaBuilder criteriaBuilder, Root<MMatchPO> wrapper, Root<MVerificationLine> subqueryRoot, Join<MVerificationLine, MVerification> join) {
     List<Predicate> predicates = new ArrayList<>(8);
-    In<String> appliedVerifications = criteriaBuilder.in(join.get(MVerification_.verificationStatus))
+    In<String> appliedVerifications = criteriaBuilder.in(join.get(AbstractTransactionalEntity_.documentStatus))
       .value(DocumentUtil.STATUS_DRAFT)
       .value(DocumentUtil.STATUS_REOPEN)
       .value(DocumentUtil.STATUS_SUBMIT)

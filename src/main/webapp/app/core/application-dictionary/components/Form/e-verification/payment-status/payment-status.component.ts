@@ -221,17 +221,17 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
 
     this.filterQuery = "";
 
-    if (!!form.verificationNo) {
-      query.push(`verificationNo.equals=${form.verificationNo}`);
+    if (!!form.documentNo) {
+      query.push(`documentNo.equals=${form.documentNo}`);
     }
     if (!!form.invoiceNo) {
       query.push(`invoiceNo.equals=${form.invoiceNo}`);
     }
-    if (!!form.verificationStatus) {
-      query.push(`verificationStatus.equals=${form.verificationStatus}`);
+    if (!!form.documentStatus) {
+      query.push(`documentStatus.equals=${form.documentStatus}`);
     }
-    if (!!form.verificationDate) {
-      query.push(`verificationDate.lessOrEqualThan=${form.verificationDate}`);
+    if (!!form.dateTrx) {
+      query.push(`dateTrx.lessOrEqualThan=${form.dateTrx}`);
     }
     if (!!form.invoiceDate) {
       query.push(`invoiceDate.lessOrEqualThan=${form.invoiceDate}`);

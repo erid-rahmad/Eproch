@@ -15,10 +15,10 @@ public class PaymentStatusDTO {
   private String orgCode;
 
   @JsonProperty("VHDOCM")
-  private String verificationNo;
+  private String documentNo;
 
   @JsonProperty("VHDOC")
-  private String documentNo;
+  private String voucherNo;
 
   @JsonProperty("VHDCT")
   private String documentType;
@@ -43,20 +43,20 @@ public class PaymentStatusDTO {
     this.orgCode = orgCode;
   }
 
-  public String getVerificationNo() {
-    return verificationNo;
-  }
-
-  public void setVerificationNo(String verificationNo) {
-    this.verificationNo = verificationNo;
-  }
-
   public String getDocumentNo() {
     return documentNo;
   }
 
   public void setDocumentNo(String documentNo) {
     this.documentNo = documentNo;
+  }
+
+  public String getVoucherNo() {
+    return voucherNo;
+  }
+
+  public void setVoucherNo(String voucherNo) {
+    this.voucherNo = voucherNo;
   }
 
   public String getDocumentType() {

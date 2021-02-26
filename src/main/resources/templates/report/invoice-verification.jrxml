@@ -74,7 +74,7 @@
 	</subDataset>
 	<parameter name="verificationId" class="java.lang.Long"/>
 	<queryString language="SQL">
-		<![CDATA[SELECT a.verification_no, a.verification_date,  a.invoice_no, a.invoice_date,  a.tax_invoice , a.tax_date,  c.code as code_currency,  d.name as vendor_name, d.tax_id_no as npwp, a.total_lines , a.tax_amount , a.grand_total,
+		<![CDATA[SELECT a.document_no, a.date_trx,  a.invoice_no, a.invoice_date,  a.tax_invoice , a.tax_date,  c.code as code_currency,  d.name as vendor_name, d.tax_id_no as npwp, a.total_lines , a.tax_amount , a.grand_total,
 f.name as product_name,  b.po_no , b.receive_no , b.description , e.name as uom_name , b.qty , b.price_actual , b.total_lines as total_line,  b.tax_amount as tax_amt
 FROM m_verification as a,
 	m_verification_line as b,
@@ -90,15 +90,15 @@ WHERE
 	 AND b.product_id = f.id
 	 AND a.id=$P{verificationId}]]>
 	</queryString>
-	<field name="verification_no" class="java.lang.String">
-		<property name="com.jaspersoft.studio.field.name" value="verification_no"/>
-		<property name="com.jaspersoft.studio.field.label" value="verification_no"/>
+	<field name="document_no" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="document_no"/>
+		<property name="com.jaspersoft.studio.field.label" value="document_no"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="m_verification"/>
 		<fieldDescription><![CDATA[VHDOCM Invoice verification document no.]]></fieldDescription>
 	</field>
-	<field name="verification_date" class="java.sql.Date">
-		<property name="com.jaspersoft.studio.field.name" value="verification_date"/>
-		<property name="com.jaspersoft.studio.field.label" value="verification_date"/>
+	<field name="date_trx" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="date_trx"/>
+		<property name="com.jaspersoft.studio.field.label" value="date_trx"/>
 		<property name="com.jaspersoft.studio.field.tree.path" value="m_verification"/>
 		<fieldDescription><![CDATA[VHTRDJ Transaction date]]></fieldDescription>
 	</field>
@@ -279,7 +279,7 @@ WHERE
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{verification_no}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{document_no}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" pattern="dd MMM yyyy" isBlankWhenNull="true">
 				<reportElement style="Detail" positionType="Float" x="120" y="65" width="150" height="15" uuid="db2eb014-4830-4c1a-ac51-99bf13a723a2">
@@ -287,7 +287,7 @@ WHERE
 					<property name="com.jaspersoft.studio.unit.height" value="px"/>
 					<property name="com.jaspersoft.studio.unit.width" value="px"/>
 				</reportElement>
-				<textFieldExpression><![CDATA[$F{verification_date}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{date_trx}]]></textFieldExpression>
 			</textField>
 			<textField textAdjust="StretchHeight" isBlankWhenNull="true">
 				<reportElement style="Detail" positionType="Float" x="120" y="90" width="150" height="15" uuid="019e0b43-c4c5-4611-80b5-61e69640db04">
@@ -377,7 +377,7 @@ WHERE
 					<property name="com.jaspersoft.studio.unit.barWidth" value="px"/>
 				</reportElement>
 				<jr:barbecue xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" type="Code39" drawText="false" checksumRequired="false">
-					<jr:codeExpression><![CDATA[$F{verification_no}]]></jr:codeExpression>
+					<jr:codeExpression><![CDATA[$F{document_no}]]></jr:codeExpression>
 				</jr:barbecue>
 			</componentElement>
 		</band>

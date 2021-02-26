@@ -38,7 +38,7 @@
 				<tr>
                     <td class="verificationHeader"><div th:text="#{email.verification.verification_no}">Verification No</div></td>
                     <td class="verificationColon">:</td>
-                    <td class="verificationHeaderValue"><div th:text="${verification.verificationNo}"/></td>
+                    <td class="verificationHeaderValue"><div th:text="${verification.documentNo}"/></td>
 
                     <td class="verificationHeader"><div th:text="#{email.verification.invoice_no}">Invoice No</div></td>
                     <td class="verificationColon">:</td>
@@ -47,7 +47,7 @@
 				<tr>
                     <td><div th:text="#{email.verification.verification_date}">Verification Date</div></td>
                     <td>:</td>
-                    <td><div th:text="${#temporals.format(verification.verificationDate, 'dd MMM yyyy')}"></div></td>
+                    <td><div th:text="${#temporals.format(verification.dateTrx, 'dd MMM yyyy')}"></div></td>
 
                     <td><div th:text="#{email.verification.invoice_date}">Invoice Date</div></td>
                     <td>:</td>
