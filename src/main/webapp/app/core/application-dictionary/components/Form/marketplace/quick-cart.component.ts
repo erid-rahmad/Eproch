@@ -10,7 +10,7 @@ export default class QuickCart extends Vue {
 
   get cartItems() {
     const items: any[] = [];
-    
+
     for (const group of marketplaceStore.cart) {
       for (const item of group.items) {
         items.push(item);
@@ -69,5 +69,9 @@ export default class QuickCart extends Vue {
         }
       });
     }
+  }
+
+  getImg(img){
+    return `/api/c-attachments/download/${img.id}-${img.fileName}`;
   }
 }

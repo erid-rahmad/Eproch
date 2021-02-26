@@ -5,6 +5,10 @@ import { Component, Inject, Vue } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import FilterGroup from "./filter-group.vue";
 import { View } from './index.component';
+import ContextVariableAccessor from "../../ContextVariableAccessor";
+import AlertMixin from '@/shared/alert/alert.mixin';
+import { mixins } from 'vue-class-component';
+import Vue2Filters from 'vue2-filters';
 
 @Component({
   components: {
@@ -17,7 +21,7 @@ import { View } from './index.component';
     })
   }
 })
-export default class ProductCatalogList extends Vue {
+export default class ProductCatalogList extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -32,6 +36,8 @@ export default class ProductCatalogList extends Vue {
   private filteredBrands: string[] = [];
   private filteredCategories: Record<string, any> = {};
   private filteredPriceRange: Record<string, number> = {};
+
+  private products = [];
 
   page = 1;
   propOrder = null;
@@ -127,11 +133,32 @@ export default class ProductCatalogList extends Vue {
     }];
   }
 
+  retrieveAllProducts(): void {
+    this.dynamicWindowService("/api/m-product-catalogs")
+      .retrieve({
+        criteriaQuery: "cGalleryId.specified=true"
+      })
+      .then(res => {
+        console.log(res);
+        res.data.map((item: any) => {
+          this.products = res.data;
+          return item;
+        });
+      }).catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message({
+          type: 'error',
+          message: err.detail || err.message
+        });
+      });
+  }
+
   get rows() {
-    return this.buildLayout(marketplaceStore.filteredProducts);
+    return this.buildLayout(this.products);
   }
 
   created() {
+    this.retrieveAllProducts();
     this.fullPath = this.$route.fullPath;
     this.initProductCatalog();
     this.unwatchStore = this.$store.watch(
@@ -143,7 +170,7 @@ export default class ProductCatalogList extends Vue {
       }
     );
   }
-  
+
   beforeDestroy() {
     this.removeWindowState(this.fullPath);
     this.unwatchStore();
@@ -187,11 +214,11 @@ export default class ProductCatalogList extends Vue {
     const gallery = catalog.cGallery;
     for (const item of gallery.cGalleryItems) {
       if (item.preview) {
-        return item.cAttachment.imageMedium;
+        return `/api/c-attachments/download/${item.cAttachment.id}-${item.cAttachment.fileName}`;
       }
     }
 
-    return gallery.cGalleryItems[0]?.cAttachment?.imageMedium;
+    return `/api/c-attachments/download/${gallery.cGalleryItems[0]?.cAttachment?.id}-${gallery.cGalleryItems[0]?.cAttachment?.fileName}`;
   }
 
   private buildLayout(items: IMProductCatalog[]) {

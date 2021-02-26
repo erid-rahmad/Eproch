@@ -34,7 +34,7 @@ export default class ProductDetail extends ProductDetailProps {
   totalPrice = 0;
   warranty = "3 Years Local Official Distributor Warranty";
 
-  defaultImg: string = null;
+  defaultImg: any = null;
   imgListsPreview: string[] = [];
   activeTab = 'desc';
   tabs = [];
@@ -65,11 +65,13 @@ export default class ProductDetail extends ProductDetailProps {
     console.log('data:', data);
     this.defaultImg = this.galleryItems
       .find(item => item.preview)
-      .cAttachment.imageLarge;
+      .cAttachment;
+
+    this.defaultImg = `/api/c-attachments/download/${this.defaultImg.id}-${this.defaultImg.fileName}`;
 
     this.imgListsPreview = this.galleryItems
-      .filter(item => !item.preview)
-      .map(item => item.cAttachment.imageSmall);
+      //.filter(item => !item.preview)
+      .map(item => `/api/c-attachments/download/${item.cAttachment.id}-${item.cAttachment.fileName}`);
   }
 
   handleTabClick(tab) {

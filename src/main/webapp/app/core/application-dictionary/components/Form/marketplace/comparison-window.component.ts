@@ -20,6 +20,7 @@ export default class ComparisonWindow extends Vue {
 
   newSearch: string = null;
   searchCriteria: string[] = [];
+  defaultImg: any = null;
 
   get canAddSlot() {
     return this.items.length < this.maxItems;
@@ -90,9 +91,13 @@ export default class ComparisonWindow extends Vue {
   }
 
   getImage(item: IMProductCatalog) {
-    return item.cGallery.cGalleryItems
+    this.defaultImg = item.cGallery.cGalleryItems
       .find(gi => gi.preview)
-      .cAttachment.imageMedium;
+      .cAttachment;
+
+    this.defaultImg = `/api/c-attachments/download/${this.defaultImg.id}-${this.defaultImg.fileName}`;
+
+    return this.defaultImg;
   }
 
   getProductName(item: IMProductCatalog) {
@@ -103,7 +108,7 @@ export default class ComparisonWindow extends Vue {
     if (!item.length && !item.width && !item.height) {
       return '-';
     }
-    
+
     return `${item.length} x ${item.width} x ${item.height}`
   }
 }
