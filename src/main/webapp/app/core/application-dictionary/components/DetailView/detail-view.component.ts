@@ -318,7 +318,8 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
       kebabCase(column.importedTable)
     );
     const api = `/api/${resourceName}`;
-    const criteriaQuery: string[] = query ? [`name.contains=${query}`] : [];
+    const keyField = column.importedTable === 'ad_user' ? 'userLogin' : 'name';
+    const criteriaQuery: string[] = query ? [`${keyField}.contains=${query}`] : [];
 
     // Append additional query from the cached validation rule query, if any.
     if (filterQuery) {
