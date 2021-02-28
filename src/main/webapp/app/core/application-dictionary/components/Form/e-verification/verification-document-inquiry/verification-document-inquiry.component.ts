@@ -35,7 +35,8 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   public docStatus: string = "docStatus";
   public paymentStatus: string = "paymentStatus";
 
-  private filterQuery: string = '';
+  private baseQuery: string = '';
+  private lookupQuery: string[] = [];
   private processing = false;
 
   private dialogTitle = "";
@@ -218,11 +219,15 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
       });
     }
 
-    this.filterQuery = buildCriteriaQueryString([this.filterQuery, watchListQuery]);
+    const filterQuery = buildCriteriaQueryString([
+      this.baseQuery,
+      watchListQuery,
+      ...this.lookupQuery
+    ]);
     
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: this.filterQuery,
+        criteriaQuery: filterQuery,
         paginationQuery
       })
       .then(res => {
@@ -314,46 +319,45 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
 
   public verificationFilter() {
     const form = this.filter;
-    const query = [];
+    this.lookupQuery = [];
 
     if (!!this.filter.documentNo) {
-      query.push(`documentNo.equals=${form.documentNo}`);
+      this.lookupQuery.push(`documentNo.equals=${form.documentNo}`);
     }
     if (!!this.filter.invoiceNo) {
-      query.push(`invoiceNo.equals=${form.invoiceNo}`);
+      this.lookupQuery.push(`invoiceNo.equals=${form.invoiceNo}`);
     }
     if (!!this.filter.taxInvoiceNo) {
-      query.push(`taxInvoiceNo.equals=${form.taxInvoiceNo}`);
+      this.lookupQuery.push(`taxInvoiceNo.equals=${form.taxInvoiceNo}`);
     }
     if (!!this.filter.vendorName) {
-      query.push(`vendorId.equals=${form.vendorName}`);
+      this.lookupQuery.push(`vendorId.equals=${form.vendorName}`);
     }
     if (!!this.filter.documentStatus) {
-      query.push(`documentStatus.equals=${form.documentStatus}`);
+      this.lookupQuery.push(`documentStatus.equals=${form.documentStatus}`);
     }
     if (!!this.filter.verificationDateFrom) {
-      query.push(`dateTrx.greaterOrEqualThan=${form.verificationDateFrom}`);
+      this.lookupQuery.push(`dateTrx.greaterOrEqualThan=${form.verificationDateFrom}`);
     }
     if (!!this.filter.verificationDateTo) {
-      query.push(`dateTrx.lessOrEqualThan=${form.verificationDateTo}`);
+      this.lookupQuery.push(`dateTrx.lessOrEqualThan=${form.verificationDateTo}`);
     }
     if (!!this.filter.invoiceDateFrom) {
-      query.push(`invoiceDate.greaterOrEqualThan=${form.invoiceDateFrom}`);
+      this.lookupQuery.push(`invoiceDate.greaterOrEqualThan=${form.invoiceDateFrom}`);
     }
     if (!!this.filter.invoiceDateTo) {
-      query.push(`invoiceDate.lessOrEqualThan=${form.invoiceDateTo}`);
+      this.lookupQuery.push(`invoiceDate.lessOrEqualThan=${form.invoiceDateTo}`);
     }
     if (!!this.filter.taxInvoiceDateFrom) {
-      query.push(`taxInvoiceDate.greaterOrEqualThan=${form.taxInvoiceDateFrom}`);
+      this.lookupQuery.push(`taxInvoiceDate.greaterOrEqualThan=${form.taxInvoiceDateFrom}`);
     }
     if (!!this.filter.taxInvoiceDateTo) {
-      query.push(`taxInvoiceDate.lessOrEqualThan=${form.taxInvoiceDateTo}`);
+      this.lookupQuery.push(`taxInvoiceDate.lessOrEqualThan=${form.taxInvoiceDateTo}`);
     }
     if (!!this.filter.payStatus) {
-      query.push(`payStatus.equals=${form.payStatus}`);
+      this.lookupQuery.push(`payStatus.equals=${form.payStatus}`);
     }
 
-    this.filterQuery = buildCriteriaQueryString(query);
     this.retrieveAllRecords();
   }
 

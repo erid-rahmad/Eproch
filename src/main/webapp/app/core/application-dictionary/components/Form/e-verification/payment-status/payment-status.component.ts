@@ -29,7 +29,8 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
   private baseApiUrlReference = "/api/ad-references";
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
 
-  private filterQuery: string = '';
+  private baseQuery: string = '';
+  private lookupQuery: string[] = [];
   processing = false;
 
   public gridData: Array<any> = [];
@@ -51,7 +52,8 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
     return settings.dateValueFormat;
   }
 
-  created(){
+  created() {
+    this.baseQuery = `vendorId.equals=${accountStore.userDetails.cVendorId}`;
     this.initDocumentStatusOptions();
     this.initPaymentStatusOptions();
   }
@@ -142,15 +144,15 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
       });
     }
 
-    this.filterQuery = buildCriteriaQueryString([
-      this.filterQuery,
+    const filterQuery = buildCriteriaQueryString([
+      this.baseQuery,
       watchListQuery,
-      `vendorId.equals=${accountStore.userDetails.cVendorId}`
+      ...this.lookupQuery
     ]);
     
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: this.filterQuery,
+        criteriaQuery: filterQuery,
         paginationQuery
       })
       .then(res => {
@@ -195,8 +197,8 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
       .then(res => {
         this.documentStatusOptions = res.map(item => 
           ({
-              key: item.value,
-              label: item.name
+            key: item.value,
+            label: item.name
           })
         );
       });
@@ -208,8 +210,8 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
       .then(res => {
         this.paymentStatusOptions = res.map(item => 
           ({
-              key: item.value,
-              label: item.name
+            key: item.value,
+            label: item.name
           })
         );
       });
@@ -217,30 +219,27 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
 
   public verificationFilter() {
     const form = this.filter;
-    const query = [];
-
-    this.filterQuery = "";
+    this.lookupQuery = [];
 
     if (!!form.documentNo) {
-      query.push(`documentNo.equals=${form.documentNo}`);
+      this.lookupQuery.push(`documentNo.equals=${form.documentNo}`);
     }
     if (!!form.invoiceNo) {
-      query.push(`invoiceNo.equals=${form.invoiceNo}`);
+      this.lookupQuery.push(`invoiceNo.equals=${form.invoiceNo}`);
     }
     if (!!form.documentStatus) {
-      query.push(`documentStatus.equals=${form.documentStatus}`);
+      this.lookupQuery.push(`documentStatus.equals=${form.documentStatus}`);
     }
     if (!!form.dateTrx) {
-      query.push(`dateTrx.lessOrEqualThan=${form.dateTrx}`);
+      this.lookupQuery.push(`dateTrx.lessOrEqualThan=${form.dateTrx}`);
     }
     if (!!form.invoiceDate) {
-      query.push(`invoiceDate.lessOrEqualThan=${form.invoiceDate}`);
+      this.lookupQuery.push(`invoiceDate.lessOrEqualThan=${form.invoiceDate}`);
     }
     if (!!form.payStatus) {
-      query.push(`payStatus.equals=${form.payStatus}`);
+      this.lookupQuery.push(`payStatus.equals=${form.payStatus}`);
     }
 
-    this.filterQuery = buildCriteriaQueryString(query);
     this.retrieveAllRecords();
   }
 
