@@ -97,8 +97,6 @@
                   separator=";"
                   tableName="m_verification">
             <column name="id" type="numeric"/>
-            <column name="verification_no" type="string"/>
-            <column name="verification_date" type="date"/>
             <column name="description" type="string"/>
             <column name="receipt_no" type="string"/>
             <column name="invoice_no" type="string"/>
@@ -120,7 +118,6 @@
             <column name="pay_amt" type="numeric"/>
             <column name="date_reject" type="date"/>
             <column name="date_approve" type="date"/>
-            <column name="verification_status" type="string"/>
             <column name="pay_status" type="string"/>
             <column name="date_trx" type="date"/>
             <column name="document_no" type="string"/>
@@ -128,6 +125,8 @@
             <column name="document_status" type="string"/>
             <column name="approved" type="boolean"/>
             <column name="processed" type="boolean"/>
+            <column name="receipt_reversed" type="boolean"/>
+            <column name="ap_reversed" type="boolean"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
@@ -296,6 +295,14 @@
                 <constraints nullable="true" />
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20210226012000" author="Ananta Aryadewa">
+        <dropColumn tableName="m_verification">
+            <column name="verification_no" />
+            <column name="verification_date" />
+            <column name="verification_status" />
+        </dropColumn>
     </changeSet>
 
 </databaseChangeLog>

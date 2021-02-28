@@ -9,7 +9,7 @@
                     v-loading.fullscreen.lock="fullscreenLoading"
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-check"
                     @click="updateEVerification"
@@ -18,7 +18,7 @@
                 <el-button
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="danger"
                     icon="el-icon-close"
                     @click="closeEVerificationUpdate"
@@ -27,7 +27,7 @@
                 <el-button
                     v-if="isDraft"
                     class="button"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-plus"
                     @click="displayMatchPo(1)"
@@ -39,7 +39,7 @@
                     v-if="isDraft"
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-plus"
                     @click="displayMatchPo(2)"
@@ -96,18 +96,24 @@
                             />
                         </el-select>
                     </el-form-item>
-                    <el-form-item v-if="!isDraft" label="Verification No" prop="verificationNo">
-                        <el-input class="form-input" disabled clearable v-model="header.verificationNo"/>
+                    <el-form-item
+                        v-if="!isDraft"
+                        label="Verification No"
+                        prop="documentNo"
+                    >
+                        <el-input class="form-input" disabled v-model="header.documentNo"/>
                     </el-form-item>
-                    <el-form-item v-if="!isDraft" label="Verification Date" prop="verificationDate">
+                    <el-form-item label="Verification Date" prop="dateTrx">
                         <el-date-picker
+                            v-model="header.dateTrx"
                             class="form-input"
-                            clearable disabled
-                            v-model="header.verificationDate"
-                            type="date"
+                            clearable
+                            :disabled="!isDraft"
                             :format="dateDisplayFormat"
+                            type="date"
                             :value-format="dateValueFormat"
-                            placeholder="Pick a date" />
+                            placeholder="Pick a date"
+                        />
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -135,14 +141,14 @@
                     <el-form-item label="NPWP" prop="vendorName">
                         <el-input class="form-input" disabled clearable v-model="header.vendorName"/>
                     </el-form-item>
-                    <el-form-item v-if="!isDraft" label="Status" prop="verificationStatus">
-                        <el-input class="form-input" disabled clearable :value="formatDocumentStatus(header.verificationStatus)"/>
+                    <el-form-item v-if="!isDraft" label="Status" prop="documentStatus">
+                        <el-input class="form-input" disabled clearable :value="formatDocumentStatus(header.documentStatus)"/>
                     </el-form-item>
                     <el-form-item v-if="!isDraft" label="Status Date">
                         <el-date-picker
                             class="form-input"
                             clearable disabled
-                            :value="dateStatus(header.verificationStatus)"
+                            :value="dateStatus(header.documentStatus)"
                             type="date"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"

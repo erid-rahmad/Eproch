@@ -24,7 +24,8 @@ export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, 
   public reverse = false;
   public totalItems = 0;
 
-  private filterQuery: string = '';
+  private baseQuery: string = '';
+  private lookupQuery: string[] = [];
   private processing = false;
 
   private dialogTitle = "";
@@ -57,7 +58,12 @@ export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, 
     return accountStore.userDetails.vendor;
   }
 
-  created(){
+  created() {
+    this.baseQuery = buildCriteriaQueryString([
+      'mMatchType.equals=1',
+      this.isVendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
+    ]);
+
     this.initStatusOptions();
     this.initVendorOptions();
     this.retrieveAllRecords();
@@ -134,14 +140,16 @@ export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, 
         this.$set(this.filter, key, value);
       });
     }
+
+    const filterQuery = buildCriteriaQueryString([
+      this.baseQuery,
+      watchListQuery,
+      ...this.lookupQuery
+    ]);
     
     this.dynamicWindowService('/api/m-match-pos')
       .retrieve({
-        criteriaQuery: [
-          'mMatchType.equals=1',
-          this.filterQuery,
-          this.isVendor ? `vendorId.equals=${accountStore.userDetails.cVendorId}` : null
-        ],
+        criteriaQuery: filterQuery,
         paginationQuery
       })
       .then(res => {
@@ -210,31 +218,30 @@ export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, 
 
   public verificationFilter() {
     const form = this.filter;
-    const query = [];
+    this.lookupQuery = [];
 
     if (!!form.receiptNo) {
-      query.push(`receiptNo.equals=${form.receiptNo}`);
+      this.lookupQuery.push(`receiptNo.equals=${form.receiptNo}`);
     }
     if (!!form.receiptDateFrom) {
-      query.push(`receiptDate.greaterOrEqualThan=${form.receiptDateFrom}`)
+      this.lookupQuery.push(`receiptDate.greaterOrEqualThan=${form.receiptDateFrom}`)
     }
     if (!!form.receiptDateTo) {
-      query.push(`receiptDate.lessOrEqualThan=${form.receiptDateTo}`)
+      this.lookupQuery.push(`receiptDate.lessOrEqualThan=${form.receiptDateTo}`)
     }
     if (!!form.poNo) {
-      query.push(`poNo.equals=${form.poNo}`)
+      this.lookupQuery.push(`poNo.equals=${form.poNo}`)
     }
     if (!!form.deliveryNo) {
-      query.push(`deliveryNo.equals=${form.deliveryNo}`);
+      this.lookupQuery.push(`deliveryNo.equals=${form.deliveryNo}`);
     }
     if (!!form.vendorId) {
-      query.push(`vendorId.equals=${form.vendorId}`);
+      this.lookupQuery.push(`vendorId.equals=${form.vendorId}`);
     }
     if (!!form.invoiced) {
-      query.push(`invoiced.equals=${form.invoiced}`);
+      this.lookupQuery.push(`invoiced.equals=${form.invoiced}`);
     }
 
-    this.filterQuery = buildCriteriaQueryString(query);
     this.retrieveAllRecords();
   }
 

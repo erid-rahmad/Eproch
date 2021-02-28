@@ -2,23 +2,6 @@
     "name": "MVerification",
     "fields": [
         {
-            "fieldName": "verificationNo",
-            "javadoc": "VHDOCM Invoice verification document no.",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "unique"
-            ]
-        },
-        {
-            "fieldName": "verificationDate",
-            "javadoc": "VHTRDJ Transaction date",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "description",
             "fieldType": "String"
         },
@@ -106,10 +89,12 @@
         },
         {
             "fieldName": "invoiceAp",
+            "javadoc": "VHDOC",
             "fieldType": "String"
         },
         {
             "fieldName": "docType",
+            "javadoc": "VHDCT",
             "fieldType": "String"
         },
         {
@@ -138,18 +123,13 @@
             "fieldType": "LocalDate"
         },
         {
-            "fieldName": "verificationStatus",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
             "fieldName": "payStatus",
+            "javadoc": "VHPST",
             "fieldType": "String"
         },
         {
             "fieldName": "dateTrx",
+            "javadoc": "VHTRDJ Transaction date",
             "fieldType": "LocalDate",
             "fieldValidateRules": [
                 "required"
@@ -157,6 +137,7 @@
         },
         {
             "fieldName": "documentNo",
+            "javadoc": "VHDOCM Invoice verification document no.",
             "fieldType": "String",
             "fieldValidateRules": [
                 "maxlength"

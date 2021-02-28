@@ -5,6 +5,7 @@
     max-height="250"
     stripe
     style="width: 100%"
+    size="mini"
     @selection-change="onSelectionChanged"
   >
     <el-table-column

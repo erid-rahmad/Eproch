@@ -38,6 +38,7 @@
                 <el-button
                     type="primary"
                     icon="el-icon-plus"
+                    size="mini"
                     @click.native.prevent="showTaxList()">
                     {{ $t('entity.action.add') }}
                 </el-button>
@@ -46,6 +47,7 @@
             <el-table
                 max-height="250"
                 style="width: 100%"
+                size="mini"
                 :data="taxes"
             >
                 <el-table-column
@@ -103,8 +105,8 @@
                 :event-bus="eventBus"
             />
             <span slot="footer" class="dialog-footer">
-                <el-button @click="editDialogVisible = false" icon="el-icon-close">{{ $t('entity.action.cancel') }}</el-button>
-                <el-button type="primary" @click="onTaxesApplied" icon="el-icon-check">{{ $t('entity.action.save') }}</el-button>
+                <el-button @click="editDialogVisible = false" size="mini" icon="el-icon-close">{{ $t('entity.action.cancel') }}</el-button>
+                <el-button type="primary" @click="onTaxesApplied" size="mini" icon="el-icon-check">{{ $t('entity.action.save') }}</el-button>
             </span>
         </el-dialog>
 

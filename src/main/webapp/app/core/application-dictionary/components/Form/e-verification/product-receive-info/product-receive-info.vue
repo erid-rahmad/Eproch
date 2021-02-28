@@ -6,14 +6,14 @@
                 <el-button
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-search"
                     @click.native.prevent="verificationFilter"/>
 
                 <el-button
                     class="button"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-download">
                     Export
@@ -62,7 +62,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item
-                        v-if="!isVendor"
+                        v-if="isVendor"
                         label="Delivery No."
                         prop="deliveryNo"
                     >

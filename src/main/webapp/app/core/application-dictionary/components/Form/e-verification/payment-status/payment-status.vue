@@ -2,25 +2,14 @@
     <div class="app-container payment-status">
         <el-row class="header">
             <el-col :span="24">
-
                 <el-button
                     class="button"
                     style="margin-left: 0px;"
-                    size="small"
+                    size="mini"
                     type="primary"
                     icon="el-icon-search"
                     @click.native.prevent="verificationFilter"
                 />
-
-                <!-- <el-button
-                    class="button"
-                    size="small"
-                    type="primary"
-                    icon="el-icon-download"
-                >
-                    Export
-                </el-button> -->
-
             </el-col>
         </el-row>
 
@@ -33,15 +22,15 @@
             >
                 <el-col :xs="24" :sm="12" :md="8">
 
-                    <el-form-item label="Verification No." prop="verificationNo">
-                        <el-input class="form-input" clearable v-model="filter.verificationNo"/>
+                    <el-form-item label="Verification No." prop="documentNo">
+                        <el-input class="form-input" clearable v-model="filter.documentNo"/>
                     </el-form-item>
                     <el-form-item label="Invoice No." prop="invoiceNo">
                         <el-input class="form-input" clearable v-model="filter.invoiceNo"></el-input>
                     </el-form-item>
 
-                    <el-form-item label="Status" prop="verificationStatus">
-                        <el-select class="form-input" clearable filterable v-model="filter.verificationStatus" placeholder="Status" >
+                    <el-form-item label="Status" prop="documentStatus">
+                        <el-select class="form-input" clearable filterable v-model="filter.documentStatus" placeholder="Status" >
                             <el-option
                                 v-for="item in documentStatusOptions"
                                 :key="item.key"
@@ -53,11 +42,11 @@
 
                 </el-col>
                 <el-col :xs="24" :sm="12" :md="8">
-                    <el-form-item label="Verification Date" prop="verificationDate">
+                    <el-form-item label="Verification Date" prop="dateTrx">
                         <el-date-picker
                             class="form-input"
                             clearable
-                            v-model="filter.verificationDate"
+                            v-model="filter.dateTrx"
                             type="date"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"
@@ -121,20 +110,20 @@
                     <el-table-column
                         min-width="140"
                         sortable
-                        prop="verificationNo"
+                        prop="documentNo"
                         label="Verification No"/>
                     <el-table-column
                         min-width="140"
                         sortable
-                        prop="verificationDate"
+                        prop="dateTrx"
                         label="Verification Date"/>
                     <el-table-column
                         min-width="120"
                         sortable
-                        prop="verificationStatus"
+                        prop="documentStatus"
                         label="Status">
                         <template slot-scope="{ row }">
-                            {{ formatDocumentStatus(row.verificationStatus) }}
+                            {{ formatDocumentStatus(row.documentStatus) }}
                         </template>
                     </el-table-column>
 

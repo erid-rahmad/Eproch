@@ -10,11 +10,11 @@
             <el-row style="margin-top: 0px" class="form">
 
                     <el-col :span="8">
-                        <el-form-item label="Verification No." prop="verificationNo">
-                            : {{ formHeader.verificationNo }}
+                        <el-form-item label="Verification No." prop="documentNo">
+                            : {{ formHeader.documentNo }}
                         </el-form-item>
-                        <el-form-item label="Verification Date" prop="verificationDate">
-                            : {{ formHeader.verificationDate }}
+                        <el-form-item label="Verification Date" prop="dateTrx">
+                            : {{ formHeader.dateTrx }}
                         </el-form-item>
                         <el-form-item label="Currency" prop="currencyName">
                             : {{ formHeader.currencyName }}

@@ -36,10 +36,10 @@ export default class PersonInChargeUpdate extends PersonInChargeUpdateProps {
             type: 'email'
         }
     };
-    
+
     public businessCategories = [];
     public person = {};
-    
+
     @Watch('user')
     setPerson(person) {
         this.person = person;
