@@ -31,13 +31,13 @@
                     <el-row :gutter="columnSpacing">
 
                         <el-col :span="12">
-                            <el-form-item label="Product" prop="mProductId" required>
+                            <el-form-item label="Product" prop="mProductCategory" required>
 
                                 <el-cascader
                                     clearable
                                     class="cascader"
                                     ref="productCategories"
-                                    v-model="productCatalog.mProductId"
+                                    v-model="productCatalog.mProductCategory"
                                     :show-all-levels="true"
                                     :options="productCategoryOptions"
                                     :props="props"

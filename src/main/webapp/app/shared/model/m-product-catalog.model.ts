@@ -42,9 +42,12 @@ export interface IMProductCatalog {
   mProductId?: number;
   mProductName?: string;
   mProductCategories?: number[];
+  mProductCategoryId?: number;
+  mProductSubCategoryId?: number;
   vendorId?: string;
   mProductPrices?: any[];
   mProductImages?: any[];
+  mProductCategory?: any[];
 }
 
 export class MProductCatalog implements IMProductCatalog {
@@ -88,9 +91,12 @@ export class MProductCatalog implements IMProductCatalog {
     public mProductId?: number,
     public mProductName?: string,
     public mProductCategories?: number[],
+    public mProductCategoryId?: number,
+    public mProductSubCategoryId?: number,
     public vendorId?: string,
     public mProductPrices?: any[],
-    public mProductImages?: any[]
+    public mProductImages?: any[],
+    public mProductCategory?: any[]
   ) {
     this.preOrder = this.preOrder || false;
     this.sold = this.sold || false;

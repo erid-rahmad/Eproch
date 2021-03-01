@@ -73,10 +73,10 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
     if(this.setRowProductCatalog != null){
       this.productCatalog = this.setRowProductCatalog;
-      /*this.productCatalog.mProductCategory = [];
+      this.productCatalog.mProductCategory = [];
       this.productCatalog.mProductCategory.push(this.productCatalog.mProductCategoryId);
       this.productCatalog.mProductCategory.push(this.productCatalog.mProductSubCategoryId);
-      this.productCatalog.mProductCategory.push(this.productCatalog.mProductId);*/
+      this.productCatalog.mProductCategory.push(this.productCatalog.mProductId);
       console.log(this.productCatalog);
     }else{
       this.productCatalog = {};
