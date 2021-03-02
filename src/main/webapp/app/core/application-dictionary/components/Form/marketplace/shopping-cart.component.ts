@@ -20,11 +20,11 @@ export default class ShoppingCart extends Vue {
   get totalCount() {
     return marketplaceStore.cartItemCount;
   }
-  
+
   @Watch('cart', { deep: true })
   calculateSubtotal(cart: any[]) {
     const items: any[] = [];
-    
+
     for (const group of cart) {
       for (const item of group.items) {
         items.push(item);
@@ -70,6 +70,10 @@ export default class ShoppingCart extends Vue {
 
   removeItem(item: any) {
     marketplaceStore.removeFromCart(item);
+  }
+
+  getImg(img){
+    return `/api/c-attachments/download/${img.id}-${img.fileName}`;
   }
 
 }

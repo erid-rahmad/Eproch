@@ -3,6 +3,7 @@ import AlertMixin from '@/shared/alert/alert.mixin';
 import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
 
@@ -40,6 +41,7 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
   public gridData: Array<any> = [];
 
   selectedRows: Array<any> = [];
+  selectedRow: any = {};
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -50,13 +52,13 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
   }
 
   created() {
-    console.log(this.status)
+    //console.log(this.status)
   }
 
   public mounted(): void {
 
     if (this.status == '0') {
-      this.filterQuery = "";
+      this.filterQuery = `cVendorId.equals=${accountStore.userDetails.cVendorId}`;
     } else {
       if(this.status == '1'){
         this.statusCatalog = "DRF";
@@ -65,7 +67,7 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
       }else {
         this.statusCatalog = "BLK";
       }
-      this.filterQuery = "documentStatus.equals="+this.statusCatalog;
+      this.filterQuery = `cVendorId.equals=${accountStore.userDetails.cVendorId}&documentStatus.equals=${this.statusCatalog}`;
     }
     this.retrieveAllRecords();
   }
@@ -132,7 +134,13 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
   private close(){
     //this.dialogConfirmationVisible = false;
     this.selectedRows = [];
+    this.selectedRow = {};
     this.retrieveAllRecords();
+  }
+
+  private editRow(row){
+    this.selectedRow = row;
+    this.$emit("selectedRow", this.selectedRow);
   }
 
   public retrieveAllRecords(): void {
@@ -158,7 +166,7 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
         this.gridData = res.data.map((item: any) => {
           if(item.cGallery != null){
             if(item.cGallery.cGalleryItems.length){
-              console.log(item.cGallery.cGalleryItems.length);
+              //console.log(item.cGallery.cGalleryItems.length);
 							item.imgList = item.cGallery.cGalleryItems;
             }
           }
@@ -187,10 +195,11 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
   displayImage(imgList){
     var x = 0;
     var img = "";
-
-    for(x; x<imgList.length; x++){
-      if(imgList[x].preview){
-        img = `http://localhost:9000/api/c-attachments/download/${imgList[x].cAttachment.id}-${imgList[x].cAttachment.fileName}`;
+    if(imgList){
+      for(x; x<imgList.length; x++){
+        if(imgList[x].preview){
+          img = `/api/c-attachments/download/${imgList[x].cAttachment.id}-${imgList[x].cAttachment.fileName}`;
+        }
       }
     }
 
@@ -201,8 +210,10 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
     var x = 0;
     var arr = [];
 
-    for(x; x<imgList.length; x++){
-      arr.push(`http://localhost:9000/api/c-attachments/download/${imgList[x].cAttachment.id}-${imgList[x].cAttachment.fileName}`);
+    if(imgList){
+      for(x; x<imgList.length; x++){
+        arr.push(`/api/c-attachments/download/${imgList[x].cAttachment.id}-${imgList[x].cAttachment.fileName}`);
+      }
     }
 
     return arr;

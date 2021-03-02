@@ -179,13 +179,21 @@ public class MProductCatalogService {
                 .expiredDate(dto.getExpiredDate())
                 .documentAction("APR")
                 .documentStatus("DRF")
+                .approved(false)
+                .processed(true)
+                .sku(dto.getSku())
+                .preOrder(dto.isPreOrder())
+                .preOrderDuration(dto.getPreOrderDuration())
+                .warranty(dto.getWarranty())
+                .sold(dto.isSold())
+                .stockAvailable(dto.getStockAvailable())
 
                 .adOrganization(organization)
                 .cDocumentType(buildDocumentType(dto.getCDocumentTypeName()))
                 .cVendor(buildVendor(dto.getCVendorName()))
                 .cUom(buildUnitOfMeasure(dto.getCUomName()))
                 .cCurrency(buildCurrency(dto.getCCurrencyName()))
-                .mProduct(buildProduct(dto.getMProductName(), buildUnitOfMeasure(dto.getCUomName())))
+                .mProduct(buildProduct(dto.getMProductShortName(), buildUnitOfMeasure(dto.getCUomName())))
                 .mBrand(buildBrand(dto.getMBrandName()));
 
             entities.add(entity);
@@ -203,6 +211,7 @@ public class MProductCatalogService {
             .orElseGet(() -> {
                 final CDocumentType entity = new CDocumentType();
                 entity.active(true)
+                    .adOrganization(organization)
                     .name(name);
 
                 return cDocumentTypeRepository.save(entity);
@@ -218,6 +227,17 @@ public class MProductCatalogService {
             .orElseGet(() -> {
                 final CVendor entity = new CVendor();
                 entity.active(true)
+                    .adOrganization(organization)
+                    .type("CMP")
+                    .paymentCategory("RED")
+                    .location("DMS")
+                    .documentAction("APV")
+                    .documentStatus("SMT")
+                    .branch(false)
+                    .approved(false)
+                    .processed(true)
+                    .dateTrx(java.time.LocalDate.now())
+                    .documentType(buildDocumentType("Supplier Registration"))
                     .name(name);
 
                 return cVendorRepository.save(entity);
@@ -233,6 +253,9 @@ public class MProductCatalogService {
             .orElseGet(() -> {
                 final CUnitOfMeasure entity = new CUnitOfMeasure();
                 entity.active(true)
+                    .adOrganization(organization)
+                    .code(name)
+                    .symbol(name)
                     .name(name);
 
                 return cUnitOfMeasureRepository.save(entity);
@@ -248,6 +271,9 @@ public class MProductCatalogService {
             .orElseGet(() -> {
                 final CCurrency entity = new CCurrency();
                 entity.active(true)
+                    .adOrganization(organization)
+                    .code(name)
+                    .symbol(name)
                     .name(name);
 
                 return cCurrencyRepository.save(entity);
@@ -257,7 +283,7 @@ public class MProductCatalogService {
     private CProduct buildProduct(String name, CUnitOfMeasure uom) {
         if (name == null) {
             return null;
-				}
+		}
 
         return cProductRepository.findFirstByName(name)
             .orElseGet(() -> {
@@ -271,6 +297,7 @@ public class MProductCatalogService {
                     .assetAcct(cProductService.getDefaultAssetAccount())
                     .expenseAcct(cProductService.getDefaultExpenseAccount())
                     .productCategory(cProductService.getDefaultCategory())
+                    .productSubCategory(cProductService.getDefaultSubCategory())
                     .productClassification(cProductService.getDefaultClassification());
 
                 return cProductRepository.save(entity);
@@ -286,6 +313,7 @@ public class MProductCatalogService {
             .orElseGet(() -> {
                 final MBrand entity = new MBrand();
                 entity.active(true)
+                    .adOrganization(organization)
                     .name(name);
 
                 return mBrandRepository.save(entity);

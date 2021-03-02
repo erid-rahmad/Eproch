@@ -9,6 +9,7 @@
             :limit="limit"
             :auto-upload="true"
 
+            :file-list="fileList"
             :before-upload="handleBeforeUpload"
             :on-preview="handlePreview"
             :on-exceed="handleExceed"

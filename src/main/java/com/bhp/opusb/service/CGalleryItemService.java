@@ -6,7 +6,7 @@ import com.bhp.opusb.service.dto.CGalleryItemDTO;
 import com.bhp.opusb.service.mapper.CGalleryItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,6 +38,7 @@ public class CGalleryItemService {
      * @param cGalleryItemDTO the entity to save.
      * @return the persisted entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.CGallery.cGalleryItems", allEntries = true)
     public CGalleryItemDTO save(CGalleryItemDTO cGalleryItemDTO) {
         log.debug("Request to save CGalleryItem : {}", cGalleryItemDTO);
         CGalleryItem cGalleryItem = cGalleryItemMapper.toEntity(cGalleryItemDTO);
@@ -77,6 +78,7 @@ public class CGalleryItemService {
      *
      * @param id the id of the entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.CGallery.cGalleryItems", allEntries = true)
     public void delete(Long id) {
         log.debug("Request to delete CGalleryItem : {}", id);
         cGalleryItemRepository.deleteById(id);

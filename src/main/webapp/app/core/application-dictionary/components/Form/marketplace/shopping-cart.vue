@@ -40,7 +40,7 @@
           <el-image
             class="image-thumbnail link"
             fit="contain"
-            :src="item.product.cGallery.cGalleryItems[0].cAttachment.imageSmall"
+            :src="getImg(item.product.cGallery.cGalleryItems[0].cAttachment)"
             @click="getDetail(item.product)"
           />
         </el-col>

@@ -5,7 +5,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 /**
  * Properties specific to Opus Web App.
  * <p>
- * Properties are configured in the {@code application.yml} file. nk 
+ * Properties are configured in the {@code application.yml} file. nk
  * o.github.jhipster.config.JHipsterProperties} for a good example.
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
@@ -20,6 +20,7 @@ public class ApplicationProperties {
   private String defaultProductType = "I";
   private long defaultProductClassificationId = 1L;
   private long defaultProductCategoryId = 1L;
+  private long defaultProductSubCategoryId = 1L;
   private long defaultProductAssetAccountId = 1L;
   private long defaultProductExpenseAccountId = 1L;
 
@@ -77,6 +78,14 @@ public class ApplicationProperties {
 
   public void setDefaultProductCategoryId(long defaultProductCategoryId) {
     this.defaultProductCategoryId = defaultProductCategoryId;
+  }
+
+  public long getDefaultProductSubCategoryId() {
+    return defaultProductSubCategoryId;
+  }
+
+  public void setDefaultProductSubCategoryId(long defaultProductSubCategoryId) {
+    this.defaultProductSubCategoryId = defaultProductSubCategoryId;
   }
 
   public long getDefaultProductAssetAccountId() {

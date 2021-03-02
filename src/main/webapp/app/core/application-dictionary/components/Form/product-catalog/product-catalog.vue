@@ -22,13 +22,6 @@
                     class="button"
                     style="margin-left: 0px;"
                     size="mini"
-                    type="primary"
-                    icon="el-icon-edit"/>
-
-                <el-button
-                    class="button"
-                    style="margin-left: 0px;"
-                    size="mini"
                     type="danger"
                     icon="el-icon-delete"
                     @click="onClick('remove')"/>
@@ -107,6 +100,7 @@
                                 ref="catalogGrid"
                                 v-if="activeName === item.value"
                                 :status="''+index"
+                                @selectedRow="selectedRow"
                                 @selectedRows="selectedRows"/>
 
                         </keep-alive>
@@ -120,6 +114,7 @@
             <el-col :span="24" class="tab-container">
 
                 <product-information
+                    :setRowProductCatalog="setRow"
                     @closeProductInformation="closeProductInformation" />
 
             </el-col>

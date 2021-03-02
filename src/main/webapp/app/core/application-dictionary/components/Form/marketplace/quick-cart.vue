@@ -18,7 +18,7 @@
           <el-image
             class="image-thumbnail link"
             fit="contain"
-            :src="item.product.cGallery.cGalleryItems[0].cAttachment.imageSmall"
+            :src="getImg(item.product.cGallery.cGalleryItems[0].cAttachment)"
           />
         </el-col>
         <el-col :span="14">
