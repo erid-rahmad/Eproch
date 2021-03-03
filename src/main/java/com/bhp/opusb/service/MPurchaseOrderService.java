@@ -1,6 +1,7 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MPurchaseOrder;
+import com.bhp.opusb.domain.MPurchaseOrderLine;
 import com.bhp.opusb.repository.MPurchaseOrderRepository;
 import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
 import com.bhp.opusb.service.dto.MPurchaseOrderLineDTO;
@@ -68,9 +69,11 @@ public class MPurchaseOrderService {
         int number = rnd.nextInt(999999);
         String documentno = "PO-"+number;
         mPurchaseOrderDTO.setDocumentNo(documentno);
-        log.info("this document no {}",documentno);
         MPurchaseOrder mPurchaseOrder = mPurchaseOrderMapper.toEntity(mPurchaseOrderDTO);
         mPurchaseOrder = mPurchaseOrderRepository.save(mPurchaseOrder);
+        for (MPurchaseOrderLine mPurchaseOrderLine : mPurchaseOrderDTO.getmPurchaseOrderLineList()){
+            mPurchaseOrderLineService.savetoPO(mPurchaseOrderLine);
+        }
         return mPurchaseOrderMapper.toDto(mPurchaseOrder);
     }
 
@@ -83,13 +86,10 @@ public class MPurchaseOrderService {
     @Transactional(readOnly = true)
     public Page<MPurchaseOrderDTO> findAll(Pageable pageable) {
         log.debug("Request to get all MPurchaseOrders 11");
-//        log.info(MapperJSONUtil.prettyLog());
         Page<MPurchaseOrderDTO> page;
         page = mPurchaseOrderRepository.findAll(pageable)
             .map(mPurchaseOrderMapper::toDto);
         log.debug("this page {}",MapperJSONUtil.prettyLog(page));
-//        return mPurchaseOrderRepository.findAll(pageable)
-//            .map(mPurchaseOrderMapper::toDto);
         return null;
     }
 
@@ -114,7 +114,6 @@ public class MPurchaseOrderService {
         }
         return costumdto;
     }
-
     /**
      * Delete the mPurchaseOrder by id.
      *

@@ -47,6 +47,12 @@ public class MPurchaseOrderLineService {
         return mPurchaseOrderLineMapper.toDto(mPurchaseOrderLine);
     }
 
+    public MPurchaseOrderLine savetoPO(MPurchaseOrderLine mPurchaseOrderLine) {
+        log.debug("Request to save MPurchaseOrderLine : {}", mPurchaseOrderLine);
+        mPurchaseOrderLineRepository.save(mPurchaseOrderLine);
+        return mPurchaseOrderLine;
+    }
+
     /**
      * Get all the mPurchaseOrderLines.
      *

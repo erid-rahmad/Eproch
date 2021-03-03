@@ -1,5 +1,6 @@
 package com.bhp.opusb.web.rest;
 
+import com.bhp.opusb.domain.MRequisitionLine;
 import com.bhp.opusb.service.MRequisitionLineService;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MRequisitionLineDTO;
@@ -102,6 +103,14 @@ public class MRequisitionLineResource {
         Page<MRequisitionLineDTO> page = mRequisitionLineQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/m-requisition-lines-nested")
+    public ResponseEntity<List<MRequisitionLine>> getAllMRequisitionLinesnested() {
+//        log.debug("REST request to get MRequisitionLines by criteria: {}", criteria);
+        List<MRequisitionLine> mRequisitionLineList = mRequisitionLineService.findAlle();
+//        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest();
+        return ResponseEntity.ok().body(mRequisitionLineList);
     }
 
     /**

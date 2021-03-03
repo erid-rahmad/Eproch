@@ -1,9 +1,11 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MRequisition;
+import com.bhp.opusb.domain.MRequisitionLine;
 import com.bhp.opusb.repository.MRequisitionRepository;
 import com.bhp.opusb.service.dto.MRequisitionDTO;
 import com.bhp.opusb.service.dto.MRequisitionLineDTO;
+import com.bhp.opusb.service.mapper.MRequisitionLineMapper;
 import com.bhp.opusb.service.mapper.MRequisitionMapper;
 import com.bhp.opusb.util.MapperJSONUtil;
 import org.slf4j.Logger;
@@ -15,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -53,6 +56,9 @@ public class MRequisitionService {
         mRequisitionDTO.setDocumentNo(documentno);
         MRequisition mRequisition = mRequisitionMapper.toEntity(mRequisitionDTO);
         mRequisition = mRequisitionRepository.save(mRequisition);
+        for (MRequisitionLine mRequisitionLine : mRequisitionDTO.getmRequisitionLineList()){
+            mRequisitionLineService.save(mRequisitionLine);
+        }
         return mRequisitionMapper.toDto(mRequisition);
     }
 

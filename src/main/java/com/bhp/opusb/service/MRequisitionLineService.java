@@ -47,6 +47,12 @@ public class MRequisitionLineService {
         return mRequisitionLineMapper.toDto(mRequisitionLine);
     }
 
+    public MRequisitionLine save(MRequisitionLine mRequisitionLine) {
+        log.debug("Request to save MRequisitionLine : {}", mRequisitionLine);
+        mRequisitionLine = mRequisitionLineRepository.save(mRequisitionLine);
+        return mRequisitionLine;
+    }
+
     /**
      * Get all the mRequisitionLines.
      *
@@ -70,6 +76,8 @@ public class MRequisitionLineService {
         List<MRequisitionLine> mRequisitionLines = mRequisitionLineRepository.mReqlinebyidpr(id);
         return mRequisitionLines;
     }
+
+
 
     /**
      * Get one mRequisitionLine by id.
