@@ -1,13 +1,9 @@
 {
-    "name": "MBiddingSchedule",
+    "name": "MBiddingSubItem",
     "fields": [
         {
-            "fieldName": "startDate",
-            "fieldType": "ZonedDateTime"
-        },
-        {
-            "fieldName": "endDate",
-            "fieldType": "ZonedDateTime"
+            "fieldName": "totalAmount",
+            "fieldType": "BigDecimal"
         },
         {
             "fieldName": "uid",
@@ -21,31 +17,31 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "mBidding",
-            "otherEntityRelationshipName": "mBiddingSchedule",
-            "relationshipValidateRules": "required",
-            "relationshipName": "bidding",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mBiddingSchedule",
+            "otherEntityRelationshipName": "mBiddingSubItem",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cEventTypeline",
-            "otherEntityRelationshipName": "mBiddingSchedule",
+            "otherEntityName": "mBiddingLine",
+            "otherEntityRelationshipName": "mBiddingSubItem",
             "relationshipValidateRules": "required",
-            "relationshipName": "eventTypeLine",
+            "relationshipName": "biddingLine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cProduct",
+            "otherEntityRelationshipName": "mBiddingSubItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "product",
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20210211091900",
-    "entityTableName": "m_bidding_schedule",
+    "changelogDate": "20210301080100",
+    "entityTableName": "m_bidding_sub_item",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",

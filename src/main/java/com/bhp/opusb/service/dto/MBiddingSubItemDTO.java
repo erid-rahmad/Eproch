@@ -1,37 +1,33 @@
 package com.bhp.opusb.service.dto;
 
-import java.time.ZonedDateTime;
+import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A DTO for the {@link com.bhp.opusb.domain.MBiddingSchedule} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.MBiddingSubItem} entity.
  */
-public class MBiddingScheduleDTO extends AbstractAuditingDTO {
+public class MBiddingSubItemDTO extends AbstractAuditingDTO {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     private Long id;
 
-    private ZonedDateTime startDate;
-
-    private ZonedDateTime endDate;
+    private BigDecimal totalAmount;
 
     private UUID uid;
 
     private Boolean active;
 
 
-    private Long biddingId;
-    private String biddingName;
-
     private Long adOrganizationId;
     private String adOrganizationName;
 
-    private Long eventTypeLineId;
+    private Long biddingLineId;
+    private String biddingLineName;
+
+    private Long productId;
+    private String productName;
 
     public Long getId() {
         return id;
@@ -41,20 +37,12 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
-    public ZonedDateTime getStartDate() {
-        return startDate;
+    public BigDecimal getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setStartDate(ZonedDateTime startDate) {
-        this.startDate = startDate;
-    }
-
-    public ZonedDateTime getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(ZonedDateTime endDate) {
-        this.endDate = endDate;
+    public void setTotalAmount(BigDecimal totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public UUID getUid() {
@@ -73,22 +61,6 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
-    public Long getBiddingId() {
-        return biddingId;
-    }
-
-    public void setBiddingId(Long mBiddingId) {
-        this.biddingId = mBiddingId;
-    }
-
-    public String getBiddingName() {
-        return biddingName;
-    }
-
-    public void setBiddingName(String biddingName) {
-        this.biddingName = biddingName;
-    }
-
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -105,12 +77,36 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getEventTypeLineId() {
-        return eventTypeLineId;
+    public Long getBiddingLineId() {
+        return biddingLineId;
     }
 
-    public void setEventTypeLineId(Long cEventTypelineId) {
-        this.eventTypeLineId = cEventTypelineId;
+    public void setBiddingLineId(Long mBiddingLineId) {
+        this.biddingLineId = mBiddingLineId;
+    }
+
+    public String getBiddingLineName() {
+        return biddingLineName;
+    }
+
+    public void setBiddingLineName(String biddingLineName) {
+        this.biddingLineName = biddingLineName;
+    }
+
+    public Long getProductId() {
+        return productId;
+    }
+
+    public void setProductId(Long cProductId) {
+        this.productId = cProductId;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     @Override
@@ -122,11 +118,11 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        MBiddingScheduleDTO mBiddingScheduleDTO = (MBiddingScheduleDTO) o;
-        if (mBiddingScheduleDTO.getId() == null || getId() == null) {
+        MBiddingSubItemDTO mBiddingSubItemDTO = (MBiddingSubItemDTO) o;
+        if (mBiddingSubItemDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), mBiddingScheduleDTO.getId());
+        return Objects.equals(getId(), mBiddingSubItemDTO.getId());
     }
 
     @Override
@@ -136,17 +132,17 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "MBiddingScheduleDTO{" +
+        return "MBiddingSubItemDTO{" +
             "id=" + getId() +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
+            ", totalAmount=" + getTotalAmount() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", biddingId=" + getBiddingId() +
-            ", biddingName=" + getBiddingName() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName=" + getAdOrganizationName() +
-            ", eventTypeLineId=" + getEventTypeLineId() +
+            ", biddingLineId=" + getBiddingLineId() +
+            ", biddingLineName=" + getBiddingLineName() +
+            ", productId=" + getProductId() +
+            ", productName=" + getProductName() +
             "}";
     }
 }

@@ -10,55 +10,52 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
-import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
- * Criteria class for the {@link com.bhp.opusb.domain.MBiddingSchedule} entity. This class is used
- * in {@link com.bhp.opusb.web.rest.MBiddingScheduleResource} to receive all the possible filtering options from
+ * Criteria class for the {@link com.bhp.opusb.domain.MBiddingSubItem} entity. This class is used
+ * in {@link com.bhp.opusb.web.rest.MBiddingSubItemResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
- * {@code /m-bidding-schedules?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
+ * {@code /m-bidding-sub-items?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class MBiddingScheduleCriteria implements Serializable, Criteria {
+public class MBiddingSubItemCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
-    private ZonedDateTimeFilter startDate;
-
-    private ZonedDateTimeFilter endDate;
+    private BigDecimalFilter totalAmount;
 
     private UUIDFilter uid;
 
     private BooleanFilter active;
 
-    private LongFilter biddingId;
-
     private LongFilter adOrganizationId;
 
-    private LongFilter eventTypeLineId;
+    private LongFilter biddingLineId;
 
-    public MBiddingScheduleCriteria() {
+    private LongFilter productId;
+
+    public MBiddingSubItemCriteria() {
     }
 
-    public MBiddingScheduleCriteria(MBiddingScheduleCriteria other) {
+    public MBiddingSubItemCriteria(MBiddingSubItemCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.startDate = other.startDate == null ? null : other.startDate.copy();
-        this.endDate = other.endDate == null ? null : other.endDate.copy();
+        this.totalAmount = other.totalAmount == null ? null : other.totalAmount.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.eventTypeLineId = other.eventTypeLineId == null ? null : other.eventTypeLineId.copy();
+        this.biddingLineId = other.biddingLineId == null ? null : other.biddingLineId.copy();
+        this.productId = other.productId == null ? null : other.productId.copy();
     }
 
     @Override
-    public MBiddingScheduleCriteria copy() {
-        return new MBiddingScheduleCriteria(this);
+    public MBiddingSubItemCriteria copy() {
+        return new MBiddingSubItemCriteria(this);
     }
 
     public LongFilter getId() {
@@ -69,20 +66,12 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public ZonedDateTimeFilter getStartDate() {
-        return startDate;
+    public BigDecimalFilter getTotalAmount() {
+        return totalAmount;
     }
 
-    public void setStartDate(ZonedDateTimeFilter startDate) {
-        this.startDate = startDate;
-    }
-
-    public ZonedDateTimeFilter getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(ZonedDateTimeFilter endDate) {
-        this.endDate = endDate;
+    public void setTotalAmount(BigDecimalFilter totalAmount) {
+        this.totalAmount = totalAmount;
     }
 
     public UUIDFilter getUid() {
@@ -101,14 +90,6 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
-    public LongFilter getBiddingId() {
-        return biddingId;
-    }
-
-    public void setBiddingId(LongFilter biddingId) {
-        this.biddingId = biddingId;
-    }
-
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -117,12 +98,20 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getEventTypeLineId() {
-        return eventTypeLineId;
+    public LongFilter getBiddingLineId() {
+        return biddingLineId;
     }
 
-    public void setEventTypeLineId(LongFilter eventTypeLineId) {
-        this.eventTypeLineId = eventTypeLineId;
+    public void setBiddingLineId(LongFilter biddingLineId) {
+        this.biddingLineId = biddingLineId;
+    }
+
+    public LongFilter getProductId() {
+        return productId;
+    }
+
+    public void setProductId(LongFilter productId) {
+        this.productId = productId;
     }
 
 
@@ -134,43 +123,40 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final MBiddingScheduleCriteria that = (MBiddingScheduleCriteria) o;
+        final MBiddingSubItemCriteria that = (MBiddingSubItemCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(startDate, that.startDate) &&
-            Objects.equals(endDate, that.endDate) &&
+            Objects.equals(totalAmount, that.totalAmount) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(eventTypeLineId, that.eventTypeLineId);
+            Objects.equals(biddingLineId, that.biddingLineId) &&
+            Objects.equals(productId, that.productId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
-        startDate,
-        endDate,
+        totalAmount,
         uid,
         active,
-        biddingId,
         adOrganizationId,
-        eventTypeLineId
+        biddingLineId,
+        productId
         );
     }
 
     @Override
     public String toString() {
-        return "MBiddingScheduleCriteria{" +
+        return "MBiddingSubItemCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (startDate != null ? "startDate=" + startDate + ", " : "") +
-                (endDate != null ? "endDate=" + endDate + ", " : "") +
+                (totalAmount != null ? "totalAmount=" + totalAmount + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (eventTypeLineId != null ? "eventTypeLineId=" + eventTypeLineId + ", " : "") +
+                (biddingLineId != null ? "biddingLineId=" + biddingLineId + ", " : "") +
+                (productId != null ? "productId=" + productId + ", " : "") +
             "}";
     }
 
