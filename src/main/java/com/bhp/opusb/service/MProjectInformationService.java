@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -56,6 +57,11 @@ public class MProjectInformationService {
         log.debug("Request to get all MProjectInformations");
         return mProjectInformationRepository.findAll(pageable)
             .map(mProjectInformationMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MProjectInformation> findByBindId(Long id) {
+        return mProjectInformationRepository.findByBindId(id);
     }
 
     /**

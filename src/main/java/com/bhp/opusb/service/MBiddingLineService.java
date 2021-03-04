@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -45,6 +46,7 @@ public class MBiddingLineService {
         return mBiddingLineMapper.toDto(mBiddingLine);
     }
 
+
     /**
      * Get all the mBiddingLines.
      *
@@ -56,6 +58,10 @@ public class MBiddingLineService {
         log.debug("Request to get all MBiddingLines");
         return mBiddingLineRepository.findAll(pageable)
             .map(mBiddingLineMapper::toDto);
+    }
+    @Transactional(readOnly = true)
+    public List<MBiddingLine> findbyheader(long id) {
+        return mBiddingLineRepository.findbyheader(id);
     }
 
     /**

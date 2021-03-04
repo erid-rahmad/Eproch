@@ -11,4 +11,5 @@ import org.springframework.stereotype.Repository;
 @SuppressWarnings("unused")
 @Repository
 public interface CAttachmentRepository extends JpaRepository<CAttachment, Long>, JpaSpecificationExecutor<CAttachment> {
+
 }

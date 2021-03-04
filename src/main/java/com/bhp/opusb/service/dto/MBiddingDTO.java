@@ -1,8 +1,12 @@
 package com.bhp.opusb.service.dto;
 
+import com.bhp.opusb.domain.MBiddingLine;
+import com.bhp.opusb.domain.MProjectInformation;
+
 import java.time.LocalDate;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -67,6 +71,59 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 
     private Long adUserUserId;
     private String adUserUserName;
+
+    private List<MBiddingLine> biddingLineList;
+
+    private List<MProjectInformation> projectInformationList;
+
+    @Override
+    public String toString() {
+        return "MBiddingDTO{" +
+            "id=" + id +
+            ", biddingNo='" + biddingNo + '\'' +
+            ", name='" + name + '\'' +
+            ", vendorSelection='" + vendorSelection + '\'' +
+            ", ceilingPrice=" + ceilingPrice +
+            ", estimatedPrice=" + estimatedPrice +
+            ", documentAction='" + documentAction + '\'' +
+            ", documentStatus='" + documentStatus + '\'' +
+            ", approved=" + approved +
+            ", processed=" + processed +
+            ", dateReject=" + dateReject +
+            ", dateApprove=" + dateApprove +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", costCenterId=" + costCenterId +
+            ", costCenterName='" + costCenterName + '\'' +
+            ", requisitionId=" + requisitionId +
+            ", biddingTypeId=" + biddingTypeId +
+            ", biddingTypeName='" + biddingTypeName + '\'' +
+            ", eventTypeId=" + eventTypeId +
+            ", eventTypeName='" + eventTypeName + '\'' +
+            ", adUserUserId=" + adUserUserId +
+            ", adUserUserName='" + adUserUserName + '\'' +
+            ", biddingLineList=" + biddingLineList +
+            ", projectInformationList=" + projectInformationList +
+            '}';
+    }
+
+    public List<MProjectInformation> getProjectInformationList() {
+        return projectInformationList;
+    }
+
+    public void setProjectInformationList(List<MProjectInformation> projectInformationList) {
+        this.projectInformationList = projectInformationList;
+    }
+
+    public List<MBiddingLine> getBiddingLineList() {
+        return biddingLineList;
+    }
+
+    public void setBiddingLineList(List<MBiddingLine> biddingLineList) {
+        this.biddingLineList = biddingLineList;
+    }
 
     public Long getId() {
         return id;
@@ -289,34 +346,4 @@ public class MBiddingDTO extends AbstractAuditingDTO {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "MBiddingDTO{" +
-            "id=" + getId() +
-            ", biddingNo='" + getBiddingNo() + "'" +
-            ", name='" + getName() + "'" +
-            ", vendorSelection='" + getVendorSelection() + "'" +
-            ", ceilingPrice=" + getCeilingPrice() +
-            ", estimatedPrice=" + getEstimatedPrice() +
-            ", documentAction='" + getDocumentAction() + "'" +
-            ", documentStatus='" + getDocumentStatus() + "'" +
-            ", approved='" + isApproved() + "'" +
-            ", processed='" + isProcessed() + "'" +
-            ", dateReject='" + getDateReject() + "'" +
-            ", dateApprove='" + getDateApprove() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
-            ", costCenterId=" + getCostCenterId() +
-            ", costCenterName=" + getCostCenterName() +
-            ", requisitionId=" + getRequisitionId() +
-            ", biddingTypeId=" + getBiddingTypeId() +
-            ", biddingTypeName=" + getBiddingTypeName() +
-            ", eventTypeId=" + getEventTypeId() +
-            ", eventTypeName=" + getEventTypeName() +
-            ", adUserUserId=" + getAdUserUserId() +
-            ", adUserUserName=" + getAdUserUserName() +
-            "}";
-    }
 }

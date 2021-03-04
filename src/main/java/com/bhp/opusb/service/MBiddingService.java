@@ -1,18 +1,23 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MBidding;
+import com.bhp.opusb.domain.MBiddingLine;
+import com.bhp.opusb.repository.MBiddingLineRepository;
 import com.bhp.opusb.repository.MBiddingRepository;
+import com.bhp.opusb.repository.MProjectInformationRepository;
 import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.mapper.MBiddingMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Random;
 
 /**
  * Service Implementation for managing {@link MBidding}.
@@ -27,6 +32,18 @@ public class MBiddingService {
 
     private final MBiddingMapper mBiddingMapper;
 
+    @Autowired
+    MBiddingLineService mBiddingLineService;
+
+    @Autowired
+    MProjectInformationService mProjectInformationService;
+
+    @Autowired
+    MBiddingLineRepository mBiddingLineRepository;
+
+    @Autowired
+    MProjectInformationRepository mProjectInformationRepository;
+
     public MBiddingService(MBiddingRepository mBiddingRepository, MBiddingMapper mBiddingMapper) {
         this.mBiddingRepository = mBiddingRepository;
         this.mBiddingMapper = mBiddingMapper;
@@ -40,6 +57,15 @@ public class MBiddingService {
      */
     public MBiddingDTO save(MBiddingDTO mBiddingDTO) {
         log.debug("Request to save MBidding : {}", mBiddingDTO);
+
+        Random rnd = new Random();
+        int number = rnd.nextInt(999999);
+        String documentno = "BD-"+number;
+        mBiddingDTO.setBiddingNo(documentno);
+
+        mBiddingLineRepository.saveAll(mBiddingDTO.getBiddingLineList());
+        mProjectInformationRepository.saveAll(mBiddingDTO.getProjectInformationList());
+
         MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
         mBidding = mBiddingRepository.save(mBidding);
         return mBiddingMapper.toDto(mBidding);
@@ -58,6 +84,8 @@ public class MBiddingService {
             .map(mBiddingMapper::toDto);
     }
 
+
+
     /**
      * Get one mBidding by id.
      *
@@ -66,9 +94,11 @@ public class MBiddingService {
      */
     @Transactional(readOnly = true)
     public Optional<MBiddingDTO> findOne(Long id) {
-        log.debug("Request to get MBidding : {}", id);
-        return mBiddingRepository.findById(id)
+        Optional<MBiddingDTO> mBiddingDTO = mBiddingRepository.findById(id)
             .map(mBiddingMapper::toDto);
+        mBiddingDTO.get().setBiddingLineList(mBiddingLineService.findbyheader(mBiddingDTO.get().getId()));
+        mBiddingDTO.get().setProjectInformationList(mProjectInformationService.findByBindId(mBiddingDTO.get().getId()));
+        return mBiddingDTO;
     }
 
     /**

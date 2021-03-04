@@ -1,3 +1,0 @@
-postman colection list
-
-PO/PR https://www.getpostman.com/collections/e2a77ff6f2e4730da8d1
