@@ -7,7 +7,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 /**
@@ -26,10 +26,10 @@ public class MBiddingSchedule extends AbstractAuditingEntity {
     private Long id;
 
     @Column(name = "start_date")
-    private LocalDate startDate;
+    private ZonedDateTime startDate;
 
     @Column(name = "end_date")
-    private LocalDate endDate;
+    private ZonedDateTime endDate;
 
     @Column(name = "uid")
     private UUID uid;
@@ -61,29 +61,29 @@ public class MBiddingSchedule extends AbstractAuditingEntity {
         this.id = id;
     }
 
-    public LocalDate getStartDate() {
+    public ZonedDateTime getStartDate() {
         return startDate;
     }
 
-    public MBiddingSchedule startDate(LocalDate startDate) {
+    public MBiddingSchedule startDate(ZonedDateTime startDate) {
         this.startDate = startDate;
         return this;
     }
 
-    public void setStartDate(LocalDate startDate) {
+    public void setStartDate(ZonedDateTime startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDate getEndDate() {
+    public ZonedDateTime getEndDate() {
         return endDate;
     }
 
-    public MBiddingSchedule endDate(LocalDate endDate) {
+    public MBiddingSchedule endDate(ZonedDateTime endDate) {
         this.endDate = endDate;
         return this;
     }
 
-    public void setEndDate(LocalDate endDate) {
+    public void setEndDate(ZonedDateTime endDate) {
         this.endDate = endDate;
     }
 

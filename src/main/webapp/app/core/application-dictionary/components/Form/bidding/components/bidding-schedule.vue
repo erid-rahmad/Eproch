@@ -42,9 +42,9 @@
                                 size="mini"
                                 clearable
                                 v-model="row.startDate"
-                                format="dd/MM/yyyy"
-                                value-format="yyyy-MM-dd"
-                                type="date"
+                                format="dd/MM/yyyy HH:mm:ss"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                type="datetime"
                                 placeholder="Pick a day"
                             />
                         </template>
@@ -61,9 +61,9 @@
                                 size="mini"
                                 clearable
                                 v-model="row.endDate"
-                                format="dd/MM/yyyy"
-                                value-format="yyyy-MM-dd"
-                                type="date"
+                                format="dd/MM/yyyy HH:mm:ss"
+                                value-format="yyyy-MM-dd HH:mm:ss"
+                                type="datetime"
                                 placeholder="Pick a day"
                             />
                         </template>
@@ -76,7 +76,7 @@
         <el-divider content-position="left"><h4>Document Submission Schedule</h4></el-divider>
 
         <el-row :gutter="24">
-            <el-col :span="20">
+            <el-col :span="20   ">
                 <el-table
                     v-loading="processing"
                     ref="biddingSchedule"
@@ -91,7 +91,7 @@
                     :data="biddingSchedule.documentSchedule">
 
                     <el-table-column
-                        min-width="30"
+                        min-width="20"
                         label="No">
                         <template slot-scope="row">
                             {{ row.$index+1 }}
@@ -99,7 +99,7 @@
                     </el-table-column>
 
                     <el-table-column
-                        min-width="100"
+                        min-width="70"
                         prop="docEvent"
                         label="Doc. Event"/>
 
@@ -123,7 +123,7 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column align="center" min-width="50">
+                    <el-table-column align="center" min-width="20">
                         <template slot="header">
                             <el-button
                                 size="mini"

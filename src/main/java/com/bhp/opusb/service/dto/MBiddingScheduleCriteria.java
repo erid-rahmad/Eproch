@@ -10,8 +10,8 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
+import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.MBiddingSchedule} entity. This class is used
@@ -28,9 +28,9 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private LocalDateFilter startDate;
+    private ZonedDateTimeFilter startDate;
 
-    private LocalDateFilter endDate;
+    private ZonedDateTimeFilter endDate;
 
     private UUIDFilter uid;
 
@@ -69,19 +69,19 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public LocalDateFilter getStartDate() {
+    public ZonedDateTimeFilter getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateFilter startDate) {
+    public void setStartDate(ZonedDateTimeFilter startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateFilter getEndDate() {
+    public ZonedDateTimeFilter getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateFilter endDate) {
+    public void setEndDate(ZonedDateTimeFilter endDate) {
         this.endDate = endDate;
     }
 

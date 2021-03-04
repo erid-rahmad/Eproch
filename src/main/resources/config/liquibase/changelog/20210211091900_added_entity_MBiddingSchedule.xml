@@ -84,4 +84,9 @@
         </loadData>
     </changeSet>
 
+    <changeSet id="20210211091900-update-1" author="dian-tri-budianto">
+        <modifyDataType tableName="m_bidding_schedule" newDataType="datetime" columnName="start_date"/>
+        <modifyDataType tableName="m_bidding_schedule" newDataType="datetime" columnName="end_date"/>
+    </changeSet>
+
 </databaseChangeLog>

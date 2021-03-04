@@ -22,11 +22,14 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.time.LocalDate;
+import java.time.Instant;
+import java.time.ZonedDateTime;
+import java.time.ZoneOffset;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.UUID;
 
+import static com.bhp.opusb.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -41,13 +44,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MBiddingScheduleResourceIT {
 
-    private static final LocalDate DEFAULT_START_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_START_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_START_DATE = LocalDate.ofEpochDay(-1L);
+    private static final ZonedDateTime DEFAULT_START_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_START_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime SMALLER_START_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
-    private static final LocalDate DEFAULT_END_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_END_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_END_DATE = LocalDate.ofEpochDay(-1L);
+    private static final ZonedDateTime DEFAULT_END_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(0L), ZoneOffset.UTC);
+    private static final ZonedDateTime UPDATED_END_DATE = ZonedDateTime.now(ZoneId.systemDefault()).withNano(0);
+    private static final ZonedDateTime SMALLER_END_DATE = ZonedDateTime.ofInstant(Instant.ofEpochMilli(-1L), ZoneOffset.UTC);
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
@@ -223,8 +226,8 @@ public class MBiddingScheduleResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBiddingSchedule.getId().intValue())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(sameInstant(DEFAULT_START_DATE))))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(sameInstant(DEFAULT_END_DATE))))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -240,8 +243,8 @@ public class MBiddingScheduleResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mBiddingSchedule.getId().intValue()))
-            .andExpect(jsonPath("$.startDate").value(DEFAULT_START_DATE.toString()))
-            .andExpect(jsonPath("$.endDate").value(DEFAULT_END_DATE.toString()))
+            .andExpect(jsonPath("$.startDate").value(sameInstant(DEFAULT_START_DATE)))
+            .andExpect(jsonPath("$.endDate").value(sameInstant(DEFAULT_END_DATE)))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -635,8 +638,8 @@ public class MBiddingScheduleResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBiddingSchedule.getId().intValue())))
-            .andExpect(jsonPath("$.[*].startDate").value(hasItem(DEFAULT_START_DATE.toString())))
-            .andExpect(jsonPath("$.[*].endDate").value(hasItem(DEFAULT_END_DATE.toString())))
+            .andExpect(jsonPath("$.[*].startDate").value(hasItem(sameInstant(DEFAULT_START_DATE))))
+            .andExpect(jsonPath("$.[*].endDate").value(hasItem(sameInstant(DEFAULT_END_DATE))))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 

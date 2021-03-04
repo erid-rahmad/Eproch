@@ -3,11 +3,11 @@
     "fields": [
         {
             "fieldName": "startDate",
-            "fieldType": "LocalDate"
+            "fieldType": "ZonedDateTime"
         },
         {
             "fieldName": "endDate",
-            "fieldType": "LocalDate"
+            "fieldType": "ZonedDateTime"
         },
         {
             "fieldName": "uid",
