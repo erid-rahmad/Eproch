@@ -1,6 +1,9 @@
 package com.bhp.opusb.service.dto;
 
+import com.bhp.opusb.domain.MDocumentSchedule;
+
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -32,6 +35,33 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
     private String adOrganizationName;
 
     private Long eventTypeLineId;
+
+    List<MDocumentSchedule> mDocumentScheduleList;
+
+    @Override
+    public String toString() {
+        return "MBiddingScheduleDTO{" +
+            "id=" + id +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", biddingId=" + biddingId +
+            ", biddingName='" + biddingName + '\'' +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", eventTypeLineId=" + eventTypeLineId +
+            ", mDocumentScheduleList=" + mDocumentScheduleList +
+            '}';
+    }
+
+    public List<MDocumentSchedule> getmDocumentScheduleList() {
+        return mDocumentScheduleList;
+    }
+
+    public void setmDocumentScheduleList(List<MDocumentSchedule> mDocumentScheduleList) {
+        this.mDocumentScheduleList = mDocumentScheduleList;
+    }
 
     public Long getId() {
         return id;
@@ -134,19 +164,4 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "MBiddingScheduleDTO{" +
-            "id=" + getId() +
-            ", startDate='" + getStartDate() + "'" +
-            ", endDate='" + getEndDate() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", biddingId=" + getBiddingId() +
-            ", biddingName=" + getBiddingName() +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
-            ", eventTypeLineId=" + getEventTypeLineId() +
-            "}";
-    }
 }

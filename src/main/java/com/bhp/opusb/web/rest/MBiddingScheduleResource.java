@@ -104,6 +104,8 @@ public class MBiddingScheduleResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+
+
     /**
      * {@code GET  /m-bidding-schedules/count} : count all the mBiddingSchedules.
      *

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -58,6 +59,11 @@ public class MDocumentScheduleService {
             .map(mDocumentScheduleMapper::toDto);
     }
 
+    @Transactional(readOnly = true)
+    public List<MDocumentSchedule> findbyidbidskjl(Long id) {
+        return mDocumentScheduleRepository.findbyidbidbidskejul(id);
+    }
+
     /**
      * Get one mDocumentSchedule by id.
      *
@@ -70,6 +76,7 @@ public class MDocumentScheduleService {
         return mDocumentScheduleRepository.findById(id)
             .map(mDocumentScheduleMapper::toDto);
     }
+
 
     /**
      * Delete the mDocumentSchedule by id.
