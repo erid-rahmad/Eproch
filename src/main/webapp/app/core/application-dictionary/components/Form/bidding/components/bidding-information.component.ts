@@ -28,16 +28,19 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
 
   fullscreenLoading = false;
   processing = false;
+  loading = false;
+
   public costCenterOptions: any = {};
   public picBiddingOptions: any = {};
   public biddingTypeOptions: any = {};
   public vendorSelectionOptions: any = {};
   public eventTypeOptions: any = {};
+  public productOptions: any = {};
+  public uomOptions: any = {};
 
   private limit: number = 1;
   private action: string = "/api/c-attachments/upload";
   private accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
-  //private downloadUri = "";
 
   private projectInformation:any = {
     information: "",
@@ -45,8 +48,42 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
     attachmentId: ""
   };
 
+  private productRequirement = {
+    id: "",
+    productName: "",
+    index: ""
+  };
+  private gridDataProductSubItem = [];
+  private gridDataProductSubSubItem = [];
+  formAddSubItem = {
+    biddingLine: "",
+    biddingLineProductName: "",
+    productId: "",
+    productObj: {},
+    subItemLine: [],
+    edited: false,
+    totalAmount: 0
+  }
+
+  formAddSubSubItem = {
+    productId: "",
+    productObj: "",
+    quantity: 0,
+    uomId: "",
+    uomObj: "",
+    price: 0,
+    amount: 0
+  }
+
   columnSpacing = 32;
   dialogConfirmationVisible:boolean = false;
+  dialogConfirmationVisibleFormSubSubItem:boolean = false;
+
+  dialogTitle = "";
+  dialogContent = null;
+  dialogContentSubItem = null;
+  dialogWidth = "";
+  dialogCloseOnClick = true;
 
   private baseApiUrlReference = "/api/ad-references";
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
@@ -61,6 +98,7 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
     this.retrieveGetReferences(this.keyReferenceVendorSelection);
     this.retrievePicBidding();
     this.retrieveEventType();
+    this.retrieveUom();
   }
 
   private retrieveGetReferences(param: string) {
@@ -156,6 +194,36 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
       });
   }
 
+  private retrieveProduct(key) {
+    this.dynamicWindowService('/api/c-products')
+      .retrieve({
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['name']
+        },
+        criteriaQuery: `name.contains=${key}`
+      })
+      .then(res => {
+        this.loading = false;
+        this.productOptions = res.data;
+      });
+  }
+
+  private retrieveUom() {
+    this.dynamicWindowService('/api/c-unit-of-measures')
+      .retrieve({
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['name']
+        }
+      })
+      .then(res => {
+        this.uomOptions = res.data;
+      });
+  }
+
   jsonEncode(data: any, fields: string[]) {
     const record: Record<string, any> = {};
     for (const field of fields) {
@@ -213,19 +281,18 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
               this.$set(this.biddingInformation, 'referenceTypeId', item.documentTypeId);
               this.$set(this.biddingInformation, 'currencyName', item.currencyName);
               this.$set(this.biddingInformation, 'currencyId', item.currencyId);
-              this.$set(this.biddingInformation, 'referenceNo', item.id);
+              this.$set(this.biddingInformation, 'referenceNo', item.documentNo);
+              this.$set(this.biddingInformation, 'requisitionId', item.id);
               console.log(item);
               return item;
             });
 
-            //this.filterQuery = "";
-            //this.filterQuery = "verificationId.equals="+this.eVerification.form.id;
-            this.searchRequisitionLine(this.biddingInformation.referenceNo);
+            this.searchRequisitionLine(this.biddingInformation.requisitionId);
           }else{
             this.$notify({
               title: 'Warning',
               dangerouslyUseHTMLString: true,
-              message: 'Status Requisition is DRF',//+this.formatDocumentStatus(res.data[0].documentStatus),
+              message: 'Status Requisition is Draft',
               type: 'warning'
             });
           }
@@ -259,7 +326,6 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
         //this.dialogInvoiceVerificationVisible = true;
         let grandTotal = 0;
         this.$set(this.biddingInformation, 'biddingInformationLine', res.data.map((item: any) => {
-          //this.$set(this.biddingInformation, 'requisitionAmount', item.requisitionAmount);
           grandTotal += item.requisitionAmount;
 
           return item;
@@ -283,8 +349,251 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
       });
   }
 
-  addProject(){
+  displayAddSubItem(row, index){
+    console.log(row);
+    console.log(index);
+    if(row.subItem == null){
+      this.gridDataProductSubItem = [];
+    }else{
+      this.gridDataProductSubItem = row.subItem;
+    }
+
+    this.productRequirement = row;
+    this.productRequirement.index = index;
     this.dialogConfirmationVisible = true;
+
+    this.dialogContent = 2;
+    this.dialogContentSubItem = 1;
+    this.dialogTitle = `Sub Item Product ${this.productRequirement.productName}`;
+    this.dialogWidth = "80%";
+    this.dialogCloseOnClick = false;
+  }
+
+  addSubItem(){
+    console.log("add sub item %O", this.productRequirement);
+
+    this.formAddSubItem = {
+      biddingLine: this.productRequirement.id,
+      biddingLineProductName: this.productRequirement.productName,
+      productId: "",
+      productObj: {},
+      subItemLine: [],
+      edited: false,
+      totalAmount: 0
+    }
+
+    this.gridDataProductSubSubItem = [];
+
+    this.dialogContentSubItem = 2;
+    this.dialogTitle = `Add Sub Item Product ${this.productRequirement.productName}`;
+  }
+
+  addSubSubItem(){
+    this.dialogConfirmationVisibleFormSubSubItem = true;
+  }
+
+  removeSubItem(index){
+    this.gridDataProductSubItem.splice(index, 1);
+  }
+
+  removeSubSubItem(index){
+    this.gridDataProductSubSubItem.splice(index, 1);
+  }
+
+  editSubItem(row){
+    console.log("edit sub item %O", row);
+
+    this.dialogTitle = `Add Sub Item Product ${this.productRequirement.productName}`;
+    this.formAddSubItem = row;
+    this.formAddSubItem.edited = true;
+    this.gridDataProductSubSubItem = this.formAddSubItem.subItemLine;
+
+    this.dialogContentSubItem = 2;
+  }
+
+  saveSubItemProduct(){
+    if(this.dialogContentSubItem == 1){
+
+      var grandTotal = 0;
+      var totalCeilingPrice = 0;
+
+      for(var i=0; i<this.gridDataProductSubItem.length; i++){
+        grandTotal += this.gridDataProductSubItem[i].totalAmount;
+      }
+
+			var biddingInformationLine = this.biddingInformation.biddingInformationLine[this.productRequirement.index];
+      biddingInformationLine.subItem = this.gridDataProductSubItem;
+      biddingInformationLine.unitPrice = grandTotal;
+			biddingInformationLine.requisitionAmount = grandTotal * biddingInformationLine.quantity;
+
+			for(var x=0; x<this.biddingInformation.biddingInformationLine.length; x++){
+        totalCeilingPrice += this.biddingInformation.biddingInformationLine[x].requisitionAmount;
+      }
+
+      console.log(grandTotal);
+      console.log(totalCeilingPrice);
+
+      this.biddingInformation.ceilingPrice = totalCeilingPrice;
+      this.biddingInformation.estimatedPrice = totalCeilingPrice;
+
+      console.log(this.biddingInformation);
+      console.log(this.gridDataProductSubItem);
+      this.dialogConfirmationVisible = false;
+    }else{
+      this.saveSubItem();
+    }
+  }
+
+  saveSubItem(){
+    (this.$refs.formAddSubItem as ElForm).validate((passed, errors) => {
+      if(passed){
+
+        var totalAmount = 0;
+        for(var i=0; i<this.gridDataProductSubSubItem.length; i++){
+          totalAmount += this.gridDataProductSubSubItem[i].amount;
+        }
+        console.log(totalAmount);
+        this.formAddSubItem.totalAmount = totalAmount;
+
+        if(this.formAddSubItem.edited){
+          this.backSubItem();
+        }else{
+
+          const dataExist = (this.gridDataProductSubItem.some((vLine: any) => {
+            return vLine.productId === this.formAddSubItem.productId;
+          }));
+
+          if(!dataExist){
+
+            this.formAddSubItem.subItemLine = this.gridDataProductSubSubItem;
+            this.formAddSubItem.productObj = this.productOptions.find(item => item.id === this.formAddSubItem.productId);
+
+            if(this.formAddSubItem.subItemLine.length){
+
+              console.log(this.formAddSubItem);
+              this.dialogTitle = `Sub Item Product ${this.productRequirement.productName}`;
+
+              this.gridDataProductSubItem.push(this.formAddSubItem);
+
+              this.dialogContentSubItem = 1;
+              this.formAddSubItem = {
+                biddingLine: "",
+                biddingLineProductName: "",
+                productId: "",
+                productObj: "",
+                subItemLine: [],
+                edited: false,
+                totalAmount: 0
+              }
+              this.gridDataProductSubSubItem = [];
+            }else{
+              this.$message({
+                message: "Please add sub sub item product",
+                type: 'error'
+              });
+            }
+          }else{
+            this.$message({
+              message: "Product sub item has been added",
+              type: 'error'
+            });
+          }
+
+        }
+      }else{
+        console.log(errors);
+      }
+    });
+  }
+
+  saveSubSubItem(){
+    (this.$refs.formAddSubSubItem as ElForm).validate((passed, errors) => {
+      if(passed){
+
+        this.formAddSubSubItem.productObj = this.productOptions.find(item => item.id === this.formAddSubSubItem.productId);
+        this.formAddSubSubItem.uomObj = this.uomOptions.find(item => item.id === this.formAddSubSubItem.uomId);
+        this.formAddSubSubItem.amount = this.formAddSubSubItem.quantity * this.formAddSubSubItem.price;
+
+        const dataExist = (this.gridDataProductSubSubItem.some((vLine: any) => {
+
+          return vLine.productId === this.formAddSubSubItem.productId;
+        }));
+
+        if(!dataExist){
+          this.dialogConfirmationVisibleFormSubSubItem = false;
+          this.gridDataProductSubSubItem.push(this.formAddSubSubItem);
+
+          console.log(this.formAddSubSubItem);
+          this.formAddSubSubItem = {
+            productId: "",
+            productObj: "",
+            quantity: 0,
+            uomId: "",
+            uomObj: "",
+            price: 0,
+            amount: 0
+          }
+        }else{
+          this.$message({
+            message: "Product has been added",
+            type: 'error'
+          });
+        }
+      }else{
+        console.log(errors);
+      }
+
+    });
+
+  }
+
+  backSubItem(){
+    this.dialogTitle = `Sub Item Product ${this.productRequirement.productName}`;
+    //this.formAddSubItem.edited = false;
+
+    this.formAddSubItem = {
+      biddingLine: this.productRequirement.id,
+      biddingLineProductName: this.productRequirement.productName,
+      productId: "",
+      productObj: {},
+      subItemLine: [],
+      edited: false,
+      totalAmount: 0
+    }
+
+    this.dialogContentSubItem = 1;
+    this.dialogWidth = "80%";
+  }
+
+  closeSubSubItem(){
+    this.dialogConfirmationVisibleFormSubSubItem = false;
+
+    this.formAddSubSubItem = {
+      productId: "",
+      productObj: "",
+      quantity: 0,
+      uomId: "",
+      uomObj: "",
+      price: 0,
+      amount: 0
+    }
+  }
+
+  addProject(){
+    this.dialogTitle = "Add Project";
+    this.dialogContent = 1;
+    this.dialogConfirmationVisible = true;
+    this.dialogWidth = "50%";
+    this.dialogCloseOnClick = true;
+  }
+
+  remoteMethod(query) {
+    if (query !== '') {
+      this.loading = true;
+      this.retrieveProduct(query);
+    } else {
+      this.productOptions = [];
+    }
   }
 
   removeProject(index){

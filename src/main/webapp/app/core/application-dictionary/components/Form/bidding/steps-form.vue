@@ -12,7 +12,6 @@
     <el-backtop target=".app-container" />
 
     <div :model="bidding">
-      <keep-alive>
         <bidding-information
           class="step-panel"
           v-if="active === 0"
@@ -35,7 +34,6 @@
           v-if="active === 3"
           :biddingInformation="bidding.biddingInformation"
           :vendorScoring="bidding.vendorScoring"/>
-      </keep-alive>
     </div>
 
     <el-container class="steps-control-btn-group">
