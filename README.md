@@ -194,7 +194,10 @@ To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`)
 ```
 PO/PR               https://www.getpostman.com/collections/e2a77ff6f2e4730da8d1
 
-biding information  https://www.getpostman.com/collections/46df691bd9dd40f90dc1
+biding              https://www.getpostman.com/collections/46df691bd9dd40f90dc1
+
+
+
 ```
 
 

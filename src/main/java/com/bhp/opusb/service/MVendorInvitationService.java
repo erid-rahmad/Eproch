@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -56,6 +57,18 @@ public class MVendorInvitationService {
         log.debug("Request to get all MVendorInvitations");
         return mVendorInvitationRepository.findAll(pageable)
             .map(mVendorInvitationMapper::toDto);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MVendorInvitation> findAllnested() {
+        log.debug("Request to get all MVendorInvitations");
+        return mVendorInvitationRepository.findAll();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<MVendorInvitation> findnested(Long id) {
+        log.debug("Request to get all MVendorInvitations");
+        return mVendorInvitationRepository.findById(id);
     }
 
     /**

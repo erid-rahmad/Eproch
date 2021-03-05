@@ -1,5 +1,6 @@
 package com.bhp.opusb.web.rest;
 
+import com.bhp.opusb.domain.MVendorInvitation;
 import com.bhp.opusb.service.MVendorInvitationService;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MVendorInvitationDTO;
@@ -102,6 +103,18 @@ public class MVendorInvitationResource {
         Page<MVendorInvitationDTO> page = mVendorInvitationQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/m-vendor-invitations-nested")
+    public ResponseEntity<List<MVendorInvitation>> getAllMVendorInvitations() {
+        log.debug("REST request to get MVendorInvitations by criteria: {}");
+        return ResponseEntity.ok().body(mVendorInvitationService.findAllnested());
+    }
+
+    @GetMapping("/m-vendor-invitations-nested/{id}")
+    public ResponseEntity<Optional<MVendorInvitation>> getAllMVendorInvitations(@PathVariable Long id) {
+        log.debug("REST request to get MVendorInvitations by criteria: {}");
+        return ResponseEntity.ok().body(mVendorInvitationService.findnested(id));
     }
 
     /**

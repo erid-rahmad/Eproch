@@ -1,5 +1,6 @@
 package com.bhp.opusb.web.rest;
 
+import com.bhp.opusb.domain.MVendorSuggestion;
 import com.bhp.opusb.service.MVendorSuggestionService;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MVendorSuggestionDTO;
@@ -102,6 +103,18 @@ public class MVendorSuggestionResource {
         Page<MVendorSuggestionDTO> page = mVendorSuggestionQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
+    @GetMapping("/m-vendor-suggestions-nested")
+    public ResponseEntity<List<MVendorSuggestion>> getAllMVendorSuggestions() {
+        log.debug("REST request to get MVendorSuggestions by criteria: {}");
+        return ResponseEntity.ok().body(mVendorSuggestionService.findallnested());
+    }
+
+    @GetMapping("/m-vendor-suggestions-nested/{id}")
+    public ResponseEntity<Optional<MVendorSuggestion>> getMVendorSuggestions(@PathVariable Long id) {
+        log.debug("REST request to get MVendorSuggestions by criteria: {}");
+        return ResponseEntity.ok().body(mVendorSuggestionService.findanested(id));
     }
 
     /**
