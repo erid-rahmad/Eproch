@@ -16,6 +16,15 @@ export interface IRetrieveParameter {
   paginationQuery?: IPaginationQuery
 }
 
+export interface IExportWizardParameter {
+  windowId: number;
+  currentRowOnly?: boolean;
+  recordId?: number;
+  includeLines?: boolean;
+  includedSubTabs?: number[];
+  parameterMapping?: Record<string, any>;
+}
+
 export default class DynamicWindowService {
   
   constructor(
@@ -166,6 +175,36 @@ export default class DynamicWindowService {
             'Content-Type': 'multipart/form-data'
           }
         })
+        .then(function(res) {
+          resolve(res);
+        })
+        .catch(function(err) {
+          reject(err);
+        });
+    })
+  }
+
+  public export(data: IExportWizardParameter) {
+    let params = [
+      `windowId=${data.windowId}`,
+      `currentRowOnly=${data.currentRowOnly || false}`,
+      data.currentRowOnly && data.recordId ? `recordId=${data.recordId}` : null
+    ];
+
+    if (data.includeLines && data.includedSubTabs?.length) {
+      params.push('includeLines=true');
+      params.push(`includedSubTabs=${data.includedSubTabs.join(',')}`);
+    }
+
+    if (data.parameterMapping) {
+      for (const key in data.parameterMapping) {
+        params.push(`parameterMapping[${key}]=${data.parameterMapping[key]}`);
+      }
+    }
+
+    return new Promise<any>((resolve, reject) => {
+      axios
+        .get(`/api/ad-windows/export?${buildCriteriaQueryString(params)}`)
         .then(function(res) {
           resolve(res);
         })

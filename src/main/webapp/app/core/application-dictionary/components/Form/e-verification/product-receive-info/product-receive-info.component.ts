@@ -42,9 +42,19 @@ export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, 
   public vendorOptions: any = [];
   public statusOptions: any = [];
 
-  public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
   public radioSelection: number = null;
+
+  public exportingData = false;
+  public exportWizardVisible = false;
+  public exportParameter = {
+    windowId: 0,
+    currentRowOnly: false,
+    recordId: 0,
+    includeLines: false,
+    includedSubTabs: [],
+    parameterMapping: {}
+  }
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -66,6 +76,7 @@ export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, 
 
     this.initStatusOptions();
     this.initVendorOptions();
+    this.retrieveWindowMeta();
     this.retrieveAllRecords();
   }
 
@@ -112,6 +123,13 @@ export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, 
     this.retrieveAllRecords();
   }
 
+  public checkCurrentRow(currentRowOnly: boolean) {
+    if (currentRowOnly && !this.selectedRow) {
+      this.$message.error('Please select at least one row');
+      this.$set(this.exportParameter, 'currentRowOnly', false);
+    }
+  }
+  
   public clear(): void {
     this.page = 1;
     this.retrieveAllRecords();
@@ -120,6 +138,57 @@ export default class ProductReceiveInfo extends mixins(ContextVariableAccessor, 
   public singleSelection(row) {
     this.radioSelection = this.gridData.indexOf(row);
     this.selectedRow = row;
+    this.exportParameter.recordId = row.id;
+  }
+
+  public exportData() {
+    this.exportingData = true;
+    const link = document.createElement('a');
+    link.setAttribute('download', 'PO_Receipt.csv');
+    link.className = 'download-anchor';
+    document.body.appendChild(link);
+
+    this.lookupQuery.forEach(query => {
+      const queryPairs = query.split('=');
+      this.exportParameter.parameterMapping[queryPairs[0]] = queryPairs[1];
+      this.exportParameter.parameterMapping['mMatchType.equals'] = 1;
+    });
+
+    this.dynamicWindowService(null)
+      .export(this.exportParameter)
+      .then(res => {
+        const buffer = new Buffer(res.data);
+        const url = window.URL.createObjectURL(new Blob([buffer], {
+          type: 'text/csv'
+        }));
+
+        link.href = url;
+        link.click();
+      })
+      .catch(err => {
+        console.log('Failed to export document.', this.$t(err.message));
+        this.$message.error('There is a problem when exporting the document');
+      })
+      .finally(() => {
+        document.body.removeChild(link);
+        this.exportingData = false;
+        this.exportWizardVisible = false;
+      });
+  }
+
+  private retrieveWindowMeta() {
+    this.dynamicWindowService('/api/ad-windows')
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          'name.equals=Match PO'
+        ]
+      })
+      .then(res => {
+        if (res.data.length) {
+          this.exportParameter.windowId = res.data[0].id
+        }
+      });
   }
 
   public retrieveAllRecords(): void {

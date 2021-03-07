@@ -1,17 +1,20 @@
 package com.bhp.opusb.web.rest;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 import com.bhp.opusb.service.ADWindowQueryService;
 import com.bhp.opusb.service.ADWindowService;
 import com.bhp.opusb.service.dto.ADWindowCriteria;
 import com.bhp.opusb.service.dto.ADWindowDTO;
+import com.bhp.opusb.service.dto.ExportParameterDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 
 import org.slf4j.Logger;
@@ -20,6 +23,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -75,6 +79,30 @@ public class ADWindowResource {
         return ResponseEntity.created(new URI("/api/ad-windows/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code POST  /ad-windows/export} : Export aDWindow record(s) and optionally its related tabs.
+     *
+     * @param aDWindowDTO the aDWindowDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new aDWindowDTO, or with status {@code 400 (Bad Request)} if the aDWindow has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     * @throws IOException
+     */
+    @GetMapping("/ad-windows/export")
+    public ResponseEntity<byte[]> exportADWindow(@Valid ExportParameterDTO parameter, HttpServletResponse response) throws IOException {
+        log.debug("REST request to export ADWindow. parameter : {}", parameter);
+        if (parameter.getWindowId() == 0) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        
+        String windowName = aDWindowService.getWindowName(parameter.getWindowId());
+        byte[] bytes =aDWindowService.export(parameter, response);
+
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentDispositionFormData("attachment", windowName + ".csv");
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        return ResponseEntity.ok().headers(httpHeaders).body(bytes);
     }
 
     /**

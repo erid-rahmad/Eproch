@@ -1,19 +1,23 @@
 import WatchListMixin from '@/core/application-dictionary/mixins/WatchListMixin';
 import settings from '@/settings';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import { mixins } from 'vue-class-component';
-import { Component, Watch } from 'vue-property-decorator';
-import ContextVariableAccessor from "../../../ContextVariableAccessor";
-import EVerificationUpdate from './e-verification-update.vue';
 import buildCriteriaQueryString from '@/shared/filter/filters';
 import { ElTable } from 'element-ui/types/table';
+import { mixins } from 'vue-class-component';
+import { Component, Inject, Watch } from 'vue-property-decorator';
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import EVerificationUpdate from './e-verification-update.vue';
 
 @Component({
   components: {
     EVerificationUpdate
   }
 })
-export default class EVerification extends mixins(ContextVariableAccessor, WatchListMixin) {
+export default class EVerification extends mixins(WatchListMixin) {
+
+  @Inject('dynamicWindowService')
+  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
+
   index: boolean = true;
   disabledButton: boolean = false;
   gridSchema = {
@@ -49,6 +53,17 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
 
   public documentStatuses: any[] = [];
 
+  public exportingData = false;
+  public exportWizardVisible = false;
+  public exportParameter = {
+    windowId: 0,
+    currentRowOnly: false,
+    recordId: 0,
+    includeLines: false,
+    includedSubTabs: [],
+    parameterMapping: {}
+  }
+
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
   }
@@ -60,6 +75,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   created() {
     this.baseQuery = `vendorId.equals=${accountStore.userDetails.cVendorId}`;
     this.initDocumentStatusOptions();
+    this.retrieveWindowMeta();
     this.retrieveAllRecords();
   }
 
@@ -132,6 +148,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   public singleSelection(row) {
     this.radioSelection = this.gridData.indexOf(row);
     this.selectedRow = row;
+    this.exportParameter.recordId = row.id;
     this.toggleToolbarButtons();
   }
 
@@ -164,6 +181,13 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
       this.buttonPrint("summary-invoice-verification");
     } else if (key == "update") {
       this.index = false;
+    }
+  }
+
+  public checkCurrentRow(currentRowOnly: boolean) {
+    if (currentRowOnly && !this.selectedRow) {
+      this.$message.error('Please select at least one row');
+      this.$set(this.exportParameter, 'currentRowOnly', false);
     }
   }
   
@@ -200,6 +224,70 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   public buttonPrint(key): void {
     const data = { ...this.selectedRow };
     window.open(`/api/m-verifications/report/${data.id}/${data.documentNo}/${key}`, '_blank');
+  }
+
+  public exportData() {
+    this.exportingData = true;
+    const link = document.createElement('a');
+    link.setAttribute('download', 'e-Verification.csv');
+    link.className = 'download-anchor';
+    document.body.appendChild(link);
+
+    this.lookupQuery.forEach(query => {
+      const queryPairs = query.split('=');
+      this.exportParameter.parameterMapping[queryPairs[0]] = queryPairs[1];
+    });
+
+    this.dynamicWindowService(null)
+      .export(this.exportParameter)
+      .then(res => {
+        const buffer = new Buffer(res.data);
+        const url = window.URL.createObjectURL(new Blob([buffer], {
+          type: 'text/csv'
+        }));
+
+        link.href = url;
+        link.click();
+      })
+      .catch(err => {
+        console.log('Failed to export document.', this.$t(err.message));
+        this.$message.error('There is a problem when exporting the document');
+      })
+      .finally(() => {
+        document.body.removeChild(link);
+        this.exportingData = false;
+        this.exportWizardVisible = false;
+      });
+  }
+
+  private retrieveWindowMeta() {
+    this.dynamicWindowService('/api/ad-windows')
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          'name.equals=Invoice Verification'
+        ]
+      })
+      .then(res => {
+        if (res.data.length) {
+          this.exportParameter.windowId = res.data[0].id
+          this.retrieveSubTabMeta(this.exportParameter.windowId);
+        }
+      });
+  }
+
+  private retrieveSubTabMeta(windowId: number) {
+    this.dynamicWindowService('/api/ad-tabs')
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          'parentTabId.specified=true',
+          `adWindowId.equals=${windowId}`
+        ]
+      })
+      .then(res => {
+        this.exportParameter.includedSubTabs = res.data.map(tab => tab.id);
+      });
   }
 
   public retrieveAllRecords(): void {
@@ -254,6 +342,8 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
 
   private clearSelection() {
     (<ElTable>this.$refs.mainTable)?.setCurrentRow();
+    this.exportParameter.recordId = 0;
+    this.exportParameter.currentRowOnly = false;
     this.radioSelection = null;
     this.selectedRow = null;
   }
