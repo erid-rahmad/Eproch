@@ -218,6 +218,8 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
                 this.fullscreenLoading = true;
                 this.submit();
               });
+          } else {
+            this.submit();
           }
         }
       });
@@ -340,7 +342,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       cTaxId: firstRow?.cTaxId,
       currencyId: firstRow?.cCurrencyId,
       matchPoCurrencyId: firstRow?.cCurrencyId,
-      taxable: firstRow?.taxable,
+      taxable: firstRow?.taxable && firstRow?.cTaxCategoryId && firstRow?.cTaxId,
       totalLines: totalLines,
       taxAmount: taxAmount,
       grandTotal: totalAmount,

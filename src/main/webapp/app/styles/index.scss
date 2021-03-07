@@ -53,6 +53,10 @@ div:focus {
   position: relative;
 }
 
+.download-anchor {
+  display: none;
+}
+
 // Refine element ui upload
 .upload-container {
   .el-upload {

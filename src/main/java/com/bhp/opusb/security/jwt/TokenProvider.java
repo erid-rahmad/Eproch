@@ -5,12 +5,14 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
 import com.bhp.opusb.domain.AdUser;
+import com.bhp.opusb.security.AuthenticatedUser;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +38,7 @@ public class TokenProvider {
     private final Logger log = LoggerFactory.getLogger(TokenProvider.class);
 
     private static final String AUTHORITIES_KEY = "auth";
+    private static final String VENDOR_ID_KEY = "vendorId";
 
     private Key key;
 
@@ -75,10 +78,15 @@ public class TokenProvider {
             .collect(Collectors.joining(","));
         
         boolean vendor = false;
+        long vendorId = 0;
 
         if (adUser.isPresent()) {
             AdUser user = adUser.get();
             vendor = Optional.ofNullable(user.isVendor()).orElse(false);
+
+            if (vendor && user.getCVendor() != null) {
+                vendorId = user.getCVendor().getId();
+            }
         }
 
         long now = (new Date()).getTime();
@@ -92,7 +100,7 @@ public class TokenProvider {
         return Jwts.builder()
             .setSubject(authentication.getName())
             .claim(AUTHORITIES_KEY, authorities)
-            .claim("isVendor", vendor)
+            .claim(VENDOR_ID_KEY, vendorId)
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
             .compact();
@@ -110,7 +118,11 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        User principal = new User(claims.getSubject(), "", authorities);
+        long vendorId = claims.get(VENDOR_ID_KEY, Long.class);
+        Collection<Long> organizations = new HashSet<>();
+        Collection<String> accesses = new HashSet<>();
+
+        User principal = new AuthenticatedUser(claims.getSubject(), "", authorities, organizations, accesses, vendorId);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }

@@ -1,5 +1,9 @@
 package com.bhp.opusb.repository;
 
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,15 +11,22 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.security.SecurityUtils;
+import com.bhp.opusb.service.dto.ExportParameterDTO;
+import com.bhp.opusb.util.ImportExportUtil;
+import com.bhp.opusb.util.ImportExportUtil.CsvHeaderMeta;
 import com.bhp.opusb.util.SqlBuilder;
+import com.univocity.parsers.csv.CsvWriter;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowCallbackHandler;
 import org.springframework.stereotype.Repository;
 
 import io.vavr.control.Either;
@@ -25,12 +36,14 @@ public class ImportExportRepository {
 
   private static final Logger log = LoggerFactory.getLogger(ImportExportRepository.class);
 
+  private final ADColumnRepository adColumnRepository;
   private final JdbcTemplate jdbcTemplate;
   private final ApplicationProperties properties;
 
   private static final String SQL_SELECT_SEQUENCE = "SELECT nextval('sequence_generator')";
 
-  public ImportExportRepository(JdbcTemplate jdbcTemplate, ApplicationProperties properties) {
+  public ImportExportRepository(ADColumnRepository adColumnRepository, JdbcTemplate jdbcTemplate, ApplicationProperties properties) {
+    this.adColumnRepository = adColumnRepository;
     this.jdbcTemplate = jdbcTemplate;
     this.properties = properties;
   }
@@ -41,6 +54,7 @@ public class ImportExportRepository {
 
   /**
    * Don't attempt to lookup for the existing record.
+   * 
    * @param tableName
    * @param records
    * @param insertOnly
@@ -70,6 +84,51 @@ public class ImportExportRepository {
     if (sql != null) {
       save(sql, data);
     }
+  }
+
+  public void exportData(ExportParameterDTO parameter, String mainTableName, String[] headers, CsvWriter writer) {
+    writer.writeHeaders();
+
+    CsvRowWriter rowWriter = new CsvRowWriter(writer);
+    Map<String, Object> sqlParameters = new HashMap<>();
+    List<CsvHeaderMeta> columnMetas = Stream.of(headers)
+        .map(header -> ImportExportUtil.parseCsvHeader(mainTableName, header))
+        .collect(Collectors.toList());
+
+    SqlBuilder builder = SqlBuilder.selectFrom(mainTableName, columnMetas);
+    boolean vendorRestriction = adColumnRepository.existsByAdTable_NameAndSqlName(mainTableName, "vendor_id");
+    long vendorId = SecurityUtils.getVendorId();
+
+    if (vendorRestriction && vendorId > 0) {
+      sqlParameters.put(mainTableName + ".vendor_id", vendorId);
+    }
+
+    if (parameter.isCurrentRowOnly()) {
+      sqlParameters.put(mainTableName + ".id", parameter.getRecordId());
+    }
+
+    if (! parameter.getParameterMapping().isEmpty()) {
+      sqlParameters = Stream.of(parameter.getParameterMapping(), sqlParameters)
+        .flatMap(map -> map.entrySet().stream())
+        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    builder.where(sqlParameters).build();
+    log.debug("Built SQL: {}", builder.getSql());
+    jdbcTemplate.query(builder.getSql(), rowWriter, builder.getParameters().toArray());
+
+    writer.flush();
+    writer.close();
+  }
+
+  public String buildSql(String mainTableName, String[] headers) {
+    // For the main table.
+    List<CsvHeaderMeta> columnMetas = Stream.of(headers)
+      .map(header -> ImportExportUtil.parseCsvHeader(mainTableName, header))
+      .collect(Collectors.toList());
+
+    SqlBuilder builder = SqlBuilder.selectFrom(mainTableName, columnMetas).build();
+    return builder.getSql();
   }
 
   public long generateSequence() {
@@ -255,5 +314,46 @@ public class ImportExportRepository {
   private boolean isUniqueField(String fieldName) {
     return fieldName.equals("id") || fieldName.equals("code") || fieldName.equals("name") || fieldName.equals("value")
         || fieldName.equals("login") || fieldName.equals("email") || fieldName.equals("document_no") || fieldName.endsWith("_id");
+  }
+
+  private class CsvRowWriter implements RowCallbackHandler {
+
+    private final CsvWriter writer;
+    private int columnCount = 0;
+    private int columnIndex = 0;
+
+    private CsvRowWriter(CsvWriter writer) {
+      this.writer = writer;
+    }
+
+    @Override
+    public void processRow(ResultSet rs) throws SQLException {
+      ResultSetMetaData rsm = rs.getMetaData();
+
+      if (columnCount == 0) {
+        columnCount = rsm.getColumnCount();
+      }
+
+      while (columnIndex++ < columnCount) {
+        int columnType = rsm.getColumnType(columnIndex);
+        Object value = null;
+
+        if (columnType == Types.BIT) {
+          Boolean bool = rs.getBoolean(columnIndex);
+
+          if (bool != null) {
+            value = Boolean.TRUE.equals(bool) ? "Y" : "N";
+          }
+        } else {
+          value = rs.getObject(columnIndex);
+        }
+
+        writer.addValue(value);
+      }
+
+      writer.writeValuesToRow();
+      columnIndex = 0;
+    }
+
   }
 }

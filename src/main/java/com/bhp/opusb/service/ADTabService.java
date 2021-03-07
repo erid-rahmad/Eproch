@@ -3,6 +3,7 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.ADColumn;
 import com.bhp.opusb.domain.ADTab;
 import com.bhp.opusb.domain.ADTable;
+import com.bhp.opusb.domain.enumeration.ADColumnType;
 import com.bhp.opusb.repository.ADTabRepository;
 import com.bhp.opusb.repository.ADTableRepository;
 import com.bhp.opusb.service.dto.ADTabDTO;
@@ -92,7 +93,15 @@ public class ADTabService {
         return tabTree;
     }
 
-    private void mapColumns(Map<String, Object> tabTree, ADTab tab, ADTab parentTab) {
+    public void mapColumns(Map<String, Object> tabTree, ADTab tab, ADTab parentTab) {
+        buildTab(tabTree, tab, parentTab);
+
+        if (!tab.getADTabs().isEmpty()) {
+            tabTree.put("children", buildTabChildren(tab));
+        }
+    }
+
+    public void buildTab(Map<String, Object> tabTree, ADTab tab, ADTab parentTab) {
         ADTable table = tab.getAdTable();
 
         tabTree.put("tableName", table.getName());
@@ -108,17 +117,20 @@ public class ADTabService {
                     });
             }
         }
-
-        if (!tab.getADTabs().isEmpty()) {
-            tabTree.put("children", buildTabChildren(tab));
-        }
     }
 
     private Map<String, Object> buildLinkedTab(ADTable linkedTable) {
         Map<String, Object> tab = new LinkedHashMap<>();
         for (ADColumn column : linkedTable.getADColumns()) {
-            tab.put(column.getSqlName(), column.getType());
+            if (Boolean.TRUE.equals(column.isDefaultSelection())) {
+                tab.put(column.getSqlName(), column.getType());
+            }
         }
+
+        if (tab.isEmpty()) {
+            tab.put("id", ADColumnType.LONG);
+        }
+        
         return tab;
     }
 

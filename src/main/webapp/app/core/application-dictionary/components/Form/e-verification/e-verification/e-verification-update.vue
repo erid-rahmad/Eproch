@@ -127,7 +127,7 @@
                             @change="checkVerification"
                         />
                     </el-form-item>
-                    <el-form-item label="Tax Invoice Date" prop="taxDate" required>
+                    <el-form-item label="Tax Invoice Date" prop="taxDate" :required="header.taxable">
                         <el-date-picker
                             class="form-input"
                             clearable
