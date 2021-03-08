@@ -6,7 +6,7 @@ import com.bhp.opusb.service.dto.ADColumnDTO;
 import com.bhp.opusb.service.mapper.ADColumnMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -38,6 +38,7 @@ public class ADColumnService {
      * @param aDColumnDTO the entity to save.
      * @return the persisted entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADTable.aDColumns", allEntries = true)
     public ADColumnDTO save(ADColumnDTO aDColumnDTO) {
         log.debug("Request to save ADColumn : {}", aDColumnDTO);
         ADColumn aDColumn = aDColumnMapper.toEntity(aDColumnDTO);
@@ -76,6 +77,7 @@ public class ADColumnService {
      *
      * @param id the id of the entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.ADTable.aDColumns", allEntries = true)
     public void delete(Long id) {
         log.debug("Request to delete ADColumn : {}", id);
         aDColumnRepository.deleteById(id);
