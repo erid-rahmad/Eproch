@@ -169,7 +169,7 @@ public class SqlBuilder {
       // TODO Check date field from its metadata.
       if (parameter.contains("date")) {
         value = Date.valueOf(LocalDate.parse((String) paramValue));
-      } else if (parameter.contains("_id")) {
+      } else if (parameter.contains("_id") && paramValue instanceof String) {
         value = Long.parseLong((String) paramValue);
       } else if (paramValue.equals("true") || paramValue.equals("false")) {
         value = Boolean.valueOf((String) paramValue);
