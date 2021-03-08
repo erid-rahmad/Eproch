@@ -72,6 +72,7 @@ public class MPurchaseOrderService {
         MPurchaseOrder mPurchaseOrder = mPurchaseOrderMapper.toEntity(mPurchaseOrderDTO);
         mPurchaseOrder = mPurchaseOrderRepository.save(mPurchaseOrder);
         for (MPurchaseOrderLine mPurchaseOrderLine : mPurchaseOrderDTO.getmPurchaseOrderLineList()){
+            mPurchaseOrderLine.setPurchaseOrder(mPurchaseOrder);
             mPurchaseOrderLineService.savetoPO(mPurchaseOrderLine);
         }
         return mPurchaseOrderMapper.toDto(mPurchaseOrder);

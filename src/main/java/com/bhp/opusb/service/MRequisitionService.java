@@ -57,6 +57,7 @@ public class MRequisitionService {
         MRequisition mRequisition = mRequisitionMapper.toEntity(mRequisitionDTO);
         mRequisition = mRequisitionRepository.save(mRequisition);
         for (MRequisitionLine mRequisitionLine : mRequisitionDTO.getmRequisitionLineList()){
+            mRequisitionLine.setRequisition(mRequisition);
             mRequisitionLineService.save(mRequisitionLine);
         }
         return mRequisitionMapper.toDto(mRequisition);
