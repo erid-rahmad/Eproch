@@ -1,62 +1,60 @@
 {
-    "name": "CBiddingSubCriteria",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "cBiddingSubCriteria",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cBiddingCriteria",
-            "otherEntityRelationshipName": "cBiddingSubCriteria",
-            "relationshipValidateRules": "required",
-            "relationshipName": "biddingCriteria",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "adUser",
-            "otherEntityRelationshipName": "cBiddingSubCriteria",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adUser",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20210209124900",
-    "entityTableName": "c_bidding_sub_criteria",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "CBiddingSubCriteria",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "cBiddingSubCriteria",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cBiddingCriteria",
+      "otherEntityRelationshipName": "cBiddingSubCriteria",
+      "relationshipValidateRules": "required",
+      "relationshipName": "biddingCriteria",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "adUser",
+      "otherEntityRelationshipName": "cBiddingSubCriteria",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adUser",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210209124900",
+  "entityTableName": "c_bidding_sub_criteria",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

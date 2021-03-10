@@ -1,62 +1,60 @@
 {
-    "name": "CBiddingType",
-    "fields": [
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "costEvaluationSelection",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "selectedWinner",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "cBiddingType",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cProductClassification",
-            "otherEntityRelationshipName": "cBiddingType",
-            "relationshipValidateRules": "required",
-            "relationshipName": "productClassification",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20210209124500",
-    "entityTableName": "c_bidding_type",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "CBiddingType",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "costEvaluationSelection",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "selectedWinner",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "cBiddingType",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cProductClassification",
+      "otherEntityRelationshipName": "cBiddingType",
+      "relationshipValidateRules": "required",
+      "relationshipName": "productClassification",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210209124500",
+  "entityTableName": "c_bidding_type",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

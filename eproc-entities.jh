@@ -893,6 +893,30 @@ entity MBiddingSubItemLine {
 	active Boolean
 }
 
+entity MBiddingSubmission {
+    joinBidding String
+    proposedPrice BigDecimal required
+    ceilingPrice BigDecimal required
+    uid UUID
+	active Boolean
+}
+
+entity MBiddingSubmissionLine {
+
+    proposedPrice BigDecimal required
+    totalPriceSubmission BigDecimal required
+    deliveryDate LocalDate required
+    uid UUID
+	active Boolean
+}
+
+entity MSubmissionSubItem {
+    proposedPrice BigDecimal required
+    uid UUID
+	active Boolean
+}
+
+
 entity MProjectInformation {
     uid UUID
 	active Boolean
@@ -989,6 +1013,9 @@ relationship OneToMany {
 
 	// Shopping cart.
 	MShoppingCart to MShoppingCartItem{mShoppingCart required}
+
+	MBiddingSubmission to MBiddingSubmissionLine{MBiddingSubmission required}
+	MBiddingSubmissionLine to MSubmissionSubItem {MBiddingSubmissionLine required}
 }
 
 /**
@@ -1319,6 +1346,17 @@ relationship ManyToOne {
     MVendorScoring{biddingCriteria required} to CBiddingCriteria
     MVendorScoring{biddingSubCriteria required} to CBiddingSubCriteria
     MVendorScoring{adUser required} to AdUser
+
+    MBiddingSubmission{bidding required} to MBidding
+    MBiddingSubmission{biddingSchedule required} to MBiddingSchedule
+    MBiddingSubmission{vendor required} to CVendor
+    MBiddingSubmission{adOrganization required} to ADOrganization
+
+    MBiddingSubmissionLine{biddingLine required} to MBiddingLine
+    MBiddingSubmissionLine{adOrganization required} to ADOrganization
+
+    MSubmissionSubItem{biddingSubItem required} to MBiddingSubItem
+    MSubmissionSubItem{adOrganization required} to ADOrganization
 }
 
 // Allow filtering to all entities.

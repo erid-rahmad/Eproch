@@ -1,100 +1,94 @@
 {
-    "name": "MBiddingLine",
-    "fields": [
-        {
-            "fieldName": "quantity",
-            "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "ceilingPrice",
-            "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "totalCeilingPrice",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "deliveryDate",
-            "fieldType": "LocalDate",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "remark",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "grandTotal",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "mBidding",
-            "otherEntityRelationshipName": "mBiddingLine",
-            "relationshipValidateRules": "required",
-            "relationshipName": "bidding",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mBiddingLine",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cCostCenter",
-            "otherEntityRelationshipName": "mBiddingLine",
-            "relationshipValidateRules": "required",
-            "relationshipName": "costCenter",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cProduct",
-            "otherEntityRelationshipName": "mBiddingLine",
-            "relationshipValidateRules": "required",
-            "relationshipName": "product",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cUnitOfMeasure",
-            "otherEntityRelationshipName": "mBiddingLine",
-            "relationshipValidateRules": "required",
-            "relationshipName": "uom",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20210211091800",
-    "entityTableName": "m_bidding_line",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "MBiddingLine",
+  "fields": [
+    {
+      "fieldName": "quantity",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "ceilingPrice",
+      "fieldType": "BigDecimal",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "totalCeilingPrice",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "deliveryDate",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "remark",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "grandTotal",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "mBidding",
+      "otherEntityRelationshipName": "mBiddingLine",
+      "relationshipValidateRules": "required",
+      "relationshipName": "bidding",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "mBiddingLine",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cCostCenter",
+      "otherEntityRelationshipName": "mBiddingLine",
+      "relationshipValidateRules": "required",
+      "relationshipName": "costCenter",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cProduct",
+      "otherEntityRelationshipName": "mBiddingLine",
+      "relationshipValidateRules": "required",
+      "relationshipName": "product",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cUnitOfMeasure",
+      "otherEntityRelationshipName": "mBiddingLine",
+      "relationshipValidateRules": "required",
+      "relationshipName": "uom",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210211091800",
+  "entityTableName": "m_bidding_line",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

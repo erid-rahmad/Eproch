@@ -1,0 +1,59 @@
+{
+    "name": "MSubmissionSubItem",
+    "fields": [
+        {
+            "fieldName": "proposedPrice",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingSubItem",
+            "otherEntityRelationshipName": "mSubmissionSubItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSubItem",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mSubmissionSubItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingSubmissionLine",
+            "otherEntityRelationshipName": "mSubmissionSubItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "mBiddingSubmissionLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210309082739",
+    "entityTableName": "m_submission_sub_item",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true,
+    "enableEntityAudit": true
+}

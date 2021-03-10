@@ -1,0 +1,79 @@
+{
+    "name": "MBiddingSubmissionLine",
+    "fields": [
+        {
+            "fieldName": "proposedPrice",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "totalPriceSubmission",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "deliveryDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "mSubmissionSubItem",
+            "otherEntityRelationshipName": "mBiddingSubmissionLine",
+            "relationshipName": "mSubmissionSubItem"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingLine",
+            "otherEntityRelationshipName": "mBiddingSubmissionLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingLine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mBiddingSubmissionLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingSubmission",
+            "otherEntityRelationshipName": "mBiddingSubmissionLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "mBiddingSubmission",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210309082639",
+    "entityTableName": "m_bidding_submission_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true,
+    "enableEntityAudit": true
+}

@@ -110,7 +110,7 @@
     "prettier": "^1.16.4",
     "prettier-plugin-java": "^0.7.1",
     "protractor": "5.4.2",
-    "rimraf": "2.6.3",
+    "rimraf": "^2.6.3",
     "sass": "1.17.2",
     "sass-loader": "7.1.0",
     "sass-resources-loader": "^2.0.1",

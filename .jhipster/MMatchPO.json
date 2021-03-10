@@ -1,280 +1,260 @@
 {
-    "name": "MMatchPO",
-    "fields": [
-        {
-            "fieldName": "deliveryNo",
-            "javadoc": "PRSHPN",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "20"
-        },
-        {
-            "fieldName": "cDocType",
-            "javadoc": "PRDCTO",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "2"
-        },
-        {
-            "fieldName": "poNo",
-            "javadoc": "PRDOCO",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "20"
-        },
-        {
-            "fieldName": "poDate",
-            "javadoc": "PRTRDJ",
-            "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "receiptNo",
-            "javadoc": "PRDOC",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "20"
-        },
-        {
-            "fieldName": "receiptDate",
-            "javadoc": "PRRCDJ",
-            "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "qty",
-            "javadoc": "PRUREC for Receipt Quantity",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "cConversionRate",
-            "javadoc": "PRCRR",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "openQty",
-            "javadoc": "PRUOPN for Open Quantity",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "priceActual",
-            "javadoc": "PRPRRC for Unit Price",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "foreignActual",
-            "javadoc": "PRFRRC for Unit Price in foreign currency",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "openAmount",
-            "javadoc": "PRAOPN for Open Amount",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "openForeignAmount",
-            "javadoc": "PRFAP for Open Amount in foreign currency",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "totalLines",
-            "javadoc": "PRAREC for Total Line Amount",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "foreignTotalLines",
-            "javadoc": "PRFREC for Total Line Amount in foreign currency",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "taxAmount",
-            "javadoc": "PRSTAM",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "foreignTaxAmount",
-            "javadoc": "PRCTAM",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "dateAccount",
-            "javadoc": "PRDGL for GL date",
-            "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "cDocTypeMr",
-            "javadoc": "PRDCT",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "2"
-        },
-        {
-            "fieldName": "orderSuffix",
-            "javadoc": "PRSFXO",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "10"
-        },
-        {
-            "fieldName": "lineNoPo",
-            "javadoc": "PRLNID for PO line number",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "lineNoMr",
-            "javadoc": "PRNLIN for number of lines",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "taxable",
-            "javadoc": "PRTX Y means true, otherwise false",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "description",
-            "javadoc": "PRVRMK",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "30"
-        },
-        {
-            "fieldName": "mMatchType",
-            "javadoc": "PRMATC",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "1"
-        },
-        {
-            "fieldName": "itemDesc1",
-            "javadoc": "PRLITM",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "25"
-        },
-        {
-            "fieldName": "itemDesc2",
-            "javadoc": "PRAITM",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "25"
-        },
-        {
-            "fieldName": "invoiced",
-            "javadoc": "Whether it's already applied in an invoice or not.",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mMatchPO",
-            "relationshipValidateRules": "required",
-            "javadoc": "PRKCOO",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cCostCenter",
-            "otherEntityRelationshipName": "mMatchPO",
-            "relationshipValidateRules": "required",
-            "relationshipName": "cCostCenter",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cVendor",
-            "otherEntityRelationshipName": "mMatchPO",
-            "javadoc": "PRAN8 is mapped to vendor code.",
-            "relationshipName": "vendor",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cCurrency",
-            "otherEntityRelationshipName": "mMatchPO",
-            "javadoc": "PRCRCD",
-            "relationshipName": "cCurrency",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cTaxCategory",
-            "otherEntityRelationshipName": "mMatchPO",
-            "javadoc": "PREXR1 is mapped to tax category name.",
-            "relationshipName": "cTaxCategory",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cTax",
-            "otherEntityRelationshipName": "mMatchPO",
-            "javadoc": "PRTXA1 is mapped to tax name.",
-            "relationshipName": "cTax",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cUnitOfMeasure",
-            "otherEntityRelationshipName": "mMatchPO",
-            "javadoc": "PRUOM is mapped to code, name, and symbol.",
-            "relationshipName": "cUom",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cProduct",
-            "otherEntityRelationshipName": "mMatchPO",
-            "javadoc": "PRITM is mapped to product code.\\nPRLITM is mapped to product name.\\nPRAITM is mapped to product desc.",
-            "relationshipName": "mProduct",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cWarehouse",
-            "otherEntityRelationshipName": "mMatchPO",
-            "javadoc": "PRMCU is mapped to warehouse code and name.",
-            "relationshipName": "mWarehouse",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cLocator",
-            "otherEntityRelationshipName": "mMatchPO",
-            "javadoc": "PRLOCN is mapped to locator code.",
-            "relationshipName": "mLocator",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20201016085600",
-    "entityTableName": "m_match_po",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "MMatchPO",
+  "fields": [
+    {
+      "fieldName": "deliveryNo",
+      "javadoc": "PRSHPN",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "20"
+    },
+    {
+      "fieldName": "cDocType",
+      "javadoc": "PRDCTO",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "2"
+    },
+    {
+      "fieldName": "poNo",
+      "javadoc": "PRDOCO",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "20"
+    },
+    {
+      "fieldName": "poDate",
+      "javadoc": "PRTRDJ",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "receiptNo",
+      "javadoc": "PRDOC",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "20"
+    },
+    {
+      "fieldName": "receiptDate",
+      "javadoc": "PRRCDJ",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "qty",
+      "javadoc": "PRUREC for Receipt Quantity",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "cConversionRate",
+      "javadoc": "PRCRR",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "openQty",
+      "javadoc": "PRUOPN for Open Quantity",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "priceActual",
+      "javadoc": "PRPRRC for Unit Price",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "foreignActual",
+      "javadoc": "PRFRRC for Unit Price in foreign currency",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "openAmount",
+      "javadoc": "PRAOPN for Open Amount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "openForeignAmount",
+      "javadoc": "PRFAP for Open Amount in foreign currency",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "totalLines",
+      "javadoc": "PRAREC for Total Line Amount",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "foreignTotalLines",
+      "javadoc": "PRFREC for Total Line Amount in foreign currency",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "taxAmount",
+      "javadoc": "PRSTAM",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "foreignTaxAmount",
+      "javadoc": "PRCTAM",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "dateAccount",
+      "javadoc": "PRDGL for GL date",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "cDocTypeMr",
+      "javadoc": "PRDCT",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "2"
+    },
+    {
+      "fieldName": "orderSuffix",
+      "javadoc": "PRSFXO",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "10"
+    },
+    {
+      "fieldName": "lineNoPo",
+      "javadoc": "PRLNID for PO line number",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "lineNoMr",
+      "javadoc": "PRNLIN for number of lines",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "taxable",
+      "javadoc": "PRTX Y means true, otherwise false",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "description",
+      "javadoc": "PRVRMK",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "30"
+    },
+    {
+      "fieldName": "mMatchType",
+      "javadoc": "PRMATC",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "1"
+    },
+    {
+      "fieldName": "itemDesc1",
+      "javadoc": "PRLITM",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "25"
+    },
+    {
+      "fieldName": "itemDesc2",
+      "javadoc": "PRAITM",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "25"
+    },
+    {
+      "fieldName": "invoiced",
+      "javadoc": "Whether it's already applied in an invoice or not.",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "mMatchPO",
+      "relationshipValidateRules": "required",
+      "javadoc": "PRKCOO",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cCostCenter",
+      "otherEntityRelationshipName": "mMatchPO",
+      "relationshipValidateRules": "required",
+      "relationshipName": "cCostCenter",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cVendor",
+      "otherEntityRelationshipName": "mMatchPO",
+      "javadoc": "PRAN8 is mapped to vendor code.",
+      "relationshipName": "vendor",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cCurrency",
+      "otherEntityRelationshipName": "mMatchPO",
+      "javadoc": "PRCRCD",
+      "relationshipName": "cCurrency",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cTaxCategory",
+      "otherEntityRelationshipName": "mMatchPO",
+      "javadoc": "PREXR1 is mapped to tax category name.",
+      "relationshipName": "cTaxCategory",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cTax",
+      "otherEntityRelationshipName": "mMatchPO",
+      "javadoc": "PRTXA1 is mapped to tax name.",
+      "relationshipName": "cTax",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cUnitOfMeasure",
+      "otherEntityRelationshipName": "mMatchPO",
+      "javadoc": "PRUOM is mapped to code, name, and symbol.",
+      "relationshipName": "cUom",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cProduct",
+      "otherEntityRelationshipName": "mMatchPO",
+      "javadoc": "PRITM is mapped to product code.\\nPRLITM is mapped to product name.\\nPRAITM is mapped to product desc.",
+      "relationshipName": "mProduct",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cWarehouse",
+      "otherEntityRelationshipName": "mMatchPO",
+      "javadoc": "PRMCU is mapped to warehouse code and name.",
+      "relationshipName": "mWarehouse",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cLocator",
+      "otherEntityRelationshipName": "mMatchPO",
+      "javadoc": "PRLOCN is mapped to locator code.",
+      "relationshipName": "mLocator",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201016085600",
+  "entityTableName": "m_match_po",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

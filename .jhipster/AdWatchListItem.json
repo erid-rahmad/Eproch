@@ -1,128 +1,114 @@
 {
-    "name": "AdWatchListItem",
-    "fields": [
-        {
-            "fieldName": "code",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength",
-                "required"
-            ],
-            "fieldValidateRulesMaxlength": "10"
-        },
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength",
-                "required"
-            ],
-            "fieldValidateRulesMaxlength": "50"
-        },
-        {
-            "fieldName": "description",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "serviceName",
-            "javadoc": "The name of Spring bean.",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "restApiEndpoint",
-            "javadoc": "RESTful API endpoint.",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "websocketEndpoint",
-            "javadoc": "Websocket endpoint.",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "actionType",
-            "javadoc": "Action to be performed when selecting the item.",
-            "fieldType": "AdWatchListActionType",
-            "fieldValues": "MENU,URL",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "actionUrl",
-            "javadoc": "URL to be opened when selecting the item.",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "50"
-        },
-        {
-            "fieldName": "filterQuery",
-            "javadoc": "Filter query to be applied to the target menu/url.",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "accentColor",
-            "javadoc": "Accent color (HEX color code) to be applied to the item.",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "7"
-        },
-        {
-            "fieldName": "icon",
-            "javadoc": "Icon path to be applied to the item.",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "100"
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "adWatchListItem",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "adMenu",
-            "otherEntityRelationshipName": "adWatchListItem",
-            "javadoc": "Menu to be opened when selecting the item.",
-            "relationshipName": "adMenu",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "adWatchList",
-            "otherEntityRelationshipName": "adWatchListItem",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adWatchList",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20210118153400",
-    "entityTableName": "ad_watch_list_item",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*"
+  "name": "AdWatchListItem",
+  "fields": [
+    {
+      "fieldName": "code",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength", "required"],
+      "fieldValidateRulesMaxlength": "10"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength", "required"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "description",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "serviceName",
+      "javadoc": "The name of Spring bean.",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "restApiEndpoint",
+      "javadoc": "RESTful API endpoint.",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "websocketEndpoint",
+      "javadoc": "Websocket endpoint.",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "actionType",
+      "javadoc": "Action to be performed when selecting the item.",
+      "fieldType": "AdWatchListActionType",
+      "fieldValues": "MENU,URL",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "actionUrl",
+      "javadoc": "URL to be opened when selecting the item.",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "50"
+    },
+    {
+      "fieldName": "filterQuery",
+      "javadoc": "Filter query to be applied to the target menu/url.",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "accentColor",
+      "javadoc": "Accent color (HEX color code) to be applied to the item.",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "7"
+    },
+    {
+      "fieldName": "icon",
+      "javadoc": "Icon path to be applied to the item.",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "100"
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "adWatchListItem",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "adMenu",
+      "otherEntityRelationshipName": "adWatchListItem",
+      "javadoc": "Menu to be opened when selecting the item.",
+      "relationshipName": "adMenu",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "adWatchList",
+      "otherEntityRelationshipName": "adWatchListItem",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adWatchList",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210118153400",
+  "entityTableName": "ad_watch_list_item",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
 }
