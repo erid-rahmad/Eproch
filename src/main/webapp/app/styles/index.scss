@@ -168,6 +168,10 @@ aside {
 }
 
 // Element UI overrides.
+.el-dialog__body {
+  word-break: normal;
+}
+
 .el-pagination {
   padding: 8px;
 

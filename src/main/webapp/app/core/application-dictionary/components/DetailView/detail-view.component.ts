@@ -3,7 +3,7 @@ import { IRegisterTabParameter, WindowStoreModule as windowStore } from '@/share
 import { ADColumnType } from '@/shared/model/ad-column.model';
 import { IADField } from '@/shared/model/ad-field.model';
 import { normalizeField } from '@/utils/form';
-import { hasReferenceList, isActiveStatusField, isAttachmentField, isBooleanField, isDateField, isDateTimeField, isNewRecord, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
+import { hasPrecision, hasReferenceList, isActiveStatusField, isAttachmentField, isBooleanField, isDateField, isDateTimeField, isNewRecord, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
 import { ElForm } from 'element-ui/types/form';
 import { cloneDeep, debounce, kebabCase } from 'lodash';
 import pluralize from 'pluralize';
@@ -52,6 +52,7 @@ const DetailViewProps = Vue.extend({
     isDateField,
     isDateTimeField,
     isBooleanField,
+    hasPrecision,
     hasReferenceList,
     isTableDirectLink,
     isAttachmentField,
@@ -438,6 +439,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     return ! this.tab.writable || ! field.writable || notUpdatable || conditionallyReadonly;
   }
 
+  public hasPrecision!: (field: IADField) => boolean;
   public hasReferenceList!: (field: IADField) => boolean;
   public isTableDirectLink!: (field: IADField) => boolean;
   public isStringField!: (field: IADField) => boolean;

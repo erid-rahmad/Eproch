@@ -1,16 +1,18 @@
 package com.bhp.opusb.service.dto;
 
-import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MRequisitionLine} entity.
  */
 public class MRequisitionLineDTO extends AbstractAuditingDTO {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 

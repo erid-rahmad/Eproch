@@ -6,7 +6,7 @@ import { IADField } from '@/shared/model/ad-field.model';
 import { formatJson } from '@/utils';
 import { exportJson2Excel } from '@/utils/excel';
 import { normalizeField } from '@/utils/form';
-import { hasReferenceList, isActiveStatusField, isAttachmentField, isBooleanField, isDateField, isDateTimeField, isNewRecord, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
+import { hasReferenceList, isActiveStatusField, isAttachmentField, isBooleanField, isDateField, isDateTimeField, isNewRecord, isNumericField, isPasswordField, isStringField, isTableDirectLink, hasPrecision } from '@/utils/validate';
 import schema from 'async-validator';
 import { format, parseISO } from 'date-fns';
 import { ElPagination } from 'element-ui/types/pagination';
@@ -70,6 +70,7 @@ const GridViewProps = Vue.extend({
     isDateField,
     isDateTimeField,
     isBooleanField,
+    hasPrecision,
     hasReferenceList,
     isTableDirectLink,
     isAttachmentField,
@@ -1052,6 +1053,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   public isDateTimeField!: (field: IADField) => boolean;
   public isBooleanField!: (field: IADField) => boolean;
   public isActivatorSwitch!: (field: IADField) => boolean;
+  public hasPrecision!: (field: IADField) => boolean;
   public hasReferenceList!: (field: IADField) => boolean;
   public isTableDirectLink!: (field: IADField) => boolean;
   public isAttachmentField!: (field: IADField) => boolean;

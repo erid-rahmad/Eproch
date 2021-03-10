@@ -1,21 +1,28 @@
 package com.bhp.opusb.service.dto;
 
-import com.bhp.opusb.domain.MRequisitionLine;
-import io.swagger.annotations.ApiModelProperty;
 import java.time.LocalDate;
-import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MRequisition} entity.
  */
 public class MRequisitionDTO extends AbstractAuditingDTO {
 
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
-    private LocalDate dateTrx;
+    private LocalDate dateTrx = LocalDate.now();
 
     @Size(max = 30)
     private String documentNo;
@@ -38,45 +45,10 @@ public class MRequisitionDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
-    private List<MRequisitionLine> mRequisitionLineList;
-
-    @Override
-    public String toString() {
-        return "MRequisitionDTO{" +
-            "id=" + id +
-            ", dateTrx=" + dateTrx +
-            ", documentNo='" + documentNo + '\'' +
-            ", documentAction='" + documentAction + '\'' +
-            ", documentStatus='" + documentStatus + '\'' +
-            ", approved=" + approved +
-            ", processed=" + processed +
-            ", datePromised=" + datePromised +
-            ", description='" + description + '\'' +
-            ", uid=" + uid +
-            ", active=" + active +
-            ", mRequisitionLineList=" + mRequisitionLineList +
-            ", adOrganizationId=" + adOrganizationId +
-            ", adOrganizationName='" + adOrganizationName + '\'' +
-            ", documentTypeId=" + documentTypeId +
-            ", documentTypeName='" + documentTypeName + '\'' +
-            ", currencyId=" + currencyId +
-            ", currencyName='" + currencyName + '\'' +
-            ", warehouseId=" + warehouseId +
-            ", warehouseName='" + warehouseName + '\'' +
-            ", costCenterId=" + costCenterId +
-            ", costCenterName='" + costCenterName + '\'' +
-            '}';
-    }
-
-    public List<MRequisitionLine> getmRequisitionLineList() {
-        return mRequisitionLineList;
-    }
-
-    public void setmRequisitionLineList(List<MRequisitionLine> mRequisitionLineList) {
-        this.mRequisitionLineList = mRequisitionLineList;
-    }
+    @JsonProperty("mRequisitionLines")
+    private List<MRequisitionLineDTO> mRequisitionLines = new ArrayList<>();
 
     /**
      * Purchase Requisition
@@ -186,6 +158,14 @@ public class MRequisitionDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
+    public List<MRequisitionLineDTO> getMRequisitionLines() {
+        return mRequisitionLines;
+    }
+
+    public void setMRequisitionLines(List<MRequisitionLineDTO> mRequisitionLines) {
+        this.mRequisitionLines = mRequisitionLines;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -285,6 +265,34 @@ public class MRequisitionDTO extends AbstractAuditingDTO {
     @Override
     public int hashCode() {
         return Objects.hashCode(getId());
+    }
+
+    @Override
+    public String toString() {
+        return "MRequisitionDTO{" +
+            "id=" + id +
+            ", dateTrx=" + dateTrx +
+            ", documentNo='" + documentNo + '\'' +
+            ", documentAction='" + documentAction + '\'' +
+            ", documentStatus='" + documentStatus + '\'' +
+            ", approved=" + approved +
+            ", processed=" + processed +
+            ", datePromised=" + datePromised +
+            ", description='" + description + '\'' +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", mRequisitionLineList=" + mRequisitionLines +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", documentTypeId=" + documentTypeId +
+            ", documentTypeName='" + documentTypeName + '\'' +
+            ", currencyId=" + currencyId +
+            ", currencyName='" + currencyName + '\'' +
+            ", warehouseId=" + warehouseId +
+            ", warehouseName='" + warehouseName + '\'' +
+            ", costCenterId=" + costCenterId +
+            ", costCenterName='" + costCenterName + '\'' +
+            '}';
     }
 
 }

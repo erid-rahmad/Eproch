@@ -11,14 +11,14 @@
           title="Category"
           type="tree"
           @changed="onFilterCategoryChanged"
-        />
+        ></filter-group>
         <filter-group
           :list-items="brands"
           multiple
           name="mBrandName"
           title="Brand"
           @changed="onFilterBrandChanged"
-        />
+        ></filter-group>
         <filter-group
           name="price"
           title="Price"
@@ -26,7 +26,7 @@
           format="number"
           pattern="currency"
           @changed="onFilterPriceChanged"
-        />
+        ></filter-group>
         <hr/>
         <el-button
           size="mini"
@@ -110,6 +110,7 @@
                   class="product-preview"
                 >
                   <el-image
+                    v-if="!!col.cGallery"
                     :alt="col.name"
                     lazy
                     :src="getThumbnailPreview(col)"

@@ -1,14 +1,10 @@
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
-import { MarketplaceStoreModule as marketplaceStore, IFilterCriteria } from "@/shared/config/store/marketplace-store";
+import { IFilterCriteria, MarketplaceStoreModule as marketplaceStore } from '@/shared/config/store/marketplace-store';
 import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
-import FilterGroup from "./filter-group.vue";
+import FilterGroup from './filter-group.vue';
 import { View } from './index.component';
-import ContextVariableAccessor from "../../ContextVariableAccessor";
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
-import Vue2Filters from 'vue2-filters';
 
 @Component({
   components: {
@@ -21,7 +17,7 @@ import Vue2Filters from 'vue2-filters';
     })
   }
 })
-export default class ProductCatalogList extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class ProductCatalogList extends Vue {
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -37,7 +33,8 @@ export default class ProductCatalogList extends mixins(Vue2Filters.mixin, AlertM
   private filteredCategories: Record<string, any> = {};
   private filteredPriceRange: Record<string, number> = {};
 
-  private products = [];
+  brands = [];
+  products = [];
 
   page = 1;
   propOrder = null;
@@ -57,10 +54,6 @@ export default class ProductCatalogList extends mixins(Vue2Filters.mixin, AlertM
     { name: 'lowestPrice', label: 'Lowest Price' },
     { name: 'highestPrice', label: 'Highest Price' }
   ];
-
-  get brands() {
-    return marketplaceStore.brands;
-  }
 
   get categories() {
     return [{
@@ -133,34 +126,14 @@ export default class ProductCatalogList extends mixins(Vue2Filters.mixin, AlertM
     }];
   }
 
-  retrieveAllProducts(): void {
-    this.dynamicWindowService("/api/m-product-catalogs")
-      .retrieve({
-        criteriaQuery: "cGalleryId.specified=true"
-      })
-      .then(res => {
-        console.log(res);
-        res.data.map((item: any) => {
-          this.products = res.data;
-          return item;
-        });
-      }).catch(err => {
-        console.error('Failed getting the record. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
-        });
-      });
-  }
-
   get rows() {
     return this.buildLayout(this.products);
   }
 
   created() {
+    this.retrieveBrands();
     this.retrieveAllProducts();
     this.fullPath = this.$route.fullPath;
-    this.initProductCatalog();
     this.unwatchStore = this.$store.watch(
       (state) => state.tagsViewStore.deletedViews,
       (views: string) => {
@@ -244,19 +217,40 @@ export default class ProductCatalogList extends mixins(Vue2Filters.mixin, AlertM
     return rows;
   }
 
-  private initProductCatalog() {
-    this.processing = true;
-
-    marketplaceStore.initCatalog()
-      .catch(err => {
-        console.error('Failed getting the product catalog. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
-        });
+  retrieveBrands(): void {
+    this.commonService('/api/m-brands')
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true'
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['name']
+        }
       })
-      .finally(() => {
-        this.processing = false;
+      .then(res => {
+        this.brands = res.data.map((brand: any) => brand.name);
+      })
+      .catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message.error(err.detail || err.message);
+      });
+  }
+
+  retrieveAllProducts(): void {
+    this.commonService('/api/m-product-catalogs')
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true'
+        ]
+      })
+      .then(res => {
+          this.products = res.data;
+      })
+      .catch(err => {
+        console.error('Failed getting the record. %O', err);
+        this.$message.error(err.detail || err.message);
       });
   }
 }
