@@ -173,6 +173,7 @@
                     <el-table-column
                         min-width="250"
                         sortable
+                        show-overflow-tooltip
                         prop="mProductName"
                         label="Item Description"/>
                     <el-table-column

@@ -168,6 +168,10 @@ aside {
 }
 
 // Element UI overrides.
+.el-button--warning {
+  color: #1f2d3d;
+}
+
 .el-dialog__body {
   word-break: normal;
 }

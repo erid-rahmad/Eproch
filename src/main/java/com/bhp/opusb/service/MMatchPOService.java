@@ -1,9 +1,7 @@
 package com.bhp.opusb.service;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.ADOrganization;
@@ -32,6 +30,7 @@ import com.bhp.opusb.repository.CWarehouseRepository;
 import com.bhp.opusb.repository.MMatchPORepository;
 import com.bhp.opusb.repository.MVerificationLineRepository;
 import com.bhp.opusb.service.dto.MMatchPODTO;
+import com.bhp.opusb.service.dto.PaymentStatusDTO;
 import com.bhp.opusb.service.dto.jde.PoReceiverFileDTO;
 import com.bhp.opusb.service.mapper.MMatchPOMapper;
 import com.bhp.opusb.util.DocumentUtil;
@@ -309,7 +308,7 @@ public class MMatchPOService {
         final BigDecimal bdReceiptNo = new BigDecimal(receiptNo);
 
         mMatchPORepository.findReversedLine(org.getCode(), docType, poNo, bdReceiptNo, lineNoPo, lineNoMr, orderSuffix)
-            .ifPresent(matchPo -> {
+            .ifPresent(matchPo ->
                 mVerificationLineRepository
                     .getFirstReversedAPInvoiceLine(org, docType, poNo, bdReceiptNo, lineNoPo, lineNoMr, orderSuffix)
                     .ifPresent(line -> {
@@ -325,13 +324,13 @@ public class MMatchPOService {
                             header.apReversed(true)
                                 .docType(null)
                                 .invoiceAp(null)
-                                .payStatus("U")
+                                .payStatus(PaymentStatusDTO.STATUS_UNPROCESSED)
                                 .payDate(null);
 
                             messagingTemplate.convertAndSend("/topic/dashboard", "AP_INVOICE_REVERSED");
                         }
-                    });
-            });
+                    })
+            );
 
         // Immediatelly return the DTO with the composite primary keys.
         // These keys are required to update the PRLRT (last_run_time) field in the
@@ -390,7 +389,7 @@ public class MMatchPOService {
             .openForeignAmount(payload.getOpenForeignAmount())
             .openQty(payload.getOpenQty())
             .orderSuffix(payload.getOrderSuffix())
-            .poNo(nullableToString(payload.getPoNo()))
+            .poNo(payload.getPoNo())
             .priceActual(payload.getPriceActual())
             .qty(payload.getQty())
             .receiptNo(payload.getReceiptNo())
@@ -557,41 +556,6 @@ public class MMatchPOService {
                 .productClassification(cProductService.getDefaultClassification())
                 .uom(uom)
             ));
-    }
-
-    private BigDecimal toBigDecimal(Map<String, Object> payload, String fieldName) {
-        final Object value = payload.get(fieldName);
-        if (value == null) {
-            return null;
-        }
-        try {
-            if (value instanceof BigDecimal) {
-                return (BigDecimal) value;
-            } else if (value instanceof String) {
-                return new BigDecimal((String) value);
-            } else if (value instanceof BigInteger) {
-                return new BigDecimal((BigInteger) value);
-            } else if (value instanceof Integer) {
-                return new BigDecimal((int) value);
-            } else if (value instanceof Long) {
-                return new BigDecimal((long) value);
-            } else if (value instanceof Double) {
-                return BigDecimal.valueOf((double) value);
-            } else {
-                log.warn("Value ({}) cannot be converted to BigDecimal", value);
-            }
-        } catch (NumberFormatException e) {
-            log.warn("Failed to convert the value into a BigDecimal");
-        }
-
-        return new BigDecimal("0");
-    }
-
-    private String nullableToString(Object value) {
-        if (value == null) {
-            return null;
-        }
-        return String.valueOf(value);
     }
 
     private boolean stringToBoolean(String value) {

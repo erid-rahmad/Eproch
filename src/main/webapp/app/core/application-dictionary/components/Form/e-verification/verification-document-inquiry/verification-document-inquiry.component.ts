@@ -56,6 +56,11 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   public filter: any = {};
 
   public radioSelection: number = null;
+  public confirmReopen: boolean = false;
+
+  get canReopen() {
+    return this.selectedRow?.apReversed && this.selectedRow?.documentStatus !== 'ROP';
+  }
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -124,6 +129,8 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   rowClassName({row}) {
     if (row.documentStatus !== 'CNL' && row.receiptReversed) {
       return 'danger-row';
+    } else if (row.apReversed) {
+      return 'warning-row';
     }
 
     return '';
@@ -164,6 +171,33 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   public buttonPrint(key): void {
     const data = { ...this.selectedRow };
     window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}/${key}`, '_blank');
+  }
+
+  public reopenDocument() {
+    const data = { ...this.selectedRow };
+    data.verificationStatus = 'ROP';
+
+    this.dynamicWindowService(this.baseApiUrl)
+      .update(data)
+      .then(() => {
+        const message = 'Invoice verification has been reopened'
+
+        this.retrieveAllRecords();
+        this.$message({
+          message: message,
+          type: 'success'
+        });
+      })
+      .catch(err => {
+        this.$message({
+          message: err.response?.data?.detail || err.message,
+          type: 'error'
+        });
+      })
+      .finally(() => {
+        this.processing = false;
+        this.confirmReopen = false;
+      });
   }
 
   public retrieveAllRecords(): void {

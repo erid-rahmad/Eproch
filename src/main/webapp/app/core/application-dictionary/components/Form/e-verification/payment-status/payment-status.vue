@@ -2,15 +2,24 @@
     <div class="app-container payment-status">
         <el-row class="header">
             <el-col :span="24">
+                <el-button
+                    class="button"
+                    icon="el-icon-search"
+                    size="mini"
+                    style="margin-left: 0px;"
+                    type="primary"
+                    @click.native.prevent="verificationFilter"
+                />
 
                 <el-button
                     class="button"
-                    style="margin-left: 0px;"
+                    icon="el-icon-download"
                     size="mini"
+                    style="margin-left: 0px;"
                     type="primary"
-                    icon="el-icon-search"
-                    @click.native.prevent="verificationFilter"
-                />
+                >
+                    Export
+                </el-button>
 
                 <el-button
                     v-if="canReopen"
@@ -22,7 +31,6 @@
                 >
                     Reopen
                 </el-button>
-
             </el-col>
         </el-row>
 
@@ -141,7 +149,7 @@
                     </el-table-column>
 
                     <el-table-column
-                        min-width="120"
+                        min-width="150"
                         sortable
                         label="Pay Status"
                     >
@@ -232,35 +240,6 @@
         </el-row>
 
         <el-dialog
-            width="30%"
-            :visible.sync="confirmReopen"
-            title="Reopen Document">
-
-            <template>
-                <span>Do you want to reopen this document?</span>
-                <div slot="footer">
-                    <el-button
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-check"
-                        type="warning"
-                        @click="reopenDocument"
-                    >
-                        Reopen
-                    </el-button>
-                    <el-button
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-close"
-                        @click="confirmReopen = false"
-                    >
-                        No
-                    </el-button>
-                </div>
-            </template>
-        </el-dialog>
-
-        <el-dialog
             width="50%"
             :visible.sync="dialogConfirmationVisible"
             title="Update Voucher Match No.">
@@ -321,8 +300,18 @@ box-shadow: none;
 .main {
     padding: 0px;
 
-    .el-table .danger-row {
-        background: oldlace;
+    .el-table .el-table__body,
+    .el-table--striped .el-table__body {
+
+        .danger-row td,
+        tr.el-table__row--striped.danger-row td {
+            background: #ffc1c1;
+        }
+
+        .warning-row td,
+        tr.el-table__row--striped.warning-row td {
+            background: #fff2cd;
+        }
     }
 }
 
