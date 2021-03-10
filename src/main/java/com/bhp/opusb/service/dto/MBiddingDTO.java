@@ -76,6 +76,10 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 
     private List<MProjectInformation> projectInformationList;
 
+    public Boolean getApproved() {
+        return approved;
+    }
+
     @Override
     public String toString() {
         return "MBiddingDTO{" +

@@ -104,6 +104,14 @@ public class MBiddingResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+//    @GetMapping("/m-biddings-sendemail")
+//    public String getAllMBiddings() {
+//        log.debug("");
+//        log.info("testing send email");
+//        mBiddingService.sendEmail("erid.rahmad@gmail.com","testing","testing",false,false);
+//        return null;
+//    }
+
     /**
      * {@code GET  /m-biddings/count} : count all the mBiddings.
      *

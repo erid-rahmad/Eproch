@@ -13,7 +13,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 @Repository
 public interface MVendorSuggestionRepository extends JpaRepository<MVendorSuggestion, Long>, JpaSpecificationExecutor<MVendorSuggestion> {
-    @Query(value = "SELECT a FROM MPurchaseOrderLine a WHERE a.purchaseOrder.id=?1" )
+    @Query(value = "SELECT a FROM MVendorSuggestion a WHERE a.bidding.id=?1" )
     List<MVendorSuggestion> findbyheaderid(long a);
 
 }
