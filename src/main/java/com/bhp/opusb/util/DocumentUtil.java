@@ -46,14 +46,17 @@ public class DocumentUtil {
     return STATUS_REOPEN.equals(documentStatus);
   }
 
-  public static String buildRunningNumber(GenericDocumentRepository<?, ?> repository) {
-    LocalDate now = LocalDate.now();
-    LocalDate start = now.withDayOfMonth(1);
-    LocalDate end = now.withDayOfMonth(now.lengthOfMonth());
+  public static String buildRunningNumber(LocalDate dateTrx, GenericDocumentRepository<?, ?> repository) {
+    LocalDate start = dateTrx.withDayOfMonth(1);
+    LocalDate end = dateTrx.withDayOfMonth(dateTrx.lengthOfMonth());
+    Long lastNumber = repository.getMaxDocumentNoWithinDates(start, end);
 
-    long numOfRecords = repository.countByDateTrxBetween(start, end);
-    String prefix = now.format(DATETIME_FORMATTER);
+    if (lastNumber != null) {
+      return String.valueOf(lastNumber + 1);
+    }
 
-    return prefix + (String.format("%04d", numOfRecords));
+    String prefix = dateTrx.format(DATETIME_FORMATTER);
+
+    return prefix + (String.format("%04d", 1));
   }
 }

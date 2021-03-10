@@ -30,4 +30,7 @@ public interface GenericDocumentRepository<T, I> extends JpaRepository<T, I>, Jp
   )
   int updateDocumentStatus(@Param("id") long id, @Param("action") String action, @Param("status") String status,
       @Param("approved") boolean approved, @Param("processed") boolean processed);
+      
+  @Query("SELECT max(CAST(t.documentNo AS long)) FROM #{#entityName} t WHERE t.dateTrx BETWEEN :startDate AND :endDate")
+  Long getMaxDocumentNoWithinDates(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
 }

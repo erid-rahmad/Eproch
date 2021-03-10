@@ -86,7 +86,7 @@ public class ADTableResource {
     @PostMapping("/ad-tables/import")
     public ResponseEntity<Void> uploadFile(@RequestParam MultipartFile file, @RequestParam ImportParameterDTO config) throws IOException {
         log.debug("REST request to import ADTable. file: {}, config: {}", file, config);
-        importExportService.importCsv(file.getInputStream(), config);
+        importExportService.importCsv(config, file.getInputStream());
         return ResponseEntity.ok().build();
     }
 

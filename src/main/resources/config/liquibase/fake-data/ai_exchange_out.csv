@@ -1,0 +1,11 @@
+id;entity_type;entity_id;payload;status
+1;Massachusetts structure invoice;10389;../fake-data/blob/hipster.txt;SUCCESS
+2;moderator Oval Checking Account;94178;../fake-data/blob/hipster.txt;ERROR
+3;Fish;14;../fake-data/blob/hipster.txt;PARTIAL
+4;index Fresh;42188;../fake-data/blob/hipster.txt;SUCCESS
+5;Money Market Account infrastructures;33806;../fake-data/blob/hipster.txt;SUCCESS
+6;withdrawal Convertible Marks mission-critical;99006;../fake-data/blob/hipster.txt;ERROR
+7;bypassing Stream reinvent;17702;../fake-data/blob/hipster.txt;SUCCESS
+8;California Lead;22248;../fake-data/blob/hipster.txt;ERROR
+9;portal;92124;../fake-data/blob/hipster.txt;ERROR
+10;orchid Garden;60675;../fake-data/blob/hipster.txt;PARTIAL

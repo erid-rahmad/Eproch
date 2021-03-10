@@ -30,7 +30,7 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
   private eVerification = {
     form: {
       id: "",
-      verificationStatus: "",
+      documentStatus: "",
       dateApprove: "",
       dateReject: "",
       dateAcct: "",
@@ -61,7 +61,7 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
       if (valid) {
         this.dialogTitle = "Verification Document Approval"
         this.fullscreenLoading = true;
-        this.searchVerification(this.filterForm.verificationNo);
+        this.searchVerification(this.filterForm.documentNo);
       }
       return valid;
     });
@@ -75,9 +75,9 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
         criteriaQuery: [
-          `verificationNo.equals=${no}`,
-          'verificationStatus.in=SMT',
-          'verificationStatus.in=ROP'
+          `documentNo.equals=${no}`,
+          'documentStatus.in=SMT',
+          'documentStatus.in=ROP'
         ]
       })
       .then(res => {
@@ -171,7 +171,7 @@ export default class InvoiceVerification extends mixins(Vue2Filters.mixin, Alert
       now = new Date(now.getTime() - (offset * 60 * 1000));
       const dateTrx = now.toISOString().split('T')[0];
 
-      this.eVerification.form.verificationStatus = action;
+      this.eVerification.form.documentStatus = action;
       this.eVerification.form[approval ? 'dateApprove' : 'dateReject'] = dateTrx;
       this.fullscreenLoading = true;
       this.submit(approval);

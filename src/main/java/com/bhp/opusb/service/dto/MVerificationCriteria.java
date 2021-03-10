@@ -2,14 +2,16 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.LocalDateFilter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -26,10 +28,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
-
-    private StringFilter verificationNo;
-
-    private LocalDateFilter verificationDate;
 
     private StringFilter description;
 
@@ -72,8 +70,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
     private LocalDateFilter dateReject;
 
     private LocalDateFilter dateApprove;
-
-    private StringFilter verificationStatus;
 
     private StringFilter payStatus;
 
@@ -118,8 +114,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     public MVerificationCriteria(MVerificationCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.verificationNo = other.verificationNo == null ? null : other.verificationNo.copy();
-        this.verificationDate = other.verificationDate == null ? null : other.verificationDate.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.receiptNo = other.receiptNo == null ? null : other.receiptNo.copy();
         this.invoiceNo = other.invoiceNo == null ? null : other.invoiceNo.copy();
@@ -141,7 +135,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.payAmt = other.payAmt == null ? null : other.payAmt.copy();
         this.dateReject = other.dateReject == null ? null : other.dateReject.copy();
         this.dateApprove = other.dateApprove == null ? null : other.dateApprove.copy();
-        this.verificationStatus = other.verificationStatus == null ? null : other.verificationStatus.copy();
         this.payStatus = other.payStatus == null ? null : other.payStatus.copy();
         this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
         this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
@@ -174,22 +167,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getVerificationNo() {
-        return verificationNo;
-    }
-
-    public void setVerificationNo(StringFilter verificationNo) {
-        this.verificationNo = verificationNo;
-    }
-
-    public LocalDateFilter getVerificationDate() {
-        return verificationDate;
-    }
-
-    public void setVerificationDate(LocalDateFilter verificationDate) {
-        this.verificationDate = verificationDate;
     }
 
     public StringFilter getDescription() {
@@ -360,14 +337,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
         this.dateApprove = dateApprove;
     }
 
-    public StringFilter getVerificationStatus() {
-        return verificationStatus;
-    }
-
-    public void setVerificationStatus(StringFilter verificationStatus) {
-        this.verificationStatus = verificationStatus;
-    }
-
     public StringFilter getPayStatus() {
         return payStatus;
     }
@@ -532,8 +501,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
         final MVerificationCriteria that = (MVerificationCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(verificationNo, that.verificationNo) &&
-            Objects.equals(verificationDate, that.verificationDate) &&
             Objects.equals(description, that.description) &&
             Objects.equals(receiptNo, that.receiptNo) &&
             Objects.equals(invoiceNo, that.invoiceNo) &&
@@ -555,7 +522,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
             Objects.equals(payAmt, that.payAmt) &&
             Objects.equals(dateReject, that.dateReject) &&
             Objects.equals(dateApprove, that.dateApprove) &&
-            Objects.equals(verificationStatus, that.verificationStatus) &&
             Objects.equals(payStatus, that.payStatus) &&
             Objects.equals(dateTrx, that.dateTrx) &&
             Objects.equals(documentNo, that.documentNo) &&
@@ -581,8 +547,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
-        verificationNo,
-        verificationDate,
         description,
         receiptNo,
         invoiceNo,
@@ -604,7 +568,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
         payAmt,
         dateReject,
         dateApprove,
-        verificationStatus,
         payStatus,
         dateTrx,
         documentNo,
@@ -631,8 +594,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
     public String toString() {
         return "MVerificationCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (verificationNo != null ? "verificationNo=" + verificationNo + ", " : "") +
-                (verificationDate != null ? "verificationDate=" + verificationDate + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (receiptNo != null ? "receiptNo=" + receiptNo + ", " : "") +
                 (invoiceNo != null ? "invoiceNo=" + invoiceNo + ", " : "") +
@@ -654,7 +615,6 @@ public class MVerificationCriteria implements Serializable, Criteria {
                 (payAmt != null ? "payAmt=" + payAmt + ", " : "") +
                 (dateReject != null ? "dateReject=" + dateReject + ", " : "") +
                 (dateApprove != null ? "dateApprove=" + dateApprove + ", " : "") +
-                (verificationStatus != null ? "verificationStatus=" + verificationStatus + ", " : "") +
                 (payStatus != null ? "payStatus=" + payStatus + ", " : "") +
                 (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
                 (documentNo != null ? "documentNo=" + documentNo + ", " : "") +

@@ -72,8 +72,6 @@ class MVerificationGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "verificationNo":"SAMPLE_TEXT"
-                , "verificationDate":"2020-01-01T00:00:00.000Z"
                 , "description":"SAMPLE_TEXT"
                 , "receiptNo":"SAMPLE_TEXT"
                 , "invoiceNo":"SAMPLE_TEXT"
@@ -95,7 +93,6 @@ class MVerificationGatlingTest extends Simulation {
                 , "payAmt":"0"
                 , "dateReject":"2020-01-01T00:00:00.000Z"
                 , "dateApprove":"2020-01-01T00:00:00.000Z"
-                , "verificationStatus":"SAMPLE_TEXT"
                 , "payStatus":"SAMPLE_TEXT"
                 , "dateTrx":"2020-01-01T00:00:00.000Z"
                 , "documentNo":"SAMPLE_TEXT"

@@ -853,8 +853,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       sort: this.sort()
     };
 
-    console.log('retrieveAllRecords. table: %s, isVendor: %s', this.tab.adTableName, this.isVendor);
-
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
         criteriaQuery: this.filterQuery,
@@ -916,7 +914,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       kebabCase(column.importedTable)
     );
     const api = `/api/${resourceName}`;
-    const criteriaQuery: string[] = query ? [`name.contains=${query}`] : [];
+    const keyField = column.importedTable === 'ad_user' ? 'userLogin' : 'name';
+    const criteriaQuery: string[] = query ? [`${keyField}.contains=${query}`] : [];
 
     // Append additional query from the cached validation rule query, if any.
     if (filterQuery) {

@@ -179,8 +179,8 @@
   .el-card {
     border: none;
     border-radius: 10px;
-    height: 75%;
-    width: 75%;
+    height: 640px;
+    width: 1024px;
     margin: auto;
 
     .login-panel,

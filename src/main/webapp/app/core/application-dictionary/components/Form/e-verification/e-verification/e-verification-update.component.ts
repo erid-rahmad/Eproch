@@ -111,7 +111,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       vendorName: accountStore.userDetails.cVendorName
     });
 
-    const docStatus = this.header.verificationStatus;
+    const docStatus = this.header.documentStatus;
 
     this.retrieveCurrencies();
     this.isDraft = !docStatus || docStatus === 'DRF' || docStatus === 'RJC' || docStatus === 'ROP';
@@ -119,6 +119,8 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     if (this.header.id) {
       this.filterQuery = `verificationId.equals=${this.header.id}`;
       this.retrieveEVerificationLine();
+    } else {
+      this.$set(this.header, 'dateTrx', new Date());
     }
   }
 
@@ -216,6 +218,8 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
                 this.fullscreenLoading = true;
                 this.submit();
               });
+          } else {
+            this.submit();
           }
         }
       });
@@ -338,7 +342,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       cTaxId: firstRow?.cTaxId,
       currencyId: firstRow?.cCurrencyId,
       matchPoCurrencyId: firstRow?.cCurrencyId,
-      taxable: firstRow?.taxable,
+      taxable: firstRow?.taxable && firstRow?.cTaxCategoryId && firstRow?.cTaxId,
       totalLines: totalLines,
       taxAmount: taxAmount,
       grandTotal: totalAmount,
@@ -391,9 +395,9 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
           criteriaQuery: [
             `vendorId.equals=${this.header.vendorId}`,
             `taxInvoice.equals=${taxInvoice}`,
-            'verificationStatus.in=DRF',
-            'verificationStatus.in=SMT',
-            'verificationStatus.in=APV',
+            'documentStatus.in=DRF',
+            'documentStatus.in=SMT',
+            'documentStatus.in=APV',
             ...queryId
           ],
           paginationQuery: {
@@ -406,7 +410,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
           const list = res.data;
 
           if (list.length) {
-            reject(`Tax Invoice is already used in verification no.: ${list[0].verificationNo}`);
+            reject(`Tax Invoice is already used in verification no.: ${list[0].documentNo}`);
           } else if (await this.checkTaxInvoice(taxInvoice)) {
             resolve(true);
           } else {
@@ -457,7 +461,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         .update(data)
         .then(res => {
           this.$message({
-            message: `Invoice verification #${res.verificationNo} has been updated successfully.`,
+            message: `Invoice verification #${res.documentNo} has been updated successfully.`,
             type: 'success'
           });
 
@@ -475,7 +479,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
         .create(data)
         .then(res => {
           this.$message({
-            message: `Invoice verification has been created successfully. Verification no. ${res.verificationNo}`,
+            message: `Invoice verification has been created successfully. Verification no. ${res.documentNo}`,
             type: 'success'
           });
 

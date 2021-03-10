@@ -54,7 +54,7 @@ public class MRequisitionService {
         MRequisition mRequisition = mRequisitionMapper.toEntity(mRequisitionDTO);
 
         if (mRequisition.getDocumentNo() == null) {
-            mRequisition.documentNo(DocumentUtil.buildRunningNumber(mRequisitionRepository));
+            mRequisition.documentNo(DocumentUtil.buildRunningNumber(mRequisition.getDateTrx(), mRequisitionRepository));
         }
 
         log.debug("Document type: {}", mRequisition.getDocumentType());

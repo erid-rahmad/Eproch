@@ -12,7 +12,7 @@ export default function buildCriteriaQueryString(options: any) {
         query += key + '=' + options[key];
       }
     } else if (isArray(options)) {
-      query = options.filter(option => option !== null && option !== void 0).join('&');
+      query = options.filter(option => !!option).join('&');
     } else if (isString(options)) {
       query = options;
     }

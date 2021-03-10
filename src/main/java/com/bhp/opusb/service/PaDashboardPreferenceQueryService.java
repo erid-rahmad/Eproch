@@ -111,6 +111,12 @@ public class PaDashboardPreferenceQueryService extends QueryService<PaDashboardP
                 specification = specification.and(buildSpecification(criteria.getAdUserId(),
                     root -> root.join(PaDashboardPreference_.adUser, JoinType.INNER).get(AdUser_.id)));
             }
+            if (criteria.getAdUserName() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdUserName(),
+                    root -> root
+                        .join(PaDashboardPreference_.adUser, JoinType.INNER)
+                        .join(AdUser_.user, JoinType.INNER).get(User_.login)));
+            }
             if (criteria.getPaDashboardItemId() != null) {
                 specification = specification.and(buildSpecification(criteria.getPaDashboardItemId(),
                     root -> root.join(PaDashboardPreference_.paDashboardItem, JoinType.INNER).get(PaDashboardItem_.id)));

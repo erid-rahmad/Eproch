@@ -11,10 +11,10 @@
                         style="margin: 200px auto 0px; width: 256px"
                         @submit.native.prevent="searchInvoiceVerification"
                     >
-                        <el-form-item prop="verificationNo" label="Please Input Verification No." required>
+                        <el-form-item prop="documentNo" label="Please Input Verification No." required>
                             <el-input
                                 ref="searchField"
-                                v-model="filterForm.verificationNo"
+                                v-model="filterForm.documentNo"
                                 placeholder="Verification No."
                                 clearable
                             >

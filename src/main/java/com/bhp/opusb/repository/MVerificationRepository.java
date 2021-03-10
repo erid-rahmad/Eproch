@@ -12,6 +12,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface MVerificationRepository extends GenericDocumentRepository<MVerification, Long> {
 
-  Optional<MVerification> findFirstByVerificationNo(String verificationNo);
+  Optional<MVerification> findFirstByDocumentNo(String documentNo);
 
 }

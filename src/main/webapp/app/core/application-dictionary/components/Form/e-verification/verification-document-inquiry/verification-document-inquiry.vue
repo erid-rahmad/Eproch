@@ -59,9 +59,9 @@
                     </el-button>
                     <el-button
                         class="button"
+                        icon="el-icon-edit"
                         size="mini"
                         type="primary"
-                        icon="el-icon-edit"
                         @click="showDialogConfirmation('update')"
                     >
                         Update Voucher
@@ -69,7 +69,7 @@
                     <el-button
                         v-if="canReopen"
                         class="button"
-                        size="small"
+                        size="mini"
                         type="warning"
                         @click="confirmReopen = true"
                     >
@@ -81,8 +81,8 @@
             <el-row class="filter">
                 <el-form ref="form"  label-width="170px" size="mini">
                     <el-col :span="8">
-                        <el-form-item label="Verification No." prop="verificationNo">
-                            <el-input class="form-input" clearable v-model="filter.verificationNo"/>
+                        <el-form-item label="Verification No." prop="documentNo">
+                            <el-input class="form-input" clearable v-model="filter.documentNo"/>
                         </el-form-item>
                         <el-form-item label="Invoice No." prop="invoiceNo">
                             <el-input class="form-input" clearable v-model="filter.invoiceNo"></el-input>
@@ -132,8 +132,8 @@
                                 :value-format="dateValueFormat"
                                 placeholder="Pick a date" />
                         </el-form-item>
-                        <el-form-item label="Status" prop="verificationStatus">
-                            <el-select class="form-input" clearable filterable v-model="filter.verificationStatus" placeholder="Status" >
+                        <el-form-item label="Status" prop="documentStatus">
+                            <el-select class="form-input" clearable filterable v-model="filter.documentStatus" placeholder="Status" >
                                 <el-option
                                     v-for="item in documentStatusOptions"
                                     :key="item.key"
@@ -230,19 +230,19 @@
                         <el-table-column
                             min-width="150"
                             sortable
-                            prop="verificationNo"
+                            prop="documentNo"
                             label="Verification No"/>
                         <el-table-column
                             min-width="150"
                             sortable
-                            prop="verificationDate"
+                            prop="dateTrx"
                             label="Verification Date"/>
                         <el-table-column
                             min-width="100"
                             sortable
                             label="Status">
                             <template slot-scope="{ row }">
-                                {{ formatDocumentStatus(row.verificationStatus) }}
+                                {{ formatDocumentStatus(row.documentStatus) }}
                             </template>
                         </el-table-column>
                         <el-table-column
