@@ -85,6 +85,11 @@ export const isNumericField = (field: IADField) => {
   );
 }
 
+export const hasPrecision = (field: IADField) => {
+  const type = field.type || field.adColumn?.type;
+  return type !== ADColumnType.INTEGER && type !== ADColumnType.LONG;
+}
+
 export const isDateField = (field: IADField) => {
   const type = field.type || field.adColumn?.type;
   return type === ADColumnType.LOCAL_DATE || type === ADColumnType.ZONED_DATE_TIME;

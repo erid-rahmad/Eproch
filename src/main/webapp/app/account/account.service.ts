@@ -67,12 +67,10 @@ export default class AccountService {
         accountStore.setAuthenticated(account);
         const requestedUrl = sessionStorage.getItem('requested-url');
         if (requestedUrl) {
-          console.log('Open the last requested url');
           this.router.replace(requestedUrl);
           sessionStorage.removeItem('requested-url');
         } else {
-          // console.log('Redirecting to home page');
-          // this.router.replace('/redirect/account/settings');
+          this.router.replace('/redirect/');
         }
         // this.trackerService.connect();
       } else {
@@ -82,9 +80,9 @@ export default class AccountService {
       }
       this.translationService.refreshTranslation(translationStore.language);
     } catch (err) {
-      this.router.replace('/redirect/');
+      this.router.replace('/login');
       accountStore.logout();
-    };
+    }
   }
 
   /**

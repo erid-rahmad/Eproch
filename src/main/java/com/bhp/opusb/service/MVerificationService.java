@@ -118,25 +118,26 @@ public class MVerificationService {
     public MVerificationDTO saveDocument(VerificationDTO verificationDTO) {
         log.debug("Request to save MVerification document : {}", verificationDTO);
         final MVerification verification = mVerificationMapper.toEntity(verificationDTO.getForm());
-        final String documentStatus = verification.getVerificationStatus();
+        final String documentStatus = verification.getDocumentStatus();
         final boolean approval = DocumentUtil.isApprove(documentStatus);
         final boolean rejection = DocumentUtil.isReject(documentStatus);
         String eventName = null;
         
         if (DocumentUtil.isNew(documentStatus)) {
+            LocalDate now = Optional.ofNullable(verification.getDateTrx()).orElseGet(LocalDate::now);
+            final String docNo = DocumentUtil.buildRunningNumber(now, mVerificationRepository);
+            
             eventName = "INVOICE_CREATED";
             verification.active(true)
                 .adOrganization(organization)
-                .dateTrx(verification.getInvoiceDate())
-                .documentNo(DocumentUtil.buildRunningNumber(mVerificationRepository))
+                .dateTrx(now)
+                .documentNo(docNo)
                 .documentAction(DocumentUtil.STATUS_SUBMIT)
-                .documentStatus(DocumentUtil.STATUS_DRAFT)
-                .verificationNo(verification.getDocumentNo())
-                .verificationStatus(DocumentUtil.STATUS_DRAFT);
+                .documentStatus(DocumentUtil.STATUS_DRAFT);
         } else if (approval) {
             eventName = "INVOICE_APPROVED";
             verification.dateApprove(LocalDate.now())
-                .payStatus("N")
+                .payStatus(PaymentStatusDTO.STATUS_UNPROCESSED)
                 .documentAction(DocumentUtil.STATUS_APPROVE)
                 .documentStatus(DocumentUtil.STATUS_APPROVE)
                 .approved(true)
@@ -188,7 +189,7 @@ public class MVerificationService {
     }
 
     public void sendDocument(MVerification verification) {
-        final String documentStatus = verification.getVerificationStatus();
+        final String documentStatus = verification.getDocumentStatus();
 
         findOne(verification.getId())
             .ifPresent(header -> {
@@ -201,18 +202,10 @@ public class MVerificationService {
 
                 if (DocumentUtil.isApprove(documentStatus) && ! lines.isEmpty()) {
                     // Dispatch the header to the external system.
-                    final Map<String, Object> headerPayload = new HashMap<>(2);
-                    headerPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_HEADER);
+                    header.setLines(lines);
+                    final Map<String, Object> headerPayload = new HashMap<>(1);
                     headerPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, header);
                     messageDispatcher.dispatch(MVerificationMessageDispatcher.BEAN_NAME, headerPayload);
-
-                    // Dispatch the lines to the external system.
-                    if (!lines.isEmpty()) {
-                        final Map<String, Object> linesPayload = new HashMap<>(2);
-                        linesPayload.put(MVerificationMessageDispatcher.KEY_CONTEXT, MVerificationMessageDispatcher.CONTEXT_LINES);
-                        linesPayload.put(MVerificationMessageDispatcher.KEY_PAYLOAD, lines);
-                        messageDispatcher.dispatch(MVerificationMessageDispatcher.BEAN_NAME, linesPayload);
-                    }
                 } else if(DocumentUtil.isReject(documentStatus)) {
                     userService.sendNotifRejectVerification(header, lines);
                 }
@@ -228,10 +221,10 @@ public class MVerificationService {
     public MVerificationDTO save(MVerificationDTO mVerificationDTO) {
         log.debug("Request to save MVerification : {}", mVerificationDTO);
         MVerification mVerification = mVerificationMapper.toEntity(mVerificationDTO);
-        final String documentStatus = mVerification.getVerificationStatus();
+        final String documentStatus = mVerification.getDocumentStatus();
         String eventName = null;
 
-        mVerification.documentStatus(documentStatus).documentAction(documentStatus);
+        mVerification.documentAction(documentStatus);
 
         // Just update the submission date if required.
         if (DocumentUtil.isSubmit(documentStatus)) {
@@ -253,10 +246,10 @@ public class MVerificationService {
             }
         } else if (DocumentUtil.isVoid(documentStatus)) {
             eventName = "INVOICE_VOIDED";
-            mVerificationLineQueryService.findByHeader(mVerification).forEach(line -> {
+            mVerificationLineQueryService.findByHeader(mVerification).forEach(line ->
                 mMatchPOService.openMatchPO(line.getAdOrganizationCode(), line.getcDocType(), line.getPoNo(),
-                        line.getReceiveNo(), line.getLineNoPo(), line.getLineNoMr(), line.getOrderSuffix());
-            });
+                        line.getReceiveNo(), line.getLineNoPo(), line.getLineNoMr(), line.getOrderSuffix())
+            );
         } else if (DocumentUtil.isReopen(documentStatus)) {
             eventName = "INVOICE_REOPENED";
         }
@@ -281,30 +274,40 @@ public class MVerificationService {
         log.debug("Request to synchronize MVerification : {}", message);
 
         final PaymentStatusDTO payload = jsonMapper.readValue(message, PaymentStatusDTO.class);
-        Optional<MVerification> record = mVerificationRepository.findFirstByVerificationNo(payload.getVerificationNo());
+        Optional<MVerification> record = mVerificationRepository.findFirstByDocumentNo(payload.getDocumentNo());
 
         if (record.isPresent()) {
             MVerification mVerification = record.get();
+
+            if (Boolean.TRUE.equals(mVerification.isApReversed())) {
+                return null;
+            }
+
             String currentStatus = mVerification.getPayStatus();
             String incomingStatus = payload.getStatus();
 
+            // Status = A (Approved for Payment). Update vouceher no., doc type, and status.
             if (incomingStatus.equals(PaymentStatusDTO.STATUS_APPROVED)
-                    && (currentStatus == null || PaymentStatusDTO.STATUS_UNPROCESSED.equals(currentStatus))) {
+                    && PaymentStatusDTO.STATUS_UNPROCESSED.equals(currentStatus)) {
 
                 log.debug("Set invoice status to {}", incomingStatus);
                 final ADOrganization org = adOrganizationService.findOrCreate(payload.getOrgCode());
                 mVerification.payStatus(incomingStatus)
-                    .invoiceAp(payload.getDocumentNo()) // Voucher No.
+                    .invoiceAp(payload.getVoucherNo()) // Voucher No.
                     .docType(payload.getDocumentType())
                     .adOrganization(org);
-            } else if (incomingStatus.equals(PaymentStatusDTO.STATUS_PAID)
+            }
+            
+            // Status = P (Paid in Full). Update payment date, amount, and status.
+            else if (incomingStatus.equals(PaymentStatusDTO.STATUS_PAID)
                     && ! PaymentStatusDTO.STATUS_PAID.equals(currentStatus)) {
+
                 final String updatedBy = payload.getUpdatedBy();
 
                 log.debug("Set invoice status to {}", incomingStatus);
                 final ADOrganization org = adOrganizationService.findOrCreate(payload.getOrgCode());
                 mVerification.payStatus(incomingStatus)
-                    .invoiceAp(payload.getDocumentNo()) // Voucher No.
+                    .invoiceAp(payload.getVoucherNo()) // Voucher No.
                     .docType(payload.getDocumentType())
                     .payAmt(payload.getAmount())
                     .payDate(payload.getDate())
@@ -313,10 +316,15 @@ public class MVerificationService {
                 if (updatedBy != null && ! updatedBy.isEmpty()) {
                     mVerification.setLastModifiedBy(updatedBy.trim());
                 }
-            } else if ( ! Objects.equals(mVerification.getInvoiceAp(), payload.getDocumentNo())) {
-                log.debug("Update voucher number from {} to {}", mVerification.getInvoiceAp(), payload.getDocumentNo());
+            }
+            
+            // Perhaps won't be executed because of unchanged data in F560411H when voucher no. is updated.
+            else if ( ! Objects.equals(mVerification.getInvoiceAp(), payload.getVoucherNo())) {
+                log.debug("Update voucher number from {} to {}", mVerification.getInvoiceAp(), payload.getVoucherNo());
                 final ADOrganization org = adOrganizationService.findOrCreate(payload.getOrgCode());
-                mVerification.invoiceAp(payload.getDocumentNo())
+                mVerification
+                    .payStatus(incomingStatus)
+                    .invoiceAp(payload.getVoucherNo())
                     .docType(payload.getDocumentType())
                     .adOrganization(org);
             }

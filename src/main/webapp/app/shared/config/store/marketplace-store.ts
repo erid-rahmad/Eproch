@@ -238,11 +238,13 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
   @Mutation
   private ADD_TO_CART(item: any) {
     const product: IMProductCatalog = item.product;
+    const vendorId = product.cVendorId;
     const vendorName = product.cVendorName;
     let itemsGroup = this.cart.find(group => group.vendorName === vendorName);
 
     if (!itemsGroup) {
       itemsGroup = {
+        vendorId,
         vendorName,
         items: []
       };
@@ -534,7 +536,7 @@ class MarketplaceStore extends VuexModule implements IMarketplaceState {
           if (!cartItem) {
             data = {
               productId: product.id,
-              vendorId: product.vendorId,
+              vendorId: product.cVendorId,
               vendorName: product.cVendorName,
               quantity: item.quantity
             };

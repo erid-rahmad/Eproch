@@ -53,7 +53,7 @@ class ImportExportServiceIT {
     parameterDTO.setMaxRows(10);
     parameterDTO.setFieldsMap(fieldsMap);
 
-    importExportService.importCsv(input, parameterDTO);
+    importExportService.importCsv(parameterDTO, input);
 
     assertThat(adOrganizationRepository.count(), Is.is(1L));
     assertThat(cCurrencyRepository.count(), Is.is(10L));
@@ -89,7 +89,7 @@ class ImportExportServiceIT {
     parameterDTO.setMaxRows(10);
     parameterDTO.setFieldsMap(fieldsMap);
 
-    importExportService.importCsv(input, parameterDTO);
+    importExportService.importCsv(parameterDTO, input);
 
     // assertThat(adOrganizationRepository.count(), Is.is(1L));
     // assertThat(cCurrencyRepository.count(), Is.is(10L));

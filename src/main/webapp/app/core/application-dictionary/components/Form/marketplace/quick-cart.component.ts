@@ -1,6 +1,7 @@
 import { MarketplaceStoreModule as marketplaceStore } from "@/shared/config/store/marketplace-store";
 import { TagsViewStoreModule as tagsViewStore } from "@/shared/config/store/tags-view-store";
 import { Component, Vue, Watch } from 'vue-property-decorator';
+import { ICGallery } from '@/shared/model/c-gallery.model';
 
 @Component
 export default class QuickCart extends Vue {
@@ -71,7 +72,11 @@ export default class QuickCart extends Vue {
     }
   }
 
-  getImg(img){
+  getImg(gallery: ICGallery){
+    if (!gallery) {
+      return null;
+    }
+    const img = gallery.cGalleryItems[0].cAttachment;
     return `/api/c-attachments/download/${img.id}-${img.fileName}`;
   }
 }

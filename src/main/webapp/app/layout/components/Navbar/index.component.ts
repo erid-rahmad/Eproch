@@ -45,14 +45,14 @@ export default class extends Vue {
     appStore.ToggleSideBar(false);
   }
 
-  logout() {
+  async logout() {
+    await accountStore.logout();
+    localStorage.removeItem('jhi-authenticationToken');
+    sessionStorage.removeItem('jhi-authenticationToken');
     this.$router.replace({
-      path: '/redirect/'
-    });
-    this.$nextTick(() => {
-      localStorage.removeItem('jhi-authenticationToken');
-      sessionStorage.removeItem('jhi-authenticationToken');
-      accountStore.logout();
+      path: `/redirect/login`
+    }).catch(err => {
+      console.warn(err);
     });
   }
 }

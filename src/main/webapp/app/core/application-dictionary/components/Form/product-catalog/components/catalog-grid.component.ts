@@ -6,6 +6,7 @@ import { Component, Watch } from 'vue-property-decorator';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
+import buildCriteriaQueryString from '@/shared/filter/filters';
 
 const CatalogGridProp = Vue.extend({
   props: {
@@ -17,6 +18,7 @@ const CatalogGridProp = Vue.extend({
 })
 @Component
 export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, CatalogGridProp) {
+
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -35,7 +37,7 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
 
   private baseApiUrl = "/api/m-product-catalogs";
 
-  private filterQuery: string = '';
+  private baseQuery: string = '';
   private processing = false;
 
   public gridData: Array<any> = [];
@@ -51,24 +53,32 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
     return settings.dateValueFormat;
   }
 
-  created() {
-    //console.log(this.status)
+  get isVendor() {
+    return accountStore.userDetails.vendor;
   }
 
-  public mounted(): void {
+  created() {
+    let filterQuery = [];
 
-    if (this.status == '0') {
-      this.filterQuery = `cVendorId.equals=${accountStore.userDetails.cVendorId}`;
-    } else {
-      if(this.status == '1'){
-        this.statusCatalog = "DRF";
-      }else  if(this.status == '2'){
-        this.statusCatalog = "LVE";
-      }else {
-        this.statusCatalog = "BLK";
-      }
-      this.filterQuery = `cVendorId.equals=${accountStore.userDetails.cVendorId}&documentStatus.equals=${this.statusCatalog}`;
+    if (this.isVendor) {
+      filterQuery.push(`cVendorId.equals=${accountStore.userDetails.cVendorId}`);
     }
+
+    if (this.status === 'ARC') {
+      filterQuery.push('documentStatus.equals=DRF');
+    } else if (this.status === 'BLK') {
+      filterQuery.push('documentStatus.equals=RJC');
+    } else if (this.status === 'LVE') {
+      filterQuery = [
+        filterQuery,
+        ...[
+          'active.equals=true',
+          'documentStatus.equals=APV'
+        ]
+      ];
+    }
+
+    this.baseQuery = buildCriteriaQueryString(filterQuery);
     this.retrieveAllRecords();
   }
 
@@ -157,7 +167,7 @@ export default class CatalogGrid extends mixins(Vue2Filters.mixin, AlertMixin, C
 
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: this.filterQuery,
+        criteriaQuery: this.baseQuery,
         paginationQuery
       })
       .then(res => {

@@ -105,6 +105,7 @@
               :min="getMinValue(col.field)"
               :max="getMaxValue(col.field)"
               :disabled="isReadonly(col.field)"
+              :precision="hasPrecision(col.field) ? 2 : 0"
               class="numeric"
               @change="value => onInputChanged(col.field, value)"
             />

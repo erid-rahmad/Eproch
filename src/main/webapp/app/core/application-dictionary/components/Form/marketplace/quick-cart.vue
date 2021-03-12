@@ -18,8 +18,12 @@
           <el-image
             class="image-thumbnail link"
             fit="contain"
-            :src="getImg(item.product.cGallery.cGalleryItems[0].cAttachment)"
-          />
+            :src="getImg(item.product.cGallery)"
+          >
+            <div slot="error" class="image-slot">
+              <em class="el-icon-picture-outline"></em>
+            </div>
+          </el-image>
         </el-col>
         <el-col :span="14">
           <div class="product-name">{{ item.product.name }}</div>

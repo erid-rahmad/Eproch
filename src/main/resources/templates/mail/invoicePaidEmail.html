@@ -40,7 +40,7 @@
 			</td>
 			<td class="verificationColon">:</td>
 			<td class="verificationHeaderValue">
-				<div th:text="${verification.verificationNo}" />
+				<div th:text="${verification.documentNo}" />
 			</td>
 
 			<td class="verificationHeader">
@@ -57,7 +57,7 @@
 			</td>
 			<td>:</td>
 			<td>
-				<div th:text="${#temporals.format(verification.verificationDate, 'dd MMM yyyy')}"></div>
+				<div th:text="${#temporals.format(verification.dateTrx, 'dd MMM yyyy')}"></div>
 			</td>
 
 			<td>

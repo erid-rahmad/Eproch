@@ -52,22 +52,24 @@ export default class ProductDetail extends ProductDetailProps {
 
   @Watch('data')
   onDataChanged(data: IMProductCatalog) {
+    const descriptionBody = data.description;
     this.tabs = [{
       id: 'desc',
       name: 'Description',
-      content: data.description.replace('div', 'ul')
+      content: descriptionBody?.includes('div') ? descriptionBody.replace('div', 'ul') : descriptionBody
     }];
 
-    this.galleryItems = data.cGallery.cGalleryItems;
+    this.galleryItems = data.cGallery?.cGalleryItems || [];
     this.qty = 1;
     this.totalPrice = data.price;
 
-    console.log('data:', data);
     this.defaultImg = this.galleryItems
       .find(item => item.preview)
-      .cAttachment;
+      ?.cAttachment;
 
-    this.defaultImg = `/api/c-attachments/download/${this.defaultImg.id}-${this.defaultImg.fileName}`;
+    if (this.defaultImg) {
+      this.defaultImg = `/api/c-attachments/download/${this.defaultImg.id}-${this.defaultImg.fileName}`;
+    }
 
     this.imgListsPreview = this.galleryItems
       //.filter(item => !item.preview)

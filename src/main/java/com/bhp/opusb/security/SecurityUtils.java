@@ -81,6 +81,15 @@ public final class SecurityUtils {
             getAuthorities(authentication).anyMatch(authority::equals);
     }
 
+    public static long getVendorId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return 0;
+        }
+
+        return ((AuthenticatedUser) authentication.getPrincipal()).getVendorId();
+    }
+
     public static String generatePassword() {
         PasswordGenerator generator = new PasswordGenerator();
         CharacterRule lowerCaseRule = new CharacterRule(EnglishCharacterData.LowerCase);

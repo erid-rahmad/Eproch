@@ -40,9 +40,13 @@
           <el-image
             class="image-thumbnail link"
             fit="contain"
-            :src="getImg(item.product.cGallery.cGalleryItems[0].cAttachment)"
+            :src="getImg(item.product.cGallery)"
             @click="getDetail(item.product)"
-          />
+          >
+            <div slot="error" class="image-slot">
+              <em class="el-icon-picture-outline"></em>
+            </div>
+          </el-image>
         </el-col>
 
         <el-col :span="12">
@@ -96,7 +100,7 @@
 
     <el-card>
       <el-row>
-        <el-col :span="12">
+        <el-col :span="10">
           <el-button
             icon="el-icon-goods"
             size="mini"
@@ -106,16 +110,17 @@
           </el-button>
         </el-col>
 
-        <el-col :span="12" align="end">
+        <el-col :span="14" align="end">
           <el-row>
-            <el-col :span="17">
+            <el-col :span="14">
               <strong>Total</strong> : <strong style="color: #409eff">Rp {{ subtotal | formatCurrency('id') }}</strong>
             </el-col>
-            <el-col :span="7">
+            <el-col :span="10">
               <el-button
                 icon="el-icon-shopping-cart-full"
                 size="mini"
                 type="primary"
+                @click="createPrConfirmationVisible = true"
               >
                 Purchase Requisition
               </el-button>
@@ -124,6 +129,106 @@
         </el-col>
       </el-row>
     </el-card>
+
+    <el-dialog
+      width="30%"
+      :visible.sync="createPrConfirmationVisible"
+      title="Create Purchase Request"
+    >
+      <template>
+        <p>Do you want to create purchase request from the selected item(s)?</p>
+        <el-form
+          ref="purchaseRequisitionForm"
+          :model="purchaseRequisitionForm"
+          label-position="left"
+          label-width="128px"
+          size="mini"
+        >
+          <el-form-item
+            class="field-cost-center"
+            label="Cost Center"
+            prop="costCenterId"
+            required
+            title="Select Cost Center"
+          >
+            <el-select
+              v-model="purchaseRequisitionForm.costCenterId"
+              clearable
+              filterable
+              placeholder="Select Cost Center"
+            >
+              <el-option
+                v-for="item in costCenterOptions"
+                :key="item.key"
+                :label="item.label"
+                :value="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            class="field-warehouse"
+            label="Warehouse"
+            prop="warehouseId"
+            required
+            title="Select Warehouse"
+          >
+            <el-select
+              v-model="purchaseRequisitionForm.warehouseId"
+              clearable
+              filterable
+              placeholder="Select Warehouse"
+            >
+              <el-option
+                v-for="item in warehouseOptions"
+                :key="item.key"
+                :label="item.label"
+                :value="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            class="field-currency"
+            label="Currency"
+            prop="currencyId"
+            required
+            title="Select Currency"
+          >
+            <el-select
+              v-model="purchaseRequisitionForm.currencyId"
+              clearable
+              filterable
+              placeholder="Select Currency"
+            >
+              <el-option
+                v-for="item in currencyOptions"
+                :key="item.key"
+                :label="item.label"
+                :value="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-check"
+            type="primary"
+            @click="createPurchaseRequisition"
+          >
+            Create
+          </el-button>
+          <el-button
+            style="margin-left: 0px;"
+            size="mini"
+            icon="el-icon-close"
+            @click="createPrConfirmationVisible = false"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script lang="ts" src="./shopping-cart.component.ts"></script>

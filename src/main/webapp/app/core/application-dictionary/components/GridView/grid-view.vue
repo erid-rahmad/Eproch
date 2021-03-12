@@ -176,6 +176,7 @@
               :class="column.property"
               class="numeric"
               controls-position="right"
+              :precision="hasPrecision(field) ? 2 : 0"
               size="mini"
               :min="getMinValue(field)"
               :max="getMaxValue(field)"

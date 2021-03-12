@@ -1,20 +1,21 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
+import java.util.Optional;
+
+import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.MRequisition;
 import com.bhp.opusb.domain.MRequisitionLine;
 import com.bhp.opusb.repository.MRequisitionLineRepository;
 import com.bhp.opusb.service.dto.MRequisitionLineDTO;
-import com.bhp.opusb.service.mapper.EntityMapper;
 import com.bhp.opusb.service.mapper.MRequisitionLineMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link MRequisitionLine}.
@@ -47,10 +48,16 @@ public class MRequisitionLineService {
         return mRequisitionLineMapper.toDto(mRequisitionLine);
     }
 
-    public MRequisitionLine save(MRequisitionLine mRequisitionLine) {
-        log.debug("Request to save MRequisitionLine : {}", mRequisitionLine);
-        mRequisitionLine = mRequisitionLineRepository.save(mRequisitionLine);
-        return mRequisitionLine;
+    public List<MRequisitionLineDTO> saveAll(List<MRequisitionLineDTO> mRequisitionLineDTOs, MRequisition mRequisition,
+            ADOrganization adOrganization) {
+        List<MRequisitionLine> mRequisitionLines = mRequisitionLineMapper.toEntity(mRequisitionLineDTOs);
+        mRequisitionLines.forEach(line -> {
+            line.active(true)
+                .adOrganization(adOrganization)
+                .requisition(mRequisition);
+        });
+
+        return mRequisitionLineMapper.toDto(mRequisitionLineRepository.saveAll(mRequisitionLines));
     }
 
     /**
@@ -65,19 +72,6 @@ public class MRequisitionLineService {
         return mRequisitionLineRepository.findAll(pageable)
             .map(mRequisitionLineMapper::toDto);
     }
-
-    public List<MRequisitionLine> findAlle() {
-        log.debug("Request to get all MRequisitionLines");
-        return mRequisitionLineRepository.findAll();
-
-    }
-    @Transactional(readOnly = true)
-    public List<MRequisitionLine> mRequisitionLineList(long id){
-        List<MRequisitionLine> mRequisitionLines = mRequisitionLineRepository.mReqlinebyidpr(id);
-        return mRequisitionLines;
-    }
-
-
 
     /**
      * Get one mRequisitionLine by id.

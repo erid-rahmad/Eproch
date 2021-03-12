@@ -1,6 +1,12 @@
 package com.bhp.opusb.service;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +14,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.bhp.opusb.repository.ImportExportRepository;
+import com.bhp.opusb.service.dto.ExportParameterDTO;
 import com.bhp.opusb.service.dto.ImportCsvColumn;
 import com.bhp.opusb.service.dto.ImportParameterDTO;
 import com.bhp.opusb.util.AdColumnUtil;
@@ -20,6 +27,8 @@ import com.univocity.parsers.common.processor.RowProcessor;
 import com.univocity.parsers.csv.CsvFormat;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
+import com.univocity.parsers.csv.CsvWriter;
+import com.univocity.parsers.csv.CsvWriterSettings;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,7 +51,7 @@ public class ImportExportService {
     }
 
     @Async("delegatingSecurityContextAsyncTaskExecutor")
-    public void importCsv(InputStream input, ImportParameterDTO parameter) {
+    public void importCsv(ImportParameterDTO parameter, InputStream input) {
         log.debug("Request to import CSV. parameter: {}", parameter);
         CsvParserSettings settings = new CsvParserSettings();
         CsvFormat format = settings.getFormat();
@@ -56,6 +65,32 @@ public class ImportExportService {
 
         CsvParser parser = new CsvParser(settings);
         parser.parse(input);
+    }
+
+    public byte[] exportCsv(ExportParameterDTO parameter, String mainTableName, String[] headers) throws IOException {
+        File tmpFile = File.createTempFile("exp", ".csv");
+        FileOutputStream fileOutputStream = new FileOutputStream(tmpFile);
+        CsvWriterSettings settings = new CsvWriterSettings();
+        
+        settings.setHeaders(headers);
+
+        CsvWriter writer = new CsvWriter(new OutputStreamWriter(fileOutputStream), settings);
+
+        importExportRepository.exportData(parameter, mainTableName, headers, writer);
+        fileOutputStream.close();
+
+        try (FileInputStream fileInputStream = new FileInputStream(tmpFile);
+                ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+
+            byte[] b = new byte[1024];
+            int n;
+
+            while ((n = fileInputStream.read(b)) != -1) {
+                bos.write(b, 0, n);
+            }
+
+            return bos.toByteArray();
+        }
     }
 
     private class BatchedRowProcessor implements RowProcessor {

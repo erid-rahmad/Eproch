@@ -3,28 +3,29 @@
         <div v-if="index">
             <el-row class="header">
                 <el-col :span="24">
-
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
                         size="mini"
                         type="primary"
                         icon="el-icon-check"
-                        @click="showDialogConfirmation('detail')" />
+                        @click="showDialogConfirmation('detail')"
+                    />
                     <el-button
                         class="button"
                         style="margin-left: 0px;"
                         size="mini"
                         type="primary"
                         icon="el-icon-search"
-                        @click.native.prevent="verificationFilter"/>
-
+                        @click.native.prevent="verificationFilter"
+                    />
                     <el-button
                         class="button"
                         size="mini"
                         type="primary"
                         icon="el-icon-printer"
-                        @click="showDialogConfirmation('print')">
+                        @click="showDialogConfirmation('print')"
+                    >
                         Print
                     </el-button>
                     <el-button
@@ -33,7 +34,8 @@
                         size="mini"
                         type="primary"
                         icon="el-icon-printer"
-                        @click="showDialogConfirmation('printSummary')">
+                        @click="showDialogConfirmation('printSummary')"
+                    >
                         Print (Summary)
                     </el-button>
                     <el-button
@@ -42,26 +44,36 @@
                         size="mini"
                         type="primary"
                         icon="el-icon-printer"
-                        @click="showDialogConfirmation('printVerificationReceipt')">
+                        @click="showDialogConfirmation('printVerificationReceipt')"
+                    >
                         Verification Receipt Print
                     </el-button>
-
                     <el-button
                         class="button"
+                        icon="el-icon-download"
+                        size="mini"
+                        style="margin-left: 0px;"
+                        type="primary"
+                    >
+                        Export
+                    </el-button>
+                    <el-button
+                        class="button"
+                        icon="el-icon-edit"
                         size="mini"
                         type="primary"
-                        icon="el-icon-edit"
-                        @click="showDialogConfirmation('update')">
+                        @click="showDialogConfirmation('update')"
+                    >
                         Update Voucher
                     </el-button>
-
                     <el-button
+                        v-if="canReopen"
                         class="button"
-                        style="margin-left: 0px;"
                         size="mini"
-                        type="primary"
-                        icon="el-icon-download">
-                        Export
+                        type="warning"
+                        @click="confirmReopen = true"
+                    >
+                        <svg-icon name="icomoo/104-undo2"></svg-icon> Reopen
                     </el-button>
                 </el-col>
             </el-row>
@@ -69,8 +81,8 @@
             <el-row class="filter">
                 <el-form ref="form"  label-width="170px" size="mini">
                     <el-col :span="8">
-                        <el-form-item label="Verification No." prop="verificationNo">
-                            <el-input class="form-input" clearable v-model="filter.verificationNo"/>
+                        <el-form-item label="Verification No." prop="documentNo">
+                            <el-input class="form-input" clearable v-model="filter.documentNo"/>
                         </el-form-item>
                         <el-form-item label="Invoice No." prop="invoiceNo">
                             <el-input class="form-input" clearable v-model="filter.invoiceNo"></el-input>
@@ -120,8 +132,8 @@
                                 :value-format="dateValueFormat"
                                 placeholder="Pick a date" />
                         </el-form-item>
-                        <el-form-item label="Status" prop="verificationStatus">
-                            <el-select class="form-input" clearable filterable v-model="filter.verificationStatus" placeholder="Status" >
+                        <el-form-item label="Status" prop="documentStatus">
+                            <el-select class="form-input" clearable filterable v-model="filter.documentStatus" placeholder="Status" >
                                 <el-option
                                     v-for="item in documentStatusOptions"
                                     :key="item.key"
@@ -210,25 +222,27 @@
 
                         <el-table-column
                             min-width="250"
+                            show-overflow-tooltip
                             sortable
                             prop="vendorName"
-                            label="Vendor"/>
+                            label="Vendor"
+                        />
                         <el-table-column
                             min-width="150"
                             sortable
-                            prop="verificationNo"
+                            prop="documentNo"
                             label="Verification No"/>
                         <el-table-column
                             min-width="150"
                             sortable
-                            prop="verificationDate"
+                            prop="dateTrx"
                             label="Verification Date"/>
                         <el-table-column
                             min-width="100"
                             sortable
                             label="Status">
                             <template slot-scope="{ row }">
-                                {{ formatDocumentStatus(row.verificationStatus) }}
+                                {{ formatDocumentStatus(row.documentStatus) }}
                             </template>
                         </el-table-column>
                         <el-table-column
@@ -237,7 +251,7 @@
                             prop="description"
                             label="Notes"/>
                         <el-table-column
-                            min-width="140"
+                            min-width="150"
                             sortable
                             label="Payment Status"
                         >
@@ -370,8 +384,36 @@
                     />
                 </el-col>
             </el-row>
-
         </div>
+
+        <el-dialog
+            width="30%"
+            :visible.sync="confirmReopen"
+            title="Reopen Document">
+
+            <template>
+                <span>Do you want to reopen this document?</span>
+                <div slot="footer">
+                    <el-button
+                        style="margin-left: 0px;"
+                        size="mini"
+                        icon="el-icon-check"
+                        type="warning"
+                        @click="reopenDocument"
+                    >
+                        Reopen
+                    </el-button>
+                    <el-button
+                        style="margin-left: 0px;"
+                        size="mini"
+                        icon="el-icon-close"
+                        @click="confirmReopen = false"
+                    >
+                        No
+                    </el-button>
+                </div>
+            </template>
+        </el-dialog>
 
         <el-dialog
             width="50%"
@@ -421,8 +463,18 @@
 .main {
     padding: 0px;
 
-    .el-table .danger-row {
-        background: oldlace;
+    .el-table .el-table__body,
+    .el-table--striped .el-table__body {
+
+        .danger-row td,
+        tr.el-table__row--striped.danger-row td {
+            background: #ffc1c1;
+        }
+
+        .warning-row td,
+        tr.el-table__row--striped.warning-row td {
+            background: #fff2cd;
+        }
     }
 }
 

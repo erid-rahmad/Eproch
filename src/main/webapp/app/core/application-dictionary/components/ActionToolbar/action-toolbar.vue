@@ -149,7 +149,7 @@
     <el-button-group>
       <el-button
         v-show="!isEditing"
-        size="small"
+        size="mini"
         title="Import (alt + i)"
         type="primary"
         @click="importRecord"
@@ -158,7 +158,7 @@
       </el-button>
       <el-button
         v-show="!isEditing"
-        size="small"
+        size="mini"
         title="Export (alt + e)"
         type="primary"
         @click="exportRecord"

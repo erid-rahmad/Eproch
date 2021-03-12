@@ -96,7 +96,7 @@ public class MBiddingService {
             for (MVendorSuggestion mVendorSuggestion1 : mVendorSuggestion){
                 log.info("this vendor id {}",mVendorSuggestion1.getVendor().getId().toString());
 
-                List<AdUser> adUsers =adUserRepository.findBycVendorId(mVendorSuggestion1.getVendor().getId());
+                List<AdUser> adUsers =adUserRepository.findBycVendorIdAndActiveTrue(mVendorSuggestion1.getVendor().getId());
                 log.info("this add user {}",adUsers);
 
                 for (AdUser adUser : adUsers){

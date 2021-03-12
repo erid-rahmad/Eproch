@@ -422,12 +422,6 @@ entity CLocator {
 * vendor Invoice Verification
 */
 entity MVerification {
-	/** VHDOCM Invoice verification document no. */
-	verificationNo String required unique
-
-	/** VHTRDJ Transaction date */
-	verificationDate LocalDate required
-
 	description String
 
 	/** VHANUR */
@@ -482,8 +476,7 @@ entity MVerification {
 	/** VHAPRD */
 	dateApprove LocalDate
 
-	verificationStatus String required
-
+	/** VHPST */
 	payStatus String
 
 	dateTrx LocalDate required
@@ -761,6 +754,13 @@ entity AiExchangeIn {
 	status AiStatus required
 }
 
+entity AiExchangeOut {
+	entityType String required
+	entityId Long
+	payload TextBlob required
+	status AiStatus required
+}
+
 entity MRequisition {
 	dateTrx LocalDate
 	documentNo String maxlength(30)
@@ -1013,9 +1013,6 @@ relationship OneToMany {
 
 	// Shopping cart.
 	MShoppingCart to MShoppingCartItem{mShoppingCart required}
-
-	MBiddingSubmission to MBiddingSubmissionLine{MBiddingSubmission required}
-	MBiddingSubmissionLine to MSubmissionSubItem {MBiddingSubmissionLine required}
 }
 
 /**

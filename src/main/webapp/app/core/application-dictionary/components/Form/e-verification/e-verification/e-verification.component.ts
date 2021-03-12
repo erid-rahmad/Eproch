@@ -1,19 +1,23 @@
 import WatchListMixin from '@/core/application-dictionary/mixins/WatchListMixin';
 import settings from '@/settings';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import { mixins } from 'vue-class-component';
-import { Component, Watch } from 'vue-property-decorator';
-import ContextVariableAccessor from "../../../ContextVariableAccessor";
-import EVerificationUpdate from './e-verification-update.vue';
 import buildCriteriaQueryString from '@/shared/filter/filters';
 import { ElTable } from 'element-ui/types/table';
+import { mixins } from 'vue-class-component';
+import { Component, Inject, Watch } from 'vue-property-decorator';
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import EVerificationUpdate from './e-verification-update.vue';
 
 @Component({
   components: {
     EVerificationUpdate
   }
 })
-export default class EVerification extends mixins(ContextVariableAccessor, WatchListMixin) {
+export default class EVerification extends mixins(WatchListMixin) {
+
+  @Inject('dynamicWindowService')
+  private dynamicWindowService: (baseApiUrl: string) => DynamicWindowService;
+
   index: boolean = true;
   disabledButton: boolean = false;
   gridSchema = {
@@ -32,7 +36,8 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   public totalItems = 0;
 
   private baseApiUrl = "/api/m-verifications";
-  private filterQuery: string = '';
+  private baseQuery: string = '';
+  private lookupQuery: string[] = [];
   public filter: any = {};
   processing = false;
   public gridData: Array<any> = [];
@@ -48,6 +53,17 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
 
   public documentStatuses: any[] = [];
 
+  public exportingData = false;
+  public exportWizardVisible = false;
+  public exportParameter = {
+    windowId: 0,
+    currentRowOnly: false,
+    recordId: 0,
+    includeLines: false,
+    includedSubTabs: [],
+    parameterMapping: {}
+  }
+
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
   }
@@ -56,8 +72,10 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
     return settings.dateValueFormat;
   }
 
-  created(){
+  created() {
+    this.baseQuery = `vendorId.equals=${accountStore.userDetails.cVendorId}`;
     this.initDocumentStatusOptions();
+    this.retrieveWindowMeta();
     this.retrieveAllRecords();
   }
 
@@ -115,6 +133,8 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   rowClassName({row}) {
     if (row.documentStatus !== 'CNL' && row.receiptReversed) {
       return 'danger-row';
+    } else if (row.apReversed) {
+      return 'warning-row';
     }
 
     return '';
@@ -128,6 +148,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
   public singleSelection(row) {
     this.radioSelection = this.gridData.indexOf(row);
     this.selectedRow = row;
+    this.exportParameter.recordId = row.id;
     this.toggleToolbarButtons();
   }
 
@@ -162,10 +183,17 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
       this.index = false;
     }
   }
+
+  public checkCurrentRow(currentRowOnly: boolean) {
+    if (currentRowOnly && !this.selectedRow) {
+      this.$message.error('Please select at least one row');
+      this.$set(this.exportParameter, 'currentRowOnly', false);
+    }
+  }
   
   public updateDocumentStatus(): void {
     const data = { ...this.selectedRow };
-    data.verificationStatus = this.dialogValue;
+    data.documentStatus = this.dialogValue;
 
     this.dynamicWindowService(this.baseApiUrl)
       .update(data)
@@ -195,7 +223,71 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
 
   public buttonPrint(key): void {
     const data = { ...this.selectedRow };
-    window.open(`/api/m-verifications/report/${data.id}/${data.verificationNo}/${key}`, '_blank');
+    window.open(`/api/m-verifications/report/${data.id}/${data.documentNo}/${key}`, '_blank');
+  }
+
+  public exportData() {
+    this.exportingData = true;
+    const link = document.createElement('a');
+    link.setAttribute('download', 'e-Verification.csv');
+    link.className = 'download-anchor';
+    document.body.appendChild(link);
+
+    this.lookupQuery.forEach(query => {
+      const queryPairs = query.split('=');
+      this.exportParameter.parameterMapping[queryPairs[0]] = queryPairs[1];
+    });
+
+    this.dynamicWindowService(null)
+      .export(this.exportParameter)
+      .then(res => {
+        const buffer = new Buffer(res.data);
+        const url = window.URL.createObjectURL(new Blob([buffer], {
+          type: 'text/csv'
+        }));
+
+        link.href = url;
+        link.click();
+      })
+      .catch(err => {
+        console.log('Failed to export document.', this.$t(err.message));
+        this.$message.error('There is a problem when exporting the document');
+      })
+      .finally(() => {
+        document.body.removeChild(link);
+        this.exportingData = false;
+        this.exportWizardVisible = false;
+      });
+  }
+
+  private retrieveWindowMeta() {
+    this.dynamicWindowService('/api/ad-windows')
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          'name.equals=Invoice Verification'
+        ]
+      })
+      .then(res => {
+        if (res.data.length) {
+          this.exportParameter.windowId = res.data[0].id
+          this.retrieveSubTabMeta(this.exportParameter.windowId);
+        }
+      });
+  }
+
+  private retrieveSubTabMeta(windowId: number) {
+    this.dynamicWindowService('/api/ad-tabs')
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          'parentTabId.specified=true',
+          `adWindowId.equals=${windowId}`
+        ]
+      })
+      .then(res => {
+        this.exportParameter.includedSubTabs = res.data.map(tab => tab.id);
+      });
   }
 
   public retrieveAllRecords(): void {
@@ -217,13 +309,15 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
       });
     }
 
+    const filterQuery = buildCriteriaQueryString([
+      this.baseQuery,
+      watchListQuery,
+      ...this.lookupQuery
+    ]);
+    
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: [
-          this.filterQuery,
-          watchListQuery,
-          `vendorId.equals=${accountStore.userDetails.cVendorId}`
-        ],
+        criteriaQuery: filterQuery,
         paginationQuery
       })
       .then(res => {
@@ -248,51 +342,52 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
 
   private clearSelection() {
     (<ElTable>this.$refs.mainTable)?.setCurrentRow();
+    this.exportParameter.recordId = 0;
+    this.exportParameter.currentRowOnly = false;
     this.radioSelection = null;
     this.selectedRow = null;
   }
 
   private toggleToolbarButtons() {
-    const docStatus = this.selectedRow?.verificationStatus;
+    const docStatus = this.selectedRow?.documentStatus;
     this.disabledButton = docStatus !== 'DRF' && docStatus !== 'RJC' && docStatus !== 'ROP';
   }
 
   public verificationFilter() {
     const form = this.filter;
-    const query = [];
+    this.lookupQuery = [];
 
-    if (!!form.verificationNo) {
-      query.push(`verificationNo.equals=${form.verificationNo}`);
+    if (!!form.documentNo) {
+      this.lookupQuery.push(`documentNo.equals=${form.documentNo}`);
     }
     if (!!form.invoiceNo) {
-      query.push(`invoiceNo.equals=${form.invoiceNo}`);
+      this.lookupQuery.push(`invoiceNo.equals=${form.invoiceNo}`);
     }
     if (!!form.taxInvoiceNo) {
-      query.push(`taxInvoiceNo.equals=${form.taxInvoiceNo}`);
+      this.lookupQuery.push(`taxInvoiceNo.equals=${form.taxInvoiceNo}`);
     }
-    if (!!form.verificationStatus) {
-      query.push(`verificationStatus.equals=${form.verificationStatus}`);
+    if (!!form.documentStatus) {
+      this.lookupQuery.push(`documentStatus.equals=${form.documentStatus}`);
     }
     if (!!form.verificationDateFrom) {
-      query.push(`verificationDate.greaterOrEqualThan=${form.verificationDateFrom}`);
+      this.lookupQuery.push(`dateTrx.greaterOrEqualThan=${form.verificationDateFrom}`);
     }
     if (!!form.verificationDateTo) {
-      query.push(`verificationDate.lessOrEqualThan=${form.verificationDateTo}`);
+      this.lookupQuery.push(`dateTrx.lessOrEqualThan=${form.verificationDateTo}`);
     }
     if (!!form.invoiceDateFrom) {
-      query.push(`invoiceDate.greaterOrEqualThan=${form.invoiceDateFrom}`);
+      this.lookupQuery.push(`invoiceDate.greaterOrEqualThan=${form.invoiceDateFrom}`);
     }
     if (!!form.invoiceDateTo) {
-      query.push(`invoiceDate.lessOrEqualThan=${form.invoiceDateTo}`);
+      this.lookupQuery.push(`invoiceDate.lessOrEqualThan=${form.invoiceDateTo}`);
     }
     if (!!form.taxInvoiceDateFrom) {
-      query.push(`taxInvoiceDate.greaterOrEqualThan=${form.taxInvoiceDateFrom}`);
+      this.lookupQuery.push(`taxInvoiceDate.greaterOrEqualThan=${form.taxInvoiceDateFrom}`);
     }
     if (!!form.taxInvoiceDateTo) {
-      query.push(`taxInvoiceDate.lessOrEqualThan=${form.taxInvoiceDateTo}`);
+      this.lookupQuery.push(`taxInvoiceDate.lessOrEqualThan=${form.taxInvoiceDateTo}`);
     }
 
-    this.filterQuery = buildCriteriaQueryString(query);
     this.retrieveAllRecords();
   }
 

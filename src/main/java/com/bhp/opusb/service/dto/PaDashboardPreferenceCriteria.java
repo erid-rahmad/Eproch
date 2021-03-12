@@ -8,6 +8,7 @@ import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -36,6 +37,7 @@ public class PaDashboardPreferenceCriteria implements Serializable, Criteria {
     private LongFilter adOrganizationId;
 
     private LongFilter adUserId;
+    private StringFilter adUserName;
 
     private LongFilter paDashboardItemId;
 
@@ -50,6 +52,7 @@ public class PaDashboardPreferenceCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.adUserId = other.adUserId == null ? null : other.adUserId.copy();
+        this.adUserName = other.adUserName == null ? null : other.adUserName.copy();
         this.paDashboardItemId = other.paDashboardItemId == null ? null : other.paDashboardItemId.copy();
     }
 
@@ -114,6 +117,14 @@ public class PaDashboardPreferenceCriteria implements Serializable, Criteria {
         this.adUserId = adUserId;
     }
 
+    public StringFilter getAdUserName() {
+        return adUserName;
+    }
+
+    public void setAdUserName(StringFilter adUserName) {
+        this.adUserName = adUserName;
+    }
+
     public LongFilter getPaDashboardItemId() {
         return paDashboardItemId;
     }
@@ -140,6 +151,7 @@ public class PaDashboardPreferenceCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(adUserId, that.adUserId) &&
+            Objects.equals(adUserName, that.adUserName) &&
             Objects.equals(paDashboardItemId, that.paDashboardItemId);
     }
 
@@ -153,6 +165,7 @@ public class PaDashboardPreferenceCriteria implements Serializable, Criteria {
         active,
         adOrganizationId,
         adUserId,
+        adUserName,
         paDashboardItemId
         );
     }
@@ -167,6 +180,7 @@ public class PaDashboardPreferenceCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (adUserId != null ? "adUserId=" + adUserId + ", " : "") +
+                (adUserName != null ? "adUserName=" + adUserName + ", " : "") +
                 (paDashboardItemId != null ? "paDashboardItemId=" + paDashboardItemId + ", " : "") +
             "}";
     }

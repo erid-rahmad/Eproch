@@ -2,6 +2,8 @@ package com.bhp.opusb.service.dto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,20 +24,6 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     private static final long serialVersionUID = 1L;
 
     private Long id;
-
-    /**
-     * VHDOCM Invoice verification document no.
-     */
-    @NotNull
-    @ApiModelProperty(value = "VHDOCM Invoice verification document no.", required = true)
-    private String verificationNo;
-
-    /**
-     * VHTRDJ Transaction date
-     */
-    @NotNull
-    @ApiModelProperty(value = "VHTRDJ Transaction date", required = true)
-    private LocalDate verificationDate;
 
     private String description;
 
@@ -115,8 +103,16 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     private BigDecimal withholdingAmt;
 
+    /**
+     * VHDOC
+     */
+    @ApiModelProperty(value = "VHDOC")
     private String invoiceAp;
 
+    /**
+     * VHDCT
+     */
+    @ApiModelProperty(value = "VHDCT")
     private String docType;
 
     /**
@@ -149,15 +145,24 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "VHAPRD")
     private LocalDate dateApprove;
 
-    @NotNull
-    private String verificationStatus;
-
+    /**
+     * VHPST
+     */
+    @ApiModelProperty(value = "VHPST")
     private String payStatus;
 
+    /**
+     * VHTRDJ Transaction date
+     */
     @NotNull
+    @ApiModelProperty(value = "VHTRDJ Transaction date", required = true)
     private LocalDate dateTrx;
 
+    /**
+     * VHDOCM Invoice verification document no.
+     */
     @Size(max = 30)
+    @ApiModelProperty(value = "VHDOCM Invoice verification document no.")
     private String documentNo;
 
     @NotNull
@@ -245,28 +250,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     @JsonProperty("cTaxName")
     private String cTaxName;
 
+    private List<MVerificationLineDTO> lines = new ArrayList<>();
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getVerificationNo() {
-        return verificationNo;
-    }
-
-    public void setVerificationNo(String verificationNo) {
-        this.verificationNo = verificationNo;
-    }
-
-    public LocalDate getVerificationDate() {
-        return verificationDate;
-    }
-
-    public void setVerificationDate(LocalDate verificationDate) {
-        this.verificationDate = verificationDate;
     }
 
     public String getDescription() {
@@ -442,14 +433,6 @@ public class MVerificationDTO extends AbstractAuditingDTO {
 
     public void setDateApprove(LocalDate dateApprove) {
         this.dateApprove = dateApprove;
-    }
-
-    public String getVerificationStatus() {
-        return verificationStatus;
-    }
-
-    public void setVerificationStatus(String verificationStatus) {
-        this.verificationStatus = verificationStatus;
     }
 
     public String getPayStatus() {
@@ -692,6 +675,14 @@ public class MVerificationDTO extends AbstractAuditingDTO {
         this.cTaxName = cTaxName;
     }
 
+    public List<MVerificationLineDTO> getLines() {
+        return lines;
+    }
+
+    public void setLines(List<MVerificationLineDTO> lines) {
+        this.lines = lines;
+    }
+
     @JsonProperty("shortCreatedBy")
     public String shortCreatedBy() {
         return getCreatedBy().length() > 10 ? getCreatedBy().substring(0, 9) : getCreatedBy();
@@ -722,8 +713,6 @@ public class MVerificationDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MVerificationDTO{" +
             "id=" + getId() +
-            ", verificationNo='" + getVerificationNo() + "'" +
-            ", verificationDate='" + getVerificationDate() + "'" +
             ", description='" + getDescription() + "'" +
             ", receiptNo='" + getReceiptNo() + "'" +
             ", invoiceNo='" + getInvoiceNo() + "'" +
@@ -745,7 +734,6 @@ public class MVerificationDTO extends AbstractAuditingDTO {
             ", payAmt=" + getPayAmt() +
             ", dateReject='" + getDateReject() + "'" +
             ", dateApprove='" + getDateApprove() + "'" +
-            ", verificationStatus='" + getVerificationStatus() + "'" +
             ", payStatus='" + getPayStatus() + "'" +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +

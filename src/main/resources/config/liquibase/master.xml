@@ -124,6 +124,7 @@
     <include file="config/liquibase/changelog/20210309082539_added_entity_MBiddingSubmission.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210309082639_added_entity_MBiddingSubmissionLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210309082739_added_entity_MSubmissionSubItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210221182200_added_entity_AiExchangeOut.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>

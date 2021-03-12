@@ -9,11 +9,11 @@
     },
     "messages": {
       "error": {
-        "authentication": "<strong>Gagal masuk!</strong> Silakan cek data anda dan coba lagi."
+        "authentication": "Gagal masuk! Silakan cek data anda dan coba lagi."
       }
     },
     "password": {
-      "forgot": "Apakah anda lupa passsword?"
+      "forgot": "Lupa passsword"
     }
   }
 }

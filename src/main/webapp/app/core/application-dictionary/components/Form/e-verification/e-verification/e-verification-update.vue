@@ -96,18 +96,24 @@
                             />
                         </el-select>
                     </el-form-item>
-                    <el-form-item v-if="!isDraft" label="Verification No" prop="verificationNo">
-                        <el-input class="form-input" disabled clearable v-model="header.verificationNo"/>
+                    <el-form-item
+                        v-if="!isDraft"
+                        label="Verification No"
+                        prop="documentNo"
+                    >
+                        <el-input class="form-input" disabled v-model="header.documentNo"/>
                     </el-form-item>
-                    <el-form-item v-if="!isDraft" label="Verification Date" prop="verificationDate">
+                    <el-form-item label="Verification Date" prop="dateTrx">
                         <el-date-picker
+                            v-model="header.dateTrx"
                             class="form-input"
-                            clearable disabled
-                            v-model="header.verificationDate"
-                            type="date"
+                            clearable
+                            :disabled="!isDraft"
                             :format="dateDisplayFormat"
+                            type="date"
                             :value-format="dateValueFormat"
-                            placeholder="Pick a date" />
+                            placeholder="Pick a date"
+                        />
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -121,7 +127,7 @@
                             @change="checkVerification"
                         />
                     </el-form-item>
-                    <el-form-item label="Tax Invoice Date" prop="taxDate" required>
+                    <el-form-item label="Tax Invoice Date" prop="taxDate" :required="header.taxable">
                         <el-date-picker
                             class="form-input"
                             clearable
@@ -135,14 +141,14 @@
                     <el-form-item label="NPWP" prop="vendorName">
                         <el-input class="form-input" disabled clearable v-model="header.vendorName"/>
                     </el-form-item>
-                    <el-form-item v-if="!isDraft" label="Status" prop="verificationStatus">
-                        <el-input class="form-input" disabled clearable :value="formatDocumentStatus(header.verificationStatus)"/>
+                    <el-form-item v-if="!isDraft" label="Status" prop="documentStatus">
+                        <el-input class="form-input" disabled clearable :value="formatDocumentStatus(header.documentStatus)"/>
                     </el-form-item>
                     <el-form-item v-if="!isDraft" label="Status Date">
                         <el-date-picker
                             class="form-input"
                             clearable disabled
-                            :value="dateStatus(header.verificationStatus)"
+                            :value="dateStatus(header.documentStatus)"
                             type="date"
                             :format="dateDisplayFormat"
                             :value-format="dateValueFormat"
@@ -370,8 +376,18 @@
 .main {
     padding: 0px;
 
-    .el-table .danger-row {
-        background: oldlace;
+    .el-table .el-table__body,
+    .el-table--striped .el-table__body {
+
+        .danger-row td,
+        tr.el-table__row--striped.danger-row td {
+            background: #ffc1c1;
+        }
+
+        .warning-row td,
+        tr.el-table__row--striped.warning-row td {
+            background: #fff2cd;
+        }
     }
 }
 

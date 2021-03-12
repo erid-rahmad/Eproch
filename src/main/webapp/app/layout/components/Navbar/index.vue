@@ -31,10 +31,11 @@
       >
         <div class="avatar-wrapper">
           <img
-            :src="avatar+'?imageView2/1/w/80/h/80'"
+            alt="Avatar"
             class="user-avatar"
+            :src="avatar+'?imageView2/1/w/80/h/80'"
           >
-          <i class="el-icon-caret-bottom" />
+          <em class="el-icon-caret-bottom"></em>
         </div>
         <el-dropdown-menu slot="dropdown">
           <router-link to="/account">

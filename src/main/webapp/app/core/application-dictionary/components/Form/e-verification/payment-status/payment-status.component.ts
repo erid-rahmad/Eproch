@@ -5,6 +5,7 @@ import { ElTable } from 'element-ui/types/table';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
+import buildCriteriaQueryString from '@/shared/filter/filters';
 
 
 @Component
@@ -28,7 +29,8 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
   private baseApiUrlReference = "/api/ad-references";
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
 
-  private filterQuery: string = '';
+  private baseQuery: string = '';
+  private lookupQuery: string[] = [];
   processing = false;
 
   public gridData: Array<any> = [];
@@ -41,11 +43,6 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
   public dialogConfirmationVisible: boolean = false;
   public filter: any = {};
   public radioSelection: number = null;
-  confirmReopen: boolean = false;
-
-  get canReopen() {
-    return this.selectedRow?.apReversed && this.selectedRow?.documentStatus !== 'ROP';
-  }
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -55,7 +52,8 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
     return settings.dateValueFormat;
   }
 
-  created(){
+  created() {
+    this.baseQuery = `vendorId.equals=${accountStore.userDetails.cVendorId}`;
     this.initDocumentStatusOptions();
     this.initPaymentStatusOptions();
   }
@@ -110,6 +108,8 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
   rowClassName({row}) {
     if (row.documentStatus !== 'CNL' && row.receiptReversed) {
       return 'danger-row';
+    } else if (row.apReversed) {
+      return 'warning-row';
     }
 
     return '';
@@ -123,33 +123,6 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
   public singleSelection (row) {
     this.radioSelection = this.gridData.indexOf(row);
     this.selectedRow = row;
-  }
-
-  public reopenDocument() {
-    const data = { ...this.selectedRow };
-    data.verificationStatus = 'ROP';
-
-    this.dynamicWindowService(this.baseApiUrl)
-      .update(data)
-      .then(() => {
-        const message = 'Invoice verification has been reopened'
-
-        this.retrieveAllRecords();
-        this.$message({
-          message: message,
-          type: 'success'
-        });
-      })
-      .catch(err => {
-        this.$message({
-          message: err.response?.data?.detail || err.message,
-          type: 'error'
-        });
-      })
-      .finally(() => {
-        this.processing = false;
-        this.confirmReopen = false;
-      });
   }
 
   public retrieveAllRecords(): void {
@@ -171,13 +144,15 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
       });
     }
 
+    const filterQuery = buildCriteriaQueryString([
+      this.baseQuery,
+      watchListQuery,
+      ...this.lookupQuery
+    ]);
+    
     this.dynamicWindowService(this.baseApiUrl)
       .retrieve({
-        criteriaQuery: [
-          this.filterQuery,
-          watchListQuery,
-          `vendorId.equals=${accountStore.userDetails.cVendorId}`
-        ],
+        criteriaQuery: filterQuery,
         paginationQuery
       })
       .then(res => {
@@ -222,8 +197,8 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
       .then(res => {
         this.documentStatusOptions = res.map(item => 
           ({
-              key: item.value,
-              label: item.name
+            key: item.value,
+            label: item.name
           })
         );
       });
@@ -235,50 +210,34 @@ export default class PaymentStatus extends mixins(ContextVariableAccessor, Watch
       .then(res => {
         this.paymentStatusOptions = res.map(item => 
           ({
-              key: item.value,
-              label: item.name
+            key: item.value,
+            label: item.name
           })
         );
       });
   }
 
-  public verificationFilter(){
+  public verificationFilter() {
+    const form = this.filter;
+    this.lookupQuery = [];
 
-    this.filterQuery = "";
-
-    if((this.filter.verificationNo != null)&&(this.filter.verificationNo != "")){
-      this.filterQuery = "verificationNo.equals="+this.filter.verificationNo;
+    if (!!form.documentNo) {
+      this.lookupQuery.push(`documentNo.equals=${form.documentNo}`);
     }
-    if((this.filter.invoiceNo != null)&&(this.filter.invoiceNo != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "invoiceNo.equals="+this.filter.invoiceNo;
+    if (!!form.invoiceNo) {
+      this.lookupQuery.push(`invoiceNo.equals=${form.invoiceNo}`);
     }
-    if((this.filter.verificationStatus != null)&&(this.filter.verificationStatus != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "verificationStatus.equals="+this.filter.verificationStatus;
+    if (!!form.documentStatus) {
+      this.lookupQuery.push(`documentStatus.equals=${form.documentStatus}`);
     }
-
-    if((this.filter.verificationDate != null)&&(this.filter.verificationDate != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "verificationDate.lessOrEqualThan="+this.filter.verificationDate;
+    if (!!form.dateTrx) {
+      this.lookupQuery.push(`dateTrx.lessOrEqualThan=${form.dateTrx}`);
     }
-    if((this.filter.invoiceDate != null)&&(this.filter.invoiceDate != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "invoiceDate.lessOrEqualThan="+this.filter.invoiceDate;
+    if (!!form.invoiceDate) {
+      this.lookupQuery.push(`invoiceDate.lessOrEqualThan=${form.invoiceDate}`);
     }
-    if((this.filter.payStatus != null)&&(this.filter.payStatus != "")){
-      if(this.filterQuery != ""){
-        this.filterQuery += "&"
-      }
-      this.filterQuery += "payStatus.equals="+this.filter.payStatus;
+    if (!!form.payStatus) {
+      this.lookupQuery.push(`payStatus.equals=${form.payStatus}`);
     }
 
     this.retrieveAllRecords();

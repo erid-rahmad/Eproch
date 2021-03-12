@@ -53,6 +53,10 @@ div:focus {
   position: relative;
 }
 
+.download-anchor {
+  display: none;
+}
+
 // Refine element ui upload
 .upload-container {
   .el-upload {
@@ -168,6 +172,14 @@ aside {
 }
 
 // Element UI overrides.
+.el-button--warning {
+  color: #1f2d3d;
+}
+
+.el-dialog__body {
+  word-break: normal;
+}
+
 .el-pagination {
   padding: 8px;
 

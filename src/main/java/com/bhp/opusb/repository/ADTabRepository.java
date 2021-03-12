@@ -1,5 +1,7 @@
 package com.bhp.opusb.repository;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import com.bhp.opusb.domain.ADTab;
@@ -15,4 +17,5 @@ import org.springframework.stereotype.Repository;
 public interface ADTabRepository extends JpaRepository<ADTab, Long>, JpaSpecificationExecutor<ADTab> {
 
   Optional<ADTab> findFirstByAdWindow_idAndParentTabIsNull(Long windowId);
+  List<ADTab> findByIdInOrderByTabSequence(Collection<Long> ids);
 }
