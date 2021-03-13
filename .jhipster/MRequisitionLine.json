@@ -28,6 +28,20 @@
             ]
         },
         {
+            "fieldName": "quantityOrdered",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "quantityBalance",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "unitPrice",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [

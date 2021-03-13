@@ -138,6 +138,8 @@ export default class ShoppingCart extends Vue {
         items.push({
           vendorId,
           quantity: item.quantity,
+          quantityBalance: item.quantity,
+          quantityOrdered: 0,
           unitPrice: item.product.price,
           requisitionAmount: item.quantity * item.product.price,
           remark: item.note,

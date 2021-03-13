@@ -66,6 +66,14 @@ public class MRequisitionLineResourceIT {
     private static final BigDecimal UPDATED_QUANTITY = new BigDecimal(2);
     private static final BigDecimal SMALLER_QUANTITY = new BigDecimal(1 - 1);
 
+    private static final BigDecimal DEFAULT_QUANTITY_ORDERED = new BigDecimal(1);
+    private static final BigDecimal UPDATED_QUANTITY_ORDERED = new BigDecimal(2);
+    private static final BigDecimal SMALLER_QUANTITY_ORDERED = new BigDecimal(1 - 1);
+
+    private static final BigDecimal DEFAULT_QUANTITY_BALANCE = new BigDecimal(1);
+    private static final BigDecimal UPDATED_QUANTITY_BALANCE = new BigDecimal(2);
+    private static final BigDecimal SMALLER_QUANTITY_BALANCE = new BigDecimal(1 - 1);
+
     private static final BigDecimal DEFAULT_UNIT_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_UNIT_PRICE = new BigDecimal(2);
     private static final BigDecimal SMALLER_UNIT_PRICE = new BigDecimal(1 - 1);
@@ -112,6 +120,8 @@ public class MRequisitionLineResourceIT {
             .dateRequired(DEFAULT_DATE_REQUIRED)
             .requisitionAmount(DEFAULT_REQUISITION_AMOUNT)
             .quantity(DEFAULT_QUANTITY)
+            .quantityOrdered(DEFAULT_QUANTITY_ORDERED)
+            .quantityBalance(DEFAULT_QUANTITY_BALANCE)
             .unitPrice(DEFAULT_UNIT_PRICE)
             .remark(DEFAULT_REMARK)
             .uid(DEFAULT_UID)
@@ -171,6 +181,8 @@ public class MRequisitionLineResourceIT {
             .dateRequired(UPDATED_DATE_REQUIRED)
             .requisitionAmount(UPDATED_REQUISITION_AMOUNT)
             .quantity(UPDATED_QUANTITY)
+            .quantityOrdered(UPDATED_QUANTITY_ORDERED)
+            .quantityBalance(UPDATED_QUANTITY_BALANCE)
             .unitPrice(UPDATED_UNIT_PRICE)
             .remark(UPDATED_REMARK)
             .uid(UPDATED_UID)
@@ -244,6 +256,8 @@ public class MRequisitionLineResourceIT {
         assertThat(testMRequisitionLine.getDateRequired()).isEqualTo(DEFAULT_DATE_REQUIRED);
         assertThat(testMRequisitionLine.getRequisitionAmount()).isEqualTo(DEFAULT_REQUISITION_AMOUNT);
         assertThat(testMRequisitionLine.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
+        assertThat(testMRequisitionLine.getQuantityOrdered()).isEqualTo(DEFAULT_QUANTITY_ORDERED);
+        assertThat(testMRequisitionLine.getQuantityBalance()).isEqualTo(DEFAULT_QUANTITY_BALANCE);
         assertThat(testMRequisitionLine.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
         assertThat(testMRequisitionLine.getRemark()).isEqualTo(DEFAULT_REMARK);
         assertThat(testMRequisitionLine.getUid()).isEqualTo(DEFAULT_UID);
@@ -311,6 +325,44 @@ public class MRequisitionLineResourceIT {
 
     @Test
     @Transactional
+    public void checkQuantityOrderedIsRequired() throws Exception {
+        int databaseSizeBeforeTest = mRequisitionLineRepository.findAll().size();
+        // set the field null
+        mRequisitionLine.setQuantityOrdered(null);
+
+        // Create the MRequisitionLine, which fails.
+        MRequisitionLineDTO mRequisitionLineDTO = mRequisitionLineMapper.toDto(mRequisitionLine);
+
+        restMRequisitionLineMockMvc.perform(post("/api/m-requisition-lines")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(mRequisitionLineDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<MRequisitionLine> mRequisitionLineList = mRequisitionLineRepository.findAll();
+        assertThat(mRequisitionLineList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkQuantityBalanceIsRequired() throws Exception {
+        int databaseSizeBeforeTest = mRequisitionLineRepository.findAll().size();
+        // set the field null
+        mRequisitionLine.setQuantityBalance(null);
+
+        // Create the MRequisitionLine, which fails.
+        MRequisitionLineDTO mRequisitionLineDTO = mRequisitionLineMapper.toDto(mRequisitionLine);
+
+        restMRequisitionLineMockMvc.perform(post("/api/m-requisition-lines")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(mRequisitionLineDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<MRequisitionLine> mRequisitionLineList = mRequisitionLineRepository.findAll();
+        assertThat(mRequisitionLineList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void checkUnitPriceIsRequired() throws Exception {
         int databaseSizeBeforeTest = mRequisitionLineRepository.findAll().size();
         // set the field null
@@ -344,6 +396,8 @@ public class MRequisitionLineResourceIT {
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
             .andExpect(jsonPath("$.[*].requisitionAmount").value(hasItem(DEFAULT_REQUISITION_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
+            .andExpect(jsonPath("$.[*].quantityOrdered").value(hasItem(DEFAULT_QUANTITY_ORDERED.intValue())))
+            .andExpect(jsonPath("$.[*].quantityBalance").value(hasItem(DEFAULT_QUANTITY_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -366,6 +420,8 @@ public class MRequisitionLineResourceIT {
             .andExpect(jsonPath("$.dateRequired").value(DEFAULT_DATE_REQUIRED.toString()))
             .andExpect(jsonPath("$.requisitionAmount").value(DEFAULT_REQUISITION_AMOUNT.intValue()))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
+            .andExpect(jsonPath("$.quantityOrdered").value(DEFAULT_QUANTITY_ORDERED.intValue()))
+            .andExpect(jsonPath("$.quantityBalance").value(DEFAULT_QUANTITY_BALANCE.intValue()))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.intValue()))
             .andExpect(jsonPath("$.remark").value(DEFAULT_REMARK))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
@@ -919,6 +975,216 @@ public class MRequisitionLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMRequisitionLinesByQuantityOrderedIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityOrdered equals to DEFAULT_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldBeFound("quantityOrdered.equals=" + DEFAULT_QUANTITY_ORDERED);
+
+        // Get all the mRequisitionLineList where quantityOrdered equals to UPDATED_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldNotBeFound("quantityOrdered.equals=" + UPDATED_QUANTITY_ORDERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityOrderedIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityOrdered not equals to DEFAULT_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldNotBeFound("quantityOrdered.notEquals=" + DEFAULT_QUANTITY_ORDERED);
+
+        // Get all the mRequisitionLineList where quantityOrdered not equals to UPDATED_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldBeFound("quantityOrdered.notEquals=" + UPDATED_QUANTITY_ORDERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityOrderedIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityOrdered in DEFAULT_QUANTITY_ORDERED or UPDATED_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldBeFound("quantityOrdered.in=" + DEFAULT_QUANTITY_ORDERED + "," + UPDATED_QUANTITY_ORDERED);
+
+        // Get all the mRequisitionLineList where quantityOrdered equals to UPDATED_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldNotBeFound("quantityOrdered.in=" + UPDATED_QUANTITY_ORDERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityOrderedIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityOrdered is not null
+        defaultMRequisitionLineShouldBeFound("quantityOrdered.specified=true");
+
+        // Get all the mRequisitionLineList where quantityOrdered is null
+        defaultMRequisitionLineShouldNotBeFound("quantityOrdered.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityOrderedIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityOrdered is greater than or equal to DEFAULT_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldBeFound("quantityOrdered.greaterThanOrEqual=" + DEFAULT_QUANTITY_ORDERED);
+
+        // Get all the mRequisitionLineList where quantityOrdered is greater than or equal to UPDATED_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldNotBeFound("quantityOrdered.greaterThanOrEqual=" + UPDATED_QUANTITY_ORDERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityOrderedIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityOrdered is less than or equal to DEFAULT_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldBeFound("quantityOrdered.lessThanOrEqual=" + DEFAULT_QUANTITY_ORDERED);
+
+        // Get all the mRequisitionLineList where quantityOrdered is less than or equal to SMALLER_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldNotBeFound("quantityOrdered.lessThanOrEqual=" + SMALLER_QUANTITY_ORDERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityOrderedIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityOrdered is less than DEFAULT_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldNotBeFound("quantityOrdered.lessThan=" + DEFAULT_QUANTITY_ORDERED);
+
+        // Get all the mRequisitionLineList where quantityOrdered is less than UPDATED_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldBeFound("quantityOrdered.lessThan=" + UPDATED_QUANTITY_ORDERED);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityOrderedIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityOrdered is greater than DEFAULT_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldNotBeFound("quantityOrdered.greaterThan=" + DEFAULT_QUANTITY_ORDERED);
+
+        // Get all the mRequisitionLineList where quantityOrdered is greater than SMALLER_QUANTITY_ORDERED
+        defaultMRequisitionLineShouldBeFound("quantityOrdered.greaterThan=" + SMALLER_QUANTITY_ORDERED);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityBalanceIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityBalance equals to DEFAULT_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldBeFound("quantityBalance.equals=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRequisitionLineList where quantityBalance equals to UPDATED_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldNotBeFound("quantityBalance.equals=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityBalanceIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityBalance not equals to DEFAULT_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldNotBeFound("quantityBalance.notEquals=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRequisitionLineList where quantityBalance not equals to UPDATED_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldBeFound("quantityBalance.notEquals=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityBalanceIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityBalance in DEFAULT_QUANTITY_BALANCE or UPDATED_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldBeFound("quantityBalance.in=" + DEFAULT_QUANTITY_BALANCE + "," + UPDATED_QUANTITY_BALANCE);
+
+        // Get all the mRequisitionLineList where quantityBalance equals to UPDATED_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldNotBeFound("quantityBalance.in=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityBalanceIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityBalance is not null
+        defaultMRequisitionLineShouldBeFound("quantityBalance.specified=true");
+
+        // Get all the mRequisitionLineList where quantityBalance is null
+        defaultMRequisitionLineShouldNotBeFound("quantityBalance.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityBalanceIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityBalance is greater than or equal to DEFAULT_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldBeFound("quantityBalance.greaterThanOrEqual=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRequisitionLineList where quantityBalance is greater than or equal to UPDATED_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldNotBeFound("quantityBalance.greaterThanOrEqual=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityBalanceIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityBalance is less than or equal to DEFAULT_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldBeFound("quantityBalance.lessThanOrEqual=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRequisitionLineList where quantityBalance is less than or equal to SMALLER_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldNotBeFound("quantityBalance.lessThanOrEqual=" + SMALLER_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityBalanceIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityBalance is less than DEFAULT_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldNotBeFound("quantityBalance.lessThan=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRequisitionLineList where quantityBalance is less than UPDATED_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldBeFound("quantityBalance.lessThan=" + UPDATED_QUANTITY_BALANCE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByQuantityBalanceIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where quantityBalance is greater than DEFAULT_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldNotBeFound("quantityBalance.greaterThan=" + DEFAULT_QUANTITY_BALANCE);
+
+        // Get all the mRequisitionLineList where quantityBalance is greater than SMALLER_QUANTITY_BALANCE
+        defaultMRequisitionLineShouldBeFound("quantityBalance.greaterThan=" + SMALLER_QUANTITY_BALANCE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMRequisitionLinesByUnitPriceIsEqualToSomething() throws Exception {
         // Initialize the database
         mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
@@ -1340,6 +1606,8 @@ public class MRequisitionLineResourceIT {
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
             .andExpect(jsonPath("$.[*].requisitionAmount").value(hasItem(DEFAULT_REQUISITION_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
+            .andExpect(jsonPath("$.[*].quantityOrdered").value(hasItem(DEFAULT_QUANTITY_ORDERED.intValue())))
+            .andExpect(jsonPath("$.[*].quantityBalance").value(hasItem(DEFAULT_QUANTITY_BALANCE.intValue())))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -1396,6 +1664,8 @@ public class MRequisitionLineResourceIT {
             .dateRequired(UPDATED_DATE_REQUIRED)
             .requisitionAmount(UPDATED_REQUISITION_AMOUNT)
             .quantity(UPDATED_QUANTITY)
+            .quantityOrdered(UPDATED_QUANTITY_ORDERED)
+            .quantityBalance(UPDATED_QUANTITY_BALANCE)
             .unitPrice(UPDATED_UNIT_PRICE)
             .remark(UPDATED_REMARK)
             .uid(UPDATED_UID)
@@ -1416,6 +1686,8 @@ public class MRequisitionLineResourceIT {
         assertThat(testMRequisitionLine.getDateRequired()).isEqualTo(UPDATED_DATE_REQUIRED);
         assertThat(testMRequisitionLine.getRequisitionAmount()).isEqualTo(UPDATED_REQUISITION_AMOUNT);
         assertThat(testMRequisitionLine.getQuantity()).isEqualTo(UPDATED_QUANTITY);
+        assertThat(testMRequisitionLine.getQuantityOrdered()).isEqualTo(UPDATED_QUANTITY_ORDERED);
+        assertThat(testMRequisitionLine.getQuantityBalance()).isEqualTo(UPDATED_QUANTITY_BALANCE);
         assertThat(testMRequisitionLine.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);
         assertThat(testMRequisitionLine.getRemark()).isEqualTo(UPDATED_REMARK);
         assertThat(testMRequisitionLine.getUid()).isEqualTo(UPDATED_UID);

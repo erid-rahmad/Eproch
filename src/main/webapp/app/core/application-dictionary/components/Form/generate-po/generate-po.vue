@@ -1,215 +1,356 @@
 <template>
-    <div class="app-container">
-        <el-row class="toolbar">
-            <el-col :span="24">
+  <div class="app-container">
+    <el-row>
+      <el-col
+        :span="24"
+        style="padding: 4px"
+      >
+        <el-button
+          class="button"
+          icon="el-icon-check"
+          size="mini"
+          type="primary"
+          @click="generatePurchaseOrder"
+        >
+          Create PO
+        </el-button>
+      </el-col>
+    </el-row>
 
-                <el-button
-                    class="button"
-                    style="margin-left: 0px;"
-                    size="mini"
-                    type="primary"
-                    icon="el-icon-check"
-                    @click="generatePurchaseOrder">
-                    Create PO
-                </el-button>
+    <el-form
+      ref="filterForm"
+      label-position="left"
+      label-width="150px"
+      :model="filter"
+      size="mini"
+    >
+      <el-row :gutter="rowGutter">
+        <el-col
+          :md="8"
+          :sm="12"
+          :xs="24"
+        >
+          <el-form-item label="Requisition No">
+            <el-input
+              ref="requisitionNo"
+              v-model="filter.requisitionNo"
+              v-loading="loadingPr"
+              clearable
+              placeholder="Please Enter PR No"
+              @change="retrievePurchaseRequisitionLines"
+              @clear="retrievePurchaseRequisitionLines()"
+            ></el-input>
+          </el-form-item>
+        </el-col>
 
-            </el-col>
-        </el-row>
+        <el-col
+          :md="8"
+          :sm="12"
+          :xs="24"
+        >
+          <el-form-item label="Supplier">
+            <el-select
+              v-model="filter.vendorId"
+              class="form-input"
+              clearable
+              filterable
+              placeholder="Select"
+              @change="onVendorChange"
+            >
+              <el-option
+                v-for="item in vendorOptions"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
 
-        <el-row class="header" :gutter="24">
-            <el-form ref="form" label-position="left" label-width="150px" size="mini">
-                <el-col :span="8">
-                    <el-form-item label="PR No" prop="prNo">
-                        <el-input
-                            placeholder="Please Input PR No"
-                            clearable
-                            v-model="pr.form.id">
-                            <el-button
-                                slot="append"
-                                icon="el-icon-search"
-                                @click="searchPurchaseRequisition"
-                                v-loading.fullscreen.lock="fullscreenLoading"/>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
+        <el-col
+          :md="8"
+          :sm="12"
+          :xs="24"
+        >
+          <el-button
+            icon="el-icon-search"
+            :loading="loadingPrLines"
+            size="mini"
+            type="primary"
+            @click="retrievePurchaseRequisitionLines(filter.requisitionNo, filter.vendorId)"
+          >
+            Search
+          </el-button>
+        </el-col>
+      </el-row>
+    </el-form>
 
-                <el-col :span="8">
-                    <el-form-item label="Warehouse" prop="warehouse">
-                        <el-select class="form-input" clearable filterable v-model="pr.form.warehouseId" placeholder="Select" >
-                            <el-option
-                                v-for="item in selectWarehouse"
-                                :key="item.key"
-                                :label="item.value"
-                                :value="item.key" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
+    <el-divider></el-divider>
 
-                <el-col :span="8">
-                    <el-form-item label="Term of Payment" prop="top">
-                        <el-select class="form-input" clearable filterable v-model="pr.form.top" placeholder="Select" >
-                            <el-option
-                                v-for="item in selectTop"
-                                :key="item.key"
-                                :label="item.value"
-                                :value="item.key" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
+    <el-form
+      ref="mainForm"
+      label-position="left"
+      label-width="150px"
+      :model="form"
+      :rules="mainFormValidationSchema"
+      size="mini"
+    >
+      <el-row
+        class="header"
+        :gutter="rowGutter"
+      >
+        <el-col
+          :md="8"
+          :sm="12"
+          :xs="24"
+        >
+          <el-form-item
+            label="Warehouse"
+            prop="warehouseId"
+          >
+            <el-select
+              v-model="form.warehouseId"
+              class="form-input"
+              clearable
+              filterable
+              placeholder="Select Warehouse"
+            >
+              <el-option
+                v-for="item in warehouseOptions"
+                :key="item.key"
+                :label="item.code"
+                :value="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
 
-            </el-form>
-        </el-row>
+        <el-col
+          :md="8"
+          :sm="12"
+          :xs="24"
+        >
+          <el-form-item
+            label="Term of Payment"
+            prop="paymentTermId"
+          >
+            <el-select
+              v-model="form.paymentTermId"
+              class="form-input"
+              clearable
+              filterable
+              placeholder="Select Term of Payment"
+            >
+              <el-option
+                v-for="item in paymentTermOptions"
+                :key="item.value"
+                :label="item.name"
+                :value="item.value"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
 
-        <el-row class="header" :gutter="24">
-            <el-form ref="form" label-position="left" label-width="150px" size="mini">
-                <el-col :span="8">
-                    <el-form-item label="Supplier" prop="supplier">
-                        <el-select class="form-input" clearable filterable v-model="pr.form.supplierId" placeholder="Select" >
-                            <el-option
-                                v-for="item in selectVendor"
-                                :key="item.key"
-                                :label="item.value"
-                                :value="item.key" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
+      <el-row
+        class="header"
+        :gutter="rowGutter"
+      >
+        <el-col
+          :md="8"
+          :sm="12"
+          :xs="24"
+        >
+          <el-form-item
+            label="Date Ordered"
+            prop="dateOrdered"
+          >
+            <el-date-picker
+              v-model="form.dateOrdered"
+              class="form-input"
+              clearable
+              :format="dateDisplayFormat"
+              placeholder="Pick a date"
+              type="date"
+              :value-format="dateValueFormat"
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
 
-                <el-col :span="8">
-                    <el-form-item label="Date Order" prop="documentDate">
-                        <el-date-picker
-                            class="form-input"
-                            clearable
-                            v-model="pr.form.documentDate"
-                            type="date"
-                            :format="dateDisplayFormat"
-                            :value-format="dateValueFormat"
-                            placeholder="Pick a date"/>
-                    </el-form-item>
-                </el-col>
+        <el-col
+          :md="8"
+          :sm="12"
+          :xs="24"
+        >
+          <el-form-item
+            label="Currency"
+            prop="currencyId"
+          >
+            <el-select
+              v-model="form.currencyId"
+              class="form-input"
+              clearable
+              filterable
+              placeholder="Select"
+            >
+              <el-option
+                v-for="item in currencyOptions"
+                :key="item.key"
+                :label="item.code"
+                :value="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
 
-                <el-col :span="8">
-                    <el-form-item label="Currency" prop="currency">
-                        <el-select class="form-input" clearable filterable v-model="pr.form.currencyId" placeholder="Select" >
-                            <el-option
-                                v-for="item in selectCurrency"
-                                :key="item.key"
-                                :label="item.code"
-                                :value="item.key" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
+    <el-table
+      v-loading="loadingPrLines"
+      ref="mainTable"
+      border
+      :data="gridData"
+      :default-sort="gridSchema.defaultSort"
+      :empty-text="gridSchema.emptyText"
+      :height="gridSchema.height"
+      highlight-current-row
+      stripe
+      size="mini"
+      style="width: 100%"
+      @sort-change="changeOrder"
+      @selection-change="onSelectionChanged"
+    >
 
-            </el-form>
-        </el-row>
+      <el-table-column
+        align="center"
+        fixed
+        type="selection"
+        width="48"
+      ></el-table-column>
 
-        <el-row class="main ">
-            <el-col :span="24">
+      <el-table-column
+        label="PR No"
+        min-width="100"
+        prop="requisitionName"
+        sortable
+      ></el-table-column>
 
-                <el-table
-                    v-loading="processing"
-                    ref="gridData"
-                    highlight-current-row
-                    border stripe fit
-                    size="mini"
-                    style="width: 100%; height: 100%"
-                    :height="gridSchema.height"
-                    :max-height="gridSchema.maxHeight"
-                    :default-sort="gridSchema.defaultSort"
-                    :empty-text="gridSchema.emptyText"
-                    :data="gridData"
-                    @sort-change="changeOrder"
-                    @selection-change="onSelectionChanged">
+      <el-table-column
+        label="Product"
+        min-width="200"
+        prop="productName"
+        show-overflow-tooltip
+        sortable
+      ></el-table-column>
 
-                    <el-table-column
-                        align="center"
-                        fixed
-                        type="selection"
-                        width="48"/>
+      <el-table-column
+        label="Supplier"
+        min-width="200"
+        prop="vendorName"
+        show-overflow-tooltip
+        sortable
+      ></el-table-column>
 
-                    <el-table-column
-                        min-width="100"
-                        sortable
-                        prop="requisitionId"
-                        label="PR No"/>
-                    <el-table-column
-                        min-width="200"
-                        sortable
-                        prop="productName"
-                        label="Product"/>
-                    <el-table-column
-                        min-width="200"
-                        sortable
-                        prop="vendorName"
-                        label="Supplier"/>
-                    <el-table-column
-                        min-width="100"
-                        sortable
-                        prop="quantity"
-                        label="PR Qty"/>
-                    <el-table-column
-                        min-width="100"
-                        sortable
-                        prop="orderedQty"
-                        label="Order Qty">
-                        0
-                    </el-table-column>
-                    <el-table-column
-                        min-width="100"
-                        sortable
-                        prop="qtyBalance"
-                        label="Qty Balance">
-                        <template slot-scope="props">
-                            <el-input
-                                clearable
-                                size="mini"
-                                v-model="props.row.qtyBalance"/>
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        min-width="100"
-                        sortable
-                        prop="uomName"
-                        label="UoM"/>
+      <el-table-column
+        label="PR Qty"
+        min-width="150"
+        prop="quantity"
+        sortable
+      ></el-table-column>
 
-                </el-table>
+      <el-table-column
+        label="Ordered Qty"
+        min-width="152"
+        prop="quantityOrdered"
+        sortable
+      >
+        <template slot-scope="{ row, $index }">
+          <el-input-number
+            v-model="row.quantityOrdered"
+            clearable
+            controls-position="right"
+            :max="row.quantity"
+            :min="0"
+            size="mini"
+            @change="value => onQuantityOrderedChanged(row, $index, value)"
+          ></el-input-number>
+        </template>
+      </el-table-column>
 
-                <el-pagination
-                    ref="pagination"
-                    background
-                    layout="sizes, prev, pager, next"
-                    mini
-                    :current-page.sync="page"
-                    :page-sizes="[10, 20, 50, 100]"
-                    :page-size="itemsPerPage"
-                    :total="queryCount"
-                    @size-change="changePageSize"/>
+      <el-table-column
+        label="Qty Balance"
+        min-width="150"
+        prop="quantityBalance"
+        sortable
+      ></el-table-column>
 
-            </el-col>
-        </el-row>
+      <el-table-column
+        min-width="100"
+        sortable
+        prop="uomName"
+        label="UoM"
+      ></el-table-column>
 
-    </div>
+      <el-table-column
+        min-width="150"
+        sortable
+        label="Unit Price"
+      >
+        <template slot-scope="{ row }">
+          {{ row.unitPrice | formatCurrency }}
+        </template>
+      </el-table-column>
+
+      <el-table-column
+        min-width="150"
+        sortable
+        label="Order Amount"
+      >
+        <template slot-scope="{ row }">
+          {{ row.orderAmount | formatCurrency }}
+        </template>
+      </el-table-column>
+
+    </el-table>
+
+    <!-- <el-pagination
+      ref="pagination"
+      background
+      :current-page.sync="page"
+      layout="sizes, prev, pager, next"
+      mini
+      :page-sizes="[10, 20, 50, 100]"
+      :page-size="itemsPerPage"
+      :total="queryCount"
+      @size-change="changePageSize"
+    > -->
+
+  </div>
 </template>
 
 <script lang="ts" src="./generate-po.component.ts">
 </script>
 
 <style lang="scss">
-    .el-table__fixed, .el-table__fixed-right{
-        box-shadow: none;
-    }
+.el-table__fixed, .el-table__fixed-right {
+  box-shadow: none;
+}
+</style>
 
-    .header {
-        color: #333;
-        .form-input {
-            width: 100%;
-        }
-    }
+<style lang="scss" scoped>
+.el-divider--horizontal {
+  margin: 12px 0;
+}
 
-    .main {
-        padding: 0px;
-    }
+.form-input {
+  width: 100%;
+}
 
-    .button {
-        margin-bottom: 5px;
-    }
+.main {
+  padding: 0px;
+}
+
+.button {
+  margin-bottom: 5px;
+}
 </style>

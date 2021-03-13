@@ -1,15 +1,20 @@
 import settings from '@/settings';
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import Inputmask from 'inputmask';
-import Vue from 'vue';
-import { mixins } from 'vue-class-component';
-import { Component, Watch } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../ContextVariableAccessor";
+import { ElForm } from 'element-ui/types/form';
+import { ElInput } from 'element-ui/types/input';
+import { ElTable } from 'element-ui/types/table';
+import { Component, Inject, Vue } from 'vue-property-decorator';
+import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 
 @Component
-export default class GeneratePo extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class GeneratePo extends Vue {
+
+  @Inject('dynamicWindowService')
+  protected commonService: (baseApiUrl: string) => DynamicWindowService;
+
+  rowGutter = 24;
+  loadingPr = false;
+  loadingPrLines = false;
+
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -25,39 +30,54 @@ export default class GeneratePo extends mixins(Vue2Filters.mixin, AlertMixin, Co
   public reverse = false;
   public totalItems = 0;
 
-  private baseApiUrl = "/api/m-requisitions";
-  private baseApiUrlLines = "/api/m-requisition-lines";
-  private baseApiUrlVendor = "/api/c-vendors";
-  private baseApiUrlWarehouse = "/api/c-warehouses";
-  private baseApiUrlCurrency = "/api/c-currencies";
-
   private baseApiUrlReference = "/api/ad-references";
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
   private keyReferenceTop: string = "top";
 
-  private filterQuery: string = '';
-  private filterQueryFormRecord: string = '';
-  private processing: boolean = false;
-  private fullscreenLoading: boolean = false;
   public dialogConfirmationVisible: boolean = false;
 
   public gridData: any[] = [];
-  public selectVendor: any[] = [];
-  public selectWarehouse: any[] = [];
-  public selectTop: any[] = [];
-  public selectCurrency: any[] = [];
+  public currencyOptions: any[] = [];
+  public vendorOptions: any[] = [];
+  public warehouseOptions: any[] = [];
+  public paymentTermOptions: any[] = [];
 
-  private pr = {
-    form: {
-      id: "",
-      warehouseId: "",
-      top: "",
-      supplierId: "",
-      documentDate: "",
-      currencyId: ""
-    },
-    line: [],
+  filter = {
+    requisitionNo: null,
+    vendorId: null
+  };
+
+  form = {
+    requisitionId: null,
+    adOrganizationId: null,
+    costCenterId: null,
+    currencyId: null,
+    dateOrdered: new Date(),
+    documentTypeId: null,
+    paymentTermId: null,
+    tax: false,
+    warehouseId: null,
+    mPurchaseOrderLines: []
   }
+
+  mainFormValidationSchema = {
+    dateOrdered: {
+      required: true,
+      message: 'Date Ordered is required'
+    },
+    paymentTermId: {
+      required: true,
+      message: 'Payment Term is required'
+    },
+    currencyId: {
+      required: true,
+      message: 'Currency is required'
+    },
+    warehouseId: {
+      required: true,
+      message: 'Warehouse is required'
+    }
+  };
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -67,140 +87,120 @@ export default class GeneratePo extends mixins(Vue2Filters.mixin, AlertMixin, Co
     return settings.dateValueFormat;
   }
 
-  mounted(): void {
-    this.filterQueryFormRecord = "";
-    this.retrieveFormRecords(this.baseApiUrlVendor, 'vendor');
-    this.retrieveFormRecords(this.baseApiUrlWarehouse, 'warehouse');
-    this.retrieveFormRecords(this.baseApiUrlCurrency, 'currency');
-
-    this.retrieveGetReferences(this.keyReferenceTop);
+  private get mainTable() {
+    return this.$refs.mainTable as ElTable;
   }
 
-  searchPurchaseRequisition(){
-    if((this.pr.form.id == null)||(this.pr.form.id == "")){
-      this.$notify({
-        title: 'Warning',
-        dangerouslyUseHTMLString: true,
-        message: 'Please fill form PR No',
-        type: 'warning'
-      });
+  created() {
+    this.retrieveDropDownOptions('/api/c-vendors', 'vendorOptions');
+    this.retrieveDropDownOptions('/api/c-warehouses', 'warehouseOptions');
+    this.retrieveDropDownOptions('/api/c-currencies', 'currencyOptions');
 
-    }else{
-      this.fullscreenLoading = true;
-      this.filterQuery = "id.equals="+this.pr.form.id;
-      this.searchPrNo();
-    }
+    this.retrieveReferenceList(this.keyReferenceTop);
   }
 
-  private searchPrNo(): void {
-    if ( ! this.baseApiUrl) {
-      return;
+  mounted() {
+    (<ElInput>this.$refs.requisitionNo).focus();
+  }
+
+  retrievePurchaseRequisitionLines(requisitionNo?: number, vendorId?: number): void {
+    this.loadingPrLines = true;
+    this.mainTable.clearSelection();
+
+    const prNo = requisitionNo || this.filter.requisitionNo;
+    const filterQuery = [
+      'active.equals=true',
+      'quantityBalance.greaterThan=0',
+      'requisitionProcessed.equals=true',
+      'requisitionApproved.equals=true'
+    ];
+
+    if (!!prNo) {
+      filterQuery.push(`requisitionNo.contains=${prNo}`);
     }
 
-    this.dynamicWindowService(this.baseApiUrl)
+    if (!!vendorId) {
+      filterQuery.push(`vendorId.equals=${vendorId}`)
+    }
+
+    this.commonService('/api/m-requisition-lines')
       .retrieve({
-        criteriaQuery: this.filterQuery
+        criteriaQuery: filterQuery,
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: this.sort()
+        }
       })
       .then(res => {
+        const lines = res.data as any[];
 
-        if(res.data.length == 0){
-          this.$notify({
-            title: 'Warning',
-            dangerouslyUseHTMLString: true,
-            message: 'Data not found',
-            type: 'warning'
-          });
+        if (lines.length) {
+          if (lines.length == 1) {
+            this.$set(this.filter, 'requisitionNo', lines[0].requisitionName);
+          } else {
+            const line = lines[0];
 
-        }else{
-          //if(res.data[0].verificationStatus == "SMT"){
-            res.data.map((item: any) => {
-              this.$set(this.pr, 'form', item);
-              return item;
-            });
-
-            //console.log(res.data);
-
-            this.filterQuery = "";
-            this.filterQuery = "requisitionId.equals="+this.pr.form.id;
-            this.searchPrNoLine();
-          /*}else{
-            this.$notify({
-              title: 'Warning',
-              dangerouslyUseHTMLString: true,
-              message: 'Status Verification is '+this.formatDocumentStatus(res.data[0].verificationStatus),
-              type: 'warning'
-            });
-          }*/
-
+            if (! lines.some(l => l.requisitionName !== line.requisitionName)) {
+              this.$set(this.filter, 'requisitionNo', lines[0].requisitionName);
+            }
+          }
         }
 
-      }).catch(err => {
-        console.error('Failed getting the record. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
-        });
-      })
-      .finally(() => {
-        this.fullscreenLoading = false;
-      });
-  }
-
-  private searchPrNoLine(): void {
-    if ( ! this.baseApiUrlLines) {
-      return;
-    }
-
-    this.dynamicWindowService(this.baseApiUrlLines)
-      .retrieve({
-        criteriaQuery: this.filterQuery
-      })
-      .then(res => {
-
-        //this.dialogInvoiceVerificationVisible = true;
-
-        this.gridData = res.data.map((item: any) => {
-          //item.payStat = "A";
-          return item;
+        this.gridData = res.data.map((line: any) => {
+          line.quantityOrdered = line.quantityBalance;
+          line.quantityBalance = 0;
+          line.orderAmount = line.quantityOrdered * line.unitPrice;
+          return line;
         });
 
-        console.log(this.pr);
-
+        this.mainTable.toggleAllSelection();
       })
       .catch(err => {
-        console.error('Failed getting the record. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
-        });
+        console.error('Failed getting the requisition lines. %O', err);
+        this.$message.error(err.detail || err.message);
       })
       .finally(() => {
-        this.fullscreenLoading = false;
+        this.loadingPrLines = false;
       });
   }
 
+  /**
+   * Action to be performed upon quantity ordered change event.
+   * Update the quantityBalance by subtracting quantity and quantityOrdered.
+   * @param row Current row being edited.
+   * @param index The row index.
+   * @param value The ordered quantity.
+   */
+  onQuantityOrderedChanged(row: any, index: number, value: number) {
+    // const line = {...row};
+    row.quantityBalance = row.quantity - value;
+    row.orderAmount = value * row.unitPrice;
 
+    // this.$set(this.gridData, index, line);
+  }
 
+  public onSelectionChanged(selection: any) {
+    this.form.mPurchaseOrderLines = selection;
+  }
 
+  onVendorChange(vendorId: number) {
+    this.retrievePurchaseRequisitionLines(this.filter.requisitionNo, vendorId);
+  }
 
-
-
-
-  public changeOrder(propOrder): void {
+  public changeOrder(propOrder: any): void {
     this.propOrder = propOrder.prop;
     this.reverse = propOrder.order === 'ascending';
-    const {propOrder: property, reverse} = this;
-    this.$emit('order-changed', { property, reverse });
     this.transition();
   }
 
-  public changePageSize(size: number) {
+  /* public changePageSize(size: number) {
     this.itemsPerPage = size;
     if(this.page!=1){
       this.page = 0;
     }
     //this.retrieveAllRecords();
-  }
+  } */
 
   public sort(): Array<any> {
     const result = [this.propOrder + ',' + (this.reverse ? 'asc' : 'desc')];
@@ -210,62 +210,45 @@ export default class GeneratePo extends mixins(Vue2Filters.mixin, AlertMixin, Co
     return result;
   }
 
-  public loadPage(page: number): void {
+  /* public loadPage(page: number): void {
     if (page !== this.previousPage) {
       this.previousPage = page;
       this.transition();
     }
-  }
+  } */
 
-  @Watch('page')
+  /* @Watch('page')
   onPageChange(page: number) {
     if (page !== this.previousPage) {
       this.previousPage = page;
       this.transition();
     }
-  }
+  } */
 
   public transition(): void {
-    //this.retrieveAllRecords();
+    this.retrievePurchaseRequisitionLines(this.filter.requisitionNo, this.filter.vendorId);
   }
 
-  public clear(): void {
+  /* public clear(): void {
     this.page = 1;
     //this.retrieveAllRecords();
-  }
+  } */
 
-  public onSelectionChanged(value: any) {
-    this.pr.line = value;
-    console.log(value);
-  }
-
-
-
-
-
-  public retrieveFormRecords(baseApi, type): void {
-    this.dynamicWindowService(baseApi)
+  public retrieveDropDownOptions(baseApi: string, prop: string): void {
+    this.commonService(baseApi)
       .retrieve({
-        criteriaQuery: this.filterQueryFormRecord,
+        criteriaQuery: [
+          'active.equals=true'
+        ],
       })
       .then(res => {
-        console.log(res);
-        let listData = res.data.map(item => {
-            return{
-                key: item.id,
-                value: item.name,
-                code: item.code
-            };
+        this[prop] = res.data.map((item: any) => {
+          return {
+            key: item.id,
+            value: item.name,
+            code: item.code
+          };
         });
-
-        if(type == 'vendor'){
-          this.selectVendor = listData;
-        } else if(type == 'warehouse'){
-          this.selectWarehouse = listData;
-        } else if(type == 'currency'){
-          this.selectCurrency = listData;
-        }
-
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -276,44 +259,41 @@ export default class GeneratePo extends mixins(Vue2Filters.mixin, AlertMixin, Co
       });
   }
 
-  private retrieveGetReferences(param: string) {
-    this.dynamicWindowService(this.baseApiUrlReference)
+  private retrieveReferenceList(param: string) {
+    this.commonService('/api/ad-reference-lists')
     .retrieve({
-      criteriaQuery: [`value.contains=`+param]
+      criteriaQuery: [
+        'active.equals=true',
+        `adReferenceValue.equals=${param}`
+      ],
+      paginationQuery: {
+        page: 0,
+        size: 1000,
+        sort: ['name']
+      }
     })
     .then(res => {
-        let references = res.data.map(item => {
-            return{
-                id: item.id,
-                value: item.value,
-                name: item.name
-            };
-        });
-        this.retrieveGetReferenceLists(references);
+      this.paymentTermOptions = res.data.map(item => {
+        return {
+          id: item.id,
+          value: item.value,
+          name: item.name
+        };
+      });
     });
   }
 
-  private retrieveGetReferenceLists(param: any) {
-    this.dynamicWindowService(this.baseApiUrlReferenceList)
-    .retrieve({
-      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
-    })
-    .then(res => {
-        let referenceList = res.data.map(item => {
-            return{
-                key: item.value,
-                value: item.name
-            };
-        });
+  generatePurchaseOrder() {
+    if (! this.form.mPurchaseOrderLines.length) {
+      this.$message.error('Please select one or more lines');
+      return;
+    }
 
-        if(param[0].value == this.keyReferenceTop){
-          this.selectTop = referenceList;
-        }
+    (<ElForm>this.$refs.mainForm).validate((passed, error) => {
+      if (passed) {
+        console.log(this.form);
+      }
     });
-  }
-
-  private generatePurchaseOrder(){
-    console.log(this.pr);
   }
 
 }

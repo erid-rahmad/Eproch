@@ -1,15 +1,24 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A MRequisitionLine.
@@ -42,6 +51,14 @@ public class MRequisitionLine extends AbstractAuditingEntity {
     @NotNull
     @Column(name = "quantity", precision = 21, scale = 2, nullable = false)
     private BigDecimal quantity;
+
+    @NotNull
+    @Column(name = "quantity_ordered", precision = 21, scale = 2, nullable = false)
+    private BigDecimal quantityOrdered;
+
+    @NotNull
+    @Column(name = "quantity_balance", precision = 21, scale = 2, nullable = false)
+    private BigDecimal quantityBalance;
 
     @NotNull
     @Column(name = "unit_price", precision = 21, scale = 2, nullable = false)
@@ -160,6 +177,32 @@ public class MRequisitionLine extends AbstractAuditingEntity {
 
     public void setQuantity(BigDecimal quantity) {
         this.quantity = quantity;
+    }
+
+    public BigDecimal getQuantityOrdered() {
+        return quantityOrdered;
+    }
+
+    public MRequisitionLine quantityOrdered(BigDecimal quantityOrdered) {
+        this.quantityOrdered = quantityOrdered;
+        return this;
+    }
+
+    public void setQuantityOrdered(BigDecimal quantityOrdered) {
+        this.quantityOrdered = quantityOrdered;
+    }
+
+    public BigDecimal getQuantityBalance() {
+        return quantityBalance;
+    }
+
+    public MRequisitionLine quantityBalance(BigDecimal quantityBalance) {
+        this.quantityBalance = quantityBalance;
+        return this;
+    }
+
+    public void setQuantityBalance(BigDecimal quantityBalance) {
+        this.quantityBalance = quantityBalance;
     }
 
     public BigDecimal getUnitPrice() {
@@ -336,6 +379,8 @@ public class MRequisitionLine extends AbstractAuditingEntity {
             ", dateRequired='" + getDateRequired() + "'" +
             ", requisitionAmount=" + getRequisitionAmount() +
             ", quantity=" + getQuantity() +
+            ", quantityOrdered=" + getQuantityOrdered() +
+            ", quantityBalance=" + getQuantityBalance() +
             ", unitPrice=" + getUnitPrice() +
             ", remark='" + getRemark() + "'" +
             ", uid='" + getUid() + "'" +

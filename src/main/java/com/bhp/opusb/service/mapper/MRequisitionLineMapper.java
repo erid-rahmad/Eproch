@@ -13,16 +13,17 @@ import org.mapstruct.*;
 public interface MRequisitionLineMapper extends EntityMapper<MRequisitionLineDTO, MRequisitionLine> {
 
     @Mapping(source = "requisition.id", target = "requisitionId")
+    @Mapping(source = "requisition.documentNo", target = "requisitionName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "product.id", target = "productId")
     @Mapping(source = "product.name", target = "productName")
     @Mapping(source = "warehouse.id", target = "warehouseId")
-    @Mapping(source = "warehouse.name", target = "warehouseName")
+    @Mapping(source = "warehouse.code", target = "warehouseName")
     @Mapping(source = "costCenter.id", target = "costCenterId")
-    @Mapping(source = "costCenter.name", target = "costCenterName")
+    @Mapping(source = "costCenter.code", target = "costCenterName")
     @Mapping(source = "uom.id", target = "uomId")
-    @Mapping(source = "uom.name", target = "uomName")
+    @Mapping(source = "uom.code", target = "uomName")
     @Mapping(source = "vendor.id", target = "vendorId")
     @Mapping(source = "vendor.name", target = "vendorName")
     MRequisitionLineDTO toDto(MRequisitionLine mRequisitionLine);

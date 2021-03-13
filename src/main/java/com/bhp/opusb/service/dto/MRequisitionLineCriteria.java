@@ -2,16 +2,14 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.BigDecimalFilter;
-import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -39,6 +37,10 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
 
     private BigDecimalFilter quantity;
 
+    private BigDecimalFilter quantityOrdered;
+
+    private BigDecimalFilter quantityBalance;
+
     private BigDecimalFilter unitPrice;
 
     private StringFilter remark;
@@ -48,6 +50,9 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
     private BooleanFilter active;
 
     private LongFilter requisitionId;
+    private StringFilter requisitionNo;
+    private BooleanFilter requisitionApproved;
+    private BooleanFilter requisitionProcessed;
 
     private LongFilter adOrganizationId;
 
@@ -71,11 +76,16 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
         this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
         this.requisitionAmount = other.requisitionAmount == null ? null : other.requisitionAmount.copy();
         this.quantity = other.quantity == null ? null : other.quantity.copy();
+        this.quantityOrdered = other.quantityOrdered == null ? null : other.quantityOrdered.copy();
+        this.quantityBalance = other.quantityBalance == null ? null : other.quantityBalance.copy();
         this.unitPrice = other.unitPrice == null ? null : other.unitPrice.copy();
         this.remark = other.remark == null ? null : other.remark.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.requisitionId = other.requisitionId == null ? null : other.requisitionId.copy();
+        this.requisitionNo = other.requisitionNo == null ? null : other.requisitionNo.copy();
+        this.requisitionApproved = other.requisitionApproved == null ? null : other.requisitionApproved.copy();
+        this.requisitionProcessed = other.requisitionProcessed == null ? null : other.requisitionProcessed.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.productId = other.productId == null ? null : other.productId.copy();
         this.warehouseId = other.warehouseId == null ? null : other.warehouseId.copy();
@@ -137,6 +147,22 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
         this.quantity = quantity;
     }
 
+    public BigDecimalFilter getQuantityOrdered() {
+        return quantityOrdered;
+    }
+
+    public void setQuantityOrdered(BigDecimalFilter quantityOrdered) {
+        this.quantityOrdered = quantityOrdered;
+    }
+
+    public BigDecimalFilter getQuantityBalance() {
+        return quantityBalance;
+    }
+
+    public void setQuantityBalance(BigDecimalFilter quantityBalance) {
+        this.quantityBalance = quantityBalance;
+    }
+
     public BigDecimalFilter getUnitPrice() {
         return unitPrice;
     }
@@ -175,6 +201,30 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
 
     public void setRequisitionId(LongFilter requisitionId) {
         this.requisitionId = requisitionId;
+    }
+
+    public StringFilter getRequisitionNo() {
+        return requisitionNo;
+    }
+
+    public void setRequisitionNo(StringFilter requisitionNo) {
+        this.requisitionNo = requisitionNo;
+    }
+
+    public BooleanFilter getRequisitionApproved() {
+        return requisitionApproved;
+    }
+
+    public void setRequisitionApproved(BooleanFilter requisitionApproved) {
+        this.requisitionApproved = requisitionApproved;
+    }
+
+    public BooleanFilter getRequisitionProcessed() {
+        return requisitionProcessed;
+    }
+
+    public void setRequisitionProcessed(BooleanFilter requisitionProcessed) {
+        this.requisitionProcessed = requisitionProcessed;
     }
 
     public LongFilter getAdOrganizationId() {
@@ -242,11 +292,16 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
             Objects.equals(dateRequired, that.dateRequired) &&
             Objects.equals(requisitionAmount, that.requisitionAmount) &&
             Objects.equals(quantity, that.quantity) &&
+            Objects.equals(quantityOrdered, that.quantityOrdered) &&
+            Objects.equals(quantityBalance, that.quantityBalance) &&
             Objects.equals(unitPrice, that.unitPrice) &&
             Objects.equals(remark, that.remark) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(requisitionId, that.requisitionId) &&
+            Objects.equals(requisitionNo, that.requisitionNo) &&
+            Objects.equals(requisitionApproved, that.requisitionApproved) &&
+            Objects.equals(requisitionProcessed, that.requisitionProcessed) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(productId, that.productId) &&
             Objects.equals(warehouseId, that.warehouseId) &&
@@ -264,11 +319,16 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
         dateRequired,
         requisitionAmount,
         quantity,
+        quantityOrdered,
+        quantityBalance,
         unitPrice,
         remark,
         uid,
         active,
         requisitionId,
+        requisitionNo,
+        requisitionApproved,
+        requisitionProcessed,
         adOrganizationId,
         productId,
         warehouseId,
@@ -287,11 +347,16 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
                 (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +
                 (requisitionAmount != null ? "requisitionAmount=" + requisitionAmount + ", " : "") +
                 (quantity != null ? "quantity=" + quantity + ", " : "") +
+                (quantityOrdered != null ? "quantityOrdered=" + quantityOrdered + ", " : "") +
+                (quantityBalance != null ? "quantityBalance=" + quantityBalance + ", " : "") +
                 (unitPrice != null ? "unitPrice=" + unitPrice + ", " : "") +
                 (remark != null ? "remark=" + remark + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (requisitionId != null ? "requisitionId=" + requisitionId + ", " : "") +
+                (requisitionNo != null ? "requisitionNo=" + requisitionNo + ", " : "") +
+                (requisitionApproved != null ? "requisitionApproved=" + requisitionApproved + ", " : "") +
+                (requisitionProcessed != null ? "requisitionProcessed=" + requisitionProcessed + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (productId != null ? "productId=" + productId + ", " : "") +
                 (warehouseId != null ? "warehouseId=" + warehouseId + ", " : "") +

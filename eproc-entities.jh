@@ -789,6 +789,8 @@ entity MRequisitionLine {
 	dateRequired LocalDate
 	requisitionAmount BigDecimal required
 	quantity BigDecimal required
+	quantityOrdered BigDecimal required
+	quantityBalance BigDecimal required
 	unitPrice BigDecimal required
 	remark String
 	uid UUID
