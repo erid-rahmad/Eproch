@@ -8,6 +8,7 @@ import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CWarehouse;
 import com.bhp.opusb.domain.CCostCenter;
+import com.bhp.opusb.domain.CPaymentTerm;
 import com.bhp.opusb.repository.MPurchaseOrderRepository;
 import com.bhp.opusb.service.MPurchaseOrderService;
 import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
@@ -184,6 +185,16 @@ public class MPurchaseOrderResourceIT {
             cCostCenter = TestUtil.findAll(em, CCostCenter.class).get(0);
         }
         mPurchaseOrder.setCostCenter(cCostCenter);
+        // Add required entity
+        CPaymentTerm cPaymentTerm;
+        if (TestUtil.findAll(em, CPaymentTerm.class).isEmpty()) {
+            cPaymentTerm = CPaymentTermResourceIT.createEntity(em);
+            em.persist(cPaymentTerm);
+            em.flush();
+        } else {
+            cPaymentTerm = TestUtil.findAll(em, CPaymentTerm.class).get(0);
+        }
+        mPurchaseOrder.setPaymentTerm(cPaymentTerm);
         return mPurchaseOrder;
     }
     /**
@@ -266,6 +277,16 @@ public class MPurchaseOrderResourceIT {
             cCostCenter = TestUtil.findAll(em, CCostCenter.class).get(0);
         }
         mPurchaseOrder.setCostCenter(cCostCenter);
+        // Add required entity
+        CPaymentTerm cPaymentTerm;
+        if (TestUtil.findAll(em, CPaymentTerm.class).isEmpty()) {
+            cPaymentTerm = CPaymentTermResourceIT.createUpdatedEntity(em);
+            em.persist(cPaymentTerm);
+            em.flush();
+        } else {
+            cPaymentTerm = TestUtil.findAll(em, CPaymentTerm.class).get(0);
+        }
+        mPurchaseOrder.setPaymentTerm(cPaymentTerm);
         return mPurchaseOrder;
     }
 
@@ -1413,6 +1434,22 @@ public class MPurchaseOrderResourceIT {
 
         // Get all the mPurchaseOrderList where costCenter equals to costCenterId + 1
         defaultMPurchaseOrderShouldNotBeFound("costCenterId.equals=" + (costCenterId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMPurchaseOrdersByPaymentTermIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CPaymentTerm paymentTerm = mPurchaseOrder.getPaymentTerm();
+        mPurchaseOrderRepository.saveAndFlush(mPurchaseOrder);
+        Long paymentTermId = paymentTerm.getId();
+
+        // Get all the mPurchaseOrderList where paymentTerm equals to paymentTermId
+        defaultMPurchaseOrderShouldBeFound("paymentTermId.equals=" + paymentTermId);
+
+        // Get all the mPurchaseOrderList where paymentTerm equals to paymentTermId + 1
+        defaultMPurchaseOrderShouldNotBeFound("paymentTermId.equals=" + (paymentTermId + 1));
     }
 
     /**

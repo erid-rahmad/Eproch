@@ -1,4 +1,5 @@
 import settings from '@/settings';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { ElForm } from 'element-ui/types/form';
 import { ElInput } from 'element-ui/types/input';
 import { ElTable } from 'element-ui/types/table';
@@ -12,6 +13,7 @@ export default class GeneratePo extends Vue {
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
   rowGutter = 24;
+  generating = false;
   loadingPr = false;
   loadingPrLines = false;
 
@@ -22,25 +24,21 @@ export default class GeneratePo extends Vue {
     height: 450
   };
 
-  public itemsPerPage = 10;
-  public queryCount: number = null;
-  public page = 1;
-  public previousPage = 1;
-  public propOrder = 'id';
-  public reverse = false;
-  public totalItems = 0;
+  itemsPerPage = 10;
+  queryCount: number = null;
+  page = 1;
+  previousPage = 1;
+  propOrder = 'id';
+  reverse = false;
+  totalItems = 0;
 
-  private baseApiUrlReference = "/api/ad-references";
-  private baseApiUrlReferenceList = "/api/ad-reference-lists";
-  private keyReferenceTop: string = "top";
 
-  public dialogConfirmationVisible: boolean = false;
-
-  public gridData: any[] = [];
-  public currencyOptions: any[] = [];
-  public vendorOptions: any[] = [];
-  public warehouseOptions: any[] = [];
-  public paymentTermOptions: any[] = [];
+  dialogConfirmationVisible: boolean = false;
+  gridData: any[] = [];
+  currencyOptions: any[] = [];
+  vendorOptions: any[] = [];
+  warehouseOptions: any[] = [];
+  paymentTermOptions: any[] = [];
 
   filter = {
     requisitionNo: null,
@@ -48,20 +46,19 @@ export default class GeneratePo extends Vue {
   };
 
   form = {
-    requisitionId: null,
-    adOrganizationId: null,
+    adOrganizationId: accountStore.organizationInfo.id,
     costCenterId: null,
     currencyId: null,
-    dateOrdered: new Date(),
+    datePromised: new Date(),
     documentTypeId: null,
     paymentTermId: null,
     tax: false,
     warehouseId: null,
-    mPurchaseOrderLines: []
+    requisitionLines: []
   }
 
   mainFormValidationSchema = {
-    dateOrdered: {
+    datePromised: {
       required: true,
       message: 'Date Ordered is required'
     },
@@ -95,8 +92,7 @@ export default class GeneratePo extends Vue {
     this.retrieveDropDownOptions('/api/c-vendors', 'vendorOptions');
     this.retrieveDropDownOptions('/api/c-warehouses', 'warehouseOptions');
     this.retrieveDropDownOptions('/api/c-currencies', 'currencyOptions');
-
-    this.retrieveReferenceList(this.keyReferenceTop);
+    this.retrieveDropDownOptions('/api/c-payment-terms', 'paymentTermOptions');
   }
 
   mounted() {
@@ -181,7 +177,7 @@ export default class GeneratePo extends Vue {
   }
 
   public onSelectionChanged(selection: any) {
-    this.form.mPurchaseOrderLines = selection;
+    this.form.requisitionLines = selection;
   }
 
   onVendorChange(vendorId: number) {
@@ -259,39 +255,29 @@ export default class GeneratePo extends Vue {
       });
   }
 
-  private retrieveReferenceList(param: string) {
-    this.commonService('/api/ad-reference-lists')
-    .retrieve({
-      criteriaQuery: [
-        'active.equals=true',
-        `adReferenceValue.equals=${param}`
-      ],
-      paginationQuery: {
-        page: 0,
-        size: 1000,
-        sort: ['name']
-      }
-    })
-    .then(res => {
-      this.paymentTermOptions = res.data.map(item => {
-        return {
-          id: item.id,
-          value: item.value,
-          name: item.name
-        };
-      });
-    });
-  }
-
   generatePurchaseOrder() {
-    if (! this.form.mPurchaseOrderLines.length) {
+    if (! this.form.requisitionLines.length) {
       this.$message.error('Please select one or more lines');
       return;
     }
 
     (<ElForm>this.$refs.mainForm).validate((passed, error) => {
       if (passed) {
-        console.log(this.form);
+        this.generating = true;
+        this.commonService('/api/m-purchase-orders/generate')
+          .create(this.form)
+          .then(res => {
+            console.log('PO generated. response: %O', res);
+            const count = res.length === 1 ? ` #${res[0].documentNo}` : '(s)';
+            this.$message.success(`Purchase Order${count} has been created successfully.`);
+          })
+          .catch(err => {
+            console.log('Failed generating purchase order(s). %O', err);
+            this.$message.error('Failed generating purchase order(s)');
+          })
+          .finally(() => {
+            this.generating = false;
+          })
       }
     });
   }

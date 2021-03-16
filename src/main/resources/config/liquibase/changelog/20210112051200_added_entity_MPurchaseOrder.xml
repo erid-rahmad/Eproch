@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity MPurchaseOrder.
     -->
@@ -100,13 +100,15 @@
                   separator=";"
                   tableName="m_purchase_order">
             <column name="id" type="numeric"/>
+            <column name="date_trx" type="date"/>
+            <column name="document_no" type="string"/>
             <column name="document_action" type="string"/>
             <column name="document_status" type="string"/>
-            <column name="is_approved" type="boolean"/>
-            <column name="is_processed" type="boolean"/>
+            <column name="approved" type="boolean"/>
+            <column name="processed" type="boolean"/>
+            <column name="grand_total" type="numeric"/>
             <column name="tax" type="boolean"/>
-            <column name="document_date" type="date"/>
-            <column name="date_required" type="date"/>
+            <column name="date_promised" type="date"/>
             <column name="description" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
@@ -116,6 +118,7 @@
             <column name="currency_id" type="numeric"/>
             <column name="warehouse_id" type="numeric"/>
             <column name="cost_center_id" type="numeric"/>
+            <column name="payment_term_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
@@ -143,6 +146,17 @@
                 <constraints nullable="true"/>
             </column>
         </addColumn>
+    </changeSet>
+
+    <changeSet id="20210315162900" author="Ananta Aryadewa">
+        <setColumnRemarks tableName="m_purchase_order" columnName="document_action" remarks="" />
+        <setColumnRemarks tableName="m_purchase_order" columnName="document_status" remarks="" />
+        <addColumn tableName="m_purchase_order">
+            <column name="payment_term_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <dropColumn tableName="m_purchase_order" columnName="date_required" />
     </changeSet>
 
 </databaseChangeLog>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity CPaymentSchedule.
+    -->
+    <changeSet id="20210314225600-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="c_payment_schedule"
+                                 constraintName="fk_c_payment_schedule_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_payment_term_id"
+                                 baseTableName="c_payment_schedule"
+                                 constraintName="fk_c_payment_schedule_c_payment_term_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_payment_term"/>
+
+    </changeSet>
+</databaseChangeLog>

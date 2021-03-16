@@ -2,6 +2,8 @@ package com.bhp.opusb.service;
 
 import java.util.Optional;
 
+import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.MRequisition;
 import com.bhp.opusb.repository.CDocumentTypeRepository;
 import com.bhp.opusb.repository.MRequisitionRepository;
@@ -32,8 +34,9 @@ public class MRequisitionService {
     private final CDocumentTypeRepository cDocumentTypeRepository;
 
     private final MRequisitionMapper mRequisitionMapper;
+    private final Document document;
 
-    public MRequisitionService(ADOrganizationService adOrganizationService,
+    public MRequisitionService(ApplicationProperties applicationProperties, ADOrganizationService adOrganizationService,
             MRequisitionLineService mRequisitionLineService, MRequisitionRepository mRequisitionRepository,
             CDocumentTypeRepository cDocumentTypeRepository, MRequisitionMapper mRequisitionMapper) {
         this.adOrganizationService = adOrganizationService;
@@ -41,6 +44,8 @@ public class MRequisitionService {
         this.mRequisitionRepository = mRequisitionRepository;
         this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.mRequisitionMapper = mRequisitionMapper;
+
+        document = applicationProperties.getDocuments().get("purchaseRequisition");
     }
 
     /**
@@ -54,12 +59,11 @@ public class MRequisitionService {
         MRequisition mRequisition = mRequisitionMapper.toEntity(mRequisitionDTO);
 
         if (mRequisition.getDocumentNo() == null) {
-            mRequisition.documentNo(DocumentUtil.buildRunningNumber(mRequisition.getDateTrx(), mRequisitionRepository));
+            mRequisition.documentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mRequisitionRepository));
         }
 
-        log.debug("Document type: {}", mRequisition.getDocumentType());
         if (mRequisition.getDocumentType() == null) {
-            cDocumentTypeRepository.findFirstByName("Purchase Requisition")
+            cDocumentTypeRepository.findFirstByName(document.getDocumentType())
                 .ifPresent(mRequisition::setDocumentType);
         }
 

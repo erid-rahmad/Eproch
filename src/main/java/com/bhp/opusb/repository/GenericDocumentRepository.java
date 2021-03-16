@@ -33,4 +33,7 @@ public interface GenericDocumentRepository<T, I> extends JpaRepository<T, I>, Jp
       
   @Query("SELECT max(CAST(t.documentNo AS long)) FROM #{#entityName} t WHERE t.dateTrx BETWEEN :startDate AND :endDate")
   Long getMaxDocumentNoWithinDates(@Param("startDate") LocalDate startDate, @Param("endDate") LocalDate endDate);
+
+  @Query(nativeQuery = true, value = "SELECT nextval( 'document_sequence' )")
+  int getNextDocumentSequence();
 }

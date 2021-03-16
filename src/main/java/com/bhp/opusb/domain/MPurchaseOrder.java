@@ -1,15 +1,25 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A MPurchaseOrder.
@@ -26,7 +36,7 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "date_trx", nullable = false)
+    @Column(name = "date_trx")
     private LocalDate dateTrx;
 
     @Size(max = 30)
@@ -99,6 +109,11 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("mPurchaseOrders")
     private CCostCenter costCenter;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mPurchaseOrders")
+    private CPaymentTerm paymentTerm;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -341,6 +356,19 @@ public class MPurchaseOrder extends AbstractAuditingEntity {
 
     public void setCostCenter(CCostCenter cCostCenter) {
         this.costCenter = cCostCenter;
+    }
+
+    public CPaymentTerm getPaymentTerm() {
+        return paymentTerm;
+    }
+
+    public MPurchaseOrder paymentTerm(CPaymentTerm cPaymentTerm) {
+        this.paymentTerm = cPaymentTerm;
+        return this;
+    }
+
+    public void setPaymentTerm(CPaymentTerm cPaymentTerm) {
+        this.paymentTerm = cPaymentTerm;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

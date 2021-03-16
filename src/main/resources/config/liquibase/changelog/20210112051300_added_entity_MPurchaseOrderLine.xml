@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity MPurchaseOrderLine.
     -->
@@ -103,9 +103,8 @@
                   separator=";"
                   tableName="m_purchase_order_line">
             <column name="id" type="numeric"/>
-            <column name="tax_id" type="string"/>
-            <column name="document_date" type="date"/>
-            <column name="document_required" type="date"/>
+            <column name="date_trx" type="date"/>
+            <column name="date_promised" type="date"/>
             <column name="order_amount" type="numeric"/>
             <column name="quantity" type="numeric"/>
             <column name="unit_price" type="numeric"/>
@@ -113,13 +112,9 @@
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="purchase_order_id" type="numeric"/>
-            <column name="requisition_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="product_id" type="numeric"/>
-            <column name="warehouse_id" type="numeric"/>
-            <column name="cost_center_id" type="numeric"/>
             <column name="uom_id" type="numeric"/>
-            <column name="vendor_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
@@ -142,6 +137,12 @@
 
     <changeSet id="20210112051300-update-2" author="dian-tri-budianto">
         <modifyDataType tableName="m_purchase_order_line" newDataType="bigint" columnName="tax_id"/>
+    </changeSet>
+
+    <changeSet id="20210315180500" author="Ananta Aryadewa">
+        <renameColumn tableName="m_purchase_order_line" oldColumnName="document_date" newColumnName="date_trx" />
+        <dropColumn tableName="m_purchase_order_line" columnName="date_required" />
+        <dropNotNullConstraint tableName="m_purchase_order_line" columnName="requisition_id" />
     </changeSet>
 
 </databaseChangeLog>

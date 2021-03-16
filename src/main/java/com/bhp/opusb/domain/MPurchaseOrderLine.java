@@ -26,14 +26,11 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "document_date")
-    private LocalDate documentDate;
+    @Column(name = "date_trx")
+    private LocalDate dateTrx;
 
     @Column(name = "date_promised")
     private LocalDate datePromised;
-
-    @Column(name = "date_required")
-    private LocalDate dateRequired;
 
     @NotNull
     @Column(name = "order_amount", precision = 21, scale = 2, nullable = false)
@@ -79,11 +76,11 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private CProduct product;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private CWarehouse warehouse;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private CCostCenter costCenter;
 
@@ -92,7 +89,7 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private CUnitOfMeasure uom;
 
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JsonIgnoreProperties("mPurchaseOrderLines")
     private CVendor vendor;
 
@@ -105,17 +102,17 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
         this.id = id;
     }
 
-    public LocalDate getDocumentDate() {
-        return documentDate;
+    public LocalDate getDateTrx() {
+        return dateTrx;
     }
 
-    public MPurchaseOrderLine documentDate(LocalDate documentDate) {
-        this.documentDate = documentDate;
+    public MPurchaseOrderLine dateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
         return this;
     }
 
-    public void setDocumentDate(LocalDate documentDate) {
-        this.documentDate = documentDate;
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
     }
 
     public LocalDate getDatePromised() {
@@ -129,19 +126,6 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
 
     public void setDatePromised(LocalDate datePromised) {
         this.datePromised = datePromised;
-    }
-
-    public LocalDate getDateRequired() {
-        return dateRequired;
-    }
-
-    public MPurchaseOrderLine dateRequired(LocalDate dateRequired) {
-        this.dateRequired = dateRequired;
-        return this;
-    }
-
-    public void setDateRequired(LocalDate dateRequired) {
-        this.dateRequired = dateRequired;
     }
 
     public BigDecimal getOrderAmount() {
@@ -365,9 +349,8 @@ public class MPurchaseOrderLine extends AbstractAuditingEntity {
     public String toString() {
         return "MPurchaseOrderLine{" +
             "id=" + getId() +
-            ", documentDate='" + getDocumentDate() + "'" +
+            ", dateTrx='" + getDateTrx() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
-            ", dateRequired='" + getDateRequired() + "'" +
             ", orderAmount=" + getOrderAmount() +
             ", quantity=" + getQuantity() +
             ", unitPrice=" + getUnitPrice() +

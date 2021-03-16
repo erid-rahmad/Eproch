@@ -205,3 +205,10 @@ kafka:
 application:
   attachment:
     upload-dir: /opt/eproc/data/attachments
+  documents:
+    purchaseOrder:
+      documentType: 'Purchase Order'
+      documentNumberPrefix: 'PO-'
+    purchaseRequisition:
+      documentType: 'Purchase Requisition'
+      documentNumberPrefix: 'PR-'

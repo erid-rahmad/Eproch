@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    
+    <!--
+        Added the entity CPaymentTerm.
+    -->
+    <changeSet id="20210314222600-1" author="jhipster">
+        <createTable tableName="c_payment_term" remarks="The CPaymentTerm entity.\n@author A true hipster">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="code" type="varchar(20)">
+                <constraints nullable="false" />
+            </column>
+            <column name="name" type="varchar(50)">
+                <constraints nullable="false" />
+            </column>
+            <column name="description" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="after_delivery" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="as_default" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="calculate_business_day" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="discount" type="decimal(21,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="discount_2" type="decimal(21,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="discount_days" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="discount_days_2" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="document_note" type="varchar(1000)">
+                <constraints nullable="true" />
+            </column>
+            <column name="fix_month_cut_off" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="fix_month_day" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="fix_month_offset" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="fixed_due_date" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="grace_days" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="net_day" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="net_days" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="on_next_business_day" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="transaction_type" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="valid" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="uid" type="${uuidType}">
+                <constraints nullable="true" />
+            </column>
+            <column name="active" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="ad_organization_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20210314222600-1-relations" author="jhipster">
+
+    </changeSet>
+    
+    <!-- Added the entity audit columns -->
+    <changeSet id="20210314222600-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="c_payment_term">
+            <column name="created_by" type="varchar(50)" defaultValue="system">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
+    <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+
+    <!--
+        Load sample data generated with Faker.js
+        - This data can be easily edited using a CSV editor (or even MS Excel) and
+          is located in the 'src/main/resources/config/liquibase/fake-data' directory
+        - By default this data is applied when running with the JHipster 'dev' profile.
+          This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
+          Spring Boot configuration key.
+    -->
+    <changeSet id="20210314222600-1-data" author="jhipster" context="faker">
+        <loadData
+                  file="config/liquibase/fake-data/c_payment_term.csv"
+                  separator=";"
+                  tableName="c_payment_term">
+            <column name="id" type="numeric"/>
+            <column name="code" type="string"/>
+            <column name="name" type="string"/>
+            <column name="description" type="string"/>
+            <column name="after_delivery" type="boolean"/>
+            <column name="as_default" type="boolean"/>
+            <column name="calculate_business_day" type="boolean"/>
+            <column name="discount" type="numeric"/>
+            <column name="discount_2" type="numeric"/>
+            <column name="discount_days" type="numeric"/>
+            <column name="discount_days_2" type="numeric"/>
+            <column name="document_note" type="string"/>
+            <column name="fix_month_cut_off" type="numeric"/>
+            <column name="fix_month_day" type="numeric"/>
+            <column name="fix_month_offset" type="numeric"/>
+            <column name="fixed_due_date" type="boolean"/>
+            <column name="grace_days" type="numeric"/>
+            <column name="net_day" type="numeric"/>
+            <column name="net_days" type="numeric"/>
+            <column name="on_next_business_day" type="boolean"/>
+            <column name="transaction_type" type="string"/>
+            <column name="valid" type="boolean"/>
+            <column name="uid" type="${uuidType}"/>
+            <column name="active" type="boolean"/>
+            <column name="ad_organization_id" type="numeric"/>
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
+        </loadData>
+    </changeSet>
+
+</databaseChangeLog>

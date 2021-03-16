@@ -7,7 +7,7 @@ import java.util.UUID;
 
 import javax.validation.constraints.NotNull;
 
-import com.bhp.opusb.domain.enumeration.CTaxTransactionType;
+import com.bhp.opusb.domain.enumeration.CTransactionType;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CTax} entity.
@@ -28,7 +28,7 @@ public class CTaxDTO extends AbstractAuditingDTO {
     private LocalDate validFrom;
 
     @NotNull
-    private CTaxTransactionType transactionType;
+    private CTransactionType transactionType;
 
     private UUID uid;
 
@@ -81,11 +81,11 @@ public class CTaxDTO extends AbstractAuditingDTO {
         this.validFrom = validFrom;
     }
 
-    public CTaxTransactionType getTransactionType() {
+    public CTransactionType getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(CTaxTransactionType transactionType) {
+    public void setTransactionType(CTransactionType transactionType) {
         this.transactionType = transactionType;
     }
 

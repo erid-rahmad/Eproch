@@ -2,15 +2,11 @@
     "name": "MPurchaseOrderLine",
     "fields": [
         {
-            "fieldName": "documentDate",
+            "fieldName": "dateTrx",
             "fieldType": "LocalDate"
         },
         {
             "fieldName": "datePromised",
-            "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "dateRequired",
             "fieldType": "LocalDate"
         },
         {

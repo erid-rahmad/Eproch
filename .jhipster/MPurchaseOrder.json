@@ -113,6 +113,14 @@
             "relationshipValidateRules": "required",
             "relationshipName": "costCenter",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cPaymentTerm",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "paymentTerm",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210112051200",

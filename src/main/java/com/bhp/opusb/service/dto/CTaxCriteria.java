@@ -2,17 +2,16 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import com.bhp.opusb.domain.enumeration.CTransactionType;
+
 import io.github.jhipster.service.Criteria;
-import com.bhp.opusb.domain.enumeration.CTaxTransactionType;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.BigDecimalFilter;
-import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -26,20 +25,20 @@ import io.github.jhipster.service.filter.UUIDFilter;
  */
 public class CTaxCriteria implements Serializable, Criteria {
     /**
-     * Class for filtering CTaxTransactionType
+     * Class for filtering CTransactionType
      */
-    public static class CTaxTransactionTypeFilter extends Filter<CTaxTransactionType> {
+    public static class CTransactionTypeFilter extends Filter<CTransactionType> {
 
-        public CTaxTransactionTypeFilter() {
+        public CTransactionTypeFilter() {
         }
 
-        public CTaxTransactionTypeFilter(CTaxTransactionTypeFilter filter) {
+        public CTransactionTypeFilter(CTransactionTypeFilter filter) {
             super(filter);
         }
 
         @Override
-        public CTaxTransactionTypeFilter copy() {
-            return new CTaxTransactionTypeFilter(this);
+        public CTransactionTypeFilter copy() {
+            return new CTransactionTypeFilter(this);
         }
 
     }
@@ -56,7 +55,7 @@ public class CTaxCriteria implements Serializable, Criteria {
 
     private LocalDateFilter validFrom;
 
-    private CTaxTransactionTypeFilter transactionType;
+    private CTransactionTypeFilter transactionType;
 
     private UUIDFilter uid;
 
@@ -127,11 +126,11 @@ public class CTaxCriteria implements Serializable, Criteria {
         this.validFrom = validFrom;
     }
 
-    public CTaxTransactionTypeFilter getTransactionType() {
+    public CTransactionTypeFilter getTransactionType() {
         return transactionType;
     }
 
-    public void setTransactionType(CTaxTransactionTypeFilter transactionType) {
+    public void setTransactionType(CTransactionTypeFilter transactionType) {
         this.transactionType = transactionType;
     }
 

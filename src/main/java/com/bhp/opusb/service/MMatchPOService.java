@@ -17,7 +17,7 @@ import com.bhp.opusb.domain.CWarehouse;
 import com.bhp.opusb.domain.MMatchPO;
 import com.bhp.opusb.domain.MVerification;
 import com.bhp.opusb.domain.enumeration.AiStatus;
-import com.bhp.opusb.domain.enumeration.CTaxTransactionType;
+import com.bhp.opusb.domain.enumeration.CTransactionType;
 import com.bhp.opusb.repository.AiExchangeInRepository;
 import com.bhp.opusb.repository.CCurrencyRepository;
 import com.bhp.opusb.repository.CLocatorRepository;
@@ -465,7 +465,7 @@ public class MMatchPOService {
                     .name(value)
                     .description(value)
                     .taxCategory(taxCategory)
-                    .transactionType(CTaxTransactionType.BOTH)
+                    .transactionType(CTransactionType.BOTH)
                 ));
             })
             .orElseGet(() -> null);

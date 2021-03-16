@@ -182,7 +182,7 @@ entity CTax {
 	description String
 	rate BigDecimal
 	validFrom LocalDate
-	transactionType CTaxTransactionType required
+	transactionType CTransactionType required
 	uid UUID
 	active Boolean
 }
@@ -319,6 +319,55 @@ entity CElementValue {
 	name String required
 	type String required
 	description String
+	uid UUID
+	active Boolean
+}
+/**
+ * The CPaymentTerm entity.
+ * @author A true hipster
+ */
+entity CPaymentTerm {
+	code String required maxlength(20)
+	name String required maxlength(50)
+	description String
+	
+	afterDelivery Boolean
+	asDefault Boolean
+	calculateBusinessDay Boolean
+	discount BigDecimal required
+	discount2 BigDecimal required
+	discountDays Long max(10) required
+	discountDays2 Long max(10) required
+	documentNote String maxlength(1000)
+
+	fixMonthCutOff Long max(10)
+	fixMonthDay Long max(10)
+	fixMonthOffset Long max(10)
+	fixedDueDate Boolean
+	graceDays Long max(10)
+	netDay Integer max(1)
+	netDays Long max(10) required
+	onNextBusinessDay Boolean
+
+	transactionType CTransactionType required
+	valid Boolean
+
+	uid UUID
+	active Boolean
+}
+/**
+ * The CPaymentSchedule entity.
+ * @author A true hipster
+ */
+entity CPaymentSchedule {
+	discount BigDecimal required
+	discountDays Long max(10) required
+	graceDays Long max(10)
+	netDay Integer max(1)
+	netDays Long max(10) required
+	percentage BigDecimal required
+	valid Boolean
+
 	uid UUID
 	active Boolean
 }
@@ -813,9 +862,8 @@ entity MPurchaseOrder {
 }
 
 entity MPurchaseOrderLine {
-	documentDate LocalDate
+	dateTrx LocalDate
 	datePromised LocalDate
-	dateRequired LocalDate
 	orderAmount BigDecimal required
 	quantity BigDecimal required
 	unitPrice BigDecimal required
@@ -955,7 +1003,7 @@ enum CGalleryItemType {
 	DOCUMENT, IMAGE, VIDEO
 }
 
-enum CTaxTransactionType {
+enum CTransactionType {
 	SALES, PURCHASE, BOTH
 }
 
@@ -1083,6 +1131,11 @@ relationship ManyToOne {
 	CConvertionRate{adOrganization required} to ADOrganization
 
 	CElementValue{adOrganization required} to ADOrganization
+
+	CPaymentTerm{adOrganization required} to ADOrganization
+	CPaymentSchedule{adOrganization required} to ADOrganization
+	CPaymentSchedule{cPaymentTerm required} to CPaymentTerm
+
 	CProductGroupAccount{assetAccount} to CElementValue
 	CProductGroupAccount{depreciationAccount} to CElementValue
 	CProductGroup{adOrganization required} to ADOrganization
@@ -1252,6 +1305,7 @@ relationship ManyToOne {
 	MPurchaseOrder{currency required} to CCurrency
 	MPurchaseOrder{warehouse required} to CWarehouse
 	MPurchaseOrder{costCenter required} to CCostCenter
+	MPurchaseOrder{paymentTerm required} to CPaymentTerm
 
 	MPurchaseOrderLine{purchaseOrder required} to MPurchaseOrder
 	MPurchaseOrderLine{requisition} to MRequisition

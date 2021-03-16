@@ -1,0 +1,11 @@
+id;discount;discount_days;grace_days;net_day;net_days;percentage;valid;uid;active;ad_organization_id;c_payment_term_id
+1;2475;6;0;0;0;83960;true;5085e087-26eb-482f-a9f1-7f45f5ab6557;false;1;1
+2;61588;10;9;0;5;5317;false;e969ee15-875f-4810-aeea-ca75fcf246d2;true;2;2
+3;86696;6;5;0;1;36300;true;654e78cf-809b-4a97-a4cc-c8b01aa77b77;false;3;3
+4;80066;7;6;1;7;47020;false;0a38c17b-c2db-43f8-a3e5-fce56ef5d185;false;4;4
+5;47998;5;4;0;7;32988;true;95a4af1e-86cb-48ce-8d07-3e56c4e5b692;true;5;5
+6;82422;6;9;0;6;76115;true;c619d90a-86e6-45b2-bf49-1e00ce36892c;true;6;6
+7;44671;3;7;0;1;43953;true;29dc6be4-d29c-4a1b-ac28-f6ddd30d3753;false;7;7
+8;67902;4;2;0;0;66796;false;77eddac4-74e1-4c65-af97-45aaa57d513f;true;8;8
+9;30149;3;0;0;8;85491;false;bbe5c9dd-fcba-4fc9-91ec-5863a2602a3b;false;9;9
+10;35985;3;2;0;5;42239;false;c8d4cb17-8124-4afd-a8b0-eb421b7b0d77;true;10;10

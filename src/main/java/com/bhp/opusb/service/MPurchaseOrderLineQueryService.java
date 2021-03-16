@@ -91,14 +91,11 @@ public class MPurchaseOrderLineQueryService extends QueryService<MPurchaseOrderL
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MPurchaseOrderLine_.id));
             }
-            if (criteria.getDocumentDate() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDocumentDate(), MPurchaseOrderLine_.documentDate));
+            if (criteria.getDateTrx() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), MPurchaseOrderLine_.dateTrx));
             }
             if (criteria.getDatePromised() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDatePromised(), MPurchaseOrderLine_.datePromised));
-            }
-            if (criteria.getDateRequired() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDateRequired(), MPurchaseOrderLine_.dateRequired));
             }
             if (criteria.getOrderAmount() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getOrderAmount(), MPurchaseOrderLine_.orderAmount));

@@ -1,5 +1,8 @@
 <template>
-  <div class="app-container">
+  <div
+    v-loading="generating"
+    class="app-container"
+  >
     <el-row>
       <el-col
         :span="24"
@@ -143,9 +146,9 @@
             >
               <el-option
                 v-for="item in paymentTermOptions"
-                :key="item.value"
-                :label="item.name"
-                :value="item.value"
+                :key="item.key"
+                :label="item.code"
+                :value="item.key"
               ></el-option>
             </el-select>
           </el-form-item>

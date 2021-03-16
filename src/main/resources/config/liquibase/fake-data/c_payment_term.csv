@@ -1,0 +1,11 @@
+id;code;name;description;after_delivery;as_default;calculate_business_day;discount;discount_2;discount_days;discount_days_2;document_note;fix_month_cut_off;fix_month_day;fix_month_offset;fixed_due_date;grace_days;net_day;net_days;on_next_business_day;transaction_type;valid;uid;active;ad_organization_id
+1;hacking COM payment;Convertible Marks Chair input;Dynamic Factors;false;false;true;4551;25768;6;10;generate Infrastructure;10;2;5;false;5;0;6;false;SALES;true;d4286261-14cb-479c-bf07-5548de038c87;true;1
+2;Metal monitor;Rustic Frozen Bacon Solutions;Saint Barthelemy Tasty Frozen Cheese;true;false;false;90587;18886;0;5;National orchid Creative;9;8;5;false;1;0;6;true;BOTH;true;8c22ae15-f2e6-4054-9243-00228e34800c;false;2
+3;Paradigm;Oklahoma navigating Web;calculate green homogeneous;true;true;false;78577;70240;2;3;Comoro Franc Savings Account;4;1;3;false;10;0;1;false;BOTH;true;1b94a91b-c154-48dc-9059-ad64a22cc86f;true;3
+4;bandwidth Accounts;communities;Robust brand;false;true;false;36904;40896;4;9;Trinidad and Tobago Dollar;6;1;0;true;6;0;3;true;SALES;true;b72e636c-6673-4b53-a3b1-1a53b1f18454;false;4
+5;optical;bluetooth;Object-based;true;true;false;5605;50152;8;10;Personal Loan Account Engineer;7;10;10;false;7;1;5;false;SALES;false;4b96b643-1a25-4069-9849-e1beb69fdd6f;false;5
+6;Valley fuchsia;mission-critical enterprise;Texas;true;true;true;94286;35382;7;1;matrix;9;4;8;true;0;1;2;true;BOTH;true;33c22b4a-22ce-4e9d-8d66-68c2daff9704;false;6
+7;Soft;Haven Regional;Cliff deposit grey;false;true;true;28909;77416;7;1;Mississippi;7;8;2;true;8;1;3;true;BOTH;true;36842fa6-1a67-42f5-a79d-d6070923ccdf;true;7
+8;transmit cultivate h;Small Frozen Chips;Swaziland deliverables;false;false;true;9312;89837;8;2;Movies website quantify;8;9;0;true;6;0;0;false;BOTH;false;0adeab33-85bb-4f1a-b882-32996074f5c1;false;8
+9;auxiliary Developer ;hard drive;backing up;false;false;true;94085;51481;4;8;incentivize;5;6;5;false;9;1;2;false;BOTH;false;b25b93dd-b91d-4104-b368-c822f864c2aa;true;9
+10;Health;Wooden Corporate;Mauritius;true;true;false;55156;8358;9;8;deposit Nicaragua Administrator;3;2;3;false;4;0;5;true;PURCHASE;false;29ed3755-ea6b-4122-bb9a-df3c73f31be8;false;10
