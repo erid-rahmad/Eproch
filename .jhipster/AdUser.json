@@ -1,82 +1,78 @@
 {
-    "name": "AdUser",
-    "fields": [
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "phone",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "20"
-        },
-        {
-            "fieldName": "position",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "30"
-        },
-        {
-            "fieldName": "vendor",
-            "javadoc": "Whether it is a vendor or not",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "failedLoginCount",
-            "fieldType": "Integer"
-        },
-        {
-            "fieldName": "lastLoginDate",
-            "fieldType": "Instant"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "one-to-one",
-            "otherEntityName": "user",
-            "otherEntityRelationshipName": "adUser",
-            "relationshipValidateRules": "required",
-            "relationshipName": "user",
-            "otherEntityField": "login",
-            "ownerSide": true
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cVendor",
-            "otherEntityRelationshipName": "adUser",
-            "javadoc": "This field should not empty for a supplier's user",
-            "relationshipName": "cVendor",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "adUser",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20201021111500",
-    "javadoc": "The extended User entity.",
-    "entityTableName": "ad_user",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "AdUser",
+  "fields": [
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "phone",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "20"
+    },
+    {
+      "fieldName": "position",
+      "fieldType": "String",
+      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRulesMaxlength": "30"
+    },
+    {
+      "fieldName": "vendor",
+      "javadoc": "Whether it is a vendor or not",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "failedLoginCount",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "lastLoginDate",
+      "fieldType": "Instant"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "adUser",
+      "relationshipValidateRules": "required",
+      "relationshipName": "user",
+      "otherEntityField": "login",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cVendor",
+      "otherEntityRelationshipName": "adUser",
+      "javadoc": "This field should not empty for a supplier's user",
+      "relationshipName": "cVendor",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "adUser",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201021111500",
+  "javadoc": "The extended User entity.",
+  "entityTableName": "ad_user",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

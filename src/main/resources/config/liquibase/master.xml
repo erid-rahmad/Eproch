@@ -121,6 +121,9 @@
     <include file="config/liquibase/changelog/20210215032900_added_entity_MVendorSuggestion.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210301080100_added_entity_MBiddingSubItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210301080200_added_entity_MBiddingSubItemLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210309082539_added_entity_MBiddingSubmission.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210309082639_added_entity_MBiddingSubmissionLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210309082739_added_entity_MSubmissionSubItem.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210221182200_added_entity_AiExchangeOut.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210314222600_added_entity_CPaymentTerm.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210314225600_added_entity_CPaymentSchedule.xml" relativeToChangelogFile="false"/>
@@ -231,5 +234,8 @@
     <include file="config/liquibase/changelog/20210301080200_added_entity_constraints_MBiddingSubItemLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210314222600_added_entity_constraints_CPaymentTerm.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210314225600_added_entity_constraints_CPaymentSchedule.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210309082539_added_entity_constraints_MBiddingSubmission.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210309082639_added_entity_constraints_MBiddingSubmissionLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210309082739_added_entity_constraints_MSubmissionSubItem.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

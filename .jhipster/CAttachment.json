@@ -1,74 +1,72 @@
 {
-    "name": "CAttachment",
-    "fields": [
-        {
-            "fieldName": "type",
-            "fieldType": "CAttachmentType",
-            "fieldValues": "LOCAL,REMOTE",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "fileName",
-            "javadoc": "The original file name.",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "imageSmall",
-            "javadoc": "The small version of the image (for image file type).",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "imageMedium",
-            "javadoc": "The medium version of the image (for image file type).",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "imageLarge",
-            "javadoc": "The large version of the image (for image file type).",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "mimeType",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "documentType",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "uploadDir",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "cAttachment",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20210112063900",
-    "entityTableName": "c_attachment",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*"
+  "name": "CAttachment",
+  "fields": [
+    {
+      "fieldName": "type",
+      "fieldType": "CAttachmentType",
+      "fieldValues": "LOCAL,REMOTE",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fileName",
+      "javadoc": "The original file name.",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "imageSmall",
+      "javadoc": "The small version of the image (for image file type).",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "imageMedium",
+      "javadoc": "The medium version of the image (for image file type).",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "imageLarge",
+      "javadoc": "The large version of the image (for image file type).",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "mimeType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "documentType",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "uploadDir",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "cAttachment",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210112063900",
+  "entityTableName": "c_attachment",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*"
 }

@@ -1,136 +1,125 @@
 {
-    "name": "MBidding",
-    "fields": [
-        {
-            "fieldName": "biddingNo",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "unique"
-            ]
-        },
-        {
-            "fieldName": "name",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "vendorSelection",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "ceilingPrice",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "estimatedPrice",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "documentAction",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "10"
-        },
-        {
-            "fieldName": "documentStatus",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required",
-                "maxlength"
-            ],
-            "fieldValidateRulesMaxlength": "10"
-        },
-        {
-            "fieldName": "approved",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "processed",
-            "fieldType": "Boolean"
-        },
-        {
-            "fieldName": "dateReject",
-            "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "dateApprove",
-            "fieldType": "LocalDate"
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mBidding",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cCostCenter",
-            "otherEntityRelationshipName": "mBidding",
-            "relationshipValidateRules": "required",
-            "relationshipName": "costCenter",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "mRequisition",
-            "otherEntityRelationshipName": "mBidding",
-            "relationshipValidateRules": "required",
-            "relationshipName": "requisition",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cBiddingType",
-            "otherEntityRelationshipName": "mBidding",
-            "relationshipValidateRules": "required",
-            "relationshipName": "biddingType",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cEventType",
-            "otherEntityRelationshipName": "mBidding",
-            "relationshipValidateRules": "required",
-            "relationshipName": "eventType",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "adUser",
-            "otherEntityRelationshipName": "mBidding",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adUser",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20210211091700",
-    "entityTableName": "m_bidding",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "MBidding",
+  "fields": [
+    {
+      "fieldName": "biddingNo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "vendorSelection",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "ceilingPrice",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "estimatedPrice",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "documentAction",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "10"
+    },
+    {
+      "fieldName": "documentStatus",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "maxlength"],
+      "fieldValidateRulesMaxlength": "10"
+    },
+    {
+      "fieldName": "approved",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "processed",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "dateReject",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "dateApprove",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "mBidding",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cCostCenter",
+      "otherEntityRelationshipName": "mBidding",
+      "relationshipValidateRules": "required",
+      "relationshipName": "costCenter",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "mRequisition",
+      "otherEntityRelationshipName": "mBidding",
+      "relationshipValidateRules": "required",
+      "relationshipName": "requisition",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cBiddingType",
+      "otherEntityRelationshipName": "mBidding",
+      "relationshipValidateRules": "required",
+      "relationshipName": "biddingType",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "cEventType",
+      "otherEntityRelationshipName": "mBidding",
+      "relationshipValidateRules": "required",
+      "relationshipName": "eventType",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "adUser",
+      "otherEntityRelationshipName": "mBidding",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adUser",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210211091700",
+  "entityTableName": "m_bidding",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

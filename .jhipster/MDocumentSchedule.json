@@ -1,66 +1,64 @@
 {
-    "name": "MDocumentSchedule",
-    "fields": [
-        {
-            "fieldName": "docEvent",
-            "fieldType": "String",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "mBidding",
-            "otherEntityRelationshipName": "mDocumentSchedule",
-            "relationshipValidateRules": "required",
-            "relationshipName": "bidding",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mDocumentSchedule",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "mBiddingSchedule",
-            "otherEntityRelationshipName": "mDocumentSchedule",
-            "relationshipValidateRules": "required",
-            "relationshipName": "vendorSubmission",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "mBiddingSchedule",
-            "otherEntityRelationshipName": "mDocumentSchedule",
-            "relationshipValidateRules": "required",
-            "relationshipName": "vendorEvaluation",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20210215032700",
-    "entityTableName": "m_document_schedule",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true
+  "name": "MDocumentSchedule",
+  "fields": [
+    {
+      "fieldName": "docEvent",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "mBidding",
+      "otherEntityRelationshipName": "mDocumentSchedule",
+      "relationshipValidateRules": "required",
+      "relationshipName": "bidding",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "mDocumentSchedule",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "mBiddingSchedule",
+      "otherEntityRelationshipName": "mDocumentSchedule",
+      "relationshipValidateRules": "required",
+      "relationshipName": "vendorSubmission",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "mBiddingSchedule",
+      "otherEntityRelationshipName": "mDocumentSchedule",
+      "relationshipValidateRules": "required",
+      "relationshipName": "vendorEvaluation",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20210215032700",
+  "entityTableName": "m_document_schedule",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true
 }

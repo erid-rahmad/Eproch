@@ -1,56 +1,56 @@
 {
-    "name": "MProductPrice",
-    "fields": [
-        {
-            "fieldName": "minQty",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "maxQty",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "price",
-            "fieldType": "BigDecimal"
-        },
-        {
-            "fieldName": "uid",
-            "fieldType": "UUID"
-        },
-        {
-            "fieldName": "active",
-            "fieldType": "Boolean"
-        }
-    ],
-    "relationships": [
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mProductPrice",
-            "relationshipValidateRules": "required",
-            "relationshipName": "adOrganization",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "mProductCatalog",
-            "otherEntityRelationshipName": "mProductPrice",
-            "relationshipValidateRules": "required",
-            "relationshipName": "mProductCatalog",
-            "otherEntityField": "id"
-        }
-    ],
-    "changelogDate": "20201230135209",
-    "entityTableName": "m_product_price",
-    "dto": "mapstruct",
-    "pagination": "pagination",
-    "service": "serviceClass",
-    "jpaMetamodelFiltering": true,
-    "fluentMethods": true,
-    "readOnly": false,
-    "embedded": false,
-    "clientRootFolder": "",
-    "applications": "*",
-    "skipClient": true,
-    "enableEntityAudit": true
+  "name": "MProductPrice",
+  "fields": [
+    {
+      "fieldName": "minQty",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "maxQty",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "price",
+      "fieldType": "BigDecimal"
+    },
+    {
+      "fieldName": "uid",
+      "fieldType": "UUID"
+    },
+    {
+      "fieldName": "active",
+      "fieldType": "Boolean"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "aDOrganization",
+      "otherEntityRelationshipName": "mProductPrice",
+      "relationshipValidateRules": "required",
+      "relationshipName": "adOrganization",
+      "otherEntityField": "id"
+    },
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "mProductCatalog",
+      "otherEntityRelationshipName": "mProductPrice",
+      "relationshipValidateRules": "required",
+      "relationshipName": "mProductCatalog",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201230135209",
+  "entityTableName": "m_product_price",
+  "dto": "mapstruct",
+  "pagination": "pagination",
+  "service": "serviceClass",
+  "jpaMetamodelFiltering": true,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": "*",
+  "skipClient": true,
+  "enableEntityAudit": true
 }
