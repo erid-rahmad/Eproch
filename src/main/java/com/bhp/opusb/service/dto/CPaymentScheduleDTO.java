@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import io.swagger.annotations.ApiModel;
 
@@ -23,17 +23,14 @@ public class CPaymentScheduleDTO extends AbstractAuditingDTO {
     private BigDecimal discount;
 
     @NotNull
-    @Max(value = 10L)
     private Long discountDays;
 
-    @Max(value = 10L)
     private Long graceDays;
 
-    @Max(value = 1)
-    private Integer netDay;
+    @Size(max = 1)
+    private String netDay;
 
     @NotNull
-    @Max(value = 10L)
     private Long netDays;
 
     @NotNull
@@ -84,11 +81,11 @@ public class CPaymentScheduleDTO extends AbstractAuditingDTO {
         this.graceDays = graceDays;
     }
 
-    public Integer getNetDay() {
+    public String getNetDay() {
         return netDay;
     }
 
-    public void setNetDay(Integer netDay) {
+    public void setNetDay(String netDay) {
         this.netDay = netDay;
     }
 
@@ -192,7 +189,7 @@ public class CPaymentScheduleDTO extends AbstractAuditingDTO {
             ", discount=" + getDiscount() +
             ", discountDays=" + getDiscountDays() +
             ", graceDays=" + getGraceDays() +
-            ", netDay=" + getNetDay() +
+            ", netDay='" + getNetDay() + "'" +
             ", netDays=" + getNetDays() +
             ", percentage=" + getPercentage() +
             ", valid='" + isValid() + "'" +

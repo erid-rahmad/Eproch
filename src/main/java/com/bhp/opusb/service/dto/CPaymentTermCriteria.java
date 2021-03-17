@@ -9,7 +9,6 @@ import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -28,8 +27,6 @@ public class CPaymentTermCriteria implements Serializable, Criteria {
      * Class for filtering CTransactionType
      */
     public static class CTransactionTypeFilter extends Filter<CTransactionType> {
-
-        private static final long serialVersionUID = 1L;
 
         public CTransactionTypeFilter() {
         }
@@ -81,7 +78,7 @@ public class CPaymentTermCriteria implements Serializable, Criteria {
 
     private LongFilter graceDays;
 
-    private IntegerFilter netDay;
+    private StringFilter netDay;
 
     private LongFilter netDays;
 
@@ -269,11 +266,11 @@ public class CPaymentTermCriteria implements Serializable, Criteria {
         this.graceDays = graceDays;
     }
 
-    public IntegerFilter getNetDay() {
+    public StringFilter getNetDay() {
         return netDay;
     }
 
-    public void setNetDay(IntegerFilter netDay) {
+    public void setNetDay(StringFilter netDay) {
         this.netDay = netDay;
     }
 

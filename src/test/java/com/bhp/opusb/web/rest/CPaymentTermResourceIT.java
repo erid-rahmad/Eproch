@@ -65,43 +65,42 @@ public class CPaymentTermResourceIT {
     private static final BigDecimal UPDATED_DISCOUNT_2 = new BigDecimal(2);
     private static final BigDecimal SMALLER_DISCOUNT_2 = new BigDecimal(1 - 1);
 
-    private static final Long DEFAULT_DISCOUNT_DAYS = 10L;
-    private static final Long UPDATED_DISCOUNT_DAYS = 9L;
-    private static final Long SMALLER_DISCOUNT_DAYS = 10L - 1L;
+    private static final Long DEFAULT_DISCOUNT_DAYS = 1L;
+    private static final Long UPDATED_DISCOUNT_DAYS = 2L;
+    private static final Long SMALLER_DISCOUNT_DAYS = 1L - 1L;
 
-    private static final Long DEFAULT_DISCOUNT_DAYS_2 = 10L;
-    private static final Long UPDATED_DISCOUNT_DAYS_2 = 9L;
-    private static final Long SMALLER_DISCOUNT_DAYS_2 = 10L - 1L;
+    private static final Long DEFAULT_DISCOUNT_DAYS_2 = 1L;
+    private static final Long UPDATED_DISCOUNT_DAYS_2 = 2L;
+    private static final Long SMALLER_DISCOUNT_DAYS_2 = 1L - 1L;
 
     private static final String DEFAULT_DOCUMENT_NOTE = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENT_NOTE = "BBBBBBBBBB";
 
-    private static final Long DEFAULT_FIX_MONTH_CUT_OFF = 10L;
-    private static final Long UPDATED_FIX_MONTH_CUT_OFF = 9L;
-    private static final Long SMALLER_FIX_MONTH_CUT_OFF = 10L - 1L;
+    private static final Long DEFAULT_FIX_MONTH_CUT_OFF = 1L;
+    private static final Long UPDATED_FIX_MONTH_CUT_OFF = 2L;
+    private static final Long SMALLER_FIX_MONTH_CUT_OFF = 1L - 1L;
 
-    private static final Long DEFAULT_FIX_MONTH_DAY = 10L;
-    private static final Long UPDATED_FIX_MONTH_DAY = 9L;
-    private static final Long SMALLER_FIX_MONTH_DAY = 10L - 1L;
+    private static final Long DEFAULT_FIX_MONTH_DAY = 1L;
+    private static final Long UPDATED_FIX_MONTH_DAY = 2L;
+    private static final Long SMALLER_FIX_MONTH_DAY = 1L - 1L;
 
-    private static final Long DEFAULT_FIX_MONTH_OFFSET = 10L;
-    private static final Long UPDATED_FIX_MONTH_OFFSET = 9L;
-    private static final Long SMALLER_FIX_MONTH_OFFSET = 10L - 1L;
+    private static final Long DEFAULT_FIX_MONTH_OFFSET = 1L;
+    private static final Long UPDATED_FIX_MONTH_OFFSET = 2L;
+    private static final Long SMALLER_FIX_MONTH_OFFSET = 1L - 1L;
 
     private static final Boolean DEFAULT_FIXED_DUE_DATE = false;
     private static final Boolean UPDATED_FIXED_DUE_DATE = true;
 
-    private static final Long DEFAULT_GRACE_DAYS = 10L;
-    private static final Long UPDATED_GRACE_DAYS = 9L;
-    private static final Long SMALLER_GRACE_DAYS = 10L - 1L;
+    private static final Long DEFAULT_GRACE_DAYS = 1L;
+    private static final Long UPDATED_GRACE_DAYS = 2L;
+    private static final Long SMALLER_GRACE_DAYS = 1L - 1L;
 
-    private static final Integer DEFAULT_NET_DAY = 1;
-    private static final Integer UPDATED_NET_DAY = 0;
-    private static final Integer SMALLER_NET_DAY = 1 - 1;
+    private static final String DEFAULT_NET_DAY = "A";
+    private static final String UPDATED_NET_DAY = "B";
 
-    private static final Long DEFAULT_NET_DAYS = 10L;
-    private static final Long UPDATED_NET_DAYS = 9L;
-    private static final Long SMALLER_NET_DAYS = 10L - 1L;
+    private static final Long DEFAULT_NET_DAYS = 1L;
+    private static final Long UPDATED_NET_DAYS = 2L;
+    private static final Long SMALLER_NET_DAYS = 1L - 1L;
 
     private static final Boolean DEFAULT_ON_NEXT_BUSINESS_DAY = false;
     private static final Boolean UPDATED_ON_NEXT_BUSINESS_DAY = true;
@@ -1197,8 +1196,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where discountDays is greater than or equal to DEFAULT_DISCOUNT_DAYS
         defaultCPaymentTermShouldBeFound("discountDays.greaterThanOrEqual=" + DEFAULT_DISCOUNT_DAYS);
 
-        // Get all the cPaymentTermList where discountDays is greater than or equal to (DEFAULT_DISCOUNT_DAYS + 1)
-        defaultCPaymentTermShouldNotBeFound("discountDays.greaterThanOrEqual=" + (DEFAULT_DISCOUNT_DAYS + 1));
+        // Get all the cPaymentTermList where discountDays is greater than or equal to UPDATED_DISCOUNT_DAYS
+        defaultCPaymentTermShouldNotBeFound("discountDays.greaterThanOrEqual=" + UPDATED_DISCOUNT_DAYS);
     }
 
     @Test
@@ -1223,8 +1222,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where discountDays is less than DEFAULT_DISCOUNT_DAYS
         defaultCPaymentTermShouldNotBeFound("discountDays.lessThan=" + DEFAULT_DISCOUNT_DAYS);
 
-        // Get all the cPaymentTermList where discountDays is less than (DEFAULT_DISCOUNT_DAYS + 1)
-        defaultCPaymentTermShouldBeFound("discountDays.lessThan=" + (DEFAULT_DISCOUNT_DAYS + 1));
+        // Get all the cPaymentTermList where discountDays is less than UPDATED_DISCOUNT_DAYS
+        defaultCPaymentTermShouldBeFound("discountDays.lessThan=" + UPDATED_DISCOUNT_DAYS);
     }
 
     @Test
@@ -1302,8 +1301,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where discountDays2 is greater than or equal to DEFAULT_DISCOUNT_DAYS_2
         defaultCPaymentTermShouldBeFound("discountDays2.greaterThanOrEqual=" + DEFAULT_DISCOUNT_DAYS_2);
 
-        // Get all the cPaymentTermList where discountDays2 is greater than or equal to (DEFAULT_DISCOUNT_DAYS_2 + 1)
-        defaultCPaymentTermShouldNotBeFound("discountDays2.greaterThanOrEqual=" + (DEFAULT_DISCOUNT_DAYS_2 + 1));
+        // Get all the cPaymentTermList where discountDays2 is greater than or equal to UPDATED_DISCOUNT_DAYS_2
+        defaultCPaymentTermShouldNotBeFound("discountDays2.greaterThanOrEqual=" + UPDATED_DISCOUNT_DAYS_2);
     }
 
     @Test
@@ -1328,8 +1327,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where discountDays2 is less than DEFAULT_DISCOUNT_DAYS_2
         defaultCPaymentTermShouldNotBeFound("discountDays2.lessThan=" + DEFAULT_DISCOUNT_DAYS_2);
 
-        // Get all the cPaymentTermList where discountDays2 is less than (DEFAULT_DISCOUNT_DAYS_2 + 1)
-        defaultCPaymentTermShouldBeFound("discountDays2.lessThan=" + (DEFAULT_DISCOUNT_DAYS_2 + 1));
+        // Get all the cPaymentTermList where discountDays2 is less than UPDATED_DISCOUNT_DAYS_2
+        defaultCPaymentTermShouldBeFound("discountDays2.lessThan=" + UPDATED_DISCOUNT_DAYS_2);
     }
 
     @Test
@@ -1485,8 +1484,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where fixMonthCutOff is greater than or equal to DEFAULT_FIX_MONTH_CUT_OFF
         defaultCPaymentTermShouldBeFound("fixMonthCutOff.greaterThanOrEqual=" + DEFAULT_FIX_MONTH_CUT_OFF);
 
-        // Get all the cPaymentTermList where fixMonthCutOff is greater than or equal to (DEFAULT_FIX_MONTH_CUT_OFF + 1)
-        defaultCPaymentTermShouldNotBeFound("fixMonthCutOff.greaterThanOrEqual=" + (DEFAULT_FIX_MONTH_CUT_OFF + 1));
+        // Get all the cPaymentTermList where fixMonthCutOff is greater than or equal to UPDATED_FIX_MONTH_CUT_OFF
+        defaultCPaymentTermShouldNotBeFound("fixMonthCutOff.greaterThanOrEqual=" + UPDATED_FIX_MONTH_CUT_OFF);
     }
 
     @Test
@@ -1511,8 +1510,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where fixMonthCutOff is less than DEFAULT_FIX_MONTH_CUT_OFF
         defaultCPaymentTermShouldNotBeFound("fixMonthCutOff.lessThan=" + DEFAULT_FIX_MONTH_CUT_OFF);
 
-        // Get all the cPaymentTermList where fixMonthCutOff is less than (DEFAULT_FIX_MONTH_CUT_OFF + 1)
-        defaultCPaymentTermShouldBeFound("fixMonthCutOff.lessThan=" + (DEFAULT_FIX_MONTH_CUT_OFF + 1));
+        // Get all the cPaymentTermList where fixMonthCutOff is less than UPDATED_FIX_MONTH_CUT_OFF
+        defaultCPaymentTermShouldBeFound("fixMonthCutOff.lessThan=" + UPDATED_FIX_MONTH_CUT_OFF);
     }
 
     @Test
@@ -1590,8 +1589,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where fixMonthDay is greater than or equal to DEFAULT_FIX_MONTH_DAY
         defaultCPaymentTermShouldBeFound("fixMonthDay.greaterThanOrEqual=" + DEFAULT_FIX_MONTH_DAY);
 
-        // Get all the cPaymentTermList where fixMonthDay is greater than or equal to (DEFAULT_FIX_MONTH_DAY + 1)
-        defaultCPaymentTermShouldNotBeFound("fixMonthDay.greaterThanOrEqual=" + (DEFAULT_FIX_MONTH_DAY + 1));
+        // Get all the cPaymentTermList where fixMonthDay is greater than or equal to UPDATED_FIX_MONTH_DAY
+        defaultCPaymentTermShouldNotBeFound("fixMonthDay.greaterThanOrEqual=" + UPDATED_FIX_MONTH_DAY);
     }
 
     @Test
@@ -1616,8 +1615,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where fixMonthDay is less than DEFAULT_FIX_MONTH_DAY
         defaultCPaymentTermShouldNotBeFound("fixMonthDay.lessThan=" + DEFAULT_FIX_MONTH_DAY);
 
-        // Get all the cPaymentTermList where fixMonthDay is less than (DEFAULT_FIX_MONTH_DAY + 1)
-        defaultCPaymentTermShouldBeFound("fixMonthDay.lessThan=" + (DEFAULT_FIX_MONTH_DAY + 1));
+        // Get all the cPaymentTermList where fixMonthDay is less than UPDATED_FIX_MONTH_DAY
+        defaultCPaymentTermShouldBeFound("fixMonthDay.lessThan=" + UPDATED_FIX_MONTH_DAY);
     }
 
     @Test
@@ -1695,8 +1694,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where fixMonthOffset is greater than or equal to DEFAULT_FIX_MONTH_OFFSET
         defaultCPaymentTermShouldBeFound("fixMonthOffset.greaterThanOrEqual=" + DEFAULT_FIX_MONTH_OFFSET);
 
-        // Get all the cPaymentTermList where fixMonthOffset is greater than or equal to (DEFAULT_FIX_MONTH_OFFSET + 1)
-        defaultCPaymentTermShouldNotBeFound("fixMonthOffset.greaterThanOrEqual=" + (DEFAULT_FIX_MONTH_OFFSET + 1));
+        // Get all the cPaymentTermList where fixMonthOffset is greater than or equal to UPDATED_FIX_MONTH_OFFSET
+        defaultCPaymentTermShouldNotBeFound("fixMonthOffset.greaterThanOrEqual=" + UPDATED_FIX_MONTH_OFFSET);
     }
 
     @Test
@@ -1721,8 +1720,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where fixMonthOffset is less than DEFAULT_FIX_MONTH_OFFSET
         defaultCPaymentTermShouldNotBeFound("fixMonthOffset.lessThan=" + DEFAULT_FIX_MONTH_OFFSET);
 
-        // Get all the cPaymentTermList where fixMonthOffset is less than (DEFAULT_FIX_MONTH_OFFSET + 1)
-        defaultCPaymentTermShouldBeFound("fixMonthOffset.lessThan=" + (DEFAULT_FIX_MONTH_OFFSET + 1));
+        // Get all the cPaymentTermList where fixMonthOffset is less than UPDATED_FIX_MONTH_OFFSET
+        defaultCPaymentTermShouldBeFound("fixMonthOffset.lessThan=" + UPDATED_FIX_MONTH_OFFSET);
     }
 
     @Test
@@ -1852,8 +1851,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where graceDays is greater than or equal to DEFAULT_GRACE_DAYS
         defaultCPaymentTermShouldBeFound("graceDays.greaterThanOrEqual=" + DEFAULT_GRACE_DAYS);
 
-        // Get all the cPaymentTermList where graceDays is greater than or equal to (DEFAULT_GRACE_DAYS + 1)
-        defaultCPaymentTermShouldNotBeFound("graceDays.greaterThanOrEqual=" + (DEFAULT_GRACE_DAYS + 1));
+        // Get all the cPaymentTermList where graceDays is greater than or equal to UPDATED_GRACE_DAYS
+        defaultCPaymentTermShouldNotBeFound("graceDays.greaterThanOrEqual=" + UPDATED_GRACE_DAYS);
     }
 
     @Test
@@ -1878,8 +1877,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where graceDays is less than DEFAULT_GRACE_DAYS
         defaultCPaymentTermShouldNotBeFound("graceDays.lessThan=" + DEFAULT_GRACE_DAYS);
 
-        // Get all the cPaymentTermList where graceDays is less than (DEFAULT_GRACE_DAYS + 1)
-        defaultCPaymentTermShouldBeFound("graceDays.lessThan=" + (DEFAULT_GRACE_DAYS + 1));
+        // Get all the cPaymentTermList where graceDays is less than UPDATED_GRACE_DAYS
+        defaultCPaymentTermShouldBeFound("graceDays.lessThan=" + UPDATED_GRACE_DAYS);
     }
 
     @Test
@@ -1947,57 +1946,30 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where netDay is null
         defaultCPaymentTermShouldNotBeFound("netDay.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
-    public void getAllCPaymentTermsByNetDayIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllCPaymentTermsByNetDayContainsSomething() throws Exception {
         // Initialize the database
         cPaymentTermRepository.saveAndFlush(cPaymentTerm);
 
-        // Get all the cPaymentTermList where netDay is greater than or equal to DEFAULT_NET_DAY
-        defaultCPaymentTermShouldBeFound("netDay.greaterThanOrEqual=" + DEFAULT_NET_DAY);
+        // Get all the cPaymentTermList where netDay contains DEFAULT_NET_DAY
+        defaultCPaymentTermShouldBeFound("netDay.contains=" + DEFAULT_NET_DAY);
 
-        // Get all the cPaymentTermList where netDay is greater than or equal to (DEFAULT_NET_DAY + 1)
-        defaultCPaymentTermShouldNotBeFound("netDay.greaterThanOrEqual=" + (DEFAULT_NET_DAY + 1));
+        // Get all the cPaymentTermList where netDay contains UPDATED_NET_DAY
+        defaultCPaymentTermShouldNotBeFound("netDay.contains=" + UPDATED_NET_DAY);
     }
 
     @Test
     @Transactional
-    public void getAllCPaymentTermsByNetDayIsLessThanOrEqualToSomething() throws Exception {
+    public void getAllCPaymentTermsByNetDayNotContainsSomething() throws Exception {
         // Initialize the database
         cPaymentTermRepository.saveAndFlush(cPaymentTerm);
 
-        // Get all the cPaymentTermList where netDay is less than or equal to DEFAULT_NET_DAY
-        defaultCPaymentTermShouldBeFound("netDay.lessThanOrEqual=" + DEFAULT_NET_DAY);
+        // Get all the cPaymentTermList where netDay does not contain DEFAULT_NET_DAY
+        defaultCPaymentTermShouldNotBeFound("netDay.doesNotContain=" + DEFAULT_NET_DAY);
 
-        // Get all the cPaymentTermList where netDay is less than or equal to SMALLER_NET_DAY
-        defaultCPaymentTermShouldNotBeFound("netDay.lessThanOrEqual=" + SMALLER_NET_DAY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCPaymentTermsByNetDayIsLessThanSomething() throws Exception {
-        // Initialize the database
-        cPaymentTermRepository.saveAndFlush(cPaymentTerm);
-
-        // Get all the cPaymentTermList where netDay is less than DEFAULT_NET_DAY
-        defaultCPaymentTermShouldNotBeFound("netDay.lessThan=" + DEFAULT_NET_DAY);
-
-        // Get all the cPaymentTermList where netDay is less than (DEFAULT_NET_DAY + 1)
-        defaultCPaymentTermShouldBeFound("netDay.lessThan=" + (DEFAULT_NET_DAY + 1));
-    }
-
-    @Test
-    @Transactional
-    public void getAllCPaymentTermsByNetDayIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        cPaymentTermRepository.saveAndFlush(cPaymentTerm);
-
-        // Get all the cPaymentTermList where netDay is greater than DEFAULT_NET_DAY
-        defaultCPaymentTermShouldNotBeFound("netDay.greaterThan=" + DEFAULT_NET_DAY);
-
-        // Get all the cPaymentTermList where netDay is greater than SMALLER_NET_DAY
-        defaultCPaymentTermShouldBeFound("netDay.greaterThan=" + SMALLER_NET_DAY);
+        // Get all the cPaymentTermList where netDay does not contain UPDATED_NET_DAY
+        defaultCPaymentTermShouldBeFound("netDay.doesNotContain=" + UPDATED_NET_DAY);
     }
 
 
@@ -2062,8 +2034,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where netDays is greater than or equal to DEFAULT_NET_DAYS
         defaultCPaymentTermShouldBeFound("netDays.greaterThanOrEqual=" + DEFAULT_NET_DAYS);
 
-        // Get all the cPaymentTermList where netDays is greater than or equal to (DEFAULT_NET_DAYS + 1)
-        defaultCPaymentTermShouldNotBeFound("netDays.greaterThanOrEqual=" + (DEFAULT_NET_DAYS + 1));
+        // Get all the cPaymentTermList where netDays is greater than or equal to UPDATED_NET_DAYS
+        defaultCPaymentTermShouldNotBeFound("netDays.greaterThanOrEqual=" + UPDATED_NET_DAYS);
     }
 
     @Test
@@ -2088,8 +2060,8 @@ public class CPaymentTermResourceIT {
         // Get all the cPaymentTermList where netDays is less than DEFAULT_NET_DAYS
         defaultCPaymentTermShouldNotBeFound("netDays.lessThan=" + DEFAULT_NET_DAYS);
 
-        // Get all the cPaymentTermList where netDays is less than (DEFAULT_NET_DAYS + 1)
-        defaultCPaymentTermShouldBeFound("netDays.lessThan=" + (DEFAULT_NET_DAYS + 1));
+        // Get all the cPaymentTermList where netDays is less than UPDATED_NET_DAYS
+        defaultCPaymentTermShouldBeFound("netDays.lessThan=" + UPDATED_NET_DAYS);
     }
 
     @Test

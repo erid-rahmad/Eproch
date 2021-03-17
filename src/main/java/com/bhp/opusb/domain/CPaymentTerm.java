@@ -14,7 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -70,12 +69,10 @@ public class CPaymentTerm extends AbstractAuditingEntity {
     private BigDecimal discount2 = new BigDecimal(0);
 
     @NotNull
-    @Max(value = 10L)
     @Column(name = "discount_days", nullable = false)
     private Long discountDays = 0L;
 
     @NotNull
-    @Max(value = 10L)
     @Column(name = "discount_days_2", nullable = false)
     private Long discountDays2 = 0L;
 
@@ -83,31 +80,26 @@ public class CPaymentTerm extends AbstractAuditingEntity {
     @Column(name = "document_note", length = 1000)
     private String documentNote;
 
-    @Max(value = 10L)
     @Column(name = "fix_month_cut_off")
     private Long fixMonthCutOff;
 
-    @Max(value = 10L)
     @Column(name = "fix_month_day")
     private Long fixMonthDay;
 
-    @Max(value = 10L)
     @Column(name = "fix_month_offset")
     private Long fixMonthOffset;
 
     @Column(name = "fixed_due_date")
     private Boolean fixedDueDate;
 
-    @Max(value = 10L)
     @Column(name = "grace_days")
     private Long graceDays;
 
-    @Max(value = 1)
-    @Column(name = "net_day")
-    private Integer netDay;
+    @Size(max = 1)
+    @Column(name = "net_day", length = 1)
+    private String netDay;
 
     @NotNull
-    @Max(value = 10L)
     @Column(name = "net_days", nullable = false)
     private Long netDays = 0L;
 
@@ -350,16 +342,16 @@ public class CPaymentTerm extends AbstractAuditingEntity {
         this.graceDays = graceDays;
     }
 
-    public Integer getNetDay() {
+    public String getNetDay() {
         return netDay;
     }
 
-    public CPaymentTerm netDay(Integer netDay) {
+    public CPaymentTerm netDay(String netDay) {
         this.netDay = netDay;
         return this;
     }
 
-    public void setNetDay(Integer netDay) {
+    public void setNetDay(String netDay) {
         this.netDay = netDay;
     }
 
@@ -496,7 +488,7 @@ public class CPaymentTerm extends AbstractAuditingEntity {
             ", fixMonthOffset=" + getFixMonthOffset() +
             ", fixedDueDate='" + isFixedDueDate() + "'" +
             ", graceDays=" + getGraceDays() +
-            ", netDay=" + getNetDay() +
+            ", netDay='" + getNetDay() + "'" +
             ", netDays=" + getNetDays() +
             ", onNextBusinessDay='" + isOnNextBusinessDay() + "'" +
             ", transactionType='" + getTransactionType() + "'" +

@@ -12,7 +12,9 @@
       "recordsDeleted": "{{ count }} {{ tabName }}(s) are deleted",
       "delete": {
         "question": "Are you sure you want to delete {{ tabName }} {{ id }}?"
-      }
+      },
+      "saveFailed": "Failed to save the record",
+      "deleteFailed": "Failed to delete the record"
     }
   }
 }

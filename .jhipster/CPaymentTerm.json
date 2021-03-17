@@ -53,19 +53,15 @@
             "fieldName": "discountDays",
             "fieldType": "Long",
             "fieldValidateRules": [
-                "max",
                 "required"
-            ],
-            "fieldValidateRulesMax": "10"
+            ]
         },
         {
             "fieldName": "discountDays2",
             "fieldType": "Long",
             "fieldValidateRules": [
-                "max",
                 "required"
-            ],
-            "fieldValidateRulesMax": "10"
+            ]
         },
         {
             "fieldName": "documentNote",
@@ -77,27 +73,15 @@
         },
         {
             "fieldName": "fixMonthCutOff",
-            "fieldType": "Long",
-            "fieldValidateRules": [
-                "max"
-            ],
-            "fieldValidateRulesMax": "10"
+            "fieldType": "Long"
         },
         {
             "fieldName": "fixMonthDay",
-            "fieldType": "Long",
-            "fieldValidateRules": [
-                "max"
-            ],
-            "fieldValidateRulesMax": "10"
+            "fieldType": "Long"
         },
         {
             "fieldName": "fixMonthOffset",
-            "fieldType": "Long",
-            "fieldValidateRules": [
-                "max"
-            ],
-            "fieldValidateRulesMax": "10"
+            "fieldType": "Long"
         },
         {
             "fieldName": "fixedDueDate",
@@ -105,28 +89,22 @@
         },
         {
             "fieldName": "graceDays",
-            "fieldType": "Long",
-            "fieldValidateRules": [
-                "max"
-            ],
-            "fieldValidateRulesMax": "10"
+            "fieldType": "Long"
         },
         {
             "fieldName": "netDay",
-            "fieldType": "Integer",
+            "fieldType": "String",
             "fieldValidateRules": [
-                "max"
+                "maxlength"
             ],
-            "fieldValidateRulesMax": "1"
+            "fieldValidateRulesMaxlength": "1"
         },
         {
             "fieldName": "netDays",
             "fieldType": "Long",
             "fieldValidateRules": [
-                "max",
                 "required"
-            ],
-            "fieldValidateRulesMax": "10"
+            ]
         },
         {
             "fieldName": "onNextBusinessDay",

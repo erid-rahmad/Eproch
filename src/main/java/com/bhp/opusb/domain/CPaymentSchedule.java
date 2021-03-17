@@ -12,8 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -40,20 +40,17 @@ public class CPaymentSchedule extends AbstractAuditingEntity {
     private BigDecimal discount = new BigDecimal(0);
 
     @NotNull
-    @Max(value = 10L)
     @Column(name = "discount_days", nullable = false)
     private Long discountDays = 0L;
 
-    @Max(value = 10L)
     @Column(name = "grace_days")
     private Long graceDays = 0L;
 
-    @Max(value = 1)
-    @Column(name = "net_day")
-    private Integer netDay;
+    @Size(max = 1)
+    @Column(name = "net_day", length = 1)
+    private String netDay;
 
     @NotNull
-    @Max(value = 10L)
     @Column(name = "net_days", nullable = false)
     private Long netDays = 0L;
 
@@ -128,16 +125,16 @@ public class CPaymentSchedule extends AbstractAuditingEntity {
         this.graceDays = graceDays;
     }
 
-    public Integer getNetDay() {
+    public String getNetDay() {
         return netDay;
     }
 
-    public CPaymentSchedule netDay(Integer netDay) {
+    public CPaymentSchedule netDay(String netDay) {
         this.netDay = netDay;
         return this;
     }
 
-    public void setNetDay(Integer netDay) {
+    public void setNetDay(String netDay) {
         this.netDay = netDay;
     }
 
@@ -261,7 +258,7 @@ public class CPaymentSchedule extends AbstractAuditingEntity {
             ", discount=" + getDiscount() +
             ", discountDays=" + getDiscountDays() +
             ", graceDays=" + getGraceDays() +
-            ", netDay=" + getNetDay() +
+            ", netDay='" + getNetDay() + "'" +
             ", netDays=" + getNetDays() +
             ", percentage=" + getPercentage() +
             ", valid='" + isValid() + "'" +

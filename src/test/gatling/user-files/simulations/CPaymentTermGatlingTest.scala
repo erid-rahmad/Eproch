@@ -88,7 +88,7 @@ class CPaymentTermGatlingTest extends Simulation {
                 , "fixMonthOffset":null
                 , "fixedDueDate":null
                 , "graceDays":null
-                , "netDay":"0"
+                , "netDay":"SAMPLE_TEXT"
                 , "netDays":null
                 , "onNextBusinessDay":null
                 , "transactionType":"SALES"

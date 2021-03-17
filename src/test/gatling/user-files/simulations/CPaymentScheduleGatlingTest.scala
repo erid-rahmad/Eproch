@@ -75,7 +75,7 @@ class CPaymentScheduleGatlingTest extends Simulation {
                 , "discount":"0"
                 , "discountDays":null
                 , "graceDays":null
-                , "netDay":"0"
+                , "netDay":"SAMPLE_TEXT"
                 , "netDays":null
                 , "percentage":"0"
                 , "valid":null

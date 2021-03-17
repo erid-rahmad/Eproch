@@ -140,7 +140,7 @@ public class CPaymentTermQueryService extends QueryService<CPaymentTerm> {
                 specification = specification.and(buildRangeSpecification(criteria.getGraceDays(), CPaymentTerm_.graceDays));
             }
             if (criteria.getNetDay() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getNetDay(), CPaymentTerm_.netDay));
+                specification = specification.and(buildStringSpecification(criteria.getNetDay(), CPaymentTerm_.netDay));
             }
             if (criteria.getNetDays() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getNetDays(), CPaymentTerm_.netDays));

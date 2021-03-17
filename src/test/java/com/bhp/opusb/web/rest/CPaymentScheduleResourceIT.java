@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
@@ -42,21 +43,20 @@ public class CPaymentScheduleResourceIT {
     private static final BigDecimal UPDATED_DISCOUNT = new BigDecimal(2);
     private static final BigDecimal SMALLER_DISCOUNT = new BigDecimal(1 - 1);
 
-    private static final Long DEFAULT_DISCOUNT_DAYS = 10L;
-    private static final Long UPDATED_DISCOUNT_DAYS = 9L;
-    private static final Long SMALLER_DISCOUNT_DAYS = 10L - 1L;
+    private static final Long DEFAULT_DISCOUNT_DAYS = 1L;
+    private static final Long UPDATED_DISCOUNT_DAYS = 2L;
+    private static final Long SMALLER_DISCOUNT_DAYS = 1L - 1L;
 
-    private static final Long DEFAULT_GRACE_DAYS = 10L;
-    private static final Long UPDATED_GRACE_DAYS = 9L;
-    private static final Long SMALLER_GRACE_DAYS = 10L - 1L;
+    private static final Long DEFAULT_GRACE_DAYS = 1L;
+    private static final Long UPDATED_GRACE_DAYS = 2L;
+    private static final Long SMALLER_GRACE_DAYS = 1L - 1L;
 
-    private static final Integer DEFAULT_NET_DAY = 1;
-    private static final Integer UPDATED_NET_DAY = 0;
-    private static final Integer SMALLER_NET_DAY = 1 - 1;
+    private static final String DEFAULT_NET_DAY = "A";
+    private static final String UPDATED_NET_DAY = "B";
 
-    private static final Long DEFAULT_NET_DAYS = 10L;
-    private static final Long UPDATED_NET_DAYS = 9L;
-    private static final Long SMALLER_NET_DAYS = 10L - 1L;
+    private static final Long DEFAULT_NET_DAYS = 1L;
+    private static final Long UPDATED_NET_DAYS = 2L;
+    private static final Long SMALLER_NET_DAYS = 1L - 1L;
 
     private static final BigDecimal DEFAULT_PERCENTAGE = new BigDecimal(1);
     private static final BigDecimal UPDATED_PERCENTAGE = new BigDecimal(2);
@@ -64,6 +64,12 @@ public class CPaymentScheduleResourceIT {
 
     private static final Boolean DEFAULT_VALID = false;
     private static final Boolean UPDATED_VALID = true;
+
+    private static final UUID DEFAULT_UID = UUID.randomUUID();
+    private static final UUID UPDATED_UID = UUID.randomUUID();
+
+    private static final Boolean DEFAULT_ACTIVE = false;
+    private static final Boolean UPDATED_ACTIVE = true;
 
     @Autowired
     private CPaymentScheduleRepository cPaymentScheduleRepository;
@@ -99,7 +105,9 @@ public class CPaymentScheduleResourceIT {
             .netDay(DEFAULT_NET_DAY)
             .netDays(DEFAULT_NET_DAYS)
             .percentage(DEFAULT_PERCENTAGE)
-            .valid(DEFAULT_VALID);
+            .valid(DEFAULT_VALID)
+            .uid(DEFAULT_UID)
+            .active(DEFAULT_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -136,7 +144,9 @@ public class CPaymentScheduleResourceIT {
             .netDay(UPDATED_NET_DAY)
             .netDays(UPDATED_NET_DAYS)
             .percentage(UPDATED_PERCENTAGE)
-            .valid(UPDATED_VALID);
+            .valid(UPDATED_VALID)
+            .uid(UPDATED_UID)
+            .active(UPDATED_ACTIVE);
         // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
@@ -188,6 +198,8 @@ public class CPaymentScheduleResourceIT {
         assertThat(testCPaymentSchedule.getNetDays()).isEqualTo(DEFAULT_NET_DAYS);
         assertThat(testCPaymentSchedule.getPercentage()).isEqualTo(DEFAULT_PERCENTAGE);
         assertThat(testCPaymentSchedule.isValid()).isEqualTo(DEFAULT_VALID);
+        assertThat(testCPaymentSchedule.getUid()).isEqualTo(DEFAULT_UID);
+        assertThat(testCPaymentSchedule.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
 
     @Test
@@ -304,7 +316,9 @@ public class CPaymentScheduleResourceIT {
             .andExpect(jsonPath("$.[*].netDay").value(hasItem(DEFAULT_NET_DAY)))
             .andExpect(jsonPath("$.[*].netDays").value(hasItem(DEFAULT_NET_DAYS.intValue())))
             .andExpect(jsonPath("$.[*].percentage").value(hasItem(DEFAULT_PERCENTAGE.intValue())))
-            .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())));
+            .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
     
     @Test
@@ -324,7 +338,9 @@ public class CPaymentScheduleResourceIT {
             .andExpect(jsonPath("$.netDay").value(DEFAULT_NET_DAY))
             .andExpect(jsonPath("$.netDays").value(DEFAULT_NET_DAYS.intValue()))
             .andExpect(jsonPath("$.percentage").value(DEFAULT_PERCENTAGE.intValue()))
-            .andExpect(jsonPath("$.valid").value(DEFAULT_VALID.booleanValue()));
+            .andExpect(jsonPath("$.valid").value(DEFAULT_VALID.booleanValue()))
+            .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
 
 
@@ -513,8 +529,8 @@ public class CPaymentScheduleResourceIT {
         // Get all the cPaymentScheduleList where discountDays is greater than or equal to DEFAULT_DISCOUNT_DAYS
         defaultCPaymentScheduleShouldBeFound("discountDays.greaterThanOrEqual=" + DEFAULT_DISCOUNT_DAYS);
 
-        // Get all the cPaymentScheduleList where discountDays is greater than or equal to (DEFAULT_DISCOUNT_DAYS + 1)
-        defaultCPaymentScheduleShouldNotBeFound("discountDays.greaterThanOrEqual=" + (DEFAULT_DISCOUNT_DAYS + 1));
+        // Get all the cPaymentScheduleList where discountDays is greater than or equal to UPDATED_DISCOUNT_DAYS
+        defaultCPaymentScheduleShouldNotBeFound("discountDays.greaterThanOrEqual=" + UPDATED_DISCOUNT_DAYS);
     }
 
     @Test
@@ -539,8 +555,8 @@ public class CPaymentScheduleResourceIT {
         // Get all the cPaymentScheduleList where discountDays is less than DEFAULT_DISCOUNT_DAYS
         defaultCPaymentScheduleShouldNotBeFound("discountDays.lessThan=" + DEFAULT_DISCOUNT_DAYS);
 
-        // Get all the cPaymentScheduleList where discountDays is less than (DEFAULT_DISCOUNT_DAYS + 1)
-        defaultCPaymentScheduleShouldBeFound("discountDays.lessThan=" + (DEFAULT_DISCOUNT_DAYS + 1));
+        // Get all the cPaymentScheduleList where discountDays is less than UPDATED_DISCOUNT_DAYS
+        defaultCPaymentScheduleShouldBeFound("discountDays.lessThan=" + UPDATED_DISCOUNT_DAYS);
     }
 
     @Test
@@ -618,8 +634,8 @@ public class CPaymentScheduleResourceIT {
         // Get all the cPaymentScheduleList where graceDays is greater than or equal to DEFAULT_GRACE_DAYS
         defaultCPaymentScheduleShouldBeFound("graceDays.greaterThanOrEqual=" + DEFAULT_GRACE_DAYS);
 
-        // Get all the cPaymentScheduleList where graceDays is greater than or equal to (DEFAULT_GRACE_DAYS + 1)
-        defaultCPaymentScheduleShouldNotBeFound("graceDays.greaterThanOrEqual=" + (DEFAULT_GRACE_DAYS + 1));
+        // Get all the cPaymentScheduleList where graceDays is greater than or equal to UPDATED_GRACE_DAYS
+        defaultCPaymentScheduleShouldNotBeFound("graceDays.greaterThanOrEqual=" + UPDATED_GRACE_DAYS);
     }
 
     @Test
@@ -644,8 +660,8 @@ public class CPaymentScheduleResourceIT {
         // Get all the cPaymentScheduleList where graceDays is less than DEFAULT_GRACE_DAYS
         defaultCPaymentScheduleShouldNotBeFound("graceDays.lessThan=" + DEFAULT_GRACE_DAYS);
 
-        // Get all the cPaymentScheduleList where graceDays is less than (DEFAULT_GRACE_DAYS + 1)
-        defaultCPaymentScheduleShouldBeFound("graceDays.lessThan=" + (DEFAULT_GRACE_DAYS + 1));
+        // Get all the cPaymentScheduleList where graceDays is less than UPDATED_GRACE_DAYS
+        defaultCPaymentScheduleShouldBeFound("graceDays.lessThan=" + UPDATED_GRACE_DAYS);
     }
 
     @Test
@@ -713,57 +729,30 @@ public class CPaymentScheduleResourceIT {
         // Get all the cPaymentScheduleList where netDay is null
         defaultCPaymentScheduleShouldNotBeFound("netDay.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
-    public void getAllCPaymentSchedulesByNetDayIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllCPaymentSchedulesByNetDayContainsSomething() throws Exception {
         // Initialize the database
         cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
 
-        // Get all the cPaymentScheduleList where netDay is greater than or equal to DEFAULT_NET_DAY
-        defaultCPaymentScheduleShouldBeFound("netDay.greaterThanOrEqual=" + DEFAULT_NET_DAY);
+        // Get all the cPaymentScheduleList where netDay contains DEFAULT_NET_DAY
+        defaultCPaymentScheduleShouldBeFound("netDay.contains=" + DEFAULT_NET_DAY);
 
-        // Get all the cPaymentScheduleList where netDay is greater than or equal to (DEFAULT_NET_DAY + 1)
-        defaultCPaymentScheduleShouldNotBeFound("netDay.greaterThanOrEqual=" + (DEFAULT_NET_DAY + 1));
+        // Get all the cPaymentScheduleList where netDay contains UPDATED_NET_DAY
+        defaultCPaymentScheduleShouldNotBeFound("netDay.contains=" + UPDATED_NET_DAY);
     }
 
     @Test
     @Transactional
-    public void getAllCPaymentSchedulesByNetDayIsLessThanOrEqualToSomething() throws Exception {
+    public void getAllCPaymentSchedulesByNetDayNotContainsSomething() throws Exception {
         // Initialize the database
         cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
 
-        // Get all the cPaymentScheduleList where netDay is less than or equal to DEFAULT_NET_DAY
-        defaultCPaymentScheduleShouldBeFound("netDay.lessThanOrEqual=" + DEFAULT_NET_DAY);
+        // Get all the cPaymentScheduleList where netDay does not contain DEFAULT_NET_DAY
+        defaultCPaymentScheduleShouldNotBeFound("netDay.doesNotContain=" + DEFAULT_NET_DAY);
 
-        // Get all the cPaymentScheduleList where netDay is less than or equal to SMALLER_NET_DAY
-        defaultCPaymentScheduleShouldNotBeFound("netDay.lessThanOrEqual=" + SMALLER_NET_DAY);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCPaymentSchedulesByNetDayIsLessThanSomething() throws Exception {
-        // Initialize the database
-        cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
-
-        // Get all the cPaymentScheduleList where netDay is less than DEFAULT_NET_DAY
-        defaultCPaymentScheduleShouldNotBeFound("netDay.lessThan=" + DEFAULT_NET_DAY);
-
-        // Get all the cPaymentScheduleList where netDay is less than (DEFAULT_NET_DAY + 1)
-        defaultCPaymentScheduleShouldBeFound("netDay.lessThan=" + (DEFAULT_NET_DAY + 1));
-    }
-
-    @Test
-    @Transactional
-    public void getAllCPaymentSchedulesByNetDayIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
-
-        // Get all the cPaymentScheduleList where netDay is greater than DEFAULT_NET_DAY
-        defaultCPaymentScheduleShouldNotBeFound("netDay.greaterThan=" + DEFAULT_NET_DAY);
-
-        // Get all the cPaymentScheduleList where netDay is greater than SMALLER_NET_DAY
-        defaultCPaymentScheduleShouldBeFound("netDay.greaterThan=" + SMALLER_NET_DAY);
+        // Get all the cPaymentScheduleList where netDay does not contain UPDATED_NET_DAY
+        defaultCPaymentScheduleShouldBeFound("netDay.doesNotContain=" + UPDATED_NET_DAY);
     }
 
 
@@ -828,8 +817,8 @@ public class CPaymentScheduleResourceIT {
         // Get all the cPaymentScheduleList where netDays is greater than or equal to DEFAULT_NET_DAYS
         defaultCPaymentScheduleShouldBeFound("netDays.greaterThanOrEqual=" + DEFAULT_NET_DAYS);
 
-        // Get all the cPaymentScheduleList where netDays is greater than or equal to (DEFAULT_NET_DAYS + 1)
-        defaultCPaymentScheduleShouldNotBeFound("netDays.greaterThanOrEqual=" + (DEFAULT_NET_DAYS + 1));
+        // Get all the cPaymentScheduleList where netDays is greater than or equal to UPDATED_NET_DAYS
+        defaultCPaymentScheduleShouldNotBeFound("netDays.greaterThanOrEqual=" + UPDATED_NET_DAYS);
     }
 
     @Test
@@ -854,8 +843,8 @@ public class CPaymentScheduleResourceIT {
         // Get all the cPaymentScheduleList where netDays is less than DEFAULT_NET_DAYS
         defaultCPaymentScheduleShouldNotBeFound("netDays.lessThan=" + DEFAULT_NET_DAYS);
 
-        // Get all the cPaymentScheduleList where netDays is less than (DEFAULT_NET_DAYS + 1)
-        defaultCPaymentScheduleShouldBeFound("netDays.lessThan=" + (DEFAULT_NET_DAYS + 1));
+        // Get all the cPaymentScheduleList where netDays is less than UPDATED_NET_DAYS
+        defaultCPaymentScheduleShouldBeFound("netDays.lessThan=" + UPDATED_NET_DAYS);
     }
 
     @Test
@@ -1031,6 +1020,110 @@ public class CPaymentScheduleResourceIT {
 
     @Test
     @Transactional
+    public void getAllCPaymentSchedulesByUidIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
+
+        // Get all the cPaymentScheduleList where uid equals to DEFAULT_UID
+        defaultCPaymentScheduleShouldBeFound("uid.equals=" + DEFAULT_UID);
+
+        // Get all the cPaymentScheduleList where uid equals to UPDATED_UID
+        defaultCPaymentScheduleShouldNotBeFound("uid.equals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPaymentSchedulesByUidIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
+
+        // Get all the cPaymentScheduleList where uid not equals to DEFAULT_UID
+        defaultCPaymentScheduleShouldNotBeFound("uid.notEquals=" + DEFAULT_UID);
+
+        // Get all the cPaymentScheduleList where uid not equals to UPDATED_UID
+        defaultCPaymentScheduleShouldBeFound("uid.notEquals=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPaymentSchedulesByUidIsInShouldWork() throws Exception {
+        // Initialize the database
+        cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
+
+        // Get all the cPaymentScheduleList where uid in DEFAULT_UID or UPDATED_UID
+        defaultCPaymentScheduleShouldBeFound("uid.in=" + DEFAULT_UID + "," + UPDATED_UID);
+
+        // Get all the cPaymentScheduleList where uid equals to UPDATED_UID
+        defaultCPaymentScheduleShouldNotBeFound("uid.in=" + UPDATED_UID);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPaymentSchedulesByUidIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
+
+        // Get all the cPaymentScheduleList where uid is not null
+        defaultCPaymentScheduleShouldBeFound("uid.specified=true");
+
+        // Get all the cPaymentScheduleList where uid is null
+        defaultCPaymentScheduleShouldNotBeFound("uid.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPaymentSchedulesByActiveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
+
+        // Get all the cPaymentScheduleList where active equals to DEFAULT_ACTIVE
+        defaultCPaymentScheduleShouldBeFound("active.equals=" + DEFAULT_ACTIVE);
+
+        // Get all the cPaymentScheduleList where active equals to UPDATED_ACTIVE
+        defaultCPaymentScheduleShouldNotBeFound("active.equals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPaymentSchedulesByActiveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
+
+        // Get all the cPaymentScheduleList where active not equals to DEFAULT_ACTIVE
+        defaultCPaymentScheduleShouldNotBeFound("active.notEquals=" + DEFAULT_ACTIVE);
+
+        // Get all the cPaymentScheduleList where active not equals to UPDATED_ACTIVE
+        defaultCPaymentScheduleShouldBeFound("active.notEquals=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPaymentSchedulesByActiveIsInShouldWork() throws Exception {
+        // Initialize the database
+        cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
+
+        // Get all the cPaymentScheduleList where active in DEFAULT_ACTIVE or UPDATED_ACTIVE
+        defaultCPaymentScheduleShouldBeFound("active.in=" + DEFAULT_ACTIVE + "," + UPDATED_ACTIVE);
+
+        // Get all the cPaymentScheduleList where active equals to UPDATED_ACTIVE
+        defaultCPaymentScheduleShouldNotBeFound("active.in=" + UPDATED_ACTIVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCPaymentSchedulesByActiveIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cPaymentScheduleRepository.saveAndFlush(cPaymentSchedule);
+
+        // Get all the cPaymentScheduleList where active is not null
+        defaultCPaymentScheduleShouldBeFound("active.specified=true");
+
+        // Get all the cPaymentScheduleList where active is null
+        defaultCPaymentScheduleShouldNotBeFound("active.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllCPaymentSchedulesByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = cPaymentSchedule.getAdOrganization();
@@ -1074,7 +1167,9 @@ public class CPaymentScheduleResourceIT {
             .andExpect(jsonPath("$.[*].netDay").value(hasItem(DEFAULT_NET_DAY)))
             .andExpect(jsonPath("$.[*].netDays").value(hasItem(DEFAULT_NET_DAYS.intValue())))
             .andExpect(jsonPath("$.[*].percentage").value(hasItem(DEFAULT_PERCENTAGE.intValue())))
-            .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())));
+            .andExpect(jsonPath("$.[*].valid").value(hasItem(DEFAULT_VALID.booleanValue())))
+            .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
         // Check, that the count call also returns 1
         restCPaymentScheduleMockMvc.perform(get("/api/c-payment-schedules/count?sort=id,desc&" + filter))
@@ -1128,7 +1223,9 @@ public class CPaymentScheduleResourceIT {
             .netDay(UPDATED_NET_DAY)
             .netDays(UPDATED_NET_DAYS)
             .percentage(UPDATED_PERCENTAGE)
-            .valid(UPDATED_VALID);
+            .valid(UPDATED_VALID)
+            .uid(UPDATED_UID)
+            .active(UPDATED_ACTIVE);
         CPaymentScheduleDTO cPaymentScheduleDTO = cPaymentScheduleMapper.toDto(updatedCPaymentSchedule);
 
         restCPaymentScheduleMockMvc.perform(put("/api/c-payment-schedules")
@@ -1147,6 +1244,8 @@ public class CPaymentScheduleResourceIT {
         assertThat(testCPaymentSchedule.getNetDays()).isEqualTo(UPDATED_NET_DAYS);
         assertThat(testCPaymentSchedule.getPercentage()).isEqualTo(UPDATED_PERCENTAGE);
         assertThat(testCPaymentSchedule.isValid()).isEqualTo(UPDATED_VALID);
+        assertThat(testCPaymentSchedule.getUid()).isEqualTo(UPDATED_UID);
+        assertThat(testCPaymentSchedule.isActive()).isEqualTo(UPDATED_ACTIVE);
     }
 
     @Test

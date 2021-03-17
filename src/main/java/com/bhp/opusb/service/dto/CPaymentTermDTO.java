@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -45,35 +44,28 @@ public class CPaymentTermDTO extends AbstractAuditingDTO {
     private BigDecimal discount2;
 
     @NotNull
-    @Max(value = 10L)
     private Long discountDays;
 
     @NotNull
-    @Max(value = 10L)
     private Long discountDays2;
 
     @Size(max = 1000)
     private String documentNote;
 
-    @Max(value = 10L)
     private Long fixMonthCutOff;
 
-    @Max(value = 10L)
     private Long fixMonthDay;
 
-    @Max(value = 10L)
     private Long fixMonthOffset;
 
     private Boolean fixedDueDate;
 
-    @Max(value = 10L)
     private Long graceDays;
 
-    @Max(value = 1)
-    private Integer netDay;
+    @Size(max = 1)
+    private String netDay;
 
     @NotNull
-    @Max(value = 10L)
     private Long netDays;
 
     private Boolean onNextBusinessDay;
@@ -227,11 +219,11 @@ public class CPaymentTermDTO extends AbstractAuditingDTO {
         this.graceDays = graceDays;
     }
 
-    public Integer getNetDay() {
+    public String getNetDay() {
         return netDay;
     }
 
-    public void setNetDay(Integer netDay) {
+    public void setNetDay(String netDay) {
         this.netDay = netDay;
     }
 
@@ -340,7 +332,7 @@ public class CPaymentTermDTO extends AbstractAuditingDTO {
             ", fixMonthOffset=" + getFixMonthOffset() +
             ", fixedDueDate='" + isFixedDueDate() + "'" +
             ", graceDays=" + getGraceDays() +
-            ", netDay=" + getNetDay() +
+            ", netDay='" + getNetDay() + "'" +
             ", netDays=" + getNetDays() +
             ", onNextBusinessDay='" + isOnNextBusinessDay() + "'" +
             ", transactionType='" + getTransactionType() + "'" +

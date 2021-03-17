@@ -88,7 +88,7 @@
             <column name="discount" type="numeric"/>
             <column name="discount_days" type="numeric"/>
             <column name="grace_days" type="numeric"/>
-            <column name="net_day" type="numeric"/>
+            <column name="net_day" type="string"/>
             <column name="net_days" type="numeric"/>
             <column name="percentage" type="numeric"/>
             <column name="valid" type="boolean"/>
@@ -98,6 +98,10 @@
             <column name="c_payment_term_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210317045300" author="Anant Aryadewa">
+        <modifyDataType tableName="c_payment_schedule" columnName="net_day" newDataType="varchar(1)" />
     </changeSet>
 
 </databaseChangeLog>

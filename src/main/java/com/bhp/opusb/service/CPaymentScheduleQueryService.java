@@ -101,7 +101,7 @@ public class CPaymentScheduleQueryService extends QueryService<CPaymentSchedule>
                 specification = specification.and(buildRangeSpecification(criteria.getGraceDays(), CPaymentSchedule_.graceDays));
             }
             if (criteria.getNetDay() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getNetDay(), CPaymentSchedule_.netDay));
+                specification = specification.and(buildStringSpecification(criteria.getNetDay(), CPaymentSchedule_.netDay));
             }
             if (criteria.getNetDays() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getNetDays(), CPaymentSchedule_.netDays));
@@ -111,6 +111,12 @@ public class CPaymentScheduleQueryService extends QueryService<CPaymentSchedule>
             }
             if (criteria.getValid() != null) {
                 specification = specification.and(buildSpecification(criteria.getValid(), CPaymentSchedule_.valid));
+            }
+            if (criteria.getUid() != null) {
+                specification = specification.and(buildSpecification(criteria.getUid(), CPaymentSchedule_.uid));
+            }
+            if (criteria.getActive() != null) {
+                specification = specification.and(buildSpecification(criteria.getActive(), CPaymentSchedule_.active));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),

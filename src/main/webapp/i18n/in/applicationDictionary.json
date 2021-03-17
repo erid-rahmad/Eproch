@@ -12,7 +12,9 @@
       "recordsDeleted": "{{ count }} {{ tabName }}(s) are deleted",
       "delete": {
         "question": "Are you sure you want to delete {{ tabName }} {{ id }}?"
-      }
+      },
+      "saveFailed": "Gagal menyimpan data",
+      "saveFailed": "Gagal menghapus data"
     }
   }
 }

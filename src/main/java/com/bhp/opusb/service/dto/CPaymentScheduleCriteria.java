@@ -7,8 +7,9 @@ import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
  * Criteria class for the {@link com.bhp.opusb.domain.CPaymentSchedule} entity. This class is used
@@ -31,13 +32,17 @@ public class CPaymentScheduleCriteria implements Serializable, Criteria {
 
     private LongFilter graceDays;
 
-    private IntegerFilter netDay;
+    private StringFilter netDay;
 
     private LongFilter netDays;
 
     private BigDecimalFilter percentage;
 
     private BooleanFilter valid;
+
+    private UUIDFilter uid;
+
+    private BooleanFilter active;
 
     private LongFilter adOrganizationId;
 
@@ -55,6 +60,8 @@ public class CPaymentScheduleCriteria implements Serializable, Criteria {
         this.netDays = other.netDays == null ? null : other.netDays.copy();
         this.percentage = other.percentage == null ? null : other.percentage.copy();
         this.valid = other.valid == null ? null : other.valid.copy();
+        this.uid = other.uid == null ? null : other.uid.copy();
+        this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.cPaymentTermId = other.cPaymentTermId == null ? null : other.cPaymentTermId.copy();
     }
@@ -96,11 +103,11 @@ public class CPaymentScheduleCriteria implements Serializable, Criteria {
         this.graceDays = graceDays;
     }
 
-    public IntegerFilter getNetDay() {
+    public StringFilter getNetDay() {
         return netDay;
     }
 
-    public void setNetDay(IntegerFilter netDay) {
+    public void setNetDay(StringFilter netDay) {
         this.netDay = netDay;
     }
 
@@ -126,6 +133,22 @@ public class CPaymentScheduleCriteria implements Serializable, Criteria {
 
     public void setValid(BooleanFilter valid) {
         this.valid = valid;
+    }
+
+    public UUIDFilter getUid() {
+        return uid;
+    }
+
+    public void setUid(UUIDFilter uid) {
+        this.uid = uid;
+    }
+
+    public BooleanFilter getActive() {
+        return active;
+    }
+
+    public void setActive(BooleanFilter active) {
+        this.active = active;
     }
 
     public LongFilter getAdOrganizationId() {
@@ -163,6 +186,8 @@ public class CPaymentScheduleCriteria implements Serializable, Criteria {
             Objects.equals(netDays, that.netDays) &&
             Objects.equals(percentage, that.percentage) &&
             Objects.equals(valid, that.valid) &&
+            Objects.equals(uid, that.uid) &&
+            Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(cPaymentTermId, that.cPaymentTermId);
     }
@@ -178,6 +203,8 @@ public class CPaymentScheduleCriteria implements Serializable, Criteria {
         netDays,
         percentage,
         valid,
+        uid,
+        active,
         adOrganizationId,
         cPaymentTermId
         );
@@ -194,6 +221,8 @@ public class CPaymentScheduleCriteria implements Serializable, Criteria {
                 (netDays != null ? "netDays=" + netDays + ", " : "") +
                 (percentage != null ? "percentage=" + percentage + ", " : "") +
                 (valid != null ? "valid=" + valid + ", " : "") +
+                (uid != null ? "uid=" + uid + ", " : "") +
+                (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (cPaymentTermId != null ? "cPaymentTermId=" + cPaymentTermId + ", " : "") +
             "}";
