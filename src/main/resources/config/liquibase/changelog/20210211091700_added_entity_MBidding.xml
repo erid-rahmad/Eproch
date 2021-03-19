@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity MBidding.
     -->
@@ -109,27 +109,52 @@
                   separator=";"
                   tableName="m_bidding">
             <column name="id" type="numeric"/>
-            <column name="bidding_no" type="string"/>
             <column name="name" type="string"/>
             <column name="vendor_selection" type="string"/>
             <column name="ceiling_price" type="numeric"/>
             <column name="estimated_price" type="numeric"/>
+            <column name="date_trx" type="date"/>
+            <column name="document_no" type="string"/>
             <column name="document_action" type="string"/>
             <column name="document_status" type="string"/>
             <column name="approved" type="boolean"/>
             <column name="processed" type="boolean"/>
-            <column name="date_reject" type="date"/>
             <column name="date_approve" type="date"/>
+            <column name="date_reject" type="date"/>
+            <column name="rejected_reason" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="cost_center_id" type="numeric"/>
+            <column name="currency_id" type="numeric"/>
             <column name="requisition_id" type="numeric"/>
+            <column name="reference_type_id" type="numeric"/>
             <column name="bidding_type_id" type="numeric"/>
             <column name="event_type_id" type="numeric"/>
             <column name="ad_user_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210318040100" author="Ananta Aryadewa">
+        <dropColumn tableName="m_bidding" columnName="bidding_no" />
+        <addColumn tableName="m_bidding">
+            <column name="date_trx" type="date">
+                <constraints nullable="true" />
+            </column>
+            <column name="document_no" type="varchar(30)">
+                <constraints nullable="false" />
+            </column>
+            <column name="rejected_reason" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="currency_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="reference_type_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

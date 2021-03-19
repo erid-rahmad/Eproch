@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity MRequisitionLine.
     -->
@@ -97,6 +97,7 @@
                   separator=";"
                   tableName="m_requisition_line">
             <column name="id" type="numeric"/>
+            <column name="line_no" type="numeric"/>
             <column name="document_date" type="date"/>
             <column name="date_promised" type="date"/>
             <column name="date_required" type="date"/>
@@ -139,6 +140,14 @@
             </column>
             <column name="quantity_balance" type="decimal(21,2)">
                 <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20210318035400" author="Ananta Aryadewa">
+        <addColumn tableName="m_requisition_line">
+            <column name="line_no" type="integer">
+                <constraints nullable="true" />
             </column>
         </addColumn>
     </changeSet>

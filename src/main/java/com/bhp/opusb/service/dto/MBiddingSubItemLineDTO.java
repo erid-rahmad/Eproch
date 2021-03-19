@@ -1,9 +1,10 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingSubItemLine} entity.
@@ -30,14 +31,14 @@ public class MBiddingSubItemLineDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
-    private Long biddingSubItemId;
-
     private Long productId;
     private String productName;
 
     private Long uomId;
     private String uomName;
 
+    private Long biddingSubItemId;
+    
     public Long getId() {
         return id;
     }
@@ -102,14 +103,6 @@ public class MBiddingSubItemLineDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getBiddingSubItemId() {
-        return biddingSubItemId;
-    }
-
-    public void setBiddingSubItemId(Long mBiddingSubItemId) {
-        this.biddingSubItemId = mBiddingSubItemId;
-    }
-
     public Long getProductId() {
         return productId;
     }
@@ -140,6 +133,14 @@ public class MBiddingSubItemLineDTO extends AbstractAuditingDTO {
 
     public void setUomName(String uomName) {
         this.uomName = uomName;
+    }
+
+    public Long getBiddingSubItemId() {
+        return biddingSubItemId;
+    }
+
+    public void setBiddingSubItemId(Long mBiddingSubItemId) {
+        this.biddingSubItemId = mBiddingSubItemId;
     }
 
     @Override
@@ -173,12 +174,9 @@ public class MBiddingSubItemLineDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
-            ", biddingSubItemId=" + getBiddingSubItemId() +
             ", productId=" + getProductId() +
-            ", productName=" + getProductName() +
             ", uomId=" + getUomId() +
-            ", uomName=" + getUomName() +
+            ", biddingSubItemId=" + getBiddingSubItemId() +
             "}";
     }
 }

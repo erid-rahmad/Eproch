@@ -1,26 +1,33 @@
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { ElForm } from 'element-ui/types/form';
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
-import Vue2Filters from 'vue2-filters';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import ContextVariableAccessor from "../../../ContextVariableAccessor";
+import { Inject, Watch } from 'vue-property-decorator';
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import { BiddingStep } from '../steps-form.component';
 
 const BiddingScheduleProp = Vue.extend({
   props: {
-    biddingInformation: {
+    editMode: Boolean,
+    data: {
       type: Object,
       default: () => {}
-    },
-    biddingSchedule: {
-      type: Object,
-      default: () => {}
-    },
+    }
   }
 })
 
 @Component
-export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, BiddingScheduleProp) {
+export default class BiddingSchedule extends BiddingScheduleProp {
+
+  @Inject('dynamicWindowService')
+  protected commonService: (baseApiUrl: string) => DynamicWindowService;
+
+  private adOrganizationId: number;
+  private events = [];
+
+  private organizationCriteria = [
+    'adOrganizationId.in=1'
+  ];
 
   gridSchema = {
     defaultSort: {},
@@ -34,91 +41,130 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
   processing = false;
   dialogConfirmationVisible:boolean = false;
 
-  public eventScheduleOptions: any = {};
+  public eventScheduleOptions: any[] = [];
 
-  private baseApiUrlEventTypeLine = "/api/c-event-typelines";
-
-  private documentSchedule:any = {
-    docEvent: "",
-    vendorSubmission: "",
-    vendorEvaluation: "",
-    vendorSubmissionObj: "",
-    vendorEvaluationObj: ""
+  private documentSchedule: any = {
+    docEvent: null,
+    submissionScheduleId: null,
+    evaluationScheduleId: null,
+    vendorSubmission: null,
+    vendorEvaluation: null
   };
 
-  created() {
-    this.eventTypeLine(this.biddingInformation.eventTypeId);
+  bidding: Record<string, any> = {};
+
+  @Watch('data')
+  onDataChanged(data: any) {
+    console.log('bidding schedule data changed:', data);
   }
 
-  private eventTypeLine(eventTypeId): void {
-    if ( ! this.baseApiUrlEventTypeLine) {
+  created() {
+    this.adOrganizationId = accountStore.organizationInfo.id;
+    this.bidding = {...this.data};
+    this.bidding.step = BiddingStep.SCHEDULE;
+
+    this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
+
+    if (! this.editMode) {
+      this.bidding.biddingSchedules = [];
+      this.bidding.documentSchedules = [];
+    }
+
+    this.retrieveReferenceList('mEvent', 'events');
+    this.retrieveEventTypeLines(this.bidding.eventTypeId);
+  }
+
+  private retrieveReferenceList(code: string, prop: string) {
+    if (this[prop] === void 0) {
       return;
     }
 
-    this.dynamicWindowService(this.baseApiUrlEventTypeLine)
+    this.commonService('/api/ad-reference-lists')
+    .retrieve({
+      criteriaQuery: [
+        `active.equals=true`,
+        `adReferenceValue.equals=${code}`
+      ],
+      paginationQuery: {
+        page: 0,
+        size: 100,
+        sort: ['name']
+      }
+    })
+    .then(res => {
+      this[prop] = res.data.map((item: any) =>
+        ({
+            key: item.value,
+            value: item.name
+        })
+      );
+    });
+  }
+
+  private retrieveEventTypeLines(eventTypeId: number): void {
+    this.commonService('/api/c-event-typelines')
       .retrieve({
-        criteriaQuery: `eventTypeId.equals=${eventTypeId}&sort=sequence`
+        criteriaQuery: [
+          'active.equals=true',
+          `eventTypeId.equals=${eventTypeId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['sequence']
+        }
       })
       .then(res => {
-
-        this.$set(this.biddingSchedule, 'eventSchedule', res.data.map((item: any) => {
-          return item;
-        }));
-
-        this.eventScheduleOptions = this.biddingSchedule.eventSchedule;
-        //console.log(this.biddingInformation);
+        this.$set(this.bidding, 'biddingSchedules', res.data);
+        this.eventScheduleOptions = res.data;
 
       })
       .catch(err => {
-        console.error('Failed getting the record. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
-        });
+        console.error('Failed to get event type lines. %O', err);
+        this.$message.error('Failed to get event type lines');
       })
       .finally(() => {
         this.fullscreenLoading = false;
       });
   }
 
-  addDocument(){
+  addDocument() {
     this.dialogConfirmationVisible = true;
   }
 
-  removeDocument(index){
-    this.biddingSchedule.documentSchedule.splice(index, 1);
+  printEventName(code: string) {
+    console.log('find %s in %O', code, this.events);
+    return this.events.find(event => event.key === code)?.value || code;
   }
 
-  saveDocument(){
+  removeDocument(index) {
+    this.bidding.documentSchedule.splice(index, 1);
+  }
 
-    this.documentSchedule.vendorSubmissionObj = this.eventScheduleOptions.find(item => item.id === this.documentSchedule.vendorSubmission);
-    this.documentSchedule.vendorEvaluationObj = this.eventScheduleOptions.find(item => item.id === this.documentSchedule.vendorEvaluation);
+  saveDocument() {
+    this.documentSchedule.vendorSubmission = this.eventScheduleOptions
+      .find(item => item.id === this.documentSchedule.submissionScheduleId);
 
-    //console.log(this.documentSchedule);
-    //console.log(this.biddingSchedule);
+    this.documentSchedule.vendorEvaluation = this.eventScheduleOptions
+      .find(item => item.id === this.documentSchedule.evaluationScheduleId);
 
-    this.biddingSchedule.documentSchedule.push(this.documentSchedule);
+    this.bidding.documentSchedules.push({...this.documentSchedule});
     this.dialogConfirmationVisible = false;
     this.documentSchedule = {
-      docEvent: "",
-      vendorSubmission: "",
-      vendorEvaluation: "",
-      vendorSubmissionObj: "",
-      vendorEvaluationObj: ""
+      docEvent: null,
+      submissionScheduleId: null,
+      evaluationScheduleId: null,
+      vendorSubmission: null,
+      vendorEvaluation: null
     };
   }
 
-  //=======================================================================
-
-  validate() {
-    (this.$refs.productCatalog as ElForm).validate((passed, errors) => {
-      if(passed){
-        //this.submit();
-      }else{
-        console.log(errors);
-      }
-
+  /**
+   * Invoked before proceeding to the next step.
+   */
+  save() {
+    this.$emit('saved', {
+      data: this.bidding
     });
   }
-
 }

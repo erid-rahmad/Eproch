@@ -7,6 +7,7 @@ import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -26,6 +27,8 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
+
+    private IntegerFilter lineNo;
 
     private LocalDateFilter documentDate;
 
@@ -71,6 +74,7 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
 
     public MRequisitionLineCriteria(MRequisitionLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.lineNo = other.lineNo == null ? null : other.lineNo.copy();
         this.documentDate = other.documentDate == null ? null : other.documentDate.copy();
         this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
         this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
@@ -105,6 +109,14 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public IntegerFilter getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(IntegerFilter lineNo) {
+        this.lineNo = lineNo;
     }
 
     public LocalDateFilter getDocumentDate() {
@@ -287,6 +299,7 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
         final MRequisitionLineCriteria that = (MRequisitionLineCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(lineNo, that.lineNo) &&
             Objects.equals(documentDate, that.documentDate) &&
             Objects.equals(datePromised, that.datePromised) &&
             Objects.equals(dateRequired, that.dateRequired) &&
@@ -314,6 +327,7 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        lineNo,
         documentDate,
         datePromised,
         dateRequired,
@@ -342,6 +356,7 @@ public class MRequisitionLineCriteria implements Serializable, Criteria {
     public String toString() {
         return "MRequisitionLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (lineNo != null ? "lineNo=" + lineNo + ", " : "") +
                 (documentDate != null ? "documentDate=" + documentDate + ", " : "") +
                 (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
                 (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +

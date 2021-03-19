@@ -1,4 +1,4 @@
-id;quantity;price;amount;uid;active;ad_organization_id;bidding_sub_item_id;product_id;uom_id
+id;quantity;price;amount;uid;active;ad_organization_id;product_id;uom_id;bidding_sub_item_id
 1;59107;77308;74620;3a6f79d1-5ae1-4ba9-b83d-177f95c85f8f;true;1;1;1;1
 2;63213;90058;70382;2dee3834-a3bf-4151-990f-d370b2d6ccfa;true;2;2;2;2
 3;18311;54601;25282;607995a9-2bd7-42af-821b-e85e3e463d52;false;3;3;3;3

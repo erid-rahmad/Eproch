@@ -2,15 +2,12 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
-import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
-import io.github.jhipster.service.filter.LongFilter;
-import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.BigDecimalFilter;
+import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -34,11 +31,13 @@ public class MBiddingSubItemCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter mBiddingSubItemLineId;
+
     private LongFilter adOrganizationId;
 
-    private LongFilter biddingLineId;
-
     private LongFilter productId;
+
+    private LongFilter biddingLineId;
 
     public MBiddingSubItemCriteria() {
     }
@@ -48,9 +47,10 @@ public class MBiddingSubItemCriteria implements Serializable, Criteria {
         this.totalAmount = other.totalAmount == null ? null : other.totalAmount.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.mBiddingSubItemLineId = other.mBiddingSubItemLineId == null ? null : other.mBiddingSubItemLineId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.biddingLineId = other.biddingLineId == null ? null : other.biddingLineId.copy();
         this.productId = other.productId == null ? null : other.productId.copy();
+        this.biddingLineId = other.biddingLineId == null ? null : other.biddingLineId.copy();
     }
 
     @Override
@@ -90,6 +90,14 @@ public class MBiddingSubItemCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getMBiddingSubItemLineId() {
+        return mBiddingSubItemLineId;
+    }
+
+    public void setMBiddingSubItemLineId(LongFilter mBiddingSubItemLineId) {
+        this.mBiddingSubItemLineId = mBiddingSubItemLineId;
+    }
+
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -98,20 +106,20 @@ public class MBiddingSubItemCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getBiddingLineId() {
-        return biddingLineId;
-    }
-
-    public void setBiddingLineId(LongFilter biddingLineId) {
-        this.biddingLineId = biddingLineId;
-    }
-
     public LongFilter getProductId() {
         return productId;
     }
 
     public void setProductId(LongFilter productId) {
         this.productId = productId;
+    }
+
+    public LongFilter getBiddingLineId() {
+        return biddingLineId;
+    }
+
+    public void setBiddingLineId(LongFilter biddingLineId) {
+        this.biddingLineId = biddingLineId;
     }
 
 
@@ -129,9 +137,10 @@ public class MBiddingSubItemCriteria implements Serializable, Criteria {
             Objects.equals(totalAmount, that.totalAmount) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(mBiddingSubItemLineId, that.mBiddingSubItemLineId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(biddingLineId, that.biddingLineId) &&
-            Objects.equals(productId, that.productId);
+            Objects.equals(productId, that.productId) &&
+            Objects.equals(biddingLineId, that.biddingLineId);
     }
 
     @Override
@@ -141,9 +150,10 @@ public class MBiddingSubItemCriteria implements Serializable, Criteria {
         totalAmount,
         uid,
         active,
+        mBiddingSubItemLineId,
         adOrganizationId,
-        biddingLineId,
-        productId
+        productId,
+        biddingLineId
         );
     }
 
@@ -154,9 +164,10 @@ public class MBiddingSubItemCriteria implements Serializable, Criteria {
                 (totalAmount != null ? "totalAmount=" + totalAmount + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (mBiddingSubItemLineId != null ? "mBiddingSubItemLineId=" + mBiddingSubItemLineId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (biddingLineId != null ? "biddingLineId=" + biddingLineId + ", " : "") +
                 (productId != null ? "productId=" + productId + ", " : "") +
+                (biddingLineId != null ? "biddingLineId=" + biddingLineId + ", " : "") +
             "}";
     }
 

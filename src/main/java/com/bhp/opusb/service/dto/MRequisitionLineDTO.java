@@ -16,6 +16,8 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
+    private Integer lineNo;
+
     private LocalDate documentDate;
 
     private LocalDate datePromised;
@@ -71,6 +73,14 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(Integer lineNo) {
+        this.lineNo = lineNo;
     }
 
     public LocalDate getDocumentDate() {
@@ -298,6 +308,7 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MRequisitionLineDTO{" +
             "id=" + getId() +
+            ", lineNo=" + getLineNo() +
             ", documentDate='" + getDocumentDate() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +

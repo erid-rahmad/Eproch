@@ -1,36 +1,43 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CBiddingType} entity.
  */
 public class CBiddingTypeDTO extends AbstractAuditingDTO {
 
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
+    @Size(max = 30)
     private String name;
 
     private String description;
 
-    private Boolean costEvaluationSelection;
+    @Size(max = 5)
+    private String costEvaluationSelection;
 
-    private Boolean selectedWinner;
+    @Size(max = 5)
+    private String winnerSelection;
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
+
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
     private Long productClassificationId;
     private String productClassificationName;
-
+    
     public Long getId() {
         return id;
     }
@@ -55,20 +62,20 @@ public class CBiddingTypeDTO extends AbstractAuditingDTO {
         this.description = description;
     }
 
-    public Boolean isCostEvaluationSelection() {
+    public String getCostEvaluationSelection() {
         return costEvaluationSelection;
     }
 
-    public void setCostEvaluationSelection(Boolean costEvaluationSelection) {
+    public void setCostEvaluationSelection(String costEvaluationSelection) {
         this.costEvaluationSelection = costEvaluationSelection;
     }
 
-    public Boolean isSelectedWinner() {
-        return selectedWinner;
+    public String getWinnerSelection() {
+        return winnerSelection;
     }
 
-    public void setSelectedWinner(Boolean selectedWinner) {
-        this.selectedWinner = selectedWinner;
+    public void setWinnerSelection(String winnerSelection) {
+        this.winnerSelection = winnerSelection;
     }
 
     public UUID getUid() {
@@ -146,14 +153,12 @@ public class CBiddingTypeDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", costEvaluationSelection='" + isCostEvaluationSelection() + "'" +
-            ", selectedWinner='" + isSelectedWinner() + "'" +
+            ", costEvaluationSelection='" + getCostEvaluationSelection() + "'" +
+            ", winnerSelection='" + getWinnerSelection() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
             ", productClassificationId=" + getProductClassificationId() +
-            ", productClassificationName=" + getProductClassificationName() +
             "}";
     }
 }

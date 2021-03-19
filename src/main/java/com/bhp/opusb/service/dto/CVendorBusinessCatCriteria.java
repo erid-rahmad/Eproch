@@ -2,12 +2,10 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -32,6 +30,7 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
     private BooleanFilter active;
 
     private LongFilter vendorId;
+    private StringFilter vendorName;
 
     private LongFilter businessClassificationId;
 
@@ -49,6 +48,7 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
+        this.vendorName = other.vendorName == null ? null : other.vendorName.copy();
         this.businessClassificationId = other.businessClassificationId == null ? null : other.businessClassificationId.copy();
         this.businessCategoryId = other.businessCategoryId == null ? null : other.businessCategoryId.copy();
         this.subBusinessCategoryId = other.subBusinessCategoryId == null ? null : other.subBusinessCategoryId.copy();
@@ -90,6 +90,14 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
 
     public void setVendorId(LongFilter vendorId) {
         this.vendorId = vendorId;
+    }
+
+    public StringFilter getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(StringFilter vendorName) {
+        this.vendorName = vendorName;
     }
 
     public LongFilter getBusinessClassificationId() {
@@ -139,6 +147,7 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(vendorId, that.vendorId) &&
+            Objects.equals(vendorName, that.vendorName) &&
             Objects.equals(businessClassificationId, that.businessClassificationId) &&
             Objects.equals(businessCategoryId, that.businessCategoryId) &&
             Objects.equals(subBusinessCategoryId, that.subBusinessCategoryId) &&
@@ -152,6 +161,7 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
         uid,
         active,
         vendorId,
+        vendorName,
         businessClassificationId,
         businessCategoryId,
         subBusinessCategoryId,
@@ -166,6 +176,7 @@ public class CVendorBusinessCatCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
+                (vendorName != null ? "vendorName=" + vendorName + ", " : "") +
                 (businessClassificationId != null ? "businessClassificationId=" + businessClassificationId + ", " : "") +
                 (businessCategoryId != null ? "businessCategoryId=" + businessCategoryId + ", " : "") +
                 (subBusinessCategoryId != null ? "subBusinessCategoryId=" + subBusinessCategoryId + ", " : "") +

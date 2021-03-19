@@ -75,6 +75,8 @@ public class AdUserService {
             User user = new User();
             user.setEmail(adUserDTO.getEmail());
             user.setLogin(adUserDTO.getUserLogin());
+            user.setFirstName(adUserDTO.getFirstName());
+            user.setLastName(adUserDTO.getLastName());
             user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
 
             // Any user that is created from the admin page doesn't need email verification.
@@ -115,7 +117,9 @@ public class AdUserService {
                 adUserAuthorityRepository.save(userAuthority);
 
                 // Add ROLE_SUPPLIER to jhi_user_authority.
-                adUser.getUser().getAuthorities().add(scAuthority.getAuthority());
+                if (! adUser.getUser().getAuthorities().contains(scAuthority.getAuthority())) {
+                    adUser.getUser().getAuthorities().add(scAuthority.getAuthority());
+                }
             });
 
         clearUserCaches(adUser.getUser());

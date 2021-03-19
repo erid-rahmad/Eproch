@@ -1,22 +1,38 @@
+import settings from '@/settings';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { ElForm } from 'element-ui/types/form';
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
-import Vue2Filters from 'vue2-filters';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import ContextVariableAccessor from "../../../ContextVariableAccessor";
+import { Inject, Watch } from 'vue-property-decorator';
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import { BiddingStep } from '../steps-form.component';
+import SubitemEditor from './subitem-editor.vue'
 
 const BiddingInformationProp = Vue.extend({
   props: {
-    biddingInformation: {
+    editMode: Boolean,
+    data: {
       type: Object,
       default: () => {}
-    },
+    }
+  }
+});
+
+@Component({
+  components: {
+    SubitemEditor
   }
 })
+export default class BiddingInformation extends BiddingInformationProp {
 
-@Component
-export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, BiddingInformationProp) {
+  @Inject('dynamicWindowService')
+  protected commonService: (baseApiUrl: string) => DynamicWindowService;
+
+  private adOrganizationId: number;
+
+  private organizationCriteria = [
+    'adOrganizationId.in=1'
+  ];
 
   gridSchema = {
     defaultSort: {},
@@ -29,55 +45,33 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
   fullscreenLoading = false;
   processing = false;
   loading = false;
+  loadingReferenceNo = false;
+  savingSubitem = false;
 
-  public costCenterOptions: any = {};
-  public picBiddingOptions: any = {};
-  public biddingTypeOptions: any = {};
-  public vendorSelectionOptions: any = {};
-  public eventTypeOptions: any = {};
-  public productOptions: any = {};
-  public uomOptions: any = {};
+  public costCenterOptions: any[] = [];
+  public picOptions: any[] = [];
+  public biddingTypeOptions: any[] = [];
+  public vendorSelectionOptions: any[] = [];
+  public eventTypeOptions: any[] = [];
+  public uomOptions: any[] = [];
 
   private limit: number = 1;
   private action: string = "/api/c-attachments/upload";
   private accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
 
-  private projectInformation:any = {
-    information: "",
-    attachment: "",
-    attachmentId: ""
+  private projectInformation: any = {
+    adOrganizationId: null,
+    name: null,
+    attachment: null,
+    attachmentId: null
   };
 
-  private productRequirement = {
-    id: "",
-    productName: "",
-    index: ""
-  };
-  private gridDataProductSubItem = [];
-  private gridDataProductSubSubItem = [];
-  formAddSubItem = {
-    biddingLine: "",
-    biddingLineProductName: "",
-    productId: "",
-    productObj: {},
-    subItemLine: [],
-    edited: false,
-    totalAmount: 0
-  }
-
-  formAddSubSubItem = {
-    productId: "",
-    productObj: "",
-    quantity: 0,
-    uomId: "",
-    uomObj: "",
-    price: 0,
-    amount: 0
-  }
+  selectedItemIndex = 0;
+  selectedItem = {};
 
   columnSpacing = 32;
-  dialogConfirmationVisible:boolean = false;
-  dialogConfirmationVisibleFormSubSubItem:boolean = false;
+  subItemEditorVisible = false;
+  projectFormVisible:boolean = false;
 
   dialogTitle = "";
   dialogContent = null;
@@ -87,62 +81,105 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
 
   private baseApiUrlReference = "/api/ad-references";
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
-  private baseApiUrlRequisition = "/api/m-requisitions";
-  private baseApiUrlRequisitionLine = "/api/m-requisition-lines";
 
-  private keyReferenceVendorSelection: string = "mVendorSelection";
+  bidding: Record<string, any> = {};
+
+  get dateDisplayFormat() {
+    return settings.dateDisplayFormat;
+  }
+
+  get dateValueFormat() {
+    return settings.dateValueFormat;
+  }
+
+  @Watch('data')
+  onDataChanged(data: any) {
+    console.log('bidding info data changed:', data);
+  }
+
+  onCeilingPriceChange(row: any, value: string | number) {
+    console.log('Bidding line: %O, ceiling price: %s', row, value);
+  }
+
+  onSubItemError() {
+    this.savingSubitem = false;
+  }
+
+  onSubItemSaved({itemIndex, subItem}) {
+    const line = {...this.bidding.biddingLines[itemIndex]};
+    line.ceilingPrice = subItem.totalAmount;
+    line.subItem = subItem;
+
+    this.$set(this.bidding.biddingLines, itemIndex, line);
+    this.onCeilingPriceChange(line, line.ceilingPrice);
+    this.savingSubitem = false;
+    this.subItemEditorVisible = false;
+  }
 
   created() {
+    this.adOrganizationId = accountStore.organizationInfo.id;
+    this.bidding.step = BiddingStep.INFO;
+
+    this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
+
+    if (this.editMode) {
+      this.bidding = {...this.data};
+    } else {
+      this.bidding.projectInformations = [];
+    }
+
     this.retrieveCostCenter();
     this.retrieveBiddingType();
-    this.retrieveGetReferences(this.keyReferenceVendorSelection);
+    this.retrieveReferenceLists('mVendorSelection');
     this.retrievePicBidding();
-    this.retrieveEventType();
     this.retrieveUom();
   }
 
-  private retrieveGetReferences(param: string) {
-    this.dynamicWindowService(this.baseApiUrlReference)
-    .retrieve({
-      criteriaQuery: [`value.contains=`+param]
-    })
-    .then(res => {
-        let references = res.data.map(item => {
-            return{
-                id: item.id,
-                value: item.value,
-                name: item.name
-            };
-        });
-        this.retrieveGetReferenceLists(references);
-    });
+  closeSubitemEditor() {
+    this.subItemEditorVisible = false;
   }
 
-  private retrieveGetReferenceLists(param: any) {
-    this.dynamicWindowService(this.baseApiUrlReferenceList)
+  saveSubitemEditor() {
+    this.savingSubitem = true;
+    (<any>this.$refs.subitemEditor).save();
+  }
+
+  private retrieveReferenceLists(code: string) {
+    if (code !== 'mVendorSelection') {
+      return;
+    }
+
+    this.commonService('/api/ad-reference-lists')
     .retrieve({
-      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
+      criteriaQuery: [
+        `active.equals=true`,
+        `adReferenceValue.equals=${code}`
+      ],
+      paginationQuery: {
+        page: 0,
+        size: 100,
+        sort: ['name']
+      }
     })
     .then(res => {
-        let referenceList = res.data.map(item => {
-            return{
-                key: item.value,
-                value: item.name
-            };
-        });
-
-        if(param[0].value == this.keyReferenceVendorSelection){
-          this.vendorSelectionOptions = referenceList;
-        }
+      this.vendorSelectionOptions = res.data.map((item: any) =>
+        ({
+            key: item.value,
+            value: item.name
+        })
+      );
     });
   }
 
   private retrieveCostCenter() {
-    this.dynamicWindowService('/api/c-cost-centers')
+    this.commonService('/api/c-cost-centers')
       .retrieve({
+        criteriaQuery: [
+          'active.equals=true'
+        ],
         paginationQuery: {
           page: 0,
-          size: 10000,
+          size: 1000,
           sort: ['name']
         }
       })
@@ -152,11 +189,14 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   private retrieveBiddingType() {
-    this.dynamicWindowService('/api/c-bidding-types')
+    this.commonService('/api/c-bidding-types')
       .retrieve({
+        criteriaQuery: [
+          'active.equals=true'
+        ],
         paginationQuery: {
           page: 0,
-          size: 10000,
+          size: 1000,
           sort: ['name']
         }
       })
@@ -166,26 +206,33 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   private retrievePicBidding() {
-    this.dynamicWindowService('/api/ad-users')
+    this.commonService('/api/ad-users')
       .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          'employee.equals=true'
+        ],
         paginationQuery: {
           page: 0,
           size: 10000,
           sort: ['user_id']
-        },
-        criteriaQuery: [`vendor.specified=false`]
+        }
       })
       .then(res => {
-        this.picBiddingOptions = res.data;
+        this.picOptions = res.data;
       });
   }
 
-  private retrieveEventType() {
-    this.dynamicWindowService('/api/c-event-types')
+  retrieveEventTypes(biddingTypeId: number) {
+    this.commonService('/api/c-event-types')
       .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `biddingTypeId.equals=${biddingTypeId}`
+        ],
         paginationQuery: {
           page: 0,
-          size: 10000,
+          size: 1000,
           sort: ['name']
         }
       })
@@ -194,24 +241,8 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
       });
   }
 
-  private retrieveProduct(key) {
-    this.dynamicWindowService('/api/c-products')
-      .retrieve({
-        paginationQuery: {
-          page: 0,
-          size: 10000,
-          sort: ['name']
-        },
-        criteriaQuery: `name.contains=${key}`
-      })
-      .then(res => {
-        this.loading = false;
-        this.productOptions = res.data;
-      });
-  }
-
   private retrieveUom() {
-    this.dynamicWindowService('/api/c-unit-of-measures')
+    this.commonService('/api/c-unit-of-measures')
       .retrieve({
         paginationQuery: {
           page: 0,
@@ -240,105 +271,102 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
     return null;
   }
 
-  searchReferenceNo(){
-    console.log(this.biddingInformation.referenceNo);
-    if((this.biddingInformation.referenceNo == null)||(this.biddingInformation.referenceNo == "")){
-      this.$notify({
-        title: 'Warning',
-        dangerouslyUseHTMLString: true,
-        message: 'Please fill form Reference No.',
-        type: 'warning'
-      });
+  retrieveReferencedData(referenceNo?: string) {
+    if (referenceNo) {
+      this.loadingReferenceNo = true;
 
-    }else{
-      this.fullscreenLoading = true;
-      this.searchRequisition();
-    }
-  }
+      const filterQuery = [
+        'active.equals=true',
+        'processed.equals=true',
+        'approved.equals=true',
+        `documentNo.equals=${referenceNo}`,
+        'adOrganizationId.in=1',
+        `adOrganizationId.in=${this.adOrganizationId}`
+      ];
 
-  searchRequisition(): void {
-    if ( ! this.baseApiUrlRequisition) {
-      return;
-    }
-
-    this.dynamicWindowService(this.baseApiUrlRequisition)
-      .retrieve({
-        criteriaQuery: `approved.equals=true&active.equals=true&documentNo.equals=${this.biddingInformation.referenceNo}`
-      }).then(res => {
-
-        if(res.data.length == 0){
-          this.$notify({
-            title: 'Warning',
-            dangerouslyUseHTMLString: true,
-            message: 'Data not found',
-            type: 'warning'
-          });
-
-        }else{
-          if(res.data[0].documentStatus == "APR"){
-            res.data.map((item: any) => {
-              this.$set(this.biddingInformation, 'referenceTypeName', item.documentTypeName);
-              this.$set(this.biddingInformation, 'referenceTypeId', item.documentTypeId);
-              this.$set(this.biddingInformation, 'currencyName', item.currencyName);
-              this.$set(this.biddingInformation, 'currencyId', item.currencyId);
-              this.$set(this.biddingInformation, 'referenceNo', item.documentNo);
-              this.$set(this.biddingInformation, 'requisitionId', item.id);
-              console.log(item);
-              return item;
-            });
-
-            this.searchRequisitionLine(this.biddingInformation.requisitionId);
-          }else{
-            this.$notify({
-              title: 'Warning',
-              dangerouslyUseHTMLString: true,
-              message: 'Status Requisition is Draft',
-              type: 'warning'
-            });
+      this.commonService('/api/m-requisitions')
+        .retrieve({
+          criteriaQuery: filterQuery,
+          paginationQuery: {
+            page: 0,
+            size: 1,
+            sort: ['id']
           }
+        })
+        .then(res => {
+          const data = res.data as any[];
 
-          console.log(this.biddingInformation);
+          if (data.length) {
+            const document = data[0];
+            this.$set(this.bidding, 'adOrganizationId', document.adOrganizationId);
+            this.$set(this.bidding, 'adOrganizationName', document.adOrganizationName);
+            this.$set(this.bidding, 'currencyName', document.currencyName);
+            this.$set(this.bidding, 'currencyId', document.currencyId);
+            this.$set(this.bidding, 'costCenterId', document.costCenterId);
+            this.$set(this.bidding, 'referenceId', document.id);
+            this.$set(this.bidding, 'referenceTypeName', document.documentTypeName);
+            this.$set(this.bidding, 'referenceTypeId', document.documentTypeId);
 
-        }
-
-      }).catch(err => {
-        console.error('Failed getting the record. %O', err);
-        this.$message({
-          type: 'error',
-          message: err.detail || err.message
+            this.retreiveReferenceLines(document.id);
+          } else {
+            this.$message.warning('No document found for the given reference no.');
+          }
+        })
+        .catch(err => {
+          console.error('Failed getting the reference. %O', err);
+          this.$message.error(err.detail || err.message);
+        })
+        .finally(() => {
+          this.loadingReferenceNo = false;
         });
-      }).finally(() => {
-        this.fullscreenLoading = false;
-      });
+    }
   }
 
-  private searchRequisitionLine(requisitionId): void {
-    if ( ! this.baseApiUrlRequisitionLine) {
-      return;
-    }
-
-    this.dynamicWindowService(this.baseApiUrlRequisitionLine)
+  private retreiveReferenceLines(referenceId: number): void {
+    this.commonService('/api/m-requisition-lines')
       .retrieve({
-        criteriaQuery: `requisitionId.equals=${requisitionId}`
+        criteriaQuery: [
+          'active.equals=true',
+          `requisitionId.equals=${referenceId}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['lineNo', 'id']
+        }
       })
       .then(res => {
+        const lines = (res.data as any[]).map(prLine => {
+          return {
+            adOrganizationId: prLine.adOrganizationId,
+            costCenterId: this.bidding.costCenterId,
+            productId: prLine.productId,
+            productName: prLine.productName,
+            subItemId: null,
+            quantity: prLine.quantity,
+            uomId: prLine.uomId,
+            uomName: prLine.uomName,
+            ceilingPrice: prLine.unitPrice,
+            totalCeilingPrice: prLine.requisitionAmount,
+            deliveryDate: prLine.datePromised,
+            remark: prLine.remark
+          };
+        });
 
-        //this.dialogInvoiceVerificationVisible = true;
-        let grandTotal = 0;
-        this.$set(this.biddingInformation, 'biddingInformationLine', res.data.map((item: any) => {
-          grandTotal += item.requisitionAmount;
+        const grandTotal = lines
+          .reduce((prev: any, next: any) => {
+          if (typeof prev === 'number') {
+            return prev + next.totalCeilingPrice
+          }
+          return prev.totalCeilingPrice + next.totalCeilingPrice;
+        })
 
-          return item;
-        }));
-
-        this.$set(this.biddingInformation, 'ceilingPrice', grandTotal);
-        this.$set(this.biddingInformation, 'estimatedPrice', grandTotal);
-
-        console.log(this.biddingInformation);
-
+        this.$set(this.bidding, 'ceilingPrice', grandTotal);
+        this.$set(this.bidding, 'estimatedPrice', grandTotal);
+        this.$set(this.bidding, 'biddingLines', lines);
       })
       .catch(err => {
-        console.error('Failed getting the record. %O', err);
+        console.error('Failed getting the bidding lines. %O', err);
         this.$message({
           type: 'error',
           message: err.detail || err.message
@@ -349,268 +377,31 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
       });
   }
 
-  displayAddSubItem(row, index){
-    console.log(row);
-    console.log(index);
-    if(row.subItem == null){
-      this.gridDataProductSubItem = [];
-    }else{
-      this.gridDataProductSubItem = row.subItem;
-    }
-
-    this.productRequirement = row;
-    this.productRequirement.index = index;
-    this.dialogConfirmationVisible = true;
-
-    this.dialogContent = 2;
-    this.dialogContentSubItem = 1;
-    this.dialogTitle = `Sub Item Product ${this.productRequirement.productName}`;
-    this.dialogWidth = "80%";
-    this.dialogCloseOnClick = false;
+  editSubItem(row: any, index: number) {
+    this.selectedItem = row;
+    this.selectedItemIndex = index;
+    this.subItemEditorVisible = true;
   }
 
-  addSubItem(){
-    console.log("add sub item %O", this.productRequirement);
-
-    this.formAddSubItem = {
-      biddingLine: this.productRequirement.id,
-      biddingLineProductName: this.productRequirement.productName,
-      productId: "",
-      productObj: {},
-      subItemLine: [],
-      edited: false,
-      totalAmount: 0
-    }
-
-    this.gridDataProductSubSubItem = [];
-
-    this.dialogContentSubItem = 2;
-    this.dialogTitle = `Add Sub Item Product ${this.productRequirement.productName}`;
+  removeProject(index: number) {
+    this.bidding.projectInformations.splice(index, 1);
   }
 
-  addSubSubItem(){
-    this.dialogConfirmationVisibleFormSubSubItem = true;
-  }
-
-  removeSubItem(index){
-    this.gridDataProductSubItem.splice(index, 1);
-  }
-
-  removeSubSubItem(index){
-    this.gridDataProductSubSubItem.splice(index, 1);
-  }
-
-  editSubItem(row){
-    console.log("edit sub item %O", row);
-
-    this.dialogTitle = `Add Sub Item Product ${this.productRequirement.productName}`;
-    this.formAddSubItem = row;
-    this.formAddSubItem.edited = true;
-    this.gridDataProductSubSubItem = this.formAddSubItem.subItemLine;
-
-    this.dialogContentSubItem = 2;
-  }
-
-  saveSubItemProduct(){
-    if(this.dialogContentSubItem == 1){
-
-      var grandTotal = 0;
-      var totalCeilingPrice = 0;
-
-      for(var i=0; i<this.gridDataProductSubItem.length; i++){
-        grandTotal += this.gridDataProductSubItem[i].totalAmount;
-      }
-
-			var biddingInformationLine = this.biddingInformation.biddingInformationLine[this.productRequirement.index];
-      biddingInformationLine.subItem = this.gridDataProductSubItem;
-      biddingInformationLine.unitPrice = grandTotal;
-			biddingInformationLine.requisitionAmount = grandTotal * biddingInformationLine.quantity;
-
-			for(var x=0; x<this.biddingInformation.biddingInformationLine.length; x++){
-        totalCeilingPrice += this.biddingInformation.biddingInformationLine[x].requisitionAmount;
-      }
-
-      console.log(grandTotal);
-      console.log(totalCeilingPrice);
-
-      this.biddingInformation.ceilingPrice = totalCeilingPrice;
-      this.biddingInformation.estimatedPrice = totalCeilingPrice;
-
-      console.log(this.biddingInformation);
-      console.log(this.gridDataProductSubItem);
-      this.dialogConfirmationVisible = false;
-    }else{
-      this.saveSubItem();
-    }
-  }
-
-  saveSubItem(){
-    (this.$refs.formAddSubItem as ElForm).validate((passed, errors) => {
-      if(passed){
-
-        var totalAmount = 0;
-        for(var i=0; i<this.gridDataProductSubSubItem.length; i++){
-          totalAmount += this.gridDataProductSubSubItem[i].amount;
-        }
-        console.log(totalAmount);
-        this.formAddSubItem.totalAmount = totalAmount;
-
-        if(this.formAddSubItem.edited){
-          this.backSubItem();
-        }else{
-
-          const dataExist = (this.gridDataProductSubItem.some((vLine: any) => {
-            return vLine.productId === this.formAddSubItem.productId;
-          }));
-
-          if(!dataExist){
-
-            this.formAddSubItem.subItemLine = this.gridDataProductSubSubItem;
-            this.formAddSubItem.productObj = this.productOptions.find(item => item.id === this.formAddSubItem.productId);
-
-            if(this.formAddSubItem.subItemLine.length){
-
-              console.log(this.formAddSubItem);
-              this.dialogTitle = `Sub Item Product ${this.productRequirement.productName}`;
-
-              this.gridDataProductSubItem.push(this.formAddSubItem);
-
-              this.dialogContentSubItem = 1;
-              this.formAddSubItem = {
-                biddingLine: "",
-                biddingLineProductName: "",
-                productId: "",
-                productObj: "",
-                subItemLine: [],
-                edited: false,
-                totalAmount: 0
-              }
-              this.gridDataProductSubSubItem = [];
-            }else{
-              this.$message({
-                message: "Please add sub sub item product",
-                type: 'error'
-              });
-            }
-          }else{
-            this.$message({
-              message: "Product sub item has been added",
-              type: 'error'
-            });
-          }
-
-        }
-      }else{
-        console.log(errors);
-      }
-    });
-  }
-
-  saveSubSubItem(){
-    (this.$refs.formAddSubSubItem as ElForm).validate((passed, errors) => {
-      if(passed){
-
-        this.formAddSubSubItem.productObj = this.productOptions.find(item => item.id === this.formAddSubSubItem.productId);
-        this.formAddSubSubItem.uomObj = this.uomOptions.find(item => item.id === this.formAddSubSubItem.uomId);
-        this.formAddSubSubItem.amount = this.formAddSubSubItem.quantity * this.formAddSubSubItem.price;
-
-        const dataExist = (this.gridDataProductSubSubItem.some((vLine: any) => {
-
-          return vLine.productId === this.formAddSubSubItem.productId;
-        }));
-
-        if(!dataExist){
-          this.dialogConfirmationVisibleFormSubSubItem = false;
-          this.gridDataProductSubSubItem.push(this.formAddSubSubItem);
-
-          console.log(this.formAddSubSubItem);
-          this.formAddSubSubItem = {
-            productId: "",
-            productObj: "",
-            quantity: 0,
-            uomId: "",
-            uomObj: "",
-            price: 0,
-            amount: 0
-          }
-        }else{
-          this.$message({
-            message: "Product has been added",
-            type: 'error'
-          });
-        }
-      }else{
-        console.log(errors);
-      }
-
-    });
-
-  }
-
-  backSubItem(){
-    this.dialogTitle = `Sub Item Product ${this.productRequirement.productName}`;
-    //this.formAddSubItem.edited = false;
-
-    this.formAddSubItem = {
-      biddingLine: this.productRequirement.id,
-      biddingLineProductName: this.productRequirement.productName,
-      productId: "",
-      productObj: {},
-      subItemLine: [],
-      edited: false,
-      totalAmount: 0
-    }
-
-    this.dialogContentSubItem = 1;
-    this.dialogWidth = "80%";
-  }
-
-  closeSubSubItem(){
-    this.dialogConfirmationVisibleFormSubSubItem = false;
-
-    this.formAddSubSubItem = {
-      productId: "",
-      productObj: "",
-      quantity: 0,
-      uomId: "",
-      uomObj: "",
-      price: 0,
-      amount: 0
-    }
-  }
-
-  addProject(){
-    this.dialogTitle = "Add Project";
-    this.dialogContent = 1;
-    this.dialogConfirmationVisible = true;
-    this.dialogWidth = "50%";
-    this.dialogCloseOnClick = true;
-  }
-
-  remoteMethod(query) {
-    if (query !== '') {
-      this.loading = true;
-      this.retrieveProduct(query);
-    } else {
-      this.productOptions = [];
-    }
-  }
-
-  removeProject(index){
-    this.biddingInformation.projectInformation.splice(index, 1);
-  }
-
-  saveProject(){
+  saveProject() {
     (this.$refs.projectInformation as ElForm).validate((passed, errors) => {
-      if(passed){
-        console.log(this.projectInformation);
-        this.biddingInformation.projectInformation.push(this.projectInformation);
-        this.dialogConfirmationVisible = false;
+      if (passed) {
+        this.projectInformation.adOrganizationId = this.adOrganizationId;
+
+        console.log('Project Info:', this.projectInformation);
+        this.bidding.projectInformations.push({...this.projectInformation});
+        this.projectFormVisible = false;
         this.projectInformation = {
-          information: "",
-          attachment: ""
+          adOrganizationId: null,
+          name: null,
+          attachment: null,
+          attachmentId: null
         };
-      }else{
+      } else {
         console.log(errors);
       }
     });
@@ -634,9 +425,6 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   onUploadSuccess(response, file, fileList) {
-      console.log('File uploaded successfully ', response);
-      console.log(file);
-      console.log(fileList);
       this.projectInformation.attachment = response.attachment;
       this.projectInformation.attachmentId = response.attachment.id;
   }
@@ -684,17 +472,19 @@ export default class BiddingInformation extends mixins(Vue2Filters.mixin, AlertM
 
   }
 
-  //=======================================================================
-
-  validate() {
+  /**
+   * Invoked before proceeding to the next step.
+   */
+  save() {
     (this.$refs.biddingInformation as ElForm).validate((passed, errors) => {
-      if(passed){
-        //this.submit();
-      }else{
-        console.log(errors);
+      if (passed) {
+        console.log('form:', this.bidding);
+        this.$emit('saved', {
+          data: this.bidding
+        });
+      } else {
+        this.$emit('error', errors);
       }
-
     });
   }
-
 }

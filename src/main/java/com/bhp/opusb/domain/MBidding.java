@@ -1,15 +1,25 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A MBidding.
@@ -27,10 +37,6 @@ public class MBidding extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "bidding_no", nullable = false, unique = true)
-    private String biddingNo;
-
-    @NotNull
     @Column(name = "name", nullable = false)
     private String name;
 
@@ -42,6 +48,14 @@ public class MBidding extends AbstractAuditingEntity {
 
     @Column(name = "estimated_price", precision = 21, scale = 2)
     private BigDecimal estimatedPrice;
+
+    @Column(name = "date_trx")
+    private LocalDate dateTrx;
+
+    @NotNull
+    @Size(max = 30)
+    @Column(name = "document_no", length = 30, nullable = false)
+    private String documentNo;
 
     @NotNull
     @Size(max = 10)
@@ -59,11 +73,14 @@ public class MBidding extends AbstractAuditingEntity {
     @Column(name = "processed")
     private Boolean processed;
 
+    @Column(name = "date_approve")
+    private LocalDate dateApprove;
+
     @Column(name = "date_reject")
     private LocalDate dateReject;
 
-    @Column(name = "date_approve")
-    private LocalDate dateApprove;
+    @Column(name = "rejected_reason")
+    private String rejectedReason;
 
     @Column(name = "uid")
     private UUID uid;
@@ -84,7 +101,17 @@ public class MBidding extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBiddings")
+    private CCurrency currency;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mBiddings")
     private MRequisition requisition;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mBiddings")
+    private CDocumentType referenceType;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -108,19 +135,6 @@ public class MBidding extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getBiddingNo() {
-        return biddingNo;
-    }
-
-    public MBidding biddingNo(String biddingNo) {
-        this.biddingNo = biddingNo;
-        return this;
-    }
-
-    public void setBiddingNo(String biddingNo) {
-        this.biddingNo = biddingNo;
     }
 
     public String getName() {
@@ -175,6 +189,32 @@ public class MBidding extends AbstractAuditingEntity {
         this.estimatedPrice = estimatedPrice;
     }
 
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public MBidding dateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+        return this;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public MBidding documentNo(String documentNo) {
+        this.documentNo = documentNo;
+        return this;
+    }
+
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
     public String getDocumentAction() {
         return documentAction;
     }
@@ -227,6 +267,19 @@ public class MBidding extends AbstractAuditingEntity {
         this.processed = processed;
     }
 
+    public LocalDate getDateApprove() {
+        return dateApprove;
+    }
+
+    public MBidding dateApprove(LocalDate dateApprove) {
+        this.dateApprove = dateApprove;
+        return this;
+    }
+
+    public void setDateApprove(LocalDate dateApprove) {
+        this.dateApprove = dateApprove;
+    }
+
     public LocalDate getDateReject() {
         return dateReject;
     }
@@ -240,17 +293,17 @@ public class MBidding extends AbstractAuditingEntity {
         this.dateReject = dateReject;
     }
 
-    public LocalDate getDateApprove() {
-        return dateApprove;
+    public String getRejectedReason() {
+        return rejectedReason;
     }
 
-    public MBidding dateApprove(LocalDate dateApprove) {
-        this.dateApprove = dateApprove;
+    public MBidding rejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
         return this;
     }
 
-    public void setDateApprove(LocalDate dateApprove) {
-        this.dateApprove = dateApprove;
+    public void setRejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
     }
 
     public UUID getUid() {
@@ -305,6 +358,19 @@ public class MBidding extends AbstractAuditingEntity {
         this.costCenter = cCostCenter;
     }
 
+    public CCurrency getCurrency() {
+        return currency;
+    }
+
+    public MBidding currency(CCurrency cCurrency) {
+        this.currency = cCurrency;
+        return this;
+    }
+
+    public void setCurrency(CCurrency cCurrency) {
+        this.currency = cCurrency;
+    }
+
     public MRequisition getRequisition() {
         return requisition;
     }
@@ -316,6 +382,19 @@ public class MBidding extends AbstractAuditingEntity {
 
     public void setRequisition(MRequisition mRequisition) {
         this.requisition = mRequisition;
+    }
+
+    public CDocumentType getReferenceType() {
+        return referenceType;
+    }
+
+    public MBidding referenceType(CDocumentType cDocumentType) {
+        this.referenceType = cDocumentType;
+        return this;
+    }
+
+    public void setReferenceType(CDocumentType cDocumentType) {
+        this.referenceType = cDocumentType;
     }
 
     public CBiddingType getBiddingType() {
@@ -383,17 +462,19 @@ public class MBidding extends AbstractAuditingEntity {
     public String toString() {
         return "MBidding{" +
             "id=" + getId() +
-            ", biddingNo='" + getBiddingNo() + "'" +
             ", name='" + getName() + "'" +
             ", vendorSelection='" + getVendorSelection() + "'" +
             ", ceilingPrice=" + getCeilingPrice() +
             ", estimatedPrice=" + getEstimatedPrice() +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +
             ", documentStatus='" + getDocumentStatus() + "'" +
             ", approved='" + isApproved() + "'" +
             ", processed='" + isProcessed() + "'" +
-            ", dateReject='" + getDateReject() + "'" +
             ", dateApprove='" + getDateApprove() + "'" +
+            ", dateReject='" + getDateReject() + "'" +
+            ", rejectedReason='" + getRejectedReason() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

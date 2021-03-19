@@ -21,4 +21,18 @@
                                  referencedTableName="c_bidding_type"/>
 
     </changeSet>
+
+    <changeSet id="20210220095200" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="c_event_type" constraintName="fk_c_event_type_binding_type_id" />
+        <modifyDataType tableName="c_event_type" columnName="name" newDataType="varchar(30)" />
+        <renameColumn tableName="c_event_type" oldColumnName="binding_type_id" newColumnName="bidding_type_id" />
+
+        <addForeignKeyConstraint baseColumnNames="bidding_type_id"
+                                 baseTableName="c_event_type"
+                                 constraintName="fk_c_event_type_bidding_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_bidding_type"/>
+
+    </changeSet>
+
 </databaseChangeLog>

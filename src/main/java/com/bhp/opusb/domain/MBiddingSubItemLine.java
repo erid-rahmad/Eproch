@@ -1,14 +1,23 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A MBiddingSubItemLine.
@@ -50,17 +59,17 @@ public class MBiddingSubItemLine extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBiddingSubItemLines")
-    private MBiddingSubItem biddingSubItem;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("mBiddingSubItemLines")
     private CProduct product;
 
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBiddingSubItemLines")
     private CUnitOfMeasure uom;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mBiddingSubItemLines")
+    private MBiddingSubItem biddingSubItem;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -149,19 +158,6 @@ public class MBiddingSubItemLine extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
 
-    public MBiddingSubItem getBiddingSubItem() {
-        return biddingSubItem;
-    }
-
-    public MBiddingSubItemLine biddingSubItem(MBiddingSubItem mBiddingSubItem) {
-        this.biddingSubItem = mBiddingSubItem;
-        return this;
-    }
-
-    public void setBiddingSubItem(MBiddingSubItem mBiddingSubItem) {
-        this.biddingSubItem = mBiddingSubItem;
-    }
-
     public CProduct getProduct() {
         return product;
     }
@@ -186,6 +182,19 @@ public class MBiddingSubItemLine extends AbstractAuditingEntity {
 
     public void setUom(CUnitOfMeasure cUnitOfMeasure) {
         this.uom = cUnitOfMeasure;
+    }
+
+    public MBiddingSubItem getBiddingSubItem() {
+        return biddingSubItem;
+    }
+
+    public MBiddingSubItemLine biddingSubItem(MBiddingSubItem mBiddingSubItem) {
+        this.biddingSubItem = mBiddingSubItem;
+        return this;
+    }
+
+    public void setBiddingSubItem(MBiddingSubItem mBiddingSubItem) {
+        this.biddingSubItem = mBiddingSubItem;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

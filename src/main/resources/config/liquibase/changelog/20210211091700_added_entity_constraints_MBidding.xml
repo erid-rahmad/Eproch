@@ -45,4 +45,20 @@
                                  referencedTableName="ad_user"/>
 
     </changeSet>
+
+    <changeSet id="20210318040000" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="currency_id"
+                                 baseTableName="m_bidding"
+                                 constraintName="fk_m_bidding_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="reference_type_id"
+                                 baseTableName="m_bidding"
+                                 constraintName="fk_m_bidding_reference_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_document_type"/>
+
+    </changeSet>
 </databaseChangeLog>

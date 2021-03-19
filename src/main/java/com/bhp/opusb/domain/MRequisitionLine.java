@@ -35,6 +35,9 @@ public class MRequisitionLine extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @Column(name = "line_no")
+    private Integer lineNo;
+
     @Column(name = "document_date")
     private LocalDate documentDate;
 
@@ -112,6 +115,19 @@ public class MRequisitionLine extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getLineNo() {
+        return lineNo;
+    }
+
+    public MRequisitionLine lineNo(Integer lineNo) {
+        this.lineNo = lineNo;
+        return this;
+    }
+
+    public void setLineNo(Integer lineNo) {
+        this.lineNo = lineNo;
     }
 
     public LocalDate getDocumentDate() {
@@ -374,6 +390,7 @@ public class MRequisitionLine extends AbstractAuditingEntity {
     public String toString() {
         return "MRequisitionLine{" +
             "id=" + getId() +
+            ", lineNo=" + getLineNo() +
             ", documentDate='" + getDocumentDate() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
             ", dateRequired='" + getDateRequired() + "'" +

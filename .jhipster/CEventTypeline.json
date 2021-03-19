@@ -4,7 +4,11 @@
     {
       "fieldName": "event",
       "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required",
+        "maxlength"
+      ],
+      "fieldValidateRulesMaxlength": "10"
     },
     {
       "fieldName": "description",
@@ -13,7 +17,10 @@
     {
       "fieldName": "sequence",
       "fieldType": "Integer",
-      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRules": [
+        "required",
+        "min"
+      ],
       "fieldValidateRulesMin": "0"
     },
     {

@@ -74,6 +74,7 @@ class MProjectInformationGatlingTest extends Simulation {
                 "id":null
                 , "uid":null
                 , "active":null
+                , "name":"SAMPLE_TEXT"
                 }""")).asJson
             .check(status.is(201))
             .check(headerRegex("Location", "(.*)").saveAs("new_mProjectInformation_url"))).exitHereIfFailed

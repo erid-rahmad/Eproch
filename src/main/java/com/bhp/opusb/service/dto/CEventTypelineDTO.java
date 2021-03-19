@@ -1,17 +1,23 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEventTypeline} entity.
  */
 public class CEventTypelineDTO extends AbstractAuditingDTO {
 
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
+    @Size(max = 10)
     private String event;
 
     private String description;
@@ -22,7 +28,7 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
@@ -30,7 +36,7 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
 
     private Long eventTypeId;
     private String eventTypeName;
-
+    
     public Long getId() {
         return id;
     }
@@ -142,9 +148,7 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
             ", eventTypeId=" + getEventTypeId() +
-            ", eventTypeName=" + getEventTypeName() +
             "}";
     }
 }

@@ -37,7 +37,7 @@ public class CEventTypeCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
-    private LongFilter bindingTypeId;
+    private LongFilter biddingTypeId;
 
     public CEventTypeCriteria() {
     }
@@ -49,7 +49,7 @@ public class CEventTypeCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.bindingTypeId = other.bindingTypeId == null ? null : other.bindingTypeId.copy();
+        this.biddingTypeId = other.biddingTypeId == null ? null : other.biddingTypeId.copy();
     }
 
     @Override
@@ -105,12 +105,12 @@ public class CEventTypeCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getBindingTypeId() {
-        return bindingTypeId;
+    public LongFilter getBiddingTypeId() {
+        return biddingTypeId;
     }
 
-    public void setBindingTypeId(LongFilter bindingTypeId) {
-        this.bindingTypeId = bindingTypeId;
+    public void setBiddingTypeId(LongFilter biddingTypeId) {
+        this.biddingTypeId = biddingTypeId;
     }
 
 
@@ -130,7 +130,7 @@ public class CEventTypeCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(bindingTypeId, that.bindingTypeId);
+            Objects.equals(biddingTypeId, that.biddingTypeId);
     }
 
     @Override
@@ -142,7 +142,7 @@ public class CEventTypeCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
-        bindingTypeId
+        biddingTypeId
         );
     }
 
@@ -155,7 +155,7 @@ public class CEventTypeCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (bindingTypeId != null ? "bindingTypeId=" + bindingTypeId + ", " : "") +
+                (biddingTypeId != null ? "biddingTypeId=" + biddingTypeId + ", " : "") +
             "}";
     }
 

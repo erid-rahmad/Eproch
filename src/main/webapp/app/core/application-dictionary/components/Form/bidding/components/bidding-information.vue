@@ -1,603 +1,551 @@
 <template>
-    <div class="app-container">
+  <div class="bidding-information">
+    <el-divider content-position="left"><h4>Bidding Information</h4></el-divider>
 
-        <el-divider content-position="left"><h4>Bidding Information</h4></el-divider>
+    <el-form
+      ref="biddingInformation"
+      label-position="left"
+      label-width="150px"
+      :model="bidding"
+      :rules="rules"
+      size="mini"
+    >
+      <el-row :gutter="24">
+        <el-col :span="8">
+          <el-form-item
+            label="Title"
+            prop="name"
+            required
+          >
+            <el-input
+              v-model="bidding.name"
+              class="form-input"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="Bidding No"
+            prop="biddingNo"
+          >
+            <el-input
+              v-model="bidding.documentNo"
+              class="form-input"
+              clearable
+              :disabled="editMode"
+            ></el-input>
+          </el-form-item>
 
-        <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini" :model="biddingInformation" :rules="rules">
+          <el-form-item
+            label="Reference No"
+            prop="referenceNo"
+            required
+          >
+            <el-input
+              ref="requisitionNo"
+              v-model="bidding.referenceNo"
+              v-loading="loadingReferenceNo"
+              clearable
+              :disabled="editMode"
+              placeholder="Please Enter Reference No"
+              @change="retrieveReferencedData"
+            >
+              <el-button
+                v-if="!editMode"
+                :loading="loadingReferenceNo"
+                icon="el-icon-search"
+                slot="append"
+                @click="retrieveReferencedData(bidding.referenceNo)"
+              >
+                Search
+              </el-button>
+            </el-input>
+          </el-form-item>
 
-            <el-row :gutter="24">
-                <el-col :span="12">
-                    <el-form-item label="Title" prop="name" required>
-                        <el-input class="form-input" clearable v-model="biddingInformation.name" />
-                    </el-form-item>
-                    <el-form-item label="Bidding No" prop="biddingNo" required>
-                        <el-input class="form-input" clearable v-model="biddingInformation.biddingNo" />
-                    </el-form-item>
+          <el-form-item
+            label="Reference Type"
+            prop="referenceTypeName"
+            required
+          >
+            <el-input
+              v-model="bidding.referenceTypeName"
+              class="form-input"
+              clearable
+              disabled
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="Department" prop="costCenterId" required>
+            <el-select
+              v-model="bidding.costCenterId"
+              class="form-input"
+              clearable
+              filterable
+              placeholder="Select Department"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in costCenterOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            label="Currency"
+            prop="currencyName"
+            required
+          >
+            <el-input
+              v-model="bidding.currencyName"
+              class="form-input"
+              clearable
+              disabled
+            ></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :span="8">
+          <el-form-item
+            label="Bidding Type"
+            prop="biddingTypeId"
+            required
+          >
+            <el-select
+              v-model="bidding.biddingTypeId"
+              class="form-input"
+              clearable
+              filterable
+              placeholder="Select Bidding Type"
+              style="width: 100%"
+              @change="retrieveEventTypes"
+            >
+              <el-option
+                v-for="item in biddingTypeOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            label="Vendor Selection Method"
+            prop="vendorSelection"
+            required
+          >
+            <el-select
+              v-model="bidding.vendorSelection"
+              class="form-input"
+              clearable
+              filterable
+              placeholder="Select Selection Method"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in vendorSelectionOptions"
+                :key="item.key"
+                :label="item.value"
+                :value="item.key"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item
+            label="Ceiling Price"
+            prop="ceilingPrice"
+            required
+          >
+            <el-input
+              v-model="bidding.ceilingPrice"
+              v-inputmask="{'alias': 'currency'}"
+              class="form-input"
+              clearable
+              disabled
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="Estimated Price"
+            prop="estimatedPrice"
+            required
+          >
+            <el-input
+              v-model="bidding.estimatedPrice"
+              v-inputmask="{'alias': 'currency'}"
+              class="form-input"
+              clearable
+              disabled
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="PiC"
+            prop="adUserId"
+            required>
+            <el-select
+              style="width: 100%"
+              v-model="bidding.adUserId"
+              class="form-input"
+              clearable
+              filterable
+              placeholder="Select PiC"
+            >
+              <el-option
+                v-for="item in picOptions"
+                :key="item.userId"
+                :label="item.userLogin"
+                :value="item.userId"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Event Type" prop="eventTypeId" required>
+            <el-select
+              v-model="bidding.eventTypeId"
+              class="form-input"
+              clearable
+              :disabled="!bidding.biddingTypeId"
+              filterable
+              placeholder="Select Event Type"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in eventTypeOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
 
-                    <el-form-item label="Reference No" prop="referenceNo" required>
+    <el-divider content-position="left">
+      <h4>Requirement</h4>
+    </el-divider>
 
-                        <el-input
-                            clearable
-                            v-model="biddingInformation.referenceNo">
+    <el-row>
+      <el-col :span="24">
+        <el-table
+          v-loading="processing"
+          ref="biddingLines"
+          border
+          class="bidding-info-table"
+          :data="bidding.biddingLines"
+          :default-sort="gridSchema.defaultSort"
+          :empty-text="gridSchema.emptyText"
+          :height="gridSchema.height"
+          highlight-current-row
+          :max-height="gridSchema.maxHeight"
+          size="mini"
+          stripe
+          style="width: 100%"
+        >
+          <el-table-column min-width="50" label="No">
+            <template slot-scope="{ $index }">
+              {{ $index + 1 }}
+            </template>
+          </el-table-column>
 
-                            <el-button
-                                @click="searchReferenceNo"
-                                v-loading.fullscreen.lock="fullscreenLoading"
-                                slot="append"
-                                icon="el-icon-search">
-                                Search
-                            </el-button>
-                        </el-input>
-                    </el-form-item>
+          <el-table-column
+            label="Product"
+            min-width="200"
+            prop="productName"
+            show-overflow-tooltip
+          ></el-table-column>
 
-                    <el-form-item label="Reference Type" prop="referenceTypeName" required>
-                        <el-input class="form-input" clearable v-model="biddingInformation.referenceTypeName" disabled />
-                    </el-form-item>
-                    <el-form-item label="Department" prop="costCenterId" required>
-                        <el-select
-                            style="width: 100%"
-                            v-model="biddingInformation.costCenterId"
-                            class="form-input"
-                            clearable filterable
-                            :placeholder="$t('register.form.select')">
-                            <el-option
-                                v-for="item in costCenterOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id" />
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="Currency" prop="currencyName" required >
-                        <el-input class="form-input" clearable v-model="biddingInformation.currencyName" disabled />
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="Bidding Type" prop="biddingTypeId" required>
-                        <el-select
-                            style="width: 100%"
-                            v-model="biddingInformation.biddingTypeId"
-                            class="form-input"
-                            clearable filterable
-                            :placeholder="$t('register.form.select')">
-                            <el-option
-                                v-for="item in biddingTypeOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id" />
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="Vendor Selection" prop="vendorSelection" required>
-                        <el-select
-                            style="width: 100%"
-                            v-model="biddingInformation.vendorSelection"
-                            class="form-input"
-                            clearable filterable
-                            :placeholder="$t('register.form.select')">
-                            <el-option
-                                v-for="item in vendorSelectionOptions"
-                                :key="item.key"
-                                :label="item.value"
-                                :value="item.key" />
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="Ceiling Price" prop="ceilingPrice" required>
-                        <el-input class="form-input" clearable v-model="biddingInformation.ceilingPrice" v-inputmask="{'alias': 'currency'}" disabled />
-                    </el-form-item>
-                    <el-form-item label="Estimated Price" prop="estimatedPrice" required>
-                        <el-input class="form-input" clearable v-model="biddingInformation.estimatedPrice" v-inputmask="{'alias': 'currency'}" disabled />
-                    </el-form-item>
-                    <el-form-item label="PIC" prop="pic" required>
-                        <el-select
-                            style="width: 100%"
-                            v-model="biddingInformation.pic"
-                            class="form-input"
-                            clearable filterable
-                            :placeholder="$t('register.form.select')">
-                            <el-option
-                                v-for="item in picBiddingOptions"
-                                :key="item.userId"
-                                :label="item.userLogin"
-                                :value="item.userId" />
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="Event Type" prop="eventTypeId" required>
-                        <el-select
-                            style="width: 100%"
-                            v-model="biddingInformation.eventTypeId"
-                            class="form-input"
-                            clearable filterable
-                            :placeholder="$t('register.form.select')">
-                            <el-option
-                                v-for="item in eventTypeOptions"
-                                :key="item.id"
-                                :label="item.name"
-                                :value="item.id" />
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+          <el-table-column
+            label="Sub Item"
+            prop="subItem"
+            width="110"
+          >
+            <template slot-scope="{ row, $index }">
+              <el-badge :is-dot="!!row.subItem">
+                <el-button
+                  class="share-button"
+                  size="mini"
+                  title="Add sub item"
+                  type="primary"
+                  @click="editSubItem(row, $index)"
+                >Sub-item</el-button>
+              </el-badge>
+            </template>
+          </el-table-column>
 
+          <el-table-column
+            label="Quantity"
+            min-width="150"
+            prop="quantity"
+          ></el-table-column>
+
+          <el-table-column
+            label="UoM"
+            min-width="50"
+            prop="uomName"
+          ></el-table-column>
+
+          <el-table-column
+            align="right"
+            label="Ceiling Price/Unit"
+            min-width="150"
+          >
+            <template
+              slot-scope="{ row }"
+            >
+              <el-input
+                v-if="!row.subItem"
+                v-model="row.ceilingPrice"
+                v-inputmask="{'alias': 'currency'}"
+                size="mini"
+                @change="value => onCeilingPriceChange(row, value)"
+              ></el-input>
+              <span v-else>{{ row.ceilingPrice | formatCurrency }}</span>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            align="right"
+            label="Total Ceiling Price"
+            min-width="150"
+          >
+            <template slot-scope="{ row }">
+              {{ row.totalCeilingPrice | formatCurrency }}
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            label="Delivery Date"
+            min-width="150"
+            prop="deliveryDate"
+          >
+            <template slot-scope="{ row }">
+              <el-date-picker
+                v-model="row.deliveryDate"
+                class="form-input"
+                clearable
+                :format="dateDisplayFormat"
+                placeholder="Pick a date"
+                size="mini"
+                style="width: 100%"
+                type="date"
+                :value-format="dateValueFormat"
+              ></el-date-picker>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            label="Remark"
+            min-width="200"
+          >
+            <template slot-scope="{ row }">
+              <el-input
+                v-model="row.remark"
+                clearable
+                :maxlength="255"
+                size="mini"
+              ></el-input>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+
+    <el-divider content-position="left"><h4>Project Information</h4></el-divider>
+    <el-row>
+      <el-col :span="12">
+        <el-table
+          v-loading="processing"
+          ref="projectInformations"
+          highlight-current-row
+          border
+          stripe
+          size="mini"
+          style="height: 100%"
+          :height="gridSchema.height"
+          :max-height="gridSchema.maxHeight"
+          :default-sort="gridSchema.defaultSort"
+          :empty-text="gridSchema.emptyText"
+          :data="bidding.projectInformations"
+        >
+          <el-table-column min-width="30" label="No">
+            <template slot-scope="row">
+              {{ row.$index + 1 }}
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            label="Information"
+            min-width="100"
+            prop="information"
+          ></el-table-column>
+
+          <el-table-column
+            label="Attachment"
+            min-width="80"
+          >
+            <template slot-scope="{ row }">
+              <el-button
+                class="btn-attachment"
+                icon="el-icon-download"
+                size="mini"
+                type="primary"
+                @click="downloadAttachment(row)"
+              >
+                    {{ row.attachment.fileName }}
+              </el-button>
+            </template>
+          </el-table-column>
+
+          <el-table-column
+            align="center"
+            min-width="50"
+          >
+            <template slot="header">
+              <el-button
+                icon="el-icon-plus"
+                size="mini"
+                type="primary"
+                @click="projectFormVisible = true"
+              ></el-button>
+            </template>
+            <template slot-scope="{ $index }">
+              <el-button
+                icon="el-icon-delete"
+                size="mini"
+                type="danger"
+                @click="removeProject($index)"
+              ></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </el-col>
+    </el-row>
+
+    <el-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
+      title="Edit Sub Item"
+      :visible.sync="subItemEditorVisible"
+    >
+      <subitem-editor
+        ref="subitemEditor"
+        :item-index="selectedItemIndex"
+        :item-detail="selectedItem"
+        @saved="onSubItemSaved"
+        @error="onSubItemError"
+      ></subitem-editor>
+      <div slot="footer">
+        <el-button
+          :loading="savingSubitem"
+          style="margin-left: 0px;"
+          size="mini"
+          icon="el-icon-check"
+          type="primary"
+          @click="saveSubitemEditor"
+        >
+          Save
+        </el-button>
+        <el-button
+          :disabled="savingSubitem"
+          style="margin-left: 0px;"
+          size="mini"
+          icon="el-icon-close"
+          @click="closeSubitemEditor"
+        >
+          Close
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      :close-on-click-modal="false"
+      :close-on-press-escape="false"
+      :show-close="false"
+      title="Add Project"
+      :visible.sync="projectFormVisible"
+    >
+      <template>
+        <el-form
+          ref="projectInformation"
+          label-position="left"
+          label-width="150px"
+          :model="projectInformation"
+          size="mini"
+        >
+          <el-form-item
+            label="Information"
+            prop="name"
+            required
+          >
+            <el-input
+              v-model="projectInformation.name"
+              class="form-input"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="Attachment"
+            prop="attachment"
+            required
+          >
+            <el-upload
+              ref="upload"
+              v-model="projectInformation.attachment"
+              :accept="accept"
+              :action="action"
+              auto-upload
+              :limit="limit"
+              :before-upload="handleBeforeUpload"
+              :on-preview="handlePreview"
+              :on-exceed="handleExceed"
+              :on-remove="handleRemove"
+              :on-error="onUploadError"
+              :on-success="onUploadSuccess"
+            >
+              <el-button
+                icon="el-icon-search"
+                slot="trigger"
+                type="primary"
+              >
+                Select File
+              </el-button>
+              <span
+                class="el-upload__tip"
+                style="margin-left: 10px"
+                slot="tip"
+              >
+                Files with a size less than 5Mb
+              </span>
+            </el-upload>
+          </el-form-item>
         </el-form>
 
-        <el-divider content-position="left"><h4>Requirement</h4></el-divider>
-        <el-row>
-            <el-col :span="24">
+        <div slot="footer">
+          <el-button
+            icon="el-icon-check"
+            size="mini"
+            style="margin-left: 0px;"
+            type="primary"
+            @click="saveProject"
+          >
+            Save
+          </el-button>
 
-                <el-table
-                    v-loading="processing"
-                    ref="biddingInformationLine"
-                    highlight-current-row
-                    border stripe
-                    size="mini"
-                    style="width: 100%; height: 100%"
-                    :height="gridSchema.height"
-                    :max-height="gridSchema.maxHeight"
-                    :default-sort="gridSchema.defaultSort"
-                    :empty-text="gridSchema.emptyText"
-                    :data="biddingInformation.biddingInformationLine">
+          <el-button
+            icon="el-icon-close"
+            size="mini"
+            style="margin-left: 0px;"
+            @click="projectFormVisible = false"
+          >
+            {{ $t('entity.action.cancel') }}
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
 
-                    <el-table-column
-                        min-width="30"
-                        label="No">
-                        <template slot-scope="row">
-                            {{ row.$index+1 }}
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column
-                        min-width="100"
-                        prop="productName"
-                        label="Product"/>
-
-                    <el-table-column
-                        width="110"
-                        prop="subItem"
-                        label="Sub Item"
-                    >
-                        <template slot-scope="scope">
-                            <el-link
-                                type="primary"
-                                size="mini"
-                                plain
-                                title="Add sub item"
-                                :underline="false"
-                                @click="displayAddSubItem(scope.row, scope.$index)"
-                            >Add sub item</el-link>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column
-                        min-width="50"
-                        prop="quantity"
-                        label="Qty"/>
-
-                    <el-table-column
-                        min-width="50"
-                        prop="uomName"
-                        label="UoM"/>
-
-                    <el-table-column
-                        min-width="80"
-                        prop="unitPrice"
-                        align="right"
-                        label="Ceiling Price/Unit">
-                        <template slot-scope="{ row }">
-                            {{ row.unitPrice | formatCurrency }}
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column
-                        min-width="80"
-                        prop="requisitionAmount"
-                        align="right"
-                        label="Total Ceiling Price">
-                        <template slot-scope="{ row }">
-                            {{ row.requisitionAmount | formatCurrency }}
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column
-                        min-width="70"
-                        prop="deliveryDate"
-                        label="Delivery Date">
-                        <template slot-scope="{ row }">
-                            <el-date-picker
-                                style="width: 100%"
-                                class="form-input"
-                                size="mini"
-                                clearable
-                                v-model="row.deliveryDate"
-                                format="dd/MM/yyyy"
-                                value-format="yyyy-MM-dd"
-                                type="date"
-                                placeholder="Pick a day"
-                            />
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column
-                        min-width="100"
-                        prop="remark"
-                        label="Remark"/>
-
-                </el-table>
-
-            </el-col>
-        </el-row>
-
-
-        <el-divider content-position="left"><h4>Project Information</h4></el-divider>
-        <el-row>
-            <el-col :span="18">
-
-                <el-table
-                    v-loading="processing"
-                    ref="projectInformation"
-                    highlight-current-row
-                    border stripe
-                    size="mini"
-                    style="height: 100%"
-                    :height="gridSchema.height"
-                    :max-height="gridSchema.maxHeight"
-                    :default-sort="gridSchema.defaultSort"
-                    :empty-text="gridSchema.emptyText"
-                    :data="biddingInformation.projectInformation">
-
-                    <el-table-column
-                        min-width="20"
-                        label="No">
-                        <template slot-scope="row">
-                            {{ row.$index+1 }}
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column
-                        min-width="100"
-                        prop="information"
-                        label="Information"/>
-
-                    <el-table-column
-                        min-width="80"
-                        label="Attachment">
-                        <template slot-scope="{ row }">
-                            <el-button
-                                class="btn-attachment"
-                                icon="el-icon-download"
-                                size="mini"
-                                type="primary"
-                                @click="downloadAttachment(row)">
-                                    {{ row.attachment.fileName }}
-                            </el-button>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column align="center" min-width="20">
-                        <template slot="header">
-                            <el-button
-                                size="mini"
-                                icon="el-icon-plus"
-                                type="primary"
-                                @click="addProject"/>
-                        </template>
-                        <template slot-scope="row">
-                            <el-button
-                                size="mini"
-                                icon="el-icon-delete"
-                                type="danger"
-                                @click="removeProject(row.$index)"/>
-                        </template>
-                    </el-table-column>
-
-                </el-table>
-
-            </el-col>
-        </el-row>
-
-        <el-dialog
-            :width="dialogWidth"
-            :close-on-click-modal="dialogCloseOnClick"
-            :close-on-press-escape="dialogCloseOnClick"
-            :show-close="dialogCloseOnClick"
-            :visible.sync="dialogConfirmationVisible"
-            :title="dialogTitle">
-
-            <template>
-                <div v-if="dialogContent == 1">
-                    <el-form ref="projectInformation" label-position="left" label-width="150px" size="mini" :model="projectInformation">
-                        <el-row :gutter="24">
-                            <el-col :span="24">
-                                <el-form-item label="Information" prop="information" required>
-                                    <el-input class="form-input" clearable v-model="projectInformation.information" />
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                            <el-col :span="24">
-                                <el-form-item label="Attachment" prop="attachment" required>
-                                    <el-upload
-                                        ref="upload"
-                                        v-model="projectInformation.attachment"
-                                        :action="action"
-                                        :accept="accept"
-                                        :limit="limit"
-                                        :auto-upload="true"
-
-                                        :before-upload="handleBeforeUpload"
-                                        :on-preview="handlePreview"
-                                        :on-exceed="handleExceed"
-                                        :on-remove="handleRemove"
-                                        :on-error="onUploadError"
-                                        :on-success="onUploadSuccess">
-
-                                        <el-button slot="trigger" type="primary" icon="el-icon-search">select file</el-button>
-                                        <span style="margin-left: 10px;" class="el-upload__tip" slot="tip">files with a size less than 5Mb</span>
-                                    </el-upload>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                    </el-form>
-                </div>
-
-                <div v-else>
-
-                    <div v-if="dialogContentSubItem == 1" class="app-container">
-                        <el-row :gutter="24">
-                            <el-col :span="24">
-                                <el-table
-                                    style="width: 100%; height: 100%"
-                                    size="mini"
-                                    :height="gridSchema.height"
-                                    :max-height="gridSchema.maxHeight"
-                                    :default-sort="gridSchema.defaultSort"
-                                    :empty-text="gridSchema.emptyText"
-                                    :data="gridDataProductSubItem">
-                                    <el-table-column label="No" min-width="50">
-                                        <template slot-scope="row">
-                                            {{ row.$index+1 }}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="biddingLineProductName" label="Product" min-width="200"/>
-                                    <el-table-column label="Sub Item" min-width="200">
-                                        <template slot-scope="{ row }">
-                                            {{ row.productObj.name }}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="totalAmount" align="right" label="Total Amount" min-width="100">
-                                        <template slot-scope="{ row }">
-                                            {{ row.totalAmount | formatCurrency }}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column align="center" min-width="80">
-                                        <template slot="header">
-                                            <el-button
-                                                size="mini"
-                                                icon="el-icon-plus"
-                                                type="primary"
-                                                @click="addSubItem"/>
-                                        </template>
-                                        <template slot-scope="row">
-                                            <el-button
-                                                size="mini"
-                                                icon="el-icon-edit"
-                                                type="primary"
-                                                @click="editSubItem(row.row)"/>
-                                            <el-button
-                                                size="mini"
-                                                icon="el-icon-delete"
-                                                type="danger"
-                                                @click="removeSubItem(row.$index)"/>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </el-col>
-                        </el-row>
-                    </div>
-
-                    <div v-if="dialogContentSubItem == 2" class="app-container">
-                        <el-row :gutter="24">
-                            <el-col :span="24">
-                                <el-form ref="formAddSubItem" :model="formAddSubItem" size="mini" label-width="80px">
-                                    <el-form-item label="Product" >
-                                        <el-input class="form-input" v-model="formAddSubItem.biddingLineProductName" clearable disabled />
-                                    </el-form-item>
-                                    <el-form-item label="Sub Item" prop="productId" required>
-                                        <el-select
-                                            style="width: 100%"
-                                            v-model="formAddSubItem.productId"
-                                            class="form-input"
-                                            clearable filterable
-                                            remote
-                                            :remote-method="remoteMethod"
-                                            :loading="loading"
-                                            :placeholder="$t('register.form.select')">
-                                            <el-option
-                                                v-for="item in productOptions"
-                                                :key="item.id"
-                                                :label="item.name"
-                                                :value="item.id" />
-                                        </el-select>
-                                    </el-form-item>
-
-                                </el-form>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                            <el-col :span="24">
-                                <el-table
-                                    style="width: 100%; height: 100%"
-                                    size="mini"
-                                    :height="gridSchema.height"
-                                    :max-height="gridSchema.maxHeight"
-                                    :default-sort="gridSchema.defaultSort"
-                                    :empty-text="gridSchema.emptyText"
-                                    :data="gridDataProductSubSubItem">
-                                    <el-table-column label="No" min-width="50">
-                                        <template slot-scope="row">
-                                            {{ row.$index + 1 }}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="productId" label="Sub Item" min-width="200">
-                                        <template slot-scope="{ row }">
-                                            {{ row.productObj.name }}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="quantity" label="Qty" min-width="70"/>
-                                    <el-table-column prop="uomId" label="Uom" min-width="100">
-                                        <template slot-scope="{ row }">
-                                            {{ row.uomObj.name }}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="price" label="Price" align="right" min-width="100">
-                                        <template slot-scope="{ row }">
-                                            {{ row.price | formatCurrency }}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="amount" label="Amount" align="right" min-width="100">
-                                        <template slot-scope="{ row }">
-                                            {{ row.amount | formatCurrency }}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column align="center" min-width="60">
-                                        <template slot="header">
-                                            <el-button
-                                                size="mini"
-                                                icon="el-icon-plus"
-                                                type="primary"
-                                                @click="addSubSubItem"/>
-                                        </template>
-                                        <template slot-scope="row">
-                                            <el-button
-                                                size="mini"
-                                                icon="el-icon-delete"
-                                                type="danger"
-                                                @click="removeSubSubItem(row.$index)"/>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </el-col>
-                        </el-row>
-                    </div>
-
-                </div>
-
-                <div slot="footer">
-                    <el-button
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-check"
-                        type="primary"
-                        v-if="dialogContent == 1"
-                        @click="saveProject">
-                            Save
-                    </el-button>
-
-                    <el-button
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-check"
-                        type="primary"
-                        v-if="(dialogContentSubItem == 1) || (dialogContentSubItem == 2)"
-                        @click="saveSubItemProduct">
-                            Save
-                    </el-button>
-                    <el-button
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-arrow-left"
-                        v-if="dialogContentSubItem == 2"
-                        @click="backSubItem">
-                            Back
-                    </el-button>
-
-                    <el-button
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-close"
-                        v-if="dialogContentSubItem != 2"
-                        @click="dialogConfirmationVisible = false">
-                            {{ $t('entity.action.cancel') }}
-                    </el-button>
-                </div>
-            </template>
-        </el-dialog>
-
-        <el-dialog
-            width="50%"
-            title="Add Sub sub Item"
-            :close-on-click-modal="dialogCloseOnClick"
-            :close-on-press-escape="dialogCloseOnClick"
-            :show-close="dialogCloseOnClick"
-            :visible.sync="dialogConfirmationVisibleFormSubSubItem">
-            <template>
-
-                <el-row :gutter="24">
-                    <el-col :span="24">
-                        <el-form ref="formAddSubSubItem" :model="formAddSubSubItem" size="mini" label-width="110px">
-
-                            <el-form-item label="Sub Sub Item" prop="productId" required>
-                                <el-select
-                                    style="width: 100%"
-                                    v-model="formAddSubSubItem.productId"
-                                    class="form-input"
-                                    clearable filterable
-                                    remote
-                                    :remote-method="remoteMethod"
-                                    :loading="loading"
-                                    :placeholder="$t('register.form.select')">
-                                    <el-option
-                                        v-for="item in productOptions"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.id" />
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="Quantity" prop="quantity" required>
-                                <el-input-number v-model="formAddSubSubItem.quantity" :min="1" clearable />
-                            </el-form-item>
-                            <el-form-item label="UoM" prop="uomId" required>
-                                <el-select
-                                    style="width: 100%"
-                                    v-model="formAddSubSubItem.uomId"
-                                    class="form-input"
-                                    clearable filterable
-                                    :placeholder="$t('register.form.select')">
-                                    <el-option
-                                        v-for="item in uomOptions"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.id" />
-                                </el-select>
-                            </el-form-item>
-                            <el-form-item label="Price" prop="price" required>
-                                <el-input class="form-input" v-model="formAddSubSubItem.price" v-inputmask="{'alias': 'currency'}" clearable />
-                            </el-form-item>
-
-                        </el-form>
-                    </el-col>
-                </el-row>
-
-                <div slot="footer">
-                    <el-button
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-check"
-                        type="primary"
-                        @click="saveSubSubItem">
-                            Save
-                    </el-button>
-                    <el-button
-                        style="margin-left: 0px;"
-                        size="mini"
-                        icon="el-icon-close"
-                        @click="closeSubSubItem">
-                            Close
-                    </el-button>
-                </div>
-
-            </template>
-        </el-dialog>
-
-    </div>
+  </div>
 </template>
 
 <script lang="ts" src="./bidding-information.component.ts"></script>
+
+<style lang="scss" scoped>
+.bidding-info-table .el-badge {
+  margin: 4px 0;
+}
+</style>

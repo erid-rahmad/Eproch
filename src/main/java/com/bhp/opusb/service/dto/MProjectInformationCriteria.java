@@ -31,6 +31,8 @@ public class MProjectInformationCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private StringFilter name;
+
     private LongFilter biddingId;
 
     private LongFilter adOrganizationId;
@@ -44,6 +46,7 @@ public class MProjectInformationCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.name = other.name == null ? null : other.name.copy();
         this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.attachmentId = other.attachmentId == null ? null : other.attachmentId.copy();
@@ -76,6 +79,14 @@ public class MProjectInformationCriteria implements Serializable, Criteria {
 
     public void setActive(BooleanFilter active) {
         this.active = active;
+    }
+
+    public StringFilter getName() {
+        return name;
+    }
+
+    public void setName(StringFilter name) {
+        this.name = name;
     }
 
     public LongFilter getBiddingId() {
@@ -116,6 +127,7 @@ public class MProjectInformationCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(name, that.name) &&
             Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(attachmentId, that.attachmentId);
@@ -127,6 +139,7 @@ public class MProjectInformationCriteria implements Serializable, Criteria {
         id,
         uid,
         active,
+        name,
         biddingId,
         adOrganizationId,
         attachmentId
@@ -139,6 +152,7 @@ public class MProjectInformationCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (name != null ? "name=" + name + ", " : "") +
                 (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (attachmentId != null ? "attachmentId=" + attachmentId + ", " : "") +

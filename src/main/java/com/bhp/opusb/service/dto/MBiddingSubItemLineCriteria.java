@@ -2,15 +2,12 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
-import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
-import io.github.jhipster.service.filter.LongFilter;
-import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.BigDecimalFilter;
+import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -40,11 +37,11 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
-    private LongFilter biddingSubItemId;
-
     private LongFilter productId;
 
     private LongFilter uomId;
+
+    private LongFilter biddingSubItemId;
 
     public MBiddingSubItemLineCriteria() {
     }
@@ -57,9 +54,9 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.biddingSubItemId = other.biddingSubItemId == null ? null : other.biddingSubItemId.copy();
         this.productId = other.productId == null ? null : other.productId.copy();
         this.uomId = other.uomId == null ? null : other.uomId.copy();
+        this.biddingSubItemId = other.biddingSubItemId == null ? null : other.biddingSubItemId.copy();
     }
 
     @Override
@@ -123,14 +120,6 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getBiddingSubItemId() {
-        return biddingSubItemId;
-    }
-
-    public void setBiddingSubItemId(LongFilter biddingSubItemId) {
-        this.biddingSubItemId = biddingSubItemId;
-    }
-
     public LongFilter getProductId() {
         return productId;
     }
@@ -145,6 +134,14 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
 
     public void setUomId(LongFilter uomId) {
         this.uomId = uomId;
+    }
+
+    public LongFilter getBiddingSubItemId() {
+        return biddingSubItemId;
+    }
+
+    public void setBiddingSubItemId(LongFilter biddingSubItemId) {
+        this.biddingSubItemId = biddingSubItemId;
     }
 
 
@@ -165,9 +162,9 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(biddingSubItemId, that.biddingSubItemId) &&
             Objects.equals(productId, that.productId) &&
-            Objects.equals(uomId, that.uomId);
+            Objects.equals(uomId, that.uomId) &&
+            Objects.equals(biddingSubItemId, that.biddingSubItemId);
     }
 
     @Override
@@ -180,9 +177,9 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
-        biddingSubItemId,
         productId,
-        uomId
+        uomId,
+        biddingSubItemId
         );
     }
 
@@ -196,9 +193,9 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (biddingSubItemId != null ? "biddingSubItemId=" + biddingSubItemId + ", " : "") +
                 (productId != null ? "productId=" + productId + ", " : "") +
                 (uomId != null ? "uomId=" + uomId + ", " : "") +
+                (biddingSubItemId != null ? "biddingSubItemId=" + biddingSubItemId + ", " : "") +
             "}";
     }
 

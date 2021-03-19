@@ -1,30 +1,38 @@
 package com.bhp.opusb.service;
 
-import com.bhp.opusb.domain.*;
-import com.bhp.opusb.repository.*;
-import com.bhp.opusb.service.dto.MBiddingDTO;
-import com.bhp.opusb.service.mapper.MBiddingMapper;
-import com.bhp.opusb.util.MapperJSONUtil;
-import io.github.jhipster.config.JHipsterProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.mail.MailException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+
+import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.AdUser;
+import com.bhp.opusb.domain.MBidding;
+import com.bhp.opusb.domain.MBiddingLine;
+import com.bhp.opusb.domain.MProjectInformation;
+import com.bhp.opusb.domain.MVendorSuggestion;
+import com.bhp.opusb.domain.enumeration.MBiddingProcess;
+import com.bhp.opusb.repository.AdUserRepository;
+import com.bhp.opusb.repository.MBiddingLineRepository;
+import com.bhp.opusb.repository.MBiddingRepository;
+import com.bhp.opusb.repository.MProjectInformationRepository;
+import com.bhp.opusb.repository.MVendorSuggestionRepository;
+import com.bhp.opusb.service.dto.MBiddingDTO;
+import com.bhp.opusb.service.dto.MBiddingFormDTO;
+import com.bhp.opusb.service.dto.MBiddingLineDTO;
+import com.bhp.opusb.service.dto.MProjectInformationDTO;
+import com.bhp.opusb.service.mapper.MBiddingFormMapper;
+import com.bhp.opusb.service.mapper.MBiddingMapper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 /**
  * Service Implementation for managing {@link MBidding}.
@@ -36,8 +44,12 @@ public class MBiddingService {
     private final Logger log = LoggerFactory.getLogger(MBiddingService.class);
 
     private final MBiddingRepository mBiddingRepository;
+    private final MBiddingLineService mBiddingLineService;
+    private final MProjectInformationService mProjectInformationService;
+    private final ADOrganizationService adOrganizationService;
 
     private final MBiddingMapper mBiddingMapper;
+    private final MBiddingFormMapper mBiddingFormMapper;
 
     private final JavaMailSender javaMailSender;
 
@@ -46,11 +58,6 @@ public class MBiddingService {
     @Autowired
     MailService mailService;
 
-    @Autowired
-    MBiddingLineService mBiddingLineService;
-
-    @Autowired
-    MProjectInformationService mProjectInformationService;
 
     @Autowired
     MBiddingLineRepository mBiddingLineRepository;
@@ -64,9 +71,16 @@ public class MBiddingService {
     @Autowired
     AdUserRepository adUserRepository;
 
-    public MBiddingService(MBiddingRepository mBiddingRepository, MBiddingMapper mBiddingMapper, JavaMailSender javaMailSender, JHipsterProperties jHipsterProperties) {
+    public MBiddingService(MBiddingRepository mBiddingRepository, MBiddingLineService mBiddingLineService,
+            MProjectInformationService mProjectInformationService, ADOrganizationService adOrganizationService,
+            MBiddingMapper mBiddingMapper, MBiddingFormMapper mBiddingFormMapper,
+            JavaMailSender javaMailSender, JHipsterProperties jHipsterProperties) {
         this.mBiddingRepository = mBiddingRepository;
+        this.mBiddingLineService = mBiddingLineService;
+        this.mProjectInformationService = mProjectInformationService;
+        this.adOrganizationService = adOrganizationService;
         this.mBiddingMapper = mBiddingMapper;
+        this.mBiddingFormMapper = mBiddingFormMapper;
         this.javaMailSender = javaMailSender;
         this.jHipsterProperties = jHipsterProperties;
     }
@@ -80,14 +94,14 @@ public class MBiddingService {
     public MBiddingDTO save(MBiddingDTO mBiddingDTO) {
         log.debug("Request to save MBidding : {}", mBiddingDTO);
 
-        if (mBiddingDTO.getBiddingNo()==null) {
+        if (mBiddingDTO.getDocumentNo()==null) {
             Random rnd = new Random();
             int number = rnd.nextInt(999999);
             String documentno = "BD-" + number;
-            mBiddingDTO.setBiddingNo(documentno);
+            mBiddingDTO.setDocumentNo(documentno);
         }
 
-        if (mBiddingDTO.getApproved()==true){
+        if (Boolean.TRUE.equals(mBiddingDTO.isApproved())){
             log.info("send email to vendor");
 //            mailService.sendEmail("erid.rahmad@gmail.com","testing","testing",false,false);
 //            List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(664801);
@@ -109,7 +123,7 @@ public class MBiddingService {
 
         MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
         mBidding = mBiddingRepository.save(mBidding);
-        for (MBiddingLine mBiddingLine : mBiddingDTO.getBiddingLineList()){
+        /* for (MBiddingLine mBiddingLine : mBiddingDTO.getBiddingLineList()){
             mBiddingLine.setBidding(mBidding);
             mBiddingLineRepository.save(mBiddingLine);
         }
@@ -117,12 +131,50 @@ public class MBiddingService {
         for (MProjectInformation mProjectInformation : mBiddingDTO.getProjectInformationList() ){
             mProjectInformation.setBidding(mBidding);
             mProjectInformationRepository.save(mProjectInformation);
-        }
+        } */
 
         return mBiddingMapper.toDto(mBidding);
     }
 
 
+
+    /**
+     * Save a mBidding form.
+     *
+     * @param mBiddingDTO the entity to save.
+     * @return the persisted entity.
+     */
+    public MBiddingDTO saveForm(MBiddingFormDTO mBiddingDTO) {
+        log.debug("Request to save MBidding : {}", mBiddingDTO);
+        MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
+
+        // TODO Set organization to be same as the user's organization.
+        ADOrganization org = adOrganizationService.getDefaultOrganization();
+
+        if (mBiddingDTO.getStep().equals(MBiddingProcess.INFO)) {
+            mBidding.setAdOrganization(org);
+            mBidding = mBiddingRepository.save(mBidding);
+            mBiddingDTO = mBiddingFormMapper.toDto(mBidding);
+            saveInformation(mBiddingDTO, mBiddingDTO.getBiddingLines(), mBiddingDTO.getProjectInformations(),
+                    mBiddingDTO.getRemovedBiddingLines(), mBiddingDTO.getRemovedProjectInformations());
+        }
+
+        return mBiddingDTO;
+    }
+
+    private MBiddingDTO saveInformation(MBiddingDTO mBiddingDTO, List<MBiddingLineDTO> biddingLines,
+            List<MProjectInformationDTO> projectInformations, List<MBiddingLineDTO> removedBiddingLines,
+            List<MProjectInformationDTO> removedProjectInformations) {
+
+        mBiddingLineService.saveAll(biddingLines, mBiddingDTO);
+        mBiddingLineService.deleteAll(removedBiddingLines);
+        mProjectInformationService.saveAll(projectInformations, mBiddingDTO);
+        mProjectInformationService.deleteAll(removedProjectInformations);
+
+        removedBiddingLines.clear();
+        removedProjectInformations.clear();
+        return mBiddingDTO;
+    }
 
     /**
      * Get all the mBiddings.
@@ -149,9 +201,34 @@ public class MBiddingService {
     public Optional<MBiddingDTO> findOne(Long id) {
         Optional<MBiddingDTO> mBiddingDTO = mBiddingRepository.findById(id)
             .map(mBiddingMapper::toDto);
-        mBiddingDTO.get().setBiddingLineList(mBiddingLineService.findbyheader(mBiddingDTO.get().getId()));
-        mBiddingDTO.get().setProjectInformationList(mProjectInformationService.findByBindId(mBiddingDTO.get().getId()));
+        /* mBiddingDTO.get().setBiddingLineList(mBiddingLineService.findbyheader(mBiddingDTO.get().getId()));
+        mBiddingDTO.get().setProjectInformationList(mProjectInformationService.findByBindId(mBiddingDTO.get().getId())); */
         return mBiddingDTO;
+    }
+
+    /**
+     * Get one mBidding form by id.
+     *
+     * @param id the id of the entity.
+     * @return the entity.
+     */
+    @Transactional(readOnly = true)
+    public Optional<MBiddingFormDTO> findOneForm(Long id, MBiddingProcess step) {
+        log.debug("Request to get MBidding (FormDTO) : {}", id);
+        Optional<MBiddingFormDTO> record = mBiddingRepository.findById(id).map(mBiddingFormMapper::toDto);
+            
+        record.ifPresent(dto -> {
+            dto.setStep(step);
+
+            if (step.equals(MBiddingProcess.INFO)) {
+                List<MBiddingLineDTO> biddingLines = mBiddingLineService.findByBiddingId(dto.getId());
+                // List<MProjectInformationDTO> projectInformations = mProjectInformationService.findByBindId(dto.getId());
+                dto.setBiddingLines(biddingLines);
+                // dto.setProjectInformations(projectInformations);
+            }
+        });
+
+        return record;
     }
 
     /**

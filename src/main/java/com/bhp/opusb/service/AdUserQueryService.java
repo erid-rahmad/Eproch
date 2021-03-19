@@ -103,6 +103,9 @@ public class AdUserQueryService extends QueryService<AdUser> {
             if (criteria.getPosition() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getPosition(), AdUser_.position));
             }
+            if (criteria.getEmployee() != null) {
+                specification = specification.and(buildSpecification(criteria.getEmployee(), AdUser_.employee));
+            }
             if (criteria.getVendor() != null) {
                 specification = specification.and(buildSpecification(criteria.getVendor(), AdUser_.vendor));
             }

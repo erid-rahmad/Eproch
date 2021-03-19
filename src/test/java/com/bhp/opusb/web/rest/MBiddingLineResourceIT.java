@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBiddingLine;
+import com.bhp.opusb.domain.MBiddingSubItem;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCostCenter;
@@ -63,10 +64,6 @@ public class MBiddingLineResourceIT {
     private static final String DEFAULT_REMARK = "AAAAAAAAAA";
     private static final String UPDATED_REMARK = "BBBBBBBBBB";
 
-    private static final BigDecimal DEFAULT_GRAND_TOTAL = new BigDecimal(1);
-    private static final BigDecimal UPDATED_GRAND_TOTAL = new BigDecimal(2);
-    private static final BigDecimal SMALLER_GRAND_TOTAL = new BigDecimal(1 - 1);
-
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -106,7 +103,6 @@ public class MBiddingLineResourceIT {
             .totalCeilingPrice(DEFAULT_TOTAL_CEILING_PRICE)
             .deliveryDate(DEFAULT_DELIVERY_DATE)
             .remark(DEFAULT_REMARK)
-            .grandTotal(DEFAULT_GRAND_TOTAL)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -174,7 +170,6 @@ public class MBiddingLineResourceIT {
             .totalCeilingPrice(UPDATED_TOTAL_CEILING_PRICE)
             .deliveryDate(UPDATED_DELIVERY_DATE)
             .remark(UPDATED_REMARK)
-            .grandTotal(UPDATED_GRAND_TOTAL)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -256,7 +251,6 @@ public class MBiddingLineResourceIT {
         assertThat(testMBiddingLine.getTotalCeilingPrice()).isEqualTo(DEFAULT_TOTAL_CEILING_PRICE);
         assertThat(testMBiddingLine.getDeliveryDate()).isEqualTo(DEFAULT_DELIVERY_DATE);
         assertThat(testMBiddingLine.getRemark()).isEqualTo(DEFAULT_REMARK);
-        assertThat(testMBiddingLine.getGrandTotal()).isEqualTo(DEFAULT_GRAND_TOTAL);
         assertThat(testMBiddingLine.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMBiddingLine.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -355,7 +349,6 @@ public class MBiddingLineResourceIT {
             .andExpect(jsonPath("$.[*].totalCeilingPrice").value(hasItem(DEFAULT_TOTAL_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].deliveryDate").value(hasItem(DEFAULT_DELIVERY_DATE.toString())))
             .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)))
-            .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -376,7 +369,6 @@ public class MBiddingLineResourceIT {
             .andExpect(jsonPath("$.totalCeilingPrice").value(DEFAULT_TOTAL_CEILING_PRICE.intValue()))
             .andExpect(jsonPath("$.deliveryDate").value(DEFAULT_DELIVERY_DATE.toString()))
             .andExpect(jsonPath("$.remark").value(DEFAULT_REMARK))
-            .andExpect(jsonPath("$.grandTotal").value(DEFAULT_GRAND_TOTAL.intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -901,111 +893,6 @@ public class MBiddingLineResourceIT {
 
     @Test
     @Transactional
-    public void getAllMBiddingLinesByGrandTotalIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingLineRepository.saveAndFlush(mBiddingLine);
-
-        // Get all the mBiddingLineList where grandTotal equals to DEFAULT_GRAND_TOTAL
-        defaultMBiddingLineShouldBeFound("grandTotal.equals=" + DEFAULT_GRAND_TOTAL);
-
-        // Get all the mBiddingLineList where grandTotal equals to UPDATED_GRAND_TOTAL
-        defaultMBiddingLineShouldNotBeFound("grandTotal.equals=" + UPDATED_GRAND_TOTAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingLinesByGrandTotalIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingLineRepository.saveAndFlush(mBiddingLine);
-
-        // Get all the mBiddingLineList where grandTotal not equals to DEFAULT_GRAND_TOTAL
-        defaultMBiddingLineShouldNotBeFound("grandTotal.notEquals=" + DEFAULT_GRAND_TOTAL);
-
-        // Get all the mBiddingLineList where grandTotal not equals to UPDATED_GRAND_TOTAL
-        defaultMBiddingLineShouldBeFound("grandTotal.notEquals=" + UPDATED_GRAND_TOTAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingLinesByGrandTotalIsInShouldWork() throws Exception {
-        // Initialize the database
-        mBiddingLineRepository.saveAndFlush(mBiddingLine);
-
-        // Get all the mBiddingLineList where grandTotal in DEFAULT_GRAND_TOTAL or UPDATED_GRAND_TOTAL
-        defaultMBiddingLineShouldBeFound("grandTotal.in=" + DEFAULT_GRAND_TOTAL + "," + UPDATED_GRAND_TOTAL);
-
-        // Get all the mBiddingLineList where grandTotal equals to UPDATED_GRAND_TOTAL
-        defaultMBiddingLineShouldNotBeFound("grandTotal.in=" + UPDATED_GRAND_TOTAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingLinesByGrandTotalIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mBiddingLineRepository.saveAndFlush(mBiddingLine);
-
-        // Get all the mBiddingLineList where grandTotal is not null
-        defaultMBiddingLineShouldBeFound("grandTotal.specified=true");
-
-        // Get all the mBiddingLineList where grandTotal is null
-        defaultMBiddingLineShouldNotBeFound("grandTotal.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingLinesByGrandTotalIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingLineRepository.saveAndFlush(mBiddingLine);
-
-        // Get all the mBiddingLineList where grandTotal is greater than or equal to DEFAULT_GRAND_TOTAL
-        defaultMBiddingLineShouldBeFound("grandTotal.greaterThanOrEqual=" + DEFAULT_GRAND_TOTAL);
-
-        // Get all the mBiddingLineList where grandTotal is greater than or equal to UPDATED_GRAND_TOTAL
-        defaultMBiddingLineShouldNotBeFound("grandTotal.greaterThanOrEqual=" + UPDATED_GRAND_TOTAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingLinesByGrandTotalIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingLineRepository.saveAndFlush(mBiddingLine);
-
-        // Get all the mBiddingLineList where grandTotal is less than or equal to DEFAULT_GRAND_TOTAL
-        defaultMBiddingLineShouldBeFound("grandTotal.lessThanOrEqual=" + DEFAULT_GRAND_TOTAL);
-
-        // Get all the mBiddingLineList where grandTotal is less than or equal to SMALLER_GRAND_TOTAL
-        defaultMBiddingLineShouldNotBeFound("grandTotal.lessThanOrEqual=" + SMALLER_GRAND_TOTAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingLinesByGrandTotalIsLessThanSomething() throws Exception {
-        // Initialize the database
-        mBiddingLineRepository.saveAndFlush(mBiddingLine);
-
-        // Get all the mBiddingLineList where grandTotal is less than DEFAULT_GRAND_TOTAL
-        defaultMBiddingLineShouldNotBeFound("grandTotal.lessThan=" + DEFAULT_GRAND_TOTAL);
-
-        // Get all the mBiddingLineList where grandTotal is less than UPDATED_GRAND_TOTAL
-        defaultMBiddingLineShouldBeFound("grandTotal.lessThan=" + UPDATED_GRAND_TOTAL);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingLinesByGrandTotalIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        mBiddingLineRepository.saveAndFlush(mBiddingLine);
-
-        // Get all the mBiddingLineList where grandTotal is greater than DEFAULT_GRAND_TOTAL
-        defaultMBiddingLineShouldNotBeFound("grandTotal.greaterThan=" + DEFAULT_GRAND_TOTAL);
-
-        // Get all the mBiddingLineList where grandTotal is greater than SMALLER_GRAND_TOTAL
-        defaultMBiddingLineShouldBeFound("grandTotal.greaterThan=" + SMALLER_GRAND_TOTAL);
-    }
-
-
-    @Test
-    @Transactional
     public void getAllMBiddingLinesByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         mBiddingLineRepository.saveAndFlush(mBiddingLine);
@@ -1110,6 +997,26 @@ public class MBiddingLineResourceIT {
 
     @Test
     @Transactional
+    public void getAllMBiddingLinesBySubItemIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingLineRepository.saveAndFlush(mBiddingLine);
+        MBiddingSubItem subItem = MBiddingSubItemResourceIT.createEntity(em);
+        em.persist(subItem);
+        em.flush();
+        mBiddingLine.setSubItem(subItem);
+        mBiddingLineRepository.saveAndFlush(mBiddingLine);
+        Long subItemId = subItem.getId();
+
+        // Get all the mBiddingLineList where subItem equals to subItemId
+        defaultMBiddingLineShouldBeFound("subItemId.equals=" + subItemId);
+
+        // Get all the mBiddingLineList where subItem equals to subItemId + 1
+        defaultMBiddingLineShouldNotBeFound("subItemId.equals=" + (subItemId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMBiddingLinesByBiddingIsEqualToSomething() throws Exception {
         // Get already existing entity
         MBidding bidding = mBiddingLine.getBidding();
@@ -1200,7 +1107,6 @@ public class MBiddingLineResourceIT {
             .andExpect(jsonPath("$.[*].totalCeilingPrice").value(hasItem(DEFAULT_TOTAL_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].deliveryDate").value(hasItem(DEFAULT_DELIVERY_DATE.toString())))
             .andExpect(jsonPath("$.[*].remark").value(hasItem(DEFAULT_REMARK)))
-            .andExpect(jsonPath("$.[*].grandTotal").value(hasItem(DEFAULT_GRAND_TOTAL.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -1255,7 +1161,6 @@ public class MBiddingLineResourceIT {
             .totalCeilingPrice(UPDATED_TOTAL_CEILING_PRICE)
             .deliveryDate(UPDATED_DELIVERY_DATE)
             .remark(UPDATED_REMARK)
-            .grandTotal(UPDATED_GRAND_TOTAL)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MBiddingLineDTO mBiddingLineDTO = mBiddingLineMapper.toDto(updatedMBiddingLine);
@@ -1274,7 +1179,6 @@ public class MBiddingLineResourceIT {
         assertThat(testMBiddingLine.getTotalCeilingPrice()).isEqualTo(UPDATED_TOTAL_CEILING_PRICE);
         assertThat(testMBiddingLine.getDeliveryDate()).isEqualTo(UPDATED_DELIVERY_DATE);
         assertThat(testMBiddingLine.getRemark()).isEqualTo(UPDATED_REMARK);
-        assertThat(testMBiddingLine.getGrandTotal()).isEqualTo(UPDATED_GRAND_TOTAL);
         assertThat(testMBiddingLine.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMBiddingLine.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

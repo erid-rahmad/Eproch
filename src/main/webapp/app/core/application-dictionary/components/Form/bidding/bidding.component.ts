@@ -43,6 +43,8 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
 
   public gridData: Array<any> = [];
 
+  editMode: boolean = false;
+  selectedRow: any = null;
   selectedRows: Array<any> = [];
 
   get dateDisplayFormat() {
@@ -122,17 +124,19 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     console.log(value);
   }
 
-  private close(){
+  close() {
     //this.dialogConfirmationVisible = false;
     this.index = true;
     this.selectedRows = [];
     this.retrieveAllRecords();
   }
 
-  onClick(key){
-    if(key == 'add'){
+  onClick(key) {
+    if (key == 'add') {
+      this.editMode = false;
+      this.selectedRow = null;
       this.index = false;
-    }else{
+    } else {
       console.log(key);
     }
   }
@@ -179,15 +183,17 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
       });
   }
 
-  viewBidding(row){
+  viewBidding(row: any) {
+    this.editMode = true;
+    this.selectedRow = row;
+    this.index = false;
+  }
+
+  viewSchedule(row: any) {
     console.log(row);
   }
 
-  viewSchedule(row){
-    console.log(row);
-  }
-
-  viewJoinVendor(row){
+  viewJoinVendor(row: any) {
     console.log(row);
   }
 

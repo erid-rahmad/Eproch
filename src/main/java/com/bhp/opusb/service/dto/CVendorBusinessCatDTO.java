@@ -16,7 +16,7 @@ public class CVendorBusinessCatDTO extends AbstractAuditingDTO {
 
     private Boolean active;
 
-
+    private CVendorDTO vendor;
     private Long vendorId;
     private String vendorName;
 
@@ -54,6 +54,14 @@ public class CVendorBusinessCatDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public CVendorDTO getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(CVendorDTO vendor) {
+        this.vendor = vendor;
     }
 
     public Long getVendorId() {

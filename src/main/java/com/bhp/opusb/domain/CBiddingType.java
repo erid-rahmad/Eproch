@@ -1,13 +1,23 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.util.UUID;
 
 /**
  * A CBiddingType.
@@ -25,23 +35,26 @@ public class CBiddingType extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Size(max = 30)
+    @Column(name = "name", length = 30, nullable = false)
     private String name;
 
     @Column(name = "description")
     private String description;
 
-    @Column(name = "cost_evaluation_selection")
-    private Boolean costEvaluationSelection;
+    @Size(max = 5)
+    @Column(name = "cost_evaluation_selection", length = 5)
+    private String costEvaluationSelection;
 
-    @Column(name = "selected_winner")
-    private Boolean selectedWinner;
+    @Size(max = 5)
+    @Column(name = "winner_selection", length = 5)
+    private String winnerSelection;
 
     @Column(name = "uid")
     private UUID uid;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -88,30 +101,30 @@ public class CBiddingType extends AbstractAuditingEntity {
         this.description = description;
     }
 
-    public Boolean isCostEvaluationSelection() {
+    public String getCostEvaluationSelection() {
         return costEvaluationSelection;
     }
 
-    public CBiddingType costEvaluationSelection(Boolean costEvaluationSelection) {
+    public CBiddingType costEvaluationSelection(String costEvaluationSelection) {
         this.costEvaluationSelection = costEvaluationSelection;
         return this;
     }
 
-    public void setCostEvaluationSelection(Boolean costEvaluationSelection) {
+    public void setCostEvaluationSelection(String costEvaluationSelection) {
         this.costEvaluationSelection = costEvaluationSelection;
     }
 
-    public Boolean isSelectedWinner() {
-        return selectedWinner;
+    public String getWinnerSelection() {
+        return winnerSelection;
     }
 
-    public CBiddingType selectedWinner(Boolean selectedWinner) {
-        this.selectedWinner = selectedWinner;
+    public CBiddingType winnerSelection(String winnerSelection) {
+        this.winnerSelection = winnerSelection;
         return this;
     }
 
-    public void setSelectedWinner(Boolean selectedWinner) {
-        this.selectedWinner = selectedWinner;
+    public void setWinnerSelection(String winnerSelection) {
+        this.winnerSelection = winnerSelection;
     }
 
     public UUID getUid() {
@@ -194,8 +207,8 @@ public class CBiddingType extends AbstractAuditingEntity {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
-            ", costEvaluationSelection='" + isCostEvaluationSelection() + "'" +
-            ", selectedWinner='" + isSelectedWinner() + "'" +
+            ", costEvaluationSelection='" + getCostEvaluationSelection() + "'" +
+            ", winnerSelection='" + getWinnerSelection() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

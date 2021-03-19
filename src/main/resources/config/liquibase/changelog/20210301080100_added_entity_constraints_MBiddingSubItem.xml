@@ -27,4 +27,9 @@
                                  referencedTableName="c_product"/>
 
     </changeSet>
+
+    <changeSet id="20210318040900" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="m_bidding_sub_item" constraintName="fk_m_bidding_sub_item_bidding_line_id" />
+        <dropColumn tableName="m_bidding_sub_item" columnName="bidding_line_id" />
+    </changeSet>
 </databaseChangeLog>

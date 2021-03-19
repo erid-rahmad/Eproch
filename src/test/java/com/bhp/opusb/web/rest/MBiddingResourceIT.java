@@ -4,7 +4,9 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCostCenter;
+import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.MRequisition;
+import com.bhp.opusb.domain.CDocumentType;
 import com.bhp.opusb.domain.CBiddingType;
 import com.bhp.opusb.domain.CEventType;
 import com.bhp.opusb.domain.AdUser;
@@ -45,9 +47,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MBiddingResourceIT {
 
-    private static final String DEFAULT_BIDDING_NO = "AAAAAAAAAA";
-    private static final String UPDATED_BIDDING_NO = "BBBBBBBBBB";
-
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
@@ -62,6 +61,13 @@ public class MBiddingResourceIT {
     private static final BigDecimal UPDATED_ESTIMATED_PRICE = new BigDecimal(2);
     private static final BigDecimal SMALLER_ESTIMATED_PRICE = new BigDecimal(1 - 1);
 
+    private static final LocalDate DEFAULT_DATE_TRX = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_TRX = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_TRX = LocalDate.ofEpochDay(-1L);
+
+    private static final String DEFAULT_DOCUMENT_NO = "AAAAAAAAAA";
+    private static final String UPDATED_DOCUMENT_NO = "BBBBBBBBBB";
+
     private static final String DEFAULT_DOCUMENT_ACTION = "AAAAAAAAAA";
     private static final String UPDATED_DOCUMENT_ACTION = "BBBBBBBBBB";
 
@@ -74,13 +80,16 @@ public class MBiddingResourceIT {
     private static final Boolean DEFAULT_PROCESSED = false;
     private static final Boolean UPDATED_PROCESSED = true;
 
+    private static final LocalDate DEFAULT_DATE_APPROVE = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_APPROVE = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_APPROVE = LocalDate.ofEpochDay(-1L);
+
     private static final LocalDate DEFAULT_DATE_REJECT = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_REJECT = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DATE_REJECT = LocalDate.ofEpochDay(-1L);
 
-    private static final LocalDate DEFAULT_DATE_APPROVE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATE_APPROVE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_DATE_APPROVE = LocalDate.ofEpochDay(-1L);
+    private static final String DEFAULT_REJECTED_REASON = "AAAAAAAAAA";
+    private static final String UPDATED_REJECTED_REASON = "BBBBBBBBBB";
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
@@ -116,17 +125,19 @@ public class MBiddingResourceIT {
      */
     public static MBidding createEntity(EntityManager em) {
         MBidding mBidding = new MBidding()
-            .biddingNo(DEFAULT_BIDDING_NO)
             .name(DEFAULT_NAME)
             .vendorSelection(DEFAULT_VENDOR_SELECTION)
             .ceilingPrice(DEFAULT_CEILING_PRICE)
             .estimatedPrice(DEFAULT_ESTIMATED_PRICE)
+            .dateTrx(DEFAULT_DATE_TRX)
+            .documentNo(DEFAULT_DOCUMENT_NO)
             .documentAction(DEFAULT_DOCUMENT_ACTION)
             .documentStatus(DEFAULT_DOCUMENT_STATUS)
             .approved(DEFAULT_APPROVED)
             .processed(DEFAULT_PROCESSED)
-            .dateReject(DEFAULT_DATE_REJECT)
             .dateApprove(DEFAULT_DATE_APPROVE)
+            .dateReject(DEFAULT_DATE_REJECT)
+            .rejectedReason(DEFAULT_REJECTED_REASON)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -150,6 +161,16 @@ public class MBiddingResourceIT {
         }
         mBidding.setCostCenter(cCostCenter);
         // Add required entity
+        CCurrency cCurrency;
+        if (TestUtil.findAll(em, CCurrency.class).isEmpty()) {
+            cCurrency = CCurrencyResourceIT.createEntity(em);
+            em.persist(cCurrency);
+            em.flush();
+        } else {
+            cCurrency = TestUtil.findAll(em, CCurrency.class).get(0);
+        }
+        mBidding.setCurrency(cCurrency);
+        // Add required entity
         MRequisition mRequisition;
         if (TestUtil.findAll(em, MRequisition.class).isEmpty()) {
             mRequisition = MRequisitionResourceIT.createEntity(em);
@@ -159,6 +180,16 @@ public class MBiddingResourceIT {
             mRequisition = TestUtil.findAll(em, MRequisition.class).get(0);
         }
         mBidding.setRequisition(mRequisition);
+        // Add required entity
+        CDocumentType cDocumentType;
+        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
+            cDocumentType = CDocumentTypeResourceIT.createEntity(em);
+            em.persist(cDocumentType);
+            em.flush();
+        } else {
+            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
+        }
+        mBidding.setReferenceType(cDocumentType);
         // Add required entity
         CBiddingType cBiddingType;
         if (TestUtil.findAll(em, CBiddingType.class).isEmpty()) {
@@ -199,17 +230,19 @@ public class MBiddingResourceIT {
      */
     public static MBidding createUpdatedEntity(EntityManager em) {
         MBidding mBidding = new MBidding()
-            .biddingNo(UPDATED_BIDDING_NO)
             .name(UPDATED_NAME)
             .vendorSelection(UPDATED_VENDOR_SELECTION)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .estimatedPrice(UPDATED_ESTIMATED_PRICE)
+            .dateTrx(UPDATED_DATE_TRX)
+            .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
-            .dateReject(UPDATED_DATE_REJECT)
             .dateApprove(UPDATED_DATE_APPROVE)
+            .dateReject(UPDATED_DATE_REJECT)
+            .rejectedReason(UPDATED_REJECTED_REASON)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -233,6 +266,16 @@ public class MBiddingResourceIT {
         }
         mBidding.setCostCenter(cCostCenter);
         // Add required entity
+        CCurrency cCurrency;
+        if (TestUtil.findAll(em, CCurrency.class).isEmpty()) {
+            cCurrency = CCurrencyResourceIT.createUpdatedEntity(em);
+            em.persist(cCurrency);
+            em.flush();
+        } else {
+            cCurrency = TestUtil.findAll(em, CCurrency.class).get(0);
+        }
+        mBidding.setCurrency(cCurrency);
+        // Add required entity
         MRequisition mRequisition;
         if (TestUtil.findAll(em, MRequisition.class).isEmpty()) {
             mRequisition = MRequisitionResourceIT.createUpdatedEntity(em);
@@ -242,6 +285,16 @@ public class MBiddingResourceIT {
             mRequisition = TestUtil.findAll(em, MRequisition.class).get(0);
         }
         mBidding.setRequisition(mRequisition);
+        // Add required entity
+        CDocumentType cDocumentType;
+        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
+            cDocumentType = CDocumentTypeResourceIT.createUpdatedEntity(em);
+            em.persist(cDocumentType);
+            em.flush();
+        } else {
+            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
+        }
+        mBidding.setReferenceType(cDocumentType);
         // Add required entity
         CBiddingType cBiddingType;
         if (TestUtil.findAll(em, CBiddingType.class).isEmpty()) {
@@ -296,17 +349,19 @@ public class MBiddingResourceIT {
         List<MBidding> mBiddingList = mBiddingRepository.findAll();
         assertThat(mBiddingList).hasSize(databaseSizeBeforeCreate + 1);
         MBidding testMBidding = mBiddingList.get(mBiddingList.size() - 1);
-        assertThat(testMBidding.getBiddingNo()).isEqualTo(DEFAULT_BIDDING_NO);
         assertThat(testMBidding.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testMBidding.getVendorSelection()).isEqualTo(DEFAULT_VENDOR_SELECTION);
         assertThat(testMBidding.getCeilingPrice()).isEqualTo(DEFAULT_CEILING_PRICE);
         assertThat(testMBidding.getEstimatedPrice()).isEqualTo(DEFAULT_ESTIMATED_PRICE);
+        assertThat(testMBidding.getDateTrx()).isEqualTo(DEFAULT_DATE_TRX);
+        assertThat(testMBidding.getDocumentNo()).isEqualTo(DEFAULT_DOCUMENT_NO);
         assertThat(testMBidding.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
         assertThat(testMBidding.getDocumentStatus()).isEqualTo(DEFAULT_DOCUMENT_STATUS);
         assertThat(testMBidding.isApproved()).isEqualTo(DEFAULT_APPROVED);
         assertThat(testMBidding.isProcessed()).isEqualTo(DEFAULT_PROCESSED);
-        assertThat(testMBidding.getDateReject()).isEqualTo(DEFAULT_DATE_REJECT);
         assertThat(testMBidding.getDateApprove()).isEqualTo(DEFAULT_DATE_APPROVE);
+        assertThat(testMBidding.getDateReject()).isEqualTo(DEFAULT_DATE_REJECT);
+        assertThat(testMBidding.getRejectedReason()).isEqualTo(DEFAULT_REJECTED_REASON);
         assertThat(testMBidding.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMBidding.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -334,10 +389,10 @@ public class MBiddingResourceIT {
 
     @Test
     @Transactional
-    public void checkBiddingNoIsRequired() throws Exception {
+    public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = mBiddingRepository.findAll().size();
         // set the field null
-        mBidding.setBiddingNo(null);
+        mBidding.setName(null);
 
         // Create the MBidding, which fails.
         MBiddingDTO mBiddingDTO = mBiddingMapper.toDto(mBidding);
@@ -353,10 +408,10 @@ public class MBiddingResourceIT {
 
     @Test
     @Transactional
-    public void checkNameIsRequired() throws Exception {
+    public void checkDocumentNoIsRequired() throws Exception {
         int databaseSizeBeforeTest = mBiddingRepository.findAll().size();
         // set the field null
-        mBidding.setName(null);
+        mBidding.setDocumentNo(null);
 
         // Create the MBidding, which fails.
         MBiddingDTO mBiddingDTO = mBiddingMapper.toDto(mBidding);
@@ -419,17 +474,19 @@ public class MBiddingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBidding.getId().intValue())))
-            .andExpect(jsonPath("$.[*].biddingNo").value(hasItem(DEFAULT_BIDDING_NO)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].vendorSelection").value(hasItem(DEFAULT_VENDOR_SELECTION)))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].estimatedPrice").value(hasItem(DEFAULT_ESTIMATED_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
+            .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
-            .andExpect(jsonPath("$.[*].dateReject").value(hasItem(DEFAULT_DATE_REJECT.toString())))
             .andExpect(jsonPath("$.[*].dateApprove").value(hasItem(DEFAULT_DATE_APPROVE.toString())))
+            .andExpect(jsonPath("$.[*].dateReject").value(hasItem(DEFAULT_DATE_REJECT.toString())))
+            .andExpect(jsonPath("$.[*].rejectedReason").value(hasItem(DEFAULT_REJECTED_REASON)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -445,17 +502,19 @@ public class MBiddingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mBidding.getId().intValue()))
-            .andExpect(jsonPath("$.biddingNo").value(DEFAULT_BIDDING_NO))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.vendorSelection").value(DEFAULT_VENDOR_SELECTION))
             .andExpect(jsonPath("$.ceilingPrice").value(DEFAULT_CEILING_PRICE.intValue()))
             .andExpect(jsonPath("$.estimatedPrice").value(DEFAULT_ESTIMATED_PRICE.intValue()))
+            .andExpect(jsonPath("$.dateTrx").value(DEFAULT_DATE_TRX.toString()))
+            .andExpect(jsonPath("$.documentNo").value(DEFAULT_DOCUMENT_NO))
             .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
             .andExpect(jsonPath("$.documentStatus").value(DEFAULT_DOCUMENT_STATUS))
             .andExpect(jsonPath("$.approved").value(DEFAULT_APPROVED.booleanValue()))
             .andExpect(jsonPath("$.processed").value(DEFAULT_PROCESSED.booleanValue()))
-            .andExpect(jsonPath("$.dateReject").value(DEFAULT_DATE_REJECT.toString()))
             .andExpect(jsonPath("$.dateApprove").value(DEFAULT_DATE_APPROVE.toString()))
+            .andExpect(jsonPath("$.dateReject").value(DEFAULT_DATE_REJECT.toString()))
+            .andExpect(jsonPath("$.rejectedReason").value(DEFAULT_REJECTED_REASON))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -477,84 +536,6 @@ public class MBiddingResourceIT {
 
         defaultMBiddingShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMBiddingShouldNotBeFound("id.lessThan=" + id);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMBiddingsByBiddingNoIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingRepository.saveAndFlush(mBidding);
-
-        // Get all the mBiddingList where biddingNo equals to DEFAULT_BIDDING_NO
-        defaultMBiddingShouldBeFound("biddingNo.equals=" + DEFAULT_BIDDING_NO);
-
-        // Get all the mBiddingList where biddingNo equals to UPDATED_BIDDING_NO
-        defaultMBiddingShouldNotBeFound("biddingNo.equals=" + UPDATED_BIDDING_NO);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingsByBiddingNoIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingRepository.saveAndFlush(mBidding);
-
-        // Get all the mBiddingList where biddingNo not equals to DEFAULT_BIDDING_NO
-        defaultMBiddingShouldNotBeFound("biddingNo.notEquals=" + DEFAULT_BIDDING_NO);
-
-        // Get all the mBiddingList where biddingNo not equals to UPDATED_BIDDING_NO
-        defaultMBiddingShouldBeFound("biddingNo.notEquals=" + UPDATED_BIDDING_NO);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingsByBiddingNoIsInShouldWork() throws Exception {
-        // Initialize the database
-        mBiddingRepository.saveAndFlush(mBidding);
-
-        // Get all the mBiddingList where biddingNo in DEFAULT_BIDDING_NO or UPDATED_BIDDING_NO
-        defaultMBiddingShouldBeFound("biddingNo.in=" + DEFAULT_BIDDING_NO + "," + UPDATED_BIDDING_NO);
-
-        // Get all the mBiddingList where biddingNo equals to UPDATED_BIDDING_NO
-        defaultMBiddingShouldNotBeFound("biddingNo.in=" + UPDATED_BIDDING_NO);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingsByBiddingNoIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mBiddingRepository.saveAndFlush(mBidding);
-
-        // Get all the mBiddingList where biddingNo is not null
-        defaultMBiddingShouldBeFound("biddingNo.specified=true");
-
-        // Get all the mBiddingList where biddingNo is null
-        defaultMBiddingShouldNotBeFound("biddingNo.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllMBiddingsByBiddingNoContainsSomething() throws Exception {
-        // Initialize the database
-        mBiddingRepository.saveAndFlush(mBidding);
-
-        // Get all the mBiddingList where biddingNo contains DEFAULT_BIDDING_NO
-        defaultMBiddingShouldBeFound("biddingNo.contains=" + DEFAULT_BIDDING_NO);
-
-        // Get all the mBiddingList where biddingNo contains UPDATED_BIDDING_NO
-        defaultMBiddingShouldNotBeFound("biddingNo.contains=" + UPDATED_BIDDING_NO);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingsByBiddingNoNotContainsSomething() throws Exception {
-        // Initialize the database
-        mBiddingRepository.saveAndFlush(mBidding);
-
-        // Get all the mBiddingList where biddingNo does not contain DEFAULT_BIDDING_NO
-        defaultMBiddingShouldNotBeFound("biddingNo.doesNotContain=" + DEFAULT_BIDDING_NO);
-
-        // Get all the mBiddingList where biddingNo does not contain UPDATED_BIDDING_NO
-        defaultMBiddingShouldBeFound("biddingNo.doesNotContain=" + UPDATED_BIDDING_NO);
     }
 
 
@@ -926,6 +907,189 @@ public class MBiddingResourceIT {
 
     @Test
     @Transactional
+    public void getAllMBiddingsByDateTrxIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateTrx equals to DEFAULT_DATE_TRX
+        defaultMBiddingShouldBeFound("dateTrx.equals=" + DEFAULT_DATE_TRX);
+
+        // Get all the mBiddingList where dateTrx equals to UPDATED_DATE_TRX
+        defaultMBiddingShouldNotBeFound("dateTrx.equals=" + UPDATED_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateTrxIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateTrx not equals to DEFAULT_DATE_TRX
+        defaultMBiddingShouldNotBeFound("dateTrx.notEquals=" + DEFAULT_DATE_TRX);
+
+        // Get all the mBiddingList where dateTrx not equals to UPDATED_DATE_TRX
+        defaultMBiddingShouldBeFound("dateTrx.notEquals=" + UPDATED_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateTrxIsInShouldWork() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateTrx in DEFAULT_DATE_TRX or UPDATED_DATE_TRX
+        defaultMBiddingShouldBeFound("dateTrx.in=" + DEFAULT_DATE_TRX + "," + UPDATED_DATE_TRX);
+
+        // Get all the mBiddingList where dateTrx equals to UPDATED_DATE_TRX
+        defaultMBiddingShouldNotBeFound("dateTrx.in=" + UPDATED_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateTrxIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateTrx is not null
+        defaultMBiddingShouldBeFound("dateTrx.specified=true");
+
+        // Get all the mBiddingList where dateTrx is null
+        defaultMBiddingShouldNotBeFound("dateTrx.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateTrxIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateTrx is greater than or equal to DEFAULT_DATE_TRX
+        defaultMBiddingShouldBeFound("dateTrx.greaterThanOrEqual=" + DEFAULT_DATE_TRX);
+
+        // Get all the mBiddingList where dateTrx is greater than or equal to UPDATED_DATE_TRX
+        defaultMBiddingShouldNotBeFound("dateTrx.greaterThanOrEqual=" + UPDATED_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateTrxIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateTrx is less than or equal to DEFAULT_DATE_TRX
+        defaultMBiddingShouldBeFound("dateTrx.lessThanOrEqual=" + DEFAULT_DATE_TRX);
+
+        // Get all the mBiddingList where dateTrx is less than or equal to SMALLER_DATE_TRX
+        defaultMBiddingShouldNotBeFound("dateTrx.lessThanOrEqual=" + SMALLER_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateTrxIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateTrx is less than DEFAULT_DATE_TRX
+        defaultMBiddingShouldNotBeFound("dateTrx.lessThan=" + DEFAULT_DATE_TRX);
+
+        // Get all the mBiddingList where dateTrx is less than UPDATED_DATE_TRX
+        defaultMBiddingShouldBeFound("dateTrx.lessThan=" + UPDATED_DATE_TRX);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateTrxIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateTrx is greater than DEFAULT_DATE_TRX
+        defaultMBiddingShouldNotBeFound("dateTrx.greaterThan=" + DEFAULT_DATE_TRX);
+
+        // Get all the mBiddingList where dateTrx is greater than SMALLER_DATE_TRX
+        defaultMBiddingShouldBeFound("dateTrx.greaterThan=" + SMALLER_DATE_TRX);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDocumentNoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where documentNo equals to DEFAULT_DOCUMENT_NO
+        defaultMBiddingShouldBeFound("documentNo.equals=" + DEFAULT_DOCUMENT_NO);
+
+        // Get all the mBiddingList where documentNo equals to UPDATED_DOCUMENT_NO
+        defaultMBiddingShouldNotBeFound("documentNo.equals=" + UPDATED_DOCUMENT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDocumentNoIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where documentNo not equals to DEFAULT_DOCUMENT_NO
+        defaultMBiddingShouldNotBeFound("documentNo.notEquals=" + DEFAULT_DOCUMENT_NO);
+
+        // Get all the mBiddingList where documentNo not equals to UPDATED_DOCUMENT_NO
+        defaultMBiddingShouldBeFound("documentNo.notEquals=" + UPDATED_DOCUMENT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDocumentNoIsInShouldWork() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where documentNo in DEFAULT_DOCUMENT_NO or UPDATED_DOCUMENT_NO
+        defaultMBiddingShouldBeFound("documentNo.in=" + DEFAULT_DOCUMENT_NO + "," + UPDATED_DOCUMENT_NO);
+
+        // Get all the mBiddingList where documentNo equals to UPDATED_DOCUMENT_NO
+        defaultMBiddingShouldNotBeFound("documentNo.in=" + UPDATED_DOCUMENT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDocumentNoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where documentNo is not null
+        defaultMBiddingShouldBeFound("documentNo.specified=true");
+
+        // Get all the mBiddingList where documentNo is null
+        defaultMBiddingShouldNotBeFound("documentNo.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMBiddingsByDocumentNoContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where documentNo contains DEFAULT_DOCUMENT_NO
+        defaultMBiddingShouldBeFound("documentNo.contains=" + DEFAULT_DOCUMENT_NO);
+
+        // Get all the mBiddingList where documentNo contains UPDATED_DOCUMENT_NO
+        defaultMBiddingShouldNotBeFound("documentNo.contains=" + UPDATED_DOCUMENT_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDocumentNoNotContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where documentNo does not contain DEFAULT_DOCUMENT_NO
+        defaultMBiddingShouldNotBeFound("documentNo.doesNotContain=" + DEFAULT_DOCUMENT_NO);
+
+        // Get all the mBiddingList where documentNo does not contain UPDATED_DOCUMENT_NO
+        defaultMBiddingShouldBeFound("documentNo.doesNotContain=" + UPDATED_DOCUMENT_NO);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMBiddingsByDocumentActionIsEqualToSomething() throws Exception {
         // Initialize the database
         mBiddingRepository.saveAndFlush(mBidding);
@@ -1186,6 +1350,111 @@ public class MBiddingResourceIT {
 
     @Test
     @Transactional
+    public void getAllMBiddingsByDateApproveIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateApprove equals to DEFAULT_DATE_APPROVE
+        defaultMBiddingShouldBeFound("dateApprove.equals=" + DEFAULT_DATE_APPROVE);
+
+        // Get all the mBiddingList where dateApprove equals to UPDATED_DATE_APPROVE
+        defaultMBiddingShouldNotBeFound("dateApprove.equals=" + UPDATED_DATE_APPROVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateApproveIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateApprove not equals to DEFAULT_DATE_APPROVE
+        defaultMBiddingShouldNotBeFound("dateApprove.notEquals=" + DEFAULT_DATE_APPROVE);
+
+        // Get all the mBiddingList where dateApprove not equals to UPDATED_DATE_APPROVE
+        defaultMBiddingShouldBeFound("dateApprove.notEquals=" + UPDATED_DATE_APPROVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateApproveIsInShouldWork() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateApprove in DEFAULT_DATE_APPROVE or UPDATED_DATE_APPROVE
+        defaultMBiddingShouldBeFound("dateApprove.in=" + DEFAULT_DATE_APPROVE + "," + UPDATED_DATE_APPROVE);
+
+        // Get all the mBiddingList where dateApprove equals to UPDATED_DATE_APPROVE
+        defaultMBiddingShouldNotBeFound("dateApprove.in=" + UPDATED_DATE_APPROVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateApproveIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateApprove is not null
+        defaultMBiddingShouldBeFound("dateApprove.specified=true");
+
+        // Get all the mBiddingList where dateApprove is null
+        defaultMBiddingShouldNotBeFound("dateApprove.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateApproveIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateApprove is greater than or equal to DEFAULT_DATE_APPROVE
+        defaultMBiddingShouldBeFound("dateApprove.greaterThanOrEqual=" + DEFAULT_DATE_APPROVE);
+
+        // Get all the mBiddingList where dateApprove is greater than or equal to UPDATED_DATE_APPROVE
+        defaultMBiddingShouldNotBeFound("dateApprove.greaterThanOrEqual=" + UPDATED_DATE_APPROVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateApproveIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateApprove is less than or equal to DEFAULT_DATE_APPROVE
+        defaultMBiddingShouldBeFound("dateApprove.lessThanOrEqual=" + DEFAULT_DATE_APPROVE);
+
+        // Get all the mBiddingList where dateApprove is less than or equal to SMALLER_DATE_APPROVE
+        defaultMBiddingShouldNotBeFound("dateApprove.lessThanOrEqual=" + SMALLER_DATE_APPROVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateApproveIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateApprove is less than DEFAULT_DATE_APPROVE
+        defaultMBiddingShouldNotBeFound("dateApprove.lessThan=" + DEFAULT_DATE_APPROVE);
+
+        // Get all the mBiddingList where dateApprove is less than UPDATED_DATE_APPROVE
+        defaultMBiddingShouldBeFound("dateApprove.lessThan=" + UPDATED_DATE_APPROVE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByDateApproveIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where dateApprove is greater than DEFAULT_DATE_APPROVE
+        defaultMBiddingShouldNotBeFound("dateApprove.greaterThan=" + DEFAULT_DATE_APPROVE);
+
+        // Get all the mBiddingList where dateApprove is greater than SMALLER_DATE_APPROVE
+        defaultMBiddingShouldBeFound("dateApprove.greaterThan=" + SMALLER_DATE_APPROVE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMBiddingsByDateRejectIsEqualToSomething() throws Exception {
         // Initialize the database
         mBiddingRepository.saveAndFlush(mBidding);
@@ -1291,106 +1560,79 @@ public class MBiddingResourceIT {
 
     @Test
     @Transactional
-    public void getAllMBiddingsByDateApproveIsEqualToSomething() throws Exception {
+    public void getAllMBiddingsByRejectedReasonIsEqualToSomething() throws Exception {
         // Initialize the database
         mBiddingRepository.saveAndFlush(mBidding);
 
-        // Get all the mBiddingList where dateApprove equals to DEFAULT_DATE_APPROVE
-        defaultMBiddingShouldBeFound("dateApprove.equals=" + DEFAULT_DATE_APPROVE);
+        // Get all the mBiddingList where rejectedReason equals to DEFAULT_REJECTED_REASON
+        defaultMBiddingShouldBeFound("rejectedReason.equals=" + DEFAULT_REJECTED_REASON);
 
-        // Get all the mBiddingList where dateApprove equals to UPDATED_DATE_APPROVE
-        defaultMBiddingShouldNotBeFound("dateApprove.equals=" + UPDATED_DATE_APPROVE);
+        // Get all the mBiddingList where rejectedReason equals to UPDATED_REJECTED_REASON
+        defaultMBiddingShouldNotBeFound("rejectedReason.equals=" + UPDATED_REJECTED_REASON);
     }
 
     @Test
     @Transactional
-    public void getAllMBiddingsByDateApproveIsNotEqualToSomething() throws Exception {
+    public void getAllMBiddingsByRejectedReasonIsNotEqualToSomething() throws Exception {
         // Initialize the database
         mBiddingRepository.saveAndFlush(mBidding);
 
-        // Get all the mBiddingList where dateApprove not equals to DEFAULT_DATE_APPROVE
-        defaultMBiddingShouldNotBeFound("dateApprove.notEquals=" + DEFAULT_DATE_APPROVE);
+        // Get all the mBiddingList where rejectedReason not equals to DEFAULT_REJECTED_REASON
+        defaultMBiddingShouldNotBeFound("rejectedReason.notEquals=" + DEFAULT_REJECTED_REASON);
 
-        // Get all the mBiddingList where dateApprove not equals to UPDATED_DATE_APPROVE
-        defaultMBiddingShouldBeFound("dateApprove.notEquals=" + UPDATED_DATE_APPROVE);
+        // Get all the mBiddingList where rejectedReason not equals to UPDATED_REJECTED_REASON
+        defaultMBiddingShouldBeFound("rejectedReason.notEquals=" + UPDATED_REJECTED_REASON);
     }
 
     @Test
     @Transactional
-    public void getAllMBiddingsByDateApproveIsInShouldWork() throws Exception {
+    public void getAllMBiddingsByRejectedReasonIsInShouldWork() throws Exception {
         // Initialize the database
         mBiddingRepository.saveAndFlush(mBidding);
 
-        // Get all the mBiddingList where dateApprove in DEFAULT_DATE_APPROVE or UPDATED_DATE_APPROVE
-        defaultMBiddingShouldBeFound("dateApprove.in=" + DEFAULT_DATE_APPROVE + "," + UPDATED_DATE_APPROVE);
+        // Get all the mBiddingList where rejectedReason in DEFAULT_REJECTED_REASON or UPDATED_REJECTED_REASON
+        defaultMBiddingShouldBeFound("rejectedReason.in=" + DEFAULT_REJECTED_REASON + "," + UPDATED_REJECTED_REASON);
 
-        // Get all the mBiddingList where dateApprove equals to UPDATED_DATE_APPROVE
-        defaultMBiddingShouldNotBeFound("dateApprove.in=" + UPDATED_DATE_APPROVE);
+        // Get all the mBiddingList where rejectedReason equals to UPDATED_REJECTED_REASON
+        defaultMBiddingShouldNotBeFound("rejectedReason.in=" + UPDATED_REJECTED_REASON);
     }
 
     @Test
     @Transactional
-    public void getAllMBiddingsByDateApproveIsNullOrNotNull() throws Exception {
+    public void getAllMBiddingsByRejectedReasonIsNullOrNotNull() throws Exception {
         // Initialize the database
         mBiddingRepository.saveAndFlush(mBidding);
 
-        // Get all the mBiddingList where dateApprove is not null
-        defaultMBiddingShouldBeFound("dateApprove.specified=true");
+        // Get all the mBiddingList where rejectedReason is not null
+        defaultMBiddingShouldBeFound("rejectedReason.specified=true");
 
-        // Get all the mBiddingList where dateApprove is null
-        defaultMBiddingShouldNotBeFound("dateApprove.specified=false");
+        // Get all the mBiddingList where rejectedReason is null
+        defaultMBiddingShouldNotBeFound("rejectedReason.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMBiddingsByRejectedReasonContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where rejectedReason contains DEFAULT_REJECTED_REASON
+        defaultMBiddingShouldBeFound("rejectedReason.contains=" + DEFAULT_REJECTED_REASON);
+
+        // Get all the mBiddingList where rejectedReason contains UPDATED_REJECTED_REASON
+        defaultMBiddingShouldNotBeFound("rejectedReason.contains=" + UPDATED_REJECTED_REASON);
     }
 
     @Test
     @Transactional
-    public void getAllMBiddingsByDateApproveIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllMBiddingsByRejectedReasonNotContainsSomething() throws Exception {
         // Initialize the database
         mBiddingRepository.saveAndFlush(mBidding);
 
-        // Get all the mBiddingList where dateApprove is greater than or equal to DEFAULT_DATE_APPROVE
-        defaultMBiddingShouldBeFound("dateApprove.greaterThanOrEqual=" + DEFAULT_DATE_APPROVE);
+        // Get all the mBiddingList where rejectedReason does not contain DEFAULT_REJECTED_REASON
+        defaultMBiddingShouldNotBeFound("rejectedReason.doesNotContain=" + DEFAULT_REJECTED_REASON);
 
-        // Get all the mBiddingList where dateApprove is greater than or equal to UPDATED_DATE_APPROVE
-        defaultMBiddingShouldNotBeFound("dateApprove.greaterThanOrEqual=" + UPDATED_DATE_APPROVE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingsByDateApproveIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingRepository.saveAndFlush(mBidding);
-
-        // Get all the mBiddingList where dateApprove is less than or equal to DEFAULT_DATE_APPROVE
-        defaultMBiddingShouldBeFound("dateApprove.lessThanOrEqual=" + DEFAULT_DATE_APPROVE);
-
-        // Get all the mBiddingList where dateApprove is less than or equal to SMALLER_DATE_APPROVE
-        defaultMBiddingShouldNotBeFound("dateApprove.lessThanOrEqual=" + SMALLER_DATE_APPROVE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingsByDateApproveIsLessThanSomething() throws Exception {
-        // Initialize the database
-        mBiddingRepository.saveAndFlush(mBidding);
-
-        // Get all the mBiddingList where dateApprove is less than DEFAULT_DATE_APPROVE
-        defaultMBiddingShouldNotBeFound("dateApprove.lessThan=" + DEFAULT_DATE_APPROVE);
-
-        // Get all the mBiddingList where dateApprove is less than UPDATED_DATE_APPROVE
-        defaultMBiddingShouldBeFound("dateApprove.lessThan=" + UPDATED_DATE_APPROVE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMBiddingsByDateApproveIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        mBiddingRepository.saveAndFlush(mBidding);
-
-        // Get all the mBiddingList where dateApprove is greater than DEFAULT_DATE_APPROVE
-        defaultMBiddingShouldNotBeFound("dateApprove.greaterThan=" + DEFAULT_DATE_APPROVE);
-
-        // Get all the mBiddingList where dateApprove is greater than SMALLER_DATE_APPROVE
-        defaultMBiddingShouldBeFound("dateApprove.greaterThan=" + SMALLER_DATE_APPROVE);
+        // Get all the mBiddingList where rejectedReason does not contain UPDATED_REJECTED_REASON
+        defaultMBiddingShouldBeFound("rejectedReason.doesNotContain=" + UPDATED_REJECTED_REASON);
     }
 
 
@@ -1532,6 +1774,22 @@ public class MBiddingResourceIT {
 
     @Test
     @Transactional
+    public void getAllMBiddingsByCurrencyIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CCurrency currency = mBidding.getCurrency();
+        mBiddingRepository.saveAndFlush(mBidding);
+        Long currencyId = currency.getId();
+
+        // Get all the mBiddingList where currency equals to currencyId
+        defaultMBiddingShouldBeFound("currencyId.equals=" + currencyId);
+
+        // Get all the mBiddingList where currency equals to currencyId + 1
+        defaultMBiddingShouldNotBeFound("currencyId.equals=" + (currencyId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMBiddingsByRequisitionIsEqualToSomething() throws Exception {
         // Get already existing entity
         MRequisition requisition = mBidding.getRequisition();
@@ -1543,6 +1801,22 @@ public class MBiddingResourceIT {
 
         // Get all the mBiddingList where requisition equals to requisitionId + 1
         defaultMBiddingShouldNotBeFound("requisitionId.equals=" + (requisitionId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByReferenceTypeIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CDocumentType referenceType = mBidding.getReferenceType();
+        mBiddingRepository.saveAndFlush(mBidding);
+        Long referenceTypeId = referenceType.getId();
+
+        // Get all the mBiddingList where referenceType equals to referenceTypeId
+        defaultMBiddingShouldBeFound("referenceTypeId.equals=" + referenceTypeId);
+
+        // Get all the mBiddingList where referenceType equals to referenceTypeId + 1
+        defaultMBiddingShouldNotBeFound("referenceTypeId.equals=" + (referenceTypeId + 1));
     }
 
 
@@ -1601,17 +1875,19 @@ public class MBiddingResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBidding.getId().intValue())))
-            .andExpect(jsonPath("$.[*].biddingNo").value(hasItem(DEFAULT_BIDDING_NO)))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].vendorSelection").value(hasItem(DEFAULT_VENDOR_SELECTION)))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].estimatedPrice").value(hasItem(DEFAULT_ESTIMATED_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
+            .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
             .andExpect(jsonPath("$.[*].documentStatus").value(hasItem(DEFAULT_DOCUMENT_STATUS)))
             .andExpect(jsonPath("$.[*].approved").value(hasItem(DEFAULT_APPROVED.booleanValue())))
             .andExpect(jsonPath("$.[*].processed").value(hasItem(DEFAULT_PROCESSED.booleanValue())))
-            .andExpect(jsonPath("$.[*].dateReject").value(hasItem(DEFAULT_DATE_REJECT.toString())))
             .andExpect(jsonPath("$.[*].dateApprove").value(hasItem(DEFAULT_DATE_APPROVE.toString())))
+            .andExpect(jsonPath("$.[*].dateReject").value(hasItem(DEFAULT_DATE_REJECT.toString())))
+            .andExpect(jsonPath("$.[*].rejectedReason").value(hasItem(DEFAULT_REJECTED_REASON)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -1661,17 +1937,19 @@ public class MBiddingResourceIT {
         // Disconnect from session so that the updates on updatedMBidding are not directly saved in db
         em.detach(updatedMBidding);
         updatedMBidding
-            .biddingNo(UPDATED_BIDDING_NO)
             .name(UPDATED_NAME)
             .vendorSelection(UPDATED_VENDOR_SELECTION)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .estimatedPrice(UPDATED_ESTIMATED_PRICE)
+            .dateTrx(UPDATED_DATE_TRX)
+            .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
             .documentStatus(UPDATED_DOCUMENT_STATUS)
             .approved(UPDATED_APPROVED)
             .processed(UPDATED_PROCESSED)
-            .dateReject(UPDATED_DATE_REJECT)
             .dateApprove(UPDATED_DATE_APPROVE)
+            .dateReject(UPDATED_DATE_REJECT)
+            .rejectedReason(UPDATED_REJECTED_REASON)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MBiddingDTO mBiddingDTO = mBiddingMapper.toDto(updatedMBidding);
@@ -1685,17 +1963,19 @@ public class MBiddingResourceIT {
         List<MBidding> mBiddingList = mBiddingRepository.findAll();
         assertThat(mBiddingList).hasSize(databaseSizeBeforeUpdate);
         MBidding testMBidding = mBiddingList.get(mBiddingList.size() - 1);
-        assertThat(testMBidding.getBiddingNo()).isEqualTo(UPDATED_BIDDING_NO);
         assertThat(testMBidding.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testMBidding.getVendorSelection()).isEqualTo(UPDATED_VENDOR_SELECTION);
         assertThat(testMBidding.getCeilingPrice()).isEqualTo(UPDATED_CEILING_PRICE);
         assertThat(testMBidding.getEstimatedPrice()).isEqualTo(UPDATED_ESTIMATED_PRICE);
+        assertThat(testMBidding.getDateTrx()).isEqualTo(UPDATED_DATE_TRX);
+        assertThat(testMBidding.getDocumentNo()).isEqualTo(UPDATED_DOCUMENT_NO);
         assertThat(testMBidding.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);
         assertThat(testMBidding.getDocumentStatus()).isEqualTo(UPDATED_DOCUMENT_STATUS);
         assertThat(testMBidding.isApproved()).isEqualTo(UPDATED_APPROVED);
         assertThat(testMBidding.isProcessed()).isEqualTo(UPDATED_PROCESSED);
-        assertThat(testMBidding.getDateReject()).isEqualTo(UPDATED_DATE_REJECT);
         assertThat(testMBidding.getDateApprove()).isEqualTo(UPDATED_DATE_APPROVE);
+        assertThat(testMBidding.getDateReject()).isEqualTo(UPDATED_DATE_REJECT);
+        assertThat(testMBidding.getRejectedReason()).isEqualTo(UPDATED_REJECTED_REASON);
         assertThat(testMBidding.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMBidding.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

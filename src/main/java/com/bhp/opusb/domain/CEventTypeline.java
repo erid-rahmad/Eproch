@@ -1,13 +1,24 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.util.UUID;
 
 /**
  * A CEventTypeline.
@@ -25,7 +36,8 @@ public class CEventTypeline extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "event", nullable = false)
+    @Size(max = 10)
+    @Column(name = "event", length = 10, nullable = false)
     private String event;
 
     @Column(name = "description")

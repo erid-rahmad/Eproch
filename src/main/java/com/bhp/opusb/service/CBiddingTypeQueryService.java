@@ -98,10 +98,10 @@ public class CBiddingTypeQueryService extends QueryService<CBiddingType> {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), CBiddingType_.description));
             }
             if (criteria.getCostEvaluationSelection() != null) {
-                specification = specification.and(buildSpecification(criteria.getCostEvaluationSelection(), CBiddingType_.costEvaluationSelection));
+                specification = specification.and(buildStringSpecification(criteria.getCostEvaluationSelection(), CBiddingType_.costEvaluationSelection));
             }
-            if (criteria.getSelectedWinner() != null) {
-                specification = specification.and(buildSpecification(criteria.getSelectedWinner(), CBiddingType_.selectedWinner));
+            if (criteria.getWinnerSelection() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getWinnerSelection(), CBiddingType_.winnerSelection));
             }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CBiddingType_.uid));

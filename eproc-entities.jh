@@ -22,6 +22,9 @@ entity AdUser {
 	phone String maxlength(20)
 	position String maxlength(30)
 
+	/** Whether it is an employee or not */
+	employee Boolean
+
 	/** Whether it is a vendor or not */
 	vendor Boolean
 
@@ -833,6 +836,7 @@ entity MRequisition {
 }
 
 entity MRequisitionLine {
+	lineNo Integer
 	documentDate LocalDate
 	datePromised LocalDate
 	dateRequired LocalDate
@@ -873,23 +877,23 @@ entity MPurchaseOrderLine {
 }
 
 entity CBiddingType {
-	name String required
+	name String required maxlength(30)
 	description String
-	costEvaluationSelection Boolean
-	selectedWinner Boolean
+	costEvaluationSelection String maxlength(5)
+	winnerSelection String maxlength(5)
 	uid UUID
 	active Boolean
 }
 
 entity CEventType {
-	name String required
+	name String required maxlength(30)
 	description String
 	uid UUID
 	active Boolean
 }
 
 entity CEventTypeline {
-	event String required
+	event String required maxlength(10)
 	description String
 	sequence Integer required min(0)
 	uid UUID
@@ -911,17 +915,22 @@ entity CBiddingSubCriteria {
 }
 
 entity MBidding {
-	biddingNo String required unique
 	name String required
 	vendorSelection String
 	ceilingPrice BigDecimal
 	estimatedPrice BigDecimal
+
+	// Common transactional fields.
+	dateTrx LocalDate
+	documentNo String required maxlength(30)
 	documentAction String required maxlength(10)
 	documentStatus String required maxlength(10)
 	approved Boolean
 	processed Boolean
-	dateReject LocalDate
 	dateApprove LocalDate
+	dateReject LocalDate
+	rejectedReason String
+
 	uid UUID
 	active Boolean
 }
@@ -932,7 +941,6 @@ entity MBiddingLine {
 	totalCeilingPrice BigDecimal
 	deliveryDate LocalDate required
 	remark String
-	grandTotal BigDecimal
 	uid UUID
 	active Boolean
 }
@@ -978,6 +986,7 @@ entity MSubmissionSubItem {
 entity MProjectInformation {
 	uid UUID
 	active Boolean
+	name String
 }
 
 entity MBiddingSchedule {
@@ -1045,6 +1054,7 @@ relationship OneToOne {
 	CVendor{taxIdFile} to CAttachment
 	CGalleryItem{cAttachment required} to CAttachment
 	MProductCatalog{cGallery} to CGallery
+	MBiddingLine{subItem} to MBiddingSubItem{biddingLine}
 }
 
 /**
@@ -1071,6 +1081,9 @@ relationship OneToMany {
 
 	// Shopping cart.
 	MShoppingCart to MShoppingCartItem{mShoppingCart required}
+
+	// Bidding sub-item lines.
+	MBiddingSubItem to MBiddingSubItemLine{biddingSubItem required}
 
 	// Bidding Submission.
 	MBiddingSubmission to MBiddingSubmissionLine{mBiddingSubmission required}
@@ -1349,7 +1362,7 @@ relationship ManyToOne {
 	CBiddingType{productClassification required} to CProductClassification
 
 	CEventType{adOrganization required} to ADOrganization
-	CEventType{bindingType required} to CBiddingType
+	CEventType{biddingType required} to CBiddingType
 
 	CEventTypeline{adOrganization required} to ADOrganization
 	CEventTypeline{eventType required} to CEventType
@@ -1362,7 +1375,9 @@ relationship ManyToOne {
 
 	MBidding{adOrganization required} to ADOrganization
 	MBidding{costCenter required} to CCostCenter
+	MBidding{currency required} to CCurrency
 	MBidding{requisition required} to MRequisition
+	MBidding{referenceType required} to CDocumentType
 	MBidding{biddingType required} to CBiddingType
 	MBidding{eventType required} to CEventType
 	MBidding{adUser required} to AdUser
@@ -1374,11 +1389,9 @@ relationship ManyToOne {
 	MBiddingLine{uom required} to CUnitOfMeasure
 
 	MBiddingSubItem{adOrganization required} to ADOrganization
-	MBiddingSubItem{biddingLine required} to MBiddingLine
 	MBiddingSubItem{product required} to CProduct
 
 	MBiddingSubItemLine{adOrganization required} to ADOrganization
-	MBiddingSubItemLine{biddingSubItem required} to MBiddingSubItem
 	MBiddingSubItemLine{product required} to CProduct
 	MBiddingSubItemLine{uom required} to CUnitOfMeasure
 

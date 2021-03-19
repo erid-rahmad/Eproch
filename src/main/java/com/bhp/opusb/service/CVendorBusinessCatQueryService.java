@@ -101,6 +101,10 @@ public class CVendorBusinessCatQueryService extends QueryService<CVendorBusiness
                 specification = specification.and(buildSpecification(criteria.getVendorId(),
                     root -> root.join(CVendorBusinessCat_.vendor, JoinType.LEFT).get(CVendor_.id)));
             }
+            if (criteria.getVendorName() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorName(),
+                    root -> root.join(CVendorBusinessCat_.vendor, JoinType.LEFT).get(CVendor_.name)));
+            }
             if (criteria.getBusinessClassificationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBusinessClassificationId(),
                     root -> root.join(CVendorBusinessCat_.businessClassification, JoinType.LEFT).get(CBusinessCategory_.id)));

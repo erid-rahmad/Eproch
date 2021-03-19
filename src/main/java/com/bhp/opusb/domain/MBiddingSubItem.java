@@ -1,14 +1,29 @@
 package com.bhp.opusb.domain;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.math.BigDecimal;
-import java.util.UUID;
 
 /**
  * A MBiddingSubItem.
@@ -34,6 +49,11 @@ public class MBiddingSubItem extends AbstractAuditingEntity {
     @Column(name = "active")
     private Boolean active;
 
+    @OneToMany(mappedBy = "biddingSubItem")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    @OrderBy("id")
+    private List<MBiddingSubItemLine> mBiddingSubItemLines = new ArrayList<>();
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBiddingSubItems")
@@ -42,12 +62,11 @@ public class MBiddingSubItem extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBiddingSubItems")
-    private MBiddingLine biddingLine;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("mBiddingSubItems")
     private CProduct product;
+
+    @OneToOne(mappedBy = "subItem")
+    @JsonIgnore
+    private MBiddingLine biddingLine;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -97,6 +116,31 @@ public class MBiddingSubItem extends AbstractAuditingEntity {
         this.active = active;
     }
 
+    public List<MBiddingSubItemLine> getMBiddingSubItemLines() {
+        return mBiddingSubItemLines;
+    }
+
+    public MBiddingSubItem mBiddingSubItemLines(List<MBiddingSubItemLine> mBiddingSubItemLines) {
+        this.mBiddingSubItemLines = mBiddingSubItemLines;
+        return this;
+    }
+
+    public MBiddingSubItem addMBiddingSubItemLine(MBiddingSubItemLine mBiddingSubItemLine) {
+        this.mBiddingSubItemLines.add(mBiddingSubItemLine);
+        mBiddingSubItemLine.setBiddingSubItem(this);
+        return this;
+    }
+
+    public MBiddingSubItem removeMBiddingSubItemLine(MBiddingSubItemLine mBiddingSubItemLine) {
+        this.mBiddingSubItemLines.remove(mBiddingSubItemLine);
+        mBiddingSubItemLine.setBiddingSubItem(null);
+        return this;
+    }
+
+    public void setMBiddingSubItemLines(List<MBiddingSubItemLine> mBiddingSubItemLines) {
+        this.mBiddingSubItemLines = mBiddingSubItemLines;
+    }
+
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -110,19 +154,6 @@ public class MBiddingSubItem extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
 
-    public MBiddingLine getBiddingLine() {
-        return biddingLine;
-    }
-
-    public MBiddingSubItem biddingLine(MBiddingLine mBiddingLine) {
-        this.biddingLine = mBiddingLine;
-        return this;
-    }
-
-    public void setBiddingLine(MBiddingLine mBiddingLine) {
-        this.biddingLine = mBiddingLine;
-    }
-
     public CProduct getProduct() {
         return product;
     }
@@ -134,6 +165,19 @@ public class MBiddingSubItem extends AbstractAuditingEntity {
 
     public void setProduct(CProduct cProduct) {
         this.product = cProduct;
+    }
+
+    public MBiddingLine getBiddingLine() {
+        return biddingLine;
+    }
+
+    public MBiddingSubItem biddingLine(MBiddingLine mBiddingLine) {
+        this.biddingLine = mBiddingLine;
+        return this;
+    }
+
+    public void setBiddingLine(MBiddingLine mBiddingLine) {
+        this.biddingLine = mBiddingLine;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

@@ -1,19 +1,17 @@
 package com.bhp.opusb.service.dto;
 
-import java.time.LocalDate;
-import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingLine} entity.
  */
 public class MBiddingLineDTO extends AbstractAuditingDTO {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -31,12 +29,13 @@ public class MBiddingLineDTO extends AbstractAuditingDTO {
 
     private String remark;
 
-    private BigDecimal grandTotal;
-
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
+
+    private Long subItemId;
+    private MBiddingSubItemDTO subItem;
 
     private Long biddingId;
     private String biddingName;
@@ -101,14 +100,6 @@ public class MBiddingLineDTO extends AbstractAuditingDTO {
         this.remark = remark;
     }
 
-    public BigDecimal getGrandTotal() {
-        return grandTotal;
-    }
-
-    public void setGrandTotal(BigDecimal grandTotal) {
-        this.grandTotal = grandTotal;
-    }
-
     public UUID getUid() {
         return uid;
     }
@@ -123,6 +114,22 @@ public class MBiddingLineDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Long getSubItemId() {
+        return subItemId;
+    }
+
+    public void setSubItemId(Long mBiddingSubItemId) {
+        this.subItemId = mBiddingSubItemId;
+    }
+
+    public MBiddingSubItemDTO getSubItem() {
+        return subItem;
+    }
+
+    public void setSubItem(MBiddingSubItemDTO subItem) {
+        this.subItem = subItem;
     }
 
     public Long getBiddingId() {
@@ -235,19 +242,14 @@ public class MBiddingLineDTO extends AbstractAuditingDTO {
             ", totalCeilingPrice=" + getTotalCeilingPrice() +
             ", deliveryDate='" + getDeliveryDate() + "'" +
             ", remark='" + getRemark() + "'" +
-            ", grandTotal=" + getGrandTotal() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", subItemId=" + getSubItemId() +
             ", biddingId=" + getBiddingId() +
-            ", biddingName=" + getBiddingName() +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
             ", costCenterId=" + getCostCenterId() +
-            ", costCenterName=" + getCostCenterName() +
             ", productId=" + getProductId() +
-            ", productName=" + getProductName() +
             ", uomId=" + getUomId() +
-            ", uomName=" + getUomName() +
             "}";
     }
 }

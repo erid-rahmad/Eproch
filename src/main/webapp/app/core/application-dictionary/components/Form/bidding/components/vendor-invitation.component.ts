@@ -1,27 +1,32 @@
-import { ElForm } from 'element-ui/types/form';
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
-import Vue2Filters from 'vue2-filters';
+import { buildCascaderOptions } from '@/utils/form';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { buildCascaderOptions } from '@/utils/form';
-import ContextVariableAccessor from "../../../ContextVariableAccessor";
+import { Inject } from 'vue-property-decorator';
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { BiddingStep } from '../steps-form.component';
 
 const VendorInvitationProp = Vue.extend({
   props: {
-    biddingInformation: {
+    editMode: Boolean,
+    data: {
       type: Object,
       default: () => {}
-    },
-    vendorInvitation: {
-      type: Object,
-      default: () => {}
-    },
+    }
   }
 })
 
 @Component
-export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, VendorInvitationProp) {
+export default class VendorInvitation extends VendorInvitationProp {
+
+  @Inject('dynamicWindowService')
+  protected commonService: (baseApiUrl: string) => DynamicWindowService;
+
+  private adOrganizationId: number;
+
+  private organizationCriteria = [
+    'adOrganizationId.in=1'
+  ];
 
   gridSchema = {
     defaultSort: {},
@@ -32,27 +37,16 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
 
   processing = false;
 
-  dialogConfirmationVisibleBusinessCategory: boolean = false;
+  vendorInvitationFormVisible: boolean = false;
   dialogConfirmationVisibleVendorSuggestion: boolean = false;
 
   public vendorOptions: any = {};
   public subCategoryOptions: any = {};
 
   businessCategory: any = {};
-  businessCategoriesId = [];
-  businessCategoriesName = [];
   businessCategorieValues = {
     id: '',
     name: ''
-  }
-
-  vendorBusinessCategory:any = {
-    businessClassificationId: '',
-    businessClassificationName: '',
-    businessCategoryId: '',
-    businessCategoryName: '',
-    businessSubCategoryId: '',
-    businessSubCategoryName: ''
   }
 
   vendorSuggestion:any = {
@@ -74,73 +68,94 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
   };
   public businessCategoryOptions = [];
 
-  vendorSelection: string = this.biddingInformation.vendorSelection;
-  buttonDisable: boolean = false;
+  canAddVendor: boolean = false;
+
+  bidding: Record<string, any> = {};
+  vendorSelection: string;
 
   created() {
-    console.log(this.vendorSelection);
+    this.adOrganizationId = accountStore.organizationInfo.id;
+    this.bidding = {...this.data};
+    this.bidding.step = BiddingStep.SELECTION;
+    this.vendorSelection = this.bidding.vendorSelection;
+    
+    this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
+
+    if (! this.editMode) {
+      this.bidding.vendorInvitations = [];
+      this.bidding.vendorSuggestions = [];
+    }
+
     this.retrieveBusinessCategories();
-    //this.retrieveVendor(0, 1);
     this.retrieveSubBusinessCategory();
 
-    if(this.vendorSelection == 'Open'){
-      this.buttonDisable = true;
-    }else if(this.vendorSelection == 'Invitation Only'){
-      this.buttonDisable = true;
-    }else if(this.vendorSelection == 'Direct Assignment'){
-      this.buttonDisable = false;
+    if (this.vendorSelection === 'OPN') {
+      this.canAddVendor = false;
+    } else if (this.vendorSelection == 'IVT') {
+      this.canAddVendor = false;
+    } else if (this.vendorSelection == 'DRC') {
+      this.canAddVendor = true;
     }
   }
 
-  addBusinessCategory(){
-    this.dialogConfirmationVisibleBusinessCategory = true;
+  addBusinessCategory() {
+    this.vendorInvitationFormVisible = true;
   }
 
-  addVendorSuggestion(){
+  addVendorSuggestion() {
     this.dialogConfirmationVisibleVendorSuggestion = true;
   }
 
-  saveBusinessCategory(){
-    const values = (<any>this.$refs.businessCategories).getCheckedNodes();
-    values.forEach(element => {
-      if(element.level === 3){
-        this.businessCategoriesId = element.path;
-        this.businessCategoriesName = element.pathLabels;
+  saveBusinessCategory() {
+    const nodes = (<any>this.$refs.businessCategories).getCheckedNodes();
+    const classifications = new Set<number>();
+    const vendorSuggestionCriteria = [
+      'active.equals=true',
+      ...this.organizationCriteria
+    ];
 
-        this.vendorBusinessCategory = {
-          businessClassificationId: this.businessCategoriesId[0],
-          businessClassificationName: this.businessCategoriesName[0],
-          businessCategoryId: this.businessCategoriesId[1],
-          businessCategoryName: this.businessCategoriesName[1],
-          businessSubCategoryId: this.businessCategoriesId[2],
-          businessSubCategoryName: this.businessCategoriesName[2]
+    nodes.forEach(element => {
+      const path = element.path;
+      const pathLabels = element.pathLabels;
+
+      if (element.level === 3) {
+        const vendorInvitation = {
+          adOrganizationId: this.adOrganizationId,
+          businessClassificationId: path[0],
+          businessClassificationName: pathLabels[0],
+          businessCategoryId: path[1],
+          businessCategoryName: pathLabels[1],
+          businessSubCategoryId: path[2],
+          businessSubCategoryName: pathLabels[2]
         }
 
-        const lineExist = (this.vendorInvitation.vendorBusinessCategory.some((vLine: any) => {
-          return vLine.businessSubCategoryId === this.vendorBusinessCategory.businessSubCategoryId;
+        const lineExist = (this.bidding.vendorInvitations.some((vLine: any) => {
+          return vLine.businessSubCategoryId === vendorInvitation.businessSubCategoryId;
         }));
 
-        if(!lineExist){
-          this.vendorInvitation.vendorBusinessCategory.push(this.vendorBusinessCategory);
+        if (!lineExist) {
+          this.bidding.vendorInvitations.push(vendorInvitation);
 
-          if(this.vendorSelection == 'Open'){
-            //this.retrieveBusinessCategory(this.vendorBusinessCategory.businessClassificationId, 2);
-          }else if(this.vendorSelection == 'Invitation Only'){
-            //this.retrieveVendorBySubCategory(this.vendorBusinessCategory.businessSubCategoryId);
+          if (this.vendorSelection === 'OPN') {
+            if (! classifications.has(path[0])) {
+              classifications.add(path[0]);
+              vendorSuggestionCriteria.push(`businessClassificationId.in=${path[0]}`);
+            }
+          } else if (this.vendorSelection === 'IVT') {
+            vendorSuggestionCriteria.push(`subBusinessCategoryId.in=${path[2]}`);
           }
         }
-
       }
     });
 
-    this.dialogConfirmationVisibleBusinessCategory = false;
+    this.retrieveVendorSuggestions(vendorSuggestionCriteria);
+    this.vendorInvitationFormVisible = false;
   }
 
-  saveVendorSuggestion(){
+  saveVendorSuggestion() {
     this.vendorSuggestion.vendorObj = this.vendorOptions.find(item => item.vendorId === this.vendorSuggestion.vendor);
     this.vendorSuggestion.subCategoryObj = this.subCategoryOptions.find(item => item.id === this.vendorSuggestion.subCategory);
-    console.log(this.vendorSuggestion);
-    this.vendorInvitation.vendorSuggestion.push(this.vendorSuggestion);
+    this.bidding.vendorSuggestions.push(this.vendorSuggestion);
 
     this.dialogConfirmationVisibleVendorSuggestion = false;
 
@@ -154,16 +169,16 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
     }
   }
 
-  removeBusinessCategory(index){
-    this.vendorInvitation.vendorBusinessCategory.splice(index, 1);
+  removeBusinessCategory(index) {
+    this.bidding.vendorInvitations.splice(index, 1);
   }
 
-  removeVendorSuggestion(index){
-    this.vendorInvitation.vendorSuggestion.splice(index, 1);
+  removeVendorSuggestion(index) {
+    this.bidding.vendorSuggestions.splice(index, 1);
   }
 
   private retrieveBusinessCategories() {
-      this.dynamicWindowService('/api/c-business-categories')
+      this.commonService('/api/c-business-categories')
       .retrieve({
           criteriaQuery: 'active.equals=true',
           paginationQuery: {
@@ -186,22 +201,24 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
       });
   }
 
-  private retrieveVendorBySubCategory(businessCategory) {
-    this.dynamicWindowService('/api/c-vendor-business-cats')
+  private retrieveVendorSuggestions(criteria: string[]) {
+    this.commonService('/api/c-vendor-business-cats')
       .retrieve({
-        criteriaQuery: `active.equals=true&businessCategoryId.equals=${businessCategory}`
+        criteriaQuery: criteria,
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['vendorId']
+        }
       })
       .then(res => {
-        if(businessCategory){
-          this.vendorOptions = res.data;
-          console.log(res.data)
-          /*res.data.map((item: any) => {
-            this.retrieveVendor(item.vendorId, 2);
-            this.vendorSuggestion.vendorObj = this.vendorOptions.find(item => item.id === this.vendorSuggestion.vendor);
-            //console.log(item);
-            return item;
-          });*/
-        }
+        this.vendorOptions = res.data;
+        /*res.data.map((item: any) => {
+          this.retrieveVendor(item.vendorId, 2);
+          this.vendorSuggestion.vendorObj = this.vendorOptions.find(item => item.id === this.vendorSuggestion.vendor);
+          //console.log(item);
+          return item;
+        });*/
       });
   }
 
@@ -209,7 +226,7 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
     let filterQuery = "";
     filterQuery = "active.equals=true&sector.equals=TERTIARY";
 
-    this.dynamicWindowService("/api/c-business-categories")
+    this.commonService("/api/c-business-categories")
       .retrieve({
         paginationQuery: {
           page: 0,
@@ -230,7 +247,7 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
     }else{
       filterQuery = `active.equals=true&id.equals=${vendorId}`;
     }
-    this.dynamicWindowService("/api/c-vendors")
+    this.commonService("/api/c-vendors")
       .retrieve({
         criteriaQuery: filterQuery
       })
@@ -279,7 +296,7 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
 
   // retrieve vendor sub category
   /*private retrieveVendorSubCategory(vendorId) {
-    this.dynamicWindowService('/api/c-vendor-business-cats')
+    this.commonService('/api/c-vendor-business-cats')
       .retrieve({
         criteriaQuery: `vendorId.equals=${vendorId}`
       })
@@ -289,7 +306,7 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
   }*/
 
   private retrieveBusinessCategory(businessCategoryId, key) {
-    this.dynamicWindowService('/api/c-business-categories')
+    this.commonService('/api/c-business-categories')
       .retrieve({
         criteriaQuery: `id.equals=${businessCategoryId}`
       })
@@ -307,7 +324,7 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
 
   // retrieve vendor address
   private retrieveVendorAddress(vendorId) {
-    this.dynamicWindowService('/api/c-vendor-locations')
+    this.commonService('/api/c-vendor-locations')
       .retrieve({
         criteriaQuery: `vendorId.equals=${vendorId}`
       })
@@ -319,7 +336,7 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
   }
 
   private retrieveLocation(locationId) {
-    this.dynamicWindowService('/api/c-locations')
+    this.commonService('/api/c-locations')
       .retrieve({
         criteriaQuery: `id.equals=${locationId}`
       })
@@ -329,34 +346,12 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
       });
   }
 
-  // ================================================================
-
-  private validate(formIndex: number) {
-      if (formIndex === 2) {
-          (<ElForm>this.$refs.businessCategoryForm)?.validate(async (passed, errors) => {
-
-            /*  const getValues = Array.from(registrationStore.businessCategories);
-              for(let i in getValues){
-                  registrationStore.deleteBusinessCategory(getValues[i]);
-              };
-
-              const values = (<any>this.$refs.businessCategories).getCheckedNodes();
-              values.forEach(element => {
-                  if(element.level === 3){
-                      registrationStore.addBusinessCategory(element.value);
-                  }
-              });
-              if (passed) {
-                  await this.retrieveDocumentTypes(true);
-                  await this.retrieveDocumentTypes(false);
-                  const businessCategories = Array.from(registrationStore.businessCategories);
-                  this.businessCategoryValues = businessCategories;
-                  console.log(this.businessCategoryValues);
-              }
-              this.eventBus.$emit('step-validated', { passed, errors });
-              */
-          });
-      }
+  /**
+   * Invoked before proceeding to the next step.
+   */
+  save() {
+    this.$emit('saved', {
+      data: this.bidding
+    });
   }
-
 }

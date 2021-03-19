@@ -2,6 +2,7 @@ package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MProjectInformation;
 import com.bhp.opusb.repository.MProjectInformationRepository;
+import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.dto.MProjectInformationDTO;
 import com.bhp.opusb.service.mapper.MProjectInformationMapper;
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link MProjectInformation}.
@@ -43,6 +45,25 @@ public class MProjectInformationService {
         log.debug("Request to save MProjectInformation : {}", mProjectInformationDTO);
         MProjectInformation mProjectInformation = mProjectInformationMapper.toEntity(mProjectInformationDTO);
         mProjectInformation = mProjectInformationRepository.save(mProjectInformation);
+        return mProjectInformationMapper.toDto(mProjectInformation);
+    }
+
+    /**
+     * Save a list of mProjectInformations.
+     *
+     * @param mProjectInformationDTOs the entities to save.
+     * @return the persisted entities.
+     */
+    public List<MProjectInformationDTO> saveAll(List<MProjectInformationDTO> mProjectInformationDTOs, MBiddingDTO mBiddingDTO) {
+        log.debug("Request to save MProjectInformation : {}", mProjectInformationDTOs);
+
+        mProjectInformationDTOs.forEach(dto -> {
+            dto.setBiddingId(mBiddingDTO.getId());
+            dto.setAdOrganizationId(mBiddingDTO.getAdOrganizationId());
+        });
+
+        List<MProjectInformation> mProjectInformation = mProjectInformationMapper.toEntity(mProjectInformationDTOs);
+        mProjectInformation = mProjectInformationRepository.saveAll(mProjectInformation);
         return mProjectInformationMapper.toDto(mProjectInformation);
     }
 
@@ -78,6 +99,17 @@ public class MProjectInformationService {
     }
 
     /**
+     * Get all mProjectInformations with the specific biddingId.
+     * @param biddingId
+     * @return the list of entities.
+     */
+    /* public List<MProjectInformationDTO> findByBiddingId(Long biddingId) {
+        log.debug("Request to get MBiddingLines of a specific bidding");
+        return mProjectInformationRepository.findByBidding_Id(biddingId).stream()
+            .map(mProjectInformationMapper::toDto).collect(Collectors.toList());
+    } */
+
+    /**
      * Delete the mProjectInformation by id.
      *
      * @param id the id of the entity.
@@ -85,5 +117,16 @@ public class MProjectInformationService {
     public void delete(Long id) {
         log.debug("Request to delete MProjectInformation : {}", id);
         mProjectInformationRepository.deleteById(id);
+    }
+
+    /**
+     * Delete the list of mProjectInformations.
+     *
+     * @param id the entities.
+     */
+    public void deleteAll(List<MProjectInformationDTO> mProjectInformationDTOs) {
+        log.debug("Request to delete MProjectInformations : {}", mProjectInformationDTOs);
+        List<MProjectInformation> entities = mProjectInformationMapper.toEntity(mProjectInformationDTOs);
+        mProjectInformationRepository.deleteAll(entities);
     }
 }

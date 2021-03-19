@@ -31,9 +31,9 @@ public class CBiddingTypeCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
-    private BooleanFilter costEvaluationSelection;
+    private StringFilter costEvaluationSelection;
 
-    private BooleanFilter selectedWinner;
+    private StringFilter winnerSelection;
 
     private UUIDFilter uid;
 
@@ -51,7 +51,7 @@ public class CBiddingTypeCriteria implements Serializable, Criteria {
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.costEvaluationSelection = other.costEvaluationSelection == null ? null : other.costEvaluationSelection.copy();
-        this.selectedWinner = other.selectedWinner == null ? null : other.selectedWinner.copy();
+        this.winnerSelection = other.winnerSelection == null ? null : other.winnerSelection.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -87,20 +87,20 @@ public class CBiddingTypeCriteria implements Serializable, Criteria {
         this.description = description;
     }
 
-    public BooleanFilter getCostEvaluationSelection() {
+    public StringFilter getCostEvaluationSelection() {
         return costEvaluationSelection;
     }
 
-    public void setCostEvaluationSelection(BooleanFilter costEvaluationSelection) {
+    public void setCostEvaluationSelection(StringFilter costEvaluationSelection) {
         this.costEvaluationSelection = costEvaluationSelection;
     }
 
-    public BooleanFilter getSelectedWinner() {
-        return selectedWinner;
+    public StringFilter getWinnerSelection() {
+        return winnerSelection;
     }
 
-    public void setSelectedWinner(BooleanFilter selectedWinner) {
-        this.selectedWinner = selectedWinner;
+    public void setWinnerSelection(StringFilter winnerSelection) {
+        this.winnerSelection = winnerSelection;
     }
 
     public UUIDFilter getUid() {
@@ -150,7 +150,7 @@ public class CBiddingTypeCriteria implements Serializable, Criteria {
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(costEvaluationSelection, that.costEvaluationSelection) &&
-            Objects.equals(selectedWinner, that.selectedWinner) &&
+            Objects.equals(winnerSelection, that.winnerSelection) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -164,7 +164,7 @@ public class CBiddingTypeCriteria implements Serializable, Criteria {
         name,
         description,
         costEvaluationSelection,
-        selectedWinner,
+        winnerSelection,
         uid,
         active,
         adOrganizationId,
@@ -179,7 +179,7 @@ public class CBiddingTypeCriteria implements Serializable, Criteria {
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (costEvaluationSelection != null ? "costEvaluationSelection=" + costEvaluationSelection + ", " : "") +
-                (selectedWinner != null ? "selectedWinner=" + selectedWinner + ", " : "") +
+                (winnerSelection != null ? "winnerSelection=" + winnerSelection + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

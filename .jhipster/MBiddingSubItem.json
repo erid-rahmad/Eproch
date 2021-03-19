@@ -1,55 +1,60 @@
 {
-  "name": "MBiddingSubItem",
-  "fields": [
-    {
-      "fieldName": "totalAmount",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "uid",
-      "fieldType": "UUID"
-    },
-    {
-      "fieldName": "active",
-      "fieldType": "Boolean"
-    }
-  ],
-  "relationships": [
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDOrganization",
-      "otherEntityRelationshipName": "mBiddingSubItem",
-      "relationshipValidateRules": "required",
-      "relationshipName": "adOrganization",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "mBiddingLine",
-      "otherEntityRelationshipName": "mBiddingSubItem",
-      "relationshipValidateRules": "required",
-      "relationshipName": "biddingLine",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cProduct",
-      "otherEntityRelationshipName": "mBiddingSubItem",
-      "relationshipValidateRules": "required",
-      "relationshipName": "product",
-      "otherEntityField": "id"
-    }
-  ],
-  "changelogDate": "20210301080100",
-  "entityTableName": "m_bidding_sub_item",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*",
-  "skipClient": true
+    "name": "MBiddingSubItem",
+    "fields": [
+        {
+            "fieldName": "totalAmount",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "mBiddingSubItemLine",
+            "otherEntityRelationshipName": "biddingSubItem",
+            "relationshipName": "mBiddingSubItemLine"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mBiddingSubItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cProduct",
+            "otherEntityRelationshipName": "mBiddingSubItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "product",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "mBiddingLine",
+            "otherEntityRelationshipName": "subItem",
+            "relationshipName": "biddingLine",
+            "ownerSide": false
+        }
+    ],
+    "changelogDate": "20210301080100",
+    "entityTableName": "m_bidding_sub_item",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
 }

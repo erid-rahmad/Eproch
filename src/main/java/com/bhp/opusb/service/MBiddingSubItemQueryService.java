@@ -100,17 +100,21 @@ public class MBiddingSubItemQueryService extends QueryService<MBiddingSubItem> {
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MBiddingSubItem_.active));
             }
+            if (criteria.getMBiddingSubItemLineId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMBiddingSubItemLineId(),
+                    root -> root.join(MBiddingSubItem_.mBiddingSubItemLines, JoinType.LEFT).get(MBiddingSubItemLine_.id)));
+            }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MBiddingSubItem_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
-            if (criteria.getBiddingLineId() != null) {
-                specification = specification.and(buildSpecification(criteria.getBiddingLineId(),
-                    root -> root.join(MBiddingSubItem_.biddingLine, JoinType.LEFT).get(MBiddingLine_.id)));
-            }
             if (criteria.getProductId() != null) {
                 specification = specification.and(buildSpecification(criteria.getProductId(),
                     root -> root.join(MBiddingSubItem_.product, JoinType.LEFT).get(CProduct_.id)));
+            }
+            if (criteria.getBiddingLineId() != null) {
+                specification = specification.and(buildSpecification(criteria.getBiddingLineId(),
+                    root -> root.join(MBiddingSubItem_.biddingLine, JoinType.LEFT).get(MBiddingLine_.id)));
             }
         }
         return specification;

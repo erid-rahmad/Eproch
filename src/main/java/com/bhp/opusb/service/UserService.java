@@ -191,10 +191,10 @@ public class UserService {
         newUser = new User();
 
         if (spaceIndex > 0) {
-            newUser.setFirstName(fullName.substring(0, spaceIndex));
-            newUser.setLastName(fullName.substring(spaceIndex + 1));
+            newUser.setFirstName(adUser.getFirstName());
+            newUser.setLastName(adUser.getLastName());
         } else {
-            newUser.setFirstName(fullName);
+            newUser.setFirstName(adUser.getFirstName());
         }
 
         if (adUser.getPassword() == null) {

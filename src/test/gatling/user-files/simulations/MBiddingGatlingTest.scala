@@ -72,17 +72,19 @@ class MBiddingGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "biddingNo":"SAMPLE_TEXT"
                 , "name":"SAMPLE_TEXT"
                 , "vendorSelection":"SAMPLE_TEXT"
                 , "ceilingPrice":"0"
                 , "estimatedPrice":"0"
+                , "dateTrx":"2020-01-01T00:00:00.000Z"
+                , "documentNo":"SAMPLE_TEXT"
                 , "documentAction":"SAMPLE_TEXT"
                 , "documentStatus":"SAMPLE_TEXT"
                 , "approved":null
                 , "processed":null
-                , "dateReject":"2020-01-01T00:00:00.000Z"
                 , "dateApprove":"2020-01-01T00:00:00.000Z"
+                , "dateReject":"2020-01-01T00:00:00.000Z"
+                , "rejectedReason":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

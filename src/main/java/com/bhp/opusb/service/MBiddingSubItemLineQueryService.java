@@ -110,10 +110,6 @@ public class MBiddingSubItemLineQueryService extends QueryService<MBiddingSubIte
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MBiddingSubItemLine_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
-            if (criteria.getBiddingSubItemId() != null) {
-                specification = specification.and(buildSpecification(criteria.getBiddingSubItemId(),
-                    root -> root.join(MBiddingSubItemLine_.biddingSubItem, JoinType.LEFT).get(MBiddingSubItem_.id)));
-            }
             if (criteria.getProductId() != null) {
                 specification = specification.and(buildSpecification(criteria.getProductId(),
                     root -> root.join(MBiddingSubItemLine_.product, JoinType.LEFT).get(CProduct_.id)));
@@ -121,6 +117,10 @@ public class MBiddingSubItemLineQueryService extends QueryService<MBiddingSubIte
             if (criteria.getUomId() != null) {
                 specification = specification.and(buildSpecification(criteria.getUomId(),
                     root -> root.join(MBiddingSubItemLine_.uom, JoinType.LEFT).get(CUnitOfMeasure_.id)));
+            }
+            if (criteria.getBiddingSubItemId() != null) {
+                specification = specification.and(buildSpecification(criteria.getBiddingSubItemId(),
+                    root -> root.join(MBiddingSubItemLine_.biddingSubItem, JoinType.LEFT).get(MBiddingSubItem_.id)));
             }
         }
         return specification;
