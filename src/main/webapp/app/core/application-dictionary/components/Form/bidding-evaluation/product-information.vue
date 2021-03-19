@@ -10,7 +10,7 @@
                 </el-button>
             </el-col>
         </el-row>
-        <el-form ref="productCatalog" label-position="right" label-width="130px" size="mini" :model="productCatalog" :rules="rules">
+        <el-form ref="productCatalog" label-position="left" label-width="130px" size="mini" :model="productCatalog" :rules="rules">
             <el-divider content-position="left">
                 <h4>Product Information</h4>
             </el-divider>
@@ -18,8 +18,8 @@
                 <el-col :span="12">
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
-                            <el-form-item label="Biding No" prop="name" required>
-                                <h7>BP-123</h7>
+                            <el-form-item label="Biding Title" prop="name" required>
+                                <h7>Biding tes</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -32,8 +32,8 @@
                     </el-row>
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
-                            <el-form-item label="Biding No" prop="name" required>
-                                <h7>BP-123</h7>
+                            <el-form-item label="Biding type" prop="name" required>
+                                <h7>promosi</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -42,15 +42,15 @@
                     <el-row>
                         <el-row>
                             <el-col :span="24">
-                                <el-form-item label="Biding No" prop="name" required>
-                                    <h7>BP-123</h7>
+                                <el-form-item label="PIC" prop="name" required>
+                                    <h7>angelina sondang</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
-                                <el-form-item label="Biding No" prop="name" required>
-                                    <h7>BP-123</h7>
+                                <el-form-item label="Depertement" prop="name" required>
+                                    <h7>EACCS</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>

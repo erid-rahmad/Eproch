@@ -1,10 +1,6 @@
 import AlertMixin from '@/shared/alert/alert.mixin';
-import {
-  mixins
-} from 'vue-class-component';
-import {
-  Component
-} from 'vue-property-decorator';
+import { mixins } from 'vue-class-component';
+import { Component } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import CatalogGrid from './components/catalog-grid.vue';
@@ -23,36 +19,17 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   setRows = [];
   setRow = {};
 
-
-
-  // multipleSelection: [];
-
-
-
-  // toggleSelection(rows) {
-  //   if (rows) {
-  //     rows.forEach(row => {
-  //       this.$refs.multipleTable.toggleRowSelection(row);
-  //     });
-  //   } else {
-  //     this.$refs.multipleTable.clearSelection();
-  //   }
-  // };
-  // handleSelectionChange(val) {
-  //   this.multipleSelection = val;
-  // };
-
-
   data() {
     return {
-      tableData: [{
-          1: 'Baju besi',
-          2: 'purchase',
-          3: 'EACS',
-          4: 'brand wander',
-          5: '123',
-          6: 'hampir',
-          7: '22/22/2021'
+      tableData: [
+        {
+        1: 'Baju besi',
+        2: 'purchase',
+        3: 'EACS',
+        4: 'brand wander',
+        5: '123',
+        6: 'hampir',
+        7: '22/22/2021'
         },
         {
           1: 'Baju besi',
@@ -73,15 +50,14 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
           7: '22/22/2021'
         },
         {
-          1: 'Baju besi',
-          2: 'purchase',
-          3: 'EACS',
-          4: 'brand wander',
-          5: '123',
-          6: 'hampir',
-          7: '22/22/2021'
-        }
-      ],
+        1: 'Baju besi',
+        2: 'purchase',
+        3: 'EACS',
+        4: 'brand wander',
+        5: '123',
+        6: 'hampir',
+        7: '22/22/2021'
+      }],
       gridData: [{
         date: '2016-05-02',
         name: 'John Smith',
@@ -100,9 +76,9 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         address: 'No.1518,  Jinshajiang Road, Putuo District'
       }],
       dialogTableVisible: false,
-
+      
       dialogFormVisible: false,
-    }
+      }
   };
 
 
@@ -147,30 +123,30 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   onClick(value: string) {
     this.dialogType = value;
 
-    if (value == 'import') {
+    if(value == 'import'){
       this.dialogConfirmationVisible = true;
       this.dialogTitle = "Import Catalog";
       this.dialogButtonIcon = "el-icon-upload2";
       this.dialogButtonType = "primary";
       this.dialogButton = "Import";
 
-    } else if (value == 'export') {
+    } else if(value == 'export'){
       this.dialogConfirmationVisible = true;
       this.dialogTitle = "Export Catalog";
       this.dialogButtonIcon = "el-icon-download";
       this.dialogButtonType = "primary";
       this.dialogButton = "Export";
 
-    } else if (value == 'filter') {
+    } else if(value == 'filter') {
       this.activeName = "ALL";
-      ( < any > this.$refs.catalogGrid[0]).retrieveAllRecords();
-    } else if (value == 'add') {
+      (<any>this.$refs.catalogGrid[0]).retrieveAllRecords();
+    } else if(value == 'add'){
       this.index = false;
       this.setRow = {};
 
     } else {
-      if (this.setRows.length) {
-        if (value == "remove") {
+      if(this.setRows.length){
+        if(value == "remove"){
           this.dialogConfirmationVisible = true;
           this.dialogTitle = "Remove Catalog";
           this.dialogMessage = "Are you sure to delete the selected record(s)?";
@@ -192,15 +168,15 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
 
   }
 
-  dialogButtonAction(dialogType) {
-    if (dialogType == "remove") {
+  dialogButtonAction(dialogType){
+    if(dialogType == "remove"){
       //console.log(this.setRows);
       this.removeCatalog();
     }
 
   }
 
-  closeProductInformation() {
+  closeProductInformation(){
     this.index = true;
     this.setRows = [];
     this.setRow = {};
@@ -208,55 +184,55 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
 
   private retrieveGetReferences(param: string) {
     this.dynamicWindowService(this.baseApiUrlReference)
-      .retrieve({
-        criteriaQuery: [`value.contains=` + param]
-      })
-      .then(res => {
+    .retrieve({
+      criteriaQuery: [`value.contains=`+param]
+    })
+    .then(res => {
         let references = res.data.map(item => {
-          return {
-            id: item.id,
-            value: item.value,
-            name: item.name
-          };
+            return{
+                id: item.id,
+                value: item.value,
+                name: item.name
+            };
         });
         this.retrieveGetReferenceLists(references);
-      });
+    });
   }
 
   private retrieveGetReferenceLists(param: any) {
     this.dynamicWindowService(this.baseApiUrlReferenceList)
-      .retrieve({
-        criteriaQuery: [`adReferenceId.equals=` + param[0].id]
-      })
-      .then(res => {
+    .retrieve({
+      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
+    })
+    .then(res => {
         let referenceList = res.data.map(item => {
-          return {
-            value: item.value,
-            name: item.name
-          };
+            return{
+                value: item.value,
+                name: item.name
+            };
         });
 
-        if (param[0].value == this.keyReferenceProductCatalog) {
+        if(param[0].value == this.keyReferenceProductCatalog){
           this.tabTitleOptions = referenceList;
         }
-      });
+    });
   }
 
-  selectedRow(value) {
+  selectedRow(value){
     this.index = false;
     this.setRow = value;
   }
 
-  selectedRows(value) {
+  selectedRows(value){
     this.setRows = value;
   }
 
   //handle import
   submitImport() {
-    ( < any > this.$refs.import).submit();
+    (<any>this.$refs.import).submit();
   }
 
-  handleImportError(err, file, fileList) {
+  handleImportError(err, file, fileList){
     const message = "Import catalog error";
     this.$notify({
       title: 'Error',
@@ -283,12 +259,12 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   }
 
   onUploadSuccess(response: any) {
-    console.log('File uploaded successfully ', response);
+      console.log('File uploaded successfully ', response);
 
-    this.importProductCatalog = "";
-    this.dialogConfirmationVisible = false;
-    this.activeName = "ALL";
-    ( < any > this.$refs.catalogGrid[0]).retrieveAllRecords();
+      this.importProductCatalog = "";
+      this.dialogConfirmationVisible = false;
+      this.activeName = "ALL";
+      (<any>this.$refs.catalogGrid[0]).retrieveAllRecords();
   }
 
   handleExceed(files, fileList) {
@@ -308,19 +284,19 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     const isLt5M = file.size / 1024 / 1024 < 5;
     if (!isLt5M) {
       this.$notify({
-        title: 'Warning',
-        message: "files with a size less than 5Mb",
-        type: 'warning',
-        duration: 3000
+          title: 'Warning',
+          message: "files with a size less than 5Mb",
+          type: 'warning',
+          duration: 3000
       });
       return isLt5M;
     }
 
     // File type restriction
     const name = file.name ? file.name : '';
-    const ext = name ?
-      name.substr(name.lastIndexOf('.') + 1, name.length) :
-      true;
+    const ext = name
+      ? name.substr(name.lastIndexOf('.') + 1, name.length)
+      : true;
     /*const isExt = this.chooseBookTypeImport.indexOf(ext) < 0;
     if (isExt) {
       this.$notify({
@@ -334,46 +310,46 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
 
   }
 
-  removeCatalog() {
+  removeCatalog(){
     Promise.allSettled(this.setRows.map((row: any) => {
-        return this.dynamicWindowService(this.baseApiUrlCatalog).delete(row.id);
-      })).then((results) => {
-        const deletedCount = results.filter(res => res.status === 'fulfilled').length
+      return this.dynamicWindowService(this.baseApiUrlCatalog).delete(row.id);
+    })).then((results) => {
+      const deletedCount = results.filter(res => res.status === 'fulfilled').length
 
-        if (deletedCount) {
-          const message = this.$t(`opusWebApp.applicationDictionary.recordsDeleted`, {
-            tabName: "Product Catalog",
-            count: deletedCount
-          });
+      if (deletedCount) {
+        const message = this.$t(`opusWebApp.applicationDictionary.recordsDeleted`, {
+          tabName: "Product Catalog",
+          count: deletedCount
+        });
 
-          //this.retrieveAllRecords();
-          this.importProductCatalog = "";
-          this.dialogConfirmationVisible = false;
-          this.activeName = "ALL";
-          ( < any > this.$refs.catalogGrid[0]).retrieveAllRecords();
+        //this.retrieveAllRecords();
+        this.importProductCatalog = "";
+        this.dialogConfirmationVisible = false;
+        this.activeName = "ALL";
+        (<any>this.$refs.catalogGrid[0]).retrieveAllRecords();
 
+        this.$notify({
+          title: 'Success',
+          message: message.toString(),
+          type: 'success',
+          duration: 3000
+        });
+      } else {
+        const rejectedCount = results.filter(res => res.status === 'rejected').length;
+        if (rejectedCount) {
+          console.log('Failed deleting the record(s)');
           this.$notify({
-            title: 'Success',
-            message: message.toString(),
-            type: 'success',
-            duration: 3000
-          });
-        } else {
-          const rejectedCount = results.filter(res => res.status === 'rejected').length;
-          if (rejectedCount) {
-            console.log('Failed deleting the record(s)');
-            this.$notify({
-              title: 'Error',
-              message: 'Failed deleting the record(s)',
-              type: 'error'
-            })
-          }
+            title: 'Error',
+            message: 'Failed deleting the record(s)',
+            type: 'error'
+          })
         }
-      })
-      .finally(() => {
-        this.setRows = [];
-        this.$emit('rows-deleted');
-      });
+      }
+    })
+    .finally(() => {
+      this.setRows = [];
+      this.$emit('rows-deleted');
+    });
   }
 
 }
