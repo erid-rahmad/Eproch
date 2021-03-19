@@ -1,15 +1,12 @@
 package com.bhp.opusb.service;
 
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.criteria.JoinType;
 
-import com.bhp.opusb.util.MapperJSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -52,13 +49,9 @@ public class MPurchaseOrderQueryService extends QueryService<MPurchaseOrder> {
      */
     @Transactional(readOnly = true)
     public List<MPurchaseOrderDTO> findByCriteria(MPurchaseOrderCriteria criteria) {
-        log.debug("find by criteria 11 : {}", criteria);
+        log.debug("find by criteria : {}", criteria);
         final Specification<MPurchaseOrder> specification = createSpecification(criteria);
-        List<MPurchaseOrderDTO> pages ;
-        pages = mPurchaseOrderMapper.toDto(mPurchaseOrderRepository.findAll(specification));
-//        return mPurchaseOrderMapper.toDto(mPurchaseOrderRepository.findAll(specification));
-        log.debug("this pages {}", MapperJSONUtil.prettyLog(pages));
-        return pages;
+        return mPurchaseOrderMapper.toDto(mPurchaseOrderRepository.findAll(specification));
     }
 
     /**
@@ -70,18 +63,9 @@ public class MPurchaseOrderQueryService extends QueryService<MPurchaseOrder> {
     @Transactional(readOnly = true)
     public Page<MPurchaseOrderDTO> findByCriteria(MPurchaseOrderCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
-        log.debug("this criteria 1");
         final Specification<MPurchaseOrder> specification = createSpecification(criteria);
-        Page<MPurchaseOrderDTO> pages;
-
-        pages = mPurchaseOrderRepository.findAll(specification, page)
+        return mPurchaseOrderRepository.findAll(specification, page)
             .map(mPurchaseOrderMapper::toDto);
-
-//        return mPurchaseOrderRepository.findAll(specification, page)
-//            .map(mPurchaseOrderMapper::toDto);
-
-        log.info("this maper {}",MapperJSONUtil.prettyLog(pages));
-        return pages;
     }
 
     /**
@@ -166,6 +150,10 @@ public class MPurchaseOrderQueryService extends QueryService<MPurchaseOrder> {
             if (criteria.getCostCenterId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCostCenterId(),
                     root -> root.join(MPurchaseOrder_.costCenter, JoinType.LEFT).get(CCostCenter_.id)));
+            }
+            if (criteria.getPaymentTermId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPaymentTermId(),
+                    root -> root.join(MPurchaseOrder_.paymentTerm, JoinType.LEFT).get(CPaymentTerm_.id)));
             }
         }
         return specification;

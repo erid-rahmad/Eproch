@@ -48,17 +48,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MPurchaseOrderLineResourceIT {
 
-    private static final LocalDate DEFAULT_DOCUMENT_DATE = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DOCUMENT_DATE = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_DOCUMENT_DATE = LocalDate.ofEpochDay(-1L);
+    private static final LocalDate DEFAULT_DATE_TRX = LocalDate.ofEpochDay(0L);
+    private static final LocalDate UPDATED_DATE_TRX = LocalDate.now(ZoneId.systemDefault());
+    private static final LocalDate SMALLER_DATE_TRX = LocalDate.ofEpochDay(-1L);
 
     private static final LocalDate DEFAULT_DATE_PROMISED = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_PROMISED = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DATE_PROMISED = LocalDate.ofEpochDay(-1L);
-
-    private static final LocalDate DEFAULT_DATE_REQUIRED = LocalDate.ofEpochDay(0L);
-    private static final LocalDate UPDATED_DATE_REQUIRED = LocalDate.now(ZoneId.systemDefault());
-    private static final LocalDate SMALLER_DATE_REQUIRED = LocalDate.ofEpochDay(-1L);
 
     private static final BigDecimal DEFAULT_ORDER_AMOUNT = new BigDecimal(1);
     private static final BigDecimal UPDATED_ORDER_AMOUNT = new BigDecimal(2);
@@ -109,9 +105,8 @@ public class MPurchaseOrderLineResourceIT {
      */
     public static MPurchaseOrderLine createEntity(EntityManager em) {
         MPurchaseOrderLine mPurchaseOrderLine = new MPurchaseOrderLine()
-            .documentDate(DEFAULT_DOCUMENT_DATE)
+            .dateTrx(DEFAULT_DATE_TRX)
             .datePromised(DEFAULT_DATE_PROMISED)
-            .dateRequired(DEFAULT_DATE_REQUIRED)
             .orderAmount(DEFAULT_ORDER_AMOUNT)
             .quantity(DEFAULT_QUANTITY)
             .unitPrice(DEFAULT_UNIT_PRICE)
@@ -168,9 +163,8 @@ public class MPurchaseOrderLineResourceIT {
      */
     public static MPurchaseOrderLine createUpdatedEntity(EntityManager em) {
         MPurchaseOrderLine mPurchaseOrderLine = new MPurchaseOrderLine()
-            .documentDate(UPDATED_DOCUMENT_DATE)
+            .dateTrx(UPDATED_DATE_TRX)
             .datePromised(UPDATED_DATE_PROMISED)
-            .dateRequired(UPDATED_DATE_REQUIRED)
             .orderAmount(UPDATED_ORDER_AMOUNT)
             .quantity(UPDATED_QUANTITY)
             .unitPrice(UPDATED_UNIT_PRICE)
@@ -241,9 +235,8 @@ public class MPurchaseOrderLineResourceIT {
         List<MPurchaseOrderLine> mPurchaseOrderLineList = mPurchaseOrderLineRepository.findAll();
         assertThat(mPurchaseOrderLineList).hasSize(databaseSizeBeforeCreate + 1);
         MPurchaseOrderLine testMPurchaseOrderLine = mPurchaseOrderLineList.get(mPurchaseOrderLineList.size() - 1);
-        assertThat(testMPurchaseOrderLine.getDocumentDate()).isEqualTo(DEFAULT_DOCUMENT_DATE);
+        assertThat(testMPurchaseOrderLine.getDateTrx()).isEqualTo(DEFAULT_DATE_TRX);
         assertThat(testMPurchaseOrderLine.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
-        assertThat(testMPurchaseOrderLine.getDateRequired()).isEqualTo(DEFAULT_DATE_REQUIRED);
         assertThat(testMPurchaseOrderLine.getOrderAmount()).isEqualTo(DEFAULT_ORDER_AMOUNT);
         assertThat(testMPurchaseOrderLine.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testMPurchaseOrderLine.getUnitPrice()).isEqualTo(DEFAULT_UNIT_PRICE);
@@ -341,9 +334,8 @@ public class MPurchaseOrderLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mPurchaseOrderLine.getId().intValue())))
-            .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
-            .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
             .andExpect(jsonPath("$.[*].orderAmount").value(hasItem(DEFAULT_ORDER_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
@@ -363,9 +355,8 @@ public class MPurchaseOrderLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mPurchaseOrderLine.getId().intValue()))
-            .andExpect(jsonPath("$.documentDate").value(DEFAULT_DOCUMENT_DATE.toString()))
+            .andExpect(jsonPath("$.dateTrx").value(DEFAULT_DATE_TRX.toString()))
             .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
-            .andExpect(jsonPath("$.dateRequired").value(DEFAULT_DATE_REQUIRED.toString()))
             .andExpect(jsonPath("$.orderAmount").value(DEFAULT_ORDER_AMOUNT.intValue()))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
             .andExpect(jsonPath("$.unitPrice").value(DEFAULT_UNIT_PRICE.intValue()))
@@ -396,106 +387,106 @@ public class MPurchaseOrderLineResourceIT {
 
     @Test
     @Transactional
-    public void getAllMPurchaseOrderLinesByDocumentDateIsEqualToSomething() throws Exception {
+    public void getAllMPurchaseOrderLinesByDateTrxIsEqualToSomething() throws Exception {
         // Initialize the database
         mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
 
-        // Get all the mPurchaseOrderLineList where documentDate equals to DEFAULT_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldBeFound("documentDate.equals=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx equals to DEFAULT_DATE_TRX
+        defaultMPurchaseOrderLineShouldBeFound("dateTrx.equals=" + DEFAULT_DATE_TRX);
 
-        // Get all the mPurchaseOrderLineList where documentDate equals to UPDATED_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldNotBeFound("documentDate.equals=" + UPDATED_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx equals to UPDATED_DATE_TRX
+        defaultMPurchaseOrderLineShouldNotBeFound("dateTrx.equals=" + UPDATED_DATE_TRX);
     }
 
     @Test
     @Transactional
-    public void getAllMPurchaseOrderLinesByDocumentDateIsNotEqualToSomething() throws Exception {
+    public void getAllMPurchaseOrderLinesByDateTrxIsNotEqualToSomething() throws Exception {
         // Initialize the database
         mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
 
-        // Get all the mPurchaseOrderLineList where documentDate not equals to DEFAULT_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldNotBeFound("documentDate.notEquals=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx not equals to DEFAULT_DATE_TRX
+        defaultMPurchaseOrderLineShouldNotBeFound("dateTrx.notEquals=" + DEFAULT_DATE_TRX);
 
-        // Get all the mPurchaseOrderLineList where documentDate not equals to UPDATED_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldBeFound("documentDate.notEquals=" + UPDATED_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx not equals to UPDATED_DATE_TRX
+        defaultMPurchaseOrderLineShouldBeFound("dateTrx.notEquals=" + UPDATED_DATE_TRX);
     }
 
     @Test
     @Transactional
-    public void getAllMPurchaseOrderLinesByDocumentDateIsInShouldWork() throws Exception {
+    public void getAllMPurchaseOrderLinesByDateTrxIsInShouldWork() throws Exception {
         // Initialize the database
         mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
 
-        // Get all the mPurchaseOrderLineList where documentDate in DEFAULT_DOCUMENT_DATE or UPDATED_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldBeFound("documentDate.in=" + DEFAULT_DOCUMENT_DATE + "," + UPDATED_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx in DEFAULT_DATE_TRX or UPDATED_DATE_TRX
+        defaultMPurchaseOrderLineShouldBeFound("dateTrx.in=" + DEFAULT_DATE_TRX + "," + UPDATED_DATE_TRX);
 
-        // Get all the mPurchaseOrderLineList where documentDate equals to UPDATED_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldNotBeFound("documentDate.in=" + UPDATED_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx equals to UPDATED_DATE_TRX
+        defaultMPurchaseOrderLineShouldNotBeFound("dateTrx.in=" + UPDATED_DATE_TRX);
     }
 
     @Test
     @Transactional
-    public void getAllMPurchaseOrderLinesByDocumentDateIsNullOrNotNull() throws Exception {
+    public void getAllMPurchaseOrderLinesByDateTrxIsNullOrNotNull() throws Exception {
         // Initialize the database
         mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
 
-        // Get all the mPurchaseOrderLineList where documentDate is not null
-        defaultMPurchaseOrderLineShouldBeFound("documentDate.specified=true");
+        // Get all the mPurchaseOrderLineList where dateTrx is not null
+        defaultMPurchaseOrderLineShouldBeFound("dateTrx.specified=true");
 
-        // Get all the mPurchaseOrderLineList where documentDate is null
-        defaultMPurchaseOrderLineShouldNotBeFound("documentDate.specified=false");
+        // Get all the mPurchaseOrderLineList where dateTrx is null
+        defaultMPurchaseOrderLineShouldNotBeFound("dateTrx.specified=false");
     }
 
     @Test
     @Transactional
-    public void getAllMPurchaseOrderLinesByDocumentDateIsGreaterThanOrEqualToSomething() throws Exception {
+    public void getAllMPurchaseOrderLinesByDateTrxIsGreaterThanOrEqualToSomething() throws Exception {
         // Initialize the database
         mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
 
-        // Get all the mPurchaseOrderLineList where documentDate is greater than or equal to DEFAULT_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldBeFound("documentDate.greaterThanOrEqual=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx is greater than or equal to DEFAULT_DATE_TRX
+        defaultMPurchaseOrderLineShouldBeFound("dateTrx.greaterThanOrEqual=" + DEFAULT_DATE_TRX);
 
-        // Get all the mPurchaseOrderLineList where documentDate is greater than or equal to UPDATED_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldNotBeFound("documentDate.greaterThanOrEqual=" + UPDATED_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx is greater than or equal to UPDATED_DATE_TRX
+        defaultMPurchaseOrderLineShouldNotBeFound("dateTrx.greaterThanOrEqual=" + UPDATED_DATE_TRX);
     }
 
     @Test
     @Transactional
-    public void getAllMPurchaseOrderLinesByDocumentDateIsLessThanOrEqualToSomething() throws Exception {
+    public void getAllMPurchaseOrderLinesByDateTrxIsLessThanOrEqualToSomething() throws Exception {
         // Initialize the database
         mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
 
-        // Get all the mPurchaseOrderLineList where documentDate is less than or equal to DEFAULT_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldBeFound("documentDate.lessThanOrEqual=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx is less than or equal to DEFAULT_DATE_TRX
+        defaultMPurchaseOrderLineShouldBeFound("dateTrx.lessThanOrEqual=" + DEFAULT_DATE_TRX);
 
-        // Get all the mPurchaseOrderLineList where documentDate is less than or equal to SMALLER_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldNotBeFound("documentDate.lessThanOrEqual=" + SMALLER_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx is less than or equal to SMALLER_DATE_TRX
+        defaultMPurchaseOrderLineShouldNotBeFound("dateTrx.lessThanOrEqual=" + SMALLER_DATE_TRX);
     }
 
     @Test
     @Transactional
-    public void getAllMPurchaseOrderLinesByDocumentDateIsLessThanSomething() throws Exception {
+    public void getAllMPurchaseOrderLinesByDateTrxIsLessThanSomething() throws Exception {
         // Initialize the database
         mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
 
-        // Get all the mPurchaseOrderLineList where documentDate is less than DEFAULT_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldNotBeFound("documentDate.lessThan=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx is less than DEFAULT_DATE_TRX
+        defaultMPurchaseOrderLineShouldNotBeFound("dateTrx.lessThan=" + DEFAULT_DATE_TRX);
 
-        // Get all the mPurchaseOrderLineList where documentDate is less than UPDATED_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldBeFound("documentDate.lessThan=" + UPDATED_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx is less than UPDATED_DATE_TRX
+        defaultMPurchaseOrderLineShouldBeFound("dateTrx.lessThan=" + UPDATED_DATE_TRX);
     }
 
     @Test
     @Transactional
-    public void getAllMPurchaseOrderLinesByDocumentDateIsGreaterThanSomething() throws Exception {
+    public void getAllMPurchaseOrderLinesByDateTrxIsGreaterThanSomething() throws Exception {
         // Initialize the database
         mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
 
-        // Get all the mPurchaseOrderLineList where documentDate is greater than DEFAULT_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldNotBeFound("documentDate.greaterThan=" + DEFAULT_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx is greater than DEFAULT_DATE_TRX
+        defaultMPurchaseOrderLineShouldNotBeFound("dateTrx.greaterThan=" + DEFAULT_DATE_TRX);
 
-        // Get all the mPurchaseOrderLineList where documentDate is greater than SMALLER_DOCUMENT_DATE
-        defaultMPurchaseOrderLineShouldBeFound("documentDate.greaterThan=" + SMALLER_DOCUMENT_DATE);
+        // Get all the mPurchaseOrderLineList where dateTrx is greater than SMALLER_DATE_TRX
+        defaultMPurchaseOrderLineShouldBeFound("dateTrx.greaterThan=" + SMALLER_DATE_TRX);
     }
 
 
@@ -601,111 +592,6 @@ public class MPurchaseOrderLineResourceIT {
 
         // Get all the mPurchaseOrderLineList where datePromised is greater than SMALLER_DATE_PROMISED
         defaultMPurchaseOrderLineShouldBeFound("datePromised.greaterThan=" + SMALLER_DATE_PROMISED);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByDateRequiredIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where dateRequired equals to DEFAULT_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldBeFound("dateRequired.equals=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mPurchaseOrderLineList where dateRequired equals to UPDATED_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldNotBeFound("dateRequired.equals=" + UPDATED_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByDateRequiredIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where dateRequired not equals to DEFAULT_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldNotBeFound("dateRequired.notEquals=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mPurchaseOrderLineList where dateRequired not equals to UPDATED_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldBeFound("dateRequired.notEquals=" + UPDATED_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByDateRequiredIsInShouldWork() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where dateRequired in DEFAULT_DATE_REQUIRED or UPDATED_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldBeFound("dateRequired.in=" + DEFAULT_DATE_REQUIRED + "," + UPDATED_DATE_REQUIRED);
-
-        // Get all the mPurchaseOrderLineList where dateRequired equals to UPDATED_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldNotBeFound("dateRequired.in=" + UPDATED_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByDateRequiredIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where dateRequired is not null
-        defaultMPurchaseOrderLineShouldBeFound("dateRequired.specified=true");
-
-        // Get all the mPurchaseOrderLineList where dateRequired is null
-        defaultMPurchaseOrderLineShouldNotBeFound("dateRequired.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByDateRequiredIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where dateRequired is greater than or equal to DEFAULT_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldBeFound("dateRequired.greaterThanOrEqual=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mPurchaseOrderLineList where dateRequired is greater than or equal to UPDATED_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldNotBeFound("dateRequired.greaterThanOrEqual=" + UPDATED_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByDateRequiredIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where dateRequired is less than or equal to DEFAULT_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldBeFound("dateRequired.lessThanOrEqual=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mPurchaseOrderLineList where dateRequired is less than or equal to SMALLER_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldNotBeFound("dateRequired.lessThanOrEqual=" + SMALLER_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByDateRequiredIsLessThanSomething() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where dateRequired is less than DEFAULT_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldNotBeFound("dateRequired.lessThan=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mPurchaseOrderLineList where dateRequired is less than UPDATED_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldBeFound("dateRequired.lessThan=" + UPDATED_DATE_REQUIRED);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMPurchaseOrderLinesByDateRequiredIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        mPurchaseOrderLineRepository.saveAndFlush(mPurchaseOrderLine);
-
-        // Get all the mPurchaseOrderLineList where dateRequired is greater than DEFAULT_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldNotBeFound("dateRequired.greaterThan=" + DEFAULT_DATE_REQUIRED);
-
-        // Get all the mPurchaseOrderLineList where dateRequired is greater than SMALLER_DATE_REQUIRED
-        defaultMPurchaseOrderLineShouldBeFound("dateRequired.greaterThan=" + SMALLER_DATE_REQUIRED);
     }
 
 
@@ -1377,9 +1263,8 @@ public class MPurchaseOrderLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mPurchaseOrderLine.getId().intValue())))
-            .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
+            .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
-            .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
             .andExpect(jsonPath("$.[*].orderAmount").value(hasItem(DEFAULT_ORDER_AMOUNT.intValue())))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].unitPrice").value(hasItem(DEFAULT_UNIT_PRICE.intValue())))
@@ -1433,9 +1318,8 @@ public class MPurchaseOrderLineResourceIT {
         // Disconnect from session so that the updates on updatedMPurchaseOrderLine are not directly saved in db
         em.detach(updatedMPurchaseOrderLine);
         updatedMPurchaseOrderLine
-            .documentDate(UPDATED_DOCUMENT_DATE)
+            .dateTrx(UPDATED_DATE_TRX)
             .datePromised(UPDATED_DATE_PROMISED)
-            .dateRequired(UPDATED_DATE_REQUIRED)
             .orderAmount(UPDATED_ORDER_AMOUNT)
             .quantity(UPDATED_QUANTITY)
             .unitPrice(UPDATED_UNIT_PRICE)
@@ -1453,9 +1337,8 @@ public class MPurchaseOrderLineResourceIT {
         List<MPurchaseOrderLine> mPurchaseOrderLineList = mPurchaseOrderLineRepository.findAll();
         assertThat(mPurchaseOrderLineList).hasSize(databaseSizeBeforeUpdate);
         MPurchaseOrderLine testMPurchaseOrderLine = mPurchaseOrderLineList.get(mPurchaseOrderLineList.size() - 1);
-        assertThat(testMPurchaseOrderLine.getDocumentDate()).isEqualTo(UPDATED_DOCUMENT_DATE);
+        assertThat(testMPurchaseOrderLine.getDateTrx()).isEqualTo(UPDATED_DATE_TRX);
         assertThat(testMPurchaseOrderLine.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
-        assertThat(testMPurchaseOrderLine.getDateRequired()).isEqualTo(UPDATED_DATE_REQUIRED);
         assertThat(testMPurchaseOrderLine.getOrderAmount()).isEqualTo(UPDATED_ORDER_AMOUNT);
         assertThat(testMPurchaseOrderLine.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testMPurchaseOrderLine.getUnitPrice()).isEqualTo(UPDATED_UNIT_PRICE);

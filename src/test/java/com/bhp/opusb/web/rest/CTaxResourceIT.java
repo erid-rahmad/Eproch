@@ -32,7 +32,7 @@ import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.bhp.opusb.domain.enumeration.CTaxTransactionType;
+import com.bhp.opusb.domain.enumeration.CTransactionType;
 /**
  * Integration tests for the {@link CTaxResource} REST controller.
  */
@@ -56,8 +56,8 @@ public class CTaxResourceIT {
     private static final LocalDate UPDATED_VALID_FROM = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_VALID_FROM = LocalDate.ofEpochDay(-1L);
 
-    private static final CTaxTransactionType DEFAULT_TRANSACTION_TYPE = CTaxTransactionType.SALES;
-    private static final CTaxTransactionType UPDATED_TRANSACTION_TYPE = CTaxTransactionType.PURCHASE;
+    private static final CTransactionType DEFAULT_TRANSACTION_TYPE = CTransactionType.SALES;
+    private static final CTransactionType UPDATED_TRANSACTION_TYPE = CTransactionType.PURCHASE;
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();

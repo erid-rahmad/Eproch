@@ -2,16 +2,14 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.BigDecimalFilter;
-import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -29,11 +27,9 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private LocalDateFilter documentDate;
+    private LocalDateFilter dateTrx;
 
     private LocalDateFilter datePromised;
-
-    private LocalDateFilter dateRequired;
 
     private BigDecimalFilter orderAmount;
 
@@ -70,9 +66,8 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
 
     public MPurchaseOrderLineCriteria(MPurchaseOrderLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.documentDate = other.documentDate == null ? null : other.documentDate.copy();
+        this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
         this.datePromised = other.datePromised == null ? null : other.datePromised.copy();
-        this.dateRequired = other.dateRequired == null ? null : other.dateRequired.copy();
         this.orderAmount = other.orderAmount == null ? null : other.orderAmount.copy();
         this.quantity = other.quantity == null ? null : other.quantity.copy();
         this.unitPrice = other.unitPrice == null ? null : other.unitPrice.copy();
@@ -103,12 +98,12 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public LocalDateFilter getDocumentDate() {
-        return documentDate;
+    public LocalDateFilter getDateTrx() {
+        return dateTrx;
     }
 
-    public void setDocumentDate(LocalDateFilter documentDate) {
-        this.documentDate = documentDate;
+    public void setDateTrx(LocalDateFilter dateTrx) {
+        this.dateTrx = dateTrx;
     }
 
     public LocalDateFilter getDatePromised() {
@@ -117,14 +112,6 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
 
     public void setDatePromised(LocalDateFilter datePromised) {
         this.datePromised = datePromised;
-    }
-
-    public LocalDateFilter getDateRequired() {
-        return dateRequired;
-    }
-
-    public void setDateRequired(LocalDateFilter dateRequired) {
-        this.dateRequired = dateRequired;
     }
 
     public BigDecimalFilter getOrderAmount() {
@@ -259,9 +246,8 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
         final MPurchaseOrderLineCriteria that = (MPurchaseOrderLineCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(documentDate, that.documentDate) &&
+            Objects.equals(dateTrx, that.dateTrx) &&
             Objects.equals(datePromised, that.datePromised) &&
-            Objects.equals(dateRequired, that.dateRequired) &&
             Objects.equals(orderAmount, that.orderAmount) &&
             Objects.equals(quantity, that.quantity) &&
             Objects.equals(unitPrice, that.unitPrice) &&
@@ -283,9 +269,8 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
-        documentDate,
+        dateTrx,
         datePromised,
-        dateRequired,
         orderAmount,
         quantity,
         unitPrice,
@@ -308,9 +293,8 @@ public class MPurchaseOrderLineCriteria implements Serializable, Criteria {
     public String toString() {
         return "MPurchaseOrderLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (documentDate != null ? "documentDate=" + documentDate + ", " : "") +
+                (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
                 (datePromised != null ? "datePromised=" + datePromised + ", " : "") +
-                (dateRequired != null ? "dateRequired=" + dateRequired + ", " : "") +
                 (orderAmount != null ? "orderAmount=" + orderAmount + ", " : "") +
                 (quantity != null ? "quantity=" + quantity + ", " : "") +
                 (unitPrice != null ? "unitPrice=" + unitPrice + ", " : "") +

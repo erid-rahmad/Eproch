@@ -1,8 +1,8 @@
 package com.bhp.opusb.domain.enumeration;
 
 /**
- * The CTaxTransactionType enumeration.
+ * The CTransactionType enumeration.
  */
-public enum CTaxTransactionType {
+public enum CTransactionType {
     SALES, PURCHASE, BOTH
 }

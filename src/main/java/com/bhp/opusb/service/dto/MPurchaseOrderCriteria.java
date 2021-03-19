@@ -2,16 +2,14 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.BigDecimalFilter;
-import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -65,6 +63,8 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
 
     private LongFilter costCenterId;
 
+    private LongFilter paymentTermId;
+
     public MPurchaseOrderCriteria() {
     }
 
@@ -88,6 +88,7 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
         this.warehouseId = other.warehouseId == null ? null : other.warehouseId.copy();
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
+        this.paymentTermId = other.paymentTermId == null ? null : other.paymentTermId.copy();
     }
 
     @Override
@@ -247,6 +248,14 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
         this.costCenterId = costCenterId;
     }
 
+    public LongFilter getPaymentTermId() {
+        return paymentTermId;
+    }
+
+    public void setPaymentTermId(LongFilter paymentTermId) {
+        this.paymentTermId = paymentTermId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -276,7 +285,8 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
             Objects.equals(vendorId, that.vendorId) &&
             Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(warehouseId, that.warehouseId) &&
-            Objects.equals(costCenterId, that.costCenterId);
+            Objects.equals(costCenterId, that.costCenterId) &&
+            Objects.equals(paymentTermId, that.paymentTermId);
     }
 
     @Override
@@ -300,7 +310,8 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
         vendorId,
         currencyId,
         warehouseId,
-        costCenterId
+        costCenterId,
+        paymentTermId
         );
     }
 
@@ -326,6 +337,7 @@ public class MPurchaseOrderCriteria implements Serializable, Criteria {
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
                 (warehouseId != null ? "warehouseId=" + warehouseId + ", " : "") +
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
+                (paymentTermId != null ? "paymentTermId=" + paymentTermId + ", " : "") +
             "}";
     }
 

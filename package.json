@@ -13,7 +13,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.13.1",
     "@fortawesome/free-solid-svg-icons": "^5.12.0",
     "@fortawesome/vue-fontawesome": "^0.1.9",
-    "axios": "0.19.0",
+    "axios": "0.21.1",
     "bootstrap": "4.4.1",
     "bootstrap-vue": "2.2.2",
     "cleave.js": "^1.6.0",

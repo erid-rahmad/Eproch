@@ -2,7 +2,6 @@ package com.bhp.opusb.repository;
 
 import com.bhp.opusb.domain.MPurchaseOrder;
 
-import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -10,5 +9,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface MPurchaseOrderRepository extends JpaRepository<MPurchaseOrder, Long>, JpaSpecificationExecutor<MPurchaseOrder> {
+public interface MPurchaseOrderRepository extends GenericDocumentRepository<MPurchaseOrder, Long> {
 }

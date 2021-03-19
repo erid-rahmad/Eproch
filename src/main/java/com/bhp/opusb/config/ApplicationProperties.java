@@ -1,5 +1,8 @@
 package com.bhp.opusb.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -23,6 +26,8 @@ public class ApplicationProperties {
   private long defaultProductSubCategoryId = 1L;
   private long defaultProductAssetAccountId = 1L;
   private long defaultProductExpenseAccountId = 1L;
+
+  private Map<String, Document> documents = new HashMap<>();
 
   public Attachment getAttachment() {
     return attachment;
@@ -102,6 +107,35 @@ public class ApplicationProperties {
 
   public void setDefaultProductExpenseAccountId(long defaultProductExpenseAccountId) {
     this.defaultProductExpenseAccountId = defaultProductExpenseAccountId;
+  }
+
+  public Map<String, Document> getDocuments() {
+    return documents;
+  }
+
+  public void setDocuments(Map<String, Document> documents) {
+    this.documents = documents;
+  }
+
+  public static class Document {
+    private String documentType;
+    private String documentNumberPrefix;
+
+    public String getDocumentType() {
+      return documentType;
+    }
+
+    public void setDocumentType(String documentType) {
+      this.documentType = documentType;
+    }
+
+    public String getDocumentNumberPrefix() {
+      return documentNumberPrefix;
+    }
+
+    public void setDocumentNumberPrefix(String documentNumberPrefix) {
+      this.documentNumberPrefix = documentNumberPrefix;
+    }
   }
 
   public static final class Attachment {

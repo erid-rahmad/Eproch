@@ -1,32 +1,5 @@
 package com.bhp.opusb.web.rest;
 
-import com.bhp.opusb.service.MPurchaseOrderService;
-import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
-import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
-import com.bhp.opusb.service.dto.MPurchaseOrderCriteria;
-import com.bhp.opusb.service.MPurchaseOrderQueryService;
-
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperExportManager;
-import net.sf.jasperreports.engine.JasperPrint;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
@@ -34,6 +7,40 @@ import java.net.URISyntaxException;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+
+import com.bhp.opusb.service.MPurchaseOrderQueryService;
+import com.bhp.opusb.service.MPurchaseOrderService;
+import com.bhp.opusb.service.dto.MPurchaseOrderCriteria;
+import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
+import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperPrint;
 
 /**
  * REST controller for managing {@link com.bhp.opusb.domain.MPurchaseOrder}.
@@ -78,6 +85,25 @@ public class MPurchaseOrderResource {
     }
 
     /**
+     * {@code POST  /m-purchase-orders/generate} : Generate mPurchaseOrder from Purchase Requisition.
+     *
+     * @param mPurchaseOrderDTO the mPurchaseOrderDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mPurchaseOrderDTO, or with status {@code 400 (Bad Request)} if the mPurchaseOrder has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/m-purchase-orders/generate")
+    public ResponseEntity<List<MPurchaseOrderDTO>> generateMPurchaseOrders(@Valid @RequestBody MPurchaseOrderDTO mPurchaseOrderDTO) throws URISyntaxException {
+        log.debug("REST request to save MPurchaseOrder : {}", mPurchaseOrderDTO);
+        if (mPurchaseOrderDTO.getRequisitionLines() == null) {
+            throw new BadRequestAlertException("The submitted purchase order has no lines", ENTITY_NAME, "poNoLines");
+        }
+        List<MPurchaseOrderDTO> result = mPurchaseOrderService.saveFromRequisition(mPurchaseOrderDTO);
+        String queryString = result.stream().map(po -> "id.equals=" + po.getId()).collect(Collectors.joining("&"));
+        return ResponseEntity.created(new URI("/api/m-purchase-orders/" + queryString))
+            .body(result);
+    }
+
+    /**
      * {@code PUT  /m-purchase-orders} : Updates an existing mPurchaseOrder.
      *
      * @param mPurchaseOrderDTO the mPurchaseOrderDTO to update.
@@ -108,7 +134,6 @@ public class MPurchaseOrderResource {
     @GetMapping("/m-purchase-orders")
     public ResponseEntity<List<MPurchaseOrderDTO>> getAllMPurchaseOrders(MPurchaseOrderCriteria criteria, Pageable pageable) {
         log.debug("REST request to get MPurchaseOrders by criteria: {}", criteria);
-        log.debug("this get 1");
         Page<MPurchaseOrderDTO> page = mPurchaseOrderQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
@@ -123,7 +148,6 @@ public class MPurchaseOrderResource {
     @GetMapping("/m-purchase-orders/count")
     public ResponseEntity<Long> countMPurchaseOrders(MPurchaseOrderCriteria criteria) {
         log.debug("REST request to count MPurchaseOrders by criteria: {}", criteria);
-        log.info("this get 2");
         return ResponseEntity.ok().body(mPurchaseOrderQueryService.countByCriteria(criteria));
     }
 
@@ -154,23 +178,14 @@ public class MPurchaseOrderResource {
     }
 
     @GetMapping("/m-purchase-orders/report/{poNo}")
-    public void reportPurchaseOrder(@PathVariable Long poNo, HttpServletResponse response) throws IOException {
+    public void reportPurchaseOrder(@PathVariable Long poNo, HttpServletResponse response) throws IOException, JRException, SQLException {
+        String fileName = "Purchase Order - " + poNo + ".pdf";
 
-        JasperPrint jasperPrint = null;
-        String fileName = "";
-
-        fileName = "Purchase Order - "+poNo+".pdf";
-
-        response.setContentType("application/octet-stream");
-        response.addHeader("Content-Disposition", "attachment; filename=\""+fileName+"\"");
+        response.setContentType("application/pdf");
+        response.addHeader("Content-Disposition", "attachment; filename=\"" + fileName + "\"");
         OutputStream out = response.getOutputStream();
 
-        try {
-            jasperPrint = mPurchaseOrderService.exportPurchaseOrder(poNo);
-
-            JasperExportManager.exportReportToPdfStream(jasperPrint, out);
-        } catch (SQLException | JRException e) {
-            e.printStackTrace();
-        }
+        JasperPrint jasperPrint = mPurchaseOrderService.exportPurchaseOrder(poNo);
+        JasperExportManager.exportReportToPdfStream(jasperPrint, out);
     }
 }

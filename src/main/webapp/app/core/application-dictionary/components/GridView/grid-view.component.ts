@@ -451,21 +451,11 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         });
 
         this.retrieveAllRecords();
-        this.$notify({
-          title: 'Success',
-          message: message.toString(),
-          type: 'success',
-          duration: 3000
-        });
+        this.$message.success(message.toString());
       } else {
         const rejectedCount = results.filter(res => res.status === 'rejected').length;
         if (rejectedCount) {
-          console.log('Failed deleting the record(s)');
-          this.$notify({
-            title: 'Error',
-            message: 'Failed deleting the record(s)',
-            type: 'error'
-          })
+          this.$message.error(this.$t('opusWebApp.applicationDictionary.deleteFailed').toString());
         }
       }
     })
@@ -742,7 +732,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
           defaultValue = this.getContext(options);
         }
 
-        if (! defaultValue) {
+        if (defaultValue === null) {
           if (fieldName === 'active') {
             defaultValue = true;
           } else if (this.isDateField(field) || this.isDateTimeField(field)) {
@@ -752,7 +742,11 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
           } else if (this.isNumericField(field)) {
             defaultValue = null;
           } else if (this.isStringField(field)) {
-            defaultValue = '';
+            defaultValue = null;
+          }
+        } else {
+          if (this.isNumericField(field)) {
+            defaultValue = parseFloat(defaultValue);
           }
         }
         row[fieldName] = defaultValue;
@@ -784,6 +778,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
           this.errors.set(error.field, error.message);
           (<any> this.$refs[error.field][0])?.$el.classList.add('is-error');
         }
+        this.$message.error(errors[0].message);
         this.errorTimestamp = Date.now();
       } else {
         for (let field in record) {
@@ -816,22 +811,12 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       });
       this.$emit('record-saved');
       this.toolbarEventBus.$emit('record-saved');
-      this.$notify({
-        title: 'Success',
-        message: message.toString(),
-        type: 'success',
-        duration: 3000
-      });
+      this.$message.success(message.toString());
     })
     .catch(err => {
       console.error('Error saving the record! %O', err);
-      const message = `Error saving the record`;
-      this.$notify({
-        title: 'Error',
-        message: message.toString(),
-        type: 'error',
-        duration: 3000
-      });
+      const message = this.$t('opusWebApp.applicationDictionary.saveFailed');
+      this.$message.error(message.toString());
     })
     .finally(() => {
       this.dynamicValidationSchema = cloneDeep(this.validationSchema);

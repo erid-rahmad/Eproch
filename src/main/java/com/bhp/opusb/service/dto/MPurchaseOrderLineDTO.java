@@ -1,24 +1,24 @@
 package com.bhp.opusb.service.dto;
 
-import java.time.LocalDate;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MPurchaseOrderLine} entity.
  */
 public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
 
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
-    private LocalDate documentDate;
+    private LocalDate dateTrx;
 
     private LocalDate datePromised;
-
-    private LocalDate dateRequired;
 
     @NotNull
     private BigDecimal orderAmount;
@@ -60,7 +60,7 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
 
     private Long vendorId;
     private String vendorName;
-
+    
     public Long getId() {
         return id;
     }
@@ -69,12 +69,12 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
-    public LocalDate getDocumentDate() {
-        return documentDate;
+    public LocalDate getDateTrx() {
+        return dateTrx;
     }
 
-    public void setDocumentDate(LocalDate documentDate) {
-        this.documentDate = documentDate;
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
     }
 
     public LocalDate getDatePromised() {
@@ -83,14 +83,6 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
 
     public void setDatePromised(LocalDate datePromised) {
         this.datePromised = datePromised;
-    }
-
-    public LocalDate getDateRequired() {
-        return dateRequired;
-    }
-
-    public void setDateRequired(LocalDate dateRequired) {
-        this.dateRequired = dateRequired;
     }
 
     public BigDecimal getOrderAmount() {
@@ -294,9 +286,8 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MPurchaseOrderLineDTO{" +
             "id=" + getId() +
-            ", documentDate='" + getDocumentDate() + "'" +
+            ", dateTrx='" + getDateTrx() + "'" +
             ", datePromised='" + getDatePromised() + "'" +
-            ", dateRequired='" + getDateRequired() + "'" +
             ", orderAmount=" + getOrderAmount() +
             ", quantity=" + getQuantity() +
             ", unitPrice=" + getUnitPrice() +
@@ -306,19 +297,12 @@ public class MPurchaseOrderLineDTO extends AbstractAuditingDTO {
             ", purchaseOrderId=" + getPurchaseOrderId() +
             ", requisitionId=" + getRequisitionId() +
             ", taxId=" + getTaxId() +
-            ", taxName=" + getTaxName() +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
             ", productId=" + getProductId() +
-            ", productName=" + getProductName() +
             ", warehouseId=" + getWarehouseId() +
-            ", warehouseName=" + getWarehouseName() +
             ", costCenterId=" + getCostCenterId() +
-            ", costCenterName=" + getCostCenterName() +
             ", uomId=" + getUomId() +
-            ", uomName=" + getUomName() +
             ", vendorId=" + getVendorId() +
-            ", vendorName=" + getVendorName() +
             "}";
     }
 }

@@ -65,7 +65,7 @@ export default class DashBoard extends Vue {
         criteriaQuery: [
           'active.equals=true',
           `adUserId.equals=${accountStore.userDetails.id}`,
-          [...items.map(id => `paDashboardItemId.in=${id}`)]
+          ...[...items].map(id => `paDashboardItemId.in=${id}`)
         ],
         paginationQuery: {
           page: 0,

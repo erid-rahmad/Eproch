@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.bhp.opusb.util.DocumentUtil;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import io.swagger.annotations.ApiModelProperty;
@@ -29,15 +30,15 @@ public class MRequisitionDTO extends AbstractAuditingDTO {
 
     @NotNull
     @Size(max = 10)
-    private String documentAction;
+    private String documentAction = DocumentUtil.STATUS_SUBMIT;
 
     @NotNull
     @Size(max = 10)
-    private String documentStatus;
+    private String documentStatus = DocumentUtil.STATUS_DRAFT;
 
-    private Boolean approved;
+    private Boolean approved = false;
 
-    private Boolean processed;
+    private Boolean processed = false;
 
     private LocalDate datePromised;
 

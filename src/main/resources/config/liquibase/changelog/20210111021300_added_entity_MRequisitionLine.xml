@@ -98,9 +98,12 @@
                   tableName="m_requisition_line">
             <column name="id" type="numeric"/>
             <column name="document_date" type="date"/>
-            <column name="document_required" type="date"/>
+            <column name="date_promised" type="date"/>
+            <column name="date_required" type="date"/>
             <column name="requisition_amount" type="numeric"/>
             <column name="quantity" type="numeric"/>
+            <column name="quantity_ordered" type="numeric"/>
+            <column name="quantity_balance" type="numeric"/>
             <column name="unit_price" type="numeric"/>
             <column name="remark" type="string"/>
             <column name="uid" type="${uuidType}"/>
@@ -108,10 +111,7 @@
             <column name="requisition_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="product_id" type="numeric"/>
-            <column name="warehouse_id" type="numeric"/>
-            <column name="cost_center_id" type="numeric"/>
             <column name="uom_id" type="numeric"/>
-            <column name="vendor_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
@@ -130,6 +130,17 @@
         <dropNotNullConstraint tableName="m_requisition_line" columnName="warehouse_id" />
         <dropNotNullConstraint tableName="m_requisition_line" columnName="cost_center_id" />
         <dropNotNullConstraint tableName="m_requisition_line" columnName="vendor_id" />
+    </changeSet>
+
+    <changeSet id="20210312033800" author="Ananta Aryadewa">
+        <addColumn tableName="m_requisition_line">
+            <column name="quantity_ordered" type="decimal(21,2)">
+                <constraints nullable="false" />
+            </column>
+            <column name="quantity_balance" type="decimal(21,2)">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

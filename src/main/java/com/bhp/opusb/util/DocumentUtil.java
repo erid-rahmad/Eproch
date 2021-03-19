@@ -59,4 +59,13 @@ public class DocumentUtil {
 
     return prefix + (String.format("%04d", 1));
   }
+
+  public static String buildDocumentNumber(String prefix, GenericDocumentRepository<?, ?> repository) {
+    if (prefix == null) {
+      prefix = LocalDate.now().format(DATETIME_FORMATTER);
+    }
+
+    int documentSequence = repository.getNextDocumentSequence();
+    return prefix + (String.format("%04d", documentSequence));
+  }
 }

@@ -513,6 +513,7 @@ public class MProductCatalogDTO extends AbstractAuditingDTO {
         this.mProductDescription = mProductDescription;
     }
 
+    @JsonProperty("mProductName")
     public String getMProductName() {
         return mProductCode + " - " + mProductShortName;
     }

@@ -19,9 +19,9 @@ public interface MRequisitionMapper extends EntityMapper<MRequisitionDTO, MRequi
     @Mapping(source = "currency.id", target = "currencyId")
     @Mapping(source = "currency.code", target = "currencyName")
     @Mapping(source = "warehouse.id", target = "warehouseId")
-    @Mapping(source = "warehouse.name", target = "warehouseName")
+    @Mapping(source = "warehouse.code", target = "warehouseName")
     @Mapping(source = "costCenter.id", target = "costCenterId")
-    @Mapping(source = "costCenter.name", target = "costCenterName")
+    @Mapping(source = "costCenter.code", target = "costCenterName")
     MRequisitionDTO toDto(MRequisition mRequisition);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

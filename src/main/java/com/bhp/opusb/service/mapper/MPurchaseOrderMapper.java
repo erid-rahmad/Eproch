@@ -1,18 +1,17 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.MPurchaseOrder;
 import com.bhp.opusb.service.dto.MPurchaseOrderDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link MPurchaseOrder} and its DTO {@link MPurchaseOrderDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CDocumentTypeMapper.class, CVendorMapper.class, CCurrencyMapper.class, CWarehouseMapper.class, CCostCenterMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CDocumentTypeMapper.class, CVendorMapper.class, CCurrencyMapper.class, CWarehouseMapper.class, CCostCenterMapper.class, CPaymentTermMapper.class})
 public interface MPurchaseOrderMapper extends EntityMapper<MPurchaseOrderDTO, MPurchaseOrder> {
-
-
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
@@ -26,6 +25,8 @@ public interface MPurchaseOrderMapper extends EntityMapper<MPurchaseOrderDTO, MP
     @Mapping(source = "warehouse.name", target = "warehouseName")
     @Mapping(source = "costCenter.id", target = "costCenterId")
     @Mapping(source = "costCenter.name", target = "costCenterName")
+    @Mapping(source = "paymentTerm.id", target = "paymentTermId")
+    @Mapping(source = "paymentTerm.name", target = "paymentTermName")
     MPurchaseOrderDTO toDto(MPurchaseOrder mPurchaseOrder);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
@@ -34,6 +35,7 @@ public interface MPurchaseOrderMapper extends EntityMapper<MPurchaseOrderDTO, MP
     @Mapping(source = "currencyId", target = "currency")
     @Mapping(source = "warehouseId", target = "warehouse")
     @Mapping(source = "costCenterId", target = "costCenter")
+    @Mapping(source = "paymentTermId", target = "paymentTerm")
     MPurchaseOrder toEntity(MPurchaseOrderDTO mPurchaseOrderDTO);
 
     default MPurchaseOrder fromId(Long id) {

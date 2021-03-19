@@ -29,6 +29,12 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
     private BigDecimal quantity;
 
     @NotNull
+    private BigDecimal quantityOrdered;
+
+    @NotNull
+    private BigDecimal quantityBalance;
+
+    @NotNull
     private BigDecimal unitPrice;
 
     private String remark;
@@ -39,6 +45,7 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
 
 
     private Long requisitionId;
+    private String requisitionName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -106,6 +113,22 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
         this.quantity = quantity;
     }
 
+    public BigDecimal getQuantityOrdered() {
+        return quantityOrdered;
+    }
+
+    public void setQuantityOrdered(BigDecimal quantityOrdered) {
+        this.quantityOrdered = quantityOrdered;
+    }
+
+    public BigDecimal getQuantityBalance() {
+        return quantityBalance;
+    }
+
+    public void setQuantityBalance(BigDecimal quantityBalance) {
+        this.quantityBalance = quantityBalance;
+    }
+
     public BigDecimal getUnitPrice() {
         return unitPrice;
     }
@@ -140,6 +163,14 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
 
     public Long getRequisitionId() {
         return requisitionId;
+    }
+
+    public String getRequisitionName() {
+        return requisitionName;
+    }
+
+    public void setRequisitionName(String requisitionName) {
+        this.requisitionName = requisitionName;
     }
 
     public void setRequisitionId(Long mRequisitionId) {
@@ -272,23 +303,19 @@ public class MRequisitionLineDTO extends AbstractAuditingDTO {
             ", dateRequired='" + getDateRequired() + "'" +
             ", requisitionAmount=" + getRequisitionAmount() +
             ", quantity=" + getQuantity() +
+            ", quantityOrdered=" + getQuantityOrdered() +
+            ", quantityBalance=" + getQuantityBalance() +
             ", unitPrice=" + getUnitPrice() +
             ", remark='" + getRemark() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", requisitionId=" + getRequisitionId() +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
             ", productId=" + getProductId() +
-            ", productName=" + getProductName() +
             ", warehouseId=" + getWarehouseId() +
-            ", warehouseName=" + getWarehouseName() +
             ", costCenterId=" + getCostCenterId() +
-            ", costCenterName=" + getCostCenterName() +
             ", uomId=" + getUomId() +
-            ", uomName=" + getUomName() +
             ", vendorId=" + getVendorId() +
-            ", vendorName=" + getVendorName() +
             "}";
     }
 }

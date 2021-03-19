@@ -17,7 +17,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-import com.bhp.opusb.domain.enumeration.CTaxTransactionType;
+import com.bhp.opusb.domain.enumeration.CTransactionType;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
@@ -54,7 +54,7 @@ public class CTax extends AbstractAuditingEntity {
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "transaction_type", nullable = false)
-    private CTaxTransactionType transactionType;
+    private CTransactionType transactionType;
 
     @Column(name = "uid")
     private UUID uid;
@@ -133,16 +133,16 @@ public class CTax extends AbstractAuditingEntity {
         this.validFrom = validFrom;
     }
 
-    public CTaxTransactionType getTransactionType() {
+    public CTransactionType getTransactionType() {
         return transactionType;
     }
 
-    public CTax transactionType(CTaxTransactionType transactionType) {
+    public CTax transactionType(CTransactionType transactionType) {
         this.transactionType = transactionType;
         return this;
     }
 
-    public void setTransactionType(CTaxTransactionType transactionType) {
+    public void setTransactionType(CTransactionType transactionType) {
         this.transactionType = transactionType;
     }
 

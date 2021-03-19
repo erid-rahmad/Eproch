@@ -77,6 +77,8 @@ class MRequisitionLineGatlingTest extends Simulation {
                 , "dateRequired":"2020-01-01T00:00:00.000Z"
                 , "requisitionAmount":"0"
                 , "quantity":"0"
+                , "quantityOrdered":"0"
+                , "quantityBalance":"0"
                 , "unitPrice":"0"
                 , "remark":"SAMPLE_TEXT"
                 , "uid":null

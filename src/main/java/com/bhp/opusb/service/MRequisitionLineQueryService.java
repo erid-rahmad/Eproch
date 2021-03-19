@@ -68,8 +68,6 @@ public class MRequisitionLineQueryService extends QueryService<MRequisitionLine>
             .map(mRequisitionLineMapper::toDto);
     }
 
-
-
     /**
      * Return the number of matching entities in the database.
      * @param criteria The object which holds all the filters, which the entities should match.
@@ -108,6 +106,12 @@ public class MRequisitionLineQueryService extends QueryService<MRequisitionLine>
             if (criteria.getQuantity() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getQuantity(), MRequisitionLine_.quantity));
             }
+            if (criteria.getQuantityOrdered() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getQuantityOrdered(), MRequisitionLine_.quantityOrdered));
+            }
+            if (criteria.getQuantityBalance() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getQuantityBalance(), MRequisitionLine_.quantityBalance));
+            }
             if (criteria.getUnitPrice() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getUnitPrice(), MRequisitionLine_.unitPrice));
             }
@@ -122,31 +126,43 @@ public class MRequisitionLineQueryService extends QueryService<MRequisitionLine>
             }
             if (criteria.getRequisitionId() != null) {
                 specification = specification.and(buildSpecification(criteria.getRequisitionId(),
-                    root -> root.join(MRequisitionLine_.requisition, JoinType.LEFT).get(MRequisition_.id)));
+                    root -> root.join(MRequisitionLine_.requisition, JoinType.INNER).get(MRequisition_.id)));
+            }
+            if (criteria.getRequisitionNo() != null) {
+                specification = specification.and(buildSpecification(criteria.getRequisitionNo(),
+                    root -> root.join(MRequisitionLine_.requisition, JoinType.INNER).get(MRequisition_.documentNo)));
+            }
+            if (criteria.getRequisitionApproved() != null) {
+                specification = specification.and(buildSpecification(criteria.getRequisitionApproved(),
+                    root -> root.join(MRequisitionLine_.requisition, JoinType.INNER).get(MRequisition_.approved)));
+            }
+            if (criteria.getRequisitionProcessed() != null) {
+                specification = specification.and(buildSpecification(criteria.getRequisitionProcessed(),
+                    root -> root.join(MRequisitionLine_.requisition, JoinType.INNER).get(MRequisition_.processed)));
             }
             if (criteria.getAdOrganizationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
-                    root -> root.join(MRequisitionLine_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
+                    root -> root.join(MRequisitionLine_.adOrganization, JoinType.INNER).get(ADOrganization_.id)));
             }
             if (criteria.getProductId() != null) {
                 specification = specification.and(buildSpecification(criteria.getProductId(),
-                    root -> root.join(MRequisitionLine_.product, JoinType.LEFT).get(CProduct_.id)));
+                    root -> root.join(MRequisitionLine_.product, JoinType.INNER).get(CProduct_.id)));
             }
             if (criteria.getWarehouseId() != null) {
                 specification = specification.and(buildSpecification(criteria.getWarehouseId(),
-                    root -> root.join(MRequisitionLine_.warehouse, JoinType.LEFT).get(CWarehouse_.id)));
+                    root -> root.join(MRequisitionLine_.warehouse, JoinType.INNER).get(CWarehouse_.id)));
             }
             if (criteria.getCostCenterId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCostCenterId(),
-                    root -> root.join(MRequisitionLine_.costCenter, JoinType.LEFT).get(CCostCenter_.id)));
+                    root -> root.join(MRequisitionLine_.costCenter, JoinType.INNER).get(CCostCenter_.id)));
             }
             if (criteria.getUomId() != null) {
                 specification = specification.and(buildSpecification(criteria.getUomId(),
-                    root -> root.join(MRequisitionLine_.uom, JoinType.LEFT).get(CUnitOfMeasure_.id)));
+                    root -> root.join(MRequisitionLine_.uom, JoinType.INNER).get(CUnitOfMeasure_.id)));
             }
             if (criteria.getVendorId() != null) {
                 specification = specification.and(buildSpecification(criteria.getVendorId(),
-                    root -> root.join(MRequisitionLine_.vendor, JoinType.LEFT).get(CVendor_.id)));
+                    root -> root.join(MRequisitionLine_.vendor, JoinType.INNER).get(CVendor_.id)));
             }
         }
         return specification;

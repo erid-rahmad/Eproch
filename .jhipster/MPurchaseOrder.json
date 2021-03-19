@@ -1,122 +1,138 @@
 {
-  "name": "MPurchaseOrder",
-  "fields": [
-    {
-      "fieldName": "dateTrx",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "documentNo",
-      "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
-      "fieldValidateRulesMaxlength": "30"
-    },
-    {
-      "fieldName": "documentAction",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "maxlength"],
-      "fieldValidateRulesMaxlength": "10"
-    },
-    {
-      "fieldName": "documentStatus",
-      "fieldType": "String",
-      "fieldValidateRules": ["required", "maxlength"],
-      "fieldValidateRulesMaxlength": "10"
-    },
-    {
-      "fieldName": "approved",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "processed",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "grandTotal",
-      "fieldType": "BigDecimal"
-    },
-    {
-      "fieldName": "tax",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "datePromised",
-      "fieldType": "LocalDate"
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "uid",
-      "fieldType": "UUID"
-    },
-    {
-      "fieldName": "active",
-      "fieldType": "Boolean"
-    }
-  ],
-  "relationships": [
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDOrganization",
-      "otherEntityRelationshipName": "mPurchaseOrder",
-      "relationshipValidateRules": "required",
-      "javadoc": "Purchase Order",
-      "relationshipName": "adOrganization",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cDocumentType",
-      "otherEntityRelationshipName": "mPurchaseOrder",
-      "relationshipValidateRules": "required",
-      "relationshipName": "documentType",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cVendor",
-      "otherEntityRelationshipName": "mPurchaseOrder",
-      "relationshipValidateRules": "required",
-      "relationshipName": "vendor",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cCurrency",
-      "otherEntityRelationshipName": "mPurchaseOrder",
-      "relationshipValidateRules": "required",
-      "relationshipName": "currency",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cWarehouse",
-      "otherEntityRelationshipName": "mPurchaseOrder",
-      "relationshipValidateRules": "required",
-      "relationshipName": "warehouse",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cCostCenter",
-      "otherEntityRelationshipName": "mPurchaseOrder",
-      "relationshipValidateRules": "required",
-      "relationshipName": "costCenter",
-      "otherEntityField": "id"
-    }
-  ],
-  "changelogDate": "20210112051200",
-  "entityTableName": "m_purchase_order",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*",
-  "skipClient": true
+    "name": "MPurchaseOrder",
+    "fields": [
+        {
+            "fieldName": "dateTrx",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "documentNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "documentAction",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "documentStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "approved",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "processed",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "grandTotal",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "tax",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "datePromised",
+            "fieldType": "LocalDate"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "javadoc": "Purchase Order",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "documentType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "currency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cWarehouse",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "warehouse",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCostCenter",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "costCenter",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cPaymentTerm",
+            "otherEntityRelationshipName": "mPurchaseOrder",
+            "relationshipValidateRules": "required",
+            "relationshipName": "paymentTerm",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210112051200",
+    "entityTableName": "m_purchase_order",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
 }

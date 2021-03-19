@@ -1,0 +1,157 @@
+{
+    "name": "CPaymentTerm",
+    "fields": [
+        {
+            "fieldName": "code",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "20"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "afterDelivery",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "asDefault",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "calculateBusinessDay",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "discount",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "discount2",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "discountDays",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "discountDays2",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "documentNote",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1000"
+        },
+        {
+            "fieldName": "fixMonthCutOff",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "fixMonthDay",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "fixMonthOffset",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "fixedDueDate",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "graceDays",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "netDay",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "1"
+        },
+        {
+            "fieldName": "netDays",
+            "fieldType": "Long",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "onNextBusinessDay",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "transactionType",
+            "fieldType": "CTransactionType",
+            "fieldValues": "SALES,PURCHASE,BOTH",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "valid",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cPaymentTerm",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210314222600",
+    "javadoc": "The CPaymentTerm entity.\\n@author A true hipster",
+    "entityTableName": "c_payment_term",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

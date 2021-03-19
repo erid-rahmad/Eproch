@@ -25,6 +25,10 @@ export const normalizeField = (record: Record<string, any>, field: IADField) => 
   }
 
   if (fieldType === ADColumnType.LOCAL_DATE) {
-    record[fieldName] = new Date(record[fieldName]);
+    if (record[fieldName] == null) {
+      record[fieldName] = new Date();
+    } else {
+      record[fieldName] = new Date(record[fieldName]);
+    }
   }
 }
