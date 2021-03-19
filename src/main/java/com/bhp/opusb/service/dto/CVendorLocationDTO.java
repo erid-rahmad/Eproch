@@ -108,8 +108,16 @@ public class CVendorLocationDTO extends AbstractAuditingDTO {
         this.vendorId = cVendorId;
     }
 
+    public String getVendorCode() {
+        return vendorCode;
+    }
+
     public void setVendorCode(String vendorCode) {
         this.vendorCode = vendorCode;
+    }
+
+    public String getVendorRegisteredName() {
+        return vendorRegisteredName;
     }
 
     public void setVendorRegisteredName(String vendorRegisteredName) {

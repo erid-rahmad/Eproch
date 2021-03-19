@@ -120,7 +120,9 @@ export default class BiddingInformation extends BiddingInformationProp {
     this.adOrganizationId = accountStore.organizationInfo.id;
     this.bidding.step = BiddingStep.INFO;
 
-    this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
+    if (this.adOrganizationId > 1) {
+      this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
+    }
 
     if (this.editMode) {
       this.bidding = {...this.data};
@@ -275,14 +277,16 @@ export default class BiddingInformation extends BiddingInformationProp {
     if (referenceNo) {
       this.loadingReferenceNo = true;
 
-      const filterQuery = [
+      let filterQuery = [
         'active.equals=true',
         'processed.equals=true',
         'approved.equals=true',
-        `documentNo.equals=${referenceNo}`,
-        'adOrganizationId.in=1',
-        `adOrganizationId.in=${this.adOrganizationId}`
+        `documentNo.equals=${referenceNo}`
       ];
+
+      if (this.adOrganizationId > 1) {
+        filterQuery = [...filterQuery, ...this.organizationCriteria];
+      }
 
       this.commonService('/api/m-requisitions')
         .retrieve({
@@ -412,7 +416,7 @@ export default class BiddingInformation extends BiddingInformationProp {
   }
 
   downloadAttachment(row){
-    window.open(`http://localhost:9000/api/c-attachments/download/${row.attachment.id}-${row.attachment.fileName}`, '_blank');
+    window.open(`/api/c-attachments/download/${row.attachment.id}-${row.attachment.fileName}`, '_blank');
   }
 
   handleRemove(file, fileList) {

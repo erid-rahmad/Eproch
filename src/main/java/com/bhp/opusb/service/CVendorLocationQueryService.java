@@ -113,6 +113,10 @@ public class CVendorLocationQueryService extends QueryService<CVendorLocation> {
                 specification = specification.and(buildSpecification(criteria.getVendorId(),
                     root -> root.join(CVendorLocation_.vendor, JoinType.LEFT).get(CVendor_.id)));
             }
+            if (criteria.getVendorName() != null) {
+                specification = specification.and(buildSpecification(criteria.getVendorName(),
+                    root -> root.join(CVendorLocation_.vendor, JoinType.LEFT).get(CVendor_.name)));
+            }
             if (criteria.getLocationId() != null) {
                 specification = specification.and(buildSpecification(criteria.getLocationId(),
                     root -> root.join(CVendorLocation_.location, JoinType.LEFT).get(CLocation_.id)));

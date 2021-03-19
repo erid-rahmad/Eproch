@@ -14,9 +14,6 @@ import javax.validation.constraints.Size;
  */
 public class MBiddingDTO extends AbstractAuditingDTO {
 
-    /**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
 
     private Long id;

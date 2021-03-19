@@ -52,10 +52,25 @@ export default class BiddingSchedule extends BiddingScheduleProp {
   };
 
   bidding: Record<string, any> = {};
+  selectedEvent: any = null;
+  eventAttachmentVisible = false;
+  tmpAttachments: any[] = [];
 
   @Watch('data')
   onDataChanged(data: any) {
     console.log('bidding schedule data changed:', data);
+  }
+
+  onAttachmentChanged(_file: any, fileList: any[]) {
+    this.tmpAttachments = fileList;
+  }
+
+  onAttachmentPreviewed(file: any) {
+    window.open(file.response.downloadUri, '_blank');
+  }
+
+  onAttachmentRemoved() {
+
   }
 
   created() {
@@ -132,8 +147,12 @@ export default class BiddingSchedule extends BiddingScheduleProp {
     this.dialogConfirmationVisible = true;
   }
 
+  editAttachments(event: any) {
+    this.selectedEvent = event;
+    this.eventAttachmentVisible = true;
+  }
+
   printEventName(code: string) {
-    console.log('find %s in %O', code, this.events);
     return this.events.find(event => event.key === code)?.value || code;
   }
 

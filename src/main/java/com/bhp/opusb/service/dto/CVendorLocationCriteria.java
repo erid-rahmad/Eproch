@@ -2,12 +2,10 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -40,6 +38,7 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
     private BooleanFilter active;
 
     private LongFilter vendorId;
+    private StringFilter vendorName;
 
     private LongFilter locationId;
 
@@ -57,6 +56,7 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
+        this.vendorName = other.vendorName == null ? null : other.vendorName.copy();
         this.locationId = other.locationId == null ? null : other.locationId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
@@ -130,6 +130,14 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
         this.vendorId = vendorId;
     }
 
+    public StringFilter getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(StringFilter vendorName) {
+        this.vendorName = vendorName;
+    }
+
     public LongFilter getLocationId() {
         return locationId;
     }
@@ -165,6 +173,7 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(vendorId, that.vendorId) &&
+            Objects.equals(vendorName, that.vendorName) &&
             Objects.equals(locationId, that.locationId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
     }
@@ -180,6 +189,7 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
         uid,
         active,
         vendorId,
+        vendorName,
         locationId,
         adOrganizationId
         );
@@ -196,6 +206,7 @@ public class CVendorLocationCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
+                (vendorName != null ? "vendorName=" + vendorName + ", " : "") +
                 (locationId != null ? "locationId=" + locationId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
             "}";

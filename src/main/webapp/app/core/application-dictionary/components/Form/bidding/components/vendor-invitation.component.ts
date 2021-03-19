@@ -35,7 +35,8 @@ export default class VendorInvitation extends VendorInvitationProp {
     height: 200
   };
 
-  processing = false;
+  loadingCategories = false;
+  loadingSuggestions = false;
 
   vendorInvitationFormVisible: boolean = false;
   dialogConfirmationVisibleVendorSuggestion: boolean = false;
@@ -79,7 +80,9 @@ export default class VendorInvitation extends VendorInvitationProp {
     this.bidding.step = BiddingStep.SELECTION;
     this.vendorSelection = this.bidding.vendorSelection;
     
-    this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
+    if (this.adOrganizationId > 1) {
+      this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
+    }
 
     if (! this.editMode) {
       this.bidding.vendorInvitations = [];
@@ -109,10 +112,13 @@ export default class VendorInvitation extends VendorInvitationProp {
   saveBusinessCategory() {
     const nodes = (<any>this.$refs.businessCategories).getCheckedNodes();
     const classifications = new Set<number>();
-    const vendorSuggestionCriteria = [
-      'active.equals=true',
-      ...this.organizationCriteria
+    let vendorSuggestionCriteria = [
+      'active.equals=true'
     ];
+
+    if (this.adOrganizationId > 1) {
+      vendorSuggestionCriteria = [...vendorSuggestionCriteria, ...this.organizationCriteria];
+    }
 
     nodes.forEach(element => {
       const path = element.path;
@@ -202,6 +208,7 @@ export default class VendorInvitation extends VendorInvitationProp {
   }
 
   private retrieveVendorSuggestions(criteria: string[]) {
+    this.loadingCategories = true;
     this.commonService('/api/c-vendor-business-cats')
       .retrieve({
         criteriaQuery: criteria,
@@ -212,14 +219,69 @@ export default class VendorInvitation extends VendorInvitationProp {
         }
       })
       .then(res => {
-        this.vendorOptions = res.data;
-        /*res.data.map((item: any) => {
-          this.retrieveVendor(item.vendorId, 2);
-          this.vendorSuggestion.vendorObj = this.vendorOptions.find(item => item.id === this.vendorSuggestion.vendor);
-          //console.log(item);
-          return item;
-        });*/
+        const categories = res.data as any[];
+        const locationCriteria = categories.map(category => `vendorId.in=${category.vendorId}`);
+        const subCategoryMap = new Map<number, any>();
+
+        for (const category of categories) {
+          subCategoryMap.set(category.vendorId, {
+            subCategoryId: category.subBusinessCategoryId,
+            subCategoryName: category.subBusinessCategoryName
+          });
+        }
+
+        this.vendorOptions = categories;
+        this.loadingCategories = false;
+        this.retrieveVendorLocations(locationCriteria, subCategoryMap);
+      })
+      .catch(err => {
+        console.log('Failed to get business categories. %O', err);
+        this.$message.error('Failed to get business categories');
+        this.loadingCategories = false;
       });
+  }
+
+  private retrieveVendorLocations(criteria: string[], subCategoryMap?: Map<number, any>) {
+    this.loadingSuggestions = true;
+    this.commonService('/api/c-vendor-locations')
+      .retrieve({
+        criteriaQuery: criteria,
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['vendorId']
+        }
+      })
+      .then(res => {
+        this.bidding.vendorSuggestions = (res.data as any[]).map(location => {
+          let subCategory = {
+            subCategoryId: null,
+            subCategoryName: null
+          };
+
+          if (subCategoryMap) {
+            subCategory = subCategoryMap.get(location.vendorId);
+          }
+
+          return {
+            vendorId: location.vendorId,
+            vendorName: location.vendorRegisteredName,
+            businessSubCategoryId: subCategory.subCategoryId,
+            businessSubCategoryName: subCategory.subCategoryName,
+            locationId: location.locationId,
+            address: location.locationName + ', ' + location.cityName
+          };
+        });
+
+        console.log('Loaded suggestions: %O', this.bidding.vendorSuggestions);
+      })
+      .catch(err => {
+        console.log('Failed to get vendor suggestions. %O', err);
+        this.$message.error('Failed to get the vendor suggestions');
+      })
+      .finally(() => {
+        this.loadingSuggestions = false;
+      })
   }
 
   private retrieveSubBusinessCategory(): void {
