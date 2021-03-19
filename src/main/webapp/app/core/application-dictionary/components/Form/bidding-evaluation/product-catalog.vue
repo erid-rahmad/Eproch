@@ -1,0 +1,98 @@
+<template>
+    <div class="app-container">
+   
+        <el-row v-if="index" class="main" ref="tableWrapper">
+            <el-col :span="24">
+
+                <el-tabs v-model="activeName" @tab-click="handleClick">
+
+                    <el-tab-pane v-for="(item, index) in tabTitleOptions" :key="item.value" :label="item.name" :name="item.value">
+
+                        <keep-alive>
+
+                            <el-col :span="24">
+                                <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
+                                    <el-table-column min-width="30" label="No">
+                                        <template slot-scope="row">
+                                            {{ row.$index+1 }}
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="1" label="Title" sortable width="180">
+                                    </el-table-column>
+                                    <el-table-column prop="2" label="Biding Type" sortable width="180">
+                                    </el-table-column>
+                                    <el-table-column prop="3" label="Depertement" sortable width="180">
+                                    </el-table-column>
+                                    <el-table-column prop="4" label="PIC" sortable width="180">
+                                    </el-table-column>
+                                    <el-table-column prop="5" label="Join Vendor" sortable width="180">
+                                        <el-button class="button" size="mini" icon="el el-download-alt" @click="dialogTableVisible = true">View</el-button>
+                                    </el-table-column>
+                                    <el-table-column prop="6" label="Biding Status" sortable width="180">
+                                    </el-table-column>
+                                    <el-table-column prop="7" label="Modified" width="180">
+                                    </el-table-column>
+                                    <el-table-column min-width="60" sortable label="Bidding Schedule">
+                                        <template slot-scope="{ row }">
+                                            <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="onClick('add')">
+                                                Evaluate
+                                            </el-button>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                            </el-col>
+
+                        </keep-alive>
+                    </el-tab-pane>
+                </el-tabs>
+
+            </el-col>
+        </el-row>
+
+        <el-row v-if="!index" class="main" ref="tableWrapper">
+            <el-col :span="24" class="tab-container">
+
+                <product-information :setRowProductCatalog="setRow" @closeProductInformation="closeProductInformation" />
+
+            </el-col>
+        </el-row>
+        <el-row v-if="index" class="header">
+        </el-row>
+
+
+
+        <el-dialog title="Shipping address" :visible.sync="dialogTableVisible">
+            <el-table :data="gridData">
+                <el-table-column property="no" label="no" width="150"><template slot-scope="row">
+                        {{ row.$index+1 }}
+                    </template></el-table-column>
+                <el-table-column property="name" label="Name" width="200"></el-table-column>
+                <el-table-column property="address" label="Address"></el-table-column>
+            </el-table>
+        </el-dialog>
+    </div>
+</template>
+
+<script lang="ts" src="./product-catalog.component.ts">
+</script>
+
+<style lang="scss">
+    .el-tabs__header {
+        margin: 0px;
+    }
+
+    .el-table__fixed {
+        box-shadow: none;
+    }
+
+    .main {
+        padding: 0px;
+    }
+
+
+
+    .form-input {
+        width: 100%;
+    }
+
+</style>
