@@ -8,6 +8,7 @@ import com.bhp.opusb.repository.MBiddingSubmissionRepository;
 import com.bhp.opusb.repository.MSubmissionSubItemRepository;
 import com.bhp.opusb.service.dto.MBiddingSubmissionDTO;
 import com.bhp.opusb.service.mapper.MBiddingSubmissionMapper;
+import com.bhp.opusb.util.MapperJSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,14 +56,19 @@ public class MBiddingSubmissionService {
      * @return the persisted entity.
      */
     public MBiddingSubmissionDTO save(MBiddingSubmissionDTO mBiddingSubmissionDTO) {
-        log.debug("Request to save MBiddingSubmission : {}", mBiddingSubmissionDTO);
+        log.debug("Request to save MBiddingSubmission : {}", MapperJSONUtil.prettyLog(mBiddingSubmissionDTO));
         MBiddingSubmission mBiddingSubmission = mBiddingSubmissionMapper.toEntity(mBiddingSubmissionDTO);
         mBiddingSubmission = mBiddingSubmissionRepository.save(mBiddingSubmission);
 
-        for (MBiddingSubmissionLine mBiddingSubmissionLine1 : mBiddingSubmissionDTO.getmBiddingSubmissionLineList()){
-            mBiddingSubmissionLine1.setMBiddingSubmission(mBiddingSubmission);
-            mBiddingSubmissionLineRepository.save(mBiddingSubmissionLine1);
-        }
+        try {
+            for (MBiddingSubmissionLine mBiddingSubmissionLine1 : mBiddingSubmissionDTO.getmBiddingSubmissionLineList()){
+                mBiddingSubmissionLine1.setMBiddingSubmission(mBiddingSubmission);
+                mBiddingSubmissionLineRepository.save(mBiddingSubmissionLine1);
+            }
+
+        }catch (Exception e){}
+
+
         return mBiddingSubmissionMapper.toDto(mBiddingSubmission);
     }
 

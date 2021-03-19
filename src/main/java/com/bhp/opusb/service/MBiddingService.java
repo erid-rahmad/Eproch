@@ -84,7 +84,6 @@ public class MBiddingService {
         this.javaMailSender = javaMailSender;
         this.jHipsterProperties = jHipsterProperties;
     }
-
     /**
      * Save a mBidding.
      *
@@ -121,22 +120,28 @@ public class MBiddingService {
             log.info("this vendor sugestion {}",mVendorSuggestion.toString());
         }
 
+//        mBiddingLineRepository.saveAll(mBiddingDTO.getBiddingLineList());
+//        mProjectInformationRepository.saveAll(mBiddingDTO.getProjectInformationList());
+
         MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
         mBidding = mBiddingRepository.save(mBidding);
-        /* for (MBiddingLine mBiddingLine : mBiddingDTO.getBiddingLineList()){
-            mBiddingLine.setBidding(mBidding);
-            mBiddingLineRepository.save(mBiddingLine);
-        }
+        /* log.info("this mbidding {}",MapperJSONUtil.prettyLog(mBidding));
 
-        for (MProjectInformation mProjectInformation : mBiddingDTO.getProjectInformationList() ){
-            mProjectInformation.setBidding(mBidding);
-            mProjectInformationRepository.save(mProjectInformation);
-        } */
-
+        try {
+            for (MBiddingLine mBiddingLine : mBiddingDTO.getBiddingLineList()){
+                log.info("this line {}",MapperJSONUtil.prettyLog(mBiddingLine));
+                mBiddingLine.setBidding(mBidding);
+                mBiddingLineRepository.save(mBiddingLine);
+            }
+        }catch (Exception e){}
+        try {
+            for (MProjectInformation mProjectInformation : mBiddingDTO.getProjectInformationList() ){
+                mProjectInformation.setBidding(mBidding);
+                mProjectInformationRepository.save(mProjectInformation);
+            }
+        }catch (Exception e){} */
         return mBiddingMapper.toDto(mBidding);
     }
-
-
 
     /**
      * Save a mBidding form.
