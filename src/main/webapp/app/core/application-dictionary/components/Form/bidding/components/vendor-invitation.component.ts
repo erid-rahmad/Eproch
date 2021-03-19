@@ -276,7 +276,7 @@ export default class VendorInvitation extends VendorInvitationProp {
 
   getVendor(businessCategory){
     console.log(businessCategory);
-    this.retrieveVendorBySubCategory(businessCategory);
+    // this.retrieveVendorBySubCategory(businessCategory);
     this.vendorSuggestion.vendor = "";
     this.vendorSuggestion.address = "";
   }
