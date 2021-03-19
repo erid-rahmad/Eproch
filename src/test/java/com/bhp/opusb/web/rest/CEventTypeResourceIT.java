@@ -101,7 +101,7 @@ public class CEventTypeResourceIT {
         } else {
             cBiddingType = TestUtil.findAll(em, CBiddingType.class).get(0);
         }
-        cEventType.setBindingType(cBiddingType);
+        cEventType.setBiddingType(cBiddingType);
         return cEventType;
     }
     /**
@@ -135,7 +135,7 @@ public class CEventTypeResourceIT {
         } else {
             cBiddingType = TestUtil.findAll(em, CBiddingType.class).get(0);
         }
-        cEventType.setBindingType(cBiddingType);
+        cEventType.setBiddingType(cBiddingType);
         return cEventType;
     }
 
@@ -538,17 +538,17 @@ public class CEventTypeResourceIT {
 
     @Test
     @Transactional
-    public void getAllCEventTypesByBindingTypeIsEqualToSomething() throws Exception {
+    public void getAllCEventTypesByBiddingTypeIsEqualToSomething() throws Exception {
         // Get already existing entity
-        CBiddingType bindingType = cEventType.getBindingType();
+        CBiddingType biddingType = cEventType.getBiddingType();
         cEventTypeRepository.saveAndFlush(cEventType);
-        Long bindingTypeId = bindingType.getId();
+        Long biddingTypeId = biddingType.getId();
 
-        // Get all the cEventTypeList where bindingType equals to bindingTypeId
-        defaultCEventTypeShouldBeFound("bindingTypeId.equals=" + bindingTypeId);
+        // Get all the cEventTypeList where biddingType equals to biddingTypeId
+        defaultCEventTypeShouldBeFound("biddingTypeId.equals=" + biddingTypeId);
 
-        // Get all the cEventTypeList where bindingType equals to bindingTypeId + 1
-        defaultCEventTypeShouldNotBeFound("bindingTypeId.equals=" + (bindingTypeId + 1));
+        // Get all the cEventTypeList where biddingType equals to biddingTypeId + 1
+        defaultCEventTypeShouldNotBeFound("biddingTypeId.equals=" + (biddingTypeId + 1));
     }
 
     /**

@@ -1,13 +1,23 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.util.UUID;
 
 /**
  * A CEventType.
@@ -25,7 +35,8 @@ public class CEventType extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "name", nullable = false)
+    @Size(max = 30)
+    @Column(name = "name", length = 30, nullable = false)
     private String name;
 
     @Column(name = "description")
@@ -35,7 +46,7 @@ public class CEventType extends AbstractAuditingEntity {
     private UUID uid;
 
     @Column(name = "active")
-    private Boolean active;
+    private Boolean active = true;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -45,7 +56,7 @@ public class CEventType extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("cEventTypes")
-    private CBiddingType bindingType;
+    private CBiddingType biddingType;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -121,17 +132,17 @@ public class CEventType extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
 
-    public CBiddingType getBindingType() {
-        return bindingType;
+    public CBiddingType getBiddingType() {
+        return biddingType;
     }
 
-    public CEventType bindingType(CBiddingType cBiddingType) {
-        this.bindingType = cBiddingType;
+    public CEventType biddingType(CBiddingType cBiddingType) {
+        this.biddingType = cBiddingType;
         return this;
     }
 
-    public void setBindingType(CBiddingType cBiddingType) {
-        this.bindingType = cBiddingType;
+    public void setBiddingType(CBiddingType cBiddingType) {
+        this.biddingType = cBiddingType;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

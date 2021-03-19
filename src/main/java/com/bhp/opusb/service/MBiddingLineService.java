@@ -1,7 +1,9 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.MBiddingLine;
 import com.bhp.opusb.repository.MBiddingLineRepository;
+import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.dto.MBiddingLineDTO;
 import com.bhp.opusb.service.mapper.MBiddingLineMapper;
 import org.slf4j.Logger;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link MBiddingLine}.
@@ -48,6 +51,25 @@ public class MBiddingLineService {
 
 
     /**
+     * Save a list of mBiddingLines.
+     *
+     * @param mBiddingLineDTOs the entities to save.
+     * @return the persisted entities.
+     */
+    public List<MBiddingLineDTO> saveAll(List<MBiddingLineDTO> mBiddingLineDTOs, MBiddingDTO mBiddingDTO) {
+        log.debug("Request to save MBiddingLine list : {}", mBiddingLineDTOs);
+
+        mBiddingLineDTOs.forEach(line -> {
+            line.setBiddingId(mBiddingDTO.getId());
+            line.setAdOrganizationId(mBiddingDTO.getAdOrganizationId());
+        });
+
+        List<MBiddingLine> mBiddingLines = mBiddingLineMapper.toEntity(mBiddingLineDTOs);
+        mBiddingLines = mBiddingLineRepository.saveAll(mBiddingLines);
+        return mBiddingLineMapper.toDto(mBiddingLines);
+    }
+
+    /**
      * Get all the mBiddingLines.
      *
      * @param pageable the pagination information.
@@ -78,6 +100,17 @@ public class MBiddingLineService {
     }
 
     /**
+     * Get all mBiddingLines with the specific biddingId.
+     * @param biddingId
+     * @return the list of entities.
+     */
+    public List<MBiddingLineDTO> findByBiddingId(Long biddingId) {
+        log.debug("Request to get MBiddingLines of a specific bidding");
+        return mBiddingLineRepository.findbyheader(biddingId).stream()
+            .map(mBiddingLineMapper::toDto).collect(Collectors.toList());
+    }
+
+    /**
      * Delete the mBiddingLine by id.
      *
      * @param id the id of the entity.
@@ -85,5 +118,16 @@ public class MBiddingLineService {
     public void delete(Long id) {
         log.debug("Request to delete MBiddingLine : {}", id);
         mBiddingLineRepository.deleteById(id);
+    }
+
+    /**
+     * Delete the list of mBiddingLines.
+     *
+     * @param id the entities.
+     */
+    public void deleteAll(List<MBiddingLineDTO> mBiddingLineDTOs) {
+        log.debug("Request to delete MBiddingLines : {}", mBiddingLineDTOs);
+        List<MBiddingLine> entities = mBiddingLineMapper.toEntity(mBiddingLineDTOs);
+        mBiddingLineRepository.deleteAll(entities);
     }
 }

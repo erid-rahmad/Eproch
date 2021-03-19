@@ -6,7 +6,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import io.swagger.annotations.ApiModel;
@@ -33,6 +32,12 @@ public class AdUserDTO extends AbstractAuditingDTO {
     private String position;
 
     /**
+     * Whether it is an employee or not
+     */
+    @ApiModelProperty(value = "Whether it is an employee or not")
+    private Boolean employee;
+
+    /**
      * Whether it is a vendor or not
      */
     @ApiModelProperty(value = "Whether it is a vendor or not")
@@ -50,9 +55,14 @@ public class AdUserDTO extends AbstractAuditingDTO {
     private String userLogin;
 
     /**
-     * This field is used for displaying the title in a dropdown item.
+     * Virtual field that's referenced from jhi_user.firstName
      */
-    private String name;
+    private String firstName;
+
+    /**
+     * Virtual field that's referenced from jhi_user.lastName
+     */
+    private String lastName;
 
     /**
      * Virtual field that's referenced from jhi_user.password
@@ -119,6 +129,14 @@ public class AdUserDTO extends AbstractAuditingDTO {
         this.position = position;
     }
 
+    public Boolean isEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Boolean employee) {
+        this.employee = employee;
+    }
+
     public Boolean isVendor() {
         return vendor;
     }
@@ -160,11 +178,42 @@ public class AdUserDTO extends AbstractAuditingDTO {
     }
 
     public String getName() {
-        return name;
+        if (firstName != null) {
+            if (lastName == null) {
+                return firstName;
+            } else {
+                return firstName + " " + lastName;
+            }
+        }
+        return userLogin;
     }
 
     public void setName(String name) {
-        this.name = name;
+        String fullName = name.trim();
+        int spaceIndex = fullName.indexOf(" ");
+
+        if (spaceIndex > 0) {
+            firstName = fullName.substring(0, spaceIndex);
+            lastName = fullName.substring(spaceIndex + 1);
+        } else {
+            firstName = fullName;
+        }
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public String getPassword() {
@@ -252,6 +301,7 @@ public class AdUserDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", phone='" + getPhone() + "'" +
             ", position='" + getPosition() + "'" +
+            ", employee='" + isEmployee() + "'" +
             ", vendor='" + isVendor() + "'" +
             ", failedLoginCount=" + getFailedLoginCount() +
             ", lastLoginDate='" + getLastLoginDate() + "'" +

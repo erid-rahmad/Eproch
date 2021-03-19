@@ -12,14 +12,23 @@
     {
       "fieldName": "phone",
       "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRules": [
+        "maxlength"
+      ],
       "fieldValidateRulesMaxlength": "20"
     },
     {
       "fieldName": "position",
       "fieldType": "String",
-      "fieldValidateRules": ["maxlength"],
+      "fieldValidateRules": [
+        "maxlength"
+      ],
       "fieldValidateRulesMaxlength": "30"
+    },
+    {
+      "fieldName": "employee",
+      "javadoc": "Whether it is an employee or not",
+      "fieldType": "Boolean"
     },
     {
       "fieldName": "vendor",

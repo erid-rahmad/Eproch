@@ -48,6 +48,12 @@ public class AdUser extends AbstractAuditingEntity {
     private String position;
 
     /**
+     * Whether it is an employee or not
+     */
+    @Column(name = "employee")
+    private Boolean employee;
+
+    /**
      * Whether it is a vendor or not
      */
     @Column(name = "vendor")
@@ -136,6 +142,19 @@ public class AdUser extends AbstractAuditingEntity {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public Boolean isEmployee() {
+        return employee;
+    }
+
+    public AdUser employee(Boolean employee) {
+        this.employee = employee;
+        return this;
+    }
+
+    public void setEmployee(Boolean employee) {
+        this.employee = employee;
     }
 
     public Boolean isVendor() {
@@ -246,6 +265,7 @@ public class AdUser extends AbstractAuditingEntity {
             ", active='" + isActive() + "'" +
             ", phone='" + getPhone() + "'" +
             ", position='" + getPosition() + "'" +
+            ", employee='" + isEmployee() + "'" +
             ", vendor='" + isVendor() + "'" +
             ", failedLoginCount=" + getFailedLoginCount() +
             ", lastLoginDate='" + getLastLoginDate() + "'" +

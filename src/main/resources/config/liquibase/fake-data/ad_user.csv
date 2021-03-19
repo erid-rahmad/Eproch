@@ -1,11 +1,11 @@
-id;uid;active;phone;position;vendor;failed_login_count;last_login_date;user_id;ad_organization_id
-1;450cd0aa-1c64-4659-9458-13215b911c49;true;1-118-999-1529;Checking Account wireless salm;false;70671;2020-10-20T23:17:37;2;1
-2;5d36652c-1286-4f84-8ff2-6158020dc2d9;false;312-330-9196 x5137;Malagasy Ariary;false;42046;2020-10-20T21:25:47;2;2
-3;be50f8f5-b06c-4590-af77-3a55acae7ac9;true;1-679-810-7278 x5841;Generic 4th generation Bucking;true;17618;2020-10-21T07:17:44;2;3
-4;56add8dd-3f6f-4692-9e0f-f4935cad85f6;true;477-463-0739 x3255;Incredible Fresh Shirt Home Lo;false;86203;2020-10-21T03:08:15;1;4
-5;90146d9f-7162-4f42-b75c-73cd7accc25c;true;258-339-5240;matrix grid-enabled hacking;false;43015;2020-10-21T08:41:03;2;5
-6;d288e693-c03a-4cf8-971a-42d080b43803;false;516.078.5223;Money Market Account;true;74928;2020-10-20T21:45:16;1;6
-7;885e7d9b-2dbe-444f-be19-6b7b36fb5070;false;(115) 411-5564 x9674;Technician synthesizing;false;76699;2020-10-20T20:56:04;2;7
-8;b1bc63d7-d585-48cc-98a0-58e0e63828f2;false;268-164-6852 x94534;Optional Iceland;false;60682;2020-10-21T10:03:10;2;8
-9;45e8e8d5-e9e8-4913-8564-3754b516fbac;true;518-077-4261;methodologies sky blue pixel;true;78109;2020-10-20T18:34:27;2;9
-10;91ba9505-361c-4d22-9fec-face3fa7337b;true;836.625.3878;ROI New Jersey Licensed Metal ;true;58036;2020-10-20T23:51:33;2;10
+id;uid;active;phone;position;employee;vendor;failed_login_count;last_login_date;user_id;ad_organization_id
+1;450cd0aa-1c64-4659-9458-13215b911c49;true;1-118-999-1529;Checking Account wireless salm;false;true;49816;2020-10-20T21:22:56;1;1
+2;d36652c1-286f-4840-bf26-158020dc2d95;true;123.309.1965;process improvement;false;true;50984;2020-10-21T03:58:19;1;2
+3;98be50f8-f5b0-46c5-902f-773a55acae7a;true;996.798.1072 x785;Expressway Virgin Islands, U.S;false;false;51780;2020-10-20T18:00:58;2;3
+4;22b56add-8dd3-4f6f-a921-e0ff4935cad8;false;1-356-477-4630 x7393;West Virginia Incredible Fresh;true;true;24151;2020-10-20T12:47:53;1;4
+5;d5490146-d9f7-4162-b423-75c73cd7accc;false;882.258.3395;web-readiness;true;false;94884;2020-10-21T04:25:58;1;5
+6;d2061ed2-88e6-493c-83ac-f8171a42d080;true;(250) 221-5160;generating cohesive enable;true;false;59511;2020-10-20T17:16:01;2;6
+7;2885e7d9-b2db-4e44-bbe1-96b7b36fb507;false;811-541-1556;Technician sensor;true;false;96466;2020-10-20T19:02:44;2;7
+8;c7c99b1b-c63d-47d5-858c-c58a058e0e63;true;1-591-082-6816;invoice Cook Islands;true;false;53869;2020-10-21T03:52:32;1;8
+9;54886390-b45e-48e8-95e9-e89130564375;false;1-313-976-7805 x1807;communities Canadian Dollar in;true;false;53512;2020-10-20T17:31:00;2;9
+10;bcbe91ba-9505-4361-8d22-dfecface3fa7;false;477-183-6625;calculating transmitting;false;false;57261;2020-10-20T21:14:48;1;10

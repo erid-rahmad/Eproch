@@ -30,6 +30,9 @@ public class MProjectInformation extends AbstractAuditingEntity {
     @Column(name = "active")
     private Boolean active;
 
+    @Column(name = "name")
+    private String name;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mProjectInformations")
@@ -78,6 +81,19 @@ public class MProjectInformation extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public MProjectInformation name(String name) {
+        this.name = name;
+        return this;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public MBidding getBidding() {
@@ -147,6 +163,7 @@ public class MProjectInformation extends AbstractAuditingEntity {
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", name='" + getName() + "'" +
             "}";
     }
 }

@@ -2,9 +2,10 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBiddingSubItem;
+import com.bhp.opusb.domain.MBiddingSubItemLine;
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.MBiddingLine;
 import com.bhp.opusb.domain.CProduct;
+import com.bhp.opusb.domain.MBiddingLine;
 import com.bhp.opusb.repository.MBiddingSubItemRepository;
 import com.bhp.opusb.service.MBiddingSubItemService;
 import com.bhp.opusb.service.dto.MBiddingSubItemDTO;
@@ -92,16 +93,6 @@ public class MBiddingSubItemResourceIT {
         }
         mBiddingSubItem.setAdOrganization(aDOrganization);
         // Add required entity
-        MBiddingLine mBiddingLine;
-        if (TestUtil.findAll(em, MBiddingLine.class).isEmpty()) {
-            mBiddingLine = MBiddingLineResourceIT.createEntity(em);
-            em.persist(mBiddingLine);
-            em.flush();
-        } else {
-            mBiddingLine = TestUtil.findAll(em, MBiddingLine.class).get(0);
-        }
-        mBiddingSubItem.setBiddingLine(mBiddingLine);
-        // Add required entity
         CProduct cProduct;
         if (TestUtil.findAll(em, CProduct.class).isEmpty()) {
             cProduct = CProductResourceIT.createEntity(em);
@@ -134,16 +125,6 @@ public class MBiddingSubItemResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mBiddingSubItem.setAdOrganization(aDOrganization);
-        // Add required entity
-        MBiddingLine mBiddingLine;
-        if (TestUtil.findAll(em, MBiddingLine.class).isEmpty()) {
-            mBiddingLine = MBiddingLineResourceIT.createUpdatedEntity(em);
-            em.persist(mBiddingLine);
-            em.flush();
-        } else {
-            mBiddingLine = TestUtil.findAll(em, MBiddingLine.class).get(0);
-        }
-        mBiddingSubItem.setBiddingLine(mBiddingLine);
         // Add required entity
         CProduct cProduct;
         if (TestUtil.findAll(em, CProduct.class).isEmpty()) {
@@ -467,6 +448,26 @@ public class MBiddingSubItemResourceIT {
 
     @Test
     @Transactional
+    public void getAllMBiddingSubItemsByMBiddingSubItemLineIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingSubItemRepository.saveAndFlush(mBiddingSubItem);
+        MBiddingSubItemLine mBiddingSubItemLine = MBiddingSubItemLineResourceIT.createEntity(em);
+        em.persist(mBiddingSubItemLine);
+        em.flush();
+        mBiddingSubItem.addMBiddingSubItemLine(mBiddingSubItemLine);
+        mBiddingSubItemRepository.saveAndFlush(mBiddingSubItem);
+        Long mBiddingSubItemLineId = mBiddingSubItemLine.getId();
+
+        // Get all the mBiddingSubItemList where mBiddingSubItemLine equals to mBiddingSubItemLineId
+        defaultMBiddingSubItemShouldBeFound("mBiddingSubItemLineId.equals=" + mBiddingSubItemLineId);
+
+        // Get all the mBiddingSubItemList where mBiddingSubItemLine equals to mBiddingSubItemLineId + 1
+        defaultMBiddingSubItemShouldNotBeFound("mBiddingSubItemLineId.equals=" + (mBiddingSubItemLineId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMBiddingSubItemsByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = mBiddingSubItem.getAdOrganization();
@@ -483,22 +484,6 @@ public class MBiddingSubItemResourceIT {
 
     @Test
     @Transactional
-    public void getAllMBiddingSubItemsByBiddingLineIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        MBiddingLine biddingLine = mBiddingSubItem.getBiddingLine();
-        mBiddingSubItemRepository.saveAndFlush(mBiddingSubItem);
-        Long biddingLineId = biddingLine.getId();
-
-        // Get all the mBiddingSubItemList where biddingLine equals to biddingLineId
-        defaultMBiddingSubItemShouldBeFound("biddingLineId.equals=" + biddingLineId);
-
-        // Get all the mBiddingSubItemList where biddingLine equals to biddingLineId + 1
-        defaultMBiddingSubItemShouldNotBeFound("biddingLineId.equals=" + (biddingLineId + 1));
-    }
-
-
-    @Test
-    @Transactional
     public void getAllMBiddingSubItemsByProductIsEqualToSomething() throws Exception {
         // Get already existing entity
         CProduct product = mBiddingSubItem.getProduct();
@@ -510,6 +495,27 @@ public class MBiddingSubItemResourceIT {
 
         // Get all the mBiddingSubItemList where product equals to productId + 1
         defaultMBiddingSubItemShouldNotBeFound("productId.equals=" + (productId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBiddingSubItemsByBiddingLineIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingSubItemRepository.saveAndFlush(mBiddingSubItem);
+        MBiddingLine biddingLine = MBiddingLineResourceIT.createEntity(em);
+        em.persist(biddingLine);
+        em.flush();
+        mBiddingSubItem.setBiddingLine(biddingLine);
+        biddingLine.setSubItem(mBiddingSubItem);
+        mBiddingSubItemRepository.saveAndFlush(mBiddingSubItem);
+        Long biddingLineId = biddingLine.getId();
+
+        // Get all the mBiddingSubItemList where biddingLine equals to biddingLineId
+        defaultMBiddingSubItemShouldBeFound("biddingLineId.equals=" + biddingLineId);
+
+        // Get all the mBiddingSubItemList where biddingLine equals to biddingLineId + 1
+        defaultMBiddingSubItemShouldNotBeFound("biddingLineId.equals=" + (biddingLineId + 1));
     }
 
     /**

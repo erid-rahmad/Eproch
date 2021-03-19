@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity CBiddingType.
     -->
@@ -78,14 +78,21 @@
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
             <column name="description" type="string"/>
-            <column name="cost_evaluation_selection" type="boolean"/>
-            <column name="selected_winner" type="boolean"/>
+            <column name="cost_evaluation_selection" type="string"/>
+            <column name="winner_selection" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="product_classification_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210220094900" author="Ananta Aryadewa">
+        <modifyDataType tableName="c_bidding_type" columnName="name" newDataType="varchar(30)" />
+        <modifyDataType tableName="c_bidding_type" columnName="cost_evaluation_selection" newDataType="varchar(5)" />
+        <modifyDataType tableName="c_bidding_type" columnName="selected_winner" newDataType="varchar(5)" />
+        <renameColumn tableName="c_bidding_type" oldColumnName="selected_winner" newColumnName="winner_selection" />
     </changeSet>
 
 </databaseChangeLog>

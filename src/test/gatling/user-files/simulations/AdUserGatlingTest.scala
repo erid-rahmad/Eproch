@@ -76,6 +76,7 @@ class AdUserGatlingTest extends Simulation {
                 , "active":null
                 , "phone":"SAMPLE_TEXT"
                 , "position":"SAMPLE_TEXT"
+                , "employee":null
                 , "vendor":null
                 , "failedLoginCount":"0"
                 , "lastLoginDate":"2020-01-01T00:00:00.000Z"

@@ -53,6 +53,9 @@ public class AdUserResourceIT {
     private static final String DEFAULT_POSITION = "AAAAAAAAAA";
     private static final String UPDATED_POSITION = "BBBBBBBBBB";
 
+    private static final Boolean DEFAULT_EMPLOYEE = false;
+    private static final Boolean UPDATED_EMPLOYEE = true;
+
     private static final Boolean DEFAULT_VENDOR = false;
     private static final Boolean UPDATED_VENDOR = true;
 
@@ -95,6 +98,7 @@ public class AdUserResourceIT {
             .active(DEFAULT_ACTIVE)
             .phone(DEFAULT_PHONE)
             .position(DEFAULT_POSITION)
+            .employee(DEFAULT_EMPLOYEE)
             .vendor(DEFAULT_VENDOR)
             .failedLoginCount(DEFAULT_FAILED_LOGIN_COUNT)
             .lastLoginDate(DEFAULT_LAST_LOGIN_DATE);
@@ -127,6 +131,7 @@ public class AdUserResourceIT {
             .active(UPDATED_ACTIVE)
             .phone(UPDATED_PHONE)
             .position(UPDATED_POSITION)
+            .employee(UPDATED_EMPLOYEE)
             .vendor(UPDATED_VENDOR)
             .failedLoginCount(UPDATED_FAILED_LOGIN_COUNT)
             .lastLoginDate(UPDATED_LAST_LOGIN_DATE);
@@ -173,6 +178,7 @@ public class AdUserResourceIT {
         assertThat(testAdUser.isActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testAdUser.getPhone()).isEqualTo(DEFAULT_PHONE);
         assertThat(testAdUser.getPosition()).isEqualTo(DEFAULT_POSITION);
+        assertThat(testAdUser.isEmployee()).isEqualTo(DEFAULT_EMPLOYEE);
         assertThat(testAdUser.isVendor()).isEqualTo(DEFAULT_VENDOR);
         assertThat(testAdUser.getFailedLoginCount()).isEqualTo(DEFAULT_FAILED_LOGIN_COUNT);
         assertThat(testAdUser.getLastLoginDate()).isEqualTo(DEFAULT_LAST_LOGIN_DATE);
@@ -214,6 +220,7 @@ public class AdUserResourceIT {
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].position").value(hasItem(DEFAULT_POSITION)))
+            .andExpect(jsonPath("$.[*].employee").value(hasItem(DEFAULT_EMPLOYEE.booleanValue())))
             .andExpect(jsonPath("$.[*].vendor").value(hasItem(DEFAULT_VENDOR.booleanValue())))
             .andExpect(jsonPath("$.[*].failedLoginCount").value(hasItem(DEFAULT_FAILED_LOGIN_COUNT)))
             .andExpect(jsonPath("$.[*].lastLoginDate").value(hasItem(DEFAULT_LAST_LOGIN_DATE.toString())));
@@ -234,6 +241,7 @@ public class AdUserResourceIT {
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.phone").value(DEFAULT_PHONE))
             .andExpect(jsonPath("$.position").value(DEFAULT_POSITION))
+            .andExpect(jsonPath("$.employee").value(DEFAULT_EMPLOYEE.booleanValue()))
             .andExpect(jsonPath("$.vendor").value(DEFAULT_VENDOR.booleanValue()))
             .andExpect(jsonPath("$.failedLoginCount").value(DEFAULT_FAILED_LOGIN_COUNT))
             .andExpect(jsonPath("$.lastLoginDate").value(DEFAULT_LAST_LOGIN_DATE.toString()));
@@ -521,6 +529,58 @@ public class AdUserResourceIT {
 
     @Test
     @Transactional
+    public void getAllAdUsersByEmployeeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where employee equals to DEFAULT_EMPLOYEE
+        defaultAdUserShouldBeFound("employee.equals=" + DEFAULT_EMPLOYEE);
+
+        // Get all the adUserList where employee equals to UPDATED_EMPLOYEE
+        defaultAdUserShouldNotBeFound("employee.equals=" + UPDATED_EMPLOYEE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByEmployeeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where employee not equals to DEFAULT_EMPLOYEE
+        defaultAdUserShouldNotBeFound("employee.notEquals=" + DEFAULT_EMPLOYEE);
+
+        // Get all the adUserList where employee not equals to UPDATED_EMPLOYEE
+        defaultAdUserShouldBeFound("employee.notEquals=" + UPDATED_EMPLOYEE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByEmployeeIsInShouldWork() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where employee in DEFAULT_EMPLOYEE or UPDATED_EMPLOYEE
+        defaultAdUserShouldBeFound("employee.in=" + DEFAULT_EMPLOYEE + "," + UPDATED_EMPLOYEE);
+
+        // Get all the adUserList where employee equals to UPDATED_EMPLOYEE
+        defaultAdUserShouldNotBeFound("employee.in=" + UPDATED_EMPLOYEE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllAdUsersByEmployeeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        adUserRepository.saveAndFlush(adUser);
+
+        // Get all the adUserList where employee is not null
+        defaultAdUserShouldBeFound("employee.specified=true");
+
+        // Get all the adUserList where employee is null
+        defaultAdUserShouldNotBeFound("employee.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllAdUsersByVendorIsEqualToSomething() throws Exception {
         // Initialize the database
         adUserRepository.saveAndFlush(adUser);
@@ -791,6 +851,7 @@ public class AdUserResourceIT {
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].phone").value(hasItem(DEFAULT_PHONE)))
             .andExpect(jsonPath("$.[*].position").value(hasItem(DEFAULT_POSITION)))
+            .andExpect(jsonPath("$.[*].employee").value(hasItem(DEFAULT_EMPLOYEE.booleanValue())))
             .andExpect(jsonPath("$.[*].vendor").value(hasItem(DEFAULT_VENDOR.booleanValue())))
             .andExpect(jsonPath("$.[*].failedLoginCount").value(hasItem(DEFAULT_FAILED_LOGIN_COUNT)))
             .andExpect(jsonPath("$.[*].lastLoginDate").value(hasItem(DEFAULT_LAST_LOGIN_DATE.toString())));
@@ -845,6 +906,7 @@ public class AdUserResourceIT {
             .active(UPDATED_ACTIVE)
             .phone(UPDATED_PHONE)
             .position(UPDATED_POSITION)
+            .employee(UPDATED_EMPLOYEE)
             .vendor(UPDATED_VENDOR)
             .failedLoginCount(UPDATED_FAILED_LOGIN_COUNT)
             .lastLoginDate(UPDATED_LAST_LOGIN_DATE);
@@ -863,6 +925,7 @@ public class AdUserResourceIT {
         assertThat(testAdUser.isActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testAdUser.getPhone()).isEqualTo(UPDATED_PHONE);
         assertThat(testAdUser.getPosition()).isEqualTo(UPDATED_POSITION);
+        assertThat(testAdUser.isEmployee()).isEqualTo(UPDATED_EMPLOYEE);
         assertThat(testAdUser.isVendor()).isEqualTo(UPDATED_VENDOR);
         assertThat(testAdUser.getFailedLoginCount()).isEqualTo(UPDATED_FAILED_LOGIN_COUNT);
         assertThat(testAdUser.getLastLoginDate()).isEqualTo(UPDATED_LAST_LOGIN_DATE);

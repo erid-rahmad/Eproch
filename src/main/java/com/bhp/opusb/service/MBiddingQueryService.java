@@ -91,9 +91,6 @@ public class MBiddingQueryService extends QueryService<MBidding> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MBidding_.id));
             }
-            if (criteria.getBiddingNo() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getBiddingNo(), MBidding_.biddingNo));
-            }
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), MBidding_.name));
             }
@@ -105,6 +102,12 @@ public class MBiddingQueryService extends QueryService<MBidding> {
             }
             if (criteria.getEstimatedPrice() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getEstimatedPrice(), MBidding_.estimatedPrice));
+            }
+            if (criteria.getDateTrx() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), MBidding_.dateTrx));
+            }
+            if (criteria.getDocumentNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentNo(), MBidding_.documentNo));
             }
             if (criteria.getDocumentAction() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDocumentAction(), MBidding_.documentAction));
@@ -118,11 +121,14 @@ public class MBiddingQueryService extends QueryService<MBidding> {
             if (criteria.getProcessed() != null) {
                 specification = specification.and(buildSpecification(criteria.getProcessed(), MBidding_.processed));
             }
+            if (criteria.getDateApprove() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateApprove(), MBidding_.dateApprove));
+            }
             if (criteria.getDateReject() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateReject(), MBidding_.dateReject));
             }
-            if (criteria.getDateApprove() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getDateApprove(), MBidding_.dateApprove));
+            if (criteria.getRejectedReason() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getRejectedReason(), MBidding_.rejectedReason));
             }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MBidding_.uid));
@@ -138,9 +144,17 @@ public class MBiddingQueryService extends QueryService<MBidding> {
                 specification = specification.and(buildSpecification(criteria.getCostCenterId(),
                     root -> root.join(MBidding_.costCenter, JoinType.LEFT).get(CCostCenter_.id)));
             }
+            if (criteria.getCurrencyId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCurrencyId(),
+                    root -> root.join(MBidding_.currency, JoinType.LEFT).get(CCurrency_.id)));
+            }
             if (criteria.getRequisitionId() != null) {
                 specification = specification.and(buildSpecification(criteria.getRequisitionId(),
                     root -> root.join(MBidding_.requisition, JoinType.LEFT).get(MRequisition_.id)));
+            }
+            if (criteria.getReferenceTypeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getReferenceTypeId(),
+                    root -> root.join(MBidding_.referenceType, JoinType.LEFT).get(CDocumentType_.id)));
             }
             if (criteria.getBiddingTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBiddingTypeId(),

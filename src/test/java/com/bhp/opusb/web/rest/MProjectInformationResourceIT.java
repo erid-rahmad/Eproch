@@ -45,6 +45,9 @@ public class MProjectInformationResourceIT {
     private static final Boolean DEFAULT_ACTIVE = false;
     private static final Boolean UPDATED_ACTIVE = true;
 
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
+
     @Autowired
     private MProjectInformationRepository mProjectInformationRepository;
 
@@ -74,7 +77,8 @@ public class MProjectInformationResourceIT {
     public static MProjectInformation createEntity(EntityManager em) {
         MProjectInformation mProjectInformation = new MProjectInformation()
             .uid(DEFAULT_UID)
-            .active(DEFAULT_ACTIVE);
+            .active(DEFAULT_ACTIVE)
+            .name(DEFAULT_NAME);
         // Add required entity
         MBidding mBidding;
         if (TestUtil.findAll(em, MBidding.class).isEmpty()) {
@@ -116,7 +120,8 @@ public class MProjectInformationResourceIT {
     public static MProjectInformation createUpdatedEntity(EntityManager em) {
         MProjectInformation mProjectInformation = new MProjectInformation()
             .uid(UPDATED_UID)
-            .active(UPDATED_ACTIVE);
+            .active(UPDATED_ACTIVE)
+            .name(UPDATED_NAME);
         // Add required entity
         MBidding mBidding;
         if (TestUtil.findAll(em, MBidding.class).isEmpty()) {
@@ -173,6 +178,7 @@ public class MProjectInformationResourceIT {
         MProjectInformation testMProjectInformation = mProjectInformationList.get(mProjectInformationList.size() - 1);
         assertThat(testMProjectInformation.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMProjectInformation.isActive()).isEqualTo(DEFAULT_ACTIVE);
+        assertThat(testMProjectInformation.getName()).isEqualTo(DEFAULT_NAME);
     }
 
     @Test
@@ -208,7 +214,8 @@ public class MProjectInformationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mProjectInformation.getId().intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
     }
     
     @Test
@@ -223,7 +230,8 @@ public class MProjectInformationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mProjectInformation.getId().intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
-            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME));
     }
 
 
@@ -352,6 +360,84 @@ public class MProjectInformationResourceIT {
 
     @Test
     @Transactional
+    public void getAllMProjectInformationsByNameIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mProjectInformationRepository.saveAndFlush(mProjectInformation);
+
+        // Get all the mProjectInformationList where name equals to DEFAULT_NAME
+        defaultMProjectInformationShouldBeFound("name.equals=" + DEFAULT_NAME);
+
+        // Get all the mProjectInformationList where name equals to UPDATED_NAME
+        defaultMProjectInformationShouldNotBeFound("name.equals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProjectInformationsByNameIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mProjectInformationRepository.saveAndFlush(mProjectInformation);
+
+        // Get all the mProjectInformationList where name not equals to DEFAULT_NAME
+        defaultMProjectInformationShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
+
+        // Get all the mProjectInformationList where name not equals to UPDATED_NAME
+        defaultMProjectInformationShouldBeFound("name.notEquals=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProjectInformationsByNameIsInShouldWork() throws Exception {
+        // Initialize the database
+        mProjectInformationRepository.saveAndFlush(mProjectInformation);
+
+        // Get all the mProjectInformationList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultMProjectInformationShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
+
+        // Get all the mProjectInformationList where name equals to UPDATED_NAME
+        defaultMProjectInformationShouldNotBeFound("name.in=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProjectInformationsByNameIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mProjectInformationRepository.saveAndFlush(mProjectInformation);
+
+        // Get all the mProjectInformationList where name is not null
+        defaultMProjectInformationShouldBeFound("name.specified=true");
+
+        // Get all the mProjectInformationList where name is null
+        defaultMProjectInformationShouldNotBeFound("name.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMProjectInformationsByNameContainsSomething() throws Exception {
+        // Initialize the database
+        mProjectInformationRepository.saveAndFlush(mProjectInformation);
+
+        // Get all the mProjectInformationList where name contains DEFAULT_NAME
+        defaultMProjectInformationShouldBeFound("name.contains=" + DEFAULT_NAME);
+
+        // Get all the mProjectInformationList where name contains UPDATED_NAME
+        defaultMProjectInformationShouldNotBeFound("name.contains=" + UPDATED_NAME);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMProjectInformationsByNameNotContainsSomething() throws Exception {
+        // Initialize the database
+        mProjectInformationRepository.saveAndFlush(mProjectInformation);
+
+        // Get all the mProjectInformationList where name does not contain DEFAULT_NAME
+        defaultMProjectInformationShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
+
+        // Get all the mProjectInformationList where name does not contain UPDATED_NAME
+        defaultMProjectInformationShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMProjectInformationsByBiddingIsEqualToSomething() throws Exception {
         // Get already existing entity
         MBidding bidding = mProjectInformation.getBidding();
@@ -406,7 +492,8 @@ public class MProjectInformationResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mProjectInformation.getId().intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
-            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)));
 
         // Check, that the count call also returns 1
         restMProjectInformationMockMvc.perform(get("/api/m-project-informations/count?sort=id,desc&" + filter))
@@ -455,7 +542,8 @@ public class MProjectInformationResourceIT {
         em.detach(updatedMProjectInformation);
         updatedMProjectInformation
             .uid(UPDATED_UID)
-            .active(UPDATED_ACTIVE);
+            .active(UPDATED_ACTIVE)
+            .name(UPDATED_NAME);
         MProjectInformationDTO mProjectInformationDTO = mProjectInformationMapper.toDto(updatedMProjectInformation);
 
         restMProjectInformationMockMvc.perform(put("/api/m-project-informations")
@@ -469,6 +557,7 @@ public class MProjectInformationResourceIT {
         MProjectInformation testMProjectInformation = mProjectInformationList.get(mProjectInformationList.size() - 1);
         assertThat(testMProjectInformation.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMProjectInformation.isActive()).isEqualTo(UPDATED_ACTIVE);
+        assertThat(testMProjectInformation.getName()).isEqualTo(UPDATED_NAME);
     }
 
     @Test

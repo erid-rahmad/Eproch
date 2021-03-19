@@ -1,32 +1,37 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEventType} entity.
  */
 public class CEventTypeDTO extends AbstractAuditingDTO {
 
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
+    @Size(max = 30)
     private String name;
 
     private String description;
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
-    private Long bindingTypeId;
-    private String bindingTypeName;
-
+    private Long biddingTypeId;
+    private String biddingTypeName;
+    
     public Long getId() {
         return id;
     }
@@ -83,20 +88,20 @@ public class CEventTypeDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getBindingTypeId() {
-        return bindingTypeId;
+    public Long getBiddingTypeId() {
+        return biddingTypeId;
     }
 
-    public void setBindingTypeId(Long cBiddingTypeId) {
-        this.bindingTypeId = cBiddingTypeId;
+    public void setBiddingTypeId(Long cBiddingTypeId) {
+        this.biddingTypeId = cBiddingTypeId;
     }
 
-    public String getBindingTypeName() {
-        return bindingTypeName;
+    public String getBiddingTypeName() {
+        return biddingTypeName;
     }
 
-    public void setBindingTypeName(String bindingTypeName) {
-        this.bindingTypeName = bindingTypeName;
+    public void setBiddingTypeName(String biddingTypeName) {
+        this.biddingTypeName = biddingTypeName;
     }
 
     @Override
@@ -129,9 +134,7 @@ public class CEventTypeDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
-            ", bindingTypeId=" + getBindingTypeId() +
-            ", bindingTypeName=" + getBindingTypeName() +
+            ", biddingTypeId=" + getBiddingTypeId() +
             "}";
     }
 }

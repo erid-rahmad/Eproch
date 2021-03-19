@@ -529,6 +529,9 @@ entity AdUser {
 	phone String maxlength(20)
 	position String maxlength(30)
 
+	/** Whether it is an employee or not */
+	employee Boolean
+
 	/** Whether it is a vendor or not */
 	vendor Boolean
 

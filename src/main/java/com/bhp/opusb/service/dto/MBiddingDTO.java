@@ -1,14 +1,13 @@
 package com.bhp.opusb.service.dto;
 
-import com.bhp.opusb.domain.MBiddingLine;
-import com.bhp.opusb.domain.MProjectInformation;
-
-import java.time.LocalDate;
-import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBidding} entity.
@@ -20,10 +19,7 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
-
-    @NotNull
-    private String biddingNo;
+    private Long id;
 
     @NotNull
     private String name;
@@ -33,6 +29,12 @@ public class MBiddingDTO extends AbstractAuditingDTO {
     private BigDecimal ceilingPrice;
 
     private BigDecimal estimatedPrice;
+
+    private LocalDate dateTrx;
+
+    @NotNull
+    @Size(max = 30)
+    private String documentNo;
 
     @NotNull
     @Size(max = 10)
@@ -46,13 +48,15 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 
     private Boolean processed;
 
+    private LocalDate dateApprove;
+
     private LocalDate dateReject;
 
-    private LocalDate dateApprove;
+    private String rejectedReason;
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
@@ -61,7 +65,14 @@ public class MBiddingDTO extends AbstractAuditingDTO {
     private Long costCenterId;
     private String costCenterName;
 
+    private Long currencyId;
+    private String currencyName;
+
     private Long requisitionId;
+    private String requisitionName;
+
+    private Long referenceTypeId;
+    private String referenceTypeName;
 
     private Long biddingTypeId;
     private String biddingTypeName;
@@ -71,63 +82,10 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 
     private Long adUserUserId;
     private String adUserUserName;
+    
+    private List<MBiddingLineDTO> biddingLineList;
 
-    private List<MBiddingLine> biddingLineList;
-
-    private List<MProjectInformation> projectInformationList;
-
-    public Boolean getApproved() {
-        return approved;
-    }
-
-    @Override
-    public String toString() {
-        return "MBiddingDTO{" +
-            "id=" + id +
-            ", biddingNo='" + biddingNo + '\'' +
-            ", name='" + name + '\'' +
-            ", vendorSelection='" + vendorSelection + '\'' +
-            ", ceilingPrice=" + ceilingPrice +
-            ", estimatedPrice=" + estimatedPrice +
-            ", documentAction='" + documentAction + '\'' +
-            ", documentStatus='" + documentStatus + '\'' +
-            ", approved=" + approved +
-            ", processed=" + processed +
-            ", dateReject=" + dateReject +
-            ", dateApprove=" + dateApprove +
-            ", uid=" + uid +
-            ", active=" + active +
-            ", adOrganizationId=" + adOrganizationId +
-            ", adOrganizationName='" + adOrganizationName + '\'' +
-            ", costCenterId=" + costCenterId +
-            ", costCenterName='" + costCenterName + '\'' +
-            ", requisitionId=" + requisitionId +
-            ", biddingTypeId=" + biddingTypeId +
-            ", biddingTypeName='" + biddingTypeName + '\'' +
-            ", eventTypeId=" + eventTypeId +
-            ", eventTypeName='" + eventTypeName + '\'' +
-            ", adUserUserId=" + adUserUserId +
-            ", adUserUserName='" + adUserUserName + '\'' +
-            ", biddingLineList=" + biddingLineList +
-            ", projectInformationList=" + projectInformationList +
-            '}';
-    }
-
-    public List<MProjectInformation> getProjectInformationList() {
-        return projectInformationList;
-    }
-
-    public void setProjectInformationList(List<MProjectInformation> projectInformationList) {
-        this.projectInformationList = projectInformationList;
-    }
-
-    public List<MBiddingLine> getBiddingLineList() {
-        return biddingLineList;
-    }
-
-    public void setBiddingLineList(List<MBiddingLine> biddingLineList) {
-        this.biddingLineList = biddingLineList;
-    }
+    private List<MProjectInformationDTO> projectInformationList;
 
     public Long getId() {
         return id;
@@ -135,14 +93,6 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getBiddingNo() {
-        return biddingNo;
-    }
-
-    public void setBiddingNo(String biddingNo) {
-        this.biddingNo = biddingNo;
     }
 
     public String getName() {
@@ -177,6 +127,22 @@ public class MBiddingDTO extends AbstractAuditingDTO {
         this.estimatedPrice = estimatedPrice;
     }
 
+    public LocalDate getDateTrx() {
+        return dateTrx;
+    }
+
+    public void setDateTrx(LocalDate dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public String getDocumentNo() {
+        return documentNo;
+    }
+
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
     public String getDocumentAction() {
         return documentAction;
     }
@@ -209,6 +175,14 @@ public class MBiddingDTO extends AbstractAuditingDTO {
         this.processed = processed;
     }
 
+    public LocalDate getDateApprove() {
+        return dateApprove;
+    }
+
+    public void setDateApprove(LocalDate dateApprove) {
+        this.dateApprove = dateApprove;
+    }
+
     public LocalDate getDateReject() {
         return dateReject;
     }
@@ -217,12 +191,12 @@ public class MBiddingDTO extends AbstractAuditingDTO {
         this.dateReject = dateReject;
     }
 
-    public LocalDate getDateApprove() {
-        return dateApprove;
+    public String getRejectedReason() {
+        return rejectedReason;
     }
 
-    public void setDateApprove(LocalDate dateApprove) {
-        this.dateApprove = dateApprove;
+    public void setRejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
     }
 
     public UUID getUid() {
@@ -273,12 +247,52 @@ public class MBiddingDTO extends AbstractAuditingDTO {
         this.costCenterName = costCenterName;
     }
 
+    public Long getCurrencyId() {
+        return currencyId;
+    }
+
+    public void setCurrencyId(Long cCurrencyId) {
+        this.currencyId = cCurrencyId;
+    }
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
     public Long getRequisitionId() {
         return requisitionId;
     }
 
     public void setRequisitionId(Long mRequisitionId) {
         this.requisitionId = mRequisitionId;
+    }
+
+    public String getRequisitionName() {
+        return requisitionName;
+    }
+
+    public void setRequisitionName(String requisitionName) {
+        this.requisitionName = requisitionName;
+    }
+
+    public Long getReferenceTypeId() {
+        return referenceTypeId;
+    }
+
+    public void setReferenceTypeId(Long cDocumentTypeId) {
+        this.referenceTypeId = cDocumentTypeId;
+    }
+
+    public String getReferenceTypeName() {
+        return referenceTypeName;
+    }
+
+    public void setReferenceTypeName(String referenceTypeName) {
+        this.referenceTypeName = referenceTypeName;
     }
 
     public Long getBiddingTypeId() {
@@ -329,6 +343,22 @@ public class MBiddingDTO extends AbstractAuditingDTO {
         this.adUserUserName = adUserUserName;
     }
 
+    public List<MBiddingLineDTO> getBiddingLineList() {
+        return biddingLineList;
+    }
+
+    public void setBiddingLineList(List<MBiddingLineDTO> biddingLineList) {
+        this.biddingLineList = biddingLineList;
+    }
+
+    public List<MProjectInformationDTO> getProjectInformationList() {
+        return projectInformationList;
+    }
+
+    public void setProjectInformationList(List<MProjectInformationDTO> projectInformationList) {
+        this.projectInformationList = projectInformationList;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -350,4 +380,33 @@ public class MBiddingDTO extends AbstractAuditingDTO {
         return Objects.hashCode(getId());
     }
 
+    @Override
+    public String toString() {
+        return "MBiddingDTO{" +
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", vendorSelection='" + getVendorSelection() + "'" +
+            ", ceilingPrice=" + getCeilingPrice() +
+            ", estimatedPrice=" + getEstimatedPrice() +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
+            ", dateApprove='" + getDateApprove() + "'" +
+            ", dateReject='" + getDateReject() + "'" +
+            ", rejectedReason='" + getRejectedReason() + "'" +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            ", costCenterId=" + getCostCenterId() +
+            ", currencyId=" + getCurrencyId() +
+            ", requisitionId=" + getRequisitionId() +
+            ", referenceTypeId=" + getReferenceTypeId() +
+            ", biddingTypeId=" + getBiddingTypeId() +
+            ", eventTypeId=" + getEventTypeId() +
+            ", adUserId=" + getAdUserUserId() +
+            "}";
+    }
 }

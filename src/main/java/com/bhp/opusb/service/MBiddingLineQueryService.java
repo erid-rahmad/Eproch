@@ -106,14 +106,15 @@ public class MBiddingLineQueryService extends QueryService<MBiddingLine> {
             if (criteria.getRemark() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getRemark(), MBiddingLine_.remark));
             }
-            if (criteria.getGrandTotal() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getGrandTotal(), MBiddingLine_.grandTotal));
-            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MBiddingLine_.uid));
             }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MBiddingLine_.active));
+            }
+            if (criteria.getSubItemId() != null) {
+                specification = specification.and(buildSpecification(criteria.getSubItemId(),
+                    root -> root.join(MBiddingLine_.subItem, JoinType.LEFT).get(MBiddingSubItem_.id)));
             }
             if (criteria.getBiddingId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBiddingId(),

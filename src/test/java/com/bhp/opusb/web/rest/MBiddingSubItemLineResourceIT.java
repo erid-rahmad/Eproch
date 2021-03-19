@@ -3,9 +3,9 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBiddingSubItemLine;
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.MBiddingSubItem;
 import com.bhp.opusb.domain.CProduct;
 import com.bhp.opusb.domain.CUnitOfMeasure;
+import com.bhp.opusb.domain.MBiddingSubItem;
 import com.bhp.opusb.repository.MBiddingSubItemLineRepository;
 import com.bhp.opusb.service.MBiddingSubItemLineService;
 import com.bhp.opusb.service.dto.MBiddingSubItemLineDTO;
@@ -103,16 +103,6 @@ public class MBiddingSubItemLineResourceIT {
         }
         mBiddingSubItemLine.setAdOrganization(aDOrganization);
         // Add required entity
-        MBiddingSubItem mBiddingSubItem;
-        if (TestUtil.findAll(em, MBiddingSubItem.class).isEmpty()) {
-            mBiddingSubItem = MBiddingSubItemResourceIT.createEntity(em);
-            em.persist(mBiddingSubItem);
-            em.flush();
-        } else {
-            mBiddingSubItem = TestUtil.findAll(em, MBiddingSubItem.class).get(0);
-        }
-        mBiddingSubItemLine.setBiddingSubItem(mBiddingSubItem);
-        // Add required entity
         CProduct cProduct;
         if (TestUtil.findAll(em, CProduct.class).isEmpty()) {
             cProduct = CProductResourceIT.createEntity(em);
@@ -132,6 +122,16 @@ public class MBiddingSubItemLineResourceIT {
             cUnitOfMeasure = TestUtil.findAll(em, CUnitOfMeasure.class).get(0);
         }
         mBiddingSubItemLine.setUom(cUnitOfMeasure);
+        // Add required entity
+        MBiddingSubItem mBiddingSubItem;
+        if (TestUtil.findAll(em, MBiddingSubItem.class).isEmpty()) {
+            mBiddingSubItem = MBiddingSubItemResourceIT.createEntity(em);
+            em.persist(mBiddingSubItem);
+            em.flush();
+        } else {
+            mBiddingSubItem = TestUtil.findAll(em, MBiddingSubItem.class).get(0);
+        }
+        mBiddingSubItemLine.setBiddingSubItem(mBiddingSubItem);
         return mBiddingSubItemLine;
     }
     /**
@@ -158,16 +158,6 @@ public class MBiddingSubItemLineResourceIT {
         }
         mBiddingSubItemLine.setAdOrganization(aDOrganization);
         // Add required entity
-        MBiddingSubItem mBiddingSubItem;
-        if (TestUtil.findAll(em, MBiddingSubItem.class).isEmpty()) {
-            mBiddingSubItem = MBiddingSubItemResourceIT.createUpdatedEntity(em);
-            em.persist(mBiddingSubItem);
-            em.flush();
-        } else {
-            mBiddingSubItem = TestUtil.findAll(em, MBiddingSubItem.class).get(0);
-        }
-        mBiddingSubItemLine.setBiddingSubItem(mBiddingSubItem);
-        // Add required entity
         CProduct cProduct;
         if (TestUtil.findAll(em, CProduct.class).isEmpty()) {
             cProduct = CProductResourceIT.createUpdatedEntity(em);
@@ -187,6 +177,16 @@ public class MBiddingSubItemLineResourceIT {
             cUnitOfMeasure = TestUtil.findAll(em, CUnitOfMeasure.class).get(0);
         }
         mBiddingSubItemLine.setUom(cUnitOfMeasure);
+        // Add required entity
+        MBiddingSubItem mBiddingSubItem;
+        if (TestUtil.findAll(em, MBiddingSubItem.class).isEmpty()) {
+            mBiddingSubItem = MBiddingSubItemResourceIT.createUpdatedEntity(em);
+            em.persist(mBiddingSubItem);
+            em.flush();
+        } else {
+            mBiddingSubItem = TestUtil.findAll(em, MBiddingSubItem.class).get(0);
+        }
+        mBiddingSubItemLine.setBiddingSubItem(mBiddingSubItem);
         return mBiddingSubItemLine;
     }
 
@@ -770,22 +770,6 @@ public class MBiddingSubItemLineResourceIT {
 
     @Test
     @Transactional
-    public void getAllMBiddingSubItemLinesByBiddingSubItemIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        MBiddingSubItem biddingSubItem = mBiddingSubItemLine.getBiddingSubItem();
-        mBiddingSubItemLineRepository.saveAndFlush(mBiddingSubItemLine);
-        Long biddingSubItemId = biddingSubItem.getId();
-
-        // Get all the mBiddingSubItemLineList where biddingSubItem equals to biddingSubItemId
-        defaultMBiddingSubItemLineShouldBeFound("biddingSubItemId.equals=" + biddingSubItemId);
-
-        // Get all the mBiddingSubItemLineList where biddingSubItem equals to biddingSubItemId + 1
-        defaultMBiddingSubItemLineShouldNotBeFound("biddingSubItemId.equals=" + (biddingSubItemId + 1));
-    }
-
-
-    @Test
-    @Transactional
     public void getAllMBiddingSubItemLinesByProductIsEqualToSomething() throws Exception {
         // Get already existing entity
         CProduct product = mBiddingSubItemLine.getProduct();
@@ -813,6 +797,22 @@ public class MBiddingSubItemLineResourceIT {
 
         // Get all the mBiddingSubItemLineList where uom equals to uomId + 1
         defaultMBiddingSubItemLineShouldNotBeFound("uomId.equals=" + (uomId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBiddingSubItemLinesByBiddingSubItemIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        MBiddingSubItem biddingSubItem = mBiddingSubItemLine.getBiddingSubItem();
+        mBiddingSubItemLineRepository.saveAndFlush(mBiddingSubItemLine);
+        Long biddingSubItemId = biddingSubItem.getId();
+
+        // Get all the mBiddingSubItemLineList where biddingSubItem equals to biddingSubItemId
+        defaultMBiddingSubItemLineShouldBeFound("biddingSubItemId.equals=" + biddingSubItemId);
+
+        // Get all the mBiddingSubItemLineList where biddingSubItem equals to biddingSubItemId + 1
+        defaultMBiddingSubItemLineShouldNotBeFound("biddingSubItemId.equals=" + (biddingSubItemId + 1));
     }
 
     /**

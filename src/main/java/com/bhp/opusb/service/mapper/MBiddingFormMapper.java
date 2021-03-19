@@ -3,6 +3,7 @@ package com.bhp.opusb.service.mapper;
 
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.service.dto.MBiddingDTO;
+import com.bhp.opusb.service.dto.MBiddingFormDTO;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -11,7 +12,7 @@ import org.mapstruct.Mapping;
  * Mapper for the entity {@link MBidding} and its DTO {@link MBiddingDTO}.
  */
 @Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CCostCenterMapper.class, CCurrencyMapper.class, MRequisitionMapper.class, CDocumentTypeMapper.class, CBiddingTypeMapper.class, CEventTypeMapper.class, AdUserMapper.class})
-public interface MBiddingMapper extends EntityMapper<MBiddingDTO, MBidding> {
+public interface MBiddingFormMapper extends EntityMapper<MBiddingFormDTO, MBidding> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
@@ -29,7 +30,7 @@ public interface MBiddingMapper extends EntityMapper<MBiddingDTO, MBidding> {
     @Mapping(source = "eventType.name", target = "eventTypeName")
     @Mapping(source = "adUser.user.id", target = "adUserUserId")
     @Mapping(source = "adUser.user.login", target = "adUserUserName")
-    MBiddingDTO toDto(MBidding mBidding);
+    MBiddingFormDTO toDto(MBidding mBidding);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "costCenterId", target = "costCenter")
@@ -39,7 +40,7 @@ public interface MBiddingMapper extends EntityMapper<MBiddingDTO, MBidding> {
     @Mapping(source = "biddingTypeId", target = "biddingType")
     @Mapping(source = "eventTypeId", target = "eventType")
     @Mapping(source = "adUserUserId", target = "adUser")
-    MBidding toEntity(MBiddingDTO mBiddingDTO);
+    MBidding toEntity(MBiddingFormDTO mBiddingDTO);
 
     default MBidding fromId(Long id) {
         if (id == null) {

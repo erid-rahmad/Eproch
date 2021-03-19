@@ -1,11 +1,11 @@
-id;quantity;ceiling_price;total_ceiling_price;delivery_date;remark;grand_total;uid;active;bidding_id;ad_organization_id;cost_center_id;product_id;uom_id
-1;15047;3206;3779;2021-02-10;tan;83652;2bf13b87-c7ef-42fc-80b5-e368f078d896;true;1;1;1;1;1
-2;44950;81781;46878;2021-02-10;Hong Kong Dollar;32985;0a8d4b0d-87ea-428d-a941-eb364975d3e4;true;2;2;2;2;2
-3;50507;2831;34111;2021-02-11;grey Regional;78005;9a804a0a-2fe9-4f2c-b788-7215088a4e30;false;3;3;3;3;3
-4;4974;91937;51876;2021-02-11;Colorado Administrator Rue;38957;187d1f47-6ef0-4cb5-a509-c40c55edd874;true;4;4;4;4;4
-5;4605;51061;84553;2021-02-11;zero administration;62726;7b6b607d-d2bd-4bad-a996-52d9d211f346;false;5;5;5;5;5
-6;97145;52481;98224;2021-02-10;AI;48792;c6d7ec59-030a-4acf-a899-5416aba4de8d;true;6;6;6;6;6
-7;36698;81704;65005;2021-02-11;parse solutions mission-critical;48922;c9271cb4-869c-4609-b841-348ced28ff6d;true;7;7;7;7;7
-8;66058;96234;41486;2021-02-11;global;15596;e23e2167-63fb-4cf9-9353-12814d30c389;false;8;8;8;8;8
-9;26688;44190;9163;2021-02-11;Tenge cutting-edge 1080p;75478;a3dbbd33-f849-4089-8940-be40447cf0d7;false;9;9;9;9;9
-10;2829;33397;76584;2021-02-10;circuit;96275;b80dbd69-1a62-4ff2-ac34-bbbd41441780;false;10;10;10;10;10
+id;quantity;ceiling_price;total_ceiling_price;delivery_date;remark;uid;active;bidding_id;ad_organization_id;cost_center_id;product_id;uom_id
+1;15047;3206;3779;2021-02-10;tan;d2bf13b8-7c7e-4f2f-800b-5e368f078d89;false;1;1;1;1;1
+2;68293;44950;81781;2021-02-10;Handcrafted Plastic Gloves Baby Tennessee;4b0d87ea-28de-4941-ab36-4975d3e4d805;false;2;2;2;2;2
+3;65666;21908;35862;2021-02-10;multi-byte payment;04a0a2fe-9f2c-4378-8721-5088a4e3040e;true;3;3;3;3;3
+4;11627;89254;56499;2021-02-11;vortals interface Granite;7d1f476e-f0cb-4565-89c4-0c55edd874a0;true;4;4;4;4;4
+5;84553;6057;28549;2021-02-11;Investment Account interface interface;07dd2bdb-ada9-4965-ad9d-211f3466f8f7;false;5;5;5;5;5
+6;85247;38994;48792;2021-02-10;indexing Mobility;59030aac-fa89-4954-96ab-a4de8d95da5f;true;6;6;6;6;6
+7;96653;43757;27456;2021-02-11;Buckinghamshire;9271cb48-69c6-4093-8413-48ced28ff6db;true;7;7;7;7;7
+8;96234;41486;19994;2021-02-11;bottom-line GB;3e216763-fbcf-49d3-9312-814d30c38944;false;8;8;8;8;8
+9;9163;36254;68460;2021-02-10;cutting-edge 1080p;ca3dbbd3-3f84-4908-9c94-0be40447cf0d;false;9;9;9;9;9
+10;39506;2829;33397;2021-02-10;paradigm Principal firewall;0dbd691a-62ff-422c-b4bb-bd4144178072;false;10;10;10;10;10

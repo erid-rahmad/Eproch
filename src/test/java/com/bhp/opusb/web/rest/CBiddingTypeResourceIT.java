@@ -44,11 +44,11 @@ public class CBiddingTypeResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
-    private static final Boolean DEFAULT_COST_EVALUATION_SELECTION = false;
-    private static final Boolean UPDATED_COST_EVALUATION_SELECTION = true;
+    private static final String DEFAULT_COST_EVALUATION_SELECTION = "AAAAA";
+    private static final String UPDATED_COST_EVALUATION_SELECTION = "BBBBB";
 
-    private static final Boolean DEFAULT_SELECTED_WINNER = false;
-    private static final Boolean UPDATED_SELECTED_WINNER = true;
+    private static final String DEFAULT_WINNER_SELECTION = "AAAAA";
+    private static final String UPDATED_WINNER_SELECTION = "BBBBB";
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
@@ -87,7 +87,7 @@ public class CBiddingTypeResourceIT {
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .costEvaluationSelection(DEFAULT_COST_EVALUATION_SELECTION)
-            .selectedWinner(DEFAULT_SELECTED_WINNER)
+            .winnerSelection(DEFAULT_WINNER_SELECTION)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -123,7 +123,7 @@ public class CBiddingTypeResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .costEvaluationSelection(UPDATED_COST_EVALUATION_SELECTION)
-            .selectedWinner(UPDATED_SELECTED_WINNER)
+            .winnerSelection(UPDATED_WINNER_SELECTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -172,8 +172,8 @@ public class CBiddingTypeResourceIT {
         CBiddingType testCBiddingType = cBiddingTypeList.get(cBiddingTypeList.size() - 1);
         assertThat(testCBiddingType.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCBiddingType.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
-        assertThat(testCBiddingType.isCostEvaluationSelection()).isEqualTo(DEFAULT_COST_EVALUATION_SELECTION);
-        assertThat(testCBiddingType.isSelectedWinner()).isEqualTo(DEFAULT_SELECTED_WINNER);
+        assertThat(testCBiddingType.getCostEvaluationSelection()).isEqualTo(DEFAULT_COST_EVALUATION_SELECTION);
+        assertThat(testCBiddingType.getWinnerSelection()).isEqualTo(DEFAULT_WINNER_SELECTION);
         assertThat(testCBiddingType.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCBiddingType.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -231,8 +231,8 @@ public class CBiddingTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cBiddingType.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].costEvaluationSelection").value(hasItem(DEFAULT_COST_EVALUATION_SELECTION.booleanValue())))
-            .andExpect(jsonPath("$.[*].selectedWinner").value(hasItem(DEFAULT_SELECTED_WINNER.booleanValue())))
+            .andExpect(jsonPath("$.[*].costEvaluationSelection").value(hasItem(DEFAULT_COST_EVALUATION_SELECTION)))
+            .andExpect(jsonPath("$.[*].winnerSelection").value(hasItem(DEFAULT_WINNER_SELECTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -250,8 +250,8 @@ public class CBiddingTypeResourceIT {
             .andExpect(jsonPath("$.id").value(cBiddingType.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
-            .andExpect(jsonPath("$.costEvaluationSelection").value(DEFAULT_COST_EVALUATION_SELECTION.booleanValue()))
-            .andExpect(jsonPath("$.selectedWinner").value(DEFAULT_SELECTED_WINNER.booleanValue()))
+            .andExpect(jsonPath("$.costEvaluationSelection").value(DEFAULT_COST_EVALUATION_SELECTION))
+            .andExpect(jsonPath("$.winnerSelection").value(DEFAULT_WINNER_SELECTION))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -483,58 +483,110 @@ public class CBiddingTypeResourceIT {
         // Get all the cBiddingTypeList where costEvaluationSelection is null
         defaultCBiddingTypeShouldNotBeFound("costEvaluationSelection.specified=false");
     }
-
-    @Test
+                @Test
     @Transactional
-    public void getAllCBiddingTypesBySelectedWinnerIsEqualToSomething() throws Exception {
+    public void getAllCBiddingTypesByCostEvaluationSelectionContainsSomething() throws Exception {
         // Initialize the database
         cBiddingTypeRepository.saveAndFlush(cBiddingType);
 
-        // Get all the cBiddingTypeList where selectedWinner equals to DEFAULT_SELECTED_WINNER
-        defaultCBiddingTypeShouldBeFound("selectedWinner.equals=" + DEFAULT_SELECTED_WINNER);
+        // Get all the cBiddingTypeList where costEvaluationSelection contains DEFAULT_COST_EVALUATION_SELECTION
+        defaultCBiddingTypeShouldBeFound("costEvaluationSelection.contains=" + DEFAULT_COST_EVALUATION_SELECTION);
 
-        // Get all the cBiddingTypeList where selectedWinner equals to UPDATED_SELECTED_WINNER
-        defaultCBiddingTypeShouldNotBeFound("selectedWinner.equals=" + UPDATED_SELECTED_WINNER);
+        // Get all the cBiddingTypeList where costEvaluationSelection contains UPDATED_COST_EVALUATION_SELECTION
+        defaultCBiddingTypeShouldNotBeFound("costEvaluationSelection.contains=" + UPDATED_COST_EVALUATION_SELECTION);
     }
 
     @Test
     @Transactional
-    public void getAllCBiddingTypesBySelectedWinnerIsNotEqualToSomething() throws Exception {
+    public void getAllCBiddingTypesByCostEvaluationSelectionNotContainsSomething() throws Exception {
         // Initialize the database
         cBiddingTypeRepository.saveAndFlush(cBiddingType);
 
-        // Get all the cBiddingTypeList where selectedWinner not equals to DEFAULT_SELECTED_WINNER
-        defaultCBiddingTypeShouldNotBeFound("selectedWinner.notEquals=" + DEFAULT_SELECTED_WINNER);
+        // Get all the cBiddingTypeList where costEvaluationSelection does not contain DEFAULT_COST_EVALUATION_SELECTION
+        defaultCBiddingTypeShouldNotBeFound("costEvaluationSelection.doesNotContain=" + DEFAULT_COST_EVALUATION_SELECTION);
 
-        // Get all the cBiddingTypeList where selectedWinner not equals to UPDATED_SELECTED_WINNER
-        defaultCBiddingTypeShouldBeFound("selectedWinner.notEquals=" + UPDATED_SELECTED_WINNER);
+        // Get all the cBiddingTypeList where costEvaluationSelection does not contain UPDATED_COST_EVALUATION_SELECTION
+        defaultCBiddingTypeShouldBeFound("costEvaluationSelection.doesNotContain=" + UPDATED_COST_EVALUATION_SELECTION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCBiddingTypesByWinnerSelectionIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cBiddingTypeRepository.saveAndFlush(cBiddingType);
+
+        // Get all the cBiddingTypeList where winnerSelection equals to DEFAULT_WINNER_SELECTION
+        defaultCBiddingTypeShouldBeFound("winnerSelection.equals=" + DEFAULT_WINNER_SELECTION);
+
+        // Get all the cBiddingTypeList where winnerSelection equals to UPDATED_WINNER_SELECTION
+        defaultCBiddingTypeShouldNotBeFound("winnerSelection.equals=" + UPDATED_WINNER_SELECTION);
     }
 
     @Test
     @Transactional
-    public void getAllCBiddingTypesBySelectedWinnerIsInShouldWork() throws Exception {
+    public void getAllCBiddingTypesByWinnerSelectionIsNotEqualToSomething() throws Exception {
         // Initialize the database
         cBiddingTypeRepository.saveAndFlush(cBiddingType);
 
-        // Get all the cBiddingTypeList where selectedWinner in DEFAULT_SELECTED_WINNER or UPDATED_SELECTED_WINNER
-        defaultCBiddingTypeShouldBeFound("selectedWinner.in=" + DEFAULT_SELECTED_WINNER + "," + UPDATED_SELECTED_WINNER);
+        // Get all the cBiddingTypeList where winnerSelection not equals to DEFAULT_WINNER_SELECTION
+        defaultCBiddingTypeShouldNotBeFound("winnerSelection.notEquals=" + DEFAULT_WINNER_SELECTION);
 
-        // Get all the cBiddingTypeList where selectedWinner equals to UPDATED_SELECTED_WINNER
-        defaultCBiddingTypeShouldNotBeFound("selectedWinner.in=" + UPDATED_SELECTED_WINNER);
+        // Get all the cBiddingTypeList where winnerSelection not equals to UPDATED_WINNER_SELECTION
+        defaultCBiddingTypeShouldBeFound("winnerSelection.notEquals=" + UPDATED_WINNER_SELECTION);
     }
 
     @Test
     @Transactional
-    public void getAllCBiddingTypesBySelectedWinnerIsNullOrNotNull() throws Exception {
+    public void getAllCBiddingTypesByWinnerSelectionIsInShouldWork() throws Exception {
         // Initialize the database
         cBiddingTypeRepository.saveAndFlush(cBiddingType);
 
-        // Get all the cBiddingTypeList where selectedWinner is not null
-        defaultCBiddingTypeShouldBeFound("selectedWinner.specified=true");
+        // Get all the cBiddingTypeList where winnerSelection in DEFAULT_WINNER_SELECTION or UPDATED_WINNER_SELECTION
+        defaultCBiddingTypeShouldBeFound("winnerSelection.in=" + DEFAULT_WINNER_SELECTION + "," + UPDATED_WINNER_SELECTION);
 
-        // Get all the cBiddingTypeList where selectedWinner is null
-        defaultCBiddingTypeShouldNotBeFound("selectedWinner.specified=false");
+        // Get all the cBiddingTypeList where winnerSelection equals to UPDATED_WINNER_SELECTION
+        defaultCBiddingTypeShouldNotBeFound("winnerSelection.in=" + UPDATED_WINNER_SELECTION);
     }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingTypesByWinnerSelectionIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cBiddingTypeRepository.saveAndFlush(cBiddingType);
+
+        // Get all the cBiddingTypeList where winnerSelection is not null
+        defaultCBiddingTypeShouldBeFound("winnerSelection.specified=true");
+
+        // Get all the cBiddingTypeList where winnerSelection is null
+        defaultCBiddingTypeShouldNotBeFound("winnerSelection.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCBiddingTypesByWinnerSelectionContainsSomething() throws Exception {
+        // Initialize the database
+        cBiddingTypeRepository.saveAndFlush(cBiddingType);
+
+        // Get all the cBiddingTypeList where winnerSelection contains DEFAULT_WINNER_SELECTION
+        defaultCBiddingTypeShouldBeFound("winnerSelection.contains=" + DEFAULT_WINNER_SELECTION);
+
+        // Get all the cBiddingTypeList where winnerSelection contains UPDATED_WINNER_SELECTION
+        defaultCBiddingTypeShouldNotBeFound("winnerSelection.contains=" + UPDATED_WINNER_SELECTION);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingTypesByWinnerSelectionNotContainsSomething() throws Exception {
+        // Initialize the database
+        cBiddingTypeRepository.saveAndFlush(cBiddingType);
+
+        // Get all the cBiddingTypeList where winnerSelection does not contain DEFAULT_WINNER_SELECTION
+        defaultCBiddingTypeShouldNotBeFound("winnerSelection.doesNotContain=" + DEFAULT_WINNER_SELECTION);
+
+        // Get all the cBiddingTypeList where winnerSelection does not contain UPDATED_WINNER_SELECTION
+        defaultCBiddingTypeShouldBeFound("winnerSelection.doesNotContain=" + UPDATED_WINNER_SELECTION);
+    }
+
 
     @Test
     @Transactional
@@ -681,8 +733,8 @@ public class CBiddingTypeResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cBiddingType.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
-            .andExpect(jsonPath("$.[*].costEvaluationSelection").value(hasItem(DEFAULT_COST_EVALUATION_SELECTION.booleanValue())))
-            .andExpect(jsonPath("$.[*].selectedWinner").value(hasItem(DEFAULT_SELECTED_WINNER.booleanValue())))
+            .andExpect(jsonPath("$.[*].costEvaluationSelection").value(hasItem(DEFAULT_COST_EVALUATION_SELECTION)))
+            .andExpect(jsonPath("$.[*].winnerSelection").value(hasItem(DEFAULT_WINNER_SELECTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -735,7 +787,7 @@ public class CBiddingTypeResourceIT {
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .costEvaluationSelection(UPDATED_COST_EVALUATION_SELECTION)
-            .selectedWinner(UPDATED_SELECTED_WINNER)
+            .winnerSelection(UPDATED_WINNER_SELECTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CBiddingTypeDTO cBiddingTypeDTO = cBiddingTypeMapper.toDto(updatedCBiddingType);
@@ -751,8 +803,8 @@ public class CBiddingTypeResourceIT {
         CBiddingType testCBiddingType = cBiddingTypeList.get(cBiddingTypeList.size() - 1);
         assertThat(testCBiddingType.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCBiddingType.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
-        assertThat(testCBiddingType.isCostEvaluationSelection()).isEqualTo(UPDATED_COST_EVALUATION_SELECTION);
-        assertThat(testCBiddingType.isSelectedWinner()).isEqualTo(UPDATED_SELECTED_WINNER);
+        assertThat(testCBiddingType.getCostEvaluationSelection()).isEqualTo(UPDATED_COST_EVALUATION_SELECTION);
+        assertThat(testCBiddingType.getWinnerSelection()).isEqualTo(UPDATED_WINNER_SELECTION);
         assertThat(testCBiddingType.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCBiddingType.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

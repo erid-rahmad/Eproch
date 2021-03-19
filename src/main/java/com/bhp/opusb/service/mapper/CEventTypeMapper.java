@@ -14,12 +14,12 @@ public interface CEventTypeMapper extends EntityMapper<CEventTypeDTO, CEventType
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
-    @Mapping(source = "bindingType.id", target = "bindingTypeId")
-    @Mapping(source = "bindingType.name", target = "bindingTypeName")
+    @Mapping(source = "biddingType.id", target = "biddingTypeId")
+    @Mapping(source = "biddingType.name", target = "biddingTypeName")
     CEventTypeDTO toDto(CEventType cEventType);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
-    @Mapping(source = "bindingTypeId", target = "bindingType")
+    @Mapping(source = "biddingTypeId", target = "biddingType")
     CEventType toEntity(CEventTypeDTO cEventTypeDTO);
 
     default CEventType fromId(Long id) {

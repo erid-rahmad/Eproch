@@ -5,6 +5,20 @@ import BiddingSchedule from './components/bidding-schedule.vue';
 import VendorInvitation from './components/vendor-invitation.vue';
 import VendorScoring from './components/vendor-scoring.vue';
 
+const StepsFormProps = Vue.extend({
+  props: {
+    editMode: Boolean,
+    data: Object
+  }
+});
+
+export enum BiddingStep {
+  INFO = 'info',
+  SCHEDULE = 'schedule',
+  SELECTION = 'selection',
+  SCORING = 'scoring'
+}
+
 @Component({
   components: {
     BiddingInformation,
@@ -13,7 +27,7 @@ import VendorScoring from './components/vendor-scoring.vue';
     VendorScoring
   }
 })
-export default class StepsForm extends Vue {
+export default class StepsForm extends StepsFormProps {
 
   agreementAccepted: boolean = false;
   doNotMatch = '';
@@ -25,20 +39,21 @@ export default class StepsForm extends Vue {
   fullscreenLoading = false;
   active = 0;
   eventBus = new Vue();
+
   bidding = {
-    biddingInformation: {
-      biddingInformationLine: [],
-      projectInformation: [],
-    },
-    biddingSchedule: {
-      eventSchedule: [],
-      documentSchedule: []
-    },
-    vendorInvitation: {
-      vendorBusinessCategory: [],
-      vendorSuggestion: []
-    },
+    biddingLines: [],
+    projectInformations: [],
+    biddingSchedules: [],
+    vendorInvitations: [],
+    vendorSuggestions: [],
     vendorScoring: []
+  }
+
+  created() {
+    console.log('editMode: %s, data: %O', this.editMode, this.data);
+    if (this.editMode && this.data) {
+      this.bidding = {...this.data};
+    }
   }
 
   mounted() {
@@ -54,28 +69,13 @@ export default class StepsForm extends Vue {
   }
 
   next() {
-    console.log(this.active);
-    if(this.active == 0){
-      console.log(this.bidding.biddingInformation);
-      console.log(this.bidding);
-    }else if(this.active == 1){
-      console.log(this.bidding.biddingSchedule);
-      console.log(this.bidding);
-    }else if(this.active == 2){
-      console.log(this.bidding.vendorInvitation);
-      console.log(this.bidding);
-    }else if(this.active == 3){
-      console.log(this.bidding.vendorScoring);
-      console.log(this.bidding);
-    }
-    ++this.active;
-    // Trigger the validation of the current form.
-    //this.eventBus.$emit('validate-form', this.active);
+    const currentStep = this.$refs[`step-${this.active}`] as any;
+    currentStep.save();
   }
 
-  proceedNext(validationState) {
-    if (validationState.passed && this.active <= 3) {
-      ++this.active;
+  goToNextStep({ data }) {
+    if (++this.active <= 3) {
+      this.bidding = data;
     }
   }
 

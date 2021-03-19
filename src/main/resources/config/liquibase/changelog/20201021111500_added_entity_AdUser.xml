@@ -110,4 +110,12 @@
         <dropNotNullConstraint tableName="ad_user" columnName="phone" />
     </changeSet>
 
+    <changeSet id="20210219112400" author="Ananta Aryadewa">
+        <addColumn tableName="ad_user">
+            <column name="employee" type="boolean" remarks="Whether it is an employee or not">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

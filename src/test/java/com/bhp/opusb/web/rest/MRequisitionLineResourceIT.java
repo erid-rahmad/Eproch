@@ -46,6 +46,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MRequisitionLineResourceIT {
 
+    private static final Integer DEFAULT_LINE_NO = 1;
+    private static final Integer UPDATED_LINE_NO = 2;
+    private static final Integer SMALLER_LINE_NO = 1 - 1;
+
     private static final LocalDate DEFAULT_DOCUMENT_DATE = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DOCUMENT_DATE = LocalDate.now(ZoneId.systemDefault());
     private static final LocalDate SMALLER_DOCUMENT_DATE = LocalDate.ofEpochDay(-1L);
@@ -115,6 +119,7 @@ public class MRequisitionLineResourceIT {
      */
     public static MRequisitionLine createEntity(EntityManager em) {
         MRequisitionLine mRequisitionLine = new MRequisitionLine()
+            .lineNo(DEFAULT_LINE_NO)
             .documentDate(DEFAULT_DOCUMENT_DATE)
             .datePromised(DEFAULT_DATE_PROMISED)
             .dateRequired(DEFAULT_DATE_REQUIRED)
@@ -176,6 +181,7 @@ public class MRequisitionLineResourceIT {
      */
     public static MRequisitionLine createUpdatedEntity(EntityManager em) {
         MRequisitionLine mRequisitionLine = new MRequisitionLine()
+            .lineNo(UPDATED_LINE_NO)
             .documentDate(UPDATED_DOCUMENT_DATE)
             .datePromised(UPDATED_DATE_PROMISED)
             .dateRequired(UPDATED_DATE_REQUIRED)
@@ -251,6 +257,7 @@ public class MRequisitionLineResourceIT {
         List<MRequisitionLine> mRequisitionLineList = mRequisitionLineRepository.findAll();
         assertThat(mRequisitionLineList).hasSize(databaseSizeBeforeCreate + 1);
         MRequisitionLine testMRequisitionLine = mRequisitionLineList.get(mRequisitionLineList.size() - 1);
+        assertThat(testMRequisitionLine.getLineNo()).isEqualTo(DEFAULT_LINE_NO);
         assertThat(testMRequisitionLine.getDocumentDate()).isEqualTo(DEFAULT_DOCUMENT_DATE);
         assertThat(testMRequisitionLine.getDatePromised()).isEqualTo(DEFAULT_DATE_PROMISED);
         assertThat(testMRequisitionLine.getDateRequired()).isEqualTo(DEFAULT_DATE_REQUIRED);
@@ -391,6 +398,7 @@ public class MRequisitionLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mRequisitionLine.getId().intValue())))
+            .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
@@ -415,6 +423,7 @@ public class MRequisitionLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mRequisitionLine.getId().intValue()))
+            .andExpect(jsonPath("$.lineNo").value(DEFAULT_LINE_NO))
             .andExpect(jsonPath("$.documentDate").value(DEFAULT_DOCUMENT_DATE.toString()))
             .andExpect(jsonPath("$.datePromised").value(DEFAULT_DATE_PROMISED.toString()))
             .andExpect(jsonPath("$.dateRequired").value(DEFAULT_DATE_REQUIRED.toString()))
@@ -445,6 +454,111 @@ public class MRequisitionLineResourceIT {
 
         defaultMRequisitionLineShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMRequisitionLineShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByLineNoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where lineNo equals to DEFAULT_LINE_NO
+        defaultMRequisitionLineShouldBeFound("lineNo.equals=" + DEFAULT_LINE_NO);
+
+        // Get all the mRequisitionLineList where lineNo equals to UPDATED_LINE_NO
+        defaultMRequisitionLineShouldNotBeFound("lineNo.equals=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByLineNoIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where lineNo not equals to DEFAULT_LINE_NO
+        defaultMRequisitionLineShouldNotBeFound("lineNo.notEquals=" + DEFAULT_LINE_NO);
+
+        // Get all the mRequisitionLineList where lineNo not equals to UPDATED_LINE_NO
+        defaultMRequisitionLineShouldBeFound("lineNo.notEquals=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByLineNoIsInShouldWork() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where lineNo in DEFAULT_LINE_NO or UPDATED_LINE_NO
+        defaultMRequisitionLineShouldBeFound("lineNo.in=" + DEFAULT_LINE_NO + "," + UPDATED_LINE_NO);
+
+        // Get all the mRequisitionLineList where lineNo equals to UPDATED_LINE_NO
+        defaultMRequisitionLineShouldNotBeFound("lineNo.in=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByLineNoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where lineNo is not null
+        defaultMRequisitionLineShouldBeFound("lineNo.specified=true");
+
+        // Get all the mRequisitionLineList where lineNo is null
+        defaultMRequisitionLineShouldNotBeFound("lineNo.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByLineNoIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where lineNo is greater than or equal to DEFAULT_LINE_NO
+        defaultMRequisitionLineShouldBeFound("lineNo.greaterThanOrEqual=" + DEFAULT_LINE_NO);
+
+        // Get all the mRequisitionLineList where lineNo is greater than or equal to UPDATED_LINE_NO
+        defaultMRequisitionLineShouldNotBeFound("lineNo.greaterThanOrEqual=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByLineNoIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where lineNo is less than or equal to DEFAULT_LINE_NO
+        defaultMRequisitionLineShouldBeFound("lineNo.lessThanOrEqual=" + DEFAULT_LINE_NO);
+
+        // Get all the mRequisitionLineList where lineNo is less than or equal to SMALLER_LINE_NO
+        defaultMRequisitionLineShouldNotBeFound("lineNo.lessThanOrEqual=" + SMALLER_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByLineNoIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where lineNo is less than DEFAULT_LINE_NO
+        defaultMRequisitionLineShouldNotBeFound("lineNo.lessThan=" + DEFAULT_LINE_NO);
+
+        // Get all the mRequisitionLineList where lineNo is less than UPDATED_LINE_NO
+        defaultMRequisitionLineShouldBeFound("lineNo.lessThan=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMRequisitionLinesByLineNoIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mRequisitionLineRepository.saveAndFlush(mRequisitionLine);
+
+        // Get all the mRequisitionLineList where lineNo is greater than DEFAULT_LINE_NO
+        defaultMRequisitionLineShouldNotBeFound("lineNo.greaterThan=" + DEFAULT_LINE_NO);
+
+        // Get all the mRequisitionLineList where lineNo is greater than SMALLER_LINE_NO
+        defaultMRequisitionLineShouldBeFound("lineNo.greaterThan=" + SMALLER_LINE_NO);
     }
 
 
@@ -1601,6 +1715,7 @@ public class MRequisitionLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mRequisitionLine.getId().intValue())))
+            .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
             .andExpect(jsonPath("$.[*].documentDate").value(hasItem(DEFAULT_DOCUMENT_DATE.toString())))
             .andExpect(jsonPath("$.[*].datePromised").value(hasItem(DEFAULT_DATE_PROMISED.toString())))
             .andExpect(jsonPath("$.[*].dateRequired").value(hasItem(DEFAULT_DATE_REQUIRED.toString())))
@@ -1659,6 +1774,7 @@ public class MRequisitionLineResourceIT {
         // Disconnect from session so that the updates on updatedMRequisitionLine are not directly saved in db
         em.detach(updatedMRequisitionLine);
         updatedMRequisitionLine
+            .lineNo(UPDATED_LINE_NO)
             .documentDate(UPDATED_DOCUMENT_DATE)
             .datePromised(UPDATED_DATE_PROMISED)
             .dateRequired(UPDATED_DATE_REQUIRED)
@@ -1681,6 +1797,7 @@ public class MRequisitionLineResourceIT {
         List<MRequisitionLine> mRequisitionLineList = mRequisitionLineRepository.findAll();
         assertThat(mRequisitionLineList).hasSize(databaseSizeBeforeUpdate);
         MRequisitionLine testMRequisitionLine = mRequisitionLineList.get(mRequisitionLineList.size() - 1);
+        assertThat(testMRequisitionLine.getLineNo()).isEqualTo(UPDATED_LINE_NO);
         assertThat(testMRequisitionLine.getDocumentDate()).isEqualTo(UPDATED_DOCUMENT_DATE);
         assertThat(testMRequisitionLine.getDatePromised()).isEqualTo(UPDATED_DATE_PROMISED);
         assertThat(testMRequisitionLine.getDateRequired()).isEqualTo(UPDATED_DATE_REQUIRED);

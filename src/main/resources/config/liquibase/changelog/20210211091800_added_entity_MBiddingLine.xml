@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity MBiddingLine.
     -->
@@ -96,7 +96,6 @@
             <column name="total_ceiling_price" type="numeric"/>
             <column name="delivery_date" type="date"/>
             <column name="remark" type="string"/>
-            <column name="grand_total" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="bidding_id" type="numeric"/>
@@ -106,6 +105,15 @@
             <column name="uom_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210318040600" author="Ananta Aryadewa">
+        <dropColumn tableName="m_bidding_line" columnName="grand_total" />
+        <addColumn tableName="m_bidding_line">
+            <column name="sub_item_id" type="bigint">
+                <constraints unique="true" nullable="true" uniqueConstraintName="ux_m_bidding_line_sub_item_id" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

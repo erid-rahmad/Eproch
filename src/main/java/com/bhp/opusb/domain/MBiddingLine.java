@@ -1,15 +1,26 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A MBiddingLine.
@@ -44,14 +55,15 @@ public class MBiddingLine extends AbstractAuditingEntity {
     @Column(name = "remark")
     private String remark;
 
-    @Column(name = "grand_total", precision = 21, scale = 2)
-    private BigDecimal grandTotal;
-
     @Column(name = "uid")
     private UUID uid;
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private MBiddingSubItem subItem;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -152,19 +164,6 @@ public class MBiddingLine extends AbstractAuditingEntity {
         this.remark = remark;
     }
 
-    public BigDecimal getGrandTotal() {
-        return grandTotal;
-    }
-
-    public MBiddingLine grandTotal(BigDecimal grandTotal) {
-        this.grandTotal = grandTotal;
-        return this;
-    }
-
-    public void setGrandTotal(BigDecimal grandTotal) {
-        this.grandTotal = grandTotal;
-    }
-
     public UUID getUid() {
         return uid;
     }
@@ -189,6 +188,19 @@ public class MBiddingLine extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public MBiddingSubItem getSubItem() {
+        return subItem;
+    }
+
+    public MBiddingLine subItem(MBiddingSubItem mBiddingSubItem) {
+        this.subItem = mBiddingSubItem;
+        return this;
+    }
+
+    public void setSubItem(MBiddingSubItem mBiddingSubItem) {
+        this.subItem = mBiddingSubItem;
     }
 
     public MBidding getBidding() {
@@ -287,7 +299,6 @@ public class MBiddingLine extends AbstractAuditingEntity {
             ", totalCeilingPrice=" + getTotalCeilingPrice() +
             ", deliveryDate='" + getDeliveryDate() + "'" +
             ", remark='" + getRemark() + "'" +
-            ", grandTotal=" + getGrandTotal() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

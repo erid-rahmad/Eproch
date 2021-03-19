@@ -2,6 +2,10 @@
     "name": "MRequisitionLine",
     "fields": [
         {
+            "fieldName": "lineNo",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "documentDate",
             "fieldType": "LocalDate"
         },

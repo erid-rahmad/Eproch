@@ -1,17 +1,19 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.MBiddingLine;
 import com.bhp.opusb.service.dto.MBiddingLineDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link MBiddingLine} and its DTO {@link MBiddingLineDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MBiddingMapper.class, ADOrganizationMapper.class, CCostCenterMapper.class, CProductMapper.class, CUnitOfMeasureMapper.class})
+@Mapper(componentModel = "spring", uses = {MBiddingSubItemMapper.class, MBiddingMapper.class, ADOrganizationMapper.class, CCostCenterMapper.class, CProductMapper.class, CUnitOfMeasureMapper.class})
 public interface MBiddingLineMapper extends EntityMapper<MBiddingLineDTO, MBiddingLine> {
 
+    @Mapping(source = "subItem.id", target = "subItemId")
     @Mapping(source = "bidding.id", target = "biddingId")
     @Mapping(source = "bidding.name", target = "biddingName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
@@ -24,6 +26,7 @@ public interface MBiddingLineMapper extends EntityMapper<MBiddingLineDTO, MBiddi
     @Mapping(source = "uom.name", target = "uomName")
     MBiddingLineDTO toDto(MBiddingLine mBiddingLine);
 
+    @Mapping(source = "subItemId", target = "subItem")
     @Mapping(source = "biddingId", target = "bidding")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "costCenterId", target = "costCenter")

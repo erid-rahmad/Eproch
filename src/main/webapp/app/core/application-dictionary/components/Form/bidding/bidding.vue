@@ -10,7 +10,8 @@
                         size="mini"
                         type="primary"
                         icon="el-icon-plus"
-                        @click="onClick('add')"/>
+                        @click="onClick('add')"
+                    />
 
                     <el-button
                         class="button"
@@ -18,14 +19,16 @@
                         size="mini"
                         type="danger"
                         icon="el-icon-delete"
-                        @click="onClick('remove')"/>
+                        @click="onClick('remove')"
+                    />
 
                     <el-button
                         class="button"
                         size="mini"
                         type="primary"
                         icon="el-icon-download"
-                        @click="onClick('export')">
+                        @click="onClick('export')"
+                    >
                         Export
                     </el-button>
 
@@ -47,13 +50,15 @@
                         :empty-text="gridSchema.emptyText"
                         :data="gridData"
                         @sort-change="changeOrder"
-                        @selection-change="onSelectionChanged">
+                        @selection-change="onSelectionChanged"
+                    >
 
                         <el-table-column
                             align="center"
                             fixed
                             type="selection"
-                            width="48"/>
+                            width="48"
+                        />
 
                         <el-table-column
                             fixed
@@ -73,7 +78,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            min-width="50"
+                            min-width="100"
                             sortable
                             prop="biddingNo"
                             label="Bidding No"/>
@@ -85,13 +90,13 @@
                             label="Title"/>
 
                         <el-table-column
-                            min-width="50"
+                            min-width="100"
                             sortable
                             prop="biddingTypeName"
                             label="Bidding Type"/>
 
                         <el-table-column
-                            min-width="60"
+                            min-width="100"
                             sortable
                             label="Bidding Schedule">
                             <template slot-scope="{ row }">
@@ -107,7 +112,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            min-width="60"
+                            min-width="100"
                             prop="documentStatus"
                             label="Bidding Status"
                             sortable>
@@ -117,7 +122,7 @@
                         </el-table-column>
 
                         <el-table-column
-                            min-width="60"
+                            min-width="100"
                             sortable
                             label="Joined Vendor">
                             <template slot-scope="{ row }">
@@ -133,13 +138,13 @@
                         </el-table-column>
 
                         <el-table-column
-                            min-width="60"
+                            min-width="100"
                             sortable
                             prop="lastModifiedDate"
                             label="Modified Date"/>
 
                         <el-table-column
-                            min-width="60"
+                            min-width="100"
                             sortable
                             prop="lastModifiedBy"
                             label="Modified By"/>
@@ -163,7 +168,11 @@
 
         <div v-else>
             <step-form
-                @back="close"/>
+                ref="biddingForm"
+                :edit-mode="editMode"
+                :data="selectedRow"
+                @back="close"
+            />
         </div>
 
     </div>

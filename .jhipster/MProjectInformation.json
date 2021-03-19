@@ -8,6 +8,10 @@
     {
       "fieldName": "active",
       "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "name",
+      "fieldType": "String"
     }
   ],
   "relationships": [

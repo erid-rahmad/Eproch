@@ -74,8 +74,8 @@ class CBiddingTypeGatlingTest extends Simulation {
                 "id":null
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
-                , "costEvaluationSelection":null
-                , "selectedWinner":null
+                , "costEvaluationSelection":"SAMPLE_TEXT"
+                , "winnerSelection":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

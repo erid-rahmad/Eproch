@@ -77,7 +77,6 @@ class MBiddingLineGatlingTest extends Simulation {
                 , "totalCeilingPrice":"0"
                 , "deliveryDate":"2020-01-01T00:00:00.000Z"
                 , "remark":"SAMPLE_TEXT"
-                , "grandTotal":"0"
                 , "uid":null
                 , "active":null
                 }""")).asJson

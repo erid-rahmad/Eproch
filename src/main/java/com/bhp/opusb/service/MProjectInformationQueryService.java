@@ -97,6 +97,9 @@ public class MProjectInformationQueryService extends QueryService<MProjectInform
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MProjectInformation_.active));
             }
+            if (criteria.getName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getName(), MProjectInformation_.name));
+            }
             if (criteria.getBiddingId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBiddingId(),
                     root -> root.join(MProjectInformation_.bidding, JoinType.LEFT).get(MBidding_.id)));

@@ -2,7 +2,6 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
@@ -35,6 +34,8 @@ public class AdUserCriteria implements Serializable, Criteria {
 
     private StringFilter position;
 
+    private BooleanFilter employee;
+
     private BooleanFilter vendor;
 
     private IntegerFilter failedLoginCount;
@@ -57,6 +58,7 @@ public class AdUserCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.phone = other.phone == null ? null : other.phone.copy();
         this.position = other.position == null ? null : other.position.copy();
+        this.employee = other.employee == null ? null : other.employee.copy();
         this.vendor = other.vendor == null ? null : other.vendor.copy();
         this.failedLoginCount = other.failedLoginCount == null ? null : other.failedLoginCount.copy();
         this.lastLoginDate = other.lastLoginDate == null ? null : other.lastLoginDate.copy();
@@ -109,6 +111,14 @@ public class AdUserCriteria implements Serializable, Criteria {
 
     public void setPosition(StringFilter position) {
         this.position = position;
+    }
+
+    public BooleanFilter getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(BooleanFilter employee) {
+        this.employee = employee;
     }
 
     public BooleanFilter getVendor() {
@@ -183,6 +193,7 @@ public class AdUserCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(phone, that.phone) &&
             Objects.equals(position, that.position) &&
+            Objects.equals(employee, that.employee) &&
             Objects.equals(vendor, that.vendor) &&
             Objects.equals(failedLoginCount, that.failedLoginCount) &&
             Objects.equals(lastLoginDate, that.lastLoginDate) &&
@@ -200,6 +211,7 @@ public class AdUserCriteria implements Serializable, Criteria {
         active,
         phone,
         position,
+        employee,
         vendor,
         failedLoginCount,
         lastLoginDate,
@@ -218,6 +230,7 @@ public class AdUserCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (phone != null ? "phone=" + phone + ", " : "") +
                 (position != null ? "position=" + position + ", " : "") +
+                (employee != null ? "employee=" + employee + ", " : "") +
                 (vendor != null ? "vendor=" + vendor + ", " : "") +
                 (failedLoginCount != null ? "failedLoginCount=" + failedLoginCount + ", " : "") +
                 (lastLoginDate != null ? "lastLoginDate=" + lastLoginDate + ", " : "") +

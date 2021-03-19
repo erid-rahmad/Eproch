@@ -2,16 +2,14 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.BigDecimalFilter;
-import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -29,8 +27,6 @@ public class MBiddingCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter biddingNo;
-
     private StringFilter name;
 
     private StringFilter vendorSelection;
@@ -38,6 +34,10 @@ public class MBiddingCriteria implements Serializable, Criteria {
     private BigDecimalFilter ceilingPrice;
 
     private BigDecimalFilter estimatedPrice;
+
+    private LocalDateFilter dateTrx;
+
+    private StringFilter documentNo;
 
     private StringFilter documentAction;
 
@@ -47,9 +47,11 @@ public class MBiddingCriteria implements Serializable, Criteria {
 
     private BooleanFilter processed;
 
+    private LocalDateFilter dateApprove;
+
     private LocalDateFilter dateReject;
 
-    private LocalDateFilter dateApprove;
+    private StringFilter rejectedReason;
 
     private UUIDFilter uid;
 
@@ -59,7 +61,11 @@ public class MBiddingCriteria implements Serializable, Criteria {
 
     private LongFilter costCenterId;
 
+    private LongFilter currencyId;
+
     private LongFilter requisitionId;
+
+    private LongFilter referenceTypeId;
 
     private LongFilter biddingTypeId;
 
@@ -72,22 +78,26 @@ public class MBiddingCriteria implements Serializable, Criteria {
 
     public MBiddingCriteria(MBiddingCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.biddingNo = other.biddingNo == null ? null : other.biddingNo.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.vendorSelection = other.vendorSelection == null ? null : other.vendorSelection.copy();
         this.ceilingPrice = other.ceilingPrice == null ? null : other.ceilingPrice.copy();
         this.estimatedPrice = other.estimatedPrice == null ? null : other.estimatedPrice.copy();
+        this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
+        this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
         this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
         this.documentStatus = other.documentStatus == null ? null : other.documentStatus.copy();
         this.approved = other.approved == null ? null : other.approved.copy();
         this.processed = other.processed == null ? null : other.processed.copy();
-        this.dateReject = other.dateReject == null ? null : other.dateReject.copy();
         this.dateApprove = other.dateApprove == null ? null : other.dateApprove.copy();
+        this.dateReject = other.dateReject == null ? null : other.dateReject.copy();
+        this.rejectedReason = other.rejectedReason == null ? null : other.rejectedReason.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
+        this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
         this.requisitionId = other.requisitionId == null ? null : other.requisitionId.copy();
+        this.referenceTypeId = other.referenceTypeId == null ? null : other.referenceTypeId.copy();
         this.biddingTypeId = other.biddingTypeId == null ? null : other.biddingTypeId.copy();
         this.eventTypeId = other.eventTypeId == null ? null : other.eventTypeId.copy();
         this.adUserId = other.adUserId == null ? null : other.adUserId.copy();
@@ -104,14 +114,6 @@ public class MBiddingCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getBiddingNo() {
-        return biddingNo;
-    }
-
-    public void setBiddingNo(StringFilter biddingNo) {
-        this.biddingNo = biddingNo;
     }
 
     public StringFilter getName() {
@@ -146,6 +148,22 @@ public class MBiddingCriteria implements Serializable, Criteria {
         this.estimatedPrice = estimatedPrice;
     }
 
+    public LocalDateFilter getDateTrx() {
+        return dateTrx;
+    }
+
+    public void setDateTrx(LocalDateFilter dateTrx) {
+        this.dateTrx = dateTrx;
+    }
+
+    public StringFilter getDocumentNo() {
+        return documentNo;
+    }
+
+    public void setDocumentNo(StringFilter documentNo) {
+        this.documentNo = documentNo;
+    }
+
     public StringFilter getDocumentAction() {
         return documentAction;
     }
@@ -178,6 +196,14 @@ public class MBiddingCriteria implements Serializable, Criteria {
         this.processed = processed;
     }
 
+    public LocalDateFilter getDateApprove() {
+        return dateApprove;
+    }
+
+    public void setDateApprove(LocalDateFilter dateApprove) {
+        this.dateApprove = dateApprove;
+    }
+
     public LocalDateFilter getDateReject() {
         return dateReject;
     }
@@ -186,12 +212,12 @@ public class MBiddingCriteria implements Serializable, Criteria {
         this.dateReject = dateReject;
     }
 
-    public LocalDateFilter getDateApprove() {
-        return dateApprove;
+    public StringFilter getRejectedReason() {
+        return rejectedReason;
     }
 
-    public void setDateApprove(LocalDateFilter dateApprove) {
-        this.dateApprove = dateApprove;
+    public void setRejectedReason(StringFilter rejectedReason) {
+        this.rejectedReason = rejectedReason;
     }
 
     public UUIDFilter getUid() {
@@ -226,12 +252,28 @@ public class MBiddingCriteria implements Serializable, Criteria {
         this.costCenterId = costCenterId;
     }
 
+    public LongFilter getCurrencyId() {
+        return currencyId;
+    }
+
+    public void setCurrencyId(LongFilter currencyId) {
+        this.currencyId = currencyId;
+    }
+
     public LongFilter getRequisitionId() {
         return requisitionId;
     }
 
     public void setRequisitionId(LongFilter requisitionId) {
         this.requisitionId = requisitionId;
+    }
+
+    public LongFilter getReferenceTypeId() {
+        return referenceTypeId;
+    }
+
+    public void setReferenceTypeId(LongFilter referenceTypeId) {
+        this.referenceTypeId = referenceTypeId;
     }
 
     public LongFilter getBiddingTypeId() {
@@ -270,22 +312,26 @@ public class MBiddingCriteria implements Serializable, Criteria {
         final MBiddingCriteria that = (MBiddingCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(biddingNo, that.biddingNo) &&
             Objects.equals(name, that.name) &&
             Objects.equals(vendorSelection, that.vendorSelection) &&
             Objects.equals(ceilingPrice, that.ceilingPrice) &&
             Objects.equals(estimatedPrice, that.estimatedPrice) &&
+            Objects.equals(dateTrx, that.dateTrx) &&
+            Objects.equals(documentNo, that.documentNo) &&
             Objects.equals(documentAction, that.documentAction) &&
             Objects.equals(documentStatus, that.documentStatus) &&
             Objects.equals(approved, that.approved) &&
             Objects.equals(processed, that.processed) &&
-            Objects.equals(dateReject, that.dateReject) &&
             Objects.equals(dateApprove, that.dateApprove) &&
+            Objects.equals(dateReject, that.dateReject) &&
+            Objects.equals(rejectedReason, that.rejectedReason) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(costCenterId, that.costCenterId) &&
+            Objects.equals(currencyId, that.currencyId) &&
             Objects.equals(requisitionId, that.requisitionId) &&
+            Objects.equals(referenceTypeId, that.referenceTypeId) &&
             Objects.equals(biddingTypeId, that.biddingTypeId) &&
             Objects.equals(eventTypeId, that.eventTypeId) &&
             Objects.equals(adUserId, that.adUserId);
@@ -295,22 +341,26 @@ public class MBiddingCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
-        biddingNo,
         name,
         vendorSelection,
         ceilingPrice,
         estimatedPrice,
+        dateTrx,
+        documentNo,
         documentAction,
         documentStatus,
         approved,
         processed,
-        dateReject,
         dateApprove,
+        dateReject,
+        rejectedReason,
         uid,
         active,
         adOrganizationId,
         costCenterId,
+        currencyId,
         requisitionId,
+        referenceTypeId,
         biddingTypeId,
         eventTypeId,
         adUserId
@@ -321,22 +371,26 @@ public class MBiddingCriteria implements Serializable, Criteria {
     public String toString() {
         return "MBiddingCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (biddingNo != null ? "biddingNo=" + biddingNo + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (vendorSelection != null ? "vendorSelection=" + vendorSelection + ", " : "") +
                 (ceilingPrice != null ? "ceilingPrice=" + ceilingPrice + ", " : "") +
                 (estimatedPrice != null ? "estimatedPrice=" + estimatedPrice + ", " : "") +
+                (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
+                (documentNo != null ? "documentNo=" + documentNo + ", " : "") +
                 (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
                 (documentStatus != null ? "documentStatus=" + documentStatus + ", " : "") +
                 (approved != null ? "approved=" + approved + ", " : "") +
                 (processed != null ? "processed=" + processed + ", " : "") +
-                (dateReject != null ? "dateReject=" + dateReject + ", " : "") +
                 (dateApprove != null ? "dateApprove=" + dateApprove + ", " : "") +
+                (dateReject != null ? "dateReject=" + dateReject + ", " : "") +
+                (rejectedReason != null ? "rejectedReason=" + rejectedReason + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
+                (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
                 (requisitionId != null ? "requisitionId=" + requisitionId + ", " : "") +
+                (referenceTypeId != null ? "referenceTypeId=" + referenceTypeId + ", " : "") +
                 (biddingTypeId != null ? "biddingTypeId=" + biddingTypeId + ", " : "") +
                 (eventTypeId != null ? "eventTypeId=" + eventTypeId + ", " : "") +
                 (adUserId != null ? "adUserId=" + adUserId + ", " : "") +

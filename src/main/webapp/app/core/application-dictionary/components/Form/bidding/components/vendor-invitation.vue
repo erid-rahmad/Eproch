@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container">
+    <div class="vendor-invitation">
 
         <el-divider content-position="left"><h4>Vendor Business Category</h4></el-divider>
 
@@ -16,7 +16,7 @@
                     :max-height="gridSchema.maxHeight"
                     :default-sort="gridSchema.defaultSort"
                     :empty-text="gridSchema.emptyText"
-                    :data="vendorInvitation.vendorBusinessCategory">
+                    :data="bidding.vendorInvitations">
 
                     <el-table-column
                         min-width="30"
@@ -68,7 +68,7 @@
             <el-col :span="20">
                 <el-table
                     v-loading="processing"
-                    ref="vendorInvitation"
+                    ref="vendorSuggestion"
                     highlight-current-row
                     border stripe
                     size="mini"
@@ -77,7 +77,7 @@
                     :max-height="gridSchema.maxHeight"
                     :default-sort="gridSchema.defaultSort"
                     :empty-text="gridSchema.emptyText"
-                    :data="vendorInvitation.vendorSuggestion">
+                    :data="bidding.vendorSuggestions">
 
                     <el-table-column
                         min-width="30"
@@ -114,7 +114,7 @@
                                 size="mini"
                                 icon="el-icon-plus"
                                 type="primary"
-                                :disabled="buttonDisable"
+                                :disabled="!canAddVendor"
                                 @click="addVendorSuggestion"/>
                         </template>
                         <template slot-scope="row">
@@ -122,7 +122,7 @@
                                 size="mini"
                                 icon="el-icon-delete"
                                 type="danger"
-                                :disabled="buttonDisable"
+                                :disabled="!canAddVendor"
                                 @click="removeVendorSuggestion(row.$index)"/>
                         </template>
                     </el-table-column>
@@ -133,7 +133,7 @@
 
         <el-dialog
             width="85%"
-            :visible.sync="dialogConfirmationVisibleBusinessCategory"
+            :visible.sync="vendorInvitationFormVisible"
             title="Add Vendor Business Category">
 
             <template>
@@ -173,7 +173,7 @@
                         style="margin-left: 0px;"
                         size="mini"
                         icon="el-icon-close"
-                        @click="dialogConfirmationVisibleBusinessCategory = false">
+                        @click="vendorInvitationFormVisible = false">
                             {{ $t('entity.action.cancel') }}
                     </el-button>
                 </div>

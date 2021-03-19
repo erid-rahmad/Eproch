@@ -4,7 +4,11 @@
     {
       "fieldName": "name",
       "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required",
+        "maxlength"
+      ],
+      "fieldValidateRulesMaxlength": "30"
     },
     {
       "fieldName": "description",
@@ -33,7 +37,7 @@
       "otherEntityName": "cBiddingType",
       "otherEntityRelationshipName": "cEventType",
       "relationshipValidateRules": "required",
-      "relationshipName": "bindingType",
+      "relationshipName": "biddingType",
       "otherEntityField": "id"
     }
   ],

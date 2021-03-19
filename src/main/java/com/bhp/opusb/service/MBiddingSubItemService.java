@@ -12,7 +12,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Service Implementation for managing {@link MBiddingSubItem}.
@@ -56,6 +60,21 @@ public class MBiddingSubItemService {
         log.debug("Request to get all MBiddingSubItems");
         return mBiddingSubItemRepository.findAll(pageable)
             .map(mBiddingSubItemMapper::toDto);
+    }
+
+
+    /**
+     *  Get all the mBiddingSubItems where BiddingLine is {@code null}.
+     *  @return the list of entities.
+     */
+    @Transactional(readOnly = true) 
+    public List<MBiddingSubItemDTO> findAllWhereBiddingLineIsNull() {
+        log.debug("Request to get all mBiddingSubItems where BiddingLine is null");
+        return StreamSupport
+            .stream(mBiddingSubItemRepository.findAll().spliterator(), false)
+            .filter(mBiddingSubItem -> mBiddingSubItem.getBiddingLine() == null)
+            .map(mBiddingSubItemMapper::toDto)
+            .collect(Collectors.toCollection(LinkedList::new));
     }
 
     /**

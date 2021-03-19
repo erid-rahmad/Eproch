@@ -2,16 +2,14 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
+import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.BigDecimalFilter;
-import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -39,11 +37,11 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
 
     private StringFilter remark;
 
-    private BigDecimalFilter grandTotal;
-
     private UUIDFilter uid;
 
     private BooleanFilter active;
+
+    private LongFilter subItemId;
 
     private LongFilter biddingId;
 
@@ -65,9 +63,9 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
         this.totalCeilingPrice = other.totalCeilingPrice == null ? null : other.totalCeilingPrice.copy();
         this.deliveryDate = other.deliveryDate == null ? null : other.deliveryDate.copy();
         this.remark = other.remark == null ? null : other.remark.copy();
-        this.grandTotal = other.grandTotal == null ? null : other.grandTotal.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.subItemId = other.subItemId == null ? null : other.subItemId.copy();
         this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
@@ -128,14 +126,6 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
         this.remark = remark;
     }
 
-    public BigDecimalFilter getGrandTotal() {
-        return grandTotal;
-    }
-
-    public void setGrandTotal(BigDecimalFilter grandTotal) {
-        this.grandTotal = grandTotal;
-    }
-
     public UUIDFilter getUid() {
         return uid;
     }
@@ -150,6 +140,14 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
 
     public void setActive(BooleanFilter active) {
         this.active = active;
+    }
+
+    public LongFilter getSubItemId() {
+        return subItemId;
+    }
+
+    public void setSubItemId(LongFilter subItemId) {
+        this.subItemId = subItemId;
     }
 
     public LongFilter getBiddingId() {
@@ -209,9 +207,9 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
             Objects.equals(totalCeilingPrice, that.totalCeilingPrice) &&
             Objects.equals(deliveryDate, that.deliveryDate) &&
             Objects.equals(remark, that.remark) &&
-            Objects.equals(grandTotal, that.grandTotal) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(subItemId, that.subItemId) &&
             Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(costCenterId, that.costCenterId) &&
@@ -228,9 +226,9 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
         totalCeilingPrice,
         deliveryDate,
         remark,
-        grandTotal,
         uid,
         active,
+        subItemId,
         biddingId,
         adOrganizationId,
         costCenterId,
@@ -248,9 +246,9 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
                 (totalCeilingPrice != null ? "totalCeilingPrice=" + totalCeilingPrice + ", " : "") +
                 (deliveryDate != null ? "deliveryDate=" + deliveryDate + ", " : "") +
                 (remark != null ? "remark=" + remark + ", " : "") +
-                (grandTotal != null ? "grandTotal=" + grandTotal + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (subItemId != null ? "subItemId=" + subItemId + ", " : "") +
                 (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +

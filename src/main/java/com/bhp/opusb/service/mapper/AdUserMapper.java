@@ -15,7 +15,8 @@ public interface AdUserMapper extends EntityMapper<AdUserDTO, AdUser> {
 
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "user.login", target = "userLogin")
-    @Mapping(source = "user.login", target = "name")
+    @Mapping(source = "user.firstName", target = "firstName")
+    @Mapping(source = "user.lastName", target = "lastName")
     @Mapping(source = "user.password", target = "password")
     @Mapping(source = "user.email", target = "email")
     @Mapping(source = "CVendor.id", target = "cVendorId")

@@ -4,7 +4,11 @@
     {
       "fieldName": "name",
       "fieldType": "String",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required",
+        "maxlength"
+      ],
+      "fieldValidateRulesMaxlength": "30"
     },
     {
       "fieldName": "description",
@@ -12,11 +16,19 @@
     },
     {
       "fieldName": "costEvaluationSelection",
-      "fieldType": "Boolean"
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "maxlength"
+      ],
+      "fieldValidateRulesMaxlength": "5"
     },
     {
-      "fieldName": "selectedWinner",
-      "fieldType": "Boolean"
+      "fieldName": "winnerSelection",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "maxlength"
+      ],
+      "fieldValidateRulesMaxlength": "5"
     },
     {
       "fieldName": "uid",

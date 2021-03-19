@@ -72,6 +72,7 @@ class MRequisitionLineGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "lineNo":"0"
                 , "documentDate":"2020-01-01T00:00:00.000Z"
                 , "datePromised":"2020-01-01T00:00:00.000Z"
                 , "dateRequired":"2020-01-01T00:00:00.000Z"

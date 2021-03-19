@@ -1,30 +1,40 @@
 package com.bhp.opusb.web.rest;
 
-import com.bhp.opusb.service.MBiddingService;
-import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
-import com.bhp.opusb.service.dto.MBiddingDTO;
-import com.bhp.opusb.service.dto.MBiddingCriteria;
-import com.bhp.opusb.service.MBiddingQueryService;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import javax.validation.Valid;
+
+import com.bhp.opusb.domain.enumeration.MBiddingProcess;
+import com.bhp.opusb.service.MBiddingQueryService;
+import com.bhp.opusb.service.MBiddingService;
+import com.bhp.opusb.service.dto.MBiddingCriteria;
+import com.bhp.opusb.service.dto.MBiddingDTO;
+import com.bhp.opusb.service.dto.MBiddingFormDTO;
+import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.bhp.opusb.domain.MBidding}.
@@ -66,6 +76,20 @@ public class MBiddingResource {
         return ResponseEntity.created(new URI("/api/m-biddings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code POST  /m-biddings} : Create a new mBidding.
+     *
+     * @param mBiddingDTO the mBiddingDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mBiddingDTO, or with status {@code 400 (Bad Request)} if the mBidding has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/m-biddings/save-form")
+    public ResponseEntity<MBiddingDTO> saveMBiddingForm(@RequestBody MBiddingFormDTO mBiddingDTO) throws URISyntaxException {
+        log.debug("REST request to save MBidding form : {}", mBiddingDTO);
+        MBiddingDTO result = mBiddingService.saveForm(mBiddingDTO);
+        return ResponseEntity.ok().body(result);
     }
 
     /**
@@ -134,6 +158,27 @@ public class MBiddingResource {
     public ResponseEntity<MBiddingDTO> getMBidding(@PathVariable Long id) {
         log.debug("REST request to get MBidding : {}", id);
         Optional<MBiddingDTO> mBiddingDTO = mBiddingService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(mBiddingDTO);
+    }
+
+    /**
+     * {@code GET  /m-biddings/form/:id} : get the "id" mBidding (for the form).
+     *
+     * @param id the id of the mBiddingDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the mBiddingDTO, or with status {@code 404 (Not Found)}.
+     */
+    @GetMapping("/m-biddings/{stepName}/{id}")
+    public ResponseEntity<MBiddingFormDTO> getMBiddingForm(@PathVariable String stepName, @PathVariable Long id) {
+        log.debug("REST request to get MBidding : {}", id);
+        MBiddingProcess step;
+        
+        try {
+            step = MBiddingProcess.valueOf(stepName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestAlertException("Invalid step name", ENTITY_NAME, "invalidstep");
+        }
+        
+        Optional<MBiddingFormDTO> mBiddingDTO = mBiddingService.findOneForm(id, step);
         return ResponseUtil.wrapOrNotFound(mBiddingDTO);
     }
 

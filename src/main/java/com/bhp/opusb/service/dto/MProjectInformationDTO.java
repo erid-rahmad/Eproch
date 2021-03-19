@@ -17,8 +17,9 @@ public class MProjectInformationDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
+    private String name;
 
     private Long biddingId;
     private String biddingName;
@@ -51,6 +52,14 @@ public class MProjectInformationDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Long getBiddingId() {
@@ -128,6 +137,7 @@ public class MProjectInformationDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", name='" + getName() + "'" +
             ", biddingId=" + getBiddingId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", attachmentId=" + getAttachmentId() +
