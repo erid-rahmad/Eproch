@@ -7,6 +7,7 @@ import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import StepForm from "../bidding-result/steps-form.vue";
+import { TranslationStoreModule } from '@/shared/config/store/translation-store';
 
 @Component({
   components: {
@@ -14,7 +15,10 @@ import StepForm from "../bidding-result/steps-form.vue";
   }
 })  
 export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
-
+  private formatter = new Intl.NumberFormat(TranslationStoreModule.currentLanguage, {
+    minimumFractionDigits: 2
+  });
+  
   tableData = [
     {
       product: 'PC',
@@ -125,10 +129,10 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     columns.forEach((column, index) => {
       if (index === 6 || index === 9) {
         sums[index] = 'Grand Total'
-      } else if (index === 7) {
+      } else if (index === 7 || index === 9) {
         const values = data.map(item => Number(item[column.property]));
         if (!values.every(value => isNaN(value))) {
-          sums[index] = values.reduce((prev, curr) => {
+          const total = values.reduce((prev, curr) => {
             const value = Number(curr);
             if (!isNaN(value)) {
               return prev + curr;
@@ -136,24 +140,16 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
               return prev;
             }
           }, 0);
-      } else if (index === 9) {
-        const values = data.map(item => Number(item[column.property]));
-        if (!values.every(value => isNaN(value))) {
-          sums[index] = values.reduce((prev, curr) => {
-            const value = Number(curr);
-            if (!isNaN(value)) {
-              return prev + curr;
-            } else {
-              return prev;
-            }
-          }, 0);
+
+          sums[index] = this.formatter.format(total);
+        }
       } else {
         sums[index] = '';
       }
-    });
 
     return sums;
-  }
+  });
+}
 
   public mounted(): void {
     this.retrieveGetReferences(this.keyReference);

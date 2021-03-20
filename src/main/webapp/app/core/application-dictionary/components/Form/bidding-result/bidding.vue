@@ -8,86 +8,93 @@
                     <el-button class="button" size="mini" type="primary" icon="el-icon-download" @click="onClick('export')">Export</el-button>
                 </el-col> -->
             </el-row>
-            <el-divider content-position="left">
-                <h4>Bidding Submission From Vendor</h4>
-            </el-divider>
             <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini" :model="biddingInformation" :rules="rules">
                 <el-row :gutter="24">
                     <el-col :span="6">
-                        <el-form-item label="Vendor Name" prop="title" required>
-                            <el-dropdown>
-                                <span class="el-dropdown-link">
-                                    Vendor List<i class="el-icon-arrow-down el-icon--right"></i>
-                                </span>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item>PT baru</el-dropdown-item>
-                                    <el-dropdown-item>PT lama</el-dropdown-item>
-                                    <el-dropdown-item>PT baru lama</el-dropdown-item>
-                                    <el-dropdown-item disabled>Action 4</el-dropdown-item>
-                                    <el-dropdown-item divided>Action 5</el-dropdown-item>
-                                </el-dropdown-menu>
-                            </el-dropdown>
+                        <el-form-item label="Vendor Name" required>
+                            <el-select
+                                clearable
+                                filterable
+                                placeholder="Select Vendors"
+                                style="width: 100%"
+                            >
+                                <el-option label="Vendor A" value="vendorA"></el-option>
+                                <el-option label="Vendor B" value="vendorB"></el-option>
+                                <el-option label="Vendor C" value="vendorC"></el-option>
+                            </el-select>
                         </el-form-item>
-                        <el-form-item label="Ceilling Price" prop="biddingNo" required>
-                            <h7>17000</h7>
+                        <el-form-item label="Ceilling Price" required>
+                            <el-input
+                                v-inputmask="{'alias': 'currency'}"
+                                size="mini"
+                            >
+                                <template slot="prepend">IDR</template>
+                            </el-input>
                         </el-form-item>
-                        <el-form-item label="Proposal Price" prop="vurrency" required>
-                            <h7>17000</h7>
+                        <el-form-item label="Proposal Price" required>
+                            <el-input
+                                v-inputmask="{'alias': 'currency'}"
+                                size="mini"
+                            >
+                                <template slot="prepend">IDR</template>
+                            </el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
-            <el-divider content-position="left">
-                <h4>Bidding Submission From Vendor Detail</h4>
-            </el-divider>
-            <template>
-                <el-table :data="tableData" style="width: 100%">
-                    <el-table-column prop="date" label="No" width="40">
-                        <template slot-scope="row">
-                            {{ row.$index+1 }}
+            <el-table
+                border
+                :data="tableData"
+                show-summary
+                size="mini"
+                stripe
+                :summary-method="calculateSummary"
+                style="width: 100%"
+            >
+                <el-table-column prop="date" label="No" width="50">
+                    <template slot-scope="row">
+                        {{ row.$index+1 }}
+                    </template>
+                </el-table-column>
+                <el-table-column label="Requirement">
+                    <el-table-column prop="product" label="Product" width="150">
+                    </el-table-column>
+                    <el-table-column prop="brand" label="Brand" width="100">
+                    </el-table-column>
+                    <el-table-column prop="description" label="Short Descriptopn" width="150">
+                    </el-table-column>
+                    <el-table-column prop="quantity" label="Qty" width="100">
+                    </el-table-column>
+                    <el-table-column prop="uom" label="UoM" width="100">
+                    </el-table-column>
+                    <el-table-column align="right" prop="ceilingPrice" label="Ceiiling Price/Unit" width="200">
+                        <template slot-scope="{ row }">
+                            {{ row.ceilingPrice | formatCurrency }}
                         </template>
                     </el-table-column>
-                    <el-table-column label="Requarement">
-                        <el-table-column prop="1" label="Product" width="120">
-                        </el-table-column>
-                        <el-table-column prop="2" label="Brand" width="100">
-                        </el-table-column>
-                        <el-table-column prop="3" label="Short Descriptopn" width="300">
-                        </el-table-column>
-                        <el-table-column prop="4" label="Qty" width="100">
-                        </el-table-column>
-                        <el-table-column prop="5" label="Uom" width="100">
-                        </el-table-column>
-                        <el-table-column prop="6" label="Ceiiling proce / unit" width="100">
-                        </el-table-column>
-                        <el-table-column prop="7" label="Total celing price " width="100">
-                        </el-table-column>
-                        <el-table-column prop="8" label="dalivery date" width="100">
-                        </el-table-column>
+                    <el-table-column align="right" prop="totalCeilingPrice" label="Total celing price " width="200">
+                        <template slot-scope="{ row }">
+                            {{ row.totalCeilingPrice | formatCurrency }}
+                        </template>
                     </el-table-column>
-                    <el-table-column label="Submission">
-                        <el-table-column prop="9" label="Price Per Unit" width="100">
-                        </el-table-column>
-                        <el-table-column prop="10" label="Total Price" width="100">
-                        </el-table-column>
-                        <el-table-column prop="11" label="Delivary Date" width="150">
-                        </el-table-column>
+                    <el-table-column prop="deliveryDate" label="Delivery date" width="100">
                     </el-table-column>
-                </el-table>
-            </template>
-            <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini" :model="biddingInformation" :rules="rules">
-                <el-row :gutter="24">
-
-                    <el-col :span="12">
-                        <el-form-item width="200" label="Grand Total Requarement " prop="Grand Total Requarement">
-                            <h7>17000</h7>
-                        </el-form-item>
-                        <el-form-item width="120" label="Grand Total Submision" prop="biddingNo">
-                            <h7>17000</h7>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
+                </el-table-column>
+                <el-table-column label="Submission">
+                    <el-table-column align="right" prop="unitPrice" label="Price Per Unit" width="200">
+                        <template slot-scope="{ row }">
+                            {{ row.unitPrice | formatCurrency }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column align="right" prop="totalPrice" label="Total Price" width="200">
+                        <template slot-scope="{ row }">
+                            {{ row.totalPrice | formatCurrency }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="submissionDeliveryDate" label="Delivery Date" width="150">
+                    </el-table-column>
+                </el-table-column>
+            </el-table>
         </div>
         <div v-else>
             <step-form :biddingrow="rowsa" @back="close" />
