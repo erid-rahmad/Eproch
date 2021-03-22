@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,6 +44,19 @@ public class MBiddingSubItemLineService {
         MBiddingSubItemLine mBiddingSubItemLine = mBiddingSubItemLineMapper.toEntity(mBiddingSubItemLineDTO);
         mBiddingSubItemLine = mBiddingSubItemLineRepository.save(mBiddingSubItemLine);
         return mBiddingSubItemLineMapper.toDto(mBiddingSubItemLine);
+    }
+
+    /**
+     * Save all mBiddingSubItemLines.
+     *
+     * @param mBiddingSubItemLineDTOs the list of entities to save.
+     * @return the persisted entities.
+     */
+    public List<MBiddingSubItemLineDTO> saveAll(List<MBiddingSubItemLineDTO> mBiddingSubItemLineDTOs) {
+        log.debug("Request to save MBiddingSubItemLine : {}", mBiddingSubItemLineDTOs);
+        List<MBiddingSubItemLine> mBiddingSubItemLines = mBiddingSubItemLineMapper.toEntity(mBiddingSubItemLineDTOs);
+        mBiddingSubItemLines = mBiddingSubItemLineRepository.saveAll(mBiddingSubItemLines);
+        return mBiddingSubItemLineMapper.toDto(mBiddingSubItemLines);
     }
 
     /**

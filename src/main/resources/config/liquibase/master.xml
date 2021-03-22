@@ -128,6 +128,10 @@
     <include file="config/liquibase/changelog/20210314222600_added_entity_CPaymentTerm.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210314225600_added_entity_CPaymentSchedule.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210316084200_added_sequence.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210321210700_added_entity_CEvaluationMethod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210321210800_added_entity_CEvaluationMethodLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210321210900_added_entity_CEvaluationCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210321211900_added_entity_MBiddingScheduleAttachment.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -237,5 +241,9 @@
     <include file="config/liquibase/changelog/20210309082539_added_entity_constraints_MBiddingSubmission.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210309082639_added_entity_constraints_MBiddingSubmissionLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210309082739_added_entity_constraints_MSubmissionSubItem.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210321210700_added_entity_constraints_CEvaluationMethod.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210321210800_added_entity_constraints_CEvaluationMethodLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210321210900_added_entity_constraints_CEvaluationCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210321211900_added_entity_constraints_MBiddingScheduleAttachment.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

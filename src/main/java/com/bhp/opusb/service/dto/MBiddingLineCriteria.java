@@ -7,6 +7,7 @@ import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -26,6 +27,8 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
+
+    private IntegerFilter lineNo;
 
     private BigDecimalFilter quantity;
 
@@ -58,6 +61,7 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
 
     public MBiddingLineCriteria(MBiddingLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.lineNo = other.lineNo == null ? null : other.lineNo.copy();
         this.quantity = other.quantity == null ? null : other.quantity.copy();
         this.ceilingPrice = other.ceilingPrice == null ? null : other.ceilingPrice.copy();
         this.totalCeilingPrice = other.totalCeilingPrice == null ? null : other.totalCeilingPrice.copy();
@@ -84,6 +88,14 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public IntegerFilter getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(IntegerFilter lineNo) {
+        this.lineNo = lineNo;
     }
 
     public BigDecimalFilter getQuantity() {
@@ -202,6 +214,7 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
         final MBiddingLineCriteria that = (MBiddingLineCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(lineNo, that.lineNo) &&
             Objects.equals(quantity, that.quantity) &&
             Objects.equals(ceilingPrice, that.ceilingPrice) &&
             Objects.equals(totalCeilingPrice, that.totalCeilingPrice) &&
@@ -221,6 +234,7 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        lineNo,
         quantity,
         ceilingPrice,
         totalCeilingPrice,
@@ -241,6 +255,7 @@ public class MBiddingLineCriteria implements Serializable, Criteria {
     public String toString() {
         return "MBiddingLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (lineNo != null ? "lineNo=" + lineNo + ", " : "") +
                 (quantity != null ? "quantity=" + quantity + ", " : "") +
                 (ceilingPrice != null ? "ceilingPrice=" + ceilingPrice + ", " : "") +
                 (totalCeilingPrice != null ? "totalCeilingPrice=" + totalCeilingPrice + ", " : "") +

@@ -19,13 +19,13 @@ public class MBiddingSubItemDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
-    private MBiddingLineDTO biddingLine;
+    private Long biddingLineId;
 
     private Long productId;
     private String productName;
@@ -80,12 +80,12 @@ public class MBiddingSubItemDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public MBiddingLineDTO getBiddingLine() {
-        return biddingLine;
+    public Long getBiddingLineId() {
+        return biddingLineId;
     }
 
-    public void setBiddingLine(MBiddingLineDTO biddingLine) {
-        this.biddingLine = biddingLine;
+    public void setBiddingLineId(Long biddingLineId) {
+        this.biddingLineId = biddingLineId;
     }
 
     public Long getProductId() {

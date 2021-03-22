@@ -14,6 +14,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
@@ -33,6 +34,9 @@ public class MBiddingSubItemLine extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @Column(name = "line_no")
+    private Integer lineNo;
 
     @NotNull
     @Column(name = "quantity", precision = 21, scale = 2, nullable = false)
@@ -69,6 +73,7 @@ public class MBiddingSubItemLine extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mBiddingSubItemLines")
+    @JsonBackReference
     private MBiddingSubItem biddingSubItem;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -78,6 +83,19 @@ public class MBiddingSubItemLine extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getLineNo() {
+        return lineNo;
+    }
+
+    public MBiddingSubItemLine lineNo(Integer lineNo) {
+        this.lineNo = lineNo;
+        return this;
+    }
+
+    public void setLineNo(Integer lineNo) {
+        this.lineNo = lineNo;
     }
 
     public BigDecimal getQuantity() {
@@ -223,6 +241,7 @@ public class MBiddingSubItemLine extends AbstractAuditingEntity {
     public String toString() {
         return "MBiddingSubItemLine{" +
             "id=" + getId() +
+            ", lineNo=" + getLineNo() +
             ", quantity=" + getQuantity() +
             ", price=" + getPrice() +
             ", amount=" + getAmount() +

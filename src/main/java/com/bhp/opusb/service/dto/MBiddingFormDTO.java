@@ -104,4 +104,36 @@ public class MBiddingFormDTO extends MBiddingDTO {
   public int hashCode() {
     return Objects.hash(getId(), getStep());
   }
+
+  @Override
+  public String toString() {
+      return "MBiddingFormDTO{" +
+          "id=" + getId() +
+          ", name='" + getName() + "'" +
+          ", vendorSelection='" + getVendorSelection() + "'" +
+          ", ceilingPrice=" + getCeilingPrice() +
+          ", estimatedPrice=" + getEstimatedPrice() +
+          ", dateTrx='" + getDateTrx() + "'" +
+          ", documentNo='" + getDocumentNo() + "'" +
+          ", documentAction='" + getDocumentAction() + "'" +
+          ", documentStatus='" + getDocumentStatus() + "'" +
+          ", approved='" + isApproved() + "'" +
+          ", processed='" + isProcessed() + "'" +
+          ", dateApprove='" + getDateApprove() + "'" +
+          ", dateReject='" + getDateReject() + "'" +
+          ", rejectedReason='" + getRejectedReason() + "'" +
+          ", uid='" + getUid() + "'" +
+          ", active='" + isActive() + "'" +
+          ", adOrganizationId=" + getAdOrganizationId() +
+          ", costCenterId=" + getCostCenterId() +
+          ", currencyId=" + getCurrencyId() +
+          ", requisitionId=" + getRequisitionId() +
+          ", referenceTypeId=" + getReferenceTypeId() +
+          ", biddingTypeId=" + getBiddingTypeId() +
+          ", eventTypeId=" + getEventTypeId() +
+          ", adUserId=" + getAdUserUserId() +
+          ", step=" + getStep() +
+          ", biddingLines=" + getBiddingLines() +
+          "}";
+  }
 }

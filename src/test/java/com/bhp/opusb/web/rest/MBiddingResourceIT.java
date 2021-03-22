@@ -408,25 +408,6 @@ public class MBiddingResourceIT {
 
     @Test
     @Transactional
-    public void checkDocumentNoIsRequired() throws Exception {
-        int databaseSizeBeforeTest = mBiddingRepository.findAll().size();
-        // set the field null
-        mBidding.setDocumentNo(null);
-
-        // Create the MBidding, which fails.
-        MBiddingDTO mBiddingDTO = mBiddingMapper.toDto(mBidding);
-
-        restMBiddingMockMvc.perform(post("/api/m-biddings")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(mBiddingDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<MBidding> mBiddingList = mBiddingRepository.findAll();
-        assertThat(mBiddingList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void checkDocumentActionIsRequired() throws Exception {
         int databaseSizeBeforeTest = mBiddingRepository.findAll().size();
         // set the field null

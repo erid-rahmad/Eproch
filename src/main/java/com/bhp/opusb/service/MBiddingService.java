@@ -4,11 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.MBidding;
-import com.bhp.opusb.domain.MBiddingLine;
-import com.bhp.opusb.domain.MProjectInformation;
 import com.bhp.opusb.domain.MVendorSuggestion;
 import com.bhp.opusb.domain.enumeration.MBiddingProcess;
 import com.bhp.opusb.repository.AdUserRepository;
@@ -22,6 +19,7 @@ import com.bhp.opusb.service.dto.MBiddingLineDTO;
 import com.bhp.opusb.service.dto.MProjectInformationDTO;
 import com.bhp.opusb.service.mapper.MBiddingFormMapper;
 import com.bhp.opusb.service.mapper.MBiddingMapper;
+import com.bhp.opusb.util.DocumentUtil;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -153,15 +151,20 @@ public class MBiddingService {
         log.debug("Request to save MBidding : {}", mBiddingDTO);
         MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
 
-        // TODO Set organization to be same as the user's organization.
-        ADOrganization org = adOrganizationService.getDefaultOrganization();
-
         if (mBiddingDTO.getStep().equals(MBiddingProcess.INFO)) {
-            mBidding.setAdOrganization(org);
+            final List<MBiddingLineDTO> lines = mBiddingDTO.getBiddingLines();
+            final List<MBiddingLineDTO> removedLines = mBiddingDTO.getRemovedBiddingLines();
+            final List<MProjectInformationDTO> projectInformations = mBiddingDTO.getProjectInformations();
+            final List<MProjectInformationDTO> removedProjectInformations = mBiddingDTO.getRemovedProjectInformations();
+
+            if (mBidding.getDocumentNo() == null) {
+               mBidding.setDocumentNo(DocumentUtil.buildDocumentNumber("BD-", mBiddingRepository));
+            }
+
             mBidding = mBiddingRepository.save(mBidding);
             mBiddingDTO = mBiddingFormMapper.toDto(mBidding);
-            saveInformation(mBiddingDTO, mBiddingDTO.getBiddingLines(), mBiddingDTO.getProjectInformations(),
-                    mBiddingDTO.getRemovedBiddingLines(), mBiddingDTO.getRemovedProjectInformations());
+            saveInformation(mBiddingDTO, lines, projectInformations,
+                    removedLines, removedProjectInformations);
         }
 
         return mBiddingDTO;

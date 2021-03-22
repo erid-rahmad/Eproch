@@ -91,6 +91,9 @@ public class MBiddingLineQueryService extends QueryService<MBiddingLine> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MBiddingLine_.id));
             }
+            if (criteria.getLineNo() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLineNo(), MBiddingLine_.lineNo));
+            }
             if (criteria.getQuantity() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getQuantity(), MBiddingLine_.quantity));
             }

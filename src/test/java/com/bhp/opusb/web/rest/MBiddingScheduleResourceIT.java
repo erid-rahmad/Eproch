@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBiddingSchedule;
+import com.bhp.opusb.domain.MBiddingScheduleAttachment;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CEventTypeline;
@@ -582,6 +583,26 @@ public class MBiddingScheduleResourceIT {
         // Get all the mBiddingScheduleList where active is null
         defaultMBiddingScheduleShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingSchedulesByMBiddingScheduleAttachmentIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingScheduleRepository.saveAndFlush(mBiddingSchedule);
+        MBiddingScheduleAttachment mBiddingScheduleAttachment = MBiddingScheduleAttachmentResourceIT.createEntity(em);
+        em.persist(mBiddingScheduleAttachment);
+        em.flush();
+        mBiddingSchedule.addMBiddingScheduleAttachment(mBiddingScheduleAttachment);
+        mBiddingScheduleRepository.saveAndFlush(mBiddingSchedule);
+        Long mBiddingScheduleAttachmentId = mBiddingScheduleAttachment.getId();
+
+        // Get all the mBiddingScheduleList where mBiddingScheduleAttachment equals to mBiddingScheduleAttachmentId
+        defaultMBiddingScheduleShouldBeFound("mBiddingScheduleAttachmentId.equals=" + mBiddingScheduleAttachmentId);
+
+        // Get all the mBiddingScheduleList where mBiddingScheduleAttachment equals to mBiddingScheduleAttachmentId + 1
+        defaultMBiddingScheduleShouldNotBeFound("mBiddingScheduleAttachmentId.equals=" + (mBiddingScheduleAttachmentId + 1));
+    }
+
 
     @Test
     @Transactional

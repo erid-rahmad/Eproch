@@ -2,8 +2,10 @@ import { AccountStoreModule as accountStore } from '@/shared/config/store/accoun
 import { ElForm } from 'element-ui/types/form';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Inject } from 'vue-property-decorator';
+import { Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import { ElSelect } from 'element-ui/types/select';
+import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 
 const SubitemEditorProp = Vue.extend({
   props: {
@@ -16,21 +18,15 @@ const SubitemEditorProp = Vue.extend({
 });
 
 @Component
-export default class SubitemEditor extends SubitemEditorProp {
+export default class SubitemEditor extends Mixins(AccessLevelMixin, SubitemEditorProp) {
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  private adOrganizationId: number;
-
   loadingProducts = false;
+  loadingLines = false;
 
-  mainForm = {
-    id: null,
-    totalAmount: 0,
-    productId: null,
-    mBiddingSubItemLines: []
-  }
+  mainForm: Record<string, any>;
 
   validationSchema = {
     productId: {
@@ -44,23 +40,24 @@ export default class SubitemEditor extends SubitemEditorProp {
     maxHeight: 256
   };
 
-  private organizationCriteria = [
-    'adOrganizationId.in=1'
-  ];
-
   productOptions = [];
   uomOptions: any[] = [];
 
-  /**
-   * Action to be performed upon quantity change event.
-   * Update the quantityBalance by subtracting quantity and quantityOrdered.
-   * @param row Current row being edited.
-   * @param value The quantity.
-   */
-  onQuantityChange(row: any, quantity: number) {
-    console.log('qty changed. row: %O, qty: %s', row, quantity);
-    row.amount = quantity * row.price;
-    this.calculateTotalAmount(row);
+  @Watch('itemDetail.subItem')
+  onItemDetailChanged(subItem: any) {
+    console.log('subItem');
+    if (subItem) {
+      this.mainForm = subItem;
+      this.retrieveLines(this.mainForm.id);
+    } else {
+      this.mainForm = {
+        id: null,
+        adOrganizationId: null,
+        totalAmount: 0,
+        productId: null,
+        mBiddingSubItemLines: []
+      };
+    }
   }
 
   /**
@@ -72,47 +69,71 @@ export default class SubitemEditor extends SubitemEditorProp {
   onPriceChange(row: any, price: string) {
     row.price = parseFloat(price);
     row.amount = row.price * row.quantity;
-    this.calculateTotalAmount(row);
+    this.calculateTotalAmount();
+  }
+
+  /**
+   * Action to be performed upon quantity change event.
+   * Update the quantityBalance by subtracting quantity and quantityOrdered.
+   * @param row Current row being edited.
+   * @param value The quantity.
+   */
+  onQuantityChange(row: any, quantity: number) {
+    row.amount = quantity * row.price;
+    this.calculateTotalAmount();
   }
 
   created() {
-    console.log('subitem form created. line: %O, index: %s', this.itemDetail, this.itemIndex);
-    this.adOrganizationId = accountStore.organizationInfo.id;
-    this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
+    this.onItemDetailChanged(this.itemDetail.subItem);
+
+    if (!this.itemDetail.subItem) {
+      this.mainForm.adOrganizationId = this.adOrganizationId;
+    }
+
     this.retrieveUom();
     this.searchProduct();
   }
 
-  beforeDestroy() {
-    console.log('About to destroy subitem form');
+  private calculateTotalAmount() {
+    let totalAmount = this.mainForm.mBiddingSubItemLines
+      .map((line: any): number => line.amount || 0)
+      .reduce((prev, next) => prev + next, 0);
+
+    this.$set(this.mainForm, 'totalAmount', totalAmount);
   }
 
-  private calculateTotalAmount(row: any) {
-    let totalAmount: number;
-
-    if (this.mainForm.mBiddingSubItemLines.length > 1) {
-      totalAmount = this.mainForm.mBiddingSubItemLines.reduce((prev, next) => {
-        console.log('prev: %O, next: %O', prev, next);
-        if (typeof prev === 'number') {
-          return prev + next.amount
+  private retrieveLines(subItemId: number) {
+    this.loadingLines = true;
+    this.commonService('/api/m-bidding-sub-item-lines')
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingSubItemId.equals=${subItemId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['id']
         }
-        return prev.amount + next.amount;
-      });
-    } else {
-      totalAmount = row.amount;
-    }
-
-    console.log('totalAmount:', totalAmount);
-    this.$set(this.mainForm, 'totalAmount', totalAmount);
+      })
+      .then(res => {
+        this.$set(this.mainForm, 'mBiddingSubItemLines', res.data);
+      })
+      .catch(err => {
+        console.log('Failed to get sub-item lines. %O', err);
+        this.$message.error('Failed to get sub-item lines');
+      })
+      .finally(() => {
+        this.loadingLines = false;
+      })
   }
 
   private retrieveUom() {
     this.commonService('/api/c-unit-of-measures')
       .retrieve({
-        criteriaQuery: [
-          'active.equals=true',
-          ...this.organizationCriteria
-        ],
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true'
+        ]),
         paginationQuery: {
           page: 0,
           size: 1000,
@@ -139,6 +160,11 @@ export default class SubitemEditor extends SubitemEditorProp {
     this.mainForm.mBiddingSubItemLines.splice(index, 1);
   }
 
+  reset() {
+    (<ElForm>this.$refs.mainForm).resetFields();
+    (<ElSelect>this.$refs.subItemProduct).focus();
+  }
+
   save() {
     if (!this.mainForm.mBiddingSubItemLines.length) {
       this.$message.error('Please add at lease one sub-item line');
@@ -146,14 +172,11 @@ export default class SubitemEditor extends SubitemEditorProp {
       return;
     }
 
-    console.log('validating mainForm: %O', this.mainForm);
     (<ElForm>this.$refs.mainForm).validate((passed, errors) => {
       if (passed) {
-        console.log('Save sub-item');
-        this.mainForm.id = 1;
         this.$emit('saved', {
           itemIndex: this.itemIndex,
-          subItem: this.mainForm
+          subItem: {...this.mainForm}
         });
       } else {
         console.log('Error saving sub-item. %O', errors);
@@ -163,10 +186,9 @@ export default class SubitemEditor extends SubitemEditorProp {
   }
 
   searchProduct(key?: string) {
-    const criteriaQuery = [
-      'active.equals=true',
-      ...this.organizationCriteria
-    ];
+    const criteriaQuery = this.updateCriteria([
+      'active.equals=true'
+    ]);
 
     if (!!key) {
       criteriaQuery.push(`name.contains=${key}`);

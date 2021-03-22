@@ -1,0 +1,75 @@
+{
+    "name": "CEvaluationCriteria",
+    "fields": [
+        {
+            "fieldName": "scoringPercentage",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": "100"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cEvaluationCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cEvaluationMethodLine",
+            "otherEntityRelationshipName": "cEvaluationCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "evaluationMethodLine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingCriteria",
+            "otherEntityRelationshipName": "cEvaluationCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingCriteria",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingSubCriteria",
+            "otherEntityRelationshipName": "cEvaluationCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSubCriteria",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adUser",
+            "otherEntityRelationshipName": "cEvaluationCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "pic",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210321210900",
+    "entityTableName": "c_evaluation_criteria",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

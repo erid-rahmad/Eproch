@@ -7,6 +7,7 @@ import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
@@ -24,6 +25,8 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
+
+    private IntegerFilter lineNo;
 
     private BigDecimalFilter quantity;
 
@@ -48,6 +51,7 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
 
     public MBiddingSubItemLineCriteria(MBiddingSubItemLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.lineNo = other.lineNo == null ? null : other.lineNo.copy();
         this.quantity = other.quantity == null ? null : other.quantity.copy();
         this.price = other.price == null ? null : other.price.copy();
         this.amount = other.amount == null ? null : other.amount.copy();
@@ -70,6 +74,14 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public IntegerFilter getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(IntegerFilter lineNo) {
+        this.lineNo = lineNo;
     }
 
     public BigDecimalFilter getQuantity() {
@@ -156,6 +168,7 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
         final MBiddingSubItemLineCriteria that = (MBiddingSubItemLineCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(lineNo, that.lineNo) &&
             Objects.equals(quantity, that.quantity) &&
             Objects.equals(price, that.price) &&
             Objects.equals(amount, that.amount) &&
@@ -171,6 +184,7 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
+        lineNo,
         quantity,
         price,
         amount,
@@ -187,6 +201,7 @@ public class MBiddingSubItemLineCriteria implements Serializable, Criteria {
     public String toString() {
         return "MBiddingSubItemLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (lineNo != null ? "lineNo=" + lineNo + ", " : "") +
                 (quantity != null ? "quantity=" + quantity + ", " : "") +
                 (price != null ? "price=" + price + ", " : "") +
                 (amount != null ? "amount=" + amount + ", " : "") +

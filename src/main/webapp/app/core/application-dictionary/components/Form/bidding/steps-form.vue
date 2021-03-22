@@ -21,6 +21,7 @@
         :edit-mode="editMode"
         :data="bidding"
         @saved="goToNextStep"
+        @error="showSaveDialog = false"
       ></bidding-information>
 
       <bidding-schedule
@@ -55,12 +56,11 @@
 
       <el-button
         size="mini"
-        type="info"
         icon="el-icon-close"
         style="margin-bottom: 12px; align-text:left;"
-        @click="back"
+        @click="close"
       >
-        Back
+        Close
       </el-button>
 
       <el-button
@@ -78,27 +78,40 @@
         type="primary"
         style="margin-bottom: 12px;"
         :disabled="active === 4"
-        v-if="active != 4"
         @click="next"
       >
         Next <em class="el-icon-arrow-right"></em>
       </el-button>
 
-      <el-button
-        size="mini"
-        type="success"
-        style="margin-bottom: 12px;"
-        v-if="active === 4"
-        :disabled="! agreementAccepted"
-        v-loading.fullscreen.lock="fullscreenLoading"
-        @click="submit"
-      >
-        Submit <em class="el-icon-arrow-right"></em>
-      </el-button>
-
     </el-container>
 
     <div class="clearfix"></div>
+    <el-dialog
+      width="30%"
+      :visible.sync="showSaveDialog"
+      title="Confirm Save"
+    >
+      <span>Do you want to save the document?</span>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          style="margin-left: 0px;"
+          @click="showSaveDialog = false"
+        >
+          No
+        </el-button>
+        <el-button
+          style="margin-left: 0px;"
+          size="mini"
+          icon="el-icon-check"
+          type="primary"
+          @click="saveStep"
+        >
+          {{ $t('entity.action.save') }}
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -107,8 +120,39 @@
 <style lang="scss">
 .bidding-form {
   .el-steps--simple {
-    .el-step.is-simple:not(:last-of-type) .el-step__title {
-      max-width: 70%;
+    background: #1890ff;
+
+    .el-step__head {
+      &.is-process {
+        border-color: #fff;
+        color: #fff;
+      }
+
+      &.is-wait {
+        border-color: #f4f4f4;
+        color: #f4f4f4;
+      }
+    }
+
+    .el-step__title {
+      &.is-process {
+        color: #fff;
+      }
+
+      &.is-wait {
+        color: #f4f4f4;
+      }
+    }
+
+    .el-step.is-simple {
+      .el-step__arrow::before,
+      .el-step__arrow::after {
+        background: #fff;
+      }
+
+      &:not(:last-of-type) .el-step__title {
+        max-width: 70%;
+      }
     }
   }
 

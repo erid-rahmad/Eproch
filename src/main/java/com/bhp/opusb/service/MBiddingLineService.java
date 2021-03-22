@@ -1,22 +1,23 @@
 package com.bhp.opusb.service;
 
-import com.bhp.opusb.domain.MBidding;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import com.bhp.opusb.domain.MBiddingLine;
 import com.bhp.opusb.repository.MBiddingLineRepository;
 import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.dto.MBiddingLineDTO;
+import com.bhp.opusb.service.dto.MBiddingSubItemDTO;
 import com.bhp.opusb.service.mapper.MBiddingLineMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link MBiddingLine}.
@@ -28,11 +29,14 @@ public class MBiddingLineService {
     private final Logger log = LoggerFactory.getLogger(MBiddingLineService.class);
 
     private final MBiddingLineRepository mBiddingLineRepository;
+    private final MBiddingSubItemService mBiddingSubItemService;
 
     private final MBiddingLineMapper mBiddingLineMapper;
 
-    public MBiddingLineService(MBiddingLineRepository mBiddingLineRepository, MBiddingLineMapper mBiddingLineMapper) {
+    public MBiddingLineService(MBiddingLineRepository mBiddingLineRepository,
+            MBiddingSubItemService mBiddingSubItemService, MBiddingLineMapper mBiddingLineMapper) {
         this.mBiddingLineRepository = mBiddingLineRepository;
+        this.mBiddingSubItemService = mBiddingSubItemService;
         this.mBiddingLineMapper = mBiddingLineMapper;
     }
 
@@ -58,11 +62,22 @@ public class MBiddingLineService {
      */
     public List<MBiddingLineDTO> saveAll(List<MBiddingLineDTO> mBiddingLineDTOs, MBiddingDTO mBiddingDTO) {
         log.debug("Request to save MBiddingLine list : {}", mBiddingLineDTOs);
+        final List<MBiddingSubItemDTO> mBiddingSubItemDTOs = new ArrayList<>(mBiddingLineDTOs.size());
 
         mBiddingLineDTOs.forEach(line -> {
             line.setBiddingId(mBiddingDTO.getId());
             line.setAdOrganizationId(mBiddingDTO.getAdOrganizationId());
+
+            final MBiddingSubItemDTO subItemDTO = line.getSubItem();
+
+            if (subItemDTO != null) {
+                final MBiddingSubItemDTO savedSubItem = mBiddingSubItemService.save(subItemDTO);
+                line.setSubItemId(savedSubItem.getId());
+            }
         });
+
+        // Batch save sub-items.
+        mBiddingSubItemService.saveAll(mBiddingSubItemDTOs);
 
         List<MBiddingLine> mBiddingLines = mBiddingLineMapper.toEntity(mBiddingLineDTOs);
         mBiddingLines = mBiddingLineRepository.saveAll(mBiddingLines);

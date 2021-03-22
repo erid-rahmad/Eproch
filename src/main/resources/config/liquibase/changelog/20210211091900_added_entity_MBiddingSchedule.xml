@@ -73,8 +73,8 @@
                   separator=";"
                   tableName="m_bidding_schedule">
             <column name="id" type="numeric"/>
-            <column name="start_date" type="date"/>
-            <column name="end_date" type="date"/>
+            <column name="start_date" type="datetime"/>
+            <column name="end_date" type="datetime"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="bidding_id" type="numeric"/>

@@ -72,6 +72,7 @@ class MBiddingLineGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "lineNo":"0"
                 , "quantity":"0"
                 , "ceilingPrice":"0"
                 , "totalCeilingPrice":"0"

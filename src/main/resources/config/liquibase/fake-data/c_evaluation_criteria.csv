@@ -1,0 +1,11 @@
+id;scoring_percentage;uid;active;ad_organization_id;evaluation_method_line_id;bidding_criteria_id;bidding_sub_criteria_id;pic_id
+1;95;9e36fc40-1b0c-4691-b034-e746a59df63b;true;1;1;1;1;1
+2;95;cb696afd-b65f-49f0-bd36-786875b2a92c;true;2;2;2;2;2
+3;46;80540d7e-aeee-43c3-b0df-84b91206c296;false;3;3;3;3;3
+4;54;4df81611-f30d-4fa7-ab5e-20ed64684ab1;true;4;4;4;4;4
+5;26;de2135b8-e8af-48d7-9ba8-3de6b24c2633;false;5;5;5;5;5
+6;41;0f7ff674-912e-4814-8c87-f8d915383907;true;6;6;6;6;6
+7;33;327d6e79-ad0e-481f-898e-948aaa8080d4;true;7;7;7;7;7
+8;54;db42f40f-5465-493c-a6c7-7d93e37031a6;true;8;8;8;8;8
+9;94;4f12f32b-39c6-47ce-a2b8-b8d0d1bb5bec;false;9;9;9;9;9
+10;49;f085748c-f637-47e7-826b-10a2cf8c8195;true;10;10;10;10;10

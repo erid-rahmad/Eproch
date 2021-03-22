@@ -19,11 +19,15 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  * A MBiddingSubItem.
@@ -50,8 +54,10 @@ public class MBiddingSubItem extends AbstractAuditingEntity {
     private Boolean active;
 
     @OneToMany(mappedBy = "biddingSubItem")
+    @Fetch(FetchMode.JOIN)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-    @OrderBy("id")
+    @OrderBy("lineNo, id")
+    @JsonManagedReference
     private List<MBiddingSubItemLine> mBiddingSubItemLines = new ArrayList<>();
 
     @ManyToOne(optional = false)
@@ -66,6 +72,7 @@ public class MBiddingSubItem extends AbstractAuditingEntity {
 
     @OneToOne(mappedBy = "subItem")
     @JsonIgnore
+    @JsonBackReference
     private MBiddingLine biddingLine;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove

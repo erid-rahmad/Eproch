@@ -1,12 +1,11 @@
+import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { ElForm } from 'element-ui/types/form';
 import Vue from 'vue';
-import Component from 'vue-class-component';
-import { Inject, Watch } from 'vue-property-decorator';
+import { Component, Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
-import SubitemEditor from './subitem-editor.vue'
+import SubitemEditor from './subitem-editor.vue';
 
 const BiddingInformationProp = Vue.extend({
   props: {
@@ -23,16 +22,12 @@ const BiddingInformationProp = Vue.extend({
     SubitemEditor
   }
 })
-export default class BiddingInformation extends BiddingInformationProp {
+export default class BiddingInformation extends Mixins(AccessLevelMixin, BiddingInformationProp) {
 
   @Inject('dynamicWindowService')
-  protected commonService: (baseApiUrl: string) => DynamicWindowService;
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  private adOrganizationId: number;
-
-  private organizationCriteria = [
-    'adOrganizationId.in=1'
-  ];
+  private updated = false;
 
   gridSchema = {
     defaultSort: {},
@@ -43,9 +38,10 @@ export default class BiddingInformation extends BiddingInformationProp {
   rules = {}
 
   fullscreenLoading = false;
-  processing = false;
   loading = false;
   loadingReferenceNo = false;
+  loadingLines = false;
+  loadingProjectInfo = false;
   savingSubitem = false;
 
   public costCenterOptions: any[] = [];
@@ -97,12 +93,18 @@ export default class BiddingInformation extends BiddingInformationProp {
     console.log('bidding info data changed:', data);
   }
 
-  onCeilingPriceChange(row: any, value: string | number) {
+  onCeilingPriceChange(row: any, value: number = 0) {
     console.log('Bidding line: %O, ceiling price: %s', row, value);
+    row.totalCeilingPrice = value * row.quantity;
+    this.calculateTotalAmount();
   }
 
   onSubItemError() {
     this.savingSubitem = false;
+  }
+
+  onSubItemClosed() {
+    (<any>this.$refs.subitemEditor).reset();
   }
 
   onSubItemSaved({itemIndex, subItem}) {
@@ -117,16 +119,17 @@ export default class BiddingInformation extends BiddingInformationProp {
   }
 
   created() {
-    this.adOrganizationId = accountStore.organizationInfo.id;
     this.bidding.step = BiddingStep.INFO;
-
-    if (this.adOrganizationId > 1) {
-      this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
-    }
 
     if (this.editMode) {
       this.bidding = {...this.data};
+      this.$set(this.bidding, 'referenceNo', this.bidding.requisitionName);
+      this.retrieveEventTypes(this.bidding.biddingTypeId);
+      this.retrieveBiddingLines(this.bidding.id);
+      this.retrieveProjectInformations(this.bidding.id);
     } else {
+      this.bidding.documentAction = 'APV';
+      this.bidding.documentStatus = 'SMT';
       this.bidding.projectInformations = [];
     }
 
@@ -135,6 +138,15 @@ export default class BiddingInformation extends BiddingInformationProp {
     this.retrieveReferenceLists('mVendorSelection');
     this.retrievePicBidding();
     this.retrieveUom();
+  }
+
+  private calculateTotalAmount() {
+    const grandTotal = (this.bidding.biddingLines as any[])
+      .map((line: any): number => line.totalCeilingPrice || 0)
+      .reduce((prev, next) => prev + next, 0);
+
+    this.$set(this.bidding, 'ceilingPrice', grandTotal);
+    this.$set(this.bidding, 'estimatedPrice', grandTotal);
   }
 
   closeSubitemEditor() {
@@ -153,10 +165,10 @@ export default class BiddingInformation extends BiddingInformationProp {
 
     this.commonService('/api/ad-reference-lists')
     .retrieve({
-      criteriaQuery: [
+      criteriaQuery: this.updateCriteria([
         `active.equals=true`,
         `adReferenceValue.equals=${code}`
-      ],
+      ]),
       paginationQuery: {
         page: 0,
         size: 100,
@@ -176,9 +188,9 @@ export default class BiddingInformation extends BiddingInformationProp {
   private retrieveCostCenter() {
     this.commonService('/api/c-cost-centers')
       .retrieve({
-        criteriaQuery: [
+        criteriaQuery: this.updateCriteria([
           'active.equals=true'
-        ],
+        ]),
         paginationQuery: {
           page: 0,
           size: 1000,
@@ -193,9 +205,9 @@ export default class BiddingInformation extends BiddingInformationProp {
   private retrieveBiddingType() {
     this.commonService('/api/c-bidding-types')
       .retrieve({
-        criteriaQuery: [
+        criteriaQuery: this.updateCriteria([
           'active.equals=true'
-        ],
+        ]),
         paginationQuery: {
           page: 0,
           size: 1000,
@@ -210,10 +222,10 @@ export default class BiddingInformation extends BiddingInformationProp {
   private retrievePicBidding() {
     this.commonService('/api/ad-users')
       .retrieve({
-        criteriaQuery: [
+        criteriaQuery: this.updateCriteria([
           'active.equals=true',
           'employee.equals=true'
-        ],
+        ]),
         paginationQuery: {
           page: 0,
           size: 10000,
@@ -228,10 +240,10 @@ export default class BiddingInformation extends BiddingInformationProp {
   retrieveEventTypes(biddingTypeId: number) {
     this.commonService('/api/c-event-types')
       .retrieve({
-        criteriaQuery: [
+        criteriaQuery: this.updateCriteria([
           'active.equals=true',
           `biddingTypeId.equals=${biddingTypeId}`
-        ],
+        ]),
         paginationQuery: {
           page: 0,
           size: 1000,
@@ -246,6 +258,9 @@ export default class BiddingInformation extends BiddingInformationProp {
   private retrieveUom() {
     this.commonService('/api/c-unit-of-measures')
       .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true'
+        ]),
         paginationQuery: {
           page: 0,
           size: 10000,
@@ -257,40 +272,70 @@ export default class BiddingInformation extends BiddingInformationProp {
       });
   }
 
-  jsonEncode(data: any, fields: string[]) {
-    const record: Record<string, any> = {};
-    for (const field of fields) {
-      record[field] = data[field];
-    }
-    return JSON.stringify(record);
+  private retrieveBiddingLines(biddingId: number) {
+    this.loadingLines = true;
+    this.commonService('/api/m-bidding-lines')
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingId.equals=${biddingId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['lineNo', 'id']
+        }
+      })
+      .then(res => {
+        this.$set(this.bidding, 'biddingLines', res.data);
+      })
+      .catch(err => {
+        console.log('Failed to get bidding lines. %O', err);
+        this.$message.error('Failed to get bidding lines');
+      })
+      .finally(() => {
+        this.loadingLines = false;
+      })
   }
 
-  private getJsonField(json: string, field: string) {
-    if (json) {
-      const data = JSON.parse(json);
-      return data[field];
-    }
-    return null;
+  private retrieveProjectInformations(biddingId: number) {
+    this.loadingProjectInfo = true;
+    this.commonService('/api/m-project-informations')
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingId.equals=${biddingId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.$set(this.bidding, 'projectInformations', res.data);
+      })
+      .catch(err => {
+        console.log('Failed to get project informations. %O', err);
+        this.$message.error('Failed to get project informations');
+      })
+      .finally(() => {
+        this.loadingProjectInfo = false;
+      })
   }
 
   retrieveReferencedData(referenceNo?: string) {
     if (referenceNo) {
       this.loadingReferenceNo = true;
 
-      let filterQuery = [
-        'active.equals=true',
-        'processed.equals=true',
-        'approved.equals=true',
-        `documentNo.equals=${referenceNo}`
-      ];
-
-      if (this.adOrganizationId > 1) {
-        filterQuery = [...filterQuery, ...this.organizationCriteria];
-      }
-
       this.commonService('/api/m-requisitions')
         .retrieve({
-          criteriaQuery: filterQuery,
+          criteriaQuery: this.updateCriteria([
+            'active.equals=true',
+            'processed.equals=true',
+            'approved.equals=true',
+            `documentNo.equals=${referenceNo}`
+          ]),
           paginationQuery: {
             page: 0,
             size: 1,
@@ -307,7 +352,7 @@ export default class BiddingInformation extends BiddingInformationProp {
             this.$set(this.bidding, 'currencyName', document.currencyName);
             this.$set(this.bidding, 'currencyId', document.currencyId);
             this.$set(this.bidding, 'costCenterId', document.costCenterId);
-            this.$set(this.bidding, 'referenceId', document.id);
+            this.$set(this.bidding, 'requisitionId', document.id);
             this.$set(this.bidding, 'referenceTypeName', document.documentTypeName);
             this.$set(this.bidding, 'referenceTypeId', document.documentTypeId);
 
@@ -317,7 +362,7 @@ export default class BiddingInformation extends BiddingInformationProp {
           }
         })
         .catch(err => {
-          console.error('Failed getting the reference. %O', err);
+          console.error('Failed to get reference. %O', err);
           this.$message.error(err.detail || err.message);
         })
         .finally(() => {
@@ -329,10 +374,10 @@ export default class BiddingInformation extends BiddingInformationProp {
   private retreiveReferenceLines(referenceId: number): void {
     this.commonService('/api/m-requisition-lines')
       .retrieve({
-        criteriaQuery: [
+        criteriaQuery: this.updateCriteria([
           'active.equals=true',
           `requisitionId.equals=${referenceId}`
-        ],
+        ]),
         paginationQuery: {
           page: 0,
           size: 1000,
@@ -357,20 +402,11 @@ export default class BiddingInformation extends BiddingInformationProp {
           };
         });
 
-        const grandTotal = lines
-          .reduce((prev: any, next: any) => {
-          if (typeof prev === 'number') {
-            return prev + next.totalCeilingPrice
-          }
-          return prev.totalCeilingPrice + next.totalCeilingPrice;
-        })
-
-        this.$set(this.bidding, 'ceilingPrice', grandTotal);
-        this.$set(this.bidding, 'estimatedPrice', grandTotal);
         this.$set(this.bidding, 'biddingLines', lines);
+        this.calculateTotalAmount();
       })
       .catch(err => {
-        console.error('Failed getting the bidding lines. %O', err);
+        console.error('Failed to get bidding lines. %O', err);
         this.$message({
           type: 'error',
           message: err.detail || err.message
@@ -480,12 +516,29 @@ export default class BiddingInformation extends BiddingInformationProp {
    * Invoked before proceeding to the next step.
    */
   save() {
+    if (! this.updated) {
+      this.$emit('saved', { data: this.data });
+      return;
+    }
+
     (this.$refs.biddingInformation as ElForm).validate((passed, errors) => {
       if (passed) {
         console.log('form:', this.bidding);
-        this.$emit('saved', {
-          data: this.bidding
-        });
+        let service = this.commonService('/api/m-biddings/save-form');
+
+        service[this.editMode ? 'update' : 'create'](this.bidding)
+          .then(res => {
+            this.$emit('saved', {
+              data: res
+            });
+          })
+          .catch(err => {
+            console.log('Failed to save bidding info. %O', err);
+            this.$message.error('Failed to save ')
+            this.$emit('error', errors)
+          });
+          
+        
       } else {
         this.$emit('error', errors);
       }

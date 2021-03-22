@@ -72,6 +72,7 @@ class MBiddingSubItemLineGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "lineNo":"0"
                 , "quantity":"0"
                 , "price":"0"
                 , "amount":"0"

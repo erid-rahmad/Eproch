@@ -80,7 +80,7 @@
                         <el-table-column
                             min-width="100"
                             sortable
-                            prop="biddingNo"
+                            prop="documentNo"
                             label="Bidding No"/>
 
                         <el-table-column
@@ -171,7 +171,7 @@
                 ref="biddingForm"
                 :edit-mode="editMode"
                 :data="selectedRow"
-                @back="close"
+                @close="close"
             />
         </div>
 

@@ -52,9 +52,8 @@ public class MBidding extends AbstractAuditingEntity {
     @Column(name = "date_trx")
     private LocalDate dateTrx;
 
-    @NotNull
     @Size(max = 30)
-    @Column(name = "document_no", length = 30, nullable = false)
+    @Column(name = "document_no", length = 30)
     private String documentNo;
 
     @NotNull
