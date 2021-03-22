@@ -26,7 +26,7 @@ export default class SubitemEditor extends Mixins(AccessLevelMixin, SubitemEdito
   loadingProducts = false;
   loadingLines = false;
 
-  mainForm: Record<string, any>;
+  mainForm: Record<string, any> = null;
 
   validationSchema = {
     productId: {
@@ -45,7 +45,7 @@ export default class SubitemEditor extends Mixins(AccessLevelMixin, SubitemEdito
 
   @Watch('itemDetail.subItem')
   onItemDetailChanged(subItem: any) {
-    console.log('subItem');
+    console.log('subItem', subItem);
     if (subItem) {
       this.mainForm = subItem;
       this.retrieveLines(this.mainForm.id);
@@ -58,6 +58,7 @@ export default class SubitemEditor extends Mixins(AccessLevelMixin, SubitemEdito
         mBiddingSubItemLines: []
       };
     }
+    console.log('mainForm:', this.mainForm);
   }
 
   /**

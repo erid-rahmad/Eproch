@@ -516,11 +516,6 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
    * Invoked before proceeding to the next step.
    */
   save() {
-    if (! this.updated) {
-      this.$emit('saved', { data: this.data });
-      return;
-    }
-
     (this.$refs.biddingInformation as ElForm).validate((passed, errors) => {
       if (passed) {
         console.log('form:', this.bidding);
