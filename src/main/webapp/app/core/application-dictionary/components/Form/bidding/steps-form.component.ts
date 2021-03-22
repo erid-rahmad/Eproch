@@ -41,7 +41,7 @@ export default class StepsForm extends StepsFormProps {
   active = 0;
   eventBus = new Vue();
 
-  bidding = {
+  bidding: Record<string, any> = {
     biddingLines: [],
     projectInformations: [],
     biddingSchedules: [],
@@ -80,6 +80,11 @@ export default class StepsForm extends StepsFormProps {
 
   goToNextStep({ data }) {
     this.showSaveDialog = false;
+
+    if (! this.editMode && data.id) {
+      this.editMode = true;
+    }
+
     if (++this.active <= 3) {
       this.bidding = data;
     }

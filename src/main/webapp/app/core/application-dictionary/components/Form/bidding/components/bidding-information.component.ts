@@ -518,11 +518,15 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   save() {
     (this.$refs.biddingInformation as ElForm).validate((passed, errors) => {
       if (passed) {
-        console.log('form:', this.bidding);
         let service = this.commonService('/api/m-biddings/save-form');
 
         service[this.editMode ? 'update' : 'create'](this.bidding)
           .then(res => {
+            if (! this.editMode) {
+              this.bidding.id = res.id;
+              this.$set(this.bidding, 'documentNo', res.documentNo);
+            }
+
             this.$emit('saved', {
               data: res
             });
