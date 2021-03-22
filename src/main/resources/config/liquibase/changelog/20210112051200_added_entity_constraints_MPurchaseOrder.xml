@@ -7,7 +7,7 @@
         Added the constraints for entity MPurchaseOrder.
     -->
     <changeSet id="20210112051200-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="m_purchase_order"
                                  constraintName="fk_m_purchase_order_ad_organization_id"
@@ -48,7 +48,8 @@
 
     <changeSet id="20210315162800" author="Ananta Aryadewa">
 
-        <addForeignKeyConstraint baseColumnNames="payment_term_id"
+        <addForeignKeyConstraint defaultValue="0"
+                                 baseColumnNames="payment_term_id"
                                  baseTableName="m_purchase_order"
                                  constraintName="fk_m_purchase_order_payment_term_id"
                                  referencedColumnNames="id"

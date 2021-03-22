@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MRequisitionLine.
     -->
@@ -134,11 +134,12 @@
     </changeSet>
 
     <changeSet id="20210312033800" author="Ananta Aryadewa">
-        <addColumn tableName="m_requisition_line">
-            <column name="quantity_ordered" type="decimal(21,2)">
-                <constraints nullable="false" />
+        <addColumn  tableName="m_requisition_line">
+            <column defaultValue="0" name="quantity_ordered" type="decimal(21,2)">
+
+                <constraints  nullable="false" />
             </column>
-            <column name="quantity_balance" type="decimal(21,2)">
+            <column defaultValue="0" name="quantity_balance" type="decimal(21,2)">
                 <constraints nullable="false" />
             </column>
         </addColumn>

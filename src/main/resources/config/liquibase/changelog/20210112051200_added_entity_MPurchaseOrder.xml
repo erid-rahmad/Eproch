@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MPurchaseOrder.
     -->
@@ -152,7 +152,7 @@
         <setColumnRemarks tableName="m_purchase_order" columnName="document_action" remarks="" />
         <setColumnRemarks tableName="m_purchase_order" columnName="document_status" remarks="" />
         <addColumn tableName="m_purchase_order">
-            <column name="payment_term_id" type="bigint">
+            <column defaultValue="0" name="payment_term_id" type="bigint">
                 <constraints nullable="false" />
             </column>
         </addColumn>
