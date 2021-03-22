@@ -1,6 +1,10 @@
-import { ElForm } from 'element-ui/types/form';
+import {
+  ElForm
+} from 'element-ui/types/form';
 import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
+import {
+  mixins
+} from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
 import Vue from 'vue';
 import Component from 'vue-class-component';
@@ -13,108 +17,89 @@ const ItemDetailProp = Vue.extend({
     biddingrow: {
       type: Object,
       default: () => {}
-    },    
+    },
   }
 })
 
 @Component
 export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, ItemDetailProp) {
-//testing
-
-data() {
-  return {
-    
-    
-    gridData: [
-      {
-      no: '1',
-      subitem: 'pc',
-      subsubitem: 'pc lenovo',
-      uom: 'yes',
-      proposedprice:'12000',
-      date: '2016-05-02',
-      name: 'John Smith',
-      address: 'No.1518,  Jinshajiang Road, Putuo District'
-      }, 
-      {
-        no: '2',
-        subitem: 'pc',
-        subsubitem: 'pc acer',
-        uom: 'yes',
-        proposedprice:'12000',
-        date: '2016-05-02',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District'
-      },
-      {
-        no: '3',
-        subitem: 'pc',
-        subsubitem: 'pc hp',
-        uom: 'yes',
-        proposedprice:'12000',
-        date: '2016-05-02',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District'
-      },
-      {
-        no: '4',
-        subitem: 'pc',
-        subsubitem: 'pc rusak',
-        uom: 'yes',
-        proposedprice:'12000',
-        date: '2016-05-02',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District'
-      },  
-    ],
-    dummy: [
-      {
-      no: '1',
-      dockument: 'suport dockument',
-      vendorsubmision: 'start 03/01/2021 end 03/10/2021',
-      vendorevaluation: 'start 03/01/2021 end 03/10/2021',
-      },
-      {
-        no: '1',
-        dockument: 'testing dockument',
-        vendorsubmision: 'start 03/01/2021 end 03/10/2021',
-        vendorevaluation: 'start 03/01/2021 end 03/10/2021',
-      },
-      {
-        no: '1',
-        dockument: 'QA dockument',
-        vendorsubmision: 'start 03/01/2021 end 03/10/2021',
-        vendorevaluation: 'start 03/01/2021 end 03/10/2021',
-      },
-      {
-        no: '1',
-        dockument: 'finishing dockument',
-        vendorsubmision: 'start 03/01/2021 end 03/10/2021',
-        vendorevaluation: 'start 03/01/2021 end 03/10/2021',
-        },
-      
-      
-    ],
-
-    // fullscreen:true,
-    form: {
-      name: '',
-      region: '',
-      date1: '',
-      date2: '',
-      delivery: false,
-      type: [],
-      resource: '',
-      desc: ''
-    },
-    formLabelWidth: '120px'
-  };
-}
-  
-  
-  
   //testing
 
+  data() {
+    return {
+      gridData: [{
+          no: '1',
+          subitem: 'pc',
+          subsubitem: 'pc lenovo',
+          uom: 'yes',
+          proposedprice: '12000',
+          date: '2016-05-02',
+          name: 'John Smith',
+          address: 'No.1518,  Jinshajiang Road, Putuo District'
+        },
+        {
+          no: '2',
+          subitem: 'pc',
+          subsubitem: 'pc acer',
+          uom: 'yes',
+          proposedprice: '12000',
+          date: '2016-05-02',
+          name: 'John Smith',
+          address: 'No.1518,  Jinshajiang Road, Putuo District'
+        },
+        {
+          no: '3',
+          subitem: 'pc',
+          subsubitem: 'pc hp',
+          uom: 'yes',
+          proposedprice: '12000',
+          date: '2016-05-02',
+          name: 'John Smith',
+          address: 'No.1518,  Jinshajiang Road, Putuo District'
+        },
+        {
+          no: '4',
+          subitem: 'pc',
+          subsubitem: 'pc rusak',
+          uom: 'yes',
+          proposedprice: '12000',
+          date: '2016-05-02',
+          name: 'John Smith',
+          address: 'No.1518,  Jinshajiang Road, Putuo District'
+        },
+      ],
+      dummy: [{
+          no: '1',
+          dockument: 'suport dockument',
+          vendorsubmision: 'start 03/01/2021 end 03/10/2021',
+          vendorevaluation: 'start 03/01/2021 end 03/10/2021',
+        },
+        {
+          no: '1',
+          dockument: 'testing dockument',
+          vendorsubmision: 'start 03/01/2021 end 03/10/2021',
+          vendorevaluation: 'start 03/01/2021 end 03/10/2021',
+        },
+        {
+          no: '1',
+          dockument: 'QA dockument',
+          vendorsubmision: 'start 03/01/2021 end 03/10/2021',
+          vendorevaluation: 'start 03/01/2021 end 03/10/2021',
+        },
+        {
+          no: '1',
+          dockument: 'finishing dockument',
+          vendorsubmision: 'start 03/01/2021 end 03/10/2021',
+          vendorevaluation: 'start 03/01/2021 end 03/10/2021',
+        },
+
+
+      ],
+
+      value1: true,
+      formLabelWidth: '120px'
+    };
+  }
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -124,19 +109,20 @@ data() {
   rules = {}
 
 
-  fullscreenLoading = false;
-  processing = false;
-  loading = false;
-  price = 0;
-  input: '';
-  dialogTableVisible: false;
-  dialogFormVisible: false;
-  value1: true;
-  value2: true;
+  // fullscreenLoading = false;
+  // processing = false;
+  // loading = false;
+  // price = 0;
+  // input: '';
+  // dialogTableVisible11: false;
+  // dialogFormVisible: false;
+
+  // value2: true;
 
   //use
   public moreInformation: any = {};
-  public id = 663751;
+  public SubItem: any = {};
+  public price = 0;
 
   public costCenterOptions: any = {};
   public picBiddingOptions: any = {};
@@ -146,12 +132,12 @@ data() {
   public productOptions: any = {};
   public uomOptions: any = {};
   private limit: number = 1;
-  
+
   private action: string = "/api/c-attachments/upload";
   private accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
 
 
-  private projectInformation:any = {
+  private projectInformation: any = {
     information: "",
     attachment: "",
     attachmentId: ""
@@ -185,14 +171,16 @@ data() {
   }
 
   columnSpacing = 32;
-  dialogConfirmationVisible:boolean = false;
-  dialogConfirmationVisibleFormSubSubItem:boolean = false;
+  dialogConfirmationVisible: boolean = false;
+  dialogConfirmationVisibleFormSubSubItem: boolean = false;
 
   dialogTitle = "";
   dialogContent = null;
   dialogContentSubItem = null;
   dialogWidth = "";
   dialogCloseOnClick = true;
+  dialogTableVisible11 = false;
+
 
   private baseApiUrlReference = "/api/ad-references";
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
@@ -209,30 +197,67 @@ data() {
     // this.retrievePicBidding();
     // this.retrieveEventType();
     // this.retrieveUom();
-    console.log("this row line",this.biddingrow);
-    
+    console.log("this row line", this.biddingrow);
+
+    this.moreInformation.totalpricesubmision = 123;
+
   }
 
+
   private moreInformationData() {
-      this.dynamicWindowService(`/api/m-biddings/${this.biddingrow.id}`)
-        .retrieve({
-          paginationQuery: {
-            page: 0,
-            size: 10000,
-            sort: ['name']
-          }
-        })
-        .then(res => {
-          this.moreInformation = res.data;
-          console.log("this more information",this.moreInformation);
-          
-        });
+    this.dynamicWindowService(`/api/m-biddings/${this.biddingrow.id}`)
+      .retrieve({
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['name']
+        }
+      })
+      .then(res => {
+        this.moreInformation = res.data;
+        console.log("this more information", this.moreInformation);
+      });
+  }
+  //${this.moreInformation.lineSubItemID}
+  private Subitemdata() {
+    this.dynamicWindowService(`/api/m-bidding-sub-items-nested/${this.moreInformation.lineSubItemID}`)
+      .retrieve({
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['name']
+        }
+      })
+      .then(res => {
+        this.SubItem = res.data;       
+        console.log("this subitem", this.SubItem);
+      });
+  }
+
+  view(row) {
+    console.log("this row", row);
   }
   
-  view(row) {    
-    console.log("this row",row);
-    
+  viewSubItem(tes) {
+    console.log("this row viewSubItem", tes);    
+    this.$set(this.moreInformation, 'lineSubItemID', tes.id);
+    console.log("this row viewSubItem", this.moreInformation.lineSubItemID);
+    this.Subitemdata()
+    this.dialogTableVisible11 = true;
   }
+  onQuantityOrderedChanged(row: any, index: number, value: number) {
+    row.totalpricesubmision = row.quantity * value;
+    this.tesjo();
+  }
+  tesjo() {
+    var total = 0;
+    this.moreInformation.biddingLineList.forEach(element => {
+      total += element.totalpricesubmision
+    });
+    console.log("price", total);
+    this.$set(this.moreInformation, 'totalpricesubmision', total);
+  }
+
 
   // private retrieveGetReferences(param: string) {
   //   this.dynamicWindowService(this.baseApiUrlReference)
@@ -327,7 +352,7 @@ data() {
   //     });
   // }
 
-  
+
 
   // private retrieveEventType() {
   //   this.dynamicWindowService('/api/c-event-types')
@@ -390,7 +415,7 @@ data() {
   // }
 
   // submit1() {
-  //   console.log(this.biddingInformation);    
+  //   console.log(this.biddingInformation);
   // }
 
   // searchReferenceNo(){
@@ -574,12 +599,12 @@ data() {
   //       grandTotal += this.gridDataProductSubItem[i].totalAmount;
   //     }
 
-	// 		var biddingInformationLine = this.biddingrow.biddingInformationLine[this.productRequirement.index];
+  // 		var biddingInformationLine = this.biddingrow.biddingInformationLine[this.productRequirement.index];
   //     biddingInformationLine.subItem = this.gridDataProductSubItem;
   //     biddingInformationLine.unitPrice = grandTotal;
-	// 		biddingInformationLine.requisitionAmount = grandTotal * biddingInformationLine.quantity;
+  // 		biddingInformationLine.requisitionAmount = grandTotal * biddingInformationLine.quantity;
 
-	// 		for(var x=0; x<this.biddingrow.biddingInformationLine.length; x++){
+  // 		for(var x=0; x<this.biddingrow.biddingInformationLine.length; x++){
   //       totalCeilingPrice += this.biddingrow.biddingInformationLine[x].requisitionAmount;
   //     }
 
@@ -732,7 +757,7 @@ data() {
   //   }
   // }
 
-  addProject(){
+  addProject() {
     this.dialogTitle = "Add Project";
     this.dialogContent = 1;
     this.dialogConfirmationVisible = true;
@@ -743,19 +768,19 @@ data() {
   remoteMethod(query) {
     if (query !== '') {
       this.loading = true;
-      // this.retrieveProduct(query);
+      this.retrieveProduct(query);
     } else {
       this.productOptions = [];
     }
   }
 
-  removeProject(index){
+  removeProject(index) {
     this.biddingrow.projectInformation.splice(index, 1);
   }
 
-  saveProject(){
+  saveProject() {
     (this.$refs.projectInformation as ElForm).validate((passed, errors) => {
-      if(passed){
+      if (passed) {
         console.log(this.projectInformation);
         this.biddingrow.projectInformation.push(this.projectInformation);
         this.dialogConfirmationVisible = false;
@@ -763,7 +788,7 @@ data() {
           information: "",
           attachment: ""
         };
-      }else{
+      } else {
         console.log(errors);
       }
     });
@@ -773,8 +798,9 @@ data() {
     window.open(file.response.downloadUri, '_blank');
   }
 
-  downloadAttachment(row){
-    window.open(`http://localhost:9000/api/c-attachments/download/${row.attachment.id}-${row.attachment.fileName}`, '_blank');
+  downloadAttachment(row) {
+    console.log(row);    
+    window.open(`http://localhost:9000/api/c-attachments/download/${row.id}-${row.fileName}`, '_blank');
   }
 
   handleRemove(file, fileList) {
@@ -787,11 +813,11 @@ data() {
   }
 
   onUploadSuccess(response, file, fileList) {
-      console.log('File uploaded successfully ', response);
-      console.log(file);
-      console.log(fileList);
-      this.projectInformation.attachment = response.attachment;
-      this.projectInformation.attachmentId = response.attachment.id;
+    console.log('File uploaded successfully ', response);
+    console.log(file);
+    console.log(fileList);
+    this.projectInformation.attachment = response.attachment;
+    this.projectInformation.attachmentId = response.attachment.id;
   }
 
   handleExceed(files, fileList) {
@@ -811,19 +837,19 @@ data() {
     const isLt5M = file.size / 1024 / 1024 < 5;
     if (!isLt5M) {
       this.$notify({
-          title: 'Warning',
-          message: "files with a size less than 5Mb",
-          type: 'warning',
-          duration: 3000
+        title: 'Warning',
+        message: "files with a size less than 5Mb",
+        type: 'warning',
+        duration: 3000
       });
       return isLt5M;
     }
 
     // File type restriction
     const name = file.name ? file.name : '';
-    const ext = name
-      ? name.substr(name.lastIndexOf('.') + 1, name.length)
-      : true;
+    const ext = name ?
+      name.substr(name.lastIndexOf('.') + 1, name.length) :
+      true;
     const isExt = this.accept.indexOf(ext) < 0;
     if (isExt) {
       this.$notify({
@@ -841,9 +867,9 @@ data() {
 
   validate() {
     (this.$refs.biddingInformation as ElForm).validate((passed, errors) => {
-      if(passed){
+      if (passed) {
         //this.submit();
-      }else{
+      } else {
         console.log(errors);
       }
 

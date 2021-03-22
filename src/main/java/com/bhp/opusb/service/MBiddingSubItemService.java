@@ -1,12 +1,15 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MBiddingSubItem;
+import com.bhp.opusb.repository.MBiddingSubItemLineRepository;
 import com.bhp.opusb.repository.MBiddingSubItemRepository;
 import com.bhp.opusb.service.dto.MBiddingSubItemDTO;
 import com.bhp.opusb.service.mapper.MBiddingSubItemMapper;
+import com.bhp.opusb.util.MapperJSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -67,7 +70,7 @@ public class MBiddingSubItemService {
      *  Get all the mBiddingSubItems where BiddingLine is {@code null}.
      *  @return the list of entities.
      */
-    @Transactional(readOnly = true) 
+    @Transactional(readOnly = true)
     public List<MBiddingSubItemDTO> findAllWhereBiddingLineIsNull() {
         log.debug("Request to get all mBiddingSubItems where BiddingLine is null");
         return StreamSupport
@@ -86,8 +89,26 @@ public class MBiddingSubItemService {
     @Transactional(readOnly = true)
     public Optional<MBiddingSubItemDTO> findOne(Long id) {
         log.debug("Request to get MBiddingSubItem : {}", id);
-        return mBiddingSubItemRepository.findById(id)
+        Optional<MBiddingSubItemDTO> result = mBiddingSubItemRepository.findById(id)
             .map(mBiddingSubItemMapper::toDto);
+        log.info("this result {}", MapperJSONUtil.prettyLog(result));
+        return result;
+    }
+
+    @Autowired
+    MBiddingSubItemLineService mBiddingSubItemLineService;
+    @Transactional(readOnly = true)
+    public MBiddingSubItem findOnenested(Long id) {
+
+        log.debug("Request to get MBiddingSubItem : {}", id);
+        Optional<MBiddingSubItem> result = mBiddingSubItemRepository.findById(id);
+        MBiddingSubItem satu = new MBiddingSubItem() ;
+        satu.setId(result.get().getId());
+        satu.setProduct(result.get().getProduct());
+        satu.setTotalAmount(result.get().getTotalAmount());
+        log.info("this result {}", MapperJSONUtil.prettyLog(result));
+        satu.setMBiddingSubItemLines(mBiddingSubItemLineService.findOnebyheader(result.get().getId()));
+        return satu;
     }
 
     /**

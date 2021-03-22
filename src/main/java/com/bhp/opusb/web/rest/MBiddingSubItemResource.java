@@ -1,6 +1,9 @@
 package com.bhp.opusb.web.rest;
 
+import com.bhp.opusb.domain.MBiddingSubItem;
+import com.bhp.opusb.repository.MBiddingSubItemRepository;
 import com.bhp.opusb.service.MBiddingSubItemService;
+import com.bhp.opusb.util.MapperJSONUtil;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MBiddingSubItemDTO;
 import com.bhp.opusb.service.dto.MBiddingSubItemCriteria;
@@ -11,11 +14,11 @@ import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -125,8 +128,18 @@ public class MBiddingSubItemResource {
     @GetMapping("/m-bidding-sub-items/{id}")
     public ResponseEntity<MBiddingSubItemDTO> getMBiddingSubItem(@PathVariable Long id) {
         log.debug("REST request to get MBiddingSubItem : {}", id);
+
         Optional<MBiddingSubItemDTO> mBiddingSubItemDTO = mBiddingSubItemService.findOne(id);
+        log.info("this respon {}", MapperJSONUtil.prettyLog(mBiddingSubItemDTO));
         return ResponseUtil.wrapOrNotFound(mBiddingSubItemDTO);
+    }
+    @Autowired
+    MBiddingSubItemRepository mBiddingSubItemRepository;
+
+    @GetMapping("/m-bidding-sub-items-nested/{id}")
+    public MBiddingSubItem getMBiddingSubItemnes(@PathVariable Long id) {
+        log.debug("REST request to get MBiddingSubItem : {}");
+        return mBiddingSubItemService.findOnenested(id) ;
     }
 
     /**

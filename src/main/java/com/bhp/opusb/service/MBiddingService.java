@@ -206,10 +206,12 @@ public class MBiddingService {
     public Optional<MBiddingDTO> findOne(Long id) {
         Optional<MBiddingDTO> mBiddingDTO = mBiddingRepository.findById(id)
             .map(mBiddingMapper::toDto);
-        /* mBiddingDTO.get().setBiddingLineList(mBiddingLineService.findbyheader(mBiddingDTO.get().getId()));
-        mBiddingDTO.get().setProjectInformationList(mProjectInformationService.findByBindId(mBiddingDTO.get().getId())); */
+         mBiddingDTO.get().setBiddingLineList(mBiddingLineService.findbyheader(mBiddingDTO.get().getId()));
+        mBiddingDTO.get().setProjectInformationList(mProjectInformationService.findByBindId(mBiddingDTO.get().getId()));
         return mBiddingDTO;
     }
+
+
 
     /**
      * Get one mBidding form by id.
@@ -221,7 +223,7 @@ public class MBiddingService {
     public Optional<MBiddingFormDTO> findOneForm(Long id, MBiddingProcess step) {
         log.debug("Request to get MBidding (FormDTO) : {}", id);
         Optional<MBiddingFormDTO> record = mBiddingRepository.findById(id).map(mBiddingFormMapper::toDto);
-            
+
         record.ifPresent(dto -> {
             dto.setStep(step);
 
