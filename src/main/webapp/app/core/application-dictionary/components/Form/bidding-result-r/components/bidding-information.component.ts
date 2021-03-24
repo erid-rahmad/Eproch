@@ -743,7 +743,7 @@ data() {
   remoteMethod(query) {
     if (query !== '') {
       this.loading = true;
-      // this.retrieveProduct(query);
+      this.retrieveProduct(query);
     } else {
       this.productOptions = [];
     }

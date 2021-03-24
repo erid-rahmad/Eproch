@@ -1,13 +1,13 @@
 <template>
     <div>
         <el-row :gutter="columnSpacing">
-            <el-col :span="24">
-                <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
+            <el-col :span="24">               
+                <!-- <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
                     Back
-                </el-button>
-                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="validate">
+                </el-button> -->
+                <!-- <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="validate">
                     Submit <em class="el-icon-arrow-right"></em>
-                </el-button>
+                </el-button> -->
             </el-col>
         </el-row>
         <el-form ref="productCatalog" label-position="left" label-width="130px" size="mini" :model="productCatalog" :rules="rules">
@@ -47,15 +47,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="Breakdown" prop="name">
-                                                           <el-dropdown>
-                                <span class="el-dropdown-link">
-                                    Breakdown<i class="el-icon-arrow-down el-icon--right"></i>
-                                </span>
-                                <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item>Yes</el-dropdown-item>
-                                    <el-dropdown-item>No</el-dropdown-item>                         
-                                </el-dropdown-menu>
-                            </el-dropdown>
+                                <el-button type="success" v-on:click="isHidden = !isHidden">BreakDown</el-button>  
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -113,6 +105,10 @@
                 <el-table-column prop="1" label="Detail" width="150">
                     <el-table-column prop="1" label="Produck" width="150">
                     </el-table-column>
+                    <el-table-column v-if="!isHidden" prop="3" label="Sub Item" width="180">
+                    </el-table-column>
+                    <el-table-column v-if="!isHidden" prop="4" label="Sub Sub item" width="180">
+                    </el-table-column>
                     <el-table-column prop="2" label="Qty" width="150">
                     </el-table-column>
                     <el-table-column prop="3" label="Uom" width="180">
@@ -148,25 +144,34 @@
         <el-divider content-position="left">
             <h4></h4>
         </el-divider>
-        <el-form ref="biddingInfasdsadormation" label-position="left" label-width="100px" :model="asd" :rules="asd">
-            <el-form-item label="Note" prop="title">
-                <el-input prop="2" class="form-input"></el-input>
-            </el-form-item>
-        </el-form>
-        <el-form ref="biddingInfasdsadormation" label-position="left" label-width="100px" :model="asd" :rules="asd">
-            <el-form-item label="Remark" prop="title">
-               <template >
-                                <el-button
-                                    class="button"
-                                    icon="el-icon-search"
-                                    size="mini"
-                                    type="primary"
-                                    @click="viewSchedule(row)">
+
+        <el-col :span="24" class="tab-container">
+            <el-col :span="20" class="tab-container">
+                <el-col :span="15" class="tab-container">
+                    <el-form ref="biddingInfasdsadormation" label-position="left" label-width="100px" size="mini" :model="asd" :rules="asd">
+
+                        <el-form-item label="note " prop="title">
+                            <el-input prop="2" class="form-input"></el-input>
+                        </el-form-item>
+                    </el-form>
+                    <el-form ref="biddingInfasdsadormation" label-position="left" label-width="100px" :model="asd" :rules="asd">
+                        <el-form-item label="Remark" prop="title">
+                            <template>
+                                <el-button class="button" icon="el-icon-search" size="mini" type="primary" @click="viewSchedule(row)">
                                     Select Dockument
                                 </el-button>
                             </template>
-            </el-form-item>
-        </el-form>
+                        </el-form-item>
+                    </el-form>
+                </el-col>
+            </el-col>
+            <el-col :span="4" class="tab-container">
+                <el-row>
+                    <el-button type="success" plain>Approve</el-button>
+                    <el-button type="danger" @click="back" plain>Cancle</el-button>
+                </el-row>
+            </el-col>
+        </el-col>
     </div>
 </template>
 

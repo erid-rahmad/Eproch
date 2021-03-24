@@ -6,7 +6,7 @@
 
                 <el-tabs v-model="activeName" @tab-click="handleClick">
 
-                    <el-tab-pane v-for="(item, index) in tabTitleOptions" :key="item.value" :label="item.name" :name="item.value">
+                   
 
                         <keep-alive>
 
@@ -43,7 +43,7 @@
                             </el-col>
 
                         </keep-alive>
-                    </el-tab-pane>
+                
                 </el-tabs>
 
             </el-col>

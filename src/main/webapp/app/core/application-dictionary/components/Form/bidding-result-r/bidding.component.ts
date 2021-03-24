@@ -7,7 +7,6 @@ import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import StepForm from "../bidding-result/steps-form.vue";
-import { TranslationStoreModule } from '@/shared/config/store/translation-store';
 
 @Component({
   components: {
@@ -15,64 +14,66 @@ import { TranslationStoreModule } from '@/shared/config/store/translation-store'
   }
 })  
 export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
-  private formatter = new Intl.NumberFormat(TranslationStoreModule.currentLanguage, {
-    minimumFractionDigits: 2
-  });
+
   
-  tableData = [
-    {
-      product: 'PC',
-      brand: 'lenovo',
-      description: 'pc baru',
-      quantity: '1',
-      uom: '1',
-      ceilingPrice: '12000',
-      totalCeilingPrice: '1200',
-      deliveryDate: '22/12/2001',
-      unitPrice: '12000',
-      totalPrice: '12000',
-      submissionDeliveryDate: '22/12/2001',
-    },
-    {
-      product: 'PC',
-      brand: 'lenovo',
-      description: 'pc baru',
-      quantity: '1',
-      uom: '1',
-      ceilingPrice: '12000',
-      totalCeilingPrice: '1200',
-      deliveryDate: '22/12/2001',
-      unitPrice: '12000',
-      totalPrice: '12000',
-      submissionDeliveryDate: '22/12/2001',
-    },
-    {
-      product: 'PC',
-      brand: 'lenovo',
-      description: 'pc baru',
-      quantity: '1',
-      uom: '1',
-      ceilingPrice: '12000',
-      totalCeilingPrice: '1200',
-      deliveryDate: '22/12/2001',
-      unitPrice: '12000',
-      totalPrice: '12000',
-      submissionDeliveryDate: '22/12/2001',
-    },
-    {
-      product: 'PC',
-      brand: 'lenovo',
-      description: 'pc baru',
-      quantity: '1',
-      uom: '1',
-      ceilingPrice: '12000',
-      totalCeilingPrice: '1200',
-      deliveryDate: '22/12/2001',
-      unitPrice: '12000',
-      totalPrice: '12000',
-      submissionDeliveryDate: '22/12/2001',
-    },
-  ];
+    data() {
+      return {
+        tableData: [
+          {
+          1: 'PC',
+          2: 'lenovo',
+          3: 'pc baru',
+          4: '1',
+          5: '1',
+          6: '12000',
+          7: '1200',
+          8: '22/12/2001',
+          9: '12000',
+          10: '12000',
+          11: '22/12/2001',
+          },
+          {
+            1: 'PC',
+            2: 'lenovo',
+            3: 'pc baru',
+            4: '1',
+            5: '1',
+            6: '12000',
+            7: '1200',
+            8: '22/12/2001',
+            9: '12000',
+            10: '12000',
+            11: '22/12/2001',
+          },
+          {
+            1: 'PC',
+            2: 'lenovo',
+            3: 'pc baru',
+            4: '1',
+            5: '1',
+            6: '12000',
+            7: '1200',
+            8: '22/12/2001',
+            9: '12000',
+            10: '12000',
+            11: '22/12/2001',
+          },
+          {
+            1: 'PC',
+            2: 'lenovo',
+            3: 'pc baru',
+            4: '1',
+            5: '1',
+            6: '12000',
+            7: '1200',
+            8: '22/12/2001',
+            9: '12000',
+            10: '12000',
+            11: '22/12/2001',
+          },
+        ]
+      }
+  };
 
 
   gridSchema = {
@@ -123,33 +124,6 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   created() {
     //console.log(this.status)
   }
-
-  calculateSummary({ columns, data }) {
-    const sums = [];
-    columns.forEach((column, index) => {
-      if (index === 6 || index === 9) {
-        sums[index] = 'Grand Total'
-      } else if (index === 7 || index === 9) {
-        const values = data.map(item => Number(item[column.property]));
-        if (!values.every(value => isNaN(value))) {
-          const total = values.reduce((prev, curr) => {
-            const value = Number(curr);
-            if (!isNaN(value)) {
-              return prev + curr;
-            } else {
-              return prev;
-            }
-          }, 0);
-
-          sums[index] = this.formatter.format(total);
-        }
-      } else {
-        sums[index] = '';
-      }
-
-    return sums;
-  });
-}
 
   public mounted(): void {
     this.retrieveGetReferences(this.keyReference);

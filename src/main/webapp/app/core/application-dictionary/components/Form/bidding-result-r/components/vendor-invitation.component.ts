@@ -28,9 +28,9 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
       eventschedule: [
         {
           no: '1',
-          event: 'vendor brieving',
-          start: '21/2/2021',
-          end: '26/3/2021',
+          event: 'Bidding Announcement',
+          start: '02/10/2021 14:00',
+          end: '02/20/2021 ',
         },
         {
           no: '1',

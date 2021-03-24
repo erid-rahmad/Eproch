@@ -1,6 +1,10 @@
-import { ElForm } from 'element-ui/types/form';
+import {
+  ElForm
+} from 'element-ui/types/form';
 import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
+import {
+  mixins
+} from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
 import Component from 'vue-class-component';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
@@ -8,8 +12,12 @@ import ProductImages from './components/form/product-images.vue';
 import SpecialPrice from './components/form/special-price.vue';
 import ProductVideo from './components/form/product-video.vue';
 import Vue from 'vue';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import { IMProductCatalog } from '@/shared/model/m-product-catalog.model';
+import {
+  AccountStoreModule as accountStore
+} from '@/shared/config/store/account-store';
+import {
+  IMProductCatalog
+} from '@/shared/model/m-product-catalog.model';
 
 const ProductCatalogProp = Vue.extend({
   props: {
@@ -33,76 +41,67 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   data() {
     return {
-      isHidden: false,
-      
-      tableData: [
-        {
-        1: 'PC',
-        2: 'lenovo',
-        3: 'pc baru',
-        4: '1',
-        5: '1',
-        6: '12000',
-        7: '1200',
-        8: '22/12/2001',
-        9: '12000',
-        10: '12000',
-        11: '22/12/2001',
+      tableData: [{
+          1: 'HONDA 2015',
+          2: 'Honda',
+          3: 'CBR 250',
+          4: '50',
+          5: 'each',
+          6: '11.900.000.000',
+          7: '11.900.000.000',
+          8: '22/12/2021',
+          9: '239.000.000',
+          10: '11.950.000.000',
+          11: '22/12/2021',
         },
         {
-          1: 'PC',
-          2: 'lenovo',
-          3: 'pc baru',
-          4: '1',
-          5: '1',
-          6: '12000',
-          7: '1200',
-          8: '22/12/2001',
-          9: '12000',
-          10: '12000',
-          11: '22/12/2001',
+          1: 'HONDA CiViC 2 017',
+          2: 'Honda',
+          3: 'Audio Control',
+          4: '30',
+          5: 'each',
+          6: '11.900.000.000',
+          7: '11.900.000.000',
+          8: '22/12/2021',
+          9: '239.000.000',
+          10: '11.950.000.000',
+          11: '22/12/2021',
         },
         {
-          1: 'PC',
-          2: 'lenovo',
-          3: 'pc baru',
-          4: '1',
-          5: '1',
-          6: '12000',
-          7: '1200',
-          8: '22/12/2001',
-          9: '12000',
-          10: '12000',
-          11: '22/12/2001',
+          1: 'HONDA 2015',
+          2: 'Honda',
+          3: 'CBR 250',
+          4: '50',
+          5: 'each',
+          6: '11.900.000.000',
+          7: '11.900.000.000',
+          8: '22/12/2021',
+          9: '239.000.000',
+          10: '11.950.000.000',
+          11: '22/12/2021',
         },
-        {
-          1: 'PC',
-          2: 'lenovo',
-          3: 'pc baru',
-          4: '1',
-          5: '1',
-          6: '12000',
-          7: '1200',
-          8: '22/12/2001',
-          9: '12000',
-          10: '12000',
-          11: '22/12/2001',
-        },
+   
+
       ],
       checked: true,
+
     }
-};
+  };
   rules = {}
 
   props = {
     lazy: true,
     lazyLoad: async (node, resolve) => {
-      const { level } = node;
-      const { data } = node;
-      if(level == 1) {
+      const {
+        level
+      } = node;
+      const {
+        data
+      } = node;
+      if (level == 1) {
         const list = await this.retrieveProductSubCategories(data.value);
         resolve(list);
-      } else if(level == 2) {
+      } else if (level == 2) {
         const list = await this.retrieveProduct(data.value, level);
         resolve(list);
       }
@@ -112,7 +111,6 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   productCatalog: IMProductCatalog = {};
   galleryId: number = 0;
-  visible: false;
   productGallery = {
     images: [],
     imagesId: []
@@ -133,14 +131,14 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.retrieveCurrency();
     this.retrieveBrand();
 
-    if(this.setRowProductCatalog != null){
+    if (this.setRowProductCatalog != null) {
       this.productCatalog = this.setRowProductCatalog;
       this.productCatalog.mProductCategory = [];
       this.productCatalog.mProductCategory.push(this.productCatalog.mProductCategoryId);
       this.productCatalog.mProductCategory.push(this.productCatalog.mProductSubCategoryId);
       this.productCatalog.mProductCategory.push(this.productCatalog.mProductId);
       console.log(this.productCatalog);
-    }else{
+    } else {
       this.productCatalog = {};
     }
   }
@@ -149,21 +147,21 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     this.$emit("closeProductInformation");
   }
 
-  setProductId(value){
+  setProductId(value) {
     console.log(value);
-    this.productCatalog.mProductId = value[value.length-1];
+    this.productCatalog.mProductId = value[value.length - 1];
   }
 
-  setGalleryId(value){
+  setGalleryId(value) {
     this.galleryId = value;
   }
 
-  submit(){
+  submit() {
 
     this.fullscreenLoading = true;
 
 
-    if(this.setRowProductCatalog == null){
+    if (this.setRowProductCatalog == null) {
       this.productCatalog.documentAction = "APR";
       this.productCatalog.documentStatus = "DRF";
       this.productCatalog.active = true;
@@ -197,8 +195,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         }).finally(() => {
           this.fullscreenLoading = false;
         });
-    }else{
-      if(this.galleryId != 0){
+    } else {
+      if (this.galleryId != 0) {
         this.productCatalog.cGalleryId = this.galleryId;
       }
 
@@ -271,7 +269,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
   }
 
   jsonEncode(data: any, fields: string[]) {
-    const record: Record<string, any> = {};
+    const record: Record < string, any > = {};
     for (const field of fields) {
       record[field] = data[field];
     }
@@ -288,14 +286,14 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   retrieveProductCategories() {
     this.dynamicWindowService('/api/c-product-categories')
-    .retrieve({
-      criteriaQuery: [`parentCategoryId.specified=false`],
-      paginationQuery: {
+      .retrieve({
+        criteriaQuery: [`parentCategoryId.specified=false`],
+        paginationQuery: {
           size: 1000,
           page: 0,
           sort: ['name']
-      }
-    }).then(res => {
+        }
+      }).then(res => {
         let categories = res.data.map(item => {
 
           return {
@@ -307,22 +305,22 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
         console.log(categories);
         this.productCategoryOptions = categories;
-    });
+      });
   }
 
   retrieveProductSubCategories(productCategoryParent) {
     return new Promise((resolve, reject) => {
       this.dynamicWindowService('/api/c-product-categories')
-      .retrieve({
-        criteriaQuery: [`parentCategoryId.equals=`+productCategoryParent],
-        paginationQuery: {
+        .retrieve({
+          criteriaQuery: [`parentCategoryId.equals=` + productCategoryParent],
+          paginationQuery: {
             size: 1000,
             page: 0,
             sort: ['name']
-        }
-      }).then(res => {
+          }
+        }).then(res => {
 
-        resolve(res.data.map(item => {
+          resolve(res.data.map(item => {
             return {
               value: item.id,
               label: item.name,
@@ -330,23 +328,23 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
             }
           }));
 
-      }).catch(err => reject(err));
+        }).catch(err => reject(err));
     });
   }
 
   retrieveProduct(productSubCategory, level) {
     return new Promise((resolve, reject) => {
       this.dynamicWindowService('/api/c-products')
-      .retrieve({
-        criteriaQuery: [`productSubCategoryId.equals=`+productSubCategory],
-        paginationQuery: {
+        .retrieve({
+          criteriaQuery: [`productSubCategoryId.equals=` + productSubCategory],
+          paginationQuery: {
             size: 1000,
             page: 0,
             sort: ['name']
-        }
-      }).then(res => {
+          }
+        }).then(res => {
 
-        resolve(res.data.map(item => {
+          resolve(res.data.map(item => {
             return {
               value: item.id,
               label: item.name,
@@ -355,7 +353,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
             }
           }));
 
-      }).catch(err => reject(err));
+        }).catch(err => reject(err));
     });
   }
 
@@ -363,9 +361,9 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   validate() {
     (this.$refs.productCatalog as ElForm).validate((passed, errors) => {
-      if(passed){
+      if (passed) {
         this.submit();
-      }else{
+      } else {
         console.log(errors);
       }
 

@@ -1,6 +1,7 @@
 package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -31,8 +32,12 @@ public class MDocumentScheduleDTO extends AbstractAuditingDTO {
     private String adOrganizationName;
 
     private Long vendorSubmissionId;
+    private ZonedDateTime vendorSubmissionStartDate;
+    private ZonedDateTime vendorSubmissionEndDate;
 
     private Long vendorEvaluationId;
+    private ZonedDateTime vendorEvaluationStartDate;
+    private ZonedDateTime vendorEvaluationEndDate;
 
     public Long getId() {
         return id;
@@ -106,12 +111,44 @@ public class MDocumentScheduleDTO extends AbstractAuditingDTO {
         this.vendorSubmissionId = mBiddingScheduleId;
     }
 
+    public ZonedDateTime getVendorSubmissionStartDate() {
+        return vendorSubmissionStartDate;
+    }
+
+    public void setVendorSubmissionStartDate(ZonedDateTime vendorSubmissionStartDate) {
+        this.vendorSubmissionStartDate = vendorSubmissionStartDate;
+    }
+
+    public ZonedDateTime getVendorSubmissionEndDate() {
+        return vendorSubmissionEndDate;
+    }
+
+    public void setVendorSubmissionEndDate(ZonedDateTime vendorSubmissionEndDate) {
+        this.vendorSubmissionEndDate = vendorSubmissionEndDate;
+    }
+
     public Long getVendorEvaluationId() {
         return vendorEvaluationId;
     }
 
     public void setVendorEvaluationId(Long mBiddingScheduleId) {
         this.vendorEvaluationId = mBiddingScheduleId;
+    }
+
+    public ZonedDateTime getVendorEvaluationStartDate() {
+        return vendorEvaluationStartDate;
+    }
+
+    public void setVendorEvaluationStartDate(ZonedDateTime vendorEvaluationStartDate) {
+        this.vendorEvaluationStartDate = vendorEvaluationStartDate;
+    }
+
+    public ZonedDateTime getVendorEvaluationEndDate() {
+        return vendorEvaluationEndDate;
+    }
+
+    public void setVendorEvaluationEndDate(ZonedDateTime vendorEvaluationEndDate) {
+        this.vendorEvaluationEndDate = vendorEvaluationEndDate;
     }
 
     @Override
@@ -147,7 +184,11 @@ public class MDocumentScheduleDTO extends AbstractAuditingDTO {
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName=" + getAdOrganizationName() +
             ", vendorSubmissionId=" + getVendorSubmissionId() +
+            ", vendorSubmissionStartDate=" + getVendorSubmissionStartDate() +
+            ", vendorSubmissionEndDate=" + getVendorSubmissionEndDate() +
             ", vendorEvaluationId=" + getVendorEvaluationId() +
+            ", vendorEvaluationStartDate=" + getVendorEvaluationStartDate() +
+            ", vendorEvaluationEndDate=" + getVendorEvaluationEndDate() +
             "}";
     }
 }

@@ -1,5 +1,8 @@
 package com.bhp.opusb.service.dto;
 
+import com.bhp.opusb.domain.MBiddingLine;
+import com.bhp.opusb.domain.MProjectInformation;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -78,10 +81,10 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 
     private Long adUserUserId;
     private String adUserUserName;
-    
-    private List<MBiddingLineDTO> biddingLineList;
 
-    private List<MProjectInformationDTO> projectInformationList;
+    private List<MBiddingLine> biddingLineList;
+
+    private List<MProjectInformation> projectInformationList;
 
     public Long getId() {
         return id;
@@ -339,19 +342,19 @@ public class MBiddingDTO extends AbstractAuditingDTO {
         this.adUserUserName = adUserUserName;
     }
 
-    public List<MBiddingLineDTO> getBiddingLineList() {
+    public List<MBiddingLine> getBiddingLineList() {
         return biddingLineList;
     }
 
-    public void setBiddingLineList(List<MBiddingLineDTO> biddingLineList) {
+    public void setBiddingLineList(List<MBiddingLine> biddingLineList) {
         this.biddingLineList = biddingLineList;
     }
 
-    public List<MProjectInformationDTO> getProjectInformationList() {
+    public List<MProjectInformation> getProjectInformationList() {
         return projectInformationList;
     }
 
-    public void setProjectInformationList(List<MProjectInformationDTO> projectInformationList) {
+    public void setProjectInformationList(List<MProjectInformation> projectInformationList) {
         this.projectInformationList = projectInformationList;
     }
 

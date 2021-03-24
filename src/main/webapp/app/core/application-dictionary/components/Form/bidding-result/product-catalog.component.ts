@@ -23,115 +23,62 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   setRows = [];
   setRow = {};
 
-
-
-  // multipleSelection: [];
-
-
-
-  // toggleSelection(rows) {
-  //   if (rows) {
-  //     rows.forEach(row => {
-  //       this.$refs.multipleTable.toggleRowSelection(row);
-  //     });
-  //   } else {
-  //     this.$refs.multipleTable.clearSelection();
-  //   }
-  // };
-  // handleSelectionChange(val) {
-  //   this.multipleSelection = val;
-  // };
-
-
   data() {
     return {
-      tableData: [
-        {
-          1: 'Baju besi',
-          2: 'Bidding Evaluation',
-          3: 'Quantity',
-          4: '20',
-          5: 'admin tender',
-          6: 'hampir',
-          7: '22/22/2021'
+      tableData: [{
+          1: 'BN-123123',
+          2: 'Office Suply Bin',
+          3: 'Tender Good',
+          4: 'Admin tender',
+          5: 'in progres',
+          6: 'Makmur jaya',
+          7: '19.370.000',
+          8: '19.123.000',
+
         },
         {
-          1: 'Baju besi',
-          2: 'Bidding Evaluation',
-          3: 'cost',
-          4: '50',
-          5: 'admin tender',
-          6: 'hampir',
-          7: '22/22/2021'
+          1: 'BN-00001',
+          2: 'Office Suply Bin',
+          3: 'Tender Good',
+          4: 'Admin tender',
+          5: 'in progres',
+          6: 'Makmur jaya',
+          7: '19.370.000',
+          8: '19.123.000',
+
         },
         {
-          1: 'Baju besi',
-          2: 'Bidding Evaluation',
-          3: 'Delivery',
-          4: '15',
-          5: 'admin tender',
-          6: 'hampir',
-          7: '22/22/2021'
+          1: 'BN-00001',
+          2: 'Office Suply Bin',
+          3: 'Tender Good',
+          4: 'Admin tender',
+          5: 'in progres',
+          6: 'Makmur jaya',
+          7: '19.370.000',
+          8: '19.234.000',
+
         },
         {
-          1: 'Baju besi',
-          2: 'Bidding Evaluation',
-          3: 'Safety',
-          4: '15',
-          5: 'admin tender',
-          6: 'hampir',
-          7: '22/22/2021'
+          1: 'BN-00001',
+          2: 'Office Suply Bin',
+          3: 'Tender Good',
+          4: 'Admin tender',
+          5: 'in progres',
+          6: 'Makmur jaya',
+          7: '19.370.000',
+          8: '19.111.000',
+
         },
-      ],
-      tableData1: [
         {
-          1: 'Ingram Micro Indonesia',
-          2: '29.400.000.000',
-          3: '2',
-          4: 'proposal teknis ingram',
-          5: 'time line.pdf',
-          6: '1',
-          7: '4',
-          8: '4',
-          9: '1',
-          10: '4',
-          11: '4',
-          12: '4',
-          13: '1',
-          14: '20',
-          15: '2',
-        },{
-          1: 'Sistem tech indonesia',
-          2: '41.400.000.000',
-          3: '1',
-          4: 'proposal teknis sistech',
-          5: 'time line.pdf',
-          6: '1',
-          7: '4',
-          8: '4',
-          9: '1',
-          10: '4',
-          11: '4',
-          12: '4',
-          13: '1',
-          14: '11',
-          15: '2',
-        },{
-          1: ' Micro chip Indonesia',
-          2: '29.400.000.000',
-          3: '2',
-          4: 'proposal teknis westcom ',
-          5: 'time line.pdf',
-          6: '1',
-          7: '4',
-          8: '4',
-          9: '1',
-          10: '4',
-          11: '4',
-          12: '4',
-          13: '1',
-          14: '5',
-          15: '2',
+          1: 'BN-00001',
+          2: 'Office Suply Bin',
+          3: 'Tender Good',
+          4: 'Admin tender',
+          5: 'in progres',
+          6: 'Makmur jaya',
+          7: '19.370.000',
+          8: '19.542.000',
+
         },
       ],
       gridData: [{

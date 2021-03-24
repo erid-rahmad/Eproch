@@ -26,11 +26,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import io.github.jhipster.config.JHipsterProperties;
 
 /**
  * Service Implementation for managing {@link MBidding}.
@@ -44,43 +41,34 @@ public class MBiddingService {
     private final MBiddingRepository mBiddingRepository;
     private final MBiddingLineService mBiddingLineService;
     private final MProjectInformationService mProjectInformationService;
-    private final ADOrganizationService adOrganizationService;
 
     private final MBiddingMapper mBiddingMapper;
     private final MBiddingFormMapper mBiddingFormMapper;
 
-    private final JavaMailSender javaMailSender;
-
-    private final JHipsterProperties jHipsterProperties;
-
     @Autowired
-    MailService mailService;
+    private MailService mailService;
 
 
     @Autowired
-    MBiddingLineRepository mBiddingLineRepository;
+    private MBiddingLineRepository mBiddingLineRepository;
 
     @Autowired
-    MProjectInformationRepository mProjectInformationRepository;
+    private MProjectInformationRepository mProjectInformationRepository;
 
     @Autowired
-    MVendorSuggestionRepository mVendorSuggestionRepository;
+    private MVendorSuggestionRepository mVendorSuggestionRepository;
 
     @Autowired
-    AdUserRepository adUserRepository;
+    private AdUserRepository adUserRepository;
 
     public MBiddingService(MBiddingRepository mBiddingRepository, MBiddingLineService mBiddingLineService,
-            MProjectInformationService mProjectInformationService, ADOrganizationService adOrganizationService,
-            MBiddingMapper mBiddingMapper, MBiddingFormMapper mBiddingFormMapper,
-            JavaMailSender javaMailSender, JHipsterProperties jHipsterProperties) {
+            MProjectInformationService mProjectInformationService, MBiddingMapper mBiddingMapper,
+            MBiddingFormMapper mBiddingFormMapper) {
         this.mBiddingRepository = mBiddingRepository;
         this.mBiddingLineService = mBiddingLineService;
         this.mProjectInformationService = mProjectInformationService;
-        this.adOrganizationService = adOrganizationService;
         this.mBiddingMapper = mBiddingMapper;
         this.mBiddingFormMapper = mBiddingFormMapper;
-        this.javaMailSender = javaMailSender;
-        this.jHipsterProperties = jHipsterProperties;
     }
     /**
      * Save a mBidding.
@@ -209,10 +197,12 @@ public class MBiddingService {
     public Optional<MBiddingDTO> findOne(Long id) {
         Optional<MBiddingDTO> mBiddingDTO = mBiddingRepository.findById(id)
             .map(mBiddingMapper::toDto);
-        /* mBiddingDTO.get().setBiddingLineList(mBiddingLineService.findbyheader(mBiddingDTO.get().getId()));
-        mBiddingDTO.get().setProjectInformationList(mProjectInformationService.findByBindId(mBiddingDTO.get().getId())); */
+         mBiddingDTO.get().setBiddingLineList(mBiddingLineService.findbyheader(mBiddingDTO.get().getId()));
+        mBiddingDTO.get().setProjectInformationList(mProjectInformationService.findByBindId(mBiddingDTO.get().getId()));
         return mBiddingDTO;
     }
+
+
 
     /**
      * Get one mBidding form by id.
@@ -224,7 +214,7 @@ public class MBiddingService {
     public Optional<MBiddingFormDTO> findOneForm(Long id, MBiddingProcess step) {
         log.debug("Request to get MBidding (FormDTO) : {}", id);
         Optional<MBiddingFormDTO> record = mBiddingRepository.findById(id).map(mBiddingFormMapper::toDto);
-            
+
         record.ifPresent(dto -> {
             dto.setStep(step);
 

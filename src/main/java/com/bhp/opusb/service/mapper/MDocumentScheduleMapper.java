@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.MDocumentSchedule;
 import com.bhp.opusb.service.dto.MDocumentScheduleDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link MDocumentSchedule} and its DTO {@link MDocumentScheduleDTO}.
@@ -17,7 +18,11 @@ public interface MDocumentScheduleMapper extends EntityMapper<MDocumentScheduleD
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "vendorSubmission.id", target = "vendorSubmissionId")
+    @Mapping(source = "vendorSubmission.startDate", target = "vendorSubmissionStartDate")
+    @Mapping(source = "vendorSubmission.endDate", target = "vendorSubmissionEndDate")
     @Mapping(source = "vendorEvaluation.id", target = "vendorEvaluationId")
+    @Mapping(source = "vendorEvaluation.startDate", target = "vendorEvaluationStartDate")
+    @Mapping(source = "vendorEvaluation.endDate", target = "vendorEvaluationEndDate")
     MDocumentScheduleDTO toDto(MDocumentSchedule mDocumentSchedule);
 
     @Mapping(source = "biddingId", target = "bidding")

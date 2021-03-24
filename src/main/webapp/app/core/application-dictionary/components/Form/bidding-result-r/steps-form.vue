@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
 
-    <el-steps :space="10" simple :active="active" finish-status="success" >
+    <!-- <el-steps :space="10" simple :active="active" finish-status="success" >
       <el-step title="More Information" />
       <el-step title="Project Information" />
       <el-step title="Even Schedule" />
       <el-step title="Vendor Scoring" />
 
-    </el-steps>
+    </el-steps> -->
 
     <el-backtop target=".app-container" />
 
