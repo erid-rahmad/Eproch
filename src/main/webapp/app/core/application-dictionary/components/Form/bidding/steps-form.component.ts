@@ -4,11 +4,18 @@ import BiddingInformation from './components/bidding-information.vue';
 import BiddingSchedule from './components/bidding-schedule.vue';
 import VendorInvitation from './components/vendor-invitation.vue';
 import VendorScoring from './components/vendor-scoring.vue';
+import { Watch } from 'vue-property-decorator';
 
 const StepsFormProps = Vue.extend({
   props: {
     editMode: Boolean,
-    data: Object
+    data: Object,
+    stepIndex: {
+      type: Object,
+      default: () => {
+        return 0;
+      }
+    }
   }
 });
 
@@ -50,8 +57,14 @@ export default class StepsForm extends StepsFormProps {
     vendorScoring: []
   }
 
+  @Watch('stepIndex')
+  onStepIndexChanged(stepIndex: number) {
+    this.active = stepIndex;
+  }
+
   created() {
-    console.log('editMode: %s, data: %O', this.editMode, this.data);
+    this.onStepIndexChanged(this.stepIndex);
+    
     if (this.editMode && this.data) {
       this.bidding = {...this.data};
     }

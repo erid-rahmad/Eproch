@@ -128,6 +128,7 @@
         color: #fff;
       }
 
+      &.is-success,
       &.is-wait {
         border-color: #f4f4f4;
         color: #f4f4f4;
@@ -139,6 +140,7 @@
         color: #fff;
       }
 
+      &.is-success,
       &.is-wait {
         color: #f4f4f4;
       }

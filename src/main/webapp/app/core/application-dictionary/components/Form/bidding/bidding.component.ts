@@ -1,6 +1,6 @@
 import settings from '@/settings';
 import AlertMixin from '@/shared/alert/alert.mixin';
-import Vue from 'vue';
+import { random } from 'lodash';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
@@ -43,9 +43,22 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
 
   public gridData: Array<any> = [];
 
+  showJoinedVendors = false;
   editMode: boolean = false;
+  stepIndex: number = 0;
   selectedRow: any = null;
   selectedRows: Array<any> = [];
+
+  joinedVendors = [
+    {
+      name: 'Perum Nurdiyanti Megantara',
+      location: ''
+    },
+    {
+      name: 'PT Hidayanto (Persero) Tbk',
+      location: ''
+    }
+  ];
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -53,6 +66,10 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
 
   get dateValueFormat() {
     return settings.dateValueFormat;
+  }
+
+  get randomVendorCount() {
+    return random(1, 10);
   }
 
   created() {
@@ -183,18 +200,15 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
       });
   }
 
-  viewBidding(row: any) {
+  viewBidding(row: any, stepIndex: number = 0) {
+    this.stepIndex = stepIndex;
     this.editMode = true;
     this.selectedRow = row;
     this.index = false;
   }
 
-  viewSchedule(row: any) {
-    console.log(row);
-  }
-
   viewJoinVendor(row: any) {
-    console.log(row);
+    this.showJoinedVendors = true;
   }
 
   formatDocumentStatus(value: string) {

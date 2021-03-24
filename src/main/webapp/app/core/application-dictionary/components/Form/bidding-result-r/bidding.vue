@@ -11,7 +11,7 @@
             <el-divider content-position="left">
                 <h4>Bidding Submission From Vendor</h4>
             </el-divider>
-            <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini" :model="biddingInformation" :rules="rules">
+            <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini">
                 <el-row :gutter="24">
                     <el-col :span="12">
                         <el-form-item label="Bidding No" prop="" required>

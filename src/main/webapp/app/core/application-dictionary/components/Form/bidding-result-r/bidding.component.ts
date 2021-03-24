@@ -1,7 +1,7 @@
 import settings from '@/settings';
 import AlertMixin from '@/shared/alert/alert.mixin';
+import { TranslationStoreModule as translationStore } from '@/shared/config/store/translation-store';
 import axios from 'axios';
-import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
@@ -14,67 +14,65 @@ import StepForm from "../bidding-result/steps-form.vue";
   }
 })  
 export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
-
   
-    data() {
-      return {
-        tableData: [
-          {
-          1: 'PC',
-          2: 'lenovo',
-          3: 'pc baru',
-          4: '1',
-          5: '1',
-          6: '12000',
-          7: '1200',
-          8: '22/12/2001',
-          9: '12000',
-          10: '12000',
-          11: '22/12/2001',
-          },
-          {
-            1: 'PC',
-            2: 'lenovo',
-            3: 'pc baru',
-            4: '1',
-            5: '1',
-            6: '12000',
-            7: '1200',
-            8: '22/12/2001',
-            9: '12000',
-            10: '12000',
-            11: '22/12/2001',
-          },
-          {
-            1: 'PC',
-            2: 'lenovo',
-            3: 'pc baru',
-            4: '1',
-            5: '1',
-            6: '12000',
-            7: '1200',
-            8: '22/12/2001',
-            9: '12000',
-            10: '12000',
-            11: '22/12/2001',
-          },
-          {
-            1: 'PC',
-            2: 'lenovo',
-            3: 'pc baru',
-            4: '1',
-            5: '1',
-            6: '12000',
-            7: '1200',
-            8: '22/12/2001',
-            9: '12000',
-            10: '12000',
-            11: '22/12/2001',
-          },
-        ]
-      }
-  };
+  private formatter = new Intl.NumberFormat(translationStore.currentLanguage, {
+    minimumFractionDigits: 2
+  });
 
+  tableData: [
+    {
+      1: 'PC',
+      2: 'lenovo',
+      3: 'pc baru',
+      4: '1',
+      5: '1',
+      6: '12000',
+      7: '1200',
+      8: '22/12/2001',
+      9: '12000',
+      10: '12000',
+      11: '22/12/2001',
+    },
+    {
+      1: 'PC',
+      2: 'lenovo',
+      3: 'pc baru',
+      4: '1',
+      5: '1',
+      6: '12000',
+      7: '1200',
+      8: '22/12/2001',
+      9: '12000',
+      10: '12000',
+      11: '22/12/2001',
+    },
+    {
+      1: 'PC',
+      2: 'lenovo',
+      3: 'pc baru',
+      4: '1',
+      5: '1',
+      6: '12000',
+      7: '1200',
+      8: '22/12/2001',
+      9: '12000',
+      10: '12000',
+      11: '22/12/2001',
+    },
+    {
+      1: 'PC',
+      2: 'lenovo',
+      3: 'pc baru',
+      4: '1',
+      5: '1',
+      6: '12000',
+      7: '1200',
+      8: '22/12/2001',
+      9: '12000',
+      10: '12000',
+      11: '22/12/2001',
+    },
+  ];
 
   gridSchema = {
     defaultSort: {},
@@ -124,6 +122,33 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   created() {
     //console.log(this.status)
   }
+
+  calculateSummary({ columns, data }) {
+    const sums = [];
+    columns.forEach((column: any, index: number) => {
+      if (index === 6 || index === 9) {
+        sums[index] = 'Grand Total'
+      } else if (index === 7 || index === 9) {
+        const values = data.map(item => Number(item[column.property]));
+        if (!values.every(value => isNaN(value))) {
+          const total = values.reduce((prev, curr) => {
+            const value = Number(curr);
+            if (!isNaN(value)) {
+              return prev + curr;
+            } else {
+              return prev;
+            }
+          }, 0);
+
+          sums[index] = this.formatter.format(total);
+        }
+      } else {
+        sums[index] = '';
+      }
+
+  });
+  return sums;
+}
 
   public mounted(): void {
     this.retrieveGetReferences(this.keyReference);
