@@ -1,4 +1,4 @@
-def d_work = "/app/jenkins/workspace/eproc" 
+def d_work = "/app/jenkins/workspace/eproc-dev" 
 
 pipeline {
   	agent {
@@ -15,7 +15,7 @@ pipeline {
     stage('Clean') {
         steps {
                 script {
-                		sh "chmod +x ${d_work}/mvnw"
+                		sh "chmod +x mvnw"
        					sh "./mvnw clean"
                     }
             }
@@ -32,8 +32,8 @@ pipeline {
     stage('Remove Failed Container') {
         steps {
                 script {
-                		sh "chmod +x ${d_work}/removenoneimages/bin/removenoneimage.sh"
-       					sh "${d_work}/removenoneimages/bin/removenoneimage.sh"
+                		sh "chmod +x removenoneimage.sh"
+       					sh "sh removenoneimage.sh"
                     }
             }
         }
