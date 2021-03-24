@@ -784,8 +784,8 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
 
   remoteMethod(query) {
     if (query !== '') {
-      this.loading = true;
-      this.retrieveProduct(query);
+      // this.loading = true;
+      // this.retrieveProduct(query);
     } else {
       this.productOptions = [];
     }
