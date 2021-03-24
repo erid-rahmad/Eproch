@@ -6,7 +6,7 @@ import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
-import StepForm from "../bidding-result/steps-form.vue";
+import StepForm from "./steps-form.vue";
 
 @Component({
   components: {
