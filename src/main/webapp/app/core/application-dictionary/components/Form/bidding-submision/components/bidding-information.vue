@@ -8,7 +8,6 @@
                 <h7>{{ x }}</h7>
             </div>
         </template>
-
         <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini">
             <el-row :gutter="24">
                 <el-col :span="6">
@@ -62,7 +61,6 @@
                 </el-col>
             </el-row>
         </el-form>
-
         <el-divider content-position="left">
             <h4>Requirement</h4>
         </el-divider>
@@ -94,7 +92,7 @@
                     <el-table-column min-width="70" prop="" label="Price submision/unit">
                         <template slot-scope="{ row, $index }">
                             <el-input-number v-model="row.pricesubmision" :step="50000" clearable controls-position="right" size="mini"
-                                @change="value => onQuantityOrderedChanged(row, $index, value)"></el-input-number>
+                                @change="value => onQuantityOrderedChanged(row, $index, value)">{{formatCurrency}}</el-input-number>
                         </template>
                     </el-table-column>
                     <el-table-column min-width="70" prop="" label="Total Price Submission">
@@ -162,7 +160,7 @@
                     border stripe
                     size="mini"
                     style="height: 100%"
-    
+
                     :data="dummy">
 
                     <el-table-column

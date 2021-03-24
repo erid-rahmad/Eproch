@@ -55,9 +55,9 @@ public class MBiddingSubItemLineService {
      */
     public List<MBiddingSubItemLineDTO> saveAll(List<MBiddingSubItemLineDTO> mBiddingSubItemLineDTOs) {
         log.debug("Request to save MBiddingSubItemLine : {}", mBiddingSubItemLineDTOs);
-        List<MBiddingSubItemLine> mBiddingSubItemLines = mBiddingSubItemLineMapper.toEntity(mBiddingSubItemLineDTOs);
-        mBiddingSubItemLines = mBiddingSubItemLineRepository.saveAll(mBiddingSubItemLines);
-        return mBiddingSubItemLineMapper.toDto(mBiddingSubItemLines);
+        List<MBiddingSubItemLine> mBiddingSubItemLines1 = mBiddingSubItemLineMapper.toEntity(mBiddingSubItemLineDTOs);
+        mBiddingSubItemLines1 = mBiddingSubItemLineRepository.saveAll(mBiddingSubItemLines1);
+        return mBiddingSubItemLineMapper.toDto(mBiddingSubItemLines1);
     }
 
     /**

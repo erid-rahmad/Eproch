@@ -136,21 +136,23 @@ public class MBiddingSubItemService {
         return result;
     }
 
-    @Autowired
-    MBiddingSubItemLineService mBiddingSubItemLineService;
-    @Transactional(readOnly = true)
-    public MBiddingSubItem findOnenested(Long id) {
+//    @Autowired
+//    MBiddingSubItemLineService mBiddingSubItemLineService;
+//    @Transactional(readOnly = true)
+//    public MBiddingSubItem findOnenested(Long id) {
+//
+//        log.debug("Request to get MBiddingSubItem : {}", id);
+//        Optional<MBiddingSubItem> result = mBiddingSubItemRepository.findById(id);
+//        MBiddingSubItem satu = new MBiddingSubItem() ;
+//        satu.setId(result.get().getId());
+//        satu.setProduct(result.get().getProduct());
+//        satu.setTotalAmount(result.get().getTotalAmount());
+//        log.info("this result {}", MapperJSONUtil.prettyLog(result));
+//        satu.setMBiddingSubItemLines(mBiddingSubItemLineService.findOnebyheader(result.get().getId()));
+//        return satu;
+//    }
 
-        log.debug("Request to get MBiddingSubItem : {}", id);
-        Optional<MBiddingSubItem> result = mBiddingSubItemRepository.findById(id);
-        MBiddingSubItem satu = new MBiddingSubItem() ;
-        satu.setId(result.get().getId());
-        satu.setProduct(result.get().getProduct());
-        satu.setTotalAmount(result.get().getTotalAmount());
-        log.info("this result {}", MapperJSONUtil.prettyLog(result));
-        satu.setMBiddingSubItemLines(mBiddingSubItemLineService.findOnebyheader(result.get().getId()));
-        return satu;
-    }
+
 
     /**
      * Delete the mBiddingSubItem by id.

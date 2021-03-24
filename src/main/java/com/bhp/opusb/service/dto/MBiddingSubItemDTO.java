@@ -1,6 +1,8 @@
 package com.bhp.opusb.service.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -17,17 +19,18 @@ public class MBiddingSubItemDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
     private Long biddingLineId;
-    private String biddingLineName;
 
     private Long productId;
     private String productName;
+
+    private List<MBiddingSubItemLineDTO> mBiddingSubItemLines = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -81,16 +84,8 @@ public class MBiddingSubItemDTO extends AbstractAuditingDTO {
         return biddingLineId;
     }
 
-    public void setBiddingLineId(Long mBiddingLineId) {
-        this.biddingLineId = mBiddingLineId;
-    }
-
-    public String getBiddingLineName() {
-        return biddingLineName;
-    }
-
-    public void setBiddingLineName(String biddingLineName) {
-        this.biddingLineName = biddingLineName;
+    public void setBiddingLineId(Long biddingLineId) {
+        this.biddingLineId = biddingLineId;
     }
 
     public Long getProductId() {
@@ -107,6 +102,14 @@ public class MBiddingSubItemDTO extends AbstractAuditingDTO {
 
     public void setProductName(String productName) {
         this.productName = productName;
+    }
+
+    public List<MBiddingSubItemLineDTO> getmBiddingSubItemLines() {
+        return mBiddingSubItemLines;
+    }
+
+    public void setmBiddingSubItemLines(List<MBiddingSubItemLineDTO> mBiddingSubItemLines) {
+        this.mBiddingSubItemLines = mBiddingSubItemLines;
     }
 
     @Override
@@ -138,11 +141,7 @@ public class MBiddingSubItemDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
-            ", biddingLineId=" + getBiddingLineId() +
-            ", biddingLineName=" + getBiddingLineName() +
             ", productId=" + getProductId() +
-            ", productName=" + getProductName() +
             "}";
     }
 }

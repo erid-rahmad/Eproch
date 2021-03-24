@@ -136,11 +136,11 @@ public class MBiddingSubItemResource {
     @Autowired
     MBiddingSubItemRepository mBiddingSubItemRepository;
 
-    @GetMapping("/m-bidding-sub-items-nested/{id}")
-    public MBiddingSubItem getMBiddingSubItemnes(@PathVariable Long id) {
-        log.debug("REST request to get MBiddingSubItem : {}");
-        return mBiddingSubItemService.findOnenested(id) ;
-    }
+//    @GetMapping("/m-bidding-sub-items-nested/{id}")
+//    public MBiddingSubItem getMBiddingSubItemnes(@PathVariable Long id) {
+//        log.debug("REST request to get MBiddingSubItem : {}");
+//        return mBiddingSubItemService.findOnenested(id) ;
+//    }
 
     /**
      * {@code DELETE  /m-bidding-sub-items/:id} : delete the "id" mBiddingSubItem.
