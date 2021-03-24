@@ -31,7 +31,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['generatePo', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/generate-po/generate-po.vue')],
   ['bidding', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding/bidding.vue')],
   ['biddingSubmision', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-submision/bidding.vue')],
-  ['biddingResult', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/bidding.vue')],
+  ['biddingResult', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/product-catalog.vue')],
   ['biddingEvaluation', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/bidding-evaluation/product-catalog.vue')],
   ['biddingApproval', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/bidding-approval/product-catalog.vue')],
   ['costEvaluation', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/cost-evaluation/product-catalog.vue')],

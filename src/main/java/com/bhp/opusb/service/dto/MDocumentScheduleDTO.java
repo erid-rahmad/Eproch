@@ -1,6 +1,7 @@
 package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -32,7 +33,47 @@ public class MDocumentScheduleDTO extends AbstractAuditingDTO {
 
     private Long vendorSubmissionId;
 
+
+
+
     private Long vendorEvaluationId;
+
+    private ZonedDateTime vendorSubmissionStartDate;
+    private ZonedDateTime vendorSubmissionEndDate;
+
+    @Override
+    public String toString() {
+        return "MDocumentScheduleDTO{" +
+            "id=" + id +
+            ", docEvent='" + docEvent + '\'' +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", biddingId=" + biddingId +
+            ", biddingName='" + biddingName + '\'' +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", vendorSubmissionId=" + vendorSubmissionId +
+            ", vendorEvaluationId=" + vendorEvaluationId +
+            ", vendorSubmissionStartDate=" + vendorSubmissionStartDate +
+            ", vendorSubmissionEndDate=" + vendorSubmissionEndDate +
+            '}';
+    }
+
+    public ZonedDateTime getVendorSubmissionStartDate() {
+        return vendorSubmissionStartDate;
+    }
+
+    public void setVendorSubmissionStartDate(ZonedDateTime vendorSubmissionStartDate) {
+        this.vendorSubmissionStartDate = vendorSubmissionStartDate;
+    }
+
+    public ZonedDateTime getVendorSubmissionEndDate() {
+        return vendorSubmissionEndDate;
+    }
+
+    public void setVendorSubmissionEndDate(ZonedDateTime vendorSubmissionEndDate) {
+        this.vendorSubmissionEndDate = vendorSubmissionEndDate;
+    }
 
     public Long getId() {
         return id;
@@ -135,19 +176,4 @@ public class MDocumentScheduleDTO extends AbstractAuditingDTO {
         return Objects.hashCode(getId());
     }
 
-    @Override
-    public String toString() {
-        return "MDocumentScheduleDTO{" +
-            "id=" + getId() +
-            ", docEvent='" + getDocEvent() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", biddingId=" + getBiddingId() +
-            ", biddingName=" + getBiddingName() +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
-            ", vendorSubmissionId=" + getVendorSubmissionId() +
-            ", vendorEvaluationId=" + getVendorEvaluationId() +
-            "}";
-    }
 }

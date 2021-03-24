@@ -17,6 +17,8 @@ public interface MDocumentScheduleMapper extends EntityMapper<MDocumentScheduleD
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "vendorSubmission.id", target = "vendorSubmissionId")
+    @Mapping(source = "vendorSubmission.startDate", target = "vendorSubmissionStartDate")
+    @Mapping(source = "vendorSubmission.endDate", target = "vendorSubmissionEndDate")
     @Mapping(source = "vendorEvaluation.id", target = "vendorEvaluationId")
     MDocumentScheduleDTO toDto(MDocumentSchedule mDocumentSchedule);
 

@@ -33,6 +33,8 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   data() {
     return {
+      isHidden: false,
+      
       tableData: [
         {
         1: 'PC',
@@ -110,6 +112,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   productCatalog: IMProductCatalog = {};
   galleryId: number = 0;
+  visible: false;
   productGallery = {
     images: [],
     imagesId: []

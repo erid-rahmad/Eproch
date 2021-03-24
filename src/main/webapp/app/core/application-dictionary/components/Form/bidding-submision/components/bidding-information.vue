@@ -124,7 +124,7 @@
         <el-divider content-position="left">
             <h4>Dokumen Submision Shcedule</h4>
         </el-divider>
-        <el-row>
+        <!-- <el-row>
             <el-col :span="24">
                 <el-table v-loading="processing" ref="biddingInformationLine" highlight-current-row border stripe size="mini" style="width: 100%; height: 100%"
                     :height="gridSchema.height" :max-height="gridSchema.maxHeight" :default-sort="gridSchema.defaultSort" :empty-text="gridSchema.emptyText" :data="dummy">
@@ -151,8 +151,8 @@
                     </el-table-column>
                 </el-table>
             </el-col>
-        </el-row>
-        <!-- <el-row>
+        </el-row> -->
+        <el-row>
             <el-col :span="18">
 
                 <el-table
@@ -213,7 +213,7 @@
                 </el-table>
 
             </el-col>
-        </el-row> -->
+        </el-row>
 
         <el-dialog :width="dialogWidth" :close-on-click-modal="dialogCloseOnClick" :close-on-press-escape="dialogCloseOnClick" :show-close="dialogCloseOnClick"
             :visible.sync="dialogConfirmationVisible" :title="dialogTitle">

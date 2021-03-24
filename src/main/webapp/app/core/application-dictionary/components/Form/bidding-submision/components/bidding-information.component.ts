@@ -123,6 +123,7 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
   public moreInformation: any = {};
   public SubItem: any = {};
   public price = 0;
+  public documentSchedulesData: any = {};
 
   public costCenterOptions: any = {};
   public picBiddingOptions: any = {};
@@ -191,6 +192,7 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
 
   created() {
     this.moreInformationData();
+    this.documentSchedules();
     // this.retrieveCostCenter();
     // this.retrieveBiddingType();
     // this.retrieveGetReferences(this.keyReferenceVendorSelection);
@@ -218,7 +220,7 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
         console.log("this more information", this.moreInformation);
       });
   }
-  //${this.moreInformation.lineSubItemID}
+ 
   private Subitemdata() {
     this.dynamicWindowService(`/api/m-bidding-sub-items-nested/${this.moreInformation.lineSubItemID}`)
       .retrieve({
@@ -231,6 +233,21 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
       .then(res => {
         this.SubItem = res.data;       
         console.log("this subitem", this.SubItem);
+      });
+  }
+
+  private documentSchedules() {
+    this.dynamicWindowService('/api/m-document-schedules')
+      .retrieve({
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.documentSchedulesData = res.data;       
+        console.log("this documentSchedulesData", this.documentSchedulesData);
       });
   }
 

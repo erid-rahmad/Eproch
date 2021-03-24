@@ -43,8 +43,8 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
       projectinformation: [
         {
           no: '1',
-          information: 'pc',
-          atachment: 'pc lenovo',
+          information: 'Bidding proposal',
+          atachment: 'Bidding proposal Doc',
         }    
       ]
     }

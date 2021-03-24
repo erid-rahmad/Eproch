@@ -3,19 +3,16 @@
    
         <el-row v-if="index" class="main" ref="tableWrapper">
             <el-col :span="24">
-
                 <el-tabs v-model="activeName" @tab-click="handleClick">
-
-                    <el-tab-pane v-for="(item, index) in tabTitleOptions" :key="item.value" :label="item.name" :name="item.value">
-
                         <keep-alive>
-
                             <el-col :span="24">
                                 <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
                                     <el-table-column min-width="30" label="No">
                                         <template slot-scope="row">
                                             {{ row.$index+1 }}
                                         </template>
+                                    </el-table-column>
+                                    <el-table-column prop="0" label="Bidding No" sortable width="180">
                                     </el-table-column>
                                     <el-table-column prop="1" label="Title" sortable width="180">
                                     </el-table-column>
@@ -32,6 +29,8 @@
                                     </el-table-column>
                                     <el-table-column prop="7" label="Modified" width="180">
                                     </el-table-column>
+                                    <el-table-column prop="8" label="Modified By" width="180">
+                                    </el-table-column>
                                     <el-table-column min-width="60" sortable label="Bidding Schedule">
                                         <template slot-scope="{ row }">
                                             <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="onClick('add')">
@@ -41,14 +40,10 @@
                                     </el-table-column>
                                 </el-table>
                             </el-col>
-
-                        </keep-alive>
-                    </el-tab-pane>
+                        </keep-alive>                
                 </el-tabs>
-
             </el-col>
         </el-row>
-
         <el-row v-if="!index" class="main" ref="tableWrapper">
             <el-col :span="24" class="tab-container">
 
