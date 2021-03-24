@@ -1,9 +1,8 @@
-def d_work = "/app/jenkins/workspace/eproc-test" 
-def ttt = "6666666666666" 
+def d_work = "/app/jenkins/workspace/eproc-dev" 
 
 pipeline {
   	agent {
-    	label 'bhp-dwh-prd'
+    	label 'bhp-dataflow-dev'
   	}
  
   	stages {
