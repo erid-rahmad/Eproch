@@ -61,11 +61,14 @@ public class DocumentUtil {
   }
 
   public static String buildDocumentNumber(String prefix, GenericDocumentRepository<?, ?> repository) {
+    final int documentSequence = repository.getNextDocumentSequence();
+    final String datePrefix = LocalDate.now().format(DATETIME_FORMATTER);
+    final String runningNumber = datePrefix + (String.format("%04d", documentSequence));
+
     if (prefix == null) {
-      prefix = LocalDate.now().format(DATETIME_FORMATTER);
+      return runningNumber;
     }
 
-    int documentSequence = repository.getNextDocumentSequence();
-    return prefix + (String.format("%04d", documentSequence));
+    return prefix + runningNumber;
   }
 }
