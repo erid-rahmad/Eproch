@@ -70,10 +70,10 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   created() {
     this.bidding = {...this.data};
     this.bidding.step = BiddingStep.SCHEDULE;
+    this.bidding.documentSchedules = [];
 
     if (! this.editMode) {
       this.bidding.biddingSchedules = [];
-      this.bidding.documentSchedules = [];
     }
 
     this.retrieveReferenceList('mEvent', 'events');

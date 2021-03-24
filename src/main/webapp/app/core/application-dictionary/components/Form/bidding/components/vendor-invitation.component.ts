@@ -72,11 +72,8 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
     this.bidding = {...this.data};
     this.bidding.step = BiddingStep.SELECTION;
     this.vendorSelection = this.bidding.vendorSelection;
-
-    if (! this.editMode) {
-      this.bidding.vendorInvitations = [];
-      this.bidding.vendorSuggestions = [];
-    }
+    this.bidding.vendorInvitations = [];
+    this.bidding.vendorSuggestions = [];
 
     this.retrieveBusinessCategories();
     this.retrieveSubBusinessCategories();

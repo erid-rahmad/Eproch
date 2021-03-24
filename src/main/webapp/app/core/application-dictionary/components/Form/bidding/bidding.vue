@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container bidding-list">
     <div v-if="index">
       <el-row class="header">
         <el-col :span="24">
@@ -159,7 +159,7 @@
         ref="pagination"
         background
         layout="sizes, prev, pager, next"
-        mini
+        small
         :current-page.sync="page"
         :page-sizes="[10, 20, 50, 100]"
         :page-size="itemsPerPage"
@@ -185,8 +185,10 @@
     >
       <el-table
         border
-        data="joinedVendors"
+        class="vendor-list"
+        :data="joinedVendors"
         highlight-current-row
+        size="mini"
       >
         <el-table-column
           label="No."
@@ -229,6 +231,12 @@
 <script lang="ts" src="./bidding.component.ts"></script>
 
 <style lang="scss">
+.compact .bidding-list .el-dialog .el-table.vendor-list {
+  td {
+    height: 35px;
+  }
+}
+
 .el-table__fixed, .el-table__fixed-right{
   box-shadow: none;
 }

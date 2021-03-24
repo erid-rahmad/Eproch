@@ -512,6 +512,10 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
 
   }
 
+  printFileName(attachment: any) {
+    return attachment?.fileName;
+  }
+
   /**
    * Invoked before proceeding to the next step.
    */

@@ -55,8 +55,8 @@
     <el-container class="steps-control-btn-group">
 
       <el-button
-        size="mini"
         icon="el-icon-close"
+        size="small"
         style="margin-bottom: 12px; align-text:left;"
         @click="close"
       >
@@ -64,8 +64,8 @@
       </el-button>
 
       <el-button
-        size="mini"
         icon="el-icon-arrow-left"
+        size="small"
         style="margin-bottom: 12px;"
         :disabled="active === 0"
         @click="previous"
@@ -74,13 +74,12 @@
       </el-button>
 
       <el-button
-        size="mini"
-        type="primary"
+        size="small"
         style="margin-bottom: 12px;"
-        :disabled="active === 4"
+        type="primary"
         @click="next"
       >
-        Next <em class="el-icon-arrow-right"></em>
+        {{ nextButton }} <em class="el-icon-arrow-right"></em>
       </el-button>
 
     </el-container>
@@ -167,8 +166,7 @@
   }
 
   .steps-control-btn-group {
-    float: right;
-    padding: 0 24px;
+    padding: 16px 24px;
   }
 }
 </style>

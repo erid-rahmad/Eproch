@@ -362,8 +362,8 @@
           :data="bidding.projectInformations"
         >
           <el-table-column min-width="30" label="No">
-            <template slot-scope="row">
-              {{ row.$index + 1 }}
+            <template slot-scope="{ $index }">
+              {{ $index + 1 }}
             </template>
           </el-table-column>
 
@@ -385,7 +385,7 @@
                 type="primary"
                 @click="downloadAttachment(row)"
               >
-                    {{ row.attachment.fileName }}
+                    {{ printFileName(row.attachment) }}
               </el-button>
             </template>
           </el-table-column>

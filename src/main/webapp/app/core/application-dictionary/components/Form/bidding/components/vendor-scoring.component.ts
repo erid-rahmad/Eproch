@@ -5,22 +5,27 @@ import Vue2Filters from 'vue2-filters';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
+import { BiddingStep } from '../steps-form.component';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import { Inject, Mixins } from 'vue-property-decorator';
+import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 
 const VendorScoringProp = Vue.extend({
   props: {
-    biddingInformation: {
+    editMode: Boolean,
+    data: {
       type: Object,
       default: () => {}
-    },
-    vendorScoring: {
-      type: Array,
-      default: () => []
-    },
+    }
   }
 })
 
 @Component
-export default class VendorScoring extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, VendorScoringProp) {
+export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScoringProp) {
+
+  @Inject('dynamicWindowService')
+  protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
   gridSchema = {
     defaultSort: {},
@@ -46,53 +51,108 @@ export default class VendorScoring extends mixins(Vue2Filters.mixin, AlertMixin,
     picName: ""
   };
 
+  bidding: Record<string, any> = {};
+
   created() {
+    this.bidding = {...this.data};
+    this.bidding.step = BiddingStep.SCORING;
+    this.bidding.scoringCriteria = [
+      {
+        criteria: 'Quality',
+        criteriaObj: "",
+        subCriteria: 'Quality',
+        subCriteriaObj: "",
+        percentage: 20,
+        pic: 'Procurement',
+        picName: 'Procurement'
+      },
+      {
+        criteria: 'Cost',
+        criteriaObj: "",
+        subCriteria: 'Cost',
+        subCriteriaObj: "",
+        percentage: 50,
+        pic: 'Finance',
+        picName: 'Finance'
+      },
+      {
+        criteria: 'Delivery',
+        criteriaObj: "",
+        subCriteria: 'Timeline',
+        subCriteriaObj: "",
+        percentage: 0,
+        pic: 'Finance',
+        picName: 'Finance'
+      },
+      {
+        criteria: 'Safety',
+        criteriaObj: "",
+        subCriteria: 'Packaging',
+        subCriteriaObj: "",
+        percentage: 0,
+        pic: 'Finance',
+        picName: 'Finance'
+      }
+    ];
+
     this.getCriteria();
   }
 
-  private getCriteria(): void {
-    this.dynamicWindowService("/api/c-bidding-criteria")
+  private getCriteria() {
+    this.commonService("/api/c-bidding-criteria")
       .retrieve({
-        criteriaQuery: `active.equals=true`
+        criteriaQuery: this.updateCriteria([`active.equals=true`])
       })
       .then(res => {
         this.criteriaOptions = res.data;
       });
   }
 
-  private getSubCriteria(criteriaId): void {
+  getSubCriteria(criteriaId?: number) {
+    if (!criteriaId) {
+      return;
+    }
+
     this.vendorScoringCriteria.subCriteria = "";
     this.vendorScoringCriteria.pic = "";
     this.vendorScoringCriteria.picName = "";
-    this.dynamicWindowService("/api/c-bidding-sub-criteria")
+    this.commonService('/api/c-bidding-sub-criteria')
       .retrieve({
-        criteriaQuery: `active.equals=true&biddingCriteriaId.equals=${criteriaId}`
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingCriteriaId.equals=${criteriaId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['name']
+        }
       })
       .then(res => {
         this.subCriteriaOptions = res.data;
       });
   }
 
-  private getPic(subCriteria){
-    let subCriteriaObj = this.subCriteriaOptions.find(item => item.id === subCriteria);
+  getPic(subCriteriaId?: number) {
+    let subCriteriaObj = this.subCriteriaOptions.find(item => item.id === subCriteriaId);
     this.vendorScoringCriteria.pic = subCriteriaObj.adUserUserId;
     this.vendorScoringCriteria.picName = subCriteriaObj.adUserUserName;
   }
 
-  addScoring(){
+  addScoring() {
     this.dialogConfirmationVisible = true;
   }
 
-  removeScoring(index){
-    this.vendorScoring.splice(index, 1);
+  removeScoring(index) {
+    this.bidding.scoringCriteria.splice(index, 1);
   }
 
-  saveScoring(){
+  saveScoring() {
 
     this.vendorScoringCriteria.criteriaObj = this.criteriaOptions.find(item => item.id === this.vendorScoringCriteria.criteria);
     this.vendorScoringCriteria.subCriteriaObj = this.subCriteriaOptions.find(item => item.id === this.vendorScoringCriteria.subCriteria);
 
-    this.vendorScoring.push(this.vendorScoringCriteria);
+    this.bidding.scoringCriteria.push(this.vendorScoringCriteria);
     this.dialogConfirmationVisible = false;
     this.vendorScoringCriteria = {
       criteria: "",

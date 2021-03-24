@@ -11,7 +11,7 @@ const StepsFormProps = Vue.extend({
     editMode: Boolean,
     data: Object,
     stepIndex: {
-      type: Object,
+      type: Number,
       default: () => {
         return 0;
       }
@@ -62,6 +62,10 @@ export default class StepsForm extends StepsFormProps {
     this.active = stepIndex;
   }
 
+  get nextButton() {
+    return this.active < 3 ? 'Next' : 'Save';
+  }
+
   created() {
     this.onStepIndexChanged(this.stepIndex);
     
@@ -79,6 +83,10 @@ export default class StepsForm extends StepsFormProps {
   }
 
   next() {
+    if (this.active === 3) {
+      return;
+    }
+
     if (this.editMode) {
       ++this.active;
     } else {
