@@ -1,4 +1,4 @@
-def d_work = "/app/jenkins/workspace/eproc-dev" 
+def d_work = "/app/jenkins/workspace/eproc" 
 
 pipeline {
   	agent {
