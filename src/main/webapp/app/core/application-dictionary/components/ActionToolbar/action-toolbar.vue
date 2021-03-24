@@ -59,13 +59,6 @@
         @click="openSearchWindow"
       />
       <el-button
-        icon="el-icon-download"
-        size="mini"
-        title="Export"
-        type="primary"
-        @click="exportRecord"
-      />
-      <el-button
         icon="el-icon-printer"
         size="mini"
         title="Print"
