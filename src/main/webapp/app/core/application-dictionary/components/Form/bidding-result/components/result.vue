@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container bidding-result-form">
     <el-row
       class="action-toolbar"
       :gutter="columnSpacing"
@@ -98,7 +98,7 @@
             prop="requisitionNo"
           >
             <el-input
-              v-model="mainForm.requisitionNo"
+              v-model="mainForm.requisitionName"
               disabled
             ></el-input>
           </el-form-item>
@@ -242,6 +242,12 @@
 </template>
 
 <script lang="ts" src="./result.component.ts"></script>
+
+<style lang="scss">
+.compact .bidding-result-form .el-table--mini td {
+  height: 35px;
+}
+</style>
 
 <style lang="scss" scoped>
 .action-toolbar {
