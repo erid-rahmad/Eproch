@@ -1,5 +1,3 @@
-def d_work = "/app/jenkins/workspace/eproc-dev" 
-
 pipeline {
   	agent {
     	label 'bhp-dataflow-dev'
