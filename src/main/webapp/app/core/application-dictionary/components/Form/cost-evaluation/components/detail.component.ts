@@ -27,6 +27,7 @@ export default class CostEvaluationDetail extends mixins(AccessLevelMixin, CostE
   mainForm = {
     documentNo: 'CE-21030001',
     biddingTitle: 'Tender Kendaraan Operasional',
+    biddingTypeName: 'Tender Goods',
     biddingNo: 'BD-21030010',
     currencyName: 'IDR',
     picName: 'Indah Haryanti',

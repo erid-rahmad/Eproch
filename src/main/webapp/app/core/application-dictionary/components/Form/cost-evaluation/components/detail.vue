@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="app-container cost-evaluation-detail">
     <el-row
       v-if="approval"
       class="action-toolbar"
@@ -87,6 +87,15 @@
             prop="picName"
           >
             <el-input
+              v-model="mainForm.biddingTypeName"
+              disabled
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="PIC"
+            prop="picName"
+          >
+            <el-input
               v-model="mainForm.picName"
               disabled
             ></el-input>
@@ -105,7 +114,7 @@
             prop="requisitionNo"
           >
             <el-input
-              v-model="mainForm.requisitionNo"
+              v-model="mainForm.requisitionName"
               disabled
             ></el-input>
           </el-form-item>
@@ -270,6 +279,12 @@
 </template>
 
 <script lang="ts" src="./detail.component.ts"></script>
+
+<style lang="scss">
+.compact .cost-evaluation-detail .el-table--mini td {
+  height: 35px;
+}
+</style>
 
 <style lang="scss" scoped>
 .action-toolbar {
