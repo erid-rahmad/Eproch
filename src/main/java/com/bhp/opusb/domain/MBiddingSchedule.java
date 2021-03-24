@@ -1,14 +1,26 @@
 package com.bhp.opusb.domain;
 
+import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.time.ZonedDateTime;
-import java.util.UUID;
 
 /**
  * A MBiddingSchedule.
@@ -36,6 +48,10 @@ public class MBiddingSchedule extends AbstractAuditingEntity {
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToMany(mappedBy = "biddingSchedule")
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+    private Set<MBiddingScheduleAttachment> mBiddingScheduleAttachments = new HashSet<>();
 
     @ManyToOne(optional = false)
     @NotNull
@@ -111,6 +127,31 @@ public class MBiddingSchedule extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Set<MBiddingScheduleAttachment> getMBiddingScheduleAttachments() {
+        return mBiddingScheduleAttachments;
+    }
+
+    public MBiddingSchedule mBiddingScheduleAttachments(Set<MBiddingScheduleAttachment> mBiddingScheduleAttachments) {
+        this.mBiddingScheduleAttachments = mBiddingScheduleAttachments;
+        return this;
+    }
+
+    public MBiddingSchedule addMBiddingScheduleAttachment(MBiddingScheduleAttachment mBiddingScheduleAttachment) {
+        this.mBiddingScheduleAttachments.add(mBiddingScheduleAttachment);
+        mBiddingScheduleAttachment.setBiddingSchedule(this);
+        return this;
+    }
+
+    public MBiddingSchedule removeMBiddingScheduleAttachment(MBiddingScheduleAttachment mBiddingScheduleAttachment) {
+        this.mBiddingScheduleAttachments.remove(mBiddingScheduleAttachment);
+        mBiddingScheduleAttachment.setBiddingSchedule(null);
+        return this;
+    }
+
+    public void setMBiddingScheduleAttachments(Set<MBiddingScheduleAttachment> mBiddingScheduleAttachments) {
+        this.mBiddingScheduleAttachments = mBiddingScheduleAttachments;
     }
 
     public MBidding getBidding() {

@@ -1,13 +1,16 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CBiddingSubCriteria} entity.
  */
 public class CBiddingSubCriteriaDTO extends AbstractAuditingDTO {
+
+    private static final long serialVersionUID = 1L;
 
     private Long id;
 
@@ -18,7 +21,7 @@ public class CBiddingSubCriteriaDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;

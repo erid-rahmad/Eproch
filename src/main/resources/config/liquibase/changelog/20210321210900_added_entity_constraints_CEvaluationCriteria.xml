@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity CEvaluationCriteria.
+    -->
+    <changeSet id="20210321210900-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="c_evaluation_criteria"
+                                 constraintName="fk_c_evaluation_criteria_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="evaluation_method_line_id"
+                                 baseTableName="c_evaluation_criteria"
+                                 constraintName="fk_c_evaluation_criteria_evaluation_method_line_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_evaluation_method_line"/>
+
+        <addForeignKeyConstraint baseColumnNames="bidding_criteria_id"
+                                 baseTableName="c_evaluation_criteria"
+                                 constraintName="fk_c_evaluation_criteria_bidding_criteria_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_bidding_criteria"/>
+
+        <addForeignKeyConstraint baseColumnNames="bidding_sub_criteria_id"
+                                 baseTableName="c_evaluation_criteria"
+                                 constraintName="fk_c_evaluation_criteria_bidding_sub_criteria_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_bidding_sub_criteria"/>
+
+        <addForeignKeyConstraint baseColumnNames="pic_user_id"
+                                 baseTableName="c_evaluation_criteria"
+                                 constraintName="fk_c_evaluation_criteria_pic_user_id"
+                                 referencedColumnNames="user_id"
+                                 referencedTableName="ad_user"/>
+
+    </changeSet>
+</databaseChangeLog>

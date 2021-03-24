@@ -130,7 +130,7 @@ export default class ContextVariableAccessor extends Vue {
    * @param param0 
    */
   protected getContext({defaultTabId, text, record}: IContextParameter): string | number | boolean {
-    if (text === null) {
+    if (text === void 0 || text === null) {
       return null;
     }
 

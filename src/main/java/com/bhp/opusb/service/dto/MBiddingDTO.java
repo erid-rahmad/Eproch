@@ -17,9 +17,6 @@ import javax.validation.constraints.Size;
  */
 public class MBiddingDTO extends AbstractAuditingDTO {
 
-    /**
-	 *
-	 */
 	private static final long serialVersionUID = 1L;
 
     private Long id;
@@ -33,23 +30,22 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 
     private BigDecimal estimatedPrice;
 
-    private LocalDate dateTrx;
+    private LocalDate dateTrx = LocalDate.now();
 
-    @NotNull
     @Size(max = 30)
     private String documentNo;
 
     @NotNull
     @Size(max = 10)
-    private String documentAction;
+    private String documentAction = "APV";
 
     @NotNull
     @Size(max = 10)
-    private String documentStatus;
+    private String documentStatus = "DRF";
 
-    private Boolean approved;
+    private Boolean approved = false;
 
-    private Boolean processed;
+    private Boolean processed = false;
 
     private LocalDate dateApprove;
 

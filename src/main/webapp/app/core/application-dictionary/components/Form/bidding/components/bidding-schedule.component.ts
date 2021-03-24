@@ -1,8 +1,7 @@
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import { ElForm } from 'element-ui/types/form';
+import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Inject, Watch } from 'vue-property-decorator';
+import { Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
 
@@ -17,17 +16,12 @@ const BiddingScheduleProp = Vue.extend({
 })
 
 @Component
-export default class BiddingSchedule extends BiddingScheduleProp {
+export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingScheduleProp) {
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  private adOrganizationId: number;
   private events = [];
-
-  private organizationCriteria = [
-    'adOrganizationId.in=1'
-  ];
 
   gridSchema = {
     defaultSort: {},
@@ -52,18 +46,30 @@ export default class BiddingSchedule extends BiddingScheduleProp {
   };
 
   bidding: Record<string, any> = {};
+  selectedEvent: any = null;
+  eventAttachmentVisible = false;
+  tmpAttachments: any[] = [];
 
   @Watch('data')
   onDataChanged(data: any) {
     console.log('bidding schedule data changed:', data);
   }
 
+  onAttachmentChanged(_file: any, fileList: any[]) {
+    this.tmpAttachments = fileList;
+  }
+
+  onAttachmentPreviewed(file: any) {
+    window.open(file.response.downloadUri, '_blank');
+  }
+
+  onAttachmentRemoved() {
+
+  }
+
   created() {
-    this.adOrganizationId = accountStore.organizationInfo.id;
     this.bidding = {...this.data};
     this.bidding.step = BiddingStep.SCHEDULE;
-
-    this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
 
     if (! this.editMode) {
       this.bidding.biddingSchedules = [];
@@ -104,10 +110,10 @@ export default class BiddingSchedule extends BiddingScheduleProp {
   private retrieveEventTypeLines(eventTypeId: number): void {
     this.commonService('/api/c-event-typelines')
       .retrieve({
-        criteriaQuery: [
+        criteriaQuery: this.updateCriteria([
           'active.equals=true',
           `eventTypeId.equals=${eventTypeId}`
-        ],
+        ]),
         paginationQuery: {
           page: 0,
           size: 100,
@@ -132,8 +138,12 @@ export default class BiddingSchedule extends BiddingScheduleProp {
     this.dialogConfirmationVisible = true;
   }
 
+  editAttachments(event: any) {
+    this.selectedEvent = event;
+    this.eventAttachmentVisible = true;
+  }
+
   printEventName(code: string) {
-    console.log('find %s in %O', code, this.events);
     return this.events.find(event => event.key === code)?.value || code;
   }
 

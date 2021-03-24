@@ -48,6 +48,19 @@ public class MBiddingSubItemLineService {
     }
 
     /**
+     * Save all mBiddingSubItemLines.
+     *
+     * @param mBiddingSubItemLineDTOs the list of entities to save.
+     * @return the persisted entities.
+     */
+    public List<MBiddingSubItemLineDTO> saveAll(List<MBiddingSubItemLineDTO> mBiddingSubItemLineDTOs) {
+        log.debug("Request to save MBiddingSubItemLine : {}", mBiddingSubItemLineDTOs);
+        List<MBiddingSubItemLine> mBiddingSubItemLines = mBiddingSubItemLineMapper.toEntity(mBiddingSubItemLineDTOs);
+        mBiddingSubItemLines = mBiddingSubItemLineRepository.saveAll(mBiddingSubItemLines);
+        return mBiddingSubItemLineMapper.toDto(mBiddingSubItemLines);
+    }
+
+    /**
      * Get all the mBiddingSubItemLines.
      *
      * @param pageable the pagination information.

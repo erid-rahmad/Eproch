@@ -91,6 +91,9 @@ public class MBiddingSubItemLineQueryService extends QueryService<MBiddingSubIte
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MBiddingSubItemLine_.id));
             }
+            if (criteria.getLineNo() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getLineNo(), MBiddingSubItemLine_.lineNo));
+            }
             if (criteria.getQuantity() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getQuantity(), MBiddingSubItemLine_.quantity));
             }

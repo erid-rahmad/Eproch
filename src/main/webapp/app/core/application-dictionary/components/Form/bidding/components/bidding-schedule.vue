@@ -78,6 +78,21 @@
             </template>
           </el-table-column>
 
+          <el-table-column
+            label="Attachments"
+            min-width="96"
+          >
+            <template slot-scope="{ row }">
+              <el-button
+                :disabled="!bidding.processed && !bidding.approved"
+                icon="el-icon-paperclip"
+                size="mini"
+                type="primary"
+                @click="editAttachments(row)"
+              >Upload</el-button>
+            </template>
+          </el-table-column>
+
         </el-table>
       </el-col>
     </el-row>
@@ -99,7 +114,8 @@
           :max-height="gridSchema.maxHeight"
           :default-sort="gridSchema.defaultSort"
           :empty-text="gridSchema.emptyText"
-          :data="bidding.documentSchedules">
+          :data="bidding.documentSchedules"
+        >
 
           <el-table-column
             label="No"
@@ -183,89 +199,111 @@
 
     <el-dialog
       width="50%"
+      :visible.sync="eventAttachmentVisible"
+      title="Edit Attachments"
+    >
+      <el-upload
+        action="/api/c-attachments/upload"
+        drag
+        :on-change="onAttachmentChanged"
+        :on-preview="onAttachmentPreviewed"
+        :on-remove="onAttachmentRemoved"
+        :file-list="tmpAttachments"
+        multiple
+      >
+        <em class="el-icon-upload"></em>
+        <div class="el-upload__text">
+          Drop file here or <em>click to upload</em>
+        </div>
+        <div
+          class="el-upload__tip"
+          slot="tip"
+        >Upload one or more files</div>
+      </el-upload>
+    </el-dialog>
+
+    <el-dialog
       :visible.sync="dialogConfirmationVisible"
       title="Document Submission Schedule"
     >
-      <template>
-        <div>
-          <el-form
-            ref="documentSchedule"
-            label-position="left"
-            label-width="150px"
-            :model="documentSchedule"
-            size="mini"
+      <div>
+        <el-form
+          ref="documentSchedule"
+          label-position="left"
+          label-width="150px"
+          :model="documentSchedule"
+          size="mini"
+        >
+          <el-form-item
+            label="Document Event"
+            prop="docEvent"
+            required
           >
-            <el-form-item
-              label="Document Event"
-              prop="docEvent"
-              required
+            <el-input
+              v-model="documentSchedule.docEvent"
+              class="form-input"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="Submission Date"
+            prop="submissionScheduleId"
+            required
+          >
+            <el-select
+              v-model="documentSchedule.submissionScheduleId"
+              class="form-input"
+              clearable
+              filterable
+              placeholder="Select Submission Schedule"
+              style="width: 100%"
             >
-              <el-input
-                v-model="documentSchedule.docEvent"
-                class="form-input"
-                clearable
-              ></el-input>
-            </el-form-item>
-            <el-form-item
-              label="Submission Date"
-              prop="submissionScheduleId"
-              required
+              <el-option
+                v-for="item in eventScheduleOptions"
+                :key="item.id"
+                :label="printEventName(item.event) + ' (Start: ' + item.startDate + ' - End: ' + item.endDate + ')'"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="Evaluation Date" prop="evaluationScheduleId" required>
+            <el-select
+              v-model="documentSchedule.evaluationScheduleId"
+              class="form-input"
+              clearable filterable
+              placeholder="Select Evaluation Schedule"
+              style="width: 100%"
             >
-              <el-select
-                v-model="documentSchedule.submissionScheduleId"
-                class="form-input"
-                clearable
-                filterable
-                placeholder="Select Submission Schedule"
-                style="width: 100%"
-              >
-                <el-option
-                  v-for="item in eventScheduleOptions"
-                  :key="item.id"
-                  :label="item.event + ' (Start: ' + item.startDate + ' - End: ' + item.endDate + ')'"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-            <el-form-item label="Evaluation Date" prop="evaluationScheduleId" required>
-              <el-select
-                v-model="documentSchedule.evaluationScheduleId"
-                class="form-input"
-                clearable filterable
-                placeholder="Select Evaluation Schedule"
-                style="width: 100%"
-              >
-                <el-option
-                  v-for="item in eventScheduleOptions"
-                  :key="item.id"
-                  :label="item.event + ' (Start: ' + item.startDate + ' - End: ' + item.endDate + ')'"
-                  :value="item.id"
-                ></el-option>
-              </el-select>
-            </el-form-item>
-          </el-form>
-        </div>
+              <el-option
+                v-for="item in eventScheduleOptions"
+                :key="item.id"
+                :label="printEventName(item.event) + ' (Start: ' + item.startDate + ' - End: ' + item.endDate + ')'"
+                :value="item.id"
+              ></el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
+      </div>
 
-        <div slot="footer">
-          <el-button
-            style="margin-left: 0px;"
-            size="mini"
-            icon="el-icon-check"
-            type="primary"
-            @click="saveDocument"
-          >
-            Save
-          </el-button>
-          <el-button
-            icon="el-icon-close"
-            size="mini"
-            style="margin-left: 0px;"
-            @click="dialogConfirmationVisible = false"
-          >
-            {{ $t('entity.action.cancel') }}
-          </el-button>
-        </div>
-      </template>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          style="margin-left: 0px;"
+          @click="dialogConfirmationVisible = false"
+        >
+          {{ $t('entity.action.cancel') }}
+        </el-button>
+        <el-button
+          style="margin-left: 0px;"
+          size="mini"
+          icon="el-icon-check"
+          type="primary"
+          @click="saveDocument"
+        >
+          {{ $t('entity.action.save') }}
+        </el-button>
+      </div>
     </el-dialog>
 
   </div>

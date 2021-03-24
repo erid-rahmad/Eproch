@@ -914,6 +914,28 @@ entity CBiddingSubCriteria {
 	active Boolean
 }
 
+entity CEvaluationMethod {
+	name String required maxlength(60)
+	priceLimit BigDecimal max(100)
+	uid UUID
+	active Boolean
+}
+
+entity CEvaluationMethodLine {
+	/** Referenced from M_Reference */
+	evaluation String required maxlength(5)
+	weight BigDecimal max(100)
+	passingGrade BigDecimal
+	uid UUID
+	active Boolean
+}
+
+entity CEvaluationCriteria {
+	scoringPercentage BigDecimal max(100)
+	uid UUID
+	active Boolean
+}
+
 entity MBidding {
 	name String required
 	vendorSelection String
@@ -922,7 +944,7 @@ entity MBidding {
 
 	// Common transactional fields.
 	dateTrx LocalDate
-	documentNo String required maxlength(30)
+	documentNo String maxlength(30)
 	documentAction String required maxlength(10)
 	documentStatus String required maxlength(10)
 	approved Boolean
@@ -936,6 +958,7 @@ entity MBidding {
 }
 
 entity MBiddingLine {
+	lineNo Integer
 	quantity BigDecimal required
 	ceilingPrice BigDecimal required
 	totalCeilingPrice BigDecimal
@@ -952,6 +975,7 @@ entity MBiddingSubItem {
 }
 
 entity MBiddingSubItemLine {
+	lineNo Integer
 	quantity BigDecimal required
 	price BigDecimal required
 	amount BigDecimal
@@ -968,7 +992,6 @@ entity MBiddingSubmission {
 }
 
 entity MBiddingSubmissionLine {
-
 	proposedPrice BigDecimal required
 	totalPriceSubmission BigDecimal required
 	deliveryDate LocalDate required
@@ -992,6 +1015,11 @@ entity MProjectInformation {
 entity MBiddingSchedule {
 	startDate ZonedDateTime
 	endDate ZonedDateTime
+	uid UUID
+	active Boolean
+}
+
+entity MBiddingScheduleAttachment {
 	uid UUID
 	active Boolean
 }
@@ -1055,6 +1083,7 @@ relationship OneToOne {
 	CGalleryItem{cAttachment required} to CAttachment
 	MProductCatalog{cGallery} to CGallery
 	MBiddingLine{subItem} to MBiddingSubItem{biddingLine}
+	MBiddingScheduleAttachment{cAttachment required} to CAttachment
 }
 
 /**
@@ -1084,6 +1113,9 @@ relationship OneToMany {
 
 	// Bidding sub-item lines.
 	MBiddingSubItem to MBiddingSubItemLine{biddingSubItem required}
+
+	// Bidding schedule attachments.
+	MBiddingSchedule to MBiddingScheduleAttachment{biddingSchedule required}
 
 	// Bidding Submission.
 	MBiddingSubmission to MBiddingSubmissionLine{mBiddingSubmission required}
@@ -1373,6 +1405,16 @@ relationship ManyToOne {
 	CBiddingSubCriteria{biddingCriteria required} to CBiddingCriteria
 	CBiddingSubCriteria{adUser required} to AdUser
 
+	CEvaluationMethod{adOrganization required} to ADOrganization
+	CEvaluationMethod{biddingType} to CBiddingType
+	CEvaluationMethodLine{adOrganization required} to ADOrganization
+	CEvaluationMethodLine{evaluationMethod required} to CEvaluationMethod
+	CEvaluationCriteria{adOrganization required} to ADOrganization
+	CEvaluationCriteria{evaluationMethodLine required} to CEvaluationMethodLine
+	CEvaluationCriteria{biddingCriteria required} to CBiddingCriteria
+	CEvaluationCriteria{biddingSubCriteria required} to CBiddingSubCriteria
+	CEvaluationCriteria{pic required} to AdUser
+
 	MBidding{adOrganization required} to ADOrganization
 	MBidding{costCenter required} to CCostCenter
 	MBidding{currency required} to CCurrency
@@ -1402,6 +1444,8 @@ relationship ManyToOne {
 	MBiddingSchedule{bidding required} to MBidding
 	MBiddingSchedule{adOrganization required} to ADOrganization
 	MBiddingSchedule{eventTypeLine required} to CEventTypeline
+
+	MBiddingScheduleAttachment{adOrganization required} to ADOrganization
 
 	MDocumentSchedule{bidding required} to MBidding
 	MDocumentSchedule{adOrganization required} to ADOrganization

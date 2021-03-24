@@ -16,6 +16,8 @@ public class MBiddingLineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
+    private Integer lineNo;
+
     @NotNull
     private BigDecimal quantity;
 
@@ -58,6 +60,14 @@ public class MBiddingLineDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(Integer lineNo) {
+        this.lineNo = lineNo;
     }
 
     public BigDecimal getQuantity() {
@@ -237,6 +247,7 @@ public class MBiddingLineDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MBiddingLineDTO{" +
             "id=" + getId() +
+            ", lineNo=" + getLineNo() +
             ", quantity=" + getQuantity() +
             ", ceilingPrice=" + getCeilingPrice() +
             ", totalCeilingPrice=" + getTotalCeilingPrice() +

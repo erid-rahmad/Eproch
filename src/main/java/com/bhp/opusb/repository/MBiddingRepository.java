@@ -10,5 +10,5 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface MBiddingRepository extends JpaRepository<MBidding, Long>, JpaSpecificationExecutor<MBidding> {
+public interface MBiddingRepository extends GenericDocumentRepository<MBidding, Long> {
 }

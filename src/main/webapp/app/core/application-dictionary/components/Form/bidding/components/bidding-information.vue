@@ -175,11 +175,11 @@
           </el-form-item>
           <el-form-item
             label="PiC"
-            prop="adUserId"
+            prop="adUserUserId"
             required>
             <el-select
               style="width: 100%"
-              v-model="bidding.adUserId"
+              v-model="bidding.adUserUserId"
               class="form-input"
               clearable
               filterable
@@ -222,7 +222,7 @@
     <el-row>
       <el-col :span="24">
         <el-table
-          v-loading="processing"
+          v-loading="loadingLines"
           ref="biddingLines"
           border
           class="bidding-info-table"
@@ -251,7 +251,6 @@
 
           <el-table-column
             label="Sub Item"
-            prop="subItem"
             width="110"
           >
             <template slot-scope="{ row, $index }">
@@ -349,7 +348,7 @@
     <el-row>
       <el-col :span="12">
         <el-table
-          v-loading="processing"
+          v-loading="loadingProjectInfo"
           ref="projectInformations"
           highlight-current-row
           border
@@ -422,6 +421,7 @@
       :show-close="false"
       title="Edit Sub Item"
       :visible.sync="subItemEditorVisible"
+      @closed="onSubItemClosed"
     >
       <subitem-editor
         ref="subitemEditor"
@@ -432,23 +432,23 @@
       ></subitem-editor>
       <div slot="footer">
         <el-button
-          :loading="savingSubitem"
-          style="margin-left: 0px;"
+          :disabled="savingSubitem"
+          icon="el-icon-close"
           size="mini"
+          style="margin-left: 0px;"
+          @click="closeSubitemEditor"
+        >
+          {{ $t('entity.action.cancel') }}
+        </el-button>
+        <el-button
+          :loading="savingSubitem"
           icon="el-icon-check"
+          size="mini"
+          style="margin-left: 0px;"
           type="primary"
           @click="saveSubitemEditor"
         >
-          Save
-        </el-button>
-        <el-button
-          :disabled="savingSubitem"
-          style="margin-left: 0px;"
-          size="mini"
-          icon="el-icon-close"
-          @click="closeSubitemEditor"
-        >
-          Close
+          {{ $t('entity.action.save') }}
         </el-button>
       </div>
     </el-dialog>
@@ -518,22 +518,21 @@
 
         <div slot="footer">
           <el-button
-            icon="el-icon-check"
-            size="mini"
-            style="margin-left: 0px;"
-            type="primary"
-            @click="saveProject"
-          >
-            Save
-          </el-button>
-
-          <el-button
             icon="el-icon-close"
             size="mini"
             style="margin-left: 0px;"
             @click="projectFormVisible = false"
           >
             {{ $t('entity.action.cancel') }}
+          </el-button>
+          <el-button
+            icon="el-icon-check"
+            size="mini"
+            style="margin-left: 0px;"
+            type="primary"
+            @click="saveProject"
+          >
+            {{ $t('entity.action.save') }}
           </el-button>
         </div>
       </template>

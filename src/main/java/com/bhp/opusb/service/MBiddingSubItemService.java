@@ -4,6 +4,7 @@ import com.bhp.opusb.domain.MBiddingSubItem;
 import com.bhp.opusb.repository.MBiddingSubItemLineRepository;
 import com.bhp.opusb.repository.MBiddingSubItemRepository;
 import com.bhp.opusb.service.dto.MBiddingSubItemDTO;
+import com.bhp.opusb.service.dto.MBiddingSubItemLineDTO;
 import com.bhp.opusb.service.mapper.MBiddingSubItemMapper;
 import com.bhp.opusb.util.MapperJSONUtil;
 import org.slf4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -31,10 +33,13 @@ public class MBiddingSubItemService {
     private final Logger log = LoggerFactory.getLogger(MBiddingSubItemService.class);
 
     private final MBiddingSubItemRepository mBiddingSubItemRepository;
+    private final MBiddingSubItemLineService mBiddingSubItemLineService;
 
     private final MBiddingSubItemMapper mBiddingSubItemMapper;
 
-    public MBiddingSubItemService(MBiddingSubItemRepository mBiddingSubItemRepository, MBiddingSubItemMapper mBiddingSubItemMapper) {
+    public MBiddingSubItemService(MBiddingSubItemRepository mBiddingSubItemRepository,
+            MBiddingSubItemLineService mBiddingSubItemLineService, MBiddingSubItemMapper mBiddingSubItemMapper) {
+        this.mBiddingSubItemLineService = mBiddingSubItemLineService;
         this.mBiddingSubItemRepository = mBiddingSubItemRepository;
         this.mBiddingSubItemMapper = mBiddingSubItemMapper;
     }
@@ -47,9 +52,45 @@ public class MBiddingSubItemService {
      */
     public MBiddingSubItemDTO save(MBiddingSubItemDTO mBiddingSubItemDTO) {
         log.debug("Request to save MBiddingSubItem : {}", mBiddingSubItemDTO);
-        MBiddingSubItem mBiddingSubItem = mBiddingSubItemMapper.toEntity(mBiddingSubItemDTO);
-        mBiddingSubItem = mBiddingSubItemRepository.save(mBiddingSubItem);
+        final MBiddingSubItem mBiddingSubItem = mBiddingSubItemMapper.toEntity(mBiddingSubItemDTO);
+        mBiddingSubItemRepository.save(mBiddingSubItem);
+
+        // Set sub-item ID for each sub-item line.
+        mBiddingSubItemDTO.getmBiddingSubItemLines().stream()
+            .forEach(line -> line.setBiddingSubItemId(mBiddingSubItem.getId()));
+
+        // Batch save all sub-item lines.
+        mBiddingSubItemLineService.saveAll(mBiddingSubItemDTO.getmBiddingSubItemLines());
         return mBiddingSubItemMapper.toDto(mBiddingSubItem);
+    }
+
+    /**
+     * Save all mBiddingSubItems.
+     *
+     * @param mBiddingSubItemDTOs the list of entities to save.
+     * @return the persisted entities.
+     */
+    public List<MBiddingSubItemDTO> saveAll(List<MBiddingSubItemDTO> mBiddingSubItemDTOs) {
+        log.debug("Request to save list of MBiddingSubItems. size : {}", mBiddingSubItemDTOs.size());
+        List<MBiddingSubItem> mBiddingSubItems = mBiddingSubItemMapper.toEntity(mBiddingSubItemDTOs);
+        mBiddingSubItems = mBiddingSubItemRepository.saveAll(mBiddingSubItems);
+
+        final List<MBiddingSubItemLineDTO> mBiddingSubItemLineDTOs = new ArrayList<>();
+
+        // Set sub-item ID for each sub-item line.
+        for (int i = 0; i < mBiddingSubItems.size(); ++i) {
+            MBiddingSubItem mBiddingSubItem = mBiddingSubItems.get(i);
+            MBiddingSubItemDTO mBiddingSubItemDTO = mBiddingSubItemDTOs.get(i);
+            mBiddingSubItemDTO.getmBiddingSubItemLines().stream()
+                .forEach(line -> {
+                    line.setBiddingSubItemId(mBiddingSubItem.getId());
+                    mBiddingSubItemLineDTOs.add(line);
+                });
+        }
+
+        // Batch save all sub-item lines.
+        mBiddingSubItemLineService.saveAll(mBiddingSubItemLineDTOs);
+        return mBiddingSubItemMapper.toDto(mBiddingSubItems);
     }
 
     /**

@@ -91,6 +91,7 @@
                   separator=";"
                   tableName="m_bidding_line">
             <column name="id" type="numeric"/>
+            <column name="line_no" type="numeric"/>
             <column name="quantity" type="numeric"/>
             <column name="ceiling_price" type="numeric"/>
             <column name="total_ceiling_price" type="numeric"/>
@@ -112,6 +113,14 @@
         <addColumn tableName="m_bidding_line">
             <column name="sub_item_id" type="bigint">
                 <constraints unique="true" nullable="true" uniqueConstraintName="ux_m_bidding_line_sub_item_id" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20210322130700" author="Ananta Aryadewa">
+        <addColumn tableName="m_bidding_line">
+            <column name="line_no" type="integer">
+                <constraints nullable="true" />
             </column>
         </addColumn>
     </changeSet>

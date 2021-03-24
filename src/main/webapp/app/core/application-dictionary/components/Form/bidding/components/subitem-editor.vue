@@ -23,6 +23,7 @@
           prop="productId"
         >
           <el-select
+            ref="subItemProduct"
             v-model="mainForm.productId"
             clearable
             filterable
@@ -56,6 +57,8 @@
       </el-col>
     </el-form>
     <el-table
+      v-loading="loadingLines"
+      border
       :empty-text="gridSchema.emptyText"
       :data="mainForm.mBiddingSubItemLines"
       :max-height="gridSchema.maxHeight"
@@ -133,7 +136,7 @@
       >
         <template slot-scope="{ row }">
           <el-input
-            v-model="row.fmtPrice"
+            v-model="row.price"
             v-inputmask="{'alias': 'currency'}"
             size="mini"
             @change="value => onPriceChange(row, value)"
@@ -175,3 +178,10 @@
   </div>
 </template>
 <script lang="ts" src="./subitem-editor.component.ts"></script>
+<style lang="scss">
+.subitem-editor {
+  .el-table .el-button--mini {
+    margin: 4px 0;
+  }
+}
+</style>

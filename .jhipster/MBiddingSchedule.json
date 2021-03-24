@@ -1,59 +1,65 @@
 {
-  "name": "MBiddingSchedule",
-  "fields": [
-    {
-      "fieldName": "startDate",
-      "fieldType": "ZonedDateTime"
-    },
-    {
-      "fieldName": "endDate",
-      "fieldType": "ZonedDateTime"
-    },
-    {
-      "fieldName": "uid",
-      "fieldType": "UUID"
-    },
-    {
-      "fieldName": "active",
-      "fieldType": "Boolean"
-    }
-  ],
-  "relationships": [
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "mBidding",
-      "otherEntityRelationshipName": "mBiddingSchedule",
-      "relationshipValidateRules": "required",
-      "relationshipName": "bidding",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDOrganization",
-      "otherEntityRelationshipName": "mBiddingSchedule",
-      "relationshipValidateRules": "required",
-      "relationshipName": "adOrganization",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "cEventTypeline",
-      "otherEntityRelationshipName": "mBiddingSchedule",
-      "relationshipValidateRules": "required",
-      "relationshipName": "eventTypeLine",
-      "otherEntityField": "id"
-    }
-  ],
-  "changelogDate": "20210211091900",
-  "entityTableName": "m_bidding_schedule",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*",
-  "skipClient": true
+    "name": "MBiddingSchedule",
+    "fields": [
+        {
+            "fieldName": "startDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "endDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "mBiddingScheduleAttachment",
+            "otherEntityRelationshipName": "biddingSchedule",
+            "relationshipName": "mBiddingScheduleAttachment"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBidding",
+            "otherEntityRelationshipName": "mBiddingSchedule",
+            "relationshipValidateRules": "required",
+            "relationshipName": "bidding",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mBiddingSchedule",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cEventTypeline",
+            "otherEntityRelationshipName": "mBiddingSchedule",
+            "relationshipValidateRules": "required",
+            "relationshipName": "eventTypeLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210211091900",
+    "entityTableName": "m_bidding_schedule",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
 }

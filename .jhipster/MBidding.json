@@ -28,7 +28,6 @@
             "fieldName": "documentNo",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required",
                 "maxlength"
             ],
             "fieldValidateRulesMaxlength": "30"

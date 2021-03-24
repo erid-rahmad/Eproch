@@ -15,6 +15,8 @@ public class MBiddingSubItemLineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
+    private Integer lineNo;
+
     @NotNull
     private BigDecimal quantity;
 
@@ -25,7 +27,7 @@ public class MBiddingSubItemLineDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
@@ -45,6 +47,14 @@ public class MBiddingSubItemLineDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getLineNo() {
+        return lineNo;
+    }
+
+    public void setLineNo(Integer lineNo) {
+        this.lineNo = lineNo;
     }
 
     public BigDecimal getQuantity() {
@@ -168,6 +178,7 @@ public class MBiddingSubItemLineDTO extends AbstractAuditingDTO {
     public String toString() {
         return "MBiddingSubItemLineDTO{" +
             "id=" + getId() +
+            ", lineNo=" + getLineNo() +
             ", quantity=" + getQuantity() +
             ", price=" + getPrice() +
             ", amount=" + getAmount() +

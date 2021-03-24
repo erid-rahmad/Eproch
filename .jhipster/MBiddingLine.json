@@ -2,6 +2,10 @@
     "name": "MBiddingLine",
     "fields": [
         {
+            "fieldName": "lineNo",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "quantity",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [

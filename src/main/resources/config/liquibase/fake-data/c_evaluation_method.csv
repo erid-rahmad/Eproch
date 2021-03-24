@@ -1,0 +1,11 @@
+id;name;price_limit;uid;active;ad_organization_id
+1;Rial Omani Soft;69;ca57c0f7-843e-4e0b-8d4f-79978d1dc5fa;true;1
+2;Lead;17;bcc7b6ac-d57a-4dea-a678-6e3f78eb4488;true;2
+3;Checking Account Diverse;41;2cc51840-f441-47dc-b707-b92070f1545a;false;3
+4;Facilitator;98;6bbf983d-f3d6-4efe-a704-d4c9b1e4f5f9;false;4
+5;transmit cyan;4;2bfd5c29-5a13-4b53-91f5-402ef6c63c31;false;5
+6;deposit;52;b2134913-eb58-43c2-9e1e-53712ccd7acc;true;6
+7;invoice;51;50a87087-e4fa-429b-b542-50c4e0e18fc5;false;7
+8;applications;19;654bd323-7728-434d-95ba-3c818296520e;false;8
+9;Multi-tiered deposit ubiquitous;39;ca42c2a2-027b-42c2-ac24-cae93931e84d;false;9
+10;maroon Principal;71;b62caa5c-07c8-4bf2-b149-acb582fe63bb;false;10

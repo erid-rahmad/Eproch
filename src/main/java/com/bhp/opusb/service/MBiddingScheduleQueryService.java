@@ -103,6 +103,10 @@ public class MBiddingScheduleQueryService extends QueryService<MBiddingSchedule>
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MBiddingSchedule_.active));
             }
+            if (criteria.getMBiddingScheduleAttachmentId() != null) {
+                specification = specification.and(buildSpecification(criteria.getMBiddingScheduleAttachmentId(),
+                    root -> root.join(MBiddingSchedule_.mBiddingScheduleAttachments, JoinType.LEFT).get(MBiddingScheduleAttachment_.id)));
+            }
             if (criteria.getBiddingId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBiddingId(),
                     root -> root.join(MBiddingSchedule_.bidding, JoinType.LEFT).get(MBidding_.id)));

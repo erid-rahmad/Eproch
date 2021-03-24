@@ -45,6 +45,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class MBiddingLineResourceIT {
 
+    private static final Integer DEFAULT_LINE_NO = 1;
+    private static final Integer UPDATED_LINE_NO = 2;
+    private static final Integer SMALLER_LINE_NO = 1 - 1;
+
     private static final BigDecimal DEFAULT_QUANTITY = new BigDecimal(1);
     private static final BigDecimal UPDATED_QUANTITY = new BigDecimal(2);
     private static final BigDecimal SMALLER_QUANTITY = new BigDecimal(1 - 1);
@@ -98,6 +102,7 @@ public class MBiddingLineResourceIT {
      */
     public static MBiddingLine createEntity(EntityManager em) {
         MBiddingLine mBiddingLine = new MBiddingLine()
+            .lineNo(DEFAULT_LINE_NO)
             .quantity(DEFAULT_QUANTITY)
             .ceilingPrice(DEFAULT_CEILING_PRICE)
             .totalCeilingPrice(DEFAULT_TOTAL_CEILING_PRICE)
@@ -165,6 +170,7 @@ public class MBiddingLineResourceIT {
      */
     public static MBiddingLine createUpdatedEntity(EntityManager em) {
         MBiddingLine mBiddingLine = new MBiddingLine()
+            .lineNo(UPDATED_LINE_NO)
             .quantity(UPDATED_QUANTITY)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .totalCeilingPrice(UPDATED_TOTAL_CEILING_PRICE)
@@ -246,6 +252,7 @@ public class MBiddingLineResourceIT {
         List<MBiddingLine> mBiddingLineList = mBiddingLineRepository.findAll();
         assertThat(mBiddingLineList).hasSize(databaseSizeBeforeCreate + 1);
         MBiddingLine testMBiddingLine = mBiddingLineList.get(mBiddingLineList.size() - 1);
+        assertThat(testMBiddingLine.getLineNo()).isEqualTo(DEFAULT_LINE_NO);
         assertThat(testMBiddingLine.getQuantity()).isEqualTo(DEFAULT_QUANTITY);
         assertThat(testMBiddingLine.getCeilingPrice()).isEqualTo(DEFAULT_CEILING_PRICE);
         assertThat(testMBiddingLine.getTotalCeilingPrice()).isEqualTo(DEFAULT_TOTAL_CEILING_PRICE);
@@ -344,6 +351,7 @@ public class MBiddingLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBiddingLine.getId().intValue())))
+            .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalCeilingPrice").value(hasItem(DEFAULT_TOTAL_CEILING_PRICE.intValue())))
@@ -364,6 +372,7 @@ public class MBiddingLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mBiddingLine.getId().intValue()))
+            .andExpect(jsonPath("$.lineNo").value(DEFAULT_LINE_NO))
             .andExpect(jsonPath("$.quantity").value(DEFAULT_QUANTITY.intValue()))
             .andExpect(jsonPath("$.ceilingPrice").value(DEFAULT_CEILING_PRICE.intValue()))
             .andExpect(jsonPath("$.totalCeilingPrice").value(DEFAULT_TOTAL_CEILING_PRICE.intValue()))
@@ -390,6 +399,111 @@ public class MBiddingLineResourceIT {
 
         defaultMBiddingLineShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMBiddingLineShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBiddingLinesByLineNoIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingLineRepository.saveAndFlush(mBiddingLine);
+
+        // Get all the mBiddingLineList where lineNo equals to DEFAULT_LINE_NO
+        defaultMBiddingLineShouldBeFound("lineNo.equals=" + DEFAULT_LINE_NO);
+
+        // Get all the mBiddingLineList where lineNo equals to UPDATED_LINE_NO
+        defaultMBiddingLineShouldNotBeFound("lineNo.equals=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingLinesByLineNoIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingLineRepository.saveAndFlush(mBiddingLine);
+
+        // Get all the mBiddingLineList where lineNo not equals to DEFAULT_LINE_NO
+        defaultMBiddingLineShouldNotBeFound("lineNo.notEquals=" + DEFAULT_LINE_NO);
+
+        // Get all the mBiddingLineList where lineNo not equals to UPDATED_LINE_NO
+        defaultMBiddingLineShouldBeFound("lineNo.notEquals=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingLinesByLineNoIsInShouldWork() throws Exception {
+        // Initialize the database
+        mBiddingLineRepository.saveAndFlush(mBiddingLine);
+
+        // Get all the mBiddingLineList where lineNo in DEFAULT_LINE_NO or UPDATED_LINE_NO
+        defaultMBiddingLineShouldBeFound("lineNo.in=" + DEFAULT_LINE_NO + "," + UPDATED_LINE_NO);
+
+        // Get all the mBiddingLineList where lineNo equals to UPDATED_LINE_NO
+        defaultMBiddingLineShouldNotBeFound("lineNo.in=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingLinesByLineNoIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mBiddingLineRepository.saveAndFlush(mBiddingLine);
+
+        // Get all the mBiddingLineList where lineNo is not null
+        defaultMBiddingLineShouldBeFound("lineNo.specified=true");
+
+        // Get all the mBiddingLineList where lineNo is null
+        defaultMBiddingLineShouldNotBeFound("lineNo.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingLinesByLineNoIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingLineRepository.saveAndFlush(mBiddingLine);
+
+        // Get all the mBiddingLineList where lineNo is greater than or equal to DEFAULT_LINE_NO
+        defaultMBiddingLineShouldBeFound("lineNo.greaterThanOrEqual=" + DEFAULT_LINE_NO);
+
+        // Get all the mBiddingLineList where lineNo is greater than or equal to UPDATED_LINE_NO
+        defaultMBiddingLineShouldNotBeFound("lineNo.greaterThanOrEqual=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingLinesByLineNoIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingLineRepository.saveAndFlush(mBiddingLine);
+
+        // Get all the mBiddingLineList where lineNo is less than or equal to DEFAULT_LINE_NO
+        defaultMBiddingLineShouldBeFound("lineNo.lessThanOrEqual=" + DEFAULT_LINE_NO);
+
+        // Get all the mBiddingLineList where lineNo is less than or equal to SMALLER_LINE_NO
+        defaultMBiddingLineShouldNotBeFound("lineNo.lessThanOrEqual=" + SMALLER_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingLinesByLineNoIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mBiddingLineRepository.saveAndFlush(mBiddingLine);
+
+        // Get all the mBiddingLineList where lineNo is less than DEFAULT_LINE_NO
+        defaultMBiddingLineShouldNotBeFound("lineNo.lessThan=" + DEFAULT_LINE_NO);
+
+        // Get all the mBiddingLineList where lineNo is less than UPDATED_LINE_NO
+        defaultMBiddingLineShouldBeFound("lineNo.lessThan=" + UPDATED_LINE_NO);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingLinesByLineNoIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mBiddingLineRepository.saveAndFlush(mBiddingLine);
+
+        // Get all the mBiddingLineList where lineNo is greater than DEFAULT_LINE_NO
+        defaultMBiddingLineShouldNotBeFound("lineNo.greaterThan=" + DEFAULT_LINE_NO);
+
+        // Get all the mBiddingLineList where lineNo is greater than SMALLER_LINE_NO
+        defaultMBiddingLineShouldBeFound("lineNo.greaterThan=" + SMALLER_LINE_NO);
     }
 
 
@@ -1102,6 +1216,7 @@ public class MBiddingLineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mBiddingLine.getId().intValue())))
+            .andExpect(jsonPath("$.[*].lineNo").value(hasItem(DEFAULT_LINE_NO)))
             .andExpect(jsonPath("$.[*].quantity").value(hasItem(DEFAULT_QUANTITY.intValue())))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].totalCeilingPrice").value(hasItem(DEFAULT_TOTAL_CEILING_PRICE.intValue())))
@@ -1156,6 +1271,7 @@ public class MBiddingLineResourceIT {
         // Disconnect from session so that the updates on updatedMBiddingLine are not directly saved in db
         em.detach(updatedMBiddingLine);
         updatedMBiddingLine
+            .lineNo(UPDATED_LINE_NO)
             .quantity(UPDATED_QUANTITY)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .totalCeilingPrice(UPDATED_TOTAL_CEILING_PRICE)
@@ -1174,6 +1290,7 @@ public class MBiddingLineResourceIT {
         List<MBiddingLine> mBiddingLineList = mBiddingLineRepository.findAll();
         assertThat(mBiddingLineList).hasSize(databaseSizeBeforeUpdate);
         MBiddingLine testMBiddingLine = mBiddingLineList.get(mBiddingLineList.size() - 1);
+        assertThat(testMBiddingLine.getLineNo()).isEqualTo(UPDATED_LINE_NO);
         assertThat(testMBiddingLine.getQuantity()).isEqualTo(UPDATED_QUANTITY);
         assertThat(testMBiddingLine.getCeilingPrice()).isEqualTo(UPDATED_CEILING_PRICE);
         assertThat(testMBiddingLine.getTotalCeilingPrice()).isEqualTo(UPDATED_TOTAL_CEILING_PRICE);

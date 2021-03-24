@@ -2,14 +2,11 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
-import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
@@ -36,6 +33,8 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter mBiddingScheduleAttachmentId;
+
     private LongFilter biddingId;
 
     private LongFilter adOrganizationId;
@@ -51,6 +50,7 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.endDate = other.endDate == null ? null : other.endDate.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.mBiddingScheduleAttachmentId = other.mBiddingScheduleAttachmentId == null ? null : other.mBiddingScheduleAttachmentId.copy();
         this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.eventTypeLineId = other.eventTypeLineId == null ? null : other.eventTypeLineId.copy();
@@ -101,6 +101,14 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getMBiddingScheduleAttachmentId() {
+        return mBiddingScheduleAttachmentId;
+    }
+
+    public void setMBiddingScheduleAttachmentId(LongFilter mBiddingScheduleAttachmentId) {
+        this.mBiddingScheduleAttachmentId = mBiddingScheduleAttachmentId;
+    }
+
     public LongFilter getBiddingId() {
         return biddingId;
     }
@@ -141,6 +149,7 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
             Objects.equals(endDate, that.endDate) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(mBiddingScheduleAttachmentId, that.mBiddingScheduleAttachmentId) &&
             Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(eventTypeLineId, that.eventTypeLineId);
@@ -154,6 +163,7 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         endDate,
         uid,
         active,
+        mBiddingScheduleAttachmentId,
         biddingId,
         adOrganizationId,
         eventTypeLineId
@@ -168,6 +178,7 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
                 (endDate != null ? "endDate=" + endDate + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (mBiddingScheduleAttachmentId != null ? "mBiddingScheduleAttachmentId=" + mBiddingScheduleAttachmentId + ", " : "") +
                 (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (eventTypeLineId != null ? "eventTypeLineId=" + eventTypeLineId + ", " : "") +

@@ -18,9 +18,12 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 /**
  * A MBiddingLine.
@@ -36,6 +39,9 @@ public class MBiddingLine extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @Column(name = "line_no")
+    private Integer lineNo;
 
     @NotNull
     @Column(name = "quantity", precision = 21, scale = 2, nullable = false)
@@ -62,7 +68,9 @@ public class MBiddingLine extends AbstractAuditingEntity {
     private Boolean active;
 
     @OneToOne
+    @Fetch(FetchMode.JOIN)
     @JoinColumn(unique = true)
+    @JsonManagedReference
     private MBiddingSubItem subItem;
 
     @ManyToOne(optional = false)
@@ -97,6 +105,19 @@ public class MBiddingLine extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getLineNo() {
+        return lineNo;
+    }
+
+    public MBiddingLine lineNo(Integer lineNo) {
+        this.lineNo = lineNo;
+        return this;
+    }
+
+    public void setLineNo(Integer lineNo) {
+        this.lineNo = lineNo;
     }
 
     public BigDecimal getQuantity() {
@@ -294,6 +315,7 @@ public class MBiddingLine extends AbstractAuditingEntity {
     public String toString() {
         return "MBiddingLine{" +
             "id=" + getId() +
+            ", lineNo=" + getLineNo() +
             ", quantity=" + getQuantity() +
             ", ceilingPrice=" + getCeilingPrice() +
             ", totalCeilingPrice=" + getTotalCeilingPrice() +

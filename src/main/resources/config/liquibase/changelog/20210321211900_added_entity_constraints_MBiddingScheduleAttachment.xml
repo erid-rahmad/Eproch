@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MBiddingScheduleAttachment.
+    -->
+    <changeSet id="20210321211900-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="c_attachment_id"
+                                 baseTableName="m_bidding_schedule_attachment"
+                                 constraintName="fk_m_bidding_schedule_attachment_c_attachment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_attachment"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_bidding_schedule_attachment"
+                                 constraintName="fk_m_bidding_schedule_attachment_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="bidding_schedule_id"
+                                 baseTableName="m_bidding_schedule_attachment"
+                                 constraintName="fk_m_bidding_schedule_attachment_bidding_schedule_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_bidding_schedule"/>
+
+    </changeSet>
+</databaseChangeLog>

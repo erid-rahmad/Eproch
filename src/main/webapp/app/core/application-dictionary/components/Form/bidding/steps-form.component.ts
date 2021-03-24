@@ -13,10 +13,10 @@ const StepsFormProps = Vue.extend({
 });
 
 export enum BiddingStep {
-  INFO = 'info',
-  SCHEDULE = 'schedule',
-  SELECTION = 'selection',
-  SCORING = 'scoring'
+  INFO,
+  SCHEDULE,
+  SELECTION,
+  SCORING
 }
 
 @Component({
@@ -29,6 +29,7 @@ export enum BiddingStep {
 })
 export default class StepsForm extends StepsFormProps {
 
+  showSaveDialog = false;
   agreementAccepted: boolean = false;
   doNotMatch = '';
   error = '';
@@ -40,7 +41,7 @@ export default class StepsForm extends StepsFormProps {
   active = 0;
   eventBus = new Vue();
 
-  bidding = {
+  bidding: Record<string, any> = {
     biddingLines: [],
     projectInformations: [],
     biddingSchedules: [],
@@ -56,12 +57,8 @@ export default class StepsForm extends StepsFormProps {
     }
   }
 
-  mounted() {
-    //this.eventBus.$on('step-validated', this.proceedNext);
-  }
-
-  back() {
-    this.$emit('back');
+  close() {
+    this.$emit('close');
   }
 
   previous() {
@@ -69,22 +66,27 @@ export default class StepsForm extends StepsFormProps {
   }
 
   next() {
+    if (this.editMode) {
+      ++this.active;
+    } else {
+      this.showSaveDialog = true;
+    }
+  }
+
+  saveStep() {
     const currentStep = this.$refs[`step-${this.active}`] as any;
     currentStep.save();
   }
 
   goToNextStep({ data }) {
+    this.showSaveDialog = false;
+
+    if (! this.editMode && data.id) {
+      this.editMode = true;
+    }
+
     if (++this.active <= 3) {
       this.bidding = data;
     }
   }
-
-  showAt(index) {
-    return index !== this.active ? 'hide' : '';
-  }
-
-  submit() {
-
-  }
-
 }
