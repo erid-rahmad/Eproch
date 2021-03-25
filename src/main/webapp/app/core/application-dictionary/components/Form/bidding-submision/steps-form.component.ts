@@ -38,7 +38,7 @@ export default class StepsForm extends StepsFormProp {
   active = 0;
   eventBus = new Vue();
   bidding = {
-    biddingInformation: {
+    ItemDetail: {
       biddingInformationLine: [],
       projectInformation: [],
     },
@@ -68,7 +68,7 @@ export default class StepsForm extends StepsFormProp {
   next() {
     console.log(this.active);
     if(this.active == 0){
-      console.log(this.bidding.biddingInformation);
+      console.log(this.bidding.ItemDetail);
       console.log(this.bidding);
     }else if(this.active == 1){
       console.log(this.bidding.biddingSchedule);

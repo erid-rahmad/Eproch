@@ -5,14 +5,19 @@ import Vue2Filters from 'vue2-filters';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import ContextVariableAccessor from "../../../ContextVariableAccessor";
+import { log } from 'util';
 
 const BiddingScheduleProp = Vue.extend({
   props: {
-    biddingInformation: {
+    ItemDetail: {
       type: Object,
       default: () => {}
     },
     biddingSchedule: {
+      type: Object,
+      default: () => {}
+    },
+    biddingrow: {
       type: Object,
       default: () => {}
     },
@@ -35,6 +40,8 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
   dialogConfirmationVisible:boolean = false;
 
   public eventScheduleOptions: any = {};
+  public projectinformation: any = {};
+
 
   private baseApiUrlEventTypeLine = "/api/c-event-typelines";
   
@@ -59,9 +66,35 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
   };
 
   created() {
-    this.eventTypeLine(this.biddingInformation.eventTypeId);
+    this.eventTypeLine(this.ItemDetail);
+    this.projectinformationData();
+    console.log("this item detail", this.ItemDetail);
+    console.log("this item row",this.biddingrow);
+    
   }
 
+  private projectinformationData() {
+    this.dynamicWindowService(`/api/m-project-informationsby-bidding/${this.biddingrow.id}`)
+    // this.dynamicWindowService("/api/m-biddings/1")
+      .retrieve({
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.projectinformation = res.data;
+        
+        console.log("this more information", this.projectinformation);
+      });
+  }
+
+  downloadAttachment(row) {
+    console.log(row);    
+    window.open(`/api/c-attachments/download/${row.attachmentid}-${row.attachmentName}`, '_blank');
+  }
+  
   private eventTypeLine(eventTypeId): void {
     if ( ! this.baseApiUrlEventTypeLine) {
       return;

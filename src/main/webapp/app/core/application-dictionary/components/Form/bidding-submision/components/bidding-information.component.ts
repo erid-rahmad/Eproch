@@ -124,6 +124,7 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
   public SubItem: any = {};
   public price = 0;
   public documentSchedulesData: any = {};
+  public ItemDetail: any = {};
 
   public costCenterOptions: any = {};
   public picBiddingOptions: any = {};
@@ -193,6 +194,10 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
   created() {
     this.moreInformationData();
     this.documentSchedules();
+    this.ItemDetail = this.biddingrow;
+    console.log("this item detail",this.ItemDetail);
+    
+    
     // this.retrieveCostCenter();
     // this.retrieveBiddingType();
     // this.retrieveGetReferences(this.keyReferenceVendorSelection);
@@ -218,6 +223,7 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
       })
       .then(res => {
         this.moreInformation = res.data;
+        
         console.log("this more information", this.moreInformation);
       });
   }

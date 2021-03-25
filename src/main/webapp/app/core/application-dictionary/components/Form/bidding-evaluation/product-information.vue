@@ -19,7 +19,7 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Biding Title" prop="name" required>
-                                <h7>Biding tes</h7>
+                                <h7>Penggadaan Kendaraan operasional</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -33,7 +33,7 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Biding type" prop="name" required>
-                                <h7>promosi</h7>
+                                <h7>Tender Goods</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -43,14 +43,14 @@
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="PIC" prop="name" required>
-                                    <h7>angelina sondang</h7>
+                                    <h7> Admin tender</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="Depertement" prop="name" required>
-                                    <h7>EACCS</h7>
+                                    <h7>MArketing</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -77,15 +77,44 @@
                 </el-table-column>
                 <el-table-column prop="2" label="Proposed Price" width="150">
                 </el-table-column>
-                <el-table-column prop="" label="Document Submision" width="180">
-                    <el-table-column prop="3" label="Proposal Teknis" width="180">
-                    </el-table-column>
-                    <el-table-column prop="4" label="Quatation" width="180">
-                    </el-table-column>
-                </el-table-column>
-                <el-table-column prop="5" label="Document Evaluation" width="180">
+                <el-table-column prop="" label="Document Submision" width="230">
                     <template>
-                        <el-checkbox v-model="checked">clear</el-checkbox>
+                        <el-row>
+                            <el-col :span="12" class="border">
+                                proposal teknis
+                            </el-col>
+                            <el-col :span="12" class="border">
+                                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="download">
+                                    download <em class="el-icon-arrow-right"></em>
+                                </el-button>
+                            </el-col>
+                            
+                            <el-col :span="12" class="border">
+                                quantation
+                            </el-col>
+                            <el-col :span="12" class="border">
+                                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="download">
+                                    download <em class="el-icon-arrow-right"></em>
+                                </el-button>
+                            </el-col>
+                        </el-row>
+                    </template>
+                </el-table-column>
+                <el-table-column prop="" label="Document Evaluation" width="150">
+                    <template>
+                        <el-row>
+                            <el-col :span="24">
+                                <template>                                
+                                <el-checkbox v-model="checked" @click="download">check</el-checkbox>
+                                </template>
+                            </el-col>
+                            <el-col :span="24">
+                                <template>                                
+                                <el-checkbox v-model="checked" @click= "checked = false">check</el-checkbox>
+                                </template>
+                            </el-col>
+                            
+                        </el-row>
                     </template>
                 </el-table-column>
                 <el-table-column label="Tender Evaluation">
@@ -103,12 +132,12 @@
                     </el-table-column> -->
                 </el-table-column>
             </el-table>
-             <el-divider content-position="left">
+            <el-divider content-position="left">
                 <h4></h4>
             </el-divider>
 
         </el-form>
-           <el-col :span="24" class="tab-container">
+        <el-col :span="24" class="tab-container">
             <el-col :span="20" class="tab-container">
                 <el-col :span="15" class="tab-container">
                     <el-form ref="biddingInfasdsadormation" label-position="left" label-width="100px" size="mini" :model="asd" :rules="asd">
@@ -158,6 +187,13 @@
 
     .cascader {
         width: 100%;
+    }
+        .border {
+        border-width: 1px;
+        border-style: outset ;
+        border-top-color: rgb(0, 0, 0);
+        border-bottom-color: rgb(0, 0, 0);
+       
     }
 
 </style>
