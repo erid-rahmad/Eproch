@@ -208,11 +208,12 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
 
   private moreInformationData() {
     this.dynamicWindowService(`/api/m-biddings/${this.biddingrow.id}`)
+    // this.dynamicWindowService("/api/m-biddings/1")
       .retrieve({
         paginationQuery: {
           page: 0,
           size: 10000,
-          sort: ['name']
+          sort: ['id']
         }
       })
       .then(res => {
@@ -222,12 +223,13 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
   }
  
   private Subitemdata() {
-    this.dynamicWindowService(`/api/m-bidding-sub-items-nested/${this.moreInformation.lineSubItemID}`)
+    this.dynamicWindowService(`/api/m-bidding-sub-items/${this.moreInformation.lineSubItemID}`)
+    // this.dynamicWindowService("http://localhost:8080/api/m-bidding-sub-items/1")
       .retrieve({
         paginationQuery: {
           page: 0,
           size: 10000,
-          sort: ['name']
+          sort: ['id']
         }
       })
       .then(res => {
@@ -256,11 +258,12 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
   }
   
   viewSubItem(tes) {
+    
     console.log("this row viewSubItem", tes);    
     this.$set(this.moreInformation, 'lineSubItemID', tes.id);
-    console.log("this row viewSubItem", this.moreInformation.lineSubItemID);
-    this.Subitemdata()
+    console.log("this row viewSubItem", this.moreInformation.lineSubItemID);    
     this.dialogTableVisible11 = true;
+    this.Subitemdata()
   }
   onQuantityOrderedChanged(row: any, index: number, value: number) {
     row.totalpricesubmision = row.quantity * value;

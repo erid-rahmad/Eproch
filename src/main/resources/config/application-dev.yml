@@ -152,7 +152,7 @@ application:
   default-product-asset-account-id: 18601
   default-product-expense-account-id: 19901
   attachment:
-    upload-dir: /home/aaryadewa/Server/opusb/data/attachments
+    upload-dir: C:\Users\eridr\upload
   integration:
     endpoint:
       invoice-verification-url: http://localhost:20001/api/invoice-verification

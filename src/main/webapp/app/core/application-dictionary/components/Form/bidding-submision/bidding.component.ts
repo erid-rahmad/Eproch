@@ -240,46 +240,46 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   }
 
   ambildata() {
-    /* axios
-      .get('http://localhost:8080/api/m-biddings')
+     axios
+      .get('/api/m-biddings')
       .then(res => {
         this.gridData1 = res.data;
         console.log("data tes 11",this.gridData1);
-      }); */
-    this.gridData1 = [
-      {
-        documentNo: 'BD-0001',
-        name: 'Tender Kendaraan',
-        biddingTypeName: 'Bidding Type #101',
-        documentStatus: 'In Progress',
-        lastModifiedDate: '2021-03-20',
-        lastModifiedBy: 'Eko',
-      },
-      {
-        documentNo: 'BD-0002',
-        name: 'Tender Peralatan Kantor',
-        biddingTypeName: 'Bidding Type #101',
-        documentStatus: 'In Progress',
-        lastModifiedDate: '2021-03-18',
-        lastModifiedBy: 'Eko',
-      },
-      {
-        documentNo: 'BD-0003',
-        name: 'Tender Laptop',
-        biddingTypeName: 'Bidding Type #101',
-        documentStatus: 'In Progress',
-        lastModifiedDate: '2021-03-01',
-        lastModifiedBy: 'Eko',
-      },
-      {
-        documentNo: 'BD-0004',
-        name: 'Tender Kendaraan',
-        biddingTypeName: 'Bidding Type #101',
-        documentStatus: 'In Progress',
-        lastModifiedDate: '2021-02-25',
-        lastModifiedBy: 'Eko',
-      }
-    ]
+      }); 
+    // this.gridData1 = [
+    //   {
+    //     documentNo: 'BD-0001',
+    //     name: 'Tender Kendaraan',
+    //     biddingTypeName: 'Bidding Type #101',
+    //     documentStatus: 'In Progress',
+    //     lastModifiedDate: '2021-03-20',
+    //     lastModifiedBy: 'Eko',
+    //   },
+    //   {
+    //     documentNo: 'BD-0002',
+    //     name: 'Tender Peralatan Kantor',
+    //     biddingTypeName: 'Bidding Type #101',
+    //     documentStatus: 'In Progress',
+    //     lastModifiedDate: '2021-03-18',
+    //     lastModifiedBy: 'Eko',
+    //   },
+    //   {
+    //     documentNo: 'BD-0003',
+    //     name: 'Tender Laptop',
+    //     biddingTypeName: 'Bidding Type #101',
+    //     documentStatus: 'In Progress',
+    //     lastModifiedDate: '2021-03-01',
+    //     lastModifiedBy: 'Eko',
+    //   },
+    //   {
+    //     documentNo: 'BD-0004',
+    //     name: 'Tender Kendaraan',
+    //     biddingTypeName: 'Bidding Type #101',
+    //     documentStatus: 'In Progress',
+    //     lastModifiedDate: '2021-02-25',
+    //     lastModifiedBy: 'Eko',
+    //   }
+    // ]
   }
 
   formatDocumentStatus(value: string) {

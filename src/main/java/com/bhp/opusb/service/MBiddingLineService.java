@@ -97,8 +97,8 @@ public class MBiddingLineService {
             .map(mBiddingLineMapper::toDto);
     }
     @Transactional(readOnly = true)
-    public List<MBiddingLine> findbyheader(long id) {
-        return mBiddingLineRepository.findbyheader(id);
+    public List<MBiddingLineDTO> findbyheader(long id) {
+        return mBiddingLineMapper.toDto(mBiddingLineRepository.findbyheader(id));
     }
 
     /**

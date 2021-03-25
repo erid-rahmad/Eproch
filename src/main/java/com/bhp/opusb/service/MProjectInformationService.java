@@ -81,8 +81,8 @@ public class MProjectInformationService {
     }
 
     @Transactional(readOnly = true)
-    public List<MProjectInformation> findByBindId(Long id) {
-        return mProjectInformationRepository.findByBindId(id);
+    public List<MProjectInformationDTO> findByBindId(Long id) {
+        return mProjectInformationMapper.toDto(mProjectInformationRepository.findByBindId(id));
     }
 
     /**
@@ -122,7 +122,7 @@ public class MProjectInformationService {
     /**
      * Delete the list of mProjectInformations.
      *
-     * @param id the entities.
+     * @param mProjectInformationDTOs the entities.
      */
     public void deleteAll(List<MProjectInformationDTO> mProjectInformationDTOs) {
         log.debug("Request to delete MProjectInformations : {}", mProjectInformationDTOs);
