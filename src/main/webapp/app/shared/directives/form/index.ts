@@ -39,5 +39,9 @@ export const cleave: DirectiveOptions = {
       (<any>input).value = (<any>input)._cleave?.properties?.result;
       input.dispatchEvent(event);
     }, 100);
+  },
+  unbind: (el) => {
+    const input = el.querySelector('input.el-input__inner');
+    (<any>input)._cleave.destroy();
   }
 };
