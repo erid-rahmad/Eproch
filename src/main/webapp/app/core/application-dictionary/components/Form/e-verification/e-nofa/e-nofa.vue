@@ -8,16 +8,16 @@
                             style="margin-left: 0px;"
                             size="mini"
                             type="primary"
-                            icon="el-icon-search"
-                            @click.native.prevent="verificationFilter"/>
+                            @click="showDialogConfirmation('add')"
+                            icon="el-icon-plus"/>
 
                         <el-button
                             class="button"
                             style="margin-left: 0px;"
                             size="mini"
                             type="primary"
-                            @click="showDialogConfirmation('add')"
-                            icon="el-icon-plus"/>
+                            icon="el-icon-search"
+                            @click.native.prevent="verificationFilter"/>
 
                         <el-button
                             class="button"
@@ -39,7 +39,7 @@
                     </el-col>
                 </el-row>
 
-                <el-row class="filter">
+                <el-row class="filter" :gutter="24">
                     <el-col :span="24">
 
                         <el-form ref="form" label-width="100px" size="mini" v-model="filter" @submit.native.prevent="verificationFilter">
@@ -144,7 +144,7 @@
                             ref="pagination"
                             background
                             layout="sizes, prev, pager, next"
-                            mini
+                            small
                             :current-page.sync="page"
                             :page-sizes="[10, 20, 50, 100]"
                             :page-size="itemsPerPage"
@@ -156,7 +156,7 @@
             <!-- =========================================================================== -->
 
         <el-dialog
-            width="40%"
+            width="30%"
             :visible.sync="dialogConfirmationVisible"
             :title="dialogTitle">
 

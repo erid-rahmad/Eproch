@@ -72,6 +72,10 @@ export default class EVerification extends mixins(WatchListMixin) {
     return settings.dateValueFormat;
   }
 
+  get taxInvoicePattern() {
+    return settings.taxNoPattern16digits;
+  }
+
   created() {
     this.baseQuery = `vendorId.equals=${accountStore.userDetails.cVendorId}`;
     this.initDocumentStatusOptions();
@@ -364,7 +368,7 @@ export default class EVerification extends mixins(WatchListMixin) {
       this.lookupQuery.push(`invoiceNo.equals=${form.invoiceNo}`);
     }
     if (!!form.taxInvoiceNo) {
-      this.lookupQuery.push(`taxInvoiceNo.equals=${form.taxInvoiceNo}`);
+      this.lookupQuery.push(`taxInvoice.equals=${form.taxInvoiceNo.replace(/[-.]+/g, '')}`);
     }
     if (!!form.documentStatus) {
       this.lookupQuery.push(`documentStatus.equals=${form.documentStatus}`);

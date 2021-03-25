@@ -3,6 +3,7 @@
         <el-form
             ref="eNofaForm"
             label-width="100px"
+            label-position="left"
             size="mini"
             :model="form"
             :rules="rules"
@@ -29,10 +30,10 @@
                 <el-col :span="24">
                     <el-form-item label="Start No. :" prop="startNo">
                         <el-input
+                            v-model="form.startNo"
+                            v-cleave="taxInvoicePattern"
                             class="form-input"
                             placeholder="___-__.________"
-                            v-model="form.startNo"
-                            v-cleave="{blocks: [3, 2, 8], delimiters: ['-', '.'], numericOnly: true}"
                         />
                     </el-form-item>
                 </el-col>
@@ -41,37 +42,33 @@
                 <el-col :span="24">
                     <el-form-item label="End No. :" prop="endNo">
                         <el-input
+                            v-model="form.endNo"
+                            v-cleave="taxInvoicePattern"
                             class="form-input"
                             placeholder="___-__.________"
-                            v-model="form.endNo"
-                            v-cleave="{blocks: [3, 2, 8], delimiters: ['-', '.'], numericOnly: true}"
                         />
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row type="flex" justify="end">
-                <el-col :span="11">
-                    <el-form-item>
-                        <el-button
-                            style="margin-left: 0px;"
-                            size="mini"
-                            icon="el-icon-check"
-                            type="primary"
-                            v-loading.fullscreen.lock="fullscreenLoading"
-                            @click="confirmSave">
-                                Save
-                        </el-button>
-                        <el-button
-                            style="margin-left: 0px;"
-                            size="mini"
-                            icon="el-icon-close"
-                            @click="closeDialog">
-                                {{ $t('entity.action.cancel') }}
-                        </el-button>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-
+            <div style="float: right">
+                <el-button
+                    style="margin-left: 0px;"
+                    size="mini"
+                    icon="el-icon-check"
+                    type="primary"
+                    v-loading.fullscreen.lock="fullscreenLoading"
+                    @click="confirmSave">
+                        Save
+                </el-button>
+                <el-button
+                    style="margin-left: 0px;"
+                    size="mini"
+                    icon="el-icon-close"
+                    @click="closeDialog">
+                        {{ $t('entity.action.cancel') }}
+                </el-button>
+            </div>
+            <div class="clearfix"></div>
         </el-form>
     </div>
 </template>

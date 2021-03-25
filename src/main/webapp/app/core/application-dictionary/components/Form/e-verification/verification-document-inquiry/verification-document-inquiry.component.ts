@@ -70,6 +70,10 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
     return settings.dateValueFormat;
   }
 
+  get taxInvoicePattern() {
+    return settings.taxNoPattern16digits;
+  }
+
   created(){
     this.retrieveReferenceLists('docStatus');
     this.retrieveReferenceLists('paymentStatus');
@@ -328,7 +332,7 @@ export default class EVerification extends mixins(ContextVariableAccessor, Watch
       this.lookupQuery.push(`invoiceNo.equals=${form.invoiceNo}`);
     }
     if (!!this.filter.taxInvoiceNo) {
-      this.lookupQuery.push(`taxInvoiceNo.equals=${form.taxInvoiceNo}`);
+      this.lookupQuery.push(`taxInvoice.equals=${form.taxInvoiceNo.replace(/[-.]+/g, '')}`);
     }
     if (!!this.filter.vendorName) {
       this.lookupQuery.push(`vendorId.equals=${form.vendorName}`);
