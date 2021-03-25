@@ -2,12 +2,12 @@
     <div>
         <el-row :gutter="columnSpacing">
             <el-col :span="24">
-                <!-- <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
+                <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
                     Back
                 </el-button>
                 <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="validate">
                     Submit <em class="el-icon-arrow-right"></em>
-                </el-button> -->
+                </el-button>
             </el-col>
         </el-row>
         <el-form ref="productCatalog" label-position="left" label-width="130px" size="mini" :model="productCatalog" :rules="rules">
@@ -78,9 +78,9 @@
                 <el-table-column prop="2" label="Proposed Price" width="150">
                 </el-table-column>
                 <el-table-column prop="" label="Document Submision" width="180">
-                    <el-table-column prop="3" label="" width="180">
+                    <el-table-column prop="3" label="Proposal Teknis" width="180">
                     </el-table-column>
-                    <el-table-column prop="4" label="" width="180">
+                    <el-table-column prop="4" label="Quatation" width="180">
                     </el-table-column>
                 </el-table-column>
                 <el-table-column prop="5" label="Document Evaluation" width="180">
@@ -89,18 +89,18 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="Tender Evaluation">
-                    <el-table-column prop="1" label="Criteria1" width="80">
+                    <el-table-column prop="5" label="quality" width="80">
                     </el-table-column>
-                    <el-table-column prop="2" label="Criteria1" width="80">
+                    <el-table-column prop="6" label="cost" width="80">
                     </el-table-column>
-                    <el-table-column prop="3" label="Criteria1" width="80">
+                    <el-table-column prop="7" label="delivery" width="80">
                     </el-table-column>
-                    <el-table-column prop="4" label="Criteria1" width="80">
+                    <el-table-column prop="8" label="safety" width="80">
                     </el-table-column>
-                    <el-table-column prop="5" label="Criteria1" width="80">
+                    <el-table-column prop="9" label="marale" width="80">
                     </el-table-column>
-                    <el-table-column prop="6" label="Criteria1 t" width="80">
-                    </el-table-column>
+                    <!-- <el-table-column prop="6" label="Criteria1 t" width="80">
+                    </el-table-column> -->
                 </el-table-column>
             </el-table>
              <el-divider content-position="left">
@@ -128,12 +128,12 @@
                     </el-form> -->
                 </el-col>
             </el-col>
-            <el-col :span="4" class="tab-container">
+            <!-- <el-col :span="4" class="tab-container">
                 <el-row>
                     <el-button type="success" plain>Approve</el-button>
                     <el-button type="danger" @click="back" plain>Cancle</el-button>
                 </el-row>
-            </el-col>
+            </el-col> -->
         </el-col>
     </div>
 </template>

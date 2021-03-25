@@ -31,7 +31,7 @@
                                     </el-table-column>
                                     <el-table-column prop="8" label="Modified By" width="180">
                                     </el-table-column>
-                                    <el-table-column min-width="60" sortable label="Bidding Schedule">
+                                    <el-table-column min-width="60" sortable label="Summary">
                                         <template slot-scope="{ row }">
                                             <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="onClick('add')">
                                                 Evaluate
@@ -61,7 +61,7 @@
                 <el-table-column property="no" label="no" width="150"><template slot-scope="row">
                         {{ row.$index+1 }}
                     </template></el-table-column>
-                <el-table-column property="name" label="Name" width="200"></el-table-column>
+                <el-table-column property="name" label="Vendor Name" width="200"></el-table-column>
                 <el-table-column property="address" label="Address"></el-table-column>
             </el-table>
         </el-dialog>

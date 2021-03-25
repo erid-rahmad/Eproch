@@ -2,12 +2,12 @@
     <div>
         <el-row :gutter="columnSpacing">
             <el-col :span="24">               
-                <!-- <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
+                <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
                     Back
-                </el-button> -->
-                <!-- <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="validate">
+                </el-button>
+                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="validate">
                     Submit <em class="el-icon-arrow-right"></em>
-                </el-button> -->
+                </el-button>
             </el-col>
         </el-row>
         <el-form ref="productCatalog" label-position="left" label-width="130px" size="mini" :model="productCatalog" :rules="rules">
@@ -165,12 +165,12 @@
                     </el-form>
                 </el-col>
             </el-col>
-            <el-col :span="4" class="tab-container">
+            <!-- <el-col :span="4" class="tab-container">
                 <el-row>
                     <el-button type="success" plain>Approve</el-button>
                     <el-button type="danger" @click="back" plain>Cancle</el-button>
                 </el-row>
-            </el-col>
+            </el-col> -->
         </el-col>
     </div>
 </template>
