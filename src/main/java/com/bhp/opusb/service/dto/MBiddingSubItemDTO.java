@@ -104,11 +104,11 @@ public class MBiddingSubItemDTO extends AbstractAuditingDTO {
         this.productName = productName;
     }
 
-    public List<MBiddingSubItemLineDTO> getmBiddingSubItemLines() {
+    public List<MBiddingSubItemLineDTO> getMBiddingSubItemLines() {
         return mBiddingSubItemLines;
     }
 
-    public void setmBiddingSubItemLines(List<MBiddingSubItemLineDTO> mBiddingSubItemLines) {
+    public void setMBiddingSubItemLines(List<MBiddingSubItemLineDTO> mBiddingSubItemLines) {
         this.mBiddingSubItemLines = mBiddingSubItemLines;
     }
 

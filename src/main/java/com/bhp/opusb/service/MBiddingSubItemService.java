@@ -53,11 +53,11 @@ public class MBiddingSubItemService {
         mBiddingSubItemRepository.save(mBiddingSubItem);
 
         // Set sub-item ID for each sub-item line.
-        mBiddingSubItemDTO.getmBiddingSubItemLines().stream()
+        mBiddingSubItemDTO.getMBiddingSubItemLines().stream()
             .forEach(line -> line.setBiddingSubItemId(mBiddingSubItem.getId()));
 
         // Batch save all sub-item lines.
-        mBiddingSubItemLineService.saveAll(mBiddingSubItemDTO.getmBiddingSubItemLines());
+        mBiddingSubItemLineService.saveAll(mBiddingSubItemDTO.getMBiddingSubItemLines());
         return mBiddingSubItemMapper.toDto(mBiddingSubItem);
     }
 
@@ -78,7 +78,7 @@ public class MBiddingSubItemService {
         for (int i = 0; i < mBiddingSubItems.size(); ++i) {
             MBiddingSubItem mBiddingSubItem = mBiddingSubItems.get(i);
             MBiddingSubItemDTO mBiddingSubItemDTO = mBiddingSubItemDTOs.get(i);
-            mBiddingSubItemDTO.getmBiddingSubItemLines().stream()
+            mBiddingSubItemDTO.getMBiddingSubItemLines().stream()
                 .forEach(line -> {
                     line.setBiddingSubItemId(mBiddingSubItem.getId());
                     mBiddingSubItemLineDTOs.add(line);
