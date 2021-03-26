@@ -2472,6 +2472,26 @@ public class ADColumnResourceIT {
 
     @Test
     @Transactional
+    public void getAllADColumnsByReferenceTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDColumnRepository.saveAndFlush(aDColumn);
+        ADReference referenceType = ADReferenceResourceIT.createEntity(em);
+        em.persist(referenceType);
+        em.flush();
+        aDColumn.setReferenceType(referenceType);
+        aDColumnRepository.saveAndFlush(aDColumn);
+        Long referenceTypeId = referenceType.getId();
+
+        // Get all the aDColumnList where referenceType equals to referenceTypeId
+        defaultADColumnShouldBeFound("referenceTypeId.equals=" + referenceTypeId);
+
+        // Get all the aDColumnList where referenceType equals to referenceTypeId + 1
+        defaultADColumnShouldNotBeFound("referenceTypeId.equals=" + (referenceTypeId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADColumnsByAdReferenceIsEqualToSomething() throws Exception {
         // Initialize the database
         aDColumnRepository.saveAndFlush(aDColumn);

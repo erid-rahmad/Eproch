@@ -118,3 +118,22 @@ export const isAttachmentField = (field: IADField) => {
   return field.adReference?.value === 'file' ||
     field.adColumn?.adReference?.value === 'file';
 }
+
+export const isAddressField = (field: IADField) => {
+  if (field.virtualColumnName) {
+    return false;
+  }
+
+  const reference = field.adReference || field.adColumn.adReference;
+  return reference?.value === 'address';
+}
+
+export const isMultiValues = (field: IADField) => {
+  const refType = field.referenceTypeName || field.adColumn?.referenceTypeName;
+  return refType === 'MULTI_CHECKBOXES' || refType === 'MULTI_OPTIONS';
+}
+
+export const isCheckboxGroup = (field: IADField) => {
+  const refType = field.referenceTypeName || field.adColumn?.referenceTypeName;
+  return refType === 'MULTI_CHECKBOXES';
+}

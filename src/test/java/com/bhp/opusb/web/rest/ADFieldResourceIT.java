@@ -3052,6 +3052,26 @@ public class ADFieldResourceIT {
 
     @Test
     @Transactional
+    public void getAllADFieldsByReferenceTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        aDFieldRepository.saveAndFlush(aDField);
+        ADReference referenceType = ADReferenceResourceIT.createEntity(em);
+        em.persist(referenceType);
+        em.flush();
+        aDField.setReferenceType(referenceType);
+        aDFieldRepository.saveAndFlush(aDField);
+        Long referenceTypeId = referenceType.getId();
+
+        // Get all the aDFieldList where referenceType equals to referenceTypeId
+        defaultADFieldShouldBeFound("referenceTypeId.equals=" + referenceTypeId);
+
+        // Get all the aDFieldList where referenceType equals to referenceTypeId + 1
+        defaultADFieldShouldNotBeFound("referenceTypeId.equals=" + (referenceTypeId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllADFieldsByAdReferenceIsEqualToSomething() throws Exception {
         // Initialize the database
         aDFieldRepository.saveAndFlush(aDField);

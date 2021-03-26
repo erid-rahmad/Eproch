@@ -44,6 +44,7 @@ export interface IADColumn {
   selectionSequence?: number;
   active?: boolean;
   adOrganizationId?: number;
+  referenceTypeName?: string;
   adReference?: IADReference;
   adReferenceId?: number;
   adValidationRule?: IAdValidationRule;
@@ -81,6 +82,7 @@ export class ADColumn implements IADColumn {
     public selectionSequence?: number,
     public active?: boolean,
     public adOrganizationId?: number,
+    public referenceTypeName?: string,
     public adReference?: IADReference,
     public adReferenceId?: number,
     public adValidationRule?: IAdValidationRule,

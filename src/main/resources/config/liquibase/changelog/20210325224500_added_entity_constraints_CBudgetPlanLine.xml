@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity CBudgetPlanLine.
+    -->
+    <changeSet id="20210325224500-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="c_budget_plan_line"
+                                 constraintName="fk_c_budget_plan_line_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_currency_id"
+                                 baseTableName="c_budget_plan_line"
+                                 constraintName="fk_c_budget_plan_line_c_currency_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_currency"/>
+
+        <addForeignKeyConstraint baseColumnNames="c_document_type_id"
+                                 baseTableName="c_budget_plan_line"
+                                 constraintName="fk_c_budget_plan_line_c_document_type_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_document_type"/>
+
+        <addForeignKeyConstraint baseColumnNames="m_bidding_id"
+                                 baseTableName="c_budget_plan_line"
+                                 constraintName="fk_c_budget_plan_line_m_bidding_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_bidding"/>
+
+        <addForeignKeyConstraint baseColumnNames="m_purchase_order_id"
+                                 baseTableName="c_budget_plan_line"
+                                 constraintName="fk_c_budget_plan_line_m_purchase_order_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_purchase_order"/>
+
+        <addForeignKeyConstraint baseColumnNames="m_requisition_id"
+                                 baseTableName="c_budget_plan_line"
+                                 constraintName="fk_c_budget_plan_line_m_requisition_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_requisition"/>
+
+    </changeSet>
+</databaseChangeLog>

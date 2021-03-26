@@ -107,7 +107,15 @@
               v-show="displayed(row, field)"
               v-model="row[column.property]"
               @input="value => onInputChanged(field, value)"
-            />
+            ></address-editor>
+            <multi-option
+              v-else-if="isMultiValues(field)"
+              v-show="displayed(row, field)"
+              v-model="row[column.property]"
+              :field="field"
+              size="mini"
+              @change="value => onInputChanged(field, value)"
+            ></multi-option>
             <el-select
               v-else-if="isTableDirectLink(field)"
               v-show="displayed(row, field)"

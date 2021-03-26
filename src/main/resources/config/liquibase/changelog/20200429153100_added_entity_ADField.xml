@@ -245,4 +245,12 @@
         </addColumn>
     </changeSet>
 
+    <changeSet id="20210326084800" author="Ananta Aryadewa">
+        <addColumn tableName="ad_field">
+            <column name="reference_type_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

@@ -113,11 +113,14 @@ public class ADFieldDTO extends AbstractAuditingDTO {
 
     private ADColumnType type;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
     private String adOrganizationName;
+
+    private Long referenceTypeId;
+    private String referenceTypeName;
 
     private Long adReferenceId;
     private String adReferenceName;
@@ -428,6 +431,22 @@ public class ADFieldDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public Long getReferenceTypeId() {
+        return referenceTypeId;
+    }
+
+    public void setReferenceTypeId(Long aDReferenceId) {
+        this.referenceTypeId = aDReferenceId;
+    }
+
+    public String getReferenceTypeName() {
+        return referenceTypeName;
+    }
+
+    public void setReferenceTypeName(String referenceTypeName) {
+        this.referenceTypeName = referenceTypeName;
+    }
+
     public Long getAdReferenceId() {
         return adReferenceId;
     }
@@ -607,6 +626,7 @@ public class ADFieldDTO extends AbstractAuditingDTO {
             ", type='" + getType() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", referenceTypeId=" + getReferenceTypeId() +
             ", adReferenceId=" + getAdReferenceId() +
             ", adColumnId=" + getAdColumnId() +
             ", adValidationRuleId=" + getAdValidationRuleId() +

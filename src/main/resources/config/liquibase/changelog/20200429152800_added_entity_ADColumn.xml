@@ -213,4 +213,12 @@
         <setColumnRemarks tableName="ad_column" columnName="selection_sequence" remarks="Determine the field sequence in the search form."/>
     </changeSet>
 
+    <changeSet id="20210326084500" author="Ananta Aryadewa">
+        <addColumn tableName="ad_column">
+            <column name="reference_type_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
 </databaseChangeLog>

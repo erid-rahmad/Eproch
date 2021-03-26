@@ -50,6 +50,13 @@
               v-model="model[col.name]"
               @input="value => onInputChanged(col.field, value)"
             />
+            <multi-option
+              v-else-if="isMultiValues(col.field)"
+              v-model="model[col.name]"
+              :checkbox-group="isCheckboxGroup(col.field)"
+              :field="col.field"
+              @change="value => onInputChanged(col.field, value)"
+            ></multi-option>
             <el-select
               v-else-if="isTableDirectLink(col.field)"
               v-model="model[col.name]"

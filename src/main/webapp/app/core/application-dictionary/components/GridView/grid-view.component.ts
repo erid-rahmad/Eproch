@@ -6,19 +6,20 @@ import { IADField } from '@/shared/model/ad-field.model';
 import { formatJson } from '@/utils';
 import { exportJson2Excel } from '@/utils/excel';
 import { normalizeField } from '@/utils/form';
-import { hasReferenceList, isActiveStatusField, isAttachmentField, isBooleanField, isDateField, isDateTimeField, isNewRecord, isNumericField, isPasswordField, isStringField, isTableDirectLink, hasPrecision } from '@/utils/validate';
 import schema from 'async-validator';
 import { format, parseISO } from 'date-fns';
 import { ElPagination } from 'element-ui/types/pagination';
 import { ElTable } from 'element-ui/types/table';
 import { cloneDeep, debounce, isEqual, kebabCase } from 'lodash';
-import pluralize from "pluralize";
+import pluralize from 'pluralize';
 import { Component, Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import CalloutMixin from '../../mixins/CalloutMixin';
-import AddressEditor from "../AddressEditor/address-editor.vue";
-import ContextVariableAccessor from "../ContextVariableAccessor";
-import PasswordEditor from "../PasswordEditor/password-editor.vue";
+import FieldTypeValidationMixin from '../../mixins/FieldTypeValidationMixin';
+import AddressEditor from '../AddressEditor/address-editor.vue';
+import ContextVariableAccessor from '../ContextVariableAccessor';
+import MultiOption from '../MultiOption/multi-option.vue';
+import PasswordEditor from '../PasswordEditor/password-editor.vue';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -60,27 +61,16 @@ const GridViewProps = Vue.extend({
 @Component({
   components: {
     AddressEditor,
+    MultiOption,
     PasswordEditor
   },
   methods: {
-    isNewRecord,
-    isStringField,
-    isPasswordField,
-    isNumericField,
-    isDateField,
-    isDateTimeField,
-    isBooleanField,
-    hasPrecision,
-    hasReferenceList,
-    isTableDirectLink,
-    isAttachmentField,
-    isActivatorSwitch: isActiveStatusField,
     ...mapActions({
       registerTabState: 'windowStore/registerTab'
     })
   }
 })
-export default class GridView extends Mixins(ContextVariableAccessor, CalloutMixin, GridViewProps) {
+export default class GridView extends Mixins(CalloutMixin, ContextVariableAccessor, FieldTypeValidationMixin, GridViewProps) {
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found'
@@ -117,8 +107,8 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
   bookType:string = '';
 
   formExport = {
-    name: "",
-    type: ""
+    name: '',
+    type: ''
   }
   chooseBookType = [
     { type: 'csv' },
@@ -386,6 +376,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
    * @param value The new value.
    */
   public onInputChanged(field: IADField, value: any) {
+    console.log('record:', this.currentRecord);
     this.registerTabState({
       path: this.$route.fullPath,
       tabId: this.tabName,
@@ -473,7 +464,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
         this.buttonExport = true;
         this.$notify({
           title: 'Warning',
-          message: "Please select at least one item",
+          message: 'Please select at least one item',
           type: 'warning',
           duration: 3000
         });
@@ -511,7 +502,7 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
       service = this.gridData;
       data = formatJson(filterVal, service);
     }
-    exportJson2Excel(tHeader, data, this.filename !== '' ? this.filename : 'excel-list', undefined, undefined, this.autoWidth, this.bookType !== '' ? this.bookType : "csv");
+    exportJson2Excel(tHeader, data, this.filename !== '' ? this.filename : 'excel-list', undefined, undefined, this.autoWidth, this.bookType !== '' ? this.bookType : 'csv');
   }
 
   public closeDialog(): void {
@@ -1027,28 +1018,6 @@ export default class GridView extends Mixins(ContextVariableAccessor, CalloutMix
 
   public getReferenceList(field: IADField) {
     return field?.adReference?.adreferenceLists || field.adColumn.adReference?.adreferenceLists;
-  }
-
-  public isNewRecord!: (row: any) => boolean;
-  public isStringField!: (field: IADField) => boolean;
-  public isPasswordField!: (field: IADField) => boolean;
-  public isNumericField!: (field: IADField) => boolean;
-  public isDateField!: (field: IADField) => boolean;
-  public isDateTimeField!: (field: IADField) => boolean;
-  public isBooleanField!: (field: IADField) => boolean;
-  public isActivatorSwitch!: (field: IADField) => boolean;
-  public hasPrecision!: (field: IADField) => boolean;
-  public hasReferenceList!: (field: IADField) => boolean;
-  public isTableDirectLink!: (field: IADField) => boolean;
-  public isAttachmentField!: (field: IADField) => boolean;
-
-  isAddressField(field: IADField) {
-    if (field.virtualColumnName) {
-      return false;
-    }
-
-    const reference = field.adReference || field.adColumn.adReference;
-    return reference?.value === 'address';
   }
 
   /**

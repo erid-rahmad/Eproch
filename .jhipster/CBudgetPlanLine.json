@@ -1,0 +1,79 @@
+{
+    "name": "CBudgetPlanLine",
+    "fields": [
+        {
+            "fieldName": "totalDebit",
+            "fieldType": "BigDecimal"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cBudgetPlanLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cCurrency",
+            "otherEntityRelationshipName": "cBudgetPlanLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cCurrency",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "cBudgetPlanLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cDocumentType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBidding",
+            "otherEntityRelationshipName": "cBudgetPlanLine",
+            "javadoc": "Mandatory for document type Bidding",
+            "relationshipName": "mBidding",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPurchaseOrder",
+            "otherEntityRelationshipName": "cBudgetPlanLine",
+            "javadoc": "Mandatory for document type Purchase Order",
+            "relationshipName": "mPurchaseOrder",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mRequisition",
+            "otherEntityRelationshipName": "cBudgetPlanLine",
+            "javadoc": "Mandatory for document type Purchase Requisition",
+            "relationshipName": "mRequisition",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210325224500",
+    "entityTableName": "c_budget_plan_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

@@ -183,6 +183,10 @@ public class ADColumn extends AbstractAuditingEntity {
 
     @ManyToOne
     @JsonIgnoreProperties("aDColumns")
+    private ADReference referenceType;
+
+    @ManyToOne
+    @JsonIgnoreProperties("aDColumns")
     private ADReference adReference;
 
     @ManyToOne
@@ -575,6 +579,19 @@ public class ADColumn extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
 
+    public ADReference getReferenceType() {
+        return referenceType;
+    }
+
+    public ADColumn referenceType(ADReference aDReference) {
+        this.referenceType = aDReference;
+        return this;
+    }
+
+    public void setReferenceType(ADReference aDReference) {
+        this.referenceType = aDReference;
+    }
+
     public ADReference getAdReference() {
         return adReference;
     }
@@ -628,8 +645,7 @@ public class ADColumn extends AbstractAuditingEntity {
         if (!(o instanceof ADColumn)) {
             return false;
         }
-        return id != null && id.equals(((ADColumn) o).id)
-            && (name == null || name.equals(((ADColumn) o).name));
+        return id != null && id.equals(((ADColumn) o).id);
     }
 
     @Override

@@ -2,12 +2,12 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-import io.github.jhipster.service.Criteria;
+
 import com.bhp.opusb.domain.enumeration.ADColumnType;
+
+import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -116,6 +116,8 @@ public class ADFieldCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
+    private LongFilter referenceTypeId;
+
     private LongFilter adReferenceId;
 
     private LongFilter adColumnId;
@@ -166,6 +168,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adCalloutId = other.adCalloutId == null ? null : other.adCalloutId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.referenceTypeId = other.referenceTypeId == null ? null : other.referenceTypeId.copy();
         this.adReferenceId = other.adReferenceId == null ? null : other.adReferenceId.copy();
         this.adColumnId = other.adColumnId == null ? null : other.adColumnId.copy();
         this.adValidationRuleId = other.adValidationRuleId == null ? null : other.adValidationRuleId.copy();
@@ -466,6 +469,14 @@ public class ADFieldCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getReferenceTypeId() {
+        return referenceTypeId;
+    }
+
+    public void setReferenceTypeId(LongFilter referenceTypeId) {
+        this.referenceTypeId = referenceTypeId;
+    }
+
     public LongFilter getAdReferenceId() {
         return adReferenceId;
     }
@@ -553,6 +564,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adCalloutId, that.adCalloutId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(referenceTypeId, that.referenceTypeId) &&
             Objects.equals(adReferenceId, that.adReferenceId) &&
             Objects.equals(adColumnId, that.adColumnId) &&
             Objects.equals(adValidationRuleId, that.adValidationRuleId) &&
@@ -599,6 +611,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
         active,
         adCalloutId,
         adOrganizationId,
+        referenceTypeId,
         adReferenceId,
         adColumnId,
         adValidationRuleId,
@@ -646,6 +659,7 @@ public class ADFieldCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adCalloutId != null ? "adCalloutId=" + adCalloutId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (referenceTypeId != null ? "referenceTypeId=" + referenceTypeId + ", " : "") +
                 (adReferenceId != null ? "adReferenceId=" + adReferenceId + ", " : "") +
                 (adColumnId != null ? "adColumnId=" + adColumnId + ", " : "") +
                 (adValidationRuleId != null ? "adValidationRuleId=" + adValidationRuleId + ", " : "") +

@@ -104,6 +104,10 @@ public class MPurchaseOrderDTO extends AbstractAuditingDTO {
         this.documentNo = documentNo;
     }
 
+    public String getName() {
+        return getDocumentNo();
+    }
+
     public String getDocumentAction() {
         return documentAction;
     }

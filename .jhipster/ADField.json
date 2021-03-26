@@ -1,211 +1,220 @@
 {
-  "name": "ADField",
-  "fields": [
-    {
-      "fieldName": "uid",
-      "fieldType": "UUID"
-    },
-    {
-      "fieldName": "name",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "hint",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "staticText",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "staticField",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "labelOnly",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "showLabel",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "showInGrid",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "showInDetail",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "gridSequence",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "detailSequence",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "displayLogic",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "readOnlyLogic",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "writable",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "columnNo",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "columnOffset",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "columnSpan",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "rowNo",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "virtualColumnName",
-      "javadoc": "Don't use the actual column in the table.\\nInstead, refers to a specific DTO's field.",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "mandatory",
-      "javadoc": "It's automatically filled by the dbSync process.\\nupdatable = false.",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "mandatoryLogic",
-      "javadoc": "This should be displayed only if mandatory = false.",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "updatable",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "alwaysUpdatable",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "copyable",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "defaultValue",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "formatPattern",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "minLength",
-      "javadoc": "The minimum character length of the string column.",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "maxLength",
-      "javadoc": "The maximum character length of the string column.",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "minValue",
-      "javadoc": "The minimum number value of the numeric column.",
-      "fieldType": "Long"
-    },
-    {
-      "fieldName": "maxValue",
-      "javadoc": "The minimum number value of the numeric column.",
-      "fieldType": "Long"
-    },
-    {
-      "fieldName": "type",
-      "fieldType": "ADColumnType",
-      "fieldValues": "STRING,INTEGER,LONG,BIG_DECIMAL,FLOAT,DOUBLE,BOOLEAN,LOCAL_DATE,ZONED_DATE_TIME,DURATION,INSTANT,BLOB"
-    },
-    {
-      "fieldName": "active",
-      "fieldType": "Boolean"
-    }
-  ],
-  "relationships": [
-    {
-      "relationshipType": "one-to-many",
-      "otherEntityName": "adCallout",
-      "otherEntityRelationshipName": "field",
-      "relationshipName": "adCallout"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDOrganization",
-      "otherEntityRelationshipName": "aDField",
-      "relationshipValidateRules": "required",
-      "relationshipName": "adOrganization",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDReference",
-      "otherEntityRelationshipName": "aDField",
-      "relationshipName": "adReference",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDColumn",
-      "otherEntityRelationshipName": "aDField",
-      "relationshipName": "adColumn",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "adValidationRule",
-      "otherEntityRelationshipName": "aDField",
-      "relationshipName": "adValidationRule",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "adButton",
-      "otherEntityRelationshipName": "aDField",
-      "relationshipName": "adButton",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDTab",
-      "otherEntityRelationshipName": "aDField",
-      "relationshipValidateRules": "required",
-      "relationshipName": "adTab",
-      "otherEntityField": "id"
-    }
-  ],
-  "changelogDate": "20200429153100",
-  "entityTableName": "ad_field",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*",
-  "enableEntityAudit": true,
-  "skipClient": true
+    "name": "ADField",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "name",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "hint",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "staticText",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "staticField",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "labelOnly",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "showLabel",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "showInGrid",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "showInDetail",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "gridSequence",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "detailSequence",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "displayLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "readOnlyLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "writable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "columnNo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "columnOffset",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "columnSpan",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "rowNo",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "virtualColumnName",
+            "javadoc": "Don't use the actual column in the table.\\nInstead, refers to a specific DTO's field.",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mandatory",
+            "javadoc": "It's automatically filled by the dbSync process.\\nupdatable = false.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "mandatoryLogic",
+            "javadoc": "This should be displayed only if mandatory = false.",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "updatable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "alwaysUpdatable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "copyable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "defaultValue",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "formatPattern",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "minLength",
+            "javadoc": "The minimum character length of the string column.",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "maxLength",
+            "javadoc": "The maximum character length of the string column.",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "minValue",
+            "javadoc": "The minimum number value of the numeric column.",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "maxValue",
+            "javadoc": "The minimum number value of the numeric column.",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "ADColumnType",
+            "fieldValues": "STRING,INTEGER,LONG,BIG_DECIMAL,FLOAT,DOUBLE,BOOLEAN,LOCAL_DATE,ZONED_DATE_TIME,DURATION,INSTANT,BLOB"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "adCallout",
+            "otherEntityRelationshipName": "field",
+            "relationshipName": "adCallout"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDReference",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipName": "referenceType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDReference",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipName": "adReference",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDColumn",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipName": "adColumn",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adValidationRule",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipName": "adValidationRule",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adButton",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipName": "adButton",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDTab",
+            "otherEntityRelationshipName": "aDField",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTab",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200429153100",
+    "entityTableName": "ad_field",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true,
+    "skipClient": true
 }

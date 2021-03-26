@@ -38,6 +38,7 @@ export interface IADField {
   type?: string;
   active?: boolean;
   adOrganizationId?: number;
+  referenceTypeName?: string;
   adReference?: IADReference;
   adReferenceId?: number;
   adColumnId?: number;
@@ -83,6 +84,7 @@ export class ADField implements IADField {
     public type?: string,
     public active?: boolean,
     public adOrganizationId?: number,
+    public referenceTypeName?: string,
     public adReference?: IADReference,
     public adReferenceId?: number,
     public adColumnId?: number,

@@ -95,6 +95,10 @@ public class MRequisitionDTO extends AbstractAuditingDTO {
         this.documentNo = documentNo;
     }
 
+    public String getName() {
+        return getDocumentNo();
+    }
+
     public String getDocumentAction() {
         return documentAction;
     }

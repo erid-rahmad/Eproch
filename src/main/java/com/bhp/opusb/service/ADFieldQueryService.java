@@ -198,6 +198,10 @@ public class ADFieldQueryService extends QueryService<ADField> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(ADField_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getReferenceTypeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getReferenceTypeId(),
+                    root -> root.join(ADField_.referenceType, JoinType.LEFT).get(ADReference_.id)));
+            }
             if (criteria.getAdReferenceId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdReferenceId(),
                     root -> root.join(ADField_.adReference, JoinType.LEFT).get(ADReference_.id)));
