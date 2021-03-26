@@ -1,175 +1,186 @@
 {
-  "name": "ADColumn",
-  "fields": [
-    {
-      "fieldName": "uid",
-      "fieldType": "UUID"
-    },
-    {
-      "fieldName": "name",
-      "javadoc": "The JPA entity field name (usually in a camelCased format).\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "sqlName",
-      "javadoc": "The native database column name (usually in a kebab_cased format).\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
-      "fieldType": "String",
-      "fieldValidateRules": ["required"]
-    },
-    {
-      "fieldName": "description",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "fieldLength",
-      "fieldType": "Long"
-    },
-    {
-      "fieldName": "key",
-      "javadoc": "Whether it is a primary key column or not.\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "type",
-      "fieldType": "ADColumnType",
-      "fieldValues": "STRING,INTEGER,LONG,BIG_DECIMAL,FLOAT,DOUBLE,BOOLEAN,LOCAL_DATE,ZONED_DATE_TIME,DURATION,INSTANT,BLOB"
-    },
-    {
-      "fieldName": "foreignKey",
-      "javadoc": "Whether it is a foreign key column or not.\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "importedTable",
-      "javadoc": "The name of the linked primary key table if foreignKey is true.\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "importedColumn",
-      "javadoc": "The column name of the linked primary key if foreignKey is true.\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "mandatory",
-      "javadoc": "It's automatically filled by the dbSync process.\\nupdatable = false.",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "mandatoryLogic",
-      "javadoc": "This should be displayed only if mandatory = false.",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "displayLogic",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "readOnlyLogic",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "updatable",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "alwaysUpdatable",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "copyable",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "defaultValue",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "formatPattern",
-      "fieldType": "String"
-    },
-    {
-      "fieldName": "minLength",
-      "javadoc": "The minimum character length of the string column.",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "maxLength",
-      "javadoc": "The maximum character length of the string column.",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "minValue",
-      "javadoc": "The minimum number value of the numeric column.",
-      "fieldType": "Long"
-    },
-    {
-      "fieldName": "maxValue",
-      "javadoc": "The minimum number value of the numeric column.",
-      "fieldType": "Long"
-    },
-    {
-      "fieldName": "identifier",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "defaultSelection",
-      "javadoc": "Determine that the field is displayed by default in the search form.",
-      "fieldType": "Boolean"
-    },
-    {
-      "fieldName": "selectionSequence",
-      "javadoc": "Determine the field sequence in the search form.",
-      "fieldType": "Integer"
-    },
-    {
-      "fieldName": "active",
-      "fieldType": "Boolean"
-    }
-  ],
-  "relationships": [
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDOrganization",
-      "otherEntityRelationshipName": "aDColumn",
-      "relationshipValidateRules": "required",
-      "relationshipName": "adOrganization",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDReference",
-      "otherEntityRelationshipName": "aDColumn",
-      "relationshipName": "adReference",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "adValidationRule",
-      "otherEntityRelationshipName": "aDColumn",
-      "relationshipName": "adValidationRule",
-      "otherEntityField": "id"
-    },
-    {
-      "relationshipType": "many-to-one",
-      "otherEntityName": "aDTable",
-      "otherEntityRelationshipName": "aDColumn",
-      "relationshipValidateRules": "required",
-      "relationshipName": "adTable",
-      "otherEntityField": "id"
-    }
-  ],
-  "changelogDate": "20200429152800",
-  "entityTableName": "ad_column",
-  "dto": "mapstruct",
-  "pagination": "pagination",
-  "service": "serviceClass",
-  "jpaMetamodelFiltering": true,
-  "fluentMethods": true,
-  "readOnly": false,
-  "embedded": false,
-  "clientRootFolder": "",
-  "applications": "*",
-  "enableEntityAudit": true,
-  "skipClient": true
+    "name": "ADColumn",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "name",
+            "javadoc": "The JPA entity field name (usually in a camelCased format).\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "sqlName",
+            "javadoc": "The native database column name (usually in a kebab_cased format).\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "description",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "fieldLength",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "key",
+            "javadoc": "Whether it is a primary key column or not.\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "type",
+            "fieldType": "ADColumnType",
+            "fieldValues": "STRING,INTEGER,LONG,BIG_DECIMAL,FLOAT,DOUBLE,BOOLEAN,LOCAL_DATE,ZONED_DATE_TIME,DURATION,INSTANT,BLOB"
+        },
+        {
+            "fieldName": "foreignKey",
+            "javadoc": "Whether it is a foreign key column or not.\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "importedTable",
+            "javadoc": "The name of the linked primary key table if foreignKey is true.\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "importedColumn",
+            "javadoc": "The column name of the linked primary key if foreignKey is true.\\nIt's automatically filled by the dbSync process.\\nupdatable = false.",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "mandatory",
+            "javadoc": "It's automatically filled by the dbSync process.\\nupdatable = false.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "mandatoryLogic",
+            "javadoc": "This should be displayed only if mandatory = false.",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "displayLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "readOnlyLogic",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "updatable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "alwaysUpdatable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "copyable",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "defaultValue",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "formatPattern",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "minLength",
+            "javadoc": "The minimum character length of the string column.",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "maxLength",
+            "javadoc": "The maximum character length of the string column.",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "minValue",
+            "javadoc": "The minimum number value of the numeric column.",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "maxValue",
+            "javadoc": "The minimum number value of the numeric column.",
+            "fieldType": "Long"
+        },
+        {
+            "fieldName": "identifier",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "defaultSelection",
+            "javadoc": "Determine that the field is displayed by default in the search form.",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "selectionSequence",
+            "javadoc": "Determine the field sequence in the search form.",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDReference",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipName": "referenceType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDReference",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipName": "adReference",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adValidationRule",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipName": "adValidationRule",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDTable",
+            "otherEntityRelationshipName": "aDColumn",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adTable",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20200429152800",
+    "entityTableName": "ad_column",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true,
+    "skipClient": true
 }

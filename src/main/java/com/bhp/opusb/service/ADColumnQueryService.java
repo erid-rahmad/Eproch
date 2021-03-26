@@ -176,6 +176,10 @@ public class ADColumnQueryService extends QueryService<ADColumn> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(ADColumn_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getReferenceTypeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getReferenceTypeId(),
+                    root -> root.join(ADColumn_.referenceType, JoinType.LEFT).get(ADReference_.id)));
+            }
             if (criteria.getAdReferenceId() != null) {
                 specification = specification.and(buildSpecification(criteria.getAdReferenceId(),
                     root -> root.join(ADColumn_.adReference, JoinType.LEFT).get(ADReference_.id)));

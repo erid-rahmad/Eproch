@@ -141,10 +141,14 @@ public class ADColumnDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "Determine the field sequence in the search form.")
     private Integer selectionSequence;
 
-    private Boolean active;
+    private Boolean active = true;
+
 
     private Long adOrganizationId;
     private String adOrganizationName;
+
+    private Long referenceTypeId;
+    private String referenceTypeName;
 
     private Long adReferenceId;
     private String adReferenceName;
@@ -398,6 +402,22 @@ public class ADColumnDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public Long getReferenceTypeId() {
+        return referenceTypeId;
+    }
+
+    public void setReferenceTypeId(Long aDReferenceId) {
+        this.referenceTypeId = aDReferenceId;
+    }
+
+    public String getReferenceTypeName() {
+        return referenceTypeName;
+    }
+
+    public void setReferenceTypeName(String referenceTypeName) {
+        this.referenceTypeName = referenceTypeName;
+    }
+
     public Long getAdReferenceId() {
         return adReferenceId;
     }
@@ -515,6 +535,7 @@ public class ADColumnDTO extends AbstractAuditingDTO {
             ", selectionSequence=" + getSelectionSequence() +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", referenceTypeId=" + getReferenceTypeId() +
             ", adReferenceId=" + getAdReferenceId() +
             ", adValidationRuleId=" + getAdValidationRuleId() +
             ", adTableId=" + getAdTableId() +

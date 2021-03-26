@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -25,28 +27,43 @@ public class CBudgetPlanLineDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    @JsonProperty("cCurrencyId")
     private Long cCurrencyId;
+
+    @JsonProperty("cCurrencyName")
     private String cCurrencyName;
 
+    @JsonProperty("cDocumentTypeId")
     private Long cDocumentTypeId;
+
+    @JsonProperty("cDocumentTypeName")
     private String cDocumentTypeName;
     /**
      * Mandatory for document type Bidding
      */
     @ApiModelProperty(value = "Mandatory for document type Bidding")
+    @JsonProperty("mBiddingId")
     private Long mBiddingId;
+
+    @JsonProperty("mBiddingName")
     private String mBiddingName;
     /**
      * Mandatory for document type Purchase Order
      */
     @ApiModelProperty(value = "Mandatory for document type Purchase Order")
+    @JsonProperty("mPurchaseOrderId")
     private Long mPurchaseOrderId;
+
+    @JsonProperty("mPurchaseOrderName")
     private String mPurchaseOrderName;
     /**
      * Mandatory for document type Purchase Requisition
      */
     @ApiModelProperty(value = "Mandatory for document type Purchase Requisition")
+    @JsonProperty("mRequisitionId")
     private Long mRequisitionId;
+
+    @JsonProperty("mRequisitionName")
     private String mRequisitionName;
     
     public Long getId() {

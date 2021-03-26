@@ -26,6 +26,8 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Where;
 
 /**
@@ -166,6 +168,7 @@ public class ADField extends AbstractAuditingEntity {
     private Boolean active = true;
 
     @OneToMany(mappedBy = "field", fetch = FetchType.EAGER)
+    @Fetch(FetchMode.JOIN)
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @Where(clause = "active = true")
     @JsonManagedReference
@@ -175,6 +178,10 @@ public class ADField extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("aDFields")
     private ADOrganization adOrganization;
+
+    @ManyToOne
+    @JsonIgnoreProperties("aDFields")
+    private ADReference referenceType;
 
     @ManyToOne
     @JsonIgnoreProperties("aDFields")
@@ -672,6 +679,19 @@ public class ADField extends AbstractAuditingEntity {
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
+    }
+
+    public ADReference getReferenceType() {
+        return referenceType;
+    }
+
+    public ADField referenceType(ADReference aDReference) {
+        this.referenceType = aDReference;
+        return this;
+    }
+
+    public void setReferenceType(ADReference aDReference) {
+        this.referenceType = aDReference;
     }
 
     public ADReference getAdReference() {

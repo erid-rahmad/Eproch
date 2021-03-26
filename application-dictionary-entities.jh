@@ -646,6 +646,7 @@ relationship ManyToOne {
 	ADTable{adOrganization required} to ADOrganization
 
 	ADColumn{adOrganization required} to ADOrganization
+	ADColumn{referenceType} to ADReference
 	ADColumn{adReference} to ADReference
 	ADColumn{adValidationRule} to AdValidationRule
 
@@ -658,6 +659,7 @@ relationship ManyToOne {
 	ADTab{foreignColumn} to ADColumn
 	
 	ADField{adOrganization required} to ADOrganization
+	ADField{referenceType} to ADReference
 	ADField{adReference} to ADReference
 	ADField{adColumn} to ADColumn
 	ADField{adValidationRule} to AdValidationRule

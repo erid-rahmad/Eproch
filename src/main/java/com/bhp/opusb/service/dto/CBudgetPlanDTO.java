@@ -8,6 +8,8 @@ import java.util.UUID;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import io.swagger.annotations.ApiModelProperty;
 
 /**
@@ -54,10 +56,16 @@ public class CBudgetPlanDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    @JsonProperty("cCostCenterId")
     private Long cCostCenterId;
+
+    @JsonProperty("cCostCenterName")
     private String cCostCenterName;
 
+    @JsonProperty("cCurrencyId")
     private Long cCurrencyId;
+
+    @JsonProperty("cCurrencyName")
     private String cCurrencyName;
     
     public Long getId() {

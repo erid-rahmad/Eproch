@@ -15,6 +15,8 @@ public interface ADFieldMapper extends EntityMapper<ADFieldDTO, ADField> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
+    @Mapping(source = "referenceType.id", target = "referenceTypeId")
+    @Mapping(source = "referenceType.value", target = "referenceTypeName")
     @Mapping(source = "adReference.id", target = "adReferenceId")
     @Mapping(source = "adReference.name", target = "adReferenceName")
     @Mapping(source = "adColumn.id", target = "adColumnId")
@@ -30,6 +32,7 @@ public interface ADFieldMapper extends EntityMapper<ADFieldDTO, ADField> {
     @Mapping(target = "adCallouts", ignore = true)
     @Mapping(target = "removeAdCallout", ignore = true)
     @Mapping(source = "adOrganizationId", target = "adOrganization")
+    @Mapping(source = "referenceTypeId", target = "referenceType")
     @Mapping(source = "adReferenceId", target = "adReference")
     @Mapping(source = "adColumnId", target = "adColumn")
     @Mapping(source = "adValidationRuleId", target = "adValidationRule")

@@ -914,6 +914,28 @@ entity CBiddingSubCriteria {
 	active Boolean
 }
 
+entity CBudgetPlan {
+	code String required maxlength(20)
+	name String required maxlength(50)
+	description String
+
+	/** Deduct from purchase requisition, purchase order, and/or bidding result */
+	budgetDeduction String
+	
+	budgetAmount BigDecimal required
+	amountAvailable BigDecimal required
+	documentDate LocalDate required
+	preventOverBudget Boolean
+	uid UUID
+	active Boolean
+}
+
+entity CBudgetPlanLine {
+	totalDebit BigDecimal
+	uid UUID
+	active Boolean
+}
+
 entity CEvaluationMethod {
 	name String required maxlength(60)
 	priceLimit BigDecimal max(100)
@@ -1404,6 +1426,23 @@ relationship ManyToOne {
 	CBiddingSubCriteria{adOrganization required} to ADOrganization
 	CBiddingSubCriteria{biddingCriteria required} to CBiddingCriteria
 	CBiddingSubCriteria{adUser required} to AdUser
+
+	CBudgetPlan{adOrganization required} to ADOrganization
+	CBudgetPlan{cCostCenter required} to CCostCenter
+	CBudgetPlan{cCurrency required} to CCurrency
+
+	CBudgetPlanLine{adOrganization required} to ADOrganization
+	CBudgetPlanLine{cCurrency required} to CCurrency
+	CBudgetPlanLine{cDocumentType required} to CDocumentType
+
+	/** Mandatory for document type Bidding */
+	CBudgetPlanLine{mBidding} to MBidding
+
+	/** Mandatory for document type Purchase Order */
+	CBudgetPlanLine{mPurchaseOrder} to MPurchaseOrder
+
+	/** Mandatory for document type Purchase Requisition */
+	CBudgetPlanLine{mRequisition} to MRequisition
 
 	CEvaluationMethod{adOrganization required} to ADOrganization
 	CEvaluationMethod{biddingType} to CBiddingType

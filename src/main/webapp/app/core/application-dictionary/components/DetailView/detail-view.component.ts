@@ -3,7 +3,6 @@ import { IRegisterTabParameter, WindowStoreModule as windowStore } from '@/share
 import { ADColumnType } from '@/shared/model/ad-column.model';
 import { IADField } from '@/shared/model/ad-field.model';
 import { normalizeField } from '@/utils/form';
-import { hasPrecision, hasReferenceList, isActiveStatusField, isAttachmentField, isBooleanField, isDateField, isDateTimeField, isNewRecord, isNumericField, isPasswordField, isStringField, isTableDirectLink } from '@/utils/validate';
 import { ElForm } from 'element-ui/types/form';
 import { cloneDeep, debounce, kebabCase } from 'lodash';
 import pluralize from 'pluralize';
@@ -11,8 +10,10 @@ import Component from 'vue-class-component';
 import { Mixins, Vue, Watch } from 'vue-property-decorator';
 import { mapActions } from 'vuex';
 import CalloutMixin from '../../mixins/CalloutMixin';
+import FieldTypeValidationMixin from '../../mixins/FieldTypeValidationMixin';
 import AddressEditor from "../AddressEditor/address-editor.vue";
 import ContextVariableAccessor from '../ContextVariableAccessor';
+import MultiOption from '../MultiOption/multi-option.vue';
 import PasswordEditor from "../PasswordEditor/password-editor.vue";
 
 const DetailViewProps = Vue.extend({
@@ -42,27 +43,16 @@ const DetailViewProps = Vue.extend({
 @Component({
   components: {
     AddressEditor,
+    MultiOption,
     PasswordEditor
   },
   methods: {
-    isNewRecord,
-    isStringField,
-    isPasswordField,
-    isNumericField,
-    isDateField,
-    isDateTimeField,
-    isBooleanField,
-    hasPrecision,
-    hasReferenceList,
-    isTableDirectLink,
-    isAttachmentField,
-    isActivatorSwitch: isActiveStatusField,
     ...mapActions({
       registerTabState: 'windowStore/registerTab'
     })
   }
 })
-export default class DetailView extends Mixins(ContextVariableAccessor, CalloutMixin, DetailViewProps) {
+export default class DetailView extends Mixins(CalloutMixin, ContextVariableAccessor, DetailViewProps, FieldTypeValidationMixin) {
   isLoading: boolean = false;
   model: any = {};
 
@@ -233,7 +223,7 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
   }
 
   public showLabel(field: IADField) {
-    return (!isBooleanField(field) && field.showLabel) ? field.name : '';
+    return (!this.isBooleanField(field) && field.showLabel) ? field.name : '';
   }
 
   public exitEditMode() {
@@ -439,25 +429,4 @@ export default class DetailView extends Mixins(ContextVariableAccessor, CalloutM
     
     return ! this.tab.writable || ! field.writable || notUpdatable || conditionallyReadonly;
   }
-
-  public hasPrecision!: (field: IADField) => boolean;
-  public hasReferenceList!: (field: IADField) => boolean;
-  public isTableDirectLink!: (field: IADField) => boolean;
-  public isStringField!: (field: IADField) => boolean;
-  public isPasswordField!: (field: IADField) => boolean;
-  public isNumericField!: (field: IADField) => boolean;
-  public isDateField!: (field: IADField) => boolean;
-  public isDateTimeField!: (field: IADField) => boolean;
-  public isBooleanField!: (field: IADField) => boolean;
-  public isActivatorSwitch!: (field: IADField) => boolean;
-
-  isAddressField(field: IADField) {
-    if (field.virtualColumnName) {
-      return false;
-    }
-
-    const reference = field.adReference || field.adColumn.adReference;
-    return reference?.value === 'address';
-  }
-
 }
