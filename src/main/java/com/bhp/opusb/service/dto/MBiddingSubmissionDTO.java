@@ -37,9 +37,9 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO implements Serial
 
     private Long adOrganizationId;
 
-    private List<MBiddingSubmissionLine> mBiddingSubmissionLineList ;
+    private List<MBiddingSubmissionLineDTO> mBiddingSubmissionLineList ;
 
-    private List<MSubmissionSubItem> mSubmissionSubItemList;
+    private List<MSubmissionSubItemDTO> mSubmissionSubItemList;
 
     @Override
     public String toString() {
@@ -59,19 +59,19 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO implements Serial
             '}';
     }
 
-    public List<MBiddingSubmissionLine> getmBiddingSubmissionLineList() {
+    public List<MBiddingSubmissionLineDTO> getmBiddingSubmissionLineList() {
         return mBiddingSubmissionLineList;
     }
 
-    public void setmBiddingSubmissionLineList(List<MBiddingSubmissionLine> mBiddingSubmissionLineList) {
+    public void setmBiddingSubmissionLineList(List<MBiddingSubmissionLineDTO> mBiddingSubmissionLineList) {
         this.mBiddingSubmissionLineList = mBiddingSubmissionLineList;
     }
 
-    public List<MSubmissionSubItem> getmSubmissionSubItemList() {
+    public List<MSubmissionSubItemDTO> getmSubmissionSubItemList() {
         return mSubmissionSubItemList;
     }
 
-    public void setmSubmissionSubItemList(List<MSubmissionSubItem> mSubmissionSubItemList) {
+    public void setmSubmissionSubItemList(List<MSubmissionSubItemDTO> mSubmissionSubItemList) {
         this.mSubmissionSubItemList = mSubmissionSubItemList;
     }
 

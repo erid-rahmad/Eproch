@@ -16,15 +16,18 @@
           class="step-panel"
           v-if="active === 0"
           :biddingrow="biddingrow"
+          :ItemDetail="ItemDetail"
           :biddingInformation="bidding.biddingInformation"/>
-          
+
 
         <bidding-schedule
           class="step-panel"
           v-if="active === 1"
+          :ItemDetail="ItemDetail"
+          :biddingrow="biddingrow"
           :biddingInformation="bidding.biddingInformation"
           :biddingSchedule="bidding.biddingSchedule"/>
-          
+
 
         <vendor-invitation
           class="step-panel"

@@ -17,6 +17,7 @@ public interface MProjectInformationMapper extends EntityMapper<MProjectInformat
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "attachment.id", target = "attachmentId")
+    @Mapping(source = "attachment.fileName", target = "attachmentName")
     MProjectInformationDTO toDto(MProjectInformation mProjectInformation);
 
     @Mapping(source = "biddingId", target = "bidding")

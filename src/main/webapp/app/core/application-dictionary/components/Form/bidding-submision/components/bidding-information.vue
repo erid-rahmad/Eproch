@@ -91,8 +91,8 @@
                     </el-table-column>
                     <el-table-column min-width="70" prop="" label="Price submision/unit">
                         <template slot-scope="{ row, $index }">
-                            <el-input-number v-model="row.pricesubmision" :step="50000" clearable controls-position="right" size="mini"
-                                @change="value => onQuantityOrderedChanged(row, $index, value)">{{formatCurrency}}</el-input-number>
+                            <el-input-number v-inputmask="{'alias': 'currency'}" v-model="row.pricesubmision" :step="50000" clearable controls-position="right" size="mini"
+                                @change="value => onQuantityOrderedChanged(row, $index, value)"></el-input-number>
                         </template>
                     </el-table-column>
                     <el-table-column min-width="70" prop="" label="Total Price Submission">
@@ -331,7 +331,7 @@
                                             <el-button size="mini" icon="el-icon-plus" type="primary" @click="addSubSubItem" />
                                         </template>
                                         <template slot-scope="row">
-                                            <el-button size="mini" icon="el-icon-delete" type="danger" @click="removeSubSubItem(row.$index)" />
+                                            <el-button size="mini"  icon="el-icon-delete" type="danger" @click="removeSubSubItem(row.$index)" />
                                         </template>
                                     </el-table-column>
                                 </el-table>

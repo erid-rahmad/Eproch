@@ -12,10 +12,8 @@
                     border stripe
                     size="mini"
                     style="width: 100%; height: 100%"
-                    :height="gridSchema.height"
-                    :max-height="gridSchema.maxHeight"
-                    :default-sort="gridSchema.defaultSort"
-                    :empty-text="gridSchema.emptyText"
+                  
+                   
                     :data="eventschedule">
 
                     <el-table-column

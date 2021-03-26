@@ -129,6 +129,13 @@ public class MProjectInformationResource {
         return ResponseUtil.wrapOrNotFound(mProjectInformationDTO);
     }
 
+    @GetMapping("/m-project-informationsby-bidding/{id}")
+    public ResponseEntity<?> getMProjectInformationbybidding(@PathVariable Long id) {
+        log.debug("REST request to get MProjectInformation : {}", id);
+        List<MProjectInformationDTO> mProjectInformationDTO = mProjectInformationService.findByBindId(id);
+        return ResponseEntity.ok(mProjectInformationDTO);
+    }
+
     /**
      * {@code DELETE  /m-project-informations/:id} : delete the "id" mProjectInformation.
      *

@@ -23,7 +23,11 @@
                                     <el-table-column prop="4" label="PIC" sortable width="180">
                                     </el-table-column>
                                     <el-table-column prop="5" label="Join Vendor" sortable width="180">
-                                        <el-button class="button" size="mini" icon="el el-download-alt" @click="dialogTableVisible = true">View</el-button>
+                                        <template slot-scope="row">
+                                             <el-button class="button" size="mini" icon="el el-download-alt" @click="dialogTableVisible = true">view</el-button>
+                                             
+                                        </template>
+                                       
                                     </el-table-column>
                                     <el-table-column prop="6" label="Biding Status" sortable width="180">
                                     </el-table-column>
@@ -89,5 +93,9 @@
     .form-input {
         width: 100%;
     }
+
+    
+
+
 
 </style>

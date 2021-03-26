@@ -26,7 +26,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   data() {
     return {
       tableData: [{
-
+        
           0: 'BN-00002',
           1: 'Office Suply Bind',
           2: 'Tender good',
@@ -35,7 +35,8 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
           5: '2',
           6: 'Inprogres',
           7: '22/22/2021',
-          8: 'Admin tender'
+        8: 'Admin tender',
+        name: '2',
         },
         {
 
@@ -47,7 +48,8 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
           5: '2',
           6: 'Inprogres',
           7: '22/22/2021',
-          8: 'Admin tender'
+          8: 'Admin tender',
+          name:'3',
         },
       ],
       gridData: [{
