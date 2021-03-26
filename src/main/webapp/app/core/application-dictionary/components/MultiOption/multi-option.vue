@@ -27,8 +27,8 @@
       v-for="item in options"
       :key="item.id"
       :label="item.name"
-      :value="item.value">
-    </el-option>
+      :value="item.value"
+    ></el-option>
   </el-select>
 </template>
 <script lang="ts" src="./multi-option.component.ts"></script>

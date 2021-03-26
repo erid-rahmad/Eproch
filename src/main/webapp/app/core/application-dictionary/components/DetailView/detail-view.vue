@@ -31,7 +31,7 @@
               inactive-color="#ff4949"
               class="switch"
               @change="value => onInputChanged(col.field, value)"
-            />
+            ></el-switch>
             <el-checkbox
               v-else-if="isBooleanField(col.field)"
               v-model="model[col.name]"
@@ -39,17 +39,17 @@
               :disabled="isReadonly(col.field)"
               class="checkbox"
               @change="value => onInputChanged(col.field, value)"
-            />
+            ></el-checkbox>
             <password-editor
               v-else-if="isPasswordField(col.field)"
               :disabled="isNewRecord(model)"
               :user-id="model.userId"
-            />
+            ></password-editor>
             <address-editor
               v-else-if="isAddressField(col.field)"
               v-model="model[col.name]"
               @input="value => onInputChanged(col.field, value)"
-            />
+            ></address-editor>
             <multi-option
               v-else-if="isMultiValues(col.field)"
               v-model="model[col.name]"
@@ -75,7 +75,7 @@
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
-              />
+              ></el-option>
             </el-select>
             <el-select
               v-else-if="hasReferenceList(col.field)"
@@ -92,7 +92,7 @@
                 :key="item.value"
                 :label="item.name"
                 :value="item.value"
-              />
+              ></el-option>
             </el-select>
             <el-input
               v-else-if="isStringField(col.field)"
@@ -104,7 +104,7 @@
               class="input"
               :show-password="isPasswordField(col.field)"
               @change="value => onInputChanged(col.field, value)"
-            />
+            ></el-input>
             <el-input-number
               v-else-if="isNumericField(col.field)"
               v-model="model[col.name]"
@@ -115,7 +115,7 @@
               :precision="hasPrecision(col.field) ? 2 : 0"
               class="numeric"
               @change="value => onInputChanged(col.field, value)"
-            />
+            ></el-input-number>
             <el-date-picker
               v-else-if="isDateField(col.field)"
               v-model="model[col.name]"
@@ -125,7 +125,8 @@
               :format="dateDisplayFormat(col.field)"
               :value-format="dateValueFormat(col.field)"
               :disabled="isReadonly(col.field)"
-            />
+              @change="value => onInputChanged(col.field, value)"
+            ></el-date-picker>
           </el-form-item>
         </el-col>
       </el-row>

@@ -28,7 +28,9 @@ export default class MultiOption extends Mixins(AccessLevelMixin, MultiOptionPro
   }
 
   onOptionChanged(values: string[]) {
-    this.$emit('input', this.selectedOptions.join(','));
+    const value = this.selectedOptions.join(',');
+    this.$emit('input', value);
+    this.$emit('change', value);
   }
 
   created() {

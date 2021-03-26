@@ -63,7 +63,7 @@
             class="switch"
             :disabled="!row.editing || isReadonly(row, field)"
             @change="value => onInputChanged(field, value)"
-          />
+          ></el-switch>
           <el-checkbox
             v-else-if="isBooleanField(field)"
             v-show="displayed(row, field)"
@@ -73,7 +73,7 @@
             class="checkbox"
             :disabled="!row.editing || isReadonly(row, field)"
             @change="value => onInputChanged(field, value)"
-          />
+          ></el-checkbox>
           <el-button
             v-else-if="isAttachmentField(field)"
             v-show="displayed(row, field)"
@@ -92,7 +92,7 @@
             v-show="displayed(row, field)"
             :disabled="isNewRecord(row)"
             :user-id="row.userId"
-          />
+          ></password-editor>
           <span
             v-else-if="!row.editing"
             v-show="displayed(row, field)"
@@ -141,7 +141,7 @@
                 :key="item.id"
                 :label="item.name"
                 :value="item.id"
-              />
+              ></el-option>
             </el-select>
             <el-select
               v-else-if="hasReferenceList(field)"
@@ -162,7 +162,7 @@
                 :key="item.value"
                 :label="item.name"
                 :value="item.value"
-              />
+              ></el-option>
             </el-select>
             <el-input
               v-else-if="isStringField(field)"
@@ -178,7 +178,7 @@
               clearable
               :disabled="isReadonly(row, field)"
               @change="value => onInputChanged(field, value)"
-            />
+            ></el-input>
             <el-input-number
               v-else-if="isNumericField(field)"
               v-show="displayed(row, field)"
@@ -193,7 +193,7 @@
               :max="getMaxValue(field)"
               :disabled="isReadonly(row, field)"
               @change="value => onInputChanged(field, value)"
-            />
+            ></el-input-number>
             <el-date-picker
               v-else-if="isDateField(field)"
               v-show="displayed(row, field)"
@@ -205,7 +205,8 @@
               :format="dateDisplayFormat(field)"
               :value-format="dateValueFormat(field)"
               :disabled="isReadonly(row, field)"
-            />
+              @change="value => onInputChanged(field, value)"
+            ></el-date-picker>
           </el-tooltip>
         </template>
       </el-table-column>
