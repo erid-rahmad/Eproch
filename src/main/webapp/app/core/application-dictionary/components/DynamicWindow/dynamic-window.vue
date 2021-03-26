@@ -7,6 +7,8 @@
       <el-col :span="24">
         <action-toolbar
           ref="mainToolbar"
+          :allow-delete="mainTab.deletable"
+          :allow-insert="mainTab.insertable"
           :approved="approved"
           :at-window-root="tabStack.length <= 1"
           :at-last-tab="childTabs.length === 0"
@@ -138,6 +140,8 @@
                   </span>
                   <tab-toolbar
                     ref="lineToolbar"
+                    :allow-delete="tab.deletable"
+                    :allow-insert="tab.insertable"
                     :disabled="isEditing"
                     :event-bus="secondaryToolbarEventBus"
                     :tab-id="'' + index"

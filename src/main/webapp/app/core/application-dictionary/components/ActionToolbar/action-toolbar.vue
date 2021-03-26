@@ -1,6 +1,6 @@
 <template>
   <div class="action-toolbar" v-hotkey="keymap">
-    <el-button-group>
+    <el-button-group v-show="allowInsert">
       <el-button
         v-show="!isEditing"
         icon="el-icon-plus"
@@ -8,7 +8,7 @@
         title="New (alt + a)"
         type="primary"
         @click="addRecord"
-      />
+      ></el-button>
       <el-button
         v-show="recordCount && !isEditing"
         icon="el-icon-document-copy"
@@ -16,32 +16,32 @@
         title="Copy (alt + d)"
         type="primary"
         @click="copyRecord"
-      />
+      ></el-button>
     </el-button-group>
     <el-button-group>
       <el-button
-        v-show="isEditing"
+        v-show="allowInsert && isEditing"
         icon="el-icon-check"
         size="mini"
         title="Save (alt + s)"
         type="primary"
         @click="saveRecord"
-      />
+      ></el-button>
       <el-button
         v-show="isEditing"
         icon="el-icon-close"
         size="mini"
         title="Cancel (alt + z)"
         @click="cancelOperation"
-      />
+      ></el-button>
       <el-button
-        v-show="recordCount && !isEditing"
+        v-show="allowDelete && recordCount && !isEditing"
         icon="el-icon-delete"
         size="mini"
         title="Delete (alt + del)"
         type="danger"
         @click="deleteRecord"
-      />
+      ></el-button>
     </el-button-group>
     <el-button-group v-show="!isEditing">
       <el-button
@@ -50,14 +50,14 @@
         title="Refresh (alt + r)"
         type="primary"
         @click="refreshData"
-      />
+      ></el-button>
       <el-button
         icon="el-icon-search"
         size="mini"
         title="Search (alt + f)"
         type="primary"
         @click="openSearchWindow"
-      />
+      ></el-button>
       <el-button
         icon="el-icon-printer"
         size="mini"
@@ -65,7 +65,7 @@
         type="primary"
         v-if="windowName == 'Purchase Order'"
         @click="printRecord"
-      />
+      ></el-button>
     </el-button-group>
     <el-dropdown
       v-if="buttons.length"
@@ -98,7 +98,7 @@
         title="Toggle Layout (alt + g)"
         type="primary"
         @click="switchView"
-      />
+      ></el-button>
       <el-button
         v-show="!isEditing"
         :disabled="atWindowRoot"
@@ -107,7 +107,7 @@
         title="Go to Parent Tab (alt + up)"
         type="primary"
         @click="goToParentTab"
-      />
+      ></el-button>
       <el-button
         v-show="!isEditing"
         :disabled="atLastTab"
@@ -116,7 +116,7 @@
         title="Go to Child Tab (alt + down)"
         type="primary"
         @click="goToChildTab"
-      />
+      ></el-button>
     </el-button-group>
     <el-dropdown
       v-show="!isEditing && hasDocumentActions"

@@ -71,6 +71,10 @@ const GridViewProps = Vue.extend({
   }
 })
 export default class GridView extends Mixins(CalloutMixin, ContextVariableAccessor, FieldTypeValidationMixin, GridViewProps) {
+
+  private deletable = true;
+  private insertable = true;
+
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found'
@@ -188,8 +192,8 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
   }
 
   get observableTabProperties() {
-    const { name, adfields, targetEndpoint, filterQuery, parentId, promoted, validationSchema } = this.tab;
-    return { name, adfields, targetEndpoint, filterQuery, parentId, promoted, validationSchema };
+    const { name, adfields, targetEndpoint, filterQuery, deletable, insertable, parentId, promoted, validationSchema } = this.tab;
+    return { name, adfields, targetEndpoint, filterQuery, deletable, insertable, parentId, promoted, validationSchema };
   }
 
   get datePickerType() {
@@ -251,6 +255,8 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
     this.propOrder = 'id';
     this.reverse = false;
 
+    this.deletable = tab.deletable;
+    this.insertable = tab.insertable;
     this.tabName = tab.name;
     this.fields = tab.adfields;
     this.baseApiUrl = tab.targetEndpoint;
@@ -425,6 +431,10 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
 
   // TODO Should be able to process deletion of multiple rows in one transaction.
   public deleteRecords(): void {
+    if (!this.deletable) {
+      return;
+    }
+    
     const multiple = this.selectedRows.length > 0;
 
     if (! multiple) {
@@ -624,11 +634,9 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
    * @param row Current selected row.
    */
   public async activateInlineEditing(row: any) {
-    if (this.newRecord)
+    if (!this.insertable || this.newRecord || (this.editing && row === this.currentRecord)) {
       return;
-
-    if (this.editing && row === this.currentRecord)
-      return;
+    }
 
     await this.initRelationships(row);
     row.editing = !row.editing;

@@ -6,6 +6,8 @@ import { ElDropdown } from 'element-ui/types/dropdown';
 
 const ActionToolbarProps = Vue.extend({
   props: {
+    allowDelete: Boolean,
+    allowInsert: Boolean,
     windowType: String,
     windowName: String,
     approved: Boolean,

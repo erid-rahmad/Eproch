@@ -29,14 +29,17 @@
         fixed
         width="48"
       >
+        <template slot="header">
+          &nbsp;
+        </template>
         <template slot-scope="{ row }">
           <el-link
-            @click="activateInlineEditing(row)"
-            type="primary"
-            size="mini"
             icon="el-icon-edit"
             plain
+            size="mini"
             :title="$t('entity.action.edit')"
+            type="primary"
+            @click="activateInlineEditing(row)"
           />
         </template>
       </el-table-column>
