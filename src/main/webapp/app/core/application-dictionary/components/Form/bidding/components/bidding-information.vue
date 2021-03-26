@@ -370,7 +370,7 @@
           <el-table-column
             label="Information"
             min-width="100"
-            prop="information"
+            prop="name"
           ></el-table-column>
 
           <el-table-column

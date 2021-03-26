@@ -27,6 +27,7 @@ public class MProjectInformationDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    private CAttachmentDTO attachment;
     private Long attachmentId;
     private String attachmentName;
 
@@ -92,6 +93,14 @@ public class MProjectInformationDTO extends AbstractAuditingDTO {
 
     public void setAdOrganizationName(String adOrganizationName) {
         this.adOrganizationName = adOrganizationName;
+    }
+
+    public CAttachmentDTO getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(CAttachmentDTO attachment) {
+        this.attachment = attachment;
     }
 
     public Long getAttachmentId() {

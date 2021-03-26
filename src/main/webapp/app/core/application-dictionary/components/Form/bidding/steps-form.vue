@@ -13,44 +13,42 @@
       <el-step title="Vendor Scoring" />
     </el-steps>
 
-    <keep-alive>
-      <bidding-information
-        v-if="active === 0"
-        ref="step-0"
-        class="step-panel"
-        :edit-mode="editMode"
-        :data="bidding"
-        @saved="goToNextStep"
-        @error="showSaveDialog = false"
-      ></bidding-information>
+    <bidding-information
+      v-if="active === 0"
+      ref="step-0"
+      class="step-panel"
+      :edit-mode="editMode"
+      :data="bidding"
+      @saved="goToNextStep"
+      @error="showSaveDialog = false"
+    ></bidding-information>
 
-      <bidding-schedule
-        v-if="active === 1"
-        ref="step-1"
-        class="step-panel"
-        :edit-mode="editMode"
-        :data="bidding"
-        @saved="goToNextStep"
-      ></bidding-schedule>
+    <bidding-schedule
+      v-if="active === 1"
+      ref="step-1"
+      class="step-panel"
+      :edit-mode="editMode"
+      :data="bidding"
+      @saved="goToNextStep"
+    ></bidding-schedule>
 
-      <vendor-invitation
-        ref="step-2"
-        class="step-panel"
-        v-if="active === 2"
-        :edit-mode="editMode"
-        :data="bidding"
-        @saved="goToNextStep"
-      ></vendor-invitation>
+    <vendor-invitation
+      ref="step-2"
+      class="step-panel"
+      v-if="active === 2"
+      :edit-mode="editMode"
+      :data="bidding"
+      @saved="goToNextStep"
+    ></vendor-invitation>
 
-      <vendor-scoring
-        ref="step-3"
-        class="step-panel"
-        v-if="active === 3"
-        :edit-mode="editMode"
-        :data="bidding"
-        @saved="goToNextStep"
-      ></vendor-scoring>
-    </keep-alive>
+    <vendor-scoring
+      ref="step-3"
+      class="step-panel"
+      v-if="active === 3"
+      :edit-mode="editMode"
+      :data="bidding"
+      @saved="goToNextStep"
+    ></vendor-scoring>
 
     <el-container class="steps-control-btn-group">
 
