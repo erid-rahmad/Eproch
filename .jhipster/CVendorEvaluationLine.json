@@ -1,0 +1,72 @@
+{
+    "name": "CVendorEvaluationLine",
+    "fields": [
+        {
+            "fieldName": "weight",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": "100"
+        },
+        {
+            "fieldName": "userWeight",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": "100"
+        },
+        {
+            "fieldName": "procurementWeight",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "max"
+            ],
+            "fieldValidateRulesMax": "100"
+        },
+        {
+            "fieldName": "question",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cVendorEvaluationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cQuestionCategory",
+            "otherEntityRelationshipName": "cVendorEvaluationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cQuestionCategory",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210329060200",
+    "entityTableName": "c_vendor_evaluation_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "enableEntityAudit": true,
+    "skipClient": true
+}

@@ -68,6 +68,7 @@ export default class BiddingResult extends mixins(AccessLevelMixin, BiddingResul
   ];
 
   manual = true;
+  showGeneratePoDialog = false;
 
   close() {
     this.$emit('close');
