@@ -958,6 +958,28 @@ entity CEvaluationCriteria {
 	active Boolean
 }
 
+entity CQuestionCategory {
+	name String required maxlength(30)
+	description String
+	uid UUID
+	active Boolean
+}
+
+entity CVendorEvaluation {
+	name String required maxlength(30)
+	uid UUID
+	active Boolean
+}
+
+entity CVendorEvaluationLine {
+	weight BigDecimal max(100)
+	userWeight BigDecimal max(100)
+	procurementWeight BigDecimal max(100)
+	question String
+	uid UUID
+	active Boolean
+}
+
 entity MBidding {
 	name String required
 	vendorSelection String
@@ -1453,6 +1475,12 @@ relationship ManyToOne {
 	CEvaluationCriteria{biddingCriteria required} to CBiddingCriteria
 	CEvaluationCriteria{biddingSubCriteria required} to CBiddingSubCriteria
 	CEvaluationCriteria{pic required} to AdUser
+
+	CQuestionCategory{adOrganization required} to ADOrganization
+
+	CVendorEvaluation{adOrganization required} to ADOrganization
+	CVendorEvaluationLine{adOrganization required} to ADOrganization
+	CVendorEvaluationLine{cQuestionCategory required} to CQuestionCategory
 
 	MBidding{adOrganization required} to ADOrganization
 	MBidding{costCenter required} to CCostCenter
