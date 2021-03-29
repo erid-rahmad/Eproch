@@ -36,6 +36,9 @@ export enum BiddingStep {
 })
 export default class StepsForm extends StepsFormProps {
 
+  private direction = 0;
+
+  dataChanged = false;
   showSaveDialog = false;
   agreementAccepted: boolean = false;
   doNotMatch = '';
@@ -57,13 +60,26 @@ export default class StepsForm extends StepsFormProps {
     vendorScoring: []
   }
 
+  get nextButton() {
+    return this.active < 3 ? 'Next' : 'Save';
+  }
+
   @Watch('stepIndex')
   onStepIndexChanged(stepIndex: number) {
     this.active = stepIndex;
   }
 
-  get nextButton() {
-    return this.active < 3 ? 'Next' : 'Save';
+  onSkipSave() {
+    this.dataChanged = false;
+    this.showSaveDialog = false;
+
+    if (this.editMode) {
+      if (this.direction > 0) {
+        ++this.active;
+      } else {
+        --this.active;
+      }
+    }
   }
 
   created() {
@@ -79,7 +95,20 @@ export default class StepsForm extends StepsFormProps {
   }
 
   previous() {
-    --this.active;
+    if (this.active === 0) {
+      return;
+    }
+
+    this.direction = -1;
+    if (this.editMode) {
+      if (this.dataChanged) {
+        this.showSaveDialog = true;
+      } else {
+        --this.active;
+      }
+    } else {
+      --this.active;
+    }
   }
 
   next() {
@@ -87,8 +116,13 @@ export default class StepsForm extends StepsFormProps {
       return;
     }
 
+    this.direction = 1;
     if (this.editMode) {
-      ++this.active;
+      if (this.dataChanged) {
+        this.showSaveDialog = true;
+      } else {
+        ++this.active;
+      }
     } else {
       this.showSaveDialog = true;
     }
@@ -101,6 +135,7 @@ export default class StepsForm extends StepsFormProps {
 
   goToNextStep({ data }) {
     this.showSaveDialog = false;
+    this.dataChanged = false;
 
     if (! this.editMode && data.id) {
       this.editMode = true;

@@ -20,6 +20,10 @@ export default class AccountService {
     private router: VueRouter
   ) {}
 
+  public get token() {
+    return localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+  }
+
   public async init(): Promise<void> {
     const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
     if (!accountStore.userIdentity && !accountStore.logon && token) {
@@ -29,7 +33,7 @@ export default class AccountService {
   }
 
   public hasToken() {
-    return localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
+    return this.token !== null;
   }
 
   public retrieveProfiles(): void {

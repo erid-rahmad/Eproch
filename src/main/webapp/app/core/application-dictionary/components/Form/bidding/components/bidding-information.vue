@@ -485,11 +485,12 @@
             required
           >
             <el-upload
-              ref="upload"
+              ref="docUpload"
               v-model="projectInformation.attachment"
               :accept="accept"
               :action="action"
               auto-upload
+              :headers="projectDocUploadHeaders"
               :limit="limit"
               :before-upload="handleBeforeUpload"
               :on-preview="handlePreview"

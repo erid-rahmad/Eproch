@@ -35,6 +35,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   };
   rules = {}
 
+  evaluationMethod = null;
   processing = false;
   dialogConfirmationVisible:boolean = false;
 

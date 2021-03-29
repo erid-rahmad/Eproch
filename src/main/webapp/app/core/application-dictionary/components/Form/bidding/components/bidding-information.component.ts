@@ -6,6 +6,7 @@ import { Component, Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
 import SubitemEditor from './subitem-editor.vue';
+import AccountService from '@/account/account.service';
 
 const BiddingInformationProp = Vue.extend({
   props: {
@@ -24,10 +25,14 @@ const BiddingInformationProp = Vue.extend({
 })
 export default class BiddingInformation extends Mixins(AccessLevelMixin, BiddingInformationProp) {
 
+  @Inject('accountService')
+  private accountService: () => AccountService;
+
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   private updated = false;
+  private recordsLoaded = true;
 
   gridSchema = {
     defaultSort: {},
@@ -74,10 +79,6 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   dialogContentSubItem = null;
   dialogWidth = "";
   dialogCloseOnClick = true;
-
-  private baseApiUrlReference = "/api/ad-references";
-  private baseApiUrlReferenceList = "/api/ad-reference-lists";
-
   bidding: Record<string, any> = {};
 
   get dateDisplayFormat() {
@@ -86,6 +87,25 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
 
   get dateValueFormat() {
     return settings.dateValueFormat;
+  }
+
+  get projectDocUploadHeaders() {
+    if (this.accountService().hasToken) {
+      return {
+        'Authorization': `Bearer ${this.accountService().token}`
+      }
+    }
+
+    return {};
+  }
+
+  @Watch('bidding', { deep: true })
+  onBiddingChanged(_bidding: Record<string, any>) {
+    if (this.editMode && this.recordsLoaded && ! this.updated) {
+      this.updated = true;
+      console.log('record updated');
+      this.$emit('change');
+    }
   }
 
   @Watch('data')
@@ -119,23 +139,37 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   }
 
   created() {
-    this.bidding.step = BiddingStep.INFO;
-
     if (this.editMode) {
+      this.recordsLoaded = false;
       this.bidding = {...this.data};
       this.$set(this.bidding, 'referenceNo', this.bidding.requisitionName);
-      this.retrieveEventTypes(this.bidding.biddingTypeId);
-      this.retrieveBiddingLines(this.bidding.id);
-      this.retrieveProjectInformations(this.bidding.id);
+      
+      Promise.allSettled([
+        this.retrieveEventTypes(this.bidding.biddingTypeId),
+        this.retrieveBiddingLines(this.bidding.id),
+        this.retrieveProjectInformations(this.bidding.id)
+      ])
+      .then(_results => {
+        this.recordsLoaded = true;
+      })
     } else {
       this.bidding.documentAction = 'APV';
       this.bidding.documentStatus = 'SMT';
       this.bidding.projectInformations = [];
     }
 
+    this.bidding.step = BiddingStep.INFO;
     this.retrieveCostCenter();
     this.retrieveBiddingType();
-    this.retrieveReferenceLists('mVendorSelection');
+
+    this.commonService(null)
+      .retrieveReferenceLists('mVendorSelection')
+      .then(res => {
+        this.vendorSelectionOptions = res.map((item: any) =>
+          ({ key: item.value, value: item.name })
+        );
+      });
+
     this.retrievePicBidding();
     this.retrieveUom();
   }
@@ -156,33 +190,6 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   saveSubitemEditor() {
     this.savingSubitem = true;
     (<any>this.$refs.subitemEditor).save();
-  }
-
-  private retrieveReferenceLists(code: string) {
-    if (code !== 'mVendorSelection') {
-      return;
-    }
-
-    this.commonService('/api/ad-reference-lists')
-    .retrieve({
-      criteriaQuery: this.updateCriteria([
-        `active.equals=true`,
-        `adReferenceValue.equals=${code}`
-      ]),
-      paginationQuery: {
-        page: 0,
-        size: 100,
-        sort: ['name']
-      }
-    })
-    .then(res => {
-      this.vendorSelectionOptions = res.data.map((item: any) =>
-        ({
-            key: item.value,
-            value: item.name
-        })
-      );
-    });
   }
 
   private retrieveCostCenter() {
@@ -237,22 +244,29 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
       });
   }
 
-  retrieveEventTypes(biddingTypeId: number) {
-    this.commonService('/api/c-event-types')
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          `biddingTypeId.equals=${biddingTypeId}`
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 1000,
-          sort: ['name']
-        }
-      })
-      .then(res => {
-        this.eventTypeOptions = res.data;
-      });
+  retrieveEventTypes(biddingTypeId: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.commonService('/api/c-event-types')
+        .retrieve({
+          criteriaQuery: this.updateCriteria([
+            'active.equals=true',
+            `biddingTypeId.equals=${biddingTypeId}`
+          ]),
+          paginationQuery: {
+            page: 0,
+            size: 1000,
+            sort: ['name']
+          }
+        })
+        .then(res => {
+          this.eventTypeOptions = res.data;
+          resolve(true);
+        })
+        .catch(err => {
+          this.$message.error('Failed to get the event type list');
+          reject(false);
+        });
+    });
   }
 
   private retrieveUom() {
@@ -272,56 +286,64 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
       });
   }
 
-  private retrieveBiddingLines(biddingId: number) {
-    this.loadingLines = true;
-    this.commonService('/api/m-bidding-lines')
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          `biddingId.equals=${biddingId}`
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 1000,
-          sort: ['lineNo', 'id']
-        }
-      })
-      .then(res => {
-        this.$set(this.bidding, 'biddingLines', res.data);
-      })
-      .catch(err => {
-        console.log('Failed to get bidding lines. %O', err);
-        this.$message.error('Failed to get bidding lines');
-      })
-      .finally(() => {
-        this.loadingLines = false;
-      })
+  private retrieveBiddingLines(biddingId: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.loadingLines = true;
+      this.commonService('/api/m-bidding-lines')
+        .retrieve({
+          criteriaQuery: this.updateCriteria([
+            'active.equals=true',
+            `biddingId.equals=${biddingId}`
+          ]),
+          paginationQuery: {
+            page: 0,
+            size: 1000,
+            sort: ['lineNo', 'id']
+          }
+        })
+        .then(res => {
+          this.$set(this.bidding, 'biddingLines', res.data);
+          resolve(true);
+        })
+        .catch(err => {
+          console.log('Failed to get bidding lines. %O', err);
+          this.$message.error('Failed to get bidding lines');
+          reject(false);
+        })
+        .finally(() => {
+          this.loadingLines = false;
+        });
+    });
   }
 
-  private retrieveProjectInformations(biddingId: number) {
-    this.loadingProjectInfo = true;
-    this.commonService('/api/m-project-informations')
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          `biddingId.equals=${biddingId}`
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 1000,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        this.$set(this.bidding, 'projectInformations', res.data);
-      })
-      .catch(err => {
-        console.log('Failed to get project informations. %O', err);
-        this.$message.error('Failed to get project informations');
-      })
-      .finally(() => {
-        this.loadingProjectInfo = false;
-      })
+  private retrieveProjectInformations(biddingId: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.loadingProjectInfo = true;
+      this.commonService('/api/m-project-informations')
+        .retrieve({
+          criteriaQuery: this.updateCriteria([
+            'active.equals=true',
+            `biddingId.equals=${biddingId}`
+          ]),
+          paginationQuery: {
+            page: 0,
+            size: 1000,
+            sort: ['id']
+          }
+        })
+        .then(res => {
+          this.$set(this.bidding, 'projectInformations', res.data);
+          resolve(true);
+        })
+        .catch(err => {
+          console.log('Failed to get project informations. %O', err);
+          this.$message.error('Failed to get project informations');
+          reject(false);
+        })
+        .finally(() => {
+          this.loadingProjectInfo = false;
+        });
+    });
   }
 
   retrieveReferencedData(referenceNo?: string) {

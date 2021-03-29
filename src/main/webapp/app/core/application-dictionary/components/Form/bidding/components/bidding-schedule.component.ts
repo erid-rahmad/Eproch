@@ -13,7 +13,7 @@ const BiddingScheduleProp = Vue.extend({
       default: () => {}
     }
   }
-})
+});
 
 @Component
 export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingScheduleProp) {

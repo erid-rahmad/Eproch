@@ -39,6 +39,7 @@ public class TokenProvider {
 
     private static final String AUTHORITIES_KEY = "auth";
     private static final String VENDOR_ID_KEY = "vendorId";
+    private static final String ORGANIZATION_ID_KEY = "orgId";
 
     private Key key;
 
@@ -79,9 +80,12 @@ public class TokenProvider {
         
         boolean vendor = false;
         long vendorId = 0;
+        long orgId = 0;
 
         if (adUser.isPresent()) {
             AdUser user = adUser.get();
+
+            orgId = user.getAdOrganization().getId();
             vendor = Optional.ofNullable(user.isVendor()).orElse(false);
 
             if (vendor && user.getCVendor() != null) {
@@ -100,6 +104,7 @@ public class TokenProvider {
         return Jwts.builder()
             .setSubject(authentication.getName())
             .claim(AUTHORITIES_KEY, authorities)
+            .claim(ORGANIZATION_ID_KEY, orgId)
             .claim(VENDOR_ID_KEY, vendorId)
             .signWith(key, SignatureAlgorithm.HS512)
             .setExpiration(validity)
@@ -118,10 +123,12 @@ public class TokenProvider {
                 .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
 
-        long vendorId = claims.get(VENDOR_ID_KEY, Long.class);
+        Long orgId = claims.get(ORGANIZATION_ID_KEY, Long.class);
+        Long vendorId = claims.get(VENDOR_ID_KEY, Long.class);
         Collection<Long> organizations = new HashSet<>();
         Collection<String> accesses = new HashSet<>();
 
+        organizations.add(orgId);
         User principal = new AuthenticatedUser(claims.getSubject(), "", authorities, organizations, accesses, vendorId);
 
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);

@@ -19,8 +19,9 @@
       class="step-panel"
       :edit-mode="editMode"
       :data="bidding"
-      @saved="goToNextStep"
+      @change="dataChanged = true"
       @error="showSaveDialog = false"
+      @saved="goToNextStep"
     ></bidding-information>
 
     <bidding-schedule
@@ -30,6 +31,7 @@
       :edit-mode="editMode"
       :data="bidding"
       @saved="goToNextStep"
+      @error="showSaveDialog = false"
     ></bidding-schedule>
 
     <vendor-invitation
@@ -94,7 +96,7 @@
           icon="el-icon-close"
           size="mini"
           style="margin-left: 0px;"
-          @click="showSaveDialog = false"
+          @click="onSkipSave"
         >
           No
         </el-button>

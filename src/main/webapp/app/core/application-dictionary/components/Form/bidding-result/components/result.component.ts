@@ -25,13 +25,13 @@ export default class BiddingResult extends mixins(AccessLevelMixin, BiddingResul
   ];
 
   mainForm = {
-    documentNo: 'CE-21030001',
-    biddingTitle: 'Tender Kendaraan Operasional',
-    biddingNo: 'BD-21030010',
+    documentNo: 'BR-21030001',
+    biddingTitle: 'Pengadaan Kendaraan Operasional',
+    biddingNo: 'BN-00001',
     currencyName: 'IDR',
-    picName: 'Indah Haryanti',
-    costCenterName: 'Departement #021',
-    requisitionName: 'PR-21020098',
+    picName: 'admintender',
+    costCenterName: 'Marketing',
+    requisitionName: 'PR-0025',
     selectedVendors: [],
     remark: null,
     galleryId: null
@@ -39,31 +39,31 @@ export default class BiddingResult extends mixins(AccessLevelMixin, BiddingResul
 
   tableData = [
     {
-      productName: 'Truk Pick-up',
-      quantity: '1',
+      productName: 'HONDA 2015',
+      quantity: '50',
       uomName: 'EA',
-      vendor1PriceGap: '4000000',
+      vendor1PriceGap: '0',
+      vendor1TotalScore: '90',
+      vendor2PriceGap: '50000000',
+      vendor2TotalScore: '100',
+    },
+    {
+      productName: 'HONDA CIVIC 2017',
+      quantity: '30',
+      uomName: 'EA',
+      vendor1PriceGap: '45000000',
       vendor1TotalScore: '100',
-      vendor2PriceGap: '3000000',
+      vendor2PriceGap: '30000000',
       vendor2TotalScore: '95',
     },
     {
-      productName: 'Truk Van',
-      quantity: '2',
+      productName: 'HONDA 2020',
+      quantity: '100',
       uomName: 'EA',
-      vendor1PriceGap: '4000000',
-      vendor1TotalScore: '100',
-      vendor2PriceGap: '0',
-      vendor2TotalScore: '50',
-    },
-    {
-      productName: 'Truk Box Medium',
-      quantity: '1',
-      uomName: 'EA',
-      vendor1PriceGap: '25000000',
-      vendor1TotalScore: '100',
-      vendor2PriceGap: '24000000',
-      vendor2TotalScore: '98',
+      vendor1PriceGap: '160000000',
+      vendor1TotalScore: '85',
+      vendor2PriceGap: '220000000',
+      vendor2TotalScore: '100',
     }
   ];
 

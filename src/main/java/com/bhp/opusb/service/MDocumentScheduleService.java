@@ -2,6 +2,7 @@ package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MDocumentSchedule;
 import com.bhp.opusb.repository.MDocumentScheduleRepository;
+import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.dto.MDocumentScheduleDTO;
 import com.bhp.opusb.service.mapper.MDocumentScheduleMapper;
 import org.slf4j.Logger;
@@ -47,6 +48,25 @@ public class MDocumentScheduleService {
     }
 
     /**
+     * Save all mDocumentSchedules.
+     *
+     * @param mDocumentScheduleDTOs the entities to save.
+     * @return the persisted entities.
+     */
+    public List<MDocumentScheduleDTO> saveAll(List<MDocumentScheduleDTO> mDocumentScheduleDTOs, MBiddingDTO mBiddingDTO) {
+        log.debug("Request to save MDocumentSchedules. count : {}", mDocumentScheduleDTOs.size());
+
+        mDocumentScheduleDTOs.forEach(line -> {
+            line.setBiddingId(mBiddingDTO.getId());
+            line.setAdOrganizationId(mBiddingDTO.getAdOrganizationId());
+        });
+
+        List<MDocumentSchedule> mDocumentSchedules = mDocumentScheduleMapper.toEntity(mDocumentScheduleDTOs);
+        mDocumentSchedules = mDocumentScheduleRepository.saveAll(mDocumentSchedules);
+        return mDocumentScheduleMapper.toDto(mDocumentSchedules);
+    }
+
+    /**
      * Get all the mDocumentSchedules.
      *
      * @param pageable the pagination information.
@@ -86,5 +106,15 @@ public class MDocumentScheduleService {
     public void delete(Long id) {
         log.debug("Request to delete MDocumentSchedule : {}", id);
         mDocumentScheduleRepository.deleteById(id);
+    }
+
+    /**
+     * Delete the mDocumentSchedules.
+     *
+     * @param mDocumentScheduleDTOs the entities to delete.
+     */
+    public void deleteAll(List<MDocumentScheduleDTO> mDocumentScheduleDTOs) {
+        log.debug("Request to delete MDocumentSchedules. count : {}", mDocumentScheduleDTOs.size());
+        mDocumentScheduleRepository.deleteAll(mDocumentScheduleMapper.toEntity(mDocumentScheduleDTOs));
     }
 }
