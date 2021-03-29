@@ -37,7 +37,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-table :data="tableData">
-                        <el-table-column min-width="30" label="No">
+                        <el-table-column label="No" sortable width="60">
                             <template slot-scope="row">
                                 {{ row.$index+1 }}
                             </template>
@@ -68,7 +68,13 @@
                         <h7>Admin Tender</h7>
                     </el-form-item>
                     <el-form-item label="Dockument" prop="biddingNo" required>
-                        <h7>proposal_projeck.pdf</h7>
+                          <template slot-scope="{ row }">
+                            <el-button class="btn-attachment" icon="el-icon-download" size="mini" type="primary" @click="downloadAttachment(row)">
+                                 proposal_projeck.pdf 
+                                
+                            </el-button>
+                        </template>
+                       
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -88,13 +94,20 @@
             </el-table-column>
             <el-table-column prop="2" label="Proposed Price" width="140">
             </el-table-column>
-            <el-table-column prop="3" label="Price Ranking" width="140">
+            <el-table-column prop="3" label="Price Ranking" width="100">
             </el-table-column>
-            <el-table-column prop="" label="Dockument Submission" width="100">
-                <el-table-column prop="4" label="" width="120">
+            <el-table-column prop="" label="Dockument Submission" width="">
+                <el-table-column prop="4" label="" width="150">
                 </el-table-column>
-                <el-table-column prop="5" label="" width="100">
+                <el-table-column prop="5" label="" width="150">
+                    <template slot-scope="{ row }">
+                            <el-button class="btn-attachment" icon="el-icon-download" size="mini" type="primary" @click="downloadAttachment(row)">
+                                 time line.pdf 
+                                
+                            </el-button>
+                        </template>
                 </el-table-column>
+                
             </el-table-column>
             <el-table-column label="Scoring Criteria 1 Name">
                 <el-table-column prop="4" label="Quantity" width="120">

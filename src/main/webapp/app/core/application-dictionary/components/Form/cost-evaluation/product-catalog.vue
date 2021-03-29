@@ -1,49 +1,57 @@
 <template>
     <div class="app-container">
-   
+
         <el-row v-if="index" class="main" ref="tableWrapper">
             <el-col :span="24">
 
                 <el-tabs v-model="activeName" @tab-click="handleClick">
 
-                   
 
-                        <keep-alive>
 
-                            <el-col :span="24">
-                                <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
-                                    <el-table-column min-width="30" label="No">
-                                        <template slot-scope="row">
-                                            {{ row.$index+1 }}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="1" label="Cost Evaluation" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="2" label="Biding No" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="3" label="Bidding title" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="4" label="Bidding type" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="5" label="Aproval Status" sortable width="180">
-                                       
-                                    </el-table-column>
-                                    <el-table-column prop="6" label="Modified Date" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="7" label="Modified By" width="180">
-                                    </el-table-column>
-                                    <el-table-column min-width="60" sortable label="Bidding Schedule">
-                                        <template slot-scope="{ row }">
-                                            <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="onClick('add')">
-                                                Action
-                                            </el-button>
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </el-col>
+                    <keep-alive>
 
-                        </keep-alive>
-                
+                        <el-col :span="24">
+                            <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
+                                <el-table-column min-width="30" label="No">
+                                    <template slot-scope="row">
+                                        {{ row.$index+1 }}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="0" label="Cost Evaluation" sortable width="180">
+                                </el-table-column>
+                                <el-table-column prop="1" label="Biding No" sortable width="180">
+                                </el-table-column>
+                                <el-table-column prop="2" label="Bidding title" sortable width="180">
+                                </el-table-column>
+                                <el-table-column prop="3" label="Bidding type" sortable width="150">
+                                </el-table-column>
+                                <el-table-column prop="4" label="Bidding Schedule" sortable width="120">
+                                </el-table-column>
+                                <el-table-column prop="5" label="Aproval Status" sortable width="120">
+                                </el-table-column>
+                                <el-table-column prop="6" label="Joined Vendor" sortable width="80">
+                                    <template slot-scope="{ row }">
+                                        <el-button class="btn-attachment" icon="el-icon-search" size="mini" type="primary" @click="downloadAttachment(row)">
+                                           {{row.re}}
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="7" label="Modified Date" sortable width="180">
+                                </el-table-column>
+                                <el-table-column prop="8" label="Modified By" width="180">
+                                </el-table-column>
+                                <el-table-column min-width="60" sortable label="Bidding Schedule">
+                                    <template slot-scope="{ row }">
+                                        <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="onClick('add')">
+                                            View
+                                        </el-button>
+                                    </template>
+                                </el-table-column>
+                            </el-table>
+                        </el-col>
+
+                    </keep-alive>
+
                 </el-tabs>
 
             </el-col>

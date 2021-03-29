@@ -19,28 +19,28 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Evaluation No" prop="name">
-                                <h7>BP-123</h7>
+                                <h7>EV-00001</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Biding Title" prop="name">
-                                <h7>Biding Tes</h7>
+                                <h7>Penggandaan Kendaraan Operasional</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Biding No" prop="name">
-                                <h7>BP-1122</h7>
+                                <h7>BP-00001</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="Biding Type" prop="name">
-                                <h7>gratis</h7>
+                                <h7>Tender Goods</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -57,14 +57,14 @@
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="PIC" prop="name">
-                                    <h7>jubaidah</h7>
+                                    <h7>Admin Tender</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="Depertement" prop="name">
-                                    <h7>majumaju</h7>
+                                    <h7>Marketing</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -105,9 +105,9 @@
                 <el-table-column prop="1" label="Detail" width="150">
                     <el-table-column prop="1" label="Produck" width="150">
                     </el-table-column>
-                    <el-table-column v-if="!isHidden" prop="3" label="Sub Item" width="180">
+                    <el-table-column v-if="!isHidden" prop="22" label="Sub Item" width="180">
                     </el-table-column>
-                    <el-table-column v-if="!isHidden" prop="4" label="Sub Sub item" width="180">
+                    <el-table-column v-if="!isHidden" prop="33" label="Sub Sub item" width="180">
                     </el-table-column>
                     <el-table-column prop="2" label="Qty" width="150">
                     </el-table-column>
@@ -117,25 +117,25 @@
                     </el-table-column>
                 </el-table-column>
                 <el-table-column prop="1" label="Evaluation" width="150">
-                    <el-table-column prop="1" label="price" width="150">
+                    <el-table-column prop="5" label="price" width="150">
                     </el-table-column>
-                    <el-table-column prop="2" label="subtotal" width="150">
+                    <el-table-column prop="6" label="subtotal" width="150">
                     </el-table-column>
                 </el-table-column>
                 <el-table-column prop="1" label="Vendor A" width="150">
-                    <el-table-column prop="1" label="price" width="150">
+                    <el-table-column prop="7" label="price" width="150">
                     </el-table-column>
-                    <el-table-column prop="2" label="subtotal" width="150">
+                    <el-table-column prop="8" label="subtotal" width="150">
                     </el-table-column>
-                    <el-table-column prop="3" label="Gap" width="150">
+                    <el-table-column prop="9" label="Gap" width="150">
                     </el-table-column>
                 </el-table-column>
                 <el-table-column prop="1" label="Vendor B" width="150">
-                    <el-table-column prop="1" label="price" width="150">
+                    <el-table-column prop="10" label="price" width="150">
                     </el-table-column>
-                    <el-table-column prop="2" label="subtotal" width="150">
+                    <el-table-column prop="11" label="subtotal" width="150">
                     </el-table-column>
-                    <el-table-column prop="2" label="Gap" width="150">
+                    <el-table-column prop="12" label="Gap" width="150">
                     </el-table-column>
                 </el-table-column>
             </el-table>
@@ -157,7 +157,7 @@
                     <el-form ref="biddingInfasdsadormation" label-position="left" label-width="100px" :model="asd" :rules="asd">
                         <el-form-item label="Remark" prop="title">
                             <template>
-                                <el-button class="button" icon="el-icon-search" size="mini" type="primary" @click="viewSchedule(row)">
+                                <el-button class="button" icon="el-icon-download" size="mini" type="primary" @click="viewSchedule(row)">
                                     Select Dockument
                                 </el-button>
                             </template>
