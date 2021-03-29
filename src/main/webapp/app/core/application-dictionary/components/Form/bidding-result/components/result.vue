@@ -14,6 +14,13 @@
         </el-button>
         <el-button
           size="mini"
+          type="primary"
+          @click="showGeneratePoDialog = true"
+        >
+          <svg-icon name="ecommerce/016-bill"></svg-icon> Generate PO
+        </el-button>
+        <el-button
+          size="mini"
         >
           <svg-icon name="icomoo/085-printer"></svg-icon> Print
         </el-button>
@@ -238,6 +245,32 @@
         </el-col>
       </el-row>
     </el-form>
+    <el-dialog
+      width="30%"
+      :visible.sync="showGeneratePoDialog"
+      title="Generate PO Confirmation"
+    >
+      <p>Do you want to generate purchase orders?</p>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          style="margin-left: 0px;"
+          size="mini"
+          @click="showGeneratePoDialog = false"
+        >
+          {{ $t('entity.action.cancel') }}
+        </el-button>
+        <el-button
+          icon="el-icon-check"
+          style="margin-left: 0px;"
+          size="mini"
+          type="primary"
+          @click="showGeneratePoDialog = false"
+        >
+          Terminate
+        </el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
