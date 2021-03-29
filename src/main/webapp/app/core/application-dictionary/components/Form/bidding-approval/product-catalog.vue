@@ -1,8 +1,17 @@
 <template>
     <div class="app-container">
         <div>
-            <el-divider content-position="left">
-                <h4></h4>
+             <el-row :gutter="columnSpacing">
+            <el-col :span="24">               
+                <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
+                    Back
+                </el-button>
+                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="validate">
+                    Submit <em class="el-icon-arrow-right"></em>
+                </el-button>
+            </el-col>
+        </el-row>
+            <el-divider content-position="left">              
             </el-divider>
             <el-form ref="biddingInformation" label-position="left" label-width="100px" size="mini" :model="biddingInformation" :rules="rules">
                 <el-row :gutter="24">
@@ -177,10 +186,10 @@
                 </el-col>
             </el-col>
             <el-col :span="4" class="tab-container">
-                <el-row>
+                <!-- <el-row>
                     <el-button type="success" plain>Approve</el-button>
                     <el-button type="danger" plain>Cancle</el-button>
-                </el-row>
+                </el-row> -->
             </el-col>
         </el-col>
         <!-- <el-row v-if="index" class="main" ref="tableWrapper">

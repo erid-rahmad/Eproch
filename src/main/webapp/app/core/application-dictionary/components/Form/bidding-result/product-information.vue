@@ -36,12 +36,12 @@
                         <el-form-item label="Vendor Name" prop="title" required>
                             <el-dropdown>
                                 <span class="el-dropdown-link">
-                                    Vendor List<i class="el-icon-arrow-down el-icon--right"></i>
+                                    PT Sistech Kharisma<i class="el-icon-arrow-down el-icon--right"></i>
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item>PT SIMATUPANG</el-dropdown-item>
-                                    <el-dropdown-item>PT LAMDA SOLUSI TECH</el-dropdown-item>
-                                    <el-dropdown-item>PT LAMGU MAIN </el-dropdown-item>
+                                    <el-dropdown-item>PT Sistech Kharisma</el-dropdown-item>
+                                    <el-dropdown-item>PT Ingram Micro Indonesia</el-dropdown-item>
+                                    <el-dropdown-item>PT Makmur jaya </el-dropdown-item>
                                  
                                 </el-dropdown-menu>
                             </el-dropdown>
