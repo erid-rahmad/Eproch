@@ -139,7 +139,7 @@
             min-width="50"
           ></el-table-column>
         </el-table-column>
-        <el-table-column label="Perum Nurdiyanti Megantara">
+        <el-table-column label="INGRAM MICRO INDONESIA">
           <el-table-column
             label="Price Gap"
             width="200"
@@ -157,7 +157,7 @@
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="PT Hidayanto (Persero) Tbk">
+        <el-table-column label="SISTECH KHARISMA">
           <el-table-column
             label="Price Gap"
             min-width="200"
@@ -188,8 +188,8 @@
             style="margin-bottom: .5rem"
           >
             <el-checkbox-group v-model="mainForm.selectedVendors">
-              <el-checkbox label="Perum Nurdiyanti Megantara" value="1000" name="selectedVendors"></el-checkbox>
-              <el-checkbox label="PT Hidayanto (Persero) Tbk" value="2000" name="selectedVendors"></el-checkbox>
+              <el-checkbox label="INGRAM MICRO INDONESIA" value="1000" name="selectedVendors"></el-checkbox>
+              <el-checkbox label="SISTECH KHARISMA" value="2000" name="selectedVendors"></el-checkbox>
             </el-checkbox-group>
           </el-form-item>
         </el-col>

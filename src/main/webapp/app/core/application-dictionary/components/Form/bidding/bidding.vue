@@ -138,9 +138,9 @@
               class="button"
               size="mini"
               style="width: 100%"
-              @click="viewJoinVendor(row)"
+              @click="viewJoinVendor"
             >
-              <svg-icon name="icomoo/115-users"></svg-icon> {{ randomVendorCount }}
+              <svg-icon name="icomoo/115-users"></svg-icon> {{ row.documentNo === 'BN-00001' ? 3 : randomizeVendorCount(row) }}
             </el-button>
           </template>
         </el-table-column>

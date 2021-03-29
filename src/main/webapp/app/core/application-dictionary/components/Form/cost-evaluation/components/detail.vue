@@ -178,7 +178,7 @@
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="Perum Nurdiyanti Megantara">
+        <el-table-column label="INGRAM MICRO INDONESIA">
           <el-table-column
             label="Price"
             min-width="200"
@@ -204,7 +204,7 @@
             </template>
           </el-table-column>
         </el-table-column>
-        <el-table-column label="PT Hidayanto (Persero) Tbk">
+        <el-table-column label="SISTECH KHARISMA">
           <el-table-column
             label="Price"
             min-width="200"

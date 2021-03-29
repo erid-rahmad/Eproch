@@ -57,12 +57,16 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
 
   joinedVendors = [
     {
-      name: 'Perum Nurdiyanti Megantara',
-      location: ''
+      name: 'INGRAM MICRO INDONESIA',
+      location: 'WISMA NUGRAHA SANTANA 9TH FLOOR SUITE#909, JL. JEND. SUDIRMAN KAV.7-8, 10220, JAKARTA PUSAT'
     },
     {
-      name: 'PT Hidayanto (Persero) Tbk',
-      location: ''
+      name: 'SISTECH KHARISMA',
+      location: 'JL. JUANDA 38-C, 10120, JAKARTA PUSAT'
+    },
+    {
+      name: 'WESTCON INTERNATIONAL INDONESIA',
+      location: 'GEDUNG MD PALACE TOWER 1, LT.5, JL. SETIABUDI SELATAN NO. 7 RT.05 RW.01, SETIABUDI, SETIABUDI, JAKARTA SELATAN'
     }
   ];
 
@@ -74,8 +78,8 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
     return settings.dateValueFormat;
   }
 
-  get randomVendorCount() {
-    return random(1, 10);
+  get randomizeVendorCount() {
+    return (_row) => random(1, 3);
   }
 
   @Watch('page')
@@ -207,7 +211,7 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
     this.index = false;
   }
 
-  viewJoinVendor(row: any) {
+  viewJoinVendor() {
     this.showJoinedVendors = true;
   }
 }
