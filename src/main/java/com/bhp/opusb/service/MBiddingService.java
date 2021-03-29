@@ -16,6 +16,8 @@ import com.bhp.opusb.repository.MVendorSuggestionRepository;
 import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.dto.MBiddingFormDTO;
 import com.bhp.opusb.service.dto.MBiddingLineDTO;
+import com.bhp.opusb.service.dto.MBiddingScheduleDTO;
+import com.bhp.opusb.service.dto.MDocumentScheduleDTO;
 import com.bhp.opusb.service.dto.MProjectInformationDTO;
 import com.bhp.opusb.service.mapper.MBiddingFormMapper;
 import com.bhp.opusb.service.mapper.MBiddingMapper;
@@ -41,6 +43,8 @@ public class MBiddingService {
     private final MBiddingRepository mBiddingRepository;
     private final MBiddingLineService mBiddingLineService;
     private final MProjectInformationService mProjectInformationService;
+    private final MBiddingScheduleService mBiddingScheduleService;
+    private final MDocumentScheduleService mDocumentScheduleService;
 
     private final MBiddingMapper mBiddingMapper;
     private final MBiddingFormMapper mBiddingFormMapper;
@@ -62,11 +66,14 @@ public class MBiddingService {
     private AdUserRepository adUserRepository;
 
     public MBiddingService(MBiddingRepository mBiddingRepository, MBiddingLineService mBiddingLineService,
-            MProjectInformationService mProjectInformationService, MBiddingMapper mBiddingMapper,
+            MProjectInformationService mProjectInformationService, MBiddingScheduleService mBiddingScheduleService,
+            MDocumentScheduleService mDocumentScheduleService, MBiddingMapper mBiddingMapper,
             MBiddingFormMapper mBiddingFormMapper) {
         this.mBiddingRepository = mBiddingRepository;
         this.mBiddingLineService = mBiddingLineService;
         this.mProjectInformationService = mProjectInformationService;
+        this.mBiddingScheduleService = mBiddingScheduleService;
+        this.mDocumentScheduleService = mDocumentScheduleService;
         this.mBiddingMapper = mBiddingMapper;
         this.mBiddingFormMapper = mBiddingFormMapper;
     }
@@ -139,7 +146,7 @@ public class MBiddingService {
         log.debug("Request to save MBidding : {}", mBiddingDTO);
         MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
 
-        if (mBiddingDTO.getStep().equals(MBiddingProcess.INFO)) {
+        if (MBiddingProcess.INFO.equals(mBiddingDTO.getStep())) {
             final List<MBiddingLineDTO> lines = mBiddingDTO.getBiddingLines();
             final List<MBiddingLineDTO> removedLines = mBiddingDTO.getRemovedBiddingLines();
             final List<MProjectInformationDTO> projectInformations = mBiddingDTO.getProjectInformations();
@@ -153,6 +160,12 @@ public class MBiddingService {
             mBiddingDTO = mBiddingFormMapper.toDto(mBidding);
             saveInformation(mBiddingDTO, lines, projectInformations,
                     removedLines, removedProjectInformations);
+        } else if (MBiddingProcess.SCHEDULE.equals(mBiddingDTO.getStep())) {
+            final List<MBiddingScheduleDTO> biddingSchedules = mBiddingDTO.getBiddingSchedules();
+            final List<MBiddingScheduleDTO> removedBiddingSchedules = mBiddingDTO.getRemovedBiddingSchedules();
+            final List<MDocumentScheduleDTO> documentSchedules = mBiddingDTO.getDocumentSchedules();
+            final List<MDocumentScheduleDTO> removedDocumentSchedules = mBiddingDTO.getRemovedDocumentSchedules();
+            saveSchedule(mBiddingDTO, biddingSchedules, documentSchedules, removedBiddingSchedules, removedDocumentSchedules);
         }
 
         return mBiddingDTO;
@@ -169,6 +182,20 @@ public class MBiddingService {
 
         removedBiddingLines.clear();
         removedProjectInformations.clear();
+        return mBiddingDTO;
+    }
+
+    private MBiddingDTO saveSchedule(MBiddingDTO mBiddingDTO, List<MBiddingScheduleDTO> biddingSchedules,
+            List<MDocumentScheduleDTO> documentSchedules, List<MBiddingScheduleDTO> removedBiddingSchedules,
+            List<MDocumentScheduleDTO> removedDocumentSchedules) {
+
+        mBiddingScheduleService.saveAll(biddingSchedules, mBiddingDTO);
+        mBiddingScheduleService.deleteAll(removedBiddingSchedules);
+        mDocumentScheduleService.saveAll(documentSchedules, mBiddingDTO);
+        mDocumentScheduleService.deleteAll(removedDocumentSchedules);
+
+        removedBiddingSchedules.clear();
+        removedDocumentSchedules.clear();
         return mBiddingDTO;
     }
 

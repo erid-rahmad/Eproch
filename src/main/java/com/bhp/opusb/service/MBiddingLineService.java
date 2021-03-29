@@ -138,11 +138,10 @@ public class MBiddingLineService {
     /**
      * Delete the list of mBiddingLines.
      *
-     * @param id the entities.
+     * @param mBiddingLineDTOs the entities to delete.
      */
     public void deleteAll(List<MBiddingLineDTO> mBiddingLineDTOs) {
-        log.debug("Request to delete MBiddingLines : {}", mBiddingLineDTOs);
-        List<MBiddingLine> entities = mBiddingLineMapper.toEntity(mBiddingLineDTOs);
-        mBiddingLineRepository.deleteAll(entities);
+        log.debug("Request to delete MBiddingLines. count : {}", mBiddingLineDTOs.size());
+        mBiddingLineRepository.deleteAll(mBiddingLineMapper.toEntity(mBiddingLineDTOs));
     }
 }

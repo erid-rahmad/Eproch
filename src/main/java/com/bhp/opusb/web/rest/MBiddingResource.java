@@ -86,10 +86,15 @@ public class MBiddingResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/m-biddings/save-form")
-    public ResponseEntity<MBiddingDTO> saveMBiddingForm(@RequestBody MBiddingFormDTO mBiddingDTO) throws URISyntaxException {
+    public ResponseEntity<MBiddingDTO> createMBiddingForm(@RequestBody MBiddingFormDTO mBiddingDTO) throws URISyntaxException {
         log.debug("REST request to save MBidding form : {}", mBiddingDTO);
+        if (mBiddingDTO.getId() != null) {
+            throw new BadRequestAlertException("A new mBidding cannot already have an ID", ENTITY_NAME, "idexists");
+        }
         MBiddingDTO result = mBiddingService.saveForm(mBiddingDTO);
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.created(new URI("/api/m-biddings/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
     }
 
     /**
@@ -108,6 +113,25 @@ public class MBiddingResource {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
         MBiddingDTO result = mBiddingService.save(mBiddingDTO);
+        return ResponseEntity.ok()
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, mBiddingDTO.getId().toString()))
+            .body(result);
+    }
+
+    /**
+     * {@code POST  /m-biddings} : Create a new mBidding.
+     *
+     * @param mBiddingDTO the mBiddingDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mBiddingDTO, or with status {@code 400 (Bad Request)} if the mBidding has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PutMapping("/m-biddings/save-form")
+    public ResponseEntity<MBiddingDTO> updateMBiddingForm(@RequestBody MBiddingFormDTO mBiddingDTO) throws URISyntaxException {
+        log.debug("REST request to save MBidding form : {}", mBiddingDTO);
+        if (mBiddingDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        MBiddingDTO result = mBiddingService.saveForm(mBiddingDTO);
         return ResponseEntity.ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, mBiddingDTO.getId().toString()))
             .body(result);

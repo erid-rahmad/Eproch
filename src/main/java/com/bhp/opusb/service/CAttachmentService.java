@@ -2,7 +2,6 @@ package com.bhp.opusb.service;
 
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -12,7 +11,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Optional;
 
 import javax.imageio.ImageIO;
@@ -21,6 +21,7 @@ import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CAttachment;
 import com.bhp.opusb.repository.CAttachmentRepository;
+import com.bhp.opusb.security.SecurityUtils;
 import com.bhp.opusb.service.dto.CAttachmentDTO;
 import com.bhp.opusb.service.mapper.CAttachmentMapper;
 
@@ -81,23 +82,31 @@ public class CAttachmentService {
     }
 
     public CAttachmentDTO storeFile(MultipartFile file) {
+        Instant now = Instant.now();
         String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
-        String fileExtension = originalFileName.substring(originalFileName.lastIndexOf("."));
-        try {
-            File tmpFile = File.createTempFile("bhp", fileExtension, null);
-            String fileName = tmpFile.getName();
-            tmpFile.delete();
+        StringBuilder fileName = new StringBuilder();
+        String fileExtension = StringUtils.getFilenameExtension(originalFileName);
 
-            Path targetLocation = this.uploadPath.resolve(fileName);
+        fileName.append(Timestamp.from(now).getTime())
+            .append("_")
+            .append(StringUtils.getFilename(originalFileName));
+
+        if (fileExtension != null) {
+            fileName.append(".").append(fileExtension);
+        }
+
+        try {
+            long orgId = SecurityUtils.getOrganizationId();
+            Path targetLocation = this.uploadPath.resolve(fileName.toString());
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             ADOrganization organization = new ADOrganization();
-            CAttachment cAttachment = new CAttachment();
+            organization.setId(orgId == 0 ? 1L : orgId);
 
-            organization.setId(1L);
-            cAttachment.active(true)
+            CAttachment cAttachment = new CAttachment()
+                .active(true)
                 .adOrganization(organization)
-                .fileName(fileName)
+                .fileName(fileName.toString())
                 .documentType(file.getContentType())
                 .mimeType(file.getContentType());
 

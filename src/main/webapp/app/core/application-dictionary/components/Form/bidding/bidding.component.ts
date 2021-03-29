@@ -1,10 +1,9 @@
+import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
-import AlertMixin from '@/shared/alert/alert.mixin';
 import { random } from 'lodash';
 import { mixins } from 'vue-class-component';
-import { Component, Watch } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../ContextVariableAccessor";
+import { Component, Inject, Watch } from 'vue-property-decorator';
+import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import StepForm from "../bidding/steps-form.vue";
 
 @Component({
@@ -12,7 +11,11 @@ import StepForm from "../bidding/steps-form.vue";
     StepForm,
   }
 })
-export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class BiddingProcess extends mixins(AccessLevelMixin) {
+
+  @Inject('dynamicWindowService')
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
+
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -44,10 +47,13 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   public gridData: Array<any> = [];
 
   showJoinedVendors = false;
+  showTerminationDialog = false;
   editMode: boolean = false;
   stepIndex: number = 0;
   selectedRow: any = null;
   selectedRows: Array<any> = [];
+
+  terminationReason = null;
 
   joinedVendors = [
     {
@@ -72,14 +78,40 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     return random(1, 10);
   }
 
-  created() {
-    //console.log(this.status)
+  @Watch('page')
+  onPageChange(page: number) {
+    this.loadPage(page);
   }
 
-  public mounted(): void {
-    this.retrieveGetReferences(this.keyReference);
-    this.filterQuery = "";
-    this.retrieveAllRecords();
+  onCreateClicked() {
+    this.editMode = false;
+    this.selectedRow = null;
+    this.index = false;
+  }
+
+  onDeleteClicked() {
+    console.log('Delete row ID: ', this.selectedRow.id);
+  }
+
+  onFormClosed() {
+    this.index = true;
+    this.selectedRows = [];
+    this.transition();
+  }
+
+  onSelectionChanged(value: any) {
+    this.selectedRows = value;
+    this.$emit("selectedRows", this.selectedRows);
+  }
+
+  created() {
+    this.commonService(null)
+      .retrieveReferenceLists('docStatus')
+      .then(res => {
+        this.documentStatuses = res.map(item => ({ key: item.value, value: item.name }));
+      });
+
+    this.transition();
   }
 
   public changeOrder(propOrder): void {
@@ -113,20 +145,7 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     }
   }
 
-  @Watch('page')
-  onPageChange(page: number) {
-    if (page !== this.previousPage) {
-      this.previousPage = page;
-      this.transition();
-    }
-  }
-
   public transition(): void {
-    this.retrieveAllRecords();
-  }
-
-  public refreshCatalogGrid(){
-    this.selectedRows = [];
     this.retrieveAllRecords();
   }
 
@@ -135,27 +154,8 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     this.retrieveAllRecords();
   }
 
-  public onSelectionChanged(value: any) {
-    this.selectedRows = value;
-    this.$emit("selectedRows", this.selectedRows);
-    console.log(value);
-  }
-
-  close() {
-    //this.dialogConfirmationVisible = false;
-    this.index = true;
-    this.selectedRows = [];
-    this.retrieveAllRecords();
-  }
-
-  onClick(key) {
-    if (key == 'add') {
-      this.editMode = false;
-      this.selectedRow = null;
-      this.index = false;
-    } else {
-      console.log(key);
-    }
+  formatDocumentStatus(value: string) {
+    return this.documentStatuses.find(status => status.key === value)?.value;
   }
 
   public retrieveAllRecords(): void {
@@ -170,7 +170,7 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
       sort: this.sort()
     };
 
-    this.dynamicWindowService(this.baseApiUrl)
+    this.commonService(this.baseApiUrl)
       .retrieve({
         criteriaQuery: this.filterQuery,
         paginationQuery
@@ -210,48 +210,4 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   viewJoinVendor(row: any) {
     this.showJoinedVendors = true;
   }
-
-  formatDocumentStatus(value: string) {
-    return this.documentStatuses.find(status => status.key === value)?.value;
-  }
-
-  private retrieveGetReferences(param: string) {
-    this.dynamicWindowService(this.baseApiUrlReference)
-    .retrieve({
-      criteriaQuery: [`value.contains=`+param]
-    })
-    .then(res => {
-        let references = res.data.map(item => {
-            return{
-                id: item.id,
-                value: item.value,
-                name: item.name
-            };
-        });
-        this.retrieveGetReferenceLists(references);
-    });
-  }
-
-  private retrieveGetReferenceLists(param: any) {
-    this.dynamicWindowService(this.baseApiUrlReferenceList)
-    .retrieve({
-      criteriaQuery: [`adReferenceId.equals=`+param[0].id]
-    })
-    .then(res => {
-        let referenceList = res.data.map(item => {
-            return{
-                key: item.value,
-                value: item.name
-            };
-        });
-
-        if(param[0].value == this.keyReference){
-          this.documentStatuses = referenceList;
-        }
-    });
-  }
-
-
-
-
 }

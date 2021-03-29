@@ -81,6 +81,19 @@ public final class SecurityUtils {
             getAuthorities(authentication).anyMatch(authority::equals);
     }
 
+    public static long getOrganizationId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return 0;
+        }
+
+        if (authentication.getPrincipal() instanceof String) {
+            return 0;
+        }
+
+        return ((AuthenticatedUser) authentication.getPrincipal()).getOrganizations().iterator().next();
+    }
+
     public static long getVendorId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {

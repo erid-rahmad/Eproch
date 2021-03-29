@@ -19,8 +19,12 @@ public class MBiddingFormDTO extends MBiddingDTO {
 
   // Event Schedule Step.
   private List<MBiddingScheduleDTO> biddingSchedules = new ArrayList<>();
+  private List<MBiddingScheduleDTO> removedBiddingSchedules = new ArrayList<>();
+  private List<MDocumentScheduleDTO> documentSchedules = new ArrayList<>();
+  private List<MDocumentScheduleDTO> removedDocumentSchedules = new ArrayList<>();
 
   // Vendor Invitation Step.
+  private List<MVendorInvitationDTO> vendorInvitations = new ArrayList<>();
   private List<MVendorSuggestionDTO> vendorSuggestions = new ArrayList<>();
 
   // Vendor Scoring Step.
@@ -72,6 +76,38 @@ public class MBiddingFormDTO extends MBiddingDTO {
 
   public void setBiddingSchedules(List<MBiddingScheduleDTO> biddingSchedules) {
     this.biddingSchedules = biddingSchedules;
+  }
+
+  public List<MBiddingScheduleDTO> getRemovedBiddingSchedules() {
+    return removedBiddingSchedules;
+  }
+
+  public void setRemovedBiddingSchedules(List<MBiddingScheduleDTO> removedBiddingSchedules) {
+    this.removedBiddingSchedules = removedBiddingSchedules;
+  }
+
+  public List<MDocumentScheduleDTO> getDocumentSchedules() {
+    return documentSchedules;
+  }
+
+  public void setDocumentSchedules(List<MDocumentScheduleDTO> documentSchedules) {
+    this.documentSchedules = documentSchedules;
+  }
+
+  public List<MDocumentScheduleDTO> getRemovedDocumentSchedules() {
+    return removedDocumentSchedules;
+  }
+
+  public void setRemovedDocumentSchedules(List<MDocumentScheduleDTO> removedDocumentSchedules) {
+    this.removedDocumentSchedules = removedDocumentSchedules;
+  }
+
+  public List<MVendorInvitationDTO> getVendorInvitations() {
+    return vendorInvitations;
+  }
+
+  public void setVendorInvitations(List<MVendorInvitationDTO> vendorInvitations) {
+    this.vendorInvitations = vendorInvitations;
   }
 
   public List<MVendorSuggestionDTO> getVendorSuggestions() {

@@ -2,6 +2,14 @@
     <div class="vendor-scoring">
 
         <el-divider content-position="left"><h4>Scoring Criteria</h4></el-divider>
+        <el-form inline size="mini">
+            <el-form-item label="Evaluation Method">
+                <el-select v-model="evaluationMethod">
+                    <el-option value="Evaluation Tender Service">Evaluation Tender Service</el-option>
+                    <el-option value="Evaluation Tender Goods">Evaluation Tender Goods</el-option>
+                </el-select>
+            </el-form-item>
+        </el-form>
 
         <el-row :gutter="24">
             <el-col :span="20">

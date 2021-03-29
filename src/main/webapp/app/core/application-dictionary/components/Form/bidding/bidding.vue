@@ -9,7 +9,7 @@
             icon="el-icon-plus"
             size="mini"
             type="primary"
-            @click="onClick('add')"
+            @click="onCreateClicked"
           />
 
           <el-button
@@ -17,17 +17,17 @@
             icon="el-icon-delete"
             size="mini"
             type="danger"
-            @click="onClick('remove')"
+            @click="onDeleteClicked"
           />
 
-          <el-button
+          <!-- <el-button
             class="button"
             size="mini"
             type="primary"
-            @click="onClick('export')"
+            @click="onExportClicked"
           >
             <svg-icon name="icomoo/199-upload2"></svg-icon> Export
-          </el-button>
+          </el-button> -->
 
         </el-col>
       </el-row>
@@ -56,51 +56,61 @@
 
         <el-table-column
           fixed
-          width="48"
+          width="200"
         >
           <template slot-scope="{ row }">
-            <el-link
-              type="primary"
-              size="mini"
+            <el-button
               icon="el-icon-search"
-              plain
+              size="mini"
               title="View"
+              type="primary"
               :underline="false"
               @click="viewBidding(row)"
-            ></el-link>
+            >View</el-button>
+            <el-button
+              size="mini"
+              title="Terminate Bidding"
+              type="danger"
+              :underline="false"
+              @click="showTerminationDialog = true"
+            >
+              <svg-icon name="icomoo/183-switch"></svg-icon> Terminate
+            </el-button>
           </template>
         </el-table-column>
 
         <el-table-column
           label="Bidding No."
-          min-width="100"
+          min-width="150"
           sortable
           prop="documentNo"
         ></el-table-column>
 
         <el-table-column
-          min-width="100"
-          sortable
-          prop="name"
           label="Title"
+          min-width="140"
+          prop="name"
+          show-overflow-tooltip
+          sortable
         ></el-table-column>
 
         <el-table-column
           label="Bidding Type"
-          min-width="100"
-          sortable
+          min-width="130"
           prop="biddingTypeName"
+          show-overflow-tooltip
+          sortable
         ></el-table-column>
 
         <el-table-column
           label="Bidding Schedule"
-          min-width="72"
+          min-width="140"
         >
           <template slot-scope="{ row }">
             <el-button
               class="button"
               size="mini"
-              type="primary"
+              style="width: 100%"
               @click="viewBidding(row, 1)"
             >
               <svg-icon name="icomoo/084-calendar"></svg-icon> View Schedule
@@ -110,7 +120,7 @@
 
         <el-table-column
           label="Bidding Status"
-          min-width="64"
+          min-width="140"
           prop="documentStatus"
           sortable
         >
@@ -121,14 +131,13 @@
 
         <el-table-column
           label="Joined Vendor"
-          min-width="64"
+          min-width="140"
         >
           <template slot-scope="{ row }">
             <el-button
               class="button"
               size="mini"
               style="width: 100%"
-              type="primary"
               @click="viewJoinVendor(row)"
             >
               <svg-icon name="icomoo/115-users"></svg-icon> {{ randomVendorCount }}
@@ -138,7 +147,7 @@
 
         <el-table-column
           label="Modified Date"
-          min-width="100"
+          min-width="150"
           prop="lastModifiedDate"
           sortable
         >
@@ -150,7 +159,7 @@
         <el-table-column
           label="Modified By"
           prop="lastModifiedBy"
-          min-width="100"
+          min-width="150"
           sortable
         ></el-table-column>
 
@@ -174,7 +183,7 @@
         :edit-mode="editMode"
         :data="selectedRow"
         :step-index="stepIndex"
-        @close="close"
+        @close="onFormClosed"
       />
     </div>
 
@@ -222,6 +231,38 @@
           @click="showJoinedVendors = false"
         >
           Close
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
+      width="30%"
+      :visible.sync="showTerminationDialog"
+      title="Terminate Bidding Confirmation"
+    >
+      <p>Are you sure you want to terminate the bidding process?</p>
+      <p>Please type the reason:</p>
+      <el-input
+        v-model="terminationReason"
+        type="textarea"
+        :autosize="{ minRows: 2, maxRows: 4}"
+      ></el-input>
+      <div slot="footer">
+        <el-button
+          style="margin-left: 0px;"
+          size="mini"
+          icon="el-icon-close"
+          @click="showTerminationDialog = false"
+        >
+          {{ $t('entity.action.cancel') }}
+        </el-button>
+        <el-button
+          style="margin-left: 0px;"
+          size="mini"
+          type="danger"
+          @click="showTerminationDialog = false"
+        >
+          <svg-icon name="icomoo/183-switch"></svg-icon> Terminate
         </el-button>
       </div>
     </el-dialog>

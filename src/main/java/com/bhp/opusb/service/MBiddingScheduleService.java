@@ -2,6 +2,7 @@ package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MBiddingSchedule;
 import com.bhp.opusb.repository.MBiddingScheduleRepository;
+import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.dto.MBiddingScheduleDTO;
 import com.bhp.opusb.service.mapper.MBiddingScheduleMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,6 +45,25 @@ public class MBiddingScheduleService {
         MBiddingSchedule mBiddingSchedule = mBiddingScheduleMapper.toEntity(mBiddingScheduleDTO);
         mBiddingSchedule = mBiddingScheduleRepository.save(mBiddingSchedule);
         return mBiddingScheduleMapper.toDto(mBiddingSchedule);
+    }
+
+    /**
+     * Save all mBiddingSchedules.
+     *
+     * @param mBiddingScheduleDTOs the entity to save.
+     * @return the persisted entities.
+     */
+    public List<MBiddingScheduleDTO> saveAll(List<MBiddingScheduleDTO> mBiddingScheduleDTOs, MBiddingDTO mBiddingDTO) {
+        log.debug("Request to save MBiddingSchedules. size : {}", mBiddingScheduleDTOs.size());
+
+        mBiddingScheduleDTOs.forEach(line -> {
+            line.setBiddingId(mBiddingDTO.getId());
+            line.setAdOrganizationId(mBiddingDTO.getAdOrganizationId());
+        });
+
+        List<MBiddingSchedule> mBiddingSchedules = mBiddingScheduleMapper.toEntity(mBiddingScheduleDTOs);
+        mBiddingSchedules = mBiddingScheduleRepository.saveAll(mBiddingSchedules);
+        return mBiddingScheduleMapper.toDto(mBiddingSchedules);
     }
 
     /**
@@ -79,5 +100,15 @@ public class MBiddingScheduleService {
     public void delete(Long id) {
         log.debug("Request to delete MBiddingSchedule : {}", id);
         mBiddingScheduleRepository.deleteById(id);
+    }
+
+    /**
+     * Delete the list ofmBiddingSchedules.
+     *
+     * @param id the id of the entity.
+     */
+    public void deleteAll(List<MBiddingScheduleDTO> mBiddingScheduleDTOs) {
+        log.debug("Request to delete MBiddingSchedule. count : {}", mBiddingScheduleDTOs.size());
+        mBiddingScheduleRepository.deleteAll(mBiddingScheduleMapper.toEntity(mBiddingScheduleDTOs));
     }
 }
