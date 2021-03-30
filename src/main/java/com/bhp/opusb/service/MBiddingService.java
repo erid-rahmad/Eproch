@@ -160,12 +160,15 @@ public class MBiddingService {
             mBiddingDTO = mBiddingFormMapper.toDto(mBidding);
             saveInformation(mBiddingDTO, lines, projectInformations,
                     removedLines, removedProjectInformations);
+
+            // Initialize bidding schedules as it depends on the Event Type value.
+            mBiddingScheduleService.initBiddingSchedules(mBidding);
+            
         } else if (MBiddingProcess.SCHEDULE.equals(mBiddingDTO.getStep())) {
             final List<MBiddingScheduleDTO> biddingSchedules = mBiddingDTO.getBiddingSchedules();
-            final List<MBiddingScheduleDTO> removedBiddingSchedules = mBiddingDTO.getRemovedBiddingSchedules();
             final List<MDocumentScheduleDTO> documentSchedules = mBiddingDTO.getDocumentSchedules();
             final List<MDocumentScheduleDTO> removedDocumentSchedules = mBiddingDTO.getRemovedDocumentSchedules();
-            saveSchedule(mBiddingDTO, biddingSchedules, documentSchedules, removedBiddingSchedules, removedDocumentSchedules);
+            saveSchedule(mBiddingDTO, biddingSchedules, documentSchedules, removedDocumentSchedules);
         }
 
         return mBiddingDTO;
@@ -186,15 +189,11 @@ public class MBiddingService {
     }
 
     private MBiddingDTO saveSchedule(MBiddingDTO mBiddingDTO, List<MBiddingScheduleDTO> biddingSchedules,
-            List<MDocumentScheduleDTO> documentSchedules, List<MBiddingScheduleDTO> removedBiddingSchedules,
-            List<MDocumentScheduleDTO> removedDocumentSchedules) {
+            List<MDocumentScheduleDTO> documentSchedules, List<MDocumentScheduleDTO> removedDocumentSchedules) {
 
-        mBiddingScheduleService.saveAll(biddingSchedules, mBiddingDTO);
-        mBiddingScheduleService.deleteAll(removedBiddingSchedules);
+        mBiddingScheduleService.saveAll(biddingSchedules);
         mDocumentScheduleService.saveAll(documentSchedules, mBiddingDTO);
         mDocumentScheduleService.deleteAll(removedDocumentSchedules);
-
-        removedBiddingSchedules.clear();
         removedDocumentSchedules.clear();
         return mBiddingDTO;
     }

@@ -1,14 +1,22 @@
 package com.bhp.opusb.repository;
 
+import java.util.Collection;
+
 import com.bhp.opusb.domain.MBiddingSchedule;
 
-import org.springframework.data.jpa.repository.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 /**
  * Spring Data  repository for the MBiddingSchedule entity.
  */
-@SuppressWarnings("unused")
 @Repository
 public interface MBiddingScheduleRepository extends JpaRepository<MBiddingSchedule, Long>, JpaSpecificationExecutor<MBiddingSchedule> {
+
+  @Modifying
+  @Query("DELETE FROM MBiddingSchedule s WHERE s.eventTypeLine.id NOT IN $1")
+  int deleteByEventTypeLineIdNotIn(Collection<Long> eventTypeLineIds);
 }

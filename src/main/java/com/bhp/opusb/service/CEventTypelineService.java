@@ -1,18 +1,19 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.bhp.opusb.domain.CEventTypeline;
 import com.bhp.opusb.repository.CEventTypelineRepository;
 import com.bhp.opusb.service.dto.CEventTypelineDTO;
 import com.bhp.opusb.service.mapper.CEventTypelineMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link CEventTypeline}.
@@ -56,6 +57,10 @@ public class CEventTypelineService {
         log.debug("Request to get all CEventTypelines");
         return cEventTypelineRepository.findAll(pageable)
             .map(cEventTypelineMapper::toDto);
+    }
+
+    public List<CEventTypelineDTO> findByEventTypeId(Long eventTypeId) {
+        return cEventTypelineMapper.toDto(cEventTypelineRepository.findByEventType_Id(eventTypeId));
     }
 
     /**

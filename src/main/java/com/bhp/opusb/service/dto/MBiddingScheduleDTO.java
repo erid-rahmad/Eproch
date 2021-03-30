@@ -27,7 +27,7 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
     private String biddingTitle;
 
     private Long adOrganizationId;
-    private Long adOrganizationName;
+    private String adOrganizationName;
 
     private Long eventTypeLineId;
     private String eventTypeLineName;
@@ -108,11 +108,11 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public Long getAdOrganizationName() {
+    public String getAdOrganizationName() {
         return adOrganizationName;
     }
 
-    public void setAdOrganizationName(Long adOrganizationName) {
+    public void setAdOrganizationName(String adOrganizationName) {
         this.adOrganizationName = adOrganizationName;
     }
 

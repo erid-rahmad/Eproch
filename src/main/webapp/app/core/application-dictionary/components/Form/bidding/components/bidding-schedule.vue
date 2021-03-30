@@ -10,15 +10,16 @@
         <el-table
           v-loading="processing"
           ref="biddingSchedules"
-          highlight-current-row
-          border stripe
-          size="mini"
-          style="width: 100%"
-          :height="gridSchema.height"
-          :max-height="gridSchema.maxHeight"
+          border
+          :data="bidding.biddingSchedules"
           :default-sort="gridSchema.defaultSort"
           :empty-text="gridSchema.emptyText"
-          :data="bidding.biddingSchedules"
+          :height="gridSchema.height"
+          highlight-current-row
+          :max-height="gridSchema.maxHeight"
+          size="mini"
+          stripe
+          style="width: 100%"
         >
           <el-table-column
             label="No"
@@ -34,46 +35,25 @@
             min-width="200"
           >
             <template slot-scope="{ row }">
-              {{ printEventName(row.event) }}
+              {{ printEventName(row.eventTypeLineName) }}
             </template>
           </el-table-column>
 
           <el-table-column
-            min-width="100"
-            prop="startDate"
-            label="Start Date"
+            width="422"
+            prop="schedule"
+            label="Schedule"
           >
             <template slot-scope="{ row }">
               <el-date-picker
-                style="width: 100%"
-                class="form-input"
+                v-model="row.schedule"
+                :format="dateDisplayFormat"
+                end-placeholder="End Datetime"
+                range-separator="To"
                 size="mini"
-                clearable
-                v-model="row.startDate"
-                format="dd/MM/yyyy HH:mm"
-                value-format="yyyy-MM-dd HH:mm"
-                type="datetime"
-                placeholder="Pick a day"
-              ></el-date-picker>
-            </template>
-          </el-table-column>
-
-          <el-table-column
-            min-width="100"
-            prop="endDate"
-            label="End Date"
-          >
-            <template slot-scope="{ row }">
-              <el-date-picker
-                style="width: 100%"
-                class="form-input"
-                size="mini"
-                clearable
-                v-model="row.endDate"
-                format="dd/MM/yyyy HH:mm"
-                value-format="yyyy-MM-dd HH:mm"
-                type="datetime"
-                placeholder="Pick a day"
+                start-placeholder="Start Datetime"
+                type="datetimerange"
+                @change="value => onScheduleChanged(row, value)"
               ></el-date-picker>
             </template>
           </el-table-column>
@@ -106,15 +86,16 @@
         <el-table
           v-loading="processing"
           ref="documentSchedules"
-          highlight-current-row
-          border stripe
-          size="mini"
-          style="width: 100%; height: 100%"
-          :height="gridSchema.height"
-          :max-height="gridSchema.maxHeight"
+          border
+          :data="bidding.documentSchedules"
           :default-sort="gridSchema.defaultSort"
           :empty-text="gridSchema.emptyText"
-          :data="bidding.documentSchedules"
+          :height="gridSchema.height"
+          highlight-current-row
+          :max-height="gridSchema.maxHeight"
+          size="mini"
+          stripe
+          style="width: 100%; height: 100%"
         >
 
           <el-table-column
@@ -142,14 +123,14 @@
                 size="small"
                 type="info"
               >
-                Start: {{ row.vendorSubmission.startDate }}
+                Start: {{ row.vendorSubmissionStartDate | formatDate }}
               </el-tag>
               <el-tag
                 effect="plain"
                 size="small"
                 type="info"
               >
-                End: {{ row.vendorSubmission.endDate }}
+                End: {{ row.vendorSubmissionEndDate | formatDate }}
               </el-tag>
             </template>
           </el-table-column>
@@ -164,14 +145,14 @@
                 size="small"
                 type="info"
               >
-                Start: {{ row.vendorEvaluation.startDate }}
+                Start: {{ row.vendorEvaluationStartDate | formatDate }}
               </el-tag>
               <el-tag
                 effect="plain"
                 size="small"
                 type="info"
               >
-                End: {{ row.vendorEvaluation.endDate }}
+                End: {{ row.vendorEvaluationEndDate | formatDate }}
               </el-tag>
             </template>
           </el-table-column>
@@ -179,18 +160,19 @@
           <el-table-column align="right" min-width="50">
             <template slot="header">
               <el-button
-                size="mini"
                 icon="el-icon-plus"
-                style="margin: 4px 0"
-                type="primary"
-                @click="addDocument"/>
-            </template>
-            <template slot-scope="row">
-              <el-button
                 size="mini"
+                type="primary"
+                @click="addDocument"
+              ></el-button>
+            </template>
+            <template slot-scope="{ row, $index }">
+              <el-button
                 icon="el-icon-delete"
+                size="mini"
                 type="danger"
-                @click="removeDocument(row.$index)"/>
+                @click="removeDocument(row, $index)"
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -247,11 +229,11 @@
           </el-form-item>
           <el-form-item
             label="Submission Date"
-            prop="submissionScheduleId"
+            prop="vendorSubmissionId"
             required
           >
             <el-select
-              v-model="documentSchedule.submissionScheduleId"
+              v-model="documentSchedule.vendorSubmissionId"
               class="form-input"
               clearable
               filterable
@@ -261,14 +243,18 @@
               <el-option
                 v-for="item in eventScheduleOptions"
                 :key="item.id"
-                :label="printEventName(item.event) + ' (Start: ' + item.startDate + ' - End: ' + item.endDate + ')'"
+                :label="printScheduleLabel(item)"
                 :value="item.id"
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label="Evaluation Date" prop="evaluationScheduleId" required>
+          <el-form-item
+            label="Evaluation Date"
+            prop="vendorEvaluationId"
+            required
+          >
             <el-select
-              v-model="documentSchedule.evaluationScheduleId"
+              v-model="documentSchedule.vendorEvaluationId"
               class="form-input"
               clearable filterable
               placeholder="Select Evaluation Schedule"
@@ -277,7 +263,7 @@
               <el-option
                 v-for="item in eventScheduleOptions"
                 :key="item.id"
-                :label="printEventName(item.event) + ' (Start: ' + item.startDate + ' - End: ' + item.endDate + ')'"
+                :label="printScheduleLabel(item)"
                 :value="item.id"
               ></el-option>
             </el-select>
@@ -310,6 +296,14 @@
 </template>
 
 <script lang="ts" src="./bidding-schedule.component.ts"></script>
+
+<style lang="scss">
+.compact .bidding-schedule .el-table--mini {
+  th, td {
+    height: 35px;
+  }
+}
+</style>
 
 <style lang="scss" scoped>
 .bidding-schedule .el-tag {

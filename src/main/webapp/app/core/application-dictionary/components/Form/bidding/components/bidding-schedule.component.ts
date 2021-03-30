@@ -1,4 +1,7 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import settings from '@/settings';
+import { DATE_TIME_FORMAT } from '@/shared/date/filters';
+import { format, parseISO } from 'date-fns';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Inject, Mixins, Watch } from 'vue-property-decorator';
@@ -21,6 +24,9 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  private updated = false;
+  private recordsLoaded = true;
+
   private events = [];
 
   gridSchema = {
@@ -31,7 +37,8 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   };
   rules = {}
 
-  fullscreenLoading = false;
+  loadingSchedules = false;
+  loadingDocumentSchedules = false;
   processing = false;
   dialogConfirmationVisible:boolean = false;
 
@@ -39,8 +46,8 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
 
   private documentSchedule: any = {
     docEvent: null,
-    submissionScheduleId: null,
-    evaluationScheduleId: null,
+    vendorSubmissionId: null,
+    vendorEvaluationId: null,
     vendorSubmission: null,
     vendorEvaluation: null
   };
@@ -50,9 +57,20 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   eventAttachmentVisible = false;
   tmpAttachments: any[] = [];
 
-  @Watch('data')
-  onDataChanged(data: any) {
-    console.log('bidding schedule data changed:', data);
+  get dateDisplayFormat() {
+    return settings.dateTimeDisplayFormat;
+  }
+
+  get dateValueFormat() {
+    return settings.dateTimeValueFormat;
+  }
+
+  @Watch('bidding', { deep: true })
+  onBiddingChanged(_bidding: Record<string, any>) {
+    if (this.recordsLoaded && ! this.updated) {
+      this.updated = true;
+      this.$emit('change');
+    }
   }
 
   onAttachmentChanged(_file: any, fileList: any[]) {
@@ -67,71 +85,102 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
 
   }
 
-  created() {
-    this.bidding = {...this.data};
-    this.bidding.step = BiddingStep.SCHEDULE;
-    this.bidding.documentSchedules = [];
-
-    if (! this.editMode) {
-      this.bidding.biddingSchedules = [];
-    }
-
-    this.retrieveReferenceList('mEvent', 'events');
-    this.retrieveEventTypeLines(this.bidding.eventTypeId);
-  }
-
-  private retrieveReferenceList(code: string, prop: string) {
-    if (this[prop] === void 0) {
+  onScheduleChanged(row: any, value: any[]) {
+    if (value == null) {
       return;
     }
-
-    this.commonService('/api/ad-reference-lists')
-    .retrieve({
-      criteriaQuery: [
-        `active.equals=true`,
-        `adReferenceValue.equals=${code}`
-      ],
-      paginationQuery: {
-        page: 0,
-        size: 100,
-        sort: ['name']
-      }
-    })
-    .then(res => {
-      this[prop] = res.data.map((item: any) =>
-        ({
-            key: item.value,
-            value: item.name
-        })
-      );
-    });
+    row.startDate = value[0].toISOString();
+    row.endDate = value[1].toISOString();
   }
 
-  private retrieveEventTypeLines(eventTypeId: number): void {
-    this.commonService('/api/c-event-typelines')
+  created() {
+    this.recordsLoaded = false;
+    this.bidding = {...this.data};
+    this.bidding.step = BiddingStep.SCHEDULE;
+
+    this.commonService(null)
+      .retrieveReferenceLists('mEvent')
+      .then(res => {
+        this.events = res.map(item => ({ key: item.value, value: item.name }))
+      });
+
+    Promise.allSettled([
+      this.retrieveBiddingSchedules(this.bidding.id),
+      this.retrieveDocumentSchedules(this.bidding.id)
+    ])
+    .then(_results => {
+      this.recordsLoaded = true;
+    })
+  }
+
+  private retrieveBiddingSchedules(biddingId: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.loadingSchedules = true;
+      this.commonService('/api/m-bidding-schedules')
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `eventTypeId.equals=${eventTypeId}`
+          `biddingId.equals=${biddingId}`
         ]),
         paginationQuery: {
           page: 0,
           size: 100,
-          sort: ['sequence']
+          sort: ['startDate', 'endDate']
         }
       })
       .then(res => {
-        this.$set(this.bidding, 'biddingSchedules', res.data);
-        this.eventScheduleOptions = res.data;
-
+        this.$set(this.bidding, 'biddingSchedules', res.data.map(item => {
+          if (item.startDate && item.endDate) {
+            item.schedule = [
+              new Date(item.startDate),
+              new Date(item.endDate)
+            ];
+          }
+          return item;
+        }));
+        this.eventScheduleOptions = this.bidding.biddingSchedules;
+        resolve(true);
       })
       .catch(err => {
-        console.error('Failed to get event type lines. %O', err);
+        console.error('Failed to get bidding schedules. %O', err);
         this.$message.error('Failed to get event type lines');
+        reject(false);
       })
       .finally(() => {
-        this.fullscreenLoading = false;
+        this.loadingSchedules = false;
       });
+    });
+  }
+
+  private retrieveDocumentSchedules(biddingId: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.loadingDocumentSchedules = true;
+      this.commonService('/api/m-document-schedules')
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingId.equals=${biddingId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.$set(this.bidding, 'documentSchedules', res.data);
+        this.$set(this.bidding, 'removedDocumentSchedules', []);
+        resolve(true);
+      })
+      .catch(err => {
+        console.error('Failed to get document schedules. %O', err);
+        this.$message.error('Failed to get event type lines');
+        reject(false);
+      })
+      .finally(() => {
+        this.loadingDocumentSchedules = false;
+      });
+    });
   }
 
   addDocument() {
@@ -147,23 +196,36 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     return this.events.find(event => event.key === code)?.value || code;
   }
 
-  removeDocument(index) {
-    this.bidding.documentSchedule.splice(index, 1);
+  printScheduleLabel(record: any) {
+    const startTime = !record.startDate ? '' : format(parseISO(record.startDate), DATE_TIME_FORMAT);
+    const endTime = !record.endDate ? '' : format(parseISO(record.endDate), DATE_TIME_FORMAT);
+    return `${this.printEventName(record.eventTypeLineName)} (Start: ${startTime} - End: ${endTime})`;
+  }
+
+  removeDocument(row: any, index: number) {
+    this.bidding.documentSchedules.splice(index, 1);
+    this.bidding.removedDocumentSchedules.push(row);
   }
 
   saveDocument() {
     this.documentSchedule.vendorSubmission = this.eventScheduleOptions
-      .find(item => item.id === this.documentSchedule.submissionScheduleId);
+      .find(item => item.id === this.documentSchedule.vendorSubmissionId);
 
     this.documentSchedule.vendorEvaluation = this.eventScheduleOptions
-      .find(item => item.id === this.documentSchedule.evaluationScheduleId);
+      .find(item => item.id === this.documentSchedule.vendorEvaluationId);
 
-    this.bidding.documentSchedules.push({...this.documentSchedule});
+    const schedule = {...this.documentSchedule};
+    schedule.vendorSubmissionStartDate = schedule.vendorSubmission.startDate;
+    schedule.vendorSubmissionEndDate = schedule.vendorSubmission.endDate;
+    schedule.vendorEvaluationStartDate = schedule.vendorEvaluation.startDate;
+    schedule.vendorEvaluationEndDate = schedule.vendorEvaluation.endDate;
+
+    this.bidding.documentSchedules.push(schedule);
     this.dialogConfirmationVisible = false;
     this.documentSchedule = {
       docEvent: null,
-      submissionScheduleId: null,
-      evaluationScheduleId: null,
+      vendorSubmissionId: null,
+      vendorEvaluationId: null,
       vendorSubmission: null,
       vendorEvaluation: null
     };
@@ -173,8 +235,16 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
    * Invoked before proceeding to the next step.
    */
   save() {
-    this.$emit('saved', {
-      data: this.bidding
-    });
+    this.commonService('/api/m-biddings/save-form')
+      .update(this.bidding)
+      .then(res => {
+        this.$emit('saved', {
+          data: res
+        });
+      })
+      .catch(err => {
+        console.log('Failed to save bidding schedule. %O', err);
+        this.$message.error('Failed to save bidding schedule')
+      });
   }
 }

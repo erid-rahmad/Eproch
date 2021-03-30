@@ -571,11 +571,9 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
           })
           .catch(err => {
             console.log('Failed to save bidding info. %O', err);
-            this.$message.error('Failed to save ')
-            this.$emit('error', errors)
+            this.$message.error('Failed to save bidding information');
+            this.$emit('error')
           });
-          
-        
       } else {
         this.$emit('error', errors);
       }
