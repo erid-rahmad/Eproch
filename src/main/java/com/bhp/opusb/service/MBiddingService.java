@@ -53,6 +53,8 @@ public class MBiddingService {
     private MailService mailService;
 
 
+
+
     @Autowired
     private MBiddingLineRepository mBiddingLineRepository;
 
@@ -95,19 +97,30 @@ public class MBiddingService {
 
         if (Boolean.TRUE.equals(mBiddingDTO.isApproved())){
             log.info("send email to vendor");
-//            mailService.sendEmail("erid.rahmad@gmail.com","testing","testing",false,false);
-//            List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(664801);
             List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(mBiddingDTO.getId());
+            log.info("this list vendor {}",mVendorSuggestion);
 
             for (MVendorSuggestion mVendorSuggestion1 : mVendorSuggestion){
                 log.info("this vendor id {}",mVendorSuggestion1.getVendor().getId().toString());
 
-                List<AdUser> adUsers =adUserRepository.findBycVendorIdAndActiveTrue(mVendorSuggestion1.getVendor().getId());
+//                List<AdUser> adUsers =adUserRepository.findBycVendorIdAndActiveTrue(mVendorSuggestion1.getVendor().getId());
+                List<AdUser> adUsers =adUserRepository.findBycVendorId(41001l);
                 log.info("this add user {}",adUsers);
 
                 for (AdUser adUser : adUsers){
                     log.info("this email {} count {}",adUser.getUser().getEmail());
-                    mailService.sendEmail(adUser.getUser().getEmail(),"testing","testing",false,false);
+//                    mailService.sendEmail(adUser.getUser().getEmail(),"testing","testing",false,false);
+                    mailService.sendEmail(adUser.getUser().getEmail(),"Bidding Invitation","<html><body>" +
+                        "<p>Kepada Bapak/Ibu Pimpinan </p>" +
+                        mVendorSuggestion1.getVendor().getName()+""+
+                        "<p>Hal: Undangan Bidding</p>"+
+                        "<p>Dengan hotmat</p>" +
+                        "<p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut" +
+                        ". Silahkan Bapak/Ibu melakukan login di "+" login.com "+" untuk mendaftar pada bidding tersebut" +
+                        ". Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p>" +
+                        "<p>Hormat Kami</p>" +
+                        "<p>Berca.co.id</p>" +
+                        "</body></html>",false,true);
                 }
             }
             log.info("this vendor sugestion {}",mVendorSuggestion.toString());
@@ -118,21 +131,6 @@ public class MBiddingService {
 
         MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
         mBidding = mBiddingRepository.save(mBidding);
-        /* log.info("this mbidding {}",MapperJSONUtil.prettyLog(mBidding));
-
-        try {
-            for (MBiddingLine mBiddingLine : mBiddingDTO.getBiddingLineList()){
-                log.info("this line {}",MapperJSONUtil.prettyLog(mBiddingLine));
-                mBiddingLine.setBidding(mBidding);
-                mBiddingLineRepository.save(mBiddingLine);
-            }
-        }catch (Exception e){}
-        try {
-            for (MProjectInformation mProjectInformation : mBiddingDTO.getProjectInformationList() ){
-                mProjectInformation.setBidding(mBidding);
-                mProjectInformationRepository.save(mProjectInformation);
-            }
-        }catch (Exception e){} */
         return mBiddingMapper.toDto(mBidding);
     }
 
