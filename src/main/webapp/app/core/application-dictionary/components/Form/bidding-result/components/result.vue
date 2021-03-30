@@ -267,7 +267,7 @@
           type="primary"
           @click="showGeneratePoDialog = false"
         >
-          Terminate
+          Generate
         </el-button>
       </div>
     </el-dialog>
