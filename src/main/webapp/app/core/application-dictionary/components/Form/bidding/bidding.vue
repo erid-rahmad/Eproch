@@ -55,7 +55,7 @@
         />
 
         <el-table-column
-          fixed
+          fixed="right"
           width="200"
         >
           <template slot-scope="{ row }">

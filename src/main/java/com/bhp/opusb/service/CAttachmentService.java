@@ -85,15 +85,10 @@ public class CAttachmentService {
         Instant now = Instant.now();
         String originalFileName = StringUtils.cleanPath(file.getOriginalFilename());
         StringBuilder fileName = new StringBuilder();
-        String fileExtension = StringUtils.getFilenameExtension(originalFileName);
 
         fileName.append(Timestamp.from(now).getTime())
             .append("_")
             .append(StringUtils.getFilename(originalFileName));
-
-        if (fileExtension != null) {
-            fileName.append(".").append(fileExtension);
-        }
 
         try {
             long orgId = SecurityUtils.getOrganizationId();
