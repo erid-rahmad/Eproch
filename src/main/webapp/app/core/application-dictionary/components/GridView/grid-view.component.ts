@@ -1038,7 +1038,7 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
     const fieldType = field.type || field.adColumn.type;
 
     if (this.isAddressField(field) || this.isTableDirectLink(field)) {
-      const propName = fieldName.replace(/(UserId|Id)$/, 'Name');
+      const propName = fieldName.replace(/(Id)$/, 'Name');
       return row[propName] || row[fieldName];
     } else if (fieldType === ADColumnType.LOCAL_DATE) {
       const value = row[fieldName];
@@ -1056,7 +1056,7 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
 
   public getFileName(row: any, field: IADField) {
     const fieldName = field.adColumn.name;
-    const propName = fieldName.replace(/(UserId|Id)$/, 'Name');
+    const propName = fieldName.replace(/(Id)$/, 'Name');
     return row[propName] || row[fieldName];
   }
 
