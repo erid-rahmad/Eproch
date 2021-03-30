@@ -3,12 +3,7 @@
         <el-divider content-position="left">
             <h4>More Information</h4>
         </el-divider>
-        <template>
-            <div>
-                <h7>{{ x }}</h7>
-            </div>
-        </template>
-        <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini">
+            <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini">
             <el-row :gutter="24">
                 <el-col :span="6">
                     <el-form-item label="Title" prop="title" required>
@@ -68,7 +63,7 @@
             <el-col :span="24">
                 <el-table v-loading="processing" ref="biddingInformationLine" highlight-current-row border stripe size="mini" style="width: 100%; height: 100%"
                     :data="moreInformation.biddingLineList">
-                    <el-table-column min-width="120" label="No">
+                    <el-table-column min-width="30" label="No">
                         <template slot-scope="row">
                             {{ row.$index+1 }}
                         </template>
@@ -89,7 +84,7 @@
                     </el-table-column>
                     <el-table-column min-width="70" prop="deliveryDate" label="Delivery Date">
                     </el-table-column>
-                    <el-table-column min-width="70" prop="" label="Price submision/unit">
+                    <el-table-column min-width="90" prop="" label="Price submision/unit">
                         <template slot-scope="{ row, $index }">
                             <el-input-number v-inputmask="{'alias': 'currency'}" v-model="row.pricesubmision" :step="50000" clearable controls-position="right" size="mini"
                                 @change="value => onQuantityOrderedChanged(row, $index, value)"></el-input-number>
@@ -152,7 +147,6 @@
         </el-row> -->
         <el-row>
             <el-col :span="18">
-
                 <el-table
                     v-loading="processing"
                     ref="projectInformation"
@@ -160,9 +154,7 @@
                     border stripe
                     size="mini"
                     style="height: 100%"
-
                     :data="dummy">
-
                     <el-table-column
                         min-width="20"
                         label="No">
@@ -170,27 +162,28 @@
                             {{ row.$index+1 }}
                         </template>
                     </el-table-column>
-
                     <el-table-column
                         min-width="100"
-                        prop="subitem"
+                        prop="dockument"
                         label="Information"/>
-
+                    <el-table-column
+                        min-width="100"
+                        prop="vendorsubmision"
+                        label="Date"/>
                     <el-table-column
                         min-width="80"
                         label="Attachment">
                         <template slot-scope="{ row }">
                             <el-button
                                 class="btn-attachment"
-                                icon="el-icon-download"
+                                icon="el-icon-upload"
                                 size="mini"
                                 type="primary"
                                 @click="downloadAttachment(row)">
-                                    {{ row.attachment.fileName }}
+                                    {{row.dockument }}
                             </el-button>
                         </template>
                     </el-table-column>
-
                     <el-table-column align="center" min-width="20">
                         <template slot="header">
                             <el-button
@@ -207,9 +200,7 @@
                                 @click="removeProject(row.$index)"/>
                         </template>
                     </el-table-column>
-
                 </el-table>
-
             </el-col>
         </el-row>
 

@@ -45,7 +45,8 @@
         <div>
             <el-row>
                 <el-col :span="24">
-                    <el-table :data="tableData">
+                    
+                    <el-table  v-loading="processing"  highlight-current-row border stripe size="mini" style="width: 100%; height: 100%" :data="tableData">
                         <el-table-column label="No" sortable width="60">
                             <template slot-scope="row">
                                 {{ row.$index+1 }}
@@ -93,7 +94,7 @@
                 <h4>Biding Evaluation Result</h4>
             </el-divider>
         </div>
-        <el-table :data="tableData1" style="width: 100%">
+        <el-table :data="tableData1" v-loading="processing"  highlight-current-row border stripe size="mini" >
             <el-table-column prop="date" label="No" width="60">
                 <template slot-scope="row">
                     {{ row.$index+1 }}
@@ -103,7 +104,7 @@
             </el-table-column>
             <el-table-column prop="2" label="Proposed Price" width="140">
             </el-table-column>
-            <el-table-column prop="3" label="Price Ranking" width="100">
+            <el-table-column prop="3" label="Price Ranking" width="120">
             </el-table-column>
             <el-table-column prop="" label="Dockument Submission" width="">
                 <el-table-column prop="4" label="" width="150">
@@ -111,12 +112,10 @@
                 <el-table-column prop="5" label="" width="150">
                     <template slot-scope="{ row }">
                             <el-button class="btn-attachment" icon="el-icon-download" size="mini" type="primary" @click="downloadAttachment(row)">
-                                 time line.pdf 
-                                
+                                 time line.pdf                                 
                             </el-button>
                         </template>
-                </el-table-column>
-                
+                </el-table-column>                
             </el-table-column>
             <el-table-column label="Scoring Criteria 1 Name">
                 <el-table-column prop="4" label="Quantity" width="120">
@@ -143,16 +142,16 @@
                     <el-table-column prop="13" label="PIC 2" width="120">
                     </el-table-column>
                 </el-table-column>
-                <!-- <el-table-column prop="5" label="Criteria 5" width="100">
-                    <el-table-column prop="14" label="PIC 1" width="120">
+                <el-table-column prop="4" label="Morale" width="100">
+                    <el-table-column prop="12" label="PIC 1" width="120">
                     </el-table-column>
-                    <el-table-column prop="15" label="PIC 2" width="120">
+                    <el-table-column prop="13" label="PIC 2" width="120">
                     </el-table-column>
-                </el-table-column> -->
+                </el-table-column>     
             </el-table-column>
-            <el-table-column prop="14" label="Total Score">
+            <el-table-column prop="14" label="Total Score" width="120">
             </el-table-column>
-            <el-table-column prop="15" label="Score Ranking">
+            <el-table-column prop="15" label="Score Ranking" width="120">
             </el-table-column>
         </el-table>
         <div>
@@ -169,10 +168,7 @@
                 <el-table-column prop="14" label="Total Score" width="120">
                 </el-table-column>
             </el-table>
-            <div style="margin-top: 20px">
-                <!-- <el-button @click="toggleSelection([tableData[1], tableData[2]])">Toggle selection status of second and third rows</el-button>
-                <el-button @click="toggleSelection()">Clear selection</el-button> -->
-            </div>
+            
         </template>
         <el-col :span="24" class="tab-container">
             <el-col :span="20" class="tab-container">
