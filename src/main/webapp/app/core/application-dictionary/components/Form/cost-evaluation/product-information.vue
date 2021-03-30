@@ -157,7 +157,7 @@
                     <el-form ref="biddingInfasdsadormation" label-position="left" label-width="100px" :model="asd" :rules="asd">
                         <el-form-item label="Remark" prop="title">
                             <template>
-                                <el-button class="button" icon="el-icon-download" size="mini" type="primary" @click="viewSchedule(row)">
+                                <el-button class="button" icon="el-icon-plus" size="mini" type="primary" @click="viewSchedule(row)">
                                     Select Dockument
                                 </el-button>
                             </template>

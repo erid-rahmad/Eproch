@@ -71,25 +71,25 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
       dummy: [{
           no: '1',
           dockument: 'suport dockument',
-          vendorsubmision: 'start 03/01/2021 end 03/10/2021',
+          vendorsubmision: '03/01/2021 20:22',
           vendorevaluation: 'start 03/01/2021 end 03/10/2021',
         },
         {
           no: '1',
           dockument: 'testing dockument',
-          vendorsubmision: 'start 03/01/2021 end 03/10/2021',
+          vendorsubmision: '03/01/2021 20:22',
           vendorevaluation: 'start 03/01/2021 end 03/10/2021',
         },
         {
           no: '1',
           dockument: 'QA dockument',
-          vendorsubmision: 'start 03/01/2021 end 03/10/2021',
+          vendorsubmision: '03/01/2021 20:22',
           vendorevaluation: 'start 03/01/2021 end 03/10/2021',
         },
         {
           no: '1',
           dockument: 'finishing dockument',
-          vendorsubmision: 'start 03/01/2021 end 03/10/2021',
+          vendorsubmision: '03/01/2021 20:22',
           vendorevaluation: 'start 03/01/2021 end 03/10/2021',
         },
 

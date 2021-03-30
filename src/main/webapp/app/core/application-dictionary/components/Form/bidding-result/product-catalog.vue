@@ -14,7 +14,7 @@
                                 </el-table-column>
                                 <el-table-column prop="1" label="Biding No" sortable width="180">
                                 </el-table-column>
-                                <el-table-column prop="2" label="title" sortable width="180">
+                                <el-table-column prop="2" label="title" sortable width="120">
                                 </el-table-column>
                                 <el-table-column prop="3" label="Bidding type" sortable width="180">
                                 </el-table-column>
@@ -29,7 +29,7 @@
                                 </el-table-column>
                                 <el-table-column prop="8" label="Proposal Price" width="180">
                                 </el-table-column>
-                                <el-table-column min-width="60" sortable label="Bidding Schedule">
+                                <el-table-column min-width="160" sortable label="Bidding Schedule">
                                     <template slot-scope="{ row }">
                                         <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="onClick('add')">
                                             View

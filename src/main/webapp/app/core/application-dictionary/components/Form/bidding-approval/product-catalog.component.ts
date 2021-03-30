@@ -96,7 +96,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         {
           1: 'Ingram Micro Indonesia',
           2: '29.400.000.000',
-          3: '2',
+          3: '3',
           4: 'proposal teknis ingram',
           5: 'time line.pdf',
           6: '1',
@@ -108,8 +108,9 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
           12: '4',
           13: '1',
           14: '20',
-          15: '2',
-        },{
+          15: '3',
+        },
+        {
           1: 'Sistem tech indonesia',
           2: '41.400.000.000',
           3: '1',
@@ -124,14 +125,15 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
           12: '4',
           13: '1',
           14: '11',
-          15: '2',
-        },{
+          15: '1',
+        },
+        {
           1: ' Micro chip Indonesia',
           2: '29.400.000.000',
           3: '2',
           4: 'proposal teknis westcom ',
           5: 'time line.pdf',
-          6: '1',
+          6: '2',
           7: '4',
           8: '4',
           9: '1',

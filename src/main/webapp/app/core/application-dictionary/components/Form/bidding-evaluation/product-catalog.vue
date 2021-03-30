@@ -24,10 +24,8 @@
                                     </el-table-column>
                                     <el-table-column prop="5" label="Join Vendor" sortable width="180">
                                         <template slot-scope="row">
-                                             <el-button class="button" size="mini" icon="el el-download-alt" @click="dialogTableVisible = true">view</el-button>
-                                             
-                                        </template>
-                                       
+                                             <el-button class="button" size="mini" icon="el-icon-user" @click="dialogTableVisible = true">2</el-button>                                             
+                                        </template>                                       
                                     </el-table-column>
                                     <el-table-column prop="6" label="Biding Status" sortable width="180">
                                     </el-table-column>
@@ -35,7 +33,7 @@
                                     </el-table-column>
                                     <el-table-column prop="8" label="Modified By" width="180">
                                     </el-table-column>
-                                    <el-table-column min-width="60" sortable label="Summary">
+                                    <el-table-column min-width="120" sortable label="Summary">
                                         <template slot-scope="{ row }">
                                             <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="onClick('add')">
                                                 Evaluate

@@ -23,6 +23,14 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     height: 500
   };
 
+  data() {
+    return {
+      value1: true,
+      value2: true,
+      
+    }
+  }
+
   // components: {
   //   'bidding-information': BiddingInformation
   // }
