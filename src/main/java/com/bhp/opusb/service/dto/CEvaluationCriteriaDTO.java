@@ -35,7 +35,7 @@ public class CEvaluationCriteriaDTO extends AbstractAuditingDTO {
     private Long biddingSubCriteriaId;
     private String biddingSubCriteriaName;
 
-    private Long picId;
+    private Long picUserId;
     private String picLogin;
     private String picFirstName;
     private String picLastName;
@@ -136,12 +136,12 @@ public class CEvaluationCriteriaDTO extends AbstractAuditingDTO {
         this.biddingSubCriteriaName = biddingSubCriteriaName;
     }
 
-    public Long getPicId() {
-        return picId;
+    public Long getPicUserId() {
+        return picUserId;
     }
 
-    public void setPicId(Long adUserId) {
-        this.picId = adUserId;
+    public void setPicUserId(Long adUserId) {
+        this.picUserId = adUserId;
     }
 
     public String getPicLogin() {
@@ -208,7 +208,7 @@ public class CEvaluationCriteriaDTO extends AbstractAuditingDTO {
             ", evaluationMethodLineId=" + getEvaluationMethodLineId() +
             ", biddingCriteriaId=" + getBiddingCriteriaId() +
             ", biddingSubCriteriaId=" + getBiddingSubCriteriaId() +
-            ", picId=" + getPicId() +
+            ", picId=" + getPicUserId() +
             "}";
     }
 }

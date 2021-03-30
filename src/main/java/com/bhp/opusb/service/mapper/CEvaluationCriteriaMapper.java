@@ -18,8 +18,10 @@ public interface CEvaluationCriteriaMapper extends EntityMapper<CEvaluationCrite
     @Mapping(source = "evaluationMethodLine.id", target = "evaluationMethodLineId")
     @Mapping(source = "evaluationMethodLine.evaluation", target = "evaluationMethodLineName")
     @Mapping(source = "biddingCriteria.id", target = "biddingCriteriaId")
-    @Mapping(source = "biddingSubCriteria.name", target = "biddingSubCriteriaId")
-    @Mapping(source = "pic.id", target = "picId")
+    @Mapping(source = "biddingCriteria.name", target = "biddingCriteriaName")
+    @Mapping(source = "biddingSubCriteria.id", target = "biddingSubCriteriaId")
+    @Mapping(source = "biddingSubCriteria.name", target = "biddingSubCriteriaName")
+    @Mapping(source = "pic.id", target = "picUserId")
     @Mapping(source = "pic.user.login", target = "picLogin")
     @Mapping(source = "pic.user.firstName", target = "picFirstName")
     @Mapping(source = "pic.user.lastName", target = "picLastName")
@@ -29,7 +31,7 @@ public interface CEvaluationCriteriaMapper extends EntityMapper<CEvaluationCrite
     @Mapping(source = "evaluationMethodLineId", target = "evaluationMethodLine")
     @Mapping(source = "biddingCriteriaId", target = "biddingCriteria")
     @Mapping(source = "biddingSubCriteriaId", target = "biddingSubCriteria")
-    @Mapping(source = "picId", target = "pic")
+    @Mapping(source = "picUserId", target = "pic")
     CEvaluationCriteria toEntity(CEvaluationCriteriaDTO cEvaluationCriteriaDTO);
 
     default CEvaluationCriteria fromId(Long id) {
