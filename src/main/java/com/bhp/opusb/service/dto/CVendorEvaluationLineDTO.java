@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import javax.validation.constraints.DecimalMax;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CVendorEvaluationLine} entity.
  */
@@ -34,8 +36,17 @@ public class CVendorEvaluationLineDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
+    @JsonProperty("cQuestionCategoryId")
     private Long cQuestionCategoryId;
+
+    @JsonProperty("cQuestionCategoryName")
     private String cQuestionCategoryName;
+
+    @JsonProperty("cVendorEvaluationId")
+    private Long cVendorEvaluationId;
+
+    @JsonProperty("cVendorEvaluationName")
+    private String cVendorEvaluationName;
     
     public Long getId() {
         return id;
@@ -125,6 +136,22 @@ public class CVendorEvaluationLineDTO extends AbstractAuditingDTO {
         this.cQuestionCategoryName = cQuestionCategoryName;
     }
 
+    public Long getCVendorEvaluationId() {
+        return cVendorEvaluationId;
+    }
+
+    public void setCVendorEvaluationId(Long cVendorEvaluationId) {
+        this.cVendorEvaluationId = cVendorEvaluationId;
+    }
+
+    public String getCVendorEvaluationName() {
+        return cVendorEvaluationName;
+    }
+
+    public void setCVendorEvaluationName(String cVendorEvaluationName) {
+        this.cVendorEvaluationName = cVendorEvaluationName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -158,6 +185,7 @@ public class CVendorEvaluationLineDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", cQuestionCategoryId=" + getCQuestionCategoryId() +
+            ", cVendorEvaluationId=" + getCVendorEvaluationId() +
             "}";
     }
 }

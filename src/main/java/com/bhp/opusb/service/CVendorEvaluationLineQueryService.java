@@ -117,6 +117,10 @@ public class CVendorEvaluationLineQueryService extends QueryService<CVendorEvalu
                 specification = specification.and(buildSpecification(criteria.getCQuestionCategoryId(),
                     root -> root.join(CVendorEvaluationLine_.cQuestionCategory, JoinType.LEFT).get(CQuestionCategory_.id)));
             }
+            if (criteria.getCVendorEvaluationId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCVendorEvaluationId(),
+                    root -> root.join(CVendorEvaluationLine_.cVendorEvaluation, JoinType.LEFT).get(CVendorEvaluation_.id)));
+            }
         }
         return specification;
     }

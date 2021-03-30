@@ -54,6 +54,14 @@
             "relationshipValidateRules": "required",
             "relationshipName": "cQuestionCategory",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendorEvaluation",
+            "otherEntityRelationshipName": "cVendorEvaluationLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cVendorEvaluation",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210329060200",

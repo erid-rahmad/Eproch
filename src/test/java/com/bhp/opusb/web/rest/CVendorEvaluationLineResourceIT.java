@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CVendorEvaluationLine;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CQuestionCategory;
+import com.bhp.opusb.domain.CVendorEvaluation;
 import com.bhp.opusb.repository.CVendorEvaluationLineRepository;
 import com.bhp.opusb.service.CVendorEvaluationLineService;
 import com.bhp.opusb.service.dto.CVendorEvaluationLineDTO;
@@ -114,6 +115,16 @@ public class CVendorEvaluationLineResourceIT {
             cQuestionCategory = TestUtil.findAll(em, CQuestionCategory.class).get(0);
         }
         cVendorEvaluationLine.setCQuestionCategory(cQuestionCategory);
+        // Add required entity
+        CVendorEvaluation cVendorEvaluation;
+        if (TestUtil.findAll(em, CVendorEvaluation.class).isEmpty()) {
+            cVendorEvaluation = CVendorEvaluationResourceIT.createEntity(em);
+            em.persist(cVendorEvaluation);
+            em.flush();
+        } else {
+            cVendorEvaluation = TestUtil.findAll(em, CVendorEvaluation.class).get(0);
+        }
+        cVendorEvaluationLine.setCVendorEvaluation(cVendorEvaluation);
         return cVendorEvaluationLine;
     }
     /**
@@ -150,6 +161,16 @@ public class CVendorEvaluationLineResourceIT {
             cQuestionCategory = TestUtil.findAll(em, CQuestionCategory.class).get(0);
         }
         cVendorEvaluationLine.setCQuestionCategory(cQuestionCategory);
+        // Add required entity
+        CVendorEvaluation cVendorEvaluation;
+        if (TestUtil.findAll(em, CVendorEvaluation.class).isEmpty()) {
+            cVendorEvaluation = CVendorEvaluationResourceIT.createUpdatedEntity(em);
+            em.persist(cVendorEvaluation);
+            em.flush();
+        } else {
+            cVendorEvaluation = TestUtil.findAll(em, CVendorEvaluation.class).get(0);
+        }
+        cVendorEvaluationLine.setCVendorEvaluation(cVendorEvaluation);
         return cVendorEvaluationLine;
     }
 
@@ -787,6 +808,22 @@ public class CVendorEvaluationLineResourceIT {
 
         // Get all the cVendorEvaluationLineList where cQuestionCategory equals to cQuestionCategoryId + 1
         defaultCVendorEvaluationLineShouldNotBeFound("cQuestionCategoryId.equals=" + (cQuestionCategoryId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCVendorEvaluationLinesByCVendorEvaluationIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CVendorEvaluation cVendorEvaluation = cVendorEvaluationLine.getCVendorEvaluation();
+        cVendorEvaluationLineRepository.saveAndFlush(cVendorEvaluationLine);
+        Long cVendorEvaluationId = cVendorEvaluation.getId();
+
+        // Get all the cVendorEvaluationLineList where cVendorEvaluation equals to cVendorEvaluationId
+        defaultCVendorEvaluationLineShouldBeFound("cVendorEvaluationId.equals=" + cVendorEvaluationId);
+
+        // Get all the cVendorEvaluationLineList where cVendorEvaluation equals to cVendorEvaluationId + 1
+        defaultCVendorEvaluationLineShouldNotBeFound("cVendorEvaluationId.equals=" + (cVendorEvaluationId + 1));
     }
 
     /**
