@@ -63,8 +63,8 @@
         size="small"
         type="primary"
         style="margin-bottom: 12px;"
-        :disabled="active === 4"
-        v-if="active != 4"
+        :disabled="active === 3"
+        v-if="active != 3"
         @click="next">
         Next <em class="el-icon-arrow-right"></em>
       </el-button>
@@ -73,7 +73,7 @@
         size="small"
         type="success"
         style="margin-bottom: 12px;"
-        v-if="active === 4"
+        v-if="active === 3"
         :disabled="! agreementAccepted"
         v-loading.fullscreen.lock="fullscreenLoading"
         @click="submit">
