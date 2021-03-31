@@ -114,7 +114,7 @@ public class MBiddingService {
                         "<p>Kepada Bapak/Ibu Pimpinan </p>" +
                         mVendorSuggestion1.getVendor().getName()+""+
                         "<p>Hal: Undangan Bidding</p>"+
-                        "<p>Dengan hotmat</p>" +
+                        "<p>Dengan hormat</p>" +
                         "<p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut" +
                         ". Silahkan Bapak/Ibu melakukan login di "+" login.com "+" untuk mendaftar pada bidding tersebut" +
                         ". Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p>" +

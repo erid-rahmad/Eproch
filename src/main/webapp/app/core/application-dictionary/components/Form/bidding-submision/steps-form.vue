@@ -2,32 +2,29 @@
   <div class="app-container">
 
     <el-steps :space="10" simple :active="active" finish-status="success" >
-      <el-step title="More Information" />
       <el-step title="Project Information" />
-      <el-step title="Even Schedule" />
+      <el-step title="More Information" />      
+      <el-step title="Event Schedule" />
       <el-step title="Vendor Scoring" />
-
     </el-steps>
 
     <el-backtop target=".app-container" />
 
     <div :model="bidding">
-        <item-detail
+      <bidding-schedule
           class="step-panel"
           v-if="active === 0"
-          :biddingrow="biddingrow"
-          :ItemDetail="ItemDetail"
-          :biddingInformation="bidding.biddingInformation"/>
-
-
-        <bidding-schedule
-          class="step-panel"
-          v-if="active === 1"
           :ItemDetail="ItemDetail"
           :biddingrow="biddingrow"
           :biddingInformation="bidding.biddingInformation"
           :biddingSchedule="bidding.biddingSchedule"/>
 
+        <item-detail
+          class="step-panel"
+          v-if="active === 1"
+          :biddingrow="biddingrow"
+          :ItemDetail="ItemDetail"
+          :biddingInformation="bidding.biddingInformation"/> 
 
         <vendor-invitation
           class="step-panel"

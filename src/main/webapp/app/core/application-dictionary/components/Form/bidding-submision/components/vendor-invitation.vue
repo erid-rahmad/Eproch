@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
 
-        <el-divider content-position="left"><h4>Vendor Business Category</h4></el-divider>
+        <el-divider content-position="left"><h4>Event Schedule</h4></el-divider>
 
         <el-row :gutter="24">
             <el-col :span="20">
