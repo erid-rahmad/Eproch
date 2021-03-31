@@ -1481,6 +1481,7 @@ relationship ManyToOne {
 	CVendorEvaluation{adOrganization required} to ADOrganization
 	CVendorEvaluationLine{adOrganization required} to ADOrganization
 	CVendorEvaluationLine{cQuestionCategory required} to CQuestionCategory
+	CVendorEvaluationLine{cVendorEvaluation required} to CVendorEvaluation
 
 	MBidding{adOrganization required} to ADOrganization
 	MBidding{costCenter required} to CCostCenter

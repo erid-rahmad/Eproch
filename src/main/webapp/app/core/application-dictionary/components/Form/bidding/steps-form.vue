@@ -30,8 +30,9 @@
       class="step-panel"
       :edit-mode="editMode"
       :data="bidding"
-      @saved="goToNextStep"
+      @change="dataChanged = true"
       @error="showSaveDialog = false"
+      @saved="goToNextStep"
     ></bidding-schedule>
 
     <vendor-invitation
@@ -40,6 +41,8 @@
       v-if="active === 2"
       :edit-mode="editMode"
       :data="bidding"
+      @change="dataChanged = true"
+      @error="showSaveDialog = false"
       @saved="goToNextStep"
     ></vendor-invitation>
 

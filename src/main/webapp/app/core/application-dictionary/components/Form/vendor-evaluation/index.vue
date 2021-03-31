@@ -24,22 +24,42 @@
             label="Reviewer"
             prop="reviewer"
           >
-            <el-input
+            <el-select
               v-model="data.reviewer"
               class="form-input"
               clearable
-            ></el-input>
+              filterable
+              placeholder="Select a Reviewer"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in reviewers"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
           </el-form-item>
 
           <el-form-item
             label="Vendor Name"
-            prop="vendorName"
+            prop="vendorId"
           >
-            <el-input
-              v-model="data.vendorName"
+            <el-select
+              v-model="data.vendorId"
               class="form-input"
               clearable
-            ></el-input>
+              filterable
+              placeholder="Select a Vendor"
+              style="width: 100%"
+            >
+              <el-option
+                v-for="item in vendorOptions"
+                :key="item.id"
+                :label="item.name"
+                :value="item.id"
+              />
+            </el-select>
           </el-form-item>
 
           <el-form-item
@@ -51,6 +71,7 @@
               v-model="data.aggreementNo"
               clearable
               placeholder="Please Enter Aggreement No."
+              @change="onAggreementChanged"
             >
               <el-button
                 icon="el-icon-search"
@@ -64,32 +85,35 @@
         <el-col :span="8">
           <el-form-item
             label="Evaluation Type"
-            prop="type"
+            prop="evaluationType"
           >
             <el-input
-              v-model="data.type"
+              v-model="data.evaluationType"
               class="form-input"
               clearable
+              disabled
             ></el-input>
           </el-form-item>
           <el-form-item
             label="Evaluation Period"
-            prop="period"
+            prop="evaluationPeriod"
           >
             <el-input
-              v-model="data.period"
+              v-model="data.evaluationPeriod"
               class="form-input"
               clearable
+              disabled
             ></el-input>
           </el-form-item>
           <el-form-item
             label="Evaluation Date"
-            prop="date"
+            prop="evaluationDate"
           >
             <el-date-picker
-              v-model="data.date"
+              v-model="data.evaluationDate"
               class="form-input"
               clearable
+              disabled
               :format="dateDisplayFormat"
               placeholder="Pick a date"
               size="mini"
@@ -104,12 +128,14 @@
             label="Total Score"
             prop="totalScore"
           >
-            <el-input
+            <el-input-number
               v-model="data.totalScore"
               class="form-input"
               clearable
+              controls-position="right"
               disabled
-            ></el-input>
+              :precision="2"
+            ></el-input-number>
           </el-form-item>
         </el-col>
       </el-row>
@@ -133,7 +159,7 @@
           <el-table-column
             label="Question Category"
             width="150"
-            prop="questionCategory"
+            prop="cQuestionCategoryName"
             show-overflow-tooltip
           ></el-table-column>
 
@@ -152,6 +178,7 @@
               <el-rate
                 v-model="row.rate"
                 :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+                @change="onRateChanged"
               ></el-rate>
             </template>
           </el-table-column>

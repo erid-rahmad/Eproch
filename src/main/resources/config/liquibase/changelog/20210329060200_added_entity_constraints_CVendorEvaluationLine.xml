@@ -21,4 +21,14 @@
                                  referencedTableName="c_question_category"/>
 
     </changeSet>
+
+    <changeSet id="20210330143600" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="c_vendor_evaluation_id"
+                                 baseTableName="c_vendor_evaluation_line"
+                                 constraintName="fk_c_vendor_evaluation_line_c_vendor_evaluation_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_vendor_evaluation"/>
+
+    </changeSet>
 </databaseChangeLog>

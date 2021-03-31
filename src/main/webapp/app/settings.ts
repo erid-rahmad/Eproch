@@ -1,3 +1,5 @@
+import { ZONED_DATE_TIME_FORMAT, DATE_TIME_FORMAT, DATE_FORMAT } from './shared/date/filters'
+
 interface ISettings {
   title: string // Overrides the default title
   showSettings: boolean // Controls settings panel display
@@ -21,10 +23,10 @@ const settings: ISettings = {
   showTagsView: true,
   fixedHeader: true,
   showSidebarLogo: true,
-  dateDisplayFormat: 'dd/MM/yyyy',
-  dateTimeDisplayFormat: 'dd/MM/yyyy HH:mm',
-  dateValueFormat: 'yyyy-MM-dd',
-  dateTimeValueFormat: 'yyyy-MM-dd HH:mm',
+  dateDisplayFormat: DATE_FORMAT,
+  dateTimeDisplayFormat: DATE_TIME_FORMAT,
+  dateValueFormat: DATE_FORMAT,
+  dateTimeValueFormat: ZONED_DATE_TIME_FORMAT,
   errorLog: ['production'],
   sidebarTextTheme: true,
   devServerPort: 9527,

@@ -1,11 +1,11 @@
-id;weight;user_weight;procurement_weight;question;uid;active;ad_organization_id;c_question_category_id
-1;31;82;31;Peru;50dce83d-2bf1-4635-8ce1-533fd17a10fe;true;1;1
-2;1;54;8;Designer Product Rustic;cbf2a9b6-8f41-4ff4-bb39-f9be774c959b;false;2;2
-3;2;70;36;out-of-the-box Engineer demand-driven;75ebb768-1a49-430d-ae3c-b9e99839251a;true;3;3
-4;15;69;77;hardware SDD Georgia;9bf1d91f-ec9b-4341-b760-5dc87fa1ac0c;false;4;4
-5;12;70;26;fuchsia Agent;c80887e4-0ef5-48fb-9b4d-954e506846a0;false;5;5
-6;96;47;48;synthesize bus Licensed Steel Shoes;639ca051-b61e-4650-9f0d-d089c5764c31;false;6;6
-7;17;67;11;Operations EXE;8b50e3e8-6843-47a2-a59d-7ea66beedb80;false;7;7
-8;50;24;20;Electronics;06597bda-9255-45fc-8dad-2581daa04bbf;false;8;8
-9;72;3;97;monitor connecting;9689861e-9452-4829-97b6-020e56b02009;false;9;9
-10;11;90;94;1080p Central African Republic auxiliary;fc9b47f9-3eeb-4e40-8f8c-4c4970ccfa21;false;10;10
+id;weight;user_weight;procurement_weight;question;uid;active;ad_organization_id;c_question_category_id;c_vendor_evaluation_id
+1;31;82;31;Peru;50dce83d-2bf1-4635-8ce1-533fd17a10fe;true;1;1;1
+2;1;54;8;Designer Product Rustic;cbf2a9b6-8f41-4ff4-bb39-f9be774c959b;false;2;2;2
+3;2;70;36;out-of-the-box Engineer demand-driven;75ebb768-1a49-430d-ae3c-b9e99839251a;true;3;3;3
+4;15;69;77;hardware SDD Georgia;9bf1d91f-ec9b-4341-b760-5dc87fa1ac0c;false;4;4;4
+5;12;70;26;fuchsia Agent;c80887e4-0ef5-48fb-9b4d-954e506846a0;false;5;5;5
+6;96;47;48;synthesize bus Licensed Steel Shoes;639ca051-b61e-4650-9f0d-d089c5764c31;false;6;6;6
+7;17;67;11;Operations EXE;8b50e3e8-6843-47a2-a59d-7ea66beedb80;false;7;7;7
+8;50;24;20;Electronics;06597bda-9255-45fc-8dad-2581daa04bbf;false;8;8;8
+9;72;3;97;monitor connecting;9689861e-9452-4829-97b6-020e56b02009;false;9;9;9
+10;11;90;94;1080p Central African Republic auxiliary;fc9b47f9-3eeb-4e40-8f8c-4c4970ccfa21;false;10;10;10

@@ -67,6 +67,9 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
     attachmentId: null
   };
 
+  downloadStats = [];
+  projectInfo = {};
+
   selectedItemIndex = 0;
   selectedItem = {};
 
@@ -80,6 +83,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   dialogWidth = "";
   dialogCloseOnClick = true;
   bidding: Record<string, any> = {};
+  showDownloadStatsDialog = false;
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -111,6 +115,11 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   @Watch('data')
   onDataChanged(data: any) {
     console.log('bidding info data changed:', data);
+  }
+
+  onBiddingTypeChanged(biddingTypeId?: number) {
+    this.$set(this.bidding, 'eventTypeId', null);
+    this.retrieveEventTypes(biddingTypeId);
   }
 
   onCeilingPriceChange(row: any, value: number = 0) {
@@ -156,6 +165,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
       this.bidding.documentAction = 'APV';
       this.bidding.documentStatus = 'SMT';
       this.bidding.projectInformations = [];
+      this.bidding.removedProjectInformations = [];
     }
 
     this.bidding.step = BiddingStep.INFO;
@@ -333,6 +343,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
         })
         .then(res => {
           this.$set(this.bidding, 'projectInformations', res.data);
+          this.$set(this.bidding, 'removedProjectInformations', []);
           resolve(true);
         })
         .catch(err => {
@@ -445,8 +456,9 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
     this.subItemEditorVisible = true;
   }
 
-  removeProject(index: number) {
+  removeProject(row: any, index: number) {
     this.bidding.projectInformations.splice(index, 1);
+    this.bidding.removedProjectInformations.push(row);
   }
 
   saveProject() {
@@ -559,14 +571,17 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
           })
           .catch(err => {
             console.log('Failed to save bidding info. %O', err);
-            this.$message.error('Failed to save ')
-            this.$emit('error', errors)
+            this.$message.error('Failed to save bidding information');
+            this.$emit('error')
           });
-          
-        
       } else {
         this.$emit('error', errors);
       }
     });
+  }
+  
+  showDownloadStats(row: any) {
+    this.projectInfo = row;
+    this.showDownloadStatsDialog = true;
   }
 }

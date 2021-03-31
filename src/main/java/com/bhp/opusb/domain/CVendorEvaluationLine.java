@@ -66,6 +66,11 @@ public class CVendorEvaluationLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("cVendorEvaluationLines")
     private CQuestionCategory cQuestionCategory;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cVendorEvaluationLines")
+    private CVendorEvaluation cVendorEvaluation;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -177,6 +182,19 @@ public class CVendorEvaluationLine extends AbstractAuditingEntity {
 
     public void setCQuestionCategory(CQuestionCategory cQuestionCategory) {
         this.cQuestionCategory = cQuestionCategory;
+    }
+
+    public CVendorEvaluation getCVendorEvaluation() {
+        return cVendorEvaluation;
+    }
+
+    public CVendorEvaluationLine cVendorEvaluation(CVendorEvaluation cVendorEvaluation) {
+        this.cVendorEvaluation = cVendorEvaluation;
+        return this;
+    }
+
+    public void setCVendorEvaluation(CVendorEvaluation cVendorEvaluation) {
+        this.cVendorEvaluation = cVendorEvaluation;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

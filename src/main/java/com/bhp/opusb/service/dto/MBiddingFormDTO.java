@@ -19,7 +19,6 @@ public class MBiddingFormDTO extends MBiddingDTO {
 
   // Event Schedule Step.
   private List<MBiddingScheduleDTO> biddingSchedules = new ArrayList<>();
-  private List<MBiddingScheduleDTO> removedBiddingSchedules = new ArrayList<>();
   private List<MDocumentScheduleDTO> documentSchedules = new ArrayList<>();
   private List<MDocumentScheduleDTO> removedDocumentSchedules = new ArrayList<>();
 
@@ -76,14 +75,6 @@ public class MBiddingFormDTO extends MBiddingDTO {
 
   public void setBiddingSchedules(List<MBiddingScheduleDTO> biddingSchedules) {
     this.biddingSchedules = biddingSchedules;
-  }
-
-  public List<MBiddingScheduleDTO> getRemovedBiddingSchedules() {
-    return removedBiddingSchedules;
-  }
-
-  public void setRemovedBiddingSchedules(List<MBiddingScheduleDTO> removedBiddingSchedules) {
-    this.removedBiddingSchedules = removedBiddingSchedules;
   }
 
   public List<MDocumentScheduleDTO> getDocumentSchedules() {

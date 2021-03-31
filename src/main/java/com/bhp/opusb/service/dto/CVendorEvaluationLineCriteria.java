@@ -2,15 +2,13 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -44,6 +42,9 @@ public class CVendorEvaluationLineCriteria implements Serializable, Criteria {
 
     private LongFilter cQuestionCategoryId;
 
+    private LongFilter cVendorEvaluationId;
+    private StringFilter cVendorEvaluationName;
+
     public CVendorEvaluationLineCriteria() {
     }
 
@@ -57,6 +58,8 @@ public class CVendorEvaluationLineCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.cQuestionCategoryId = other.cQuestionCategoryId == null ? null : other.cQuestionCategoryId.copy();
+        this.cVendorEvaluationId = other.cVendorEvaluationId == null ? null : other.cVendorEvaluationId.copy();
+        this.cVendorEvaluationName = other.cVendorEvaluationName == null ? null : other.cVendorEvaluationName.copy();
     }
 
     @Override
@@ -136,6 +139,22 @@ public class CVendorEvaluationLineCriteria implements Serializable, Criteria {
         this.cQuestionCategoryId = cQuestionCategoryId;
     }
 
+    public LongFilter getCVendorEvaluationId() {
+        return cVendorEvaluationId;
+    }
+
+    public void setCVendorEvaluationId(LongFilter cVendorEvaluationId) {
+        this.cVendorEvaluationId = cVendorEvaluationId;
+    }
+
+    public StringFilter getCVendorEvaluationName() {
+        return cVendorEvaluationName;
+    }
+
+    public void setCVendorEvaluationName(StringFilter cVendorEvaluationName) {
+        this.cVendorEvaluationName = cVendorEvaluationName;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -155,7 +174,9 @@ public class CVendorEvaluationLineCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(cQuestionCategoryId, that.cQuestionCategoryId);
+            Objects.equals(cQuestionCategoryId, that.cQuestionCategoryId) &&
+            Objects.equals(cVendorEvaluationId, that.cVendorEvaluationId) &&
+            Objects.equals(cVendorEvaluationName, that.cVendorEvaluationName);
     }
 
     @Override
@@ -169,7 +190,9 @@ public class CVendorEvaluationLineCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
-        cQuestionCategoryId
+        cQuestionCategoryId,
+        cVendorEvaluationId,
+        cVendorEvaluationName
         );
     }
 
@@ -185,6 +208,8 @@ public class CVendorEvaluationLineCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (cQuestionCategoryId != null ? "cQuestionCategoryId=" + cQuestionCategoryId + ", " : "") +
+                (cVendorEvaluationId != null ? "cVendorEvaluationId=" + cVendorEvaluationId + ", " : "") +
+                (cVendorEvaluationName != null ? "cVendorEvaluationName=" + cVendorEvaluationName + ", " : "") +
             "}";
     }
 

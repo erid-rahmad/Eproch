@@ -11,7 +11,11 @@
       size="mini"
     >
       <el-row :gutter="24">
-        <el-col :span="8">
+        <el-col
+          :xs="24"
+          :sm="12"
+          :lg="8"
+        >
           <el-form-item
             label="Title"
             prop="name"
@@ -103,7 +107,11 @@
             ></el-input>
           </el-form-item>
         </el-col>
-        <el-col :span="8">
+        <el-col
+          :xs="24"
+          :sm="12"
+          :lg="8"
+        >
           <el-form-item
             label="Bidding Type"
             prop="biddingTypeId"
@@ -116,7 +124,7 @@
               filterable
               placeholder="Select Bidding Type"
               style="width: 100%"
-              @change="retrieveEventTypes"
+              @change="onBiddingTypeChanged"
             >
               <el-option
                 v-for="item in biddingTypeOptions"
@@ -346,7 +354,12 @@
 
     <el-divider content-position="left"><h4>Project Information</h4></el-divider>
     <el-row>
-      <el-col :span="12">
+      <el-col
+        :xs="24"
+        :sm="24"
+        :lg="18"
+        :xl="12"
+      >
         <el-table
           v-loading="loadingProjectInfo"
           ref="projectInformations"
@@ -375,13 +388,14 @@
 
           <el-table-column
             label="Attachment"
-            min-width="80"
+            min-width="150"
           >
             <template slot-scope="{ row }">
               <el-button
                 class="btn-attachment"
                 icon="el-icon-download"
                 size="mini"
+                :title="printFileName(row.attachment)"
                 type="primary"
                 @click="downloadAttachment(row)"
               >
@@ -391,8 +405,25 @@
           </el-table-column>
 
           <el-table-column
+            label="View Stats"
+            width="150"
+          >
+            <template slot-scope="{ row }">
+              <el-button
+                class="button"
+                size="mini"
+                style="width: 100%"
+                @click="showDownloadStats(row)"
+              >
+                <svg-icon name="ecommerce/015-statistics"></svg-icon> View Stats
+              </el-button>
+            </template>
+          </el-table-column>
+
+          <el-table-column
             align="center"
-            min-width="50"
+            fixed="right"
+            width="56"
           >
             <template slot="header">
               <el-button
@@ -402,12 +433,12 @@
                 @click="projectFormVisible = true"
               ></el-button>
             </template>
-            <template slot-scope="{ $index }">
+            <template slot-scope="{ row, $index }">
               <el-button
                 icon="el-icon-delete"
                 size="mini"
                 type="danger"
-                @click="removeProject($index)"
+                @click="removeProject(row, $index)"
               ></el-button>
             </template>
           </el-table-column>
@@ -416,8 +447,49 @@
     </el-row>
 
     <el-dialog
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
+      width="30%"
+      :visible.sync="showDownloadStatsDialog"
+      title="Download Stats"
+    >
+      <p>Download statistics for file: {{ printFileName(projectInfo.attachment) }}</p>
+      <el-table
+        border
+        class="download-stats"
+        :data="downloadStats"
+        empty-text="No downloads yet"
+        highlight-current-row
+        size="mini"
+      >
+        <el-table-column
+          label="No."
+          min-width="50"
+        >
+          <template slot-scope="{ $index }">
+            {{ $index + 1 }}
+          </template>
+        </el-table-column>
+
+        <el-table-column
+          label="Vendor"
+          min-width="150"
+          show-overflow-tooltip
+          sortable
+          prop="vendorName"
+        ></el-table-column>
+
+      </el-table>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          @click="showDownloadStatsDialog = false"
+        >
+          Close
+        </el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog
       :show-close="false"
       title="Edit Sub Item"
       :visible.sync="subItemEditorVisible"
@@ -454,8 +526,6 @@
     </el-dialog>
 
     <el-dialog
-      :close-on-click-modal="false"
-      :close-on-press-escape="false"
       :show-close="false"
       title="Add Project"
       :visible.sync="projectFormVisible"
@@ -544,8 +614,16 @@
 
 <script lang="ts" src="./bidding-information.component.ts"></script>
 
+<style lang="scss">
+.compact .bidding-information .el-table--mini {
+  th, td {
+    height: 35px;
+  }
+}
+</style>
+
 <style lang="scss" scoped>
-.bidding-info-table .el-badge {
-  margin: 4px 0;
+.btn-attachment {
+  width: 100%;
 }
 </style>
