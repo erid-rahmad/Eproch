@@ -1,7 +1,7 @@
 <template>
     <div class="app-container">
 
-        <el-divider content-position="left"><h4>Scoring Criteria</h4></el-divider>
+        <el-divider content-position="left"><h4>Vendor Scoring</h4></el-divider>
 
         <el-row :gutter="24">
             <el-col :span="20">
