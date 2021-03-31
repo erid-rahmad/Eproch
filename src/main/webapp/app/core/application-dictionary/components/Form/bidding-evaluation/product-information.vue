@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="bidding-evaluation">
         <el-row :gutter="columnSpacing">
             <el-col :span="24">
                 <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
@@ -170,6 +170,7 @@
 <script lang="ts" src="./product-information.component.ts"></script>
 
 <style lang="scss">
+.bidding-evaluation {
     .form-input {
         textarea {
             resize: none;
@@ -188,12 +189,13 @@
     .cascader {
         width: 100%;
     }
-        .border {
+    
+    .border {
         border-width: 1px;
         border-style: outset ;
         border-top-color: rgb(0, 0, 0);
         border-bottom-color: rgb(0, 0, 0);
        
     }
-
+}
 </style>
