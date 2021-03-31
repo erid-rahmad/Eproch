@@ -116,12 +116,7 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
     this.selectedRow = row;
   }
 
-  onDeleteClicked() {
-    console.log('Delete row ID: ', this.selectedRow.id);
-  }
-
   onDocumentActionChanged(action: any) {
-    console.log('action', action);
     this.selectedDocumentAction = action;
     this.showDocumentActionConfirm = true;
   }

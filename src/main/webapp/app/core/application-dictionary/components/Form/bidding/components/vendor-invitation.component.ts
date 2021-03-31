@@ -20,76 +20,70 @@ const VendorInvitationProp = Vue.extend({
 @Component
 export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInvitationProp) {
 
-  data() {
-    return {
-      options: [{
-        value: 'Wajib',
-        label: 'Wajib'
-      }, {
-        value: 'Optional',
-        label: 'Optional'
-      }, {
-        value: 'Tidak Wajib',
-        label: 'Tidak Wajib'
-      }, ],
-      value: '',
-      input:'',
-      projectinformation: [
-        {
-          no: '1',
-          information: 'Bidding proposal',
-          atachment: 'Bidding proposal Doc',
-        }    
-      ],
-      dummy: [{
-        no: '1',
-        dockument: 'Policy Statment - apakah perusahaan memiliki kebijakan K3L dalam menjalankan usahanya ? ',
-        dockument1: 'wajib',
-        
-        
-        input:'',
-      },{
-        no: '1',
-          dockument: 'Emergency Response procedure - apakah perusahaan memiliki prosedur tanggap darurat ? ',
-          dockument1: 'wajib',
-        
-      },{
-        no: '1',
-          dockument: 'Basic Safety Rules - apakah perusahaan memiliki peraturan dasar keselamatan kerja ? ',
-          dockument1: 'wajib',
-        
-      }
-      ],
-      dummy1: [{
-        no: '1',
-        dockument: 'Profesional safety support - Bagaimana penanganan / pengelolaan profesional safety supportt ? ',
-        dockument1: 'wajib',
-        
-        
-        input:'',
-      },{
-        no: '1',
-          dockument: 'Enviromental - Sejauh mana perusahaan anda mengelola kebijakan lingkungan kerja ',
-          dockument1: 'wajib',
-        
-      },
-      ],
-      dummy2: [{
-        no: '1',
-        dockument: 'Apakah pengurus telah menetapkan struktur organisasi perusahaan ',
-        dockument1: 'wajib',
-        
-        
-        input:'',
-      },{
-        no: '1',
-          dockument: 'apakah pengurus menetapkan kebijakan pengelolaan usaha dan perngendalian kegiatan usaha perusahaan ',
-          dockument1: 'wajib',
-        
-      },
-    ],
+  options = [
+    {
+      value: 'Wajib',
+      label: 'Wajib'
+    },
+    {
+      value: 'Optional',
+      label: 'Optional'
+    },
+    {
+      value: 'Tidak Wajib',
+      label: 'Tidak Wajib'
     }
-  };
+  ];
+
+  value = '';
+  input = '';
+  projectinformation = [
+    {
+      no: '1',
+      information: 'Bidding proposal',
+      atachment: 'Bidding proposal Doc',
+    }
+  ];
+  dummy: [
+    {
+      no: '1',
+      dockument: 'Policy Statment - apakah perusahaan memiliki kebijakan K3L dalam menjalankan usahanya ? ',
+      dockument1: 'wajib',
+      input: '',
+    }, {
+      no: '1',
+      dockument: 'Emergency Response procedure - apakah perusahaan memiliki prosedur tanggap darurat ? ',
+      dockument1: 'wajib',
+    }, {
+      no: '1',
+      dockument: 'Basic Safety Rules - apakah perusahaan memiliki peraturan dasar keselamatan kerja ? ',
+      dockument1: 'wajib',
+    }
+  ];
+  dummy1: [
+    {
+      no: '1',
+      dockument: 'Profesional safety support - Bagaimana penanganan / pengelolaan profesional safety supportt ? ',
+      dockument1: 'wajib',
+      input: '',
+    }, {
+      no: '1',
+      dockument: 'Enviromental - Sejauh mana perusahaan anda mengelola kebijakan lingkungan kerja ',
+      dockument1: 'wajib',
+    },
+  ];
+  dummy2: [
+    {
+      no: '1',
+      dockument: 'Apakah pengurus telah menetapkan struktur organisasi perusahaan ',
+      dockument1: 'wajib',
+      input: '',
+    }, {
+      no: '1',
+      dockument: 'apakah pengurus menetapkan kebijakan pengelolaan usaha dan perngendalian kegiatan usaha perusahaan ',
+      dockument1: 'wajib',
+    }
+  ];
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;

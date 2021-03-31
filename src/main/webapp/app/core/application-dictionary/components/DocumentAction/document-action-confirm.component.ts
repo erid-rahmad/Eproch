@@ -31,5 +31,10 @@ const DocumentActionConfirmProps = Vue.extend({
 
 @Component
 export default class DocumentActionConfirm extends Mixins(AccessLevelMixin, DocumentActionConfirmProps, Vue2Filters) {
-  applyDocumentAction() {}
+  onClosed() {
+    this.$emit('update:visible', false);
+  }
+  applyDocumentAction() {
+    this.$emit('confirmed', this.action);
+  }
 }

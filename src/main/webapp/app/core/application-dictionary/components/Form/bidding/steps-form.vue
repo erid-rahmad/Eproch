@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container bidding-form">
+  <div class="bidding-form">
 
     <el-steps
       :active="active"
@@ -13,66 +13,59 @@
       <el-step title="Vendor Scoring" />
     </el-steps>
 
-    <bidding-information
-      v-if="active === 0"
-      ref="step-0"
-      class="step-panel"
-      :edit-mode="editMode"
-      :data="bidding"
-      @change="dataChanged = true"
-      @error="showSaveDialog = false"
-      @saved="goToNextStep"
-    ></bidding-information>
+    <el-scrollbar class="panel-wrapper">
+      <bidding-information
+        v-if="active === 0"
+        ref="step-0"
+        class="step-panel"
+        :edit-mode="editMode"
+        :data="bidding"
+        @change="dataChanged = true"
+        @error="showSaveDialog = false"
+        @saved="goToNextStep"
+      ></bidding-information>
 
-    <bidding-schedule
-      v-if="active === 1"
-      ref="step-1"
-      class="step-panel"
-      :edit-mode="editMode"
-      :data="bidding"
-      @change="dataChanged = true"
-      @error="showSaveDialog = false"
-      @saved="goToNextStep"
-    ></bidding-schedule>
+      <bidding-schedule
+        v-if="active === 1"
+        ref="step-1"
+        class="step-panel"
+        :edit-mode="editMode"
+        :data="bidding"
+        @change="dataChanged = true"
+        @error="showSaveDialog = false"
+        @saved="goToNextStep"
+      ></bidding-schedule>
 
-    <vendor-invitation
-      ref="step-2"
-      class="step-panel"
-      v-if="active === 2"
-      :edit-mode="editMode"
-      :data="bidding"
-      @change="dataChanged = true"
-      @error="showSaveDialog = false"
-      @saved="goToNextStep"
-    ></vendor-invitation>
+      <vendor-invitation
+        ref="step-2"
+        class="step-panel"
+        v-if="active === 2"
+        :edit-mode="editMode"
+        :data="bidding"
+        @change="dataChanged = true"
+        @error="showSaveDialog = false"
+        @saved="goToNextStep"
+      ></vendor-invitation>
 
-    <vendor-scoring
-      ref="step-3"
-      class="step-panel"
-      v-if="active === 3"
-      :edit-mode="editMode"
-      :data="bidding"
-      @change="dataChanged = true"
-      @error="showSaveDialog = false"
-      @saved="goToNextStep"
-    ></vendor-scoring>
+      <vendor-scoring
+        ref="step-3"
+        class="step-panel"
+        v-if="active === 3"
+        :edit-mode="editMode"
+        :data="bidding"
+        @change="dataChanged = true"
+        @error="showSaveDialog = false"
+        @saved="goToNextStep"
+      ></vendor-scoring>
+    </el-scrollbar>
 
-    <el-container class="steps-control-btn-group">
-
-      <el-button
-        icon="el-icon-close"
-        size="small"
-        style="margin-bottom: 12px; align-text:left;"
-        @click="close"
-      >
-        Close
-      </el-button>
+    <div class="steps-control-btn-group">
 
       <el-button
+        :disabled="active === 0"
         icon="el-icon-arrow-left"
         size="small"
-        style="margin-bottom: 12px;"
-        :disabled="active === 0"
+        type="primary"
         @click="previous"
       >
         Previous
@@ -80,16 +73,14 @@
 
       <el-button
         size="small"
-        style="margin-bottom: 12px;"
         type="primary"
         @click="next"
       >
         {{ nextButton }} <em class="el-icon-arrow-right"></em>
       </el-button>
 
-    </el-container>
+    </div>
 
-    <div class="clearfix"></div>
     <el-dialog
       width="30%"
       :visible.sync="showSaveDialog"
@@ -123,6 +114,11 @@
 
 <style lang="scss">
 .bidding-form {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 48px auto 48px;
+  overflow: hidden;
+
   .el-steps--simple {
     background: #1890ff;
 
@@ -162,6 +158,13 @@
     }
   }
 
+  .panel-wrapper {
+    .el-scrollbar__wrap {
+      overflow-x: hidden;
+      padding: 15px;
+    }
+  }
+
   .step-panel {
     //padding: 24px;
 
@@ -171,7 +174,7 @@
   }
 
   .steps-control-btn-group {
-    padding: 16px 24px;
+    padding: 8px 16px;
   }
 }
 </style>

@@ -4,7 +4,8 @@
     <el-row>
       <el-col
         :xs="24"
-        :sm="16"
+        :sm="18"
+        :xl="16"
       >
         <el-divider content-position="left"><h4>Event Schedule</h4></el-divider>
         <el-table
@@ -23,7 +24,7 @@
         >
           <el-table-column
             label="No"
-            min-width="30"
+            width="50"
           >
             <template slot-scope="row">
               {{ row.$index + 1 }}
@@ -59,8 +60,9 @@
           </el-table-column>
 
           <el-table-column
+            fixed="right"
             label="Attachments"
-            min-width="96"
+            min-width="100"
           >
             <template slot-scope="{ row }">
               <el-button
@@ -80,7 +82,8 @@
     <el-row>
       <el-col
         :xs="24"
-        :sm="16"
+        :sm="18"
+        :xl="16"
       >
         <el-divider content-position="left"><h4>Document Submission Schedule</h4></el-divider>
         <el-table
@@ -157,7 +160,10 @@
             </template>
           </el-table-column>
 
-          <el-table-column align="right" min-width="50">
+          <el-table-column
+            fixed="right"
+            min-width="56"
+          >
             <template slot="header">
               <el-button
                 icon="el-icon-plus"

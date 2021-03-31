@@ -2,8 +2,9 @@
   <el-dialog
     class="document-action-confirm"
     :title="`${action.name} ${data.documentTypeName} ${data.documentNo}`"
-    :visible.sync="visible"
+    :visible="visible"
     :width="width"
+    @close="onClosed"
   >
     <template>
       <p>Are you sure you want to {{ action.name | lowercase }} {{ data.documentTypeName | lowercase }}?</p>
@@ -17,15 +18,15 @@
       </template>
       <div slot="footer">
         <el-button
-          size="mini"
           icon="el-icon-close"
-          @click="$emit('update:visible', false)"
+          size="mini"
+          @click="onClosed"
         >
           {{ $t('entity.action.cancel') }}
         </el-button>
         <el-button
-          size="mini"
           icon="el-icon-check"
+          size="mini"
           :type="action.value === 'RJC' ? 'danger' : 'primary'"
           @click="applyDocumentAction"
         >

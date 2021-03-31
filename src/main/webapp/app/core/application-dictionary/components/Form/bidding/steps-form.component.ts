@@ -90,10 +90,6 @@ export default class StepsForm extends StepsFormProps {
     }
   }
 
-  close() {
-    this.$emit('close');
-  }
-
   previous() {
     if (this.active === 0) {
       return;

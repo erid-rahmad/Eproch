@@ -244,17 +244,6 @@
               ></el-option>
             </el-select>
           </el-form-item>
-          <el-form-item
-            label="Action"
-          >
-            <document-action-button
-              :approved="bidding.approved"
-              :document-type-id="bidding.documentTypeId"
-              :next-action="bidding.documentAction"
-              size="mini"
-              window-type="TRANSACTION"
-            ></document-action-button>
-          </el-form-item>
         </el-col>
       </el-row>
     </el-form>

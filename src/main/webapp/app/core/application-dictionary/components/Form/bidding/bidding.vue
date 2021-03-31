@@ -1,38 +1,36 @@
 <template>
-  <div class="app-container bidding-list">
-    <div v-if="index">
-      <el-row class="header">
-        <el-col :span="24">
+  <div class="app-container bidding-process">
+    <div class="toolbar">
+      <el-button
+        v-if="!index"
+        icon="el-icon-close"
+        size="mini"
+        type="danger"
+        @click="onFormClosed"
+      >
+        Close
+      </el-button>
+      <el-button
+        v-if="index"
+        class="button"
+        icon="el-icon-plus"
+        size="mini"
+        type="primary"
+        @click="onCreateClicked"
+      ></el-button>
 
-          <el-button
-            class="button"
-            icon="el-icon-plus"
-            size="mini"
-            type="primary"
-            @click="onCreateClicked"
-          />
+      <document-action-button
+        v-show="index || editMode"
+        :approved="documentApproved"
+        :document-type-id="documentTypeId"
+        :next-action="defaultDocumentAction"
+        size="mini"
+        window-type="TRANSACTION"
+        @change="onDocumentActionChanged"
+      ></document-action-button>
+    </div>
 
-          <el-button
-            class="button"
-            icon="el-icon-delete"
-            size="mini"
-            style="margin-left: 0"
-            type="danger"
-            @click="onDeleteClicked"
-          />
-
-          <document-action-button
-            :approved="documentApproved"
-            :document-type-id="documentTypeId"
-            :next-action="defaultDocumentAction"
-            size="mini"
-            window-type="TRANSACTION"
-            @change="onDocumentActionChanged"
-          ></document-action-button>
-
-        </el-col>
-      </el-row>
-
+    <template v-if="index">
       <el-table
         v-loading="processing"
         ref="mainGrid"
@@ -43,7 +41,6 @@
         highlight-current-row
         size="mini"
         stripe
-        style="width: 100%; height: 100%"
         @current-change="onCurrentRowChanged"
         @sort-change="changeOrder"
         @selection-change="onSelectionChanged"
@@ -176,17 +173,15 @@
         :total="queryCount"
         @size-change="changePageSize"
       ></el-pagination>
-    </div>
+    </template>
 
-    <div v-else>
-      <step-form
-        ref="biddingForm"
-        :edit-mode="editMode"
-        :data="selectedRow"
-        :step-index="stepIndex"
-        @close="onFormClosed"
-      />
-    </div>
+    <step-form
+      v-else
+      ref="biddingForm"
+      :edit-mode="editMode"
+      :data="selectedRow"
+      :step-index="stepIndex"
+    ></step-form>
 
     <document-action-confirm
       :action="selectedDocumentAction"
@@ -195,6 +190,7 @@
     ></document-action-confirm>
 
     <el-dialog
+      class="joined-vendor-dialog"
       width="30%"
       :visible.sync="showJoinedVendors"
       title="Joined Vendors"
@@ -279,9 +275,15 @@
 <script lang="ts" src="./bidding.component.ts"></script>
 
 <style lang="scss">
-.compact .bidding-list .el-dialog .el-table.vendor-list {
-  td {
-    height: 35px;
+.compact .bidding-process {
+  display: grid;
+  grid-template-columns: 100%;
+  grid-template-rows: 36px auto;
+
+  .joined-vendor-dialog .el-table.vendor-list {
+    td {
+      height: 35px;
+    }
   }
 }
 
@@ -297,10 +299,8 @@
   }
 }
 
-.header{
-  .button {
-    margin-bottom: 5px;
-  }
+.toolbar {
+  padding: 4px;
 }
 
 .form-input {
