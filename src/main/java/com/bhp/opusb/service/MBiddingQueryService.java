@@ -103,6 +103,12 @@ public class MBiddingQueryService extends QueryService<MBidding> {
             if (criteria.getEstimatedPrice() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getEstimatedPrice(), MBidding_.estimatedPrice));
             }
+            if (criteria.getBiddingStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getBiddingStatus(), MBidding_.biddingStatus));
+            }
+            if (criteria.getJoinedVendorCount() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getJoinedVendorCount(), MBidding_.joinedVendorCount));
+            }
             if (criteria.getDateTrx() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), MBidding_.dateTrx));
             }
@@ -147,6 +153,10 @@ public class MBiddingQueryService extends QueryService<MBidding> {
             if (criteria.getCurrencyId() != null) {
                 specification = specification.and(buildSpecification(criteria.getCurrencyId(),
                     root -> root.join(MBidding_.currency, JoinType.LEFT).get(CCurrency_.id)));
+            }
+            if (criteria.getDocumentTypeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getDocumentTypeId(),
+                    root -> root.join(MBidding_.documentType, JoinType.LEFT).get(CDocumentType_.id)));
             }
             if (criteria.getRequisitionId() != null) {
                 specification = specification.and(buildSpecification(criteria.getRequisitionId(),

@@ -1,3 +1,5 @@
+import AccountService from '@/account/account.service';
+import DocumentActionButton from '@/core/application-dictionary/components/DocumentAction/document-action-button.vue';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
 import { ElForm } from 'element-ui/types/form';
@@ -6,7 +8,6 @@ import { Component, Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
 import SubitemEditor from './subitem-editor.vue';
-import AccountService from '@/account/account.service';
 
 const BiddingInformationProp = Vue.extend({
   props: {
@@ -20,6 +21,7 @@ const BiddingInformationProp = Vue.extend({
 
 @Component({
   components: {
+    DocumentActionButton,
     SubitemEditor
   }
 })
@@ -49,6 +51,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   loadingProjectInfo = false;
   savingSubitem = false;
 
+  biddingStatuses: any[] = [];
   public costCenterOptions: any[] = [];
   public picOptions: any[] = [];
   public biddingTypeOptions: any[] = [];
@@ -171,6 +174,10 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
     this.bidding.step = BiddingStep.INFO;
     this.retrieveCostCenter();
     this.retrieveBiddingType();
+
+    this.commonService(null)
+      .retrieveReferenceLists('biddingStatus')
+      .then(res => this.biddingStatuses = res);
 
     this.commonService(null)
       .retrieveReferenceLists('mVendorSelection')
@@ -544,6 +551,10 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
       return !isExt;
     }
 
+  }
+
+  printBiddingStatus(value: string) {
+    return this.biddingStatuses.find(status => status.value === value)?.value || '-';
   }
 
   printFileName(attachment: any) {

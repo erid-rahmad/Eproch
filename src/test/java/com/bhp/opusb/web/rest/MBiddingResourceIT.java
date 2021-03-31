@@ -5,8 +5,8 @@ import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCostCenter;
 import com.bhp.opusb.domain.CCurrency;
-import com.bhp.opusb.domain.MRequisition;
 import com.bhp.opusb.domain.CDocumentType;
+import com.bhp.opusb.domain.MRequisition;
 import com.bhp.opusb.domain.CBiddingType;
 import com.bhp.opusb.domain.CEventType;
 import com.bhp.opusb.domain.AdUser;
@@ -60,6 +60,13 @@ public class MBiddingResourceIT {
     private static final BigDecimal DEFAULT_ESTIMATED_PRICE = new BigDecimal(1);
     private static final BigDecimal UPDATED_ESTIMATED_PRICE = new BigDecimal(2);
     private static final BigDecimal SMALLER_ESTIMATED_PRICE = new BigDecimal(1 - 1);
+
+    private static final String DEFAULT_BIDDING_STATUS = "AAAAAAAAAA";
+    private static final String UPDATED_BIDDING_STATUS = "BBBBBBBBBB";
+
+    private static final Integer DEFAULT_JOINED_VENDOR_COUNT = 1;
+    private static final Integer UPDATED_JOINED_VENDOR_COUNT = 2;
+    private static final Integer SMALLER_JOINED_VENDOR_COUNT = 1 - 1;
 
     private static final LocalDate DEFAULT_DATE_TRX = LocalDate.ofEpochDay(0L);
     private static final LocalDate UPDATED_DATE_TRX = LocalDate.now(ZoneId.systemDefault());
@@ -129,6 +136,8 @@ public class MBiddingResourceIT {
             .vendorSelection(DEFAULT_VENDOR_SELECTION)
             .ceilingPrice(DEFAULT_CEILING_PRICE)
             .estimatedPrice(DEFAULT_ESTIMATED_PRICE)
+            .biddingStatus(DEFAULT_BIDDING_STATUS)
+            .joinedVendorCount(DEFAULT_JOINED_VENDOR_COUNT)
             .dateTrx(DEFAULT_DATE_TRX)
             .documentNo(DEFAULT_DOCUMENT_NO)
             .documentAction(DEFAULT_DOCUMENT_ACTION)
@@ -171,6 +180,16 @@ public class MBiddingResourceIT {
         }
         mBidding.setCurrency(cCurrency);
         // Add required entity
+        CDocumentType cDocumentType;
+        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
+            cDocumentType = CDocumentTypeResourceIT.createEntity(em);
+            em.persist(cDocumentType);
+            em.flush();
+        } else {
+            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
+        }
+        mBidding.setDocumentType(cDocumentType);
+        // Add required entity
         MRequisition mRequisition;
         if (TestUtil.findAll(em, MRequisition.class).isEmpty()) {
             mRequisition = MRequisitionResourceIT.createEntity(em);
@@ -181,14 +200,6 @@ public class MBiddingResourceIT {
         }
         mBidding.setRequisition(mRequisition);
         // Add required entity
-        CDocumentType cDocumentType;
-        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
-            cDocumentType = CDocumentTypeResourceIT.createEntity(em);
-            em.persist(cDocumentType);
-            em.flush();
-        } else {
-            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
-        }
         mBidding.setReferenceType(cDocumentType);
         // Add required entity
         CBiddingType cBiddingType;
@@ -234,6 +245,8 @@ public class MBiddingResourceIT {
             .vendorSelection(UPDATED_VENDOR_SELECTION)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .estimatedPrice(UPDATED_ESTIMATED_PRICE)
+            .biddingStatus(UPDATED_BIDDING_STATUS)
+            .joinedVendorCount(UPDATED_JOINED_VENDOR_COUNT)
             .dateTrx(UPDATED_DATE_TRX)
             .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
@@ -276,6 +289,16 @@ public class MBiddingResourceIT {
         }
         mBidding.setCurrency(cCurrency);
         // Add required entity
+        CDocumentType cDocumentType;
+        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
+            cDocumentType = CDocumentTypeResourceIT.createUpdatedEntity(em);
+            em.persist(cDocumentType);
+            em.flush();
+        } else {
+            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
+        }
+        mBidding.setDocumentType(cDocumentType);
+        // Add required entity
         MRequisition mRequisition;
         if (TestUtil.findAll(em, MRequisition.class).isEmpty()) {
             mRequisition = MRequisitionResourceIT.createUpdatedEntity(em);
@@ -286,14 +309,6 @@ public class MBiddingResourceIT {
         }
         mBidding.setRequisition(mRequisition);
         // Add required entity
-        CDocumentType cDocumentType;
-        if (TestUtil.findAll(em, CDocumentType.class).isEmpty()) {
-            cDocumentType = CDocumentTypeResourceIT.createUpdatedEntity(em);
-            em.persist(cDocumentType);
-            em.flush();
-        } else {
-            cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
-        }
         mBidding.setReferenceType(cDocumentType);
         // Add required entity
         CBiddingType cBiddingType;
@@ -353,6 +368,8 @@ public class MBiddingResourceIT {
         assertThat(testMBidding.getVendorSelection()).isEqualTo(DEFAULT_VENDOR_SELECTION);
         assertThat(testMBidding.getCeilingPrice()).isEqualTo(DEFAULT_CEILING_PRICE);
         assertThat(testMBidding.getEstimatedPrice()).isEqualTo(DEFAULT_ESTIMATED_PRICE);
+        assertThat(testMBidding.getBiddingStatus()).isEqualTo(DEFAULT_BIDDING_STATUS);
+        assertThat(testMBidding.getJoinedVendorCount()).isEqualTo(DEFAULT_JOINED_VENDOR_COUNT);
         assertThat(testMBidding.getDateTrx()).isEqualTo(DEFAULT_DATE_TRX);
         assertThat(testMBidding.getDocumentNo()).isEqualTo(DEFAULT_DOCUMENT_NO);
         assertThat(testMBidding.getDocumentAction()).isEqualTo(DEFAULT_DOCUMENT_ACTION);
@@ -393,6 +410,25 @@ public class MBiddingResourceIT {
         int databaseSizeBeforeTest = mBiddingRepository.findAll().size();
         // set the field null
         mBidding.setName(null);
+
+        // Create the MBidding, which fails.
+        MBiddingDTO mBiddingDTO = mBiddingMapper.toDto(mBidding);
+
+        restMBiddingMockMvc.perform(post("/api/m-biddings")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(mBiddingDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<MBidding> mBiddingList = mBiddingRepository.findAll();
+        assertThat(mBiddingList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
+    public void checkBiddingStatusIsRequired() throws Exception {
+        int databaseSizeBeforeTest = mBiddingRepository.findAll().size();
+        // set the field null
+        mBidding.setBiddingStatus(null);
 
         // Create the MBidding, which fails.
         MBiddingDTO mBiddingDTO = mBiddingMapper.toDto(mBidding);
@@ -459,6 +495,8 @@ public class MBiddingResourceIT {
             .andExpect(jsonPath("$.[*].vendorSelection").value(hasItem(DEFAULT_VENDOR_SELECTION)))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].estimatedPrice").value(hasItem(DEFAULT_ESTIMATED_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].biddingStatus").value(hasItem(DEFAULT_BIDDING_STATUS)))
+            .andExpect(jsonPath("$.[*].joinedVendorCount").value(hasItem(DEFAULT_JOINED_VENDOR_COUNT)))
             .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
             .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
@@ -487,6 +525,8 @@ public class MBiddingResourceIT {
             .andExpect(jsonPath("$.vendorSelection").value(DEFAULT_VENDOR_SELECTION))
             .andExpect(jsonPath("$.ceilingPrice").value(DEFAULT_CEILING_PRICE.intValue()))
             .andExpect(jsonPath("$.estimatedPrice").value(DEFAULT_ESTIMATED_PRICE.intValue()))
+            .andExpect(jsonPath("$.biddingStatus").value(DEFAULT_BIDDING_STATUS))
+            .andExpect(jsonPath("$.joinedVendorCount").value(DEFAULT_JOINED_VENDOR_COUNT))
             .andExpect(jsonPath("$.dateTrx").value(DEFAULT_DATE_TRX.toString()))
             .andExpect(jsonPath("$.documentNo").value(DEFAULT_DOCUMENT_NO))
             .andExpect(jsonPath("$.documentAction").value(DEFAULT_DOCUMENT_ACTION))
@@ -883,6 +923,189 @@ public class MBiddingResourceIT {
 
         // Get all the mBiddingList where estimatedPrice is greater than SMALLER_ESTIMATED_PRICE
         defaultMBiddingShouldBeFound("estimatedPrice.greaterThan=" + SMALLER_ESTIMATED_PRICE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByBiddingStatusIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where biddingStatus equals to DEFAULT_BIDDING_STATUS
+        defaultMBiddingShouldBeFound("biddingStatus.equals=" + DEFAULT_BIDDING_STATUS);
+
+        // Get all the mBiddingList where biddingStatus equals to UPDATED_BIDDING_STATUS
+        defaultMBiddingShouldNotBeFound("biddingStatus.equals=" + UPDATED_BIDDING_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByBiddingStatusIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where biddingStatus not equals to DEFAULT_BIDDING_STATUS
+        defaultMBiddingShouldNotBeFound("biddingStatus.notEquals=" + DEFAULT_BIDDING_STATUS);
+
+        // Get all the mBiddingList where biddingStatus not equals to UPDATED_BIDDING_STATUS
+        defaultMBiddingShouldBeFound("biddingStatus.notEquals=" + UPDATED_BIDDING_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByBiddingStatusIsInShouldWork() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where biddingStatus in DEFAULT_BIDDING_STATUS or UPDATED_BIDDING_STATUS
+        defaultMBiddingShouldBeFound("biddingStatus.in=" + DEFAULT_BIDDING_STATUS + "," + UPDATED_BIDDING_STATUS);
+
+        // Get all the mBiddingList where biddingStatus equals to UPDATED_BIDDING_STATUS
+        defaultMBiddingShouldNotBeFound("biddingStatus.in=" + UPDATED_BIDDING_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByBiddingStatusIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where biddingStatus is not null
+        defaultMBiddingShouldBeFound("biddingStatus.specified=true");
+
+        // Get all the mBiddingList where biddingStatus is null
+        defaultMBiddingShouldNotBeFound("biddingStatus.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllMBiddingsByBiddingStatusContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where biddingStatus contains DEFAULT_BIDDING_STATUS
+        defaultMBiddingShouldBeFound("biddingStatus.contains=" + DEFAULT_BIDDING_STATUS);
+
+        // Get all the mBiddingList where biddingStatus contains UPDATED_BIDDING_STATUS
+        defaultMBiddingShouldNotBeFound("biddingStatus.contains=" + UPDATED_BIDDING_STATUS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByBiddingStatusNotContainsSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where biddingStatus does not contain DEFAULT_BIDDING_STATUS
+        defaultMBiddingShouldNotBeFound("biddingStatus.doesNotContain=" + DEFAULT_BIDDING_STATUS);
+
+        // Get all the mBiddingList where biddingStatus does not contain UPDATED_BIDDING_STATUS
+        defaultMBiddingShouldBeFound("biddingStatus.doesNotContain=" + UPDATED_BIDDING_STATUS);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByJoinedVendorCountIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where joinedVendorCount equals to DEFAULT_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldBeFound("joinedVendorCount.equals=" + DEFAULT_JOINED_VENDOR_COUNT);
+
+        // Get all the mBiddingList where joinedVendorCount equals to UPDATED_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldNotBeFound("joinedVendorCount.equals=" + UPDATED_JOINED_VENDOR_COUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByJoinedVendorCountIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where joinedVendorCount not equals to DEFAULT_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldNotBeFound("joinedVendorCount.notEquals=" + DEFAULT_JOINED_VENDOR_COUNT);
+
+        // Get all the mBiddingList where joinedVendorCount not equals to UPDATED_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldBeFound("joinedVendorCount.notEquals=" + UPDATED_JOINED_VENDOR_COUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByJoinedVendorCountIsInShouldWork() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where joinedVendorCount in DEFAULT_JOINED_VENDOR_COUNT or UPDATED_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldBeFound("joinedVendorCount.in=" + DEFAULT_JOINED_VENDOR_COUNT + "," + UPDATED_JOINED_VENDOR_COUNT);
+
+        // Get all the mBiddingList where joinedVendorCount equals to UPDATED_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldNotBeFound("joinedVendorCount.in=" + UPDATED_JOINED_VENDOR_COUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByJoinedVendorCountIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where joinedVendorCount is not null
+        defaultMBiddingShouldBeFound("joinedVendorCount.specified=true");
+
+        // Get all the mBiddingList where joinedVendorCount is null
+        defaultMBiddingShouldNotBeFound("joinedVendorCount.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByJoinedVendorCountIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where joinedVendorCount is greater than or equal to DEFAULT_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldBeFound("joinedVendorCount.greaterThanOrEqual=" + DEFAULT_JOINED_VENDOR_COUNT);
+
+        // Get all the mBiddingList where joinedVendorCount is greater than or equal to UPDATED_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldNotBeFound("joinedVendorCount.greaterThanOrEqual=" + UPDATED_JOINED_VENDOR_COUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByJoinedVendorCountIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where joinedVendorCount is less than or equal to DEFAULT_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldBeFound("joinedVendorCount.lessThanOrEqual=" + DEFAULT_JOINED_VENDOR_COUNT);
+
+        // Get all the mBiddingList where joinedVendorCount is less than or equal to SMALLER_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldNotBeFound("joinedVendorCount.lessThanOrEqual=" + SMALLER_JOINED_VENDOR_COUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByJoinedVendorCountIsLessThanSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where joinedVendorCount is less than DEFAULT_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldNotBeFound("joinedVendorCount.lessThan=" + DEFAULT_JOINED_VENDOR_COUNT);
+
+        // Get all the mBiddingList where joinedVendorCount is less than UPDATED_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldBeFound("joinedVendorCount.lessThan=" + UPDATED_JOINED_VENDOR_COUNT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingsByJoinedVendorCountIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        mBiddingRepository.saveAndFlush(mBidding);
+
+        // Get all the mBiddingList where joinedVendorCount is greater than DEFAULT_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldNotBeFound("joinedVendorCount.greaterThan=" + DEFAULT_JOINED_VENDOR_COUNT);
+
+        // Get all the mBiddingList where joinedVendorCount is greater than SMALLER_JOINED_VENDOR_COUNT
+        defaultMBiddingShouldBeFound("joinedVendorCount.greaterThan=" + SMALLER_JOINED_VENDOR_COUNT);
     }
 
 
@@ -1771,6 +1994,22 @@ public class MBiddingResourceIT {
 
     @Test
     @Transactional
+    public void getAllMBiddingsByDocumentTypeIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CDocumentType documentType = mBidding.getDocumentType();
+        mBiddingRepository.saveAndFlush(mBidding);
+        Long documentTypeId = documentType.getId();
+
+        // Get all the mBiddingList where documentType equals to documentTypeId
+        defaultMBiddingShouldBeFound("documentTypeId.equals=" + documentTypeId);
+
+        // Get all the mBiddingList where documentType equals to documentTypeId + 1
+        defaultMBiddingShouldNotBeFound("documentTypeId.equals=" + (documentTypeId + 1));
+    }
+
+
+    @Test
+    @Transactional
     public void getAllMBiddingsByRequisitionIsEqualToSomething() throws Exception {
         // Get already existing entity
         MRequisition requisition = mBidding.getRequisition();
@@ -1860,6 +2099,8 @@ public class MBiddingResourceIT {
             .andExpect(jsonPath("$.[*].vendorSelection").value(hasItem(DEFAULT_VENDOR_SELECTION)))
             .andExpect(jsonPath("$.[*].ceilingPrice").value(hasItem(DEFAULT_CEILING_PRICE.intValue())))
             .andExpect(jsonPath("$.[*].estimatedPrice").value(hasItem(DEFAULT_ESTIMATED_PRICE.intValue())))
+            .andExpect(jsonPath("$.[*].biddingStatus").value(hasItem(DEFAULT_BIDDING_STATUS)))
+            .andExpect(jsonPath("$.[*].joinedVendorCount").value(hasItem(DEFAULT_JOINED_VENDOR_COUNT)))
             .andExpect(jsonPath("$.[*].dateTrx").value(hasItem(DEFAULT_DATE_TRX.toString())))
             .andExpect(jsonPath("$.[*].documentNo").value(hasItem(DEFAULT_DOCUMENT_NO)))
             .andExpect(jsonPath("$.[*].documentAction").value(hasItem(DEFAULT_DOCUMENT_ACTION)))
@@ -1922,6 +2163,8 @@ public class MBiddingResourceIT {
             .vendorSelection(UPDATED_VENDOR_SELECTION)
             .ceilingPrice(UPDATED_CEILING_PRICE)
             .estimatedPrice(UPDATED_ESTIMATED_PRICE)
+            .biddingStatus(UPDATED_BIDDING_STATUS)
+            .joinedVendorCount(UPDATED_JOINED_VENDOR_COUNT)
             .dateTrx(UPDATED_DATE_TRX)
             .documentNo(UPDATED_DOCUMENT_NO)
             .documentAction(UPDATED_DOCUMENT_ACTION)
@@ -1948,6 +2191,8 @@ public class MBiddingResourceIT {
         assertThat(testMBidding.getVendorSelection()).isEqualTo(UPDATED_VENDOR_SELECTION);
         assertThat(testMBidding.getCeilingPrice()).isEqualTo(UPDATED_CEILING_PRICE);
         assertThat(testMBidding.getEstimatedPrice()).isEqualTo(UPDATED_ESTIMATED_PRICE);
+        assertThat(testMBidding.getBiddingStatus()).isEqualTo(UPDATED_BIDDING_STATUS);
+        assertThat(testMBidding.getJoinedVendorCount()).isEqualTo(UPDATED_JOINED_VENDOR_COUNT);
         assertThat(testMBidding.getDateTrx()).isEqualTo(UPDATED_DATE_TRX);
         assertThat(testMBidding.getDocumentNo()).isEqualTo(UPDATED_DOCUMENT_NO);
         assertThat(testMBidding.getDocumentAction()).isEqualTo(UPDATED_DOCUMENT_ACTION);

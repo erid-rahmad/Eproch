@@ -16,25 +16,26 @@
             class="button"
             icon="el-icon-delete"
             size="mini"
+            style="margin-left: 0"
             type="danger"
             @click="onDeleteClicked"
           />
 
-          <!-- <el-button
-            class="button"
+          <document-action-button
+            :approved="documentApproved"
+            :document-type-id="documentTypeId"
+            :next-action="defaultDocumentAction"
             size="mini"
-            type="primary"
-            @click="onExportClicked"
-          >
-            <svg-icon name="icomoo/199-upload2"></svg-icon> Export
-          </el-button> -->
+            window-type="TRANSACTION"
+            @change="onDocumentActionChanged"
+          ></document-action-button>
 
         </el-col>
       </el-row>
 
       <el-table
         v-loading="processing"
-        ref="gridData"
+        ref="mainGrid"
         border
         :data="gridData"
         :default-sort="gridSchema.defaultSort"
@@ -43,6 +44,7 @@
         size="mini"
         stripe
         style="width: 100%; height: 100%"
+        @current-change="onCurrentRowChanged"
         @sort-change="changeOrder"
         @selection-change="onSelectionChanged"
       >
@@ -121,11 +123,10 @@
         <el-table-column
           label="Bidding Status"
           min-width="140"
-          prop="documentStatus"
           sortable
         >
           <template slot-scope="{ row }">
-            {{ formatDocumentStatus(row.documentStatus) }}
+            {{ formatDocumentStatus(row.biddingStatus) }}
           </template>
         </el-table-column>
 
@@ -186,6 +187,12 @@
         @close="onFormClosed"
       />
     </div>
+
+    <document-action-confirm
+      :action="selectedDocumentAction"
+      :data="selectedRow"
+      :visible.sync="showDocumentActionConfirm"
+    ></document-action-confirm>
 
     <el-dialog
       width="30%"

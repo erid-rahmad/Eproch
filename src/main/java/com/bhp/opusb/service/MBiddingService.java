@@ -4,11 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
+import com.bhp.opusb.config.ApplicationProperties;
+import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.MVendorSuggestion;
 import com.bhp.opusb.domain.enumeration.MBiddingProcess;
 import com.bhp.opusb.repository.AdUserRepository;
+import com.bhp.opusb.repository.CDocumentTypeRepository;
 import com.bhp.opusb.repository.MBiddingLineRepository;
 import com.bhp.opusb.repository.MBiddingRepository;
 import com.bhp.opusb.repository.MProjectInformationRepository;
@@ -41,6 +44,8 @@ public class MBiddingService {
     private final Logger log = LoggerFactory.getLogger(MBiddingService.class);
 
     private final MBiddingRepository mBiddingRepository;
+    private final CDocumentTypeRepository cDocumentTypeRepository;
+
     private final MBiddingLineService mBiddingLineService;
     private final MProjectInformationService mProjectInformationService;
     private final MBiddingScheduleService mBiddingScheduleService;
@@ -48,6 +53,8 @@ public class MBiddingService {
 
     private final MBiddingMapper mBiddingMapper;
     private final MBiddingFormMapper mBiddingFormMapper;
+
+    private final Document document;
 
     @Autowired
     private MailService mailService;
@@ -65,10 +72,12 @@ public class MBiddingService {
     @Autowired
     private AdUserRepository adUserRepository;
 
-    public MBiddingService(MBiddingRepository mBiddingRepository, MBiddingLineService mBiddingLineService,
+    public MBiddingService(ApplicationProperties applicationProperties, CDocumentTypeRepository cDocumentTypeRepository,
+            MBiddingRepository mBiddingRepository, MBiddingLineService mBiddingLineService,
             MProjectInformationService mProjectInformationService, MBiddingScheduleService mBiddingScheduleService,
             MDocumentScheduleService mDocumentScheduleService, MBiddingMapper mBiddingMapper,
             MBiddingFormMapper mBiddingFormMapper) {
+        this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.mBiddingRepository = mBiddingRepository;
         this.mBiddingLineService = mBiddingLineService;
         this.mProjectInformationService = mProjectInformationService;
@@ -76,7 +85,10 @@ public class MBiddingService {
         this.mDocumentScheduleService = mDocumentScheduleService;
         this.mBiddingMapper = mBiddingMapper;
         this.mBiddingFormMapper = mBiddingFormMapper;
+
+        document = applicationProperties.getDocuments().get("bidding");
     }
+
     /**
      * Save a mBidding.
      *
@@ -89,7 +101,7 @@ public class MBiddingService {
         if (mBiddingDTO.getDocumentNo()==null) {
             Random rnd = new Random();
             int number = rnd.nextInt(999999);
-            String documentno = "BD-" + number;
+            String documentno = document.getDocumentNumberPrefix() + number;
             mBiddingDTO.setDocumentNo(documentno);
         }
 
@@ -153,7 +165,13 @@ public class MBiddingService {
             final List<MProjectInformationDTO> removedProjectInformations = mBiddingDTO.getRemovedProjectInformations();
 
             if (mBidding.getDocumentNo() == null) {
-               mBidding.setDocumentNo(DocumentUtil.buildDocumentNumber("BD-", mBiddingRepository));
+               mBidding.setDocumentNo(DocumentUtil.buildDocumentNumber(document.getDocumentNumberPrefix(), mBiddingRepository));
+            }
+
+            // Set the default Purchase Order document type.
+            if (mBidding.getDocumentType() == null) {
+                cDocumentTypeRepository.findFirstByName(document.getDocumentType())
+                    .ifPresent(mBidding::setDocumentType);
             }
 
             mBidding = mBiddingRepository.save(mBidding);

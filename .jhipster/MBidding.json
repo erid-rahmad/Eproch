@@ -21,6 +21,17 @@
             "fieldType": "BigDecimal"
         },
         {
+            "fieldName": "biddingStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "joinedVendorCount",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "dateTrx",
             "fieldType": "LocalDate"
         },
@@ -106,6 +117,14 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "cDocumentType",
+            "otherEntityRelationshipName": "mBidding",
+            "relationshipValidateRules": "required",
+            "relationshipName": "documentType",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "mRequisition",
             "otherEntityRelationshipName": "mBidding",
             "relationshipValidateRules": "required",
@@ -156,5 +175,6 @@
     "embedded": false,
     "clientRootFolder": "",
     "applications": "*",
+    "enableEntityAudit": true,
     "skipClient": true
 }

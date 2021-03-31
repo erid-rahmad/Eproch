@@ -49,6 +49,13 @@ public class MBidding extends AbstractAuditingEntity {
     @Column(name = "estimated_price", precision = 21, scale = 2)
     private BigDecimal estimatedPrice;
 
+    @NotNull
+    @Column(name = "bidding_status", nullable = false)
+    private String biddingStatus;
+
+    @Column(name = "joined_vendor_count")
+    private Integer joinedVendorCount;
+
     @Column(name = "date_trx")
     private LocalDate dateTrx;
 
@@ -101,6 +108,11 @@ public class MBidding extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("mBiddings")
     private CCurrency currency;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mBiddings")
+    private CDocumentType documentType;
 
     @ManyToOne(optional = false)
     @NotNull
@@ -186,6 +198,32 @@ public class MBidding extends AbstractAuditingEntity {
 
     public void setEstimatedPrice(BigDecimal estimatedPrice) {
         this.estimatedPrice = estimatedPrice;
+    }
+
+    public String getBiddingStatus() {
+        return biddingStatus;
+    }
+
+    public MBidding biddingStatus(String biddingStatus) {
+        this.biddingStatus = biddingStatus;
+        return this;
+    }
+
+    public void setBiddingStatus(String biddingStatus) {
+        this.biddingStatus = biddingStatus;
+    }
+
+    public Integer getJoinedVendorCount() {
+        return joinedVendorCount;
+    }
+
+    public MBidding joinedVendorCount(Integer joinedVendorCount) {
+        this.joinedVendorCount = joinedVendorCount;
+        return this;
+    }
+
+    public void setJoinedVendorCount(Integer joinedVendorCount) {
+        this.joinedVendorCount = joinedVendorCount;
     }
 
     public LocalDate getDateTrx() {
@@ -370,6 +408,19 @@ public class MBidding extends AbstractAuditingEntity {
         this.currency = cCurrency;
     }
 
+    public CDocumentType getDocumentType() {
+        return documentType;
+    }
+
+    public MBidding documentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+        return this;
+    }
+
+    public void setDocumentType(CDocumentType cDocumentType) {
+        this.documentType = cDocumentType;
+    }
+
     public MRequisition getRequisition() {
         return requisition;
     }
@@ -465,6 +516,8 @@ public class MBidding extends AbstractAuditingEntity {
             ", vendorSelection='" + getVendorSelection() + "'" +
             ", ceilingPrice=" + getCeilingPrice() +
             ", estimatedPrice=" + getEstimatedPrice() +
+            ", biddingStatus='" + getBiddingStatus() + "'" +
+            ", joinedVendorCount=" + getJoinedVendorCount() +
             ", dateTrx='" + getDateTrx() + "'" +
             ", documentNo='" + getDocumentNo() + "'" +
             ", documentAction='" + getDocumentAction() + "'" +

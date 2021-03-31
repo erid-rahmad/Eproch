@@ -113,6 +113,8 @@
             <column name="vendor_selection" type="string"/>
             <column name="ceiling_price" type="numeric"/>
             <column name="estimated_price" type="numeric"/>
+            <column name="bidding_status" type="string"/>
+            <column name="joined_vendor_count" type="numeric"/>
             <column name="date_trx" type="date"/>
             <column name="document_no" type="string"/>
             <column name="document_action" type="string"/>
@@ -127,6 +129,7 @@
             <column name="ad_organization_id" type="numeric"/>
             <column name="cost_center_id" type="numeric"/>
             <column name="currency_id" type="numeric"/>
+            <column name="document_type_id" type="numeric"/>
             <column name="requisition_id" type="numeric"/>
             <column name="reference_type_id" type="numeric"/>
             <column name="bidding_type_id" type="numeric"/>
@@ -153,6 +156,20 @@
             </column>
             <column name="reference_type_id" type="bigint">
                 <constraints nullable="false" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20210331101300" author="Ananta Aryadewa">
+        <addColumn tableName="m_bidding">
+            <column name="bidding_status" type="varchar(255)" defaultValue="N">
+                <constraints nullable="false" />
+            </column>
+            <column name="joined_vendor_count" type="integer" defaultValue="0">
+                <constraints nullable="true" />
+            </column>
+            <column name="document_type_id" type="bigint">
+                <constraints nullable="true" />
             </column>
         </addColumn>
     </changeSet>

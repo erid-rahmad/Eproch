@@ -1,8 +1,5 @@
 package com.bhp.opusb.service.dto;
 
-import com.bhp.opusb.domain.MBiddingLine;
-import com.bhp.opusb.domain.MProjectInformation;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
@@ -29,6 +26,11 @@ public class MBiddingDTO extends AbstractAuditingDTO {
     private BigDecimal ceilingPrice;
 
     private BigDecimal estimatedPrice;
+
+    @NotNull
+    private String biddingStatus;
+
+    private Integer joinedVendorCount;
 
     private LocalDate dateTrx = LocalDate.now();
 
@@ -66,6 +68,9 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 
     private Long currencyId;
     private String currencyName;
+
+    private Long documentTypeId;
+    private String documentTypeName;
 
     private Long requisitionId;
     private String requisitionName;
@@ -124,6 +129,22 @@ public class MBiddingDTO extends AbstractAuditingDTO {
 
     public void setEstimatedPrice(BigDecimal estimatedPrice) {
         this.estimatedPrice = estimatedPrice;
+    }
+
+    public String getBiddingStatus() {
+        return biddingStatus;
+    }
+
+    public void setBiddingStatus(String biddingStatus) {
+        this.biddingStatus = biddingStatus;
+    }
+
+    public Integer getJoinedVendorCount() {
+        return joinedVendorCount;
+    }
+
+    public void setJoinedVendorCount(Integer joinedVendorCount) {
+        this.joinedVendorCount = joinedVendorCount;
     }
 
     public LocalDate getDateTrx() {
@@ -262,6 +283,22 @@ public class MBiddingDTO extends AbstractAuditingDTO {
         this.currencyName = currencyName;
     }
 
+    public Long getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(Long cDocumentTypeId) {
+        this.documentTypeId = cDocumentTypeId;
+    }
+
+    public String getDocumentTypeName() {
+        return documentTypeName;
+    }
+
+    public void setDocumentTypeName(String documentTypeName) {
+        this.documentTypeName = documentTypeName;
+    }
+
     public Long getRequisitionId() {
         return requisitionId;
     }
@@ -382,40 +419,33 @@ public class MBiddingDTO extends AbstractAuditingDTO {
     @Override
     public String toString() {
         return "MBiddingDTO{" +
-            "id=" + id +
-            ", name='" + name + '\'' +
-            ", vendorSelection='" + vendorSelection + '\'' +
-            ", ceilingPrice=" + ceilingPrice +
-            ", estimatedPrice=" + estimatedPrice +
-            ", dateTrx=" + dateTrx +
-            ", documentNo='" + documentNo + '\'' +
-            ", documentAction='" + documentAction + '\'' +
-            ", documentStatus='" + documentStatus + '\'' +
-            ", approved=" + approved +
-            ", processed=" + processed +
-            ", dateApprove=" + dateApprove +
-            ", dateReject=" + dateReject +
-            ", rejectedReason='" + rejectedReason + '\'' +
-            ", uid=" + uid +
-            ", active=" + active +
-            ", adOrganizationId=" + adOrganizationId +
-            ", adOrganizationName='" + adOrganizationName + '\'' +
-            ", costCenterId=" + costCenterId +
-            ", costCenterName='" + costCenterName + '\'' +
-            ", currencyId=" + currencyId +
-            ", currencyName='" + currencyName + '\'' +
-            ", requisitionId=" + requisitionId +
-            ", requisitionName='" + requisitionName + '\'' +
-            ", referenceTypeId=" + referenceTypeId +
-            ", referenceTypeName='" + referenceTypeName + '\'' +
-            ", biddingTypeId=" + biddingTypeId +
-            ", biddingTypeName='" + biddingTypeName + '\'' +
-            ", eventTypeId=" + eventTypeId +
-            ", eventTypeName='" + eventTypeName + '\'' +
-            ", adUserUserId=" + adUserUserId +
-            ", adUserUserName='" + adUserUserName + '\'' +
-            ", biddingLineList=" + biddingLineList +
-            ", projectInformationList=" + projectInformationList +
-            '}';
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", vendorSelection='" + getVendorSelection() + "'" +
+            ", ceilingPrice=" + getCeilingPrice() +
+            ", estimatedPrice=" + getEstimatedPrice() +
+            ", biddingStatus='" + getBiddingStatus() + "'" +
+            ", joinedVendorCount=" + getJoinedVendorCount() +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
+            ", dateApprove='" + getDateApprove() + "'" +
+            ", dateReject='" + getDateReject() + "'" +
+            ", rejectedReason='" + getRejectedReason() + "'" +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            ", costCenterId=" + getCostCenterId() +
+            ", currencyId=" + getCurrencyId() +
+            ", documentTypeId=" + getDocumentTypeId() +
+            ", requisitionId=" + getRequisitionId() +
+            ", referenceTypeId=" + getReferenceTypeId() +
+            ", biddingTypeId=" + getBiddingTypeId() +
+            ", eventTypeId=" + getEventTypeId() +
+            ", adUserUserId=" + getAdUserUserId() +
+            "}";
     }
 }

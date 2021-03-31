@@ -206,6 +206,9 @@ application:
   attachment:
     upload-dir: /opt/eproc/data/attachments
   documents:
+    bidding:
+      documentType: 'Bidding'
+      documentNumberPrefix: 'BD-'
     purchaseOrder:
       documentType: 'Purchase Order'
       documentNumberPrefix: 'PO-'

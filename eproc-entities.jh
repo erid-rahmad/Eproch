@@ -985,6 +985,8 @@ entity MBidding {
 	vendorSelection String
 	ceilingPrice BigDecimal
 	estimatedPrice BigDecimal
+	biddingStatus String required
+	joinedVendorCount Integer
 
 	// Common transactional fields.
 	dateTrx LocalDate
@@ -1486,6 +1488,7 @@ relationship ManyToOne {
 	MBidding{adOrganization required} to ADOrganization
 	MBidding{costCenter required} to CCostCenter
 	MBidding{currency required} to CCurrency
+	MBidding{documentType required} to CDocumentType
 	MBidding{requisition required} to MRequisition
 	MBidding{referenceType required} to CDocumentType
 	MBidding{biddingType required} to CBiddingType

@@ -7,6 +7,7 @@ import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LocalDateFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
@@ -34,6 +35,10 @@ public class MBiddingCriteria implements Serializable, Criteria {
     private BigDecimalFilter ceilingPrice;
 
     private BigDecimalFilter estimatedPrice;
+
+    private StringFilter biddingStatus;
+
+    private IntegerFilter joinedVendorCount;
 
     private LocalDateFilter dateTrx;
 
@@ -63,6 +68,8 @@ public class MBiddingCriteria implements Serializable, Criteria {
 
     private LongFilter currencyId;
 
+    private LongFilter documentTypeId;
+
     private LongFilter requisitionId;
 
     private LongFilter referenceTypeId;
@@ -82,6 +89,8 @@ public class MBiddingCriteria implements Serializable, Criteria {
         this.vendorSelection = other.vendorSelection == null ? null : other.vendorSelection.copy();
         this.ceilingPrice = other.ceilingPrice == null ? null : other.ceilingPrice.copy();
         this.estimatedPrice = other.estimatedPrice == null ? null : other.estimatedPrice.copy();
+        this.biddingStatus = other.biddingStatus == null ? null : other.biddingStatus.copy();
+        this.joinedVendorCount = other.joinedVendorCount == null ? null : other.joinedVendorCount.copy();
         this.dateTrx = other.dateTrx == null ? null : other.dateTrx.copy();
         this.documentNo = other.documentNo == null ? null : other.documentNo.copy();
         this.documentAction = other.documentAction == null ? null : other.documentAction.copy();
@@ -96,6 +105,7 @@ public class MBiddingCriteria implements Serializable, Criteria {
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.costCenterId = other.costCenterId == null ? null : other.costCenterId.copy();
         this.currencyId = other.currencyId == null ? null : other.currencyId.copy();
+        this.documentTypeId = other.documentTypeId == null ? null : other.documentTypeId.copy();
         this.requisitionId = other.requisitionId == null ? null : other.requisitionId.copy();
         this.referenceTypeId = other.referenceTypeId == null ? null : other.referenceTypeId.copy();
         this.biddingTypeId = other.biddingTypeId == null ? null : other.biddingTypeId.copy();
@@ -146,6 +156,22 @@ public class MBiddingCriteria implements Serializable, Criteria {
 
     public void setEstimatedPrice(BigDecimalFilter estimatedPrice) {
         this.estimatedPrice = estimatedPrice;
+    }
+
+    public StringFilter getBiddingStatus() {
+        return biddingStatus;
+    }
+
+    public void setBiddingStatus(StringFilter biddingStatus) {
+        this.biddingStatus = biddingStatus;
+    }
+
+    public IntegerFilter getJoinedVendorCount() {
+        return joinedVendorCount;
+    }
+
+    public void setJoinedVendorCount(IntegerFilter joinedVendorCount) {
+        this.joinedVendorCount = joinedVendorCount;
     }
 
     public LocalDateFilter getDateTrx() {
@@ -260,6 +286,14 @@ public class MBiddingCriteria implements Serializable, Criteria {
         this.currencyId = currencyId;
     }
 
+    public LongFilter getDocumentTypeId() {
+        return documentTypeId;
+    }
+
+    public void setDocumentTypeId(LongFilter documentTypeId) {
+        this.documentTypeId = documentTypeId;
+    }
+
     public LongFilter getRequisitionId() {
         return requisitionId;
     }
@@ -316,6 +350,8 @@ public class MBiddingCriteria implements Serializable, Criteria {
             Objects.equals(vendorSelection, that.vendorSelection) &&
             Objects.equals(ceilingPrice, that.ceilingPrice) &&
             Objects.equals(estimatedPrice, that.estimatedPrice) &&
+            Objects.equals(biddingStatus, that.biddingStatus) &&
+            Objects.equals(joinedVendorCount, that.joinedVendorCount) &&
             Objects.equals(dateTrx, that.dateTrx) &&
             Objects.equals(documentNo, that.documentNo) &&
             Objects.equals(documentAction, that.documentAction) &&
@@ -330,6 +366,7 @@ public class MBiddingCriteria implements Serializable, Criteria {
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(costCenterId, that.costCenterId) &&
             Objects.equals(currencyId, that.currencyId) &&
+            Objects.equals(documentTypeId, that.documentTypeId) &&
             Objects.equals(requisitionId, that.requisitionId) &&
             Objects.equals(referenceTypeId, that.referenceTypeId) &&
             Objects.equals(biddingTypeId, that.biddingTypeId) &&
@@ -345,6 +382,8 @@ public class MBiddingCriteria implements Serializable, Criteria {
         vendorSelection,
         ceilingPrice,
         estimatedPrice,
+        biddingStatus,
+        joinedVendorCount,
         dateTrx,
         documentNo,
         documentAction,
@@ -359,6 +398,7 @@ public class MBiddingCriteria implements Serializable, Criteria {
         adOrganizationId,
         costCenterId,
         currencyId,
+        documentTypeId,
         requisitionId,
         referenceTypeId,
         biddingTypeId,
@@ -375,6 +415,8 @@ public class MBiddingCriteria implements Serializable, Criteria {
                 (vendorSelection != null ? "vendorSelection=" + vendorSelection + ", " : "") +
                 (ceilingPrice != null ? "ceilingPrice=" + ceilingPrice + ", " : "") +
                 (estimatedPrice != null ? "estimatedPrice=" + estimatedPrice + ", " : "") +
+                (biddingStatus != null ? "biddingStatus=" + biddingStatus + ", " : "") +
+                (joinedVendorCount != null ? "joinedVendorCount=" + joinedVendorCount + ", " : "") +
                 (dateTrx != null ? "dateTrx=" + dateTrx + ", " : "") +
                 (documentNo != null ? "documentNo=" + documentNo + ", " : "") +
                 (documentAction != null ? "documentAction=" + documentAction + ", " : "") +
@@ -389,6 +431,7 @@ public class MBiddingCriteria implements Serializable, Criteria {
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (costCenterId != null ? "costCenterId=" + costCenterId + ", " : "") +
                 (currencyId != null ? "currencyId=" + currencyId + ", " : "") +
+                (documentTypeId != null ? "documentTypeId=" + documentTypeId + ", " : "") +
                 (requisitionId != null ? "requisitionId=" + requisitionId + ", " : "") +
                 (referenceTypeId != null ? "referenceTypeId=" + referenceTypeId + ", " : "") +
                 (biddingTypeId != null ? "biddingTypeId=" + biddingTypeId + ", " : "") +

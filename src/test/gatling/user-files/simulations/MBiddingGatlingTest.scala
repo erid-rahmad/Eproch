@@ -76,6 +76,8 @@ class MBiddingGatlingTest extends Simulation {
                 , "vendorSelection":"SAMPLE_TEXT"
                 , "ceilingPrice":"0"
                 , "estimatedPrice":"0"
+                , "biddingStatus":"SAMPLE_TEXT"
+                , "joinedVendorCount":"0"
                 , "dateTrx":"2020-01-01T00:00:00.000Z"
                 , "documentNo":"SAMPLE_TEXT"
                 , "documentAction":"SAMPLE_TEXT"

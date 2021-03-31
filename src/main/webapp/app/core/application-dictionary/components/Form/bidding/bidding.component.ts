@@ -1,14 +1,19 @@
+import DocumentActionButton from '@/core/application-dictionary/components/DocumentAction/document-action-button.vue';
+import DocumentActionConfirm from '@/core/application-dictionary/components/DocumentAction/document-action-confirm.vue';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
+import { ElTable } from 'element-ui/types/table';
 import { random } from 'lodash';
 import { mixins } from 'vue-class-component';
 import { Component, Inject, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
-import StepForm from "../bidding/steps-form.vue";
+import StepForm from '../bidding/steps-form.vue';
 
 @Component({
   components: {
-    StepForm,
+    DocumentActionButton,
+    DocumentActionConfirm,
+    StepForm
   }
 })
 export default class BiddingProcess extends mixins(AccessLevelMixin) {
@@ -32,26 +37,28 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
   public propOrder = 'id';
   public reverse = false;
   public totalItems = 0;
-  public statusCatalog = "";
+  public statusCatalog = '';
 
-  private baseApiUrl = "/api/m-biddings";
-  private baseApiUrlReference = "/api/ad-references";
-  private baseApiUrlReferenceList = "/api/ad-reference-lists";
-  private keyReference: string = "docStatus";
+  private baseApiUrl = '/api/m-biddings';
+  private baseApiUrlReference = '/api/ad-references';
+  private baseApiUrlReferenceList = '/api/ad-reference-lists';
+  private keyReference: string = 'docStatus';
 
   public documentStatuses: any[] = [];
 
   private filterQuery: string = '';
   private processing = false;
 
-  public gridData: Array<any> = [];
+  public gridData: any[] = [];
 
   showJoinedVendors = false;
   showTerminationDialog = false;
+  showDocumentActionConfirm = false;
   editMode: boolean = false;
   stepIndex: number = 0;
-  selectedRow: any = null;
-  selectedRows: Array<any> = [];
+  selectedRow: any = {};
+  selectedRows: any[] = [];
+  selectedDocumentAction: any = {};
 
   terminationReason = null;
 
@@ -78,6 +85,18 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
     return settings.dateValueFormat;
   }
 
+  get defaultDocumentAction() {
+    return this.selectedRow.documentAction || 'DRF';
+  }
+
+  get documentApproved() {
+    return this.selectedRow.processed && this.selectedRow.approved || false;
+  }
+
+  get documentTypeId() {
+    return this.selectedRow.documentTypeId;
+  }
+
   get randomizeVendorCount() {
     return (_row) => random(1, 3);
   }
@@ -89,12 +108,22 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
 
   onCreateClicked() {
     this.editMode = false;
-    this.selectedRow = null;
+    this.selectedRow = {};
     this.index = false;
+  }
+
+  onCurrentRowChanged(row: any) {
+    this.selectedRow = row;
   }
 
   onDeleteClicked() {
     console.log('Delete row ID: ', this.selectedRow.id);
+  }
+
+  onDocumentActionChanged(action: any) {
+    console.log('action', action);
+    this.selectedDocumentAction = action;
+    this.showDocumentActionConfirm = true;
   }
 
   onFormClosed() {
@@ -105,12 +134,12 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
 
   onSelectionChanged(value: any) {
     this.selectedRows = value;
-    this.$emit("selectedRows", this.selectedRows);
+    this.$emit('selectedRows', this.selectedRows);
   }
 
   created() {
     this.commonService(null)
-      .retrieveReferenceLists('docStatus')
+      .retrieveReferenceLists('biddingStatus')
       .then(res => {
         this.documentStatuses = res.map(item => ({ key: item.value, value: item.name }));
       });
@@ -180,16 +209,13 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
         paginationQuery
       })
       .then(res => {
-        console.log(res);
-
-        this.gridData = res.data.map((item: any) => {
-          return item;
-        });
-
+        this.gridData = res.data;
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
-        this.$emit('total-count-changed', this.queryCount);
 
+        if (this.gridData.length) {
+          this.setRow(this.gridData[0]);
+        }
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
@@ -202,6 +228,10 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
         this.processing = false;
         this.selectedRows = [];
       });
+  }
+
+  private setRow(record: any) {
+    (<ElTable>this.$refs.mainGrid).setCurrentRow(record);
   }
 
   viewBidding(row: any, stepIndex: number = 0) {

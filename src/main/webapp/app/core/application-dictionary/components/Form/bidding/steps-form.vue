@@ -52,6 +52,8 @@
       v-if="active === 3"
       :edit-mode="editMode"
       :data="bidding"
+      @change="dataChanged = true"
+      @error="showSaveDialog = false"
       @saved="goToNextStep"
     ></vendor-scoring>
 
