@@ -19,6 +19,13 @@ const VendorInvitationProp = Vue.extend({
 
 @Component
 export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInvitationProp) {
+  dummy2: any;
+
+  addNewRow() {
+    this.dummy2.push({
+      dockument: '',
+    });
+  }
 
   options = [
     {

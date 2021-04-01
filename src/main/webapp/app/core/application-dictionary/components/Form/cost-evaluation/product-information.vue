@@ -26,7 +26,7 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Biding Title" prop="name">
-                                <h7>Penggandaan Kendaraan Operasional</h7>
+                                <h7>Pengadaan Kendaraan Operasional</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>

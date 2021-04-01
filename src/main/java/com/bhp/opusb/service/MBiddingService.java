@@ -111,6 +111,17 @@ public class MBiddingService {
             log.info("send email to vendor");
             List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(mBiddingDTO.getId());
             log.info("this list vendor {}",mVendorSuggestion);
+//            mailService.sendEmail("wawan@beca.co.id","Bidding Invitation","<html><body>" +
+//                "<p>Kepada Bapak/Ibu Pimpinan </p>" +
+//                ""+
+//                "<p>Hal: Undangan Bidding</p>"+
+//                "<p>Dengan hormat</p>" +
+//                "<p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut" +
+//                ". Silahkan Bapak/Ibu melakukan login di "+" login.com "+" untuk mendaftar pada bidding tersebut" +
+//                ". Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p>" +
+//                "<p>Hormat Kami</p>" +
+//                "<p>Berca.co.id</p>" +
+//                "</body></html>",false,true);
 
             for (MVendorSuggestion mVendorSuggestion1 : mVendorSuggestion){
                 log.info("this vendor id {}",mVendorSuggestion1.getVendor().getId().toString());
@@ -179,7 +190,7 @@ public class MBiddingService {
 
             // Initialize bidding schedules as it depends on the Event Type value.
             mBiddingScheduleService.initBiddingSchedules(mBidding);
-            
+
         } else if (MBiddingProcess.SCHEDULE.equals(mBiddingDTO.getStep())) {
             final List<MBiddingScheduleDTO> biddingSchedules = mBiddingDTO.getBiddingSchedules();
             final List<MDocumentScheduleDTO> documentSchedules = mBiddingDTO.getDocumentSchedules();

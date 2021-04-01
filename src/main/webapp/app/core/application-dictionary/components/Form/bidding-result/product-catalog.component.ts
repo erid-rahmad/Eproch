@@ -28,7 +28,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
       tableData: [
         {
           1: 'BN-00001',
-          2: 'Penggandaan Kendaraan Operasional',
+          2: 'Pengadaan Kendaraan Operasional',
           3: 'Tender Good',
           4: 'Admin tender',
           5: 'in progres',
@@ -39,7 +39,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         },
         {
           1: 'BN-00001',
-          2: 'Penggandaan Kendaraan Operasional',
+          2: 'Pengadaan Kendaraan Operasional',
           3: 'Tender Good',
           4: 'Admin tender',
           5: 'in progres',
@@ -50,7 +50,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         },
         {
           1: 'BN-00001',
-          2: 'Penggandaan Kendaraan Operasional',
+          2: 'Pengadaan Kendaraan Operasional',
           3: 'Tender Good',
           4: 'Admin tender',
           5: 'in progres',
@@ -61,7 +61,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         },
         {
           1: 'BN-00002',
-          2: 'Penggandaan Kendaraan Jabatan',
+          2: 'Pengadaan Kendaraan Jabatan',
           3: 'Tender Good',
           4: 'Admin tender',
           5: 'in progres',
@@ -72,7 +72,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         },
         {
           1: 'BN-00002',
-          2: 'Penggandaan Kendaraan Jabatan',
+          2: 'Pengadaan Kendaraan Jabatan',
           3: 'Tender Good',
           4: 'Admin tender',
           5: 'in progres',
@@ -83,7 +83,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         },
         {
           1: 'BN-00002',
-          2: 'Penggandaan Kendaraan Jabatan',
+          2: 'Pengadaan Kendaraan Jabatan',
           3: 'Tender Good',
           4: 'Admin tender',
           5: 'in progres',

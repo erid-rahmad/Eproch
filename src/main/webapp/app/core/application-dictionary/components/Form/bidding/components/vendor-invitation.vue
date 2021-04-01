@@ -193,18 +193,18 @@
                         </template>
                     </el-table-column>
                     <el-table-column min-width="120" prop="dockument" label="Question" />
-                          <el-table-column min-width="30" prop="dockument1" label="requirment" >
-                   
-                     <template slot="header">
-                           
+                    <el-table-column min-width="30" prop="dockument1" label="requirment">
+
+                        <template slot="header">
+
                         </template>
                         <template slot-scope="row">
-                              <el-select v-model="value" placeholder="Select">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
+                            <el-select v-model="value" placeholder="Select">
+                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </template>
-                        </el-table-column>
+                    </el-table-column>
                     <el-table-column align="center" min-width="20">
                         <template slot="header">
                             <el-button size="mini" icon="el-icon-plus" type="primary" @click="addBusinessCategory"></el-button>
@@ -236,18 +236,18 @@
                         </template>
                     </el-table-column>
                     <el-table-column min-width="120" prop="dockument" label="Question" />
-                    <el-table-column min-width="30" prop="dockument1" label="requirment" >
-                   
-                     <template slot="header">
-                           
+                    <el-table-column min-width="30" prop="dockument1" label="requirment">
+
+                        <template slot="header">
+
                         </template>
                         <template slot-scope="row">
-                              <el-select v-model="value" placeholder="Select">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
+                            <el-select v-model="value" placeholder="Select">
+                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </template>
-                        </el-table-column>
+                    </el-table-column>
                     <el-table-column align="center" min-width="20">
                         <template slot="header">
                             <el-button size="mini" icon="el-icon-plus" type="primary" @click="addBusinessCategory"></el-button>
@@ -282,22 +282,27 @@
                             {{ row.$index+1 }}
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="120" prop="dockument" label="Question" />
-                          <el-table-column min-width="30" prop="dockument1" label="requirment" >
-                   
-                     <template slot="header">
-                           
+                    <el-table-column min-width="120" prop="dockument" label="Question" >
+                      <!-- <template slot-scope="row">
+                        <el-input v-model="row.dockument" class="form-input" clearable></el-input>
+                      </template>               -->
+
+                    </el-table-column>
+                    <el-table-column min-width="30" prop="" label="requirment">
+
+                        <template slot="header">
+
                         </template>
                         <template slot-scope="row">
-                              <el-select v-model="value" placeholder="Select">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
-                            </el-option>
-                        </el-select>
+                            <el-select v-model="value" placeholder="Select">
+                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </template>
-                        </el-table-column>
+                    </el-table-column>
                     <el-table-column align="center" min-width="20">
                         <template slot="header">
-                            <el-button size="mini" icon="el-icon-plus" type="primary" @click="addBusinessCategory"></el-button>
+                            <el-button size="mini" icon="el-icon-plus" type="primary" @click="addNewRow"></el-button>
                         </template>
                         <template slot-scope="row">
                             <el-button size="mini" icon="el-icon-delete" type="danger" @click="removeBusinessCategory(row.$index)"></el-button>
@@ -309,31 +314,10 @@
         </el-row>
         <h1></h1>
         <template>
-          <div>
-            <tr v-for="(invoice_product, k) in invoice_products" :key="k">
-    <td scope="row" class="trashIconContainer">
-        <i class="far fa-trash-alt" @click="deleteRow(k, invoice_product)"></i>
-    </td>
-    <td>
-        <input class="form-control" type="text" v-model="invoice_product.product_no" />
-    </td>
-    <td>
-        <input class="form-control" type="text" v-model="invoice_product.product_name" />
-    </td>
-    <td>
-        <input class="form-control text-right" type="number" min="0" step=".01" v-model="invoice_product.product_price" @change="calculateLineTotal(invoice_product)"
-        />
-    </td>
-    <td>
-        <input class="form-control text-right" type="number" min="0" step=".01" v-model="invoice_product.product_qty" @change="calculateLineTotal(invoice_product)"
-        />
-    </td>
-    <td>
-        <input readonly class="form-control text-right" type="number" min="0" step=".01" v-model="invoice_product.line_total" />
-    </td>
-</tr>
-            
-          </div>
+            <div>
+
+
+            </div>
         </template>
     </div>
 
