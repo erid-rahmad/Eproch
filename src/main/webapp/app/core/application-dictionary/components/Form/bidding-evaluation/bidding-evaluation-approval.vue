@@ -1,7 +1,7 @@
 <template>
   <div class="app-container bidding-evaluation-approval">
     <div class="toolbar">
-      <el-col :span="24">      
+      <el-col :span="24">
         <document-action-button
           :approved="false"
           :document-type-id="bidding.documentTypeId"

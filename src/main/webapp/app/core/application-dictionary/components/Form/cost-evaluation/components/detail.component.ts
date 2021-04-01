@@ -1,17 +1,38 @@
+import DocumentActionButton from '@/core/application-dictionary/components/DocumentAction/document-action-button.vue';
+import DocumentActionConfirm from '@/core/application-dictionary/components/DocumentAction/document-action-confirm.vue';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
+import { Inject } from 'vue-property-decorator';
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 
 const CostEvaluationDetailProp = Vue.extend({
   props: {
-    // approval: Boolean
+    approval: Boolean,
+    data: {
+      type: Object,
+      default: () => {
+        return {};
+      }
+    }
+  }
+});
+
+@Component({
+  components: {
+    DocumentActionButton,
+    DocumentActionConfirm,
   }
 })
-
-@Component
 export default class CostEvaluationDetail extends mixins(AccessLevelMixin, CostEvaluationDetailProp) {
 
+  @Inject('dynamicWindowService')
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
+
   columnSpacing = 24;
+
+  selectedDocumentAction: any = {};
+  showDocumentActionConfirm = false;
 
   uploadedDocuments = [
     {
@@ -24,17 +45,8 @@ export default class CostEvaluationDetail extends mixins(AccessLevelMixin, CostE
     }
   ];
 
-  mainForm = {
-    documentNo: 'BR-21030001',
-    biddingTitle: 'Pengadaan Kendaraan Operasional',
-    biddingNo: 'BN-00001',
-    currencyName: 'IDR',
-    picName: 'admintender',
-    costCenterName: 'Marketing',
-    requisitionName: 'PR-0025',
-    biddingTypeName: 'Tender Goods',
-    galleryId: null
-  };
+  breakdown = false;
+  mainForm = {};
 
   tableData = [
     {
@@ -48,6 +60,8 @@ export default class CostEvaluationDetail extends mixins(AccessLevelMixin, CostE
       vendor1SubTotal: '11900000000',
       vendor2Price: '237000000',
       vendor2SubTotal: '11850000000',
+      subItem: null,
+      subSubItem: null
     },
     {
       productName: 'HONDA CIVIC 2017',
@@ -60,6 +74,8 @@ export default class CostEvaluationDetail extends mixins(AccessLevelMixin, CostE
       vendor1SubTotal: '13125000000',
       vendor2Price: '438000000',
       vendor2SubTotal: '13140000000',
+      subItem: null,
+      subSubItem: null
     },
     {
       productName: 'HONDA 2020',
@@ -72,12 +88,22 @@ export default class CostEvaluationDetail extends mixins(AccessLevelMixin, CostE
       vendor1SubTotal: '4340000000',
       vendor2Price: '42800000',
       vendor2SubTotal: '4280000000',
+      subItem: null,
+      subSubItem: null
     }
   ];
 
-  approval = true;
+  get defaultDocumentAction() {
+    return 'APV';
+  }
 
-  close() {
-    this.$emit('close');
+  onDocumentActionChanged(action: any) {
+    this.selectedDocumentAction = action;
+    this.showDocumentActionConfirm = true;
+  }
+
+  created() {
+    console.log('created. isApproval: %s, data: %O', this.approval, this.data);
+    this.mainForm = {...this.data};
   }
 }
