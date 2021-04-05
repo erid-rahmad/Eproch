@@ -37,9 +37,15 @@ export default class VendorEvaluation extends mixins(AccessLevelMixin, VendorEva
 
   vendorEvaluations = [
     {
+      documentNo: '11011',
+      vendorId: 1,
+      vendorName: 'Ingram Micro Indonesia',
+      reviewer: 'Admin Evaluator',
       aggreementNo: '13334',
       aggreementTitle: 'Pengadaan Kendaraan Operasional',
-      evaluationDate: new Date('2021-03-31'),
+      evaluationType: 'Vendor Otomotif',
+      evaluationPeriod: 'Yearly',
+      evaluationDate: '2021-03-31T00:00:00.000Z',
       totalScore: 3.67,
       documentStatus: 'APV',
     }

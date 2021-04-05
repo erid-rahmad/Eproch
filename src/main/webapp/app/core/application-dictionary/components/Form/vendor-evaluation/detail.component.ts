@@ -35,13 +35,34 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
     reviewer: 'Admin Evaluator',
     vendorId: null,
     vendorName: 'Ingram Micro Indonesia',
-    aggreementNo: null,
-    evaluationType: null,
-    evaluationPeriod: null,
-    evaluationDate: null,
-    totalScore: null,
+    aggreementNo: '13334',
+    evaluationType: 'Vendor Otomotif',
+    evaluationPeriod: 'Yearly',
+    evaluationDate: new Date('2021-03-31T00:00:00.000Z'),
+    totalScore: 3.67,
     evaluationLines: []
   }
+
+  evaluationLines = [
+    {
+      cQuestionCategoryName: 'Cost',
+      question: 'Vendor tidak menaikkan harga setelah menerima PO',
+      rate: 3,
+      remark: null
+    },
+    {
+      cQuestionCategoryName: 'Delivery',
+      question: 'Ketepatan waktu pengiriman',
+      rate: 5,
+      remark: null
+    },
+    {
+      cQuestionCategoryName: 'Quality',
+      question: 'Kualitas produk sesuai permintaan',
+      rate: 3,
+      remark: null
+    }
+  ];
 
   gridSchema = {
     defaultSort: {},
@@ -51,8 +72,20 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
   };
 
   validationSchema = {};
-  reviewers = [];
-  vendorOptions = [];
+
+  reviewers = [
+    {
+      id: 1,
+      name: 'Admin Evaluator'
+    }
+  ];
+
+  vendorOptions = [
+    {
+      id: 1,
+      name: 'Ingram Micro Indonesia'
+    }
+  ];
 
   get dateDisplayFormat() {
     return settings.dateDisplayFormat;
@@ -88,8 +121,8 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
   }
 
   created() {
-    this.retrieveReviewers();
-    this.retrieveVendors();
+    // this.retrieveReviewers();
+    // this.retrieveVendors();
   }
 
   retrieveLines(evaluationType: string) {
@@ -105,7 +138,7 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
       });
   }
 
-  retrieveReviewers() {
+  private retrieveReviewers() {
     this.commonService('/api/ad-users')
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -123,7 +156,7 @@ export default class VendorEvaluationDetail extends Mixins(AccessLevelMixin, Ven
       });
   }
 
-  retrieveVendors() {
+  private retrieveVendors() {
     this.commonService('/api/c-vendors')
       .retrieve({
         criteriaQuery: this.updateCriteria([
