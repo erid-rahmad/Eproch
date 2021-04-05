@@ -43,7 +43,9 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['prequalificationMethod', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/prequalification-method/product-catalog.vue')],
  
 
-  ['vendorEvaluation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/vendor-evaluation/index.vue')]
+  ['vendorEvaluation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/vendor-evaluation/index.vue')],
+  ['warningLetter', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/vendor-evaluation/warning-letter.vue')],
+  ['vendorConfirmation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/vendor-confirmation/index.vue')],
 ]);
 
 export const blankForm = () => import(/* webpackChunckName: "blankForm" */'@/core/application-dictionary/components/Form/index.vue');
