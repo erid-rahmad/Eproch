@@ -50,16 +50,12 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     //  api
   };
   addRow() {
-    let newRow = {
-      state: "California",
-      zip: "CA 90036",
-    };
-    this.tableDataquestion = [newRow, ...this.tableDataquestion];
+    this.tableDataquestion.push({ question: null });
     ++this.addCount;
   };
   saveAll() {
     // api
-    console.log(JSON.stringify(this.disabledList));
+    // console.log(JSON.stringify(this.disabledList));
   };
   handleSaveRow() {
     this.isEdit = false

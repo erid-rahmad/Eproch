@@ -19,11 +19,13 @@ const VendorInvitationProp = Vue.extend({
 
 @Component
 export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInvitationProp) {
-  dummy2: any;
 
   addNewRow() {
     this.dummy2.push({
-      dockument: '',
+      no: '1',
+      dockument: null,
+      dockument1: 'wajib',
+      input: '',
     });
   }
 
@@ -79,7 +81,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
       dockument1: 'wajib',
     },
   ];
-  dummy2: [
+  dummy2 = [
     {
       no: '1',
       dockument: 'Apakah pengurus telah menetapkan struktur organisasi perusahaan ',
