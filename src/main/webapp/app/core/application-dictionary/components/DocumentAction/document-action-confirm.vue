@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     class="document-action-confirm"
-    :title="`${action.name} ${data.documentTypeName} ${data.documentNo}`"
+    :title="title"
     :visible="visible"
     :width="width"
     @close="onClosed"
