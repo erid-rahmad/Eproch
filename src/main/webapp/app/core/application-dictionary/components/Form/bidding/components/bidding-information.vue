@@ -433,12 +433,12 @@
             label="View Stats"
             width="150"
           >
-            <template slot-scope="{ row }">
+            <template slot-scope="{ row, $index }">
               <el-button
                 class="button"
                 size="mini"
                 style="width: 100%"
-                @click="showDownloadStats(row)"
+                @click="showDownloadStats(row, $index)"
               >
                 <svg-icon name="ecommerce/015-statistics"></svg-icon> View Stats
               </el-button>

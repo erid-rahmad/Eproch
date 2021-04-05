@@ -8,6 +8,7 @@ import { Component, Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
 import SubitemEditor from './subitem-editor.vue';
+import { random } from 'lodash';
 
 const BiddingInformationProp = Vue.extend({
   props: {
@@ -72,6 +73,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
 
   downloadStats = [];
   projectInfo = {};
+  projectInfoStats = new Map<number, any[]>();
 
   selectedItemIndex = 0;
   selectedItem = {};
@@ -189,6 +191,30 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
 
     this.retrievePicBidding();
     this.retrieveUom();
+
+    // TODO This is for mock-up purpose. Please change as appropriate.
+    this.randomizeDownloadStats();
+  }
+
+  private randomizeDownloadStats() {
+    const vendors = [
+      'WESTCON INTERNATIONAL INDONESIA',
+      'SISTECH KHARISMA',
+      'INGRAM MICRO INDONESIA'
+    ];
+
+    for (let i = 9; i >= 0; --i) {
+      const count = random(0, 3);
+      if (count) {
+        const stats = [];
+        for (let j = count - 1; j >= 0; --j) {
+          stats.push({
+            vendorName: vendors[random(0, 2)]
+          });
+        }
+        this.projectInfoStats.set(i, stats);
+      }
+    }
   }
 
   private calculateTotalAmount() {
@@ -591,7 +617,8 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
     });
   }
   
-  showDownloadStats(row: any) {
+  showDownloadStats(row: any, index: number) {
+    this.downloadStats = this.projectInfoStats.get(index);
     this.projectInfo = row;
     this.showDownloadStatsDialog = true;
   }
