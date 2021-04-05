@@ -41,7 +41,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         {
 
           0: 'BN-00002',
-          1: 'Penggandaan Kendaraan Operasional',
+          1: 'Pengadaan Kendaraan Operasional',
           2: 'Tender good',
           3: 'Marketing',
           4: 'Admin Tender',

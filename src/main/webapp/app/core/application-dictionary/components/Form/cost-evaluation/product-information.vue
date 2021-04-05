@@ -26,7 +26,7 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Biding Title" prop="name">
-                                <h7>Penggandaan Kendaraan Operasional</h7>
+                                <h7>Pengadaan Kendaraan Operasional</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -71,7 +71,7 @@
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="Reference" prop="name">
-                                    <h7>Mr.smith</h7>
+                                    <h7>100001</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -85,7 +85,7 @@
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="Evaluation deadline" prop="name">
-                                    <h7>21/12/2021 12:99</h7>
+                                    <h7>03/01/2021 14:00</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -96,7 +96,7 @@
             <el-divider content-position="left">
                 <h4>Detail</h4>
             </el-divider>
-            <el-table :data="tableData" style="width: 100%">
+            <el-table size="mini" :data="tableData" style="width: 100%">
                 <el-table-column prop="date" label="No" width="60">
                     <template slot-scope="row">
                         {{ row.$index+1 }}
@@ -151,7 +151,7 @@
                     <el-form ref="biddingInfasdsadormation" label-position="left" label-width="100px" size="mini" :model="asd" :rules="asd">
 
                         <el-form-item label="note " prop="title">
-                            <el-input prop="2" class="form-input"></el-input>
+                            <el-input v-model="asd" :rows="3" type="textarea"></el-input>
                         </el-form-item>
                     </el-form>
                     <el-form ref="biddingInfasdsadormation" label-position="left" label-width="100px" :model="asd" :rules="asd">

@@ -9,6 +9,11 @@ import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import CatalogGrid from './components/catalog-grid.vue';
 import ProductInformation from './product-information.vue';
+import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
+import {
+  Inject,
+  Mixins
+} from 'vue-property-decorator';
 
 @Component({
   components: {
@@ -17,79 +22,95 @@ import ProductInformation from './product-information.vue';
   }
 })
 export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+
+
+
   index: boolean = true;
   refresh: string = "";
   private tabTitleOptions = [];
   setRows = [];
   setRow = {};
+  isHidden = false;
+  isHidden1 = false;
+  value = '';
+  value1 = '';
 
-  data() {
-    return {
-      tableData: [
-        {
-          0:'CE-0001',
-          1: 'BN -00001',
-          2: 'Pengadaan Kendaraan Operasional',
-          3: 'Tender Goods',
-          4: 'View Schejule',
-          5: 'In progres',
-          re: '3',
-        7: '22/22/2021',
-        8: 'Admin Tender'
-        }, {
-          0:'CE-0002',
-          1: 'BN -00002',
-          2: 'Pengadaan Office Supply',
-          3: 'Tender Goods',
-          4: 'View Schejule',
-          5: 'In progres',
-          re: '5',
-        7: '22/22/2021',
-        8: 'Admin Tender'
-        }, {
-          0:'CE-0003',
-          1: 'BN -00003',
-          2: 'Pengadaan Office Equipment',
-          3: 'Tender Goods',
-          4: 'View Schejule',
-          5: 'Submitted',
-          re: '4',
-        7: '22/22/2021',
-        8: 'Admin Tender'
-        }, {
-          0:'CE-0004',
-          1: 'BN -00004',
-          2: 'Pengadaan Kendaraan Jabatan',
-          3: 'Tender Goods',
-          4: 'View Schejule',
-          5: 'Submitted',
-          re: '3',
-        7: '22/22/2021',
-        8: 'Admin Tender'
-        },
-      ],
-      gridData: [{
-        date: '2016-05-02',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District'
-      }, {
-        date: '2016-05-04',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District'
-      }, {
-        date: '2016-05-01',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District'
-      }, {
-        date: '2016-05-03',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District'
-      }],
-      dialogTableVisible: false,
+  dummy: any = {};
 
-      dialogFormVisible: false,
-    }
-  };
+  dialogTableVisible = false;
+  dialogTableVisible2 = false;
+
+
+  options = [{
+    value: console.log("coba tes"),
+    label: 'Score',
+    Vmodel: 'isHidden'
+  }, {
+    value: this.isHidden = false,
+    label: 'Pass file'
+    }];
+  
+  options1 = [{
+    value: 'Dropdown List',
+    label: 'Dropdown List',
+  },
+  {
+    value: 'Input Text',
+    label: 'Input Text'
+  }];
+
+  tableData = [{
+    1: 'BN-00001',
+    2: 'Organisasi dan management',
+    3: '1'
+
+  }, {
+    1: 'BN-00001',
+    2: 'Pengelola k3L',
+    3: '2'
+
+  }, {
+    1: 'BN-00001',
+    2: 'Pengelola Sumber daya',
+    3: '3'
+  }];
+  tableData1 = [{
+    1: 'BN-00001',
+    2: 'Pass',
+    3: '1'
+  }, {
+    1: 'BN-00001',
+    2: 'Fail',
+    3: '2'
+  }, ];
+  tableData2 = [{
+    1: 'BN-00001',
+    2: 'Untuk Kontraktor',
+    3: '1'
+  }, {
+    1: 'BN-00001',
+    2: 'Untuk Suply',
+    3: '2'
+  }, ];
+
+  gridData = [{
+    date: '2016-05-02',
+    name: 'John Smith',
+    address: 'No.1518,  Jinshajiang Road, Putuo District'
+  }, {
+    date: '2016-05-04',
+    name: 'John Smith',
+    address: 'No.1518,  Jinshajiang Road, Putuo District'
+  }, {
+    date: '2016-05-01',
+    name: 'John Smith',
+    address: 'No.1518,  Jinshajiang Road, Putuo District'
+  }, {
+    date: '2016-05-03',
+    name: 'John Smith',
+    address: 'No.1518,  Jinshajiang Road, Putuo District'
+  }];
+
 
 
   private baseApiUrlCatalog = "/api/m-product-catalogs";
@@ -97,7 +118,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   private baseApiUrlReferenceList = "/api/ad-reference-lists";
   private keyReferenceProductCatalog: string = "docStatProductCatalog";
 
-  dialogTableVisible1: false;
+
   activeName = 'ALL';
   dialogConfirmationVisible: boolean = false;
   dialogTitle: string = "";

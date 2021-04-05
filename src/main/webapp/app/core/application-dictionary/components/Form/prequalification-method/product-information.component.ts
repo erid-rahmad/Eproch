@@ -6,6 +6,8 @@ import {
   mixins
 } from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
+
+
 import Component from 'vue-class-component';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import ProductImages from './components/form/product-images.vue';
@@ -39,58 +41,100 @@ const ProductCatalogProp = Vue.extend({
 })
 export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, ProductCatalogProp) {
 
-  data() {
-    return {
-      isHidden: true,
-      tableData: [{
-        1: 'Honda 2015',
-        22: 'Honda 2014',
-        33: 'Honda 2013',
-        2: '50',
-        3: 'Ea',
-        4: '',
-        5: '238.000.000',
-        6: '11.900.000.000',
-        7: '239.000.000',
-        8: '11.950.000.000',
-        9: '0.4%',
-        10: '238.500.000',
-        11: '11.925.000.000',
-        12: '0.2%',
-      }, {
-        1: 'Honda Civic 2017',
-        22: 'Honda Civic 2017',
-        33: 'Honda Civic 2017',
-        2: '30',
-        3: 'Ea',
-        4: '',
-        5: '439.000.000',
-        6: '13.170.000.000',
-        7: '440.000.000',
-        8: '13.200.000.000',
-        9: '0.22%',
-        10: '439.000.000',
-        11: '13.170.000.000',
-        12: '0%',
-      }, {
-        1: 'Honda 2020',
-        22: 'Honda 2020',
-        33: 'Honda 2020',
-        2: '100',
-        3: 'Ea',
-        4: '',
-        5: '45.000.000',
-        6: '4.500.000.000',
-        7: '41.600.000',
-        8: '4.160.000.000',
-        9: '7.85%',
-        10: '45.000.000',
-        11: '4.500.000.000',
-        12: '0%',
-      }, ],
-      checked: true,
-    }
+  deleteRow(index, rows) {
+    this.tableDataquestion.splice(index, 1);
+    if (this.addCount > 0)
+      --this.addCount;
   };
+  saveRow(index, rows) {
+    //  api
+  };
+  addRow() {
+    let newRow = {
+      state: "California",
+      zip: "CA 90036",
+    };
+    this.tableDataquestion = [newRow, ...this.tableDataquestion];
+    ++this.addCount;
+  };
+  saveAll() {
+    // api
+    console.log(JSON.stringify(this.disabledList));
+  };
+  handleSaveRow() {
+    this.isEdit = false
+  };
+  handleSaveRow1() {
+    this.isEdit = true
+  };
+  isEdit=true;
+
+  tableDataquestion = [{
+      question: 'Policy Statment - apakah perusahaan memiliki kebijakan K3L dalam menjalankan usahanya ? ',
+
+    },
+    {
+      question: 'Emergency Response procedure - apakah perusahaan memiliki prosedur tanggap darurat ?',
+
+    },
+    {
+      question: 'Basic Safety Rules - apakah perusahaan memiliki peraturan dasar keselamatan kerja ?',
+
+    },
+  ];
+  addCount = 0;
+
+  handleChange(val) {
+    console.log(val);
+  }
+  activeNames = ['1'];
+
+
+  evaluationtype = [{
+    value: 'Pass Fail',
+    label: 'Pass Fail'
+  }, {
+    value: 'non Pass Fail',
+    label: 'non Pass Fail'
+  }, ];
+  active = [{
+    value: 'yes',
+    label: 'yes'
+  }, {
+    value: 'no',
+    label: 'no'
+  }, ];
+  type = [{
+    value: 'prequalification',
+    label: 'prequalification'
+  }, {
+    value: 'non prequalification',
+    label: 'non prequalification'
+  }, ];
+  optiontype = [{
+    value: 'Drop Down',
+    label: 'Drop Down'
+  }, {
+    value: 'Input Text',
+    label: 'Input Text'
+  }, ];
+
+  value: any = {};
+  dialogTableVisible = false;
+  tableData = [{
+      1: 'Organisasi dan Management',
+    }, {
+      1: 'Pengelolaan k3',
+    }, {
+      1: 'Pengelolaan Sumberdaya',
+    },
+
+  ];
+  checked = true;
+
+  dummy: any = {};
+
+
   rules = {}
 
   props = {
@@ -115,7 +159,6 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
   productCatalog: IMProductCatalog = {};
   galleryId: number = 0;
-  visible: false;
   productGallery = {
     images: [],
     imagesId: []

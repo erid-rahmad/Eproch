@@ -1,17 +1,20 @@
 <template>
-    <div class="app-container">
-        <div v-if="index">
-            <el-row class="header">
-                <el-col :span="24">
-                    <el-button class="button" style="margin-left: 0px;" size="mini" type="primary" icon="el-icon-plus" @click="onClick('add')" />
-                    <el-button class="button" style="margin-left: 0px;" size="mini" type="danger" icon="el-icon-delete" @click="onClick('remove')" />
-                    <el-button class="button" size="mini" type="primary" icon="el-icon-download" @click="onClick('export')">Export</el-button>
-                </el-col>
-            </el-row>
+    <div>
+        <el-row :gutter="columnSpacing">
+            <el-col :span="24">
+                <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
+                    Back
+                </el-button>
+                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="validate">
+                    Submit <em class="el-icon-arrow-right"></em>
+                </el-button>
+            </el-col>
+        </el-row>
+        <el-form ref="productCatalog" label-position="left" label-width="130px" size="mini" :model="productCatalog" :rules="rules">
             <el-divider content-position="left">
-                <h4>Bidding Submission From Vendor</h4>
+                <h4>Product Information</h4>
             </el-divider>
-            <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini">
+              <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini" :model="biddingInformation" :rules="rules">
                 <el-row :gutter="24">
                     <el-col :span="12">
                         <el-form-item label="Bidding No" prop="" required>
@@ -28,35 +31,35 @@
                             <h7>Tender good</h7>
                         </el-form-item>
                         <el-form-item label="Bidding Tytle" prop="biddingNo" required>
-                            <h7>Tender </h7>
+                            <h7>Penggadaan kendaraan operasional </h7>
                         </el-form-item>
                         <el-form-item label="Vendor Name" prop="title" required>
                             <el-dropdown>
                                 <span class="el-dropdown-link">
-                                    Vendor List<i class="el-icon-arrow-down el-icon--right"></i>
+                                    PT Sistech Kharisma<i class="el-icon-arrow-down el-icon--right"></i>
                                 </span>
                                 <el-dropdown-menu slot="dropdown">
-                                    <el-dropdown-item>PT baru</el-dropdown-item>
-                                    <el-dropdown-item>PT lama</el-dropdown-item>
-                                    <el-dropdown-item>PT baru lama</el-dropdown-item>
-                                    <el-dropdown-item disabled>Action 4</el-dropdown-item>
-                                    <el-dropdown-item divided>Action 5</el-dropdown-item>
+                                    <el-dropdown-item>PT Sistech Kharisma</el-dropdown-item>
+                                    <el-dropdown-item>PT Ingram Micro Indonesia</el-dropdown-item>
+                                    <el-dropdown-item>PT Makmur jaya </el-dropdown-item>
+                                 
                                 </el-dropdown-menu>
                             </el-dropdown>
                         </el-form-item>
                         <el-form-item label="Ceilling Price" prop="biddingNo" required>
-                            <h7>17000</h7>
+                            <h7>29.000.000.000</h7>
                         </el-form-item>
                         <el-form-item label="Proposal Price" prop="vurrency" required>
-                            <h7>17000</h7>
+                            <h7>269.000.000.000</h7>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
+        
             <el-divider content-position="left">
-                <h4>Bidding Submission From Vendor Detail</h4>
+                <h4>Detail</h4>
             </el-divider>
-            <template>
+              <template>
                 <el-table :data="tableData" style="width: 100%">
                     <el-table-column prop="date" label="No" width="40">
                         <template slot-scope="row">
@@ -91,48 +94,48 @@
                     </el-table-column>
                 </el-table>
             </template>
-            <el-form ref="biddingInformation" label-position="left" label-width="150px" size="mini" :model="biddingInformation" :rules="rules">
-                <el-row :gutter="24">
+            <el-divider content-position="left">
+                <h4>Total</h4>
+            </el-divider>
+            <el-col :span="24">
+                <el-col :span="6">
+                     <h6>Grand Total Requarement</h6>
+                </el-col>
+                <el-col :span="6">
+                      <h6>29.570.000.000</h6>
+                </el-col>
 
-                    <el-col :span="12">
-                        <el-form-item width="200" label="Grand Total Requarement " prop="Grand Total Requarement">
-                            <h7>17000</h7>
-                        </el-form-item>
-                        <el-form-item width="120" label="Grand Total Submision" prop="biddingNo">
-                            <h7>17000</h7>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </el-form>
-        </div>
-        <div v-else>
-            <step-form :biddingrow="rowsa" @back="close" />
-        </div>
+            </el-col>
+           
+          
+         
+
+        </el-form>
+        
+        
+        
     </div>
 </template>
-<script lang="ts" src="./bidding.component.ts">
-</script>
+
+<script lang="ts" src="./product-information.component.ts"></script>
+
 <style lang="scss">
-    .el-table__fixed,
-    .el-table__fixed-right {
-        box-shadow: none;
-    }
-
-    .main {
-        padding: 0px;
-
-        .button {
-            width: 100%;
-        }
-    }
-
-    .header {
-        .button {
-            margin-bottom: 5px;
-        }
-    }
-
     .form-input {
+        textarea {
+            resize: none;
+            border: none;
+            border-radius: 0px;
+            border-bottom: 1px solid #bfcbd9;
+        }
+    }
+
+    .el-form-item is-required el-form-item--mini {
+        .el-form-item__content {
+            margin-left: 0px;
+        }
+    }
+
+    .cascader {
         width: 100%;
     }
 
