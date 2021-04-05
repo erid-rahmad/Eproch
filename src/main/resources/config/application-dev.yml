@@ -23,6 +23,8 @@ logging:
     org.apache.kafka.clients.NetworkClient: ERROR
 
 spring:
+  autoconfigure:
+    exclude: org.springframework.cloud.dataflow.rest.client.config.DataFlowClientAutoConfiguration
   profiles:
     active: dev
     include:
@@ -45,9 +47,9 @@ spring:
         server-uri: http://localhost:9393
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/eproc_demo
-    username: postgres
-    password: root
+    url: jdbc:postgresql://localhost:5432/OpusWebApp
+    username: OpusWebApp
+    password: 
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -151,8 +153,6 @@ application:
   default-product-category-id: 45551
   default-product-asset-account-id: 18601
   default-product-expense-account-id: 19901
-  attachment:
-    upload-dir: C:\Users\eridr\upload
   integration:
     endpoint:
       invoice-verification-url: http://localhost:20001/api/invoice-verification
