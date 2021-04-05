@@ -3,10 +3,10 @@
 
         <el-row v-if="index" class="main" ref="tableWrapper">
             <el-col :span="24">
-                <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tabs v-model="activeName" @tab-click="handleClick" >
                     <keep-alive>
                         <el-col :span="24">
-                            <el-table :data="tableData" size="mini" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
+                            <el-table  :data="tableData" size="mini" :default-sort="{prop: 'date', order: 'descending'}" >
                                 <el-table-column min-width="30" label="No">
                                     <template slot-scope="row">
                                         {{ row.$index+1 }}

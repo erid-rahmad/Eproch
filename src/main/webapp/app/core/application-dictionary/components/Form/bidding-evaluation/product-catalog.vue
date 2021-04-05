@@ -12,9 +12,9 @@
                                             {{ row.$index+1 }}
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="0" label="Bidding No" sortable width="180">
+                                    <el-table-column prop="0" label="Bidding No" sortable width="150">
                                     </el-table-column>
-                                    <el-table-column prop="1" label="Title" sortable width="180">
+                                    <el-table-column prop="1" label="Title" sortable width="200">
                                     </el-table-column>
                                     <el-table-column prop="2" label="Biding Type" sortable width="180">
                                     </el-table-column>

@@ -85,7 +85,7 @@
                                         </el-table-column>
                                     </el-table> -->
                                     <template>
-                                        <el-table :data="tableDataquestion" size="small">
+                                        <el-table :data="tableDataquestion" size="mini">
                                             <el-table-column min-width="20" label="No">
                                                 <template slot-scope="row">
                                                     {{ row.$index+1 }}

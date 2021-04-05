@@ -6,17 +6,17 @@
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <keep-alive>
                         <el-col :span="24">
-                            <el-table :data="tableData"  style="width: 100%">
+                            <el-table :data="tableData" size="mini"  style="width: 100%">
                                 <el-table-column min-width="50" label="No">
                                     <template slot-scope="row">
                                         {{ row.$index+1 }}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="0" label="Cost Evaluation" sortable width="180">
+                                <el-table-column prop="0" label="Cost Evaluation" sortable width="100">
                                 </el-table-column>
-                                <el-table-column prop="1" label="Biding No" sortable width="180">
+                                <el-table-column prop="1" label="Biding No" sortable width="100">
                                 </el-table-column>
-                                <el-table-column prop="2" label="Bidding title" sortable width="180">
+                                <el-table-column prop="2" label="Bidding title" sortable width="210">
                                 </el-table-column>
                                 <el-table-column prop="3" label="Bidding type" sortable width="150">
                                 </el-table-column>
