@@ -20,6 +20,7 @@ import AddressEditor from '../AddressEditor/address-editor.vue';
 import ContextVariableAccessor from '../ContextVariableAccessor';
 import MultiOption from '../MultiOption/multi-option.vue';
 import PasswordEditor from '../PasswordEditor/password-editor.vue';
+import { IADTab } from '@/shared/model/ad-tab.model';
 
 const GridViewProps = Vue.extend({
   props: {
@@ -249,7 +250,7 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
   }
 
   @Watch('observableTabProperties')
-  onObservableTabPropertiesChange(tab: any) {
+  onObservableTabPropertiesChange(tab: IADTab) {
     // Reset the pagination.
     this.page = 1;
     this.propOrder = 'id';
@@ -859,6 +860,11 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
           const rowExists = this.gridData[this.currentRowIndex] !== void 0;
           this.setRow(this.gridData[rowExists ? this.currentRowIndex : 0]);
         }
+
+        // AP-194 Fix el-table layout problem.
+        this.$nextTick(() => {
+          (<ElTable>this.$refs.grid).doLayout();
+        })
       })
       .catch(err => {
         console.error('Failed getting the record. %O', err);
