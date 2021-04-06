@@ -1,0 +1,135 @@
+<template>
+  <div class="vendor-blacklist-detail">
+    <el-form
+      ref="filterFormPersonal"
+      label-position="left"
+      label-width="200px"
+      :model="filterPersonal"
+      size="mini"
+    >
+      <el-row :gutter="columnSpacing">
+        <el-col
+          :xs="24"
+          :sm="24"
+          :lg="12"
+          :xl="8"
+        >
+          <el-form-item label="Personal">
+            <el-input
+              v-model="filterPersonal.username"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-table
+        ref="personalGrid"
+        border
+        :data="users"
+        highlight-current-row
+        size="mini"
+        stripe
+        style="width: 100%"
+      >
+        <el-table-column
+          align="center"
+          fixed
+          type="selection"
+          width="48"
+        ></el-table-column>
+        <el-table-column
+          label="Name"
+          min-width="150"
+          prop="username"
+          show-overflow-tooltip
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="ID"
+          min-width="100"
+          prop="code"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Position"
+          min-width="150"
+          prop="position"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Note"
+          min-width="200"
+          prop="note"
+        ></el-table-column>
+      </el-table>
+    </el-form>
+    <el-divider></el-divider>
+    <el-form
+      ref="filterFormShareHolder"
+      label-position="left"
+      label-width="200px"
+      :model="filterShareHolder"
+      size="mini"
+    >
+      <el-row :gutter="columnSpacing">
+        <el-col
+          :xs="24"
+          :sm="24"
+          :lg="12"
+          :xl="8"
+        >
+          <el-form-item label="Share Holder">
+            <el-input
+              v-model="filterShareHolder.username"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+      <el-table
+        ref="personalGrid"
+        border
+        :data="shareHolders"
+        highlight-current-row
+        size="mini"
+        stripe
+        style="width: 100%"
+      >
+        <el-table-column
+          align="center"
+          fixed
+          type="selection"
+          width="48"
+        ></el-table-column>
+        <el-table-column
+          label="Name"
+          min-width="150"
+          prop="username"
+          show-overflow-tooltip
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="ID"
+          min-width="100"
+          prop="code"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Position"
+          min-width="150"
+          prop="position"
+          sortable
+        ></el-table-column>
+        <el-table-column
+          label="Note"
+          min-width="200"
+          prop="note"
+        ></el-table-column>
+      </el-table>
+    </el-form>
+  </div>
+</template>
+<script lang="ts" src="./vendor-blacklist-detail.component.ts"></script>
+<style lang="scss">
+.vendor-blacklist-detail {
+  padding: 4px 8px;
+}
+</style>

@@ -3,12 +3,12 @@ import DocumentActionConfirm from '@/core/application-dictionary/components/Docu
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
-import WarningLetterDetail from './warning-letter-detail.vue';
+import ComplaintDetail from './complaint-detail.vue';
 import { Inject } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import { ElTable } from 'element-ui/types/table';
 
-const WarningLetterProp = Vue.extend({
+const ComplaintListProp = Vue.extend({
   props: {
     approval: Boolean
   }
@@ -16,12 +16,12 @@ const WarningLetterProp = Vue.extend({
 
 @Component({
   components: {
-    WarningLetterDetail,
+    ComplaintDetail,
     DocumentActionButton,
     DocumentActionConfirm
   }
 })
-export default class WarningLetter extends mixins(AccessLevelMixin, WarningLetterProp) {
+export default class ComplaintList extends mixins(AccessLevelMixin, ComplaintListProp) {
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -39,40 +39,42 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
     SMT: 'Submitted',
   }
 
-  warningLetters = [
+  complaints = [
     {
       documentTypeId: null,
       documentTypeName: null,
-      reportDate: '2021-03-31T00:00:00.000Z',
+      dateTrx: '2021-03-31T00:00:00.000Z',
+      vendorId: 1,
       vendorName: 'INGRAM MICRO INDONESIA',
       businessCategory: 'Automotive Vehicle',
       subCategory: 'Car',
-      startDate: '2021-03-31T00:00:00.000Z',
-      endDate: '2021-04-14T00:00:00.000Z',
-      warningType: 'Admonition',
-      location: null,
-      message: null,
-      requestor: 'Admin',
+      message: 'Performa buruk',
+      contractNo: '1113456',
+      costCenterId: 1,
+      costCenterName: 'Procurement',
+      requestor: 'Admin1',
+      type: 'Performance',
       documentAction: 'SMT',
       documentStatus: 'DRF',
-      status: 'Open'
+      status: 'Drafted'
     },
     {
       documentTypeId: null,
       documentTypeName: null,
-      reportDate: '2021-02-01T00:00:00.000Z',
+      dateTrx: '2021-03-31T00:00:00.000Z',
+      vendorId: 2,
       vendorName: 'WESTCON INTERNATIONAL INDONESIA',
       businessCategory: 'Automotive Vehicle',
       subCategory: 'Car',
-      startDate: '2021-01-01T00:00:00.000Z',
-      endDate: '2021-01-20T00:00:00.000Z',
-      warningType: 'Admonition',
-      location: null,
-      message: 'First warning!',
-      requestor: 'Admin',
-      documentAction: 'CLS',
-      documentStatus: 'CLS',
-      status: 'Close'
+      message: 'Performa buruk',
+      contractNo: '1113456',
+      costCenterId: 1,
+      costCenterName: 'Procurement',
+      requestor: 'Admin1',
+      type: 'Performance',
+      documentAction: 'CMP',
+      documentStatus: 'RVW',
+      status: 'Reviewed'
     },
   ];
 
@@ -102,11 +104,11 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
   }
 
   created() {
-    this.retrieveDocumentType('Warning Letter');
+    this.retrieveDocumentType('Complaint');
   }
 
   mounted() {
-    this.setRow(this.warningLetters[0]);
+    this.setRow(this.complaints[0]);
   }
 
   closeDetail() {
@@ -132,7 +134,7 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
       })
       .then(res => {
         if (res.data.length) {
-          this.warningLetters = this.warningLetters.map(item => {
+          this.complaints = this.complaints.map(item => {
             item.documentTypeId = res.data[0].id;
             item.documentTypeName = res.data[0].name;
             return item;

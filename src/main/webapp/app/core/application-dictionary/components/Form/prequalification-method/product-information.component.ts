@@ -51,17 +51,13 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     // this.editing = true;
   };
   addRow() {
-    let newRow = {
-      state: "California",
-      zip: "CA 90036",
-    };
-    this.tableDataquestion = [newRow, ...this.tableDataquestion];
+    this.tableDataquestion.push({ question: null });
     ++this.addCount;
     // this.editing = false;
   };
   saveAll() {
     // api
-    console.log(JSON.stringify(this.disabledList));
+    // console.log(JSON.stringify(this.disabledList));
   };
 
   public editing :boolean =true;

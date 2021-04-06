@@ -1,14 +1,14 @@
 import DocumentActionButton from '@/core/application-dictionary/components/DocumentAction/document-action-button.vue';
 import DocumentActionConfirm from '@/core/application-dictionary/components/DocumentAction/document-action-confirm.vue';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import { ElTable } from 'element-ui/types/table';
 import Vue from 'vue';
 import Component, { mixins } from 'vue-class-component';
-import WarningLetterDetail from './warning-letter-detail.vue';
 import { Inject } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
-import { ElTable } from 'element-ui/types/table';
+import VendorBlacklistDetail from './vendor-blacklist-detail.vue';
 
-const WarningLetterProp = Vue.extend({
+const VendorBlacklistProp = Vue.extend({
   props: {
     approval: Boolean
   }
@@ -16,12 +16,12 @@ const WarningLetterProp = Vue.extend({
 
 @Component({
   components: {
-    WarningLetterDetail,
+    VendorBlacklistDetail,
     DocumentActionButton,
     DocumentActionConfirm
   }
 })
-export default class WarningLetter extends mixins(AccessLevelMixin, WarningLetterProp) {
+export default class VendorBlacklist extends mixins(AccessLevelMixin, VendorBlacklistProp) {
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -39,40 +39,51 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
     SMT: 'Submitted',
   }
 
-  warningLetters = [
+  blacklist = [
     {
       documentTypeId: null,
       documentTypeName: null,
-      reportDate: '2021-03-31T00:00:00.000Z',
+      approvalDate: null,
+      vendorId: 1,
       vendorName: 'INGRAM MICRO INDONESIA',
-      businessCategory: 'Automotive Vehicle',
-      subCategory: 'Car',
-      startDate: '2021-03-31T00:00:00.000Z',
-      endDate: '2021-04-14T00:00:00.000Z',
-      warningType: 'Admonition',
-      location: null,
-      message: null,
-      requestor: 'Admin',
+      blacklistedPersonalCount: 0,
+      notes: null,
+      attachment: null,
+      type: 'Whitelist',
       documentAction: 'SMT',
       documentStatus: 'DRF',
-      status: 'Open'
+      approved: false,
+      status: 'Draft'
     },
     {
       documentTypeId: null,
       documentTypeName: null,
-      reportDate: '2021-02-01T00:00:00.000Z',
-      vendorName: 'WESTCON INTERNATIONAL INDONESIA',
-      businessCategory: 'Automotive Vehicle',
-      subCategory: 'Car',
-      startDate: '2021-01-01T00:00:00.000Z',
-      endDate: '2021-01-20T00:00:00.000Z',
-      warningType: 'Admonition',
-      location: null,
-      message: 'First warning!',
-      requestor: 'Admin',
-      documentAction: 'CLS',
-      documentStatus: 'CLS',
-      status: 'Close'
+      approvalDate: '2021-03-31T00:00:00.000Z',
+      vendorId: 2,
+      vendorName: 'PT. APV',
+      blacklistedPersonalCount: 1,
+      notes: 'Kinerja buruk',
+      attachment: 'Performance Report.pdf',
+      type: 'Blacklist',
+      documentAction: 'APV',
+      documentStatus: 'APV',
+      approved: true,
+      status: 'Approved'
+    },
+    {
+      documentTypeId: null,
+      documentTypeName: null,
+      approvalDate: null,
+      vendorId: 3,
+      vendorName: 'SISTECH KHARISMA',
+      blacklistedPersonalCount: 0,
+      notes: null,
+      attachment: null,
+      type: 'Whitelist',
+      documentAction: 'APV',
+      documentStatus: 'SMT',
+      approved: false,
+      status: 'Submitted'
     },
   ];
 
@@ -102,11 +113,11 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
   }
 
   created() {
-    this.retrieveDocumentType('Warning Letter');
+    this.retrieveDocumentType('Vendor Blacklist');
   }
 
   mounted() {
-    this.setRow(this.warningLetters[0]);
+    this.setRow(this.blacklist[0]);
   }
 
   closeDetail() {
@@ -132,7 +143,7 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
       })
       .then(res => {
         if (res.data.length) {
-          this.warningLetters = this.warningLetters.map(item => {
+          this.blacklist = this.blacklist.map(item => {
             item.documentTypeId = res.data[0].id;
             item.documentTypeName = res.data[0].name;
             return item;
@@ -146,7 +157,6 @@ export default class WarningLetter extends mixins(AccessLevelMixin, WarningLette
   }
 
   viewDetail(row: any) {
-    console.log('selected row:', row);
     this.selectedRow = row;
     this.index = false;
   }

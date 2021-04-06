@@ -43,8 +43,11 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['prequalificationMethod', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/prequalification-method/product-catalog.vue')],
  
 
-  ['vendorEvaluation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/vendor-evaluation/index.vue')],
-  ['warningLetter', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/vendor-evaluation/warning-letter.vue')],
+  ['vendorEvaluation', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/vendor-evaluation/index.vue')],
+  ['warningLetter', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/vendor-evaluation/warning-letter.vue')],
+  ['complaintList', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/vendor-evaluation/complaint-list.vue')],
+  ['vendorBlacklist', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/vendor-evaluation/vendor-blacklist.vue')],
+  ['vendorPerformanceReport', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/vendor-evaluation/vendor-performance-report.vue')],
   ['vendorConfirmation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/vendor-confirmation/index.vue')],
 ]);
 

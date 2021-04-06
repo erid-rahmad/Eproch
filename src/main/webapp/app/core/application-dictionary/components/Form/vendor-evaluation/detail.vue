@@ -15,7 +15,7 @@
             prop="evaluationNo"
           >
             <el-input
-              v-model="data.evaluationNo"
+              v-model="data.documentNo"
               class="form-input"
               clearable
             ></el-input>
@@ -149,7 +149,7 @@
           ref="evaluationLines"
           border
           class="evaluation-line-table"
-          :data="data.evaluationLines"
+          :data="evaluationLines"
           highlight-current-row
           :max-height="gridSchema.maxHeight"
           size="mini"
@@ -202,7 +202,7 @@
     </el-row>
   </div>
 </template>
-<script lang="ts" src="./index.component.ts"></script>
+<script lang="ts" src="./detail.component.ts"></script>
 
 <style lang="scss" scoped>
 .evaluation-line-table .el-input.remark {
