@@ -39,7 +39,9 @@
       >
         <el-col
           :xs="24"
-          :sm="8"
+          :sm="12"
+          :lg="12"
+          :xl="8"
         >
           <el-form-item
             label="Cost Evaluation No."
@@ -47,6 +49,18 @@
           >
             <el-input
               v-model="mainForm.documentNo"
+              clearable
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="Biding No.">
+            <el-input
+              v-model="mainForm.biddingNo"
+              disabled
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="Biding Evaluation No.">
+            <el-input
+              v-model="mainForm.biddingEvaluationNo"
               disabled
             ></el-input>
           </el-form-item>
@@ -59,51 +73,32 @@
               disabled
             ></el-input>
           </el-form-item>
-          <el-form-item
-            label="Biding No."
-            prop="biddingNo"
-          >
-            <el-input
-              v-model="mainForm.biddingNo"
-              disabled
-            ></el-input>
-          </el-form-item>
-          <el-form-item
-            label="Currency"
-            prop="currencyName"
-          >
-            <el-input
-              v-model="mainForm.currencyName"
-              disabled
-            ></el-input>
-          </el-form-item>
         </el-col>
         <el-col
           :xs="24"
-          :sm="8"
+          :sm="12"
+          :lg="12"
+          :xl="8"
         >
-          <el-form-item
-            label="PIC"
-            prop="picName"
-          >
+          <el-form-item label="Bidding Type">
             <el-input
-              v-model="mainForm.picName"
+              v-model="mainForm.biddingType"
               disabled
             ></el-input>
           </el-form-item>
-          <el-form-item
-            label="Depertement"
-            prop="costCenterName"
-          >
+          <el-form-item label="Department">
             <el-input
               v-model="mainForm.costCenterName"
               disabled
             ></el-input>
           </el-form-item>
-          <el-form-item
-            label="Reference"
-            prop="requisitionNo"
-          >
+          <el-form-item label="PiC">
+            <el-input
+              v-model="mainForm.picName"
+              disabled
+            ></el-input>
+          </el-form-item>
+          <el-form-item label="Reference">
             <el-input
               v-model="mainForm.requisitionName"
               disabled
@@ -112,77 +107,69 @@
         </el-col>
       </el-row>
       
-      <el-table
-        border
-        :data="tableData"
-        highlight-current-row
-        :max-height="256"
-        size="mini"
-        stripe
-        style="margin-top: 16px; width: 100%"
+      <el-row
+        :gutter="columnSpacing"
+        style="margin-top: 16px"
       >
-        <el-table-column
-          label="No"
-          width="50"
+        <el-col
+          :xs="24"
+          :sm="24"
+          :lg="18"
+          :xl="16"
         >
-          <template slot-scope="{ $index }">
-            {{ $index + 1 }}
-          </template>
-        </el-table-column>
-        <el-table-column label="Detail">
-          <el-table-column
-            label="Product"
-            prop="productName"
-            min-width="150"
-          ></el-table-column>
-          <el-table-column
-            label="Qty"
-            prop="quantity"
-            min-width="100"
-          ></el-table-column>
-          <el-table-column
-            label="UoM"
-            prop="uomName"
-            min-width="50"
-          ></el-table-column>
-        </el-table-column>
-        <el-table-column label="INGRAM MICRO INDONESIA">
-          <el-table-column
-            label="Price Gap"
-            width="200"
+          <el-table
+            border
+            :data="tableData"
+            highlight-current-row
+            :max-height="256"
+            size="mini"
+            stripe
+            style="margin-top: 16px; width: 100%"
           >
-            <template slot-scope="{ row }">
-              {{ row.vendor1PriceGap | formatCurrency }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="Total Score"
-            width="100"
-          >
-            <template slot-scope="{ row }">
-              {{ row.vendor1TotalScore }}
-            </template>
-          </el-table-column>
-        </el-table-column>
-        <el-table-column label="SISTECH KHARISMA">
-          <el-table-column
-            label="Price Gap"
-            min-width="200"
-          >
-            <template slot-scope="{ row }">
-              {{ row.vendor2PriceGap | formatCurrency }}
-            </template>
-          </el-table-column>
-          <el-table-column
-            label="Total Score"
-            width="100"
-          >
-            <template slot-scope="{ row }">
-              {{ row.vendor2TotalScore }}
-            </template>
-          </el-table-column>
-        </el-table-column>
-      </el-table>
+            <el-table-column
+              label="No"
+              width="50"
+            >
+              <template slot-scope="{ $index }">
+                {{ $index + 1 }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="Vendor"
+              prop="vendorName"
+              min-width="150"
+              show-overflow-tooltip
+            ></el-table-column>
+            <el-table-column
+              label="Proposed Price"
+              min-width="200"
+            >
+              <template slot-scope="{ row }">
+                {{ row.proposedPrice | formatCurrency }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="Total Score"
+              prop="totalScore"
+              min-width="100"
+            ></el-table-column>
+            <el-table-column>
+              <template slot="header">
+                &nbsp;
+              </template>
+              <el-button
+                icon="el-icon-search"
+                size="mini"
+                title="View"
+                type="primary"
+                @click="showScoreDetail = true"
+              >
+                Detail
+              </el-button>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
       
       <el-row style="margin-top: 16px">
         <el-col
@@ -245,6 +232,24 @@
         </el-col>
       </el-row>
     </el-form>
+    <el-dialog
+      width="30%"
+      :visible.sync="showScoreDetail"
+      title="Score Detail"
+    >
+      <score-detail></score-detail>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          style="margin-left: 0px;"
+          size="mini"
+          type="primary"
+          @click="showScoreDetail = false"
+        >
+          {{ $t('entity.action.cancel') }}
+        </el-button>
+      </div>
+    </el-dialog>
     <el-dialog
       width="30%"
       :visible.sync="showGeneratePoDialog"
