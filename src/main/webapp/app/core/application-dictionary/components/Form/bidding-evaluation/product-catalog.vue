@@ -6,15 +6,15 @@
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                         <keep-alive>
                             <el-col :span="24">
-                                <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
+                                <el-table size="mini" :data="tableData" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
                                     <el-table-column min-width="30" label="No">
                                         <template slot-scope="row">
                                             {{ row.$index+1 }}
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="0" label="Bidding No" sortable width="150">
+                                    <el-table-column prop="0" label="Bidding No" sortable width="180">
                                     </el-table-column>
-                                    <el-table-column prop="1" label="Title" sortable width="200">
+                                    <el-table-column prop="1" label="Title" sortable width="180">
                                     </el-table-column>
                                     <el-table-column prop="2" label="Biding Type" sortable width="180">
                                     </el-table-column>

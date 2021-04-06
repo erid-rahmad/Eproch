@@ -46,8 +46,9 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     if (this.addCount > 0)
       --this.addCount;
   };
-  saveRow(index, rows) {
-    //  api
+  saveRow() {
+
+    // this.editing = true;
   };
   addRow() {
     let newRow = {
@@ -56,18 +57,41 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     };
     this.tableDataquestion = [newRow, ...this.tableDataquestion];
     ++this.addCount;
+    // this.editing = false;
   };
   saveAll() {
     // api
     console.log(JSON.stringify(this.disabledList));
   };
-  handleSaveRow() {
-    this.isEdit = false
-  };
-  handleSaveRow1() {
-    this.isEdit = true
-  };
-  isEdit=true;
+
+  public editing :boolean =true;
+  
+  dummy1= [
+    {
+      no: '1',
+      question: 'Profesional safety support - Bagaimana penanganan / pengelolaan profesional safety supportt ? ',
+      dockument1: 'wajib',
+      input: '',
+    }, {
+      no: '1',
+      question: 'Enviromental - Sejauh mana perusahaan anda mengelola kebijakan lingkungan kerja ',
+      dockument1: 'wajib',
+    },
+  ];
+  dummy2= [
+    {
+      no: '1',
+      question: 'Apakah pengurus telah menetapkan struktur organisasi perusahaan ',
+      dockument1: 'wajib',
+      input: '',
+    }, {
+      no: '1',
+      question: 'apakah pengurus menetapkan kebijakan pengelolaan usaha dan perngendalian kegiatan usaha perusahaan ',
+      dockument1: 'wajib',
+    }
+  ];
+
+  
 
   tableDataquestion = [{
       question: 'Policy Statment - apakah perusahaan memiliki kebijakan K3L dalam menjalankan usahanya ? ',

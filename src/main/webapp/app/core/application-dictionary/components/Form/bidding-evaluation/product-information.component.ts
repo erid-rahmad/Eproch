@@ -38,51 +38,130 @@ const ProductCatalogProp = Vue.extend({
   }
 })
 export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor, ProductCatalogProp) {
-
-  data() {
-    return {
-      tableData: [{
-          1: 'Westcon International Indonesia',
-          2: '29.000.000.000',
-          3: 'download',
-          4: 'Download',
-          5: '2',
-          6: '1',
-          7: '2',
-          8: '2',
-          9: '2',
-          10: '12000',
-          11: '22/12/2001',
+  evaluationResult = [{
+      vendorName: 'WESTCON INTERNATIONAL INDONESIA',
+      proposedPrice: 29450000000,
+      priceRanking: 3,
+      attachments: [{
+          id: 1000,
+          documentName: 'Proposal Teknis'
         },
         {
-          1: 'sistech kharisma',
-          2: '29.000.000.000',
-          3: 'download',
-          4: 'Download',
-          5: '2',
-          6: '1',
-          7: '2',
-          8: '2',
-          9: '2',
-          10: '12000',
-          11: '22/12/2001',
-        }, {
-          1: 'instaram indonesia',
-          2: '29.000.000.000',
-          3: 'Download',
-          4: 'Download',
-          5: '2',
-          6: '1',
-          7: '2',
-          8: '2',
-          9: '2',
-          10: '12000',
-          11: '22/12/2001',
-        },
+          id: 2000,
+          documentName: 'Quotation'
+        }
       ],
-      checked: true,
-    }
-  };
+      qualityScore: 2,
+      costScore: 1,
+      timelineScore: 2,
+      packagingScore: 2,
+      moraleScore: 2,
+      totalScore: 9,
+      scoreRanking: 3,
+      5: '2',
+      6: '1',
+      7: '2',
+      8: '2',
+      9: '2',
+      11: '22/12/2021',
+    },
+    {
+      vendorName: 'SISTECH KHARISMA',
+      proposedPrice: 29310000000,
+      priceRanking: 1,
+      attachments: [{
+          id: 1000,
+          documentName: 'Proposal Teknis'
+        },
+        {
+          id: 2000,
+          documentName: 'Quotation'
+        }
+      ],
+      qualityScore: 3,
+      costScore: 3,
+      timelineScore: 2,
+      packagingScore: 3,
+      moraleScore: 3,
+      totalScore: 14,
+      scoreRanking: 1,
+      5: '3',
+      6: '3',
+      7: '2',
+      8: '3',
+      9: '2',
+      11: '22/12/2021',
+    },
+    {
+      vendorName: 'INGRAM MICRO INDONESIA',
+      proposedPrice: 29400000000,
+      priceRanking: 2,
+      attachments: [{
+          id: 1000,
+          documentName: 'Proposal Teknis'
+        },
+        {
+          id: 2000,
+          documentName: 'Quotation'
+        }
+      ],
+      qualityScore: 2,
+      costScore: 2,
+      timelineScore: 2,
+      packagingScore: 2,
+      moraleScore: 2,
+      totalScore: 10,
+      scoreRanking: 2,
+      5: '2',
+      6: '2',
+      7: '2',
+      8: '2',
+      9: '2',
+      11: '22/12/2021',
+    },
+  ];
+
+  tableData = [{
+      1: 'Westcon International Indonesia',
+      2: '29.000.000.000',
+      3: 'download',
+      4: 'Download',
+      5: '2',
+      6: '2',
+      7: '2',
+      8: '2',
+      9: '2',
+      10: '12000',
+      11: '22/12/2021',
+    },
+    {
+      1: 'sistech kharisma',
+      2: '29.000.000.000',
+      3: 'download',
+      4: 'Download',
+      5: '2',
+      6: '1',
+      7: '2',
+      8: '2',
+      9: '2',
+      10: '12000',
+      11: '22/12/2021',
+    }, {
+      1: 'instaram indonesia',
+      2: '29.000.000.000',
+      3: 'Download',
+      4: 'Download',
+      5: '2',
+      6: '1',
+      7: '2',
+      8: '2',
+      9: '2',
+      10: '12000',
+      11: '22/12/2021',
+    },
+  ];
+  checked: true;
+
   rules = {}
 
   props = {

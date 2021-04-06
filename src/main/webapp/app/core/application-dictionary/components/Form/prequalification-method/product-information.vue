@@ -67,52 +67,39 @@
                                             </el-select>
                                         </template>
                                     </el-form-item>
-                                    <!-- <el-table :data="tableData" size="mini" style="width: 100%">
-                                        <el-table-column min-width="30" label="No">
-                                            <template slot-scope="row">
-                                                {{ row.$index+1 }}
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column prop="1" label="Question" min-width="200">
-                                        </el-table-column>
-                                        <el-table-column min-width="30" label="Bidding Schedule">
-                                            <template slot="header">
-                                                <el-button size="mini" icon="el-icon-plus" type="primary" @click="addNewRow"></el-button>
-                                            </template>
-                                            <template slot-scope="row">
-                                                <el-button size="mini" icon="el-icon-delete" type="danger" @click="removeBusinessCategory(row.$index)"></el-button>
-                                            </template>
-                                        </el-table-column>
-                                    </el-table> -->
                                     <template>
+                                        <!-- <el-button size="mini" icon="el-icon-plus" type="primary" @click="saveRow"></el-button> -->
                                         <el-table :data="tableDataquestion" size="mini">
                                             <el-table-column min-width="20" label="No">
                                                 <template slot-scope="row">
                                                     {{ row.$index+1 }}
                                                 </template>
                                             </el-table-column>
-                                            <el-table-column prop="question" label="Name" size="small" min-width="300">
+                                            <el-table-column v-if="editing" prop="question" label="Name" size="small" min-width="300">
                                                 <template slot-scope="scope">
-                                                    <el-input size="small" style="text-align:center" v-model="scope.row.question" :disabled='isEdit'></el-input>
+                                                    <!-- <el-input size="small" style="text-align:center" v-model="scope.row.question" :disabled='isEdit'></el-input> -->
+                                                    {{scope.row.question}}
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column v-else prop="question" label="Name" size="small" min-width="300">
+                                                <template slot-scope="scope">
+                                                    <el-input size="mini" style="text-align:center" v-model="scope.row.question"></el-input>
                                                 </template>
                                             </el-table-column>
                                             <el-table-column fixed="right" label="Operations" min-width="50">
                                                 <template slot="header">
                                                     <el-button size="mini" icon="el-icon-plus" type="primary" @click="addRow"></el-button>
-                                                    <el-button size="mini" icon="el-icon-edit" type="primary" @click="isEdit=!isEdit"></el-button>  
+                                                    <el-button size="mini" icon="el-icon-edit" type="primary" @click.native.prevent="editing=!editing"></el-button>
+                                                    <!-- <el-button size="mini" icon="el-icon-edit" type="primary" @click="edit1"></el-button> -->
                                                     <!-- <el-button size="small" @click="saveAll">Save All</el-button> -->
-
                                                 </template>
                                                 <template slot-scope="row">
                                                     <!-- <el-button @click.native.prevent="saveRow($index, row)" type="text" size="small">
                                                         Save
                                                     </el-button> -->
-                                                                                                
                                                     <!-- <el-button size="mini" icon="el-icon-edit" type="primary"  @click.native.prevent="saveRow($index, row)"></el-button> -->
                                                     <el-button size="mini" icon="el-icon-delete" type="danger" @click.native.prevent="deleteRow($index, row)"></el-button>
-
                                                 </template>
-
                                             </el-table-column>
                                         </el-table>
                                     </template>
@@ -120,35 +107,100 @@
                                 <el-collapse-item title="Faktor Pendukung" name="5">
                                     <el-form-item label="Option Type">
                                         <template>
-                                            <el-select v-model="value.optiontype2">
+                                            <el-select v-model="value.optiontype1">
                                                 <el-option v-for="item in optiontype" :key="item.value" :label="item.label" :value="item.value">
                                                 </el-option>
                                             </el-select>
                                         </template>
                                     </el-form-item>
-                                    <el-table :data="tableData" size="mini" style="width: 100%">
-                                        <el-table-column min-width="30" label="No">
-                                            <template slot-scope="row">
-                                                {{ row.$index+1 }}
-                                            </template>
-                                        </el-table-column>
-                                        <el-table-column prop="1" label="Question" min-width="200">
-                                        </el-table-column>
-                                        <el-table-column min-width="30" label="Bidding Schedule">
-                                            <template slot="header">
-                                                <el-button size="mini" icon="el-icon-plus" type="primary" @click="addNewRow"></el-button>
-                                            </template>
-                                            <template slot-scope="row">
-                                                <el-button size="mini" icon="el-icon-delete" type="danger" @click="removeBusinessCategory(row.$index)"></el-button>
-                                            </template>
-                                        </el-table-column>
-                                    </el-table>
+                                    <template>
+                                        <!-- <el-button size="mini" icon="el-icon-plus" type="primary" @click="saveRow"></el-button> -->
+                                        <el-table :data="dummy1" size="mini">
+                                            <el-table-column min-width="20" label="No">
+                                                <template slot-scope="row">
+                                                    {{ row.$index+1 }}
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column v-if="editing" prop="question" label="Name" size="small" min-width="300">
+                                                <template slot-scope="scope">
+                                                    <!-- <el-input size="small" style="text-align:center" v-model="scope.row.question" :disabled='isEdit'></el-input> -->
+                                                    {{scope.row.question}}
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column v-else prop="question" label="Name" size="small" min-width="300">
+                                                <template slot-scope="scope">
+                                                    <el-input size="mini" style="text-align:center" v-model="scope.row.question"></el-input>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column fixed="right" label="Operations" min-width="50">
+                                                <template slot="header">
+                                                    <el-button size="mini" icon="el-icon-plus" type="primary" @click="addRow"></el-button>
+                                                    <el-button size="mini" icon="el-icon-edit" type="primary" @click.native.prevent="editing=!editing"></el-button>
+                                                    <!-- <el-button size="mini" icon="el-icon-edit" type="primary" @click="edit1"></el-button> -->
+                                                    <!-- <el-button size="small" @click="saveAll">Save All</el-button> -->
+                                                </template>
+                                                <template slot-scope="row">
+                                                    <!-- <el-button @click.native.prevent="saveRow($index, row)" type="text" size="small">
+                                                        Save
+                                                    </el-button> -->
+                                                    <!-- <el-button size="mini" icon="el-icon-edit" type="primary"  @click.native.prevent="saveRow($index, row)"></el-button> -->
+                                                    <el-button size="mini" icon="el-icon-delete" type="danger" @click.native.prevent="deleteRow($index, row)"></el-button>
+                                                </template>
+                                            </el-table-column>
+                                        </el-table>
+                                    </template>
                                 </el-collapse-item>
                             </el-col>
                         </el-collapse-item>
                         <el-collapse-item title="Organisasi Dan management " name="2">
-                            <div>Operation feedback: enable the users to clearly perceive their operations by style updates and interactive effects;</div>
-                            <div>Visual feedback: reflect current state by updating or rearranging elements of the page.</div>
+                            <el-col :span="20" style="margin-left: 20px;">
+                                                           <el-collapse-item title="Organisasi Dan management" name="6">
+                                    <el-form-item label="Option Type">
+                                        <template>
+                                            <el-select v-model="value.optiontype1">
+                                                <el-option v-for="item in optiontype" :key="item.value" :label="item.label" :value="item.value">
+                                                </el-option>
+                                            </el-select>
+                                        </template>
+                                    </el-form-item>
+                                    <template>
+                                        <!-- <el-button size="mini" icon="el-icon-plus" type="primary" @click="saveRow"></el-button> -->
+                                        <el-table :data="dummy2" size="mini">
+                                            <el-table-column min-width="20" label="No">
+                                                <template slot-scope="row">
+                                                    {{ row.$index+1 }}
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column v-if="editing" prop="question" label="Name" size="small" min-width="300">
+                                                <template slot-scope="scope">
+                                                    <!-- <el-input size="small" style="text-align:center" v-model="scope.row.question" :disabled='isEdit'></el-input> -->
+                                                    {{scope.row.question}}
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column v-else prop="question" label="Name" size="small" min-width="300">
+                                                <template slot-scope="scope">
+                                                    <el-input size="mini" style="text-align:center" v-model="scope.row.question"></el-input>
+                                                </template>
+                                            </el-table-column>
+                                            <el-table-column fixed="right" label="Operations" min-width="50">
+                                                <template slot="header">
+                                                    <el-button size="mini" icon="el-icon-plus" type="primary" @click="addRow"></el-button>
+                                                    <el-button size="mini" icon="el-icon-edit" type="primary" @click.native.prevent="editing=!editing"></el-button>
+                                                    <!-- <el-button size="mini" icon="el-icon-edit" type="primary" @click="edit1"></el-button> -->
+                                                    <!-- <el-button size="small" @click="saveAll">Save All</el-button> -->
+                                                </template>
+                                                <template slot-scope="row">
+                                                    <!-- <el-button @click.native.prevent="saveRow($index, row)" type="text" size="small">
+                                                        Save
+                                                    </el-button> -->
+                                                    <!-- <el-button size="mini" icon="el-icon-edit" type="primary"  @click.native.prevent="saveRow($index, row)"></el-button> -->
+                                                    <el-button size="mini" icon="el-icon-delete" type="danger" @click.native.prevent="deleteRow($index, row)"></el-button>
+                                                </template>
+                                            </el-table-column>
+                                        </el-table>
+                                    </template>
+                                </el-collapse-item>
+                            </el-col>
                         </el-collapse-item>
                         <el-collapse-item title="Pengelolaan Sumber Daya " name="3">
                             <div>Simplify the process: keep operating process simple and intuitive;</div>

@@ -51,7 +51,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
       atachment: 'Bidding proposal Doc',
     }
   ];
-  dummy: [
+  dummy= [
     {
       no: '1',
       dockument: 'Policy Statment - apakah perusahaan memiliki kebijakan K3L dalam menjalankan usahanya ? ',
@@ -67,7 +67,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
       dockument1: 'wajib',
     }
   ];
-  dummy1: [
+  dummy1= [
     {
       no: '1',
       dockument: 'Profesional safety support - Bagaimana penanganan / pengelolaan profesional safety supportt ? ',
@@ -79,7 +79,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
       dockument1: 'wajib',
     },
   ];
-  dummy2: [
+  dummy2= [
     {
       no: '1',
       dockument: 'Apakah pengurus telah menetapkan struktur organisasi perusahaan ',

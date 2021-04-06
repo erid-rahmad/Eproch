@@ -50,7 +50,7 @@
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="Depertement" prop="name" required>
-                                    <h7>MArketing</h7>
+                                    <h7>Marketing</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -67,69 +67,77 @@
             <el-divider content-position="left">
                 <h4>Image Information</h4>
             </el-divider>
-            <el-table :data="tableData" style="width: 100%">
-                <el-table-column prop="date" label="No" width="60">
+            <el-table border :data="evaluationResult" highlight-current-row size="mini" stripe>
+                <el-table-column label="No." width="50">
                     <template slot-scope="row">
-                        {{ row.$index+1 }}
+                        {{ row.$index + 1 }}
                     </template>
                 </el-table-column>
-                <el-table-column prop="1" label="Vendor Name" width="150">
+                <el-table-column label="Vendor Name" prop="vendorName" show-overflow-tooltip min-width="200"></el-table-column>
+                <el-table-column label="Proposed Price" width="200">
+                    <template slot-scope="{ row }">
+                        {{ row.proposedPrice | formatCurrency }}
+                    </template>
                 </el-table-column>
-                <el-table-column prop="2" label="Proposed Price" width="150">
-                </el-table-column>
-                <el-table-column prop="" label="Document Submision" width="230">
-                    <template>
-                        <el-row>
-                            <el-col :span="12" class="border">
-                                proposal teknis
+                <el-table-column class-name="document-submission" label="Document Submission" width="250">
+                    <template slot-scope="{ row }">
+                        <el-row v-for="item in row.attachments" :key="item.id">
+                            <el-col class="border" :span="12">
+                                {{ item.documentName }}
                             </el-col>
-                            <el-col :span="12" class="border">
-                                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="download">
-                                    download <em class="el-icon-arrow-right"></em>
-                                </el-button>
-                            </el-col>
-                            
-                            <el-col :span="12" class="border">
-                                quantation
-                            </el-col>
-                            <el-col :span="12" class="border">
-                                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="download">
-                                    download <em class="el-icon-arrow-right"></em>
+                            <el-col class="border" :span="12">
+                                <el-button class="btn-attachment" icon="el-icon-download" size="mini" type="primary">
+                                    Download
                                 </el-button>
                             </el-col>
                         </el-row>
                     </template>
                 </el-table-column>
+                <el-table-column prop="" label="Document Received" width="150">
+                    <el-col :span="24">
+                        <el-col :span="24">
+                            <h7> 22/12/2021</h7>
+                        </el-col>
+                        <el-col :span="24">
+                            <h7> 22/12/2021</h7>
+                        </el-col>
+                    </el-col>
+
+                </el-table-column>
+
                 <el-table-column prop="" label="Document Evaluation" width="150">
                     <template>
                         <el-row>
                             <el-col :span="24">
-                                <template>                                
-                                <el-checkbox v-model="checked" @click="download">check</el-checkbox>
+                                <template>
+                                    <el-checkbox v-model="checked" @click="download">check</el-checkbox>
                                 </template>
                             </el-col>
                             <el-col :span="24">
-                                <template>                                
-                                <el-checkbox v-model="checked" @click= "checked = false">check</el-checkbox>
+                                <template>
+                                    <el-checkbox v-model="checked" @click="checked = false">check</el-checkbox>
                                 </template>
                             </el-col>
-                            
+
                         </el-row>
                     </template>
                 </el-table-column>
-                <el-table-column label="Tender Evaluation">
-                    <el-table-column prop="5" label="quality" width="80">
+
+
+
+                <el-table-column label="Evaluation">
+                    <el-table-column label="Bidding Evaluation">
+                        <el-table-column prop="5" label="quality" width="80">
+                        </el-table-column>
+                        <el-table-column prop="6" label="cost" width="80">
+                        </el-table-column>
+                        <el-table-column prop="7" label="delivery" width="80">
+                        </el-table-column>
+                        <el-table-column prop="8" label="safety" width="80">
+                        </el-table-column>
+                        <el-table-column prop="9" label="marale" width="80">
+                        </el-table-column>
                     </el-table-column>
-                    <el-table-column prop="6" label="cost" width="80">
-                    </el-table-column>
-                    <el-table-column prop="7" label="delivery" width="80">
-                    </el-table-column>
-                    <el-table-column prop="8" label="safety" width="80">
-                    </el-table-column>
-                    <el-table-column prop="9" label="marale" width="80">
-                    </el-table-column>
-                    <!-- <el-table-column prop="6" label="Criteria1 t" width="80">
-                    </el-table-column> -->
                 </el-table-column>
             </el-table>
             <el-divider content-position="left">
@@ -170,32 +178,65 @@
 <script lang="ts" src="./product-information.component.ts"></script>
 
 <style lang="scss">
-.bidding-evaluation {
+    .bidding-evaluation-approval {
+        display: grid;
+        grid-template-columns: 100%;
+        grid-template-rows: 36px auto;
+
+        td.document-submission .cell {
+            padding: 0;
+
+            .el-row .el-col.border {
+                border-bottom: none !important;
+                border-left: none !important;
+                padding: 4px 10px;
+
+                &:last-child {
+                    border-right: none !important;
+                }
+            }
+
+            .el-row:first-child .el-col.border {
+                border-top: none !important;
+            }
+        }
+
+        .el-divider--horizontal {
+            margin-top: 32px;
+            margin-bottom: 16px;
+        }
+
+        .form-wrapper {
+            .el-scrollbar__wrap {
+                overflow-x: hidden;
+                padding: 15px;
+            }
+        }
+
+
+        .toolbar {
+            padding: 4px;
+        }
+
+        .vendor-scoring tbody td {
+            height: 35px;
+        }
+    }
+
+    .el-tabs__header {
+        margin: 0px;
+    }
+
+    .el-table__fixed {
+        box-shadow: none;
+    }
+
+    .main {
+        padding: 0px;
+    }
+
     .form-input {
-        textarea {
-            resize: none;
-            border: none;
-            border-radius: 0px;
-            border-bottom: 1px solid #bfcbd9;
-        }
-    }
-
-    .el-form-item is-required el-form-item--mini {
-        .el-form-item__content {
-            margin-left: 0px;
-        }
-    }
-
-    .cascader {
         width: 100%;
     }
-    
-    .border {
-        border-width: 1px;
-        border-style: outset ;
-        border-top-color: rgb(0, 0, 0);
-        border-bottom-color: rgb(0, 0, 0);
-       
-    }
-}
+
 </style>
