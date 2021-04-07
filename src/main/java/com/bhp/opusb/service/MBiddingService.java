@@ -22,6 +22,8 @@ import com.bhp.opusb.service.dto.MBiddingLineDTO;
 import com.bhp.opusb.service.dto.MBiddingScheduleDTO;
 import com.bhp.opusb.service.dto.MDocumentScheduleDTO;
 import com.bhp.opusb.service.dto.MProjectInformationDTO;
+import com.bhp.opusb.service.dto.MVendorInvitationDTO;
+import com.bhp.opusb.service.dto.MVendorSuggestionDTO;
 import com.bhp.opusb.service.mapper.MBiddingFormMapper;
 import com.bhp.opusb.service.mapper.MBiddingMapper;
 import com.bhp.opusb.util.DocumentUtil;
@@ -50,6 +52,8 @@ public class MBiddingService {
     private final MProjectInformationService mProjectInformationService;
     private final MBiddingScheduleService mBiddingScheduleService;
     private final MDocumentScheduleService mDocumentScheduleService;
+    private final MVendorInvitationService mVendorInvitationService;
+    private final MVendorSuggestionService mVendorSuggestionService;
 
     private final MBiddingMapper mBiddingMapper;
     private final MBiddingFormMapper mBiddingFormMapper;
@@ -77,7 +81,8 @@ public class MBiddingService {
     public MBiddingService(ApplicationProperties applicationProperties, CDocumentTypeRepository cDocumentTypeRepository,
             MBiddingRepository mBiddingRepository, MBiddingLineService mBiddingLineService,
             MProjectInformationService mProjectInformationService, MBiddingScheduleService mBiddingScheduleService,
-            MDocumentScheduleService mDocumentScheduleService, MBiddingMapper mBiddingMapper,
+            MDocumentScheduleService mDocumentScheduleService, MVendorInvitationService mVendorInvitationService,
+            MVendorSuggestionService mVendorSuggestionService, MBiddingMapper mBiddingMapper,
             MBiddingFormMapper mBiddingFormMapper) {
         this.cDocumentTypeRepository = cDocumentTypeRepository;
         this.mBiddingRepository = mBiddingRepository;
@@ -85,6 +90,8 @@ public class MBiddingService {
         this.mProjectInformationService = mProjectInformationService;
         this.mBiddingScheduleService = mBiddingScheduleService;
         this.mDocumentScheduleService = mDocumentScheduleService;
+        this.mVendorInvitationService = mVendorInvitationService;
+        this.mVendorSuggestionService = mVendorSuggestionService;
         this.mBiddingMapper = mBiddingMapper;
         this.mBiddingFormMapper = mBiddingFormMapper;
 
@@ -218,8 +225,9 @@ public class MBiddingService {
     public MBiddingDTO saveForm(MBiddingFormDTO mBiddingDTO) {
         log.debug("Request to save MBidding : {}", mBiddingDTO);
         MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
+        MBiddingProcess step = mBiddingDTO.getStep();
 
-        if (MBiddingProcess.INFO.equals(mBiddingDTO.getStep())) {
+        if (MBiddingProcess.INFO.equals(step)) {
             final List<MBiddingLineDTO> lines = mBiddingDTO.getBiddingLines();
             final List<MBiddingLineDTO> removedLines = mBiddingDTO.getRemovedBiddingLines();
             final List<MProjectInformationDTO> projectInformations = mBiddingDTO.getProjectInformations();
@@ -243,16 +251,33 @@ public class MBiddingService {
             // Initialize bidding schedules as it depends on the Event Type value.
             mBiddingScheduleService.initBiddingSchedules(mBidding);
 
-        } else if (MBiddingProcess.SCHEDULE.equals(mBiddingDTO.getStep())) {
+        } else if (MBiddingProcess.SCHEDULE.equals(step)) {
             final List<MBiddingScheduleDTO> biddingSchedules = mBiddingDTO.getBiddingSchedules();
             final List<MDocumentScheduleDTO> documentSchedules = mBiddingDTO.getDocumentSchedules();
             final List<MDocumentScheduleDTO> removedDocumentSchedules = mBiddingDTO.getRemovedDocumentSchedules();
             saveSchedule(mBiddingDTO, biddingSchedules, documentSchedules, removedDocumentSchedules);
+        } else if (MBiddingProcess.SELECTION.equals(step)) {
+            final List<MVendorInvitationDTO> vendorInvitations = mBiddingDTO.getVendorInvitations();
+            final List<MVendorInvitationDTO> removedVendorInvitations = mBiddingDTO.getRemovedVendorInvitations();
+            final List<MVendorSuggestionDTO> vendorSuggestions = mBiddingDTO.getVendorSuggestions();
+            final List<MVendorSuggestionDTO> removedVendorSuggestions = mBiddingDTO.getRemovedVendorSuggestions();
+            saveInvitation(mBiddingDTO, vendorInvitations, vendorSuggestions, removedVendorInvitations, removedVendorSuggestions);
+        } else if (MBiddingProcess.SCORING.equals(step)) {
+            
         }
 
         return mBiddingDTO;
     }
 
+    /**
+     * Save bidding header, lines, and project informations in the first step.
+     * @param mBiddingDTO
+     * @param biddingLines
+     * @param projectInformations
+     * @param removedBiddingLines
+     * @param removedProjectInformations
+     * @return
+     */
     private MBiddingDTO saveInformation(MBiddingDTO mBiddingDTO, List<MBiddingLineDTO> biddingLines,
             List<MProjectInformationDTO> projectInformations, List<MBiddingLineDTO> removedBiddingLines,
             List<MProjectInformationDTO> removedProjectInformations) {
@@ -267,6 +292,14 @@ public class MBiddingService {
         return mBiddingDTO;
     }
 
+    /**
+     * Save bidding schedule and document schedule in the second step.
+     * @param mBiddingDTO
+     * @param biddingSchedules
+     * @param documentSchedules
+     * @param removedDocumentSchedules
+     * @return
+     */
     private MBiddingDTO saveSchedule(MBiddingDTO mBiddingDTO, List<MBiddingScheduleDTO> biddingSchedules,
             List<MDocumentScheduleDTO> documentSchedules, List<MDocumentScheduleDTO> removedDocumentSchedules) {
 
@@ -274,6 +307,25 @@ public class MBiddingService {
         mDocumentScheduleService.saveAll(documentSchedules, mBiddingDTO);
         mDocumentScheduleService.deleteAll(removedDocumentSchedules);
         removedDocumentSchedules.clear();
+        return mBiddingDTO;
+    }
+
+    /**
+     * Save vendor invitation and suggestions in the third step.
+     * @param mBiddingDTO
+     * @param vendorInvitations
+     * @param vendorSuggestions
+     * @param removedVendorInvitations
+     * @param removedVendorSuggestions
+     * @return
+     */
+    private MBiddingDTO saveInvitation(MBiddingDTO mBiddingDTO, List<MVendorInvitationDTO> vendorInvitations,
+            List<MVendorSuggestionDTO> vendorSuggestions, List<MVendorInvitationDTO> removedVendorInvitations,
+            List<MVendorSuggestionDTO> removedVendorSuggestions) {
+        
+        mVendorInvitationService.saveAll(vendorInvitations, mBiddingDTO);
+        mVendorInvitationService.deleteAll(removedVendorInvitations);
+        removedVendorInvitations.clear();
         return mBiddingDTO;
     }
 

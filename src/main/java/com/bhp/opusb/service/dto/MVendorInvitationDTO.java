@@ -17,7 +17,7 @@ public class MVendorInvitationDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long biddingId;

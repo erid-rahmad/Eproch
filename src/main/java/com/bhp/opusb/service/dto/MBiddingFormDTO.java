@@ -24,10 +24,13 @@ public class MBiddingFormDTO extends MBiddingDTO {
 
   // Vendor Invitation Step.
   private List<MVendorInvitationDTO> vendorInvitations = new ArrayList<>();
+  private List<MVendorInvitationDTO> removedVendorInvitations = new ArrayList<>();
   private List<MVendorSuggestionDTO> vendorSuggestions = new ArrayList<>();
+  private List<MVendorSuggestionDTO> removedVendorSuggestions = new ArrayList<>();
 
   // Vendor Scoring Step.
   private List<MVendorScoringDTO> vendorScorings = new ArrayList<>();
+  private List<MVendorScoringDTO> removedVendorScorings = new ArrayList<>();
 
   public MBiddingProcess getStep() {
     return step;
@@ -101,6 +104,14 @@ public class MBiddingFormDTO extends MBiddingDTO {
     this.vendorInvitations = vendorInvitations;
   }
 
+  public List<MVendorInvitationDTO> getRemovedVendorInvitations() {
+    return removedVendorInvitations;
+  }
+
+  public void setRemovedVendorInvitations(List<MVendorInvitationDTO> removedVendorInvitations) {
+    this.removedVendorInvitations = removedVendorInvitations;
+  }
+
   public List<MVendorSuggestionDTO> getVendorSuggestions() {
     return vendorSuggestions;
   }
@@ -109,12 +120,28 @@ public class MBiddingFormDTO extends MBiddingDTO {
     this.vendorSuggestions = vendorSuggestions;
   }
 
+  public List<MVendorSuggestionDTO> getRemovedVendorSuggestions() {
+    return removedVendorSuggestions;
+  }
+
+  public void setRemovedVendorSuggestions(List<MVendorSuggestionDTO> removedVendorSuggestions) {
+    this.removedVendorSuggestions = removedVendorSuggestions;
+  }
+
   public List<MVendorScoringDTO> getVendorScorings() {
     return vendorScorings;
   }
 
   public void setVendorScorings(List<MVendorScoringDTO> vendorScorings) {
     this.vendorScorings = vendorScorings;
+  }
+
+  public List<MVendorScoringDTO> getRemovedVendorScorings() {
+    return removedVendorScorings;
+  }
+
+  public void setRemovedVendorScorings(List<MVendorScoringDTO> removedVendorScorings) {
+    this.removedVendorScorings = removedVendorScorings;
   }
 
   @Override

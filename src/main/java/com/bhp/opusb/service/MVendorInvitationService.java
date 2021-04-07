@@ -2,6 +2,7 @@ package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MVendorInvitation;
 import com.bhp.opusb.repository.MVendorInvitationRepository;
+import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.dto.MVendorInvitationDTO;
 import com.bhp.opusb.service.mapper.MVendorInvitationMapper;
 import org.slf4j.Logger;
@@ -44,6 +45,24 @@ public class MVendorInvitationService {
         MVendorInvitation mVendorInvitation = mVendorInvitationMapper.toEntity(mVendorInvitationDTO);
         mVendorInvitation = mVendorInvitationRepository.save(mVendorInvitation);
         return mVendorInvitationMapper.toDto(mVendorInvitation);
+    }
+
+    /**
+     * Save a list of mVendorInvitations.
+     *
+     * @param mVendorInvitationDTOs the entities to save.
+     * @return the persisted entities.
+     */
+    public List<MVendorInvitationDTO> saveAll(List<MVendorInvitationDTO> mVendorInvitationDTOs, MBiddingDTO mBiddingDTO) {
+        log.debug("Request to save MVendorInvitations : {}", mVendorInvitationDTOs);
+
+        mVendorInvitationDTOs.forEach(invitation -> {
+            invitation.setBiddingId(mBiddingDTO.getId());
+            invitation.setAdOrganizationId(mBiddingDTO.getAdOrganizationId());
+        });
+
+        List<MVendorInvitation> mVendorInvitations = mVendorInvitationMapper.toEntity(mVendorInvitationDTOs);
+        return mVendorInvitationMapper.toDto(mVendorInvitationRepository.saveAll(mVendorInvitations));
     }
 
     /**
@@ -92,5 +111,15 @@ public class MVendorInvitationService {
     public void delete(Long id) {
         log.debug("Request to delete MVendorInvitation : {}", id);
         mVendorInvitationRepository.deleteById(id);
+    }
+
+    /**
+     * Delete the given mVendorInvitations.
+     *
+     * @param mVendorInvitationDTOs the given mVendorInvitations.
+     */
+    public void deleteAll(List<MVendorInvitationDTO> mVendorInvitationDTOs) {
+        log.debug("Request to delete all MVendorInvitations. count : {}", mVendorInvitationDTOs.size());
+        mVendorInvitationRepository.deleteAll(mVendorInvitationMapper.toEntity(mVendorInvitationDTOs));
     }
 }
