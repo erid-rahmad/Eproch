@@ -4,6 +4,8 @@ export interface IADTab {
   id?: number;
   name?: string;
   description?: string;
+  deletable?: boolean;
+  insertable?: boolean;
   iconName?: string;
   treeView?: boolean;
   targetEndpoint?: string;
@@ -32,6 +34,7 @@ export interface IADTab {
    */
   parentId?: number;
 
+  filterQueryTmp?: string;
   nativeFilterQuery?: string;
 
   /**
@@ -43,6 +46,7 @@ export interface IADTab {
 export class ADTab implements IADTab {
 
   public parentId?: number;
+  public filterQueryTmp?: string = null;
   public nativeFilterQuery?: string = null;
   public validationSchema?: any = null;
 
@@ -50,6 +54,8 @@ export class ADTab implements IADTab {
     public id?: number,
     public name?: string,
     public description?: string,
+    public deletable?: boolean,
+    public insertable?: boolean,
     public iconName?: string,
     public treeView?: boolean,
     public targetEndpoint?: string,
