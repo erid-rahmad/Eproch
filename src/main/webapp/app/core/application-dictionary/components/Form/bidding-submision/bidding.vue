@@ -43,7 +43,7 @@
                         <el-table-column min-width="100" sortable prop="lastModifiedBy" label="Modified By" />
                         <el-table-column min-width="90" label="Join Status">                       
                             <template slot-scope="{ row }">
-                                <el-switch v-model="value1" active-text="Yes" size="mini" inactive-text="No">
+                                <el-switch v-model="row.value1" active-text="Yes" size="mini" inactive-text="No">
                                 </el-switch>
                             </template>
                         </el-table-column>
