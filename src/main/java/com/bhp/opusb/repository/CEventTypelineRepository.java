@@ -14,5 +14,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CEventTypelineRepository extends JpaRepository<CEventTypeline, Long>, JpaSpecificationExecutor<CEventTypeline> {
 
-  List<CEventTypeline> findByEventType_Id(Long eventTypeId);
+  List<CEventTypeline> findByEventType_IdOrderBySequence(Long eventTypeId);
 }
