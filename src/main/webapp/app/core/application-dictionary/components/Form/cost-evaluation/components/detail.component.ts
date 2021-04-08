@@ -36,11 +36,11 @@ export default class CostEvaluationDetail extends mixins(AccessLevelMixin, CostE
 
   uploadedDocuments = [
     {
-      name: 'Document #100.jpeg',
+      name: 'Cost Evaluation 1.pdf',
       url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
     },
     {
-      name: 'Document #101.jpeg',
+      name: 'Cost Evaluation 2.pdf',
       url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
     }
   ];
@@ -53,13 +53,15 @@ export default class CostEvaluationDetail extends mixins(AccessLevelMixin, CostE
       productName: 'HONDA 2015',
       quantity: '50',
       uomName: 'EA',
-      mandays: '14',
+      mandays: null,
       evaluationPrice: '238000000',
       evaluationSubTotal: '11900000000',
-      vendor1Price: '238000000',
-      vendor1SubTotal: '11900000000',
-      vendor2Price: '237000000',
-      vendor2SubTotal: '11850000000',
+      vendor1Price: '238500000',
+      vendor1SubTotal: '11925000000',
+      vendor1Gap: '0.2%',
+      vendor2Price: '239000000',
+      vendor2SubTotal: '11950000000',
+      vendor2Gap: '0.4%',
       subItem: null,
       subSubItem: null
     },
@@ -67,13 +69,15 @@ export default class CostEvaluationDetail extends mixins(AccessLevelMixin, CostE
       productName: 'HONDA CIVIC 2017',
       quantity: '30',
       uomName: 'EA',
-      mandays: '21',
+      mandays: null,
       evaluationPrice: '439000000',
       evaluationSubTotal: '13170000000',
-      vendor1Price: '437500000',
-      vendor1SubTotal: '13125000000',
-      vendor2Price: '438000000',
-      vendor2SubTotal: '13140000000',
+      vendor1Price: '439000000',
+      vendor1SubTotal: '13170000000',
+      vendor1Gap: '0%',
+      vendor2Price: '440000000',
+      vendor2SubTotal: '13200000000',
+      vendor2Gap: '0.22%',
       subItem: null,
       subSubItem: null
     },
@@ -81,13 +85,15 @@ export default class CostEvaluationDetail extends mixins(AccessLevelMixin, CostE
       productName: 'HONDA 2020',
       quantity: '100',
       uomName: 'EA',
-      mandays: '30',
+      mandays: null,
       evaluationPrice: '45000000',
       evaluationSubTotal: '4500000000',
-      vendor1Price: '43400000',
-      vendor1SubTotal: '4340000000',
-      vendor2Price: '42800000',
-      vendor2SubTotal: '4280000000',
+      vendor1Price: '45000000',
+      vendor1SubTotal: '4500000000',
+      vendor1Gap: '0%',
+      vendor2Price: '41600000',
+      vendor2SubTotal: '4160000000',
+      vendor2Gap: '7.85%',
       subItem: null,
       subSubItem: null
     }
