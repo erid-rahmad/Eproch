@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -17,6 +18,6 @@ import org.springframework.stereotype.Repository;
 public interface MBiddingScheduleRepository extends JpaRepository<MBiddingSchedule, Long>, JpaSpecificationExecutor<MBiddingSchedule> {
 
   @Modifying
-  @Query("DELETE FROM MBiddingSchedule s WHERE s.eventTypeLine.id NOT IN $1")
-  int deleteByEventTypeLineIdNotIn(Collection<Long> eventTypeLineIds);
+  @Query("DELETE FROM MBiddingSchedule s WHERE s.eventTypeLine.id NOT IN (:lineIds)")
+  int deleteByEventTypeLineIdNotIn(@Param("lineIds") Collection<Long> eventTypeLineIds);
 }

@@ -110,7 +110,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     ])
     .then(_results => {
       this.recordsLoaded = true;
-    })
+    });
   }
 
   private retrieveBiddingSchedules(biddingId: number): Promise<boolean> {
@@ -125,7 +125,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
         paginationQuery: {
           page: 0,
           size: 100,
-          sort: ['startDate', 'endDate']
+          sort: ['id']
         }
       })
       .then(res => {
@@ -244,7 +244,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
       })
       .catch(err => {
         console.log('Failed to save bidding schedule. %O', err);
-        this.$message.error('Failed to save bidding schedule')
+        this.$message.error('Failed to save bidding schedule');
       });
   }
 }

@@ -3,7 +3,7 @@ import { AccountStoreModule as accountStore } from '@/shared/config/store/accoun
 import { buildCascaderOptions } from '@/utils/form';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import { Inject, Mixins } from 'vue-property-decorator';
+import { Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
 
@@ -19,6 +19,9 @@ const VendorInvitationProp = Vue.extend({
 
 @Component
 export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInvitationProp) {
+
+  private updated = false;
+  private recordsLoaded = true;
 
   addNewRow() {
     this.dummy2.push({
@@ -129,12 +132,12 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   }
 
   public rules = {
-      values: {
-          type: 'array',
-          required: true,
-          defaultFields: {type: 'array', len: 3, required: true},
-          message: 'Business Category is required'
-      }
+    values: {
+      type: 'array',
+      required: true,
+      defaultFields: {type: 'array', len: 3, required: true},
+      message: 'Business Category is required'
+    }
   };
   public businessCategoryOptions = [];
 
@@ -142,15 +145,35 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   bidding: Record<string, any> = {};
   vendorSelection: string;
 
+  @Watch('bidding', { deep: true })
+  onBiddingChanged(_bidding: Record<string, any>) {
+    if (this.recordsLoaded && ! this.updated) {
+      this.updated = true;
+      this.$emit('change');
+    }
+  }
+
+  onBusinessCategoryChanged(values) {
+    console.log('onBusinessCategoryChanged. values:', values);
+  }
+
   created() {
+    this.recordsLoaded = false;
     this.bidding = {...this.data};
-    this.bidding.step = BiddingStep.SELECTION;
-    this.vendorSelection = this.bidding.vendorSelection;
-    this.bidding.vendorInvitations = [];
-    this.bidding.vendorSuggestions = [];
 
     this.retrieveBusinessCategories();
     this.retrieveSubBusinessCategories();
+
+    Promise.allSettled([
+      this.retrieveVendorInvitations(this.bidding.id),
+      this.retrieveVendorSuggestions(this.bidding.id)
+    ])
+    .then(_results => {
+      this.recordsLoaded = true;
+    });
+
+    this.bidding.step = BiddingStep.SELECTION;
+    this.vendorSelection = this.bidding.vendorSelection;
 
     if (this.vendorSelection === 'OPN') {
       this.canAddVendor = false;
@@ -167,6 +190,68 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
 
   addVendorSuggestion() {
     this.dialogConfirmationVisibleVendorSuggestion = true;
+  }
+
+  private retrieveVendorInvitations(biddingId: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.loadingCategories = true;
+      this.commonService('/api/m-vendor-invitations')
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingId.equals=${biddingId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.$set(this.bidding, 'vendorInvitations', res.data);
+        this.$set(this.bidding, 'removedVendorInvitations', []);
+        resolve(true);
+      })
+      .catch(err => {
+        console.error('Failed to get vendor invitations. %O', err);
+        this.$message.error('Failed to get vendor invitations');
+        reject(false);
+      })
+      .finally(() => {
+        this.loadingCategories = false;
+      });
+    });
+  }
+
+  private retrieveVendorSuggestions(biddingId: number): Promise<boolean> {
+    return new Promise((resolve, reject) => {
+      this.loadingSuggestions = true;
+      this.commonService('/api/m-vendor-suggestions')
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingId.equals=${biddingId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.$set(this.bidding, 'vendorSuggestions', res.data);
+        this.$set(this.bidding, 'removedVendorSuggestions', []);
+        resolve(true);
+      })
+      .catch(err => {
+        console.error('Failed to get vendor suggestions. %O', err);
+        this.$message.error('Failed to get vendor suggestions');
+        reject(false);
+      })
+      .finally(() => {
+        this.loadingSuggestions = false;
+      });
+    });
   }
 
   saveBusinessCategory() {
@@ -210,7 +295,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
       }
     });
 
-    this.retrieveVendorSuggestions(vendorSuggestionCriteria);
+    this.onVendorInvitationChanged(vendorSuggestionCriteria);
     this.vendorInvitationFormVisible = false;
   }
 
@@ -240,31 +325,31 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   }
 
   private retrieveBusinessCategories() {
-      this.commonService('/api/c-business-categories')
+    this.commonService('/api/c-business-categories')
       .retrieve({
-          criteriaQuery: this.updateCriteria(['active.equals=true']),
-          paginationQuery: {
-              size: 1000,
-              page: 0,
-              sort: ['name']
-          }
+        criteriaQuery: this.updateCriteria(['active.equals=true']),
+        paginationQuery: {
+          size: 1000,
+          page: 0,
+          sort: ['name']
+        }
       })
       .then(res => {
-          let categories = res.data.map(item => {
-              return {
-                  value: item.id,
-                  label: item.name,
-                  parent: item.parentCategoryId
-              };
-          });
+        let categories = res.data.map(item => {
+          return {
+            value: item.id,
+            label: item.name,
+            parent: item.parentCategoryId
+          };
+        });
 
-          // Use set to uniquely identify added category.
-          this.businessCategoryOptions = buildCascaderOptions(categories);
+        // Use set to uniquely identify added category.
+        this.businessCategoryOptions = buildCascaderOptions(categories);
       });
   }
 
-  private retrieveVendorSuggestions(criteria: string[]) {
-    this.loadingCategories = true;
+  private onVendorInvitationChanged(criteria: string[]) {
+    this.loadingSuggestions = true;
     this.commonService('/api/c-vendor-business-cats')
       .retrieve({
         criteriaQuery: this.updateCriteria(criteria),
@@ -287,18 +372,16 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
         }
 
         this.vendorOptions = categories;
-        this.loadingCategories = false;
         this.retrieveVendorLocations(locationCriteria, subCategoryMap);
       })
       .catch(err => {
         console.log('Failed to get business categories. %O', err);
         this.$message.error('Failed to get business categories');
-        this.loadingCategories = false;
+        this.loadingSuggestions = false;
       });
   }
 
   private retrieveVendorLocations(criteria: string[], subCategoryMap?: Map<number, any>) {
-    this.loadingSuggestions = true;
     this.commonService('/api/c-vendor-locations')
       .retrieve({
         criteriaQuery: this.updateCriteria(criteria),
@@ -328,8 +411,6 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
             address: location.locationName + ', ' + location.cityName
           };
         });
-
-        console.log('Loaded suggestions: %O', this.bidding.vendorSuggestions);
       })
       .catch(err => {
         console.log('Failed to get vendor suggestions. %O', err);
@@ -358,43 +439,33 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
       });
   }
 
-  /* private retrieveVendor(vendorId, key): void {
-    let filterQuery = "";
-    if(key == 1){
-      filterQuery = "active.equals=true";
-    }else{
-      filterQuery = `active.equals=true&id.equals=${vendorId}`;
-    }
-    this.commonService("/api/c-vendors")
+  private retrieveVendorsByCriteria(criteria: string[]) {
+    this.commonService('/api/c-vendor-business-cats')
       .retrieve({
-        criteriaQuery: filterQuery
+        criteriaQuery: this.updateCriteria(criteria),
+        paginationQuery: {
+          page: 0,
+          size: 1000,
+          sort: ['vendorId']
+        }
       })
       .then(res => {
-        //if(key == 1){
-          //this.vendorOptions = res.data;
-        }else{
-          res.data.map((item: any) => {
-            //this.retrieveVendor(item.vendorId, 2);
-            //console.log(item);
-            this.getVendorDetail(item.id);
-            this.vendorSuggestion.vendor = item.id;
-            this.vendorSuggestion.vendorObj = item;
-            this.vendorInvitation.vendorSuggestion.push(this.vendorSuggestion);
-
-            return item;
-          });
-        }
+        this.vendorOptions = res.data;
       });
-  } */
+  }
 
   getVendorDetail(vendorId){
-    //this.retrieveVendorSubCategory(vendorId);
+    this.retrieveVendorSubCategory(vendorId);
     this.retrieveVendorAddress(vendorId);
   }
 
-  getVendor(businessCategory){
-    console.log(businessCategory);
-    // this.retrieveVendorBySubCategory(businessCategory);
+  getVendor(businessCategory) {
+    const classifications = new Set<number>();
+    let vendorSuggestionCriteria = [
+      'active.equals=true'
+    ];
+
+    this.retrieveVendorsByCriteria(vendorSuggestionCriteria);
     this.vendorSuggestion.vendor = "";
     this.vendorSuggestion.address = "";
   }
@@ -413,7 +484,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   }
 
   // retrieve vendor sub category
-  /*private retrieveVendorSubCategory(vendorId) {
+  private retrieveVendorSubCategory(vendorId) {
     this.commonService('/api/c-vendor-business-cats')
       .retrieve({
         criteriaQuery: `vendorId.equals=${vendorId}`
@@ -421,7 +492,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
       .then(res => {
         this.retrieveBusinessCategory(res.data[0].businessCategoryId, 1);
       });
-  }*/
+  }
 
   private retrieveBusinessCategory(businessCategoryId, key) {
     this.commonService('/api/c-business-categories')
@@ -468,8 +539,16 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
    * Invoked before proceeding to the next step.
    */
   save() {
-    this.$emit('saved', {
-      data: this.bidding
-    });
+    this.commonService('/api/m-biddings/save-form')
+      .update(this.bidding)
+      .then(res => {
+        this.$emit('saved', {
+          data: res
+        });
+      })
+      .catch(err => {
+        console.log('Failed to save bidding schedule. %O', err);
+        this.$message.error('Failed to save vendor invitations');
+      });
   }
 }

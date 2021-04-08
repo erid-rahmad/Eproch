@@ -60,7 +60,7 @@ public class CEventTypelineService {
     }
 
     public List<CEventTypelineDTO> findByEventTypeId(Long eventTypeId) {
-        return cEventTypelineMapper.toDto(cEventTypelineRepository.findByEventType_Id(eventTypeId));
+        return cEventTypelineMapper.toDto(cEventTypelineRepository.findByEventType_IdOrderBySequence(eventTypeId));
     }
 
     /**
