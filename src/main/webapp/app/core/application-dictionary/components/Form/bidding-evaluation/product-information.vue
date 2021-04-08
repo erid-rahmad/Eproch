@@ -26,7 +26,7 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Biding No" prop="name" required>
-                                <h7>BP-123</h7>
+                                <h7>BN-00001</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -57,7 +57,7 @@
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="Ceilling Price" prop="name" required>
-                                    <h7>290.000.000.000</h7>
+                                    <h7>29,570,000,000.00</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -94,27 +94,30 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="" label="Date Document Received" width="170">
+                    <template slot-scope="{ row }">
+                        <el-row v-for="item in row.attachments" :key="item.id">
                     <el-col :span="24">
                         <el-col :span="24">
-                            <template>
+                            
                                 <div class="block">
                                     <span class="demonstration"></span>
-                                    <el-date-picker v-model="value1" type="date" placeholder="Pick a date " default-value="2010-10-01">
+                                    <el-date-picker v-model="item.date" type="date" placeholder="Pick a date " default-value="2010-10-01">
                                     </el-date-picker>
                                 </div>
-                            </template>
+                            
                         </el-col>
-                        <el-col :span="24">
-                          <template>
+                        <!-- <el-col :span="24">
+                            
                                 <div class="block">
                                     <span class="demonstration"></span>
                                     <el-date-picker v-model="value1" type="date" placeholder="Pick a date" default-value="2010-10-01">
                                     </el-date-picker>
                                 </div>
-                            </template>
-                        </el-col>
+                           
+                        </el-col> -->
                     </el-col>
-
+                        </el-row>
+                    </template>
                 </el-table-column>
 
                 <el-table-column prop="" label="Document Evaluation" width="150">
@@ -122,7 +125,7 @@
                         <el-row>
                             <el-col :span="24">
                                 <template>
-                                    <el-checkbox v-model="checked" @click="download">check</el-checkbox>
+                                    <el-checkbox v-model="checked" @click="checked = false">check</el-checkbox>
                                 </template>
                             </el-col>
                             <el-col :span="24">
@@ -134,20 +137,32 @@
                         </el-row>
                     </template>
                 </el-table-column>
-
-
-
                 <el-table-column label="Evaluation">
                     <el-table-column label="Bidding Evaluation">
-                        <el-table-column prop="5" label="quality" width="80">
+                        <el-table-column  label="quality" min-width="140">
+                           <template slot-scope="{ row }">
+                                <el-input-number v-model="row.quality" controls-position="right" size="mini" @change="handleChange" :min="1" :max="10"></el-input-number>
+                            </template>
                         </el-table-column>
-                        <el-table-column prop="6" label="cost" width="80">
+                        <el-table-column prop="6" label="cost" min-width="140">
+                           <template slot-scope="{ row }">
+                                <el-input-number v-model="row.cost" controls-position="right"  size="mini" @change="handleChange" :min="1" :max="10"></el-input-number>
+                            </template>
                         </el-table-column>
-                        <el-table-column prop="7" label="delivery" width="80">
+                        <el-table-column prop="7" label="delivery" min-width="140">
+                            <template slot-scope="{ row }">
+                                <el-input-number v-model="row.delivery" controls-position="right" size="mini" @change="handleChange" :min="1" :max="10"></el-input-number>
+                            </template>
                         </el-table-column>
-                        <el-table-column prop="8" label="safety" width="80">
+                        <el-table-column prop="8" label="safety" min-width="140">
+                           <template slot-scope="{ row }">
+                                <el-input-number v-model="row.safety" controls-position="right" size="mini" @change="handleChange" :min="1" :max="10"></el-input-number>
+                            </template>
                         </el-table-column>
-                        <el-table-column prop="9" label="marale" width="80">
+                        <el-table-column prop="9" label="marale" min-width="140">
+                           <template slot-scope="{ row }">
+                                <el-input-number v-model="row.marale" controls-position="right" size="mini" @change="handleChange" :min="1" :max="10"></el-input-number>
+                            </template>
                         </el-table-column>
                     </el-table-column>
                 </el-table-column>

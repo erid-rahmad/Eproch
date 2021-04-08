@@ -44,11 +44,13 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       priceRanking: 3,
       attachments: [{
           id: 1000,
-          documentName: 'Proposal Teknis'
+        documentName: 'Proposal Teknis',
+          date:'2021-03-22'
         },
         {
           id: 2000,
-          documentName: 'Quotation'
+          documentName: 'Quotation',
+          date:'2021-03-22'
         }
       ],
       qualityScore: 2,
@@ -58,12 +60,13 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       moraleScore: 2,
       totalScore: 9,
       scoreRanking: 3,
-      5: '2',
-      6: '1',
-      7: '2',
-      8: '2',
-      9: '2',
-      11: '22/12/2021',
+      quality: '2',
+      cost: '1',
+      delivery: '2',
+      safety: '2',
+      marale: '2',
+    11: '22/12/2021',
+      value:'',
     },
     {
       vendorName: 'SISTECH KHARISMA',
@@ -71,11 +74,13 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       priceRanking: 1,
       attachments: [{
           id: 1000,
-          documentName: 'Proposal Teknis'
+        documentName: 'Proposal Teknis',
+        date:'2021-03-22'
         },
         {
           id: 2000,
-          documentName: 'Quotation'
+          documentName: 'Quotation',
+          date:'2021-03-22'
         }
       ],
       qualityScore: 3,
@@ -85,11 +90,11 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       moraleScore: 3,
       totalScore: 14,
       scoreRanking: 1,
-      5: '3',
-      6: '3',
-      7: '2',
-      8: '3',
-      9: '2',
+      quality: '3',
+      cost: '3',
+      delivery: '2',
+      safety: '3',
+      marale: '2',
       11: '22/12/2021',
     },
     {
@@ -98,11 +103,13 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       priceRanking: 2,
       attachments: [{
           id: 1000,
-          documentName: 'Proposal Teknis'
+        documentName: 'Proposal Teknis',
+        date:'2021-03-22'
         },
         {
           id: 2000,
-          documentName: 'Quotation'
+          documentName: 'Quotation',
+          date:'2021-03-22'
         }
       ],
       qualityScore: 2,
@@ -112,11 +119,11 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       moraleScore: 2,
       totalScore: 10,
       scoreRanking: 2,
-      5: '2',
-      6: '2',
-      7: '2',
-      8: '2',
-      9: '2',
+      quality: '2',
+      cost: '2',
+      delivery: '2',
+      safety: '2',
+      marale: '2',
       11: '22/12/2021',
     },
   ];
@@ -161,7 +168,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     },
   ];
   checked: true;
-  value1= '';
+  value1= '2021-03-22';
 
   rules = {}
 

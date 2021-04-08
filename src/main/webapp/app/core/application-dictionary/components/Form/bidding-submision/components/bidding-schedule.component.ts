@@ -79,7 +79,7 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
     no: '1',
     dockument: 'Profesional safety support - Bagaimana penanganan / pengelolaan profesional safety supportt ? ',
     dockument1: 'wajib',
-    dockument3: '',
+    dockument3: 'yes',
         
         
     input: '',
@@ -87,7 +87,7 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
     no: '1',
     dockument: 'Enviromental - Sejauh mana perusahaan anda mengelola kebijakan lingkungan kerja ',
     dockument1: 'wajib',
-    dockument3: '',
+    dockument3: 'yes',
         
   },
   ];
@@ -103,7 +103,7 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
     no: '1',
     dockument: 'apakah pengurus menetapkan kebijakan pengelolaan usaha dan perngendalian kegiatan usaha perusahaan ',
     dockument1: 'wajib',
-    dockument3: 'no',
+    dockument3: 'yes',
         
   },
   ];

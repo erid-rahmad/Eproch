@@ -12,26 +12,26 @@
                                             {{ row.$index+1 }}
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="0" label="Bidding No" sortable width="180">
+                                    <el-table-column prop="documentNo" label="Bidding No" sortable width="180">
                                     </el-table-column>
-                                    <el-table-column prop="1" label="Title" sortable width="180">
+                                    <el-table-column prop="name" label="Title" sortable width="180">
                                     </el-table-column>
-                                    <el-table-column prop="2" label="Biding Type" sortable width="180">
+                                    <el-table-column prop="biddingTypeName" label="Biding Type" sortable width="180">
                                     </el-table-column>
-                                    <el-table-column prop="3" label="Depertement" sortable width="180">
+                                    <el-table-column prop="costCenterName" label="Depertement" sortable width="180">
                                     </el-table-column>
-                                    <el-table-column prop="4" label="PIC" sortable width="180">
+                                    <el-table-column prop="adUserUserName" label="PIC" sortable width="180">
                                     </el-table-column>
                                     <el-table-column prop="5" label="Join Vendor" sortable width="180">
-                                        <template slot-scope="row">
-                                             <el-button class="button" size="mini" icon="el-icon-user" @click="dialogTableVisible = true">2</el-button>                                             
+                                        <template slot-scope="{row}">
+                                             <el-button class="button" size="mini" icon="el-icon-user" @click="dialogTableVisible = true">{{row.joinedVendorCount}}</el-button>                                             
                                         </template>                                       
                                     </el-table-column>
-                                    <el-table-column prop="6" label="Biding Status" sortable width="180">
+                                    <el-table-column prop="documentStatus" label="Biding Status" sortable width="180">
                                     </el-table-column>
-                                    <el-table-column prop="7" label="Modified" width="180">
+                                    <el-table-column prop="lastModifiedDate" label="Modified" width="180">
                                     </el-table-column>
-                                    <el-table-column prop="8" label="Modified By" width="180">
+                                    <el-table-column prop="lastModifiedBy" label="Modified By" width="180">
                                     </el-table-column>
                                     <el-table-column min-width="120" sortable label="Summary">
                                         <template slot-scope="{ row }">

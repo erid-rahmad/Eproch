@@ -191,13 +191,13 @@
                         </template>
                     </el-table-column>
                     <el-table-column align="center" min-width="20">
-                        <template slot="header">
+                        <!-- <template slot="header">
                             <el-button
                                 size="mini"
                                 icon="el-icon-plus"
                                 type="primary"
                                 @click="addProject"/>
-                        </template>
+                        </template> -->
                         <template slot-scope="row">
                             <el-button
                                 size="mini"

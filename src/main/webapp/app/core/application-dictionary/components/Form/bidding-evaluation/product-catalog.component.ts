@@ -22,36 +22,51 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   private tabTitleOptions = [];
   setRows = [];
   setRow = {};
+  tableData: any= { };
+
+  private moreInformationData() {
+    // this.dynamicWindowService(`/api/m-biddings/${this.biddingrow.id}`)
+    this.dynamicWindowService("/api/m-biddings")
+      .retrieve({
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['documentNo']
+        }
+      })
+      .then(res => {
+        this.tableData = res.data;        
+        console.log("this more information", this.tableData);
+      });
+  }
 
   data() {
     return {
-      tableData: [{
-        
-          0: 'BN-00002',
-          1: 'Office Suply Bind',
-          2: 'Tender good',
-          3: 'General Afair',
-          4: 'Admin Tender',
-          5: '2',
-          6: 'Inprogres',
-          7: '22/22/2021',
-        8: 'Admin tender',
-        name: '2',
-        },
-        {
-
-          0: 'BN-00002',
-          1: 'Pengadaan Kendaraan Operasional',
-          2: 'Tender good',
-          3: 'Marketing',
-          4: 'Admin Tender',
-          5: '2',
-          6: 'Inprogres',
-          7: '22/22/2021',
-          8: 'Admin tender',
-          name:'3',
-        },
-      ],
+      // tableData: [{        
+      //     0: 'BN-00002',
+      //     1: 'Office Suply Bind',
+      //     2: 'Tender good',
+      //     3: 'General Afair',
+      //     4: 'Admin Tender',
+      //     5: '2',
+      //     6: 'Inprogres',
+      //     7: '22/22/2021',
+      //   8: 'Admin tender',
+      //   name: '2',
+      //   },
+      //   {
+      //     0: 'BN-00002',
+      //     1: 'Pengadaan Kendaraan Operasional',
+      //     2: 'Tender good',
+      //     3: 'Marketing',
+      //     4: 'Admin Tender',
+      //     5: '2',
+      //     6: 'Inprogres',
+      //     7: '22/22/2021',
+      //     8: 'Admin tender',
+      //     name:'3',
+      //   },
+      // ],
       gridData: [{
         date: '2016-05-02',
         name: 'Wescon Interasional',
@@ -59,14 +74,6 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
       }, {
         date: '2016-05-04',
         name: 'Sistech Kharisma',
-        address: 'No.1518,  Jinshajiang Road, Putuo District'
-      }, {
-        date: '2016-05-01',
-        name: 'John Smith',
-        address: 'No.1518,  Jinshajiang Road, Putuo District'
-      }, {
-        date: '2016-05-03',
-        name: 'John Smith',
         address: 'No.1518,  Jinshajiang Road, Putuo District'
       }],
       dialogTableVisible: false,
@@ -104,6 +111,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   created() {
     const token = localStorage.getItem('jhi-authenticationToken') || sessionStorage.getItem('jhi-authenticationToken');
     this.importHeaders['Authorization'] = `Bearer ${token}`;
+    this.moreInformationData();
 
     this.retrieveGetReferences(this.keyReferenceProductCatalog);
   }

@@ -57,7 +57,7 @@
                     <el-form-item label="Attachment" prop="bidingType">
                         <template slot-scope="{ row }">
                             <el-button class="btn-attachment" icon="el-icon-upload" size="mini" type="primary" @click="downloadAttachment(row)">
-                                SertifikatK3l.pdf
+                                Safety_pilicy.pdf
                             </el-button>
                         </template>
                     </el-form-item>
@@ -94,7 +94,7 @@
                     <el-form-item label="Attachment" prop="bidingType">
                         <template slot-scope="{ row }">
                             <el-button class="btn-attachment" icon="el-icon-upload" size="mini" type="primary" @click="downloadAttachment(row)">
-                                suport.pdf
+                                enviromentalpolicy.pdf
                             </el-button>
                         </template>
                     </el-form-item>
@@ -135,7 +135,7 @@
                     <el-form-item label="Attachment" prop="bidingType">
                         <template slot-scope="{ row }">
                             <el-button class="btn-attachment" icon="el-icon-upload" size="mini" type="primary" @click="downloadAttachment(row)">
-                                Organisasi.pdf
+                                sop dan struktur organisasi.pdf
                             </el-button>
                         </template>
                     </el-form-item>

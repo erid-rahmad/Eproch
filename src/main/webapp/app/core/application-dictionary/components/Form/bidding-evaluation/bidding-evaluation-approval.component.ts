@@ -64,7 +64,7 @@ export default class BiddingEvaluationApproval extends Mixins(AccessLevelMixin) 
 
   supportingDocument = {
     picUserName: 'Admin Tender',
-    fileName: 'Bidding Proposal.pdf'
+    fileName: 'Suport.pdf'
   }
 
   evaluationResult = [
