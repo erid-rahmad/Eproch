@@ -64,7 +64,7 @@ export default class BiddingEvaluationApproval extends Mixins(AccessLevelMixin) 
 
   supportingDocument = {
     picUserName: 'Admin Tender',
-    fileName: 'Suport.pdf'
+    fileList: []
   }
 
   evaluationResult = [
@@ -192,6 +192,10 @@ export default class BiddingEvaluationApproval extends Mixins(AccessLevelMixin) 
 
   get defaultDocumentAction() {
     return 'APV';
+  }
+
+  onFileListChanged(_file, fileList) {
+    this.$set(this.supportingDocument, 'fileList', fileList);
   }
 
   created() {

@@ -58,9 +58,24 @@
                                 {{ supportingDocument.picUserName }}
                             </el-form-item>
                             <el-form-item label="Document">
-                                <el-button class="btn-attachment" icon="el-icon-download" size="mini" type="primary">
-                                    {{ supportingDocument.fileName }}
-                                </el-button>
+                                <el-upload
+                                    class="upload-demo"
+                                    action="/api/c-attachments/upload"
+                                    :file-list="supportingDocument.fileList"
+                                    :on-change="onFileListChanged"
+                                    :limit="1"
+                                    :multiple="false"
+                                >
+                                    <el-button
+                                        size="mini"
+                                        type="primary"
+                                    >
+                                        Click to upload
+                                    </el-button>
+                                    <div slot="tip" class="el-upload__tip">
+                                        pdf files with a size less than 2mb
+                                    </div>
+                                </el-upload>
                             </el-form-item>
                         </el-col>
                     </el-row>
