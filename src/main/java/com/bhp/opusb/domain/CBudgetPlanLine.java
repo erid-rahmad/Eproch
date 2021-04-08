@@ -58,6 +58,11 @@ public class CBudgetPlanLine extends AbstractAuditingEntity {
     @JsonIgnoreProperties("cBudgetPlanLines")
     private CDocumentType cDocumentType;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cBudgetPlanLines")
+    private CBudgetPlan cBudgetPlan;
+
     /**
      * Mandatory for document type Bidding
      */
@@ -164,6 +169,19 @@ public class CBudgetPlanLine extends AbstractAuditingEntity {
 
     public void setCDocumentType(CDocumentType cDocumentType) {
         this.cDocumentType = cDocumentType;
+    }
+
+    public CBudgetPlan getCBudgetPlan() {
+        return cBudgetPlan;
+    }
+
+    public CBudgetPlanLine cBudgetPlan(CBudgetPlan cBudgetPlan) {
+        this.cBudgetPlan = cBudgetPlan;
+        return this;
+    }
+
+    public void setCBudgetPlan(CBudgetPlan cBudgetPlan) {
+        this.cBudgetPlan = cBudgetPlan;
     }
 
     public MBidding getMBidding() {

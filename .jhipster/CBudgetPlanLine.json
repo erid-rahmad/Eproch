@@ -41,6 +41,14 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "cBudgetPlan",
+            "otherEntityRelationshipName": "cBudgetPlanLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cBudgetPlan",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "mBidding",
             "otherEntityRelationshipName": "cBudgetPlanLine",
             "javadoc": "Mandatory for document type Bidding",

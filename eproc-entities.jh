@@ -1458,6 +1458,7 @@ relationship ManyToOne {
 	CBudgetPlanLine{adOrganization required} to ADOrganization
 	CBudgetPlanLine{cCurrency required} to CCurrency
 	CBudgetPlanLine{cDocumentType required} to CDocumentType
+	CBudgetPlanLine{cBudgetPlan required} to CBudgetPlan
 
 	/** Mandatory for document type Bidding */
 	CBudgetPlanLine{mBidding} to MBidding

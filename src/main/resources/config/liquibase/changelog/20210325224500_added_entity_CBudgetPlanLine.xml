@@ -85,8 +85,17 @@
             <column name="ad_organization_id" type="numeric"/>
             <column name="c_currency_id" type="numeric"/>
             <column name="c_document_type_id" type="numeric"/>
+            <column name="c_budget_plan_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210409012200" author="Ananta Aryadewa">
+        <addColumn tableName="c_budget_plan_line">
+            <column name="c_budget_plan_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

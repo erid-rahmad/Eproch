@@ -38,6 +38,13 @@ public class CBudgetPlanLineDTO extends AbstractAuditingDTO {
 
     @JsonProperty("cDocumentTypeName")
     private String cDocumentTypeName;
+
+    @JsonProperty("cBudgetPlanId")
+    private Long cBudgetPlanId;
+
+    @JsonProperty("cBudgetPlanName")
+    private Long cBudgetPlanName;
+
     /**
      * Mandatory for document type Bidding
      */
@@ -47,6 +54,7 @@ public class CBudgetPlanLineDTO extends AbstractAuditingDTO {
 
     @JsonProperty("mBiddingName")
     private String mBiddingName;
+
     /**
      * Mandatory for document type Purchase Order
      */
@@ -56,6 +64,7 @@ public class CBudgetPlanLineDTO extends AbstractAuditingDTO {
 
     @JsonProperty("mPurchaseOrderName")
     private String mPurchaseOrderName;
+
     /**
      * Mandatory for document type Purchase Requisition
      */
@@ -146,6 +155,22 @@ public class CBudgetPlanLineDTO extends AbstractAuditingDTO {
         this.cDocumentTypeName = cDocumentTypeName;
     }
 
+    public Long getCBudgetPlanId() {
+        return cBudgetPlanId;
+    }
+
+    public void setCBudgetPlanId(Long cBudgetPlanId) {
+        this.cBudgetPlanId = cBudgetPlanId;
+    }
+
+    public Long getCBudgetPlanName() {
+        return cBudgetPlanName;
+    }
+
+    public void setCBudgetPlanName(Long cBudgetPlanName) {
+        this.cBudgetPlanName = cBudgetPlanName;
+    }
+
     public Long getMBiddingId() {
         return mBiddingId;
     }
@@ -225,6 +250,7 @@ public class CBudgetPlanLineDTO extends AbstractAuditingDTO {
             ", adOrganizationId=" + getAdOrganizationId() +
             ", cCurrencyId=" + getCCurrencyId() +
             ", cDocumentTypeId=" + getCDocumentTypeId() +
+            ", cBudgetPlanId=" + getCBudgetPlanId() +
             ", mBiddingId=" + getMBiddingId() +
             ", mPurchaseOrderId=" + getMPurchaseOrderId() +
             ", mRequisitionId=" + getMRequisitionId() +

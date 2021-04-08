@@ -45,4 +45,14 @@
                                  referencedTableName="m_requisition"/>
 
     </changeSet>
+
+    <changeSet id="20210409012300" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="c_budget_plan_id"
+                                 baseTableName="c_budget_plan_line"
+                                 constraintName="fk_c_budget_plan_line_c_budget_plan_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_budget_plan"/>
+
+    </changeSet>
 </databaseChangeLog>

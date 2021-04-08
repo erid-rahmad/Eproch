@@ -112,6 +112,10 @@ public class CBudgetPlanLineQueryService extends QueryService<CBudgetPlanLine> {
                 specification = specification.and(buildSpecification(criteria.getCDocumentTypeId(),
                     root -> root.join(CBudgetPlanLine_.cDocumentType, JoinType.LEFT).get(CDocumentType_.id)));
             }
+            if (criteria.getCBudgetPlanId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCBudgetPlanId(),
+                    root -> root.join(CBudgetPlanLine_.cBudgetPlan, JoinType.LEFT).get(CBudgetPlan_.id)));
+            }
             if (criteria.getMBiddingId() != null) {
                 specification = specification.and(buildSpecification(criteria.getMBiddingId(),
                     root -> root.join(CBudgetPlanLine_.mBidding, JoinType.LEFT).get(MBidding_.id)));

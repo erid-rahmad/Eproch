@@ -5,6 +5,7 @@ import com.bhp.opusb.domain.CBudgetPlanLine;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CCurrency;
 import com.bhp.opusb.domain.CDocumentType;
+import com.bhp.opusb.domain.CBudgetPlan;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.MPurchaseOrder;
 import com.bhp.opusb.domain.MRequisition;
@@ -114,6 +115,16 @@ public class CBudgetPlanLineResourceIT {
             cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
         }
         cBudgetPlanLine.setCDocumentType(cDocumentType);
+        // Add required entity
+        CBudgetPlan cBudgetPlan;
+        if (TestUtil.findAll(em, CBudgetPlan.class).isEmpty()) {
+            cBudgetPlan = CBudgetPlanResourceIT.createEntity(em);
+            em.persist(cBudgetPlan);
+            em.flush();
+        } else {
+            cBudgetPlan = TestUtil.findAll(em, CBudgetPlan.class).get(0);
+        }
+        cBudgetPlanLine.setCBudgetPlan(cBudgetPlan);
         return cBudgetPlanLine;
     }
     /**
@@ -157,6 +168,16 @@ public class CBudgetPlanLineResourceIT {
             cDocumentType = TestUtil.findAll(em, CDocumentType.class).get(0);
         }
         cBudgetPlanLine.setCDocumentType(cDocumentType);
+        // Add required entity
+        CBudgetPlan cBudgetPlan;
+        if (TestUtil.findAll(em, CBudgetPlan.class).isEmpty()) {
+            cBudgetPlan = CBudgetPlanResourceIT.createUpdatedEntity(em);
+            em.persist(cBudgetPlan);
+            em.flush();
+        } else {
+            cBudgetPlan = TestUtil.findAll(em, CBudgetPlan.class).get(0);
+        }
+        cBudgetPlanLine.setCBudgetPlan(cBudgetPlan);
         return cBudgetPlanLine;
     }
 
@@ -513,6 +534,22 @@ public class CBudgetPlanLineResourceIT {
 
         // Get all the cBudgetPlanLineList where cDocumentType equals to cDocumentTypeId + 1
         defaultCBudgetPlanLineShouldNotBeFound("cDocumentTypeId.equals=" + (cDocumentTypeId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCBudgetPlanLinesByCBudgetPlanIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CBudgetPlan cBudgetPlan = cBudgetPlanLine.getCBudgetPlan();
+        cBudgetPlanLineRepository.saveAndFlush(cBudgetPlanLine);
+        Long cBudgetPlanId = cBudgetPlan.getId();
+
+        // Get all the cBudgetPlanLineList where cBudgetPlan equals to cBudgetPlanId
+        defaultCBudgetPlanLineShouldBeFound("cBudgetPlanId.equals=" + cBudgetPlanId);
+
+        // Get all the cBudgetPlanLineList where cBudgetPlan equals to cBudgetPlanId + 1
+        defaultCBudgetPlanLineShouldNotBeFound("cBudgetPlanId.equals=" + (cBudgetPlanId + 1));
     }
 
 
