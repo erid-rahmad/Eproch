@@ -30,7 +30,7 @@ export default class BiddingResult extends mixins(AccessLevelMixin, BiddingResul
   ];
 
   mainForm = {
-    documentNo: null,
+    costEvaluationNo: 'CE-00001',
     biddingNo: 'BN-00001',
     biddingEvaluationNo: 'BE-00101',
     biddingTitle: 'Pengadaan Kendaraan Operasional',
@@ -45,22 +45,22 @@ export default class BiddingResult extends mixins(AccessLevelMixin, BiddingResul
 
   tableData = [
     {
+      vendorName: 'WESTCON INTERNATIONAL INDONESIA',
+      proposedPrice: 29450000000,
+      priceGap: '0.4%',
+      totalScore: '9'
+    },
+    {
       vendorName: 'SISTECH KHARISMA',
-      proposedPrice: 29000000000,
-      priceGap: '3%',
-      totalScore: '30'
+      proposedPrice: 29310000000,
+      priceGap: '0.88%',
+      totalScore: '14'
     },
     {
       vendorName: 'INGRAM MICRO INDONESIA',
-      proposedPrice: 29200000000,
-      priceGap: '5%',
-      totalScore: '22'
-    },
-    {
-      vendorName: 'WESTCON INTERNATIONAL INDONESIA',
-      proposedPrice: 29100000000,
-      priceGap: '4%',
-      totalScore: '24'
+      proposedPrice: 29400000000,
+      priceGap: '0.57%',
+      totalScore: '10'
     }
   ];
 

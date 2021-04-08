@@ -45,10 +45,10 @@
         >
           <el-form-item
             label="Cost Evaluation No."
-            prop="documentNo"
+            prop="costEvaluationNo"
           >
             <el-input
-              v-model="mainForm.documentNo"
+              v-model="mainForm.costEvaluationNo"
               clearable
             ></el-input>
           </el-form-item>
@@ -148,6 +148,11 @@
                 {{ row.proposedPrice | formatCurrency }}
               </template>
             </el-table-column>
+            <el-table-column
+              label="Price Gap"
+              prop="priceGap"
+              min-width="100"
+            ></el-table-column>
             <el-table-column
               label="Total Score"
               prop="totalScore"
