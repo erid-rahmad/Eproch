@@ -15,9 +15,7 @@
           :data="bidding.biddingSchedules"
           :default-sort="gridSchema.defaultSort"
           :empty-text="gridSchema.emptyText"
-          :height="gridSchema.height"
           highlight-current-row
-          :max-height="gridSchema.maxHeight"
           size="mini"
           stripe
           style="width: 100%"
@@ -48,6 +46,7 @@
             <template slot-scope="{ row }">
               <el-date-picker
                 v-model="row.schedule"
+                :disabled="readOnly"
                 :format="dateDisplayFormat"
                 end-placeholder="End Datetime"
                 range-separator="To"
@@ -65,8 +64,9 @@
             min-width="100"
           >
             <template slot-scope="{ row }">
+              <!-- User can add attachments once the bidding is started. -->
               <el-button
-                :disabled="!bidding.processed && !bidding.approved"
+                :disabled="!readOnly"
                 icon="el-icon-paperclip"
                 size="mini"
                 type="primary"
@@ -93,9 +93,7 @@
           :data="bidding.documentSchedules"
           :default-sort="gridSchema.defaultSort"
           :empty-text="gridSchema.emptyText"
-          :height="gridSchema.height"
           highlight-current-row
-          :max-height="gridSchema.maxHeight"
           size="mini"
           stripe
           style="width: 100%; height: 100%"
@@ -161,6 +159,7 @@
           </el-table-column>
 
           <el-table-column
+            v-if="!readOnly"
             fixed="right"
             min-width="56"
           >
@@ -186,7 +185,8 @@
     </el-row>
 
     <el-dialog
-      width="50%"
+      class="attachment-form"
+      width="30%"
       :visible.sync="eventAttachmentVisible"
       title="Edit Attachments"
     >
@@ -208,6 +208,17 @@
           slot="tip"
         >Upload one or more files</div>
       </el-upload>
+      <div slot="footer">
+        <el-button
+          icon="el-icon-close"
+          size="mini"
+          style="margin-left: 0px;"
+          type="danger"
+          @click="eventAttachmentVisible = false"
+        >
+          {{ $t('entity.action.cancel') }}
+        </el-button>
+      </div>
     </el-dialog>
 
     <el-dialog
@@ -309,15 +320,33 @@
     height: 35px;
   }
 }
+
+.bidding-schedule {
+  .attachment-form {
+    .el-upload {
+      width: 100%;
+
+      .el-upload-dragger {
+        width: 100%;
+      }
+    }
+  }
+
+  .el-upload-list__item-name {
+    font-weight: 400;
+  }
+}
 </style>
 
 <style lang="scss" scoped>
-.bidding-schedule .el-tag {
-  border-radius: 12px;
-  margin: 4px 0;
+.bidding-schedule {
+  .el-tag {
+    border-radius: 12px;
+    margin: 4px 0;
 
-  .el-tag--success {
-    background: #80b600;
+    .el-tag--success {
+      background: #80b600;
+    }
   }
 }
 </style>

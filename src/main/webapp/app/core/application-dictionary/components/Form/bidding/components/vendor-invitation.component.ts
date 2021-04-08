@@ -1,11 +1,11 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { buildCascaderOptions } from '@/utils/form';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
+import PrequalificationForm from './prequalification-form.vue';
 
 const VendorInvitationProp = Vue.extend({
   props: {
@@ -17,85 +17,15 @@ const VendorInvitationProp = Vue.extend({
   }
 })
 
-@Component
+@Component({
+  components: {
+    PrequalificationForm
+  }
+})
 export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInvitationProp) {
 
   private updated = false;
   private recordsLoaded = true;
-
-  addNewRow() {
-    this.dummy2.push({
-      no: '1',
-      dockument: null,
-      dockument1: 'wajib',
-      input: '',
-    });
-  }
-
-  options = [
-    {
-      value: 'Wajib',
-      label: 'Wajib'
-    },
-    {
-      value: 'Optional',
-      label: 'Optional'
-    },
-    {
-      value: 'Tidak Wajib',
-      label: 'Tidak Wajib'
-    }
-  ];
-
-  value = '';
-  input = '';
-  projectinformation = [
-    {
-      no: '1',
-      information: 'Bidding proposal',
-      atachment: 'Bidding proposal Doc',
-    }
-  ];
-  dummy= [
-    {
-      no: '1',
-      dockument: 'Policy Statment - apakah perusahaan memiliki kebijakan K3L dalam menjalankan usahanya ? ',
-      dockument1: 'wajib',
-      input: '',
-    }, {
-      no: '1',
-      dockument: 'Emergency Response procedure - apakah perusahaan memiliki prosedur tanggap darurat ? ',
-      dockument1: 'wajib',
-    }, {
-      no: '1',
-      dockument: 'Basic Safety Rules - apakah perusahaan memiliki peraturan dasar keselamatan kerja ? ',
-      dockument1: 'wajib',
-    }
-  ];
-  dummy1= [
-    {
-      no: '1',
-      dockument: 'Profesional safety support - Bagaimana penanganan / pengelolaan profesional safety supportt ? ',
-      dockument1: 'wajib',
-      input: '',
-    }, {
-      no: '1',
-      dockument: 'Enviromental - Sejauh mana perusahaan anda mengelola kebijakan lingkungan kerja ',
-      dockument1: 'wajib',
-    },
-  ];
-  dummy2= [
-    {
-      no: '1',
-      dockument: 'Apakah pengurus telah menetapkan struktur organisasi perusahaan ',
-      dockument1: 'wajib',
-      input: '',
-    }, {
-      no: '1',
-      dockument: 'apakah pengurus menetapkan kebijakan pengelolaan usaha dan perngendalian kegiatan usaha perusahaan ',
-      dockument1: 'wajib',
-    }
-  ];
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -122,7 +52,43 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
     name: ''
   }
 
-  vendorSuggestion:any = {
+  vendorInvitations = [
+    {
+      businessClassificationName: 'Transportation and Automotive',
+      businessCategoryName: 'Automotive & Vehicle',
+      businessSubCategoryName: 'Car'
+    },
+    {
+      businessClassificationName: 'Transportation and Automotive',
+      businessCategoryName: 'Automotive & Vehicle',
+      businessSubCategoryName: 'Engine Parts'
+    },
+    {
+      businessClassificationName: 'Transportation and Automotive',
+      businessCategoryName: 'Automotive & Vehicle',
+      businessSubCategoryName: 'Motorbike'
+    }
+  ];
+
+  vendorSuggestions = [
+    {
+      vendorName: 'INGRAM MICRO INDONESIA',
+      businessSubCategoryName: 'Engine Parts',
+      address: 'WISMA NUGRAHA SANTANA 9TH FLOOR SUITE#909, JL. JEND. SUDIRMAN KAV.7-8, 10220, JAKARTA PUSAT'
+    },
+    {
+      vendorName: 'SISTECH KHARISMA',
+      businessSubCategoryName: 'Car',
+      address: 'JL. JUANDA 38-C, 10120, JAKARTA PUSAT'
+    },
+    {
+      vendorName: 'WESTCON INTERNATIONAL INDONESIA',
+      businessSubCategoryName: 'Motorbike',
+      address: 'GEDUNG MD PALACE TOWER 1, LT.5, JL. SETIABUDI SELATAN NO. 7 RT.05 RW.01, SETIABUDI, SETIABUDI, JAKARTA SELATAN'
+    }
+  ]
+
+  vendorSuggestion: any = {
     vendor: '',
     vendorObj: '',
     subCategoryObj: '',
@@ -145,6 +111,10 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   bidding: Record<string, any> = {};
   vendorSelection: string;
 
+  get readOnly() {
+    return this.bidding.biddingStatus === 'In Progress';
+  }
+
   @Watch('bidding', { deep: true })
   onBiddingChanged(_bidding: Record<string, any>) {
     if (this.recordsLoaded && ! this.updated) {
@@ -158,19 +128,19 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   }
 
   created() {
-    this.recordsLoaded = false;
+    // this.recordsLoaded = false;
     this.bidding = {...this.data};
 
     this.retrieveBusinessCategories();
     this.retrieveSubBusinessCategories();
 
-    Promise.allSettled([
-      this.retrieveVendorInvitations(this.bidding.id),
-      this.retrieveVendorSuggestions(this.bidding.id)
-    ])
-    .then(_results => {
-      this.recordsLoaded = true;
-    });
+    // Promise.allSettled([
+    //   this.retrieveVendorInvitations(this.bidding.id),
+    //   this.retrieveVendorSuggestions(this.bidding.id)
+    // ])
+    // .then(_results => {
+    //   this.recordsLoaded = true;
+    // });
 
     this.bidding.step = BiddingStep.SELECTION;
     this.vendorSelection = this.bidding.vendorSelection;
