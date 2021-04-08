@@ -14,7 +14,9 @@
         >
           <el-col
             :xs="24"
-            :sm="8"
+            :sm="12"
+            :lg="12"
+            :xl="8"
           >
             <el-form-item
               label="Biding No."
@@ -43,7 +45,9 @@
           </el-col>
           <el-col
             :xs="24"
-            :sm="8"
+            :sm="12"
+            :lg="12"
+            :xl="8"
           >
             <el-form-item label="Department">
               <el-input
@@ -60,6 +64,7 @@
             <el-form-item label="Amount">
               <el-input
                 v-model="mainForm.amount"
+                v-inputmask="{'alias': 'currency'}"
                 disabled
               ></el-input>
             </el-form-item>
@@ -161,7 +166,9 @@
         <el-row :gutter="columnSpacing">
           <el-col
             :xs="24"
-            :sm="12"
+            :sm="24"
+            :lg="18"
+            :xl="12"
           >
             <el-form-item label="Amount Total">
               <el-input
@@ -171,10 +178,12 @@
               ></el-input>
             </el-form-item>
             <el-form-item label="Quantity Total">
-              <el-input
+              <el-input-number
                 v-model="selectedConfirmation.quantity"
+                controls-position="right"
                 disabled
-              ></el-input>
+                size="mini"
+              ></el-input-number>
             </el-form-item>
           </el-col>
         </el-row>
@@ -280,7 +289,7 @@
           >
             <el-form-item label="Contract Attachment">
               <el-upload
-                action="https://jsonplaceholder.typicode.com/posts/"
+                action="/api/c-attachments/upload"
                 class="upload-demo"
                 :limit="1"
                 :multiple="false"

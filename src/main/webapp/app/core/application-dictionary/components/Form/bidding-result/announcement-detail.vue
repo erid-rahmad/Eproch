@@ -2,13 +2,19 @@
   <div class="bidding-result-announcement-detail">
     <el-form
       ref="mainForm"
+      disabled
       label-position="left"
-      label-width="150px"
+      label-width="200px"
       :model="data"
       size="mini"
     >
       <el-row :gutter="24">
-        <el-col :span="8">
+        <el-col
+          :xs="24"
+          :sm="12"
+          :lg="12"
+          :xl="8"
+        >
           <el-form-item label="Bidding No.">
             <el-input
               v-model="data.biddingNo"
@@ -34,14 +40,18 @@
             ></el-input>
           </el-form-item>
           <el-form-item label="Total Score">
-            <el-input
+            <el-input-number
               v-model="data.totalScore"
-              clearable
-            ></el-input>
+              controls-position="right"
+              :max="100"
+              :min="0"
+              size="mini"
+            ></el-input-number>
           </el-form-item>
           <el-form-item label="Contract Amount">
             <el-input
               v-model="data.contractAmount"
+              v-inputmask="{'alias': 'currency'}"
               clearable
             ></el-input>
           </el-form-item>

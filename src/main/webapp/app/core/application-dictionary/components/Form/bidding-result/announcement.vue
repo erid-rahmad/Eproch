@@ -15,7 +15,9 @@
         v-if="!index"
         icon="el-icon-check"
         size="mini"
+        style="margin-left: 0"
         type="primary"
+        @click="openVendorConfirmation"
       >
         Vendor Confirmation
       </el-button>

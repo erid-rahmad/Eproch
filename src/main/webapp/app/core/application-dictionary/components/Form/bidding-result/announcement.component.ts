@@ -22,19 +22,19 @@ export default class BiddingResultAnnouncement extends mixins(AccessLevelMixin, 
 
   announcements = [
     {
-      biddingNo: 'BN-0001',
+      biddingNo: 'BN-00001',
       biddingType: 'Tender Goods',
       biddingTitle: 'Pengadaan Kendaraan Operasional',
       type: 'Invitation',
       winner: 'SISTECH KHARISMA',
-      totalScore: 16,
-      contractAmount: 29000000000,
+      totalScore: 14,
+      contractAmount: 29310000000,
       currencyName: 'IDR'
     },
     {
-      biddingNo: 'BN-0002',
+      biddingNo: 'BN-00002',
       biddingType: 'Tender Goods',
-      biddingTitle: 'Pengadaan Office Equipment',
+      biddingTitle: 'Pengadaan Office Supply',
       type: 'Invitation',
       winner: 'INGRAM MICRO INDONESIA',
       totalScore: 11,
@@ -42,9 +42,9 @@ export default class BiddingResultAnnouncement extends mixins(AccessLevelMixin, 
       currencyName: 'IDR'
     },
     {
-      biddingNo: 'BN-0003',
+      biddingNo: 'BN-00003',
       biddingType: 'Tender Goods',
-      biddingTitle: 'Pengadaan Mesin',
+      biddingTitle: 'Pengadaan Kendaraan Marketing',
       type: 'Open',
       winner: 'WESTCON INTERNATIONAL',
       totalScore: 12,
@@ -63,6 +63,16 @@ export default class BiddingResultAnnouncement extends mixins(AccessLevelMixin, 
 
   closeDetail() {
     this.index = true;
+  }
+
+  openVendorConfirmation() {
+    this.$router.push({
+      path: '/bidding-management/vendor-confirmation',
+      query: {
+        t: '' + new Date().getTime,
+        doc: this.selectedRow.biddingNo
+      }
+    })
   }
 
   private setRow(record: any) {
