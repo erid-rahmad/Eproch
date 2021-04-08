@@ -30,7 +30,7 @@
                         <h7>{{moreInformation.biddingTypeName}}</h7>
                     </el-form-item>
                     <el-form-item label="Ceiling Price" prop="ceilingPrice" required>
-                        <h7>{{moreInformation.ceilingPrice}}</h7>
+                        <h7>{{moreInformation.ceilingPrice | formatCurrency}}</h7> 
                     </el-form-item>
                     <el-form-item label="Even Type" prop="evenType" required>
                         <h7>{{moreInformation.eventTypeName}}</h7>
@@ -60,7 +60,7 @@
             <h4>Requirement</h4>
         </el-divider>
         <el-row>
-            <el-col :span="24">
+           
                 <el-table v-loading="processing" ref="biddingInformationLine" highlight-current-row border stripe size="mini" style="width: 100%; height: 100%"
                     :data="moreInformation.biddingLineList">
                     <el-table-column min-width="30" label="No">
@@ -68,7 +68,7 @@
                             {{ row.$index+1 }}
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="100" prop="product.description" label="Product" />
+                    <el-table-column min-width="100" prop="productName" label="Product" />
                     <el-table-column min-width="60" sortable label="Product">
                         <template slot-scope="{ row, $index }">
                             <el-button class="button" icon="el-icon-search" size="mini" type="primary" @click="viewSubItem(row,$index)">
@@ -77,16 +77,23 @@
                         </template>
                     </el-table-column>
                     <el-table-column min-width="50" prop="quantity" label="Qty" />
-                    <el-table-column min-width="50" prop="uom.code" label="UoM" />
-                    <el-table-column min-width="80" prop="ceilingPrice" align="right" label="Ceiling Price/Unit">
+                    <el-table-column min-width="50" prop="uomName" label="UoM" />
+                    <el-table-column min-width="80"  align="right" label="Ceiling Price/Unit">
+                    <template slot-scope="{ row }">
+                        {{row.ceilingPrice | formatCurrency}}
+                    </template>
+               
                     </el-table-column>
-                    <el-table-column min-width="80" prop="totalCeilingPrice" align="right" label="Total Ceiling Price">
+                    <el-table-column min-width="80"  align="right" label="Total Ceiling Price">
+                        <template slot-scope="{ row }">
+                        {{row.totalCeilingPrice | formatCurrency}}
+                    </template>
                     </el-table-column>
                     <el-table-column min-width="70" prop="deliveryDate" label="Delivery Date">
                     </el-table-column>
-                    <el-table-column min-width="90" prop="" label="Price submision/unit">
+                    <el-table-column min-width="110" prop="" label="Price submision/unit">
                         <template slot-scope="{ row, $index }">
-                            <el-input-number v-inputmask="{'alias': 'currency'}" v-model="row.pricesubmision" :step="50000" clearable controls-position="right" size="mini"
+                            <el-input-number  v-inputmask="{'alias': 'currency'}" v-model="row.ceilingPrice1" :step="50000" clearable controls-position="right" 
                                 @change="value => onQuantityOrderedChanged(row, $index, value)"></el-input-number>
                         </template>
                     </el-table-column>
@@ -95,9 +102,8 @@
                             {{ row.totalpricesubmision | formatCurrency }}
                         </template>
                     </el-table-column>
-                    <el-table-column min-width="100" prop="remark" label="Remark" />
-                </el-table>
-            </el-col>
+                    <el-table-column min-width="50" prop="remark" label="Remark" />
+                </el-table>           
         </el-row>
         <el-dialog title="Sub Item" :visible.sync="dialogTableVisible11" width="80%">
             <h7>Produck PC</h7>

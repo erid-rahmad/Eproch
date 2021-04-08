@@ -51,7 +51,7 @@
                                     size="mini"
                                     type="primary"
                                     @click="view(row)">
-                                    PDF
+                                    {{row.event}}.pdf
 
                                     
                                 </el-button>

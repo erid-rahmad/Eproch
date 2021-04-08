@@ -19,7 +19,7 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Biding Title" prop="name" required>
-                                <h7>Penggadaan Kendaraan operasional</h7>
+                                <h7>Penggadaan Kendaraan operasional </h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -93,13 +93,25 @@
                         </el-row>
                     </template>
                 </el-table-column>
-                <el-table-column prop="" label="Document Received" width="150">
+                <el-table-column prop="" label="Date Document Received" width="170">
                     <el-col :span="24">
                         <el-col :span="24">
-                            <h7> 22/12/2021</h7>
+                            <template>
+                                <div class="block">
+                                    <span class="demonstration"></span>
+                                    <el-date-picker v-model="value1" type="date" placeholder="Pick a date " default-value="2010-10-01">
+                                    </el-date-picker>
+                                </div>
+                            </template>
                         </el-col>
                         <el-col :span="24">
-                            <h7> 22/12/2021</h7>
+                          <template>
+                                <div class="block">
+                                    <span class="demonstration"></span>
+                                    <el-date-picker v-model="value1" type="date" placeholder="Pick a date" default-value="2010-10-01">
+                                    </el-date-picker>
+                                </div>
+                            </template>
                         </el-col>
                     </el-col>
 
@@ -178,7 +190,7 @@
 <script lang="ts" src="./product-information.component.ts"></script>
 
 <style lang="scss">
-    .bidding-evaluation-approval {
+    .bidding-evaluation {
         display: grid;
         grid-template-columns: 100%;
         grid-template-rows: 36px auto;

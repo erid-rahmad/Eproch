@@ -161,6 +161,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
     },
   ];
   checked: true;
+  value1= '';
 
   rules = {}
 

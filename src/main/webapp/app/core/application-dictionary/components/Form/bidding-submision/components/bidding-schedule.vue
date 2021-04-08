@@ -57,7 +57,7 @@
                     <el-form-item label="Attachment" prop="bidingType">
                         <template slot-scope="{ row }">
                             <el-button class="btn-attachment" icon="el-icon-upload" size="mini" type="primary" @click="downloadAttachment(row)">
-                                Upload
+                                SertifikatK3l.pdf
                             </el-button>
                         </template>
                     </el-form-item>
@@ -74,12 +74,11 @@
                     </el-table-column>
                     <el-table-column min-width="120" prop="dockument" label="Question" />
                     <el-table-column min-width="30" prop="dockument1" label="requirment" />
-                    <el-table-column min-width="150" prop="vendorsubmision" label="Answer">
-                        <template slot="header">
+                    <el-table-column min-width="150"  label="Answer">                 
+                        <template slot-scope="{row}">
+                            <el-input class="form-input" size="mini" v-model="row.input" clearable required></el-input>
                         </template>
-                        <template slot-scope="row">
-                            <el-input class="form-input" size="mini" v-model="row.dockument" clearable required></el-input>
-                        </template></el-table-column>
+                        </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
@@ -95,7 +94,7 @@
                     <el-form-item label="Attachment" prop="bidingType">
                         <template slot-scope="{ row }">
                             <el-button class="btn-attachment" icon="el-icon-upload" size="mini" type="primary" @click="downloadAttachment(row)">
-                                Upload
+                                suport.pdf
                             </el-button>
                         </template>
                     </el-form-item>
@@ -115,8 +114,8 @@
                     <el-table-column min-width="150" prop="vendorsubmision" label="Answer">
                         <template slot="header">
                         </template>
-                        <template slot-scope="row">
-                            <el-input class="form-input" size="mini" v-model="row.dockument" clearable required></el-input>
+                        <template slot-scope="{row}">
+                            <el-input class="form-input" size="mini" v-model="row.dockument3" clearable required></el-input>
                         </template></el-table-column>
                 </el-table>
             </el-col>
@@ -136,7 +135,7 @@
                     <el-form-item label="Attachment" prop="bidingType">
                         <template slot-scope="{ row }">
                             <el-button class="btn-attachment" icon="el-icon-upload" size="mini" type="primary" @click="downloadAttachment(row)">
-                                Upload
+                                Organisasi.pdf
                             </el-button>
                         </template>
                     </el-form-item>
@@ -156,8 +155,8 @@
                     <el-table-column min-width="150" prop="vendorsubmision" label="Answer">
                         <template slot="header">
                         </template>
-                        <template slot-scope="row">
-                            <el-input class="form-input" size="mini" v-model="row.input" required></el-input>
+                        <template slot-scope="{row}">
+                            <el-input class="form-input" size="mini" v-model="row.dockument3" required></el-input>
                         </template></el-table-column>
                 </el-table>
             </el-col>

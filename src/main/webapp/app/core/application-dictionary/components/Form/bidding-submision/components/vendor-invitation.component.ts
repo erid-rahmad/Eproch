@@ -26,12 +26,7 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
   data() {
     return {
       eventschedule: [
-        {
-          no: '1',
-          event: 'Bidding Announcement',
-          start: '02/10/2021 14:00',
-          end: '02/20/2021 14:00',
-        },
+        
         {
           no: '2',
           event: 'Vendor Brieving',
@@ -46,28 +41,17 @@ export default class VendorInvitation extends mixins(Vue2Filters.mixin, AlertMix
         },
         {
           no: '5',
-          event: 'Bidding Submission',
+          event: 'Bidding Explanation Meeting',
           start: '02/10/2021 14:00',
           end: '02/20/2021 14:00',
         },
         {
           no: '6',
-          event: 'Bidding Evaluation',
+          event: 'Bidding Review',
           start: '02/10/2021 14:00',
           end: '02/20/2021 14:00',
         },
-        {
-          no: '7',
-          event: 'Bidding Approval',
-          start: '02/10/2021 14:00',
-          end: '02/20/2021 14:00',
-        },
-        {
-          no: '8',
-          event: 'Bidding Result',
-          start: '02/10/2021 14:00',
-          end: '02/20/2021 14:00',
-        },
+       
         
       ]
     }

@@ -25,18 +25,20 @@ export default class VendorScoring extends mixins(Vue2Filters.mixin, AlertMixin,
   data() {
     return {
       vendorscoring: [
+       
+       
         {
           no: '1',
           criteria: 'quality',
           subcriteria: 'quality',
-          persentage: '40',
+          persentage: '20',
           pic: 'procriutment',
         },
         {
           no: '2',
           criteria: 'cost',
           subcriteria: 'cost',
-          persentage: '20',
+          persentage: '40',
           pic: 'user finance',
         },
         {
@@ -55,8 +57,8 @@ export default class VendorScoring extends mixins(Vue2Filters.mixin, AlertMixin,
         },
         {
           no: '5',
-          criteria: 'price',
-          subcriteria: 'price',
+          criteria: 'Morale',
+          subcriteria: 'Morale',
           persentage: '10',
           pic: 'user finance',
         },

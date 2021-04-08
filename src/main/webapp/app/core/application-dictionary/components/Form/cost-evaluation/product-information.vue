@@ -1,7 +1,7 @@
 <template>
     <div>
         <el-row :gutter="columnSpacing">
-            <el-col :span="24">               
+            <el-col :span="24">
                 <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
                     Back
                 </el-button>
@@ -19,7 +19,7 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Evaluation No" prop="name">
-                                <h7>EV-00001</h7>
+                                <h7>CE-00001</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -33,7 +33,7 @@
                     <el-row :gutter="columnSpacing">
                         <el-col :span="24">
                             <el-form-item label="Biding No" prop="name">
-                                <h7>BP-00001</h7>
+                                <h7>BN-00001</h7>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -47,7 +47,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="Breakdown" prop="name">
-                                <el-button type="success" v-on:click="isHidden = !isHidden">BreakDown</el-button>  
+                                <el-button type="success" v-on:click="isHidden = !isHidden">BreakDown</el-button>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -71,7 +71,7 @@
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="Reference" prop="name">
-                                    <h7>100001</h7>
+                                    <h7>PR-21030031</h7>
                                 </el-form-item>
                             </el-col>
                         </el-row>
@@ -122,7 +122,7 @@
                     <el-table-column prop="6" label="subtotal" width="150">
                     </el-table-column>
                 </el-table-column>
-                <el-table-column prop="1" label="Vendor A" width="150">
+                <el-table-column prop="1" label="Sistech Kharisma" width="150">
                     <el-table-column prop="7" label="price" width="150">
                     </el-table-column>
                     <el-table-column prop="8" label="subtotal" width="150">
@@ -130,7 +130,7 @@
                     <el-table-column prop="9" label="Gap" width="150">
                     </el-table-column>
                 </el-table-column>
-                <el-table-column prop="1" label="Vendor B" width="150">
+                <el-table-column prop="1" label="Ingram Micro" width="150">
                     <el-table-column prop="10" label="price" width="150">
                     </el-table-column>
                     <el-table-column prop="11" label="subtotal" width="150">

@@ -40,70 +40,74 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
   dialogConfirmationVisible:boolean = false;
 
   public eventScheduleOptions: any = {};
-  public projectinformation: any = {};
+  // public projectinformation: any = {};
 
 
   private baseApiUrlEventTypeLine = "/api/c-event-typelines";
   
-  data() {
-    return {
-      input:'',
-      projectinformation: [
-        {
-          no: '1',
-          information: 'Bidding proposal',
-          atachment: 'Bidding proposal Doc',
-        }    
-      ],
-      dummy: [{
-        no: '1',
-        dockument: 'Policy Statment - apakah perusahaan memiliki kebijakan K3L dalam menjalankan usahanya ? ',
-        dockument1: 'wajib',
-        
-        
-        input:'',
-      },{
-        no: '1',
-          dockument: 'Emergency Response procedure - apakah perusahaan memiliki prosedur tanggap darurat ? ',
-          dockument1: 'wajib',
-        
-      },{
-        no: '1',
-          dockument: 'Basic Safety Rules - apakah perusahaan memiliki peraturan dasar keselamatan kerja ? ',
-          dockument1: 'wajib',
-        
-      }
-      ],
-      dummy1: [{
-        no: '1',
-        dockument: 'Profesional safety support - Bagaimana penanganan / pengelolaan profesional safety supportt ? ',
-        dockument1: 'wajib',
-        
-        
-        input:'',
-      },{
-        no: '1',
-          dockument: 'Enviromental - Sejauh mana perusahaan anda mengelola kebijakan lingkungan kerja ',
-          dockument1: 'wajib',
-        
-      },
-      ],
-      dummy2: [{
-        no: '1',
-        dockument: 'Apakah pengurus telah menetapkan struktur organisasi perusahaan ',
-        dockument1: 'wajib',
-        
-        
-        input:'',
-      },{
-        no: '1',
-          dockument: 'apakah pengurus menetapkan kebijakan pengelolaan usaha dan perngendalian kegiatan usaha perusahaan ',
-          dockument1: 'wajib',
-        
-      },
-    ],
+
+  projectinformation = [
+    {
+      no: '1',
+      information: 'Bidding proposal',
+      atachment: 'Bidding proposal Doc',
     }
-  };
+  ];
+  dummy = [{
+    no: '1',
+    dockument: 'Policy Statment - apakah perusahaan memiliki kebijakan K3L dalam menjalankan usahanya ? ',
+    dockument1: 'wajib',
+    input: 'yes',
+        
+        
+  
+  }, {
+    no: '1',
+    dockument: 'Emergency Response procedure - apakah perusahaan memiliki prosedur tanggap darurat ? ',
+    dockument1: 'wajib',
+    input: 'yes',
+        
+  }, {
+    no: '1',
+    dockument: 'Basic Safety Rules - apakah perusahaan memiliki peraturan dasar keselamatan kerja ? ',
+    dockument1: 'wajib',
+    input: 'yes',
+        
+  }
+  ];
+  dummy1 = [{
+    no: '1',
+    dockument: 'Profesional safety support - Bagaimana penanganan / pengelolaan profesional safety supportt ? ',
+    dockument1: 'wajib',
+    dockument3: '',
+        
+        
+    input: '',
+  }, {
+    no: '1',
+    dockument: 'Enviromental - Sejauh mana perusahaan anda mengelola kebijakan lingkungan kerja ',
+    dockument1: 'wajib',
+    dockument3: '',
+        
+  },
+  ];
+  dummy2= [{
+    no: '1',
+    dockument: 'Apakah pengurus telah menetapkan struktur organisasi perusahaan ',
+    dockument1: 'wajib',
+    dockument3: 'yes',
+        
+        
+    input: '',
+  }, {
+    no: '1',
+    dockument: 'apakah pengurus menetapkan kebijakan pengelolaan usaha dan perngendalian kegiatan usaha perusahaan ',
+    dockument1: 'wajib',
+    dockument3: 'no',
+        
+  },
+  ];
+
 
   private documentSchedule:any = {
     docEvent: "",
@@ -122,8 +126,9 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
   }
 
   private projectinformationData() {
-    this.dynamicWindowService(`/api/m-project-informationsby-bidding/${this.biddingrow.id}`)
-    // this.dynamicWindowService("/api/m-biddings/1")
+    // this.dynamicWindowService(`/api/m-project-informationsby-bidding/${this.biddingrow.id}`)
+    this.dynamicWindowService("/api/m-project-informationsby-bidding/1958806")
+
       .retrieve({
         paginationQuery: {
           page: 0,

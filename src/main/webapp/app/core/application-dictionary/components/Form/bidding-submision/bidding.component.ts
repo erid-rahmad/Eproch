@@ -250,44 +250,45 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
   ambildata() {
      axios
       .get('/api/m-biddings')
-      .then(res => {
-        this.gridData1 = res.data;
-        console.log("data tes 11",this.gridData1);
-      }); 
-    // this.gridData1 = [
-    //   {
-    //     documentNo: 'BD-0001',
-    //     name: 'Tender Kendaraan',
-    //     biddingTypeName: 'Bidding Type #101',
-    //     documentStatus: 'In Progress',
-    //     lastModifiedDate: '2021-03-20',
-    //     lastModifiedBy: 'Eko',
-    //   },
-    //   {
-    //     documentNo: 'BD-0002',
-    //     name: 'Tender Peralatan Kantor',
-    //     biddingTypeName: 'Bidding Type #101',
-    //     documentStatus: 'In Progress',
-    //     lastModifiedDate: '2021-03-18',
-    //     lastModifiedBy: 'Eko',
-    //   },
-    //   {
-    //     documentNo: 'BD-0003',
-    //     name: 'Tender Laptop',
-    //     biddingTypeName: 'Bidding Type #101',
-    //     documentStatus: 'In Progress',
-    //     lastModifiedDate: '2021-03-01',
-    //     lastModifiedBy: 'Eko',
-    //   },
-    //   {
-    //     documentNo: 'BD-0004',
-    //     name: 'Tender Kendaraan',
-    //     biddingTypeName: 'Bidding Type #101',
-    //     documentStatus: 'In Progress',
-    //     lastModifiedDate: '2021-02-25',
-    //     lastModifiedBy: 'Eko',
-    //   }
-    // ]
+      // .then(res => {
+      //   this.gridData1 = res.data;
+      //   console.log("data tes 11",this.gridData1);
+      // }); 
+    this.gridData1 = [
+      {
+        documentNo: 'BD-0001',
+        name: 'pengadaan kendaraan operasional',
+        biddingTypeName: 'Tender Goods',
+        documentStatus: 'In Progress',
+        lastModifiedDate: '2021-03-26  3:30:16 ',
+        lastModifiedBy: 'Admin Tender',
+        status: true,
+        action:'submit'
+
+        
+      },
+
+      {
+        documentNo: 'BD-0003',
+        name: 'pengadaan Office equepment',
+        biddingTypeName: 'Tender Goods',
+        documentStatus: 'In Progress',
+        lastModifiedDate: '2021-03-26  3:30:16  ',
+        lastModifiedBy: 'Admin Tender',
+        status: true,
+        action:'submit'
+      },
+      {
+        documentNo: 'BD-0004',
+        name: 'pengadaan kendaraan jabatan',
+        biddingTypeName: 'Tender Goods',
+        documentStatus: 'In Progress',
+        lastModifiedDate: '2021-03-26  3:30:16 ',
+        lastModifiedBy: 'Admin Tender',
+        status: false,
+        action:'register '
+      }
+    ]
   }
 
   formatDocumentStatus(value: string) {
