@@ -191,9 +191,12 @@ public class CAttachmentResource {
             .body(uploadedFile);
     }
 
-    @GetMapping("/c-attachments/download/{id}-{fileName}")
-    public ResponseEntity<Resource> downloadFile(@PathVariable Long id, @PathVariable String fileName,
+    @GetMapping("/c-attachments/download/{param}")
+    public ResponseEntity<Resource> downloadFile(@PathVariable String param,
             HttpServletRequest request) throws IOException {
+        int separatorIndex = param.indexOf("-");
+        long id = Long.parseLong(param.substring(0, separatorIndex));
+        String fileName = param.substring(separatorIndex + 1);
         Resource resource = cAttachmentService.loadFileAsResource(id, fileName);
 
         // Try to determine file's content type
