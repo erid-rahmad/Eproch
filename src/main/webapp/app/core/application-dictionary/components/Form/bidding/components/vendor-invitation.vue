@@ -145,7 +145,6 @@
                 size="mini"
                 icon="el-icon-delete"
                 type="danger"
-                :disabled="!canAddVendor"
                 @click="removeVendorSuggestion(row.$index)"
               ></el-button>
             </template>

@@ -24,7 +24,7 @@ const VendorInvitationProp = Vue.extend({
 })
 export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInvitationProp) {
 
-  private updated = false;
+  private updated = true;
   private recordsLoaded = true;
 
   @Inject('dynamicWindowService')
@@ -147,9 +147,9 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
 
     if (this.vendorSelection === 'OPN') {
       this.canAddVendor = false;
-    } else if (this.vendorSelection == 'IVT') {
+    } else if (this.vendorSelection === 'IVT') {
       this.canAddVendor = false;
-    } else if (this.vendorSelection == 'DRC') {
+    } else if (this.vendorSelection === 'DRC') {
       this.canAddVendor = true;
     }
   }

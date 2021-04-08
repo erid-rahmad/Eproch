@@ -5,8 +5,8 @@
         <el-form inline size="mini">
             <el-form-item label="Evaluation Method">
                 <el-select v-model="evaluationMethod">
-                    <el-option value="Evaluation Tender Service">Evaluation Tender Service</el-option>
-                    <el-option value="Evaluation Tender Goods">Evaluation Tender Goods</el-option>
+                    <el-option value="Evaluation Tender Service">Tender Service</el-option>
+                    <el-option value="Evaluation Tender Goods">Tender Goods</el-option>
                 </el-select>
             </el-form-item>
         </el-form>
@@ -14,19 +14,18 @@
         <el-row :gutter="24">
             <el-col :span="20">
                 <el-table
-                    v-loading="processing"
                     ref="vendorScoring"
-                    highlight-current-row
-                    border stripe
-                    :fit="false"
-                    size="mini"
-                    :max-height="gridSchema.maxHeight"
+                    border
+                    :data="bidding.scoringCriteria"
                     :default-sort="gridSchema.defaultSort"
                     :empty-text="gridSchema.emptyText"
-                    :data="bidding.scoringCriteria">
-
+                    highlight-current-row
+                    size="mini"
+                    stripe
+                    style="width: 100%"
+                >
                     <el-table-column
-                        min-width="48"
+                        width="48"
                         label="No"
                     >
                         <template slot-scope="row">
@@ -82,7 +81,11 @@
                         </template>
                     </el-table-column>
 
-                    <el-table-column align="center" min-width="56">
+                    <el-table-column
+                      v-if="!readOnly"
+                      align="center"
+                      width="56"
+                    >
                         <template slot="header">
                             <el-button
                                 size="mini"

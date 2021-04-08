@@ -1,15 +1,10 @@
+import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { ElForm } from 'element-ui/types/form';
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
-import Vue2Filters from 'vue2-filters';
 import Vue from 'vue';
 import Component from 'vue-class-component';
-import ContextVariableAccessor from "../../../ContextVariableAccessor";
-import { BiddingStep } from '../steps-form.component';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
-import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { Inject, Mixins } from 'vue-property-decorator';
-import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import { BiddingStep } from '../steps-form.component';
 
 const VendorScoringProp = Vue.extend({
   props: {
@@ -35,7 +30,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   };
   rules = {}
 
-  evaluationMethod = null;
+  evaluationMethod = 'Tender Goods';
   processing = false;
   dialogConfirmationVisible:boolean = false;
 
@@ -43,16 +38,20 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   public subCriteriaOptions: any = {};
 
   private vendorScoringCriteria:any = {
-    criteria: "",
-    criteriaObj: "",
-    subCriteria: "",
-    subCriteriaObj: "",
-    percentage: "",
-    pic: "",
-    picName: ""
+    criteria: '',
+    criteriaObj: '',
+    subCriteria: '',
+    subCriteriaObj: '',
+    percentage: '',
+    pic: '',
+    picName: ''
   };
 
   bidding: Record<string, any> = {};
+
+  get readOnly() {
+    return this.bidding.biddingStatus === 'In Progress';
+  }
 
   created() {
     this.bidding = {...this.data};
@@ -60,39 +59,48 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     this.bidding.scoringCriteria = [
       {
         criteria: 'Quality',
-        criteriaObj: "",
+        criteriaObj: '',
         subCriteria: 'Quality',
-        subCriteriaObj: "",
+        subCriteriaObj: '',
         percentage: 20,
         pic: 'Procurement',
         picName: 'Procurement'
       },
       {
         criteria: 'Cost',
-        criteriaObj: "",
+        criteriaObj: '',
         subCriteria: 'Cost',
-        subCriteriaObj: "",
-        percentage: 50,
-        pic: 'Finance',
-        picName: 'Finance'
+        subCriteriaObj: '',
+        percentage: 40,
+        pic: 'admincost',
+        picName: 'admincost'
       },
       {
         criteria: 'Delivery',
-        criteriaObj: "",
+        criteriaObj: '',
         subCriteria: 'Timeline',
-        subCriteriaObj: "",
-        percentage: 0,
-        pic: 'Finance',
-        picName: 'Finance'
+        subCriteriaObj: '',
+        percentage: 15,
+        pic: 'admintimeline',
+        picName: 'admintimeline'
       },
       {
         criteria: 'Safety',
-        criteriaObj: "",
+        criteriaObj: '',
         subCriteria: 'Packaging',
-        subCriteriaObj: "",
-        percentage: 0,
-        pic: 'Finance',
-        picName: 'Finance'
+        subCriteriaObj: '',
+        percentage: 15,
+        pic: 'adminpackaging',
+        picName: 'adminpackaging'
+      },
+      {
+        criteria: 'Morale',
+        criteriaObj: '',
+        subCriteria: 'Morale',
+        subCriteriaObj: '',
+        percentage: 15,
+        pic: 'adminmorale',
+        picName: 'adminmorale'
       }
     ];
 
@@ -100,7 +108,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   }
 
   private getCriteria() {
-    this.commonService("/api/c-bidding-criteria")
+    this.commonService('/api/c-bidding-criteria')
       .retrieve({
         criteriaQuery: this.updateCriteria([`active.equals=true`])
       })
@@ -114,9 +122,9 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
       return;
     }
 
-    this.vendorScoringCriteria.subCriteria = "";
-    this.vendorScoringCriteria.pic = "";
-    this.vendorScoringCriteria.picName = "";
+    this.vendorScoringCriteria.subCriteria = '';
+    this.vendorScoringCriteria.pic = '';
+    this.vendorScoringCriteria.picName = '';
     this.commonService('/api/c-bidding-sub-criteria')
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -156,13 +164,13 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     this.bidding.scoringCriteria.push(this.vendorScoringCriteria);
     this.dialogConfirmationVisible = false;
     this.vendorScoringCriteria = {
-      criteria: "",
-      criteriaObj: "",
-      subCriteria: "",
-      subCriteriaObj: "",
-      percentage: "",
-      pic: "",
-      picName: ""
+      criteria: '',
+      criteriaObj: '',
+      subCriteria: '',
+      subCriteriaObj: '',
+      percentage: '',
+      pic: '',
+      picName: ''
     };
   }
 
