@@ -97,10 +97,6 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
     return this.selectedRow.documentTypeId;
   }
 
-  get randomizeVendorCount() {
-    return (_row) => random(1, 3);
-  }
-
   @Watch('page')
   onPageChange(page: number) {
     this.loadPage(page);
@@ -204,7 +200,36 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
         paginationQuery
       })
       .then(res => {
-        this.gridData = res.data;
+        this.gridData = res.data.map(item => {
+          const documentNo = item.documentNo;
+          let biddingStatus: string;
+          let vendorCount: number;
+
+          if (documentNo === 'BN-00001' || documentNo === 'BN-00002' || documentNo === 'BD-21030023') {
+            biddingStatus = 'In Progress';
+            if (documentNo === 'BN-00001') {
+              vendorCount = 3;
+            } else {
+              vendorCount = 5;
+            }
+          } else {
+            biddingStatus = 'Not Started';
+            if (documentNo === 'BN-00003') {
+              vendorCount = 4;
+            } else if (documentNo === 'BN-00004') {
+              vendorCount = 3;
+            } else if (documentNo === 'BN-00005') {
+              vendorCount = 5;
+            } else {
+              vendorCount = random(0, 5);
+            }
+          }
+
+          item.biddingStatus = biddingStatus;
+          item.vendorCount = vendorCount;
+          return item;
+        });
+
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
 

@@ -9,7 +9,7 @@ export default class ScoreDetail extends mixins(AccessLevelMixin) {
 
   mainForm = {
     vendorName: 'SISTECH KHARISMA',
-    totalScore: 17
+    totalScore: 14
   };
 
   tableData = [
@@ -17,25 +17,25 @@ export default class ScoreDetail extends mixins(AccessLevelMixin) {
       criteria: 'Price',
       subCriteria: 'Item Price',
       percentage: '30%',
-      totalScore: '5',
+      score: '5',
     },
     {
       criteria: 'Delivery',
       subCriteria: 'Delivery Time',
       percentage: '30%',
-      totalScore: '3',
+      score: '3',
     },
     {
       criteria: 'On Required Demand',
       subCriteria: 'Based on Contract',
       percentage: '20%',
-      totalScore: '4',
+      score: '4',
     },
     {
       criteria: 'Quality',
       subCriteria: 'Product Quality',
       percentage: '20%',
-      totalScore: '5',
+      score: '5',
     },
   ];
 }

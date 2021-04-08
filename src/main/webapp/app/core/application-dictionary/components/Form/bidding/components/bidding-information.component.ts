@@ -71,7 +71,12 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
     attachmentId: null
   };
 
-  downloadStats = [];
+  downloadStats = [
+    { vendorName: 'INGRAM MICRO INDONESIA' },
+    { vendorName: 'SISTECH KHARISMA' },
+    { vendorName: 'WESTCON INTERNATIONAL INDONESIA'}
+  ];
+
   projectInfo = {};
   projectInfoStats = new Map<number, any[]>();
 
@@ -106,6 +111,10 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
     }
 
     return {};
+  }
+
+  get readOnly() {
+    return this.bidding.biddingStatus === 'In Progress';
   }
 
   @Watch('bidding', { deep: true })
@@ -618,7 +627,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   }
   
   showDownloadStats(row: any, index: number) {
-    this.downloadStats = this.projectInfoStats.get(index);
+    // this.downloadStats = this.projectInfoStats.get(index);
     this.projectInfo = row;
     this.showDownloadStatsDialog = true;
   }

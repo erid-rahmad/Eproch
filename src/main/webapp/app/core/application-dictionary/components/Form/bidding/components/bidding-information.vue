@@ -4,6 +4,7 @@
 
     <el-form
       ref="biddingInformation"
+      :disabled="readOnly"
       label-position="left"
       label-width="150px"
       :model="bidding"
@@ -323,6 +324,7 @@
                 v-if="!row.subItem"
                 v-model="row.ceilingPrice"
                 v-inputmask="{'alias': 'currency'}"
+                :disabled="readOnly"
                 size="mini"
                 @change="value => onCeilingPriceChange(row, value)"
               ></el-input>
@@ -350,6 +352,7 @@
                 v-model="row.deliveryDate"
                 class="form-input"
                 clearable
+                :disabled="readOnly"
                 :format="dateDisplayFormat"
                 placeholder="Pick a date"
                 size="mini"
@@ -368,6 +371,7 @@
               <el-input
                 v-model="row.remark"
                 clearable
+                :disabled="readOnly"
                 :maxlength="255"
                 size="mini"
               ></el-input>
@@ -460,6 +464,7 @@
             </template>
             <template slot-scope="{ row, $index }">
               <el-button
+                v-if="!readOnly"
                 icon="el-icon-delete"
                 size="mini"
                 type="danger"
@@ -522,6 +527,7 @@
     >
       <subitem-editor
         ref="subitemEditor"
+        :read-only="readOnly"
         :item-index="selectedItemIndex"
         :item-detail="selectedItem"
         @saved="onSubItemSaved"
@@ -538,6 +544,7 @@
           {{ $t('entity.action.cancel') }}
         </el-button>
         <el-button
+          v-if="!readOnly"
           :loading="savingSubitem"
           icon="el-icon-check"
           size="mini"

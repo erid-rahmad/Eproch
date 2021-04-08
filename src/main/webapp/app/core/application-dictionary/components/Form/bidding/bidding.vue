@@ -120,12 +120,9 @@
         <el-table-column
           label="Bidding Status"
           min-width="140"
+          prop="biddingStatus"
           sortable
-        >
-          <template slot-scope="{ row }">
-            {{ formatDocumentStatus(row.biddingStatus) }}
-          </template>
-        </el-table-column>
+        ></el-table-column>
 
         <el-table-column
           label="Joined Vendor"
@@ -138,7 +135,7 @@
               style="width: 100%"
               @click="viewJoinVendor"
             >
-              <svg-icon name="icomoo/115-users"></svg-icon> {{ row.documentNo === 'BN-00001' ? 3 : randomizeVendorCount(row) }}
+              <svg-icon name="icomoo/115-users"></svg-icon> {{ row.vendorCount }}
             </el-button>
           </template>
         </el-table-column>
@@ -191,7 +188,7 @@
 
     <el-dialog
       class="joined-vendor-dialog"
-      width="30%"
+      width="40%"
       :visible.sync="showJoinedVendors"
       title="Joined Vendors"
     >
@@ -204,7 +201,7 @@
       >
         <el-table-column
           label="No."
-          min-width="50"
+          width="50"
         >
           <template slot-scope="{ $index }">
             {{ $index + 1 }}
@@ -214,15 +211,15 @@
         <el-table-column
           label="Vendor"
           min-width="150"
+          show-overflow-tooltip
           sortable
           prop="name"
         ></el-table-column>
 
         <el-table-column
           label="Address"
-          min-width="100"
-          show-overflow-tooltip=""
-          sortable
+          min-width="200"
+          show-overflow-tooltip
           prop="location"
         ></el-table-column>
 

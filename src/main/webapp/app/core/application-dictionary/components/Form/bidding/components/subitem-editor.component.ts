@@ -1,11 +1,10 @@
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { ElForm } from 'element-ui/types/form';
+import { ElSelect } from 'element-ui/types/select';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
-import { ElSelect } from 'element-ui/types/select';
-import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 
 const SubitemEditorProp = Vue.extend({
   props: {
@@ -14,6 +13,7 @@ const SubitemEditorProp = Vue.extend({
       type: Object,
       default: () => {}
     },
+    readOnly: Boolean
   }
 });
 
