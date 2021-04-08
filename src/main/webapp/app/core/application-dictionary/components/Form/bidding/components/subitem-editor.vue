@@ -4,6 +4,7 @@
       ref="mainForm"
       label-width="150px"
       :model="mainForm"
+      :disabled="readOnly"
       :rules="validationSchema"
       size="mini"
     >
@@ -159,6 +160,7 @@
       >
         <template slot="header">
           <el-button
+            :disabled="readOnly"
             icon="el-icon-plus"
             size="mini"
             type="primary"
@@ -167,6 +169,7 @@
         </template>
         <template slot-scope="{ $index }">
           <el-button
+            v-if="!readOnly"
             icon="el-icon-delete"
             size="mini"
             type="danger"
