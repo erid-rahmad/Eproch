@@ -45,12 +45,14 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       attachments: [{
           id: 1000,
         documentName: 'Proposal Teknis',
-          date:'2021-03-22'
+        date: '2021-03-22',
+        checked:true
         },
         {
           id: 2000,
           documentName: 'Quotation',
-          date:'2021-03-22'
+          date: '2021-03-22',
+          checked:''
         }
       ],
       qualityScore: 2,
@@ -75,12 +77,14 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       attachments: [{
           id: 1000,
         documentName: 'Proposal Teknis',
-        date:'2021-03-22'
+        date: '2021-03-22',
+        checked:true
         },
         {
           id: 2000,
           documentName: 'Quotation',
-          date:'2021-03-22'
+          date: '2021-03-22',
+          checked:true
         }
       ],
       qualityScore: 3,
@@ -104,12 +108,14 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
       attachments: [{
           id: 1000,
         documentName: 'Proposal Teknis',
-        date:'2021-03-22'
+        date: '2021-03-22',
+        checked:''
         },
         {
           id: 2000,
           documentName: 'Quotation',
-          date:'2021-03-22'
+          date: '2021-03-22',
+          checked:''
         }
       ],
       qualityScore: 2,

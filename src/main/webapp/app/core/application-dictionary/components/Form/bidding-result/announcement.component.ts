@@ -22,35 +22,40 @@ export default class BiddingResultAnnouncement extends mixins(AccessLevelMixin, 
 
   announcements = [
     {
-      biddingNo: 'BN-0001',
-      biddingType: 'Tender Goods',
-      biddingTitle: 'Pengadaan Kendaraan Operasional',
-      type: 'Invitation',
-      winner: 'SISTECH KHARISMA',
-      totalScore: 16,
-      contractAmount: 29000000000,
-      currencyName: 'IDR'
-    },
-    {
-      biddingNo: 'BN-0002',
-      biddingType: 'Tender Goods',
-      biddingTitle: 'Pengadaan Office Equipment',
-      type: 'Invitation',
-      winner: 'INGRAM MICRO INDONESIA',
-      totalScore: 11,
-      contractAmount: 29200000000,
-      currencyName: 'IDR'
-    },
-    {
-      biddingNo: 'BN-0003',
+      biddingNo: 'BN-00000',
       biddingType: 'Tender Goods',
       biddingTitle: 'Pengadaan Mesin',
       type: 'Open',
       winner: 'WESTCON INTERNATIONAL',
       totalScore: 12,
       contractAmount: 29100000000,
-      currencyName: 'IDR'
-    }
+      currencyName: 'IDR',
+      status:'Terminate '
+    },
+    {
+      
+      biddingNo: 'BN-00001',
+      biddingType: 'Tender Goods',
+      biddingTitle: 'Pengadaan Kendaraan Operasional',
+      type: 'Invitation',
+      winner: 'SISTECH KHARISMA',
+      totalScore: 16,
+      contractAmount: 29000000000,
+      currencyName: 'IDR',
+      status:'Winner Selection'
+    },
+    {
+      biddingNo: 'BN-00002',
+      biddingType: 'Tender Goods',
+      biddingTitle: 'Pengadaan Office Equipment',
+      type: 'Invitation',
+      winner: 'INGRAM MICRO INDONESIA',
+      totalScore: 11,
+      contractAmount: 29200000000,
+      currencyName: 'IDR',
+      status:'In Progres'
+    },
+   
   ];
 
   onCurrentRowChanged(row: any) {

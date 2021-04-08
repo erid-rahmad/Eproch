@@ -256,7 +256,7 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
       // }); 
     this.gridData1 = [
       {
-        documentNo: 'BD-0001',
+        documentNo: 'BD-00001',
         name: 'pengadaan kendaraan operasional',
         biddingTypeName: 'Tender Goods',
         documentStatus: 'In Progress',
@@ -269,7 +269,7 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
       },
 
       {
-        documentNo: 'BD-0003',
+        documentNo: 'BD-00003',
         name: 'pengadaan Office equepment',
         biddingTypeName: 'Tender Goods',
         documentStatus: 'In Progress',
@@ -279,7 +279,7 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         action:'submit'
       },
       {
-        documentNo: 'BD-0004',
+        documentNo: 'BD-00004',
         name: 'pengadaan kendaraan jabatan',
         biddingTypeName: 'Tender Goods',
         documentStatus: 'In Progress',

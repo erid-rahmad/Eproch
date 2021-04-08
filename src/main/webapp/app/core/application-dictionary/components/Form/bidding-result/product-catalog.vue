@@ -1,35 +1,34 @@
 <template>
     <div class="app-container">
-
         <el-row v-if="index" class="main" ref="tableWrapper">
             <el-col :span="24">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <keep-alive>
                         <el-col :span="24">
-                            <el-table :data="tableData" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
+                            <el-table size="mini" :data="tableData" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
                                 <el-table-column min-width="30" label="No">
                                     <template slot-scope="row">
                                         {{ row.$index+1 }}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="1" label="Biding No" sortable width="180">
+                                <el-table-column prop="1" label="Biding No" sortable min-width="120">
                                 </el-table-column>
-                                <el-table-column prop="2" label="title" sortable width="120">
+                                <el-table-column prop="2" label="title" sortable min-width="200">
                                 </el-table-column>
-                                <el-table-column prop="3" label="Bidding type" sortable width="180">
+                                <el-table-column prop="3" label="Bidding type" sortable min-width="120">
                                 </el-table-column>
-                                <el-table-column prop="4" label="PIC" sortable width="180">
+                                <el-table-column prop="4" label="PIC" sortable min-width="120">
                                 </el-table-column>
-                                <el-table-column prop="5" label="Bidding Status" sortable width="180">
+                                <el-table-column prop="5" label="Bidding Status" sortable min-width="120">
 
                                 </el-table-column>
-                                <el-table-column prop="6" label="Joined Vendor" sortable width="180">
+                                <el-table-column prop="6" label="Joined Vendor" sortable min-width="180">
                                 </el-table-column>
-                                <el-table-column prop="7" label="Ceiling price" width="180">
+                                <el-table-column prop="7" label="Ceiling price" min-width="120">
                                 </el-table-column>
-                                <el-table-column prop="8" label="Proposal Price" width="180">
+                                <el-table-column prop="8" label="Proposal Price" min-width="120">
                                 </el-table-column>
-                                <el-table-column min-width="160" sortable label="Bidding Schedule">
+                                <el-table-column min-width="100" sortable label="Bidding Schedule">
                                     <template slot-scope="{ row }">
                                         <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="onClick('add')">
                                             View

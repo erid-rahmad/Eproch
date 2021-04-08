@@ -57,7 +57,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
         {
           1: 'HONDA CiViC 2 017',
           2: 'Honda',
-          3: 'Audio Control',
+          3: 'Audio - Controls On steering Column',
           4: '30',
           5: 'each',
           6: '349.000.000',
@@ -68,9 +68,9 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
           11: '31/12/2021',
         },
         {
-          1: 'HONDA 2015',
+          1: 'HONDA 2020',
           2: 'Honda',
-          3: 'CBR 250',
+          3: 'CBR 250RR',
           4: '100',
           5: 'each',
           6: '45.000.000',
@@ -84,6 +84,7 @@ export default class ProductInformation extends mixins(Vue2Filters.mixin, AlertM
 
       ],
       checked: true,
+      input1: 'BN-00001',
 
     }
   };

@@ -87,7 +87,7 @@
                             </el-col>
                             <el-col class="border" :span="12">
                                 <el-button class="btn-attachment" icon="el-icon-download" size="mini" type="primary">
-                                    Download
+                                   {{ item.documentName }}.pdf
                                 </el-button>
                             </el-col>
                         </el-row>
@@ -121,18 +121,18 @@
                 </el-table-column>
 
                 <el-table-column prop="" label="Document Evaluation" width="150">
-                    <template>
-                        <el-row>
+                    <template slot-scope="{ row }">
+                        <el-row v-for="item in row.attachments" :key="item.id">
                             <el-col :span="24">
+                                <template>
+                                    <el-checkbox v-model="item.checked" @click="checked = false">check</el-checkbox>
+                                </template>
+                            </el-col>
+                            <!-- <el-col :span="24">
                                 <template>
                                     <el-checkbox v-model="checked" @click="checked = false">check</el-checkbox>
                                 </template>
-                            </el-col>
-                            <el-col :span="24">
-                                <template>
-                                    <el-checkbox v-model="checked" @click="checked = false">check</el-checkbox>
-                                </template>
-                            </el-col>
+                            </el-col> -->
 
                         </el-row>
                     </template>

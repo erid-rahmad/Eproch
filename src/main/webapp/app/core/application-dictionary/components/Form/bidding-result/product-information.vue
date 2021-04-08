@@ -19,10 +19,10 @@
                     <el-col :span="12">
                         <el-form-item label="Bidding No" prop="" required>
                             <template>
-                                <el-col :span="6">
-                                    <el-input v-model="asd" class="form-input" clearable disabled></el-input>
+                                <el-col :span="7">
+                                    <el-input v-model="input1" class="form-input" clearable disabled></el-input>
                                 </el-col>
-                                <el-col :span="6">
+                                <el-col :span="5">
                                     <el-button type="primary" icon="el-icon-search">Search</el-button>
                                 </el-col>
                             </template>
@@ -47,10 +47,10 @@
                             </el-dropdown>
                         </el-form-item>
                         <el-form-item label="Ceilling Price" prop="biddingNo" required>
-                            <h7>29.000.000.000</h7>
+                            <h7>29,570,000,000.00</h7>
                         </el-form-item>
                         <el-form-item label="Proposal Price" prop="vurrency" required>
-                            <h7>269.000.000.000</h7>
+                            <h7>29,310,000,000.00</h7>
                         </el-form-item>
                     </el-col>
                 </el-row>

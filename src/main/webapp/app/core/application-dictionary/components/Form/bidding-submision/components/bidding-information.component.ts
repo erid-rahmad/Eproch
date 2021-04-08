@@ -40,7 +40,7 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
     "dateTrx": "2021-03-29",
     "documentNo": "BN-00001",
     "documentAction": "APV",
-    "documentStatus": "In Proses",
+    "documentStatus": "In Progres",
     "totalpricesubmision":29310000000,
     "approved": false,
     "processed": false,
