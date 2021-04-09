@@ -4,23 +4,13 @@
             <el-button v-if="!index" icon="el-icon-close" size="mini" type="danger" @click="closeDetail">
                 Close
             </el-button>
-
-            <el-button v-if="!index" icon="el-icon-check" size="mini" type="primary">
+            <el-button v-if="!index" icon="el-icon-check" size="mini"  style="margin-left: 0" type="primary" @click="openVendorConfirmation">
                 Vendor Confirmation
             </el-button>
         </div>
-      <el-button
-        v-if="!index"
-        icon="el-icon-check"
-        size="mini"
-        style="margin-left: 0"
-        type="primary"
-        @click="openVendorConfirmation"
-      >
-        Vendor Confirmation
-      </el-button>
-    </div>
-
+        <!-- <el-button v-if="!index" icon="el-icon-check" size="mini" style="margin-left: 0" type="primary" @click="openVendorConfirmation">
+            Vendor Confirmation ww
+        </el-button> -->
         <el-table v-if="index" ref="mainGrid" border :data="announcements" highlight-current-row size="mini" stripe style="width: 100%" @current-change="onCurrentRowChanged">
             <el-table-column label="No" width="50">
                 <template slot-scope="{ $index }">
@@ -44,9 +34,10 @@
                 </template>
             </el-table-column>
         </el-table>
-
         <bidding-result-announcement-detail v-else :data="selectedRow"></bidding-result-announcement-detail>
     </div>
+
+
 </template>
 <script lang="ts" src="./announcement.component.ts"></script>
 
