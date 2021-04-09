@@ -43,7 +43,7 @@ public class CBudgetPlanLineDTO extends AbstractAuditingDTO {
     private Long cBudgetPlanId;
 
     @JsonProperty("cBudgetPlanName")
-    private Long cBudgetPlanName;
+    private String cBudgetPlanName;
 
     /**
      * Mandatory for document type Bidding
@@ -163,11 +163,11 @@ public class CBudgetPlanLineDTO extends AbstractAuditingDTO {
         this.cBudgetPlanId = cBudgetPlanId;
     }
 
-    public Long getCBudgetPlanName() {
+    public String getCBudgetPlanName() {
         return cBudgetPlanName;
     }
 
-    public void setCBudgetPlanName(Long cBudgetPlanName) {
+    public void setCBudgetPlanName(String cBudgetPlanName) {
         this.cBudgetPlanName = cBudgetPlanName;
     }
 
