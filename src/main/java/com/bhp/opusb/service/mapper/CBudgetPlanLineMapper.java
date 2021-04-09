@@ -10,7 +10,7 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link CBudgetPlanLine} and its DTO {@link CBudgetPlanLineDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CCurrencyMapper.class, CDocumentTypeMapper.class, MBiddingMapper.class, MPurchaseOrderMapper.class, MRequisitionMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CCurrencyMapper.class, CDocumentTypeMapper.class, CBudgetPlanMapper.class, MBiddingMapper.class, MPurchaseOrderMapper.class, MRequisitionMapper.class})
 public interface CBudgetPlanLineMapper extends EntityMapper<CBudgetPlanLineDTO, CBudgetPlanLine> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
@@ -19,6 +19,8 @@ public interface CBudgetPlanLineMapper extends EntityMapper<CBudgetPlanLineDTO, 
     @Mapping(source = "CCurrency.code", target = "CCurrencyName")
     @Mapping(source = "CDocumentType.id", target = "CDocumentTypeId")
     @Mapping(source = "CDocumentType.name", target = "CDocumentTypeName")
+    @Mapping(source = "CBudgetPlan.id", target = "CBudgetPlanId")
+    @Mapping(source = "CBudgetPlan.name", target = "CBudgetPlanName")
     @Mapping(source = "MBidding.id", target = "MBiddingId")
     @Mapping(source = "MBidding.documentNo", target = "MBiddingName")
     @Mapping(source = "MPurchaseOrder.id", target = "MPurchaseOrderId")
@@ -30,6 +32,7 @@ public interface CBudgetPlanLineMapper extends EntityMapper<CBudgetPlanLineDTO, 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "CCurrencyId", target = "CCurrency")
     @Mapping(source = "CDocumentTypeId", target = "CDocumentType")
+    @Mapping(source = "CBudgetPlanId", target = "CBudgetPlan")
     @Mapping(source = "MBiddingId", target = "mBidding")
     @Mapping(source = "MPurchaseOrderId", target = "mPurchaseOrder")
     @Mapping(source = "MRequisitionId", target = "mRequisition")

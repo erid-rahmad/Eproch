@@ -55,7 +55,25 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   bidding: Record<string, any> = {};
   selectedEvent: any = null;
   eventAttachmentVisible = false;
-  tmpAttachments: any[] = [];
+  tmpAttachments: any[] = [
+    {
+      name: 'Berita Acara Rapat Penjelasan Dokumen Lelang.pdf',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+    },
+    {
+      name: 'Lampiran Berita Acara Rapat Penjelasan Dokumen Lelang (Risalah Tanya Jawab.pdf',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+    },
+    {
+      name: 'Daftar Hadir Rapat Penjelasan Pekerjaan.pdf',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+    },
+    {
+      name: 'Addendum Dokumen Lelang.pdf',
+      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
+    }
+  ];
+
 
   get dateDisplayFormat() {
     return settings.dateTimeDisplayFormat;
@@ -63,6 +81,10 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
 
   get dateValueFormat() {
     return settings.dateTimeValueFormat;
+  }
+
+  get readOnly() {
+    return this.bidding.biddingStatus === 'In Progress';
   }
 
   @Watch('bidding', { deep: true })
@@ -78,7 +100,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   }
 
   onAttachmentPreviewed(file: any) {
-    window.open(file.response.downloadUri, '_blank');
+    window.open(file.url, '_blank');
   }
 
   onAttachmentRemoved() {

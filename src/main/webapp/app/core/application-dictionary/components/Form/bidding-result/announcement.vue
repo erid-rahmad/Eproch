@@ -9,6 +9,17 @@
                 Vendor Confirmation
             </el-button>
         </div>
+      <el-button
+        v-if="!index"
+        icon="el-icon-check"
+        size="mini"
+        style="margin-left: 0"
+        type="primary"
+        @click="openVendorConfirmation"
+      >
+        Vendor Confirmation
+      </el-button>
+    </div>
 
         <el-table v-if="index" ref="mainGrid" border :data="announcements" highlight-current-row size="mini" stripe style="width: 100%" @current-change="onCurrentRowChanged">
             <el-table-column label="No" width="50">

@@ -33,29 +33,29 @@ export default class BiddingResultAnnouncement extends mixins(AccessLevelMixin, 
       status:'Terminate '
     },
     {
-      
+
       biddingNo: 'BN-00001',
       biddingType: 'Tender Goods',
       biddingTitle: 'Pengadaan Kendaraan Operasional',
       type: 'Invitation',
       winner: 'SISTECH KHARISMA',
-      totalScore: 16,
-      contractAmount: 29000000000,
+      totalScore: 14,
+      contractAmount: 29310000000,
       currencyName: 'IDR',
       status:'Winner Selection'
     },
     {
       biddingNo: 'BN-00002',
       biddingType: 'Tender Goods',
-      biddingTitle: 'Pengadaan Office Equipment',
+      biddingTitle: 'Pengadaan Office Supply',
       type: 'Invitation',
       winner: 'INGRAM MICRO INDONESIA',
       totalScore: 11,
       contractAmount: 29200000000,
       currencyName: 'IDR',
       status:'In Progres'
-    },
-   
+    }
+
   ];
 
   onCurrentRowChanged(row: any) {

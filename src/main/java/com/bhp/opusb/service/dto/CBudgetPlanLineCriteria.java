@@ -37,6 +37,8 @@ public class CBudgetPlanLineCriteria implements Serializable, Criteria {
 
     private LongFilter cDocumentTypeId;
 
+    private LongFilter cBudgetPlanId;
+
     private LongFilter mBiddingId;
 
     private LongFilter mPurchaseOrderId;
@@ -54,6 +56,7 @@ public class CBudgetPlanLineCriteria implements Serializable, Criteria {
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.cCurrencyId = other.cCurrencyId == null ? null : other.cCurrencyId.copy();
         this.cDocumentTypeId = other.cDocumentTypeId == null ? null : other.cDocumentTypeId.copy();
+        this.cBudgetPlanId = other.cBudgetPlanId == null ? null : other.cBudgetPlanId.copy();
         this.mBiddingId = other.mBiddingId == null ? null : other.mBiddingId.copy();
         this.mPurchaseOrderId = other.mPurchaseOrderId == null ? null : other.mPurchaseOrderId.copy();
         this.mRequisitionId = other.mRequisitionId == null ? null : other.mRequisitionId.copy();
@@ -120,6 +123,14 @@ public class CBudgetPlanLineCriteria implements Serializable, Criteria {
         this.cDocumentTypeId = cDocumentTypeId;
     }
 
+    public LongFilter getCBudgetPlanId() {
+        return cBudgetPlanId;
+    }
+
+    public void setCBudgetPlanId(LongFilter cBudgetPlanId) {
+        this.cBudgetPlanId = cBudgetPlanId;
+    }
+
     public LongFilter getMBiddingId() {
         return mBiddingId;
     }
@@ -162,6 +173,7 @@ public class CBudgetPlanLineCriteria implements Serializable, Criteria {
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(cCurrencyId, that.cCurrencyId) &&
             Objects.equals(cDocumentTypeId, that.cDocumentTypeId) &&
+            Objects.equals(cBudgetPlanId, that.cBudgetPlanId) &&
             Objects.equals(mBiddingId, that.mBiddingId) &&
             Objects.equals(mPurchaseOrderId, that.mPurchaseOrderId) &&
             Objects.equals(mRequisitionId, that.mRequisitionId);
@@ -177,6 +189,7 @@ public class CBudgetPlanLineCriteria implements Serializable, Criteria {
         adOrganizationId,
         cCurrencyId,
         cDocumentTypeId,
+        cBudgetPlanId,
         mBiddingId,
         mPurchaseOrderId,
         mRequisitionId
@@ -193,6 +206,7 @@ public class CBudgetPlanLineCriteria implements Serializable, Criteria {
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (cCurrencyId != null ? "cCurrencyId=" + cCurrencyId + ", " : "") +
                 (cDocumentTypeId != null ? "cDocumentTypeId=" + cDocumentTypeId + ", " : "") +
+                (cBudgetPlanId != null ? "cBudgetPlanId=" + cBudgetPlanId + ", " : "") +
                 (mBiddingId != null ? "mBiddingId=" + mBiddingId + ", " : "") +
                 (mPurchaseOrderId != null ? "mPurchaseOrderId=" + mPurchaseOrderId + ", " : "") +
                 (mRequisitionId != null ? "mRequisitionId=" + mRequisitionId + ", " : "") +

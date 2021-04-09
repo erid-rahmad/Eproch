@@ -15,13 +15,14 @@
         v-if="!index && isDraft"
         icon="el-icon-check"
         size="mini"
+        style="margin-left: 0"
         type="primary"
       >
         Save
       </el-button>
 
       <document-action-button
-        v-show="index || selectedRow.documentStatus === 'SMT'"
+        v-show="index || !selectedRow.approved"
         :approved="selectedRow.approved"
         :document-type-id="documentTypeId"
         :next-action="defaultDocumentAction"
@@ -102,6 +103,7 @@
           <el-button
             icon="el-icon-edit"
             size="mini"
+            style="width: 100%"
             type="primary"
             @click="viewDetail(row)"
           >
@@ -113,7 +115,7 @@
 
     <cost-evaluation-detail
       v-else
-      :approval="selectedRow.documentStatus === 'SMT'"
+      :approval="selectedRow.documentAction === 'SMT'"
       :data="selectedRow"
     ></cost-evaluation-detail>
 

@@ -43,12 +43,12 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
       picName: 'Admin Tender',
       costCenterName: 'Marketing',
       selectedWinner: 1,
-      amount: 29000000000,
+      amount: 29570000000,
       confirmationStatus: 'Need Confirmation'
     },
     {
-      biddingNo: 'BN-11011',
-      biddingTitle: 'Office Supply Bid',
+      biddingNo: 'BN-00002',
+      biddingTitle: 'Pengadaan Office Supply',
       biddingTypeName: 'Tender Goods',
       currencyName: 'IDR',
       picName: 'Admin Tender',
@@ -65,6 +65,17 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
 
   onCurrentRowChanged(row: any) {
     this.selectedRow = row;
+  }
+
+  created() {
+    const biddingNo = this.$route.query?.doc;
+    console.log('biddingNo:', biddingNo);
+    if (biddingNo) {
+      const row = this.vendorConfirmations.find(data => data.biddingNo === biddingNo);
+      if (row) {
+        this.viewDetail(row);
+      }
+    }
   }
 
   mounted() {
@@ -94,7 +105,7 @@ export default class VendorConfirmation extends mixins(AccessLevelMixin, VendorC
   }
 
   private setRow(record: any) {
-    (<ElTable>this.$refs.mainGrid).setCurrentRow(record);
+    (<ElTable>this.$refs.mainGrid)?.setCurrentRow(record);
   }
 
   viewDetail(row: any) {

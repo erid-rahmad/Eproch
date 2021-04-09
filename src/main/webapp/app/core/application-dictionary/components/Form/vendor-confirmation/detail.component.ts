@@ -32,8 +32,8 @@ export default class VendorConfirmationDetail extends mixins(AccessLevelMixin, V
   confirmations = [
     {
       vendorName: 'Sistech Kharisma',
-      amount: 29000000000,
-      quantity: 170,
+      amount: 29310000000,
+      quantity: 180,
       documentStatus: 'Draft',
       lines: [
         {

@@ -1,17 +1,5 @@
 <template>
   <div class="app-container cost-evaluation-detail">
-    <!-- <div class="toolbar">
-      <el-col :span="24">
-        <document-action-button
-          :approved="false"
-          :document-type-id="mainForm.documentTypeId"
-          :next-action="defaultDocumentAction"
-          size="mini"
-          window-type="TRANSACTION"
-          @change="onDocumentActionChanged"
-        ></document-action-button>
-      </el-col>
-    </div> -->
     <el-scrollbar class="form-wrapper">
       <el-form
         ref="mainForm"
@@ -26,7 +14,9 @@
         >
           <el-col
             :xs="24"
-            :sm="8"
+            :sm="24"
+            :lg="12"
+            :xl="8"
           >
             <el-form-item
               label="Cost Evaluation No."
@@ -34,7 +24,7 @@
             >
               <el-input
                 v-model="mainForm.documentNo"
-                disabled
+                :disabled="!approval"
               ></el-input>
             </el-form-item>
             <el-form-item
@@ -43,7 +33,7 @@
             >
               <el-input
                 v-model="mainForm.biddingTitle"
-                disabled
+                :disabled="!approval"
               ></el-input>
             </el-form-item>
             <el-form-item
@@ -52,7 +42,7 @@
             >
               <el-input
                 v-model="mainForm.biddingNo"
-                disabled
+                :disabled="!approval"
               ></el-input>
             </el-form-item>
             <el-form-item
@@ -61,13 +51,10 @@
             >
               <el-input
                 v-model="mainForm.currencyName"
-                disabled
+                :disabled="!approval"
               ></el-input>
             </el-form-item>
-            <el-form-item
-              v-if="!approval"
-              label=""
-            >
+            <el-form-item label="">
               <el-checkbox v-model="breakdown">
                 Breakdown
               </el-checkbox>
@@ -75,14 +62,16 @@
           </el-col>
           <el-col
             :xs="24"
-            :sm="8"
+            :sm="24"
+            :lg="12"
+            :xl="8"
           >
             <el-form-item
               label="Bidding Type"
             >
               <el-input
                 v-model="mainForm.biddingTypeName"
-                disabled
+                :disabled="!approval"
               ></el-input>
             </el-form-item>
             <el-form-item
@@ -91,7 +80,7 @@
             >
               <el-input
                 v-model="mainForm.picName"
-                disabled
+                :disabled="!approval"
               ></el-input>
             </el-form-item>
             <el-form-item
@@ -99,7 +88,7 @@
             >
               <el-input
                 v-model="mainForm.costCenterName"
-                disabled
+                :disabled="!approval"
               ></el-input>
             </el-form-item>
             <el-form-item
@@ -107,13 +96,10 @@
             >
               <el-input
                 v-model="mainForm.requisitionName"
-                disabled
+                :disabled="!approval"
               ></el-input>
             </el-form-item>
-            <el-form-item
-              v-if="!approval"
-              label="Evaluation Deadline"
-            >
+            <el-form-item label="Evaluation Deadline">
               2021-03-31 14:00
             </el-form-item>
           </el-col>
@@ -143,13 +129,13 @@
               min-width="150"
             ></el-table-column>
             <el-table-column
-              v-if="!approval && breakdown"
+              v-if="breakdown"
               label="Subitem"
               prop="subItem"
               min-width="150"
             ></el-table-column>
             <el-table-column
-              v-if="!approval && breakdown"
+              v-if="breakdown"
               label="Sub Subitem"
               prop="subSubItem"
               min-width="150"
@@ -173,7 +159,7 @@
           <el-table-column label="Evaluation">
             <el-table-column
               label="Price"
-              min-width="200"
+              min-width="150"
             >
               <template slot-scope="{ row }">
                 {{ row.evaluationPrice | formatCurrency }}
@@ -188,36 +174,10 @@
               </template>
             </el-table-column>
           </el-table-column>
-          <el-table-column label="INGRAM MICRO INDONESIA">
-            <el-table-column
-              label="Price"
-              min-width="200"
-            >
-              <template slot-scope="{ row }">
-                {{ row.vendor1Price | formatCurrency }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="Sub Total"
-              width="150"
-            >
-              <template slot-scope="{ row }">
-                {{ row.vendor1SubTotal | formatCurrency }}
-              </template>
-            </el-table-column>
-            <el-table-column
-              label="Gap"
-              width="200"
-            >
-              <template slot-scope="{ row }">
-                {{ row.evaluationSubTotal - row.vendor1SubTotal | formatCurrency }}
-              </template>
-            </el-table-column>
-          </el-table-column>
           <el-table-column label="SISTECH KHARISMA">
             <el-table-column
               label="Price"
-              min-width="200"
+              min-width="150"
             >
               <template slot-scope="{ row }">
                 {{ row.vendor2Price | formatCurrency }}
@@ -233,10 +193,36 @@
             </el-table-column>
             <el-table-column
               label="Gap"
-              width="200"
+              width="64"
             >
               <template slot-scope="{ row }">
-                {{ row.evaluationSubTotal - row.vendor2SubTotal | formatCurrency }}
+                {{ row.vendor2Gap }}
+              </template>
+            </el-table-column>
+          </el-table-column>
+          <el-table-column label="INGRAM MICRO INDONESIA">
+            <el-table-column
+              label="Price"
+              min-width="150"
+            >
+              <template slot-scope="{ row }">
+                {{ row.vendor1Price | formatCurrency }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="Sub Total"
+              width="150"
+            >
+              <template slot-scope="{ row }">
+                {{ row.vendor1SubTotal | formatCurrency }}
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="Gap"
+              width="64"
+            >
+              <template slot-scope="{ row }">
+                {{ row.vendor1Gap }}
               </template>
             </el-table-column>
           </el-table-column>
@@ -244,7 +230,9 @@
         <el-row style="margin-top: 16px">
           <el-col
             :xs="24"
-            :sm="8"
+            :sm="24"
+            :lg="12"
+            :xl="8"
           >
             <el-form-item
               label="Note"
