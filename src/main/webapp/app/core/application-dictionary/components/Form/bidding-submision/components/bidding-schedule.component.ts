@@ -46,17 +46,12 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
   dialogConfirmationVisible: boolean = false;
 
   public eventScheduleOptions: any = {};
-  // public projectinformation: any = {};
 
 
   private baseApiUrlEventTypeLine = "/api/c-event-typelines";
 
 
-  projectinformation = [{
-    no: '1',
-    information: 'Bidding proposal',
-    atachment: 'Bidding proposal Doc',
-  }];
+  projectinformation = [];
   dummy = [{
     no: '1',
     dockument: 'Policy Statment - apakah perusahaan memiliki kebijakan K3L dalam menjalankan usahanya ? ',
@@ -128,9 +123,12 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
 
   private projectinformationData() {
     // this.dynamicWindowService(`/api/m-project-informationsby-bidding/${this.biddingrow.id}`)
-    this.dynamicWindowService("/api/m-project-informationsby-bidding/1958806")
+    this.dynamicWindowService("/api/m-project-informations")
 
       .retrieve({
+        criteriaQuery: [
+          'biddingId.equals=1958806'
+        ],
         paginationQuery: {
           page: 0,
           size: 10000,
@@ -138,116 +136,7 @@ export default class BiddingSchedule extends mixins(Vue2Filters.mixin, AlertMixi
         }
       })
       .then(res => {
-        this.projectinformation = [{
-            "createdBy": "admin",
-            "createdDate": "2021-03-29T03:30:16.507924Z",
-            "lastModifiedBy": "admin",
-            "lastModifiedDate": "2021-03-29T03:30:16.507924Z",
-            "id": 1958906,
-            "uid": "7091e357-d56c-4397-a57a-eb28850f431c",
-            "active": true,
-            "name": "Bidding Proposal",
-            "biddingId": 1958806,
-            "biddingName": "Pengadaan Kendaraan Operasional",
-            "adOrganizationId": 33851,
-            "adOrganizationName": "Berca Hardayaperkasa",
-            "attachment": {
-              "createdBy": "anonymousUser",
-              "createdDate": "2021-03-29T03:27:46.923768Z",
-              "lastModifiedBy": "anonymousUser",
-              "lastModifiedDate": "2021-03-29T03:27:46.923768Z",
-              "id": 1958753,
-              "type": "LOCAL",
-              "fileName": "bhp132572448130081500.xlsx",
-              "imageSmall": null,
-              "imageMedium": null,
-              "imageLarge": null,
-              "mimeType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-              "documentType": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-              "uploadDir": null,
-              "uid": "effc6c2a-083a-428f-82ec-71a05f344e5f",
-              "active": true,
-              "adOrganizationId": 1,
-              "adOrganizationName": "All"
-            },
-            "attachmentId": 1958753,
-            "attachmentName": "bhp132572448130081500.xlsx"
-          },
-          {
-            "createdBy": "admin",
-            "createdDate": "2021-03-29T06:39:52.262102Z",
-            "lastModifiedBy": "admin",
-            "lastModifiedDate": "2021-03-29T06:39:52.262102Z",
-            "id": 1959701,
-            "uid": "44480ea2-65f8-4e28-8505-e8e6e78dfb25",
-            "active": true,
-            "name": "Data Sheet",
-            "biddingId": 1958806,
-            "biddingName": "Pengadaan Kendaraan Operasional",
-            "adOrganizationId": 33851,
-            "adOrganizationName": "Berca Hardayaperkasa",
-            "attachment": {
-              "createdBy": "admin",
-              "createdDate": "2021-03-29T06:33:04.461847Z",
-              "lastModifiedBy": "admin",
-              "lastModifiedDate": "2021-03-29T06:33:04.461847Z",
-              "id": 1959604,
-              "type": "LOCAL",
-              "fileName": "1616999584452_B Data Sheet.pdf.pdf",
-              "imageSmall": null,
-              "imageMedium": null,
-              "imageLarge": null,
-              "mimeType": "application/pdf",
-              "documentType": "application/pdf",
-              "uploadDir": null,
-              "uid": "cfc99aa7-ce50-4e73-8cdb-c316972d1173",
-              "active": true,
-              "adOrganizationId": 1,
-              "adOrganizationName": "All"
-            },
-            "attachmentId": 1959604,
-            "attachmentName": "1616999584452_B Data Sheet.pdf.pdf"
-          },
-          {
-            "createdBy": "admin",
-            "createdDate": "2021-03-29T06:39:52.266820Z",
-            "lastModifiedBy": "admin",
-            "lastModifiedDate": "2021-03-29T06:39:52.266820Z",
-            "id": 1959702,
-            "uid": "718c5c47-f093-4b89-acf5-9ac0d8ec20f6",
-            "active": true,
-            "name": "Scope of Work",
-            "biddingId": 1958806,
-            "biddingName": "Pengadaan Kendaraan Operasional",
-            "adOrganizationId": 33851,
-            "adOrganizationName": "Berca Hardayaperkasa",
-            "attachment": {
-              "createdBy": "admin",
-              "createdDate": "2021-03-29T06:33:24.175234Z",
-              "lastModifiedBy": "admin",
-              "lastModifiedDate": "2021-03-29T06:33:24.175234Z",
-              "id": 1959605,
-              "type": "LOCAL",
-              "fileName": "1616999604171_B Scope of Work.pdf.pdf",
-              "imageSmall": null,
-              "imageMedium": null,
-              "imageLarge": null,
-              "mimeType": "application/pdf",
-              "documentType": "application/pdf",
-              "uploadDir": null,
-              "uid": "8e0c67d7-f490-465f-93de-9b8251e8b31d",
-              "active": true,
-              "adOrganizationId": 1,
-              "adOrganizationName": "All"
-            },
-            "attachmentId": 1959605,
-            "attachmentName": "1616999604171_B Scope of Work.pdf.pdf"
-          },
-
-        ];
         this.projectinformation = res.data;
-
-
         console.log("this more information", this.projectinformation);
       });
   }
