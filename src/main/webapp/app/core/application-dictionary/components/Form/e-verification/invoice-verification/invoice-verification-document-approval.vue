@@ -74,13 +74,15 @@
 
                     <el-table
                         v-loading="processing"
-                        highlight-current-row
                         border stripe
+                        :data="lines"
+                        :empty-text="gridSchema.emptyText"
+                        :height="gridSchema.height"
+                        highlight-current-row
+                        :max-height="gridSchema.maxHeight"
                         size="mini"
                         style="width: 100%; height: 100%; padding-top: 0px; margin-bottom: 10px;"
-                        :height="gridSchema.height"
-                        :empty-text="gridSchema.emptyText"
-                        :data="lines">
+                    >
 
                         <el-table-column
                             min-width="100"
@@ -112,6 +114,7 @@
                             min-width="250"
                             sortable
                             prop="mProductName"
+                            show-overflow-tooltip
                             label="Item Description"/>
                         <el-table-column
                             min-width="100"

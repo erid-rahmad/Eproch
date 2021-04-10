@@ -1,6 +1,5 @@
 import settings from '@/settings';
 import AlertMixin from '@/shared/alert/alert.mixin';
-import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import Vue from 'vue';
 import { mixins } from 'vue-class-component';
 import { Component, Watch } from 'vue-property-decorator';
@@ -154,8 +153,6 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
           return item;
         });
 
-        this.calculateLines();
-
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
         this.$emit('total-count-changed', this.queryCount);
@@ -171,22 +168,6 @@ export default class DetailVerificationDocument extends mixins(Vue2Filters.mixin
       .finally(() => {
         this.processing = false;
       });
-  }
-
-  private calculateLines() {
-    let totalLines = 0;
-    let totalAmount = 0;
-    let taxAmount = 0;
-
-    for (const row of this.gridData) {
-      totalLines += row.totalLines;
-      totalAmount += row.totalAmount;
-      taxAmount += row.taxAmount;
-    }
-
-    this.detailVerification.totalLines = totalLines;
-    this.detailVerification.taxAmount = taxAmount;
-    this.detailVerification.grandTotal = totalAmount;
   }
 
 }

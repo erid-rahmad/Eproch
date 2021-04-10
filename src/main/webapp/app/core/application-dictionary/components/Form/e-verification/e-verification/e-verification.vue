@@ -326,7 +326,7 @@
             ref="formUpdate"
             :form-update="selectedRow"
             :doc-status="documentStatuses"
-            @close-e-verification-update="closeEVerificationUpdate"
+            @close="closeEVerificationUpdate"
           />
         </el-col>
       </el-row>
@@ -425,6 +425,13 @@
 </script>
 
 <style lang="scss">
+.compact .e-verification {
+  .el-table--mini {
+    th, td {
+      height: 35px;
+    }
+  }
+}
 .e-verification {
     .el-pagination .el-input--mini .el-input__inner {
         height: 22px;

@@ -35,7 +35,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     height: 370
   };
 
-  public itemsPerPage = 10;
+  public itemsPerPage = 1000;
   public queryCount: number = null;
   public page = 1;
   public previousPage = 1;
@@ -48,23 +48,19 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   private baseApiUrlCurrency = "/api/c-currencies";
   private baseApiUrlTaxInvoice = "/api/c-tax-invoices";
   private enofaList: any[] = [];
+  private removedLines: any[] = [];
 
-  public gridData: Array<any> = [];
-  public removedLines: Array<any> = [];
-  lastTaxInvoice: string = "";
-  isDraft: boolean = false;
+  gridData: any[] = [];
 
-  private processing = false;
-  private fullscreenLoading: boolean = false;
+  processing = false;
+  fullscreenLoading: boolean = false;
 
   public currencyOptions: any[] = [];
 
   public dialogMatchPoVisible: boolean = false;
-  private totalAmount: number = null;
 
   public matchPo = {};
   public modeFilterMatchPo: any = {};
-  private filterQuery: string = "";
 
   header: Record<string, any> = {};
   
@@ -82,6 +78,12 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     return settings.dateValueFormat;
   }
 
+  get editable() {
+    const docStatus = this.header.documentStatus;
+
+    return !docStatus || docStatus === 'DRF' || docStatus === 'RJC' || docStatus === 'ROP';
+  }
+
   get taxInvoicePattern() {
     return settings.taxNoPattern16digits;
   }
@@ -92,13 +94,10 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       vendorName: accountStore.userDetails.cVendorName
     });
 
-    const docStatus = this.header.documentStatus;
 
     this.retrieveCurrencies();
-    this.isDraft = !docStatus || docStatus === 'DRF' || docStatus === 'RJC' || docStatus === 'ROP';
 
     if (this.header.id) {
-      this.filterQuery = `verificationId.equals=${this.header.id}`;
       this.retrieveEVerificationLine();
     } else {
       this.$set(this.header, 'dateTrx', new Date());
@@ -125,7 +124,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   // Pagination
   changePageSize(size: number) {
     this.itemsPerPage = size;
-    if(this.page!=1){
+    if (this.page != 1) {
       this.page = 0;
     }
     this.transition();
@@ -148,7 +147,6 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
   transition(): void {
     if (this.header.id) {
-      this.filterQuery = `verificationId.equals=${this.header.id}`;
       this.retrieveEVerificationLine();
     }
   }
@@ -183,7 +181,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
 
   public closeEVerificationUpdate() {
-    this.$emit('close-e-verification-update');
+    this.$emit('close');
   }
 
   /**
@@ -213,20 +211,18 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
   }
 
   private retrieveEVerificationLine(): void {
-    if ( ! this.baseApiUrlEVerificationLine) {
-      return;
-    }
-
     this.processing = true;
     const paginationQuery = {
-      page: this.page - 1,
-      size: this.itemsPerPage,
+      page: 0,
+      size: 10000,
       sort: this.sort()
     };
 
     this.dynamicWindowService(this.baseApiUrlEVerificationLine)
       .retrieve({
-        criteriaQuery: this.filterQuery,
+        criteriaQuery: [
+          `verificationId.equals=${this.header.id}`
+        ],
         paginationQuery
       })
       .then(res => {
@@ -278,6 +274,11 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
 
     this.mergeLines(lines);
     this.calculateLines();
+
+    if (!this.header.id) {
+      this.queryCount = this.gridData.length;
+    }
+    
     this.dialogMatchPoVisible = false;
   }
 
@@ -323,7 +324,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
       cTaxId: firstRow?.cTaxId,
       currencyId: firstRow?.cCurrencyId,
       matchPoCurrencyId: firstRow?.cCurrencyId,
-      taxable: firstRow?.taxable && firstRow?.cTaxCategoryId && firstRow?.cTaxId,
+      taxable: firstRow?.taxable && firstRow?.cTaxCategoryId && firstRow?.cTaxId ? true : false,
       totalLines: totalLines,
       taxAmount: taxAmount,
       grandTotal: totalAmount,

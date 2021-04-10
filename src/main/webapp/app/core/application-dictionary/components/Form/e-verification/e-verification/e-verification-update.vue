@@ -5,7 +5,7 @@
       <el-col :span="24">
 
         <el-button
-          v-if="isDraft"
+          v-if="editable"
           v-loading.fullscreen.lock="fullscreenLoading"
           class="button"
           style="margin-left: 0px;"
@@ -25,7 +25,7 @@
         />
 
         <el-button
-          v-if="isDraft"
+          v-if="editable"
           class="button"
           size="mini"
           type="primary"
@@ -36,7 +36,7 @@
         </el-button>
 
         <el-button
-          v-if="isDraft"
+          v-if="editable"
           class="button"
           style="margin-left: 0px;"
           size="mini"
@@ -63,7 +63,7 @@
           <el-form-item label="Invoice No." prop="invoiceNo" required>
             <el-input
               v-model="header.invoiceNo"
-              :disabled="!isDraft"
+              :disabled="!editable"
               class="form-input"
               clearable
             ></el-input>
@@ -73,7 +73,7 @@
                     v-model="header.invoiceDate"
                     class="form-input"
                     clearable
-                    :disabled="!isDraft"
+                    :disabled="!editable"
                     type="date"
                     :format="dateDisplayFormat"
                     :value-format="dateValueFormat"
@@ -82,7 +82,7 @@
             <el-form-item label="Currency" prop="currencyId" required>
                 <el-select
                     v-model="header.currencyId"
-                    :disabled="!isDraft"
+                    :disabled="!editable"
                     class="form-input"
                     clearable
                     filterable
@@ -97,7 +97,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item
-                v-if="!isDraft"
+                v-if="!editable"
                 label="Verification No"
                 prop="documentNo"
             >
@@ -108,7 +108,7 @@
                     v-model="header.dateTrx"
                     class="form-input"
                     clearable
-                    :disabled="!isDraft"
+                    :disabled="!editable"
                     :format="dateDisplayFormat"
                     type="date"
                     :value-format="dateValueFormat"
@@ -123,7 +123,7 @@
                     v-cleave="taxInvoicePattern"
                     ref="taxInvoice"
                     class="form-input"
-                    :disabled="!isDraft"
+                    :disabled="!editable"
                     placeholder="___.___-__.________"
                     @change="checkVerification"
                 ></el-input>
@@ -134,7 +134,7 @@
                     clearable
                     v-model="header.taxDate"
                     type="date"
-                    :disabled="!isDraft"
+                    :disabled="!editable"
                     :format="dateDisplayFormat"
                     :value-format="dateValueFormat"
                     placeholder="Pick a date" />
@@ -142,10 +142,10 @@
             <el-form-item label="NPWP" prop="vendorName">
                 <el-input class="form-input" disabled clearable v-model="header.vendorName"/>
             </el-form-item>
-            <el-form-item v-if="!isDraft" label="Status" prop="documentStatus">
+            <el-form-item v-if="!editable" label="Status" prop="documentStatus">
                 <el-input class="form-input" disabled clearable :value="formatDocumentStatus(header.documentStatus)"/>
             </el-form-item>
-            <el-form-item v-if="!isDraft" label="Status Date">
+            <el-form-item v-if="!editable" label="Status Date">
                 <el-date-picker
                     class="form-input"
                     clearable disabled
@@ -193,18 +193,17 @@
                     v-loading="processing"
                     highlight-current-row
                     border stripe
-                    size="mini"
-                    style="width: 100%; height: 100%"
-                    :height="gridSchema.height"
+                    :data="gridData"
                     :default-sort="gridSchema.defaultSort"
                     :empty-text="gridSchema.emptyText"
-                    :data="gridData"
+                    :max-height="gridSchema.maxHeight"
                     :row-class-name="rowClassName"
+                    size="mini"
                     @sort-change="changeOrder"
                 >
 
                     <el-table-column
-                        v-if="isDraft"
+                        v-if="editable"
                         align="center"
                         fixed
                         width="55"
@@ -247,6 +246,7 @@
                         min-width="250"
                         prop="mProductName"
                         label="Item Description"
+                        show-overflow-tooltip
                     />
                     <el-table-column
                         min-width="100"
@@ -294,7 +294,6 @@
                     </el-table-column>
                     <el-table-column
                         min-width="150"
-                        prop="totalAmount"
                         label="Total Amount"
                         align="right"
                     >
@@ -304,14 +303,14 @@
                     </el-table-column>
                 </el-table>
                 <el-pagination
-                    ref="pagination"
-                    background mini
-                    layout="sizes, prev, pager, next"
+                    ref="pagination, sizes, prev, pager, next"
+                    background
                     :current-page.sync="page"
-                    :page-sizes="[10, 20, 50, 100]"
+                    layout="total"
                     :page-size="itemsPerPage"
+                    small
                     :total="queryCount"
-                    @size-change="changePageSize"/>
+                ></el-pagination>
             </el-col>
         </el-row>
 
@@ -369,6 +368,11 @@
         line-height: 26px;
         margin-bottom: 0;
         padding: 0;
+    }
+    .el-table--mini {
+        th, td {
+            height: 35px;
+        }
     }
 }
 

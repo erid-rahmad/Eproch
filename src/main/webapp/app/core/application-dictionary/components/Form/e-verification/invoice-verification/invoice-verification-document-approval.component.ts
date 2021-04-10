@@ -25,8 +25,8 @@ export default class InvoiceVerificationDocumentApproval extends mixins(Vue2Filt
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
-    maxHeight: 250,
-    height: 210
+    maxHeight: 480,
+    height: 320
   };
   rules = {
 

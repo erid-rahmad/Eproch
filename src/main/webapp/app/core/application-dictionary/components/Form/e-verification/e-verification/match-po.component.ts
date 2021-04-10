@@ -22,11 +22,11 @@ export default class MatchPoUpdate extends mixins(Vue2Filters.mixin, AlertMixin,
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
-    maxHeight: 412,
-    height: 310
+    maxHeight: 480,
+    height: 320
   };
 
-  private itemsPerPage = 10;
+  private itemsPerPage = 20;
   private queryCount: number = null;
   private page = 1;
   private previousPage = 1;
