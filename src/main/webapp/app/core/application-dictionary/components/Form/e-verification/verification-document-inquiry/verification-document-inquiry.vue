@@ -438,6 +438,15 @@
 </script>
 
 <style lang="scss">
+.compact {
+    .verification-document-inquiry {
+        .el-table--mini {
+            th, td {
+                height: 35px;
+            }
+        }
+    }
+}
 .el-table__fixed, .el-table__fixed-right{
     box-shadow: none;
 }

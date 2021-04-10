@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container">
+    <div class="match-po-lookup">
         <div v-if="modeFilterMatchPo.mode==1">
             <el-row
                 class="filter"
@@ -64,13 +64,15 @@
                     <el-table
                         v-loading="processing"
                         ref="gridData"
-                        highlight-current-row
-                        border stripe
-                        size="mini"
-                        style="width: 100%; height: 100%; padding-top: 0px;"
-                        :height="gridSchema.height"
-                        :empty-text="gridSchema.emptyText"
+                        border
                         :data="gridData"
+                        :empty-text="gridSchema.emptyText"
+                        :height="gridSchema.height"
+                        highlight-current-row
+                        :max-height="gridSchema.maxHeight"
+                        size="mini"
+                        stripe
+                        style="padding-top: 0px;"
                         @selection-change="onSelectionChanged"
                         @sort-change="changeOrder"
                     >
@@ -108,6 +110,7 @@
                             sortable
                             prop="mProductName"
                             label="Item Description"
+                            show-overflow-tooltip
                         />
                         <el-table-column
                             min-width="100"
@@ -169,10 +172,10 @@
                     <el-pagination
                         ref="pagination"
                         background
-                        layout="sizes, prev, pager, next"
+                        layout="total, sizes, prev, pager, next, jumper"
                         small
                         :current-page.sync="page"
-                        :page-sizes="[10, 20, 50, 100]"
+                        :page-sizes="[10, 20, 50, 100, 200, 500, 1000]"
                         :page-size="itemsPerPage"
                         :total="queryCount"
                         @size-change="changePageSize"
@@ -211,7 +214,16 @@
 </script>
 
 <style lang="scss">
-    .el-dialog__body{
-        padding: 10px 20px;
+.compact {
+    .match-po-lookup {
+        .el-table--mini {
+            th, td {
+                height: 35px;
+            }
+        }
     }
+}
+.el-dialog__body{
+    padding: 10px 20px;
+}
 </style>

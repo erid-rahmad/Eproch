@@ -1,5 +1,5 @@
 <template>
-    <div class="app-container verification">
+    <div class="verification-inquiry">
 
         <el-row class="header">
             <el-col :span="24">
@@ -18,7 +18,7 @@
         </el-row>
 
         <el-row class="filter">
-            <el-form ref="form"  label-width="170px" size="mini">
+            <el-form ref="form" label-position="left" label-width="170px" size="mini">
                 <el-col :span="8">
                     <el-form-item label="Invoice No. :" prop="invoiceNo">
                         {{ detailVerification.invoiceNo }}
@@ -105,6 +105,7 @@
                         min-width="250"
                         sortable
                         prop="mProductName"
+                        show-overflow-tooltip
                         label="Description"/>
                     <el-table-column
                         min-width="100"
@@ -160,7 +161,7 @@
                 <el-pagination
                     ref="pagination"
                     background
-                    layout="sizes, prev, pager, next"
+                    layout="total, sizes, prev, pager, next, jumper"
                     small
                     :current-page.sync="page"
                     :page-sizes="[10, 20, 50, 100]"
@@ -179,8 +180,14 @@
 <script lang="ts" src="./detail-verification-document.component.ts"></script>
 
 <style lang="scss">
-.compact .verification{
+.compact .verification-inquiry {
     padding: 0px;
+
+    .el-table--mini {
+        th, td {
+        height: 35px;
+        }
+    }
 }
 
 .el-table .cell.no-ellipsis {
