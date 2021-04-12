@@ -32,8 +32,8 @@
 
                         <el-table-column min-width="100" label="Joined Vendor">
                             <template slot-scope="{ row }">
-                                <el-button class="button" icon="el-icon-search" size="mini" type="primary" @click="viewJoinVendor(row)">
-                                    3
+                                <el-button class="button" icon="el-icon-user" size="mini"  @click="viewJoinVendor(row)">
+                                    {{row.join}}
                                 </el-button>
                             </template>
                         </el-table-column>

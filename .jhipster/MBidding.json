@@ -59,7 +59,7 @@
                 "required",
                 "maxlength"
             ],
-            "fieldValidateRulesMaxlength": "10"
+            "fieldValidateRulesMaxlength": "12"
         },
         {
             "fieldName": "approved",

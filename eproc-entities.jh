@@ -333,7 +333,7 @@ entity CPaymentTerm {
 	code String required maxlength(20)
 	name String required maxlength(50)
 	description String
-	
+
 	afterDelivery Boolean
 	asDefault Boolean
 	calculateBusinessDay Boolean
@@ -921,7 +921,7 @@ entity CBudgetPlan {
 
 	/** Deduct from purchase requisition, purchase order, and/or bidding result */
 	budgetDeduction String
-	
+
 	budgetAmount BigDecimal required
 	amountAvailable BigDecimal required
 	documentDate LocalDate required
@@ -992,7 +992,7 @@ entity MBidding {
 	dateTrx LocalDate
 	documentNo String maxlength(30)
 	documentAction String required maxlength(10)
-	documentStatus String required maxlength(10)
+	documentStatus String required maxlength(12)
 	approved Boolean
 	processed Boolean
 	dateApprove LocalDate

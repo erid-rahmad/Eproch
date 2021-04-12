@@ -261,32 +261,33 @@ export default class Bidding extends mixins(Vue2Filters.mixin, AlertMixin, Conte
         biddingTypeName: 'Tender Goods',
         documentStatus: 'In Progress',
         lastModifiedDate: '2021-03-26  3:30:16 ',
-        lastModifiedBy: 'Admin Tender',
+        lastModifiedBy: 'admintender',
         status: true,
-        action:'submit'
-
-        
+        action: 'submit',
+        join:'3'
       },
 
       {
         documentNo: 'BD-00003',
         name: 'pengadaan Office equepment',
         biddingTypeName: 'Tender Goods',
-        documentStatus: 'In Progress',
+        documentStatus: 'Terminate',
         lastModifiedDate: '2021-03-26  3:30:16  ',
-        lastModifiedBy: 'Admin Tender',
+        lastModifiedBy: 'admintender',
         status: true,
-        action:'submit'
+        action: 'submit',
+        join:'4'
       },
       {
         documentNo: 'BD-00004',
         name: 'pengadaan kendaraan jabatan',
         biddingTypeName: 'Tender Goods',
-        documentStatus: 'In Progress',
+        documentStatus: 'Not Started',
         lastModifiedDate: '2021-03-26  3:30:16 ',
-        lastModifiedBy: 'Admin Tender',
+        lastModifiedBy: 'admintender',
         status: false,
-        action:'register '
+        action: 'register ',
+        join:'3'
       }
     ]
   }

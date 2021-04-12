@@ -4,6 +4,7 @@
             <el-button v-if="!index" icon="el-icon-close" size="mini" type="danger" @click="closeDetail">
                 Close
             </el-button>
+           
             <el-button v-if="!index" icon="el-icon-check" size="mini"  style="margin-left: 0" type="primary" @click="openVendorConfirmation">
                 Vendor Confirmation
             </el-button>
@@ -22,7 +23,7 @@
             <el-table-column label="Bidding Title" min-width="150" prop="biddingTitle" show-overflow-tooltip sortable></el-table-column>
             <el-table-column label="Type" min-width="100" prop="type" sortable></el-table-column>
             <el-table-column label="Winner" min-width="150" prop="winner" show-overflow-tooltip sortable></el-table-column>
-            <el-table-column label="Status" min-width="150" prop="status" show-overflow-tooltip sortable></el-table-column>
+            <!-- <el-table-column label="Status" min-width="150" prop="status" show-overflow-tooltip sortable></el-table-column> -->
             <el-table-column min-width="100">
                 <template slot="header">
                     &nbsp;
@@ -34,8 +35,13 @@
                 </template>
             </el-table-column>
         </el-table>
+
+        
+        
         <bidding-result-announcement-detail v-else :data="selectedRow"></bidding-result-announcement-detail>
-    </div>
+         
+        
+    </div> 
 
 
 </template>

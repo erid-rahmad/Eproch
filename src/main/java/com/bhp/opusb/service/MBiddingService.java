@@ -118,9 +118,11 @@ public class MBiddingService {
             log.info("send email to vendor");
             List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(mBiddingDTO.getId());
             log.info("this list vendor {}",mVendorSuggestion);
+
+            //just for test
             mailService.sendEmail("wawan@beca.co.id","Pengumuman Pemenang Lelang","<html><body>" +
                 "<p>Kepada Bapak/Ibu Pimpinan </p>" +
-                ""+
+                "<p>Sistech Kharisma PT</p>" +
                 "<p>Hal: Pemenang Lelang</p>"+
                 "<p>Dengan hormat</p>" +
                 "<p>Sehubung dengan pelaksaanaan pelelangan pengadaan kendaraan operasional berdasarkan hasil ecvaluasi proposal penawaran lelang, dengan ini kami umumkan penetapan pemenang lelang sebagai berikut :" +
@@ -178,6 +180,43 @@ public class MBiddingService {
                     "</table>"+
                 "<p>Terhadap peserta lelang yang keberatan atas hasil penetapan lelang pada paket pekerjaan tersebut dapat mengajukan sanggahan tertulis 2 (dua) hari kerja setelah tanggal pengumuman ini </p>" +
 
+                "<p>Hormat Kami</p>" +
+                "<p>Berca.co.id</p>" +
+                "</body></html>",false,true);
+
+            //just for test
+            mailService.sendEmail("wawan@beca.co.id","Pembatalan Lelang","<html><body>" +
+
+                "<p>Kepada Bapak/Ibu Pimpinan\n</p>" +
+                "<p>Sistech Kharisma PT</p>" +
+                "<p>Hal: Pembatalan Bidding</p>" +
+                "<p>Dengan Hormat,\n</p>" +
+                "<p><table>\n" +
+                "  <tr>\n" +
+                "    <th>Bidding Number</th>\n" +
+                "    <th>BN-0003</th>\n" +
+                "   \n" +
+                "  </tr>\n" +
+                "  <tr>\n" +
+                "    <td>Bidding Title</td>\n" +
+                "    <td>Pengadaan kendaraan Marketing</td>\n" +
+                "    \n" +
+                "  </tr>\n" +
+                " \n" +
+                "</table></p>" +
+                "<p>Berdasarkan Bidding dengan judul di atas, diberitahukan bahwa pelelangan dibatalkan karena adanya kendala pada proses pelelangan. Untuk info lebih lanjut hubungi PIC Bidding.\n</p>" +
+                "<p>Hormat Kami</p>" +
+                "<p>Berca.co.id</p>" +
+                "</body></html>",false,true);
+
+            mailService.sendEmail("wawan@beca.co.id","Undangan Lelang","<html><body>" +
+                "<p>Kepada Bapak/Ibu Pimpinan </p>" +
+                "Sistech Kharisma PT"+
+                "<p>Hal: Undangan Bidding</p>"+
+                "<p>Dengan hormat</p>" +
+                "<p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut" +
+                ". Silahkan Bapak/Ibu melakukan login di "+" login.com "+" untuk mendaftar pada bidding tersebut" +
+                ". Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p>" +
                 "<p>Hormat Kami</p>" +
                 "<p>Berca.co.id</p>" +
                 "</body></html>",false,true);
@@ -263,7 +302,7 @@ public class MBiddingService {
             final List<MVendorSuggestionDTO> removedVendorSuggestions = mBiddingDTO.getRemovedVendorSuggestions();
             saveInvitation(mBiddingDTO, vendorInvitations, vendorSuggestions, removedVendorInvitations, removedVendorSuggestions);
         } else if (MBiddingProcess.SCORING.equals(step)) {
-            
+
         }
 
         return mBiddingDTO;
@@ -322,7 +361,7 @@ public class MBiddingService {
     private MBiddingDTO saveInvitation(MBiddingDTO mBiddingDTO, List<MVendorInvitationDTO> vendorInvitations,
             List<MVendorSuggestionDTO> vendorSuggestions, List<MVendorInvitationDTO> removedVendorInvitations,
             List<MVendorSuggestionDTO> removedVendorSuggestions) {
-        
+
         mVendorInvitationService.saveAll(vendorInvitations, mBiddingDTO);
         mVendorInvitationService.deleteAll(removedVendorInvitations);
         removedVendorInvitations.clear();
