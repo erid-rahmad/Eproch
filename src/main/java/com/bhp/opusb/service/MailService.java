@@ -94,6 +94,17 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromTemplate(String email, String templateName, String titleKey) {
+        Locale locale = Locale.forLanguageTag("en");
+        Context context = new Context(locale);
+        String content = templateEngine.process(templateName, context);
+        String subject = titleKey;
+        sendEmail(email, subject, content, false, true);
+    }
+
+
+
+    @Async
     public void sendEmailFromTemplate(User user, String currentLogin, MVerificationDTO mVerification, List<MVerificationLineDTO> mVerificationLines,
         String templateName, String titleKey) {
 
@@ -111,6 +122,24 @@ public class MailService {
         String content = templateEngine.process(templateName, context);
         String subject = messageSource.getMessage(titleKey, null, locale);
         sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
+    public void sendWinnerEmail(String email) {
+        log.debug("Sending activation email to '{}'");
+        sendEmailFromTemplate(email, "mail/winnerEmail", "Pengumuman Pemenang Lelang");
+    }
+
+    @Async
+    public void sendBiddingInvatationEmail(String email) {
+        log.debug("Sending activation email to '{}'");
+        sendEmailFromTemplate(email, "mail/biddingInvitationEmail", "Undangan Lelang");
+    }
+
+    @Async
+    public void sendTerminateEmail(String email) {
+        log.debug("Sending activation email to '{}'");
+        sendEmailFromTemplate(email, "mail/biddingTerminateEmail", "Pembatalan Lelang");
     }
 
     @Async
@@ -142,4 +171,6 @@ public class MailService {
         log.debug("Sending payment status (Paid) email notification to '{}'", user.getEmail());
         sendEmailFromTemplate(user, mVerification.getLastModifiedBy(), mVerification, mVerificationLines, "mail/invoicePaidEmail", "email.verification.title");
     }
+
+
 }

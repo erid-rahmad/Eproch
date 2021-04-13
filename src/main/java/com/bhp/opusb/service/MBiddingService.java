@@ -9,6 +9,7 @@ import com.bhp.opusb.config.ApplicationProperties.Document;
 import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.MVendorSuggestion;
+import com.bhp.opusb.domain.User;
 import com.bhp.opusb.domain.enumeration.MBiddingProcess;
 import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.CDocumentTypeRepository;
@@ -63,9 +64,6 @@ public class MBiddingService {
     @Autowired
     private MailService mailService;
 
-
-
-
     @Autowired
     private MBiddingLineRepository mBiddingLineRepository;
 
@@ -118,110 +116,13 @@ public class MBiddingService {
             log.info("send email to vendor");
             List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(mBiddingDTO.getId());
             log.info("this list vendor {}",mVendorSuggestion);
+            mailService.sendWinnerEmail("sitech@gmail.com");
+            mailService.sendBiddingInvatationEmail("sitech@gmail.com");
+            mailService.sendTerminateEmail("sitech@gmail.com");
 
-            //just for test
-            mailService.sendEmail("wawan@beca.co.id","Pengumuman Pemenang Lelang","<html><body>" +
-                "<p>Kepada Bapak/Ibu Pimpinan </p>" +
-                "<p>Sistech Kharisma PT</p>" +
-                "<p>Hal: Pemenang Lelang</p>"+
-                "<p>Dengan hormat</p>" +
-                "<p>Sehubung dengan pelaksaanaan pelelangan pengadaan kendaraan operasional berdasarkan hasil ecvaluasi proposal penawaran lelang, dengan ini kami umumkan penetapan pemenang lelang sebagai berikut :" +
-
-                "<table>\n" +
-                    "  <tr>\n" +
-                    "    <th>No</th>\n" +
-                    "    <th>Data Informasi</th>\n" +
-                    "    <th></th>\n" +
-                    "  </tr>\n" +
-                    "  <tr>\n" +
-                    "    <td>1</td>\n" +
-                    "    <td>Nama Pekerjaan</td>\n" +
-                    "    <td>Pengadaan kendaraan operasional</td>\n" +
-                    "  </tr>\n" +
-                    "  <tr>\n" +
-                    "    <td>2</td>\n" +
-                    "    <td>Nama Penyedia Jasa </td>\n" +
-                    "    <td>PT Sistech Kharisma</td> \n" +
-                    "  </tr>\n" +
-                    "  <tr>\n" +
-                    "    <td>3</td>\n" +
-                    "    <td>Alamat Penyedia Jasa</td>\n" +
-                    "    <td>Jakarta Pusat 10340 </td>\n" +
-                    "  </tr>\n" +
-                    "  <tr>\n" +
-                    "    <td>4</td>\n" +
-                    "    <td>Harga penawaran</td>\n" +
-                    "    <td>29.000.000.000.-</td>\n" +
-                    "  </tr>\n" +
-                    "   <tr>\n" +
-                    "    <td></td>\n" +
-                    "    <td></td>\n" +
-                    "    <td>Dua Puluh Sembilan Milyar</td> \n" +
-                    "  <tr>\n" +
-                    "    <td>5</td>\n" +
-                    "    <td>Nomor Pokok Wajib Pajak</td> \n" +
-                    "    <td>01.302.965.7-073.000</td>\n" +
-                    "  </tr>\n" +
-                    "  <tr>\n" +
-                    "    <td>6</td>\n" +
-                    "    <td>Hasil Evaluasi</td>\n" +
-                    "    <td>Nilai Teknis sebesar 42.57</td>  \n" +
-                    "  </tr>\n" +
-                    "  <tr>\n" +
-                    "    <td></td>\n" +
-                    "    <td></td>\n" +
-                    "    <td>Nilai Harga/Biaya sebesar 22.75</td>  \n" +
-                    "  </tr>\n" +
-                    "  <tr>\n" +
-                    "    <td></td>\n" +
-                    "    <td></td>\n" +
-                    "    <td>Nilai Evaluasi Keseluruhan sebesar 65.35</td>  \n" +
-                    "  </tr>\n" +
-                    "</table>"+
-                "<p>Terhadap peserta lelang yang keberatan atas hasil penetapan lelang pada paket pekerjaan tersebut dapat mengajukan sanggahan tertulis 2 (dua) hari kerja setelah tanggal pengumuman ini </p>" +
-
-                "<p>Hormat Kami</p>" +
-                "<p>Berca.co.id</p>" +
-                "</body></html>",false,true);
-
-            //just for test
-            mailService.sendEmail("wawan@beca.co.id","Pembatalan Lelang","<html><body>" +
-
-                "<p>Kepada Bapak/Ibu Pimpinan\n</p>" +
-                "<p>Sistech Kharisma PT</p>" +
-                "<p>Hal: Pembatalan Bidding</p>" +
-                "<p>Dengan Hormat,\n</p>" +
-                "<p><table>\n" +
-                "  <tr>\n" +
-                "    <th>Bidding Number</th>\n" +
-                "    <th>BN-0003</th>\n" +
-                "   \n" +
-                "  </tr>\n" +
-                "  <tr>\n" +
-                "    <td>Bidding Title</td>\n" +
-                "    <td>Pengadaan kendaraan Marketing</td>\n" +
-                "    \n" +
-                "  </tr>\n" +
-                " \n" +
-                "</table></p>" +
-                "<p>Berdasarkan Bidding dengan judul di atas, diberitahukan bahwa pelelangan dibatalkan karena adanya kendala pada proses pelelangan. Untuk info lebih lanjut hubungi PIC Bidding.\n</p>" +
-                "<p>Hormat Kami</p>" +
-                "<p>Berca.co.id</p>" +
-                "</body></html>",false,true);
-
-            mailService.sendEmail("wawan@beca.co.id","Undangan Lelang","<html><body>" +
-                "<p>Kepada Bapak/Ibu Pimpinan </p>" +
-                "Sistech Kharisma PT"+
-                "<p>Hal: Undangan Bidding</p>"+
-                "<p>Dengan hormat</p>" +
-                "<p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut" +
-                ". Silahkan Bapak/Ibu melakukan login di "+" login.com "+" untuk mendaftar pada bidding tersebut" +
-                ". Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p>" +
-                "<p>Hormat Kami</p>" +
-                "<p>Berca.co.id</p>" +
-                "</body></html>",false,true);
 
             for (MVendorSuggestion mVendorSuggestion1 : mVendorSuggestion){
+
                 log.info("this vendor id {}",mVendorSuggestion1.getVendor().getId().toString());
 
 //                List<AdUser> adUsers =adUserRepository.findBycVendorIdAndActiveTrue(mVendorSuggestion1.getVendor().getId());
@@ -229,6 +130,7 @@ public class MBiddingService {
                 log.info("this add user {}",adUsers);
 
                 for (AdUser adUser : adUsers){
+
                     log.info("this email {} count {}",adUser.getUser().getEmail());
 //                    mailService.sendEmail(adUser.getUser().getEmail(),"testing","testing",false,false);
                     mailService.sendEmail(adUser.getUser().getEmail(),"Bidding Invitation","<html><body>" +

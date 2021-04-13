@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
+
+<head>
+    <title th:text="#{email.verification.title}">Verification Approval</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="shortcut icon" th:href="@{|${baseUrl}/favicon.ico|}" />
+    <style type="text/css">
+		.currency {
+			text-align: right;
+		}
+
+		.verificationHeader {
+			width: 15%;
+		}
+
+		.verificationColon {
+			width: 1%;
+			padding: 5px;;
+		}
+
+		.verificationHeaderValue {
+			width: 34%;
+		}
+
+		table.verificationLine tr td {
+			padding: 5px;
+		}
+	</style>
+</head>
+
+<body>
+<p>
+    <br>Kepada Bapak/Ibu Pimpinan
+    <br>Sistech Kharisma PT
+    <br>Hal: Pembatalan Bidding
+    <br>Dengan Hormat,
+</p>
+<table border="1" >
+    <tr>
+        <td class="verificationHeaderValue">Bidding Number</td>
+        <td class="verificationHeaderValue">BN-0003</td>
+    </tr>
+    <tr>
+        <td class="verificationHeaderValue">Bidding Title</td>
+        <td class="verificationHeaderValue">Pengadaan kendaraan Marketing</td>
+    </tr>
+</table>
+<p>Berdasarkan Bidding dengan judul di atas, diberitahukan bahwa pelelangan dibatalkan karena adanya kendala pada proses pelelangan. Untuk info lebih lanjut hubungi PIC Bidding.   </p>
+<p>Hormat Kami
+    <br>Berca.co.id</br></p>
+</body>
+
+</html>
