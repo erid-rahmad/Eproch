@@ -42,7 +42,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['costEvaluationApproval', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/cost-evaluation/components/detail.vue')],
   ['prequalificationCriteria', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/prequalification-criteria/product-catalog.vue')],
   ['prequalificationMethod', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/prequalification-method/product-catalog.vue')],
-  ['biddingAgreement', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/bidding-agreement/index.vue')],
+  // ['biddingAgreement', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/bidding-agreement/index.vue')],
 
   ['vendorEvaluation', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/vendor-evaluation/index.vue')],
   ['warningLetter', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/vendor-evaluation/warning-letter.vue')],

@@ -117,7 +117,7 @@ public class MBiddingService {
             List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(mBiddingDTO.getId());
             log.info("this list vendor {}",mVendorSuggestion);
             mailService.sendWinnerEmail("sitech@gmail.com");
-            mailService.sendBiddingInvatationEmail("sitech@gmail.com");
+            mailService.sendBiddingInvatationEmail("sitech@gmail.com",mBiddingDTO);
             mailService.sendTerminateEmail("sitech@gmail.com");
 
 

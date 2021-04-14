@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CEventTypeline;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CEventType;
+import com.bhp.opusb.domain.CEvent;
 import com.bhp.opusb.repository.CEventTypelineRepository;
 import com.bhp.opusb.service.CEventTypelineService;
 import com.bhp.opusb.service.dto.CEventTypelineDTO;
@@ -37,9 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 public class CEventTypelineResourceIT {
-
-    private static final String DEFAULT_EVENT = "AAAAAAAAAA";
-    private static final String UPDATED_EVENT = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -82,7 +80,6 @@ public class CEventTypelineResourceIT {
      */
     public static CEventTypeline createEntity(EntityManager em) {
         CEventTypeline cEventTypeline = new CEventTypeline()
-            .event(DEFAULT_EVENT)
             .description(DEFAULT_DESCRIPTION)
             .sequence(DEFAULT_SEQUENCE)
             .uid(DEFAULT_UID)
@@ -107,6 +104,16 @@ public class CEventTypelineResourceIT {
             cEventType = TestUtil.findAll(em, CEventType.class).get(0);
         }
         cEventTypeline.setEventType(cEventType);
+        // Add required entity
+        CEvent cEvent;
+        if (TestUtil.findAll(em, CEvent.class).isEmpty()) {
+            cEvent = CEventResourceIT.createEntity(em);
+            em.persist(cEvent);
+            em.flush();
+        } else {
+            cEvent = TestUtil.findAll(em, CEvent.class).get(0);
+        }
+        cEventTypeline.setCEvent(cEvent);
         return cEventTypeline;
     }
     /**
@@ -117,7 +124,6 @@ public class CEventTypelineResourceIT {
      */
     public static CEventTypeline createUpdatedEntity(EntityManager em) {
         CEventTypeline cEventTypeline = new CEventTypeline()
-            .event(UPDATED_EVENT)
             .description(UPDATED_DESCRIPTION)
             .sequence(UPDATED_SEQUENCE)
             .uid(UPDATED_UID)
@@ -142,6 +148,16 @@ public class CEventTypelineResourceIT {
             cEventType = TestUtil.findAll(em, CEventType.class).get(0);
         }
         cEventTypeline.setEventType(cEventType);
+        // Add required entity
+        CEvent cEvent;
+        if (TestUtil.findAll(em, CEvent.class).isEmpty()) {
+            cEvent = CEventResourceIT.createUpdatedEntity(em);
+            em.persist(cEvent);
+            em.flush();
+        } else {
+            cEvent = TestUtil.findAll(em, CEvent.class).get(0);
+        }
+        cEventTypeline.setCEvent(cEvent);
         return cEventTypeline;
     }
 
@@ -166,7 +182,6 @@ public class CEventTypelineResourceIT {
         List<CEventTypeline> cEventTypelineList = cEventTypelineRepository.findAll();
         assertThat(cEventTypelineList).hasSize(databaseSizeBeforeCreate + 1);
         CEventTypeline testCEventTypeline = cEventTypelineList.get(cEventTypelineList.size() - 1);
-        assertThat(testCEventTypeline.getEvent()).isEqualTo(DEFAULT_EVENT);
         assertThat(testCEventTypeline.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCEventTypeline.getSequence()).isEqualTo(DEFAULT_SEQUENCE);
         assertThat(testCEventTypeline.getUid()).isEqualTo(DEFAULT_UID);
@@ -193,25 +208,6 @@ public class CEventTypelineResourceIT {
         assertThat(cEventTypelineList).hasSize(databaseSizeBeforeCreate);
     }
 
-
-    @Test
-    @Transactional
-    public void checkEventIsRequired() throws Exception {
-        int databaseSizeBeforeTest = cEventTypelineRepository.findAll().size();
-        // set the field null
-        cEventTypeline.setEvent(null);
-
-        // Create the CEventTypeline, which fails.
-        CEventTypelineDTO cEventTypelineDTO = cEventTypelineMapper.toDto(cEventTypeline);
-
-        restCEventTypelineMockMvc.perform(post("/api/c-event-typelines")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(cEventTypelineDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<CEventTypeline> cEventTypelineList = cEventTypelineRepository.findAll();
-        assertThat(cEventTypelineList).hasSize(databaseSizeBeforeTest);
-    }
 
     @Test
     @Transactional
@@ -243,7 +239,6 @@ public class CEventTypelineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEventTypeline.getId().intValue())))
-            .andExpect(jsonPath("$.[*].event").value(hasItem(DEFAULT_EVENT)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].sequence").value(hasItem(DEFAULT_SEQUENCE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -261,7 +256,6 @@ public class CEventTypelineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cEventTypeline.getId().intValue()))
-            .andExpect(jsonPath("$.event").value(DEFAULT_EVENT))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.sequence").value(DEFAULT_SEQUENCE))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
@@ -285,84 +279,6 @@ public class CEventTypelineResourceIT {
 
         defaultCEventTypelineShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCEventTypelineShouldNotBeFound("id.lessThan=" + id);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllCEventTypelinesByEventIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cEventTypelineRepository.saveAndFlush(cEventTypeline);
-
-        // Get all the cEventTypelineList where event equals to DEFAULT_EVENT
-        defaultCEventTypelineShouldBeFound("event.equals=" + DEFAULT_EVENT);
-
-        // Get all the cEventTypelineList where event equals to UPDATED_EVENT
-        defaultCEventTypelineShouldNotBeFound("event.equals=" + UPDATED_EVENT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCEventTypelinesByEventIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        cEventTypelineRepository.saveAndFlush(cEventTypeline);
-
-        // Get all the cEventTypelineList where event not equals to DEFAULT_EVENT
-        defaultCEventTypelineShouldNotBeFound("event.notEquals=" + DEFAULT_EVENT);
-
-        // Get all the cEventTypelineList where event not equals to UPDATED_EVENT
-        defaultCEventTypelineShouldBeFound("event.notEquals=" + UPDATED_EVENT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCEventTypelinesByEventIsInShouldWork() throws Exception {
-        // Initialize the database
-        cEventTypelineRepository.saveAndFlush(cEventTypeline);
-
-        // Get all the cEventTypelineList where event in DEFAULT_EVENT or UPDATED_EVENT
-        defaultCEventTypelineShouldBeFound("event.in=" + DEFAULT_EVENT + "," + UPDATED_EVENT);
-
-        // Get all the cEventTypelineList where event equals to UPDATED_EVENT
-        defaultCEventTypelineShouldNotBeFound("event.in=" + UPDATED_EVENT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCEventTypelinesByEventIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        cEventTypelineRepository.saveAndFlush(cEventTypeline);
-
-        // Get all the cEventTypelineList where event is not null
-        defaultCEventTypelineShouldBeFound("event.specified=true");
-
-        // Get all the cEventTypelineList where event is null
-        defaultCEventTypelineShouldNotBeFound("event.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllCEventTypelinesByEventContainsSomething() throws Exception {
-        // Initialize the database
-        cEventTypelineRepository.saveAndFlush(cEventTypeline);
-
-        // Get all the cEventTypelineList where event contains DEFAULT_EVENT
-        defaultCEventTypelineShouldBeFound("event.contains=" + DEFAULT_EVENT);
-
-        // Get all the cEventTypelineList where event contains UPDATED_EVENT
-        defaultCEventTypelineShouldNotBeFound("event.contains=" + UPDATED_EVENT);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCEventTypelinesByEventNotContainsSomething() throws Exception {
-        // Initialize the database
-        cEventTypelineRepository.saveAndFlush(cEventTypeline);
-
-        // Get all the cEventTypelineList where event does not contain DEFAULT_EVENT
-        defaultCEventTypelineShouldNotBeFound("event.doesNotContain=" + DEFAULT_EVENT);
-
-        // Get all the cEventTypelineList where event does not contain UPDATED_EVENT
-        defaultCEventTypelineShouldBeFound("event.doesNotContain=" + UPDATED_EVENT);
     }
 
 
@@ -684,6 +600,22 @@ public class CEventTypelineResourceIT {
         defaultCEventTypelineShouldNotBeFound("eventTypeId.equals=" + (eventTypeId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllCEventTypelinesByCEventIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CEvent cEvent = cEventTypeline.getCEvent();
+        cEventTypelineRepository.saveAndFlush(cEventTypeline);
+        Long cEventId = cEvent.getId();
+
+        // Get all the cEventTypelineList where cEvent equals to cEventId
+        defaultCEventTypelineShouldBeFound("cEventId.equals=" + cEventId);
+
+        // Get all the cEventTypelineList where cEvent equals to cEventId + 1
+        defaultCEventTypelineShouldNotBeFound("cEventId.equals=" + (cEventId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -692,7 +624,6 @@ public class CEventTypelineResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEventTypeline.getId().intValue())))
-            .andExpect(jsonPath("$.[*].event").value(hasItem(DEFAULT_EVENT)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].sequence").value(hasItem(DEFAULT_SEQUENCE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -744,7 +675,6 @@ public class CEventTypelineResourceIT {
         // Disconnect from session so that the updates on updatedCEventTypeline are not directly saved in db
         em.detach(updatedCEventTypeline);
         updatedCEventTypeline
-            .event(UPDATED_EVENT)
             .description(UPDATED_DESCRIPTION)
             .sequence(UPDATED_SEQUENCE)
             .uid(UPDATED_UID)
@@ -760,7 +690,6 @@ public class CEventTypelineResourceIT {
         List<CEventTypeline> cEventTypelineList = cEventTypelineRepository.findAll();
         assertThat(cEventTypelineList).hasSize(databaseSizeBeforeUpdate);
         CEventTypeline testCEventTypeline = cEventTypelineList.get(cEventTypelineList.size() - 1);
-        assertThat(testCEventTypeline.getEvent()).isEqualTo(UPDATED_EVENT);
         assertThat(testCEventTypeline.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCEventTypeline.getSequence()).isEqualTo(UPDATED_SEQUENCE);
         assertThat(testCEventTypeline.getUid()).isEqualTo(UPDATED_UID);

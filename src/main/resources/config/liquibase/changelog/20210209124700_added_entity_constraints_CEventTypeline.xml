@@ -20,5 +20,11 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_event_type"/>
 
+        <addForeignKeyConstraint baseColumnNames="c_event_id"
+                                 baseTableName="c_event_typeline"
+                                 constraintName="fk_c_event_typeline_c_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_event"/>
+
     </changeSet>
 </databaseChangeLog>

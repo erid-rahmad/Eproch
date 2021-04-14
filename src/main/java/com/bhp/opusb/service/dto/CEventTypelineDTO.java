@@ -1,11 +1,9 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEventTypeline} entity.
@@ -16,10 +14,6 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    @NotNull
-    @Size(max = 10)
-    private String event;
-
     private String description;
 
     @NotNull
@@ -28,29 +22,22 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active = true;
+    private Boolean active;
 
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
     private Long eventTypeId;
-    private String eventTypeName;
-    
+
+    private Long cEventId;
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getEvent() {
-        return event;
-    }
-
-    public void setEvent(String event) {
-        this.event = event;
     }
 
     public String getDescription() {
@@ -109,12 +96,12 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
         this.eventTypeId = cEventTypeId;
     }
 
-    public String getEventTypeName() {
-        return eventTypeName;
+    public Long getcEventId() {
+        return cEventId;
     }
 
-    public void setEventTypeName(String eventTypeName) {
-        this.eventTypeName = eventTypeName;
+    public void setcEventId(Long cEventId) {
+        this.cEventId = cEventId;
     }
 
     @Override
@@ -141,14 +128,15 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
     @Override
     public String toString() {
         return "CEventTypelineDTO{" +
-            "id=" + getId() +
-            ", event='" + getEvent() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", sequence=" + getSequence() +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", eventTypeId=" + getEventTypeId() +
-            "}";
+            "id=" + id +
+            ", description='" + description + '\'' +
+            ", sequence=" + sequence +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", eventTypeId=" + eventTypeId +
+            ", cEventId=" + cEventId +
+            '}';
     }
 }

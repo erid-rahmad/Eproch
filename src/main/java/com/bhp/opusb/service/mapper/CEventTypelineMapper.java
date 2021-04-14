@@ -9,17 +9,20 @@ import org.mapstruct.*;
 /**
  * Mapper for the entity {@link CEventTypeline} and its DTO {@link CEventTypelineDTO}.
  */
-@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CEventTypeMapper.class})
+@Mapper(componentModel = "spring", uses = {ADOrganizationMapper.class, CEventTypeMapper.class, CEventMapper.class})
 public interface CEventTypelineMapper extends EntityMapper<CEventTypelineDTO, CEventTypeline> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "eventType.id", target = "eventTypeId")
-    @Mapping(source = "eventType.name", target = "eventTypeName")
+    @Mapping(source = "CEvent.id", target = "cEventId")
+//    @Mapping(source = "cEvent.event", target = "cEventName")
+//    @Mapping(source = "eventType.name", target = "eventTypeName")
     CEventTypelineDTO toDto(CEventTypeline cEventTypeline);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "eventTypeId", target = "eventType")
+    @Mapping(source = "cEventId", target = "cEvent")
     CEventTypeline toEntity(CEventTypelineDTO cEventTypelineDTO);
 
     default CEventTypeline fromId(Long id) {

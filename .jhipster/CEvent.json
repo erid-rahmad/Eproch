@@ -1,18 +1,16 @@
 {
-    "name": "CEventTypeline",
+    "name": "CEvent",
     "fields": [
+        {
+            "fieldName": "event",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
         {
             "fieldName": "description",
             "fieldType": "String"
-        },
-        {
-            "fieldName": "sequence",
-            "fieldType": "Integer",
-            "fieldValidateRules": [
-                "required",
-                "min"
-            ],
-            "fieldValidateRulesMin": "0"
         },
         {
             "fieldName": "uid",
@@ -27,30 +25,22 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "cEventTypeline",
+            "otherEntityRelationshipName": "cEvent",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cEventType",
-            "otherEntityRelationshipName": "cEventTypeline",
+            "otherEntityName": "cProductClassification",
+            "otherEntityRelationshipName": "cEvent",
             "relationshipValidateRules": "required",
-            "relationshipName": "eventType",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cEvent",
-            "otherEntityRelationshipName": "cEventTypeline",
-            "relationshipValidateRules": "required",
-            "relationshipName": "cEvent",
+            "relationshipName": "cProductClassification",
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20210209124700",
-    "entityTableName": "c_event_typeline",
+    "changelogDate": "20210414044300",
+    "entityTableName": "c_event",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",

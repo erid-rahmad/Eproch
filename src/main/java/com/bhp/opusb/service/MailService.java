@@ -1,6 +1,7 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.User;
+import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.dto.MVerificationDTO;
 import com.bhp.opusb.service.dto.MVerificationLineDTO;
 
@@ -39,6 +40,9 @@ public class MailService {
     private static final String VERIFICATION_LINE = "verification_line";
 
     private static final String BASE_URL = "baseUrl";
+
+
+
 
     private final JHipsterProperties jHipsterProperties;
 
@@ -102,7 +106,15 @@ public class MailService {
         sendEmail(email, subject, content, false, true);
     }
 
-
+    @Async
+    public void sendEmailFromTemplate(String email, String templateName, String titleKey,MBiddingDTO mBiddingDTO) {
+        Locale locale = Locale.forLanguageTag("en");
+        Context context = new Context(locale);
+        context.setVariable("BIDING_DATA",mBiddingDTO);
+        String content = templateEngine.process(templateName, context);
+        String subject = titleKey;
+        sendEmail(email, subject, content, false, true);
+    }
 
     @Async
     public void sendEmailFromTemplate(User user, String currentLogin, MVerificationDTO mVerification, List<MVerificationLineDTO> mVerificationLines,
@@ -131,9 +143,9 @@ public class MailService {
     }
 
     @Async
-    public void sendBiddingInvatationEmail(String email) {
+    public void sendBiddingInvatationEmail(String email,MBiddingDTO mBiddingDTO) {
         log.debug("Sending activation email to '{}'");
-        sendEmailFromTemplate(email, "mail/biddingInvitationEmail", "Undangan Lelang");
+        sendEmailFromTemplate(email, "mail/biddingInvitationEmail", "Undangan Lelang",mBiddingDTO);
     }
 
     @Async

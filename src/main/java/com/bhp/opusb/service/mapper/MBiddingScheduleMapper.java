@@ -19,7 +19,7 @@ public interface MBiddingScheduleMapper extends EntityMapper<MBiddingScheduleDTO
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "eventTypeLine.id", target = "eventTypeLineId")
-    @Mapping(source = "eventTypeLine.event", target = "eventTypeLineName")
+//    @Mapping(source = "eventTypeLine.event", target = "eventTypeLineName")
     MBiddingScheduleDTO toDto(MBiddingSchedule mBiddingSchedule);
 
     @Mapping(target = "mBiddingScheduleAttachments", ignore = true)

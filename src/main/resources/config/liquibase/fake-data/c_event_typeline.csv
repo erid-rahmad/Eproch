@@ -1,11 +1,11 @@
-id;event;description;sequence;uid;active;ad_organization_id;event_type_id
-1;haptic Corporate deposit;dot-com hack;41162;ab6d0feb-9070-4bef-92cf-a386155dd699;false;1;1
-2;out-of-the-box;Fiji Generic Digitized;6730;fa708bb0-cf2f-4255-9bcd-c19b4e267722;false;2;2
-3;Associate District;Group Auto Loan Account;72675;ccd376d5-51f5-478d-a2f5-310161281be0;false;3;3
-4;even-keeled Polarised;back-end Refined Rubber Shirt;28142;4bafe106-68c9-4425-82d8-53448a35ad30;true;4;4
-5;deliverables Distributed cultivate;Savings Account;84371;e44888e0-3c24-4697-b8d4-baa4ae6ee91b;false;5;5
-6;override Hat Incredible Fresh Bacon;Palladium;49977;2f123d22-1b40-4f46-aadc-881e0221b340;false;6;6
-7;Future-proofed Unbranded;Senior Practical;59340;625ad937-2d9e-4913-a8e8-654bf77a9ee5;false;7;7
-8;District solution-oriented;encoding Investment Account;94724;ad28101c-b1c5-4b1d-b6dc-49d15aee0288;true;8;8
-9;Licensed knowledge base;backing up knowledge base hard drive;51417;8a2782cc-9a73-4e92-ab90-3b1f637a75b5;true;9;9
-10;Avon program synthesizing;Paradigm Turkmenistan;66099;2c910c3c-cdc0-4076-831e-afc5593493d3;true;10;10
+id;description;sequence;uid;active;ad_organization_id;event_type_id;c_event_id
+1;haptic Corporate deposit;51552;57c26ab6-d0fe-4b90-b0be-f92cfa386155;true;1;1;1
+2;interfaces Checking Account Garden;74505;e8419321-fa70-48bb-8cf2-f2559bcdc19b;false;2;2;2
+3;maroon Lodge Mouse;39136;6f0e6ae6-9cbc-4cd3-b6d5-51f578de2f53;false;3;3;3
+4;Fantastic;8956;281be038-4549-47c1-9d96-44bafe10668c;true;4;4;4
+5;Cotton;53605;2d853448-a35a-4d30-af6c-336e092de448;true;5;5;5
+6;Lead indigo;13141;469738d4-baa4-4ae6-ae91-b6dc22805ed2;true;6;6;6
+7;Avon Executive Bike;82297;221b40f4-6ead-4c88-9e02-21b34046351e;true;7;7;7
+8;Ergonomic e-markets embrace;34910;ad9372d9-e913-4e8e-8654-bf77a9ee566e;false;8;8;8
+9;generating;33233;497fad28-101c-4b1c-9b1d-36dc49d15aee;false;9;9;9
+10;Macedonia;86370;91c59bd0-58b9-488a-a782-cc9a73e922b9;false;10;10;10

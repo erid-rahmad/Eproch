@@ -892,8 +892,15 @@ entity CEventType {
 	active Boolean
 }
 
+entity CEvent {
+	event String required
+	description String
+	uid UUID
+	active Boolean
+
+}
+
 entity CEventTypeline {
-	event String required maxlength(10)
 	description String
 	sequence Integer required min(0)
 	uid UUID
@@ -1442,8 +1449,12 @@ relationship ManyToOne {
 	CEventType{adOrganization required} to ADOrganization
 	CEventType{biddingType required} to CBiddingType
 
+	CEvent{adOrganization required} to ADOrganization
+	CEvent{cProductClassification required} to CProductClassification
+
 	CEventTypeline{adOrganization required} to ADOrganization
 	CEventTypeline{eventType required} to CEventType
+	CEventTypeline{cEvent required} to CEvent
 
 	CBiddingCriteria{adOrganization required} to ADOrganization
 

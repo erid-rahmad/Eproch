@@ -2,12 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
 
 <head>
-	
 </head>
-
 <body>
 	<p>
-		<br>Kepada Bapak/Ibu Pimpinan 
+		<br>Kepada Bapak/Ibu Pimpinan
+        <br><span th:text="${BIDING_DATA.vendorSelection}"></span>
 		<br>Hal: Undangan Bidding
 		<br>Dengan hormat</p>
 	<p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut
@@ -16,7 +15,5 @@
 		sampaikan ke email eproc.berca.co.id </p>
 	<p>Hormat Kami
 	<br>Berca.co.id</p>
-
 </body>
-
 </html>

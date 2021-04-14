@@ -12,12 +12,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A CEventTypeline.
+ * A CEvent.
  */
 @Entity
-@Table(name = "c_event_typeline")
+@Table(name = "c_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CEventTypeline extends AbstractAuditingEntity {
+public class CEvent implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -26,13 +26,12 @@ public class CEventTypeline extends AbstractAuditingEntity {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
+    @NotNull
+    @Column(name = "event", nullable = false)
+    private String event;
+
     @Column(name = "description")
     private String description;
-
-    @NotNull
-    @Min(value = 0)
-    @Column(name = "sequence", nullable = false)
-    private Integer sequence;
 
     @Column(name = "uid")
     private UUID uid;
@@ -42,18 +41,13 @@ public class CEventTypeline extends AbstractAuditingEntity {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("cEventTypelines")
+    @JsonIgnoreProperties("cEvents")
     private ADOrganization adOrganization;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("cEventTypelines")
-    private CEventType eventType;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("cEventTypelines")
-    private CEvent cEvent;
+    @JsonIgnoreProperties("cEvents")
+    private CProductClassification cProductClassification;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -64,11 +58,24 @@ public class CEventTypeline extends AbstractAuditingEntity {
         this.id = id;
     }
 
+    public String getEvent() {
+        return event;
+    }
+
+    public CEvent event(String event) {
+        this.event = event;
+        return this;
+    }
+
+    public void setEvent(String event) {
+        this.event = event;
+    }
+
     public String getDescription() {
         return description;
     }
 
-    public CEventTypeline description(String description) {
+    public CEvent description(String description) {
         this.description = description;
         return this;
     }
@@ -77,24 +84,11 @@ public class CEventTypeline extends AbstractAuditingEntity {
         this.description = description;
     }
 
-    public Integer getSequence() {
-        return sequence;
-    }
-
-    public CEventTypeline sequence(Integer sequence) {
-        this.sequence = sequence;
-        return this;
-    }
-
-    public void setSequence(Integer sequence) {
-        this.sequence = sequence;
-    }
-
     public UUID getUid() {
         return uid;
     }
 
-    public CEventTypeline uid(UUID uid) {
+    public CEvent uid(UUID uid) {
         this.uid = uid;
         return this;
     }
@@ -107,7 +101,7 @@ public class CEventTypeline extends AbstractAuditingEntity {
         return active;
     }
 
-    public CEventTypeline active(Boolean active) {
+    public CEvent active(Boolean active) {
         this.active = active;
         return this;
     }
@@ -120,7 +114,7 @@ public class CEventTypeline extends AbstractAuditingEntity {
         return adOrganization;
     }
 
-    public CEventTypeline adOrganization(ADOrganization aDOrganization) {
+    public CEvent adOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
         return this;
     }
@@ -129,47 +123,29 @@ public class CEventTypeline extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
 
-    public CEventType getEventType() {
-        return eventType;
+    public CProductClassification getCProductClassification() {
+        return cProductClassification;
     }
 
-    public CEventTypeline eventType(CEventType cEventType) {
-        this.eventType = cEventType;
+    public CEvent cProductClassification(CProductClassification cProductClassification) {
+        this.cProductClassification = cProductClassification;
         return this;
     }
 
-    public void setEventType(CEventType cEventType) {
-        this.eventType = cEventType;
-    }
-
-    public CEvent getCEvent() {
-        return cEvent;
-    }
-
-    public CEventTypeline cEvent(CEvent cEvent) {
-        this.cEvent = cEvent;
-        return this;
-    }
-
-    public void setCEvent(CEvent cEvent) {
-        this.cEvent = cEvent;
+    public void setCProductClassification(CProductClassification cProductClassification) {
+        this.cProductClassification = cProductClassification;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
-    @PrePersist
-    public void assignUUID() {
-        this.uid = UUID.randomUUID();
-    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof CEventTypeline)) {
+        if (!(o instanceof CEvent)) {
             return false;
         }
-        return id != null && id.equals(((CEventTypeline) o).id);
+        return id != null && id.equals(((CEvent) o).id);
     }
 
     @Override
@@ -179,10 +155,10 @@ public class CEventTypeline extends AbstractAuditingEntity {
 
     @Override
     public String toString() {
-        return "CEventTypeline{" +
+        return "CEvent{" +
             "id=" + getId() +
+            ", event='" + getEvent() + "'" +
             ", description='" + getDescription() + "'" +
-            ", sequence=" + getSequence() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

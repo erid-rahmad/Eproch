@@ -91,9 +91,6 @@ public class CEventTypelineQueryService extends QueryService<CEventTypeline> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CEventTypeline_.id));
             }
-            if (criteria.getEvent() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getEvent(), CEventTypeline_.event));
-            }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), CEventTypeline_.description));
             }
@@ -113,6 +110,10 @@ public class CEventTypelineQueryService extends QueryService<CEventTypeline> {
             if (criteria.getEventTypeId() != null) {
                 specification = specification.and(buildSpecification(criteria.getEventTypeId(),
                     root -> root.join(CEventTypeline_.eventType, JoinType.LEFT).get(CEventType_.id)));
+            }
+            if (criteria.getCEventId() != null) {
+                specification = specification.and(buildSpecification(criteria.getCEventId(),
+                    root -> root.join(CEventTypeline_.cEvent, JoinType.LEFT).get(CEvent_.id)));
             }
         }
         return specification;

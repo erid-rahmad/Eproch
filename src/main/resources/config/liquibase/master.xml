@@ -4,6 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
+
     <property name="now" value="now()" dbms="h2"/>
     <property name="now" value="current_timestamp" dbms="postgresql"/>
 
@@ -137,6 +138,7 @@
     <include file="config/liquibase/changelog/20210329060000_added_entity_CQuestionCategory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210329060100_added_entity_CVendorEvaluation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210329060200_added_entity_CVendorEvaluationLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210414044300_added_entity_CEvent.xml"  relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -255,5 +257,6 @@
     <include file="config/liquibase/changelog/20210329060000_added_entity_constraints_CQuestionCategory.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210329060100_added_entity_constraints_CVendorEvaluation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210329060200_added_entity_constraints_CVendorEvaluationLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210414044300_added_entity_constraints_CEvent.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

@@ -8,18 +8,18 @@
 
 
     <!--
-        Added the entity CEventTypeline.
+        Added the entity CEvent.
     -->
-    <changeSet id="20210209124700-1" author="jhipster">
-        <createTable tableName="c_event_typeline">
+    <changeSet id="20210414044300-1" author="jhipster">
+        <createTable tableName="c_event">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="event" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
-            </column>
-            <column name="sequence" type="integer">
-                <constraints nullable="false" />
             </column>
             <column name="uid" type="${uuidType}">
                 <constraints nullable="true" />
@@ -30,20 +30,19 @@
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="event_type_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
-            <column name="c_event_id" type="bigint">
+            <column name="c_product_classification_id" type="bigint">
                 <constraints nullable="false" />
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
     </changeSet>
 
-    <changeSet id="20210209124700-1-relations" author="jhipster">
+    <changeSet id="20210414044300-1-relations" author="jhipster">
 
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
+
+    <!-- Added the entity audit columns -->
 
     <!--
         Load sample data generated with Faker.js
@@ -53,33 +52,33 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20210209124700-1-data" author="jhipster" context="faker">
+    <changeSet id="20210414044300-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/c_event_typeline.csv"
+                  file="config/liquibase/fake-data/c_event.csv"
                   separator=";"
-                  tableName="c_event_typeline">
+                  tableName="c_event">
             <column name="id" type="numeric"/>
+            <column name="event" type="string"/>
             <column name="description" type="string"/>
-            <column name="sequence" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
-            <column name="event_type_id" type="numeric"/>
-            <column name="c_event_id" type="numeric"/>
+            <column name="c_product_classification_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
     </changeSet>
 
-    <changeSet id="20210209120900-1-data" author="jhipster">
-        <addColumn tableName="c_event_typeline">
-            <column name="c_event_id" type="numeric"/>
+    <changeSet id="20210414054400-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="c_event">
+            <column name="created_by" type="varchar(50)" defaultValue="system">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
         </addColumn>
-    </changeSet>
-
-    <changeSet id="20210209120912-1-data" author="jhipster">
-        <dropColumn tableName="c_event_typeline">
-            <column name="event"/>
-        </dropColumn>
     </changeSet>
 
 </databaseChangeLog>
