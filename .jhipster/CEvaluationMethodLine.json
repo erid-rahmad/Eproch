@@ -12,6 +12,10 @@
             "fieldValidateRulesMaxlength": "5"
         },
         {
+            "fieldName": "evaluationType",
+            "fieldType": "String"
+        },
+        {
             "fieldName": "weight",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [

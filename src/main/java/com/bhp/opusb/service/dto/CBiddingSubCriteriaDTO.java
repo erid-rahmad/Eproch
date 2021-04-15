@@ -1,9 +1,9 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CBiddingSubCriteria} entity.
@@ -19,6 +19,10 @@ public class CBiddingSubCriteriaDTO extends AbstractAuditingDTO {
 
     private String description;
 
+    private String evaluationType;
+
+    private Boolean multipleOptions;
+
     private UUID uid;
 
     private Boolean active = true;
@@ -30,8 +34,7 @@ public class CBiddingSubCriteriaDTO extends AbstractAuditingDTO {
     private Long biddingCriteriaId;
     private String biddingCriteriaName;
 
-    private Long adUserUserId;
-    private String adUserUserName;
+
 
     public Long getId() {
         return id;
@@ -55,6 +58,22 @@ public class CBiddingSubCriteriaDTO extends AbstractAuditingDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getEvaluationType() {
+        return evaluationType;
+    }
+
+    public void setEvaluationType(String evaluationType) {
+        this.evaluationType = evaluationType;
+    }
+
+    public Boolean isMultipleOptions() {
+        return multipleOptions;
+    }
+
+    public void setMultipleOptions(Boolean multipleOptions) {
+        this.multipleOptions = multipleOptions;
     }
 
     public UUID getUid() {
@@ -105,21 +124,6 @@ public class CBiddingSubCriteriaDTO extends AbstractAuditingDTO {
         this.biddingCriteriaName = biddingCriteriaName;
     }
 
-    public Long getAdUserUserId() {
-        return adUserUserId;
-    }
-
-    public void setAdUserUserId(Long adUserUserId) {
-        this.adUserUserId = adUserUserId;
-    }
-
-    public String getAdUserUserName() {
-        return adUserUserName;
-    }
-
-    public void setAdUserUserName(String adUserUserName) {
-        this.adUserUserName = adUserUserName;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -148,14 +152,14 @@ public class CBiddingSubCriteriaDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", evaluationType='" + getEvaluationType() + "'" +
+            ", multipleOptions='" + isMultipleOptions() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", adOrganizationName=" + getAdOrganizationName() +
             ", biddingCriteriaId=" + getBiddingCriteriaId() +
             ", biddingCriteriaName=" + getBiddingCriteriaName() +
-            ", adUserUserId=" + getAdUserUserId() +
-            ", adUserUserName=" + getAdUserUserName() +
             "}";
     }
 }

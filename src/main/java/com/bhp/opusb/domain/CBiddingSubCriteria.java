@@ -7,6 +7,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -31,6 +33,12 @@ public class CBiddingSubCriteria extends AbstractAuditingEntity {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "evaluation_type")
+    private String evaluationType;
+
+    @Column(name = "multiple_options")
+    private Boolean multipleOptions;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -46,11 +54,6 @@ public class CBiddingSubCriteria extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("cBiddingSubCriteria")
     private CBiddingCriteria biddingCriteria;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("cBiddingSubCriteria")
-    private AdUser adUser;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -85,6 +88,32 @@ public class CBiddingSubCriteria extends AbstractAuditingEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getEvaluationType() {
+        return evaluationType;
+    }
+
+    public CBiddingSubCriteria evaluationType(String evaluationType) {
+        this.evaluationType = evaluationType;
+        return this;
+    }
+
+    public void setEvaluationType(String evaluationType) {
+        this.evaluationType = evaluationType;
+    }
+
+    public Boolean isMultipleOptions() {
+        return multipleOptions;
+    }
+
+    public CBiddingSubCriteria multipleOptions(Boolean multipleOptions) {
+        this.multipleOptions = multipleOptions;
+        return this;
+    }
+
+    public void setMultipleOptions(Boolean multipleOptions) {
+        this.multipleOptions = multipleOptions;
     }
 
     public UUID getUid() {
@@ -138,19 +167,6 @@ public class CBiddingSubCriteria extends AbstractAuditingEntity {
     public void setBiddingCriteria(CBiddingCriteria cBiddingCriteria) {
         this.biddingCriteria = cBiddingCriteria;
     }
-
-    public AdUser getAdUser() {
-        return adUser;
-    }
-
-    public CBiddingSubCriteria adUser(AdUser adUser) {
-        this.adUser = adUser;
-        return this;
-    }
-
-    public void setAdUser(AdUser adUser) {
-        this.adUser = adUser;
-    }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
     @PrePersist
@@ -180,6 +196,8 @@ public class CBiddingSubCriteria extends AbstractAuditingEntity {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", evaluationType='" + getEvaluationType() + "'" +
+            ", multipleOptions='" + isMultipleOptions() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

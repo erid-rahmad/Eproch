@@ -94,9 +94,6 @@ public class CBiddingCriteriaQueryService extends QueryService<CBiddingCriteria>
             if (criteria.getName() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getName(), CBiddingCriteria_.name));
             }
-            if (criteria.getDescription() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getDescription(), CBiddingCriteria_.description));
-            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CBiddingCriteria_.uid));
             }

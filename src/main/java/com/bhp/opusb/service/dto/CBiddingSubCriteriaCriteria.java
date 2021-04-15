@@ -31,6 +31,10 @@ public class CBiddingSubCriteriaCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
+    private StringFilter evaluationType;
+
+    private BooleanFilter multipleOptions;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -39,8 +43,6 @@ public class CBiddingSubCriteriaCriteria implements Serializable, Criteria {
 
     private LongFilter biddingCriteriaId;
 
-    private LongFilter adUserId;
-
     public CBiddingSubCriteriaCriteria() {
     }
 
@@ -48,11 +50,12 @@ public class CBiddingSubCriteriaCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.evaluationType = other.evaluationType == null ? null : other.evaluationType.copy();
+        this.multipleOptions = other.multipleOptions == null ? null : other.multipleOptions.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.biddingCriteriaId = other.biddingCriteriaId == null ? null : other.biddingCriteriaId.copy();
-        this.adUserId = other.adUserId == null ? null : other.adUserId.copy();
     }
 
     @Override
@@ -82,6 +85,22 @@ public class CBiddingSubCriteriaCriteria implements Serializable, Criteria {
 
     public void setDescription(StringFilter description) {
         this.description = description;
+    }
+
+    public StringFilter getEvaluationType() {
+        return evaluationType;
+    }
+
+    public void setEvaluationType(StringFilter evaluationType) {
+        this.evaluationType = evaluationType;
+    }
+
+    public BooleanFilter getMultipleOptions() {
+        return multipleOptions;
+    }
+
+    public void setMultipleOptions(BooleanFilter multipleOptions) {
+        this.multipleOptions = multipleOptions;
     }
 
     public UUIDFilter getUid() {
@@ -116,14 +135,6 @@ public class CBiddingSubCriteriaCriteria implements Serializable, Criteria {
         this.biddingCriteriaId = biddingCriteriaId;
     }
 
-    public LongFilter getAdUserId() {
-        return adUserId;
-    }
-
-    public void setAdUserId(LongFilter adUserId) {
-        this.adUserId = adUserId;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -138,11 +149,12 @@ public class CBiddingSubCriteriaCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(evaluationType, that.evaluationType) &&
+            Objects.equals(multipleOptions, that.multipleOptions) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(biddingCriteriaId, that.biddingCriteriaId) &&
-            Objects.equals(adUserId, that.adUserId);
+            Objects.equals(biddingCriteriaId, that.biddingCriteriaId);
     }
 
     @Override
@@ -151,11 +163,12 @@ public class CBiddingSubCriteriaCriteria implements Serializable, Criteria {
         id,
         name,
         description,
+        evaluationType,
+        multipleOptions,
         uid,
         active,
         adOrganizationId,
-        biddingCriteriaId,
-        adUserId
+        biddingCriteriaId
         );
     }
 
@@ -165,11 +178,12 @@ public class CBiddingSubCriteriaCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (evaluationType != null ? "evaluationType=" + evaluationType + ", " : "") +
+                (multipleOptions != null ? "multipleOptions=" + multipleOptions + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (biddingCriteriaId != null ? "biddingCriteriaId=" + biddingCriteriaId + ", " : "") +
-                (adUserId != null ? "adUserId=" + adUserId + ", " : "") +
             "}";
     }
 

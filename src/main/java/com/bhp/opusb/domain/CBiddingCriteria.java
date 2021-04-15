@@ -7,6 +7,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -27,9 +29,6 @@ public class CBiddingCriteria extends AbstractAuditingEntity {
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
-
-    @Column(name = "description")
-    private String description;
 
     @Column(name = "uid")
     private UUID uid;
@@ -62,19 +61,6 @@ public class CBiddingCriteria extends AbstractAuditingEntity {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public CBiddingCriteria description(String description) {
-        this.description = description;
-        return this;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public UUID getUid() {
@@ -143,7 +129,6 @@ public class CBiddingCriteria extends AbstractAuditingEntity {
         return "CBiddingCriteria{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

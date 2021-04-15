@@ -2,13 +2,15 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
-
 import io.github.jhipster.service.Criteria;
-import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
+import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
+import io.github.jhipster.service.filter.FloatFilter;
+import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -38,6 +40,8 @@ public class CEvaluationMethodCriteria implements Serializable, Criteria {
 
     private LongFilter biddingTypeId;
 
+    private LongFilter eventTypeId;
+
     public CEvaluationMethodCriteria() {
     }
 
@@ -49,6 +53,7 @@ public class CEvaluationMethodCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.biddingTypeId = other.biddingTypeId == null ? null : other.biddingTypeId.copy();
+        this.eventTypeId = other.eventTypeId == null ? null : other.eventTypeId.copy();
     }
 
     @Override
@@ -112,6 +117,14 @@ public class CEvaluationMethodCriteria implements Serializable, Criteria {
         this.biddingTypeId = biddingTypeId;
     }
 
+    public LongFilter getEventTypeId() {
+        return eventTypeId;
+    }
+
+    public void setEventTypeId(LongFilter eventTypeId) {
+        this.eventTypeId = eventTypeId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -129,7 +142,8 @@ public class CEvaluationMethodCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(biddingTypeId, that.biddingTypeId);
+            Objects.equals(biddingTypeId, that.biddingTypeId) &&
+            Objects.equals(eventTypeId, that.eventTypeId);
     }
 
     @Override
@@ -141,7 +155,8 @@ public class CEvaluationMethodCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
-        biddingTypeId
+        biddingTypeId,
+        eventTypeId
         );
     }
 
@@ -155,6 +170,7 @@ public class CEvaluationMethodCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (biddingTypeId != null ? "biddingTypeId=" + biddingTypeId + ", " : "") +
+                (eventTypeId != null ? "eventTypeId=" + eventTypeId + ", " : "") +
             "}";
     }
 

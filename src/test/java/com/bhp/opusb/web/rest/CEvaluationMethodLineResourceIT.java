@@ -42,6 +42,9 @@ public class CEvaluationMethodLineResourceIT {
     private static final String DEFAULT_EVALUATION = "AAAAA";
     private static final String UPDATED_EVALUATION = "BBBBB";
 
+    private static final String DEFAULT_EVALUATION_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_EVALUATION_TYPE = "BBBBBBBBBB";
+
     private static final BigDecimal DEFAULT_WEIGHT = new BigDecimal(100);
     private static final BigDecimal UPDATED_WEIGHT = new BigDecimal(99);
     private static final BigDecimal SMALLER_WEIGHT = new BigDecimal(100 - 1);
@@ -85,6 +88,7 @@ public class CEvaluationMethodLineResourceIT {
     public static CEvaluationMethodLine createEntity(EntityManager em) {
         CEvaluationMethodLine cEvaluationMethodLine = new CEvaluationMethodLine()
             .evaluation(DEFAULT_EVALUATION)
+            .evaluationType(DEFAULT_EVALUATION_TYPE)
             .weight(DEFAULT_WEIGHT)
             .passingGrade(DEFAULT_PASSING_GRADE)
             .uid(DEFAULT_UID)
@@ -120,6 +124,7 @@ public class CEvaluationMethodLineResourceIT {
     public static CEvaluationMethodLine createUpdatedEntity(EntityManager em) {
         CEvaluationMethodLine cEvaluationMethodLine = new CEvaluationMethodLine()
             .evaluation(UPDATED_EVALUATION)
+            .evaluationType(UPDATED_EVALUATION_TYPE)
             .weight(UPDATED_WEIGHT)
             .passingGrade(UPDATED_PASSING_GRADE)
             .uid(UPDATED_UID)
@@ -169,6 +174,7 @@ public class CEvaluationMethodLineResourceIT {
         assertThat(cEvaluationMethodLineList).hasSize(databaseSizeBeforeCreate + 1);
         CEvaluationMethodLine testCEvaluationMethodLine = cEvaluationMethodLineList.get(cEvaluationMethodLineList.size() - 1);
         assertThat(testCEvaluationMethodLine.getEvaluation()).isEqualTo(DEFAULT_EVALUATION);
+        assertThat(testCEvaluationMethodLine.getEvaluationType()).isEqualTo(DEFAULT_EVALUATION_TYPE);
         assertThat(testCEvaluationMethodLine.getWeight()).isEqualTo(DEFAULT_WEIGHT);
         assertThat(testCEvaluationMethodLine.getPassingGrade()).isEqualTo(DEFAULT_PASSING_GRADE);
         assertThat(testCEvaluationMethodLine.getUid()).isEqualTo(DEFAULT_UID);
@@ -227,6 +233,7 @@ public class CEvaluationMethodLineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEvaluationMethodLine.getId().intValue())))
             .andExpect(jsonPath("$.[*].evaluation").value(hasItem(DEFAULT_EVALUATION)))
+            .andExpect(jsonPath("$.[*].evaluationType").value(hasItem(DEFAULT_EVALUATION_TYPE)))
             .andExpect(jsonPath("$.[*].weight").value(hasItem(DEFAULT_WEIGHT.intValue())))
             .andExpect(jsonPath("$.[*].passingGrade").value(hasItem(DEFAULT_PASSING_GRADE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -245,6 +252,7 @@ public class CEvaluationMethodLineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cEvaluationMethodLine.getId().intValue()))
             .andExpect(jsonPath("$.evaluation").value(DEFAULT_EVALUATION))
+            .andExpect(jsonPath("$.evaluationType").value(DEFAULT_EVALUATION_TYPE))
             .andExpect(jsonPath("$.weight").value(DEFAULT_WEIGHT.intValue()))
             .andExpect(jsonPath("$.passingGrade").value(DEFAULT_PASSING_GRADE.intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
@@ -346,6 +354,84 @@ public class CEvaluationMethodLineResourceIT {
 
         // Get all the cEvaluationMethodLineList where evaluation does not contain UPDATED_EVALUATION
         defaultCEvaluationMethodLineShouldBeFound("evaluation.doesNotContain=" + UPDATED_EVALUATION);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodLinesByEvaluationTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodLineRepository.saveAndFlush(cEvaluationMethodLine);
+
+        // Get all the cEvaluationMethodLineList where evaluationType equals to DEFAULT_EVALUATION_TYPE
+        defaultCEvaluationMethodLineShouldBeFound("evaluationType.equals=" + DEFAULT_EVALUATION_TYPE);
+
+        // Get all the cEvaluationMethodLineList where evaluationType equals to UPDATED_EVALUATION_TYPE
+        defaultCEvaluationMethodLineShouldNotBeFound("evaluationType.equals=" + UPDATED_EVALUATION_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodLinesByEvaluationTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodLineRepository.saveAndFlush(cEvaluationMethodLine);
+
+        // Get all the cEvaluationMethodLineList where evaluationType not equals to DEFAULT_EVALUATION_TYPE
+        defaultCEvaluationMethodLineShouldNotBeFound("evaluationType.notEquals=" + DEFAULT_EVALUATION_TYPE);
+
+        // Get all the cEvaluationMethodLineList where evaluationType not equals to UPDATED_EVALUATION_TYPE
+        defaultCEvaluationMethodLineShouldBeFound("evaluationType.notEquals=" + UPDATED_EVALUATION_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodLinesByEvaluationTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        cEvaluationMethodLineRepository.saveAndFlush(cEvaluationMethodLine);
+
+        // Get all the cEvaluationMethodLineList where evaluationType in DEFAULT_EVALUATION_TYPE or UPDATED_EVALUATION_TYPE
+        defaultCEvaluationMethodLineShouldBeFound("evaluationType.in=" + DEFAULT_EVALUATION_TYPE + "," + UPDATED_EVALUATION_TYPE);
+
+        // Get all the cEvaluationMethodLineList where evaluationType equals to UPDATED_EVALUATION_TYPE
+        defaultCEvaluationMethodLineShouldNotBeFound("evaluationType.in=" + UPDATED_EVALUATION_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodLinesByEvaluationTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cEvaluationMethodLineRepository.saveAndFlush(cEvaluationMethodLine);
+
+        // Get all the cEvaluationMethodLineList where evaluationType is not null
+        defaultCEvaluationMethodLineShouldBeFound("evaluationType.specified=true");
+
+        // Get all the cEvaluationMethodLineList where evaluationType is null
+        defaultCEvaluationMethodLineShouldNotBeFound("evaluationType.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCEvaluationMethodLinesByEvaluationTypeContainsSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodLineRepository.saveAndFlush(cEvaluationMethodLine);
+
+        // Get all the cEvaluationMethodLineList where evaluationType contains DEFAULT_EVALUATION_TYPE
+        defaultCEvaluationMethodLineShouldBeFound("evaluationType.contains=" + DEFAULT_EVALUATION_TYPE);
+
+        // Get all the cEvaluationMethodLineList where evaluationType contains UPDATED_EVALUATION_TYPE
+        defaultCEvaluationMethodLineShouldNotBeFound("evaluationType.contains=" + UPDATED_EVALUATION_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodLinesByEvaluationTypeNotContainsSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodLineRepository.saveAndFlush(cEvaluationMethodLine);
+
+        // Get all the cEvaluationMethodLineList where evaluationType does not contain DEFAULT_EVALUATION_TYPE
+        defaultCEvaluationMethodLineShouldNotBeFound("evaluationType.doesNotContain=" + DEFAULT_EVALUATION_TYPE);
+
+        // Get all the cEvaluationMethodLineList where evaluationType does not contain UPDATED_EVALUATION_TYPE
+        defaultCEvaluationMethodLineShouldBeFound("evaluationType.doesNotContain=" + UPDATED_EVALUATION_TYPE);
     }
 
 
@@ -703,6 +789,7 @@ public class CEvaluationMethodLineResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEvaluationMethodLine.getId().intValue())))
             .andExpect(jsonPath("$.[*].evaluation").value(hasItem(DEFAULT_EVALUATION)))
+            .andExpect(jsonPath("$.[*].evaluationType").value(hasItem(DEFAULT_EVALUATION_TYPE)))
             .andExpect(jsonPath("$.[*].weight").value(hasItem(DEFAULT_WEIGHT.intValue())))
             .andExpect(jsonPath("$.[*].passingGrade").value(hasItem(DEFAULT_PASSING_GRADE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
@@ -755,6 +842,7 @@ public class CEvaluationMethodLineResourceIT {
         em.detach(updatedCEvaluationMethodLine);
         updatedCEvaluationMethodLine
             .evaluation(UPDATED_EVALUATION)
+            .evaluationType(UPDATED_EVALUATION_TYPE)
             .weight(UPDATED_WEIGHT)
             .passingGrade(UPDATED_PASSING_GRADE)
             .uid(UPDATED_UID)
@@ -771,6 +859,7 @@ public class CEvaluationMethodLineResourceIT {
         assertThat(cEvaluationMethodLineList).hasSize(databaseSizeBeforeUpdate);
         CEvaluationMethodLine testCEvaluationMethodLine = cEvaluationMethodLineList.get(cEvaluationMethodLineList.size() - 1);
         assertThat(testCEvaluationMethodLine.getEvaluation()).isEqualTo(UPDATED_EVALUATION);
+        assertThat(testCEvaluationMethodLine.getEvaluationType()).isEqualTo(UPDATED_EVALUATION_TYPE);
         assertThat(testCEvaluationMethodLine.getWeight()).isEqualTo(UPDATED_WEIGHT);
         assertThat(testCEvaluationMethodLine.getPassingGrade()).isEqualTo(UPDATED_PASSING_GRADE);
         assertThat(testCEvaluationMethodLine.getUid()).isEqualTo(UPDATED_UID);

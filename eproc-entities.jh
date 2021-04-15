@@ -909,7 +909,7 @@ entity CEventTypeline {
 
 entity CBiddingCriteria {
 	name String required
-	description String
+
 	uid UUID
 	active Boolean
 }
@@ -917,9 +917,18 @@ entity CBiddingCriteria {
 entity CBiddingSubCriteria {
 	name String required
 	description String
+	EvaluationType String
+	MultipleOptions Boolean
 	uid UUID
 	active Boolean
 }
+
+entity CBiddingSubCriteriaLine {
+	name String required
+	score Integer
+	uid UUID
+	active Boolean
+	}
 
 entity CBudgetPlan {
 	code String required maxlength(20)
@@ -953,8 +962,28 @@ entity CEvaluationMethod {
 entity CEvaluationMethodLine {
 	/** Referenced from M_Reference */
 	evaluation String required maxlength(5)
+	evaluationType String
 	weight BigDecimal max(100)
 	passingGrade BigDecimal
+	uid UUID
+	active Boolean
+}
+
+entity CEvaluationMethodCriteria {
+	uid UUID
+	active Boolean
+
+}
+
+entity CEvalMethodCriteriaLine {
+    weight Integer
+	uid UUID
+	active Boolean
+
+}
+
+entity CEvalMethodSubCriteria {
+    weight Integer
 	uid UUID
 	active Boolean
 }
@@ -1460,7 +1489,10 @@ relationship ManyToOne {
 
 	CBiddingSubCriteria{adOrganization required} to ADOrganization
 	CBiddingSubCriteria{biddingCriteria required} to CBiddingCriteria
-	CBiddingSubCriteria{adUser required} to AdUser
+
+	CBiddingSubCriteriaLine{adOrganization required} to ADOrganization
+	CBiddingSubCriteriaLine{biddingSubCriteria required} to CBiddingSubCriteria
+
 
 	CBudgetPlan{adOrganization required} to ADOrganization
 	CBudgetPlan{cCostCenter required} to CCostCenter
@@ -1482,8 +1514,23 @@ relationship ManyToOne {
 
 	CEvaluationMethod{adOrganization required} to ADOrganization
 	CEvaluationMethod{biddingType} to CBiddingType
+	CEvaluationMethod{eventType} to CEventType
+
 	CEvaluationMethodLine{adOrganization required} to ADOrganization
 	CEvaluationMethodLine{evaluationMethod required} to CEvaluationMethod
+
+	CEvaluationMethodCriteria{adOrganization } to ADOrganization
+	CEvaluationMethodCriteria{evaluationMethodLine } to CEvaluationMethodLine
+
+    CEvalMethodCriteriaLine{adOrganization } to ADOrganization
+	CEvalMethodCriteriaLine{biddingCriteria } to CBiddingCriteria
+
+    CEvalMethodSubCriteria{adOrganization } to ADOrganization
+	CEvalMethodSubCriteria{biddingCriteria } to CBiddingCriteria
+	CEvalMethodSubCriteria{biddingSubCriteria } to CBiddingSubCriteria
+
+
+
 	CEvaluationCriteria{adOrganization required} to ADOrganization
 	CEvaluationCriteria{evaluationMethodLine required} to CEvaluationMethodLine
 	CEvaluationCriteria{biddingCriteria required} to CBiddingCriteria

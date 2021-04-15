@@ -27,4 +27,5 @@
                                  referencedTableName="ad_user"/>
 
     </changeSet>
+
 </databaseChangeLog>

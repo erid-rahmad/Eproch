@@ -1,20 +1,16 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEvaluationMethod} entity.
  */
-public class CEvaluationMethodDTO extends AbstractAuditingDTO {
+public class CEvaluationMethodDTO implements Serializable {
     
-    private static final long serialVersionUID = 1L;
-
     private Long id;
 
     @NotNull
@@ -26,14 +22,14 @@ public class CEvaluationMethodDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active = true;
+    private Boolean active;
 
 
     private Long adOrganizationId;
-    private String adOrganizationName;
 
     private Long biddingTypeId;
-    private String biddingTypeName;
+
+    private Long eventTypeId;
     
     public Long getId() {
         return id;
@@ -83,14 +79,6 @@ public class CEvaluationMethodDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public String getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
-
     public Long getBiddingTypeId() {
         return biddingTypeId;
     }
@@ -99,12 +87,12 @@ public class CEvaluationMethodDTO extends AbstractAuditingDTO {
         this.biddingTypeId = cBiddingTypeId;
     }
 
-    public String getBiddingTypeName() {
-        return biddingTypeName;
+    public Long getEventTypeId() {
+        return eventTypeId;
     }
 
-    public void setBiddingTypeName(String biddingTypeName) {
-        this.biddingTypeName = biddingTypeName;
+    public void setEventTypeId(Long cEventTypeId) {
+        this.eventTypeId = cEventTypeId;
     }
 
     @Override
@@ -138,6 +126,7 @@ public class CEvaluationMethodDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", biddingTypeId=" + getBiddingTypeId() +
+            ", eventTypeId=" + getEventTypeId() +
             "}";
     }
 }

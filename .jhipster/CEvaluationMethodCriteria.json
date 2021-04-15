@@ -1,0 +1,41 @@
+{
+    "name": "CEvaluationMethodCriteria",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cEvaluationMethodCriteria",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cEvaluationMethodLine",
+            "otherEntityRelationshipName": "cEvaluationMethodCriteria",
+            "relationshipName": "evaluationMethodLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210416075600",
+    "entityTableName": "c_evaluation_method_criteria",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
