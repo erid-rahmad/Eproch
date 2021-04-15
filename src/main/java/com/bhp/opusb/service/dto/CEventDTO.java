@@ -8,8 +8,8 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEvent} entity.
  */
-public class CEventDTO implements Serializable {
-    
+public class CEventDTO extends AbstractAuditingDTO {
+
     private Long id;
 
     @NotNull
@@ -25,7 +25,19 @@ public class CEventDTO implements Serializable {
     private Long adOrganizationId;
 
     private Long cProductClassificationId;
-    
+
+    public String getcProductClassificationName() {
+        return cProductClassificationName;
+    }
+
+    public void setcProductClassificationName(String cProductClassificationName) {
+        this.cProductClassificationName = cProductClassificationName;
+    }
+
+    private String cProductClassificationName;
+
+
+
     public Long getId() {
         return id;
     }
@@ -74,11 +86,11 @@ public class CEventDTO implements Serializable {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public Long getCProductClassificationId() {
+    public Long getcProductClassificationId() {
         return cProductClassificationId;
     }
 
-    public void setCProductClassificationId(Long cProductClassificationId) {
+    public void setcProductClassificationId(Long cProductClassificationId) {
         this.cProductClassificationId = cProductClassificationId;
     }
 
@@ -106,13 +118,14 @@ public class CEventDTO implements Serializable {
     @Override
     public String toString() {
         return "CEventDTO{" +
-            "id=" + getId() +
-            ", event='" + getEvent() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", cProductClassificationId=" + getCProductClassificationId() +
-            "}";
+            "id=" + id +
+            ", event='" + event + '\'' +
+            ", description='" + description + '\'' +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", cProductClassificationId=" + cProductClassificationId +
+            ", cProductClassificationName='" + cProductClassificationName + '\'' +
+            '}';
     }
 }

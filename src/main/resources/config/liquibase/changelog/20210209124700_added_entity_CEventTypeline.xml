@@ -70,9 +70,11 @@
         </loadData>
     </changeSet>
 
-    <changeSet id="20210209120900-1-data" author="jhipster">
+    <changeSet id="20210209120990-1-data" author="jhipster">
         <addColumn tableName="c_event_typeline">
-            <column name="c_event_id" type="numeric"/>
+            <column name="c_event_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
         </addColumn>
     </changeSet>
 

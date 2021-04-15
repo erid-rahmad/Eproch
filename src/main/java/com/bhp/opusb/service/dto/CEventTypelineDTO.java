@@ -1,5 +1,7 @@
 package com.bhp.opusb.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -29,8 +31,26 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
     private String adOrganizationName;
 
     private Long eventTypeId;
-
+//    @JsonProperty("cEventId")
     private Long cEventId;
+//    @JsonProperty("cEventName")
+    private String cEventName;
+
+    public Long getcEventId() {
+        return cEventId;
+    }
+
+    public void setcEventId(Long cEventId) {
+        this.cEventId = cEventId;
+    }
+
+    public String getcEventName() {
+        return cEventName;
+    }
+
+    public void setcEventName(String cEventName) {
+        this.cEventName = cEventName;
+    }
 
     public Long getId() {
         return id;
@@ -96,13 +116,7 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
         this.eventTypeId = cEventTypeId;
     }
 
-    public Long getcEventId() {
-        return cEventId;
-    }
 
-    public void setcEventId(Long cEventId) {
-        this.cEventId = cEventId;
-    }
 
     @Override
     public boolean equals(Object o) {

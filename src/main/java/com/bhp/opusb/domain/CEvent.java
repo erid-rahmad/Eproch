@@ -17,7 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "c_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CEvent implements Serializable {
+public class CEvent extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 

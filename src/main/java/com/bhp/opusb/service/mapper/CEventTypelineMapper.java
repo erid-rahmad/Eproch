@@ -16,13 +16,13 @@ public interface CEventTypelineMapper extends EntityMapper<CEventTypelineDTO, CE
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "eventType.id", target = "eventTypeId")
     @Mapping(source = "CEvent.id", target = "cEventId")
-//    @Mapping(source = "cEvent.event", target = "cEventName")
+    @Mapping(source = "CEvent.event", target = "cEventName")
 //    @Mapping(source = "eventType.name", target = "eventTypeName")
     CEventTypelineDTO toDto(CEventTypeline cEventTypeline);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "eventTypeId", target = "eventType")
-    @Mapping(source = "cEventId", target = "cEvent")
+    @Mapping(source = "cEventId", target = "CEvent")
     CEventTypeline toEntity(CEventTypelineDTO cEventTypelineDTO);
 
     default CEventTypeline fromId(Long id) {
