@@ -231,6 +231,11 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
           return item;
         });
 
+        if (this.gridData.length) {
+          const firstRow = this.gridData[0];
+          this.header.taxable = firstRow?.taxable && firstRow?.cTaxCategoryId && firstRow?.cTaxId ? true : false;
+        }
+
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
       })
@@ -438,7 +443,7 @@ export default class EVerificationUpdate extends mixins(Vue2Filters.mixin, Alert
     this.header.picId = accountStore.userDetails.id;
 
     // Remove non-numeric character in taxIncoive.
-    if (this.header.taxable) {
+    if (this.header.taxInvoice) {
       this.header.taxInvoice = this.header.taxInvoice.replace(/[-.]+/g, '');
     }
     
