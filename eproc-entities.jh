@@ -1123,10 +1123,22 @@ entity MVendorSuggestion {
 }
 
 entity MVendorScoring {
-	percentage BigDecimal
 	uid UUID
 	active Boolean
 }
+entity MVendorScoringLine {
+    evaluation String
+	uid UUID
+	active Boolean
+}
+
+entity MVendorScoringCriteria {
+    requirement String required
+	uid UUID
+	active Boolean
+}
+
+
 
 // Enums
 
@@ -1493,7 +1505,6 @@ relationship ManyToOne {
 	CBiddingSubCriteriaLine{adOrganization required} to ADOrganization
 	CBiddingSubCriteriaLine{biddingSubCriteria required} to CBiddingSubCriteria
 
-
 	CBudgetPlan{adOrganization required} to ADOrganization
 	CBudgetPlan{cCostCenter required} to CCostCenter
 	CBudgetPlan{cCurrency required} to CCurrency
@@ -1595,9 +1606,18 @@ relationship ManyToOne {
 
 	MVendorScoring{bidding required} to MBidding
 	MVendorScoring{adOrganization required} to ADOrganization
-	MVendorScoring{biddingCriteria required} to CBiddingCriteria
-	MVendorScoring{biddingSubCriteria required} to CBiddingSubCriteria
-	MVendorScoring{adUser required} to AdUser
+	MVendorScoring{evaluationMethod } to CEvaluationMethod
+
+	MVendorScoringLine{adOrganization required} to ADOrganization
+	MVendorScoringLine{evaluationMethodLine required} to CEvaluationMethodLine
+	MVendorScoringLine{vendorScoring required} to MVendorScoring
+
+	MVendorScoringCriteria{adOrganization required} to ADOrganization
+	MVendorScoringCriteria{evalMethodCriteriaLine } to CEvalMethodCriteriaLine
+	MVendorScoringCriteria{evalMethodSubCriteria } to CEvalMethodSubCriteria
+	MVendorScoringCriteria{vendorScoringLine } to MVendorScoringLine
+	MVendorScoringCriteria{biddingSubCriteriaLine } to CBiddingSubCriteriaLine
+
 
 	MBiddingSubmission{bidding required} to MBidding
 	MBiddingSubmission{biddingSchedule required} to MBiddingSchedule

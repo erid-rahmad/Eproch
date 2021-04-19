@@ -4,9 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MVendorScoring;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.CBiddingCriteria;
-import com.bhp.opusb.domain.CBiddingSubCriteria;
-import com.bhp.opusb.domain.AdUser;
+import com.bhp.opusb.domain.CEvaluationMethod;
 import com.bhp.opusb.repository.MVendorScoringRepository;
 import com.bhp.opusb.service.MVendorScoringService;
 import com.bhp.opusb.service.dto.MVendorScoringDTO;
@@ -24,7 +22,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -41,10 +38,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 public class MVendorScoringResourceIT {
-
-    private static final BigDecimal DEFAULT_PERCENTAGE = new BigDecimal(1);
-    private static final BigDecimal UPDATED_PERCENTAGE = new BigDecimal(2);
-    private static final BigDecimal SMALLER_PERCENTAGE = new BigDecimal(1 - 1);
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
@@ -80,7 +73,6 @@ public class MVendorScoringResourceIT {
      */
     public static MVendorScoring createEntity(EntityManager em) {
         MVendorScoring mVendorScoring = new MVendorScoring()
-            .percentage(DEFAULT_PERCENTAGE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -104,35 +96,15 @@ public class MVendorScoringResourceIT {
         }
         mVendorScoring.setAdOrganization(aDOrganization);
         // Add required entity
-        CBiddingCriteria cBiddingCriteria;
-        if (TestUtil.findAll(em, CBiddingCriteria.class).isEmpty()) {
-            cBiddingCriteria = CBiddingCriteriaResourceIT.createEntity(em);
-            em.persist(cBiddingCriteria);
+        CEvaluationMethod cEvaluationMethod;
+        if (TestUtil.findAll(em, CEvaluationMethod.class).isEmpty()) {
+            cEvaluationMethod = CEvaluationMethodResourceIT.createEntity(em);
+            em.persist(cEvaluationMethod);
             em.flush();
         } else {
-            cBiddingCriteria = TestUtil.findAll(em, CBiddingCriteria.class).get(0);
+            cEvaluationMethod = TestUtil.findAll(em, CEvaluationMethod.class).get(0);
         }
-        mVendorScoring.setBiddingCriteria(cBiddingCriteria);
-        // Add required entity
-        CBiddingSubCriteria cBiddingSubCriteria;
-        if (TestUtil.findAll(em, CBiddingSubCriteria.class).isEmpty()) {
-            cBiddingSubCriteria = CBiddingSubCriteriaResourceIT.createEntity(em);
-            em.persist(cBiddingSubCriteria);
-            em.flush();
-        } else {
-            cBiddingSubCriteria = TestUtil.findAll(em, CBiddingSubCriteria.class).get(0);
-        }
-        mVendorScoring.setBiddingSubCriteria(cBiddingSubCriteria);
-        // Add required entity
-        AdUser adUser;
-        if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
-            adUser = AdUserResourceIT.createEntity(em);
-            em.persist(adUser);
-            em.flush();
-        } else {
-            adUser = TestUtil.findAll(em, AdUser.class).get(0);
-        }
-        mVendorScoring.setAdUser(adUser);
+        mVendorScoring.setEvaluationMethod(cEvaluationMethod);
         return mVendorScoring;
     }
     /**
@@ -143,7 +115,6 @@ public class MVendorScoringResourceIT {
      */
     public static MVendorScoring createUpdatedEntity(EntityManager em) {
         MVendorScoring mVendorScoring = new MVendorScoring()
-            .percentage(UPDATED_PERCENTAGE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -167,35 +138,15 @@ public class MVendorScoringResourceIT {
         }
         mVendorScoring.setAdOrganization(aDOrganization);
         // Add required entity
-        CBiddingCriteria cBiddingCriteria;
-        if (TestUtil.findAll(em, CBiddingCriteria.class).isEmpty()) {
-            cBiddingCriteria = CBiddingCriteriaResourceIT.createUpdatedEntity(em);
-            em.persist(cBiddingCriteria);
+        CEvaluationMethod cEvaluationMethod;
+        if (TestUtil.findAll(em, CEvaluationMethod.class).isEmpty()) {
+            cEvaluationMethod = CEvaluationMethodResourceIT.createUpdatedEntity(em);
+            em.persist(cEvaluationMethod);
             em.flush();
         } else {
-            cBiddingCriteria = TestUtil.findAll(em, CBiddingCriteria.class).get(0);
+            cEvaluationMethod = TestUtil.findAll(em, CEvaluationMethod.class).get(0);
         }
-        mVendorScoring.setBiddingCriteria(cBiddingCriteria);
-        // Add required entity
-        CBiddingSubCriteria cBiddingSubCriteria;
-        if (TestUtil.findAll(em, CBiddingSubCriteria.class).isEmpty()) {
-            cBiddingSubCriteria = CBiddingSubCriteriaResourceIT.createUpdatedEntity(em);
-            em.persist(cBiddingSubCriteria);
-            em.flush();
-        } else {
-            cBiddingSubCriteria = TestUtil.findAll(em, CBiddingSubCriteria.class).get(0);
-        }
-        mVendorScoring.setBiddingSubCriteria(cBiddingSubCriteria);
-        // Add required entity
-        AdUser adUser;
-        if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
-            adUser = AdUserResourceIT.createUpdatedEntity(em);
-            em.persist(adUser);
-            em.flush();
-        } else {
-            adUser = TestUtil.findAll(em, AdUser.class).get(0);
-        }
-        mVendorScoring.setAdUser(adUser);
+        mVendorScoring.setEvaluationMethod(cEvaluationMethod);
         return mVendorScoring;
     }
 
@@ -220,7 +171,6 @@ public class MVendorScoringResourceIT {
         List<MVendorScoring> mVendorScoringList = mVendorScoringRepository.findAll();
         assertThat(mVendorScoringList).hasSize(databaseSizeBeforeCreate + 1);
         MVendorScoring testMVendorScoring = mVendorScoringList.get(mVendorScoringList.size() - 1);
-        assertThat(testMVendorScoring.getPercentage()).isEqualTo(DEFAULT_PERCENTAGE);
         assertThat(testMVendorScoring.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testMVendorScoring.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -257,7 +207,6 @@ public class MVendorScoringResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mVendorScoring.getId().intValue())))
-            .andExpect(jsonPath("$.[*].percentage").value(hasItem(DEFAULT_PERCENTAGE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -273,7 +222,6 @@ public class MVendorScoringResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(mVendorScoring.getId().intValue()))
-            .andExpect(jsonPath("$.percentage").value(DEFAULT_PERCENTAGE.intValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -295,111 +243,6 @@ public class MVendorScoringResourceIT {
 
         defaultMVendorScoringShouldBeFound("id.lessThanOrEqual=" + id);
         defaultMVendorScoringShouldNotBeFound("id.lessThan=" + id);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMVendorScoringsByPercentageIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mVendorScoringRepository.saveAndFlush(mVendorScoring);
-
-        // Get all the mVendorScoringList where percentage equals to DEFAULT_PERCENTAGE
-        defaultMVendorScoringShouldBeFound("percentage.equals=" + DEFAULT_PERCENTAGE);
-
-        // Get all the mVendorScoringList where percentage equals to UPDATED_PERCENTAGE
-        defaultMVendorScoringShouldNotBeFound("percentage.equals=" + UPDATED_PERCENTAGE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVendorScoringsByPercentageIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        mVendorScoringRepository.saveAndFlush(mVendorScoring);
-
-        // Get all the mVendorScoringList where percentage not equals to DEFAULT_PERCENTAGE
-        defaultMVendorScoringShouldNotBeFound("percentage.notEquals=" + DEFAULT_PERCENTAGE);
-
-        // Get all the mVendorScoringList where percentage not equals to UPDATED_PERCENTAGE
-        defaultMVendorScoringShouldBeFound("percentage.notEquals=" + UPDATED_PERCENTAGE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVendorScoringsByPercentageIsInShouldWork() throws Exception {
-        // Initialize the database
-        mVendorScoringRepository.saveAndFlush(mVendorScoring);
-
-        // Get all the mVendorScoringList where percentage in DEFAULT_PERCENTAGE or UPDATED_PERCENTAGE
-        defaultMVendorScoringShouldBeFound("percentage.in=" + DEFAULT_PERCENTAGE + "," + UPDATED_PERCENTAGE);
-
-        // Get all the mVendorScoringList where percentage equals to UPDATED_PERCENTAGE
-        defaultMVendorScoringShouldNotBeFound("percentage.in=" + UPDATED_PERCENTAGE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVendorScoringsByPercentageIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        mVendorScoringRepository.saveAndFlush(mVendorScoring);
-
-        // Get all the mVendorScoringList where percentage is not null
-        defaultMVendorScoringShouldBeFound("percentage.specified=true");
-
-        // Get all the mVendorScoringList where percentage is null
-        defaultMVendorScoringShouldNotBeFound("percentage.specified=false");
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVendorScoringsByPercentageIsGreaterThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mVendorScoringRepository.saveAndFlush(mVendorScoring);
-
-        // Get all the mVendorScoringList where percentage is greater than or equal to DEFAULT_PERCENTAGE
-        defaultMVendorScoringShouldBeFound("percentage.greaterThanOrEqual=" + DEFAULT_PERCENTAGE);
-
-        // Get all the mVendorScoringList where percentage is greater than or equal to UPDATED_PERCENTAGE
-        defaultMVendorScoringShouldNotBeFound("percentage.greaterThanOrEqual=" + UPDATED_PERCENTAGE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVendorScoringsByPercentageIsLessThanOrEqualToSomething() throws Exception {
-        // Initialize the database
-        mVendorScoringRepository.saveAndFlush(mVendorScoring);
-
-        // Get all the mVendorScoringList where percentage is less than or equal to DEFAULT_PERCENTAGE
-        defaultMVendorScoringShouldBeFound("percentage.lessThanOrEqual=" + DEFAULT_PERCENTAGE);
-
-        // Get all the mVendorScoringList where percentage is less than or equal to SMALLER_PERCENTAGE
-        defaultMVendorScoringShouldNotBeFound("percentage.lessThanOrEqual=" + SMALLER_PERCENTAGE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVendorScoringsByPercentageIsLessThanSomething() throws Exception {
-        // Initialize the database
-        mVendorScoringRepository.saveAndFlush(mVendorScoring);
-
-        // Get all the mVendorScoringList where percentage is less than DEFAULT_PERCENTAGE
-        defaultMVendorScoringShouldNotBeFound("percentage.lessThan=" + DEFAULT_PERCENTAGE);
-
-        // Get all the mVendorScoringList where percentage is less than UPDATED_PERCENTAGE
-        defaultMVendorScoringShouldBeFound("percentage.lessThan=" + UPDATED_PERCENTAGE);
-    }
-
-    @Test
-    @Transactional
-    public void getAllMVendorScoringsByPercentageIsGreaterThanSomething() throws Exception {
-        // Initialize the database
-        mVendorScoringRepository.saveAndFlush(mVendorScoring);
-
-        // Get all the mVendorScoringList where percentage is greater than DEFAULT_PERCENTAGE
-        defaultMVendorScoringShouldNotBeFound("percentage.greaterThan=" + DEFAULT_PERCENTAGE);
-
-        // Get all the mVendorScoringList where percentage is greater than SMALLER_PERCENTAGE
-        defaultMVendorScoringShouldBeFound("percentage.greaterThan=" + SMALLER_PERCENTAGE);
     }
 
 
@@ -541,49 +384,17 @@ public class MVendorScoringResourceIT {
 
     @Test
     @Transactional
-    public void getAllMVendorScoringsByBiddingCriteriaIsEqualToSomething() throws Exception {
+    public void getAllMVendorScoringsByEvaluationMethodIsEqualToSomething() throws Exception {
         // Get already existing entity
-        CBiddingCriteria biddingCriteria = mVendorScoring.getBiddingCriteria();
+        CEvaluationMethod evaluationMethod = mVendorScoring.getEvaluationMethod();
         mVendorScoringRepository.saveAndFlush(mVendorScoring);
-        Long biddingCriteriaId = biddingCriteria.getId();
+        Long evaluationMethodId = evaluationMethod.getId();
 
-        // Get all the mVendorScoringList where biddingCriteria equals to biddingCriteriaId
-        defaultMVendorScoringShouldBeFound("biddingCriteriaId.equals=" + biddingCriteriaId);
+        // Get all the mVendorScoringList where evaluationMethod equals to evaluationMethodId
+        defaultMVendorScoringShouldBeFound("evaluationMethodId.equals=" + evaluationMethodId);
 
-        // Get all the mVendorScoringList where biddingCriteria equals to biddingCriteriaId + 1
-        defaultMVendorScoringShouldNotBeFound("biddingCriteriaId.equals=" + (biddingCriteriaId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMVendorScoringsByBiddingSubCriteriaIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        CBiddingSubCriteria biddingSubCriteria = mVendorScoring.getBiddingSubCriteria();
-        mVendorScoringRepository.saveAndFlush(mVendorScoring);
-        Long biddingSubCriteriaId = biddingSubCriteria.getId();
-
-        // Get all the mVendorScoringList where biddingSubCriteria equals to biddingSubCriteriaId
-        defaultMVendorScoringShouldBeFound("biddingSubCriteriaId.equals=" + biddingSubCriteriaId);
-
-        // Get all the mVendorScoringList where biddingSubCriteria equals to biddingSubCriteriaId + 1
-        defaultMVendorScoringShouldNotBeFound("biddingSubCriteriaId.equals=" + (biddingSubCriteriaId + 1));
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllMVendorScoringsByAdUserIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        AdUser adUser = mVendorScoring.getAdUser();
-        mVendorScoringRepository.saveAndFlush(mVendorScoring);
-        Long adUserId = adUser.getId();
-
-        // Get all the mVendorScoringList where adUser equals to adUserId
-        defaultMVendorScoringShouldBeFound("adUserId.equals=" + adUserId);
-
-        // Get all the mVendorScoringList where adUser equals to adUserId + 1
-        defaultMVendorScoringShouldNotBeFound("adUserId.equals=" + (adUserId + 1));
+        // Get all the mVendorScoringList where evaluationMethod equals to evaluationMethodId + 1
+        defaultMVendorScoringShouldNotBeFound("evaluationMethodId.equals=" + (evaluationMethodId + 1));
     }
 
     /**
@@ -594,7 +405,6 @@ public class MVendorScoringResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(mVendorScoring.getId().intValue())))
-            .andExpect(jsonPath("$.[*].percentage").value(hasItem(DEFAULT_PERCENTAGE.intValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -644,7 +454,6 @@ public class MVendorScoringResourceIT {
         // Disconnect from session so that the updates on updatedMVendorScoring are not directly saved in db
         em.detach(updatedMVendorScoring);
         updatedMVendorScoring
-            .percentage(UPDATED_PERCENTAGE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         MVendorScoringDTO mVendorScoringDTO = mVendorScoringMapper.toDto(updatedMVendorScoring);
@@ -658,7 +467,6 @@ public class MVendorScoringResourceIT {
         List<MVendorScoring> mVendorScoringList = mVendorScoringRepository.findAll();
         assertThat(mVendorScoringList).hasSize(databaseSizeBeforeUpdate);
         MVendorScoring testMVendorScoring = mVendorScoringList.get(mVendorScoringList.size() - 1);
-        assertThat(testMVendorScoring.getPercentage()).isEqualTo(UPDATED_PERCENTAGE);
         assertThat(testMVendorScoring.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testMVendorScoring.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

@@ -12,12 +12,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A MVendorScoring.
+ * A MVendorScoringLine.
  */
 @Entity
-@Table(name = "m_vendor_scoring")
+@Table(name = "m_vendor_scoring_line")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MVendorScoring implements Serializable {
+public class MVendorScoringLine implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -25,6 +25,9 @@ public class MVendorScoring implements Serializable {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
+
+    @Column(name = "evaluation")
+    private String evaluation;
 
     @Column(name = "uid")
     private UUID uid;
@@ -34,18 +37,18 @@ public class MVendorScoring implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("mVendorScorings")
-    private MBidding bidding;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("mVendorScorings")
+    @JsonIgnoreProperties("mVendorScoringLines")
     private ADOrganization adOrganization;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("mVendorScorings")
-    private CEvaluationMethod evaluationMethod;
+    @JsonIgnoreProperties("mVendorScoringLines")
+    private CEvaluationMethodLine evaluationMethodLine;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mVendorScoringLines")
+    private MVendorScoring vendorScoring;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -56,11 +59,24 @@ public class MVendorScoring implements Serializable {
         this.id = id;
     }
 
+    public String getEvaluation() {
+        return evaluation;
+    }
+
+    public MVendorScoringLine evaluation(String evaluation) {
+        this.evaluation = evaluation;
+        return this;
+    }
+
+    public void setEvaluation(String evaluation) {
+        this.evaluation = evaluation;
+    }
+
     public UUID getUid() {
         return uid;
     }
 
-    public MVendorScoring uid(UUID uid) {
+    public MVendorScoringLine uid(UUID uid) {
         this.uid = uid;
         return this;
     }
@@ -73,7 +89,7 @@ public class MVendorScoring implements Serializable {
         return active;
     }
 
-    public MVendorScoring active(Boolean active) {
+    public MVendorScoringLine active(Boolean active) {
         this.active = active;
         return this;
     }
@@ -82,24 +98,11 @@ public class MVendorScoring implements Serializable {
         this.active = active;
     }
 
-    public MBidding getBidding() {
-        return bidding;
-    }
-
-    public MVendorScoring bidding(MBidding mBidding) {
-        this.bidding = mBidding;
-        return this;
-    }
-
-    public void setBidding(MBidding mBidding) {
-        this.bidding = mBidding;
-    }
-
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
 
-    public MVendorScoring adOrganization(ADOrganization aDOrganization) {
+    public MVendorScoringLine adOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
         return this;
     }
@@ -108,17 +111,30 @@ public class MVendorScoring implements Serializable {
         this.adOrganization = aDOrganization;
     }
 
-    public CEvaluationMethod getEvaluationMethod() {
-        return evaluationMethod;
+    public CEvaluationMethodLine getEvaluationMethodLine() {
+        return evaluationMethodLine;
     }
 
-    public MVendorScoring evaluationMethod(CEvaluationMethod cEvaluationMethod) {
-        this.evaluationMethod = cEvaluationMethod;
+    public MVendorScoringLine evaluationMethodLine(CEvaluationMethodLine cEvaluationMethodLine) {
+        this.evaluationMethodLine = cEvaluationMethodLine;
         return this;
     }
 
-    public void setEvaluationMethod(CEvaluationMethod cEvaluationMethod) {
-        this.evaluationMethod = cEvaluationMethod;
+    public void setEvaluationMethodLine(CEvaluationMethodLine cEvaluationMethodLine) {
+        this.evaluationMethodLine = cEvaluationMethodLine;
+    }
+
+    public MVendorScoring getVendorScoring() {
+        return vendorScoring;
+    }
+
+    public MVendorScoringLine vendorScoring(MVendorScoring mVendorScoring) {
+        this.vendorScoring = mVendorScoring;
+        return this;
+    }
+
+    public void setVendorScoring(MVendorScoring mVendorScoring) {
+        this.vendorScoring = mVendorScoring;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
@@ -127,10 +143,10 @@ public class MVendorScoring implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof MVendorScoring)) {
+        if (!(o instanceof MVendorScoringLine)) {
             return false;
         }
-        return id != null && id.equals(((MVendorScoring) o).id);
+        return id != null && id.equals(((MVendorScoringLine) o).id);
     }
 
     @Override
@@ -140,8 +156,9 @@ public class MVendorScoring implements Serializable {
 
     @Override
     public String toString() {
-        return "MVendorScoring{" +
+        return "MVendorScoringLine{" +
             "id=" + getId() +
+            ", evaluation='" + getEvaluation() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

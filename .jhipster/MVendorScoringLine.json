@@ -1,6 +1,10 @@
 {
-    "name": "MVendorScoring",
+    "name": "MVendorScoringLine",
     "fields": [
+        {
+            "fieldName": "evaluation",
+            "fieldType": "String"
+        },
         {
             "fieldName": "uid",
             "fieldType": "UUID"
@@ -13,31 +17,31 @@
     "relationships": [
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "mBidding",
-            "otherEntityRelationshipName": "mVendorScoring",
-            "relationshipValidateRules": "required",
-            "relationshipName": "bidding",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mVendorScoring",
+            "otherEntityRelationshipName": "mVendorScoringLine",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cEvaluationMethod",
-            "otherEntityRelationshipName": "mVendorScoring",
+            "otherEntityName": "cEvaluationMethodLine",
+            "otherEntityRelationshipName": "mVendorScoringLine",
             "relationshipValidateRules": "required",
-            "relationshipName": "evaluationMethod",
+            "relationshipName": "evaluationMethodLine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mVendorScoring",
+            "otherEntityRelationshipName": "mVendorScoringLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendorScoring",
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20210211092100",
-    "entityTableName": "m_vendor_scoring",
+    "changelogDate": "20210419070300",
+    "entityTableName": "m_vendor_scoring_line",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",

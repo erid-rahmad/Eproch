@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the MVendorScoring entity.
+ * Performance test for the MVendorScoringLine entity.
  */
-class MVendorScoringGatlingTest extends Simulation {
+class MVendorScoringLineGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class MVendorScoringGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the MVendorScoring entity")
+    val scn = scenario("Test the MVendorScoringLine entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,30 +62,31 @@ class MVendorScoringGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all mVendorScorings")
-            .get("/api/m-vendor-scorings")
+            exec(http("Get all mVendorScoringLines")
+            .get("/api/m-vendor-scoring-lines")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new mVendorScoring")
-            .post("/api/m-vendor-scorings")
+            .exec(http("Create new mVendorScoringLine")
+            .post("/api/m-vendor-scoring-lines")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "evaluation":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_mVendorScoring_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_mVendorScoringLine_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created mVendorScoring")
-                .get("${new_mVendorScoring_url}")
+                exec(http("Get created mVendorScoringLine")
+                .get("${new_mVendorScoringLine_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created mVendorScoring")
-            .delete("${new_mVendorScoring_url}")
+            .exec(http("Delete created mVendorScoringLine")
+            .delete("${new_mVendorScoringLine_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

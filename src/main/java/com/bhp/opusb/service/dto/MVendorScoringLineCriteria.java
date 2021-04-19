@@ -13,45 +13,48 @@ import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
- * Criteria class for the {@link com.bhp.opusb.domain.MVendorScoring} entity. This class is used
- * in {@link com.bhp.opusb.web.rest.MVendorScoringResource} to receive all the possible filtering options from
+ * Criteria class for the {@link com.bhp.opusb.domain.MVendorScoringLine} entity. This class is used
+ * in {@link com.bhp.opusb.web.rest.MVendorScoringLineResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
- * {@code /m-vendor-scorings?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
+ * {@code /m-vendor-scoring-lines?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class MVendorScoringCriteria implements Serializable, Criteria {
+public class MVendorScoringLineCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
     private LongFilter id;
 
+    private StringFilter evaluation;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
 
-    private LongFilter biddingId;
-
     private LongFilter adOrganizationId;
 
-    private LongFilter evaluationMethodId;
+    private LongFilter evaluationMethodLineId;
 
-    public MVendorScoringCriteria() {
+    private LongFilter vendorScoringId;
+
+    public MVendorScoringLineCriteria() {
     }
 
-    public MVendorScoringCriteria(MVendorScoringCriteria other) {
+    public MVendorScoringLineCriteria(MVendorScoringLineCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.evaluation = other.evaluation == null ? null : other.evaluation.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.evaluationMethodId = other.evaluationMethodId == null ? null : other.evaluationMethodId.copy();
+        this.evaluationMethodLineId = other.evaluationMethodLineId == null ? null : other.evaluationMethodLineId.copy();
+        this.vendorScoringId = other.vendorScoringId == null ? null : other.vendorScoringId.copy();
     }
 
     @Override
-    public MVendorScoringCriteria copy() {
-        return new MVendorScoringCriteria(this);
+    public MVendorScoringLineCriteria copy() {
+        return new MVendorScoringLineCriteria(this);
     }
 
     public LongFilter getId() {
@@ -60,6 +63,14 @@ public class MVendorScoringCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public StringFilter getEvaluation() {
+        return evaluation;
+    }
+
+    public void setEvaluation(StringFilter evaluation) {
+        this.evaluation = evaluation;
     }
 
     public UUIDFilter getUid() {
@@ -78,14 +89,6 @@ public class MVendorScoringCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
-    public LongFilter getBiddingId() {
-        return biddingId;
-    }
-
-    public void setBiddingId(LongFilter biddingId) {
-        this.biddingId = biddingId;
-    }
-
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -94,12 +97,20 @@ public class MVendorScoringCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getEvaluationMethodId() {
-        return evaluationMethodId;
+    public LongFilter getEvaluationMethodLineId() {
+        return evaluationMethodLineId;
     }
 
-    public void setEvaluationMethodId(LongFilter evaluationMethodId) {
-        this.evaluationMethodId = evaluationMethodId;
+    public void setEvaluationMethodLineId(LongFilter evaluationMethodLineId) {
+        this.evaluationMethodLineId = evaluationMethodLineId;
+    }
+
+    public LongFilter getVendorScoringId() {
+        return vendorScoringId;
+    }
+
+    public void setVendorScoringId(LongFilter vendorScoringId) {
+        this.vendorScoringId = vendorScoringId;
     }
 
 
@@ -111,37 +122,40 @@ public class MVendorScoringCriteria implements Serializable, Criteria {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final MVendorScoringCriteria that = (MVendorScoringCriteria) o;
+        final MVendorScoringLineCriteria that = (MVendorScoringLineCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(evaluation, that.evaluation) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(evaluationMethodId, that.evaluationMethodId);
+            Objects.equals(evaluationMethodLineId, that.evaluationMethodLineId) &&
+            Objects.equals(vendorScoringId, that.vendorScoringId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
+        evaluation,
         uid,
         active,
-        biddingId,
         adOrganizationId,
-        evaluationMethodId
+        evaluationMethodLineId,
+        vendorScoringId
         );
     }
 
     @Override
     public String toString() {
-        return "MVendorScoringCriteria{" +
+        return "MVendorScoringLineCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (evaluation != null ? "evaluation=" + evaluation + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (evaluationMethodId != null ? "evaluationMethodId=" + evaluationMethodId + ", " : "") +
+                (evaluationMethodLineId != null ? "evaluationMethodLineId=" + evaluationMethodLineId + ", " : "") +
+                (vendorScoringId != null ? "vendorScoringId=" + vendorScoringId + ", " : "") +
             "}";
     }
 

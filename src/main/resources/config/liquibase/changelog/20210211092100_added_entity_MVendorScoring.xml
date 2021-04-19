@@ -72,20 +72,39 @@
     -->
     <changeSet id="20210211092100-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/m_vendor_scoring.csv"
-                  separator=";"
-                  tableName="m_vendor_scoring">
+            file="config/liquibase/fake-data/m_vendor_scoring.csv"
+            separator=";"
+            tableName="m_vendor_scoring">
             <column name="id" type="numeric"/>
-            <column name="percentage" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="bidding_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
-            <column name="bidding_criteria_id" type="numeric"/>
-            <column name="bidding_sub_criteria_id" type="numeric"/>
-            <column name="ad_user_id" type="numeric"/>
+            <column name="evaluation_method_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210421092100" author="erid">
+        <dropColumn tableName="m_vendor_scoring">
+            <column name="bidding_criteria_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="bidding_sub_criteria_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="ad_user_user_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="percentage" type="decimal(21,2)">
+                <constraints nullable="true" />
+            </column>
+        </dropColumn>
+        <addColumn tableName="m_vendor_scoring">
+            <column name="evaluation_method_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

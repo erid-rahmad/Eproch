@@ -1,0 +1,70 @@
+{
+    "name": "MVendorScoringCriteria",
+    "fields": [
+        {
+            "fieldName": "requirement",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mVendorScoringCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cEvalMethodCriteriaLine",
+            "otherEntityRelationshipName": "mVendorScoringCriteria",
+            "relationshipName": "evalMethodCriteriaLine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cEvalMethodSubCriteria",
+            "otherEntityRelationshipName": "mVendorScoringCriteria",
+            "relationshipName": "evalMethodSubCriteria",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mVendorScoringLine",
+            "otherEntityRelationshipName": "mVendorScoringCriteria",
+            "relationshipName": "vendorScoringLine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingSubCriteriaLine",
+            "otherEntityRelationshipName": "mVendorScoringCriteria",
+            "relationshipName": "biddingSubCriteriaLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210419070400",
+    "entityTableName": "m_vendor_scoring_criteria",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
