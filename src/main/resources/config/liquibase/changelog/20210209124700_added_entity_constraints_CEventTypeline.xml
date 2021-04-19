@@ -20,14 +20,9 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_event_type"/>
 
-        <addForeignKeyConstraint baseColumnNames="c_event_id"
-                                 baseTableName="c_event_typeline"
-                                 constraintName="fk_c_event_typeline_c_event_id"
-                                 referencedColumnNames="id"
-                                 referencedTableName="c_event"/>
-
     </changeSet>
-    <changeSet id="20210209124722-2" author="jhipster">
+    <changeSet id="20210416000010-2" author="Erid">
+
         <addForeignKeyConstraint baseColumnNames="c_event_id"
                                  baseTableName="c_event_typeline"
                                  constraintName="fk_c_event_typeline_c_event_id"
