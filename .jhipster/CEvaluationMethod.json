@@ -42,6 +42,13 @@
             "otherEntityRelationshipName": "cEvaluationMethod",
             "relationshipName": "biddingType",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cEventType",
+            "otherEntityRelationshipName": "cEvaluationMethod",
+            "relationshipName": "eventType",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210321210700",

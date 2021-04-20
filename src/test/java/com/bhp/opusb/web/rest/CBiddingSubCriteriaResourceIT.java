@@ -4,7 +4,6 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CBiddingSubCriteria;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CBiddingCriteria;
-import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.repository.CBiddingSubCriteriaRepository;
 import com.bhp.opusb.service.CBiddingSubCriteriaService;
 import com.bhp.opusb.service.dto.CBiddingSubCriteriaDTO;
@@ -45,6 +44,12 @@ public class CBiddingSubCriteriaResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_EVALUATION_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_EVALUATION_TYPE = "BBBBBBBBBB";
+
+    private static final Boolean DEFAULT_MULTIPLE_OPTIONS = false;
+    private static final Boolean UPDATED_MULTIPLE_OPTIONS = true;
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -81,6 +86,8 @@ public class CBiddingSubCriteriaResourceIT {
         CBiddingSubCriteria cBiddingSubCriteria = new CBiddingSubCriteria()
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
+            .evaluationType(DEFAULT_EVALUATION_TYPE)
+            .multipleOptions(DEFAULT_MULTIPLE_OPTIONS)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -103,16 +110,6 @@ public class CBiddingSubCriteriaResourceIT {
             cBiddingCriteria = TestUtil.findAll(em, CBiddingCriteria.class).get(0);
         }
         cBiddingSubCriteria.setBiddingCriteria(cBiddingCriteria);
-        // Add required entity
-        AdUser adUser;
-        if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
-            adUser = AdUserResourceIT.createEntity(em);
-            em.persist(adUser);
-            em.flush();
-        } else {
-            adUser = TestUtil.findAll(em, AdUser.class).get(0);
-        }
-        cBiddingSubCriteria.setAdUser(adUser);
         return cBiddingSubCriteria;
     }
     /**
@@ -125,6 +122,8 @@ public class CBiddingSubCriteriaResourceIT {
         CBiddingSubCriteria cBiddingSubCriteria = new CBiddingSubCriteria()
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .evaluationType(UPDATED_EVALUATION_TYPE)
+            .multipleOptions(UPDATED_MULTIPLE_OPTIONS)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -147,16 +146,6 @@ public class CBiddingSubCriteriaResourceIT {
             cBiddingCriteria = TestUtil.findAll(em, CBiddingCriteria.class).get(0);
         }
         cBiddingSubCriteria.setBiddingCriteria(cBiddingCriteria);
-        // Add required entity
-        AdUser adUser;
-        if (TestUtil.findAll(em, AdUser.class).isEmpty()) {
-            adUser = AdUserResourceIT.createUpdatedEntity(em);
-            em.persist(adUser);
-            em.flush();
-        } else {
-            adUser = TestUtil.findAll(em, AdUser.class).get(0);
-        }
-        cBiddingSubCriteria.setAdUser(adUser);
         return cBiddingSubCriteria;
     }
 
@@ -183,6 +172,8 @@ public class CBiddingSubCriteriaResourceIT {
         CBiddingSubCriteria testCBiddingSubCriteria = cBiddingSubCriteriaList.get(cBiddingSubCriteriaList.size() - 1);
         assertThat(testCBiddingSubCriteria.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCBiddingSubCriteria.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testCBiddingSubCriteria.getEvaluationType()).isEqualTo(DEFAULT_EVALUATION_TYPE);
+        assertThat(testCBiddingSubCriteria.isMultipleOptions()).isEqualTo(DEFAULT_MULTIPLE_OPTIONS);
         assertThat(testCBiddingSubCriteria.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCBiddingSubCriteria.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -240,6 +231,8 @@ public class CBiddingSubCriteriaResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cBiddingSubCriteria.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].evaluationType").value(hasItem(DEFAULT_EVALUATION_TYPE)))
+            .andExpect(jsonPath("$.[*].multipleOptions").value(hasItem(DEFAULT_MULTIPLE_OPTIONS.booleanValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -257,6 +250,8 @@ public class CBiddingSubCriteriaResourceIT {
             .andExpect(jsonPath("$.id").value(cBiddingSubCriteria.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.evaluationType").value(DEFAULT_EVALUATION_TYPE))
+            .andExpect(jsonPath("$.multipleOptions").value(DEFAULT_MULTIPLE_OPTIONS.booleanValue()))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -439,6 +434,136 @@ public class CBiddingSubCriteriaResourceIT {
 
     @Test
     @Transactional
+    public void getAllCBiddingSubCriteriaByEvaluationTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType equals to DEFAULT_EVALUATION_TYPE
+        defaultCBiddingSubCriteriaShouldBeFound("evaluationType.equals=" + DEFAULT_EVALUATION_TYPE);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType equals to UPDATED_EVALUATION_TYPE
+        defaultCBiddingSubCriteriaShouldNotBeFound("evaluationType.equals=" + UPDATED_EVALUATION_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingSubCriteriaByEvaluationTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType not equals to DEFAULT_EVALUATION_TYPE
+        defaultCBiddingSubCriteriaShouldNotBeFound("evaluationType.notEquals=" + DEFAULT_EVALUATION_TYPE);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType not equals to UPDATED_EVALUATION_TYPE
+        defaultCBiddingSubCriteriaShouldBeFound("evaluationType.notEquals=" + UPDATED_EVALUATION_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingSubCriteriaByEvaluationTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType in DEFAULT_EVALUATION_TYPE or UPDATED_EVALUATION_TYPE
+        defaultCBiddingSubCriteriaShouldBeFound("evaluationType.in=" + DEFAULT_EVALUATION_TYPE + "," + UPDATED_EVALUATION_TYPE);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType equals to UPDATED_EVALUATION_TYPE
+        defaultCBiddingSubCriteriaShouldNotBeFound("evaluationType.in=" + UPDATED_EVALUATION_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingSubCriteriaByEvaluationTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType is not null
+        defaultCBiddingSubCriteriaShouldBeFound("evaluationType.specified=true");
+
+        // Get all the cBiddingSubCriteriaList where evaluationType is null
+        defaultCBiddingSubCriteriaShouldNotBeFound("evaluationType.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCBiddingSubCriteriaByEvaluationTypeContainsSomething() throws Exception {
+        // Initialize the database
+        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType contains DEFAULT_EVALUATION_TYPE
+        defaultCBiddingSubCriteriaShouldBeFound("evaluationType.contains=" + DEFAULT_EVALUATION_TYPE);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType contains UPDATED_EVALUATION_TYPE
+        defaultCBiddingSubCriteriaShouldNotBeFound("evaluationType.contains=" + UPDATED_EVALUATION_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingSubCriteriaByEvaluationTypeNotContainsSomething() throws Exception {
+        // Initialize the database
+        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType does not contain DEFAULT_EVALUATION_TYPE
+        defaultCBiddingSubCriteriaShouldNotBeFound("evaluationType.doesNotContain=" + DEFAULT_EVALUATION_TYPE);
+
+        // Get all the cBiddingSubCriteriaList where evaluationType does not contain UPDATED_EVALUATION_TYPE
+        defaultCBiddingSubCriteriaShouldBeFound("evaluationType.doesNotContain=" + UPDATED_EVALUATION_TYPE);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCBiddingSubCriteriaByMultipleOptionsIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
+
+        // Get all the cBiddingSubCriteriaList where multipleOptions equals to DEFAULT_MULTIPLE_OPTIONS
+        defaultCBiddingSubCriteriaShouldBeFound("multipleOptions.equals=" + DEFAULT_MULTIPLE_OPTIONS);
+
+        // Get all the cBiddingSubCriteriaList where multipleOptions equals to UPDATED_MULTIPLE_OPTIONS
+        defaultCBiddingSubCriteriaShouldNotBeFound("multipleOptions.equals=" + UPDATED_MULTIPLE_OPTIONS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingSubCriteriaByMultipleOptionsIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
+
+        // Get all the cBiddingSubCriteriaList where multipleOptions not equals to DEFAULT_MULTIPLE_OPTIONS
+        defaultCBiddingSubCriteriaShouldNotBeFound("multipleOptions.notEquals=" + DEFAULT_MULTIPLE_OPTIONS);
+
+        // Get all the cBiddingSubCriteriaList where multipleOptions not equals to UPDATED_MULTIPLE_OPTIONS
+        defaultCBiddingSubCriteriaShouldBeFound("multipleOptions.notEquals=" + UPDATED_MULTIPLE_OPTIONS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingSubCriteriaByMultipleOptionsIsInShouldWork() throws Exception {
+        // Initialize the database
+        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
+
+        // Get all the cBiddingSubCriteriaList where multipleOptions in DEFAULT_MULTIPLE_OPTIONS or UPDATED_MULTIPLE_OPTIONS
+        defaultCBiddingSubCriteriaShouldBeFound("multipleOptions.in=" + DEFAULT_MULTIPLE_OPTIONS + "," + UPDATED_MULTIPLE_OPTIONS);
+
+        // Get all the cBiddingSubCriteriaList where multipleOptions equals to UPDATED_MULTIPLE_OPTIONS
+        defaultCBiddingSubCriteriaShouldNotBeFound("multipleOptions.in=" + UPDATED_MULTIPLE_OPTIONS);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingSubCriteriaByMultipleOptionsIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
+
+        // Get all the cBiddingSubCriteriaList where multipleOptions is not null
+        defaultCBiddingSubCriteriaShouldBeFound("multipleOptions.specified=true");
+
+        // Get all the cBiddingSubCriteriaList where multipleOptions is null
+        defaultCBiddingSubCriteriaShouldNotBeFound("multipleOptions.specified=false");
+    }
+
+    @Test
+    @Transactional
     public void getAllCBiddingSubCriteriaByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
@@ -572,22 +697,6 @@ public class CBiddingSubCriteriaResourceIT {
         defaultCBiddingSubCriteriaShouldNotBeFound("biddingCriteriaId.equals=" + (biddingCriteriaId + 1));
     }
 
-
-    @Test
-    @Transactional
-    public void getAllCBiddingSubCriteriaByAdUserIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        AdUser adUser = cBiddingSubCriteria.getAdUser();
-        cBiddingSubCriteriaRepository.saveAndFlush(cBiddingSubCriteria);
-        Long adUserId = adUser.getId();
-
-        // Get all the cBiddingSubCriteriaList where adUser equals to adUserId
-        defaultCBiddingSubCriteriaShouldBeFound("adUserId.equals=" + adUserId);
-
-        // Get all the cBiddingSubCriteriaList where adUser equals to adUserId + 1
-        defaultCBiddingSubCriteriaShouldNotBeFound("adUserId.equals=" + (adUserId + 1));
-    }
-
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -598,6 +707,8 @@ public class CBiddingSubCriteriaResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cBiddingSubCriteria.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].evaluationType").value(hasItem(DEFAULT_EVALUATION_TYPE)))
+            .andExpect(jsonPath("$.[*].multipleOptions").value(hasItem(DEFAULT_MULTIPLE_OPTIONS.booleanValue())))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -649,6 +760,8 @@ public class CBiddingSubCriteriaResourceIT {
         updatedCBiddingSubCriteria
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .evaluationType(UPDATED_EVALUATION_TYPE)
+            .multipleOptions(UPDATED_MULTIPLE_OPTIONS)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CBiddingSubCriteriaDTO cBiddingSubCriteriaDTO = cBiddingSubCriteriaMapper.toDto(updatedCBiddingSubCriteria);
@@ -664,6 +777,8 @@ public class CBiddingSubCriteriaResourceIT {
         CBiddingSubCriteria testCBiddingSubCriteria = cBiddingSubCriteriaList.get(cBiddingSubCriteriaList.size() - 1);
         assertThat(testCBiddingSubCriteria.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCBiddingSubCriteria.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testCBiddingSubCriteria.getEvaluationType()).isEqualTo(UPDATED_EVALUATION_TYPE);
+        assertThat(testCBiddingSubCriteria.isMultipleOptions()).isEqualTo(UPDATED_MULTIPLE_OPTIONS);
         assertThat(testCBiddingSubCriteria.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCBiddingSubCriteria.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

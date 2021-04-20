@@ -1,6 +1,7 @@
 package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -13,8 +14,6 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
 
     @NotNull
     private String name;
-
-    private String description;
 
     private UUID uid;
 
@@ -38,14 +37,6 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public UUID getUid() {
@@ -106,7 +97,6 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
         return "CBiddingCriteriaDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +

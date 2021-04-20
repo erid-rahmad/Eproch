@@ -73,6 +73,7 @@ class CEvaluationMethodLineGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "evaluation":"SAMPLE_TEXT"
+                , "evaluationType":"SAMPLE_TEXT"
                 , "weight":"0"
                 , "passingGrade":"0"
                 , "uid":null

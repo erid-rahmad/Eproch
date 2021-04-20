@@ -74,6 +74,8 @@ class CBiddingSubCriteriaGatlingTest extends Simulation {
                 "id":null
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
+                , "evaluationType":"SAMPLE_TEXT"
+                , "multipleOptions":null
                 , "uid":null
                 , "active":null
                 }""")).asJson

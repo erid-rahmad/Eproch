@@ -111,6 +111,10 @@ public class CEvaluationMethodQueryService extends QueryService<CEvaluationMetho
                 specification = specification.and(buildSpecification(criteria.getBiddingTypeId(),
                     root -> root.join(CEvaluationMethod_.biddingType, JoinType.LEFT).get(CBiddingType_.id)));
             }
+            if (criteria.getEventTypeId() != null) {
+                specification = specification.and(buildSpecification(criteria.getEventTypeId(),
+                    root -> root.join(CEvaluationMethod_.eventType, JoinType.LEFT).get(CEventType_.id)));
+            }
         }
         return specification;
     }

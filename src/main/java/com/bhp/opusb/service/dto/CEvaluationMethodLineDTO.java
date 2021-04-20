@@ -1,22 +1,17 @@
 package com.bhp.opusb.service.dto;
 
+import io.swagger.annotations.ApiModelProperty;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
 
-import javax.validation.constraints.DecimalMax;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
-import io.swagger.annotations.ApiModelProperty;
-
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEvaluationMethodLine} entity.
  */
-public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
+public class CEvaluationMethodLineDTO implements Serializable {
     
-    private static final long serialVersionUID = 1L;
-
     private Long id;
 
     /**
@@ -27,6 +22,8 @@ public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
     @ApiModelProperty(value = "Referenced from M_Reference", required = true)
     private String evaluation;
 
+    private String evaluationType;
+
     @DecimalMax(value = "100")
     private BigDecimal weight;
 
@@ -34,14 +31,12 @@ public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active = true;
+    private Boolean active;
 
 
     private Long adOrganizationId;
-    private String adOrganizationName;
 
     private Long evaluationMethodId;
-    private String evaluationMethodName;
     
     public Long getId() {
         return id;
@@ -57,6 +52,14 @@ public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
 
     public void setEvaluation(String evaluation) {
         this.evaluation = evaluation;
+    }
+
+    public String getEvaluationType() {
+        return evaluationType;
+    }
+
+    public void setEvaluationType(String evaluationType) {
+        this.evaluationType = evaluationType;
     }
 
     public BigDecimal getWeight() {
@@ -99,28 +102,12 @@ public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public String getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
-
     public Long getEvaluationMethodId() {
         return evaluationMethodId;
     }
 
     public void setEvaluationMethodId(Long cEvaluationMethodId) {
         this.evaluationMethodId = cEvaluationMethodId;
-    }
-
-    public String getEvaluationMethodName() {
-        return evaluationMethodName;
-    }
-
-    public void setEvaluationMethodName(String evaluationMethodName) {
-        this.evaluationMethodName = evaluationMethodName;
     }
 
     @Override
@@ -149,6 +136,7 @@ public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
         return "CEvaluationMethodLineDTO{" +
             "id=" + getId() +
             ", evaluation='" + getEvaluation() + "'" +
+            ", evaluationType='" + getEvaluationType() + "'" +
             ", weight=" + getWeight() +
             ", passingGrade=" + getPassingGrade() +
             ", uid='" + getUid() + "'" +

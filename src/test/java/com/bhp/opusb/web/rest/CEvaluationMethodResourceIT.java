@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CEvaluationMethod;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CBiddingType;
+import com.bhp.opusb.domain.CEventType;
 import com.bhp.opusb.repository.CEvaluationMethodRepository;
 import com.bhp.opusb.service.CEvaluationMethodService;
 import com.bhp.opusb.service.dto.CEvaluationMethodDTO;
@@ -562,6 +563,26 @@ public class CEvaluationMethodResourceIT {
 
         // Get all the cEvaluationMethodList where biddingType equals to biddingTypeId + 1
         defaultCEvaluationMethodShouldNotBeFound("biddingTypeId.equals=" + (biddingTypeId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodsByEventTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodRepository.saveAndFlush(cEvaluationMethod);
+        CEventType eventType = CEventTypeResourceIT.createEntity(em);
+        em.persist(eventType);
+        em.flush();
+        cEvaluationMethod.setEventType(eventType);
+        cEvaluationMethodRepository.saveAndFlush(cEvaluationMethod);
+        Long eventTypeId = eventType.getId();
+
+        // Get all the cEvaluationMethodList where eventType equals to eventTypeId
+        defaultCEvaluationMethodShouldBeFound("eventTypeId.equals=" + eventTypeId);
+
+        // Get all the cEvaluationMethodList where eventType equals to eventTypeId + 1
+        defaultCEvaluationMethodShouldNotBeFound("eventTypeId.equals=" + (eventTypeId + 1));
     }
 
     /**

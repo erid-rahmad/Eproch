@@ -29,8 +29,6 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
-    private StringFilter description;
-
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -43,7 +41,6 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
     public CBiddingCriteriaCriteria(CBiddingCriteriaCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
-        this.description = other.description == null ? null : other.description.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -68,14 +65,6 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
 
     public void setName(StringFilter name) {
         this.name = name;
-    }
-
-    public StringFilter getDescription() {
-        return description;
-    }
-
-    public void setDescription(StringFilter description) {
-        this.description = description;
     }
 
     public UUIDFilter getUid() {
@@ -115,7 +104,6 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
         return
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
-            Objects.equals(description, that.description) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
@@ -126,7 +114,6 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         name,
-        description,
         uid,
         active,
         adOrganizationId
@@ -138,7 +125,6 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
         return "CBiddingCriteriaCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
-                (description != null ? "description=" + description + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

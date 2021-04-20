@@ -1,11 +1,11 @@
-id;evaluation;weight;passing_grade;uid;active;ad_organization_id;evaluation_method_id
-1;Human;27;18996;f6de7ad9-7383-4dd3-8786-4e5b40892981;false;1;1
-2;Intel;62;17427;2ad8f80e-f0fd-49d2-ae24-386e90b7e810;true;2;2
-3;rich ;16;88961;4584d8f1-d164-42bb-baed-f144bb189fab;false;3;3
-4;cross;31;24704;542a1dbb-9a84-454c-a6ec-39fd8afd4fa9;true;4;4
-5;Shoes;23;9770;818f8b5b-2769-468b-8e1c-bd2d14dc9c7e;true;5;5
-6;solid;37;41532;153cc9f3-4dcb-4399-a3eb-c32262557dbb;false;6;6
-7;lever;51;8506;fc66779b-e4d1-484e-a73a-027010fcc49f;false;7;7
-8;Avon ;66;51517;3a0772fc-cc65-4a14-abb0-e009daa0ffc9;false;8;8
-9;Berks;11;2614;32faf1f6-7e10-40ad-9e18-275293914a0d;true;9;9
-10;Kenya;53;48945;360a41a7-7aba-4ddc-b50c-b2caefe6dcee;true;10;10
+id;evaluation;evaluation_type;weight;passing_grade;uid;active;ad_organization_id;evaluation_method_id
+1;Human;lavender;39;81917;e7ad9738-3dd3-4878-a4e5-b40892981600;false;1;1
+2;Home ;Tuna;85;51956;f80ef0fd-9d22-4e24-b86e-90b7e810fd5f;true;2;2
+3;Quali;Product;31;53240;4d8f1d16-42bb-43ae-9f14-4bb189fab4ac;false;3;3
+4;card ;Fresh Dobra;57;64656;8454c26e-c39f-4d8a-bd4f-a98627d73181;true;4;4
+5;Peru ;Investment Account Buckinghamshire;77;90673;1cbd2d14-dc9c-47ed-8ce4-556153cc9f34;true;5;5
+6;micro;Somoni De-engineered Cotton;16;33007;57dbb3c6-26a8-4481-bc66-779be4d184e2;false;6;6
+7;Lek;Avon;9;5496;fcc49f6d-7009-466a-83a0-772fccc65a14;false;7;7
+8;drive;payment Industrial Consultant;58;1784;4871032f-af1f-467e-900a-d9e182752939;false;8;8
+9;depos;back-end Kenyan Shilling Lebanon;20;43222;0a41a77a-badd-4cb5-8cb2-caefe6dceea3;true;9;9
+10;Shoes;structure;52;29222;0eb48671-2782-4329-b360-f5150eb0c222;false;10;10

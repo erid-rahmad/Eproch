@@ -97,6 +97,12 @@ public class CBiddingSubCriteriaQueryService extends QueryService<CBiddingSubCri
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), CBiddingSubCriteria_.description));
             }
+            if (criteria.getEvaluationType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getEvaluationType(), CBiddingSubCriteria_.evaluationType));
+            }
+            if (criteria.getMultipleOptions() != null) {
+                specification = specification.and(buildSpecification(criteria.getMultipleOptions(), CBiddingSubCriteria_.multipleOptions));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CBiddingSubCriteria_.uid));
             }
@@ -110,10 +116,6 @@ public class CBiddingSubCriteriaQueryService extends QueryService<CBiddingSubCri
             if (criteria.getBiddingCriteriaId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBiddingCriteriaId(),
                     root -> root.join(CBiddingSubCriteria_.biddingCriteria, JoinType.LEFT).get(CBiddingCriteria_.id)));
-            }
-            if (criteria.getAdUserId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAdUserId(),
-                    root -> root.join(CBiddingSubCriteria_.adUser, JoinType.LEFT).get(AdUser_.id)));
             }
         }
         return specification;

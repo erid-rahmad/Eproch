@@ -139,6 +139,10 @@
     <include file="config/liquibase/changelog/20210329060100_added_entity_CVendorEvaluation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210329060200_added_entity_CVendorEvaluationLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210414044300_added_entity_CEvent.xml"  relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210416034100_added_entity_CBiddingSubCriteriaLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210416075600_added_entity_CEvaluationMethodCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210416075700_added_entity_CEvalMethodCriteriaLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210416075800_added_entity_CEvalMethodSubCriteria.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -258,5 +262,9 @@
     <include file="config/liquibase/changelog/20210329060100_added_entity_constraints_CVendorEvaluation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210329060200_added_entity_constraints_CVendorEvaluationLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210414044300_added_entity_constraints_CEvent.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210416034100_added_entity_constraints_CBiddingSubCriteriaLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210416075600_added_entity_constraints_CEvaluationMethodCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210416075700_added_entity_constraints_CEvalMethodCriteriaLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210416075800_added_entity_constraints_CEvalMethodSubCriteria.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

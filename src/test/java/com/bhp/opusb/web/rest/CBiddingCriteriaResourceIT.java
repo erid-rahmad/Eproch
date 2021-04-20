@@ -40,9 +40,6 @@ public class CBiddingCriteriaResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
-    private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
-    private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
-
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -78,7 +75,6 @@ public class CBiddingCriteriaResourceIT {
     public static CBiddingCriteria createEntity(EntityManager em) {
         CBiddingCriteria cBiddingCriteria = new CBiddingCriteria()
             .name(DEFAULT_NAME)
-            .description(DEFAULT_DESCRIPTION)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -102,7 +98,6 @@ public class CBiddingCriteriaResourceIT {
     public static CBiddingCriteria createUpdatedEntity(EntityManager em) {
         CBiddingCriteria cBiddingCriteria = new CBiddingCriteria()
             .name(UPDATED_NAME)
-            .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -140,7 +135,6 @@ public class CBiddingCriteriaResourceIT {
         assertThat(cBiddingCriteriaList).hasSize(databaseSizeBeforeCreate + 1);
         CBiddingCriteria testCBiddingCriteria = cBiddingCriteriaList.get(cBiddingCriteriaList.size() - 1);
         assertThat(testCBiddingCriteria.getName()).isEqualTo(DEFAULT_NAME);
-        assertThat(testCBiddingCriteria.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCBiddingCriteria.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCBiddingCriteria.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -197,7 +191,6 @@ public class CBiddingCriteriaResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cBiddingCriteria.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -214,7 +207,6 @@ public class CBiddingCriteriaResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cBiddingCriteria.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -314,84 +306,6 @@ public class CBiddingCriteriaResourceIT {
 
         // Get all the cBiddingCriteriaList where name does not contain UPDATED_NAME
         defaultCBiddingCriteriaShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllCBiddingCriteriaByDescriptionIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
-
-        // Get all the cBiddingCriteriaList where description equals to DEFAULT_DESCRIPTION
-        defaultCBiddingCriteriaShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
-
-        // Get all the cBiddingCriteriaList where description equals to UPDATED_DESCRIPTION
-        defaultCBiddingCriteriaShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCBiddingCriteriaByDescriptionIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
-
-        // Get all the cBiddingCriteriaList where description not equals to DEFAULT_DESCRIPTION
-        defaultCBiddingCriteriaShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
-
-        // Get all the cBiddingCriteriaList where description not equals to UPDATED_DESCRIPTION
-        defaultCBiddingCriteriaShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCBiddingCriteriaByDescriptionIsInShouldWork() throws Exception {
-        // Initialize the database
-        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
-
-        // Get all the cBiddingCriteriaList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
-        defaultCBiddingCriteriaShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
-
-        // Get all the cBiddingCriteriaList where description equals to UPDATED_DESCRIPTION
-        defaultCBiddingCriteriaShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCBiddingCriteriaByDescriptionIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
-
-        // Get all the cBiddingCriteriaList where description is not null
-        defaultCBiddingCriteriaShouldBeFound("description.specified=true");
-
-        // Get all the cBiddingCriteriaList where description is null
-        defaultCBiddingCriteriaShouldNotBeFound("description.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllCBiddingCriteriaByDescriptionContainsSomething() throws Exception {
-        // Initialize the database
-        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
-
-        // Get all the cBiddingCriteriaList where description contains DEFAULT_DESCRIPTION
-        defaultCBiddingCriteriaShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
-
-        // Get all the cBiddingCriteriaList where description contains UPDATED_DESCRIPTION
-        defaultCBiddingCriteriaShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCBiddingCriteriaByDescriptionNotContainsSomething() throws Exception {
-        // Initialize the database
-        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
-
-        // Get all the cBiddingCriteriaList where description does not contain DEFAULT_DESCRIPTION
-        defaultCBiddingCriteriaShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
-
-        // Get all the cBiddingCriteriaList where description does not contain UPDATED_DESCRIPTION
-        defaultCBiddingCriteriaShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
     }
 
 
@@ -523,7 +437,6 @@ public class CBiddingCriteriaResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cBiddingCriteria.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -574,7 +487,6 @@ public class CBiddingCriteriaResourceIT {
         em.detach(updatedCBiddingCriteria);
         updatedCBiddingCriteria
             .name(UPDATED_NAME)
-            .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CBiddingCriteriaDTO cBiddingCriteriaDTO = cBiddingCriteriaMapper.toDto(updatedCBiddingCriteria);
@@ -589,7 +501,6 @@ public class CBiddingCriteriaResourceIT {
         assertThat(cBiddingCriteriaList).hasSize(databaseSizeBeforeUpdate);
         CBiddingCriteria testCBiddingCriteria = cBiddingCriteriaList.get(cBiddingCriteriaList.size() - 1);
         assertThat(testCBiddingCriteria.getName()).isEqualTo(UPDATED_NAME);
-        assertThat(testCBiddingCriteria.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCBiddingCriteria.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCBiddingCriteria.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

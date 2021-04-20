@@ -47,7 +47,7 @@ spring:
         server-uri: http://localhost:9393
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/eproc_demo
+    url: jdbc:postgresql://localhost:5432/eproch_demo_1
     username: postgres
     password: root
     hikari:
