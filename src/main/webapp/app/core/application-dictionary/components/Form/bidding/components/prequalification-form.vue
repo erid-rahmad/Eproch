@@ -39,9 +39,11 @@
 
                                 <el-table-column label="Requirement" width="150">
                                     <template slot-scope="{ row }">
-                                        <el-select v-model="row.requirement" clearable size="mini">
+                                        <!-- <el-select v-model="row.requirement" clearable size="mini">
                                             <el-option v-for="item in requirements" :key="item.code" :label="item.name" :value="item.code"></el-option>
-                                        </el-select>
+                                            <el-input v-model="requirements.row" class="form-input" clearable></el-input>
+                                        </el-select> -->
+                                        <el-input v-model="row.requerment" class="form-input" clearable></el-input>
                                     </template>
                                 </el-table-column>
 

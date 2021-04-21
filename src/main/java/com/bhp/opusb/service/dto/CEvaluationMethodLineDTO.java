@@ -10,8 +10,10 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEvaluationMethodLine} entity.
  */
-public class CEvaluationMethodLineDTO implements Serializable {
-    
+public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     /**
@@ -31,13 +33,15 @@ public class CEvaluationMethodLineDTO implements Serializable {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long evaluationMethodId;
-    
+    private String evaluationMethodName;
+
     public Long getId() {
         return id;
     }
@@ -102,12 +106,28 @@ public class CEvaluationMethodLineDTO implements Serializable {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getEvaluationMethodId() {
         return evaluationMethodId;
     }
 
     public void setEvaluationMethodId(Long cEvaluationMethodId) {
         this.evaluationMethodId = cEvaluationMethodId;
+    }
+
+    public String getEvaluationMethodName() {
+        return evaluationMethodName;
+    }
+
+    public void setEvaluationMethodName(String evaluationMethodName) {
+        this.evaluationMethodName = evaluationMethodName;
     }
 
     @Override

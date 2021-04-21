@@ -15,6 +15,8 @@ export default class PrequalificationForm extends PrequalificationFormProps {
     }
   ];
 
+  requerment: any = {};
+
   data() {
     return {
       options: [{
@@ -37,16 +39,16 @@ export default class PrequalificationForm extends PrequalificationFormProps {
     }
   }
 
-  requirements = [
-    {
-      code: 'O',
-      name: 'Optional'
-    },
-    {
-      code: 'M',
-      name: 'Required'
-    }
-  ]
+  // requirements = [
+  //   {
+  //     code: 'O',
+  //     name: 'Optional'
+  //   },
+  //   {
+  //     code: 'M',
+  //     name: 'Required'
+  //   }
+  // ]
 
   formData = {
     method: 1,

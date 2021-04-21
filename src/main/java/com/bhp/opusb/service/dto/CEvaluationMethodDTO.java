@@ -9,8 +9,10 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEvaluationMethod} entity.
  */
-public class CEvaluationMethodDTO implements Serializable {
-    
+public class CEvaluationMethodDTO extends AbstractAuditingDTO {
+
+    private static final long serialVersionUID = 1L;
+
     private Long id;
 
     @NotNull
@@ -22,15 +24,34 @@ public class CEvaluationMethodDTO implements Serializable {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long biddingTypeId;
+    private String biddingTypeName;
 
     private Long eventTypeId;
-    
+    private String eventTypeName;
+
+    public Long getEventTypeId() {
+        return eventTypeId;
+    }
+
+    public void setEventTypeId(Long eventTypeId) {
+        this.eventTypeId = eventTypeId;
+    }
+
+    public String getEventTypeName() {
+        return eventTypeName;
+    }
+
+    public void setEventTypeName(String eventTypeName) {
+        this.eventTypeName = eventTypeName;
+    }
+
     public Long getId() {
         return id;
     }
@@ -79,6 +100,14 @@ public class CEvaluationMethodDTO implements Serializable {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getBiddingTypeId() {
         return biddingTypeId;
     }
@@ -87,12 +116,12 @@ public class CEvaluationMethodDTO implements Serializable {
         this.biddingTypeId = cBiddingTypeId;
     }
 
-    public Long getEventTypeId() {
-        return eventTypeId;
+    public String getBiddingTypeName() {
+        return biddingTypeName;
     }
 
-    public void setEventTypeId(Long cEventTypeId) {
-        this.eventTypeId = cEventTypeId;
+    public void setBiddingTypeName(String biddingTypeName) {
+        this.biddingTypeName = biddingTypeName;
     }
 
     @Override
@@ -119,14 +148,17 @@ public class CEvaluationMethodDTO implements Serializable {
     @Override
     public String toString() {
         return "CEvaluationMethodDTO{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", priceLimit=" + getPriceLimit() +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", biddingTypeId=" + getBiddingTypeId() +
-            ", eventTypeId=" + getEventTypeId() +
-            "}";
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", priceLimit=" + priceLimit +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", biddingTypeId=" + biddingTypeId +
+            ", biddingTypeName='" + biddingTypeName + '\'' +
+            ", eventTypeId=" + eventTypeId +
+            ", eventTypeName='" + eventTypeName + '\'' +
+            '}';
     }
 }
