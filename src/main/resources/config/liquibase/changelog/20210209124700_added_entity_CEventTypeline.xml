@@ -15,11 +15,11 @@
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
+            <column name="event" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
             <column name="description" type="varchar(255)">
                 <constraints nullable="true" />
-            </column>
-            <column name="sequence" type="integer">
-                <constraints nullable="false" />
             </column>
             <column name="uid" type="${uuidType}">
                 <constraints nullable="true" />
@@ -33,15 +33,26 @@
             <column name="event_type_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <column name="c_event_id" type="bigint">
-                <constraints nullable="false" />
-            </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
     </changeSet>
 
     <changeSet id="20210209124700-1-relations" author="jhipster">
 
+    </changeSet>
+
+    <!-- Added the entity audit columns -->
+    <changeSet id="20210209124700-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="c_event_typeline">
+            <column name="created_by" type="varchar(50)" defaultValue="system">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
@@ -70,18 +81,27 @@
         </loadData>
     </changeSet>
 
-<!--    <changeSet id="20210209120990-1-data" author="jhipster">-->
-<!--        <addColumn tableName="c_event_typeline">-->
-<!--            <column name="c_event_id" type="bigint">-->
-<!--                <constraints nullable="true" />-->
-<!--            </column>-->
-<!--        </addColumn>-->
-<!--    </changeSet>-->
+    <changeSet id="20210209124700-add-data" author="dian-tri-budianto">
+        <addColumn tableName="c_event_typeline">
+            <column name="sequence" type="integer">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
 
-<!--    <changeSet id="20210209120912-1-data" author="jhipster">-->
-<!--        <dropColumn tableName="c_event_typeline">-->
-<!--            <column name="event"/>-->
-<!--        </dropColumn>-->
-<!--    </changeSet>-->
+    <changeSet id="20210220095700" author="Ananta Aryadewa">
+        <modifyDataType tableName="c_event_typeline" columnName="event" newDataType="varchar(10)" />
+    </changeSet>
+
+    <changeSet id="20210416000010" author="Erid">
+        <dropColumn tableName="c_event_typeline">
+            <column name="event"/>
+        </dropColumn>
+        <addColumn tableName="c_event_typeline">
+            <column name="c_event_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
 
 </databaseChangeLog>
