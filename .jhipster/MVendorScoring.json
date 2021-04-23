@@ -31,7 +31,6 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cEvaluationMethod",
             "otherEntityRelationshipName": "mVendorScoring",
-            "relationshipValidateRules": "required",
             "relationshipName": "evaluationMethod",
             "otherEntityField": "id"
         }

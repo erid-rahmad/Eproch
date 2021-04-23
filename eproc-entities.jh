@@ -146,6 +146,13 @@ entity CRegistrationDocument {
 	uid UUID
 	active Boolean
 }
+
+entity CAnnouncement{
+    description String required
+    publishDate ZonedDateTime
+    uid UUID
+	active Boolean
+}
 /**
  * The Registration Document Type entity.
  */
@@ -1106,6 +1113,14 @@ entity MBiddingScheduleAttachment {
 	active Boolean
 }
 
+entity MBiddingInvitation {
+    invitationStatus String
+    reason String
+    answerDate ZonedDateTime
+	uid UUID
+	active Boolean
+}
+
 entity MDocumentSchedule {
 	docEvent String required
 	uid UUID
@@ -1263,6 +1278,11 @@ relationship ManyToOne {
 	CGalleryItem{adOrganization required} to ADOrganization
 	CAttachment{adOrganization required} to ADOrganization
 	CRegistrationDocType{adOrganization required} to ADOrganization
+
+	CAnnouncement{adOrganization } to ADOrganization
+	CAnnouncement{bidding } to MBidding
+    CAnnouncement{biddingSchedule } to MBiddingSchedule
+    CAnnouncement{attachment } to CAttachment
 
 	CVendor{adOrganization required} to ADOrganization
 	CVendor{documentType required} to CDocumentType
@@ -1626,6 +1646,11 @@ relationship ManyToOne {
 
 	MBiddingSubmissionLine{biddingLine required} to MBiddingLine
 	MBiddingSubmissionLine{adOrganization required} to ADOrganization
+
+	MBiddingInvitation{adOrganization } to ADOrganization
+	MBiddingInvitation{announcement } to CAnnouncement
+	MBiddingInvitation{bidding } to MBidding
+	MBiddingInvitation{vendor } to CVendor
 
 	MSubmissionSubItem{biddingSubItem required} to MBiddingSubItem
 	MSubmissionSubItem{adOrganization required} to ADOrganization
