@@ -1,25 +1,31 @@
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Inject } from "vue-property-decorator";
 import { Editor, EditorContent } from '@tiptap/vue-2'
 import { defaultExtensions } from '@tiptap/starter-kit'
 import MenuItem from './MenuItem.vue'
 import tiptap from './Vue/index.vue'
-
+import AlertMixin from '@/shared/alert/alert.mixin';
+import { mixins } from 'vue-class-component';
+import Vue2Filters from 'vue2-filters';
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 
 @Component({
   components: {
     tiptap,
-    
-
-
-
   }
-})  
+})
+export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, AlertMixin,EditorContent) {
+  @Inject('dynamicWindowService')
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  @Inject('dynamicWindowService')
+  private pushService: (baseApiUrl: string) => DynamicWindowService;
 
-export default class AddAnnouncementForm extends EditorContent {
-  
   dialogTableVisible = false;
   dialogTableVisible11 = false;
+
+  public emailFromChild: any = {};
+  public Announcment: any = {};
+  
 
   sizeForm= {
     name: '',
@@ -94,13 +100,39 @@ export default class AddAnnouncementForm extends EditorContent {
   
   editor = null;
 
+  // private retrieveCostCenter() {
+  //   this.commonService('/api/c-cost-centers')
+  //     .retrieve({
+  //       criteriaQuery:([
+       
+  //       ]),
+  //       paginationQuery: {
+  //         page: 0,
+  //         size: 1000,
+  //         sort: ['name']
+  //       }
+  //     })
+  //     .then(res => {
+  //       this.costCenterOptions = res.data;
+  //     });
+  // }
+
+  private pushAnnouncement() {
+    this.pushService('http://localhost:8080/api/c-announcements')
+      .create(this.Announcment);
+  }
+
+
   mounted() {
-    this.editor = new Editor({
-      extensions: [
-        ...defaultExtensions(),
-      ],
-      content: 'Tes',
-    })
+    console.log("mail from child", this.emailFromChild);
+    this.Announcment.description = "<p><br>Kepada Bapak/Ibu Pimpinan <br>#VendorName <br>Hal: Undangan #TenderName <br>Dengan hormat </p><p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>";
+    this.Announcment.adOrganizationId = 1;
+    this.Announcment.biddingId = 1957651;
+    this.Announcment.attachmentId = 16502;
+
+
+    this.pushAnnouncement();
+    
   }
 
   beforeDestroy() {

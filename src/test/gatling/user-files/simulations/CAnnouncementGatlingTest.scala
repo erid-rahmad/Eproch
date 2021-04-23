@@ -72,7 +72,7 @@ class CAnnouncementGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "description":"SAMPLE_TEXT"
+                , "description":null
                 , "publishDate":"2020-01-01T00:00:00.000Z"
                 , "uid":null
                 , "active":null

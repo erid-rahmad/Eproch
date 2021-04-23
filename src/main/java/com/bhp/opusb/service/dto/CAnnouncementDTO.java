@@ -5,6 +5,7 @@ import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+import javax.persistence.Lob;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CAnnouncement} entity.
@@ -13,7 +14,8 @@ public class CAnnouncementDTO implements Serializable {
     
     private Long id;
 
-    @NotNull
+    
+    @Lob
     private String description;
 
     private ZonedDateTime publishDate;

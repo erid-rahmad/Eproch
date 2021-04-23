@@ -91,9 +91,6 @@ public class CAnnouncementQueryService extends QueryService<CAnnouncement> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CAnnouncement_.id));
             }
-            if (criteria.getDescription() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getDescription(), CAnnouncement_.description));
-            }
             if (criteria.getPublishDate() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getPublishDate(), CAnnouncement_.publishDate));
             }

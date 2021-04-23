@@ -23,7 +23,7 @@
                         <el-input v-model="sizeForm.q"></el-input>
                     </el-form-item>
                     <el-form-item label="Deskripsi"> 
-                        <tiptap ></tiptap>
+                        <tiptap :editor="editor" @email="emailFromChild=$event " ></tiptap>
                     
                     </el-form-item>
                     <el-form-item size="large">
