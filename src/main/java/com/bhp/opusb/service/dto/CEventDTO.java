@@ -1,9 +1,12 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEvent} entity.
@@ -13,7 +16,8 @@ public class CEventDTO extends AbstractAuditingDTO {
     private Long id;
 
     @NotNull
-    private String event;
+    @Size(max = 50)
+    private String name;
 
     private String description;
 
@@ -23,17 +27,12 @@ public class CEventDTO extends AbstractAuditingDTO {
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
+    @JsonProperty("cProductClassificationId")
     private Long cProductClassificationId;
 
-    public String getcProductClassificationName() {
-        return cProductClassificationName;
-    }
-
-    public void setcProductClassificationName(String cProductClassificationName) {
-        this.cProductClassificationName = cProductClassificationName;
-    }
-
+    @JsonProperty("cProductClassificationName")
     private String cProductClassificationName;
 
 
@@ -46,12 +45,12 @@ public class CEventDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
-    public String getEvent() {
-        return event;
+    public String getName() {
+        return name;
     }
 
-    public void setEvent(String event) {
-        this.event = event;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -86,12 +85,28 @@ public class CEventDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public Long getcProductClassificationId() {
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
+    public Long getCProductClassificationId() {
         return cProductClassificationId;
     }
 
-    public void setcProductClassificationId(Long cProductClassificationId) {
+    public void setCProductClassificationId(Long cProductClassificationId) {
         this.cProductClassificationId = cProductClassificationId;
+    }
+
+    public String getCProductClassificationName() {
+        return cProductClassificationName;
+    }
+
+    public void setCProductClassificationName(String cProductClassificationName) {
+        this.cProductClassificationName = cProductClassificationName;
     }
 
     @Override
@@ -118,14 +133,13 @@ public class CEventDTO extends AbstractAuditingDTO {
     @Override
     public String toString() {
         return "CEventDTO{" +
-            "id=" + id +
-            ", event='" + event + '\'' +
-            ", description='" + description + '\'' +
-            ", uid=" + uid +
-            ", active=" + active +
-            ", adOrganizationId=" + adOrganizationId +
-            ", cProductClassificationId=" + cProductClassificationId +
-            ", cProductClassificationName='" + cProductClassificationName + '\'' +
-            '}';
+            "id=" + getId() +
+            ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            ", cProductClassificationId=" + getCProductClassificationId() +
+            "}";
     }
 }

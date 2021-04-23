@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.CEventTypeline;
 import com.bhp.opusb.service.dto.CEventTypelineDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link CEventTypeline} and its DTO {@link CEventTypelineDTO}.
@@ -15,14 +16,14 @@ public interface CEventTypelineMapper extends EntityMapper<CEventTypelineDTO, CE
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "eventType.id", target = "eventTypeId")
-    @Mapping(source = "CEvent.id", target = "cEventId")
-    @Mapping(source = "CEvent.event", target = "cEventName")
-//    @Mapping(source = "eventType.name", target = "eventTypeName")
+    @Mapping(source = "eventType.name", target = "eventTypeName")
+    @Mapping(source = "CEvent.id", target = "CEventId")
+    @Mapping(source = "CEvent.name", target = "CEventName")
     CEventTypelineDTO toDto(CEventTypeline cEventTypeline);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
     @Mapping(source = "eventTypeId", target = "eventType")
-    @Mapping(source = "cEventId", target = "CEvent")
+    @Mapping(source = "CEventId", target = "CEvent")
     CEventTypeline toEntity(CEventTypelineDTO cEventTypelineDTO);
 
     default CEventTypeline fromId(Long id) {

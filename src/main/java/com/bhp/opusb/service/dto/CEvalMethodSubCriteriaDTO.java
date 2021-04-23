@@ -8,7 +8,7 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.CEvalMethodSubCriteria} entity.
  */
 public class CEvalMethodSubCriteriaDTO implements Serializable {
-
+    
     private Long id;
 
     private Integer weight;
@@ -26,30 +26,6 @@ public class CEvalMethodSubCriteriaDTO implements Serializable {
 
     private Long biddingSubCriteriaId;
     private String biddingSubCriteriaName;
-
-    public String getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
-
-    public String getBiddingCriteriaName() {
-        return biddingCriteriaName;
-    }
-
-    public void setBiddingCriteriaName(String biddingCriteriaName) {
-        this.biddingCriteriaName = biddingCriteriaName;
-    }
-
-    public String getBiddingSubCriteriaName() {
-        return biddingSubCriteriaName;
-    }
-
-    public void setBiddingSubCriteriaName(String biddingSubCriteriaName) {
-        this.biddingSubCriteriaName = biddingSubCriteriaName;
-    }
 
     public Long getId() {
         return id;
@@ -91,12 +67,28 @@ public class CEvalMethodSubCriteriaDTO implements Serializable {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getBiddingCriteriaId() {
         return biddingCriteriaId;
     }
 
     public void setBiddingCriteriaId(Long cBiddingCriteriaId) {
         this.biddingCriteriaId = cBiddingCriteriaId;
+    }
+
+    public String getBiddingCriteriaName() {
+        return biddingCriteriaName;
+    }
+
+    public void setBiddingCriteriaName(String biddingCriteriaName) {
+        this.biddingCriteriaName = biddingCriteriaName;
     }
 
     public Long getBiddingSubCriteriaId() {
@@ -107,6 +99,14 @@ public class CEvalMethodSubCriteriaDTO implements Serializable {
         this.biddingSubCriteriaId = cBiddingSubCriteriaId;
     }
 
+    public String getBiddingSubCriteriaName() {
+        return biddingSubCriteriaName;
+    }
+
+    public void setBiddingSubCriteriaName(String biddingSubCriteriaName) {
+        this.biddingSubCriteriaName = biddingSubCriteriaName;
+    }
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -131,16 +131,13 @@ public class CEvalMethodSubCriteriaDTO implements Serializable {
     @Override
     public String toString() {
         return "CEvalMethodSubCriteriaDTO{" +
-            "id=" + id +
-            ", weight=" + weight +
-            ", uid=" + uid +
-            ", active=" + active +
-            ", adOrganizationId=" + adOrganizationId +
-            ", adOrganizationName='" + adOrganizationName + '\'' +
-            ", biddingCriteriaId=" + biddingCriteriaId +
-            ", biddingCriteriaName='" + biddingCriteriaName + '\'' +
-            ", biddingSubCriteriaId=" + biddingSubCriteriaId +
-            ", biddingSubCriteriaName='" + biddingSubCriteriaName + '\'' +
-            '}';
+            "id=" + getId() +
+            ", weight=" + getWeight() +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            ", biddingCriteriaId=" + getBiddingCriteriaId() +
+            ", biddingSubCriteriaId=" + getBiddingSubCriteriaId() +
+            "}";
     }
 }

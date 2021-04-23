@@ -2,11 +2,13 @@
     "name": "CEvent",
     "fields": [
         {
-            "fieldName": "event",
+            "fieldName": "name",
             "fieldType": "String",
             "fieldValidateRules": [
-                "required"
-            ]
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "50"
         },
         {
             "fieldName": "description",

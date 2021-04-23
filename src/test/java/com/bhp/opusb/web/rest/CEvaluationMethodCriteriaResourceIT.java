@@ -74,6 +74,16 @@ public class CEvaluationMethodCriteriaResourceIT {
         CEvaluationMethodCriteria cEvaluationMethodCriteria = new CEvaluationMethodCriteria()
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cEvaluationMethodCriteria.setAdOrganization(aDOrganization);
         return cEvaluationMethodCriteria;
     }
     /**
@@ -86,6 +96,16 @@ public class CEvaluationMethodCriteriaResourceIT {
         CEvaluationMethodCriteria cEvaluationMethodCriteria = new CEvaluationMethodCriteria()
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cEvaluationMethodCriteria.setAdOrganization(aDOrganization);
         return cEvaluationMethodCriteria;
     }
 
@@ -292,12 +312,8 @@ public class CEvaluationMethodCriteriaResourceIT {
     @Test
     @Transactional
     public void getAllCEvaluationMethodCriteriaByAdOrganizationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
-        ADOrganization adOrganization = ADOrganizationResourceIT.createEntity(em);
-        em.persist(adOrganization);
-        em.flush();
-        cEvaluationMethodCriteria.setAdOrganization(adOrganization);
+        // Get already existing entity
+        ADOrganization adOrganization = cEvaluationMethodCriteria.getAdOrganization();
         cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
         Long adOrganizationId = adOrganization.getId();
 

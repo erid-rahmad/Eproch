@@ -40,6 +40,20 @@
     <changeSet id="20210416075800-1-relations" author="jhipster">
 
     </changeSet>
+
+    <!-- Added the entity audit columns -->
+    <changeSet id="20210416075800-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="c_eval_method_sub_criteria">
+            <column name="created_by" type="varchar(50)" defaultValue="system">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="timestamp" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_modified_by" type="varchar(50)"/>
+            <column name="last_modified_date" type="timestamp"/>
+        </addColumn>
+    </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here, do not remove-->
 
     <!--
@@ -59,8 +73,17 @@
             <column name="weight" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
+            <column name="ad_organization_id" type="numeric"/>
+            <column name="bidding_criteria_id" type="numeric"/>
+            <column name="bidding_sub_criteria_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210422132300" author="Ananta Aryadewa">
+        <addNotNullConstraint tableName="c_eval_method_sub_criteria" columnName="ad_organization_id" />
+        <addNotNullConstraint tableName="c_eval_method_sub_criteria" columnName="bidding_criteria_id" />
+        <addNotNullConstraint tableName="c_eval_method_sub_criteria" columnName="bidding_sub_criteria_id" />
     </changeSet>
 
 </databaseChangeLog>

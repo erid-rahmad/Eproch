@@ -19,6 +19,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
             "otherEntityRelationshipName": "cEvalMethodSubCriteria",
+            "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },
@@ -26,6 +27,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cBiddingCriteria",
             "otherEntityRelationshipName": "cEvalMethodSubCriteria",
+            "relationshipValidateRules": "required",
             "relationshipName": "biddingCriteria",
             "otherEntityField": "id"
         },
@@ -33,6 +35,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cBiddingSubCriteria",
             "otherEntityRelationshipName": "cEvalMethodSubCriteria",
+            "relationshipValidateRules": "required",
             "relationshipName": "biddingSubCriteria",
             "otherEntityField": "id"
         }

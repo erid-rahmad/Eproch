@@ -80,6 +80,36 @@ public class CEvalMethodSubCriteriaResourceIT {
             .weight(DEFAULT_WEIGHT)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cEvalMethodSubCriteria.setAdOrganization(aDOrganization);
+        // Add required entity
+        CBiddingCriteria cBiddingCriteria;
+        if (TestUtil.findAll(em, CBiddingCriteria.class).isEmpty()) {
+            cBiddingCriteria = CBiddingCriteriaResourceIT.createEntity(em);
+            em.persist(cBiddingCriteria);
+            em.flush();
+        } else {
+            cBiddingCriteria = TestUtil.findAll(em, CBiddingCriteria.class).get(0);
+        }
+        cEvalMethodSubCriteria.setBiddingCriteria(cBiddingCriteria);
+        // Add required entity
+        CBiddingSubCriteria cBiddingSubCriteria;
+        if (TestUtil.findAll(em, CBiddingSubCriteria.class).isEmpty()) {
+            cBiddingSubCriteria = CBiddingSubCriteriaResourceIT.createEntity(em);
+            em.persist(cBiddingSubCriteria);
+            em.flush();
+        } else {
+            cBiddingSubCriteria = TestUtil.findAll(em, CBiddingSubCriteria.class).get(0);
+        }
+        cEvalMethodSubCriteria.setBiddingSubCriteria(cBiddingSubCriteria);
         return cEvalMethodSubCriteria;
     }
     /**
@@ -93,6 +123,36 @@ public class CEvalMethodSubCriteriaResourceIT {
             .weight(UPDATED_WEIGHT)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cEvalMethodSubCriteria.setAdOrganization(aDOrganization);
+        // Add required entity
+        CBiddingCriteria cBiddingCriteria;
+        if (TestUtil.findAll(em, CBiddingCriteria.class).isEmpty()) {
+            cBiddingCriteria = CBiddingCriteriaResourceIT.createUpdatedEntity(em);
+            em.persist(cBiddingCriteria);
+            em.flush();
+        } else {
+            cBiddingCriteria = TestUtil.findAll(em, CBiddingCriteria.class).get(0);
+        }
+        cEvalMethodSubCriteria.setBiddingCriteria(cBiddingCriteria);
+        // Add required entity
+        CBiddingSubCriteria cBiddingSubCriteria;
+        if (TestUtil.findAll(em, CBiddingSubCriteria.class).isEmpty()) {
+            cBiddingSubCriteria = CBiddingSubCriteriaResourceIT.createUpdatedEntity(em);
+            em.persist(cBiddingSubCriteria);
+            em.flush();
+        } else {
+            cBiddingSubCriteria = TestUtil.findAll(em, CBiddingSubCriteria.class).get(0);
+        }
+        cEvalMethodSubCriteria.setBiddingSubCriteria(cBiddingSubCriteria);
         return cEvalMethodSubCriteria;
     }
 
@@ -407,12 +467,8 @@ public class CEvalMethodSubCriteriaResourceIT {
     @Test
     @Transactional
     public void getAllCEvalMethodSubCriteriaByAdOrganizationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cEvalMethodSubCriteriaRepository.saveAndFlush(cEvalMethodSubCriteria);
-        ADOrganization adOrganization = ADOrganizationResourceIT.createEntity(em);
-        em.persist(adOrganization);
-        em.flush();
-        cEvalMethodSubCriteria.setAdOrganization(adOrganization);
+        // Get already existing entity
+        ADOrganization adOrganization = cEvalMethodSubCriteria.getAdOrganization();
         cEvalMethodSubCriteriaRepository.saveAndFlush(cEvalMethodSubCriteria);
         Long adOrganizationId = adOrganization.getId();
 
@@ -427,12 +483,8 @@ public class CEvalMethodSubCriteriaResourceIT {
     @Test
     @Transactional
     public void getAllCEvalMethodSubCriteriaByBiddingCriteriaIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cEvalMethodSubCriteriaRepository.saveAndFlush(cEvalMethodSubCriteria);
-        CBiddingCriteria biddingCriteria = CBiddingCriteriaResourceIT.createEntity(em);
-        em.persist(biddingCriteria);
-        em.flush();
-        cEvalMethodSubCriteria.setBiddingCriteria(biddingCriteria);
+        // Get already existing entity
+        CBiddingCriteria biddingCriteria = cEvalMethodSubCriteria.getBiddingCriteria();
         cEvalMethodSubCriteriaRepository.saveAndFlush(cEvalMethodSubCriteria);
         Long biddingCriteriaId = biddingCriteria.getId();
 
@@ -447,12 +499,8 @@ public class CEvalMethodSubCriteriaResourceIT {
     @Test
     @Transactional
     public void getAllCEvalMethodSubCriteriaByBiddingSubCriteriaIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cEvalMethodSubCriteriaRepository.saveAndFlush(cEvalMethodSubCriteria);
-        CBiddingSubCriteria biddingSubCriteria = CBiddingSubCriteriaResourceIT.createEntity(em);
-        em.persist(biddingSubCriteria);
-        em.flush();
-        cEvalMethodSubCriteria.setBiddingSubCriteria(biddingSubCriteria);
+        // Get already existing entity
+        CBiddingSubCriteria biddingSubCriteria = cEvalMethodSubCriteria.getBiddingSubCriteria();
         cEvalMethodSubCriteriaRepository.saveAndFlush(cEvalMethodSubCriteria);
         Long biddingSubCriteriaId = biddingSubCriteria.getId();
 

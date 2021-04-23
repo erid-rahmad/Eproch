@@ -2,12 +2,10 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -27,7 +25,7 @@ public class CEventCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter event;
+    private StringFilter name;
 
     private StringFilter description;
 
@@ -44,7 +42,7 @@ public class CEventCriteria implements Serializable, Criteria {
 
     public CEventCriteria(CEventCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.event = other.event == null ? null : other.event.copy();
+        this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
@@ -65,12 +63,12 @@ public class CEventCriteria implements Serializable, Criteria {
         this.id = id;
     }
 
-    public StringFilter getEvent() {
-        return event;
+    public StringFilter getName() {
+        return name;
     }
 
-    public void setEvent(StringFilter event) {
-        this.event = event;
+    public void setName(StringFilter name) {
+        this.name = name;
     }
 
     public StringFilter getDescription() {
@@ -125,7 +123,7 @@ public class CEventCriteria implements Serializable, Criteria {
         final CEventCriteria that = (CEventCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(event, that.event) &&
+            Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
@@ -137,7 +135,7 @@ public class CEventCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
-        event,
+        name,
         description,
         uid,
         active,
@@ -150,7 +148,7 @@ public class CEventCriteria implements Serializable, Criteria {
     public String toString() {
         return "CEventCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (event != null ? "event=" + event + ", " : "") +
+                (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +

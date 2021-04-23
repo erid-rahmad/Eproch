@@ -13,12 +13,13 @@ import org.mapstruct.*;
 public interface CEventMapper extends EntityMapper<CEventDTO, CEvent> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
-    @Mapping(source = "CProductClassification.id", target = "cProductClassificationId")
-    @Mapping(source = "CProductClassification.name", target = "cProductClassificationName")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
+    @Mapping(source = "CProductClassification.id", target = "CProductClassificationId")
+    @Mapping(source = "CProductClassification.name", target = "CProductClassificationName")
     CEventDTO toDto(CEvent cEvent);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
-    @Mapping(source = "cProductClassificationId", target = "cProductClassification")
+    @Mapping(source = "CProductClassificationId", target = "CProductClassification")
     CEvent toEntity(CEventDTO cEventDTO);
 
     default CEvent fromId(Long id) {

@@ -91,8 +91,8 @@ public class CEventQueryService extends QueryService<CEvent> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CEvent_.id));
             }
-            if (criteria.getEvent() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getEvent(), CEvent_.event));
+            if (criteria.getName() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getName(), CEvent_.name));
             }
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), CEvent_.description));

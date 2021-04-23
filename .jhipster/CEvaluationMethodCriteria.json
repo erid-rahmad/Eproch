@@ -15,6 +15,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
             "otherEntityRelationshipName": "cEvaluationMethodCriteria",
+            "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },

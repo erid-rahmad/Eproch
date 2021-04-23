@@ -38,8 +38,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 public class CEventResourceIT {
 
-    private static final String DEFAULT_EVENT = "AAAAAAAAAA";
-    private static final String UPDATED_EVENT = "BBBBBBBBBB";
+    private static final String DEFAULT_NAME = "AAAAAAAAAA";
+    private static final String UPDATED_NAME = "BBBBBBBBBB";
 
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
@@ -78,7 +78,7 @@ public class CEventResourceIT {
      */
     public static CEvent createEntity(EntityManager em) {
         CEvent cEvent = new CEvent()
-            .event(DEFAULT_EVENT)
+            .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
@@ -112,7 +112,7 @@ public class CEventResourceIT {
      */
     public static CEvent createUpdatedEntity(EntityManager em) {
         CEvent cEvent = new CEvent()
-            .event(UPDATED_EVENT)
+            .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
@@ -160,7 +160,7 @@ public class CEventResourceIT {
         List<CEvent> cEventList = cEventRepository.findAll();
         assertThat(cEventList).hasSize(databaseSizeBeforeCreate + 1);
         CEvent testCEvent = cEventList.get(cEventList.size() - 1);
-        assertThat(testCEvent.getEvent()).isEqualTo(DEFAULT_EVENT);
+        assertThat(testCEvent.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCEvent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
         assertThat(testCEvent.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCEvent.isActive()).isEqualTo(DEFAULT_ACTIVE);
@@ -189,10 +189,10 @@ public class CEventResourceIT {
 
     @Test
     @Transactional
-    public void checkEventIsRequired() throws Exception {
+    public void checkNameIsRequired() throws Exception {
         int databaseSizeBeforeTest = cEventRepository.findAll().size();
         // set the field null
-        cEvent.setEvent(null);
+        cEvent.setName(null);
 
         // Create the CEvent, which fails.
         CEventDTO cEventDTO = cEventMapper.toDto(cEvent);
@@ -217,7 +217,7 @@ public class CEventResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEvent.getId().intValue())))
-            .andExpect(jsonPath("$.[*].event").value(hasItem(DEFAULT_EVENT)))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -234,7 +234,7 @@ public class CEventResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cEvent.getId().intValue()))
-            .andExpect(jsonPath("$.event").value(DEFAULT_EVENT))
+            .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
@@ -262,79 +262,79 @@ public class CEventResourceIT {
 
     @Test
     @Transactional
-    public void getAllCEventsByEventIsEqualToSomething() throws Exception {
+    public void getAllCEventsByNameIsEqualToSomething() throws Exception {
         // Initialize the database
         cEventRepository.saveAndFlush(cEvent);
 
-        // Get all the cEventList where event equals to DEFAULT_EVENT
-        defaultCEventShouldBeFound("event.equals=" + DEFAULT_EVENT);
+        // Get all the cEventList where name equals to DEFAULT_NAME
+        defaultCEventShouldBeFound("name.equals=" + DEFAULT_NAME);
 
-        // Get all the cEventList where event equals to UPDATED_EVENT
-        defaultCEventShouldNotBeFound("event.equals=" + UPDATED_EVENT);
+        // Get all the cEventList where name equals to UPDATED_NAME
+        defaultCEventShouldNotBeFound("name.equals=" + UPDATED_NAME);
     }
 
     @Test
     @Transactional
-    public void getAllCEventsByEventIsNotEqualToSomething() throws Exception {
+    public void getAllCEventsByNameIsNotEqualToSomething() throws Exception {
         // Initialize the database
         cEventRepository.saveAndFlush(cEvent);
 
-        // Get all the cEventList where event not equals to DEFAULT_EVENT
-        defaultCEventShouldNotBeFound("event.notEquals=" + DEFAULT_EVENT);
+        // Get all the cEventList where name not equals to DEFAULT_NAME
+        defaultCEventShouldNotBeFound("name.notEquals=" + DEFAULT_NAME);
 
-        // Get all the cEventList where event not equals to UPDATED_EVENT
-        defaultCEventShouldBeFound("event.notEquals=" + UPDATED_EVENT);
+        // Get all the cEventList where name not equals to UPDATED_NAME
+        defaultCEventShouldBeFound("name.notEquals=" + UPDATED_NAME);
     }
 
     @Test
     @Transactional
-    public void getAllCEventsByEventIsInShouldWork() throws Exception {
+    public void getAllCEventsByNameIsInShouldWork() throws Exception {
         // Initialize the database
         cEventRepository.saveAndFlush(cEvent);
 
-        // Get all the cEventList where event in DEFAULT_EVENT or UPDATED_EVENT
-        defaultCEventShouldBeFound("event.in=" + DEFAULT_EVENT + "," + UPDATED_EVENT);
+        // Get all the cEventList where name in DEFAULT_NAME or UPDATED_NAME
+        defaultCEventShouldBeFound("name.in=" + DEFAULT_NAME + "," + UPDATED_NAME);
 
-        // Get all the cEventList where event equals to UPDATED_EVENT
-        defaultCEventShouldNotBeFound("event.in=" + UPDATED_EVENT);
+        // Get all the cEventList where name equals to UPDATED_NAME
+        defaultCEventShouldNotBeFound("name.in=" + UPDATED_NAME);
     }
 
     @Test
     @Transactional
-    public void getAllCEventsByEventIsNullOrNotNull() throws Exception {
+    public void getAllCEventsByNameIsNullOrNotNull() throws Exception {
         // Initialize the database
         cEventRepository.saveAndFlush(cEvent);
 
-        // Get all the cEventList where event is not null
-        defaultCEventShouldBeFound("event.specified=true");
+        // Get all the cEventList where name is not null
+        defaultCEventShouldBeFound("name.specified=true");
 
-        // Get all the cEventList where event is null
-        defaultCEventShouldNotBeFound("event.specified=false");
+        // Get all the cEventList where name is null
+        defaultCEventShouldNotBeFound("name.specified=false");
     }
                 @Test
     @Transactional
-    public void getAllCEventsByEventContainsSomething() throws Exception {
+    public void getAllCEventsByNameContainsSomething() throws Exception {
         // Initialize the database
         cEventRepository.saveAndFlush(cEvent);
 
-        // Get all the cEventList where event contains DEFAULT_EVENT
-        defaultCEventShouldBeFound("event.contains=" + DEFAULT_EVENT);
+        // Get all the cEventList where name contains DEFAULT_NAME
+        defaultCEventShouldBeFound("name.contains=" + DEFAULT_NAME);
 
-        // Get all the cEventList where event contains UPDATED_EVENT
-        defaultCEventShouldNotBeFound("event.contains=" + UPDATED_EVENT);
+        // Get all the cEventList where name contains UPDATED_NAME
+        defaultCEventShouldNotBeFound("name.contains=" + UPDATED_NAME);
     }
 
     @Test
     @Transactional
-    public void getAllCEventsByEventNotContainsSomething() throws Exception {
+    public void getAllCEventsByNameNotContainsSomething() throws Exception {
         // Initialize the database
         cEventRepository.saveAndFlush(cEvent);
 
-        // Get all the cEventList where event does not contain DEFAULT_EVENT
-        defaultCEventShouldNotBeFound("event.doesNotContain=" + DEFAULT_EVENT);
+        // Get all the cEventList where name does not contain DEFAULT_NAME
+        defaultCEventShouldNotBeFound("name.doesNotContain=" + DEFAULT_NAME);
 
-        // Get all the cEventList where event does not contain UPDATED_EVENT
-        defaultCEventShouldBeFound("event.doesNotContain=" + UPDATED_EVENT);
+        // Get all the cEventList where name does not contain UPDATED_NAME
+        defaultCEventShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
     }
 
 
@@ -559,7 +559,7 @@ public class CEventResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEvent.getId().intValue())))
-            .andExpect(jsonPath("$.[*].event").value(hasItem(DEFAULT_EVENT)))
+            .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -610,7 +610,7 @@ public class CEventResourceIT {
         // Disconnect from session so that the updates on updatedCEvent are not directly saved in db
         em.detach(updatedCEvent);
         updatedCEvent
-            .event(UPDATED_EVENT)
+            .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
@@ -625,7 +625,7 @@ public class CEventResourceIT {
         List<CEvent> cEventList = cEventRepository.findAll();
         assertThat(cEventList).hasSize(databaseSizeBeforeUpdate);
         CEvent testCEvent = cEventList.get(cEventList.size() - 1);
-        assertThat(testCEvent.getEvent()).isEqualTo(UPDATED_EVENT);
+        assertThat(testCEvent.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCEvent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
         assertThat(testCEvent.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCEvent.isActive()).isEqualTo(UPDATED_ACTIVE);

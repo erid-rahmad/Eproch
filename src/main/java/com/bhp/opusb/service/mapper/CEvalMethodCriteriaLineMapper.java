@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.CEvalMethodCriteriaLine;
 import com.bhp.opusb.service.dto.CEvalMethodCriteriaLineDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link CEvalMethodCriteriaLine} and its DTO {@link CEvalMethodCriteriaLineDTO}.
@@ -13,8 +14,8 @@ import org.mapstruct.*;
 public interface CEvalMethodCriteriaLineMapper extends EntityMapper<CEvalMethodCriteriaLineDTO, CEvalMethodCriteriaLine> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
-    @Mapping(source = "biddingCriteria.id", target = "biddingCriteriaId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
+    @Mapping(source = "biddingCriteria.id", target = "biddingCriteriaId")
     @Mapping(source = "biddingCriteria.name", target = "biddingCriteriaName")
     CEvalMethodCriteriaLineDTO toDto(CEvalMethodCriteriaLine cEvalMethodCriteriaLine);
 

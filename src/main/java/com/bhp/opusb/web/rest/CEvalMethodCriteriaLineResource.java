@@ -1,29 +1,38 @@
 package com.bhp.opusb.web.rest;
 
-import com.bhp.opusb.service.CEvalMethodCriteriaLineService;
-import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
-import com.bhp.opusb.service.dto.CEvalMethodCriteriaLineDTO;
-import com.bhp.opusb.service.dto.CEvalMethodCriteriaLineCriteria;
-import com.bhp.opusb.service.CEvalMethodCriteriaLineQueryService;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import javax.validation.Valid;
+
+import com.bhp.opusb.service.CEvalMethodCriteriaLineQueryService;
+import com.bhp.opusb.service.CEvalMethodCriteriaLineService;
+import com.bhp.opusb.service.dto.CEvalMethodCriteriaLineCriteria;
+import com.bhp.opusb.service.dto.CEvalMethodCriteriaLineDTO;
+import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.bhp.opusb.domain.CEvalMethodCriteriaLine}.
@@ -56,7 +65,7 @@ public class CEvalMethodCriteriaLineResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/c-eval-method-criteria-lines")
-    public ResponseEntity<CEvalMethodCriteriaLineDTO> createCEvalMethodCriteriaLine(@RequestBody CEvalMethodCriteriaLineDTO cEvalMethodCriteriaLineDTO) throws URISyntaxException {
+    public ResponseEntity<CEvalMethodCriteriaLineDTO> createCEvalMethodCriteriaLine(@Valid @RequestBody CEvalMethodCriteriaLineDTO cEvalMethodCriteriaLineDTO) throws URISyntaxException {
         log.debug("REST request to save CEvalMethodCriteriaLine : {}", cEvalMethodCriteriaLineDTO);
         if (cEvalMethodCriteriaLineDTO.getId() != null) {
             throw new BadRequestAlertException("A new cEvalMethodCriteriaLine cannot already have an ID", ENTITY_NAME, "idexists");
@@ -77,7 +86,7 @@ public class CEvalMethodCriteriaLineResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/c-eval-method-criteria-lines")
-    public ResponseEntity<CEvalMethodCriteriaLineDTO> updateCEvalMethodCriteriaLine(@RequestBody CEvalMethodCriteriaLineDTO cEvalMethodCriteriaLineDTO) throws URISyntaxException {
+    public ResponseEntity<CEvalMethodCriteriaLineDTO> updateCEvalMethodCriteriaLine(@Valid @RequestBody CEvalMethodCriteriaLineDTO cEvalMethodCriteriaLineDTO) throws URISyntaxException {
         log.debug("REST request to update CEvalMethodCriteriaLine : {}", cEvalMethodCriteriaLineDTO);
         if (cEvalMethodCriteriaLineDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

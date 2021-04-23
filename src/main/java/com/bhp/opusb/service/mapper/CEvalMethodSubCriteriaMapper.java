@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.CEvalMethodSubCriteria;
 import com.bhp.opusb.service.dto.CEvalMethodSubCriteriaDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link CEvalMethodSubCriteria} and its DTO {@link CEvalMethodSubCriteriaDTO}.
@@ -13,10 +14,10 @@ import org.mapstruct.*;
 public interface CEvalMethodSubCriteriaMapper extends EntityMapper<CEvalMethodSubCriteriaDTO, CEvalMethodSubCriteria> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
-    @Mapping(source = "biddingCriteria.id", target = "biddingCriteriaId")
-    @Mapping(source = "biddingSubCriteria.id", target = "biddingSubCriteriaId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
+    @Mapping(source = "biddingCriteria.id", target = "biddingCriteriaId")
     @Mapping(source = "biddingCriteria.name", target = "biddingCriteriaName")
+    @Mapping(source = "biddingSubCriteria.id", target = "biddingSubCriteriaId")
     @Mapping(source = "biddingSubCriteria.name", target = "biddingSubCriteriaName")
     CEvalMethodSubCriteriaDTO toDto(CEvalMethodSubCriteria cEvalMethodSubCriteria);
 
