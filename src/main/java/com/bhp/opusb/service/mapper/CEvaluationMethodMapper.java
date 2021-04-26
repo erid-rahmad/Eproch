@@ -13,8 +13,11 @@ import org.mapstruct.*;
 public interface CEvaluationMethodMapper extends EntityMapper<CEvaluationMethodDTO, CEvaluationMethod> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "biddingType.id", target = "biddingTypeId")
     @Mapping(source = "eventType.id", target = "eventTypeId")
+    @Mapping(source = "eventType.name", target = "eventTypeName")
+    @Mapping(source = "biddingType.name", target = "biddingTypeName")
     CEvaluationMethodDTO toDto(CEvaluationMethod cEvaluationMethod);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

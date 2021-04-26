@@ -7,7 +7,8 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 
-import java.math.BigDecimal;
+import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "m_vendor_scoring")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MVendorScoring extends AbstractAuditingEntity {
+public class MVendorScoring implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -24,9 +25,6 @@ public class MVendorScoring extends AbstractAuditingEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
-
-    @Column(name = "percentage", precision = 21, scale = 2)
-    private BigDecimal percentage;
 
     @Column(name = "uid")
     private UUID uid;
@@ -47,17 +45,7 @@ public class MVendorScoring extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mVendorScorings")
-    private CBiddingCriteria biddingCriteria;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("mVendorScorings")
-    private CBiddingSubCriteria biddingSubCriteria;
-
-    @ManyToOne(optional = false)
-    @NotNull
-    @JsonIgnoreProperties("mVendorScorings")
-    private AdUser adUser;
+    private CEvaluationMethod evaluationMethod;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -66,19 +54,6 @@ public class MVendorScoring extends AbstractAuditingEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public BigDecimal getPercentage() {
-        return percentage;
-    }
-
-    public MVendorScoring percentage(BigDecimal percentage) {
-        this.percentage = percentage;
-        return this;
-    }
-
-    public void setPercentage(BigDecimal percentage) {
-        this.percentage = percentage;
     }
 
     public UUID getUid() {
@@ -133,50 +108,19 @@ public class MVendorScoring extends AbstractAuditingEntity {
         this.adOrganization = aDOrganization;
     }
 
-    public CBiddingCriteria getBiddingCriteria() {
-        return biddingCriteria;
+    public CEvaluationMethod getEvaluationMethod() {
+        return evaluationMethod;
     }
 
-    public MVendorScoring biddingCriteria(CBiddingCriteria cBiddingCriteria) {
-        this.biddingCriteria = cBiddingCriteria;
+    public MVendorScoring evaluationMethod(CEvaluationMethod cEvaluationMethod) {
+        this.evaluationMethod = cEvaluationMethod;
         return this;
     }
 
-    public void setBiddingCriteria(CBiddingCriteria cBiddingCriteria) {
-        this.biddingCriteria = cBiddingCriteria;
-    }
-
-    public CBiddingSubCriteria getBiddingSubCriteria() {
-        return biddingSubCriteria;
-    }
-
-    public MVendorScoring biddingSubCriteria(CBiddingSubCriteria cBiddingSubCriteria) {
-        this.biddingSubCriteria = cBiddingSubCriteria;
-        return this;
-    }
-
-    public void setBiddingSubCriteria(CBiddingSubCriteria cBiddingSubCriteria) {
-        this.biddingSubCriteria = cBiddingSubCriteria;
-    }
-
-    public AdUser getAdUser() {
-        return adUser;
-    }
-
-    public MVendorScoring adUser(AdUser adUser) {
-        this.adUser = adUser;
-        return this;
-    }
-
-    public void setAdUser(AdUser adUser) {
-        this.adUser = adUser;
+    public void setEvaluationMethod(CEvaluationMethod cEvaluationMethod) {
+        this.evaluationMethod = cEvaluationMethod;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
-    @PrePersist
-    public void assignUUID() {
-        this.uid = UUID.randomUUID();
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -198,7 +142,6 @@ public class MVendorScoring extends AbstractAuditingEntity {
     public String toString() {
         return "MVendorScoring{" +
             "id=" + getId() +
-            ", percentage=" + getPercentage() +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

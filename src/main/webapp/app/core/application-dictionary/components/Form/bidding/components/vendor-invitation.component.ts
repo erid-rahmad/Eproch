@@ -17,11 +17,7 @@ const VendorInvitationProp = Vue.extend({
   }
 })
 
-@Component({
-  components: {
-    PrequalificationForm
-  }
-})
+@Component
 export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInvitationProp) {
 
   private updated = true;

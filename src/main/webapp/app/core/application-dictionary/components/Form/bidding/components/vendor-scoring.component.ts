@@ -5,6 +5,7 @@ import Component from 'vue-class-component';
 import { Inject, Mixins } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
+import PrequalificationForm from './prequalification-form.vue';
 
 const VendorScoringProp = Vue.extend({
   props: {
@@ -16,7 +17,11 @@ const VendorScoringProp = Vue.extend({
   }
 })
 
-@Component
+@Component({
+  components: {
+    PrequalificationForm
+  }
+})
 export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScoringProp) {
 
   @Inject('dynamicWindowService')
@@ -46,65 +51,110 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     pic: '',
     picName: ''
   };
-
+  private num = 1958806;
   bidding: Record<string, any> = {};
+  private line: any = {};
 
   get readOnly() {
     return this.bidding.biddingStatus === 'In Progress';
   }
 
   created() {
-    this.bidding = {...this.data};
+    this.bidding = { ...this.data };
+    console.log("this bidding",this.bidding);
+    
     this.bidding.step = BiddingStep.SCORING;
-    this.bidding.scoringCriteria = [
-      {
-        criteria: 'Quality',
-        criteriaObj: '',
-        subCriteria: 'Quality',
-        subCriteriaObj: '',
-        percentage: 20,
-        pic: 'Procurement',
-        picName: 'Procurement'
-      },
-      {
-        criteria: 'Cost',
-        criteriaObj: '',
-        subCriteria: 'Cost',
-        subCriteriaObj: '',
-        percentage: 40,
-        pic: 'admincost',
-        picName: 'admincost'
-      },
-      {
-        criteria: 'Delivery',
-        criteriaObj: '',
-        subCriteria: 'Timeline',
-        subCriteriaObj: '',
-        percentage: 15,
-        pic: 'admintimeline',
-        picName: 'admintimeline'
-      },
-      {
-        criteria: 'Safety',
-        criteriaObj: '',
-        subCriteria: 'Packaging',
-        subCriteriaObj: '',
-        percentage: 15,
-        pic: 'adminpackaging',
-        picName: 'adminpackaging'
-      },
-      {
-        criteria: 'Morale',
-        criteriaObj: '',
-        subCriteria: 'Morale',
-        subCriteriaObj: '',
-        percentage: 15,
-        pic: 'adminmorale',
-        picName: 'adminmorale'
-      }
-    ];
-
+    // this.bidding.scoringCriteria = [
+    //   {
+    //     criteria: 'Quality',
+    //     criteriaObj: '',
+    //     subCriteria: 'Quality',
+    //     subCriteriaObj: '',
+    //     percentage: 20,
+    //     pic: 'Procurement',
+    //     picName: 'Procurement'
+    //   },
+    //   {
+    //     criteria: 'Cost',
+    //     criteriaObj: '',
+    //     subCriteria: 'Cost',
+    //     subCriteriaObj: '',
+    //     percentage: 40,
+    //     pic: 'admincost',
+    //     picName: 'admincost'
+    //   },
+    //   {
+    //     criteria: 'Delivery',
+    //     criteriaObj: '',
+    //     subCriteria: 'Timeline',
+    //     subCriteriaObj: '',
+    //     percentage: 15,
+    //     pic: 'admintimeline',
+    //     picName: 'admintimeline'
+    //   },
+    //   {
+    //     criteria: 'Safety',
+    //     criteriaObj: '',
+    //     subCriteria: 'Packaging',
+    //     subCriteriaObj: '',
+    //     percentage: 15,
+    //     pic: 'adminpackaging',
+    //     picName: 'adminpackaging'
+    //   },
+    //   {
+    //     criteria: 'Morale',
+    //     criteriaObj: '',
+    //     subCriteria: 'Morale',
+    //     subCriteriaObj: '',
+    //     percentage: 15,
+    //     pic: 'adminmorale',
+    //     picName: 'adminmorale'
+    //   }
+    // ];
+    this.getVendorScoringLine();
+    this.getVendorScoring();
+    
     this.getCriteria();
+
+    
+    
+  }
+
+  private getVendorScoring() {
+    this.commonService('/api/m-vendor-scorings')
+      .retrieve({
+        criteriaQuery: [
+          `biddingId.equals=${this.bidding.id}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.bidding.scoringCriteria = res.data;
+        console.log("this.bidding.scoringCriteria", this.bidding.scoringCriteria);
+      });
+  }
+
+  private getVendorScoringLine() {
+    this.commonService('/api/m-vendor-scoring-lines')
+      .retrieve({
+        criteriaQuery: [
+          // `vendorScoringId.equals=${this.bidding.scoringCriteria.id}`
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.line = res.data;
+        console.log("this.bidding.scoringCriteria.line", this.line);
+        
+      });
   }
 
   private getCriteria() {

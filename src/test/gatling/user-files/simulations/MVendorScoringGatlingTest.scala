@@ -72,7 +72,6 @@ class MVendorScoringGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "percentage":"0"
                 , "uid":null
                 , "active":null
                 }""")).asJson

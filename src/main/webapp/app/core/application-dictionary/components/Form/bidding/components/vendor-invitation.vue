@@ -153,10 +153,7 @@
         </el-table>
       </el-col>
     </el-row>
-    <el-divider content-position="left">
-      <h4>Vendor Qualification</h4>
-    </el-divider>
-    <prequalification-form :read-only="readOnly"></prequalification-form>
+
 
     <el-dialog
       title="Add Vendor Business Category"

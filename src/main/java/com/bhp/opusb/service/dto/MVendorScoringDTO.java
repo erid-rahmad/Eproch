@@ -1,27 +1,20 @@
 package com.bhp.opusb.service.dto;
 
-import java.math.BigDecimal;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVendorScoring} entity.
  */
-public class MVendorScoringDTO extends AbstractAuditingDTO {
-
-    /**
-     *
-     */
-    private static final long serialVersionUID = 1L;
+public class MVendorScoringDTO implements Serializable {
 
     private Long id;
-
-    private BigDecimal percentage;
 
     private UUID uid;
 
     private Boolean active;
-
 
     private Long biddingId;
     private String biddingName;
@@ -29,14 +22,33 @@ public class MVendorScoringDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
     private String adOrganizationName;
 
-    private Long biddingCriteriaId;
-    private String biddingCriteriaName;
 
-    private Long biddingSubCriteriaId;
-    private String biddingSubCriteriaName;
+    private Long evaluationMethodId;
+    private String evaluationMethodName;
 
-    private Long adUserUserId;
-    private String adUserUserName;
+    public String getBiddingName() {
+        return biddingName;
+    }
+
+    public void setBiddingName(String biddingName) {
+        this.biddingName = biddingName;
+    }
+
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
+    public String getEvaluationMethodName() {
+        return evaluationMethodName;
+    }
+
+    public void setEvaluationMethodName(String evaluationMethodName) {
+        this.evaluationMethodName = evaluationMethodName;
+    }
 
     public Long getId() {
         return id;
@@ -44,14 +56,6 @@ public class MVendorScoringDTO extends AbstractAuditingDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public BigDecimal getPercentage() {
-        return percentage;
-    }
-
-    public void setPercentage(BigDecimal percentage) {
-        this.percentage = percentage;
     }
 
     public UUID getUid() {
@@ -78,14 +82,6 @@ public class MVendorScoringDTO extends AbstractAuditingDTO {
         this.biddingId = mBiddingId;
     }
 
-    public String getBiddingName() {
-        return biddingName;
-    }
-
-    public void setBiddingName(String biddingName) {
-        this.biddingName = biddingName;
-    }
-
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -94,60 +90,12 @@ public class MVendorScoringDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public String getAdOrganizationName() {
-        return adOrganizationName;
+    public Long getEvaluationMethodId() {
+        return evaluationMethodId;
     }
 
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
-
-    public Long getBiddingCriteriaId() {
-        return biddingCriteriaId;
-    }
-
-    public void setBiddingCriteriaId(Long cBiddingCriteriaId) {
-        this.biddingCriteriaId = cBiddingCriteriaId;
-    }
-
-    public String getBiddingCriteriaName() {
-        return biddingCriteriaName;
-    }
-
-    public void setBiddingCriteriaName(String biddingCriteriaName) {
-        this.biddingCriteriaName = biddingCriteriaName;
-    }
-
-    public Long getBiddingSubCriteriaId() {
-        return biddingSubCriteriaId;
-    }
-
-    public void setBiddingSubCriteriaId(Long cBiddingSubCriteriaId) {
-        this.biddingSubCriteriaId = cBiddingSubCriteriaId;
-    }
-
-    public String getBiddingSubCriteriaName() {
-        return biddingSubCriteriaName;
-    }
-
-    public void setBiddingSubCriteriaName(String biddingSubCriteriaName) {
-        this.biddingSubCriteriaName = biddingSubCriteriaName;
-    }
-
-    public Long getAdUserUserId() {
-        return adUserUserId;
-    }
-
-    public void setAdUserUserId(Long adUserUserId) {
-        this.adUserUserId = adUserUserId;
-    }
-
-    public String getAdUserUserName() {
-        return adUserUserName;
-    }
-
-    public void setAdUserUserName(String adUserUserName) {
-        this.adUserUserName = adUserUserName;
+    public void setEvaluationMethodId(Long cEvaluationMethodId) {
+        this.evaluationMethodId = cEvaluationMethodId;
     }
 
     @Override
@@ -174,16 +122,15 @@ public class MVendorScoringDTO extends AbstractAuditingDTO {
     @Override
     public String toString() {
         return "MVendorScoringDTO{" +
-            "id=" + getId() +
-            ", percentage=" + getPercentage() +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", biddingId=" + getBiddingId() +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", biddingCriteriaId=" + getBiddingCriteriaId() +
-            ", biddingSubCriteriaId=" + getBiddingSubCriteriaId() +
-            ", adUserUserId=" + getAdUserUserId() +
-            ", adUserUserName=" + getAdUserUserName() +
-            "}";
+            "id=" + id +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", biddingId=" + biddingId +
+            ", biddingName='" + biddingName + '\'' +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", evaluationMethodId=" + evaluationMethodId +
+            ", evaluationMethodName='" + evaluationMethodName + '\'' +
+            '}';
     }
 }

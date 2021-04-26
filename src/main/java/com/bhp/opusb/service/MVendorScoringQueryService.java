@@ -91,9 +91,6 @@ public class MVendorScoringQueryService extends QueryService<MVendorScoring> {
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MVendorScoring_.id));
             }
-            if (criteria.getPercentage() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getPercentage(), MVendorScoring_.percentage));
-            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MVendorScoring_.uid));
             }
@@ -108,17 +105,9 @@ public class MVendorScoringQueryService extends QueryService<MVendorScoring> {
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MVendorScoring_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
-            if (criteria.getBiddingCriteriaId() != null) {
-                specification = specification.and(buildSpecification(criteria.getBiddingCriteriaId(),
-                    root -> root.join(MVendorScoring_.biddingCriteria, JoinType.LEFT).get(CBiddingCriteria_.id)));
-            }
-            if (criteria.getBiddingSubCriteriaId() != null) {
-                specification = specification.and(buildSpecification(criteria.getBiddingSubCriteriaId(),
-                    root -> root.join(MVendorScoring_.biddingSubCriteria, JoinType.LEFT).get(CBiddingSubCriteria_.id)));
-            }
-            if (criteria.getAdUserId() != null) {
-                specification = specification.and(buildSpecification(criteria.getAdUserId(),
-                    root -> root.join(MVendorScoring_.adUser, JoinType.LEFT).get(AdUser_.id)));
+            if (criteria.getEvaluationMethodId() != null) {
+                specification = specification.and(buildSpecification(criteria.getEvaluationMethodId(),
+                    root -> root.join(MVendorScoring_.evaluationMethod, JoinType.LEFT).get(CEvaluationMethod_.id)));
             }
         }
         return specification;

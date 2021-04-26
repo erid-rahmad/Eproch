@@ -143,6 +143,10 @@
     <include file="config/liquibase/changelog/20210416075600_added_entity_CEvaluationMethodCriteria.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210416075700_added_entity_CEvalMethodCriteriaLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210416075800_added_entity_CEvalMethodSubCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210419070300_added_entity_MVendorScoringLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210419070400_added_entity_MVendorScoringCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210423035000_added_entity_CAnnouncement.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210423050500_added_entity_MBiddingInvitation.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -266,5 +270,9 @@
     <include file="config/liquibase/changelog/20210416075600_added_entity_constraints_CEvaluationMethodCriteria.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210416075700_added_entity_constraints_CEvalMethodCriteriaLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210416075800_added_entity_constraints_CEvalMethodSubCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210419070300_added_entity_constraints_MVendorScoringLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210419070400_added_entity_constraints_MVendorScoringCriteria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210423035000_added_entity_constraints_CAnnouncement.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210423050500_added_entity_constraints_MBiddingInvitation.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>

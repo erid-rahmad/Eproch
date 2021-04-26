@@ -1,0 +1,66 @@
+{
+    "name": "CAnnouncement",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "publishDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cAnnouncement",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBidding",
+            "otherEntityRelationshipName": "cAnnouncement",
+            "relationshipName": "bidding",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingSchedule",
+            "otherEntityRelationshipName": "cAnnouncement",
+            "relationshipName": "biddingSchedule",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "cAnnouncement",
+            "relationshipName": "attachment",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210423035000",
+    "entityTableName": "c_announcement",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

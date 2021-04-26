@@ -10,7 +10,6 @@ import io.github.jhipster.service.filter.FloatFilter;
 import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -28,8 +27,6 @@ public class MVendorScoringCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private BigDecimalFilter percentage;
-
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -38,25 +35,18 @@ public class MVendorScoringCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
-    private LongFilter biddingCriteriaId;
-
-    private LongFilter biddingSubCriteriaId;
-
-    private LongFilter adUserId;
+    private LongFilter evaluationMethodId;
 
     public MVendorScoringCriteria() {
     }
 
     public MVendorScoringCriteria(MVendorScoringCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.percentage = other.percentage == null ? null : other.percentage.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.biddingCriteriaId = other.biddingCriteriaId == null ? null : other.biddingCriteriaId.copy();
-        this.biddingSubCriteriaId = other.biddingSubCriteriaId == null ? null : other.biddingSubCriteriaId.copy();
-        this.adUserId = other.adUserId == null ? null : other.adUserId.copy();
+        this.evaluationMethodId = other.evaluationMethodId == null ? null : other.evaluationMethodId.copy();
     }
 
     @Override
@@ -70,14 +60,6 @@ public class MVendorScoringCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public BigDecimalFilter getPercentage() {
-        return percentage;
-    }
-
-    public void setPercentage(BigDecimalFilter percentage) {
-        this.percentage = percentage;
     }
 
     public UUIDFilter getUid() {
@@ -112,28 +94,12 @@ public class MVendorScoringCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getBiddingCriteriaId() {
-        return biddingCriteriaId;
+    public LongFilter getEvaluationMethodId() {
+        return evaluationMethodId;
     }
 
-    public void setBiddingCriteriaId(LongFilter biddingCriteriaId) {
-        this.biddingCriteriaId = biddingCriteriaId;
-    }
-
-    public LongFilter getBiddingSubCriteriaId() {
-        return biddingSubCriteriaId;
-    }
-
-    public void setBiddingSubCriteriaId(LongFilter biddingSubCriteriaId) {
-        this.biddingSubCriteriaId = biddingSubCriteriaId;
-    }
-
-    public LongFilter getAdUserId() {
-        return adUserId;
-    }
-
-    public void setAdUserId(LongFilter adUserId) {
-        this.adUserId = adUserId;
+    public void setEvaluationMethodId(LongFilter evaluationMethodId) {
+        this.evaluationMethodId = evaluationMethodId;
     }
 
 
@@ -148,28 +114,22 @@ public class MVendorScoringCriteria implements Serializable, Criteria {
         final MVendorScoringCriteria that = (MVendorScoringCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(percentage, that.percentage) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(biddingCriteriaId, that.biddingCriteriaId) &&
-            Objects.equals(biddingSubCriteriaId, that.biddingSubCriteriaId) &&
-            Objects.equals(adUserId, that.adUserId);
+            Objects.equals(evaluationMethodId, that.evaluationMethodId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
-        percentage,
         uid,
         active,
         biddingId,
         adOrganizationId,
-        biddingCriteriaId,
-        biddingSubCriteriaId,
-        adUserId
+        evaluationMethodId
         );
     }
 
@@ -177,14 +137,11 @@ public class MVendorScoringCriteria implements Serializable, Criteria {
     public String toString() {
         return "MVendorScoringCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (percentage != null ? "percentage=" + percentage + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (biddingCriteriaId != null ? "biddingCriteriaId=" + biddingCriteriaId + ", " : "") +
-                (biddingSubCriteriaId != null ? "biddingSubCriteriaId=" + biddingSubCriteriaId + ", " : "") +
-                (adUserId != null ? "adUserId=" + adUserId + ", " : "") +
+                (evaluationMethodId != null ? "evaluationMethodId=" + evaluationMethodId + ", " : "") +
             "}";
     }
 

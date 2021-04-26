@@ -39,4 +39,29 @@
                                  referencedTableName="ad_user"/>
 
     </changeSet>
+    <changeSet id="20210411092100" author="erid">
+<!--        <dropForeignKeyConstraint baseColumnNames="bidding_criteria_id"-->
+<!--                                  baseTableName="m_vendor_scoring"-->
+<!--                                  constraintName="fk_m_vendor_scoring_bidding_criteria_id"-->
+<!--                                  referencedColumnNames="id"-->
+<!--                                  referencedTableName="c_bidding_criteria"/>-->
+
+<!--        <dropForeignKeyConstraint baseColumnNames="bidding_sub_criteria_id"-->
+<!--                                  baseTableName="m_vendor_scoring"-->
+<!--                                  constraintName="fk_m_vendor_scoring_bidding_sub_criteria_id"-->
+<!--                                  referencedColumnNames="id"-->
+<!--                                  referencedTableName="c_bidding_sub_criteria"/>-->
+
+<!--        <dropForeignKeyConstraint baseColumnNames="ad_user_user_id"-->
+<!--                                  baseTableName="m_vendor_scoring"-->
+<!--                                  constraintName="fk_m_vendor_scoring_ad_user_user_id"-->
+<!--                                  referencedColumnNames="user_id"-->
+<!--                                  referencedTableName="ad_user"/>-->
+
+        <addForeignKeyConstraint baseColumnNames="evaluation_method_id"
+                                 baseTableName="m_vendor_scoring"
+                                 constraintName="fk_m_vendor_scoring_evaluation_method_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_evaluation_method"/>
+    </changeSet>
 </databaseChangeLog>
