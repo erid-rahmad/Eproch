@@ -8,12 +8,16 @@ import {
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import CatalogGrid from './components/catalog-grid.vue';
-import ProductInformation from './product-information.vue';
+// import ProductInformation from './product-information.vue';
+import submission from './bidding-submission.vue';
+
 
 @Component({
   components: {
     CatalogGrid,
-    ProductInformation
+    submission
+    // ProductInformation,
+
   }
 })
 export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
@@ -27,71 +31,93 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
     return {
       tableData: [
         {
-          1: 'BN-00001',
-          2: 'Pengadaan Kendaraan Operasional',
-          3: 'Tender Good',
-          4: 'Admin tender',
-          5: 'In progres',
-          6: 'INGRAM MICRO INDONESIA',
-          7: '29.570.000.000',
-          8: '29.550.000.000',
-
+            1: 'BN-00001',
+            2: 'Office Supply Bid',
+            3: 'Tender Good',
+            4: 'View',
+            5: 'In progres',
+            6: '04-20-2021 14:00',
+            7: '04-20-2021 14:00',
+            8: '3',
+  
         },
         {
           1: 'BN-00001',
-          2: 'Pengadaan Kendaraan Operasional',
+          2: 'Bidding Laptop',
           3: 'Tender Good',
-          4: 'Admin tender',
+          4: 'View',
           5: 'In progres',
-          6: 'SISTECH KHARISMA',
-          7: '29.570.000.000',
-          8: '29.310.000.000',
+          6: '04-20-2021 14:00',
+          7: '04-20-2021 14:00',
+          8: '3',
 
         },
-        {
-          1: 'BN-00001',
-          2: 'Pengadaan Kendaraan Operasional',
-          3: 'Tender Good',
-          4: 'Admin tender',
-          5: 'In progres',
-          6: 'WESTCON INTERNATIONAL INDONESIA',
-          7: '29.570.000.000',
-          8: '29.450.000.000',
+        // {
+        //   1: 'BN-00001',
+        //   2: 'Pengadaan Kendaraan Operasional',
+        //   3: 'Tender Good',
+        //   4: 'View',
+        //   5: 'In progres',
+        //   6: 'INGRAM MICRO INDONESIA',
+        //   7: '29.570.000.000',
+        //   8: '29.550.000.000',
 
-        },
-        {
-          1: 'BN-00002',
-          2: 'Pengadaan Office Supply',
-          3: 'Tender Good',
-          4: 'Admin tender',
-          5: 'In progres',
-          6: 'INGRAM MICRO INDONESIA',
-          7: '6.914.000',
-          8: '6.920.000',
+        // },
+        // {
+        //   1: 'BN-00001',
+        //   2: 'Pengadaan Kendaraan Operasional',
+        //   3: 'Tender Good',
+        //   4: 'View',
+        //   5: 'In progres',
+        //   6: 'SISTECH KHARISMA',
+        //   7: '29.570.000.000',
+        //   8: '29.310.000.000',
 
-        },
-        {
-          1: 'BN-00002',
-          2: 'Pengadaan Office Supply',
-          3: 'Tender Good',
-          4: 'Admin tender',
-          5: 'In progres',
-          6: 'MAKMUR JAYA',
-          7: '6.914.000',
-          8: '6.919.000',
+        // },
+        // {
+        //   1: 'BN-00001',
+        //   2: 'Pengadaan Kendaraan Operasional',
+        //   3: 'Tender Good',
+        //   4: 'View',
+        //   5: 'In progres',
+        //   6: 'WESTCON INTERNATIONAL INDONESIA',
+        //   7: '29.570.000.000',
+        //   8: '29.450.000.000',
 
-        },
-        {
-          1: 'BN-00002',
-          2: 'Pengadaan Office Supply',
-          3: 'Tender Good',
-          4: 'Admin tender',
-          5: 'In progres',
-          6: 'SISTECH KHARISMA',
-          7: '6.914.000',
-          8: '6.919.000',
+        // },
+        // {
+        //   1: 'BN-00002',
+        //   2: 'Pengadaan Office Supply',
+        //   3: 'Tender Good',
+        //   4: 'View',
+        //   5: 'In progres',
+        //   6: 'INGRAM MICRO INDONESIA',
+        //   7: '6.914.000',
+        //   8: '6.920.000',
 
-        },
+        // },
+        // {
+        //   1: 'BN-00002',
+        //   2: 'Pengadaan Office Supply',
+        //   3: 'Tender Good',
+        //   4: 'View',
+        //   5: 'In progres',
+        //   6: 'MAKMUR JAYA',
+        //   7: '6.914.000',
+        //   8: '6.919.000',
+
+        // },
+        // {
+        //   1: 'BN-00002',
+        //   2: 'Pengadaan Office Supply',
+        //   3: 'Tender Good',
+        //   4: 'View',
+        //   5: 'In progres',
+        //   6: 'SISTECH KHARISMA',
+        //   7: '6.914.000',
+        //   8: '6.919.000',
+
+        // },
       ],
       gridData: [{
         date: '2016-05-02',

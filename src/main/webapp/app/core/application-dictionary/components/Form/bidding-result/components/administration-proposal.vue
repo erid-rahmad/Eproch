@@ -1,37 +1,24 @@
 <template>
     <div class="app-container">
-
-        <el-divider content-position="left">
-            <h4>Project Information</h4>
-        </el-divider>
-        <el-row :gutter="24">
-            <el-col :span="20">
-                <el-table v-loading="processing" ref="biddingSchedule" highlight-current-row border stripe size="mini" style="width: 100%; height: 100%" :data="projectinformation">
-
-                    <el-table-column min-width="30" label="No">
-                        <template slot-scope="row">
-                            {{ row.$index+1 }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column min-width="100" prop="name" label="Information" />
-                    <el-table-column min-width="100" prop="attachmentName" label="atachment">
-                        <template slot-scope="{ row }">
-                            <el-button class="btn-attachment" icon="el-icon-download" size="mini" type="primary" @click="downloadAttachment(row)">
-                                {{ row.attachmentName }}
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
+        <el-row :gutter="columnSpacing">
+            <el-col :span="24">
+                <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
+                    Back
+                </el-button>
+                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="dialogTableVisible11 = true">
+                    Submit <em class="el-icon-arrow-right"></em>
+                </el-button>
             </el-col>
         </el-row>
+
         <el-divider content-position="left">
-            <h4>Vendor Qualification</h4>
+            <h4>Administration Proposal</h4>
         </el-divider>
         <el-form ref="biddingInformation" label-position="left" label-width="200px" size="mini">
             <el-row :gutter="24">
                 <el-col :span="18">
                     <el-form-item label="Prequalification Method" prop="title">
-                        <el-dropdown>
+                        <!-- <el-dropdown>
                             <el-button type="primary">
                                 Metode Prekualifikasi 2021<i class="el-icon-arrow-down el-icon--right"></i>
                             </el-button>
@@ -42,7 +29,7 @@
                                 <el-dropdown-item>Action 4</el-dropdown-item>
                                 <el-dropdown-item>Action 5</el-dropdown-item>
                             </el-dropdown-menu>
-                        </el-dropdown>
+                        </el-dropdown> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -74,11 +61,16 @@
                     </el-table-column>
                     <el-table-column min-width="120" prop="dockument" label="Question" />
                     <el-table-column min-width="30" prop="dockument1" label="requirment" />
-                    <el-table-column min-width="150"  label="Answer">                 
+                    <el-table-column min-width="150" label="Answer">
                         <template slot-scope="{row}">
                             <el-input class="form-input" size="mini" v-model="row.input" clearable required></el-input>
                         </template>
-                        </el-table-column>
+                    </el-table-column>
+                    <el-table-column min-width="50" label="Dockument">
+                        <template slot-scope="{row}">
+                           <el-checkbox v-model="row.checked">Checked</el-checkbox>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
@@ -116,7 +108,13 @@
                         </template>
                         <template slot-scope="{row}">
                             <el-input class="form-input" size="mini" v-model="row.dockument3" clearable required></el-input>
-                        </template></el-table-column>
+                        </template>
+                    </el-table-column>
+                    <el-table-column min-width="50" label="Dockument">
+                        <template slot-scope="{row}">
+                            <el-checkbox v-model="row.checked">Checked</el-checkbox>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
@@ -157,19 +155,25 @@
                         </template>
                         <template slot-scope="{row}">
                             <el-input class="form-input" size="mini" v-model="row.dockument3" required></el-input>
-                        </template></el-table-column>
+                        </template>
+                    </el-table-column>
+                    <el-table-column min-width="50" label="Dockument">
+                        <template slot-scope="{row}">
+                           <el-checkbox v-model="row.checked">Checked</el-checkbox>
+                        </template>
+                    </el-table-column>
                 </el-table>
             </el-col>
         </el-row>
         <h1></h1>
         <el-row :gutter="columnSpacing">
-            <el-col :span="24">
+            <!-- <el-col :span="24">
                 <el-button type="primary" size="mini" style="margin-left: 0px;position: absolute; top: 50%; left: 50%;" v-loading.fullscreen.lock="fullscreenLoading" @click="validate">
                     Submit
                 </el-button>
-            </el-col>
+            </el-col> -->
         </el-row>
 
     </div>
 </template>
-<script lang="ts" src="./bidding-schedule.component.ts"></script>
+<script lang="ts" src="./administration-proposal.component.ts"></script>

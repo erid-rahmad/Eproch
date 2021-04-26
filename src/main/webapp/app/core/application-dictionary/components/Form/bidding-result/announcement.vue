@@ -35,12 +35,7 @@
                 </template>
             </el-table-column>
         </el-table>
-
-        
-        
-        <bidding-result-announcement-detail v-else :data="selectedRow"></bidding-result-announcement-detail>
-         
-        
+        <bidding-result-announcement-detail v-else :data="selectedRow"></bidding-result-announcement-detail> 
     </div> 
 
 

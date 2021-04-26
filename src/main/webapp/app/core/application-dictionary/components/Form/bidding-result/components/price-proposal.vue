@@ -1,5 +1,15 @@
 <template>
     <div class="app-container">
+                <el-row :gutter="columnSpacing">
+            <el-col :span="24">
+                <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
+                    Back
+                </el-button>
+                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="dialogTableVisible11 = true">
+                    Submit <em class="el-icon-arrow-right"></em>
+                </el-button>
+            </el-col>
+        </el-row>
         <el-divider content-position="left">
             <h4>More Information</h4>
         </el-divider>
@@ -119,96 +129,7 @@
                 <el-table-column width="300" property="uom.name" label="Uom"></el-table-column>
                 <el-table-column width="300" property="price" label="Proposed Price"></el-table-column>
             </el-table>
-        </el-dialog>
-        <el-divider content-position="left">
-            <h4>Dokumen Submision Shcedule</h4>
-        </el-divider>
-        <!-- <el-row>
-            <el-col :span="24">
-                <el-table v-loading="processing" ref="biddingInformationLine" highlight-current-row border stripe size="mini" style="width: 100%; height: 100%"
-                    :height="gridSchema.height" :max-height="gridSchema.maxHeight" :default-sort="gridSchema.defaultSort" :empty-text="gridSchema.emptyText" :data="dummy">
-
-                    <el-table-column min-width="30" label="No">
-                        <template slot-scope="row">
-                            {{ row.$index+1 }}
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column min-width="100" prop="dockument" label="Dokumen" />
-
-
-                    <el-table-column min-width="50" prop="vendorsubmision" label="Vendor Submision" />
-
-                    <el-table-column min-width="50" prop="vendorevaluation" label="Vendor evaluation" />
-
-                    <el-table-column min-width="60" sortable label="Bidding Schedule">
-                        <template slot-scope="{ row }">
-                            <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="downloadAttachment(row)">
-                                Download
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </el-col>
-        </el-row> -->
-        <el-row>
-            <el-col :span="18">
-                <el-table
-                    v-loading="processing"
-                    ref="projectInformation"
-                    highlight-current-row
-                    border stripe
-                    size="mini"
-                    style="height: 100%"
-                    :data="dummy">
-                    <el-table-column
-                        min-width="20"
-                        label="No">
-                        <template slot-scope="row">
-                            {{ row.$index+1 }}
-                        </template>
-                    </el-table-column>
-                    <el-table-column
-                        min-width="100"
-                        prop="dockument"
-                        label="Information"/>
-                    <el-table-column
-                        min-width="100"
-                        prop="vendorsubmision"
-                        label="Date"/>
-                    <el-table-column
-                        min-width="80"
-                        label="Attachment">
-                        <template slot-scope="{ row }">
-                            <el-button
-                                class="btn-attachment"
-                                icon="el-icon-upload"
-                                size="mini"
-                                type="primary"
-                                @click="downloadAttachment(row)">
-                                    {{row.dockument }}
-                            </el-button>
-                        </template>
-                    </el-table-column>
-                    <el-table-column align="center" min-width="20">
-                        <!-- <template slot="header">
-                            <el-button
-                                size="mini"
-                                icon="el-icon-plus"
-                                type="primary"
-                                @click="addProject"/>
-                        </template> -->
-                        <template slot-scope="row">
-                            <el-button
-                                size="mini"
-                                icon="el-icon-delete"
-                                type="danger"
-                                @click="removeProject(row.$index)"/>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </el-col>
-        </el-row>
+        </el-dialog> 
 
         <el-dialog :width="dialogWidth" :close-on-click-modal="dialogCloseOnClick" :close-on-press-escape="dialogCloseOnClick" :show-close="dialogCloseOnClick"
             :visible.sync="dialogConfirmationVisible" :title="dialogTitle">
@@ -403,4 +324,4 @@
     </div>
 </template>
 
-<script lang="ts" src="./bidding-information.component.ts"></script>
+<script lang="ts" src="./price-proposal.component.ts"></script>

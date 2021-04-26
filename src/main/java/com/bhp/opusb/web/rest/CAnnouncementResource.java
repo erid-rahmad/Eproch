@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -68,6 +69,22 @@ public class CAnnouncementResource {
             .body(result);
     }
 
+    @PostMapping("/c-announcementemaillist")
+    public ResponseEntity<ArrayList> listemail(@Valid @RequestBody CAnnouncementDTO cAnnouncementDTO) throws URISyntaxException {
+        log.debug("REST request to save CAnnouncement : {}", cAnnouncementDTO);
+
+        return ResponseEntity.ok(cAnnouncementService.emailInvitation(cAnnouncementDTO));
+//        if (cAnnouncementDTO.getId() != null) {
+//            throw new BadRequestAlertException("A new cAnnouncement cannot already have an ID", ENTITY_NAME, "idexists");
+//        }
+//        CAnnouncementDTO result = cAnnouncementService.save(cAnnouncementDTO);
+//        return ResponseEntity.created(new URI("/api/c-announcements/" + result.getId()))
+//            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+//            .body(result);
+
+
+    }
+
     /**
      * {@code PUT  /c-announcements} : Updates an existing cAnnouncement.
      *
@@ -103,6 +120,8 @@ public class CAnnouncementResource {
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
+
+
 
     /**
      * {@code GET  /c-announcements/count} : count all the cAnnouncements.

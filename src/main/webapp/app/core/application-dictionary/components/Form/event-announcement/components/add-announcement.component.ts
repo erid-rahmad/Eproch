@@ -40,42 +40,36 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
   };
 
 
-  gridData1 = [
-    {
-      documentNo: 'BD-00001',
-      name: 'pengadaan kendaraan operasional',
-      biddingTypeName: 'Tender Goods',
-      documentStatus: 'In Progress',
-      lastModifiedDate: '2021-03-26  3:30:16 ',
-      lastModifiedBy: 'admintender',
-      status: true,
-      action: 'submit',
-      join: '3'
-    },
-
-    {
-      documentNo: 'BD-00003',
-      name: 'pengadaan Office equepment',
-      biddingTypeName: 'Tender Goods',
-      documentStatus: 'Terminate',
-      lastModifiedDate: '2021-03-26  3:30:16  ',
-      lastModifiedBy: 'admintender',
-      status: true,
-      action: 'submit',
-      join: '4'
-    },
-    {
-      documentNo: 'BD-00004',
-      name: 'pengadaan kendaraan jabatan',
-      biddingTypeName: 'Tender Goods',
-      documentStatus: 'Not Started',
-      lastModifiedDate: '2021-03-26  3:30:16 ',
-      lastModifiedBy: 'admintender',
-      status: false,
-      action: 'register ',
-      join: '3'
-    }
-  ];
+  tableData= [{
+    date: '2016-05-03',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  }, {
+    date: '2016-05-02',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  }, {
+    date: '2016-05-04',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  }, {
+    date: '2016-05-01',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  }, {
+    date: '2016-05-08',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  }, {
+    date: '2016-05-06',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+  }, {
+    date: '2016-05-07',
+    name: 'Tom',
+    address: 'No. 189, Grove St, Los Angeles'
+    }];
+  multipleSelection= [];
 
 
   eventschedule = [
@@ -118,7 +112,7 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
   // }
 
   private pushAnnouncement() {
-    this.pushService('http://localhost:8080/api/c-announcements')
+    this.pushService('api/c-announcements')
       .create(this.Announcment);
   }
 
@@ -131,9 +125,24 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
     this.Announcment.attachmentId = 16502;
 
 
-    this.pushAnnouncement();
+    // this.pushAnnouncement();
     
   }
+
+    toggleSelection(rows) {
+      if (rows) {
+        rows.forEach(row => {
+          this.$refs.multipleTable.toggleRowSelection(row);
+        });
+      } else {
+        this.$refs.multipleTable.clearSelection();
+      }
+  }
+  
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
+    }
+  
 
   beforeDestroy() {
     this.editor.destroy()
@@ -143,4 +152,6 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
     this.$emit("back")
       ;
   }
+
+
 }

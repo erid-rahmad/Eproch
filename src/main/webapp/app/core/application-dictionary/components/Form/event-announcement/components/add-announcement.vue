@@ -22,9 +22,9 @@
                     <el-form-item label="Nama Tender">
                         <el-input v-model="sizeForm.q"></el-input>
                     </el-form-item>
-                    <el-form-item label="Deskripsi"> 
-                        <tiptap :editor="editor" @email="emailFromChild=$event " ></tiptap>
-                    
+                    <el-form-item label="Deskripsi">
+                        <tiptap :editor="editor" @email="emailFromChild=$event "></tiptap>
+
                     </el-form-item>
                     <el-form-item size="large">
 
@@ -79,31 +79,30 @@
             <div>
                 <el-dialog title="" :visible.sync="dialogTableVisible11">
                     <template>
-                        <div>
-                            <el-table v-loading="processing" ref="vendorInvitation" highlight-current-row border stripe size="mini" style="width: 100%; height: 100%"
-                                :data="eventschedule">
-                                <el-table-column min-width="30" label="No">
-                                    <template slot-scope="row">
-                                        {{ row.$index+1 }}
-                                    </template>
-                                </el-table-column>
-                                <el-table-column min-width="100" prop="event" label="Name" />
-                                <el-table-column min-width="100" prop="start" label="Position" />
-                                <el-table-column min-width="100" prop="end" label="Email" />
-                            </el-table>
+                        <el-table ref="multipleTable" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
+                            <el-table-column type="selection" width="55">
+                            </el-table-column>
+                            <el-table-column label="Date" width="120">
+                                <template slot-scope="scope">{{ scope.row.date }}</template>
+                            </el-table-column>
+                            <el-table-column property="name" label="Name" width="120">
+                            </el-table-column>
+                            <el-table-column property="address" label="Address" show-overflow-tooltip>
+                            </el-table-column>
+                        </el-table>
+                        <div style="margin-top: 20px">
+                            <el-button @click="toggleSelection([tableData[1], tableData[2]])">Toggle selection status of second and third rows</el-button>
+                            <el-button @click="toggleSelection()">Clear selection</el-button>
                         </div>
                     </template>
                     <template>
                         <div slot="footer">
-                            <el-button type="primary" size="mini"      @click="dialogTableVisible11  = false">Sent</el-button>
+                            <el-button type="primary" size="mini" @click="dialogTableVisible11  = false">Sent</el-button>
                         </div>
                     </template>
-
                 </el-dialog>
-
             </div>
         </template>
-
     </div>
 </template>
 <script lang="ts" src="./add-announcement.component.ts"></script>

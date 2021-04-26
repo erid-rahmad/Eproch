@@ -1205,4 +1205,9 @@ export default class ItemDetail extends mixins(Vue2Filters.mixin, AlertMixin, Co
     });
   }
 
+  back() {
+    this.$emit("back")
+      ;
+  }
+
 }
