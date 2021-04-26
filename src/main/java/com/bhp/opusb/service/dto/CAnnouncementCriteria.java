@@ -28,8 +28,6 @@ public class CAnnouncementCriteria implements Serializable, Criteria {
 
     private LongFilter id;
 
-    private StringFilter description;
-
     private ZonedDateTimeFilter publishDate;
 
     private UUIDFilter uid;
@@ -49,7 +47,6 @@ public class CAnnouncementCriteria implements Serializable, Criteria {
 
     public CAnnouncementCriteria(CAnnouncementCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
-        this.description = other.description == null ? null : other.description.copy();
         this.publishDate = other.publishDate == null ? null : other.publishDate.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
@@ -70,14 +67,6 @@ public class CAnnouncementCriteria implements Serializable, Criteria {
 
     public void setId(LongFilter id) {
         this.id = id;
-    }
-
-    public StringFilter getDescription() {
-        return description;
-    }
-
-    public void setDescription(StringFilter description) {
-        this.description = description;
     }
 
     public ZonedDateTimeFilter getPublishDate() {
@@ -148,7 +137,6 @@ public class CAnnouncementCriteria implements Serializable, Criteria {
         final CAnnouncementCriteria that = (CAnnouncementCriteria) o;
         return
             Objects.equals(id, that.id) &&
-            Objects.equals(description, that.description) &&
             Objects.equals(publishDate, that.publishDate) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
@@ -162,7 +150,6 @@ public class CAnnouncementCriteria implements Serializable, Criteria {
     public int hashCode() {
         return Objects.hash(
         id,
-        description,
         publishDate,
         uid,
         active,
@@ -177,7 +164,6 @@ public class CAnnouncementCriteria implements Serializable, Criteria {
     public String toString() {
         return "CAnnouncementCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
-                (description != null ? "description=" + description + ", " : "") +
                 (publishDate != null ? "publishDate=" + publishDate + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +

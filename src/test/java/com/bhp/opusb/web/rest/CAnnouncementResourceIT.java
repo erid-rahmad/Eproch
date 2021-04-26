@@ -22,6 +22,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Base64Utils;
 import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.time.ZonedDateTime;
@@ -157,25 +158,6 @@ public class CAnnouncementResourceIT {
 
     @Test
     @Transactional
-    public void checkDescriptionIsRequired() throws Exception {
-        int databaseSizeBeforeTest = cAnnouncementRepository.findAll().size();
-        // set the field null
-        cAnnouncement.setDescription(null);
-
-        // Create the CAnnouncement, which fails.
-        CAnnouncementDTO cAnnouncementDTO = cAnnouncementMapper.toDto(cAnnouncement);
-
-        restCAnnouncementMockMvc.perform(post("/api/c-announcements")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(cAnnouncementDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<CAnnouncement> cAnnouncementList = cAnnouncementRepository.findAll();
-        assertThat(cAnnouncementList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     public void getAllCAnnouncements() throws Exception {
         // Initialize the database
         cAnnouncementRepository.saveAndFlush(cAnnouncement);
@@ -185,7 +167,7 @@ public class CAnnouncementResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cAnnouncement.getId().intValue())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].publishDate").value(hasItem(sameInstant(DEFAULT_PUBLISH_DATE))))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
@@ -202,7 +184,7 @@ public class CAnnouncementResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cAnnouncement.getId().intValue()))
-            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION.toString()))
             .andExpect(jsonPath("$.publishDate").value(sameInstant(DEFAULT_PUBLISH_DATE)))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
@@ -225,84 +207,6 @@ public class CAnnouncementResourceIT {
 
         defaultCAnnouncementShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCAnnouncementShouldNotBeFound("id.lessThan=" + id);
-    }
-
-
-    @Test
-    @Transactional
-    public void getAllCAnnouncementsByDescriptionIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cAnnouncementRepository.saveAndFlush(cAnnouncement);
-
-        // Get all the cAnnouncementList where description equals to DEFAULT_DESCRIPTION
-        defaultCAnnouncementShouldBeFound("description.equals=" + DEFAULT_DESCRIPTION);
-
-        // Get all the cAnnouncementList where description equals to UPDATED_DESCRIPTION
-        defaultCAnnouncementShouldNotBeFound("description.equals=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCAnnouncementsByDescriptionIsNotEqualToSomething() throws Exception {
-        // Initialize the database
-        cAnnouncementRepository.saveAndFlush(cAnnouncement);
-
-        // Get all the cAnnouncementList where description not equals to DEFAULT_DESCRIPTION
-        defaultCAnnouncementShouldNotBeFound("description.notEquals=" + DEFAULT_DESCRIPTION);
-
-        // Get all the cAnnouncementList where description not equals to UPDATED_DESCRIPTION
-        defaultCAnnouncementShouldBeFound("description.notEquals=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCAnnouncementsByDescriptionIsInShouldWork() throws Exception {
-        // Initialize the database
-        cAnnouncementRepository.saveAndFlush(cAnnouncement);
-
-        // Get all the cAnnouncementList where description in DEFAULT_DESCRIPTION or UPDATED_DESCRIPTION
-        defaultCAnnouncementShouldBeFound("description.in=" + DEFAULT_DESCRIPTION + "," + UPDATED_DESCRIPTION);
-
-        // Get all the cAnnouncementList where description equals to UPDATED_DESCRIPTION
-        defaultCAnnouncementShouldNotBeFound("description.in=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCAnnouncementsByDescriptionIsNullOrNotNull() throws Exception {
-        // Initialize the database
-        cAnnouncementRepository.saveAndFlush(cAnnouncement);
-
-        // Get all the cAnnouncementList where description is not null
-        defaultCAnnouncementShouldBeFound("description.specified=true");
-
-        // Get all the cAnnouncementList where description is null
-        defaultCAnnouncementShouldNotBeFound("description.specified=false");
-    }
-                @Test
-    @Transactional
-    public void getAllCAnnouncementsByDescriptionContainsSomething() throws Exception {
-        // Initialize the database
-        cAnnouncementRepository.saveAndFlush(cAnnouncement);
-
-        // Get all the cAnnouncementList where description contains DEFAULT_DESCRIPTION
-        defaultCAnnouncementShouldBeFound("description.contains=" + DEFAULT_DESCRIPTION);
-
-        // Get all the cAnnouncementList where description contains UPDATED_DESCRIPTION
-        defaultCAnnouncementShouldNotBeFound("description.contains=" + UPDATED_DESCRIPTION);
-    }
-
-    @Test
-    @Transactional
-    public void getAllCAnnouncementsByDescriptionNotContainsSomething() throws Exception {
-        // Initialize the database
-        cAnnouncementRepository.saveAndFlush(cAnnouncement);
-
-        // Get all the cAnnouncementList where description does not contain DEFAULT_DESCRIPTION
-        defaultCAnnouncementShouldNotBeFound("description.doesNotContain=" + DEFAULT_DESCRIPTION);
-
-        // Get all the cAnnouncementList where description does not contain UPDATED_DESCRIPTION
-        defaultCAnnouncementShouldBeFound("description.doesNotContain=" + UPDATED_DESCRIPTION);
     }
 
 
@@ -602,7 +506,7 @@ public class CAnnouncementResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cAnnouncement.getId().intValue())))
-            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION.toString())))
             .andExpect(jsonPath("$.[*].publishDate").value(hasItem(sameInstant(DEFAULT_PUBLISH_DATE))))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));

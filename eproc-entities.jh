@@ -148,7 +148,7 @@ entity CRegistrationDocument {
 }
 
 entity CAnnouncement{
-    description String required
+    description TextBlob required
     publishDate ZonedDateTime
     uid UUID
 	active Boolean

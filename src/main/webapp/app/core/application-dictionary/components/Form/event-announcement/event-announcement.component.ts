@@ -1,6 +1,6 @@
 import AlertMixin from '@/shared/alert/alert.mixin';
 import { mixins } from 'vue-class-component';
-import { Component, Watch } from 'vue-property-decorator';
+import { Component, Inject } from 'vue-property-decorator';
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 
@@ -15,16 +15,13 @@ import DetailsAnnouncementForm from './components/details-announcement.vue';
 
   }
 })  
-export default class EventAnnouncement extends  mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
+export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
   
+
    
   dialogTableVisible = false;
   dialogTableVisible11 = false;
   editor = null;
-
-  
-
-
 
   
   gridSchema = {
