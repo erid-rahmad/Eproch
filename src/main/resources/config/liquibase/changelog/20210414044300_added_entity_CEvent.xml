@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity CEvent.
     -->
@@ -70,7 +70,7 @@
                   separator=";"
                   tableName="c_event">
             <column name="id" type="numeric"/>
-            <column name="event" type="string"/>
+            <column name="name" type="string"/>
             <column name="description" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
@@ -78,6 +78,10 @@
             <column name="c_product_classification_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210422133100" author="Ananta Aryadewa">
+        <renameColumn tableName="c_event" oldColumnName="event" newColumnName="name" columnDataType="varchar(50)" />
     </changeSet>
 
 </databaseChangeLog>

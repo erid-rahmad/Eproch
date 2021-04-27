@@ -8,7 +8,7 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.CEvaluationMethodCriteria} entity.
  */
 public class CEvaluationMethodCriteriaDTO implements Serializable {
-
+    
     private Long id;
 
     private UUID uid;
@@ -21,22 +21,6 @@ public class CEvaluationMethodCriteriaDTO implements Serializable {
 
     private Long evaluationMethodLineId;
     private String evaluationMethodLineName;
-
-    public String getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
-
-    public String getEvaluationMethodLineName() {
-        return evaluationMethodLineName;
-    }
-
-    public void setEvaluationMethodLineName(String evaluationMethodLineName) {
-        this.evaluationMethodLineName = evaluationMethodLineName;
-    }
 
     public Long getId() {
         return id;
@@ -70,12 +54,28 @@ public class CEvaluationMethodCriteriaDTO implements Serializable {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getEvaluationMethodLineId() {
         return evaluationMethodLineId;
     }
 
     public void setEvaluationMethodLineId(Long cEvaluationMethodLineId) {
         this.evaluationMethodLineId = cEvaluationMethodLineId;
+    }
+
+    public String getEvaluationMethodLineName() {
+        return evaluationMethodLineName;
+    }
+
+    public void setEvaluationMethodLineName(String evaluationMethodLineName) {
+        this.evaluationMethodLineName = evaluationMethodLineName;
     }
 
     @Override
@@ -102,13 +102,11 @@ public class CEvaluationMethodCriteriaDTO implements Serializable {
     @Override
     public String toString() {
         return "CEvaluationMethodCriteriaDTO{" +
-            "id=" + id +
-            ", uid=" + uid +
-            ", active=" + active +
-            ", adOrganizationId=" + adOrganizationId +
-            ", adOrganizationName='" + adOrganizationName + '\'' +
-            ", evaluationMethodLineId=" + evaluationMethodLineId +
-            ", evaluationMethodLineName='" + evaluationMethodLineName + '\'' +
-            '}';
+            "id=" + getId() +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            ", evaluationMethodLineId=" + getEvaluationMethodLineId() +
+            "}";
     }
 }

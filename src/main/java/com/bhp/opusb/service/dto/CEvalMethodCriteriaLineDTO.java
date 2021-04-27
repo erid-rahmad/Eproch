@@ -21,25 +21,8 @@ public class CEvalMethodCriteriaLineDTO implements Serializable {
     private Long adOrganizationId;
     private String adOrganizationName;
 
-
     private Long biddingCriteriaId;
     private String biddingCriteriaName;
-
-    public String getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
-
-    public String getBiddingCriteriaName() {
-        return biddingCriteriaName;
-    }
-
-    public void setBiddingCriteriaName(String biddingCriteriaName) {
-        this.biddingCriteriaName = biddingCriteriaName;
-    }
 
     public Long getId() {
         return id;
@@ -81,12 +64,28 @@ public class CEvalMethodCriteriaLineDTO implements Serializable {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getBiddingCriteriaId() {
         return biddingCriteriaId;
     }
 
     public void setBiddingCriteriaId(Long cBiddingCriteriaId) {
         this.biddingCriteriaId = cBiddingCriteriaId;
+    }
+
+    public String getBiddingCriteriaName() {
+        return biddingCriteriaName;
+    }
+
+    public void setBiddingCriteriaName(String biddingCriteriaName) {
+        this.biddingCriteriaName = biddingCriteriaName;
     }
 
     @Override
@@ -113,14 +112,12 @@ public class CEvalMethodCriteriaLineDTO implements Serializable {
     @Override
     public String toString() {
         return "CEvalMethodCriteriaLineDTO{" +
-            "id=" + id +
-            ", weight=" + weight +
-            ", uid=" + uid +
-            ", active=" + active +
-            ", adOrganizationId=" + adOrganizationId +
-            ", adOrganizationName='" + adOrganizationName + '\'' +
-            ", biddingCriteriaId=" + biddingCriteriaId +
-            ", biddingCriteriaName='" + biddingCriteriaName + '\'' +
-            '}';
+            "id=" + getId() +
+            ", weight=" + getWeight() +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            ", biddingCriteriaId=" + getBiddingCriteriaId() +
+            "}";
     }
 }

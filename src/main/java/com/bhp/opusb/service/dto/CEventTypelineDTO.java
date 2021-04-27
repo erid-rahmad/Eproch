@@ -1,11 +1,12 @@
 package com.bhp.opusb.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEventTypeline} entity.
@@ -24,33 +25,20 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
     private String adOrganizationName;
 
     private Long eventTypeId;
-//    @JsonProperty("cEventId")
+    private String eventTypeName;
+
+    @JsonProperty("cEventId")
     private Long cEventId;
-//    @JsonProperty("cEventName")
+
+    @JsonProperty("cEventName")
     private String cEventName;
-
-    public Long getcEventId() {
-        return cEventId;
-    }
-
-    public void setcEventId(Long cEventId) {
-        this.cEventId = cEventId;
-    }
-
-    public String getcEventName() {
-        return cEventName;
-    }
-
-    public void setcEventName(String cEventName) {
-        this.cEventName = cEventName;
-    }
 
     public Long getId() {
         return id;
@@ -116,7 +104,29 @@ public class CEventTypelineDTO extends AbstractAuditingDTO {
         this.eventTypeId = cEventTypeId;
     }
 
+    public String getEventTypeName() {
+        return eventTypeName;
+    }
 
+    public void setEventTypeName(String eventTypeName) {
+        this.eventTypeName = eventTypeName;
+    }
+
+    public Long getCEventId() {
+        return cEventId;
+    }
+
+    public void setCEventId(Long cEventId) {
+        this.cEventId = cEventId;
+    }
+
+    public String getCEventName() {
+        return cEventName;
+    }
+
+    public void setCEventName(String cEventName) {
+        this.cEventName = cEventName;
+    }
 
     @Override
     public boolean equals(Object o) {

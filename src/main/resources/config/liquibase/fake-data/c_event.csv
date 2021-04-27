@@ -1,4 +1,4 @@
-id;event;description;uid;active;ad_organization_id;c_product_classification_id
+id;name;description;uid;active;ad_organization_id;c_product_classification_id
 1;haptic;Ergonomic;60b6b158-7723-4775-9f1b-19ccaf6722e2;true;1;1
 2;XML violet;parsing application;28ded88d-ad30-49fd-ad11-4b49601ad217;false;2;2
 3;Tanzania digital;frame;74a78c91-0895-4275-aac5-068e9f64f4bf;false;3;3

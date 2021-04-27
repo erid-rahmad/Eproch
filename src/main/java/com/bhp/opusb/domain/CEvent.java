@@ -1,15 +1,23 @@
 package com.bhp.opusb.domain;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.util.UUID;
 
 /**
  * A CEvent.
@@ -27,8 +35,9 @@ public class CEvent extends AbstractAuditingEntity {
     private Long id;
 
     @NotNull
-    @Column(name = "event", nullable = false)
-    private String event;
+    @Size(max = 50)
+    @Column(name = "name", length = 50, nullable = false)
+    private String name;
 
     @Column(name = "description")
     private String description;
@@ -58,17 +67,17 @@ public class CEvent extends AbstractAuditingEntity {
         this.id = id;
     }
 
-    public String getEvent() {
-        return event;
+    public String getName() {
+        return name;
     }
 
-    public CEvent event(String event) {
-        this.event = event;
+    public CEvent name(String name) {
+        this.name = name;
         return this;
     }
 
-    public void setEvent(String event) {
-        this.event = event;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -137,6 +146,11 @@ public class CEvent extends AbstractAuditingEntity {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void prePersist() {
+        uid = UUID.randomUUID();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -157,7 +171,7 @@ public class CEvent extends AbstractAuditingEntity {
     public String toString() {
         return "CEvent{" +
             "id=" + getId() +
-            ", event='" + getEvent() + "'" +
+            ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +

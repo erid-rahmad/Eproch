@@ -19,6 +19,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
             "otherEntityRelationshipName": "cEvalMethodCriteriaLine",
+            "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },
@@ -26,6 +27,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cBiddingCriteria",
             "otherEntityRelationshipName": "cEvalMethodCriteriaLine",
+            "relationshipValidateRules": "required",
             "relationshipName": "biddingCriteria",
             "otherEntityField": "id"
         }
