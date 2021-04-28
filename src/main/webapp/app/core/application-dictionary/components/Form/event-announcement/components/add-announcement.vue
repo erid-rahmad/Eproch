@@ -79,7 +79,7 @@
             <div>
                 <el-dialog title="" :visible.sync="dialogTableVisible11">
                     <template>
-                        <el-table ref="multipleTable" :data="tableData" style="width: 100%" @selection-change="handleSelectionChange">
+                        <el-table ref="multipleTable" :data="tableData" style="width: 100%">
                             <el-table-column type="selection" width="55">
                             </el-table-column>
                             <el-table-column label="Date" width="120">
@@ -90,10 +90,6 @@
                             <el-table-column property="address" label="Address" show-overflow-tooltip>
                             </el-table-column>
                         </el-table>
-                        <div style="margin-top: 20px">
-                            <el-button @click="toggleSelection([tableData[1], tableData[2]])">Toggle selection status of second and third rows</el-button>
-                            <el-button @click="toggleSelection()">Clear selection</el-button>
-                        </div>
                     </template>
                     <template>
                         <div slot="footer">
