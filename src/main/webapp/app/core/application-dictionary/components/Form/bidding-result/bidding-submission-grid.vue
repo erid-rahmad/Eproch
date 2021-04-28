@@ -17,16 +17,16 @@
                                 </el-table-column>
                                 <el-table-column prop="3" label="Bidding type" sortable min-width="120">
                                 </el-table-column>
-                                <el-table-column prop="4" label="PIC" sortable min-width="120">
+                                <el-table-column prop="4" label="Bidding Schedule" sortable min-width="120">
                                 </el-table-column>
                                 <el-table-column prop="5" label="Bidding Status" sortable min-width="120">
 
                                 </el-table-column>
-                                <el-table-column prop="6" label="Joined Vendor" sortable min-width="180">
+                                <el-table-column prop="6" label="Submission Start Date" sortable min-width="180">
                                 </el-table-column>
-                                <el-table-column prop="7" label="Ceiling price" min-width="120">
+                                <el-table-column prop="7" label="Submission End Date" min-width="120">
                                 </el-table-column>
-                                <el-table-column prop="8" label="Proposal Price" min-width="120">
+                                <el-table-column prop="8" label="Vendor" min-width="120">
                                 </el-table-column>
                                 <el-table-column min-width="100" sortable label="Bidding Schedule">
                                     <template slot-scope="{ row }">
@@ -42,9 +42,10 @@
             </el-col>
         </el-row>
         <el-row v-if="!index" class="main" ref="tableWrapper">
-            <el-col :span="24" class="tab-container">
-                <product-information :setRowProductCatalog="setRow" @closeProductInformation="closeProductInformation" />
-            </el-col>
+            <!-- <el-col :span="24" class="tab-container"> -->
+                <!-- <product-information :setRowProductCatalog="setRow" @closeProductInformation="closeProductInformation" /> -->
+                <submission ></submission>
+            <!-- </el-col> -->
         </el-row>
         <el-row v-if="index" class="header">
         </el-row>
@@ -59,7 +60,7 @@
         </el-dialog>
     </div>
 </template>
-<script lang="ts" src="./product-catalog.component.ts">
+<script lang="ts" src="./bidding-submission-grid.component.ts">
 </script>
 <style lang="scss">
     .el-tabs__header {

@@ -42,38 +42,27 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
 
   tableData= [{
     date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    name: 'WESTCON INTERNATIONAL INDONESIA',
+    status: 'failed'
   }, {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-08',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-06',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-07',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-    }];
+      date: '2016-05-02',
+      name: 'SISTECH KHARISMA',
+      status: 'failed'
+    }
+    , {
+      date: '2016-05-02',
+      name: 'INGRAM MICRO INDONESIA',
+      status: 'failed'
+    }
+  ];
+  tableData1= [{
+    email: 'westcon@gmail.com',
+    name: 'WESTCON INTERNATIONAL INDONESIA',
+    status: 'lolos'
+  }, 
+];
   multipleSelection= [];
-
-
-  eventschedule = [
-        
+  eventschedule = [        
     {
       no: 'Hena',
       event: 'Hena',
@@ -93,24 +82,6 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
     }];
   
   editor = null;
-
-  // private retrieveCostCenter() {
-  //   this.commonService('/api/c-cost-centers')
-  //     .retrieve({
-  //       criteriaQuery:([
-       
-  //       ]),
-  //       paginationQuery: {
-  //         page: 0,
-  //         size: 1000,
-  //         sort: ['name']
-  //       }
-  //     })
-  //     .then(res => {
-  //       this.costCenterOptions = res.data;
-  //     });
-  // }
-
   private pushAnnouncement() {
     this.pushService('api/c-announcements')
       .create(this.Announcment);
@@ -119,29 +90,17 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
 
   mounted() {
     console.log("mail from child", this.emailFromChild);
-    this.Announcment.description = "<p><br>Kepada Bapak/Ibu Pimpinan <br>#VendorName <br>Hal: Undangan #TenderName <br>Dengan hormat </p><p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>";
+    this.Announcment.description = "<br>Nomor :081<br>Klasifikasi :penting<br>Perihal:Pengumuman Hasil Evaluasi Sampil I <br>Nusu Dua 06 Desember-2019<br><br>Kepada:<br>Yth Pada Perserta Pengadaan Barang/Jasa<br>PEngadaan A";
     this.Announcment.adOrganizationId = 1;
     this.Announcment.biddingId = 1957651;
-    this.Announcment.attachmentId = 16502;
-
-
-    // this.pushAnnouncement();
-    
+    this.Announcment.attachmentId = 16502;    
   }
 
-    toggleSelection(rows) {
-      if (rows) {
-        rows.forEach(row => {
-          this.$refs.multipleTable.toggleRowSelection(row);
-        });
-      } else {
-        this.$refs.multipleTable.clearSelection();
-      }
-  }
+ 
   
-    handleSelectionChange(val) {
+  handleSelectionChange(val) {
       this.multipleSelection = val;
-    }
+  }
   
 
   beforeDestroy() {

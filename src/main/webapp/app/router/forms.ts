@@ -32,7 +32,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
 
   ['bidding', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding/bidding.vue')],
   ['biddingSubmission', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-submision/bidding.vue')],
-  ['biddingResult', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/product-catalog.vue')],
+  ['biddingResult', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/bidding-submission-grid.vue')],
   ['biddingResultAnnouncement', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/announcement.vue')],
   ['biddingResultForm', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/components/result.vue')],
   ['biddingEvaluation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-evaluation/product-catalog.vue')],
@@ -56,6 +56,8 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['eventAnnouncement', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/event-announcement/event-announcement.vue')],
   ['eventAnnouncementvendor', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/event-announcement/bidding-announcement.vue')],
   ['biddingRegistration', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/event-announcement/bidding-registration.vue')],
+  ['evaluationAnnouncement', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-evaluation-announcement/evaluation-announcement.vue')],
+  ['evaluationAnnouncementVendor', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-evaluation-announcement/evaluation-announcement-vendor.vue')],
 ]);
 
 export const blankForm = () => import(/* webpackChunckName: "blankForm" */'@/core/application-dictionary/components/Form/index.vue');

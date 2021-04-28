@@ -17,7 +17,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -60,16 +62,19 @@ public class CAnnouncementService {
         CAnnouncement cAnnouncement = cAnnouncementMapper.toEntity(cAnnouncementDTO);
         cAnnouncement = cAnnouncementRepository.save(cAnnouncement);
         log.info("this anoncement {}",cAnnouncementDTO);
-        emailInvitation(cAnnouncementDTO);
+//        emailInvitation(cAnnouncementDTO);
 
         return cAnnouncementMapper.toDto(cAnnouncement);
     }
 
-    public void emailInvitation (CAnnouncementDTO cAnnouncementDTO){
+    public ArrayList emailInvitation (CAnnouncementDTO cAnnouncementDTO){
 
         List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(cAnnouncementDTO.getBiddingId());
         log.info(String.valueOf(mVendorSuggestion));
         String email = cAnnouncementDTO.getDescription();
+
+
+        ArrayList emaillist =new ArrayList();
 
         for (MVendorSuggestion mVendorSuggestion1 : mVendorSuggestion){
             log.info("this vendor id {}",mVendorSuggestion1.getVendor().getId().toString());
@@ -81,10 +86,13 @@ public class CAnnouncementService {
                 email=email.replace("#VendorName",mVendorSuggestion1.getVendor().getName());
 //                email=email.replace("#JenisPerusahaan","majumundur");
                 log.info( "this email{}",email);
-
-                mailService.sendEmail(adUser.getUser().getEmail(),"Bidding Invitation",email,false,true);
+//                mailService.sendEmail(adUser.getUser().getEmail(),"Bidding Invitation",email,false,true);
+                emaillist.add( adUser.getUser().getEmail());
             }
         }
+
+        log.info("this email {}",String.valueOf(emaillist));
+        return emaillist;
     }
 
     /**
