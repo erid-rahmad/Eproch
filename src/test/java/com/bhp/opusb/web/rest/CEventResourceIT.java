@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CEvent;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CProductClassification;
+import com.bhp.opusb.domain.AdForm;
 import com.bhp.opusb.repository.CEventRepository;
 import com.bhp.opusb.service.CEventService;
 import com.bhp.opusb.service.dto.CEventDTO;
@@ -549,6 +550,26 @@ public class CEventResourceIT {
 
         // Get all the cEventList where cProductClassification equals to cProductClassificationId + 1
         defaultCEventShouldNotBeFound("cProductClassificationId.equals=" + (cProductClassificationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCEventsByAdFormIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cEventRepository.saveAndFlush(cEvent);
+        AdForm adForm = AdFormResourceIT.createEntity(em);
+        em.persist(adForm);
+        em.flush();
+        cEvent.setAdForm(adForm);
+        cEventRepository.saveAndFlush(cEvent);
+        Long adFormId = adForm.getId();
+
+        // Get all the cEventList where adForm equals to adFormId
+        defaultCEventShouldBeFound("adFormId.equals=" + adFormId);
+
+        // Get all the cEventList where adForm equals to adFormId + 1
+        defaultCEventShouldNotBeFound("adFormId.equals=" + (adFormId + 1));
     }
 
     /**

@@ -111,6 +111,10 @@ public class CEventQueryService extends QueryService<CEvent> {
                 specification = specification.and(buildSpecification(criteria.getCProductClassificationId(),
                     root -> root.join(CEvent_.cProductClassification, JoinType.LEFT).get(CProductClassification_.id)));
             }
+            if (criteria.getAdFormId() != null) {
+                specification = specification.and(buildSpecification(criteria.getAdFormId(),
+                    root -> root.join(CEvent_.adForm, JoinType.LEFT).get(AdForm_.id)));
+            }
         }
         return specification;
     }

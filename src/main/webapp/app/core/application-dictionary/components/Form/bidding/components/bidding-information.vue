@@ -1,9 +1,5 @@
 <template>
     <div class="bidding-information">
-        <el-divider content-position="left">
-            <h4>Bidding Information</h4>
-        </el-divider>
-
         <el-form ref="biddingInformation" :disabled="readOnly" label-position="left" label-width="150px" :model="bidding" :rules="rules" size="mini">
             <el-row :gutter="24">
                 <el-col :xs="24" :sm="12" :lg="8">

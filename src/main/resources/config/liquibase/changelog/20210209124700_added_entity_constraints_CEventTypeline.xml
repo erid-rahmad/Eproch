@@ -21,6 +21,7 @@
                                  referencedTableName="c_event_type"/>
 
     </changeSet>
+
     <changeSet id="20210416000010-2" author="Erid">
 
         <addForeignKeyConstraint baseColumnNames="c_event_id"

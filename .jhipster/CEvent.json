@@ -39,6 +39,13 @@
             "relationshipValidateRules": "required",
             "relationshipName": "cProductClassification",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "adForm",
+            "otherEntityRelationshipName": "cEvent",
+            "relationshipName": "adForm",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210414044300",
