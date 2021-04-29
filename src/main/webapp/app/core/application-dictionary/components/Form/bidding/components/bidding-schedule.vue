@@ -1,11 +1,47 @@
 <template>
   <div class="bidding-schedule">
-
+    <el-form
+      ref="biddingInformation"
+      disabled
+      label-position="left"
+      label-width="150px"
+      :model="bidding"
+      size="mini"
+    >
+      <el-row :gutter="24">
+        <el-col
+          :xs="24"
+          :sm="24"
+          :lg="12"
+          :xl="8"
+        >
+          <el-form-item
+            label="Title"
+            prop="name"
+            required
+          >
+            <el-input
+              v-model="bidding.name"
+              class="form-input"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="Bidding No"
+            prop="biddingNo"
+          >
+            <el-input
+              v-model="bidding.documentNo"
+              class="form-input"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
     <el-row>
       <el-col
         :xs="24"
-        :sm="18"
-        :xl="16"
+        :sm="24"
+        :xl="18"
       >
         <el-divider content-position="left"><h4>Event Schedule</h4></el-divider>
         <el-table
@@ -32,282 +68,93 @@
           <el-table-column
             label="Event"
             min-width="200"
-          >
-            <template slot-scope="{ row }">
-              {{ printEventName(row.eventTypeLineName) }}
-            </template>
+            prop="eventTypeLineName"
+            show-overflow-tooltip
+          ></el-table-column>
+
+          <el-table-column label="Schedule">
+            <el-table-column
+              width="422"
+              prop="schedule"
+              label="Plan"
+            >
+              <template slot-scope="{ row }">
+                <el-date-picker
+                  v-model="row.schedule"
+                  :disabled="readOnly"
+                  :format="dateDisplayFormat"
+                  end-placeholder="End Datetime"
+                  range-separator="To"
+                  size="mini"
+                  start-placeholder="Start Datetime"
+                  type="datetimerange"
+                  @change="value => onScheduleChanged(row, value)"
+                ></el-date-picker>
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="422"
+              prop="actual"
+              label="Actual"
+            >
+              <template slot-scope="{ row }">
+                <el-date-picker
+                  v-model="row.actual"
+                  disabled
+                  :format="dateDisplayFormat"
+                  end-placeholder="End Datetime"
+                  range-separator="To"
+                  size="mini"
+                  start-placeholder="Start Datetime"
+                  type="datetimerange"
+                ></el-date-picker>
+              </template>
+            </el-table-column>
           </el-table-column>
 
           <el-table-column
-            width="422"
-            prop="schedule"
-            label="Schedule"
+            label="Status"
+            min-width="150"
           >
             <template slot-scope="{ row }">
-              <el-date-picker
-                v-model="row.schedule"
-                :disabled="readOnly"
-                :format="dateDisplayFormat"
-                end-placeholder="End Datetime"
-                range-separator="To"
-                size="mini"
-                start-placeholder="Start Datetime"
-                type="datetimerange"
-                @change="value => onScheduleChanged(row, value)"
-              ></el-date-picker>
+              {{ printStatus(row) }}
             </template>
           </el-table-column>
 
           <el-table-column
             fixed="right"
             label="Attachments"
-            min-width="100"
-          >
-            <template slot-scope="{ row }">
-              <!-- User can add attachments once the bidding is started. -->
-              <el-button
-                :disabled="!readOnly"
-                icon="el-icon-paperclip"
-                size="mini"
-                type="primary"
-                @click="editAttachments(row)"
-              >Upload</el-button>
-            </template>
-          </el-table-column>
-
-        </el-table>
-      </el-col>
-    </el-row>
-
-    <el-row>
-      <el-col
-        :xs="24"
-        :sm="18"
-        :xl="16"
-      >
-        <el-divider content-position="left"><h4>Document Submission Schedule</h4></el-divider>
-        <el-table
-          v-loading="processing"
-          ref="documentSchedules"
-          border
-          :data="bidding.documentSchedules"
-          :default-sort="gridSchema.defaultSort"
-          :empty-text="gridSchema.emptyText"
-          highlight-current-row
-          size="mini"
-          stripe
-          style="width: 100%; height: 100%"
-        >
-
-          <el-table-column
-            label="No"
-            min-width="50"
-          >
-            <template slot-scope="row">
-              {{ row.$index + 1 }}
-            </template>
-          </el-table-column>
-
-          <el-table-column
-            label="Doc. Event"
             min-width="200"
-            prop="docEvent"
-          ></el-table-column>
-
-          <el-table-column
-            label="Vendor Submission"
-            min-width="310"
           >
             <template slot-scope="{ row }">
-              <el-tag
-                effect="plain"
-                size="small"
-                type="info"
-              >
-                Start: {{ row.vendorSubmissionStartDate | formatDate }}
-              </el-tag>
-              <el-tag
-                effect="plain"
-                size="small"
-                type="info"
-              >
-                End: {{ row.vendorSubmissionEndDate | formatDate }}
-              </el-tag>
-            </template>
-          </el-table-column>
-
-          <el-table-column
-            label="Vendor Evaluation"
-            min-width="310"
-          >
-            <template slot-scope="{ row }">
-              <el-tag
-                effect="plain"
-                size="small"
-                type="info"
-              >
-                Start: {{ row.vendorEvaluationStartDate | formatDate }}
-              </el-tag>
-              <el-tag
-                effect="plain"
-                size="small"
-                type="info"
-              >
-                End: {{ row.vendorEvaluationEndDate | formatDate }}
-              </el-tag>
-            </template>
-          </el-table-column>
-
-          <el-table-column
-            v-if="!readOnly"
-            fixed="right"
-            min-width="56"
-          >
-            <template slot="header">
               <el-button
-                icon="el-icon-plus"
+                size="mini"
+                @click="editSchedule(row)"
+              >
+                <svg-icon name="icomoo/084-calendar"></svg-icon> Date
+              </el-button>
+
+              <el-button
                 size="mini"
                 type="primary"
-                @click="addDocument"
-              ></el-button>
-            </template>
-            <template slot-scope="{ row, $index }">
-              <el-button
-                icon="el-icon-delete"
-                size="mini"
-                type="danger"
-                @click="removeDocument(row, $index)"
-              ></el-button>
+                @click="viewEvent(row)"
+              >
+                <svg-icon name="link"></svg-icon> View
+              </el-button>
             </template>
           </el-table-column>
+
         </el-table>
       </el-col>
     </el-row>
 
-    <el-dialog
-      class="attachment-form"
-      width="30%"
-      :visible.sync="eventAttachmentVisible"
-      title="Edit Attachments"
-    >
-      <el-upload
-        action="/api/c-attachments/upload"
-        drag
-        :on-change="onAttachmentChanged"
-        :on-preview="onAttachmentPreviewed"
-        :on-remove="onAttachmentRemoved"
-        :file-list="tmpAttachments"
-        multiple
-      >
-        <em class="el-icon-upload"></em>
-        <div class="el-upload__text">
-          Drop file here or <em>click to upload</em>
-        </div>
-        <div
-          class="el-upload__tip"
-          slot="tip"
-        >Upload one or more files</div>
-      </el-upload>
-      <div slot="footer">
-        <el-button
-          icon="el-icon-close"
-          size="mini"
-          style="margin-left: 0px;"
-          type="danger"
-          @click="eventAttachmentVisible = false"
-        >
-          {{ $t('entity.action.cancel') }}
-        </el-button>
-      </div>
-    </el-dialog>
-
-    <el-dialog
-      :visible.sync="dialogConfirmationVisible"
-      title="Document Submission Schedule"
-    >
-      <div>
-        <el-form
-          ref="documentSchedule"
-          label-position="left"
-          label-width="150px"
-          :model="documentSchedule"
-          size="mini"
-        >
-          <el-form-item
-            label="Document Event"
-            prop="docEvent"
-            required
-          >
-            <el-input
-              v-model="documentSchedule.docEvent"
-              class="form-input"
-              clearable
-            ></el-input>
-          </el-form-item>
-          <el-form-item
-            label="Submission Date"
-            prop="vendorSubmissionId"
-            required
-          >
-            <el-select
-              v-model="documentSchedule.vendorSubmissionId"
-              class="form-input"
-              clearable
-              filterable
-              placeholder="Select Submission Schedule"
-              style="width: 100%"
-            >
-              <el-option
-                v-for="item in eventScheduleOptions"
-                :key="item.id"
-                :label="printScheduleLabel(item)"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item
-            label="Evaluation Date"
-            prop="vendorEvaluationId"
-            required
-          >
-            <el-select
-              v-model="documentSchedule.vendorEvaluationId"
-              class="form-input"
-              clearable filterable
-              placeholder="Select Evaluation Schedule"
-              style="width: 100%"
-            >
-              <el-option
-                v-for="item in eventScheduleOptions"
-                :key="item.id"
-                :label="printScheduleLabel(item)"
-                :value="item.id"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-form>
-      </div>
-
-      <div slot="footer">
-        <el-button
-          icon="el-icon-close"
-          size="mini"
-          style="margin-left: 0px;"
-          @click="dialogConfirmationVisible = false"
-        >
-          {{ $t('entity.action.cancel') }}
-        </el-button>
-        <el-button
-          style="margin-left: 0px;"
-          size="mini"
-          icon="el-icon-check"
-          type="primary"
-          @click="saveDocument"
-        >
-          {{ $t('entity.action.save') }}
-        </el-button>
-      </div>
-    </el-dialog>
+    <date-setting-form
+      :visible.sync="editScheduleVisible"
+      :schedule-id="selectedEvent.id"
+      :title="selectedEvent.eventTypeLineName"
+      @saved="onDateSettingSaved"
+      @error="onDateSettingError"
+    ></date-setting-form>
 
   </div>
 </template>

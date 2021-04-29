@@ -58,6 +58,10 @@ public class CEvent extends AbstractAuditingEntity {
     @JsonIgnoreProperties("cEvents")
     private CProductClassification cProductClassification;
 
+    @ManyToOne
+    @JsonIgnoreProperties("cEvents")
+    private AdForm adForm;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -143,6 +147,19 @@ public class CEvent extends AbstractAuditingEntity {
 
     public void setCProductClassification(CProductClassification cProductClassification) {
         this.cProductClassification = cProductClassification;
+    }
+
+    public AdForm getAdForm() {
+        return adForm;
+    }
+
+    public CEvent adForm(AdForm adForm) {
+        this.adForm = adForm;
+        return this;
+    }
+
+    public void setAdForm(AdForm adForm) {
+        this.adForm = adForm;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

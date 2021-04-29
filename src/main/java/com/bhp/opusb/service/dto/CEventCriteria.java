@@ -37,6 +37,8 @@ public class CEventCriteria implements Serializable, Criteria {
 
     private LongFilter cProductClassificationId;
 
+    private LongFilter adFormId;
+
     public CEventCriteria() {
     }
 
@@ -48,6 +50,7 @@ public class CEventCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.cProductClassificationId = other.cProductClassificationId == null ? null : other.cProductClassificationId.copy();
+        this.adFormId = other.adFormId == null ? null : other.adFormId.copy();
     }
 
     @Override
@@ -111,6 +114,14 @@ public class CEventCriteria implements Serializable, Criteria {
         this.cProductClassificationId = cProductClassificationId;
     }
 
+    public LongFilter getAdFormId() {
+        return adFormId;
+    }
+
+    public void setAdFormId(LongFilter adFormId) {
+        this.adFormId = adFormId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -128,7 +139,8 @@ public class CEventCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(cProductClassificationId, that.cProductClassificationId);
+            Objects.equals(cProductClassificationId, that.cProductClassificationId) &&
+            Objects.equals(adFormId, that.adFormId);
     }
 
     @Override
@@ -140,7 +152,8 @@ public class CEventCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
-        cProductClassificationId
+        cProductClassificationId,
+        adFormId
         );
     }
 
@@ -154,6 +167,7 @@ public class CEventCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (cProductClassificationId != null ? "cProductClassificationId=" + cProductClassificationId + ", " : "") +
+                (adFormId != null ? "adFormId=" + adFormId + ", " : "") +
             "}";
     }
 

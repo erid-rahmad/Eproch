@@ -13,6 +13,15 @@ entity ADOrganizationInfo {
 	active Boolean
 }
 
+entity AdForm {
+	uid UUID
+	active Boolean
+	name String required
+	description String
+	formName String required
+	accessLevel AdAccessLevel
+}
+
 /**
  * The extended User entity.
  */
@@ -892,19 +901,18 @@ entity CBiddingType {
 	active Boolean
 }
 
-entity CEventType {
-	name String required maxlength(30)
+entity CEvent {
+	name String required maxlength(50)
 	description String
 	uid UUID
 	active Boolean
 }
 
-entity CEvent {
-	event String required
+entity CEventType {
+	name String required maxlength(30)
 	description String
 	uid UUID
 	active Boolean
-
 }
 
 entity CEventTypeline {
@@ -924,8 +932,8 @@ entity CBiddingCriteria {
 entity CBiddingSubCriteria {
 	name String required
 	description String
-	EvaluationType String
-	MultipleOptions Boolean
+	evaluationType String
+	multipleOptions Boolean
 	uid UUID
 	active Boolean
 }
@@ -935,7 +943,7 @@ entity CBiddingSubCriteriaLine {
 	score Integer
 	uid UUID
 	active Boolean
-	}
+}
 
 entity CBudgetPlan {
 	code String required maxlength(20)
@@ -983,14 +991,14 @@ entity CEvaluationMethodCriteria {
 }
 
 entity CEvalMethodCriteriaLine {
-    weight Integer
+	weight Integer
 	uid UUID
 	active Boolean
 
 }
 
 entity CEvalMethodSubCriteria {
-    weight Integer
+	weight Integer
 	uid UUID
 	active Boolean
 }
@@ -1108,15 +1116,23 @@ entity MBiddingSchedule {
 	active Boolean
 }
 
+entity MPrequalificationDateSet {
+	startDate ZonedDateTime
+	endDate ZonedDateTime
+	status String maxlength(10)
+	uid UUID
+	active Boolean
+}
+
 entity MBiddingScheduleAttachment {
 	uid UUID
 	active Boolean
 }
 
 entity MBiddingInvitation {
-    invitationStatus String
-    reason String
-    answerDate ZonedDateTime
+	invitationStatus String
+	reason String
+	answerDate ZonedDateTime
 	uid UUID
 	active Boolean
 }
@@ -1148,14 +1164,15 @@ entity MVendorScoringLine {
 }
 
 entity MVendorScoringCriteria {
-    requirement String required
+	requirement String required
 	uid UUID
 	active Boolean
 }
 
-
-
 // Enums
+enum AdAccessLevel {
+	SYS, SYS_CLN, CLN, CLN_ORG, CLN_VND
+}
 
 enum Depreciation {
 	STRAIGHT_LINE, DOUBLE_DECLINING
@@ -1193,6 +1210,7 @@ relationship OneToOne {
 	MProductCatalog{cGallery} to CGallery
 	MBiddingLine{subItem} to MBiddingSubItem{biddingLine}
 	MBiddingScheduleAttachment{cAttachment required} to CAttachment
+	MPrequalificationDateSet{biddingSchedule required} to MBiddingSchedule
 }
 
 /**
@@ -1236,6 +1254,8 @@ relationship OneToMany {
  */
 relationship ManyToOne {
 	ADOrganizationInfo{adOrganization required} to ADOrganization
+
+	AdForm{adOrganization required} to ADOrganization
 
 	/** This field should not empty for a supplier's user */
 	AdUser{cVendor} to CVendor
@@ -1281,8 +1301,8 @@ relationship ManyToOne {
 
 	CAnnouncement{adOrganization } to ADOrganization
 	CAnnouncement{bidding } to MBidding
-    CAnnouncement{biddingSchedule } to MBiddingSchedule
-    CAnnouncement{attachment } to CAttachment
+	CAnnouncement{biddingSchedule } to MBiddingSchedule
+	CAnnouncement{attachment } to CAttachment
 
 	CVendor{adOrganization required} to ADOrganization
 	CVendor{documentType required} to CDocumentType
@@ -1512,6 +1532,7 @@ relationship ManyToOne {
 
 	CEvent{adOrganization required} to ADOrganization
 	CEvent{cProductClassification required} to CProductClassification
+	CEvent{adForm} to AdForm
 
 	CEventTypeline{adOrganization required} to ADOrganization
 	CEventTypeline{eventType required} to CEventType
@@ -1550,15 +1571,15 @@ relationship ManyToOne {
 	CEvaluationMethodLine{adOrganization required} to ADOrganization
 	CEvaluationMethodLine{evaluationMethod required} to CEvaluationMethod
 
-	CEvaluationMethodCriteria{adOrganization } to ADOrganization
+	CEvaluationMethodCriteria{adOrganization required} to ADOrganization
 	CEvaluationMethodCriteria{evaluationMethodLine } to CEvaluationMethodLine
 
-    CEvalMethodCriteriaLine{adOrganization } to ADOrganization
-	CEvalMethodCriteriaLine{biddingCriteria } to CBiddingCriteria
+	CEvalMethodCriteriaLine{adOrganization required} to ADOrganization
+	CEvalMethodCriteriaLine{biddingCriteria required} to CBiddingCriteria
 
-    CEvalMethodSubCriteria{adOrganization } to ADOrganization
-	CEvalMethodSubCriteria{biddingCriteria } to CBiddingCriteria
-	CEvalMethodSubCriteria{biddingSubCriteria } to CBiddingSubCriteria
+	CEvalMethodSubCriteria{adOrganization required} to ADOrganization
+	CEvalMethodSubCriteria{biddingCriteria required} to CBiddingCriteria
+	CEvalMethodSubCriteria{biddingSubCriteria required} to CBiddingSubCriteria
 
 
 
@@ -1638,6 +1659,7 @@ relationship ManyToOne {
 	MVendorScoringCriteria{vendorScoringLine } to MVendorScoringLine
 	MVendorScoringCriteria{biddingSubCriteriaLine } to CBiddingSubCriteriaLine
 
+	MPrequalificationDateSet{adOrganization required} to ADOrganization
 
 	MBiddingSubmission{bidding required} to MBidding
 	MBiddingSubmission{biddingSchedule required} to MBiddingSchedule

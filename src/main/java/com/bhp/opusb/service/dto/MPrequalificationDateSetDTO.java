@@ -1,39 +1,35 @@
 package com.bhp.opusb.service.dto;
 
 import java.time.ZonedDateTime;
+import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A DTO for the {@link com.bhp.opusb.domain.MBiddingSchedule} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.MPrequalificationDateSet} entity.
  */
-public class MBiddingScheduleDTO extends AbstractAuditingDTO {
+public class MPrequalificationDateSetDTO implements Serializable {
     
-    private static final long serialVersionUID = 1L;
-
     private Long id;
 
     private ZonedDateTime startDate;
 
     private ZonedDateTime endDate;
 
+    @Size(max = 10)
+    private String status;
+
     private UUID uid;
 
     private Boolean active = true;
 
 
-    private Long biddingId;
-    private String biddingNo;
-    private String biddingTitle;
+    private Long biddingScheduleId;
+    private String biddingScheduleName;
 
     private Long adOrganizationId;
     private String adOrganizationName;
-
-    private Long eventTypeLineId;
-    private String eventTypeLineName;
-
-    private AdFormDTO adForm;
-    private Long adFormId;
     
     public Long getId() {
         return id;
@@ -59,6 +55,14 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
         this.endDate = endDate;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public UUID getUid() {
         return uid;
     }
@@ -75,32 +79,20 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
         this.active = active;
     }
 
-    public Long getBiddingId() {
-        return biddingId;
+    public Long getBiddingScheduleId() {
+        return biddingScheduleId;
     }
 
-    public void setBiddingId(Long mBiddingId) {
-        this.biddingId = mBiddingId;
+    public void setBiddingScheduleId(Long mBiddingScheduleId) {
+        this.biddingScheduleId = mBiddingScheduleId;
     }
 
-    public String getBiddingNo() {
-        return biddingNo;
+    public String getBiddingScheduleName() {
+        return biddingScheduleName;
     }
 
-    public void setBiddingNo(String biddingNo) {
-        this.biddingNo = biddingNo;
-    }
-
-    public String getBiddingTitle() {
-        return biddingTitle;
-    }
-
-    public void setBiddingTitle(String biddingTitle) {
-        this.biddingTitle = biddingTitle;
-    }
-
-    public String getBiddingName() {
-        return biddingNo + " - " + biddingTitle;
+    public void setBiddingScheduleName(String biddingScheduleName) {
+        this.biddingScheduleName = biddingScheduleName;
     }
 
     public Long getAdOrganizationId() {
@@ -119,38 +111,6 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
-    public Long getEventTypeLineId() {
-        return eventTypeLineId;
-    }
-
-    public void setEventTypeLineId(Long cEventTypelineId) {
-        this.eventTypeLineId = cEventTypelineId;
-    }
-
-    public String getEventTypeLineName() {
-        return eventTypeLineName;
-    }
-
-    public void setEventTypeLineName(String eventTypeLineName) {
-        this.eventTypeLineName = eventTypeLineName;
-    }
-
-    public AdFormDTO getAdForm() {
-        return adForm;
-    }
-
-    public void setAdForm(AdFormDTO adForm) {
-        this.adForm = adForm;
-    }
-
-    public Long getAdFormId() {
-        return adFormId;
-    }
-
-    public void setAdFormId(Long adFormId) {
-        this.adFormId = adFormId;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -160,11 +120,11 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        MBiddingScheduleDTO mBiddingScheduleDTO = (MBiddingScheduleDTO) o;
-        if (mBiddingScheduleDTO.getId() == null || getId() == null) {
+        MPrequalificationDateSetDTO mPrequalificationDateSetDTO = (MPrequalificationDateSetDTO) o;
+        if (mPrequalificationDateSetDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), mBiddingScheduleDTO.getId());
+        return Objects.equals(getId(), mPrequalificationDateSetDTO.getId());
     }
 
     @Override
@@ -174,15 +134,15 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "MBiddingScheduleDTO{" +
+        return "MPrequalificationDateSetDTO{" +
             "id=" + getId() +
             ", startDate='" + getStartDate() + "'" +
             ", endDate='" + getEndDate() + "'" +
+            ", status='" + getStatus() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
-            ", biddingId=" + getBiddingId() +
+            ", biddingScheduleId=" + getBiddingScheduleId() +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", eventTypeLineId=" + getEventTypeLineId() +
             "}";
     }
 }

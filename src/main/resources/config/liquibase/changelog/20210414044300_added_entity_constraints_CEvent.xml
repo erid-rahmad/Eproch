@@ -21,4 +21,14 @@
                                  referencedTableName="c_product_classification"/>
 
     </changeSet>
+
+    <changeSet id="202104271032" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="ad_form_id"
+                                 baseTableName="c_event"
+                                 constraintName="fk_c_event_ad_form_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_form"/>
+
+    </changeSet>
 </databaseChangeLog>

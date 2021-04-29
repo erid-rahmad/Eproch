@@ -23,7 +23,7 @@ public class CEventDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
@@ -35,8 +35,9 @@ public class CEventDTO extends AbstractAuditingDTO {
     @JsonProperty("cProductClassificationName")
     private String cProductClassificationName;
 
-
-
+    private Long adFormId;
+    private String adFormName;
+    
     public Long getId() {
         return id;
     }
@@ -109,6 +110,22 @@ public class CEventDTO extends AbstractAuditingDTO {
         this.cProductClassificationName = cProductClassificationName;
     }
 
+    public Long getAdFormId() {
+        return adFormId;
+    }
+
+    public void setAdFormId(Long adFormId) {
+        this.adFormId = adFormId;
+    }
+
+    public String getAdFormName() {
+        return adFormName;
+    }
+
+    public void setAdFormName(String adFormName) {
+        this.adFormName = adFormName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -140,6 +157,7 @@ public class CEventDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", cProductClassificationId=" + getCProductClassificationId() +
+            ", adFormId=" + getAdFormId() +
             "}";
     }
 }

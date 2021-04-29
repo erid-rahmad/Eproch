@@ -1,12 +1,11 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
-import { DATE_TIME_FORMAT } from '@/shared/date/filters';
-import { format, parseISO } from 'date-fns';
 import Vue from 'vue';
 import Component from 'vue-class-component';
 import { Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
+import DateSettingForm from './date-setting-form.vue';
 
 const BiddingScheduleProp = Vue.extend({
   props: {
@@ -18,7 +17,11 @@ const BiddingScheduleProp = Vue.extend({
   }
 });
 
-@Component
+@Component({
+  components: {
+    DateSettingForm
+  }
+})
 export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingScheduleProp) {
 
   @Inject('dynamicWindowService')
@@ -27,7 +30,9 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   private updated = false;
   private recordsLoaded = true;
 
-  private events = [];
+  // Dialog visibility flags.
+  editScheduleVisible = false;
+  eventAttachmentVisible = false;
 
   gridSchema = {
     defaultSort: {},
@@ -35,45 +40,15 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     maxHeight: 200,
     height: 200
   };
-  rules = {}
 
   loadingSchedules = false;
-  loadingDocumentSchedules = false;
   processing = false;
   dialogConfirmationVisible:boolean = false;
 
-  public eventScheduleOptions: any[] = [];
-
-  private documentSchedule: any = {
-    docEvent: null,
-    vendorSubmissionId: null,
-    vendorEvaluationId: null,
-    vendorSubmission: null,
-    vendorEvaluation: null
-  };
-
   bidding: Record<string, any> = {};
-  selectedEvent: any = null;
-  eventAttachmentVisible = false;
-  tmpAttachments: any[] = [
-    {
-      name: 'Berita Acara Rapat Penjelasan Dokumen Lelang.pdf',
-      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-    },
-    {
-      name: 'Lampiran Berita Acara Rapat Penjelasan Dokumen Lelang (Risalah Tanya Jawab.pdf',
-      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-    },
-    {
-      name: 'Daftar Hadir Rapat Penjelasan Pekerjaan.pdf',
-      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-    },
-    {
-      name: 'Addendum Dokumen Lelang.pdf',
-      url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-    }
-  ];
+  selectedEvent: any = {};
 
+  eventStatuses: any[] = [];
 
   get dateDisplayFormat() {
     return settings.dateTimeDisplayFormat;
@@ -95,16 +70,26 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     }
   }
 
-  onAttachmentChanged(_file: any, fileList: any[]) {
-    this.tmpAttachments = fileList;
+  onDateSettingSaved(dateSet: any) {
+    this.recordsLoaded = false;
+    const selectedIndex = this.bidding.biddingSchedules.indexOf(this.selectedEvent);
+    const record = {
+      ...this.selectedEvent,
+      ...{
+        actual: [
+          new Date(dateSet.startDate),
+          new Date(dateSet.endDate)
+        ]
+      }
+    };
+
+    this.bidding.biddingSchedules.splice(selectedIndex, 1, record);
+    this.recordsLoaded = true;
   }
 
-  onAttachmentPreviewed(file: any) {
-    window.open(file.url, '_blank');
-  }
-
-  onAttachmentRemoved() {
-
+  onDateSettingError(error: any) {
+    console.log('Failed to save the schedule. %O', error);
+    this.$message.error('Failed to save the schedule');
   }
 
   onScheduleChanged(row: any, value: any[]) {
@@ -120,19 +105,12 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     this.bidding = {...this.data};
     this.bidding.step = BiddingStep.SCHEDULE;
 
-    this.commonService(null)
-      .retrieveReferenceLists('mEvent')
-      .then(res => {
-        this.events = res.map(item => ({ key: item.value, value: item.name }))
-      });
+    this.retrieveEventStatuses();
 
-    Promise.allSettled([
-      this.retrieveBiddingSchedules(this.bidding.id),
-      this.retrieveDocumentSchedules(this.bidding.id)
-    ])
-    .then(_results => {
-      this.recordsLoaded = true;
-    });
+    this.retrieveBiddingSchedules(this.bidding.id)
+      .finally(() => {
+        this.recordsLoaded = true;
+      });
   }
 
   private retrieveBiddingSchedules(biddingId: number): Promise<boolean> {
@@ -150,7 +128,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
           sort: ['id']
         }
       })
-      .then(res => {
+      .then(async res => {
         this.$set(this.bidding, 'biddingSchedules', res.data.map(item => {
           if (item.startDate && item.endDate) {
             item.schedule = [
@@ -158,9 +136,16 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
               new Date(item.endDate)
             ];
           }
+
+          item.actual = [];
+          item.startDateActual = null;
+          item.endDateActual = null;
+          item.status = null;
           return item;
         }));
-        this.eventScheduleOptions = this.bidding.biddingSchedules;
+
+        const scheduleIds: number[] = this.bidding.biddingSchedules.map((sch: any) => sch.id);
+        await this.retrieveDateSet(scheduleIds);
         resolve(true);
       })
       .catch(err => {
@@ -174,39 +159,52 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     });
   }
 
-  private retrieveDocumentSchedules(biddingId: number): Promise<boolean> {
-    return new Promise((resolve, reject) => {
-      this.loadingDocumentSchedules = true;
-      this.commonService('/api/m-document-schedules')
+  private retrieveDateSet(scheduleIds: number[]): Promise<boolean> {
+    return new Promise(resolve => {
+      this.commonService('api/m-prequalification-date-sets')
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
-          `biddingId.equals=${biddingId}`
+          ...scheduleIds.map(id => `biddingScheduleId.in=${id}`)
         ]),
         paginationQuery: {
           page: 0,
-          size: 100,
+          size: scheduleIds.length,
           sort: ['id']
         }
       })
       .then(res => {
-        this.$set(this.bidding, 'documentSchedules', res.data);
-        this.$set(this.bidding, 'removedDocumentSchedules', []);
+        const dateSets = res.data as any[];
+        for (const dateSet of dateSets) {
+          const schedule = this.bidding.biddingSchedules
+            .find(sch => sch.id === dateSet.biddingScheduleId);
+
+          schedule.status = dateSet.status;
+          schedule.actual = [
+            new Date(dateSet.startDate),
+            new Date(dateSet.endDate)
+          ];
+        }
         resolve(true);
       })
       .catch(err => {
-        console.error('Failed to get document schedules. %O', err);
-        this.$message.error('Failed to get event type lines');
-        reject(false);
-      })
-      .finally(() => {
-        this.loadingDocumentSchedules = false;
+        console.error('Failed to get schedule date set. %O', err);
+        this.$message.error('Failed to get schedule details');
+        resolve(false);
       });
     });
   }
 
-  addDocument() {
-    this.dialogConfirmationVisible = true;
+  private retrieveEventStatuses() {
+    this.commonService(null)
+      .retrieveReferenceLists('eventStatus')
+      .then(list => {
+        this.eventStatuses = list;
+      })
+      .catch(err => {
+        console.error('Failed getting statuses. %O', err);
+        this.$message.error('Failed to get event statuses');
+      });
   }
 
   editAttachments(event: any) {
@@ -214,43 +212,51 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     this.eventAttachmentVisible = true;
   }
 
-  printEventName(code: string) {
-    return this.events.find(event => event.key === code)?.value || code;
+  editSchedule(event: any) {
+    this.selectedEvent = event;
+    this.editScheduleVisible = true;
   }
 
-  printScheduleLabel(record: any) {
-    const startTime = !record.startDate ? '' : format(parseISO(record.startDate), DATE_TIME_FORMAT);
-    const endTime = !record.endDate ? '' : format(parseISO(record.endDate), DATE_TIME_FORMAT);
-    return `${this.printEventName(record.eventTypeLineName)} (Start: ${startTime} - End: ${endTime})`;
+  async viewEvent(event: any) {
+    this.selectedEvent = event;
+    const unspecifiedForm = () => {
+      this.$message.error('No form specified for the selected event');
+      return;
+    }
+
+    if (!event.adFormId) {
+      return unspecifiedForm();
+    }
+
+    const res = await this.commonService('api/ad-menus')
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `adFormId.equals=${event.adFormId}`
+        ])
+      });
+
+    if (!res.data.length) {
+      return unspecifiedForm();
+    }
+
+    const menu = res.data[0];
+    const url = await this.commonService('/api/ad-menus/full-path').find(menu.id);
+
+    if (url) {
+      const timestamp = Date.now();
+      this.$router.push({
+        path: url,
+        query: {
+          t: `${timestamp}`,
+          biddingScheduleId: `${event.id}`
+        }
+      });
+    }
   }
 
-  removeDocument(row: any, index: number) {
-    this.bidding.documentSchedules.splice(index, 1);
-    this.bidding.removedDocumentSchedules.push(row);
-  }
-
-  saveDocument() {
-    this.documentSchedule.vendorSubmission = this.eventScheduleOptions
-      .find(item => item.id === this.documentSchedule.vendorSubmissionId);
-
-    this.documentSchedule.vendorEvaluation = this.eventScheduleOptions
-      .find(item => item.id === this.documentSchedule.vendorEvaluationId);
-
-    const schedule = {...this.documentSchedule};
-    schedule.vendorSubmissionStartDate = schedule.vendorSubmission.startDate;
-    schedule.vendorSubmissionEndDate = schedule.vendorSubmission.endDate;
-    schedule.vendorEvaluationStartDate = schedule.vendorEvaluation.startDate;
-    schedule.vendorEvaluationEndDate = schedule.vendorEvaluation.endDate;
-
-    this.bidding.documentSchedules.push(schedule);
-    this.dialogConfirmationVisible = false;
-    this.documentSchedule = {
-      docEvent: null,
-      vendorSubmissionId: null,
-      vendorEvaluationId: null,
-      vendorSubmission: null,
-      vendorEvaluation: null
-    };
+  printStatus(record: any) {
+    return this.eventStatuses.find(status => record.status === status.value)?.name || record.status;
   }
 
   /**

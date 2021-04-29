@@ -31,6 +31,7 @@ export default class AdMenuService {
       path: data.path,
       component: this.getComponent(data),
       meta: {
+        hidden: data.hidden || false,
         title: data.name,
         icon: data.icon,
         alwaysShow: data.alwaysShow || false,
