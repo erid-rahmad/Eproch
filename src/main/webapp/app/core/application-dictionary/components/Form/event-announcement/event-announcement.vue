@@ -4,14 +4,14 @@
         <div v-if="page===1">
             <el-row>
                 <el-col :span="24">
-                    <el-table :data="gridData1" style="width: 80%" size="mini">
+                    <el-table :data="announcmentGridData" style="width: 80%" size="mini">
                         <el-table-column width="50" label="No">
                             <template slot-scope="row">
                                 {{ row.$index + 1 }}
                             </template>
                         </el-table-column>
-                        <el-table-column min-width="80" sortable prop="documentNo" label="Bidding No" />
-                        <el-table-column min-width="100" sortable prop="name" label="Title" />
+                        <el-table-column min-width="80" sortable prop="biddingDocNo" label="Bidding No" />
+                        <el-table-column min-width="100" sortable prop="biddingName" label="Title" />
                         <el-table-column align="center" min-width="20">
                             <template slot="header">
                                 <el-button size="mini" icon="el-icon-plus" type="primary" @click="view(row)" />

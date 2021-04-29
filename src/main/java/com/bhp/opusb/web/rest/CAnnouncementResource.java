@@ -69,21 +69,7 @@ public class CAnnouncementResource {
             .body(result);
     }
 
-    @PostMapping("/c-announcementemaillist")
-    public ResponseEntity<ArrayList> listemail(@Valid @RequestBody CAnnouncementDTO cAnnouncementDTO) throws URISyntaxException {
-        log.debug("REST request to save CAnnouncement : {}", cAnnouncementDTO);
 
-        return ResponseEntity.ok(cAnnouncementService.emailInvitation(cAnnouncementDTO));
-//        if (cAnnouncementDTO.getId() != null) {
-//            throw new BadRequestAlertException("A new cAnnouncement cannot already have an ID", ENTITY_NAME, "idexists");
-//        }
-//        CAnnouncementDTO result = cAnnouncementService.save(cAnnouncementDTO);
-//        return ResponseEntity.created(new URI("/api/c-announcements/" + result.getId()))
-//            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-//            .body(result);
-
-
-    }
 
     /**
      * {@code PUT  /c-announcements} : Updates an existing cAnnouncement.
@@ -146,6 +132,12 @@ public class CAnnouncementResource {
         log.debug("REST request to get CAnnouncement : {}", id);
         Optional<CAnnouncementDTO> cAnnouncementDTO = cAnnouncementService.findOne(id);
         return ResponseUtil.wrapOrNotFound(cAnnouncementDTO);
+    }
+
+    @GetMapping("/c-announcementemaillist/{id}")
+    public ResponseEntity<ArrayList> listemail(@PathVariable Long id) throws URISyntaxException {
+        log.debug("REST request to list CAnnouncement : {}");
+        return ResponseEntity.ok(cAnnouncementService.emailInvitation(id));
     }
 
     /**

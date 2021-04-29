@@ -3,6 +3,8 @@ package com.bhp.opusb.service.dto;
 import java.time.ZonedDateTime;
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import javax.persistence.Lob;
@@ -11,10 +13,10 @@ import javax.persistence.Lob;
  * A DTO for the {@link com.bhp.opusb.domain.CAnnouncement} entity.
  */
 public class CAnnouncementDTO implements Serializable {
-    
+
     private Long id;
 
-    
+
     @Lob
     private String description;
 
@@ -28,11 +30,39 @@ public class CAnnouncementDTO implements Serializable {
     private Long adOrganizationId;
 
     private Long biddingId;
+    private String biddingName;
+    private String biddingDocNo;
+    private List<Map<String,Object>> emaillist ;
+
+    public List<Map<String, Object>> getEmaillist() {
+        return emaillist;
+    }
+
+    public void setEmaillist(List<Map<String, Object>> emaillist) {
+        this.emaillist = emaillist;
+    }
+
+
+    public String getBiddingName() {
+        return biddingName;
+    }
+
+    public void setBiddingName(String biddingName) {
+        this.biddingName = biddingName;
+    }
+
+    public String getBiddingDocNo() {
+        return biddingDocNo;
+    }
+
+    public void setBiddingDocNo(String biddingDocNo) {
+        this.biddingDocNo = biddingDocNo;
+    }
 
     private Long biddingScheduleId;
 
     private Long attachmentId;
-    
+
     public Long getId() {
         return id;
     }
@@ -129,15 +159,18 @@ public class CAnnouncementDTO implements Serializable {
     @Override
     public String toString() {
         return "CAnnouncementDTO{" +
-            "id=" + getId() +
-            ", description='" + getDescription() + "'" +
-            ", publishDate='" + getPublishDate() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", biddingId=" + getBiddingId() +
-            ", biddingScheduleId=" + getBiddingScheduleId() +
-            ", attachmentId=" + getAttachmentId() +
-            "}";
+            "id=" + id +
+            ", description='" + description + '\'' +
+            ", publishDate=" + publishDate +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", biddingId=" + biddingId +
+            ", biddingName='" + biddingName + '\'' +
+            ", biddingDocNo='" + biddingDocNo + '\'' +
+            ", emaillist=" + emaillist +
+            ", biddingScheduleId=" + biddingScheduleId +
+            ", attachmentId=" + attachmentId +
+            '}';
     }
 }

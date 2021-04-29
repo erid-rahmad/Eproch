@@ -14,6 +14,8 @@ public interface CAnnouncementMapper extends EntityMapper<CAnnouncementDTO, CAnn
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "bidding.id", target = "biddingId")
+    @Mapping(source = "bidding.name", target = "biddingName")
+    @Mapping(source = "bidding.documentNo", target = "biddingDocNo")
     @Mapping(source = "biddingSchedule.id", target = "biddingScheduleId")
     @Mapping(source = "attachment.id", target = "attachmentId")
     CAnnouncementDTO toDto(CAnnouncement cAnnouncement);

@@ -66,7 +66,8 @@
       </el-button>
     </div>
     <editor-content :editor="editor" />
-     <el-button type="primary" size="mini"  @click="sent">Sent</el-button>
+     <el-button type="primary" size="mini" @click="sent">Sent</el-button>
+    
   </div>
 </template>
 

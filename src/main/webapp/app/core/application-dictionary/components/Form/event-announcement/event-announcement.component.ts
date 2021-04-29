@@ -6,6 +6,8 @@ import ContextVariableAccessor from "../../ContextVariableAccessor";
 
 import AddAnnouncementForm from './components/add-announcement.vue';
 import DetailsAnnouncementForm from './components/details-announcement.vue';
+import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
+import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 
 
 @Component({
@@ -15,13 +17,18 @@ import DetailsAnnouncementForm from './components/details-announcement.vue';
 
   }
 })  
-export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor) {
-  
+export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor,AccessLevelMixin) {
+  @Inject('dynamicWindowService')
+  private commonService: (baseApiUrl: string) => DynamicWindowService;
+
+  @Inject('dynamicWindowService')
+  private pushService: (baseApiUrl: string) => DynamicWindowService;
 
    
   dialogTableVisible = false;
   dialogTableVisible11 = false;
   editor = null;
+  private announcmentGridData: any = {};
 
   
   gridSchema = {
@@ -79,6 +86,32 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
   moreinfoview: boolean = false;
   step: boolean = false;
 
+  ///##########################################################################################################
+
+  mounted() { 
+    this.announcmentGrid();
+  }
+
+  private announcmentGrid() {
+    this.commonService('/api/c-announcements')
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true'   
+          
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.announcmentGridData = res.data;
+        console.log("announcmentGridData",this.announcmentGridData);
+        
+      });
+  }
+
   viewBidding(row){
     console.log(row);
   }
@@ -97,6 +130,8 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
 
   back() {
     this.page = 1;
+    this.announcmentGrid();
+
   
     
   }

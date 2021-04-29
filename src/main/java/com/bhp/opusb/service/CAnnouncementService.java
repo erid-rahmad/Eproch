@@ -17,10 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Service Implementation for managing {@link CAnnouncement}.
@@ -61,37 +58,45 @@ public class CAnnouncementService {
         log.debug("Request to save CAnnouncement : {}", cAnnouncementDTO);
         CAnnouncement cAnnouncement = cAnnouncementMapper.toEntity(cAnnouncementDTO);
         cAnnouncement = cAnnouncementRepository.save(cAnnouncement);
-        log.info("this anoncement {}",cAnnouncementDTO);
-//        emailInvitation(cAnnouncementDTO);
+        log.info("this cAnnouncement to get {}",cAnnouncement);
+
+        try {
+            for (Map<String,Object> emaillist_:cAnnouncementDTO.getEmaillist()) {
+                String email = cAnnouncementDTO.getDescription();
+                log.info(String.valueOf(emaillist_.get("email")));
+                email=email.replace("#TenderName",emaillist_.get("biddingName").toString());
+                email=email.replace("#VendorName",emaillist_.get("vendor").toString());
+//            email=email.replace("#JenisPerusahaan","majumundur");
+                log.info( "this email{}",email);
+                mailService.sendEmail(emaillist_.get("email").toString(),"Bidding Invitation",email,false,true);
+            }
+        }catch (Exception e){}
 
         return cAnnouncementMapper.toDto(cAnnouncement);
     }
 
-    public ArrayList emailInvitation (CAnnouncementDTO cAnnouncementDTO){
+    public ArrayList emailInvitation (Long id){
 
-        List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(cAnnouncementDTO.getBiddingId());
+        List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(id);
         log.info(String.valueOf(mVendorSuggestion));
-        String email = cAnnouncementDTO.getDescription();
-
 
         ArrayList emaillist =new ArrayList();
-
         for (MVendorSuggestion mVendorSuggestion1 : mVendorSuggestion){
             log.info("this vendor id {}",mVendorSuggestion1.getVendor().getId().toString());
             List<AdUser> adUsers =adUserRepository.findBycVendorId(mVendorSuggestion1.getVendor().getId());
             log.info("this add user {}",adUsers);
             for (AdUser adUser : adUsers){
                 log.info("this email {} count {}",adUser.getUser().getEmail());
-                email=email.replace("#TenderName",mVendorSuggestion1.getBidding().getName());
-                email=email.replace("#VendorName",mVendorSuggestion1.getVendor().getName());
-//                email=email.replace("#JenisPerusahaan","majumundur");
-                log.info( "this email{}",email);
-//                mailService.sendEmail(adUser.getUser().getEmail(),"Bidding Invitation",email,false,true);
-                emaillist.add( adUser.getUser().getEmail());
+                Map<String, Object> emaillistdata = new HashMap<String,Object>();
+                emaillistdata.put("adUserId",adUser.getId());
+                emaillistdata.put("name",adUser.getUser().getFirstName()+" "+adUser.getUser().getLastName());
+                emaillistdata.put("email",adUser.getUser().getEmail());
+                emaillistdata.put("position",adUser.getPosition());
+                emaillistdata.put("vendor",adUser.getCVendor().getName());
+                emaillistdata.put("biddingName",mVendorSuggestion1.getBidding().getName());
+                emaillist.add(emaillistdata);
             }
         }
-
-        log.info("this email {}",String.valueOf(emaillist));
         return emaillist;
     }
 
