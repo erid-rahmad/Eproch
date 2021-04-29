@@ -14,11 +14,6 @@
                 <h2>BN-00001</h2>
                 <p>Pengadaan Kendaraan Operasional</p>
             </div>
-
-
-
-
-
             <el-button class="button" icon="el-icon-plus" size="mini" type="primary" @click="pages=2"></el-button>
 
             <template>

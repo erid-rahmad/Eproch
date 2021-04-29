@@ -16,8 +16,8 @@
                             <template slot="header">
                                 <el-button size="mini" icon="el-icon-plus" type="primary" @click="view(row)" />
                             </template>
-                            <template slot-scope="row">
-                                <el-button size="mini" icon="el-icon-view" type="primary" @click="moreinfo()" />
+                            <template slot-scope="{row}">
+                                <el-button size="mini" icon="el-icon-view" type="primary" @click="moreInfo(row)" />
                             </template>
                         </el-table-column>
                     </el-table>
@@ -25,7 +25,7 @@
             </el-row>
         </div>
         <div v-if="page===2">
-            <DetailsAnnouncementForm @back="back" ></DetailsAnnouncementForm>
+            <DetailsAnnouncementForm @back="back" :moreinfo="moreinfo" ></DetailsAnnouncementForm>
         </div>
         <div v-if="page===3">
             <AddAnnouncementForm @back="back" ></AddAnnouncementForm>         

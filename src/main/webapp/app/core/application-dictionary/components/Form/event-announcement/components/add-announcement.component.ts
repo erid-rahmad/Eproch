@@ -1,4 +1,4 @@
-import { Component, Inject } from "vue-property-decorator";
+import { Component, Inject,Watch } from "vue-property-decorator";
 import { Editor, EditorContent } from '@tiptap/vue-2'
 import { defaultExtensions } from '@tiptap/starter-kit'
 import MenuItem from './MenuItem.vue'
@@ -42,71 +42,10 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
   projectFormVisible = false;
   private action: string = "/api/c-attachments/upload"  
   private limit: number = 1;
+  private dataRekanan: any = {};
+  private dataForAnnouncment: any = {};
 
-  sizeForm= {
-    name: '',
-    region: '',
-    date1: '',
-    date2: '',
-    delivery: false,
-    type: [],
-    resource: '',
-    desc: ''
-
-  };
-
-
-  tableData= [{
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-08',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-06',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  }, {
-    date: '2016-05-07',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-    }];
   multipleSelection= [];
-
-
-  eventschedule = [
-
-    {
-      no: 'Hena',
-      event: 'Hena',
-      start: 'Manager',
-      end: 'hena@yahoo.com',
-    },
-    {
-      no: 'agung',
-      event: 'agung',
-      start: 'Manager',
-      end: 'agung@yahoo.com',
-    }, {
-      no: 'rahmi',
-      event: 'rahmi',
-      start: 'Manager',
-      end: 'rahmi@yahoo.com',
-    }];
 
   editor = null;
 
@@ -118,6 +57,31 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
   mounted() {
     console.log("mail from child", this.emailFromChild);
     this.retrieveBidding();
+    this.value = null;
+    
+  }
+
+  @Watch('value')
+  onDataChanged(data: any) {
+    console.log('Value:', data);
+    this.getDataForAnnouncment();
+  }
+
+  @Watch('dataForAnnouncment')
+  onDataChang(data: any) {
+    console.log('Value:', data);
+    this.changedata();
+  }
+
+  changedata() {
+    this.emailList = this.dataForAnnouncment.emaillist;
+    this.dataRekanan = this.dataForAnnouncment.vendorlist;  
+
+    console.log(this.dataForAnnouncment.emaillist);
+    console.log(this.dataForAnnouncment.vendorlist);
+    
+    
+    
   }
 
   private retrieveBidding() {
@@ -138,7 +102,7 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
       });
   }
 
-  private viewEmailList() {
+  private getDataForAnnouncment() {
     this.commonService(`/api/c-announcementemaillist/${this.value}`)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -152,8 +116,8 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
         }
       })
       .then(res => {
-        this.emailList = res.data;
-        console.log("email list",this.emailList);
+        this.dataForAnnouncment = res.data;
+        console.log("dataForAnnouncment",this.dataForAnnouncment);
 
       });
   }
@@ -206,8 +170,15 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
     }
 
   }
+
   handlePreview() {
     window.open(this.fileAttacment.response.downloadUri, '_blank');
+  }
+
+  cancelAtachment() {
+    this.attachmetName = null;
+    this.Announcment.attachmentId = null;
+    this.Announcment.attachment = null;
   }
 
   handleExceed(files, fileList) {
@@ -234,6 +205,9 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
     console.log(file, fileList);
 
   }
+  onUploadError(err: any) {
+    console.log('Failed uploading a file ', err);
+  }
 
 
   get projectDocUploadHeaders() {
@@ -256,9 +230,10 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
   }
   
   praSent() {
+    
     console.log(this.value);
     this.praSentPA = true;
-    this.viewEmailList();
+    // this.viewEmailList();
     console.log("this announsment", this.Announcment);
   }
 

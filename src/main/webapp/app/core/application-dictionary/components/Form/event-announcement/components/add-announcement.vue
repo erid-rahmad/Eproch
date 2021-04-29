@@ -1,6 +1,6 @@
 <template>
     <div class="add-announcement">
-        <el-row :gutter="columnSpacing">
+        <el-row >
             <el-col :span="24">
                 <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
                     Back
@@ -15,7 +15,7 @@
         </el-divider>
         <el-row :gutter="24">
             <el-col :xs="24" :sm="12" :lg="17">
-                <el-form ref="form" :model="sizeForm" label-width="120px" size="mini">
+                <el-form ref="form"  label-width="120px" size="mini">
                     <el-form-item label="Kode Tender">
                         <template>
                             <el-select v-model="value" filterable placeholder="Select">
@@ -28,7 +28,7 @@
                         <!-- <el-input v-model="sizeForm.q"></el-input> -->
                         <template>
                             <el-select v-model="value" filterable placeholder="Select">
-                                <el-option v-for="item in biddingData" :key="item.id" @itemname="item.neme" :label="item.name" :value="item.id">
+                                <el-option v-for="item in biddingData" :key="item.id" :label="item.name" :value="item.id">
                                 </el-option>
                             </el-select>
                         </template>
@@ -41,6 +41,7 @@
 
                         <el-button type="primary" icon="el-icon-upload" v-if="!attachmetName" size="mini" @click="projectFormVisible = true">Chose File </el-button>
                         <el-button type="primary" icon="el-icon-view" v-if="attachmetName" size="mini" @click="handlePreview">{{attachmetName}}</el-button>
+                        <el-button type="primary" icon="el-icon-close" v-if="attachmetName" size="mini" @click="cancelAtachment"></el-button>
 
 
                         <el-button type="primary" icon="el-icon-view" size="mini" @click="dialogTableVisible = true">View Email</el-button>
@@ -51,14 +52,14 @@
                     <h4>Data Rekanan</h4>
                 </el-divider>
                 <el-col :span="20">
-                    <el-table v-loading="processing" ref="biddingSchedule" highlight-current-row border stripe size="mini" style="width: 100%; height: 100%" :data="gridData1">
+                    <el-table ref="biddingSchedule" highlight-current-row border stripe size="mini" style="width: 100%; height: 100%" :data="dataRekanan">
 
                         <el-table-column min-width="30" label="No">
                             <template slot-scope="row">
                                 {{ row.$index+1 }}
                             </template>
                         </el-table-column>
-                        <el-table-column min-width="100" prop="documentNo" label="Kode" />
+                        <el-table-column min-width="100" prop="code" label="Kode" />
                         <el-table-column min-width="100" prop="name" label="Nama Vendor" />
                     </el-table>
                 </el-col>
@@ -113,12 +114,12 @@
             </div>
         </template>
 
-        <el-dialog :show-close="false" title="Add Project" :visible.sync="projectFormVisible">
+        <el-dialog :show-close="false" title="Add File" :visible.sync="projectFormVisible">
             <template>
                 <el-form ref="Announcment" label-position="left" label-width="150px" :model="Announcment" size="mini">
-                    <el-form-item label="Information" prop="name" required>
+                    <!-- <el-form-item label="Information" prop="name" required>
                         <el-input v-model="Announcment.name" class="form-input" clearable></el-input>
-                    </el-form-item>
+                    </el-form-item> -->
                     <el-form-item label="Attachment" prop="attachment" required>
                         <el-upload ref="docUpload" v-model="Announcment.attachment" :accept="accept" :action="action" auto-upload :headers="projectDocUploadHeaders" :limit="limit"
                             :before-upload="handleBeforeUpload" :on-preview="handlePreview" :on-exceed="handleExceed" :on-remove="handleRemove" :on-error="onUploadError"
@@ -143,13 +144,6 @@
                 </div>
             </template>
         </el-dialog>
-
-
-        <template>
-            <el-button plain @click="open">
-
-            </el-button>
-        </template>
     </div>
 </template>
 <script lang="ts" src="./add-announcement.component.ts"></script>

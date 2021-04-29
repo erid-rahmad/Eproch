@@ -28,11 +28,12 @@ public class CAnnouncement implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    
+
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "description", nullable = false)
     private String description;
+
 
     @Column(name = "publish_date")
     private ZonedDateTime publishDate;

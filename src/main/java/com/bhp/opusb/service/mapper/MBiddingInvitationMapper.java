@@ -14,8 +14,12 @@ public interface MBiddingInvitationMapper extends EntityMapper<MBiddingInvitatio
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "announcement.id", target = "announcementId")
+    @Mapping(source = "announcement.description", target = "announcementDescription")
+    @Mapping(source = "announcement.publishDate", target = "announcementPublishDate")
     @Mapping(source = "bidding.id", target = "biddingId")
+    @Mapping(source = "bidding.name", target = "biddingName")
     @Mapping(source = "vendor.id", target = "vendorId")
+    @Mapping(source = "vendor.name", target = "vendorName")
     MBiddingInvitationDTO toDto(MBiddingInvitation mBiddingInvitation);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

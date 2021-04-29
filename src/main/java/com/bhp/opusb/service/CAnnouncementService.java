@@ -7,7 +7,9 @@ import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.CAnnouncementRepository;
 import com.bhp.opusb.repository.MVendorSuggestionRepository;
 import com.bhp.opusb.service.dto.CAnnouncementDTO;
+import com.bhp.opusb.service.dto.MBiddingInvitationDTO;
 import com.bhp.opusb.service.mapper.CAnnouncementMapper;
+import liquibase.pro.packaged.M;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.*;
 
 /**
@@ -44,6 +47,9 @@ public class CAnnouncementService {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    MBiddingInvitationService mBiddingInvitationService;
+
     /**
      * Save a cAnnouncement.
      *
@@ -56,6 +62,7 @@ public class CAnnouncementService {
     public CAnnouncementDTO save(CAnnouncementDTO cAnnouncementDTO) {
 
         log.debug("Request to save CAnnouncement : {}", cAnnouncementDTO);
+        cAnnouncementDTO.setPublishDate(ZonedDateTime.now());
         CAnnouncement cAnnouncement = cAnnouncementMapper.toEntity(cAnnouncementDTO);
         cAnnouncement = cAnnouncementRepository.save(cAnnouncement);
         log.info("this cAnnouncement to get {}",cAnnouncement);
@@ -72,17 +79,38 @@ public class CAnnouncementService {
             }
         }catch (Exception e){}
 
+        List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(cAnnouncement.getBidding().getId());
+        for (MVendorSuggestion mVendorSuggestion_:mVendorSuggestion) {
+            MBiddingInvitationDTO mBiddingInvitationDTO = new MBiddingInvitationDTO();
+            mBiddingInvitationDTO.setBiddingId(cAnnouncementDTO.getBiddingId());
+            mBiddingInvitationDTO.setActive(true);
+            mBiddingInvitationDTO.setVendorId(mVendorSuggestion_.getVendor().getId());
+            mBiddingInvitationDTO.setInvitationStatus("Belum Terdaftar");
+            mBiddingInvitationDTO.setAnnouncementId(cAnnouncement.getId());
+            mBiddingInvitationDTO.setAdOrganizationId(cAnnouncementDTO.getAdOrganizationId());
+            mBiddingInvitationService.save(mBiddingInvitationDTO);
+        }
+
+
         return cAnnouncementMapper.toDto(cAnnouncement);
     }
 
-    public ArrayList emailInvitation (Long id){
+    public Map<String,Object> emailInvitation (Long id){
 
+        ArrayList emaillist =new ArrayList();
+        ArrayList vendorlist = new ArrayList();
+
+        Map<String,Object> dataForAnnouncment = new HashMap<String,Object>();
         List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(id);
         log.info(String.valueOf(mVendorSuggestion));
 
-        ArrayList emaillist =new ArrayList();
+
         for (MVendorSuggestion mVendorSuggestion1 : mVendorSuggestion){
             log.info("this vendor id {}",mVendorSuggestion1.getVendor().getId().toString());
+            Map<String, Object> vendorlistdata = new HashMap<String,Object>();
+            vendorlistdata.put("name",mVendorSuggestion1.getVendor().getName());
+            vendorlistdata.put("code",mVendorSuggestion1.getVendor().getCode());
+            vendorlist.add(vendorlistdata);
             List<AdUser> adUsers =adUserRepository.findBycVendorId(mVendorSuggestion1.getVendor().getId());
             log.info("this add user {}",adUsers);
             for (AdUser adUser : adUsers){
@@ -97,7 +125,11 @@ public class CAnnouncementService {
                 emaillist.add(emaillistdata);
             }
         }
-        return emaillist;
+        dataForAnnouncment.put("emaillist",emaillist);
+        dataForAnnouncment.put("vendorlist",vendorlist);
+
+
+        return dataForAnnouncment;
     }
 
     /**

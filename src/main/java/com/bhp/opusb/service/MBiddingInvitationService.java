@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 /**
@@ -40,6 +41,10 @@ public class MBiddingInvitationService {
      */
     public MBiddingInvitationDTO save(MBiddingInvitationDTO mBiddingInvitationDTO) {
         log.debug("Request to save MBiddingInvitation : {}", mBiddingInvitationDTO);
+        if (mBiddingInvitationDTO.getInvitationStatus().equals("Tidak Berminat") ||mBiddingInvitationDTO.getInvitationStatus().equals("Terdaftar") ){
+            mBiddingInvitationDTO.setAnswerDate(ZonedDateTime.now());
+            log.info("change time");
+        }
         MBiddingInvitation mBiddingInvitation = mBiddingInvitationMapper.toEntity(mBiddingInvitationDTO);
         mBiddingInvitation = mBiddingInvitationRepository.save(mBiddingInvitation);
         return mBiddingInvitationMapper.toDto(mBiddingInvitation);
@@ -66,9 +71,14 @@ public class MBiddingInvitationService {
      */
     @Transactional(readOnly = true)
     public Optional<MBiddingInvitationDTO> findOne(Long id) {
-        log.debug("Request to get MBiddingInvitation : {}", id);
-        return mBiddingInvitationRepository.findById(id)
+        log.debug("Request to get MBiddingInvitation change : {}", id);
+        Optional<MBiddingInvitationDTO> mBiddingInvitationDTO =mBiddingInvitationRepository.findById(id)
             .map(mBiddingInvitationMapper::toDto);
+        String email=mBiddingInvitationDTO.get().getAnnouncementDescription();
+        email=email.replace("#TenderName",mBiddingInvitationDTO.get().getBiddingName());
+        email=email.replace("#VendorName",mBiddingInvitationDTO.get().getVendorName());
+        mBiddingInvitationDTO.get().setAnnouncementDescription(email);
+        return mBiddingInvitationDTO;
     }
 
     /**

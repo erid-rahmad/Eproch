@@ -32,6 +32,7 @@ public class MBiddingInvitation implements Serializable {
     @Column(name = "reason")
     private String reason;
 
+
     @Column(name = "answer_date")
     private ZonedDateTime answerDate;
 
@@ -47,6 +48,7 @@ public class MBiddingInvitation implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("mBiddingInvitations")
+//    @Column(name = "announcement_id")
     private CAnnouncement announcement;
 
     @ManyToOne

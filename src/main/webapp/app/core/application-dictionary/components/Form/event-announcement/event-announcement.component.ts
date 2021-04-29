@@ -16,7 +16,7 @@ import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMi
     DetailsAnnouncementForm,
 
   }
-})  
+})
 export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor,AccessLevelMixin) {
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -24,13 +24,13 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
   @Inject('dynamicWindowService')
   private pushService: (baseApiUrl: string) => DynamicWindowService;
 
-   
+
   dialogTableVisible = false;
   dialogTableVisible11 = false;
   editor = null;
   private announcmentGridData: any = {};
 
-  
+
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -75,7 +75,7 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
     }
   ];
 
- 
+
 
 
 
@@ -85,10 +85,11 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
   page: number = 1;
   moreinfoview: boolean = false;
   step: boolean = false;
+  private moreinfo: any = {};
 
   ///##########################################################################################################
 
-  mounted() { 
+  mounted() {
     this.announcmentGrid();
   }
 
@@ -96,8 +97,8 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
     this.commonService('/api/c-announcements')
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          'active.equals=true'   
-          
+          'active.equals=true'
+
         ]),
         paginationQuery: {
           page: 0,
@@ -108,7 +109,7 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
       .then(res => {
         this.announcmentGridData = res.data;
         console.log("announcmentGridData",this.announcmentGridData);
-        
+
       });
   }
 
@@ -121,19 +122,21 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
   }
 
   view(row, stepIndex: number = 0) {
-    this.page = 3;   
+    this.page = 3;
   }
 
-  moreinfo() {
-    this.page = 2;   
+  moreInfo(row) {
+    this.page = 2;
+    this.moreinfo = row;
+
   }
 
   back() {
     this.page = 1;
     this.announcmentGrid();
 
-  
-    
+
+
   }
 
 

@@ -6,19 +6,25 @@
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <keep-alive>
                         <el-col :span="24">
-                            <el-table :data="tableData" size="mini"  style="width: 100%">
+                            <el-table :data="biddingInvitationsGridData" size="mini"  style="width: 100%">
                                 <el-table-column min-width="50" label="No">
                                     <template slot-scope="row">
                                         {{ row.$index+1 }}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="0" label="Tanggal" sortable width="100">
+                                <!-- <el-table-column prop="publishDate" label="Tanggal" sortable width="100">
+                                </el-table-column> -->
+                                <el-table-column prop="biddingName" label="Nama Pengadaan" sortable min-width="210">
                                 </el-table-column>
-                                <el-table-column prop="1" label="Nama Pengadaan" sortable min-width="210">
+                                <el-table-column  label="Publish Date" sortable min-width="210">
+                                    
+                                        <template slot-scope="{ row }">
+                                            <span>{{formattime(row.announcementPublishDate) }}</span>
+                                        </template>
+                                   
+                                    
                                 </el-table-column>
-                                <el-table-column prop="2" label="Tanggal Selesai" sortable min-width="210">
-                                </el-table-column>
-                                <el-table-column prop="3" label="Status" sortable min-width="150">
+                                <el-table-column prop="invitationStatus" label="Status" sortable min-width="150">
                                 </el-table-column>              
                                 <el-table-column prop="6" label="Detail" sortable min-width="180">
                                     <template slot-scope="{ row }">

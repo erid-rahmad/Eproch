@@ -25,6 +25,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -135,7 +136,7 @@ public class CAnnouncementResource {
     }
 
     @GetMapping("/c-announcementemaillist/{id}")
-    public ResponseEntity<ArrayList> listemail(@PathVariable Long id) throws URISyntaxException {
+    public ResponseEntity<Map<String,Object>> listemail(@PathVariable Long id) throws URISyntaxException {
         log.debug("REST request to list CAnnouncement : {}");
         return ResponseEntity.ok(cAnnouncementService.emailInvitation(id));
     }

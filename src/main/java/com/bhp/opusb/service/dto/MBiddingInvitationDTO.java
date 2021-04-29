@@ -1,5 +1,8 @@
 package com.bhp.opusb.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
+import javax.persistence.Lob;
 import java.time.ZonedDateTime;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,7 +12,7 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingInvitation} entity.
  */
 public class MBiddingInvitationDTO implements Serializable {
-    
+
     private Long id;
 
     private String invitationStatus;
@@ -27,10 +30,51 @@ public class MBiddingInvitationDTO implements Serializable {
 
     private Long announcementId;
 
+    @Lob
+    private String announcementDescription;
+
+//    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
+    private ZonedDateTime announcementPublishDate;
+
     private Long biddingId;
+    private String biddingName;
+
 
     private Long vendorId;
-    
+    private String vendorName;
+
+    public String getAnnouncementDescription() {
+        return announcementDescription;
+    }
+
+    public void setAnnouncementDescription(String announcementDescription) {
+        this.announcementDescription = announcementDescription;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public ZonedDateTime getAnnouncementPublishDate() {
+        return announcementPublishDate;
+    }
+
+    public void setAnnouncementPublishDate(ZonedDateTime announcementPublishDate) {
+        this.announcementPublishDate = announcementPublishDate;
+    }
+
+    public String getBiddingName() {
+        return biddingName;
+    }
+
+    public void setBiddingName(String biddingName) {
+        this.biddingName = biddingName;
+    }
+
     public Long getId() {
         return id;
     }
@@ -91,8 +135,8 @@ public class MBiddingInvitationDTO implements Serializable {
         return announcementId;
     }
 
-    public void setAnnouncementId(Long cAnnouncementId) {
-        this.announcementId = cAnnouncementId;
+    public void setAnnouncementId(Long announcementId) {
+        this.announcementId = announcementId;
     }
 
     public Long getBiddingId() {
@@ -135,16 +179,20 @@ public class MBiddingInvitationDTO implements Serializable {
     @Override
     public String toString() {
         return "MBiddingInvitationDTO{" +
-            "id=" + getId() +
-            ", invitationStatus='" + getInvitationStatus() + "'" +
-            ", reason='" + getReason() + "'" +
-            ", answerDate='" + getAnswerDate() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", announcementId=" + getAnnouncementId() +
-            ", biddingId=" + getBiddingId() +
-            ", vendorId=" + getVendorId() +
-            "}";
+            "id=" + id +
+            ", invitationStatus='" + invitationStatus + '\'' +
+            ", reason='" + reason + '\'' +
+            ", answerDate=" + answerDate +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", announcementId=" + announcementId +
+            ", announcementDescription='" + announcementDescription + '\'' +
+            ", announcementPublishDate=" + announcementPublishDate +
+            ", biddingId=" + biddingId +
+            ", biddingName='" + biddingName + '\'' +
+            ", vendorId=" + vendorId +
+            ", vendorName='" + vendorName + '\'' +
+            '}';
     }
 }

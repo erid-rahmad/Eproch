@@ -28,6 +28,7 @@
     "inputmask": "^5.0.5",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.15",
+    "moment": "^2.29.1",
     "normalize.css": "^8.0.1",
     "nprogress": "^0.2.0",
     "pluralize": "^8.0.0",
