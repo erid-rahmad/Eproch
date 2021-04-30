@@ -13,6 +13,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 import com.bhp.opusb.domain.enumeration.CAttachmentType;
@@ -20,6 +21,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 /**
  * A CAttachment.
@@ -118,6 +120,14 @@ public class CAttachment extends AbstractAuditingEntity {
 
     public void setFileName(String fileName) {
         this.fileName = fileName;
+    }
+
+    @Transient
+    public String getDownloadUrl() {
+        return ServletUriComponentsBuilder.fromCurrentContextPath()
+            .path("/api/c-attachments/download/")
+            .path(getId() + "-" + getFileName())
+            .toUriString();
     }
 
     public String getImageSmall() {

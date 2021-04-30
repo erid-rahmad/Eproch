@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity MPreBidMeetingAttachment.
+    -->
+    <changeSet id="20210429054200-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="c_attachment_id"
+                                 baseTableName="m_pre_bid_meeting_attachment"
+                                 constraintName="fk_m_pre_bid_meeting_attachment_c_attachment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_attachment"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="m_pre_bid_meeting_attachment"
+                                 constraintName="fk_m_pre_bid_meeting_attachment_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+        <addForeignKeyConstraint baseColumnNames="pre_bid_meeting_id"
+                                 baseTableName="m_pre_bid_meeting_attachment"
+                                 constraintName="fk_m_pre_bid_meeting_attachment_pre_bid_meeting_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_pre_bid_meeting"/>
+
+    </changeSet>
+</databaseChangeLog>

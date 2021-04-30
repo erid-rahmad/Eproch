@@ -1,0 +1,11 @@
+id;uid;active;bidding_schedule_id;ad_organization_id
+1;5051f79a-7b3c-4b4a-95de-86702409e048;false;1;1
+2;4309f88c-62a8-4068-8e05-f0c14da426b5;true;2;2
+3;d061a42a-4f4e-458c-8447-1dddfcfd829f;false;3;3
+4;1bb072e5-f4a4-4ab5-a17e-4c6cd2eac7cd;false;4;4
+5;3a99fac5-1085-406a-8c44-293e7c603afe;true;5;5
+6;3d0fd13c-2386-4cfa-bd4d-d6d017cbb7a5;true;6;6
+7;865406d4-2a6e-47b3-8ad6-f502d6ec431d;true;7;7
+8;d0dcac8a-491f-465d-a784-6550f0696ca9;false;8;8
+9;4db691dd-5e1c-4258-805e-b96a4463c3c0;false;9;9
+10;685158d1-ef49-47f8-b545-2dd0b342c945;false;10;10

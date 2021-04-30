@@ -1,0 +1,50 @@
+{
+    "name": "MPreBidMeeting",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "mBiddingSchedule",
+            "otherEntityRelationshipName": "mPreBidMeeting",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSchedule",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "mPreBidMeetingAttachment",
+            "otherEntityRelationshipName": "preBidMeeting",
+            "relationshipName": "mPreBidMeetingAttachment"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPreBidMeeting",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210429054000",
+    "entityTableName": "m_pre_bid_meeting",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

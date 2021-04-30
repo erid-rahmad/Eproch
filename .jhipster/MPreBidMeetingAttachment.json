@@ -1,0 +1,52 @@
+{
+    "name": "MPreBidMeetingAttachment",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "mPreBidMeetingAttachment",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cAttachment",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mPreBidMeetingAttachment",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mPreBidMeeting",
+            "otherEntityRelationshipName": "mPreBidMeetingAttachment",
+            "relationshipValidateRules": "required",
+            "relationshipName": "preBidMeeting",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210429054200",
+    "entityTableName": "m_pre_bid_meeting_attachment",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

@@ -2,6 +2,14 @@ import { Component, Inject, Mixins } from "vue-property-decorator";
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import AccountService from '@/account/account.service';
+import settings from '@/settings';
+import { AccountStoreModule } from '@/shared/config/store/account-store';
+
+const baseApiSchedule = 'api/m-bidding-schedules';
+const baseApiDateSet = 'api/m-prequalification-date-sets';
+const baseApiPreBidMeeting = 'api/m-pre-bid-meetings';
+const baseApiPreBidMeetingAttachment = 'api/m-pre-bid-meeting-attachments'
+const baseApiAttachment = 'api/c-attachments';
 
 @Component
 export default class PreBidMeeting extends Mixins(AccessLevelMixin) {
@@ -12,25 +20,28 @@ export default class PreBidMeeting extends Mixins(AccessLevelMixin) {
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  attachment = null;
   biddingScheduleId: number = null;
-  biddingSchedule: any = {};
-  dateSet: any = {};
+  mainForm: any = {};
+  uploadedFiles: any[] = [];
 
   gutterSize: number = 24;
 
   loading: boolean = false;
-  uploadAccept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
+  loadingAttachments: boolean = false;
+  uploadAccept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf";
   uploadEndpoint = '/api/c-attachments/upload';
 
   preBidMeeting = {
-    attachment: null,
-    attachmentId: null,
-    biddingId: null,
+    id: null,
+    adOrganizationId: AccountStoreModule.organizationInfo.id,
     biddingScheduleId: null,
-    startDate: null,
-    endDate: null
   };
+
+  attachments = [];
+
+  get dateDisplayFormat() {
+    return settings.dateTimeDisplayFormat;
+  }
 
   get uploadHeaders() {
     if (this.accountService().hasToken) {
@@ -43,30 +54,161 @@ export default class PreBidMeeting extends Mixins(AccessLevelMixin) {
   }
 
   onUploadError(err: any) {
-    console.log('Failed uploading a file ', err);
+    console.log('Failed uploading a file. %O', err);
   }
 
-  onUploadRemove(file, fileList) {
-    console.log(file, fileList);
+  onFilePreview(file: any) {
+    console.log('preview file. %O', file);
+    window.open(file.url, '_blank');
   }
 
-  onUploadSuccess(response, file, fileList) {
-      this.preBidMeeting.attachment = response.attachment;
-      this.preBidMeeting.attachmentId = response.attachment.id;
+  async beforeFileRemove(file: any, fileList: any[]) {
+    try {
+      await this.commonService(baseApiPreBidMeetingAttachment)
+        .delete(file.id);
+      
+      this.$message.success('File has been successfully removed');
+      return true;
+    } catch (err) {
+      this.$message.error(`Failed to remove file ${file.name}`);
+      return false;
+    }
+  }
+
+  onFileRemove(file: any) {
+    const index = this.uploadedFiles.findIndex(item => item.id === file.id);
+    this.uploadedFiles.splice(index, 1);
+  }
+
+  onUploadSuccess(response: any) {
+    const attachment = response.attachment;
+    
+    const data = {
+      id: null,
+      cAttachmentId: attachment.id,
+      preBidMeetingId: this.preBidMeeting.id,
+      adOrganizationId: AccountStoreModule.organizationInfo.id,
+      name: attachment.fileName,
+      url: response.downloadUrl
+    };
+
+    this.createPreBidMeetingAttachment(data);
+    this.uploadedFiles.push(data);
   }
 
   created() {
     const query = this.$route.query;
-    console.log('url query:', query);
 
     this.biddingScheduleId = parseInt(query.biddingScheduleId as string);
     this.retrieveBiddingSchedule(this.biddingScheduleId);
+    this.retrievePreBidMeeting(this.biddingScheduleId);
+  }
+
+  viewParticipants() {
+    
+  }
+
+  private retrievePreBidMeeting(scheduleId: number): Promise<boolean> {
+    return new Promise(resolve => {
+      this.loading = true;
+      this.commonService(baseApiPreBidMeeting)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingScheduleId.equals=${scheduleId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 1,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        if (res.data.length) {
+          this.preBidMeeting = res.data[0];
+          this.retrieveAttachments(this.preBidMeeting.id);
+        } else {
+          this.preBidMeeting.biddingScheduleId = scheduleId;
+          this.createPreBidMeeting(this.preBidMeeting);
+        }
+
+        resolve(true);
+      })
+      .catch(err => {
+        console.error('Failed to get bidding schedules. %O', err);
+        this.$message.error('Failed to get schedule details');
+        resolve(false);
+      })
+      .finally(() => {
+        this.loading = false;
+      });
+    });
+  }
+
+  private createPreBidMeeting(data: any) {
+    this.loading = true;
+    this.commonService(baseApiPreBidMeeting)
+      .create(data)
+      .then(res => this.preBidMeeting = res.data)
+      .catch(_err => this.$message.error('Failed to save Pre-bid Meeting record'))
+      .finally(() => this.loading = false);
+  }
+
+  private createPreBidMeetingAttachment(data: any) {
+    this.loadingAttachments = true;
+    this.commonService(baseApiPreBidMeetingAttachment)
+      .create(data)
+      .then(_res => {
+        data.id = _res.id;
+        this.$message.success('File has been successfully uploaded')
+      })
+      .catch(_err => this.$message.error('Failed to save Pre-bid Meeting attachment'))
+      .finally(() => this.loadingAttachments = false);
+  }
+
+  private retrieveAttachments(preBidMeetingId: number): Promise<boolean> {
+    return new Promise(resolve => {
+      this.loadingAttachments = true;
+      this.commonService(baseApiPreBidMeetingAttachment)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `preBidMeetingId.equals=${preBidMeetingId}`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 50,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        if (res.data.length) {
+          const list = res.data as any[];
+          this.uploadedFiles = list.map(item => ({
+            id: item.id,
+            attachmentId: item.cAttachmentId,
+            name: item.cAttachmentName,
+            url: item.cAttachmentUrl
+          }));
+        }
+
+        resolve(true);
+      })
+      .catch(err => {
+        console.error('Failed to get bidding schedules. %O', err);
+        this.$message.error('Failed to get schedule details');
+        resolve(false);
+      })
+      .finally(() => {
+        this.loadingAttachments = false;
+      });
+    });
   }
 
   private retrieveBiddingSchedule(id: number): Promise<boolean> {
     return new Promise(resolve => {
       this.loading = true;
-      this.commonService('/api/m-bidding-schedules')
+      this.commonService(baseApiSchedule)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
@@ -80,9 +222,8 @@ export default class PreBidMeeting extends Mixins(AccessLevelMixin) {
       })
       .then(res => {
         if (res.data.length) {
-          this.biddingSchedule = res.data[0];
-          console.log('schedule:', this.biddingSchedule);
-          this.retrieveDateSet(this.biddingSchedule.id);
+          this.mainForm = res.data[0];
+          this.retrieveDateSet(this.mainForm.id);
         }
         resolve(true);
       })
@@ -100,7 +241,7 @@ export default class PreBidMeeting extends Mixins(AccessLevelMixin) {
   private retrieveDateSet(biddingScheduleId: number): Promise<boolean> {
     return new Promise(resolve => {
       this.loading = true;
-      this.commonService('api/m-prequalification-date-sets')
+      this.commonService(baseApiDateSet)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true',
@@ -114,8 +255,9 @@ export default class PreBidMeeting extends Mixins(AccessLevelMixin) {
       })
       .then(res => {
         if (res.data.length) {
-          this.dateSet = res.data[0];
-          console.log('dateSet:', this.dateSet);
+          const dateSet = res.data[0];
+          this.$set(this.mainForm, 'startDate', dateSet.startDate);
+          this.$set(this.mainForm, 'endDate', dateSet.endDate);
         }
         resolve(true);
       })
