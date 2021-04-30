@@ -240,6 +240,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
       return unspecifiedForm();
     }
 
+    // TODO Cache the URL.
     const menu = res.data[0];
     const url = await this.commonService('/api/ad-menus/full-path').find(menu.id);
 

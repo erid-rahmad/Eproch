@@ -1124,6 +1124,23 @@ entity MPrequalificationDateSet {
 	active Boolean
 }
 
+entity MPreBidMeeting {
+	uid UUID
+	active Boolean
+}
+
+entity MPreBidMeetingParticipant {
+	attended Boolean
+	registerDate ZonedDateTime
+	uid UUID
+	active Boolean
+}
+
+entity MPreBidMeetingAttachment {
+	uid UUID
+	active Boolean
+}
+
 entity MBiddingScheduleAttachment {
 	uid UUID
 	active Boolean
@@ -1211,6 +1228,10 @@ relationship OneToOne {
 	MBiddingLine{subItem} to MBiddingSubItem{biddingLine}
 	MBiddingScheduleAttachment{cAttachment required} to CAttachment
 	MPrequalificationDateSet{biddingSchedule required} to MBiddingSchedule
+
+	// Bidding event form.
+	MPreBidMeeting{biddingSchedule required} to MBiddingSchedule
+	MPreBidMeetingAttachment{cAttachment required} to CAttachment
 }
 
 /**
@@ -1243,6 +1264,9 @@ relationship OneToMany {
 
 	// Bidding schedule attachments.
 	MBiddingSchedule to MBiddingScheduleAttachment{biddingSchedule required}
+	
+	// Pre-bid Meeting attachments.
+	MPreBidMeeting to MPreBidMeetingAttachment{preBidMeeting required}
 
 	// Bidding Submission.
 	MBiddingSubmission to MBiddingSubmissionLine{mBiddingSubmission required}
@@ -1660,6 +1684,12 @@ relationship ManyToOne {
 	MVendorScoringCriteria{biddingSubCriteriaLine } to CBiddingSubCriteriaLine
 
 	MPrequalificationDateSet{adOrganization required} to ADOrganization
+
+	// Bidding event form.
+	MPreBidMeeting{adOrganization required} to ADOrganization
+	MPreBidMeetingAttachment{adOrganization required} to ADOrganization
+	MPreBidMeetingParticipant{adOrganization required} to ADOrganization
+	MPreBidMeetingParticipant{vendor required} to CVendor
 
 	MBiddingSubmission{bidding required} to MBidding
 	MBiddingSubmission{biddingSchedule required} to MBiddingSchedule
