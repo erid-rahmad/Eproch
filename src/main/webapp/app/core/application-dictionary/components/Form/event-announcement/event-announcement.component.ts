@@ -31,56 +31,6 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
   private announcmentGridData: any = {};
 
 
-  gridSchema = {
-    defaultSort: {},
-    emptyText: 'No Records Found',
-    maxHeight: 500,
-    height: 500
-  };
-
-  gridData1 = [
-    {
-      documentNo: 'BD-00001',
-      name: 'pengadaan kendaraan operasional',
-      biddingTypeName: 'Tender Goods',
-      documentStatus: 'In Progress',
-      lastModifiedDate: '2021-03-26  3:30:16 ',
-      lastModifiedBy: 'admintender',
-      status: true,
-      action: 'submit',
-      join: '3'
-    },
-
-    {
-      documentNo: 'BD-00003',
-      name: 'pengadaan Office equepment',
-      biddingTypeName: 'Tender Goods',
-      documentStatus: 'Terminate',
-      lastModifiedDate: '2021-03-26  3:30:16  ',
-      lastModifiedBy: 'admintender',
-      status: true,
-      action: 'submit',
-      join: '4'
-    },
-    {
-      documentNo: 'BD-00004',
-      name: 'pengadaan kendaraan jabatan',
-      biddingTypeName: 'Tender Goods',
-      documentStatus: 'Not Started',
-      lastModifiedDate: '2021-03-26  3:30:16 ',
-      lastModifiedBy: 'admintender',
-      status: false,
-      action: 'register ',
-      join: '3'
-    }
-  ];
-
-
-
-
-
-
-
   index: boolean = true;
   page: number = 1;
   moreinfoview: boolean = false;

@@ -47,8 +47,8 @@
                 </el-tabs>
             </el-col>
         </el-row>
-        <el-button class="btn-attachment" icon="el-icon-circle-check" size="mini" type="primary" @click="help">
-        </el-button>
+
+  
 
         <el-dialog title="" :visible.sync="reasonPA" width="60%" center>
             <span>Alasan Tidak Tertarik</span>

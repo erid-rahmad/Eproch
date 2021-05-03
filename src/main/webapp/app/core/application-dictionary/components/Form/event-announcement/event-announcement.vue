@@ -30,7 +30,7 @@
         <div v-if="page===3">
             <AddAnnouncementForm @back="back" ></AddAnnouncementForm>         
         </div>
-        <el-dialog title="Joined Vendors" :visible.sync="vendorListVisible">
+        <!-- <el-dialog title="Joined Vendors" :visible.sync="vendorListVisible">
             <el-table border :data="joinedVendors" size="mini">
                 <el-table-column width="50" label="No">
                     <template slot-scope="row">
@@ -40,7 +40,7 @@
                 <el-table-column property="vendorName" label="Vendor Name" width="200" show-overflow-tooltip></el-table-column>
                 <el-table-column property="address" label="Address" min-width="200" show-overflow-tooltip></el-table-column>
             </el-table>
-        </el-dialog>
+        </el-dialog> -->
     </div>
 </template>
 

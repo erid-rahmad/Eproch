@@ -1,6 +1,6 @@
 <template>
     <div class="add-announcement">
-        <el-row >
+        <el-row>
             <el-col :span="24">
                 <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
                     Back
@@ -15,7 +15,7 @@
         </el-divider>
         <el-row :gutter="24">
             <el-col :xs="24" :sm="12" :lg="17">
-                <el-form ref="form"  label-width="120px" size="mini">
+                <el-form ref="form" label-width="120px" size="mini">
                     <el-form-item label="Kode Tender">
                         <template>
                             <el-select v-model="value" filterable placeholder="Select">
@@ -34,7 +34,13 @@
                         </template>
                     </el-form-item>
                     <el-form-item label="Deskripsi">
-                        <tiptap :editor="editor" @email="emailFromChild=$event "></tiptap>
+                        <Editor v-model="content" />                     
+
+                       
+                            <!-- <h3>Content</h3>
+                            <pre><code>{{ content }}</code></pre> -->
+                     
+                        <!-- <tiptap :editor="editor" @email="emailFromChild=$event "></tiptap> -->
 
                     </el-form-item>
                     <el-form-item size="large">
@@ -71,20 +77,7 @@
             <div>
                 <el-dialog title="View" :visible.sync="dialogTableVisible">
                     <template>
-                        <div>
-                            <p>
-                                <br>Kepada Bapak/Ibu Pimpinan
-                                <br>PT Sistech
-                                <br><span th:text="${BIDING_DATA.vendorSelection}"></span>
-                                <br>Hal: Undangan Bidding
-                                <br>Dengan hormat</p>
-                            <p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut
-                                . Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut
-                                . Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan
-                                sampaikan ke email eproc.berca.co.id </p>
-                            <p>Hormat Kami
-                                <br>Berca.co.id</p>
-                        </div>
+                        <div v-html="content"></div>
                     </template>
                 </el-dialog>
 

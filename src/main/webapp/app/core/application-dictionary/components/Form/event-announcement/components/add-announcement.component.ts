@@ -1,8 +1,7 @@
 import { Component, Inject,Watch } from "vue-property-decorator";
-import { Editor, EditorContent } from '@tiptap/vue-2'
-import { defaultExtensions } from '@tiptap/starter-kit'
-import MenuItem from './MenuItem.vue'
-import tiptap from './Vue/index.vue'
+
+import tiptap from './VModel/index.vue'
+import Editor from './VModel/Editor.vue'
 import AlertMixin from '@/shared/alert/alert.mixin';
 import { mixins } from 'vue-class-component';
 import Vue2Filters from 'vue2-filters';
@@ -12,10 +11,10 @@ import AccountService from '@/account/account.service';
 
 @Component({
   components: {
-    tiptap,
+    Editor,   
   }
 })
-export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, AlertMixin,EditorContent,AccessLevelMixin) {
+export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, AlertMixin,AccessLevelMixin) {
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
@@ -47,7 +46,7 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
 
   multipleSelection= [];
 
-  editor = null;
+  private content = '<p><br>Kepada Bapak/Ibu Pimpinan <br>#VendorName <br>Hal: Undangan #TenderName <br>Dengan hormat </p><p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>';
 
 
 
@@ -65,6 +64,13 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
   onDataChanged(data: any) {
     console.log('Value:', data);
     this.getDataForAnnouncment();
+  }
+
+  @Watch('emailFromChild')
+  onDataChangeemail(data: any) {
+    console.log('Value:', data);
+  console.log("changeit");
+  
   }
 
   @Watch('dataForAnnouncment')
@@ -131,9 +137,7 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
       this.multipleSelection = val;
   }
 
-  beforeDestroy() {
-    this.editor.destroy()
-  }
+
 
   back() {
     this.$emit("back")
@@ -247,7 +251,8 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
   }
   else {
       console.log(this.multipleSelection);
-      this.Announcment.description = "<p><br>Kepada Bapak/Ibu Pimpinan <br>#VendorName <br>Hal: Undangan #TenderName <br>Dengan hormat </p><p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>";
+      this.Announcment.description = this.content;
+      console.log("description",this.Announcment.description);      
       this.Announcment.adOrganizationId = 1;
       this.Announcment.biddingId = this.value;
       this.Announcment.active = true;
