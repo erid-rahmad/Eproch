@@ -8,6 +8,7 @@ import AddAnnouncementForm from './components/add-announcement.vue';
 import DetailsAnnouncementForm from './components/details-announcement.vue';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
 
 @Component({
@@ -41,6 +42,12 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
 
   mounted() {
     this.announcmentGrid();
+ 
+    console.log("thislog",accountStore.userDetails.cVendorId);
+    
+  
+    
+    
   }
 
   private announcmentGrid() {
@@ -61,6 +68,13 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
         console.log("announcmentGridData",this.announcmentGridData);
 
       });
+  }
+  public get settingsAccount(): any {
+    return accountStore.account;
+  }
+
+  public get username(): string {
+    return accountStore.account ? accountStore.account.login : '';
   }
 
   viewBidding(row){

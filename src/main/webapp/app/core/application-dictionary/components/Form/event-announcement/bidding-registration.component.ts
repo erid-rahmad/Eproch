@@ -8,7 +8,7 @@ import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import moment from 'moment';
 import axios from 'axios';
-
+import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 
 @Component
 export default class BiddingRegistration extends mixins(Vue2Filters.mixin, AccessLevelMixin,AlertMixin, ContextVariableAccessor) {
@@ -33,14 +33,31 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
   private info: any = {};
   private pickdetailemail: any = {}; 
 
+  private vendor = '';
+
   mounted() {
+    if (this.isVendor == true) {
+      this.vendor = accountStore.userDetails.cVendorId ;
+    } 
     this.biddingInvitations();
     this.getAnnouncment();
     this.getemail();
-    
   }
+
   help() {
     console.log("this info",this.info);    
+  }
+
+  get isVendor() {
+    return accountStore.isVendor;
+  }
+
+  public get settingsAccount(): any {
+    return accountStore.account;
+  }
+
+  public get username(): string {
+    return accountStore.account ? accountStore.account.login : '';
   }
 
   @Watch('pickdetailemail')
@@ -53,7 +70,8 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
     this.commonService('/api/m-bidding-invitations')
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          'active.equals=true'
+          // 'active.equals=true',
+          `vendorId.equals=${this.vendor}`
 
         ]),
         paginationQuery: {
