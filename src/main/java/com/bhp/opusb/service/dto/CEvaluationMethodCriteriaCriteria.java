@@ -27,6 +27,8 @@ public class CEvaluationMethodCriteriaCriteria implements Serializable, Criteria
 
     private LongFilter id;
 
+    private IntegerFilter weight;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -35,15 +37,19 @@ public class CEvaluationMethodCriteriaCriteria implements Serializable, Criteria
 
     private LongFilter evaluationMethodLineId;
 
+    private LongFilter biddingCriteriaId;
+
     public CEvaluationMethodCriteriaCriteria() {
     }
 
     public CEvaluationMethodCriteriaCriteria(CEvaluationMethodCriteriaCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
+        this.weight = other.weight == null ? null : other.weight.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.evaluationMethodLineId = other.evaluationMethodLineId == null ? null : other.evaluationMethodLineId.copy();
+        this.biddingCriteriaId = other.biddingCriteriaId == null ? null : other.biddingCriteriaId.copy();
     }
 
     @Override
@@ -57,6 +63,14 @@ public class CEvaluationMethodCriteriaCriteria implements Serializable, Criteria
 
     public void setId(LongFilter id) {
         this.id = id;
+    }
+
+    public IntegerFilter getWeight() {
+        return weight;
+    }
+
+    public void setWeight(IntegerFilter weight) {
+        this.weight = weight;
     }
 
     public UUIDFilter getUid() {
@@ -91,6 +105,14 @@ public class CEvaluationMethodCriteriaCriteria implements Serializable, Criteria
         this.evaluationMethodLineId = evaluationMethodLineId;
     }
 
+    public LongFilter getBiddingCriteriaId() {
+        return biddingCriteriaId;
+    }
+
+    public void setBiddingCriteriaId(LongFilter biddingCriteriaId) {
+        this.biddingCriteriaId = biddingCriteriaId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -103,20 +125,24 @@ public class CEvaluationMethodCriteriaCriteria implements Serializable, Criteria
         final CEvaluationMethodCriteriaCriteria that = (CEvaluationMethodCriteriaCriteria) o;
         return
             Objects.equals(id, that.id) &&
+            Objects.equals(weight, that.weight) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(evaluationMethodLineId, that.evaluationMethodLineId);
+            Objects.equals(evaluationMethodLineId, that.evaluationMethodLineId) &&
+            Objects.equals(biddingCriteriaId, that.biddingCriteriaId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(
         id,
+        weight,
         uid,
         active,
         adOrganizationId,
-        evaluationMethodLineId
+        evaluationMethodLineId,
+        biddingCriteriaId
         );
     }
 
@@ -124,10 +150,12 @@ public class CEvaluationMethodCriteriaCriteria implements Serializable, Criteria
     public String toString() {
         return "CEvaluationMethodCriteriaCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
+                (weight != null ? "weight=" + weight + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (evaluationMethodLineId != null ? "evaluationMethodLineId=" + evaluationMethodLineId + ", " : "") +
+                (biddingCriteriaId != null ? "biddingCriteriaId=" + biddingCriteriaId + ", " : "") +
             "}";
     }
 

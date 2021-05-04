@@ -1,5 +1,6 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -8,7 +9,7 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.CEvalMethodSubCriteria} entity.
  */
 public class CEvalMethodSubCriteriaDTO implements Serializable {
-    
+
     private Long id;
 
     private Integer weight;
@@ -26,6 +27,8 @@ public class CEvalMethodSubCriteriaDTO implements Serializable {
 
     private Long biddingSubCriteriaId;
     private String biddingSubCriteriaName;
+
+    private Long evaluationMethodCriteriaId;
 
     public Long getId() {
         return id;
@@ -106,7 +109,15 @@ public class CEvalMethodSubCriteriaDTO implements Serializable {
     public void setBiddingSubCriteriaName(String biddingSubCriteriaName) {
         this.biddingSubCriteriaName = biddingSubCriteriaName;
     }
-    
+
+    public Long getEvaluationMethodCriteriaId() {
+        return evaluationMethodCriteriaId;
+    }
+
+    public void setEvaluationMethodCriteriaId(Long cEvaluationMethodCriteriaId) {
+        this.evaluationMethodCriteriaId = cEvaluationMethodCriteriaId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -138,6 +149,7 @@ public class CEvalMethodSubCriteriaDTO implements Serializable {
             ", adOrganizationId=" + getAdOrganizationId() +
             ", biddingCriteriaId=" + getBiddingCriteriaId() +
             ", biddingSubCriteriaId=" + getBiddingSubCriteriaId() +
+            ", evaluationMethodCriteriaId=" + getEvaluationMethodCriteriaId() +
             "}";
     }
 }

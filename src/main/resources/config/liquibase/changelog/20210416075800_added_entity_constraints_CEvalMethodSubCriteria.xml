@@ -7,7 +7,7 @@
         Added the constraints for entity CEvalMethodSubCriteria.
     -->
     <changeSet id="20210416075800-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="c_eval_method_sub_criteria"
                                  constraintName="fk_c_eval_method_sub_criteria_ad_organization_id"
@@ -26,5 +26,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_bidding_sub_criteria"/>
 
+    </changeSet>
+    <changeSet id="202105051148010" author="erid">
+        <addForeignKeyConstraint baseColumnNames="evaluation_method_criteria_id"
+                                 baseTableName="c_eval_method_sub_criteria"
+                                 constraintName="fk_c_eval_method_sub_criteria_evaluation_method_criteria_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_evaluation_method_criteria"/>
     </changeSet>
 </databaseChangeLog>

@@ -1,12 +1,19 @@
 package com.bhp.opusb.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.JoinType;
 
+import com.bhp.opusb.service.dto.CBiddingSubCriteriaLineCriteria;
+import com.bhp.opusb.service.dto.CBiddingSubCriteriaLineDTO;
+import com.bhp.opusb.web.rest.CBiddingSubCriteriaLineResource;
+import io.github.jhipster.service.filter.LongFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -41,6 +48,11 @@ public class CBiddingSubCriteriaQueryService extends QueryService<CBiddingSubCri
         this.cBiddingSubCriteriaRepository = cBiddingSubCriteriaRepository;
         this.cBiddingSubCriteriaMapper = cBiddingSubCriteriaMapper;
     }
+//    @Autowired
+
+
+    @Autowired
+    CBiddingSubCriteriaLineQueryService cBiddingSubCriteriaLineQueryService;
 
     /**
      * Return a {@link List} of {@link CBiddingSubCriteriaDTO} which matches the criteria from the database.
@@ -62,10 +74,29 @@ public class CBiddingSubCriteriaQueryService extends QueryService<CBiddingSubCri
      */
     @Transactional(readOnly = true)
     public Page<CBiddingSubCriteriaDTO> findByCriteria(CBiddingSubCriteriaCriteria criteria, Pageable page) {
-        log.debug("find by criteria : {}, page: {}", criteria, page);
+        log.debug("find by criteria tes : {}, page: {}", criteria, page);
         final Specification<CBiddingSubCriteria> specification = createSpecification(criteria);
-        return cBiddingSubCriteriaRepository.findAll(specification, page)
+        Page<CBiddingSubCriteriaDTO> cBiddingSubCriteriaDTO =cBiddingSubCriteriaRepository.findAll(specification, page)
             .map(cBiddingSubCriteriaMapper::toDto);
+        List<CBiddingSubCriteriaDTO> cBiddingSubCriteriaDTOS = new ArrayList<>();
+
+        for(CBiddingSubCriteriaDTO cBiddingSubCriteriaDTO_ : cBiddingSubCriteriaDTO.getContent()){
+            LongFilter longFilter = new LongFilter();
+            CBiddingSubCriteriaLineCriteria lineCriteria = new CBiddingSubCriteriaLineCriteria();
+            LongFilter x = (LongFilter) longFilter.setEquals(cBiddingSubCriteriaDTO_.getId());
+            lineCriteria.setBiddingSubCriteriaId(x);
+            List<CBiddingSubCriteriaLineDTO> subCriteriaLineDTOS= cBiddingSubCriteriaLineQueryService.findByCriteria(lineCriteria);
+            log.info("this is subCriteriaLineDTOS {}",subCriteriaLineDTOS);
+            cBiddingSubCriteriaDTO_.setCriteriaLineDTO(subCriteriaLineDTOS);
+            cBiddingSubCriteriaDTOS.add(cBiddingSubCriteriaDTO_);
+        }
+
+        log.info("this final {}",cBiddingSubCriteriaDTOS);
+        Page<CBiddingSubCriteriaDTO> pages = new PageImpl<>(cBiddingSubCriteriaDTOS);
+
+        return pages ;
+
+
     }
 
     /**

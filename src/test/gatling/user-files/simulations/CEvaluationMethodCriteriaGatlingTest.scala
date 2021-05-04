@@ -72,6 +72,7 @@ class CEvaluationMethodCriteriaGatlingTest extends Simulation {
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
+                , "weight":"0"
                 , "uid":null
                 , "active":null
                 }""")).asJson

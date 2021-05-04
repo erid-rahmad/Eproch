@@ -1,11 +1,13 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { ElForm } from 'element-ui/types/form';
 import Vue from 'vue';
-import Component from 'vue-class-component';
-import { Inject, Mixins } from 'vue-property-decorator';
+
+import { Component, Inject,Watch } from "vue-property-decorator";
+import { Mixins } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
 import PrequalificationForm from './prequalification-form.vue';
+import { watch } from 'fs';
 
 const VendorScoringProp = Vue.extend({
   props: {
@@ -35,7 +37,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   };
   rules = {}
 
-  evaluationMethod = 'Tender Goods';
+
   processing = false;
   dialogConfirmationVisible:boolean = false;
 
@@ -54,6 +56,10 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   private num = 1958806;
   bidding: Record<string, any> = {};
   private line: any = {};
+  private evaluationMethod: any = {};
+  private value = '';
+  private EvaluationMethodLine: any = {};
+  private biddingsubcriteria: any = {};
 
   get readOnly() {
     return this.bidding.biddingStatus === 'In Progress';
@@ -64,61 +70,82 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     console.log("this bidding",this.bidding);
     
     this.bidding.step = BiddingStep.SCORING;
-    // this.bidding.scoringCriteria = [
-    //   {
-    //     criteria: 'Quality',
-    //     criteriaObj: '',
-    //     subCriteria: 'Quality',
-    //     subCriteriaObj: '',
-    //     percentage: 20,
-    //     pic: 'Procurement',
-    //     picName: 'Procurement'
-    //   },
-    //   {
-    //     criteria: 'Cost',
-    //     criteriaObj: '',
-    //     subCriteria: 'Cost',
-    //     subCriteriaObj: '',
-    //     percentage: 40,
-    //     pic: 'admincost',
-    //     picName: 'admincost'
-    //   },
-    //   {
-    //     criteria: 'Delivery',
-    //     criteriaObj: '',
-    //     subCriteria: 'Timeline',
-    //     subCriteriaObj: '',
-    //     percentage: 15,
-    //     pic: 'admintimeline',
-    //     picName: 'admintimeline'
-    //   },
-    //   {
-    //     criteria: 'Safety',
-    //     criteriaObj: '',
-    //     subCriteria: 'Packaging',
-    //     subCriteriaObj: '',
-    //     percentage: 15,
-    //     pic: 'adminpackaging',
-    //     picName: 'adminpackaging'
-    //   },
-    //   {
-    //     criteria: 'Morale',
-    //     criteriaObj: '',
-    //     subCriteria: 'Morale',
-    //     subCriteriaObj: '',
-    //     percentage: 15,
-    //     pic: 'adminmorale',
-    //     picName: 'adminmorale'
-    //   }
-    // ];
-    this.getVendorScoringLine();
+
+    this.getEvaluationMethod();
+ 
     this.getVendorScoring();
     
-    this.getCriteria();
+    this.getVendorScoringLine();
 
+    this.getbiddingsubcriteria();
     
+    // this.getCriteria();    
     
   }
+
+  @Watch('value')
+  getLineVendorscoring() {
+    this.getEvaluationMethodLine()
+    
+    }
+    
+
+  private getEvaluationMethod() {
+    this.commonService('/api/c-evaluation-methods')
+      .retrieve({
+        criteriaQuery: [
+          
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.evaluationMethod = res.data;
+        console.log("this.evaluationMethod", this.evaluationMethod);
+      });
+  }
+
+  private getEvaluationMethodLine() {
+    this.commonService('api/c-evaluation-method-lines')
+      .retrieve({
+        criteriaQuery: [
+          `evaluationMethodId.equals=${this.value}`
+          
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.EvaluationMethodLine = res.data;
+        console.log("this.EvaluationMethodLine", this.EvaluationMethodLine);
+      });
+  }
+
+  private getbiddingsubcriteria() {
+    this.commonService('api/c-bidding-sub-criteria')
+      .retrieve({
+        criteriaQuery: [
+          `biddingCriteriaId.equals=1955454`          
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.biddingsubcriteria = res.data;
+        console.log("this.getbiddingsubcriteria", this.biddingsubcriteria);
+      });
+  }
+
+
 
   private getVendorScoring() {
     this.commonService('/api/m-vendor-scorings')
@@ -155,6 +182,11 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
         console.log("this.bidding.scoringCriteria.line", this.line);
         
       });
+  }
+
+  private pushVendorScoringLine(data) {
+    this.commonService('/api/m-vendor-scoring-lines')
+      .create(data);
   }
 
   private getCriteria() {
@@ -198,7 +230,9 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     this.vendorScoringCriteria.picName = subCriteriaObj.adUserUserName;
   }
 
-  addScoring() {
+  addScoring(row) {
+    console.log("this row",row);
+    
     this.dialogConfirmationVisible = true;
   }
 

@@ -1,5 +1,6 @@
 package com.bhp.opusb.service.dto;
 
+import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -8,8 +9,10 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.CEvaluationMethodCriteria} entity.
  */
 public class CEvaluationMethodCriteriaDTO implements Serializable {
-    
+
     private Long id;
+
+    private Integer weight;
 
     private UUID uid;
 
@@ -22,12 +25,31 @@ public class CEvaluationMethodCriteriaDTO implements Serializable {
     private Long evaluationMethodLineId;
     private String evaluationMethodLineName;
 
+    private Long biddingCriteriaId;
+    private String biddingCriteriaName;
+
+    public String getBiddingCriteriaName() {
+        return biddingCriteriaName;
+    }
+
+    public void setBiddingCriteriaName(String biddingCriteriaName) {
+        this.biddingCriteriaName = biddingCriteriaName;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Integer getWeight() {
+        return weight;
+    }
+
+    public void setWeight(Integer weight) {
+        this.weight = weight;
     }
 
     public UUID getUid() {
@@ -78,6 +100,14 @@ public class CEvaluationMethodCriteriaDTO implements Serializable {
         this.evaluationMethodLineName = evaluationMethodLineName;
     }
 
+    public Long getBiddingCriteriaId() {
+        return biddingCriteriaId;
+    }
+
+    public void setBiddingCriteriaId(Long cBiddingCriteriaId) {
+        this.biddingCriteriaId = cBiddingCriteriaId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -102,11 +132,16 @@ public class CEvaluationMethodCriteriaDTO implements Serializable {
     @Override
     public String toString() {
         return "CEvaluationMethodCriteriaDTO{" +
-            "id=" + getId() +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", evaluationMethodLineId=" + getEvaluationMethodLineId() +
-            "}";
+            "id=" + id +
+            ", weight=" + weight +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", evaluationMethodLineId=" + evaluationMethodLineId +
+            ", evaluationMethodLineName='" + evaluationMethodLineName + '\'' +
+            ", biddingCriteriaId=" + biddingCriteriaId +
+            ", biddingCriteriaName='" + biddingCriteriaName + '\'' +
+            '}';
     }
 }

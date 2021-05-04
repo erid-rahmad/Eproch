@@ -91,6 +91,9 @@ public class CEvaluationMethodCriteriaQueryService extends QueryService<CEvaluat
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), CEvaluationMethodCriteria_.id));
             }
+            if (criteria.getWeight() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getWeight(), CEvaluationMethodCriteria_.weight));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CEvaluationMethodCriteria_.uid));
             }
@@ -104,6 +107,10 @@ public class CEvaluationMethodCriteriaQueryService extends QueryService<CEvaluat
             if (criteria.getEvaluationMethodLineId() != null) {
                 specification = specification.and(buildSpecification(criteria.getEvaluationMethodLineId(),
                     root -> root.join(CEvaluationMethodCriteria_.evaluationMethodLine, JoinType.LEFT).get(CEvaluationMethodLine_.id)));
+            }
+            if (criteria.getBiddingCriteriaId() != null) {
+                specification = specification.and(buildSpecification(criteria.getBiddingCriteriaId(),
+                    root -> root.join(CEvaluationMethodCriteria_.biddingCriteria, JoinType.LEFT).get(CBiddingCriteria_.id)));
             }
         }
         return specification;

@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.CEvaluationMethodCriteria;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CEvaluationMethodLine;
+import com.bhp.opusb.domain.CBiddingCriteria;
 import com.bhp.opusb.repository.CEvaluationMethodCriteriaRepository;
 import com.bhp.opusb.service.CEvaluationMethodCriteriaService;
 import com.bhp.opusb.service.dto.CEvaluationMethodCriteriaDTO;
@@ -37,6 +38,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WithMockUser
 public class CEvaluationMethodCriteriaResourceIT {
+
+    private static final Integer DEFAULT_WEIGHT = 1;
+    private static final Integer UPDATED_WEIGHT = 2;
+    private static final Integer SMALLER_WEIGHT = 1 - 1;
 
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
@@ -72,6 +77,7 @@ public class CEvaluationMethodCriteriaResourceIT {
      */
     public static CEvaluationMethodCriteria createEntity(EntityManager em) {
         CEvaluationMethodCriteria cEvaluationMethodCriteria = new CEvaluationMethodCriteria()
+            .weight(DEFAULT_WEIGHT)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -84,6 +90,16 @@ public class CEvaluationMethodCriteriaResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         cEvaluationMethodCriteria.setAdOrganization(aDOrganization);
+        // Add required entity
+        CBiddingCriteria cBiddingCriteria;
+        if (TestUtil.findAll(em, CBiddingCriteria.class).isEmpty()) {
+            cBiddingCriteria = CBiddingCriteriaResourceIT.createEntity(em);
+            em.persist(cBiddingCriteria);
+            em.flush();
+        } else {
+            cBiddingCriteria = TestUtil.findAll(em, CBiddingCriteria.class).get(0);
+        }
+        cEvaluationMethodCriteria.setBiddingCriteria(cBiddingCriteria);
         return cEvaluationMethodCriteria;
     }
     /**
@@ -94,6 +110,7 @@ public class CEvaluationMethodCriteriaResourceIT {
      */
     public static CEvaluationMethodCriteria createUpdatedEntity(EntityManager em) {
         CEvaluationMethodCriteria cEvaluationMethodCriteria = new CEvaluationMethodCriteria()
+            .weight(UPDATED_WEIGHT)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -106,6 +123,16 @@ public class CEvaluationMethodCriteriaResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         cEvaluationMethodCriteria.setAdOrganization(aDOrganization);
+        // Add required entity
+        CBiddingCriteria cBiddingCriteria;
+        if (TestUtil.findAll(em, CBiddingCriteria.class).isEmpty()) {
+            cBiddingCriteria = CBiddingCriteriaResourceIT.createUpdatedEntity(em);
+            em.persist(cBiddingCriteria);
+            em.flush();
+        } else {
+            cBiddingCriteria = TestUtil.findAll(em, CBiddingCriteria.class).get(0);
+        }
+        cEvaluationMethodCriteria.setBiddingCriteria(cBiddingCriteria);
         return cEvaluationMethodCriteria;
     }
 
@@ -130,6 +157,7 @@ public class CEvaluationMethodCriteriaResourceIT {
         List<CEvaluationMethodCriteria> cEvaluationMethodCriteriaList = cEvaluationMethodCriteriaRepository.findAll();
         assertThat(cEvaluationMethodCriteriaList).hasSize(databaseSizeBeforeCreate + 1);
         CEvaluationMethodCriteria testCEvaluationMethodCriteria = cEvaluationMethodCriteriaList.get(cEvaluationMethodCriteriaList.size() - 1);
+        assertThat(testCEvaluationMethodCriteria.getWeight()).isEqualTo(DEFAULT_WEIGHT);
         assertThat(testCEvaluationMethodCriteria.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCEvaluationMethodCriteria.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -166,6 +194,7 @@ public class CEvaluationMethodCriteriaResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEvaluationMethodCriteria.getId().intValue())))
+            .andExpect(jsonPath("$.[*].weight").value(hasItem(DEFAULT_WEIGHT)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -181,6 +210,7 @@ public class CEvaluationMethodCriteriaResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cEvaluationMethodCriteria.getId().intValue()))
+            .andExpect(jsonPath("$.weight").value(DEFAULT_WEIGHT))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -202,6 +232,111 @@ public class CEvaluationMethodCriteriaResourceIT {
 
         defaultCEvaluationMethodCriteriaShouldBeFound("id.lessThanOrEqual=" + id);
         defaultCEvaluationMethodCriteriaShouldNotBeFound("id.lessThan=" + id);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodCriteriaByWeightIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
+
+        // Get all the cEvaluationMethodCriteriaList where weight equals to DEFAULT_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldBeFound("weight.equals=" + DEFAULT_WEIGHT);
+
+        // Get all the cEvaluationMethodCriteriaList where weight equals to UPDATED_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldNotBeFound("weight.equals=" + UPDATED_WEIGHT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodCriteriaByWeightIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
+
+        // Get all the cEvaluationMethodCriteriaList where weight not equals to DEFAULT_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldNotBeFound("weight.notEquals=" + DEFAULT_WEIGHT);
+
+        // Get all the cEvaluationMethodCriteriaList where weight not equals to UPDATED_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldBeFound("weight.notEquals=" + UPDATED_WEIGHT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodCriteriaByWeightIsInShouldWork() throws Exception {
+        // Initialize the database
+        cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
+
+        // Get all the cEvaluationMethodCriteriaList where weight in DEFAULT_WEIGHT or UPDATED_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldBeFound("weight.in=" + DEFAULT_WEIGHT + "," + UPDATED_WEIGHT);
+
+        // Get all the cEvaluationMethodCriteriaList where weight equals to UPDATED_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldNotBeFound("weight.in=" + UPDATED_WEIGHT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodCriteriaByWeightIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
+
+        // Get all the cEvaluationMethodCriteriaList where weight is not null
+        defaultCEvaluationMethodCriteriaShouldBeFound("weight.specified=true");
+
+        // Get all the cEvaluationMethodCriteriaList where weight is null
+        defaultCEvaluationMethodCriteriaShouldNotBeFound("weight.specified=false");
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodCriteriaByWeightIsGreaterThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
+
+        // Get all the cEvaluationMethodCriteriaList where weight is greater than or equal to DEFAULT_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldBeFound("weight.greaterThanOrEqual=" + DEFAULT_WEIGHT);
+
+        // Get all the cEvaluationMethodCriteriaList where weight is greater than or equal to UPDATED_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldNotBeFound("weight.greaterThanOrEqual=" + UPDATED_WEIGHT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodCriteriaByWeightIsLessThanOrEqualToSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
+
+        // Get all the cEvaluationMethodCriteriaList where weight is less than or equal to DEFAULT_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldBeFound("weight.lessThanOrEqual=" + DEFAULT_WEIGHT);
+
+        // Get all the cEvaluationMethodCriteriaList where weight is less than or equal to SMALLER_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldNotBeFound("weight.lessThanOrEqual=" + SMALLER_WEIGHT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodCriteriaByWeightIsLessThanSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
+
+        // Get all the cEvaluationMethodCriteriaList where weight is less than DEFAULT_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldNotBeFound("weight.lessThan=" + DEFAULT_WEIGHT);
+
+        // Get all the cEvaluationMethodCriteriaList where weight is less than UPDATED_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldBeFound("weight.lessThan=" + UPDATED_WEIGHT);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodCriteriaByWeightIsGreaterThanSomething() throws Exception {
+        // Initialize the database
+        cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
+
+        // Get all the cEvaluationMethodCriteriaList where weight is greater than DEFAULT_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldNotBeFound("weight.greaterThan=" + DEFAULT_WEIGHT);
+
+        // Get all the cEvaluationMethodCriteriaList where weight is greater than SMALLER_WEIGHT
+        defaultCEvaluationMethodCriteriaShouldBeFound("weight.greaterThan=" + SMALLER_WEIGHT);
     }
 
 
@@ -344,6 +479,22 @@ public class CEvaluationMethodCriteriaResourceIT {
         defaultCEvaluationMethodCriteriaShouldNotBeFound("evaluationMethodLineId.equals=" + (evaluationMethodLineId + 1));
     }
 
+
+    @Test
+    @Transactional
+    public void getAllCEvaluationMethodCriteriaByBiddingCriteriaIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CBiddingCriteria biddingCriteria = cEvaluationMethodCriteria.getBiddingCriteria();
+        cEvaluationMethodCriteriaRepository.saveAndFlush(cEvaluationMethodCriteria);
+        Long biddingCriteriaId = biddingCriteria.getId();
+
+        // Get all the cEvaluationMethodCriteriaList where biddingCriteria equals to biddingCriteriaId
+        defaultCEvaluationMethodCriteriaShouldBeFound("biddingCriteriaId.equals=" + biddingCriteriaId);
+
+        // Get all the cEvaluationMethodCriteriaList where biddingCriteria equals to biddingCriteriaId + 1
+        defaultCEvaluationMethodCriteriaShouldNotBeFound("biddingCriteriaId.equals=" + (biddingCriteriaId + 1));
+    }
+
     /**
      * Executes the search, and checks that the default entity is returned.
      */
@@ -352,6 +503,7 @@ public class CEvaluationMethodCriteriaResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEvaluationMethodCriteria.getId().intValue())))
+            .andExpect(jsonPath("$.[*].weight").value(hasItem(DEFAULT_WEIGHT)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -401,6 +553,7 @@ public class CEvaluationMethodCriteriaResourceIT {
         // Disconnect from session so that the updates on updatedCEvaluationMethodCriteria are not directly saved in db
         em.detach(updatedCEvaluationMethodCriteria);
         updatedCEvaluationMethodCriteria
+            .weight(UPDATED_WEIGHT)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CEvaluationMethodCriteriaDTO cEvaluationMethodCriteriaDTO = cEvaluationMethodCriteriaMapper.toDto(updatedCEvaluationMethodCriteria);
@@ -414,6 +567,7 @@ public class CEvaluationMethodCriteriaResourceIT {
         List<CEvaluationMethodCriteria> cEvaluationMethodCriteriaList = cEvaluationMethodCriteriaRepository.findAll();
         assertThat(cEvaluationMethodCriteriaList).hasSize(databaseSizeBeforeUpdate);
         CEvaluationMethodCriteria testCEvaluationMethodCriteria = cEvaluationMethodCriteriaList.get(cEvaluationMethodCriteriaList.size() - 1);
+        assertThat(testCEvaluationMethodCriteria.getWeight()).isEqualTo(UPDATED_WEIGHT);
         assertThat(testCEvaluationMethodCriteria.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCEvaluationMethodCriteria.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

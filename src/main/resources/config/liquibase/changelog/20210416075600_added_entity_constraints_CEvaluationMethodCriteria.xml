@@ -7,7 +7,7 @@
         Added the constraints for entity CEvaluationMethodCriteria.
     -->
     <changeSet id="20210416075600-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="c_evaluation_method_criteria"
                                  constraintName="fk_c_evaluation_method_criteria_ad_organization_id"
@@ -20,5 +20,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_evaluation_method_line"/>
 
+    </changeSet>
+    <changeSet id="202105051126" author="">
+        <addForeignKeyConstraint baseColumnNames="bidding_criteria_id"
+                                 baseTableName="c_evaluation_method_criteria"
+                                 constraintName="fk_c_evaluation_method_criteria_bidding_criteria_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_bidding_criteria"/>
     </changeSet>
 </databaseChangeLog>

@@ -985,6 +985,7 @@ entity CEvaluationMethodLine {
 }
 
 entity CEvaluationMethodCriteria {
+    weight Integer
 	uid UUID
 	active Boolean
 
@@ -1264,7 +1265,7 @@ relationship OneToMany {
 
 	// Bidding schedule attachments.
 	MBiddingSchedule to MBiddingScheduleAttachment{biddingSchedule required}
-	
+
 	// Pre-bid Meeting attachments.
 	MPreBidMeeting to MPreBidMeetingAttachment{preBidMeeting required}
 
@@ -1597,6 +1598,7 @@ relationship ManyToOne {
 
 	CEvaluationMethodCriteria{adOrganization required} to ADOrganization
 	CEvaluationMethodCriteria{evaluationMethodLine } to CEvaluationMethodLine
+	CEvaluationMethodCriteria{biddingCriteria required} to CBiddingCriteria
 
 	CEvalMethodCriteriaLine{adOrganization required} to ADOrganization
 	CEvalMethodCriteriaLine{biddingCriteria required} to CBiddingCriteria
@@ -1604,6 +1606,7 @@ relationship ManyToOne {
 	CEvalMethodSubCriteria{adOrganization required} to ADOrganization
 	CEvalMethodSubCriteria{biddingCriteria required} to CBiddingCriteria
 	CEvalMethodSubCriteria{biddingSubCriteria required} to CBiddingSubCriteria
+	CEvalMethodSubCriteria{evaluationMethodCriteria required} to CEvaluationMethodCriteria
 
 
 

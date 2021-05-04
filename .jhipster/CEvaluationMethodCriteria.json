@@ -2,6 +2,10 @@
     "name": "CEvaluationMethodCriteria",
     "fields": [
         {
+            "fieldName": "weight",
+            "fieldType": "Integer"
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },
@@ -24,6 +28,14 @@
             "otherEntityName": "cEvaluationMethodLine",
             "otherEntityRelationshipName": "cEvaluationMethodCriteria",
             "relationshipName": "evaluationMethodLine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingCriteria",
+            "otherEntityRelationshipName": "cEvaluationMethodCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingCriteria",
             "otherEntityField": "id"
         }
     ],

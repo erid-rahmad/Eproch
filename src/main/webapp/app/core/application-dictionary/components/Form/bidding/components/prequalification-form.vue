@@ -3,11 +3,11 @@
         <el-form ref="mainForm"  label-position="left" label-width="200px" :model="formData" size="mini">
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="Prequalification Method">
+                    <!-- <el-form-item label="Prequalification Method">
                         <el-select v-model="formData.method" class="form-input" clearable filterable>
                             <el-option v-for="item in methods" :key="item.id" :label="item.name" :value="item.id"></el-option>
                         </el-select>
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-col>
             </el-row>
             <el-row v-for="(criteria, index) in formData.criteria" :key="criteria.id" class="criteria-section" :class="`criteria-${index}`">

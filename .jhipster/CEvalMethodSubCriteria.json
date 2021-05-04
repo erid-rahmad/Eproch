@@ -38,6 +38,14 @@
             "relationshipValidateRules": "required",
             "relationshipName": "biddingSubCriteria",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cEvaluationMethodCriteria",
+            "otherEntityRelationshipName": "cEvalMethodSubCriteria",
+            "relationshipValidateRules": "required",
+            "relationshipName": "evaluationMethodCriteria",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210416075800",
