@@ -17,7 +17,7 @@
 
         <el-row :gutter="24">
             <el-col :span="20">
-                <el-table ref="vendorScoring" border :data="EvaluationMethodLine" :default-sort="gridSchema.defaultSort" :empty-text="gridSchema.emptyText" highlight-current-row
+                <el-table ref="vendorScoring" border :data="evaluationMethodLine" :default-sort="gridSchema.defaultSort" :empty-text="gridSchema.emptyText" highlight-current-row
                     size="mini" stripe style="width: 100%">
                     <el-table-column width="48" label="No">
                         <template slot-scope="row">
@@ -60,73 +60,20 @@
             </el-col>
         </el-row>
 
-        <el-dialog width="90%" :visible.sync="dialogConfirmationVisible" title=" Criteria">
+        <el-dialog width="90%" :visible.sync="criteriaPA" title=" Criteria">
 
-            <template>
-                <el-divider content-position="left">
-                    <h4></h4>
-                </el-divider>
-                <prequalification-form :read-only="readOnly"></prequalification-form>
+            <template>    
+                <prequalification-form :pickrow="pickrow"></prequalification-form>
+                <!-- <prequalification-form :read-only="readOnly" :pickrow="pickrow"></prequalification-form> -->
                    <div slot="footer">
                     <el-button style="margin-left: 0px;" size="mini" icon="el-icon-check" type="primary" @click="saveScoring">
                         Save
                     </el-button>
-                    <el-button style="margin-left: 0px;" size="mini" icon="el-icon-close" @click="dialogConfirmationVisible = false">
+                    <el-button style="margin-left: 0px;" size="mini" icon="el-icon-close" @click="closeCriteriaPA">
                         {{ $t('entity.action.cancel') }}
                     </el-button>
                 </div>
-            </template>
-
-            <!-- <template>
-                <div>
-                    <el-form ref="vendorScoringCriteria" label-position="left" label-width="150px" size="mini" :model="vendorScoringCriteria">
-                        <el-row :gutter="24">
-                            <el-col :span="24">
-                                <el-form-item label="Criteria" prop="criteria" required>
-                                    <el-select style="width: 100%" v-model="vendorScoringCriteria.criteria" clearable filterable :placeholder="$t('register.form.select')"
-                                        @change="getSubCriteria($event)">
-                                        <el-option v-for="item in criteriaOptions" :key="item.id" :label="item.name" :value="item.id" />
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                            <el-col :span="24">
-                                <el-form-item label="SubCriteria" prop="subCriteria" required>
-                                    <el-select style="width: 100%" v-model="vendorScoringCriteria.subCriteria" clearable filterable :placeholder="$t('register.form.select')"
-                                        @change="getPic($event)">
-                                        <el-option v-for="item in subCriteriaOptions" :key="item.id" :label="item.name" :value="item.id" />
-                                    </el-select>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                            <el-col :span="24">
-                                <el-form-item label="Percentage" prop="percentage" required>
-                                    <el-input-number v-model="vendorScoringCriteria.percentage" clearable controls-position="right" :max="100" :min="0"></el-input-number>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-                        <el-row :gutter="24">
-                            <el-col :span="24">
-                                <el-form-item label="PIC" prop="picName" required>
-                                    <el-input clearable v-model="vendorScoringCriteria.picName"></el-input>
-                                </el-form-item>
-                            </el-col>
-                        </el-row>
-
-                    </el-form>
-                </div>
-
-                <div slot="footer">
-                    <el-button style="margin-left: 0px;" size="mini" icon="el-icon-check" type="primary" @click="saveScoring">
-                        Save
-                    </el-button>
-                    <el-button style="margin-left: 0px;" size="mini" icon="el-icon-close" @click="dialogConfirmationVisible = false">
-                        {{ $t('entity.action.cancel') }}
-                    </el-button>
-                </div>
-            </template> -->
+            </template>          
         </el-dialog>
 
     </div>

@@ -1,12 +1,18 @@
 package com.bhp.opusb.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.JoinType;
 
+import com.bhp.opusb.service.dto.CBiddingSubCriteriaCriteria;
+import com.bhp.opusb.service.dto.CBiddingSubCriteriaDTO;
+import io.github.jhipster.service.filter.LongFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -42,6 +48,9 @@ public class CEvalMethodSubCriteriaQueryService extends QueryService<CEvalMethod
         this.cEvalMethodSubCriteriaMapper = cEvalMethodSubCriteriaMapper;
     }
 
+    @Autowired
+    CBiddingSubCriteriaQueryService cBiddingSubCriteriaQueryService;
+
     /**
      * Return a {@link List} of {@link CEvalMethodSubCriteriaDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
@@ -63,9 +72,25 @@ public class CEvalMethodSubCriteriaQueryService extends QueryService<CEvalMethod
     @Transactional(readOnly = true)
     public Page<CEvalMethodSubCriteriaDTO> findByCriteria(CEvalMethodSubCriteriaCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
+
         final Specification<CEvalMethodSubCriteria> specification = createSpecification(criteria);
-        return cEvalMethodSubCriteriaRepository.findAll(specification, page)
+        Page<CEvalMethodSubCriteriaDTO> cEvalMethodSubCriteriaDTOS=
+         cEvalMethodSubCriteriaRepository.findAll(specification, page)
             .map(cEvalMethodSubCriteriaMapper::toDto);
+
+        List<CEvalMethodSubCriteriaDTO> CEvalMethodSubCriteriaDTO =new ArrayList<>();
+
+        for(CEvalMethodSubCriteriaDTO evalMethodSubCriteriaDTO_:cEvalMethodSubCriteriaDTOS.getContent()){
+            LongFilter longFilter = new LongFilter();
+            CBiddingSubCriteriaCriteria criteriaCriteria = new CBiddingSubCriteriaCriteria();
+            criteriaCriteria.setId((LongFilter) longFilter.setEquals(evalMethodSubCriteriaDTO_.getBiddingSubCriteriaId()));
+            Page<CBiddingSubCriteriaDTO> biddingSubCriteriaDTOS_=cBiddingSubCriteriaQueryService.findByCriteria(criteriaCriteria,page);
+            log.info("this biddingSubCriteriaDTOS_ {} ",biddingSubCriteriaDTOS_);
+            evalMethodSubCriteriaDTO_.setBiddingSubCriteriaDTO(biddingSubCriteriaDTOS_.getContent());
+            CEvalMethodSubCriteriaDTO.add(evalMethodSubCriteriaDTO_);
+        }
+        Page<CEvalMethodSubCriteriaDTO> pages = new PageImpl<>(CEvalMethodSubCriteriaDTO);
+        return pages;
     }
 
     /**

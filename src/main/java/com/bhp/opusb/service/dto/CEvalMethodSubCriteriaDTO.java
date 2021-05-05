@@ -2,6 +2,7 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -29,6 +30,16 @@ public class CEvalMethodSubCriteriaDTO implements Serializable {
     private String biddingSubCriteriaName;
 
     private Long evaluationMethodCriteriaId;
+
+    private List<CBiddingSubCriteriaDTO> biddingSubCriteriaDTO ;
+
+    public List<CBiddingSubCriteriaDTO> getBiddingSubCriteriaDTO() {
+        return biddingSubCriteriaDTO;
+    }
+
+    public void setBiddingSubCriteriaDTO(List<CBiddingSubCriteriaDTO> biddingSubCriteriaDTO) {
+        this.biddingSubCriteriaDTO = biddingSubCriteriaDTO;
+    }
 
     public Long getId() {
         return id;
@@ -142,14 +153,18 @@ public class CEvalMethodSubCriteriaDTO implements Serializable {
     @Override
     public String toString() {
         return "CEvalMethodSubCriteriaDTO{" +
-            "id=" + getId() +
-            ", weight=" + getWeight() +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", biddingCriteriaId=" + getBiddingCriteriaId() +
-            ", biddingSubCriteriaId=" + getBiddingSubCriteriaId() +
-            ", evaluationMethodCriteriaId=" + getEvaluationMethodCriteriaId() +
-            "}";
+            "id=" + id +
+            ", weight=" + weight +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", biddingCriteriaId=" + biddingCriteriaId +
+            ", biddingCriteriaName='" + biddingCriteriaName + '\'' +
+            ", biddingSubCriteriaId=" + biddingSubCriteriaId +
+            ", biddingSubCriteriaName='" + biddingSubCriteriaName + '\'' +
+            ", evaluationMethodCriteriaId=" + evaluationMethodCriteriaId +
+            ", biddingSubCriteriaDTO=" + biddingSubCriteriaDTO +
+            '}';
     }
 }
