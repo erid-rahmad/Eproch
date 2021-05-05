@@ -1,17 +1,12 @@
 {
-    "name": "MBiddingInvitation",
+    "name": "MProposalPriceSubItem",
     "fields": [
         {
-            "fieldName": "invitationStatus",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "reason",
-            "fieldType": "String"
-        },
-        {
-            "fieldName": "answerDate",
-            "fieldType": "ZonedDateTime"
+            "fieldName": "proposedPrice",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
         },
         {
             "fieldName": "uid",
@@ -26,38 +21,30 @@
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
-            "otherEntityRelationshipName": "mBiddingInvitation",
+            "otherEntityRelationshipName": "mProposalPriceSubItem",
             "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cAnnouncement",
-            "otherEntityRelationshipName": "mBiddingInvitation",
+            "otherEntityName": "mBiddingSubItemLine",
+            "otherEntityRelationshipName": "mProposalPriceSubItem",
             "relationshipValidateRules": "required",
-            "relationshipName": "announcement",
+            "relationshipName": "biddingSubItemLine",
             "otherEntityField": "id"
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "mBidding",
-            "otherEntityRelationshipName": "mBiddingInvitation",
+            "otherEntityName": "mProposalPriceLine",
+            "otherEntityRelationshipName": "mProposalPriceSubItem",
             "relationshipValidateRules": "required",
-            "relationshipName": "bidding",
-            "otherEntityField": "id"
-        },
-        {
-            "relationshipType": "many-to-one",
-            "otherEntityName": "cVendor",
-            "otherEntityRelationshipName": "mBiddingInvitation",
-            "relationshipValidateRules": "required",
-            "relationshipName": "vendor",
+            "relationshipName": "proposalPriceLine",
             "otherEntityField": "id"
         }
     ],
-    "changelogDate": "20210423050500",
-    "entityTableName": "m_bidding_invitation",
+    "changelogDate": "20210505055400",
+    "entityTableName": "m_proposal_price_sub_item",
     "dto": "mapstruct",
     "pagination": "pagination",
     "service": "serviceClass",

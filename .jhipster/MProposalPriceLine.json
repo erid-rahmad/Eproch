@@ -1,0 +1,78 @@
+{
+    "name": "MProposalPriceLine",
+    "fields": [
+        {
+            "fieldName": "proposedPrice",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "totalPriceSubmission",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "deliveryDate",
+            "fieldType": "LocalDate",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "otherEntityName": "mProposalPriceSubItem",
+            "otherEntityRelationshipName": "proposalPriceLine",
+            "relationshipName": "mProposalPriceSubItem"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mProposalPriceLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mProposalPrice",
+            "otherEntityRelationshipName": "mProposalPriceLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "proposalPrice",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingLine",
+            "otherEntityRelationshipName": "mProposalPriceLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210505055300",
+    "entityTableName": "m_proposal_price_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
