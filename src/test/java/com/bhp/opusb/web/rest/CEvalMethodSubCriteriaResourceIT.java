@@ -5,6 +5,7 @@ import com.bhp.opusb.domain.CEvalMethodSubCriteria;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.CBiddingCriteria;
 import com.bhp.opusb.domain.CBiddingSubCriteria;
+import com.bhp.opusb.domain.CEvaluationMethodCriteria;
 import com.bhp.opusb.repository.CEvalMethodSubCriteriaRepository;
 import com.bhp.opusb.service.CEvalMethodSubCriteriaService;
 import com.bhp.opusb.service.dto.CEvalMethodSubCriteriaDTO;
@@ -110,6 +111,16 @@ public class CEvalMethodSubCriteriaResourceIT {
             cBiddingSubCriteria = TestUtil.findAll(em, CBiddingSubCriteria.class).get(0);
         }
         cEvalMethodSubCriteria.setBiddingSubCriteria(cBiddingSubCriteria);
+        // Add required entity
+        CEvaluationMethodCriteria cEvaluationMethodCriteria;
+        if (TestUtil.findAll(em, CEvaluationMethodCriteria.class).isEmpty()) {
+            cEvaluationMethodCriteria = CEvaluationMethodCriteriaResourceIT.createEntity(em);
+            em.persist(cEvaluationMethodCriteria);
+            em.flush();
+        } else {
+            cEvaluationMethodCriteria = TestUtil.findAll(em, CEvaluationMethodCriteria.class).get(0);
+        }
+        cEvalMethodSubCriteria.setEvaluationMethodCriteria(cEvaluationMethodCriteria);
         return cEvalMethodSubCriteria;
     }
     /**
@@ -153,6 +164,16 @@ public class CEvalMethodSubCriteriaResourceIT {
             cBiddingSubCriteria = TestUtil.findAll(em, CBiddingSubCriteria.class).get(0);
         }
         cEvalMethodSubCriteria.setBiddingSubCriteria(cBiddingSubCriteria);
+        // Add required entity
+        CEvaluationMethodCriteria cEvaluationMethodCriteria;
+        if (TestUtil.findAll(em, CEvaluationMethodCriteria.class).isEmpty()) {
+            cEvaluationMethodCriteria = CEvaluationMethodCriteriaResourceIT.createUpdatedEntity(em);
+            em.persist(cEvaluationMethodCriteria);
+            em.flush();
+        } else {
+            cEvaluationMethodCriteria = TestUtil.findAll(em, CEvaluationMethodCriteria.class).get(0);
+        }
+        cEvalMethodSubCriteria.setEvaluationMethodCriteria(cEvaluationMethodCriteria);
         return cEvalMethodSubCriteria;
     }
 
@@ -509,6 +530,22 @@ public class CEvalMethodSubCriteriaResourceIT {
 
         // Get all the cEvalMethodSubCriteriaList where biddingSubCriteria equals to biddingSubCriteriaId + 1
         defaultCEvalMethodSubCriteriaShouldNotBeFound("biddingSubCriteriaId.equals=" + (biddingSubCriteriaId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCEvalMethodSubCriteriaByEvaluationMethodCriteriaIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CEvaluationMethodCriteria evaluationMethodCriteria = cEvalMethodSubCriteria.getEvaluationMethodCriteria();
+        cEvalMethodSubCriteriaRepository.saveAndFlush(cEvalMethodSubCriteria);
+        Long evaluationMethodCriteriaId = evaluationMethodCriteria.getId();
+
+        // Get all the cEvalMethodSubCriteriaList where evaluationMethodCriteria equals to evaluationMethodCriteriaId
+        defaultCEvalMethodSubCriteriaShouldBeFound("evaluationMethodCriteriaId.equals=" + evaluationMethodCriteriaId);
+
+        // Get all the cEvalMethodSubCriteriaList where evaluationMethodCriteria equals to evaluationMethodCriteriaId + 1
+        defaultCEvalMethodSubCriteriaShouldNotBeFound("evaluationMethodCriteriaId.equals=" + (evaluationMethodCriteriaId + 1));
     }
 
     /**

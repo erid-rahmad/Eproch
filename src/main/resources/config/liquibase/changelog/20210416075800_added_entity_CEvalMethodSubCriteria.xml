@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity CEvalMethodSubCriteria.
     -->
@@ -84,6 +84,14 @@
         <addNotNullConstraint tableName="c_eval_method_sub_criteria" columnName="ad_organization_id" />
         <addNotNullConstraint tableName="c_eval_method_sub_criteria" columnName="bidding_criteria_id" />
         <addNotNullConstraint tableName="c_eval_method_sub_criteria" columnName="bidding_sub_criteria_id" />
+    </changeSet>
+
+    <changeSet id="2021050511400" author="erid">
+        <addColumn tableName="c_eval_method_sub_criteria">
+            <column name="evaluation_method_criteria_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

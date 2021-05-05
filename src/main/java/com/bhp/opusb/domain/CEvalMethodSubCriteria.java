@@ -1,22 +1,15 @@
 package com.bhp.opusb.domain;
 
-import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import javax.validation.constraints.*;
+
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * A CEvalMethodSubCriteria.
@@ -56,6 +49,11 @@ public class CEvalMethodSubCriteria extends AbstractAuditingEntity {
     @NotNull
     @JsonIgnoreProperties("cEvalMethodSubCriteria")
     private CBiddingSubCriteria biddingSubCriteria;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("cEvalMethodSubCriteria")
+    private CEvaluationMethodCriteria evaluationMethodCriteria;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -142,6 +140,19 @@ public class CEvalMethodSubCriteria extends AbstractAuditingEntity {
 
     public void setBiddingSubCriteria(CBiddingSubCriteria cBiddingSubCriteria) {
         this.biddingSubCriteria = cBiddingSubCriteria;
+    }
+
+    public CEvaluationMethodCriteria getEvaluationMethodCriteria() {
+        return evaluationMethodCriteria;
+    }
+
+    public CEvalMethodSubCriteria evaluationMethodCriteria(CEvaluationMethodCriteria cEvaluationMethodCriteria) {
+        this.evaluationMethodCriteria = cEvaluationMethodCriteria;
+        return this;
+    }
+
+    public void setEvaluationMethodCriteria(CEvaluationMethodCriteria cEvaluationMethodCriteria) {
+        this.evaluationMethodCriteria = cEvaluationMethodCriteria;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

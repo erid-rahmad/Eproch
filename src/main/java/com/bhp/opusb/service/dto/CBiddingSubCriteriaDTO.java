@@ -2,6 +2,7 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -33,8 +34,15 @@ public class CBiddingSubCriteriaDTO extends AbstractAuditingDTO {
 
     private Long biddingCriteriaId;
     private String biddingCriteriaName;
+    private List<CBiddingSubCriteriaLineDTO> criteriaLineDTO;
 
+    public List<CBiddingSubCriteriaLineDTO> getCriteriaLineDTO() {
+        return criteriaLineDTO;
+    }
 
+    public void setCriteriaLineDTO(List<CBiddingSubCriteriaLineDTO> criteriaLineDTO) {
+        this.criteriaLineDTO = criteriaLineDTO;
+    }
 
     public Long getId() {
         return id;
@@ -149,17 +157,18 @@ public class CBiddingSubCriteriaDTO extends AbstractAuditingDTO {
     @Override
     public String toString() {
         return "CBiddingSubCriteriaDTO{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", description='" + getDescription() + "'" +
-            ", evaluationType='" + getEvaluationType() + "'" +
-            ", multipleOptions='" + isMultipleOptions() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
-            ", biddingCriteriaId=" + getBiddingCriteriaId() +
-            ", biddingCriteriaName=" + getBiddingCriteriaName() +
-            "}";
+            "id=" + id +
+            ", name='" + name + '\'' +
+            ", description='" + description + '\'' +
+            ", evaluationType='" + evaluationType + '\'' +
+            ", multipleOptions=" + multipleOptions +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", adOrganizationName='" + adOrganizationName + '\'' +
+            ", biddingCriteriaId=" + biddingCriteriaId +
+            ", biddingCriteriaName='" + biddingCriteriaName + '\'' +
+            ", criteriaLineDTO=" + criteriaLineDTO +
+            '}';
     }
 }

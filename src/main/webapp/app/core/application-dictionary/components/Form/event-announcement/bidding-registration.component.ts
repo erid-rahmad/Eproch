@@ -33,12 +33,12 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
   private info: any = {};
   private pickdetailemail: any = {}; 
 
-  private vendor = '';
+  private vendorId = '';
 
   mounted() {
     if (this.isVendor == true) {
-      this.vendor = accountStore.userDetails.cVendorId ;
-    } 
+      this.vendorId = accountStore.userDetails.cVendorId ;
+    }
     this.biddingInvitations();
     this.getAnnouncment();
     this.getemail();
@@ -71,7 +71,7 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
       .retrieve({
         criteriaQuery: this.updateCriteria([
           // 'active.equals=true',
-          `vendorId.equals=${this.vendor}`
+          `vendorId.equals=${this.vendorId}`
 
         ]),
         paginationQuery: {

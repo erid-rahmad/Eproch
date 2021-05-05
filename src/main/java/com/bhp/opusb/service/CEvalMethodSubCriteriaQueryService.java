@@ -112,6 +112,10 @@ public class CEvalMethodSubCriteriaQueryService extends QueryService<CEvalMethod
                 specification = specification.and(buildSpecification(criteria.getBiddingSubCriteriaId(),
                     root -> root.join(CEvalMethodSubCriteria_.biddingSubCriteria, JoinType.LEFT).get(CBiddingSubCriteria_.id)));
             }
+            if (criteria.getEvaluationMethodCriteriaId() != null) {
+                specification = specification.and(buildSpecification(criteria.getEvaluationMethodCriteriaId(),
+                    root -> root.join(CEvalMethodSubCriteria_.evaluationMethodCriteria, JoinType.LEFT).get(CEvaluationMethodCriteria_.id)));
+            }
         }
         return specification;
     }

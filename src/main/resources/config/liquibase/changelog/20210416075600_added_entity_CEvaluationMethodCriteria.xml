@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity CEvaluationMethodCriteria.
     -->
@@ -73,6 +73,17 @@
 
     <changeSet id="20210422132700" author="Ananta Aryadewa">
         <addNotNullConstraint tableName="c_evaluation_method_criteria" columnName="ad_organization_id" />
+    </changeSet>
+
+    <changeSet id="20210505112500" author="erid">
+        <addColumn tableName="c_evaluation_method_criteria">
+            <column name="weight" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="bidding_criteria_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

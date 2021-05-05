@@ -50,6 +50,8 @@ export default class PrequalificationForm extends PrequalificationFormProps {
   //   }
   // ]
 
+  
+
   formData = {
     method: 1,
     criteria: [

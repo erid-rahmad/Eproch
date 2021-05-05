@@ -6,16 +6,18 @@
         </el-divider>
         <el-form inline size="mini">
             <el-form-item label="Evaluation Method">
-                <el-select v-model="evaluationMethod">
-                    <el-option value="Evaluation Tender Service">Tender Service</el-option>
-                    <el-option value="Evaluation Tender Goods">Tender Goods</el-option>
-                </el-select>
+                        <template>
+                            <el-select v-model="value" filterable placeholder="Select">
+                                <el-option v-for="item in evaluationMethod" :key="item.id" :label="item.name" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </template>
             </el-form-item>
         </el-form>
 
         <el-row :gutter="24">
             <el-col :span="20">
-                <el-table ref="vendorScoring" border :data="line" :default-sort="gridSchema.defaultSort" :empty-text="gridSchema.emptyText" highlight-current-row
+                <el-table ref="vendorScoring" border :data="EvaluationMethodLine" :default-sort="gridSchema.defaultSort" :empty-text="gridSchema.emptyText" highlight-current-row
                     size="mini" stripe style="width: 100%">
                     <el-table-column width="48" label="No">
                         <template slot-scope="row">
@@ -31,26 +33,26 @@
 
                     <el-table-column min-width="128" label="Evaluation Type" show-overflow-tooltip>
                         <template slot-scope="{ row }">
-                            {{ row.evaluationMethodLineEvaluationType}}
+                            {{ row.evaluationType}}
                         </template>
                     </el-table-column>
 
                     <el-table-column min-width="152" label="Weight">
                         <template slot-scope="{ row }">
-                            {{row.evaluationMethodLineWeight}}
+                            {{row.weight}}
                         </template>
                     </el-table-column>
 
                     <el-table-column min-width="200" label="Passing Grade">
                         <template slot-scope="{ row }">
-                          {{ row.evaluationMethodLinePassingGrade}}
+                          {{ row.passingGrade}}
                         </template>
                     </el-table-column>
 
                     <!-- <el-table-column v-if="!readOnly" align="center" label="Criteria" min-width="56"> -->
                     <el-table-column align="center" label="Criteria" min-width="56">
-                        <template slot-scope="row">
-                            <el-button size="mini" icon="el-icon-plus" type="primary" @click="addScoring" />
+                        <template slot-scope="{row}">
+                            <el-button size="mini" icon="el-icon-plus" type="primary" @click="addScoring(row)" />
                         </template>
                     </el-table-column>
 

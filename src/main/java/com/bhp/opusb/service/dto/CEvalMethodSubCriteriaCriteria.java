@@ -39,6 +39,8 @@ public class CEvalMethodSubCriteriaCriteria implements Serializable, Criteria {
 
     private LongFilter biddingSubCriteriaId;
 
+    private LongFilter evaluationMethodCriteriaId;
+
     public CEvalMethodSubCriteriaCriteria() {
     }
 
@@ -50,6 +52,7 @@ public class CEvalMethodSubCriteriaCriteria implements Serializable, Criteria {
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.biddingCriteriaId = other.biddingCriteriaId == null ? null : other.biddingCriteriaId.copy();
         this.biddingSubCriteriaId = other.biddingSubCriteriaId == null ? null : other.biddingSubCriteriaId.copy();
+        this.evaluationMethodCriteriaId = other.evaluationMethodCriteriaId == null ? null : other.evaluationMethodCriteriaId.copy();
     }
 
     @Override
@@ -113,6 +116,14 @@ public class CEvalMethodSubCriteriaCriteria implements Serializable, Criteria {
         this.biddingSubCriteriaId = biddingSubCriteriaId;
     }
 
+    public LongFilter getEvaluationMethodCriteriaId() {
+        return evaluationMethodCriteriaId;
+    }
+
+    public void setEvaluationMethodCriteriaId(LongFilter evaluationMethodCriteriaId) {
+        this.evaluationMethodCriteriaId = evaluationMethodCriteriaId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -130,7 +141,8 @@ public class CEvalMethodSubCriteriaCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(biddingCriteriaId, that.biddingCriteriaId) &&
-            Objects.equals(biddingSubCriteriaId, that.biddingSubCriteriaId);
+            Objects.equals(biddingSubCriteriaId, that.biddingSubCriteriaId) &&
+            Objects.equals(evaluationMethodCriteriaId, that.evaluationMethodCriteriaId);
     }
 
     @Override
@@ -142,7 +154,8 @@ public class CEvalMethodSubCriteriaCriteria implements Serializable, Criteria {
         active,
         adOrganizationId,
         biddingCriteriaId,
-        biddingSubCriteriaId
+        biddingSubCriteriaId,
+        evaluationMethodCriteriaId
         );
     }
 
@@ -156,6 +169,7 @@ public class CEvalMethodSubCriteriaCriteria implements Serializable, Criteria {
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (biddingCriteriaId != null ? "biddingCriteriaId=" + biddingCriteriaId + ", " : "") +
                 (biddingSubCriteriaId != null ? "biddingSubCriteriaId=" + biddingSubCriteriaId + ", " : "") +
+                (evaluationMethodCriteriaId != null ? "evaluationMethodCriteriaId=" + evaluationMethodCriteriaId + ", " : "") +
             "}";
     }
 
