@@ -1,18 +1,14 @@
 package com.bhp.opusb.service.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import javax.persistence.Lob;
 import java.time.ZonedDateTime;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingInvitation} entity.
  */
-public class MBiddingInvitationDTO implements Serializable {
-
+public class MBiddingInvitationDTO extends AbstractAuditingDTO {
+    
     private Long id;
 
     private String invitationStatus;
@@ -23,17 +19,15 @@ public class MBiddingInvitationDTO implements Serializable {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
 
     private Long announcementId;
 
-    @Lob
     private String announcementDescription;
 
-//    @JsonFormat(pattern="yyyy-MM-dd HH:mm")
     private ZonedDateTime announcementPublishDate;
 
     private Long biddingId;
@@ -179,20 +173,16 @@ public class MBiddingInvitationDTO implements Serializable {
     @Override
     public String toString() {
         return "MBiddingInvitationDTO{" +
-            "id=" + id +
-            ", invitationStatus='" + invitationStatus + '\'' +
-            ", reason='" + reason + '\'' +
-            ", answerDate=" + answerDate +
-            ", uid=" + uid +
-            ", active=" + active +
-            ", adOrganizationId=" + adOrganizationId +
-            ", announcementId=" + announcementId +
-            ", announcementDescription='" + announcementDescription + '\'' +
-            ", announcementPublishDate=" + announcementPublishDate +
-            ", biddingId=" + biddingId +
-            ", biddingName='" + biddingName + '\'' +
-            ", vendorId=" + vendorId +
-            ", vendorName='" + vendorName + '\'' +
-            '}';
+            "id=" + getId() +
+            ", invitationStatus='" + getInvitationStatus() + "'" +
+            ", reason='" + getReason() + "'" +
+            ", answerDate='" + getAnswerDate() + "'" +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            ", announcementId=" + getAnnouncementId() +
+            ", biddingId=" + getBiddingId() +
+            ", vendorId=" + getVendorId() +
+            "}";
     }
 }

@@ -18,8 +18,6 @@ public interface MBiddingSubmissionMapper extends EntityMapper<MBiddingSubmissio
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     MBiddingSubmissionDTO toDto(MBiddingSubmission mBiddingSubmission);
 
-    @Mapping(target = "mBiddingSubmissionLines", ignore = true)
-    @Mapping(target = "removeMBiddingSubmissionLine", ignore = true)
     @Mapping(source = "biddingId", target = "bidding")
     @Mapping(source = "biddingScheduleId", target = "biddingSchedule")
     @Mapping(source = "vendorId", target = "vendor")

@@ -1,11 +1,11 @@
-id;invitation_status;reason;answer_date;uid;active
-1;Cambridgeshire deposit architect;Markets portals;2021-04-23T00:27:40;4da764c0-a9d4-40c5-b2e7-17e5e9bdda2e;true
-2;24/7 COM;Colombian Peso Unidad de Valor Real;2021-04-22T18:23:01;92f412c6-daf3-4516-8199-7097d19dff49;true
-3;hack;Administrator Rhode Island digital;2021-04-22T06:16:35;f278764d-ec8f-45b8-89d5-45e3b2ee5cfe;false
-4;Rustic Concrete Shirt deposit extend;application brand;2021-04-22T16:31:18;c393c86e-e125-4340-9580-2757d85e916f;true
-5;Tasty;Licensed Metal Car;2021-04-22T20:57:56;2efbec96-0f8f-4904-a8b4-56d148031e79;false
-6;olive;Money Market Account Zimbabwe Dollar Plaza;2021-04-22T23:15:28;125612f9-e2c4-4e48-a41c-d3d773578dbf;true
-7;turquoise Communications Ergonomic;programming;2021-04-23T04:51:47;35915785-c871-40ca-9b96-6ac87dbc8921;true
-8;synthesizing;functionalities action-items synthesizing;2021-04-23T04:17:33;1a953fd7-b82a-443d-98e0-d1fc88f1154f;true
-9;out-of-the-box;Pizza analyzer;2021-04-22T11:01:36;9e8a21ee-8037-4f07-ac4b-343ba662ca12;true
-10;Garden sensor;India expedite;2021-04-23T03:33:12;daf1ecb9-3a83-4520-abc2-350f5c2f62bc;false
+id;invitation_status;reason;answer_date;uid;active;ad_organization_id;announcement_id;bidding_id;vendor_id
+1;Cambridgeshire deposit architect;Markets portals;2021-04-23T00:27:40;4da764c0-a9d4-40c5-b2e7-17e5e9bdda2e;true;1;1;1;1
+2;24/7 COM;Colombian Peso Unidad de Valor Real;2021-04-22T18:23:01;92f412c6-daf3-4516-8199-7097d19dff49;true;2;2;2;2
+3;hack;Administrator Rhode Island digital;2021-04-22T06:16:35;f278764d-ec8f-45b8-89d5-45e3b2ee5cfe;false;3;3;3;3
+4;Rustic Concrete Shirt deposit extend;application brand;2021-04-22T16:31:18;c393c86e-e125-4340-9580-2757d85e916f;true;4;4;4;4
+5;Tasty;Licensed Metal Car;2021-04-22T20:57:56;2efbec96-0f8f-4904-a8b4-56d148031e79;false;5;5;5;5
+6;olive;Money Market Account Zimbabwe Dollar Plaza;2021-04-22T23:15:28;125612f9-e2c4-4e48-a41c-d3d773578dbf;true;6;6;6;6
+7;turquoise Communications Ergonomic;programming;2021-04-23T04:51:47;35915785-c871-40ca-9b96-6ac87dbc8921;true;7;7;7;7
+8;synthesizing;functionalities action-items synthesizing;2021-04-23T04:17:33;1a953fd7-b82a-443d-98e0-d1fc88f1154f;true;8;8;8;8
+9;out-of-the-box;Pizza analyzer;2021-04-22T11:01:36;9e8a21ee-8037-4f07-ac4b-343ba662ca12;true;9;9;9;9
+10;Garden sensor;India expedite;2021-04-23T03:33:12;daf1ecb9-3a83-4520-abc2-350f5c2f62bc;false;10;10;10;10

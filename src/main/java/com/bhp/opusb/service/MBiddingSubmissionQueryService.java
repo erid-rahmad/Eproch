@@ -91,24 +91,44 @@ public class MBiddingSubmissionQueryService extends QueryService<MBiddingSubmiss
             if (criteria.getId() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getId(), MBiddingSubmission_.id));
             }
-            if (criteria.getJoinBidding() != null) {
-                specification = specification.and(buildStringSpecification(criteria.getJoinBidding(), MBiddingSubmission_.joinBidding));
+            if (criteria.getJoined() != null) {
+                specification = specification.and(buildSpecification(criteria.getJoined(), MBiddingSubmission_.joined));
             }
-            if (criteria.getProposedPrice() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getProposedPrice(), MBiddingSubmission_.proposedPrice));
+            if (criteria.getDateTrx() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateTrx(), MBiddingSubmission_.dateTrx));
             }
-            if (criteria.getCeilingPrice() != null) {
-                specification = specification.and(buildRangeSpecification(criteria.getCeilingPrice(), MBiddingSubmission_.ceilingPrice));
+            if (criteria.getDocumentNo() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentNo(), MBiddingSubmission_.documentNo));
+            }
+            if (criteria.getDocumentAction() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentAction(), MBiddingSubmission_.documentAction));
+            }
+            if (criteria.getDocumentStatus() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getDocumentStatus(), MBiddingSubmission_.documentStatus));
+            }
+            if (criteria.getApproved() != null) {
+                specification = specification.and(buildSpecification(criteria.getApproved(), MBiddingSubmission_.approved));
+            }
+            if (criteria.getProcessed() != null) {
+                specification = specification.and(buildSpecification(criteria.getProcessed(), MBiddingSubmission_.processed));
+            }
+            if (criteria.getDateApprove() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateApprove(), MBiddingSubmission_.dateApprove));
+            }
+            if (criteria.getDateReject() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateReject(), MBiddingSubmission_.dateReject));
+            }
+            if (criteria.getRejectedReason() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getRejectedReason(), MBiddingSubmission_.rejectedReason));
+            }
+            if (criteria.getDateSubmit() != null) {
+                specification = specification.and(buildRangeSpecification(criteria.getDateSubmit(), MBiddingSubmission_.dateSubmit));
             }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), MBiddingSubmission_.uid));
             }
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MBiddingSubmission_.active));
-            }
-            if (criteria.getMBiddingSubmissionLineId() != null) {
-                specification = specification.and(buildSpecification(criteria.getMBiddingSubmissionLineId(),
-                    root -> root.join(MBiddingSubmission_.mBiddingSubmissionLines, JoinType.LEFT).get(MBiddingSubmissionLine_.id)));
             }
             if (criteria.getBiddingId() != null) {
                 specification = specification.and(buildSpecification(criteria.getBiddingId(),

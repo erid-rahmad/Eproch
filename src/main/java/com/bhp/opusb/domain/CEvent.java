@@ -42,6 +42,13 @@ public class CEvent extends AbstractAuditingEntity {
     @Column(name = "description")
     private String description;
 
+    /**
+     * Specify the type of event form
+     */
+    @Size(max = 10)
+    @Column(name = "form_type", length = 10)
+    private String formType;
+
     @Column(name = "uid")
     private UUID uid;
 
@@ -95,6 +102,19 @@ public class CEvent extends AbstractAuditingEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFormType() {
+        return formType;
+    }
+
+    public CEvent formType(String formType) {
+        this.formType = formType;
+        return this;
+    }
+
+    public void setFormType(String formType) {
+        this.formType = formType;
     }
 
     public UUID getUid() {
@@ -190,6 +210,7 @@ public class CEvent extends AbstractAuditingEntity {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", formType='" + getFormType() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

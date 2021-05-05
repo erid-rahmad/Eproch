@@ -1,80 +1,63 @@
 package com.bhp.opusb.service.dto;
 
-import com.bhp.opusb.domain.MBiddingSubmissionLine;
-import com.bhp.opusb.domain.MSubmissionSubItem;
-
-import javax.validation.constraints.*;
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.List;
+import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingSubmission} entity.
  */
-public class MBiddingSubmissionDTO extends AbstractAuditingDTO implements Serializable {
+public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
 
     private Long id;
 
-    private String joinBidding;
+    private Boolean joined;
+
+    private ZonedDateTime dateTrx = ZonedDateTime.now();
+
+    @Size(max = 30)
+    private String documentNo;
 
     @NotNull
-    private BigDecimal proposedPrice;
+    @Size(max = 10)
+    private String documentAction;
 
     @NotNull
-    private BigDecimal ceilingPrice;
+    @Size(max = 12)
+    private String documentStatus;
+
+    private Boolean approved;
+
+    private Boolean processed;
+
+    private ZonedDateTime dateApprove;
+
+    private ZonedDateTime dateReject;
+
+    private String rejectedReason;
+
+    private ZonedDateTime dateSubmit;
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long biddingId;
+    private String biddingName;
 
     private Long biddingScheduleId;
+    private String biddingScheduleName;
 
     private Long vendorId;
+    private String vendorName;
 
     private Long adOrganizationId;
-
-    private List<MBiddingSubmissionLineDTO> mBiddingSubmissionLineList ;
-
-    private List<MSubmissionSubItemDTO> mSubmissionSubItemList;
-
-    @Override
-    public String toString() {
-        return "MBiddingSubmissionDTO{" +
-            "id=" + id +
-            ", joinBidding='" + joinBidding + '\'' +
-            ", proposedPrice=" + proposedPrice +
-            ", ceilingPrice=" + ceilingPrice +
-            ", uid=" + uid +
-            ", active=" + active +
-            ", biddingId=" + biddingId +
-            ", biddingScheduleId=" + biddingScheduleId +
-            ", vendorId=" + vendorId +
-            ", adOrganizationId=" + adOrganizationId +
-            ", mBiddingSubmissionLineList=" + mBiddingSubmissionLineList +
-            ", mSubmissionSubItemList=" + mSubmissionSubItemList +
-            '}';
-    }
-
-    public List<MBiddingSubmissionLineDTO> getmBiddingSubmissionLineList() {
-        return mBiddingSubmissionLineList;
-    }
-
-    public void setmBiddingSubmissionLineList(List<MBiddingSubmissionLineDTO> mBiddingSubmissionLineList) {
-        this.mBiddingSubmissionLineList = mBiddingSubmissionLineList;
-    }
-
-    public List<MSubmissionSubItemDTO> getmSubmissionSubItemList() {
-        return mSubmissionSubItemList;
-    }
-
-    public void setmSubmissionSubItemList(List<MSubmissionSubItemDTO> mSubmissionSubItemList) {
-        this.mSubmissionSubItemList = mSubmissionSubItemList;
-    }
-
+    private String adOrganizationName;
+    
     public Long getId() {
         return id;
     }
@@ -83,28 +66,92 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO implements Serial
         this.id = id;
     }
 
-    public String getJoinBidding() {
-        return joinBidding;
+    public Boolean isJoined() {
+        return joined;
     }
 
-    public void setJoinBidding(String joinBidding) {
-        this.joinBidding = joinBidding;
+    public void setJoined(Boolean joined) {
+        this.joined = joined;
     }
 
-    public BigDecimal getProposedPrice() {
-        return proposedPrice;
+    public ZonedDateTime getDateTrx() {
+        return dateTrx;
     }
 
-    public void setProposedPrice(BigDecimal proposedPrice) {
-        this.proposedPrice = proposedPrice;
+    public void setDateTrx(ZonedDateTime dateTrx) {
+        this.dateTrx = dateTrx;
     }
 
-    public BigDecimal getCeilingPrice() {
-        return ceilingPrice;
+    public String getDocumentNo() {
+        return documentNo;
     }
 
-    public void setCeilingPrice(BigDecimal ceilingPrice) {
-        this.ceilingPrice = ceilingPrice;
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public Boolean isApproved() {
+        return approved;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public Boolean isProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
+    public ZonedDateTime getDateApprove() {
+        return dateApprove;
+    }
+
+    public void setDateApprove(ZonedDateTime dateApprove) {
+        this.dateApprove = dateApprove;
+    }
+
+    public ZonedDateTime getDateReject() {
+        return dateReject;
+    }
+
+    public void setDateReject(ZonedDateTime dateReject) {
+        this.dateReject = dateReject;
+    }
+
+    public String getRejectedReason() {
+        return rejectedReason;
+    }
+
+    public void setRejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
+    }
+
+    public ZonedDateTime getDateSubmit() {
+        return dateSubmit;
+    }
+
+    public void setDateSubmit(ZonedDateTime dateSubmit) {
+        this.dateSubmit = dateSubmit;
     }
 
     public UUID getUid() {
@@ -131,12 +178,28 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO implements Serial
         this.biddingId = mBiddingId;
     }
 
+    public String getBiddingName() {
+        return biddingName;
+    }
+
+    public void setBiddingName(String biddingName) {
+        this.biddingName = biddingName;
+    }
+
     public Long getBiddingScheduleId() {
         return biddingScheduleId;
     }
 
     public void setBiddingScheduleId(Long mBiddingScheduleId) {
         this.biddingScheduleId = mBiddingScheduleId;
+    }
+
+    public String getBiddingScheduleName() {
+        return biddingScheduleName;
+    }
+
+    public void setBiddingScheduleName(String biddingScheduleName) {
+        this.biddingScheduleName = biddingScheduleName;
     }
 
     public Long getVendorId() {
@@ -147,6 +210,14 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO implements Serial
         this.vendorId = cVendorId;
     }
 
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
     public Long getAdOrganizationId() {
         return adOrganizationId;
     }
@@ -155,21 +226,56 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO implements Serial
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof MBiddingSubmissionDTO)) {
+        if (o == null || getClass() != o.getClass()) {
             return false;
         }
 
-        return id != null && id.equals(((MBiddingSubmissionDTO) o).id);
+        MBiddingSubmissionDTO mBiddingSubmissionDTO = (MBiddingSubmissionDTO) o;
+        if (mBiddingSubmissionDTO.getId() == null || getId() == null) {
+            return false;
+        }
+        return Objects.equals(getId(), mBiddingSubmissionDTO.getId());
     }
 
     @Override
     public int hashCode() {
-        return 31;
+        return Objects.hashCode(getId());
     }
 
+    @Override
+    public String toString() {
+        return "MBiddingSubmissionDTO{" +
+            "id=" + getId() +
+            ", joined='" + isJoined() + "'" +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
+            ", dateApprove='" + getDateApprove() + "'" +
+            ", dateReject='" + getDateReject() + "'" +
+            ", rejectedReason='" + getRejectedReason() + "'" +
+            ", dateSubmit='" + getDateSubmit() + "'" +
+            ", uid='" + getUid() + "'" +
+            ", active='" + isActive() + "'" +
+            ", biddingId=" + getBiddingId() +
+            ", biddingScheduleId=" + getBiddingScheduleId() +
+            ", vendorId=" + getVendorId() +
+            ", adOrganizationId=" + getAdOrganizationId() +
+            "}";
+    }
 }

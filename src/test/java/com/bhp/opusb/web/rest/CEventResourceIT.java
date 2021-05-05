@@ -45,6 +45,9 @@ public class CEventResourceIT {
     private static final String DEFAULT_DESCRIPTION = "AAAAAAAAAA";
     private static final String UPDATED_DESCRIPTION = "BBBBBBBBBB";
 
+    private static final String DEFAULT_FORM_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_FORM_TYPE = "BBBBBBBBBB";
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -81,6 +84,7 @@ public class CEventResourceIT {
         CEvent cEvent = new CEvent()
             .name(DEFAULT_NAME)
             .description(DEFAULT_DESCRIPTION)
+            .formType(DEFAULT_FORM_TYPE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -115,6 +119,7 @@ public class CEventResourceIT {
         CEvent cEvent = new CEvent()
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .formType(UPDATED_FORM_TYPE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -163,6 +168,7 @@ public class CEventResourceIT {
         CEvent testCEvent = cEventList.get(cEventList.size() - 1);
         assertThat(testCEvent.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testCEvent.getDescription()).isEqualTo(DEFAULT_DESCRIPTION);
+        assertThat(testCEvent.getFormType()).isEqualTo(DEFAULT_FORM_TYPE);
         assertThat(testCEvent.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCEvent.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -220,6 +226,7 @@ public class CEventResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEvent.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].formType").value(hasItem(DEFAULT_FORM_TYPE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -237,6 +244,7 @@ public class CEventResourceIT {
             .andExpect(jsonPath("$.id").value(cEvent.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
             .andExpect(jsonPath("$.description").value(DEFAULT_DESCRIPTION))
+            .andExpect(jsonPath("$.formType").value(DEFAULT_FORM_TYPE))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -419,6 +427,84 @@ public class CEventResourceIT {
 
     @Test
     @Transactional
+    public void getAllCEventsByFormTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cEventRepository.saveAndFlush(cEvent);
+
+        // Get all the cEventList where formType equals to DEFAULT_FORM_TYPE
+        defaultCEventShouldBeFound("formType.equals=" + DEFAULT_FORM_TYPE);
+
+        // Get all the cEventList where formType equals to UPDATED_FORM_TYPE
+        defaultCEventShouldNotBeFound("formType.equals=" + UPDATED_FORM_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventsByFormTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cEventRepository.saveAndFlush(cEvent);
+
+        // Get all the cEventList where formType not equals to DEFAULT_FORM_TYPE
+        defaultCEventShouldNotBeFound("formType.notEquals=" + DEFAULT_FORM_TYPE);
+
+        // Get all the cEventList where formType not equals to UPDATED_FORM_TYPE
+        defaultCEventShouldBeFound("formType.notEquals=" + UPDATED_FORM_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventsByFormTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        cEventRepository.saveAndFlush(cEvent);
+
+        // Get all the cEventList where formType in DEFAULT_FORM_TYPE or UPDATED_FORM_TYPE
+        defaultCEventShouldBeFound("formType.in=" + DEFAULT_FORM_TYPE + "," + UPDATED_FORM_TYPE);
+
+        // Get all the cEventList where formType equals to UPDATED_FORM_TYPE
+        defaultCEventShouldNotBeFound("formType.in=" + UPDATED_FORM_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventsByFormTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cEventRepository.saveAndFlush(cEvent);
+
+        // Get all the cEventList where formType is not null
+        defaultCEventShouldBeFound("formType.specified=true");
+
+        // Get all the cEventList where formType is null
+        defaultCEventShouldNotBeFound("formType.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCEventsByFormTypeContainsSomething() throws Exception {
+        // Initialize the database
+        cEventRepository.saveAndFlush(cEvent);
+
+        // Get all the cEventList where formType contains DEFAULT_FORM_TYPE
+        defaultCEventShouldBeFound("formType.contains=" + DEFAULT_FORM_TYPE);
+
+        // Get all the cEventList where formType contains UPDATED_FORM_TYPE
+        defaultCEventShouldNotBeFound("formType.contains=" + UPDATED_FORM_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCEventsByFormTypeNotContainsSomething() throws Exception {
+        // Initialize the database
+        cEventRepository.saveAndFlush(cEvent);
+
+        // Get all the cEventList where formType does not contain DEFAULT_FORM_TYPE
+        defaultCEventShouldNotBeFound("formType.doesNotContain=" + DEFAULT_FORM_TYPE);
+
+        // Get all the cEventList where formType does not contain UPDATED_FORM_TYPE
+        defaultCEventShouldBeFound("formType.doesNotContain=" + UPDATED_FORM_TYPE);
+    }
+
+
+    @Test
+    @Transactional
     public void getAllCEventsByUidIsEqualToSomething() throws Exception {
         // Initialize the database
         cEventRepository.saveAndFlush(cEvent);
@@ -582,6 +668,7 @@ public class CEventResourceIT {
             .andExpect(jsonPath("$.[*].id").value(hasItem(cEvent.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
             .andExpect(jsonPath("$.[*].description").value(hasItem(DEFAULT_DESCRIPTION)))
+            .andExpect(jsonPath("$.[*].formType").value(hasItem(DEFAULT_FORM_TYPE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -633,6 +720,7 @@ public class CEventResourceIT {
         updatedCEvent
             .name(UPDATED_NAME)
             .description(UPDATED_DESCRIPTION)
+            .formType(UPDATED_FORM_TYPE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CEventDTO cEventDTO = cEventMapper.toDto(updatedCEvent);
@@ -648,6 +736,7 @@ public class CEventResourceIT {
         CEvent testCEvent = cEventList.get(cEventList.size() - 1);
         assertThat(testCEvent.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testCEvent.getDescription()).isEqualTo(UPDATED_DESCRIPTION);
+        assertThat(testCEvent.getFormType()).isEqualTo(UPDATED_FORM_TYPE);
         assertThat(testCEvent.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCEvent.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

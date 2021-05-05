@@ -94,6 +94,46 @@ public class MBiddingInvitationResourceIT {
             .answerDate(DEFAULT_ANSWER_DATE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        mBiddingInvitation.setAdOrganization(aDOrganization);
+        // Add required entity
+        CAnnouncement cAnnouncement;
+        if (TestUtil.findAll(em, CAnnouncement.class).isEmpty()) {
+            cAnnouncement = CAnnouncementResourceIT.createEntity(em);
+            em.persist(cAnnouncement);
+            em.flush();
+        } else {
+            cAnnouncement = TestUtil.findAll(em, CAnnouncement.class).get(0);
+        }
+        mBiddingInvitation.setAnnouncement(cAnnouncement);
+        // Add required entity
+        MBidding mBidding;
+        if (TestUtil.findAll(em, MBidding.class).isEmpty()) {
+            mBidding = MBiddingResourceIT.createEntity(em);
+            em.persist(mBidding);
+            em.flush();
+        } else {
+            mBidding = TestUtil.findAll(em, MBidding.class).get(0);
+        }
+        mBiddingInvitation.setBidding(mBidding);
+        // Add required entity
+        CVendor cVendor;
+        if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
+            cVendor = CVendorResourceIT.createEntity(em);
+            em.persist(cVendor);
+            em.flush();
+        } else {
+            cVendor = TestUtil.findAll(em, CVendor.class).get(0);
+        }
+        mBiddingInvitation.setVendor(cVendor);
         return mBiddingInvitation;
     }
     /**
@@ -109,6 +149,46 @@ public class MBiddingInvitationResourceIT {
             .answerDate(UPDATED_ANSWER_DATE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        mBiddingInvitation.setAdOrganization(aDOrganization);
+        // Add required entity
+        CAnnouncement cAnnouncement;
+        if (TestUtil.findAll(em, CAnnouncement.class).isEmpty()) {
+            cAnnouncement = CAnnouncementResourceIT.createUpdatedEntity(em);
+            em.persist(cAnnouncement);
+            em.flush();
+        } else {
+            cAnnouncement = TestUtil.findAll(em, CAnnouncement.class).get(0);
+        }
+        mBiddingInvitation.setAnnouncement(cAnnouncement);
+        // Add required entity
+        MBidding mBidding;
+        if (TestUtil.findAll(em, MBidding.class).isEmpty()) {
+            mBidding = MBiddingResourceIT.createUpdatedEntity(em);
+            em.persist(mBidding);
+            em.flush();
+        } else {
+            mBidding = TestUtil.findAll(em, MBidding.class).get(0);
+        }
+        mBiddingInvitation.setBidding(mBidding);
+        // Add required entity
+        CVendor cVendor;
+        if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
+            cVendor = CVendorResourceIT.createUpdatedEntity(em);
+            em.persist(cVendor);
+            em.flush();
+        } else {
+            cVendor = TestUtil.findAll(em, CVendor.class).get(0);
+        }
+        mBiddingInvitation.setVendor(cVendor);
         return mBiddingInvitation;
     }
 
@@ -585,12 +665,8 @@ public class MBiddingInvitationResourceIT {
     @Test
     @Transactional
     public void getAllMBiddingInvitationsByAdOrganizationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingInvitationRepository.saveAndFlush(mBiddingInvitation);
-        ADOrganization adOrganization = ADOrganizationResourceIT.createEntity(em);
-        em.persist(adOrganization);
-        em.flush();
-        mBiddingInvitation.setAdOrganization(adOrganization);
+        // Get already existing entity
+        ADOrganization adOrganization = mBiddingInvitation.getAdOrganization();
         mBiddingInvitationRepository.saveAndFlush(mBiddingInvitation);
         Long adOrganizationId = adOrganization.getId();
 
@@ -605,12 +681,8 @@ public class MBiddingInvitationResourceIT {
     @Test
     @Transactional
     public void getAllMBiddingInvitationsByAnnouncementIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingInvitationRepository.saveAndFlush(mBiddingInvitation);
-        CAnnouncement announcement = CAnnouncementResourceIT.createEntity(em);
-        em.persist(announcement);
-        em.flush();
-        mBiddingInvitation.setAnnouncement(announcement);
+        // Get already existing entity
+        CAnnouncement announcement = mBiddingInvitation.getAnnouncement();
         mBiddingInvitationRepository.saveAndFlush(mBiddingInvitation);
         Long announcementId = announcement.getId();
 
@@ -625,12 +697,8 @@ public class MBiddingInvitationResourceIT {
     @Test
     @Transactional
     public void getAllMBiddingInvitationsByBiddingIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingInvitationRepository.saveAndFlush(mBiddingInvitation);
-        MBidding bidding = MBiddingResourceIT.createEntity(em);
-        em.persist(bidding);
-        em.flush();
-        mBiddingInvitation.setBidding(bidding);
+        // Get already existing entity
+        MBidding bidding = mBiddingInvitation.getBidding();
         mBiddingInvitationRepository.saveAndFlush(mBiddingInvitation);
         Long biddingId = bidding.getId();
 
@@ -645,12 +713,8 @@ public class MBiddingInvitationResourceIT {
     @Test
     @Transactional
     public void getAllMBiddingInvitationsByVendorIsEqualToSomething() throws Exception {
-        // Initialize the database
-        mBiddingInvitationRepository.saveAndFlush(mBiddingInvitation);
-        CVendor vendor = CVendorResourceIT.createEntity(em);
-        em.persist(vendor);
-        em.flush();
-        mBiddingInvitation.setVendor(vendor);
+        // Get already existing entity
+        CVendor vendor = mBiddingInvitation.getVendor();
         mBiddingInvitationRepository.saveAndFlush(mBiddingInvitation);
         Long vendorId = vendor.getId();
 

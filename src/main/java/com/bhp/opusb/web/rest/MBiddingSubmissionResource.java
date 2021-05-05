@@ -1,6 +1,5 @@
 package com.bhp.opusb.web.rest;
 
-import com.bhp.opusb.domain.MBiddingSubmission;
 import com.bhp.opusb.service.MBiddingSubmissionService;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MBiddingSubmissionDTO;
@@ -103,12 +102,6 @@ public class MBiddingSubmissionResource {
         Page<MBiddingSubmissionDTO> page = mBiddingSubmissionQueryService.findByCriteria(criteria, pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return ResponseEntity.ok().headers(headers).body(page.getContent());
-    }
-
-    @GetMapping("/m-bidding-submissions-nested/{id}")
-    public ResponseEntity<Optional<MBiddingSubmission>> getAllMBiddingSubmissions(@PathVariable Long id) {
-        log.debug("REST request to get MBiddingSubmissions by criteria: {}");
-        return ResponseEntity.ok().body(mBiddingSubmissionService.findAllnested(id));
     }
 
     /**
