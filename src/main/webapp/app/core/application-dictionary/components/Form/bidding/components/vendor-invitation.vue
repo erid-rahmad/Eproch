@@ -1,5 +1,42 @@
 <template>
   <div class="vendor-invitation">
+    <el-form
+      ref="biddingInformation"
+      disabled
+      label-position="left"
+      label-width="150px"
+      :model="bidding"
+      size="mini"
+    >
+      <el-row :gutter="24">
+        <el-col
+          :xs="24"
+          :sm="24"
+          :lg="12"
+          :xl="8"
+        >
+          <el-form-item
+            label="Title"
+            prop="name"
+            required
+          >
+            <el-input
+              v-model="bidding.name"
+              class="form-input"
+            ></el-input>
+          </el-form-item>
+          <el-form-item
+            label="Bidding No"
+            prop="biddingNo"
+          >
+            <el-input
+              v-model="bidding.documentNo"
+              class="form-input"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </el-form>
     <el-divider content-position="left"><h4>Vendor Business Category</h4></el-divider>
 
     <el-row :gutter="24">
