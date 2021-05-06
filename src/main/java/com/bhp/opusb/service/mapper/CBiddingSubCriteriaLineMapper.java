@@ -13,7 +13,9 @@ import org.mapstruct.*;
 public interface CBiddingSubCriteriaLineMapper extends EntityMapper<CBiddingSubCriteriaLineDTO, CBiddingSubCriteriaLine> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "biddingSubCriteria.id", target = "biddingSubCriteriaId")
+    @Mapping(source = "biddingSubCriteria.name", target = "biddingSubCriteriaName")
     CBiddingSubCriteriaLineDTO toDto(CBiddingSubCriteriaLine cBiddingSubCriteriaLine);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
