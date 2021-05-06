@@ -1,7 +1,10 @@
 package com.bhp.opusb.service.dto;
 
+import com.bhp.opusb.domain.CEvalMethodSubCriteria;
+
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -27,6 +30,16 @@ public class CEvaluationMethodCriteriaDTO implements Serializable {
 
     private Long biddingCriteriaId;
     private String biddingCriteriaName;
+
+    private List<CEvalMethodSubCriteriaDTO> evalMethodSubCriteriaList ;
+
+    public List<CEvalMethodSubCriteriaDTO> getEvalMethodSubCriteriaList() {
+        return evalMethodSubCriteriaList;
+    }
+
+    public void setEvalMethodSubCriteriaList(List<CEvalMethodSubCriteriaDTO> evalMethodSubCriteriaList) {
+        this.evalMethodSubCriteriaList = evalMethodSubCriteriaList;
+    }
 
     public String getBiddingCriteriaName() {
         return biddingCriteriaName;
@@ -142,6 +155,7 @@ public class CEvaluationMethodCriteriaDTO implements Serializable {
             ", evaluationMethodLineName='" + evaluationMethodLineName + '\'' +
             ", biddingCriteriaId=" + biddingCriteriaId +
             ", biddingCriteriaName='" + biddingCriteriaName + '\'' +
+            ", evalMethodSubCriteriaList=" + evalMethodSubCriteriaList +
             '}';
     }
 }

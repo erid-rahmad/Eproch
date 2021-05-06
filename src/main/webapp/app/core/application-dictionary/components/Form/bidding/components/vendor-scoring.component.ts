@@ -39,7 +39,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
 
 
   processing = false;
-  dialogConfirmationVisible:boolean = false;
+  criteriaPA:boolean = false;
 
   public criteriaOptions: any = {};
   public subCriteriaOptions: any = {};
@@ -58,8 +58,10 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   private line: any = {};
   private evaluationMethod: any = {};
   private value = '';
-  private EvaluationMethodLine: any = {};
+  private evaluationMethodLine: any = {};
+  private evaluationMethodCriteria: any = {};
   private biddingsubcriteria: any = {};
+  private pickrow: any = {};
 
   get readOnly() {
     return this.bidding.biddingStatus === 'In Progress';
@@ -73,13 +75,15 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
 
     this.getEvaluationMethod();
  
-    this.getVendorScoring();
+    // this.getVendorScoring();
     
-    this.getVendorScoringLine();
+    // this.getVendorScoringLine();
 
     this.getbiddingsubcriteria();
     
     // this.getCriteria();    
+
+    // this.evaluationMethodCriteria={'awdawd':"awdad"}
     
   }
 
@@ -122,10 +126,11 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
         }
       })
       .then(res => {
-        this.EvaluationMethodLine = res.data;
-        console.log("this.EvaluationMethodLine", this.EvaluationMethodLine);
+        this.evaluationMethodLine = res.data;
+        console.log("this.EvaluationMethodLine", this.evaluationMethodLine);
       });
   }
+
 
   private getbiddingsubcriteria() {
     this.commonService('api/c-bidding-sub-criteria')
@@ -169,7 +174,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     this.commonService('/api/m-vendor-scoring-lines')
       .retrieve({
         criteriaQuery: [
-          // `vendorScoringId.equals=${this.bidding.scoringCriteria.id}`
+          `vendorScoringId.equals=${this.bidding.scoringCriteria.id}`
         ],
         paginationQuery: {
           page: 0,
@@ -231,9 +236,13 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   }
 
   addScoring(row) {
-    console.log("this row",row);
-    
-    this.dialogConfirmationVisible = true;
+    this.pickrow = row; 
+    this.criteriaPA = true;
+  }
+
+  closeCriteriaPA() {
+    this.criteriaPA = false;
+    this.pickrow = null;
   }
 
   removeScoring(index) {
@@ -246,7 +255,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     this.vendorScoringCriteria.subCriteriaObj = this.subCriteriaOptions.find(item => item.id === this.vendorScoringCriteria.subCriteria);
 
     this.bidding.scoringCriteria.push(this.vendorScoringCriteria);
-    this.dialogConfirmationVisible = false;
+    this.criteriaPA = false;
     this.vendorScoringCriteria = {
       criteria: '',
       criteriaObj: '',

@@ -1,12 +1,17 @@
 package com.bhp.opusb.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.JoinType;
 
+import com.bhp.opusb.service.dto.*;
+import io.github.jhipster.service.filter.LongFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -17,8 +22,6 @@ import io.github.jhipster.service.QueryService;
 import com.bhp.opusb.domain.CEvaluationMethodCriteria;
 import com.bhp.opusb.domain.*; // for static metamodels
 import com.bhp.opusb.repository.CEvaluationMethodCriteriaRepository;
-import com.bhp.opusb.service.dto.CEvaluationMethodCriteriaCriteria;
-import com.bhp.opusb.service.dto.CEvaluationMethodCriteriaDTO;
 import com.bhp.opusb.service.mapper.CEvaluationMethodCriteriaMapper;
 
 /**
@@ -42,6 +45,9 @@ public class CEvaluationMethodCriteriaQueryService extends QueryService<CEvaluat
         this.cEvaluationMethodCriteriaMapper = cEvaluationMethodCriteriaMapper;
     }
 
+    @Autowired
+    CEvalMethodSubCriteriaQueryService cEvalMethodSubCriteriaQueryService;
+
     /**
      * Return a {@link List} of {@link CEvaluationMethodCriteriaDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
@@ -64,8 +70,23 @@ public class CEvaluationMethodCriteriaQueryService extends QueryService<CEvaluat
     public Page<CEvaluationMethodCriteriaDTO> findByCriteria(CEvaluationMethodCriteriaCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<CEvaluationMethodCriteria> specification = createSpecification(criteria);
-        return cEvaluationMethodCriteriaRepository.findAll(specification, page)
+
+        Page<CEvaluationMethodCriteriaDTO> evaluationMethodCriteriaDTOS=
+         cEvaluationMethodCriteriaRepository.findAll(specification, page)
             .map(cEvaluationMethodCriteriaMapper::toDto);
+
+        List<CEvaluationMethodCriteriaDTO> cEvaluationMethodCriteriaDTOS =new ArrayList<>();
+
+        for (CEvaluationMethodCriteriaDTO cEvaluationMethodCriteriaDTO_:evaluationMethodCriteriaDTOS){
+            LongFilter longFilter = new LongFilter();
+            CEvalMethodSubCriteriaCriteria criteriaCriteria = new CEvalMethodSubCriteriaCriteria();
+            criteriaCriteria.setEvaluationMethodCriteriaId((LongFilter) longFilter.setEquals(cEvaluationMethodCriteriaDTO_.getId()));
+            Page<CEvalMethodSubCriteriaDTO> cEvalMethodSubCriteriaDTOS=cEvalMethodSubCriteriaQueryService.findByCriteria(criteriaCriteria,page);
+            log.info("this biddingSubCriteriaDTOS_ {} ",cEvalMethodSubCriteriaDTOS);
+            cEvaluationMethodCriteriaDTO_.setEvalMethodSubCriteriaList(cEvalMethodSubCriteriaDTOS.getContent());
+            cEvaluationMethodCriteriaDTOS.add(cEvaluationMethodCriteriaDTO_);
+        }
+        return new PageImpl<>(cEvaluationMethodCriteriaDTOS);
     }
 
     /**
