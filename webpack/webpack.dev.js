@@ -20,7 +20,7 @@ module.exports = merge(baseWebpackConfig, {
   // cheap-module-eval-source-map is faster for development
   devtool: config.dev.devtool,
   entry: {
-    global: './src/main/webapp/content/scss/global.scss',
+    // global: './src/main/webapp/app/styles/index.scss',
     main: './src/main/webapp/app/main'
   },
   output: {
@@ -34,9 +34,9 @@ module.exports = merge(baseWebpackConfig, {
     proxy: [
       {
         context: ['/api', '/services', '/management', '/swagger-resources', '/v2/api-docs', '/h2-console', '/auth', '/websocket'],
-        target: 'http://127.0.0.1:8080',
+        target: 'http://127.0.0.1:8091',
         secure: false,
-        headers: { host: 'localhost:9000' }
+        headers: { host: 'localhost:9001' }
       }
     ],
     watchOptions: {
@@ -54,7 +54,7 @@ module.exports = merge(baseWebpackConfig, {
     new BrowserSyncPlugin(
       {
         host: 'localhost',
-        port: 9000,
+        port: 9001,
         proxy: {
           target: 'http://localhost:9060'
         },

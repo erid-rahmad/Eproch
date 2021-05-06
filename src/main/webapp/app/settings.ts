@@ -28,7 +28,7 @@ const settings: ISettings = {
   dateValueFormat: DATE_FORMAT,
   dateTimeValueFormat: ZONED_DATE_TIME_FORMAT,
   errorLog: ['production'],
-  sidebarTextTheme: true,
+  sidebarTextTheme: false,
   devServerPort: 9527,
   mockServerPort: 9528
 }

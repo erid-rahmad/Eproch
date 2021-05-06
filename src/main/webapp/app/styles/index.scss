@@ -1,5 +1,6 @@
 // @import './variables.scss'; // Already imported in style-resources-loader
 // @import './mixins.scss'; // Already imported in style-resources-loader
+@import './font.scss';
 @import './transition.scss';
 @import './svgicon.scss';
 
@@ -9,7 +10,7 @@ body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial,
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Nunito, Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial,
     sans-serif;
 }
 
@@ -41,6 +42,18 @@ button:focus {
 
 div:focus {
   outline: none;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+label {
+  display: inline-block;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
 }
 
 .clearfix {
@@ -215,6 +228,10 @@ aside {
   }
 }
 
+.el-table thead {
+  color: #1f2d3d;
+}
+
 .table-container {
   border: 1px solid #ebebeb;
   border-radius: 3px;
@@ -253,6 +270,18 @@ aside {
     content: '*';
     color: #ff4949;
     margin-left: 4px;
+  }
+}
+
+.app-container.card-view {
+  background: #f0f2f5;
+
+  .card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 24px;
   }
 }
 
@@ -299,14 +328,26 @@ aside {
   padding-bottom: 4px;
 }
 
+.el-range-editor{
+  &.is-disabled {
+    .el-range__icon,
+    .el-range-separator,
+    input {
+      color: #70707c;
+    }
+  }
+}
+
 .el-input {
   &.is-disabled .el-input__inner {
     color: #70707c;
   }
 }
 
-.el-textarea.is-disabled .el-textarea__inner {
-  color: #70707c;
+.el-textarea {
+  &.is-disabled .el-textarea__inner {
+    color: #70707c;
+  }
 }
 
 .el-divider h4 {
@@ -314,6 +355,11 @@ aside {
   font-weight: 600;
 }
 
+.el-table__body-wrapper.is-scrolling-right ~ .el-table__fixed-right {
+  border-left: none;
+}
+
 .el-table__fixed, .el-table__fixed-right{
   box-shadow: none;
+  border-left: 1px solid #dfe6ec;
 }
