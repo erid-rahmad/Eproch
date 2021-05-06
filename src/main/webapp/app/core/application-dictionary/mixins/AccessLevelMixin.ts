@@ -6,7 +6,7 @@ export default class AccessLevelMixin extends Vue {
 
   protected adOrganizationId: number;
 
-  protected organizationCriteria = [
+  protected additionalCriteria = [
     'adOrganizationId.in=1'
   ];
 
@@ -14,13 +14,18 @@ export default class AccessLevelMixin extends Vue {
     this.adOrganizationId = accountStore.organizationInfo.id;
 
     if (this.adOrganizationId > 1) {
-      this.organizationCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
+      this.additionalCriteria.push(`adOrganizationId.in=${this.adOrganizationId}`);
+    }
+
+    if (accountStore.isVendor) {
+      const vendorId = accountStore.vendorInfo.id;
+      this.additionalCriteria.push(`vendorId.equals=${vendorId}`);
     }
   }
 
   protected updateCriteria(criteria: string[]) {
     if (this.adOrganizationId > 1) {
-      return [...criteria, ...this.organizationCriteria];
+      return [...criteria, ...this.additionalCriteria];
     }
 
     return criteria;

@@ -1,8 +1,9 @@
 <template>
-  <div class="app-container">
+  <div class="app-container card-view pre-bid-meeting">
     <el-form
       v-loading="loading"
       ref="mainForm"
+      class="card"
       label-position="left"
       label-width="150px"
       :model="mainForm"
@@ -93,16 +94,3 @@
   </div>
 </template>
 <script lang="ts" src="./pre-bid-meeting.component.ts"></script>
-<style lang="scss" scoped>
-.app-container {
-  background: #f0f2f5;
-
-  .el-form {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-    margin: 10px;
-    padding: 24px;
-  }
-}
-</style>

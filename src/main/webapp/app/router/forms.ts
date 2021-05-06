@@ -31,7 +31,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['generatePo', () => import(/* webpackChunkName: "marketplace" */'@/core/application-dictionary/components/Form/generate-po/generate-po.vue')],
 
   ['bidding', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding/bidding.vue')],
-  ['biddingSubmission', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-submision/bidding.vue')],
+  ['biddingSubmission', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding/submission/registered-bidding-list.vue')],
   ['biddingResult', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/bidding-submission-grid.vue')],
   ['biddingResultAnnouncement', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/announcement.vue')],
   ['biddingResultForm', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/components/result.vue')],
@@ -45,7 +45,9 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['biddingEvaluationTeam', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding/evaluation-team/evaluation-team.vue')],
   // ['biddingAgreement', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/bidding-agreement/index.vue')],
 
-  ['preBidMeeting', () => import(/* webpackChunkName: "biddingEvent" */'@/core/application-dictionary/components/Form/bidding/event/pre-bid-meeting.vue')],
+  // Bidding events.
+  ['preBidMeeting', () => import(/* webpackChunkName: "biddingEvent" */'@/core/application-dictionary/components/Form/bidding/event/pre-bid-meeting/pre-bid-meeting.vue')],
+  ['biddingSubmissionForm', () => import(/* webpackChunkName: "biddingEvent" */'@/core/application-dictionary/components/Form/bidding/event/bidding-submission/bidding-submission.vue')],
 
   ['vendorEvaluation', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/vendor-evaluation/index.vue')],
   ['warningLetter', () => import(/* webpackChunkName: "vendorManagement" */'@/core/application-dictionary/components/Form/vendor-evaluation/warning-letter.vue')],
