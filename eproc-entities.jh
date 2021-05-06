@@ -904,6 +904,10 @@ entity CBiddingType {
 entity CEvent {
 	name String required maxlength(50)
 	description String
+	
+	/** Specify the type of event form */
+	formType String maxlength(10)
+	
 	uid UUID
 	active Boolean
 }
@@ -1082,14 +1086,47 @@ entity MBiddingSubItemLine {
 }
 
 entity MBiddingSubmission {
-	joinBidding String
-	proposedPrice BigDecimal required
-	ceilingPrice BigDecimal required
+	joined Boolean
+
+	// Common transactional fields.
+	dateTrx ZonedDateTime
+	documentNo String maxlength(30)
+	documentAction String required maxlength(10)
+	documentStatus String required maxlength(12)
+	approved Boolean
+	processed Boolean
+	dateApprove ZonedDateTime
+	dateReject ZonedDateTime
+	rejectedReason String
+
+	dateSubmit ZonedDateTime
+
 	uid UUID
 	active Boolean
 }
 
-entity MBiddingSubmissionLine {
+entity MProposalAdministration {
+	answer String required
+	documentEvaluation Boolean
+
+	uid UUID
+	active Boolean
+}
+
+entity MProposalAdministrationFile {
+	uid UUID
+	active Boolean
+}
+
+entity MProposalPrice {
+	proposedPrice BigDecimal required
+	ceilingPrice BigDecimal required
+
+	uid UUID
+	active Boolean
+}
+
+entity MProposalPriceLine {
 	proposedPrice BigDecimal required
 	totalPriceSubmission BigDecimal required
 	deliveryDate LocalDate required
@@ -1097,12 +1134,24 @@ entity MBiddingSubmissionLine {
 	active Boolean
 }
 
-entity MSubmissionSubItem {
+entity MProposalPriceSubItem {
 	proposedPrice BigDecimal required
 	uid UUID
 	active Boolean
 }
 
+entity MProposalTechnical {
+	answer String required
+	documentEvaluation Boolean
+
+	uid UUID
+	active Boolean
+}
+
+entity MProposalTechnicalFile {
+	uid UUID
+	active Boolean
+}
 
 entity MProjectInformation {
 	uid UUID
@@ -1233,6 +1282,10 @@ relationship OneToOne {
 	// Bidding event form.
 	MPreBidMeeting{biddingSchedule required} to MBiddingSchedule
 	MPreBidMeetingAttachment{cAttachment required} to CAttachment
+	
+	MProposalAdministrationFile{cAttachment required} to CAttachment
+	MProposalTechnicalFile{cAttachment required} to CAttachment
+	MProposalPrice{biddingSubmission required} to MBiddingSubmission
 }
 
 /**
@@ -1270,8 +1323,7 @@ relationship OneToMany {
 	MPreBidMeeting to MPreBidMeetingAttachment{preBidMeeting required}
 
 	// Bidding Submission.
-	MBiddingSubmission to MBiddingSubmissionLine{mBiddingSubmission required}
-	MBiddingSubmissionLine to MSubmissionSubItem{mBiddingSubmissionLine required}
+	MProposalPriceLine to MProposalPriceSubItem{proposalPriceLine required}
 }
 
 /**
@@ -1699,16 +1751,33 @@ relationship ManyToOne {
 	MBiddingSubmission{vendor required} to CVendor
 	MBiddingSubmission{adOrganization required} to ADOrganization
 
-	MBiddingSubmissionLine{biddingLine required} to MBiddingLine
-	MBiddingSubmissionLine{adOrganization required} to ADOrganization
+	MProposalAdministration{adOrganization required} to ADOrganization
+	MProposalAdministration{biddingSubmission required} to MBiddingSubmission
 
-	MBiddingInvitation{adOrganization } to ADOrganization
-	MBiddingInvitation{announcement } to CAnnouncement
-	MBiddingInvitation{bidding } to MBidding
-	MBiddingInvitation{vendor } to CVendor
+	MProposalAdministrationFile{adOrganization required} to ADOrganization
+	MProposalAdministrationFile{biddingSubmission required} to MBiddingSubmission
+	MProposalAdministrationFile{biddingSubCriteria required} to CBiddingSubCriteria
 
-	MSubmissionSubItem{biddingSubItem required} to MBiddingSubItem
-	MSubmissionSubItem{adOrganization required} to ADOrganization
+	MProposalTechnical{adOrganization required} to ADOrganization
+	MProposalTechnical{biddingSubmission required} to MBiddingSubmission
+
+	MProposalTechnicalFile{adOrganization required} to ADOrganization
+	MProposalTechnicalFile{biddingSubmission required} to MBiddingSubmission
+	MProposalTechnicalFile{biddingSubCriteria required} to CBiddingSubCriteria
+
+	MProposalPrice{adOrganization required} to ADOrganization
+
+	MProposalPriceLine{adOrganization required} to ADOrganization
+	MProposalPriceLine{proposalPrice required} to MProposalPrice
+	MProposalPriceLine{biddingLine required} to MBiddingLine
+
+	MProposalPriceSubItem{adOrganization required} to ADOrganization
+	MProposalPriceSubItem{biddingSubItemLine required} to MBiddingSubItemLine
+
+	MBiddingInvitation{adOrganization required} to ADOrganization
+	MBiddingInvitation{announcement required} to CAnnouncement
+	MBiddingInvitation{bidding required} to MBidding
+	MBiddingInvitation{vendor required} to CVendor
 }
 
 // Allow filtering to all entities.
