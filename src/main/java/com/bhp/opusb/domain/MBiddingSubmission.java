@@ -1,17 +1,24 @@
 package com.bhp.opusb.domain;
 
+import java.time.ZonedDateTime;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.UUID;
 
 /**
  * A MBiddingSubmission.
@@ -19,25 +26,50 @@ import java.util.UUID;
 @Entity
 @Table(name = "m_bidding_submission")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class MBiddingSubmission extends AbstractAuditingEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class MBiddingSubmission extends AbstractAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-    @Column(name = "join_bidding")
-    private String joinBidding;
+    @Column(name = "joined")
+    private Boolean joined;
+
+    @Column(name = "date_trx")
+    private ZonedDateTime dateTrx;
+
+    @Size(max = 30)
+    @Column(name = "document_no", length = 30)
+    private String documentNo;
 
     @NotNull
-    @Column(name = "proposed_price", precision = 21, scale = 2, nullable = false)
-    private BigDecimal proposedPrice;
+    @Size(max = 10)
+    @Column(name = "document_action", length = 10, nullable = false)
+    private String documentAction;
 
     @NotNull
-    @Column(name = "ceiling_price", precision = 21, scale = 2, nullable = false)
-    private BigDecimal ceilingPrice;
+    @Size(max = 12)
+    @Column(name = "document_status", length = 12, nullable = false)
+    private String documentStatus;
+
+    @Column(name = "approved")
+    private Boolean approved;
+
+    @Column(name = "processed")
+    private Boolean processed;
+
+    @Column(name = "date_approve")
+    private ZonedDateTime dateApprove;
+
+    @Column(name = "date_reject")
+    private ZonedDateTime dateReject;
+
+    @Column(name = "rejected_reason")
+    private String rejectedReason;
+
+    @Column(name = "date_submit")
+    private ZonedDateTime dateSubmit;
 
     @Column(name = "uid")
     private UUID uid;
@@ -45,31 +77,27 @@ public class MBiddingSubmission extends AbstractAuditingEntity implements Serial
     @Column(name = "active")
     private Boolean active;
 
-    @OneToMany(mappedBy = "mBiddingSubmission")
-    @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-    private Set<MBiddingSubmissionLine> mBiddingSubmissionLines = new HashSet<>();
-
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "mBiddingSubmissions", allowSetters = true)
+    @JsonIgnoreProperties("mBiddingSubmissions")
     private MBidding bidding;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "mBiddingSubmissions", allowSetters = true)
+    @JsonIgnoreProperties("mBiddingSubmissions")
     private MBiddingSchedule biddingSchedule;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "mBiddingSubmissions", allowSetters = true)
+    @JsonIgnoreProperties("mBiddingSubmissions")
     private CVendor vendor;
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = "mBiddingSubmissions", allowSetters = true)
+    @JsonIgnoreProperties("mBiddingSubmissions")
     private ADOrganization adOrganization;
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here
+    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -78,43 +106,147 @@ public class MBiddingSubmission extends AbstractAuditingEntity implements Serial
         this.id = id;
     }
 
-    public String getJoinBidding() {
-        return joinBidding;
+    public Boolean isJoined() {
+        return joined;
     }
 
-    public MBiddingSubmission joinBidding(String joinBidding) {
-        this.joinBidding = joinBidding;
+    public MBiddingSubmission joined(Boolean joined) {
+        this.joined = joined;
         return this;
     }
 
-    public void setJoinBidding(String joinBidding) {
-        this.joinBidding = joinBidding;
+    public void setJoined(Boolean joined) {
+        this.joined = joined;
     }
 
-    public BigDecimal getProposedPrice() {
-        return proposedPrice;
+    public ZonedDateTime getDateTrx() {
+        return dateTrx;
     }
 
-    public MBiddingSubmission proposedPrice(BigDecimal proposedPrice) {
-        this.proposedPrice = proposedPrice;
+    public MBiddingSubmission dateTrx(ZonedDateTime dateTrx) {
+        this.dateTrx = dateTrx;
         return this;
     }
 
-    public void setProposedPrice(BigDecimal proposedPrice) {
-        this.proposedPrice = proposedPrice;
+    public void setDateTrx(ZonedDateTime dateTrx) {
+        this.dateTrx = dateTrx;
     }
 
-    public BigDecimal getCeilingPrice() {
-        return ceilingPrice;
+    public String getDocumentNo() {
+        return documentNo;
     }
 
-    public MBiddingSubmission ceilingPrice(BigDecimal ceilingPrice) {
-        this.ceilingPrice = ceilingPrice;
+    public MBiddingSubmission documentNo(String documentNo) {
+        this.documentNo = documentNo;
         return this;
     }
 
-    public void setCeilingPrice(BigDecimal ceilingPrice) {
-        this.ceilingPrice = ceilingPrice;
+    public void setDocumentNo(String documentNo) {
+        this.documentNo = documentNo;
+    }
+
+    public String getDocumentAction() {
+        return documentAction;
+    }
+
+    public MBiddingSubmission documentAction(String documentAction) {
+        this.documentAction = documentAction;
+        return this;
+    }
+
+    public void setDocumentAction(String documentAction) {
+        this.documentAction = documentAction;
+    }
+
+    public String getDocumentStatus() {
+        return documentStatus;
+    }
+
+    public MBiddingSubmission documentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+        return this;
+    }
+
+    public void setDocumentStatus(String documentStatus) {
+        this.documentStatus = documentStatus;
+    }
+
+    public Boolean isApproved() {
+        return approved;
+    }
+
+    public MBiddingSubmission approved(Boolean approved) {
+        this.approved = approved;
+        return this;
+    }
+
+    public void setApproved(Boolean approved) {
+        this.approved = approved;
+    }
+
+    public Boolean isProcessed() {
+        return processed;
+    }
+
+    public MBiddingSubmission processed(Boolean processed) {
+        this.processed = processed;
+        return this;
+    }
+
+    public void setProcessed(Boolean processed) {
+        this.processed = processed;
+    }
+
+    public ZonedDateTime getDateApprove() {
+        return dateApprove;
+    }
+
+    public MBiddingSubmission dateApprove(ZonedDateTime dateApprove) {
+        this.dateApprove = dateApprove;
+        return this;
+    }
+
+    public void setDateApprove(ZonedDateTime dateApprove) {
+        this.dateApprove = dateApprove;
+    }
+
+    public ZonedDateTime getDateReject() {
+        return dateReject;
+    }
+
+    public MBiddingSubmission dateReject(ZonedDateTime dateReject) {
+        this.dateReject = dateReject;
+        return this;
+    }
+
+    public void setDateReject(ZonedDateTime dateReject) {
+        this.dateReject = dateReject;
+    }
+
+    public String getRejectedReason() {
+        return rejectedReason;
+    }
+
+    public MBiddingSubmission rejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
+        return this;
+    }
+
+    public void setRejectedReason(String rejectedReason) {
+        this.rejectedReason = rejectedReason;
+    }
+
+    public ZonedDateTime getDateSubmit() {
+        return dateSubmit;
+    }
+
+    public MBiddingSubmission dateSubmit(ZonedDateTime dateSubmit) {
+        this.dateSubmit = dateSubmit;
+        return this;
+    }
+
+    public void setDateSubmit(ZonedDateTime dateSubmit) {
+        this.dateSubmit = dateSubmit;
     }
 
     public UUID getUid() {
@@ -141,31 +273,6 @@ public class MBiddingSubmission extends AbstractAuditingEntity implements Serial
 
     public void setActive(Boolean active) {
         this.active = active;
-    }
-
-    public Set<MBiddingSubmissionLine> getMBiddingSubmissionLines() {
-        return mBiddingSubmissionLines;
-    }
-
-    public MBiddingSubmission mBiddingSubmissionLines(Set<MBiddingSubmissionLine> mBiddingSubmissionLines) {
-        this.mBiddingSubmissionLines = mBiddingSubmissionLines;
-        return this;
-    }
-
-    public MBiddingSubmission addMBiddingSubmissionLine(MBiddingSubmissionLine mBiddingSubmissionLine) {
-        this.mBiddingSubmissionLines.add(mBiddingSubmissionLine);
-        mBiddingSubmissionLine.setMBiddingSubmission(this);
-        return this;
-    }
-
-    public MBiddingSubmission removeMBiddingSubmissionLine(MBiddingSubmissionLine mBiddingSubmissionLine) {
-        this.mBiddingSubmissionLines.remove(mBiddingSubmissionLine);
-        mBiddingSubmissionLine.setMBiddingSubmission(null);
-        return this;
-    }
-
-    public void setMBiddingSubmissionLines(Set<MBiddingSubmissionLine> mBiddingSubmissionLines) {
-        this.mBiddingSubmissionLines = mBiddingSubmissionLines;
     }
 
     public MBidding getBidding() {
@@ -219,7 +326,12 @@ public class MBiddingSubmission extends AbstractAuditingEntity implements Serial
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
+    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @PrePersist
+    public void prePersist() {
+        uid = UUID.randomUUID();
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -237,14 +349,21 @@ public class MBiddingSubmission extends AbstractAuditingEntity implements Serial
         return 31;
     }
 
-    // prettier-ignore
     @Override
     public String toString() {
         return "MBiddingSubmission{" +
             "id=" + getId() +
-            ", joinBidding='" + getJoinBidding() + "'" +
-            ", proposedPrice=" + getProposedPrice() +
-            ", ceilingPrice=" + getCeilingPrice() +
+            ", joined='" + isJoined() + "'" +
+            ", dateTrx='" + getDateTrx() + "'" +
+            ", documentNo='" + getDocumentNo() + "'" +
+            ", documentAction='" + getDocumentAction() + "'" +
+            ", documentStatus='" + getDocumentStatus() + "'" +
+            ", approved='" + isApproved() + "'" +
+            ", processed='" + isProcessed() + "'" +
+            ", dateApprove='" + getDateApprove() + "'" +
+            ", dateReject='" + getDateReject() + "'" +
+            ", rejectedReason='" + getRejectedReason() + "'" +
+            ", dateSubmit='" + getDateSubmit() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

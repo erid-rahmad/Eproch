@@ -42,7 +42,7 @@
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
             </column>
-            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here, do not remove-->
         </createTable>
     </changeSet>
 
@@ -79,17 +79,69 @@
                   separator=";"
                   tableName="m_bidding_submission">
             <column name="id" type="numeric"/>
-            <column name="join_bidding" type="string"/>
-            <column name="proposed_price" type="numeric"/>
-            <column name="ceiling_price" type="numeric"/>
+            <column name="joined" type="boolean"/>
+            <column name="date_trx" type="datetime"/>
+            <column name="document_no" type="string"/>
+            <column name="document_action" type="string"/>
+            <column name="document_status" type="string"/>
+            <column name="approved" type="boolean"/>
+            <column name="processed" type="boolean"/>
+            <column name="date_approve" type="datetime"/>
+            <column name="date_reject" type="datetime"/>
+            <column name="rejected_reason" type="string"/>
+            <column name="date_submit" type="datetime"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="bidding_id" type="numeric"/>
             <column name="bidding_schedule_id" type="numeric"/>
             <column name="vendor_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
-            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here -->
+            <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210505164000" author="Ananta Aryadewa">
+        <renameColumn tableName="m_bidding_submission" oldColumnName="join_bidding" newColumnName="joined" columnDataType="boolean" />
+        <dropColumn tableName="m_bidding_submission">
+            <column name="ceiling_price"/>
+            <column name="proposed_price"/>
+        </dropColumn>
+        <addColumn tableName="m_bidding_submission">
+            <column name="date_trx" type="datetime">
+                <constraints nullable="true" />
+            </column>
+            <column name="document_no" type="varchar(30)">
+                <constraints nullable="true" />
+            </column>
+            <column name="document_action" type="varchar(10)">
+                <constraints nullable="false" />
+            </column>
+            <column name="document_status" type="varchar(12)">
+                <constraints nullable="false" />
+            </column>
+            <column name="approved" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="processed" type="boolean">
+                <constraints nullable="true" />
+            </column>
+            <column name="date_approve" type="datetime">
+                <constraints nullable="true" />
+            </column>
+            <column name="date_reject" type="datetime">
+                <constraints nullable="true" />
+            </column>
+            <column name="rejected_reason" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="date_submit" type="datetime">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <dropDefaultValue tableName="m_bidding_submission" columnName="date_trx" columnDataType="datetime"/>
+        <dropDefaultValue tableName="m_bidding_submission" columnName="date_approve" columnDataType="datetime"/>
+        <dropDefaultValue tableName="m_bidding_submission" columnName="date_reject" columnDataType="datetime"/>
+        <dropDefaultValue tableName="m_bidding_submission" columnName="date_submit" columnDataType="datetime"/>
     </changeSet>
 
 </databaseChangeLog>

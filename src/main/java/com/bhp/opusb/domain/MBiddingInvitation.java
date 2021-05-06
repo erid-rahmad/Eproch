@@ -1,15 +1,23 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-
-import java.io.Serializable;
-import java.util.Objects;
 import java.time.ZonedDateTime;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A MBiddingInvitation.
@@ -17,9 +25,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "m_bidding_invitation")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class MBiddingInvitation implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class MBiddingInvitation extends AbstractAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -32,7 +38,6 @@ public class MBiddingInvitation implements Serializable {
     @Column(name = "reason")
     private String reason;
 
-
     @Column(name = "answer_date")
     private ZonedDateTime answerDate;
 
@@ -42,20 +47,23 @@ public class MBiddingInvitation implements Serializable {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("mBiddingInvitations")
     private ADOrganization adOrganization;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("mBiddingInvitations")
-//    @Column(name = "announcement_id")
     private CAnnouncement announcement;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("mBiddingInvitations")
     private MBidding bidding;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("mBiddingInvitations")
     private CVendor vendor;
 
@@ -185,6 +193,11 @@ public class MBiddingInvitation implements Serializable {
         this.vendor = cVendor;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @PrePersist
+    public void prePersist() {
+        uid = UUID.randomUUID();
+    }
 
     @Override
     public boolean equals(Object o) {

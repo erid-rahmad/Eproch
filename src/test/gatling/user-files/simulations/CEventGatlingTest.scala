@@ -74,6 +74,7 @@ class CEventGatlingTest extends Simulation {
                 "id":null
                 , "name":"SAMPLE_TEXT"
                 , "description":"SAMPLE_TEXT"
+                , "formType":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

@@ -72,6 +72,7 @@
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
             <column name="description" type="string"/>
+            <column name="form_type" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
@@ -87,6 +88,14 @@
     <changeSet id="20210427103100" author="Ananta Aryadewa">
         <addColumn tableName="c_event">
             <column name="ad_form_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20210505164400" author="Ananta Aryadewa">
+        <addColumn tableName="c_event">
+            <column name="form_type" type="varchar(10)" remarks="Specify the type of event form">
                 <constraints nullable="true" />
             </column>
         </addColumn>

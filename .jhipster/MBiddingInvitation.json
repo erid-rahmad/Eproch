@@ -27,6 +27,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "aDOrganization",
             "otherEntityRelationshipName": "mBiddingInvitation",
+            "relationshipValidateRules": "required",
             "relationshipName": "adOrganization",
             "otherEntityField": "id"
         },
@@ -34,6 +35,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cAnnouncement",
             "otherEntityRelationshipName": "mBiddingInvitation",
+            "relationshipValidateRules": "required",
             "relationshipName": "announcement",
             "otherEntityField": "id"
         },
@@ -41,6 +43,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "mBidding",
             "otherEntityRelationshipName": "mBiddingInvitation",
+            "relationshipValidateRules": "required",
             "relationshipName": "bidding",
             "otherEntityField": "id"
         },
@@ -48,6 +51,7 @@
             "relationshipType": "many-to-one",
             "otherEntityName": "cVendor",
             "otherEntityRelationshipName": "mBiddingInvitation",
+            "relationshipValidateRules": "required",
             "relationshipName": "vendor",
             "otherEntityField": "id"
         }

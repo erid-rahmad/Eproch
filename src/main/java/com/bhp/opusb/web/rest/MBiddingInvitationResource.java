@@ -20,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -56,7 +57,7 @@ public class MBiddingInvitationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/m-bidding-invitations")
-    public ResponseEntity<MBiddingInvitationDTO> createMBiddingInvitation(@RequestBody MBiddingInvitationDTO mBiddingInvitationDTO) throws URISyntaxException {
+    public ResponseEntity<MBiddingInvitationDTO> createMBiddingInvitation(@Valid @RequestBody MBiddingInvitationDTO mBiddingInvitationDTO) throws URISyntaxException {
         log.debug("REST request to save MBiddingInvitation : {}", mBiddingInvitationDTO);
         if (mBiddingInvitationDTO.getId() != null) {
             throw new BadRequestAlertException("A new mBiddingInvitation cannot already have an ID", ENTITY_NAME, "idexists");
@@ -77,7 +78,7 @@ public class MBiddingInvitationResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/m-bidding-invitations")
-    public ResponseEntity<MBiddingInvitationDTO> updateMBiddingInvitation(@RequestBody MBiddingInvitationDTO mBiddingInvitationDTO) throws URISyntaxException {
+    public ResponseEntity<MBiddingInvitationDTO> updateMBiddingInvitation(@Valid @RequestBody MBiddingInvitationDTO mBiddingInvitationDTO) throws URISyntaxException {
         log.debug("REST request to update MBiddingInvitation : {}", mBiddingInvitationDTO);
         if (mBiddingInvitationDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");

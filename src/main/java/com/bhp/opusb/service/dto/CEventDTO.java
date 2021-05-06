@@ -8,6 +8,8 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import io.swagger.annotations.ApiModelProperty;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEvent} entity.
  */
@@ -20,6 +22,13 @@ public class CEventDTO extends AbstractAuditingDTO {
     private String name;
 
     private String description;
+
+    /**
+     * Specify the type of event form
+     */
+    @Size(max = 10)
+    @ApiModelProperty(value = "Specify the type of event form")
+    private String formType;
 
     private UUID uid;
 
@@ -60,6 +69,14 @@ public class CEventDTO extends AbstractAuditingDTO {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getFormType() {
+        return formType;
+    }
+
+    public void setFormType(String formType) {
+        this.formType = formType;
     }
 
     public UUID getUid() {
@@ -153,6 +170,7 @@ public class CEventDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", name='" + getName() + "'" +
             ", description='" + getDescription() + "'" +
+            ", formType='" + getFormType() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +

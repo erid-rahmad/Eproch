@@ -2,22 +2,62 @@
     "name": "MBiddingSubmission",
     "fields": [
         {
-            "fieldName": "joinBidding",
+            "fieldName": "joined",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "dateTrx",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "documentNo",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "30"
+        },
+        {
+            "fieldName": "documentAction",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
+            "fieldName": "documentStatus",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required",
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "12"
+        },
+        {
+            "fieldName": "approved",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "processed",
+            "fieldType": "Boolean"
+        },
+        {
+            "fieldName": "dateApprove",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "dateReject",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "rejectedReason",
             "fieldType": "String"
         },
         {
-            "fieldName": "proposedPrice",
-            "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
-        },
-        {
-            "fieldName": "ceilingPrice",
-            "fieldType": "BigDecimal",
-            "fieldValidateRules": [
-                "required"
-            ]
+            "fieldName": "dateSubmit",
+            "fieldType": "ZonedDateTime"
         },
         {
             "fieldName": "uid",
@@ -29,12 +69,6 @@
         }
     ],
     "relationships": [
-        {
-            "relationshipType": "one-to-many",
-            "otherEntityName": "mBiddingSubmissionLine",
-            "otherEntityRelationshipName": "mBiddingSubmission",
-            "relationshipName": "mBiddingSubmissionLine"
-        },
         {
             "relationshipType": "many-to-one",
             "otherEntityName": "mBidding",

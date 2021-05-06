@@ -29,6 +29,8 @@ public class CEventCriteria implements Serializable, Criteria {
 
     private StringFilter description;
 
+    private StringFilter formType;
+
     private UUIDFilter uid;
 
     private BooleanFilter active;
@@ -46,6 +48,7 @@ public class CEventCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
         this.description = other.description == null ? null : other.description.copy();
+        this.formType = other.formType == null ? null : other.formType.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -80,6 +83,14 @@ public class CEventCriteria implements Serializable, Criteria {
 
     public void setDescription(StringFilter description) {
         this.description = description;
+    }
+
+    public StringFilter getFormType() {
+        return formType;
+    }
+
+    public void setFormType(StringFilter formType) {
+        this.formType = formType;
     }
 
     public UUIDFilter getUid() {
@@ -136,6 +147,7 @@ public class CEventCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
             Objects.equals(description, that.description) &&
+            Objects.equals(formType, that.formType) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -149,6 +161,7 @@ public class CEventCriteria implements Serializable, Criteria {
         id,
         name,
         description,
+        formType,
         uid,
         active,
         adOrganizationId,
@@ -163,6 +176,7 @@ public class CEventCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
                 (description != null ? "description=" + description + ", " : "") +
+                (formType != null ? "formType=" + formType + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

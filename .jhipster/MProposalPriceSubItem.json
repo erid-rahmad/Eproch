@@ -1,0 +1,58 @@
+{
+    "name": "MProposalPriceSubItem",
+    "fields": [
+        {
+            "fieldName": "proposedPrice",
+            "fieldType": "BigDecimal",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mProposalPriceSubItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingSubItemLine",
+            "otherEntityRelationshipName": "mProposalPriceSubItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSubItemLine",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mProposalPriceLine",
+            "otherEntityRelationshipName": "mProposalPriceSubItem",
+            "relationshipValidateRules": "required",
+            "relationshipName": "proposalPriceLine",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210505055400",
+    "entityTableName": "m_proposal_price_sub_item",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

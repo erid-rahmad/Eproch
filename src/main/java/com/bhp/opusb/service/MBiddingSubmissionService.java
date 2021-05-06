@@ -1,30 +1,18 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MBiddingSubmission;
-
-import com.bhp.opusb.domain.MBiddingSubmissionLine;
-import com.bhp.opusb.repository.MBiddingSubmissionLineRepository;
 import com.bhp.opusb.repository.MBiddingSubmissionRepository;
-import com.bhp.opusb.repository.MSubmissionSubItemRepository;
 import com.bhp.opusb.service.dto.MBiddingSubmissionDTO;
-import com.bhp.opusb.service.dto.MBiddingSubmissionLineDTO;
-import com.bhp.opusb.service.mapper.MBiddingSubmissionLineMapper;
 import com.bhp.opusb.service.mapper.MBiddingSubmissionMapper;
-import com.bhp.opusb.util.MapperJSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
-
 
 /**
  * Service Implementation for managing {@link MBiddingSubmission}.
@@ -39,15 +27,6 @@ public class MBiddingSubmissionService {
 
     private final MBiddingSubmissionMapper mBiddingSubmissionMapper;
 
-    @Autowired
-    MBiddingSubmissionLineRepository mBiddingSubmissionLineRepository;
-
-    @Autowired
-    MSubmissionSubItemRepository mSubmissionSubItemRepository;
-
-    @Autowired
-    MBiddingSubmissionLineMapper mBiddingSubmissionLineMapper;
-
     public MBiddingSubmissionService(MBiddingSubmissionRepository mBiddingSubmissionRepository, MBiddingSubmissionMapper mBiddingSubmissionMapper) {
         this.mBiddingSubmissionRepository = mBiddingSubmissionRepository;
         this.mBiddingSubmissionMapper = mBiddingSubmissionMapper;
@@ -60,19 +39,9 @@ public class MBiddingSubmissionService {
      * @return the persisted entity.
      */
     public MBiddingSubmissionDTO save(MBiddingSubmissionDTO mBiddingSubmissionDTO) {
-        log.debug("Request to save MBiddingSubmission : {}", MapperJSONUtil.prettyLog(mBiddingSubmissionDTO));
+        log.debug("Request to save MBiddingSubmission : {}", mBiddingSubmissionDTO);
         MBiddingSubmission mBiddingSubmission = mBiddingSubmissionMapper.toEntity(mBiddingSubmissionDTO);
         mBiddingSubmission = mBiddingSubmissionRepository.save(mBiddingSubmission);
-
-//        try {
-//            for (MBiddingSubmissionLine mBiddingSubmissionLine1 : mBiddingSubmissionDTO.ge()){
-//                mBiddingSubmissionLine1.setMBiddingSubmission(mBiddingSubmission);
-//                mBiddingSubmissionLineRepository.save(mBiddingSubmissionLine1);
-//            }
-//
-//        }catch (Exception e){}
-
-
         return mBiddingSubmissionMapper.toDto(mBiddingSubmission);
     }
 
@@ -89,24 +58,6 @@ public class MBiddingSubmissionService {
             .map(mBiddingSubmissionMapper::toDto);
     }
 
-    @Transactional(readOnly = true)
-    public Optional<MBiddingSubmission> findAllnested(Long id) {
-        log.debug("Request to get all MBiddingSubmissions");
-        Optional<MBiddingSubmission> mBiddingSubmission = mBiddingSubmissionRepository.findById(id);
-        log.info("this mBiddingSubmission ");
-//        MBiddingSubmissionLine mBiddingSubmissionLine = null;
-//        mBiddingSubmission.get().addMBiddingSubmissionLine(mBiddingSubmissionLine);
-//        Set<MBiddingSubmissionLine> mBiddingSubmissionLines = mBiddingSubmissionLineRepository.findbyheaders(1l);
-//        for(MBiddingSubmissionLine mBiddingSubmissionLine :mBiddingSubmissionLines) {
-//            try {
-//                mBiddingSubmission.get().addMBiddingSubmissionLine(mBiddingSubmissionLine);
-//            }catch (Exception e){}
-//
-//        }
-        return mBiddingSubmission;
-    }
-
-
     /**
      * Get one mBiddingSubmission by id.
      *
@@ -115,13 +66,9 @@ public class MBiddingSubmissionService {
      */
     @Transactional(readOnly = true)
     public Optional<MBiddingSubmissionDTO> findOne(Long id) {
-        log.debug("Request to get MBiddingSubmission nested : {}", id);
-        Optional<MBiddingSubmissionDTO> mBiddingSubmissionDTO =mBiddingSubmissionRepository.findById(id)
+        log.debug("Request to get MBiddingSubmission : {}", id);
+        return mBiddingSubmissionRepository.findById(id)
             .map(mBiddingSubmissionMapper::toDto);
-        List<MBiddingSubmissionLineDTO> mBiddingSubmissionLines = mBiddingSubmissionLineMapper
-            .toDto(mBiddingSubmissionLineRepository.findbyheader(mBiddingSubmissionDTO.get().getId()));
-        mBiddingSubmissionDTO.get().setmBiddingSubmissionLineList(mBiddingSubmissionLines);
-        return mBiddingSubmissionDTO;
     }
 
     /**

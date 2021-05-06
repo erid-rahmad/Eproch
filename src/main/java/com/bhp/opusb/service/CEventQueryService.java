@@ -97,6 +97,9 @@ public class CEventQueryService extends QueryService<CEvent> {
             if (criteria.getDescription() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getDescription(), CEvent_.description));
             }
+            if (criteria.getFormType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFormType(), CEvent_.formType));
+            }
             if (criteria.getUid() != null) {
                 specification = specification.and(buildSpecification(criteria.getUid(), CEvent_.uid));
             }

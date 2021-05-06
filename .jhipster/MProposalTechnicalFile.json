@@ -1,0 +1,60 @@
+{
+    "name": "MProposalTechnicalFile",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "mProposalTechnicalFile",
+            "relationshipValidateRules": "required",
+            "relationshipName": "cAttachment",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mProposalTechnicalFile",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingSubmission",
+            "otherEntityRelationshipName": "mProposalTechnicalFile",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSubmission",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingSubCriteria",
+            "otherEntityRelationshipName": "mProposalTechnicalFile",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSubCriteria",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210505055600",
+    "entityTableName": "m_proposal_technical_file",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}
