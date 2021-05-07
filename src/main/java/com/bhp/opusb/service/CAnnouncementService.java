@@ -1,26 +1,37 @@
 package com.bhp.opusb.service;
 
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.CAnnouncement;
+import com.bhp.opusb.domain.MBidding;
+import com.bhp.opusb.domain.MBiddingInvitation;
 import com.bhp.opusb.domain.MVendorSuggestion;
 import com.bhp.opusb.repository.AdUserRepository;
 import com.bhp.opusb.repository.CAnnouncementRepository;
+import com.bhp.opusb.repository.MBiddingInvitationRepository;
+import com.bhp.opusb.repository.MBiddingSubmissionRepository;
 import com.bhp.opusb.repository.MVendorSuggestionRepository;
+import com.bhp.opusb.service.dto.AdUserDTO;
 import com.bhp.opusb.service.dto.CAnnouncementDTO;
-import com.bhp.opusb.service.dto.MBiddingInvitationDTO;
+import com.bhp.opusb.service.dto.CAnnouncementPublishDTO;
+import com.bhp.opusb.service.dto.MBiddingDTO;
+import com.bhp.opusb.service.mapper.AdUserMapper;
 import com.bhp.opusb.service.mapper.CAnnouncementMapper;
-import liquibase.pro.packaged.M;
+import com.bhp.opusb.service.mapper.MBiddingMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.ZonedDateTime;
-import java.util.*;
 
 /**
  * Service Implementation for managing {@link CAnnouncement}.
@@ -33,22 +44,35 @@ public class CAnnouncementService {
 
     private final CAnnouncementRepository cAnnouncementRepository;
 
+    private final MBiddingSubmissionRepository mBiddingSubmissionRepository;
+
+    @Autowired
+    private MVendorSuggestionRepository mVendorSuggestionRepository;
+
+    @Autowired
+    private AdUserRepository adUserRepository;
+
+    private final MBiddingInvitationRepository mBiddingInvitationRepository;
+
+    private final MailService mailService;
+
     private final CAnnouncementMapper cAnnouncementMapper;
+    private final MBiddingMapper mBiddingMapper;
+    private final AdUserMapper adUserMapper;
 
-    public CAnnouncementService(CAnnouncementRepository cAnnouncementRepository, CAnnouncementMapper cAnnouncementMapper) {
+    public CAnnouncementService(CAnnouncementRepository cAnnouncementRepository,
+            MBiddingSubmissionRepository mBiddingSubmissionRepository,
+            MBiddingInvitationRepository mBiddingInvitationRepository, MailService mailService,
+            CAnnouncementMapper cAnnouncementMapper, MBiddingMapper mBiddingMapper,
+            AdUserMapper adUserMapper) {
         this.cAnnouncementRepository = cAnnouncementRepository;
+        this.mBiddingSubmissionRepository = mBiddingSubmissionRepository;
+        this.mBiddingInvitationRepository = mBiddingInvitationRepository;
+        this.mailService = mailService;
         this.cAnnouncementMapper = cAnnouncementMapper;
+        this.mBiddingMapper = mBiddingMapper;
+        this.adUserMapper = adUserMapper;
     }
-
-    @Autowired
-    MVendorSuggestionRepository mVendorSuggestionRepository;
-    @Autowired
-    AdUserRepository adUserRepository;
-    @Autowired
-    private MailService mailService;
-
-    @Autowired
-    MBiddingInvitationService mBiddingInvitationService;
 
     /**
      * Save a cAnnouncement.
@@ -60,39 +84,47 @@ public class CAnnouncementService {
 
 
     public CAnnouncementDTO save(CAnnouncementDTO cAnnouncementDTO) {
-
         log.debug("Request to save CAnnouncement : {}", cAnnouncementDTO);
-        cAnnouncementDTO.setPublishDate(ZonedDateTime.now());
         CAnnouncement cAnnouncement = cAnnouncementMapper.toEntity(cAnnouncementDTO);
         cAnnouncement = cAnnouncementRepository.save(cAnnouncement);
-        log.info("this cAnnouncement to get {}",cAnnouncement);
-
-        try {
-            for (Map<String,Object> emaillist_:cAnnouncementDTO.getEmaillist()) {
-                String email = cAnnouncementDTO.getDescription();
-                log.info(String.valueOf(emaillist_.get("email")));
-                email=email.replace("#TenderName",emaillist_.get("biddingName").toString());
-                email=email.replace("#VendorName",emaillist_.get("vendor").toString());
-//            email=email.replace("#JenisPerusahaan","majumundur");
-                log.info( "this email{}",email);
-                mailService.sendEmail(emaillist_.get("email").toString(),"Bidding Invitation",email,false,true);
-            }
-        }catch (Exception e){}
-
-        List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(cAnnouncement.getBidding().getId());
-        for (MVendorSuggestion mVendorSuggestion_:mVendorSuggestion) {
-            MBiddingInvitationDTO mBiddingInvitationDTO = new MBiddingInvitationDTO();
-            mBiddingInvitationDTO.setBiddingId(cAnnouncementDTO.getBiddingId());
-            mBiddingInvitationDTO.setActive(true);
-            mBiddingInvitationDTO.setVendorId(mVendorSuggestion_.getVendor().getId());
-            mBiddingInvitationDTO.setInvitationStatus("Belum Terdaftar");
-            mBiddingInvitationDTO.setAnnouncementId(cAnnouncement.getId());
-            mBiddingInvitationDTO.setAdOrganizationId(cAnnouncementDTO.getAdOrganizationId());
-            mBiddingInvitationService.save(mBiddingInvitationDTO);
-        }
-
 
         return cAnnouncementMapper.toDto(cAnnouncement);
+    }
+
+    /**
+     * This will publish the announcement document to the selected vendors.
+     * @param cAnnouncementPublishDTO
+     */
+    public void publish(CAnnouncementPublishDTO cAnnouncementPublishDTO) {
+        CAnnouncement cAnnouncement = cAnnouncementMapper.toEntity(cAnnouncementPublishDTO.getAnnouncement());
+        final MBiddingDTO mBiddingDTO = cAnnouncementPublishDTO.getBidding();
+        final String content = cAnnouncement.getDescription();
+        final List<AdUserDTO> users = cAnnouncementPublishDTO.getUsers();
+        MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
+
+        String body = content.replace("#biddingTitle", mBiddingDTO.getName());
+
+        for (final AdUserDTO user : users) {
+            final AdUser adUser = adUserMapper.toEntity(user);
+
+            MBiddingInvitation mBiddingInvitation = new MBiddingInvitation()
+                .active(true)
+                .adOrganization(cAnnouncement.getAdOrganization())
+                .bidding(mBidding)
+                .vendor(adUser.getCVendor())
+                .invitationStatus("U")
+                .announcement(cAnnouncement);
+
+            // Create the invitation record.
+            mBiddingInvitationRepository.save(mBiddingInvitation);
+
+            body = body.replace("#vendorName", user.getcVendorName());
+            mailService.sendEmail(user.getEmail(), "Bidding Invitation", body, false, true);
+        }
+
+        // Update the announcement published date.
+        cAnnouncement.setPublishDate(ZonedDateTime.now());
+        cAnnouncementRepository.save(cAnnouncement);
     }
 
     public Map<String,Object> emailInvitation (Long id){

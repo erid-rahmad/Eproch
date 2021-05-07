@@ -157,9 +157,9 @@ entity CRegistrationDocument {
 }
 
 entity CAnnouncement{
-    description TextBlob required
-    publishDate ZonedDateTime
-    uid UUID
+	description TextBlob required
+	publishDate ZonedDateTime
+	uid UUID
 	active Boolean
 }
 /**
@@ -1376,10 +1376,10 @@ relationship ManyToOne {
 	CAttachment{adOrganization required} to ADOrganization
 	CRegistrationDocType{adOrganization required} to ADOrganization
 
-	CAnnouncement{adOrganization } to ADOrganization
-	CAnnouncement{bidding } to MBidding
-	CAnnouncement{biddingSchedule } to MBiddingSchedule
-	CAnnouncement{attachment } to CAttachment
+	CAnnouncement{adOrganization required} to ADOrganization
+	CAnnouncement{bidding required} to MBidding
+	CAnnouncement{biddingSchedule required} to MBiddingSchedule
+	CAnnouncement{attachment} to CAttachment
 
 	CVendor{adOrganization required} to ADOrganization
 	CVendor{documentType required} to CDocumentType

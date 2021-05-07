@@ -22,6 +22,8 @@ export default class ScheduleEventMixin extends Mixins(AccessLevelMixin, Schedul
   loading: boolean = false;
   mainForm: any = {};
 
+  protected onMainFormUpdated(mainForm: any) {}
+
   created() {
     console.log('scheduleEventMixin created');
     const query = this.$route.query;
@@ -88,6 +90,7 @@ export default class ScheduleEventMixin extends Mixins(AccessLevelMixin, Schedul
           this.$set(this.mainForm, 'endDate', dateSet.endDate);
         }
         this.$emit('data-loaded', {...this.mainForm});
+        this.onMainFormUpdated(this.mainForm);
         resolve(true);
       })
       .catch(err => {

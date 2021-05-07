@@ -1,56 +1,45 @@
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
-import { Component, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import ContextVariableAccessor from "../../ContextVariableAccessor";
-
-import AddAnnouncementForm from './components/add-announcement.vue';
-import DetailsAnnouncementForm from './components/details-announcement.vue';
-import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
+import AnnouncementForm from '@/core/application-dictionary/components/Form/bidding/event/bidding-announcement/announcement-form.vue';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
+import { Component, Inject, Mixins } from 'vue-property-decorator';
+import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
+
 
 
 @Component({
   components: {
-    AddAnnouncementForm,
-    DetailsAnnouncementForm,
-
+    AnnouncementForm
   }
 })
-export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMixin, ContextVariableAccessor,AccessLevelMixin) {
+export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
+
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  @Inject('dynamicWindowService')
-  private pushService: (baseApiUrl: string) => DynamicWindowService;
+  loading: boolean = false;
+  gridData: any = [];
 
+  gridSchema = {
+    defaultSort: {},
+    emptyText: 'No Records Found',
+    maxHeight: 500,
+    height: 500
+  };
 
-  dialogTableVisible = false;
-  dialogTableVisible11 = false;
-  editor = null;
-  private announcmentGridData: any = {};
-
-
-  index: boolean = true;
   page: number = 1;
-  moreinfoview: boolean = false;
-  step: boolean = false;
-  private moreinfo: any = {};
+  selectedRow: any = {};
 
-  ///##########################################################################################################
-
-  mounted() {
-    this.announcmentGrid();
- 
-    console.log("thislog",accountStore.userDetails.cVendorId);
-    
-  
-    
-    
+  onFormClosed() {
+    this.page = 1;
+    this.retrieveAnnouncements();
   }
 
-  private announcmentGrid() {
+  created() {
+    this.retrieveAnnouncements();
+  }
+
+  private retrieveAnnouncements() {
+    this.loading = true;
     this.commonService('/api/c-announcements')
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -64,19 +53,11 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
         }
       })
       .then(res => {
-        this.announcmentGridData = res.data;
-        console.log("announcmentGridData",this.announcmentGridData);
-
-      });
+        this.gridData = res.data;
+      })
+      .finally(() => this.loading = false);
   }
-  public get settingsAccount(): any {
-    return accountStore.account;
-  }
-
-  public get username(): string {
-    return accountStore.account ? accountStore.account.login : '';
-  }
-
+  
   viewBidding(row){
     console.log(row);
   }
@@ -85,24 +66,21 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
     console.log(row);
   }
 
-  view(row, stepIndex: number = 0) {
+  addAnnouncement() {
     this.page = 3;
   }
 
-  moreInfo(row) {
-    this.page = 2;
-    this.moreinfo = row;
-
+  viewDetails(row: any) {
+    this.page = 3;
+    this.selectedRow = row;
   }
 
-  back() {
-    this.page = 1;
-    this.announcmentGrid();
-
-
-
+  openRecipientList() {
+    (<any>this.$refs.announcementForm).openRecipientList();
   }
 
-
+  saveAsDraft() {
+    (<any>this.$refs.announcementForm).saveAsDraft();
+  }
 
 }

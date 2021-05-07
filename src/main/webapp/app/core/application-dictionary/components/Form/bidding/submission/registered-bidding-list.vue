@@ -192,7 +192,6 @@
 
       <submission-form
         v-else-if="submissionPage"
-        :data="selectedRow"
         :schedule-id="selectedRow.biddingScheduleId"
         @data-loaded="onSubmissionFormLoaded"
       ></submission-form>

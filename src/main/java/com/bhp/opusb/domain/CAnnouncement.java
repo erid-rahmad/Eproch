@@ -1,17 +1,25 @@
 package com.bhp.opusb.domain;
 
+import java.time.ZonedDateTime;
+import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
-import java.time.ZonedDateTime;
-import java.util.UUID;
 
 /**
  * A CAnnouncement.
@@ -19,7 +27,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "c_announcement")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CAnnouncement implements Serializable {
+public class CAnnouncement extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -28,12 +36,11 @@ public class CAnnouncement implements Serializable {
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
-
+    
     @Lob
     @Type(type = "org.hibernate.type.TextType")
     @Column(name = "description", nullable = false)
     private String description;
-
 
     @Column(name = "publish_date")
     private ZonedDateTime publishDate;
@@ -44,15 +51,18 @@ public class CAnnouncement implements Serializable {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("cAnnouncements")
     private ADOrganization adOrganization;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("cAnnouncements")
     private MBidding bidding;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @NotNull
     @JsonIgnoreProperties("cAnnouncements")
     private MBiddingSchedule biddingSchedule;
 
@@ -173,6 +183,11 @@ public class CAnnouncement implements Serializable {
         this.attachment = cAttachment;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
+
+    @PrePersist
+    public void prePersist() {
+        uid = UUID.randomUUID();
+    }
 
     @Override
     public boolean equals(Object o) {

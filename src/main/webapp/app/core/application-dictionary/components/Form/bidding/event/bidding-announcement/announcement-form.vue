@@ -68,9 +68,9 @@
                             size="mini"
                         ></html-editor>
                     </el-form-item>
-                    <el-form-item>
+                    <el-form-item style="margin-top: .5rem">
                         <el-button
-                            v-if="!attachmentName"
+                            v-if="!hasAttachment"
                             size="mini"
                             type="primary"
                             @click="attachmentFormVisible = true"
@@ -78,7 +78,7 @@
                             <svg-icon name="icomoo/206-attachment"></svg-icon> Attachment
                         </el-button>
                         <el-button
-                            v-if="attachmentName"
+                            v-if="hasAttachment"
                             icon="el-icon-view"
                             size="mini"
                             type="primary"
@@ -87,7 +87,7 @@
                             {{ attachmentName }}
                         </el-button>
                         <el-button
-                            v-if="attachmentName"
+                            v-if="hasAttachment"
                             icon="el-icon-close"
                             size="mini"
                             type="primary"
@@ -107,7 +107,7 @@
         </el-form>
 
         <el-divider content-position="left">
-            <h4>Data Rekanan</h4>
+            <h4>Vendors</h4>
         </el-divider>
         <el-row>
             <el-col
@@ -153,12 +153,13 @@
             title="Email Preview"
             :visible.sync="emailPreviewVisible"
         >
-            <template>
-                <div v-html="content"></div>
-            </template>
+            <div v-html="formData.description"></div>
         </el-dialog>
 
         <el-dialog
+            v-loading="publishing"
+            :close-on-click-modal="!publishing"
+            :close-on-press-escape="!publishing"
             title="Publish Email"
             :visible.sync="recipientListVisible"
             @open="retrieveEmailList"
@@ -169,7 +170,7 @@
                 :data="emailList"
                 size="mini"
                 stripe
-                @selection-change="handleSelectionChange"
+                @selection-change="onRecipientSelectionChanged"
             >
                 <el-table-column
                     type="selection"
@@ -196,7 +197,7 @@
             </el-table>
             <template>
                 <div slot="footer">
-                    <el-button type="primary" size="mini" @click="publish">Send</el-button>
+                    <el-button :loading="publishing" type="primary" size="mini" @click="publish">Send</el-button>
                 </div>
             </template>
         </el-dialog>
@@ -235,7 +236,7 @@
         </el-dialog>
     </div>
 </template>
-<script lang="ts" src="./add-announcement.component.ts"></script>
+<script lang="ts" src="./announcement-form.component.ts"></script>
 <style lang="scss">
     .compact .add-announcement {
         .el-table--mini {

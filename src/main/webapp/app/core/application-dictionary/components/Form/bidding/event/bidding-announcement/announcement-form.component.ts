@@ -1,10 +1,9 @@
 import AccountService from '@/account/account.service';
-import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import ScheduleEventMixin from '@/core/application-dictionary/mixins/ScheduleEventMixin';
 import HtmlEditor from '@/shared/components/HtmlEditor/index.vue';
-import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
-import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
 import { ElForm } from 'element-ui/types/form';
+import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
 
 const baseApiBidding = 'api/m-biddings'
 const baseApiAnnouncement = 'api/c-announcements';
@@ -16,9 +15,7 @@ const baseApiUser = 'api/ad-users'
     HtmlEditor
   }
 })
-export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
-  @Inject('dynamicWindowService')
-  private commonService: (baseApiUrl: string) => DynamicWindowService;
+export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
 
   @Inject('accountService')
   private accountService: () => AccountService;
@@ -26,29 +23,25 @@ export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
   loading: boolean = false;
   loadingVendors: boolean = false;
   loadingEmailList: boolean = false;
+  publishing: boolean = false;
 
   attachmentFormVisible = false;
   emailPreviewVisible = false;
   recipientListVisible = false;
 
-  public emailFromChild: any = {};
-  public Announcment: any = {};
-  private attachmentName = '';
   private file: any = {};
 
   public biddingData: any = {};
   public value: any = {};
   public itemname: any = {};
-  public emailList: any = {};
+  public emailList: any[] = [];
   private accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
   private action: string = "/api/c-attachments/upload"  
   private limit: number = 1;
   private vendorSuggestions: any[] = [];
   private dataForAnnouncment: any = {};
 
-  multipleSelection= [];
-
-  private content = '<p><br>Kepada Bapak/Ibu Pimpinan <br>#VendorName <br>Hal: Undangan #TenderName <br>Dengan hormat </p><p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>';
+  private selectedRecipients = [];
 
   formData: any = {
     adOrganizationId: AccountStoreModule.organizationInfo.id,
@@ -67,12 +60,13 @@ export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
       required: true, message: 'Description is required'
     },
   }
-  
-  @Watch('emailFromChild')
-  onDataChangeemail(data: any) {
-    console.log('Value:', data);
-  console.log("changeit");
-  
+
+  get attachmentName() {
+    return this.formData.attachmentName;
+  }
+
+  get hasAttachment() {
+    return !!this.formData.attachmentId;
   }
 
   @Watch('dataForAnnouncment')
@@ -81,8 +75,14 @@ export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
     this.changedata();
   }
 
+  onMainFormUpdated(mainForm: any) {
+    this.$set(this.formData, 'biddingId', mainForm.biddingId);
+    this.$set(this.formData, 'biddingScheduleId', mainForm.id);
+    this.retrieveVendorSuggestions(mainForm.biddingId);
+    this.retrieveAnnouncement(mainForm.biddingId, mainForm.id);
+  }
+
   created() {
-    console.log("mail from child", this.emailFromChild);
     this.retrieveBiddings();
   }
 
@@ -109,6 +109,26 @@ export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
       .then(res => {
         this.biddingData = res.data;
       });
+  }
+
+  private retrieveAnnouncement(biddingId: number, scheduleId: number) {
+    this.loading = true;
+    this.commonService(baseApiAnnouncement)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingId.equals=${biddingId}`,
+          `biddingScheduleId.equals=${scheduleId}`
+        ])
+      })
+      .then(res => {
+        const data = res.data as any[];
+        if (data.length) {
+          this.formData = {...this.formData, ...data[0]};
+        }
+      })
+      .catch(err => this.$message.error('Failed to get bidding announcement'))
+      .finally(() => this.loading = false);
   }
 
   retrieveVendorSuggestions(biddingId: number) {
@@ -168,15 +188,8 @@ export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
       });
   }
 
-  handleSelectionChange(val) {
-    this.multipleSelection = val;
-  }
-
-
-
-  back() {
-    this.$emit("back")
-      ;
+  onRecipientSelectionChanged(val) {
+    this.selectedRecipients = val;
   }
 
   handleBeforeUpload(file: any) {
@@ -211,13 +224,14 @@ export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
   }
 
   handlePreview() {
-    window.open(this.file.response.downloadUri, '_blank');
+    window.open(this.formData.attachmentUrl, '_blank');
   }
 
   cancelAttachment() {
-    this.attachmentName = null;
-    this.Announcment.attachmentId = null;
-    this.Announcment.attachment = null;
+    this.formData.attachmentId = null;
+    this.formData.attachmentName = null;
+    this.formData.attachmentUrl = null;
+    this.formData.attachment = null;
   }
 
   handleExceed(files, fileList) {
@@ -235,6 +249,8 @@ export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
   onUploadSuccess(response, file, fileList) {
     this.formData.attachment = response.attachment;
     this.formData.attachmentId = response.attachment.id;
+    this.formData.attachmentName = response.attachment.name;
+    this.formData.attachmentUrl = response.attachment.downloadUrl;
     this.file = file;
   }
 
@@ -265,11 +281,40 @@ export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
   }
 
   publish() {
-    if (this.multipleSelection.length == 0) {
+    this.loading = true;
+    if (this.selectedRecipients.length == 0) {
       this.$message.error('Please select at least one recipient');
     } else {
-      console.log('Publishing emails', this.formData);
-      this.recipientListVisible = false;
+      const data = {
+        announcement: this.formData,
+        bidding: {
+          id: this.mainForm.biddingId,
+          name: this.mainForm.biddingTitle,
+          documentNo: this.mainForm.biddingNo
+        },
+        users: []
+      };
+
+      for (const recipient of this.selectedRecipients) {
+        const {
+          createdBy,
+          createdDate,
+          lastModifiedBy,
+          lastModifiedDate,
+          password,
+          ...user
+        } = recipient;
+        data.users.push(user);
+      }
+
+      this.commonService(`${baseApiAnnouncement}/publish/${data.announcement.id}`)
+        .create(data)
+        .then(() => {
+          this.$message.success('Announcement has been published successfully');
+          this.recipientListVisible = false;
+        })
+        .catch(() => this.$message.error('Failed to publish bidding announcement'))
+        .finally(() => this.loading = false);
     }
   }
 
@@ -290,7 +335,9 @@ export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
   }
 
   saveAttachment() {
-    this.attachmentName = this.formData.attachment.fileName;
+    this.formData.attachmentId = this.formData.attachment.id;
+    this.formData.attachmentName = this.formData.attachment.fileName;
+    this.formData.attachmentUrl = this.formData.attachment.downloadUrl;
     this.attachmentFormVisible = false;
   }
 }
