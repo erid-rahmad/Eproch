@@ -15,6 +15,8 @@ public class CBiddingSubCriteriaLineDTO implements Serializable {
     @NotNull
     private String name;
 
+    private String requirement;
+
     private Integer score;
 
     private UUID uid;
@@ -25,6 +27,14 @@ public class CBiddingSubCriteriaLineDTO implements Serializable {
     private Long adOrganizationId;
 
     private Long biddingSubCriteriaId;
+
+    public String getRequirement() {
+        return requirement;
+    }
+
+    public void setRequirement(String requirement) {
+        this.requirement = requirement;
+    }
 
     public Long getId() {
         return id;

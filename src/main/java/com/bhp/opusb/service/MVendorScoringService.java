@@ -3,15 +3,19 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.MVendorScoring;
 import com.bhp.opusb.repository.MVendorScoringRepository;
 import com.bhp.opusb.service.dto.MVendorScoringDTO;
+import com.bhp.opusb.service.dto.MVendorScoringLineDTO;
 import com.bhp.opusb.service.mapper.MVendorScoringMapper;
+import com.bhp.opusb.util.MapperJSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -31,6 +35,8 @@ public class MVendorScoringService {
         this.mVendorScoringRepository = mVendorScoringRepository;
         this.mVendorScoringMapper = mVendorScoringMapper;
     }
+    @Autowired
+    MVendorScoringLineService mVendorScoringLineService;
 
     /**
      * Save a mVendorScoring.
@@ -42,8 +48,18 @@ public class MVendorScoringService {
         log.debug("Request to save MVendorScoring : {}", mVendorScoringDTO);
         MVendorScoring mVendorScoring = mVendorScoringMapper.toEntity(mVendorScoringDTO);
         mVendorScoring = mVendorScoringRepository.save(mVendorScoring);
-        return mVendorScoringMapper.toDto(mVendorScoring);
+        MVendorScoringDTO mVendorScoringDTO_=
+         mVendorScoringMapper.toDto(mVendorScoring);
+        log.info("result of mVendorScoringDTO_ {}",mVendorScoringDTO_);
+
+        for ( MVendorScoringLineDTO mVendorScoringLineDTO:mVendorScoringDTO.getVendorScoringLineDTOList()) {
+            mVendorScoringLineDTO.setVendorScoringId(mVendorScoringDTO_.getId());
+            mVendorScoringLineDTO.setActive(true);
+            mVendorScoringLineService.save(mVendorScoringLineDTO);
+        }
+        return mVendorScoringDTO_;
     }
+
 
     /**
      * Get all the mVendorScorings.

@@ -1,6 +1,8 @@
 package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.MVendorScoringCriteriaService;
+import com.bhp.opusb.service.dto.CEvaluationMethodCriteria;
+import com.bhp.opusb.service.dto.CEvaluationMethodCriteriaDTO;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
 import com.bhp.opusb.service.dto.MVendorScoringCriteriaDTO;
 import com.bhp.opusb.service.dto.MVendorScoringCriteriaCriteria;
@@ -24,6 +26,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -66,6 +70,15 @@ public class MVendorScoringCriteriaResource {
         return ResponseEntity.created(new URI("/api/m-vendor-scoring-criteria/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    @PostMapping("/m-vendor-scoring-criteria-answer")
+    public ResponseEntity<List<CEvaluationMethodCriteriaDTO>> createMVendorScoringCriteria(@Valid @RequestBody List<CEvaluationMethodCriteriaDTO> answer) throws URISyntaxException {
+        log.debug("REST request to save MVendorScoringCriteria : {}", answer);
+        List<CEvaluationMethodCriteriaDTO> result=mVendorScoringCriteriaService.vendorScoringAnswer(answer);
+        return ResponseEntity.ok(answer);
+
+
     }
 
     /**

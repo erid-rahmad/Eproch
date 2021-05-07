@@ -2,7 +2,7 @@
     <div class="prequalification-form">
         <el-form ref="mainForm" label-position="left" label-width="200px"  size="mini">
             <!-- <el-row v-for="criteria in evaluationMethodCriteria" :key="criteria.id" class="criteria-section" :class="`criteria-${index}`"> -->
-                  <el-button size="mini" icon="el-icon-plus" type="primary" @click="testing">help</el-button>
+                 
             <el-row v-for="criteria in evaluationMethodCriteria" :key="criteria.id" >
                 <el-col :span="24">
                     <el-row>
@@ -39,26 +39,24 @@
                                             <el-option v-for="item in requirements" :key="item.code" :label="item.name" :value="item.code"></el-option>
                                             <el-input v-model="requirements.row" class="form-input" clearable></el-input>
                                         </el-select> -->
-                                            <el-input v-model="row.requerment" class="form-input" clearable @change="testing"></el-input>
+                                            <el-input v-model="row.requirement" class="form-input" clearable @change="testing"></el-input>
                                         </template>
                                     </el-table-column>
 
-                                    <el-table-column label="Requirement" width="150">
+                                    <!-- <el-table-column label="Requirement" width="150">
                                         <template slot-scope="{ row }">
                                             <el-button size="mini" icon="el-icon-plus" type="primary" @click="testing2(row)">help</el-button>                                            
                                         </template>
-                                    </el-table-column>
+                                    </el-table-column> -->
                                 </el-table>
                             </el-row>
                         </el-col>
                     </el-row>
                 </el-col>
             </el-row>
-
-
-
+             <el-button size="mini" icon="el-icon-plus" type="primary" @click="setpushVendorScoringAnswer">PUSH</el-button>
         </el-form>
-        <el-button size="mini" icon="el-icon-plus" type="primary" @click="testing">help</el-button>
+
 
     </div>
 </template>

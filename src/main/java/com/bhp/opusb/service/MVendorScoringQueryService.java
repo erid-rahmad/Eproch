@@ -1,12 +1,18 @@
 package com.bhp.opusb.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.JoinType;
 
+import com.bhp.opusb.service.dto.*;
+import com.bhp.opusb.service.dto.MVendorScoringCriteria;
+import io.github.jhipster.service.filter.LongFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -17,8 +23,6 @@ import io.github.jhipster.service.QueryService;
 import com.bhp.opusb.domain.MVendorScoring;
 import com.bhp.opusb.domain.*; // for static metamodels
 import com.bhp.opusb.repository.MVendorScoringRepository;
-import com.bhp.opusb.service.dto.MVendorScoringCriteria;
-import com.bhp.opusb.service.dto.MVendorScoringDTO;
 import com.bhp.opusb.service.mapper.MVendorScoringMapper;
 
 /**
@@ -42,6 +46,9 @@ public class MVendorScoringQueryService extends QueryService<MVendorScoring> {
         this.mVendorScoringMapper = mVendorScoringMapper;
     }
 
+    @Autowired
+    MVendorScoringLineQueryService mVendorScoringLineQueryService;
+
     /**
      * Return a {@link List} of {@link MVendorScoringDTO} which matches the criteria from the database.
      * @param criteria The object which holds all the filters, which the entities should match.
@@ -64,8 +71,26 @@ public class MVendorScoringQueryService extends QueryService<MVendorScoring> {
     public Page<MVendorScoringDTO> findByCriteria(MVendorScoringCriteria criteria, Pageable page) {
         log.debug("find by criteria : {}, page: {}", criteria, page);
         final Specification<MVendorScoring> specification = createSpecification(criteria);
-        return mVendorScoringRepository.findAll(specification, page)
+
+        Page<MVendorScoringDTO> mvendorScoringDTO= mVendorScoringRepository.findAll(specification, page)
             .map(mVendorScoringMapper::toDto);
+
+        List<MVendorScoringDTO> vendorScoringDTOS =new ArrayList<>();
+
+        for (MVendorScoringDTO mVendorScoringDTO_ :mvendorScoringDTO){
+
+            LongFilter longFilter = new LongFilter();
+            MVendorScoringLineCriteria criteriaCriteria = new MVendorScoringLineCriteria();
+            criteriaCriteria.setVendorScoringId((LongFilter) longFilter.setEquals(mVendorScoringDTO_.getId()));
+            Page<MVendorScoringLineDTO> mVendorScoringLineDTOS = mVendorScoringLineQueryService.findByCriteria(criteriaCriteria,page);
+            log.info("this biddingSubCriteriaDTOS_ {} ",mVendorScoringLineDTOS);
+            mVendorScoringDTO_.setVendorScoringLineDTOList(mVendorScoringLineDTOS.getContent());
+            vendorScoringDTOS.add(mVendorScoringDTO_);
+        }
+        return new PageImpl<>(vendorScoringDTOS);
+
+
+
     }
 
     /**

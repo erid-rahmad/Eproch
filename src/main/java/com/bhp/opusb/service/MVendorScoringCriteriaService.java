@@ -2,8 +2,9 @@ package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MVendorScoringCriteria;
 import com.bhp.opusb.repository.MVendorScoringCriteriaRepository;
-import com.bhp.opusb.service.dto.MVendorScoringCriteriaDTO;
+import com.bhp.opusb.service.dto.*;
 import com.bhp.opusb.service.mapper.MVendorScoringCriteriaMapper;
+import com.bhp.opusb.util.MapperJSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -43,6 +46,29 @@ public class MVendorScoringCriteriaService {
         MVendorScoringCriteria mVendorScoringCriteria = mVendorScoringCriteriaMapper.toEntity(mVendorScoringCriteriaDTO);
         mVendorScoringCriteria = mVendorScoringCriteriaRepository.save(mVendorScoringCriteria);
         return mVendorScoringCriteriaMapper.toDto(mVendorScoringCriteria);
+    }
+
+    public List<CEvaluationMethodCriteriaDTO> vendorScoringAnswer (List<CEvaluationMethodCriteriaDTO> evaluationMethodCriteria){
+        log.debug("Request to save MVendorScoring annwer : {}", MapperJSONUtil.prettyLog(evaluationMethodCriteria));
+
+        for (CEvaluationMethodCriteriaDTO cEvaluationMethodCriteriaDTO:evaluationMethodCriteria) {
+            for ( CEvalMethodSubCriteriaDTO evalMethodSubCriteriaDTO:cEvaluationMethodCriteriaDTO.getEvalMethodSubCriteriaList()) {
+                for (CBiddingSubCriteriaDTO cBiddingSubCriteriaDTO:evalMethodSubCriteriaDTO.getBiddingSubCriteriaDTO()){
+                    for (CBiddingSubCriteriaLineDTO cBiddingSubCriteriaLineDTO:cBiddingSubCriteriaDTO.getCriteriaLineDTO()){
+                        log.info(cBiddingSubCriteriaLineDTO.getRequirement());
+                        log.info(cBiddingSubCriteriaLineDTO.getName());
+                        MVendorScoringCriteriaDTO mVendorScoringCriteriaDTO =new MVendorScoringCriteriaDTO();
+                        mVendorScoringCriteriaDTO.setRequirement(cBiddingSubCriteriaLineDTO.getRequirement());
+                        mVendorScoringCriteriaDTO.setBiddingSubCriteriaLineId(cBiddingSubCriteriaLineDTO.getId());
+                        mVendorScoringCriteriaDTO.setEvalMethodSubCriteriaId(evalMethodSubCriteriaDTO.getId());
+//                        mVendorScoringCriteriaDTO.setEvalMethodCriteriaLineId(););
+
+
+                    }
+                }
+            }
+        }
+        return evaluationMethodCriteria;
     }
 
     /**

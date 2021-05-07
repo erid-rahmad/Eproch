@@ -86,6 +86,7 @@ public class CEvaluationMethodCriteriaQueryService extends QueryService<CEvaluat
             cEvaluationMethodCriteriaDTO_.setEvalMethodSubCriteriaList(cEvalMethodSubCriteriaDTOS.getContent());
             cEvaluationMethodCriteriaDTOS.add(cEvaluationMethodCriteriaDTO_);
         }
+
         return new PageImpl<>(cEvaluationMethodCriteriaDTOS);
     }
 
