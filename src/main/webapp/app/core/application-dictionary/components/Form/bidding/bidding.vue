@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container bidding-process">
+  <div class="app-container card-view bidding-process">
     <div class="toolbar">
       <el-button
         v-if="!index"
@@ -30,7 +30,10 @@
       ></document-action-button>
     </div>
 
-    <template v-if="index">
+    <div
+      v-if="index"
+      class="card"
+    >
       <el-table
         v-loading="processing"
         ref="mainGrid"
@@ -170,10 +173,11 @@
         :total="queryCount"
         @size-change="changePageSize"
       ></el-pagination>
-    </template>
+    </div>
 
     <step-form
       v-else
+      class="card"
       ref="biddingForm"
       :edit-mode="editMode"
       :data="selectedRow"
@@ -297,7 +301,7 @@
 }
 
 .toolbar {
-  padding: 4px;
+  padding: 4px 16px;
 }
 
 .form-input {

@@ -25,6 +25,7 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
     private Long biddingId;
     private String biddingNo;
     private String biddingTitle;
+    private String biddingType;
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -34,6 +35,8 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
 
     private AdFormDTO adForm;
     private Long adFormId;
+    
+    private String formType;
     
     public Long getId() {
         return id;
@@ -99,6 +102,14 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
         this.biddingTitle = biddingTitle;
     }
 
+    public String getBiddingType() {
+        return biddingType;
+    }
+
+    public void setBiddingType(String biddingType) {
+        this.biddingType = biddingType;
+    }
+
     public String getBiddingName() {
         return biddingNo + " - " + biddingTitle;
     }
@@ -149,6 +160,14 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
 
     public void setAdFormId(Long adFormId) {
         this.adFormId = adFormId;
+    }
+
+    public String getFormType() {
+        return formType;
+    }
+
+    public void setFormType(String formType) {
+        this.formType = formType;
     }
 
     @Override

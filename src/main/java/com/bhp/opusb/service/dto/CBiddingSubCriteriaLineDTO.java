@@ -25,8 +25,10 @@ public class CBiddingSubCriteriaLineDTO implements Serializable {
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long biddingSubCriteriaId;
+    private String biddingSubCriteriaName;
 
     public String getRequirement() {
         return requirement;
@@ -84,12 +86,28 @@ public class CBiddingSubCriteriaLineDTO implements Serializable {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getBiddingSubCriteriaId() {
         return biddingSubCriteriaId;
     }
 
     public void setBiddingSubCriteriaId(Long cBiddingSubCriteriaId) {
         this.biddingSubCriteriaId = cBiddingSubCriteriaId;
+    }
+
+    public String getBiddingSubCriteriaName() {
+        return biddingSubCriteriaName;
+    }
+
+    public void setBiddingSubCriteriaName(String biddingSubCriteriaName) {
+        this.biddingSubCriteriaName = biddingSubCriteriaName;
     }
 
     @Override

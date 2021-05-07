@@ -91,6 +91,36 @@ public class CAnnouncementResourceIT {
             .publishDate(DEFAULT_PUBLISH_DATE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cAnnouncement.setAdOrganization(aDOrganization);
+        // Add required entity
+        MBidding mBidding;
+        if (TestUtil.findAll(em, MBidding.class).isEmpty()) {
+            mBidding = MBiddingResourceIT.createEntity(em);
+            em.persist(mBidding);
+            em.flush();
+        } else {
+            mBidding = TestUtil.findAll(em, MBidding.class).get(0);
+        }
+        cAnnouncement.setBidding(mBidding);
+        // Add required entity
+        MBiddingSchedule mBiddingSchedule;
+        if (TestUtil.findAll(em, MBiddingSchedule.class).isEmpty()) {
+            mBiddingSchedule = MBiddingScheduleResourceIT.createEntity(em);
+            em.persist(mBiddingSchedule);
+            em.flush();
+        } else {
+            mBiddingSchedule = TestUtil.findAll(em, MBiddingSchedule.class).get(0);
+        }
+        cAnnouncement.setBiddingSchedule(mBiddingSchedule);
         return cAnnouncement;
     }
     /**
@@ -105,6 +135,36 @@ public class CAnnouncementResourceIT {
             .publishDate(UPDATED_PUBLISH_DATE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
+        // Add required entity
+        ADOrganization aDOrganization;
+        if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
+            aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
+            em.persist(aDOrganization);
+            em.flush();
+        } else {
+            aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
+        }
+        cAnnouncement.setAdOrganization(aDOrganization);
+        // Add required entity
+        MBidding mBidding;
+        if (TestUtil.findAll(em, MBidding.class).isEmpty()) {
+            mBidding = MBiddingResourceIT.createUpdatedEntity(em);
+            em.persist(mBidding);
+            em.flush();
+        } else {
+            mBidding = TestUtil.findAll(em, MBidding.class).get(0);
+        }
+        cAnnouncement.setBidding(mBidding);
+        // Add required entity
+        MBiddingSchedule mBiddingSchedule;
+        if (TestUtil.findAll(em, MBiddingSchedule.class).isEmpty()) {
+            mBiddingSchedule = MBiddingScheduleResourceIT.createUpdatedEntity(em);
+            em.persist(mBiddingSchedule);
+            em.flush();
+        } else {
+            mBiddingSchedule = TestUtil.findAll(em, MBiddingSchedule.class).get(0);
+        }
+        cAnnouncement.setBiddingSchedule(mBiddingSchedule);
         return cAnnouncement;
     }
 
@@ -422,12 +482,8 @@ public class CAnnouncementResourceIT {
     @Test
     @Transactional
     public void getAllCAnnouncementsByAdOrganizationIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cAnnouncementRepository.saveAndFlush(cAnnouncement);
-        ADOrganization adOrganization = ADOrganizationResourceIT.createEntity(em);
-        em.persist(adOrganization);
-        em.flush();
-        cAnnouncement.setAdOrganization(adOrganization);
+        // Get already existing entity
+        ADOrganization adOrganization = cAnnouncement.getAdOrganization();
         cAnnouncementRepository.saveAndFlush(cAnnouncement);
         Long adOrganizationId = adOrganization.getId();
 
@@ -442,12 +498,8 @@ public class CAnnouncementResourceIT {
     @Test
     @Transactional
     public void getAllCAnnouncementsByBiddingIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cAnnouncementRepository.saveAndFlush(cAnnouncement);
-        MBidding bidding = MBiddingResourceIT.createEntity(em);
-        em.persist(bidding);
-        em.flush();
-        cAnnouncement.setBidding(bidding);
+        // Get already existing entity
+        MBidding bidding = cAnnouncement.getBidding();
         cAnnouncementRepository.saveAndFlush(cAnnouncement);
         Long biddingId = bidding.getId();
 
@@ -462,12 +514,8 @@ public class CAnnouncementResourceIT {
     @Test
     @Transactional
     public void getAllCAnnouncementsByBiddingScheduleIsEqualToSomething() throws Exception {
-        // Initialize the database
-        cAnnouncementRepository.saveAndFlush(cAnnouncement);
-        MBiddingSchedule biddingSchedule = MBiddingScheduleResourceIT.createEntity(em);
-        em.persist(biddingSchedule);
-        em.flush();
-        cAnnouncement.setBiddingSchedule(biddingSchedule);
+        // Get already existing entity
+        MBiddingSchedule biddingSchedule = cAnnouncement.getBiddingSchedule();
         cAnnouncementRepository.saveAndFlush(cAnnouncement);
         Long biddingScheduleId = biddingSchedule.getId();
 

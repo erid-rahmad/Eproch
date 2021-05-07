@@ -31,7 +31,6 @@ import UserManagementService from '@/admin/user-management/user-management.servi
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
 
-import '../content/scss/vendor.scss';
 import '@/styles/element-variables.scss';
 import '@/styles/index.scss';
 import '@/assets/icons/components';

@@ -1,18 +1,15 @@
-import { Component, Inject, Mixins } from "vue-property-decorator";
-import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
-import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import AccountService from '@/account/account.service';
+import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
+import ScheduleEventMixin from '@/core/application-dictionary/mixins/ScheduleEventMixin';
 import settings from '@/settings';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
+import { Component, Inject, Mixins } from "vue-property-decorator";
 
-const baseApiSchedule = 'api/m-bidding-schedules';
-const baseApiDateSet = 'api/m-prequalification-date-sets';
 const baseApiPreBidMeeting = 'api/m-pre-bid-meetings';
 const baseApiPreBidMeetingAttachment = 'api/m-pre-bid-meeting-attachments'
-const baseApiAttachment = 'api/c-attachments';
 
 @Component
-export default class PreBidMeeting extends Mixins(AccessLevelMixin) {
+export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
 
   @Inject('accountService')
   private accountService: () => AccountService;
@@ -20,24 +17,19 @@ export default class PreBidMeeting extends Mixins(AccessLevelMixin) {
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  biddingScheduleId: number = null;
-  mainForm: any = {};
-  uploadedFiles: any[] = [];
-
   gutterSize: number = 24;
-
-  loading: boolean = false;
   loadingAttachments: boolean = false;
+
   uploadAccept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf";
   uploadEndpoint = '/api/c-attachments/upload';
+
+  uploadedFiles: any[] = [];
 
   preBidMeeting = {
     id: null,
     adOrganizationId: AccountStoreModule.organizationInfo.id,
     biddingScheduleId: null,
   };
-
-  attachments = [];
 
   get dateDisplayFormat() {
     return settings.dateTimeDisplayFormat;
@@ -97,11 +89,11 @@ export default class PreBidMeeting extends Mixins(AccessLevelMixin) {
   }
 
   created() {
+    console.log('preBidMeeting created. scheduleId:', this.biddingScheduleId);
     const query = this.$route.query;
 
-    this.biddingScheduleId = parseInt(query.biddingScheduleId as string);
-    this.retrieveBiddingSchedule(this.biddingScheduleId);
-    this.retrievePreBidMeeting(this.biddingScheduleId);
+    const biddingScheduleId = parseInt(query.biddingScheduleId as string);
+    this.retrievePreBidMeeting(biddingScheduleId);
   }
 
   viewParticipants() {
@@ -201,73 +193,6 @@ export default class PreBidMeeting extends Mixins(AccessLevelMixin) {
       })
       .finally(() => {
         this.loadingAttachments = false;
-      });
-    });
-  }
-
-  private retrieveBiddingSchedule(id: number): Promise<boolean> {
-    return new Promise(resolve => {
-      this.loading = true;
-      this.commonService(baseApiSchedule)
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          `id.equals=${id}`
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 1,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        if (res.data.length) {
-          this.mainForm = res.data[0];
-          this.retrieveDateSet(this.mainForm.id);
-        }
-        resolve(true);
-      })
-      .catch(err => {
-        console.error('Failed to get bidding schedules. %O', err);
-        this.$message.error('Failed to get schedule details');
-        resolve(false);
-      })
-      .finally(() => {
-        this.loading = false;
-      });
-    });
-  }
-
-  private retrieveDateSet(biddingScheduleId: number): Promise<boolean> {
-    return new Promise(resolve => {
-      this.loading = true;
-      this.commonService(baseApiDateSet)
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          `biddingScheduleId.equals=${biddingScheduleId}`
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 1,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        if (res.data.length) {
-          const dateSet = res.data[0];
-          this.$set(this.mainForm, 'startDate', dateSet.startDate);
-          this.$set(this.mainForm, 'endDate', dateSet.endDate);
-        }
-        resolve(true);
-      })
-      .catch(err => {
-        console.error('Failed to get schedule date set. %O', err);
-        this.$message.error('Failed to get schedule details');
-        resolve(false);
-      })
-      .finally(() => {
-        this.loading = false;
       });
     });
   }

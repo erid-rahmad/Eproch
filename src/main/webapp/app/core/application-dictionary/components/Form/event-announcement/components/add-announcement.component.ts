@@ -1,71 +1,73 @@
-import { Component, Inject,Watch } from "vue-property-decorator";
-
-import tiptap from './VModel/index.vue'
-import Editor from './VModel/Editor.vue'
-import AlertMixin from '@/shared/alert/alert.mixin';
-import { mixins } from 'vue-class-component';
-import Vue2Filters from 'vue2-filters';
-import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
-import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import AccountService from '@/account/account.service';
+import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import HtmlEditor from '@/shared/components/HtmlEditor/index.vue';
+import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
+import { AccountStoreModule } from '@/shared/config/store/account-store';
+import { ElForm } from 'element-ui/types/form';
+
+const baseApiBidding = 'api/m-biddings'
+const baseApiAnnouncement = 'api/c-announcements';
+const baseApiVendorSuggestion = 'api/m-vendor-suggestions';
+const baseApiUser = 'api/ad-users'
 
 @Component({
   components: {
-    Editor,   
+    HtmlEditor
   }
 })
-export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, AlertMixin,AccessLevelMixin) {
+export default class AddAnnouncementForm extends Mixins(AccessLevelMixin) {
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
-
-  @Inject('dynamicWindowService')
-  private pushService: (baseApiUrl: string) => DynamicWindowService;
 
   @Inject('accountService')
   private accountService: () => AccountService;
 
-  dialogTableVisible = false;
-  dialogTableVisible11 = false;
+  loading: boolean = false;
+  loadingVendors: boolean = false;
+  loadingEmailList: boolean = false;
+
+  attachmentFormVisible = false;
+  emailPreviewVisible = false;
+  recipientListVisible = false;
 
   public emailFromChild: any = {};
   public Announcment: any = {};
-  private attachmetName = '';
-  private fileAttacment: any = {};
+  private attachmentName = '';
+  private file: any = {};
 
   public biddingData: any = {};
   public value: any = {};
   public itemname: any = {};
   public emailList: any = {};
-  praSentPA = false;
   private accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
-  projectFormVisible = false;
   private action: string = "/api/c-attachments/upload"  
   private limit: number = 1;
-  private dataRekanan: any = {};
+  private vendorSuggestions: any[] = [];
   private dataForAnnouncment: any = {};
 
   multipleSelection= [];
 
   private content = '<p><br>Kepada Bapak/Ibu Pimpinan <br>#VendorName <br>Hal: Undangan #TenderName <br>Dengan hormat </p><p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>';
 
+  formData: any = {
+    adOrganizationId: AccountStoreModule.organizationInfo.id,
+    biddingId: null,
+    description: null,
+    attachment: null,
+    attachmentId: null,
+    emaillist: []
+  };
 
-
-
-  // #########################################################################SERVICE########################################################
-
-  mounted() {
-    console.log("mail from child", this.emailFromChild);
-    this.retrieveBidding();
-    this.value = null;
-    
+  validationSchema = {
+    biddingId: {
+      required: true, message: 'Bidding is required'
+    },
+    description: {
+      required: true, message: 'Description is required'
+    },
   }
-
-  @Watch('value')
-  onDataChanged(data: any) {
-    console.log('Value:', data);
-    this.getDataForAnnouncment();
-  }
-
+  
   @Watch('emailFromChild')
   onDataChangeemail(data: any) {
     console.log('Value:', data);
@@ -79,19 +81,21 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
     this.changedata();
   }
 
+  created() {
+    console.log("mail from child", this.emailFromChild);
+    this.retrieveBiddings();
+  }
+
   changedata() {
     this.emailList = this.dataForAnnouncment.emaillist;
-    this.dataRekanan = this.dataForAnnouncment.vendorlist;  
+    this.vendorSuggestions = this.dataForAnnouncment.vendorlist;  
 
     console.log(this.dataForAnnouncment.emaillist);
     console.log(this.dataForAnnouncment.vendorlist);
-    
-    
-    
   }
 
-  private retrieveBidding() {
-    this.commonService('/api/m-biddings')
+  private retrieveBiddings() {
+    this.commonService(baseApiBidding)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=true'
@@ -104,8 +108,44 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
       })
       .then(res => {
         this.biddingData = res.data;
-        console.log("biding data",this.biddingData);
       });
+  }
+
+  retrieveVendorSuggestions(biddingId: number) {
+    this.loadingVendors = true;
+    this.commonService(baseApiVendorSuggestion)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          `biddingId.equals=${biddingId}`
+        ])
+      })
+      .then(res => {
+        this.vendorSuggestions = res.data;
+      })
+      .catch(_err => {
+        this.$message.error('Failed to get the vendor suggestions');
+      })
+      .finally(() => this.loadingVendors = false);
+  }
+
+  retrieveEmailList() {
+    const vendorQuery = this.vendorSuggestions.map(vendor => `cVendorId.in=${vendor.vendorId}`);
+
+    this.loadingEmailList = true;
+    this.commonService(baseApiUser)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
+          'vendor.equals=true',
+          ...vendorQuery
+        ])
+      })
+      .then(res => {
+        this.emailList = res.data;
+      })
+      .catch(err => this.$message.error('Failed to get the email recipients'))
+      .finally(() => this.loadingEmailList = false);
   }
 
   private getDataForAnnouncment() {
@@ -128,13 +168,8 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
       });
   }
 
-  private pushAnnouncement() {
-    this.pushService('/api/c-announcements')
-      .create(this.Announcment);
-  }
-
-    handleSelectionChange(val) {
-      this.multipleSelection = val;
+  handleSelectionChange(val) {
+    this.multipleSelection = val;
   }
 
 
@@ -176,11 +211,11 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
   }
 
   handlePreview() {
-    window.open(this.fileAttacment.response.downloadUri, '_blank');
+    window.open(this.file.response.downloadUri, '_blank');
   }
 
-  cancelAtachment() {
-    this.attachmetName = null;
+  cancelAttachment() {
+    this.attachmentName = null;
     this.Announcment.attachmentId = null;
     this.Announcment.attachment = null;
   }
@@ -198,12 +233,10 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
   }
 
   onUploadSuccess(response, file, fileList) {
-    this.Announcment.attachment = response.attachment;
-    this.Announcment.attachmentId = response.attachment.id;
-    this.fileAttacment = file;
-    
-
-}
+    this.formData.attachment = response.attachment;
+    this.formData.attachmentId = response.attachment.id;
+    this.file = file;
+  }
 
   handleRemove(file, fileList) {
     console.log(file, fileList);
@@ -213,8 +246,7 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
     console.log('Failed uploading a file ', err);
   }
 
-
-  get projectDocUploadHeaders() {
+  get uploadHeaders() {
     if (this.accountService().hasToken) {
       return {
         'Authorization': `Bearer ${this.accountService().token}`
@@ -227,47 +259,38 @@ export default class AddAnnouncementForm extends mixins (Vue2Filters.mixin, Aler
   printFileName(attachment: any) {
     return attachment?.fileName;
   }
+  
+  openRecipientList() {
+    this.recipientListVisible = true;
+  }
+
+  publish() {
+    if (this.multipleSelection.length == 0) {
+      this.$message.error('Please select at least one recipient');
+    } else {
+      console.log('Publishing emails', this.formData);
+      this.recipientListVisible = false;
+    }
+  }
+
+  saveAsDraft() {
+    (<ElForm>this.$refs.mainForm).validate((passed, errors) => {
+      if (passed) {
+        this.loading = true;
+        this.commonService(baseApiAnnouncement)
+          .create(this.formData)
+          .then(res => {
+            this.formData = res;
+            this.$message.success('Announcement has been saved successfully');
+          })
+          .catch(_err => this.$message.error('Failed to save the announcement'))
+          .finally(() => this.loading = false);
+      }
+    })
+  }
 
   saveAttachment() {
-    this.attachmetName = this.Announcment.attachment.fileName;
-    this.projectFormVisible = false;
-  }
-  
-  praSent() {
-    
-    console.log(this.value);
-    this.praSentPA = true;
-    // this.viewEmailList();
-    console.log("this announsment", this.Announcment);
-  }
-
-  sent() {
-    if (this.multipleSelection.length == 0) {
-      this.$notify.warning({
-        title: 'Warning',
-        message: "Email Can't Empty",
-        offset: 100
-      })
-  }
-  else {
-      console.log(this.multipleSelection);
-      this.Announcment.description = this.content;
-      console.log("description",this.Announcment.description);      
-      this.Announcment.adOrganizationId = 1;
-      this.Announcment.biddingId = this.value;
-      this.Announcment.active = true;
-      this.Announcment.emaillist = this.multipleSelection;
-      this.pushAnnouncement();
-      console.log("itemname",this.itemname);
-      
-
-
-      this.$notify.success({
-        title: 'Success',
-        message: 'Send Email',
-        offset: 100
-      });
-      this.praSentPA = false;
-    }
+    this.attachmentName = this.formData.attachment.fileName;
+    this.attachmentFormVisible = false;
   }
 }

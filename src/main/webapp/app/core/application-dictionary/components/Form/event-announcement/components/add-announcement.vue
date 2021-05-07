@@ -1,141 +1,237 @@
 <template>
     <div class="add-announcement">
-        <el-row>
-            <el-col :span="24">
-                <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
-                    Back
-                </el-button>
-                <el-button type="primary" size="mini" style="margin-left: 0px" v-loading.fullscreen.lock="fullscreenLoading" @click="praSent">
-                    Sent <em class="el-icon-arrow-right"></em>
-                </el-button>
-            </el-col>
-        </el-row>
-        <el-divider content-position="left">
-            <h4>Text Pengumuman</h4>
-        </el-divider>
-        <el-row :gutter="24">
-            <el-col :xs="24" :sm="12" :lg="17">
-                <el-form ref="form" label-width="120px" size="mini">
-                    <el-form-item label="Kode Tender">
-                        <template>
-                            <el-select v-model="value" filterable placeholder="Select">
-                                <el-option v-for="item in biddingData" :key="item.id" :label="item.documentNo" :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </template>
+        <el-form
+            v-loading="loading"
+            ref="mainForm"
+            :model="formData"
+            label-position="left"
+            label-width="150px"
+            :rules="validationSchema"
+            size="mini"
+        >
+            <el-row :gutter="24">
+                <el-col
+                    :xs="24"
+                    :sm="24"
+                    :lg="18"
+                    :xl="8"
+                >
+                    <el-form-item label="Bidding No." prop="biddingId">
+                        <el-select
+                            v-model="formData.biddingId"
+                            clearable
+                            filterable
+                            @change="retrieveVendorSuggestions"
+                        >
+                            <el-option
+                                v-for="item in biddingData"
+                                :key="item.id"
+                                :label="item.documentNo"
+                                :value="item.id"
+                            ></el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="Nama Tender">
-                        <!-- <el-input v-model="sizeForm.q"></el-input> -->
-                        <template>
-                            <el-select v-model="value" filterable placeholder="Select">
-                                <el-option v-for="item in biddingData" :key="item.id" :label="item.name" :value="item.id">
-                                </el-option>
-                            </el-select>
-                        </template>
-                    </el-form-item>
-                    <el-form-item label="Deskripsi">
-                        <Editor v-model="content" />                     
-
-                       
-                            <!-- <h3>Content</h3>
-                            <pre><code>{{ content }}</code></pre> -->
-                     
-                        <!-- <tiptap :editor="editor" @email="emailFromChild=$event "></tiptap> -->
-
-                    </el-form-item>
-                    <el-form-item size="large">
-
-                        <el-button type="primary" icon="el-icon-upload" v-if="!attachmetName" size="mini" @click="projectFormVisible = true">Chose File </el-button>
-                        <el-button type="primary" icon="el-icon-view" v-if="attachmetName" size="mini" @click="handlePreview">{{attachmetName}}</el-button>
-                        <el-button type="primary" icon="el-icon-close" v-if="attachmetName" size="mini" @click="cancelAtachment"></el-button>
-
-
-                        <el-button type="primary" icon="el-icon-view" size="mini" @click="dialogTableVisible = true">View Email</el-button>
-                    </el-form-item>
-                </el-form>
-
-                <el-divider content-position="left">
-                    <h4>Data Rekanan</h4>
-                </el-divider>
-                <el-col :span="20">
-                    <el-table ref="biddingSchedule" highlight-current-row border stripe size="mini" style="width: 100%; height: 100%" :data="dataRekanan">
-
-                        <el-table-column min-width="30" label="No">
-                            <template slot-scope="row">
-                                {{ row.$index+1 }}
-                            </template>
-                        </el-table-column>
-                        <el-table-column min-width="100" prop="code" label="Kode" />
-                        <el-table-column min-width="100" prop="name" label="Nama Vendor" />
-                    </el-table>
                 </el-col>
-            </el-col>
+                <el-col
+                    :xs="24"
+                    :sm="24"
+                    :lg="18"
+                    :xl="8"
+                >
+                    <el-form-item label="Bidding Title">
+                        <el-select
+                            v-model="formData.biddingId"
+                            clearable
+                            disabled
+                            filterable
+                        >
+                            <el-option
+                                v-for="item in biddingData"
+                                :key="item.id"
+                                :label="item.name"
+                                :value="item.id"
+                            ></el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row :gutter="24">
+                <el-col
+                    :xs="24"
+                    :sm="24"
+                    :lg="18"
+                    :xl="16"
+                >
+                    <el-form-item label="Description" prop="description">
+                        <html-editor
+                            v-model="formData.description"
+                            size="mini"
+                        ></html-editor>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button
+                            v-if="!attachmentName"
+                            size="mini"
+                            type="primary"
+                            @click="attachmentFormVisible = true"
+                        >
+                            <svg-icon name="icomoo/206-attachment"></svg-icon> Attachment
+                        </el-button>
+                        <el-button
+                            v-if="attachmentName"
+                            icon="el-icon-view"
+                            size="mini"
+                            type="primary"
+                            @click="handlePreview"
+                        >
+                            {{ attachmentName }}
+                        </el-button>
+                        <el-button
+                            v-if="attachmentName"
+                            icon="el-icon-close"
+                            size="mini"
+                            type="primary"
+                            @click="cancelAttachment"
+                        ></el-button>
+                        <el-button
+                            icon="el-icon-view"
+                            size="mini"
+                            type="primary"
+                            @click="emailPreviewVisible = true"
+                        >
+                            Preview
+                        </el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+        </el-form>
 
+        <el-divider content-position="left">
+            <h4>Data Rekanan</h4>
+        </el-divider>
+        <el-row>
+            <el-col
+                :xs="24"
+                :sm="24"
+                :lg="18"
+                :xl="16"
+            >
+                <el-table
+                    v-loading="loadingVendors"
+                    ref="biddingSchedule"
+                    border
+                    :data="vendorSuggestions"
+                    highlight-current-row
+                    size="mini"
+                    stripe
+                >
+                    <el-table-column
+                        label="No"
+                        width="50"
+                    >
+                        <template slot-scope="row">
+                            {{ row.$index + 1 }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column
+                        width="100"
+                        prop="vendorCode"
+                        label="Code"
+                        show-overflow-tooltip
+                    ></el-table-column>
+                    <el-table-column
+                        label="Vendor"
+                        min-width="200"
+                        prop="vendorName"
+                        show-overflow-tooltip
+                    ></el-table-column>
+                </el-table>
+            </el-col>
         </el-row>
 
-        <template>
-            <div>
-                <el-dialog title="View" :visible.sync="dialogTableVisible">
-                    <template>
-                        <div v-html="content"></div>
-                    </template>
-                </el-dialog>
-
-            </div>
-        </template>
-        <template>
-            <div>
-                <el-dialog title="" :visible.sync="praSentPA">
-                    <template>
-                        <el-table ref="multipleTable" :data="emailList" style="width: 100%" @selection-change="handleSelectionChange">
-                            <el-table-column type="selection" width="55">
-                            </el-table-column>
-                            <el-table-column property="name" label="Name" min-width="120">
-                            </el-table-column>
-                            <el-table-column property="position" label="Position" min-width="120">
-                            </el-table-column>
-                            <el-table-column property="email" label="Email" min-width="120">
-                            </el-table-column>
-                        </el-table>
-                    </template>
-                    <template>
-                        <div slot="footer">
-                            <el-button type="primary" size="mini" @click="sent">Sent</el-button>
-                        </div>
-                    </template>
-                </el-dialog>
-            </div>
-        </template>
-
-        <el-dialog :show-close="false" title="Add File" :visible.sync="projectFormVisible">
+        <el-dialog
+            title="Email Preview"
+            :visible.sync="emailPreviewVisible"
+        >
             <template>
-                <el-form ref="Announcment" label-position="left" label-width="150px" :model="Announcment" size="mini">
-                    <!-- <el-form-item label="Information" prop="name" required>
-                        <el-input v-model="Announcment.name" class="form-input" clearable></el-input>
-                    </el-form-item> -->
-                    <el-form-item label="Attachment" prop="attachment" required>
-                        <el-upload ref="docUpload" v-model="Announcment.attachment" :accept="accept" :action="action" auto-upload :headers="projectDocUploadHeaders" :limit="limit"
-                            :before-upload="handleBeforeUpload" :on-preview="handlePreview" :on-exceed="handleExceed" :on-remove="handleRemove" :on-error="onUploadError"
-                            :on-success="onUploadSuccess">
-                            <el-button icon="el-icon-search" slot="trigger" type="primary">
-                                Select File
-                            </el-button>
-                            <span class="el-upload__tip" style="margin-left: 10px" slot="tip">
-                                Files with a size less than 5Mb
-                            </span>
-                        </el-upload>
-                    </el-form-item>
-                </el-form>
+                <div v-html="content"></div>
+            </template>
+        </el-dialog>
 
+        <el-dialog
+            title="Publish Email"
+            :visible.sync="recipientListVisible"
+            @open="retrieveEmailList"
+        >
+            <el-table
+                v-loading="loadingEmailList"
+                border
+                :data="emailList"
+                size="mini"
+                stripe
+                @selection-change="handleSelectionChange"
+            >
+                <el-table-column
+                    type="selection"
+                    width="55"
+                ></el-table-column>
+                <el-table-column
+                    label="Name"
+                    property="name"
+                    min-width="150"
+                    show-overflow-tooltip
+                ></el-table-column>
+                <el-table-column
+                    label="Position"
+                    property="position"
+                    min-width="150"
+                    show-overflow-tooltip
+                ></el-table-column>
+                <el-table-column
+                    label="Email"
+                    property="email"
+                    min-width="150"
+                    show-overflow-tooltip
+                ></el-table-column>
+            </el-table>
+            <template>
                 <div slot="footer">
-                    <el-button icon="el-icon-close" size="mini" style="margin-left: 0px;" @click="projectFormVisible = false">
-                        {{ $t('entity.action.cancel') }}
-                    </el-button>
-                    <el-button icon="el-icon-check" size="mini" style="margin-left: 0px;" type="primary" @click="saveAttachment">
-                        {{ $t('entity.action.save') }}
-                    </el-button>
+                    <el-button type="primary" size="mini" @click="publish">Send</el-button>
                 </div>
             </template>
+        </el-dialog>
+
+        <el-dialog :show-close="false" title="Add Attachment" :visible.sync="attachmentFormVisible">
+            <el-upload
+                ref="docUpload"
+                :accept="accept"
+                :action="action"
+                auto-upload
+                :headers="uploadHeaders"
+                :limit="limit"
+                :before-upload="handleBeforeUpload"
+                :on-error="onUploadError"
+                :on-exceed="handleExceed"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :on-success="onUploadSuccess"
+            >
+                <el-button icon="el-icon-search" slot="trigger" type="primary">
+                    Select File
+                </el-button>
+                <span class="el-upload__tip" style="margin-left: 10px" slot="tip">
+                    Files with a size less than 5Mb
+                </span>
+            </el-upload>
+
+            <div slot="footer">
+                <el-button icon="el-icon-close" size="mini" style="margin-left: 0px;" @click="attachmentFormVisible = false">
+                    {{ $t('entity.action.cancel') }}
+                </el-button>
+                <el-button icon="el-icon-check" size="mini" style="margin-left: 0px;" type="primary" @click="saveAttachment">
+                    {{ $t('entity.action.save') }}
+                </el-button>
+            </div>
         </el-dialog>
     </div>
 </template>
@@ -160,65 +256,6 @@
             >.el-col>.sub-criteria-section:not(.sub-0) {
                 margin-top: 10px;
             }
-        }
-    }
-
-</style>
-<style lang="scss">
-    /* Basic editor styles */
-    .ProseMirror {
-        >*+* {
-            margin-top: 0.75em;
-        }
-
-        ul,
-        ol {
-            padding: 0 1rem;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            line-height: 1.1;
-        }
-
-        code {
-            background-color: rgba(#616161, 0.1);
-            color: #616161;
-        }
-
-        pre {
-            background: #0D0D0D;
-            color: #FFF;
-            font-family: 'JetBrainsMono', monospace;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-
-            code {
-                color: inherit;
-                padding: 0;
-                background: none;
-                font-size: 0.8rem;
-            }
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        blockquote {
-            padding-left: 1rem;
-            border-left: 2px solid rgba(#0D0D0D, 0.1);
-        }
-
-        hr {
-            border: none;
-            border-top: 2px solid rgba(#0D0D0D, 0.1);
-            margin: 2rem 0;
         }
     }
 
