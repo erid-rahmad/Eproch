@@ -48,7 +48,7 @@ public class MVendorScoringCriteriaService {
         return mVendorScoringCriteriaMapper.toDto(mVendorScoringCriteria);
     }
 
-    public List<CEvaluationMethodCriteriaDTO> vendorScoringAnswer (List<CEvaluationMethodCriteriaDTO> evaluationMethodCriteria){
+    public List<CEvaluationMethodCriteriaDTO> vendorScoringAnswer (List<CEvaluationMethodCriteriaDTO> evaluationMethodCriteria,Long vendorscoringlineId){
         log.debug("Request to save MVendorScoring annwer : {}", MapperJSONUtil.prettyLog(evaluationMethodCriteria));
 
         for (CEvaluationMethodCriteriaDTO cEvaluationMethodCriteriaDTO:evaluationMethodCriteria) {
@@ -61,9 +61,11 @@ public class MVendorScoringCriteriaService {
                         mVendorScoringCriteriaDTO.setRequirement(cBiddingSubCriteriaLineDTO.getRequirement());
                         mVendorScoringCriteriaDTO.setBiddingSubCriteriaLineId(cBiddingSubCriteriaLineDTO.getId());
                         mVendorScoringCriteriaDTO.setEvalMethodSubCriteriaId(evalMethodSubCriteriaDTO.getId());
-//                        mVendorScoringCriteriaDTO.setEvalMethodCriteriaLineId(););
-
-
+                        mVendorScoringCriteriaDTO.setEvaluationMethodCriteriaId(cEvaluationMethodCriteriaDTO.getId());
+                        mVendorScoringCriteriaDTO.setVendorScoringLineId(vendorscoringlineId);
+                        mVendorScoringCriteriaDTO.setAdOrganizationId(cEvaluationMethodCriteriaDTO.getAdOrganizationId());
+                        MVendorScoringCriteriaDTO mVendorScoringCriteriaDTO1 =save(mVendorScoringCriteriaDTO);
+                        log.info("this sucses {}",mVendorScoringCriteriaDTO1);
                     }
                 }
             }

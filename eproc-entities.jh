@@ -904,10 +904,10 @@ entity CBiddingType {
 entity CEvent {
 	name String required maxlength(50)
 	description String
-	
+
 	/** Specify the type of event form */
 	formType String maxlength(10)
-	
+
 	uid UUID
 	active Boolean
 }
@@ -1282,7 +1282,7 @@ relationship OneToOne {
 	// Bidding event form.
 	MPreBidMeeting{biddingSchedule required} to MBiddingSchedule
 	MPreBidMeetingAttachment{cAttachment required} to CAttachment
-	
+
 	MProposalAdministrationFile{cAttachment required} to CAttachment
 	MProposalTechnicalFile{cAttachment required} to CAttachment
 	MProposalPrice{biddingSubmission required} to MBiddingSubmission
@@ -1733,7 +1733,7 @@ relationship ManyToOne {
 	MVendorScoringLine{vendorScoring required} to MVendorScoring
 
 	MVendorScoringCriteria{adOrganization required} to ADOrganization
-	MVendorScoringCriteria{evalMethodCriteriaLine } to CEvalMethodCriteriaLine
+	MVendorScoringCriteria{evaluationMethodCriteria } to CEvaluationMethodCriteria
 	MVendorScoringCriteria{evalMethodSubCriteria } to CEvalMethodSubCriteria
 	MVendorScoringCriteria{vendorScoringLine } to MVendorScoringLine
 	MVendorScoringCriteria{biddingSubCriteriaLine } to CBiddingSubCriteriaLine

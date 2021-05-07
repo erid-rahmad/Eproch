@@ -43,7 +43,7 @@ public class MVendorScoringCriteria implements Serializable {
 
     @ManyToOne
     @JsonIgnoreProperties("mVendorScoringCriteria")
-    private CEvalMethodCriteriaLine evalMethodCriteriaLine;
+    private CEvaluationMethodCriteria evaluationMethodCriteria;
 
     @ManyToOne
     @JsonIgnoreProperties("mVendorScoringCriteria")
@@ -118,17 +118,17 @@ public class MVendorScoringCriteria implements Serializable {
         this.adOrganization = aDOrganization;
     }
 
-    public CEvalMethodCriteriaLine getEvalMethodCriteriaLine() {
-        return evalMethodCriteriaLine;
+    public CEvaluationMethodCriteria getEvaluationMethodCriteria() {
+        return evaluationMethodCriteria;
     }
 
-    public MVendorScoringCriteria evalMethodCriteriaLine(CEvalMethodCriteriaLine cEvalMethodCriteriaLine) {
-        this.evalMethodCriteriaLine = cEvalMethodCriteriaLine;
+    public MVendorScoringCriteria evaluationMethodCriteria(CEvaluationMethodCriteria cEvaluationMethodCriteria) {
+        this.evaluationMethodCriteria = cEvaluationMethodCriteria;
         return this;
     }
 
-    public void setEvalMethodCriteriaLine(CEvalMethodCriteriaLine cEvalMethodCriteriaLine) {
-        this.evalMethodCriteriaLine = cEvalMethodCriteriaLine;
+    public void setEvaluationMethodCriteria(CEvaluationMethodCriteria cEvaluationMethodCriteria) {
+        this.evaluationMethodCriteria = cEvaluationMethodCriteria;
     }
 
     public CEvalMethodSubCriteria getEvalMethodSubCriteria() {

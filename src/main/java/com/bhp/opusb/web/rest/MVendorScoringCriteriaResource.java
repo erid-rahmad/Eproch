@@ -1,11 +1,10 @@
 package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.service.MVendorScoringCriteriaService;
-import com.bhp.opusb.service.dto.CEvaluationMethodCriteria;
-import com.bhp.opusb.service.dto.CEvaluationMethodCriteriaDTO;
+import com.bhp.opusb.service.MVendorScoringService;
+import com.bhp.opusb.service.dto.*;
+import com.bhp.opusb.util.MapperJSONUtil;
 import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
-import com.bhp.opusb.service.dto.MVendorScoringCriteriaDTO;
-import com.bhp.opusb.service.dto.MVendorScoringCriteriaCriteria;
 import com.bhp.opusb.service.MVendorScoringCriteriaQueryService;
 
 import io.github.jhipster.web.util.HeaderUtil;
@@ -13,11 +12,13 @@ import io.github.jhipster.web.util.PaginationUtil;
 import io.github.jhipster.web.util.ResponseUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -53,6 +54,9 @@ public class MVendorScoringCriteriaResource {
         this.mVendorScoringCriteriaQueryService = mVendorScoringCriteriaQueryService;
     }
 
+    @Autowired
+    MVendorScoringService mVendorScoringService;
+
     /**
      * {@code POST  /m-vendor-scoring-criteria} : Create a new mVendorScoringCriteria.
      *
@@ -73,12 +77,12 @@ public class MVendorScoringCriteriaResource {
     }
 
     @PostMapping("/m-vendor-scoring-criteria-answer")
-    public ResponseEntity<List<CEvaluationMethodCriteriaDTO>> createMVendorScoringCriteria(@Valid @RequestBody List<CEvaluationMethodCriteriaDTO> answer) throws URISyntaxException {
-        log.debug("REST request to save MVendorScoringCriteria : {}", answer);
-        List<CEvaluationMethodCriteriaDTO> result=mVendorScoringCriteriaService.vendorScoringAnswer(answer);
+    @Transactional
+    public ResponseEntity<MVendorScoringNestedDTO> createMVendorScoringCriteria(@Valid @RequestBody MVendorScoringNestedDTO answer) throws URISyntaxException {
+        log.debug("REST request to save MVendorScoringCriteria : {}", MapperJSONUtil.prettyLog(answer));
+        List<CEvaluationMethodCriteriaDTO> result2 =mVendorScoringCriteriaService.vendorScoringAnswer(answer.getEvaluationMethodCriteriaNested(),answer.getEvaluationMethodLineId());
+        log.info("ok {}",result2);
         return ResponseEntity.ok(answer);
-
-
     }
 
     /**

@@ -59,7 +59,6 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   private biddingsubcriteria: any = {};
   private pickrow: any = {};
   private mainForm: any = {};
-  private arrayform = [];
   private vendorScoring: any = {};
 
 
@@ -69,17 +68,14 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     return this.bidding.biddingStatus === 'In Progress';
   }
 
-  created() {
+  mounted() {
+    
     this.bidding = { ...this.data };
-    console.log("this bidding",this.bidding);
-
+    console.log("this bidding", this.bidding);
+    this.getVendorScoring();    
     this.bidding.step = BiddingStep.SCORING;
-
     this.getEvaluationMethod();
-
-    this.getVendorScoring();
-
-
+    
   }
 
   @Watch('value')
@@ -88,10 +84,8 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     this.mainForm.biddingId = this.bidding.id;
     this.mainForm.adOrganizationId = this.bidding.adOrganizationId;
     this.mainForm.active = true;
-    this.getEvaluationMethodLine()
-
-    }
-
+    this.getEvaluationMethodLine();
+  }
 
   private getEvaluationMethod() {
     this.commonService('/api/c-evaluation-methods')
@@ -126,14 +120,15 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
       })
       .then(res => {
         this.evaluationMethodLine = res.data;
+        let arrayform = [];
         this.evaluationMethodLine.forEach(element => {
           console.log("this element", element);
           let a :any= {};
           a.evaluationMethodLineId = element.id;
           a.adOrganizationId = element.adOrganizationId;
-          this.arrayform.push(a);
+          arrayform.push(a);
         });
-        this.mainForm.vendorScoringLineDTOList = this.arrayform;
+        this.mainForm.vendorScoringLineDTOList = arrayform;
         console.log("this.EvaluationMethodLine", this.evaluationMethodLine);
       });
   }
@@ -155,7 +150,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
           this.vendorScoring=element
         });
         if (this.vendorScoring.evaluationMethodName.length) {
-          return this.index = true;
+          this.index = true;
         }
         console.log("this.vendorScoring", this.vendorScoring);
       });
@@ -163,7 +158,10 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
 
   private pushVendorScoring(data) {
     this.commonService('/api/m-vendor-scorings')
-      .create(data);
+      .create(data)
+      .then(res => { 
+        this.getVendorScoring();
+      })    
   }
 
   addScoring(row) {
@@ -180,9 +178,20 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   cekmainform() {
     console.log("this main", this.mainForm);
     // this.pushVendorScoring(this.mainForm);
-    console.log("this index", this.index);
-    console.log("this vendor scoring", this.vendorScoring.evaluationMethodName, this.vendorScoring.evaluationMethodName.length);
+    // this.reload();
+    // console.log("this index", this.index);
+    // console.log("this vendor scoring", this.vendorScoring.evaluationMethodName, this.vendorScoring.evaluationMethodName.length);
+    this.pushVendorScoring(this.mainForm);    
    
+   
+  }
+
+  closecriteriaPA() {
+    this.criteriaPA = false;
+    console.log("this close");
+    this.mounted();
+    this.pickrow = null;
+    
   }
 
   //=======================================================================

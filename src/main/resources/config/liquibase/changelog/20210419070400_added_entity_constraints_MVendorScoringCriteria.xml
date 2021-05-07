@@ -7,7 +7,7 @@
         Added the constraints for entity MVendorScoringCriteria.
     -->
     <changeSet id="20210419070400-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="ad_organization_id"
                                  baseTableName="m_vendor_scoring_criteria"
                                  constraintName="fk_m_vendor_scoring_criteria_ad_organization_id"
@@ -38,5 +38,12 @@
                                  referencedColumnNames="id"
                                  referencedTableName="c_bidding_sub_criteria_line"/>
 
+    </changeSet>
+    <changeSet id="2021050701551232" author="erid">
+        <addForeignKeyConstraint baseColumnNames="evaluation_method_criteria_id"
+                                 baseTableName="m_vendor_scoring_criteria"
+                                 constraintName="fk_m_vendor_scoring_criteria_evaluation_method_criteria_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_evaluation_method_criteria"/>
     </changeSet>
 </databaseChangeLog>

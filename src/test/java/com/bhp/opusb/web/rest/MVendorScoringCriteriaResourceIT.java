@@ -3,7 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MVendorScoringCriteria;
 import com.bhp.opusb.domain.ADOrganization;
-import com.bhp.opusb.domain.CEvalMethodCriteriaLine;
+import com.bhp.opusb.domain.CEvaluationMethodCriteria;
 import com.bhp.opusb.domain.CEvalMethodSubCriteria;
 import com.bhp.opusb.domain.MVendorScoringLine;
 import com.bhp.opusb.domain.CBiddingSubCriteriaLine;
@@ -198,7 +198,7 @@ public class MVendorScoringCriteriaResourceIT {
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
-    
+
     @Test
     @Transactional
     public void getMVendorScoringCriteria() throws Exception {
@@ -435,21 +435,21 @@ public class MVendorScoringCriteriaResourceIT {
 
     @Test
     @Transactional
-    public void getAllMVendorScoringCriteriaByEvalMethodCriteriaLineIsEqualToSomething() throws Exception {
+    public void getAllMVendorScoringCriteriaByEvaluationMethodCriteriaIsEqualToSomething() throws Exception {
         // Initialize the database
         mVendorScoringCriteriaRepository.saveAndFlush(mVendorScoringCriteria);
-        CEvalMethodCriteriaLine evalMethodCriteriaLine = CEvalMethodCriteriaLineResourceIT.createEntity(em);
-        em.persist(evalMethodCriteriaLine);
+        CEvaluationMethodCriteria evaluationMethodCriteria = CEvaluationMethodCriteriaResourceIT.createEntity(em);
+        em.persist(evaluationMethodCriteria);
         em.flush();
-        mVendorScoringCriteria.setEvalMethodCriteriaLine(evalMethodCriteriaLine);
+        mVendorScoringCriteria.setEvaluationMethodCriteria(evaluationMethodCriteria);
         mVendorScoringCriteriaRepository.saveAndFlush(mVendorScoringCriteria);
-        Long evalMethodCriteriaLineId = evalMethodCriteriaLine.getId();
+        Long evaluationMethodCriteriaId = evaluationMethodCriteria.getId();
 
-        // Get all the mVendorScoringCriteriaList where evalMethodCriteriaLine equals to evalMethodCriteriaLineId
-        defaultMVendorScoringCriteriaShouldBeFound("evalMethodCriteriaLineId.equals=" + evalMethodCriteriaLineId);
+        // Get all the mVendorScoringCriteriaList where evaluationMethodCriteria equals to evaluationMethodCriteriaId
+        defaultMVendorScoringCriteriaShouldBeFound("evaluationMethodCriteriaId.equals=" + evaluationMethodCriteriaId);
 
-        // Get all the mVendorScoringCriteriaList where evalMethodCriteriaLine equals to evalMethodCriteriaLineId + 1
-        defaultMVendorScoringCriteriaShouldNotBeFound("evalMethodCriteriaLineId.equals=" + (evalMethodCriteriaLineId + 1));
+        // Get all the mVendorScoringCriteriaList where evaluationMethodCriteria equals to evaluationMethodCriteriaId + 1
+        defaultMVendorScoringCriteriaShouldNotBeFound("evaluationMethodCriteriaId.equals=" + (evaluationMethodCriteriaId + 1));
     }
 
 

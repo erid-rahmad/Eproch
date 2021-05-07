@@ -35,7 +35,7 @@ public class MVendorScoringCriteriaCriteria implements Serializable, Criteria {
 
     private LongFilter adOrganizationId;
 
-    private LongFilter evalMethodCriteriaLineId;
+    private LongFilter evaluationMethodCriteriaId;
 
     private LongFilter evalMethodSubCriteriaId;
 
@@ -52,7 +52,7 @@ public class MVendorScoringCriteriaCriteria implements Serializable, Criteria {
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
-        this.evalMethodCriteriaLineId = other.evalMethodCriteriaLineId == null ? null : other.evalMethodCriteriaLineId.copy();
+        this.evaluationMethodCriteriaId = other.evaluationMethodCriteriaId == null ? null : other.evaluationMethodCriteriaId.copy();
         this.evalMethodSubCriteriaId = other.evalMethodSubCriteriaId == null ? null : other.evalMethodSubCriteriaId.copy();
         this.vendorScoringLineId = other.vendorScoringLineId == null ? null : other.vendorScoringLineId.copy();
         this.biddingSubCriteriaLineId = other.biddingSubCriteriaLineId == null ? null : other.biddingSubCriteriaLineId.copy();
@@ -103,12 +103,12 @@ public class MVendorScoringCriteriaCriteria implements Serializable, Criteria {
         this.adOrganizationId = adOrganizationId;
     }
 
-    public LongFilter getEvalMethodCriteriaLineId() {
-        return evalMethodCriteriaLineId;
+    public LongFilter getEvaluationMethodCriteriaId() {
+        return evaluationMethodCriteriaId;
     }
 
-    public void setEvalMethodCriteriaLineId(LongFilter evalMethodCriteriaLineId) {
-        this.evalMethodCriteriaLineId = evalMethodCriteriaLineId;
+    public void setEvaluationMethodCriteriaId(LongFilter evaluationMethodCriteriaId) {
+        this.evaluationMethodCriteriaId = evaluationMethodCriteriaId;
     }
 
     public LongFilter getEvalMethodSubCriteriaId() {
@@ -151,7 +151,7 @@ public class MVendorScoringCriteriaCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(evalMethodCriteriaLineId, that.evalMethodCriteriaLineId) &&
+            Objects.equals(evaluationMethodCriteriaId, that.evaluationMethodCriteriaId) &&
             Objects.equals(evalMethodSubCriteriaId, that.evalMethodSubCriteriaId) &&
             Objects.equals(vendorScoringLineId, that.vendorScoringLineId) &&
             Objects.equals(biddingSubCriteriaLineId, that.biddingSubCriteriaLineId);
@@ -165,7 +165,7 @@ public class MVendorScoringCriteriaCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
-        evalMethodCriteriaLineId,
+        evaluationMethodCriteriaId,
         evalMethodSubCriteriaId,
         vendorScoringLineId,
         biddingSubCriteriaLineId
@@ -180,7 +180,7 @@ public class MVendorScoringCriteriaCriteria implements Serializable, Criteria {
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
-                (evalMethodCriteriaLineId != null ? "evalMethodCriteriaLineId=" + evalMethodCriteriaLineId + ", " : "") +
+                (evaluationMethodCriteriaId != null ? "evaluationMethodCriteriaId=" + evaluationMethodCriteriaId + ", " : "") +
                 (evalMethodSubCriteriaId != null ? "evalMethodSubCriteriaId=" + evalMethodSubCriteriaId + ", " : "") +
                 (vendorScoringLineId != null ? "vendorScoringLineId=" + vendorScoringLineId + ", " : "") +
                 (biddingSubCriteriaLineId != null ? "biddingSubCriteriaLineId=" + biddingSubCriteriaLineId + ", " : "") +

@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -51,12 +53,14 @@ public class MVendorScoringService {
         MVendorScoringDTO mVendorScoringDTO_=
          mVendorScoringMapper.toDto(mVendorScoring);
         log.info("result of mVendorScoringDTO_ {}",mVendorScoringDTO_);
-
+        List<MVendorScoringLineDTO> vendorScoringLineDTOList = new ArrayList<>();
         for ( MVendorScoringLineDTO mVendorScoringLineDTO:mVendorScoringDTO.getVendorScoringLineDTOList()) {
             mVendorScoringLineDTO.setVendorScoringId(mVendorScoringDTO_.getId());
             mVendorScoringLineDTO.setActive(true);
-            mVendorScoringLineService.save(mVendorScoringLineDTO);
+            MVendorScoringLineDTO mVendorScoringLineDTO_ = mVendorScoringLineService.save(mVendorScoringLineDTO);
+            vendorScoringLineDTOList.add(mVendorScoringLineDTO_);
         }
+        mVendorScoringDTO_.setVendorScoringLineDTOList(vendorScoringLineDTOList);
         return mVendorScoringDTO_;
     }
 

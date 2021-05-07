@@ -6,10 +6,6 @@ import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMi
 const PrequalificationFormProps = Vue.extend({
   props: {
     // readOnly: Boolean,
-    mainForm: {
-      type: Object,
-      default: () => {}
-    },
     pickrow: {
       type: Object,
       default: () => {}
@@ -25,32 +21,26 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
   private evaluationMethodCriteria: any = {};
-
+  private MVendorScoringNestedDTO: any = {};
+  private vendorScoringCriteria: any = {};
+  private input: boolean = true;
 
   mounted() {
-    console.log("this.pickrow", this.pickrow);
-    console.log("this.mainForm",this.mainForm);
-    this.getEvaluationMethodCriteria(this.pickrow.id);
-    
+    console.log("this.pickrow", this.pickrow);    
+    this.getEvaluationMethodCriteria(this.pickrow.evaluationMethodLineId);  
   }
 
   @Watch('pickrow')
   updatedata() {
-    console.log("this.pickrow",this.pickrow);    
-    this.getEvaluationMethodCriteria(this.pickrow.id);    
+    console.log("this.pickrow", this.pickrow);   
+    this.getEvaluationMethodCriteria(this.pickrow.evaluationMethodLineId);      
   }
   
-  // @Watch('evaluationMethodCriteria',{deep:true})
-  // updatedataevaluationMethodCriteria(value) {
-  //   console.log("change",value);   
-  //   }
-    
   private getEvaluationMethodCriteria(lineId) {
     this.commonService('/api/c-evaluation-method-criteria')
       .retrieve({
         criteriaQuery: [
-          `evaluationMethodLineId.equals=${lineId}`
-          
+          `evaluationMethodLineId.equals=${lineId}`          
         ],
         paginationQuery: {
           page: 0,
@@ -60,28 +50,88 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       })
       .then(res => {
         this.evaluationMethodCriteria = res.data;
-        console.log("this.evaluationMethodCriteria", this.evaluationMethodCriteria);
+        console.log("this.evaluationMethodCriteria", this.evaluationMethodCriteria);  
+      });
+      this.getVendorScoringCriteria(this.pickrow.id);
+  }
+
+  getanswer(id) {
+    const found = this.vendorScoringCriteria.find(element => element.biddingSubCriteriaLineId === id);
+    return found.requirement;
+  }
+
+  private getVendorScoringCriteria(lineId) {
+    this.commonService('/api/m-vendor-scoring-criteria')
+      .retrieve({
+        criteriaQuery: [
+          `vendorScoringLineId.equals=${lineId}`
+          
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.vendorScoringCriteria = res.data;
+        console.log("this vendoring criteria data",this.vendorScoringCriteria);
+        
+        console.log("this.vendorScoringCriteria", res.data.length); 
+        if (res.data.length) {
+          this.input = false;
+        } else { 
+          this.input = true;
+        }
       });
   }
 
   private pushVendorScoringAnswer(data) {
     this.commonService('/api/m-vendor-scoring-criteria-answer')
-      .create(data);
+      .create(data)
+      .then(res => {
+        
+        
+        this.pickrow = null;
+      });
   }
-
-  testing() {    
-    console.log("this evaluation method", this.evaluationMethodCriteria); 
-
-  }
-
+  
   setpushVendorScoringAnswer() {    
-    console.log("this evaluation method", this.evaluationMethodCriteria);
-    this.pushVendorScoringAnswer(this.evaluationMethodCriteria);
+    console.log("this sent"); 
+    this.emptyhandler();
+    this.MVendorScoringNestedDTO.evaluationMethodCriteriaNested = this.evaluationMethodCriteria;
+    this.MVendorScoringNestedDTO.evaluationMethodLineId = this.pickrow.id;
+    this.pushVendorScoringAnswer(this.MVendorScoringNestedDTO);
+    this.$emit("closecriteriaPA");
 
+
+   
+  
+   
   }
 
-  testing2(row) {
-    console.log("this row",row);   
+  emptyhandler() { 
+    console.log("this empty handler",this.evaluationMethodCriteria);
+    this.evaluationMethodCriteria.forEach(element => {
+      element.evalMethodSubCriteriaList.forEach(element => {
+        element.biddingSubCriteriaDTO.forEach(element => {
+          element.criteriaLineDTO.forEach(element => {
+           
+            
+            console.log("this element", element);
+            if (element.requirement === null) { 
+              console.log("this handler null");
+              this.$notify.error({
+                title: 'Error',
+                message: 'Answer Required'
+              });
+              
+            }
+          });
+        });
+      });
+    });
+      
   }
 
 
