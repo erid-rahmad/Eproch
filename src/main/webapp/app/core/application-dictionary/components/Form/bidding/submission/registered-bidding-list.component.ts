@@ -1,29 +1,30 @@
+import ProposalForm from '@/core/application-dictionary/components/Form/bidding/event/bidding-submission/proposal-form.vue';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
+import { AccountStoreModule } from '@/shared/config/store/account-store';
 import { ElTable } from 'element-ui/types/table';
 import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import AdministrationProposal from '../event/bidding-submission/administration-proposal.vue';
-import SubmissionForm from "../event/bidding-submission/submission-form.vue";
 import PriceProposal from '../event/bidding-submission/price-proposal.vue';
+import SubmissionForm from "../event/bidding-submission/submission-form.vue";
 import TechnicalProposal from '../event/bidding-submission/technical-proposal.vue';
-import { AccountStoreModule } from '@/shared/config/store/account-store';
 
 const enum SubmissionPage {
   MAIN = 'main',
   SUBMISSION = 'submission',
-  ADMINISTRATION_PROPOSAL = 'administration_proposal',
-  PRICE_PROPOSAL = 'price_proposal',
-  TECHNICAL_PROPOSAL = 'technical_proposal'
+  PROPOSAL = 'proposal'
 }
 
 const baseApiSubmission = 'api/m-bidding-submissions';
+const baseApiVendorScoringLine = 'api/m-vendor-scoring-lines';
 
 @Component({
   components: {
     SubmissionForm,
     AdministrationProposal,
     TechnicalProposal,
-    PriceProposal
+    PriceProposal,
+    ProposalForm
   }
 })
 export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
@@ -81,6 +82,14 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   reverse = false;
   totalItems = 0;
 
+  proposals: any[] = [];
+  proposalName: string = null;
+  selectedProposal: number = null;
+
+  get isVendor() {
+    return AccountStoreModule.isVendor;
+  }
+
   get mainPage() {
     return this.section === SubmissionPage.MAIN;
   }
@@ -89,32 +98,12 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
     return this.section === SubmissionPage.SUBMISSION;
   }
 
-  get administrationProposalPage() {
-    return this.section === SubmissionPage.ADMINISTRATION_PROPOSAL;
-  }
+  get proposalComponent() {
+    if (this.proposalName === 'price') {
+      return 'price-proposal';
+    }
 
-  get priceProposalPage() {
-    return this.section === SubmissionPage.PRICE_PROPOSAL;
-  }
-
-  get technicalProposalPage() {
-    return this.section === SubmissionPage.TECHNICAL_PROPOSAL;
-  }
-
-  get isVendor() {
-    return AccountStoreModule.isVendor;
-  }
-
-  get showAdministrationProposal() {
-    return ['S1', 'S2', 'S3'].includes(this.formType);
-  }
-
-  get showTechnicalProposal() {
-    return ['S1', 'S2', 'S3'].includes(this.formType);
-  }
-
-  get showPriceProposal() {
-    return ['S1', 'S4'].includes(this.formType);
+    return `proposal-form`;
   }
 
   @Watch('page')
@@ -132,6 +121,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
 
   onSubmissionFormLoaded(data: any) {
     this.formType = data.formType;
+    this.retrieveVendorScoringLines(data.biddingId, data.formType);
   }
 
   created() {
@@ -180,6 +170,17 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
     this.retrieveAllRecords();
   }
 
+  closeProposalPage() {
+    this.section = SubmissionPage.SUBMISSION;
+  }
+
+  openProposalForm(data: any) {
+    const { evaluation } = data;
+    this.proposalName = evaluation.toLowerCase();
+    this.selectedProposal = data;
+    this.section = SubmissionPage.PROPOSAL;
+  }
+
   private retrieveAllRecords(): void {
     this.loading = true;
     const paginationQuery = {
@@ -216,24 +217,34 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
       });
   }
 
+  private retrieveVendorScoringLines(biddingId: number, formType: string) {
+    this.commonService(baseApiVendorScoringLine)
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `biddingId.equals=${biddingId}`,
+          `formType.equals=${formType}`
+        ]
+      })
+      .then(res => {
+        this.proposals = res.data;
+      })
+      .catch(err => {
+        console.error('Failed to load proposals. %O', err);
+        this.$message.error('Failed to load proposals');
+      })
+  }
+
   private setRow(record: any) {
     (<ElTable>this.$refs.mainGrid).setCurrentRow(record);
   }
 
-  closeProposalPage() {
-    this.section = SubmissionPage.SUBMISSION;
+  saveProposal() {
+    (<any>this.$refs.proposalForm).save();
   }
 
-  openAdministrationProposal() {
-    this.section = SubmissionPage.ADMINISTRATION_PROPOSAL;
-  }
-
-  openTechnicalProposal() {
-    this.section = SubmissionPage.TECHNICAL_PROPOSAL;
-  }
-
-  openPriceProposal() {
-    this.section = SubmissionPage.PRICE_PROPOSAL;
+  submitProposals() {
+    (<any>this.$refs.submissionForm).submit();
   }
 
   viewSchedule(row: any) {

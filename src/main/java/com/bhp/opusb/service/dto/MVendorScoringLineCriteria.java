@@ -2,12 +2,10 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
@@ -39,6 +37,10 @@ public class MVendorScoringLineCriteria implements Serializable, Criteria {
 
     private LongFilter vendorScoringId;
 
+    private LongFilter biddingId;
+
+    private StringFilter formType;
+
     public MVendorScoringLineCriteria() {
     }
 
@@ -50,6 +52,8 @@ public class MVendorScoringLineCriteria implements Serializable, Criteria {
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.evaluationMethodLineId = other.evaluationMethodLineId == null ? null : other.evaluationMethodLineId.copy();
         this.vendorScoringId = other.vendorScoringId == null ? null : other.vendorScoringId.copy();
+        this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
+        this.formType = other.formType == null ? null : other.formType.copy();
     }
 
     @Override
@@ -114,6 +118,22 @@ public class MVendorScoringLineCriteria implements Serializable, Criteria {
     }
 
 
+    public LongFilter getBiddingId() {
+        return biddingId;
+    }
+
+    public void setBiddingId(LongFilter biddingId) {
+        this.biddingId = biddingId;
+    }
+
+    public StringFilter getFormType() {
+        return formType;
+    }
+
+    public void setFormType(StringFilter formType) {
+        this.formType = formType;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -130,7 +150,9 @@ public class MVendorScoringLineCriteria implements Serializable, Criteria {
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
             Objects.equals(evaluationMethodLineId, that.evaluationMethodLineId) &&
-            Objects.equals(vendorScoringId, that.vendorScoringId);
+            Objects.equals(vendorScoringId, that.vendorScoringId) &&
+            Objects.equals(biddingId, that.biddingId) &&
+            Objects.equals(formType, that.formType);
     }
 
     @Override
@@ -142,7 +164,9 @@ public class MVendorScoringLineCriteria implements Serializable, Criteria {
         active,
         adOrganizationId,
         evaluationMethodLineId,
-        vendorScoringId
+        vendorScoringId,
+        biddingId,
+        formType
         );
     }
 
@@ -156,6 +180,8 @@ public class MVendorScoringLineCriteria implements Serializable, Criteria {
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (evaluationMethodLineId != null ? "evaluationMethodLineId=" + evaluationMethodLineId + ", " : "") +
                 (vendorScoringId != null ? "vendorScoringId=" + vendorScoringId + ", " : "") +
+                (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
+                (formType != null ? "formType=" + formType + ", " : "") +
             "}";
     }
 

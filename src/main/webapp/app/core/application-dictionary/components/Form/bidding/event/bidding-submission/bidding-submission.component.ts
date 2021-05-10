@@ -1,74 +1,78 @@
-import { Component, Vue } from 'vue-property-decorator';
-import AdministrationProposal from './administration-proposal.vue';
+import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
+import { Component, Inject, Vue } from 'vue-property-decorator';
 import PriceProposal from './price-proposal.vue';
+import ProposalForm from './proposal-form.vue';
 import SubmissionForm from './submission-form.vue';
-import TechnicalProposal from './technical-proposal.vue';
+
+const baseApiVendorScoringLine = 'api/m-vendor-scoring-lines';
 
 const enum SubmissionPage {
   SUBMISSION = 'submission',
-  ADMINISTRATION_PROPOSAL = 'administration_proposal',
-  PRICE_PROPOSAL = 'price_proposal',
-  TECHNICAL_PROPOSAL = 'technical_proposal'
+  PROPOSAL = 'proposal'
 }
 
 @Component({
   components: {
     SubmissionForm,
-    AdministrationProposal,
-    TechnicalProposal,
-    PriceProposal
+    PriceProposal,
+    ProposalForm
   }
 })
 export default class BiddingSubmissionEvent extends Vue {
 
+  @Inject('dynamicWindowService')
+  protected commonService: (baseApiUrl: string) => DynamicWindowService;
+
   section: SubmissionPage = SubmissionPage.SUBMISSION;
   formType: string = null;
+
+  proposals: any[] = [];
+  proposalName: string = null;
+  selectedProposal: number = null;
+
+  get proposalComponent() {
+    if (this.proposalName === 'price') {
+      return 'price-proposal';
+    }
+
+    return `proposal-form`;
+  }
 
   get submissionPage() {
     return this.section === SubmissionPage.SUBMISSION;
   }
 
-  get administrationProposalPage() {
-    return this.section === SubmissionPage.ADMINISTRATION_PROPOSAL;
-  }
-
-  get priceProposalPage() {
-    return this.section === SubmissionPage.PRICE_PROPOSAL;
-  }
-
-  get technicalProposalPage() {
-    return this.section === SubmissionPage.TECHNICAL_PROPOSAL;
-  }
-
-  get showAdministrationProposal() {
-    return ['S1', 'S2', 'S3'].includes(this.formType);
-  }
-
-  get showTechnicalProposal() {
-    return ['S1', 'S2', 'S3'].includes(this.formType);
-  }
-
-  get showPriceProposal() {
-    return ['S1', 'S4'].includes(this.formType);
-  }
-
   onSubmissionFormLoaded(data: any) {
     this.formType = data.formType;
+    this.retrieveVendorScoringLines(data.biddingId, data.formType);
   }
 
   closeProposalPage() {
     this.section = SubmissionPage.SUBMISSION;
   }
 
-  openAdministrationProposal() {
-    this.section = SubmissionPage.ADMINISTRATION_PROPOSAL;
+  openProposalForm(data: any) {
+    const { evaluation } = data;
+    this.proposalName = evaluation.toLowerCase();
+    this.selectedProposal = data;
+    this.section = SubmissionPage.PROPOSAL;
   }
 
-  openTechnicalProposal() {
-    this.section = SubmissionPage.TECHNICAL_PROPOSAL;
+  private retrieveVendorScoringLines(biddingId: number, formType: string) {
+    this.commonService(baseApiVendorScoringLine)
+      .retrieve({
+        criteriaQuery: [
+          'active.equals=true',
+          `biddingId.equals=${biddingId}`,
+          `formType.equals=${formType}`
+        ]
+      })
+      .then(res => {
+        this.proposals = res.data;
+      })
   }
 
-  openPriceProposal() {
-    this.section = SubmissionPage.PRICE_PROPOSAL;
+  saveProposal() {
+    (<any>this.$refs.proposalForm).save();
   }
 }

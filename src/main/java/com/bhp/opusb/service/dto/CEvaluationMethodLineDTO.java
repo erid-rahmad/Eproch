@@ -1,18 +1,19 @@
 package com.bhp.opusb.service.dto;
 
-import io.swagger.annotations.ApiModelProperty;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import io.swagger.annotations.ApiModelProperty;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.CEvaluationMethodLine} entity.
  */
 public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
-
-    private static final long serialVersionUID = 1L;
 
     private Long id;
 
@@ -25,6 +26,13 @@ public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
     private String evaluation;
 
     private String evaluationType;
+
+    /**
+     * Specify the type of event form
+     */
+    @Size(max = 10)
+    @ApiModelProperty(value = "Specify the type of event form")
+    private String formType;
 
     @DecimalMax(value = "100")
     private BigDecimal weight;
@@ -41,7 +49,7 @@ public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
 
     private Long evaluationMethodId;
     private String evaluationMethodName;
-
+    
     public Long getId() {
         return id;
     }
@@ -64,6 +72,14 @@ public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
 
     public void setEvaluationType(String evaluationType) {
         this.evaluationType = evaluationType;
+    }
+
+    public String getFormType() {
+        return formType;
+    }
+
+    public void setFormType(String formType) {
+        this.formType = formType;
     }
 
     public BigDecimal getWeight() {
@@ -157,6 +173,7 @@ public class CEvaluationMethodLineDTO extends AbstractAuditingDTO {
             "id=" + getId() +
             ", evaluation='" + getEvaluation() + "'" +
             ", evaluationType='" + getEvaluationType() + "'" +
+            ", formType='" + getFormType() + "'" +
             ", weight=" + getWeight() +
             ", passingGrade=" + getPassingGrade() +
             ", uid='" + getUid() + "'" +

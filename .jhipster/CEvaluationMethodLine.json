@@ -16,6 +16,15 @@
             "fieldType": "String"
         },
         {
+            "fieldName": "formType",
+            "javadoc": "Specify the type of event form",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "maxlength"
+            ],
+            "fieldValidateRulesMaxlength": "10"
+        },
+        {
             "fieldName": "weight",
             "fieldType": "BigDecimal",
             "fieldValidateRules": [

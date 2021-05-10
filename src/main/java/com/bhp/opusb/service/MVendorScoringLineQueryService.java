@@ -112,6 +112,19 @@ public class MVendorScoringLineQueryService extends QueryService<MVendorScoringL
                 specification = specification.and(buildSpecification(criteria.getVendorScoringId(),
                     root -> root.join(MVendorScoringLine_.vendorScoring, JoinType.LEFT).get(MVendorScoring_.id)));
             }
+            if (criteria.getBiddingId() != null) {
+                specification = specification.and(buildSpecification(criteria.getBiddingId(),
+                    root -> root
+                        .join(MVendorScoringLine_.vendorScoring, JoinType.INNER)
+                        .join(MVendorScoring_.bidding, JoinType.INNER)
+                        .get(MBidding_.id)));
+            }
+            if (criteria.getFormType() != null) {
+                specification = specification.and(buildSpecification(criteria.getFormType(),
+                    root -> root
+                        .join(MVendorScoringLine_.evaluationMethodLine, JoinType.INNER)
+                        .get(CEvaluationMethodLine_.formType)));
+            }
         }
         return specification;
     }

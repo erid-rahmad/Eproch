@@ -13,7 +13,10 @@ import org.mapstruct.*;
 public interface MVendorScoringLineMapper extends EntityMapper<MVendorScoringLineDTO, MVendorScoringLine> {
 
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
+    @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     @Mapping(source = "evaluationMethodLine.id", target = "evaluationMethodLineId")
+    @Mapping(source = "evaluationMethodLine.evaluation", target = "evaluationMethodLineName")
+    @Mapping(source = "evaluationMethodLine.formType", target = "evaluationMethodLineFormType")
     @Mapping(source = "evaluationMethodLine.evaluationType", target = "evaluationMethodLineEvaluationType")
     @Mapping(source = "evaluationMethodLine.weight", target = "evaluationMethodLineWeight")
     @Mapping(source = "evaluationMethodLine.passingGrade", target = "evaluationMethodLinePassingGrade")

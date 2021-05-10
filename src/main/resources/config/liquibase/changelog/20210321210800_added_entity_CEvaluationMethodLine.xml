@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity CEvaluationMethodLine.
     -->
@@ -74,6 +74,8 @@
                   tableName="c_evaluation_method_line">
             <column name="id" type="numeric"/>
             <column name="evaluation" type="string"/>
+            <column name="evaluation_type" type="string"/>
+            <column name="form_type" type="string"/>
             <column name="weight" type="numeric"/>
             <column name="passing_grade" type="numeric"/>
             <column name="uid" type="${uuidType}"/>
@@ -87,6 +89,14 @@
     <changeSet id="20210521210800" author="erid">
         <addColumn tableName="c_evaluation_method_line">
             <column name="evaluation_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+    </changeSet>
+
+    <changeSet id="20210510111300" author="Ananta Aryadewa">
+        <addColumn tableName="c_evaluation_method_line">
+            <column name="form_type" type="varchar(10)" remarks="Specify the type of event form">
                 <constraints nullable="true" />
             </column>
         </addColumn>

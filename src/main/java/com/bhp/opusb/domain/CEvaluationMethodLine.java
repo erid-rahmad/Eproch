@@ -1,16 +1,25 @@
 package com.bhp.opusb.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
-import javax.persistence.*;
-import javax.validation.constraints.*;
-
-import java.io.Serializable;
-import java.util.Objects;
 import java.math.BigDecimal;
 import java.util.UUID;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 /**
  * A CEvaluationMethodLine.
@@ -18,9 +27,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "c_evaluation_method_line")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CEvaluationMethodLine implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class CEvaluationMethodLine extends AbstractAuditingEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -37,6 +44,13 @@ public class CEvaluationMethodLine implements Serializable {
 
     @Column(name = "evaluation_type")
     private String evaluationType;
+
+    /**
+     * Specify the type of event form
+     */
+    @Size(max = 10)
+    @Column(name = "form_type", length = 10)
+    private String formType;
 
     @DecimalMax(value = "100")
     @Column(name = "weight", precision = 21, scale = 2)
@@ -94,6 +108,19 @@ public class CEvaluationMethodLine implements Serializable {
 
     public void setEvaluationType(String evaluationType) {
         this.evaluationType = evaluationType;
+    }
+
+    public String getFormType() {
+        return formType;
+    }
+
+    public CEvaluationMethodLine formType(String formType) {
+        this.formType = formType;
+        return this;
+    }
+
+    public void setFormType(String formType) {
+        this.formType = formType;
     }
 
     public BigDecimal getWeight() {
@@ -175,6 +202,11 @@ public class CEvaluationMethodLine implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void prePersist() {
+        uid = UUID.randomUUID();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -197,6 +229,7 @@ public class CEvaluationMethodLine implements Serializable {
             "id=" + getId() +
             ", evaluation='" + getEvaluation() + "'" +
             ", evaluationType='" + getEvaluationType() + "'" +
+            ", formType='" + getFormType() + "'" +
             ", weight=" + getWeight() +
             ", passingGrade=" + getPassingGrade() +
             ", uid='" + getUid() + "'" +

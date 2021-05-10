@@ -74,6 +74,7 @@ class CEvaluationMethodLineGatlingTest extends Simulation {
                 "id":null
                 , "evaluation":"SAMPLE_TEXT"
                 , "evaluationType":"SAMPLE_TEXT"
+                , "formType":"SAMPLE_TEXT"
                 , "weight":"0"
                 , "passingGrade":"0"
                 , "uid":null

@@ -25,39 +25,33 @@
         v-if="submissionPage && isVendor"
         size="mini"
         type="primary"
-        @click="closeProposalPage"
+        @click="submitProposals"
       >
         <svg-icon name="guide"></svg-icon> Submit
       </el-button>
       
+      <el-button
+        v-if="!submissionPage"
+        size="mini"
+        type="primary"
+        @click="saveProposal"
+      >
+        <svg-icon name="icomoo/273-checkmark"></svg-icon> Save
+      </el-button>
+
       <el-divider
         v-if="!mainPage"
         direction="vertical"
       ></el-divider>
 
       <el-button
-        v-if="showAdministrationProposal && submissionPage"
+        v-for="proposal in proposals"
+        :key="proposal.id"
         size="mini"
         type="primary"
-        @click="openAdministrationProposal"
+        @click="openProposalForm(proposal)"
       >
-        Administration Proposal
-      </el-button>
-      <el-button
-        v-if="showTechnicalProposal && submissionPage"
-        size="mini"
-        type="primary"
-        @click="openTechnicalProposal"
-      >
-        Technical Proposal
-      </el-button>
-      <el-button
-        v-show="showPriceProposal && submissionPage"
-        size="mini"
-        type="primary"
-        @click="openPriceProposal"
-      >
-        Price Proposal
+        {{ proposal.evaluation }} Proposal
       </el-button>
     </div>
 
@@ -192,21 +186,17 @@
 
       <submission-form
         v-else-if="submissionPage"
+        ref="submissionForm"
         :schedule-id="selectedRow.biddingScheduleId"
         @data-loaded="onSubmissionFormLoaded"
       ></submission-form>
 
-      <administration-proposal
-        v-else-if="administrationProposalPage"
-      ></administration-proposal>
-
-      <price-proposal
-        v-else-if="priceProposalPage"
-      ></price-proposal>
-
-      <technical-proposal
-        v-else-if="technicalProposalPage"
-      ></technical-proposal>
+      <component
+        v-else
+        ref="proposalForm"
+        :is="proposalComponent"
+        :data="selectedProposal"
+      ></component>
     </div>
   </div>
 </template>
@@ -225,7 +215,7 @@
     padding: 4px 16px 0;
 
     .el-button + .el-button {
-      margin-left: 0;
+      margin-left: 8px;
     }
   }
 }

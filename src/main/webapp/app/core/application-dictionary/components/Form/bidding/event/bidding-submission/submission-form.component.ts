@@ -46,6 +46,10 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
     });
   }
 
+  onMainFormUpdated(mainForm: any) {
+
+  }
+
   created() {
     this.timerId = setTimeout(() => {
         this.intervalId = setInterval(this.updateCurrentDate, 60000);
@@ -83,6 +87,10 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
           };
         });
       })
+  }
+
+  submit() {
+    console.log('This will submit the submission');
   }
 
   private updateCurrentDate() {

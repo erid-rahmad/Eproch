@@ -97,6 +97,9 @@ public class CEvaluationMethodLineQueryService extends QueryService<CEvaluationM
             if (criteria.getEvaluationType() != null) {
                 specification = specification.and(buildStringSpecification(criteria.getEvaluationType(), CEvaluationMethodLine_.evaluationType));
             }
+            if (criteria.getFormType() != null) {
+                specification = specification.and(buildStringSpecification(criteria.getFormType(), CEvaluationMethodLine_.formType));
+            }
             if (criteria.getWeight() != null) {
                 specification = specification.and(buildRangeSpecification(criteria.getWeight(), CEvaluationMethodLine_.weight));
             }
