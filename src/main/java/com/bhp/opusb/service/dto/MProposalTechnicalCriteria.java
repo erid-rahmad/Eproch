@@ -37,6 +37,8 @@ public class MProposalTechnicalCriteria implements Serializable, Criteria {
 
     private LongFilter biddingSubmissionId;
 
+    private LongFilter biddingSubCriteriaLineId;
+
     public MProposalTechnicalCriteria() {
     }
 
@@ -48,6 +50,7 @@ public class MProposalTechnicalCriteria implements Serializable, Criteria {
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.biddingSubmissionId = other.biddingSubmissionId == null ? null : other.biddingSubmissionId.copy();
+        this.biddingSubCriteriaLineId = other.biddingSubCriteriaLineId == null ? null : other.biddingSubCriteriaLineId.copy();
     }
 
     @Override
@@ -111,6 +114,14 @@ public class MProposalTechnicalCriteria implements Serializable, Criteria {
         this.biddingSubmissionId = biddingSubmissionId;
     }
 
+    public LongFilter getBiddingSubCriteriaLineId() {
+        return biddingSubCriteriaLineId;
+    }
+
+    public void setBiddingSubCriteriaLineId(LongFilter biddingSubCriteriaLineId) {
+        this.biddingSubCriteriaLineId = biddingSubCriteriaLineId;
+    }
+
 
     @Override
     public boolean equals(Object o) {
@@ -128,7 +139,8 @@ public class MProposalTechnicalCriteria implements Serializable, Criteria {
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(biddingSubmissionId, that.biddingSubmissionId);
+            Objects.equals(biddingSubmissionId, that.biddingSubmissionId) &&
+            Objects.equals(biddingSubCriteriaLineId, that.biddingSubCriteriaLineId);
     }
 
     @Override
@@ -140,7 +152,8 @@ public class MProposalTechnicalCriteria implements Serializable, Criteria {
         uid,
         active,
         adOrganizationId,
-        biddingSubmissionId
+        biddingSubmissionId,
+        biddingSubCriteriaLineId
         );
     }
 
@@ -154,6 +167,7 @@ public class MProposalTechnicalCriteria implements Serializable, Criteria {
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (biddingSubmissionId != null ? "biddingSubmissionId=" + biddingSubmissionId + ", " : "") +
+                (biddingSubCriteriaLineId != null ? "biddingSubCriteriaLineId=" + biddingSubCriteriaLineId + ", " : "") +
             "}";
     }
 

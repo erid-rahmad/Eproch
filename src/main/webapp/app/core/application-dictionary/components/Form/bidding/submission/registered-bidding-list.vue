@@ -117,39 +117,51 @@
           <el-table-column
             label="Bidding Status"
             min-width="140"
-            prop="biddingStatus"
             sortable
-          ></el-table-column>
+          >
+            <template slot-scope="{ row }">
+              {{ printBiddingStatus(row.biddingStatus) }}
+            </template>
+          </el-table-column>
 
           <el-table-column
             v-if="isVendor"
             label="Submission Status"
             min-width="170"
-            prop="status"
             sortable
-          ></el-table-column>
+          >
+            <template slot-scope="{ row }">
+              {{ printSubmissionStatus(row.documentStatus) }}
+            </template>
+          </el-table-column>
 
           <el-table-column
             v-if="!isVendor"
             label="Submission Start Date"
             min-width="170"
-            prop="status"
             sortable
-          ></el-table-column>
+          >
+            <template slot-scope="{ row }">
+              {{ row.startDate | formatDate(false) }}
+            </template>
+          </el-table-column>
 
           <el-table-column
             v-if="!isVendor"
             label="Submission End Date"
             min-width="170"
-            prop="status"
             sortable
-          ></el-table-column>
+          >
+            <template slot-scope="{ row }">
+              {{ row.endDate | formatDate(false) }}
+            </template>
+          </el-table-column>
 
           <el-table-column
             v-if="!isVendor"
             label="Vendors"
             min-width="170"
-            prop="status"
+            prop="numOfParticipants"
             sortable
           ></el-table-column>
 
@@ -196,6 +208,7 @@
         ref="proposalForm"
         :is="proposalComponent"
         :data="selectedProposal"
+        :submission-id="selectedRow.id"
       ></component>
     </div>
   </div>

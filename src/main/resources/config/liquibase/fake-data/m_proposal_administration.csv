@@ -1,11 +1,11 @@
-id;answer;document_evaluation;uid;active;ad_organization_id;bidding_submission_id
-1;black;true;30c4137c-3a98-475e-a5f7-f9a3845f0587;false;1;1
-2;content;true;6cdec32e-51fc-4068-9db0-b746a45e9298;true;2;2
-3;Security Gorgeous;false;1f744ca4-bbd3-4478-8f56-92bd9ac094f2;true;3;3
-4;Alaska Cheese;true;1d082918-fead-43a1-ba43-2f57cb8e1b0e;false;4;4
-5;optical generate 24/7;true;a570258a-927b-481b-b01a-54ba9e01a5f8;true;5;5
-6;Expressway Handmade Concrete Keyboard Handcrafted Steel Towels;false;0db6cdaf-0491-4075-8a2a-cabec31ad0fc;false;6;6
-7;orchid;false;e8aad6a5-e692-474e-9e17-bfbafb6a129b;true;7;7
-8;Tanzanian Shilling Metal;true;36aff1a1-9b96-44b9-b35f-c96c8187cfa9;false;8;8
-9;bluetooth Vanuatu Configurable;true;83f88f61-62c0-4877-aadc-6bacff125a16;false;9;9
-10;bluetooth;true;fd20708c-f7e5-4860-a68b-acf9b0806bd2;false;10;10
+id;answer;document_evaluation;uid;active;ad_organization_id;bidding_submission_id;bidding_sub_criteria_line_id
+1;black;true;30c4137c-3a98-475e-a5f7-f9a3845f0587;false;1;1;1
+2;content;true;6cdec32e-51fc-4068-9db0-b746a45e9298;true;2;2;2
+3;Security Gorgeous;false;1f744ca4-bbd3-4478-8f56-92bd9ac094f2;true;3;3;3
+4;Alaska Cheese;true;1d082918-fead-43a1-ba43-2f57cb8e1b0e;false;4;4;4
+5;optical generate 24/7;true;a570258a-927b-481b-b01a-54ba9e01a5f8;true;5;5;5
+6;Expressway Handmade Concrete Keyboard Handcrafted Steel Towels;false;0db6cdaf-0491-4075-8a2a-cabec31ad0fc;false;6;6;6
+7;orchid;false;e8aad6a5-e692-474e-9e17-bfbafb6a129b;true;7;7;7
+8;Tanzanian Shilling Metal;true;36aff1a1-9b96-44b9-b35f-c96c8187cfa9;false;8;8;8
+9;bluetooth Vanuatu Configurable;true;83f88f61-62c0-4877-aadc-6bacff125a16;false;9;9;9
+10;bluetooth;true;fd20708c-f7e5-4860-a68b-acf9b0806bd2;false;10;10;10

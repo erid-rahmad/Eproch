@@ -19,7 +19,7 @@ public class MProposalTechnicalDTO extends AbstractAuditingDTO {
 
     private UUID uid;
 
-    private Boolean active = true;
+    private Boolean active;
 
 
     private Long adOrganizationId;
@@ -27,6 +27,9 @@ public class MProposalTechnicalDTO extends AbstractAuditingDTO {
 
     private Long biddingSubmissionId;
     private String biddingSubmissionName;
+
+    private Long biddingSubCriteriaLineId;
+    private Long biddingSubCriteriaLineName;
     
     public Long getId() {
         return id;
@@ -100,6 +103,22 @@ public class MProposalTechnicalDTO extends AbstractAuditingDTO {
         this.biddingSubmissionName = biddingSubmissionName;
     }
 
+    public Long getBiddingSubCriteriaLineId() {
+        return biddingSubCriteriaLineId;
+    }
+
+    public void setBiddingSubCriteriaLineId(Long cBiddingSubCriteriaLineId) {
+        this.biddingSubCriteriaLineId = cBiddingSubCriteriaLineId;
+    }
+
+    public Long getBiddingSubCriteriaLineName() {
+        return biddingSubCriteriaLineName;
+    }
+
+    public void setBiddingSubCriteriaLineName(Long biddingSubCriteriaLineName) {
+        this.biddingSubCriteriaLineName = biddingSubCriteriaLineName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -131,6 +150,7 @@ public class MProposalTechnicalDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", biddingSubmissionId=" + getBiddingSubmissionId() +
+            ", biddingSubCriteriaLineId=" + getBiddingSubCriteriaLineId() +
             "}";
     }
 }

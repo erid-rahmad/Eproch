@@ -37,6 +37,14 @@
             "relationshipValidateRules": "required",
             "relationshipName": "biddingSubmission",
             "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cBiddingSubCriteriaLine",
+            "otherEntityRelationshipName": "mProposalAdministration",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSubCriteriaLine",
+            "otherEntityField": "id"
         }
     ],
     "changelogDate": "20210505055000",

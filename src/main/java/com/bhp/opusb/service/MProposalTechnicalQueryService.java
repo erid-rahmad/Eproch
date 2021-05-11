@@ -111,6 +111,10 @@ public class MProposalTechnicalQueryService extends QueryService<MProposalTechni
                 specification = specification.and(buildSpecification(criteria.getBiddingSubmissionId(),
                     root -> root.join(MProposalTechnical_.biddingSubmission, JoinType.LEFT).get(MBiddingSubmission_.id)));
             }
+            if (criteria.getBiddingSubCriteriaLineId() != null) {
+                specification = specification.and(buildSpecification(criteria.getBiddingSubCriteriaLineId(),
+                    root -> root.join(MProposalTechnical_.biddingSubCriteriaLine, JoinType.LEFT).get(CBiddingSubCriteriaLine_.id)));
+            }
         }
         return specification;
     }

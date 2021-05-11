@@ -1757,6 +1757,7 @@ relationship ManyToOne {
 
 	MProposalAdministration{adOrganization required} to ADOrganization
 	MProposalAdministration{biddingSubmission required} to MBiddingSubmission
+	MProposalAdministration{biddingSubCriteriaLine required} to CBiddingSubCriteriaLine
 
 	MProposalAdministrationFile{adOrganization required} to ADOrganization
 	MProposalAdministrationFile{biddingSubmission required} to MBiddingSubmission
@@ -1764,6 +1765,7 @@ relationship ManyToOne {
 
 	MProposalTechnical{adOrganization required} to ADOrganization
 	MProposalTechnical{biddingSubmission required} to MBiddingSubmission
+	MProposalTechnical{biddingSubCriteriaLine required} to CBiddingSubCriteriaLine
 
 	MProposalTechnicalFile{adOrganization required} to ADOrganization
 	MProposalTechnicalFile{biddingSubmission required} to MBiddingSubmission

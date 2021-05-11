@@ -21,4 +21,14 @@
                                  referencedTableName="m_bidding_submission"/>
 
     </changeSet>
+
+    <changeSet id="20210511054600" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="bidding_sub_criteria_line_id"
+                                 baseTableName="m_proposal_administration"
+                                 constraintName="fk_m_proposal_administration_bidding_sub_criteria_line_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_bidding_sub_criteria_line"/>
+
+    </changeSet>
 </databaseChangeLog>

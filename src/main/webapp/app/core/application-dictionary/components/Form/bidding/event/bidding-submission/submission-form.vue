@@ -1,5 +1,5 @@
 <template>
-  <div class="submission-form ">
+  <div class="submission-form">
     <div v-if="page === 1">
       <el-divider content-position="left">
         <h4>Bidding Submission</h4>
@@ -101,19 +101,3 @@
 </template>
 
 <script lang="ts" src="./submission-form.component.ts"></script>
-<style>
-.tombolaction {
-  /* width: 150px;
-        padding: 10px;
-
-        margin: auto; */
-  display: block;
-  width: 100%;
-  border: none;
-
-  padding: 14px 28px;
-  font-size: 16px;
-  cursor: pointer;
-  text-align: center;
-}
-</style>

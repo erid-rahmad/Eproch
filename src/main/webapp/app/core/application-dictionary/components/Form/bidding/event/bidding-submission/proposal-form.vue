@@ -96,7 +96,7 @@
                   >
                     <template slot-scope="{ row }">
                       <el-checkbox
-                        v-model="row.documentChecked"
+                        v-model="row.documentEvaluation"
                         size="mini"
                       ></el-checkbox>
                     </template>
@@ -116,7 +116,7 @@
   .criteria-label {
     font-weight: 700;
   }
-  
+
   .sub-criteria-section {
     label.el-form-item__label {
       font-weight: 600;

@@ -8,6 +8,7 @@ import AdministrationProposal from '../event/bidding-submission/administration-p
 import PriceProposal from '../event/bidding-submission/price-proposal.vue';
 import SubmissionForm from "../event/bidding-submission/submission-form.vue";
 import TechnicalProposal from '../event/bidding-submission/technical-proposal.vue';
+import { proposalNameMap } from '../event/bidding-submission/proposal-form.component';
 
 const enum SubmissionPage {
   MAIN = 'main',
@@ -35,33 +36,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   loading: boolean = false;
   formType: string = null;
 
-  gridData: any[] = [
-    {
-      biddingNo: 'BD-00001',
-      biddingName: 'Pengadaan Kendaraan Operasional',
-      biddingTypeName: 'Tender Goods',
-      biddingStatus: 'In Progress',
-      biddingScheduleId: 317004,
-      status: 'Submitted',
-    },
-
-    {
-      biddingNo: 'BD-00003',
-      biddingName: 'Pengadaan Office Equipment',
-      biddingTypeName: 'Tender Goods',
-      biddingStatus: 'In Progress',
-      biddingScheduleId: 317004,
-      status: 'Draft',
-    },
-    {
-      biddingNo: 'BD-00004',
-      biddingName: 'Pengadaan Kendaraan Jabatan',
-      biddingTypeName: 'Tender Goods',
-      biddingStatus: 'In Progress',
-      biddingScheduleId: 317004,
-      status: 'Draft',
-    }
-  ];
+  gridData: any[] = [];
 
   selectedRow: any = {};
   
@@ -85,6 +60,9 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   proposals: any[] = [];
   proposalName: string = null;
   selectedProposal: number = null;
+
+  biddingStatuses: any[] = [];
+  docStatuses: any[] = [];
 
   get isVendor() {
     return AccountStoreModule.isVendor;
@@ -125,7 +103,11 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   }
 
   created() {
-    if (!this.isVendor) {
+    if (this.isVendor) {
+      this.retrieveBiddingStatuses();
+      this.retrieveDocStatuses();
+      this.transition();
+    } else {
       this.section = SubmissionPage.SUBMISSION;
     }
   }
@@ -175,10 +157,30 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   }
 
   openProposalForm(data: any) {
-    const { evaluation } = data;
-    this.proposalName = evaluation.toLowerCase();
+    const { evaluationMethodLineName } = data;
+    this.proposalName = proposalNameMap.get(evaluationMethodLineName);
     this.selectedProposal = data;
     this.section = SubmissionPage.PROPOSAL;
+  }
+
+  printBiddingStatus(status: string) {
+    return this.biddingStatuses.find(stat => stat.value === status)?.name || status;
+  }
+
+  printSubmissionStatus(status: string) {
+    return this.docStatuses.find(stat => stat.value === status)?.name || status;
+  }
+
+  private retrieveBiddingStatuses() {
+    this.commonService(null).retrieveReferenceLists('biddingStatus')
+      .then(res => this.biddingStatuses = res)
+      .catch(err => this.$message.warning('Failed to get bidding statuses'));
+  }
+
+  private retrieveDocStatuses() {
+    this.commonService(null).retrieveReferenceLists('docStatus')
+      .then(res => this.docStatuses = res)
+      .catch(err => this.$message.warning('Failed to get document statuses'));
   }
 
   private retrieveAllRecords(): void {

@@ -1,6 +1,7 @@
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import PriceProposal from './price-proposal.vue';
+import { proposalNameMap } from './proposal-form.component';
 import ProposalForm from './proposal-form.vue';
 import SubmissionForm from './submission-form.vue';
 
@@ -52,8 +53,8 @@ export default class BiddingSubmissionEvent extends Vue {
   }
 
   openProposalForm(data: any) {
-    const { evaluation } = data;
-    this.proposalName = evaluation.toLowerCase();
+    const { evaluationMethodLineName } = data;
+    this.proposalName = proposalNameMap.get(evaluationMethodLineName);
     this.selectedProposal = data;
     this.section = SubmissionPage.PROPOSAL;
   }
