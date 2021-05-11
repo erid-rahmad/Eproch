@@ -40,6 +40,9 @@ public class CBiddingCriteriaResourceIT {
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
 
+    private static final String DEFAULT_TYPE = "AAAAAAAAAA";
+    private static final String UPDATED_TYPE = "BBBBBBBBBB";
+
     private static final UUID DEFAULT_UID = UUID.randomUUID();
     private static final UUID UPDATED_UID = UUID.randomUUID();
 
@@ -75,6 +78,7 @@ public class CBiddingCriteriaResourceIT {
     public static CBiddingCriteria createEntity(EntityManager em) {
         CBiddingCriteria cBiddingCriteria = new CBiddingCriteria()
             .name(DEFAULT_NAME)
+            .type(DEFAULT_TYPE)
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
@@ -98,6 +102,7 @@ public class CBiddingCriteriaResourceIT {
     public static CBiddingCriteria createUpdatedEntity(EntityManager em) {
         CBiddingCriteria cBiddingCriteria = new CBiddingCriteria()
             .name(UPDATED_NAME)
+            .type(UPDATED_TYPE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
@@ -135,6 +140,7 @@ public class CBiddingCriteriaResourceIT {
         assertThat(cBiddingCriteriaList).hasSize(databaseSizeBeforeCreate + 1);
         CBiddingCriteria testCBiddingCriteria = cBiddingCriteriaList.get(cBiddingCriteriaList.size() - 1);
         assertThat(testCBiddingCriteria.getName()).isEqualTo(DEFAULT_NAME);
+        assertThat(testCBiddingCriteria.getType()).isEqualTo(DEFAULT_TYPE);
         assertThat(testCBiddingCriteria.getUid()).isEqualTo(DEFAULT_UID);
         assertThat(testCBiddingCriteria.isActive()).isEqualTo(DEFAULT_ACTIVE);
     }
@@ -181,6 +187,25 @@ public class CBiddingCriteriaResourceIT {
 
     @Test
     @Transactional
+    public void checkTypeIsRequired() throws Exception {
+        int databaseSizeBeforeTest = cBiddingCriteriaRepository.findAll().size();
+        // set the field null
+        cBiddingCriteria.setType(null);
+
+        // Create the CBiddingCriteria, which fails.
+        CBiddingCriteriaDTO cBiddingCriteriaDTO = cBiddingCriteriaMapper.toDto(cBiddingCriteria);
+
+        restCBiddingCriteriaMockMvc.perform(post("/api/c-bidding-criteria")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(TestUtil.convertObjectToJsonBytes(cBiddingCriteriaDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<CBiddingCriteria> cBiddingCriteriaList = cBiddingCriteriaRepository.findAll();
+        assertThat(cBiddingCriteriaList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
+    @Transactional
     public void getAllCBiddingCriteria() throws Exception {
         // Initialize the database
         cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
@@ -191,6 +216,7 @@ public class CBiddingCriteriaResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cBiddingCriteria.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
     }
@@ -207,6 +233,7 @@ public class CBiddingCriteriaResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(cBiddingCriteria.getId().intValue()))
             .andExpect(jsonPath("$.name").value(DEFAULT_NAME))
+            .andExpect(jsonPath("$.type").value(DEFAULT_TYPE))
             .andExpect(jsonPath("$.uid").value(DEFAULT_UID.toString()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()));
     }
@@ -306,6 +333,84 @@ public class CBiddingCriteriaResourceIT {
 
         // Get all the cBiddingCriteriaList where name does not contain UPDATED_NAME
         defaultCBiddingCriteriaShouldBeFound("name.doesNotContain=" + UPDATED_NAME);
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllCBiddingCriteriaByTypeIsEqualToSomething() throws Exception {
+        // Initialize the database
+        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
+
+        // Get all the cBiddingCriteriaList where type equals to DEFAULT_TYPE
+        defaultCBiddingCriteriaShouldBeFound("type.equals=" + DEFAULT_TYPE);
+
+        // Get all the cBiddingCriteriaList where type equals to UPDATED_TYPE
+        defaultCBiddingCriteriaShouldNotBeFound("type.equals=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingCriteriaByTypeIsNotEqualToSomething() throws Exception {
+        // Initialize the database
+        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
+
+        // Get all the cBiddingCriteriaList where type not equals to DEFAULT_TYPE
+        defaultCBiddingCriteriaShouldNotBeFound("type.notEquals=" + DEFAULT_TYPE);
+
+        // Get all the cBiddingCriteriaList where type not equals to UPDATED_TYPE
+        defaultCBiddingCriteriaShouldBeFound("type.notEquals=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingCriteriaByTypeIsInShouldWork() throws Exception {
+        // Initialize the database
+        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
+
+        // Get all the cBiddingCriteriaList where type in DEFAULT_TYPE or UPDATED_TYPE
+        defaultCBiddingCriteriaShouldBeFound("type.in=" + DEFAULT_TYPE + "," + UPDATED_TYPE);
+
+        // Get all the cBiddingCriteriaList where type equals to UPDATED_TYPE
+        defaultCBiddingCriteriaShouldNotBeFound("type.in=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingCriteriaByTypeIsNullOrNotNull() throws Exception {
+        // Initialize the database
+        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
+
+        // Get all the cBiddingCriteriaList where type is not null
+        defaultCBiddingCriteriaShouldBeFound("type.specified=true");
+
+        // Get all the cBiddingCriteriaList where type is null
+        defaultCBiddingCriteriaShouldNotBeFound("type.specified=false");
+    }
+                @Test
+    @Transactional
+    public void getAllCBiddingCriteriaByTypeContainsSomething() throws Exception {
+        // Initialize the database
+        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
+
+        // Get all the cBiddingCriteriaList where type contains DEFAULT_TYPE
+        defaultCBiddingCriteriaShouldBeFound("type.contains=" + DEFAULT_TYPE);
+
+        // Get all the cBiddingCriteriaList where type contains UPDATED_TYPE
+        defaultCBiddingCriteriaShouldNotBeFound("type.contains=" + UPDATED_TYPE);
+    }
+
+    @Test
+    @Transactional
+    public void getAllCBiddingCriteriaByTypeNotContainsSomething() throws Exception {
+        // Initialize the database
+        cBiddingCriteriaRepository.saveAndFlush(cBiddingCriteria);
+
+        // Get all the cBiddingCriteriaList where type does not contain DEFAULT_TYPE
+        defaultCBiddingCriteriaShouldNotBeFound("type.doesNotContain=" + DEFAULT_TYPE);
+
+        // Get all the cBiddingCriteriaList where type does not contain UPDATED_TYPE
+        defaultCBiddingCriteriaShouldBeFound("type.doesNotContain=" + UPDATED_TYPE);
     }
 
 
@@ -437,6 +542,7 @@ public class CBiddingCriteriaResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(cBiddingCriteria.getId().intValue())))
             .andExpect(jsonPath("$.[*].name").value(hasItem(DEFAULT_NAME)))
+            .andExpect(jsonPath("$.[*].type").value(hasItem(DEFAULT_TYPE)))
             .andExpect(jsonPath("$.[*].uid").value(hasItem(DEFAULT_UID.toString())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())));
 
@@ -487,6 +593,7 @@ public class CBiddingCriteriaResourceIT {
         em.detach(updatedCBiddingCriteria);
         updatedCBiddingCriteria
             .name(UPDATED_NAME)
+            .type(UPDATED_TYPE)
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         CBiddingCriteriaDTO cBiddingCriteriaDTO = cBiddingCriteriaMapper.toDto(updatedCBiddingCriteria);
@@ -501,6 +608,7 @@ public class CBiddingCriteriaResourceIT {
         assertThat(cBiddingCriteriaList).hasSize(databaseSizeBeforeUpdate);
         CBiddingCriteria testCBiddingCriteria = cBiddingCriteriaList.get(cBiddingCriteriaList.size() - 1);
         assertThat(testCBiddingCriteria.getName()).isEqualTo(UPDATED_NAME);
+        assertThat(testCBiddingCriteria.getType()).isEqualTo(UPDATED_TYPE);
         assertThat(testCBiddingCriteria.getUid()).isEqualTo(UPDATED_UID);
         assertThat(testCBiddingCriteria.isActive()).isEqualTo(UPDATED_ACTIVE);
     }

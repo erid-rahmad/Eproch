@@ -8,24 +8,24 @@
 
 
     <!--
-        Added the entity CBiddingCriteria.
+        Added the entity CPrequalificationEventLine.
     -->
-    <changeSet id="20210209124800-1" author="jhipster">
-        <createTable tableName="c_bidding_criteria">
+    <changeSet id="20210511075800-1" author="jhipster">
+        <createTable tableName="c_prequalification_event_line">
             <column name="id" type="bigint">
                 <constraints primaryKey="true" nullable="false"/>
-            </column>
-            <column name="name" type="varchar(255)">
-                <constraints nullable="false" />
-            </column>
-            <column name="description" type="varchar(255)">
-                <constraints nullable="true" />
             </column>
             <column name="uid" type="${uuidType}">
                 <constraints nullable="true" />
             </column>
             <column name="active" type="boolean">
                 <constraints nullable="true" />
+            </column>
+            <column name="prequalification_event_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="prequalification_step_id" type="bigint">
+                <constraints nullable="false" />
             </column>
             <column name="ad_organization_id" type="bigint">
                 <constraints nullable="false" />
@@ -34,13 +34,13 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="20210209124800-1-relations" author="jhipster">
+    <changeSet id="20210511075800-1-relations" author="jhipster">
 
     </changeSet>
 
     <!-- Added the entity audit columns -->
-    <changeSet id="20210209124800-audit-1" author="jhipster-entity-audit">
-        <addColumn tableName="c_bidding_criteria">
+    <changeSet id="2021051101440003-audit-1" author="jhipster-entity-audit">
+        <addColumn tableName="c_prequalification_event_line">
             <column name="created_by" type="varchar(50)" defaultValue="system">
                 <constraints nullable="false"/>
             </column>
@@ -61,33 +61,19 @@
           This can be customized by adding or removing 'faker' in the 'spring.liquibase.contexts'
           Spring Boot configuration key.
     -->
-    <changeSet id="20210209124800-1-data" author="jhipster" context="faker">
+    <changeSet id="20210511075800-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/c_bidding_criteria.csv"
+                  file="config/liquibase/fake-data/c_prequalification_event_line.csv"
                   separator=";"
-                  tableName="c_bidding_criteria">
+                  tableName="c_prequalification_event_line">
             <column name="id" type="numeric"/>
-            <column name="name" type="string"/>
-            <column name="type" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
+            <column name="prequalification_event_id" type="numeric"/>
+            <column name="prequalification_step_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
-    </changeSet>
-
-    <changeSet id="20210415124800-1-data" author="erid">
-        <dropColumn tableName="c_bidding_criteria">
-            <column name="description" type="varchar(255)"></column>
-        </dropColumn>
-    </changeSet>
-
-    <changeSet id="20210511122800" author="erid">
-        <addColumn tableName="c_bidding_criteria">
-            <column name="type" type="varchar(255)">
-                <constraints nullable="true" />
-            </column>
-        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

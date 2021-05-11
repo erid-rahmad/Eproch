@@ -1,0 +1,51 @@
+{
+    "name": "CPrequalificationEventLine",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cPrequalificationEvent",
+            "otherEntityRelationshipName": "cPrequalificationEventLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalificationEvent",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cPrequalificationStep",
+            "otherEntityRelationshipName": "cPrequalificationEventLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "prequalificationStep",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cPrequalificationEventLine",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210511075800",
+    "entityTableName": "c_prequalification_event_line",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

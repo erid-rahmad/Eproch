@@ -1,20 +1,21 @@
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
-import { ElForm } from 'element-ui/types/form';
+import {ElForm} from 'element-ui/types/form';
 import Vue from 'vue';
 
-import { Component, Inject,Watch } from "vue-property-decorator";
-import { Mixins } from 'vue-property-decorator';
+import {Component, Inject, Watch} from "vue-property-decorator";
+import {Mixins} from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
-import { BiddingStep } from '../steps-form.component';
+import {BiddingStep} from '../steps-form.component';
 import PrequalificationForm from './prequalification-form.vue';
-import { watch } from 'fs';
+import {watch} from 'fs';
 
 const VendorScoringProp = Vue.extend({
   props: {
     editMode: Boolean,
     data: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     }
   }
 })
@@ -30,9 +31,6 @@ const VendorScoringProp = Vue.extend({
 })
 export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScoringProp) {
 
-  @Inject('dynamicWindowService')
-  protected commonService: (baseApiUrl: string) => DynamicWindowService;
-
   gridSchema = {
     defaultSort: {},
     emptyText: 'No Records Found',
@@ -40,16 +38,14 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     height: 200
   };
   rules = {}
-
-
   processing = false;
-  criteriaPA:boolean = false;
-
+  criteriaPA: boolean = false;
   public criteriaOptions: any = {};
   public subCriteriaOptions: any = {};
-
-  private num = 1958806;
   bidding: Record<string, any> = {};
+  @Inject('dynamicWindowService')
+  protected commonService: (baseApiUrl: string) => DynamicWindowService;
+  private num = 1958806;
   private line: any = {};
   private evaluationMethod: any = {};
   private value = '';
@@ -62,20 +58,18 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   private vendorScoring: any = {};
 
 
-
-
   get readOnly() {
     return this.bidding.biddingStatus === 'In Progress';
   }
 
   mounted() {
-    
-    this.bidding = { ...this.data };
+
+    this.bidding = {...this.data};
     console.log("this bidding", this.bidding);
-    this.getVendorScoring();    
+    this.getVendorScoring();
     this.bidding.step = BiddingStep.SCORING;
     this.getEvaluationMethod();
-    
+
   }
 
   @Watch('value')
@@ -87,12 +81,51 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     this.getEvaluationMethodLine();
   }
 
+  addScoring(row) {
+    this.pickrow = row;
+    this.mainForm = this.mainForm;
+    this.criteriaPA = true;
+  }
+
+  closeCriteriaPA() {
+    this.criteriaPA = false;
+    this.pickrow = null;
+  }
+
+  cekmainform() {
+    console.log("this main", this.mainForm);
+    // this.pushVendorScoring(this.mainForm);
+    // this.reload();
+    // console.log("this index", this.index);
+    // console.log("this vendor scoring", this.vendorScoring.evaluationMethodName, this.vendorScoring.evaluationMethodName.length);
+    this.pushVendorScoring(this.mainForm);
+
+
+  }
+
+  closecriteriaPA() {
+    this.criteriaPA = false;
+    console.log("this close");
+    this.mounted();
+    this.pickrow = null;
+
+  }
+
+  validate() {
+    (this.$refs.productCatalog as ElForm).validate((passed, errors) => {
+      if (passed) {
+        //this.submit();
+      } else {
+        console.log(errors);
+      }
+
+    });
+  }
+
   private getEvaluationMethod() {
     this.commonService('/api/c-evaluation-methods')
       .retrieve({
-        criteriaQuery: [
-
-        ],
+        criteriaQuery: [],
         paginationQuery: {
           page: 0,
           size: 10000,
@@ -123,7 +156,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
         let arrayform = [];
         this.evaluationMethodLine.forEach(element => {
           console.log("this element", element);
-          let a :any= {};
+          let a: any = {};
           a.evaluationMethodLineId = element.id;
           a.adOrganizationId = element.adOrganizationId;
           arrayform.push(a);
@@ -145,9 +178,9 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
           sort: ['id']
         }
       })
-      .then(res => {       
+      .then(res => {
         res.data.forEach(element => {
-          this.vendorScoring=element
+          this.vendorScoring = element
         });
         if (this.vendorScoring.evaluationMethodName.length) {
           this.index = true;
@@ -156,55 +189,14 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
       });
   }
 
+  //=======================================================================
+
   private pushVendorScoring(data) {
     this.commonService('/api/m-vendor-scorings')
       .create(data)
-      .then(res => { 
+      .then(res => {
         this.getVendorScoring();
-      })    
-  }
-
-  addScoring(row) {
-    this.pickrow = row;
-    this.mainForm = this.mainForm;
-    this.criteriaPA = true;
-  }
-
-  closeCriteriaPA() {
-    this.criteriaPA = false;
-    this.pickrow = null;
-  }
-
-  cekmainform() {
-    console.log("this main", this.mainForm);
-    // this.pushVendorScoring(this.mainForm);
-    // this.reload();
-    // console.log("this index", this.index);
-    // console.log("this vendor scoring", this.vendorScoring.evaluationMethodName, this.vendorScoring.evaluationMethodName.length);
-    this.pushVendorScoring(this.mainForm);    
-   
-   
-  }
-
-  closecriteriaPA() {
-    this.criteriaPA = false;
-    console.log("this close");
-    this.mounted();
-    this.pickrow = null;
-    
-  }
-
-  //=======================================================================
-
-  validate() {
-    (this.$refs.productCatalog as ElForm).validate((passed, errors) => {
-      if(passed){
-        //this.submit();
-      }else{
-        console.log(errors);
-      }
-
-    });
+      })
   }
 
 }

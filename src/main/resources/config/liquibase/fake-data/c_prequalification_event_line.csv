@@ -1,0 +1,11 @@
+id;uid;active;prequalification_event_id;prequalification_step_id;ad_organization_id
+1;75f220fa-722c-4c7e-9107-d4cd2f290dc9;true;1;1;1
+2;b1f5f842-5288-4440-9259-aac179892ff6;false;2;2;2
+3;45df1717-37ff-4d72-84b5-383aed5a1422;false;3;3;3
+4;6c891d8a-9504-48c9-834d-0e883098ed92;false;4;4;4
+5;33b0bdc8-e327-4d00-9441-d1ead5e27dda;false;5;5;5
+6;afd702c6-b2f9-4ec6-9c89-1375bca49074;true;6;6;6
+7;48be5c29-a011-4ee6-b375-525964f845fa;true;7;7;7
+8;127ffd15-b0ae-4cf9-b18e-05c510ad918a;true;8;8;8
+9;9eccdc61-439b-4e42-98d2-56207a1fea15;false;9;9;9
+10;371c376c-57df-4c63-afb6-e937aeb1cb32;false;10;10;10

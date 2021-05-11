@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory
 import scala.concurrent.duration._
 
 /**
- * Performance test for the CBiddingCriteria entity.
+ * Performance test for the CPrequalificationStep entity.
  */
-class CBiddingCriteriaGatlingTest extends Simulation {
+class CPrequalificationStepGatlingTest extends Simulation {
 
     val context: LoggerContext = LoggerFactory.getILoggerFactory.asInstanceOf[LoggerContext]
     // Log all HTTP requests
@@ -43,7 +43,7 @@ class CBiddingCriteriaGatlingTest extends Simulation {
         "Authorization" -> "${access_token}"
     )
 
-    val scn = scenario("Test the CBiddingCriteria entity")
+    val scn = scenario("Test the CPrequalificationStep entity")
         .exec(http("First unauthenticated request")
         .get("/api/account")
         .headers(headers_http)
@@ -62,32 +62,32 @@ class CBiddingCriteriaGatlingTest extends Simulation {
         .check(status.is(200)))
         .pause(10)
         .repeat(2) {
-            exec(http("Get all cBiddingCriteria")
-            .get("/api/c-bidding-criteria")
+            exec(http("Get all cPrequalificationSteps")
+            .get("/api/c-prequalification-steps")
             .headers(headers_http_authenticated)
             .check(status.is(200)))
             .pause(10 seconds, 20 seconds)
-            .exec(http("Create new cBiddingCriteria")
-            .post("/api/c-bidding-criteria")
+            .exec(http("Create new cPrequalificationStep")
+            .post("/api/c-prequalification-steps")
             .headers(headers_http_authenticated)
             .body(StringBody("""{
                 "id":null
-                , "name":"SAMPLE_TEXT"
+                , "description":"SAMPLE_TEXT"
                 , "type":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson
             .check(status.is(201))
-            .check(headerRegex("Location", "(.*)").saveAs("new_cBiddingCriteria_url"))).exitHereIfFailed
+            .check(headerRegex("Location", "(.*)").saveAs("new_cPrequalificationStep_url"))).exitHereIfFailed
             .pause(10)
             .repeat(5) {
-                exec(http("Get created cBiddingCriteria")
-                .get("${new_cBiddingCriteria_url}")
+                exec(http("Get created cPrequalificationStep")
+                .get("${new_cPrequalificationStep_url}")
                 .headers(headers_http_authenticated))
                 .pause(10)
             }
-            .exec(http("Delete created cBiddingCriteria")
-            .delete("${new_cBiddingCriteria_url}")
+            .exec(http("Delete created cPrequalificationStep")
+            .delete("${new_cPrequalificationStep_url}")
             .headers(headers_http_authenticated))
             .pause(10)
         }

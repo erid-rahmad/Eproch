@@ -12,12 +12,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A CBiddingCriteria.
+ * A CPrequalificationEvent.
  */
 @Entity
-@Table(name = "c_bidding_criteria")
+@Table(name = "c_prequalification_event")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CBiddingCriteria implements Serializable {
+public class CPrequalificationEvent extends AbstractAuditingEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -30,10 +30,6 @@ public class CBiddingCriteria implements Serializable {
     @Column(name = "name", nullable = false)
     private String name;
 
-    @NotNull
-    @Column(name = "type", nullable = false)
-    private String type;
-
     @Column(name = "uid")
     private UUID uid;
 
@@ -42,7 +38,7 @@ public class CBiddingCriteria implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties("cBiddingCriteria")
+    @JsonIgnoreProperties("cPrequalificationEvents")
     private ADOrganization adOrganization;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -58,7 +54,7 @@ public class CBiddingCriteria implements Serializable {
         return name;
     }
 
-    public CBiddingCriteria name(String name) {
+    public CPrequalificationEvent name(String name) {
         this.name = name;
         return this;
     }
@@ -67,24 +63,11 @@ public class CBiddingCriteria implements Serializable {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public CBiddingCriteria type(String type) {
-        this.type = type;
-        return this;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
     public UUID getUid() {
         return uid;
     }
 
-    public CBiddingCriteria uid(UUID uid) {
+    public CPrequalificationEvent uid(UUID uid) {
         this.uid = uid;
         return this;
     }
@@ -97,7 +80,7 @@ public class CBiddingCriteria implements Serializable {
         return active;
     }
 
-    public CBiddingCriteria active(Boolean active) {
+    public CPrequalificationEvent active(Boolean active) {
         this.active = active;
         return this;
     }
@@ -110,7 +93,7 @@ public class CBiddingCriteria implements Serializable {
         return adOrganization;
     }
 
-    public CBiddingCriteria adOrganization(ADOrganization aDOrganization) {
+    public CPrequalificationEvent adOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
         return this;
     }
@@ -120,15 +103,20 @@ public class CBiddingCriteria implements Serializable {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
+    @PrePersist
+    public void prePersist() {
+        uid = UUID.randomUUID();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof CBiddingCriteria)) {
+        if (!(o instanceof CPrequalificationEvent)) {
             return false;
         }
-        return id != null && id.equals(((CBiddingCriteria) o).id);
+        return id != null && id.equals(((CPrequalificationEvent) o).id);
     }
 
     @Override
@@ -138,10 +126,9 @@ public class CBiddingCriteria implements Serializable {
 
     @Override
     public String toString() {
-        return "CBiddingCriteria{" +
+        return "CPrequalificationEvent{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", type='" + getType() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";

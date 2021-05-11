@@ -1,5 +1,5 @@
-import { Component, Vue, Watch ,Inject} from "vue-property-decorator";
-import { Mixins } from 'vue-property-decorator';
+import {Component, Vue, Watch, Inject} from "vue-property-decorator";
+import {Mixins} from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 
@@ -8,15 +8,15 @@ const PrequalificationFormProps = Vue.extend({
     // readOnly: Boolean,
     pickrow: {
       type: Object,
-      default: () => {}
+      default: () => {
+      }
     },
 
   }
 });
 
 @Component
-export default class PrequalificationForm extends Mixins(AccessLevelMixin, PrequalificationFormProps)  {
-
+export default class PrequalificationForm extends Mixins(AccessLevelMixin, PrequalificationFormProps) {
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -26,21 +26,56 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
   private input: boolean = true;
 
   mounted() {
-    console.log("this.pickrow", this.pickrow);    
-    this.getEvaluationMethodCriteria(this.pickrow.evaluationMethodLineId);  
+    console.log("this.pickrow", this.pickrow);
+    this.getEvaluationMethodCriteria(this.pickrow.evaluationMethodLineId);
   }
 
   @Watch('pickrow')
   updatedata() {
-    console.log("this.pickrow", this.pickrow);   
-    this.getEvaluationMethodCriteria(this.pickrow.evaluationMethodLineId);      
+    console.log("this.pickrow", this.pickrow);
+    this.getEvaluationMethodCriteria(this.pickrow.evaluationMethodLineId);
   }
-  
+
+  getanswer(id) {
+    const found = this.vendorScoringCriteria.find(element => element.biddingSubCriteriaLineId === id);
+    return found.requirement;
+  }
+
+  setpushVendorScoringAnswer() {
+    console.log("this sent");
+    this.emptyhandler();
+    this.MVendorScoringNestedDTO.evaluationMethodCriteriaNested = this.evaluationMethodCriteria;
+    this.MVendorScoringNestedDTO.evaluationMethodLineId = this.pickrow.id;
+    this.pushVendorScoringAnswer(this.MVendorScoringNestedDTO);
+    this.$emit("closecriteriaPA");
+  }
+
+  emptyhandler() {
+    console.log("this empty handler", this.evaluationMethodCriteria);
+    this.evaluationMethodCriteria.forEach(element => {
+      element.evalMethodSubCriteriaList.forEach(element => {
+        element.biddingSubCriteriaDTO.forEach(element => {
+          element.criteriaLineDTO.forEach(element => {
+            console.log("this element", element);
+            if (element.requirement === null) {
+              console.log("this handler null");
+              this.$notify.error({
+                title: 'Error',
+                message: 'Answer Required'
+              });
+            }
+          });
+        });
+      });
+    });
+
+  }
+
   private getEvaluationMethodCriteria(lineId) {
     this.commonService('/api/c-evaluation-method-criteria')
       .retrieve({
         criteriaQuery: [
-          `evaluationMethodLineId.equals=${lineId}`          
+          `evaluationMethodLineId.equals=${lineId}`
         ],
         paginationQuery: {
           page: 0,
@@ -50,14 +85,9 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       })
       .then(res => {
         this.evaluationMethodCriteria = res.data;
-        console.log("this.evaluationMethodCriteria", this.evaluationMethodCriteria);  
+        console.log("this.evaluationMethodCriteria", this.evaluationMethodCriteria);
       });
-      this.getVendorScoringCriteria(this.pickrow.id);
-  }
-
-  getanswer(id) {
-    const found = this.vendorScoringCriteria.find(element => element.biddingSubCriteriaLineId === id);
-    return found.requirement;
+    this.getVendorScoringCriteria(this.pickrow.id);
   }
 
   private getVendorScoringCriteria(lineId) {
@@ -65,7 +95,6 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       .retrieve({
         criteriaQuery: [
           `vendorScoringLineId.equals=${lineId}`
-          
         ],
         paginationQuery: {
           page: 0,
@@ -75,12 +104,12 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       })
       .then(res => {
         this.vendorScoringCriteria = res.data;
-        console.log("this vendoring criteria data",this.vendorScoringCriteria);
-        
-        console.log("this.vendorScoringCriteria", res.data.length); 
+        console.log("this vendoring criteria data", this.vendorScoringCriteria);
+
+        console.log("this.vendorScoringCriteria", res.data.length);
         if (res.data.length) {
           this.input = false;
-        } else { 
+        } else {
           this.input = true;
         }
       });
@@ -90,48 +119,8 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
     this.commonService('/api/m-vendor-scoring-criteria-answer')
       .create(data)
       .then(res => {
-        
-        
         this.pickrow = null;
       });
-  }
-  
-  setpushVendorScoringAnswer() {    
-    console.log("this sent"); 
-    this.emptyhandler();
-    this.MVendorScoringNestedDTO.evaluationMethodCriteriaNested = this.evaluationMethodCriteria;
-    this.MVendorScoringNestedDTO.evaluationMethodLineId = this.pickrow.id;
-    this.pushVendorScoringAnswer(this.MVendorScoringNestedDTO);
-    this.$emit("closecriteriaPA");
-
-
-   
-  
-   
-  }
-
-  emptyhandler() { 
-    console.log("this empty handler",this.evaluationMethodCriteria);
-    this.evaluationMethodCriteria.forEach(element => {
-      element.evalMethodSubCriteriaList.forEach(element => {
-        element.biddingSubCriteriaDTO.forEach(element => {
-          element.criteriaLineDTO.forEach(element => {
-           
-            
-            console.log("this element", element);
-            if (element.requirement === null) { 
-              console.log("this handler null");
-              this.$notify.error({
-                title: 'Error',
-                message: 'Answer Required'
-              });
-              
-            }
-          });
-        });
-      });
-    });
-      
   }
 
 

@@ -6,17 +6,14 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A DTO for the {@link com.bhp.opusb.domain.CBiddingCriteria} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.CPrequalificationEvent} entity.
  */
-public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
+public class CPrequalificationEventDTO extends AbstractAuditingDTO {
 
     private Long id;
 
     @NotNull
     private String name;
-
-    @NotNull
-    private String type;
 
     private UUID uid;
 
@@ -24,7 +21,6 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
 
 
     private Long adOrganizationId;
-    private String adOrganizationName;
 
     public Long getId() {
         return id;
@@ -40,14 +36,6 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public UUID getUid() {
@@ -74,14 +62,6 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public String getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -91,11 +71,11 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        CBiddingCriteriaDTO cBiddingCriteriaDTO = (CBiddingCriteriaDTO) o;
-        if (cBiddingCriteriaDTO.getId() == null || getId() == null) {
+        CPrequalificationEventDTO cPrequalificationEventDTO = (CPrequalificationEventDTO) o;
+        if (cPrequalificationEventDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), cBiddingCriteriaDTO.getId());
+        return Objects.equals(getId(), cPrequalificationEventDTO.getId());
     }
 
     @Override
@@ -105,14 +85,12 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "CBiddingCriteriaDTO{" +
+        return "CPrequalificationEventDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
-            ", type='" + getType() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
 }

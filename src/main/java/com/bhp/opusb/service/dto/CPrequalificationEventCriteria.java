@@ -13,15 +13,15 @@ import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
- * Criteria class for the {@link com.bhp.opusb.domain.CBiddingCriteria} entity. This class is used
- * in {@link com.bhp.opusb.web.rest.CBiddingCriteriaResource} to receive all the possible filtering options from
+ * Criteria class for the {@link com.bhp.opusb.domain.CPrequalificationEvent} entity. This class is used
+ * in {@link com.bhp.opusb.web.rest.CPrequalificationEventResource} to receive all the possible filtering options from
  * the Http GET request parameters.
  * For example the following could be a valid request:
- * {@code /c-bidding-criteria?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
+ * {@code /c-prequalification-events?id.greaterThan=5&attr1.contains=something&attr2.specified=false}
  * As Spring is unable to properly convert the types, unless specific {@link Filter} class are used, we need to use
  * fix type specific filters.
  */
-public class CBiddingCriteriaCriteria implements Serializable, Criteria {
+public class CPrequalificationEventCriteria implements Serializable, Criteria {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,29 +29,26 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
 
     private StringFilter name;
 
-    private StringFilter type;
-
     private UUIDFilter uid;
 
     private BooleanFilter active;
 
     private LongFilter adOrganizationId;
 
-    public CBiddingCriteriaCriteria() {
+    public CPrequalificationEventCriteria() {
     }
 
-    public CBiddingCriteriaCriteria(CBiddingCriteriaCriteria other) {
+    public CPrequalificationEventCriteria(CPrequalificationEventCriteria other) {
         this.id = other.id == null ? null : other.id.copy();
         this.name = other.name == null ? null : other.name.copy();
-        this.type = other.type == null ? null : other.type.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
     }
 
     @Override
-    public CBiddingCriteriaCriteria copy() {
-        return new CBiddingCriteriaCriteria(this);
+    public CPrequalificationEventCriteria copy() {
+        return new CPrequalificationEventCriteria(this);
     }
 
     public LongFilter getId() {
@@ -68,14 +65,6 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
 
     public void setName(StringFilter name) {
         this.name = name;
-    }
-
-    public StringFilter getType() {
-        return type;
-    }
-
-    public void setType(StringFilter type) {
-        this.type = type;
     }
 
     public UUIDFilter getUid() {
@@ -111,11 +100,10 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        final CBiddingCriteriaCriteria that = (CBiddingCriteriaCriteria) o;
+        final CPrequalificationEventCriteria that = (CPrequalificationEventCriteria) o;
         return
             Objects.equals(id, that.id) &&
             Objects.equals(name, that.name) &&
-            Objects.equals(type, that.type) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId);
@@ -126,7 +114,6 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
         return Objects.hash(
         id,
         name,
-        type,
         uid,
         active,
         adOrganizationId
@@ -135,10 +122,9 @@ public class CBiddingCriteriaCriteria implements Serializable, Criteria {
 
     @Override
     public String toString() {
-        return "CBiddingCriteriaCriteria{" +
+        return "CPrequalificationEventCriteria{" +
                 (id != null ? "id=" + id + ", " : "") +
                 (name != null ? "name=" + name + ", " : "") +
-                (type != null ? "type=" + type + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

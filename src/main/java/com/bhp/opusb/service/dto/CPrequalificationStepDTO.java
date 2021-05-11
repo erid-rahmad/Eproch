@@ -6,16 +6,15 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * A DTO for the {@link com.bhp.opusb.domain.CBiddingCriteria} entity.
+ * A DTO for the {@link com.bhp.opusb.domain.CPrequalificationStep} entity.
  */
-public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
+public class CPrequalificationStepDTO extends AbstractAuditingDTO {
 
     private Long id;
 
     @NotNull
-    private String name;
+    private String description;
 
-    @NotNull
     private String type;
 
     private UUID uid;
@@ -24,7 +23,6 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
 
 
     private Long adOrganizationId;
-    private String adOrganizationName;
 
     public Long getId() {
         return id;
@@ -34,12 +32,12 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getType() {
@@ -74,14 +72,6 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public String getAdOrganizationName() {
-        return adOrganizationName;
-    }
-
-    public void setAdOrganizationName(String adOrganizationName) {
-        this.adOrganizationName = adOrganizationName;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -91,11 +81,11 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
             return false;
         }
 
-        CBiddingCriteriaDTO cBiddingCriteriaDTO = (CBiddingCriteriaDTO) o;
-        if (cBiddingCriteriaDTO.getId() == null || getId() == null) {
+        CPrequalificationStepDTO cPrequalificationStepDTO = (CPrequalificationStepDTO) o;
+        if (cPrequalificationStepDTO.getId() == null || getId() == null) {
             return false;
         }
-        return Objects.equals(getId(), cBiddingCriteriaDTO.getId());
+        return Objects.equals(getId(), cPrequalificationStepDTO.getId());
     }
 
     @Override
@@ -105,14 +95,13 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
 
     @Override
     public String toString() {
-        return "CBiddingCriteriaDTO{" +
+        return "CPrequalificationStepDTO{" +
             "id=" + getId() +
-            ", name='" + getName() + "'" +
+            ", description='" + getDescription() + "'" +
             ", type='" + getType() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", adOrganizationName=" + getAdOrganizationName() +
             "}";
     }
 }

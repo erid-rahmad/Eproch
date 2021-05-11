@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+    <!--
+        Added the constraints for entity CPrequalificationEventLine.
+    -->
+    <changeSet id="20210511075800-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="prequalification_event_id"
+                                 baseTableName="c_prequalification_event_line"
+                                 constraintName="fk_c_prequalification_event_line_prequalification_event_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_prequalification_event"/>
+
+        <addForeignKeyConstraint baseColumnNames="prequalification_step_id"
+                                 baseTableName="c_prequalification_event_line"
+                                 constraintName="fk_c_prequalification_event_line_prequalification_step_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="c_prequalification_step"/>
+
+        <addForeignKeyConstraint baseColumnNames="ad_organization_id"
+                                 baseTableName="c_prequalification_event_line"
+                                 constraintName="fk_c_prequalification_event_line_ad_organization_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="ad_organization"/>
+
+    </changeSet>
+</databaseChangeLog>

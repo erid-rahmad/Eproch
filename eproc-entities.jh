@@ -928,7 +928,7 @@ entity CEventTypeline {
 
 entity CBiddingCriteria {
 	name String required
-
+	type String required
 	uid UUID
 	active Boolean
 }
@@ -1010,6 +1010,24 @@ entity CEvalMethodSubCriteria {
 
 entity CEvaluationCriteria {
 	scoringPercentage BigDecimal max(100)
+	uid UUID
+	active Boolean
+}
+
+entity CPrequalificationStep {
+	description String required
+	type String
+	uid UUID
+	active Boolean
+}
+
+entity CPrequalificationEvent {
+	name String required
+	uid UUID
+	active Boolean
+}
+
+entity CPrequalificationEventLine {
 	uid UUID
 	active Boolean
 }
@@ -1667,6 +1685,14 @@ relationship ManyToOne {
 	CEvaluationCriteria{biddingCriteria required} to CBiddingCriteria
 	CEvaluationCriteria{biddingSubCriteria required} to CBiddingSubCriteria
 	CEvaluationCriteria{pic required} to AdUser
+
+	CPrequalificationStep{adOrganization required} to ADOrganization
+
+	CPrequalificationEvent{adOrganization required} to ADOrganization
+
+	CPrequalificationEventLine{prequalificationEvent required} to CPrequalificationEvent
+	CPrequalificationEventLine{prequalificationStep required} to CPrequalificationStep
+	CPrequalificationEventLine{adOrganization required} to ADOrganization
 
 	CQuestionCategory{adOrganization required} to ADOrganization
 
