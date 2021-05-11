@@ -878,9 +878,15 @@ export default class GridView extends Mixins(CalloutMixin, ContextVariableAccess
       });
   }
 
-  public changeOrder(propOrder): void {
-    this.propOrder = propOrder.prop;
-    this.reverse = propOrder.order === 'ascending';
+  public changeOrder({ prop, order }): void {
+    if (order) {
+      this.propOrder = prop;
+      this.reverse = order === 'ascending';
+    } else {
+      this.propOrder = 'id';
+      this.reverse = false;
+    }
+
     const {propOrder: property, reverse} = this;
     this.$emit('order-changed', { property, reverse });
     this.transition();
