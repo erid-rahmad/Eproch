@@ -5,7 +5,6 @@ import Component from 'vue-class-component';
 import { Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
-import PrequalificationForm from './prequalification-form.vue';
 
 const VendorInvitationProp = Vue.extend({
   props: {
@@ -20,7 +19,7 @@ const VendorInvitationProp = Vue.extend({
 @Component
 export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInvitationProp) {
 
-  private updated = true;
+  private updated = false;
   private recordsLoaded = true;
 
   @Inject('dynamicWindowService')
@@ -46,43 +45,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   businessCategorieValues = {
     id: '',
     name: ''
-  }
-
-  vendorInvitations = [
-    {
-      businessClassificationName: 'Transportation and Automotive',
-      businessCategoryName: 'Automotive & Vehicle',
-      businessSubCategoryName: 'Car'
-    },
-    {
-      businessClassificationName: 'Transportation and Automotive',
-      businessCategoryName: 'Automotive & Vehicle',
-      businessSubCategoryName: 'Engine Parts'
-    },
-    {
-      businessClassificationName: 'Transportation and Automotive',
-      businessCategoryName: 'Automotive & Vehicle',
-      businessSubCategoryName: 'Motorbike'
-    }
-  ];
-
-  vendorSuggestions = [
-    {
-      vendorName: 'INGRAM MICRO INDONESIA',
-      businessSubCategoryName: 'Engine Parts',
-      address: 'WISMA NUGRAHA SANTANA 9TH FLOOR SUITE#909, JL. JEND. SUDIRMAN KAV.7-8, 10220, JAKARTA PUSAT'
-    },
-    {
-      vendorName: 'SISTECH KHARISMA',
-      businessSubCategoryName: 'Car',
-      address: 'JL. JUANDA 38-C, 10120, JAKARTA PUSAT'
-    },
-    {
-      vendorName: 'WESTCON INTERNATIONAL INDONESIA',
-      businessSubCategoryName: 'Motorbike',
-      address: 'GEDUNG MD PALACE TOWER 1, LT.5, JL. SETIABUDI SELATAN NO. 7 RT.05 RW.01, SETIABUDI, SETIABUDI, JAKARTA SELATAN'
-    }
-  ]
+  };
 
   vendorSuggestion: any = {
     vendor: '',
@@ -91,7 +54,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
     subCategory: '',
     addressId: '',
     address: ''
-  }
+  };
 
   public rules = {
     values: {
@@ -124,19 +87,23 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   }
 
   created() {
-    // this.recordsLoaded = false;
+    this.recordsLoaded = false;
     this.bidding = {...this.data};
+    this.bidding = {...this.bidding, ...{
+      vendorInvitations: [],
+      vendorSuggestions: []
+    }};
 
     this.retrieveBusinessCategories();
     this.retrieveSubBusinessCategories();
 
-    // Promise.allSettled([
-    //   this.retrieveVendorInvitations(this.bidding.id),
-    //   this.retrieveVendorSuggestions(this.bidding.id)
-    // ])
-    // .then(_results => {
-    //   this.recordsLoaded = true;
-    // });
+    Promise.allSettled([
+      this.retrieveVendorInvitations(this.bidding.id),
+      this.retrieveVendorSuggestions(this.bidding.id)
+    ])
+    .then(_results => {
+      this.recordsLoaded = true;
+    });
 
     this.bidding.step = BiddingStep.SELECTION;
     this.vendorSelection = this.bidding.vendorSelection;
@@ -223,6 +190,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   saveBusinessCategory() {
     const nodes = (<any>this.$refs.businessCategories).getCheckedNodes();
     const classifications = new Set<number>();
+    const vendorInvitations = this.bidding.vendorInvitations || [];
     let vendorSuggestionCriteria = [
       'active.equals=true'
     ];
@@ -240,14 +208,14 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
           businessCategoryName: pathLabels[1],
           businessSubCategoryId: path[2],
           businessSubCategoryName: pathLabels[2]
-        }
+        };
 
-        const lineExist = (this.bidding.vendorInvitations.some((vLine: any) => {
+        const lineExist = (vendorInvitations.some((vLine: any) => {
           return vLine.businessSubCategoryId === vendorInvitation.businessSubCategoryId;
         }));
 
         if (!lineExist) {
-          this.bidding.vendorInvitations.push(vendorInvitation);
+          vendorInvitations.push(vendorInvitation);
 
           if (this.vendorSelection === 'OPN') {
             if (! classifications.has(path[0])) {
@@ -261,6 +229,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
       }
     });
 
+    this.bidding = {...this.bidding, ...{ vendorInvitations }};
     this.onVendorInvitationChanged(vendorSuggestionCriteria);
     this.vendorInvitationFormVisible = false;
   }
@@ -268,7 +237,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   saveVendorSuggestion() {
     this.vendorSuggestion.vendorObj = this.vendorOptions.find(item => item.vendorId === this.vendorSuggestion.vendor);
     this.vendorSuggestion.subCategoryObj = this.subCategoryOptions.find(item => item.id === this.vendorSuggestion.subCategory);
-    this.bidding.vendorSuggestions.push(this.vendorSuggestion);
+    this.bidding.vendorSuggestions.push({ ...this.vendorSuggestion });
 
     this.dialogConfirmationVisibleVendorSuggestion = false;
 

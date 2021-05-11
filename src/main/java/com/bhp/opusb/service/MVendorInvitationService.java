@@ -78,18 +78,6 @@ public class MVendorInvitationService {
             .map(mVendorInvitationMapper::toDto);
     }
 
-    @Transactional(readOnly = true)
-    public List<MVendorInvitation> findAllnested() {
-        log.debug("Request to get all MVendorInvitations");
-        return mVendorInvitationRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    public Optional<MVendorInvitation> findnested(Long id) {
-        log.debug("Request to get all MVendorInvitations");
-        return mVendorInvitationRepository.findById(id);
-    }
-
     /**
      * Get one mVendorInvitation by id.
      *

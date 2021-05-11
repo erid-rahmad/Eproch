@@ -45,7 +45,7 @@
           v-loading="loadingCategories"
           ref="vendorInvitation"
           border
-          :data="vendorInvitations"
+          :data="bidding.vendorInvitations"
           :default-sort="gridSchema.defaultSort"
           :empty-text="gridSchema.emptyText"
           highlight-current-row
@@ -117,7 +117,7 @@
           v-loading="loadingSuggestions"
           ref="vendorSuggestion"
           border
-          :data="vendorSuggestions"
+          :data="bidding.vendorSuggestions"
           :default-sort="gridSchema.defaultSort"
           :empty-text="gridSchema.emptyText"
           highlight-current-row

@@ -62,7 +62,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :xs="24" :sm="12" :lg="8">
-                    <el-form-item label="Bidding Status" prop="biddingStatus" required>
+                    <el-form-item label="Bidding Status" prop="biddingStatus">
                         <el-select v-model="bidding.biddingStatus" class="form-input" disabled style="width: 100%">
                             <el-option v-for="item in biddingStatuses" :key="item.id" :label="item.name" :value="item.value"></el-option>
                         </el-select>
