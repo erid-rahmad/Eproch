@@ -19,6 +19,10 @@ const VendorScoringProp = Vue.extend({
   }
 })
 
+// export enum SCORINGDATA {
+//   INFO,
+// }
+
 @Component({
   components: {
     PrequalificationForm
@@ -44,61 +48,50 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   public criteriaOptions: any = {};
   public subCriteriaOptions: any = {};
 
-  private vendorScoringCriteria:any = {
-    criteria: '',
-    criteriaObj: '',
-    subCriteria: '',
-    subCriteriaObj: '',
-    percentage: '',
-    pic: '',
-    picName: ''
-  };
   private num = 1958806;
   bidding: Record<string, any> = {};
   private line: any = {};
   private evaluationMethod: any = {};
   private value = '';
+  private index: boolean = false;
   private evaluationMethodLine: any = {};
   private evaluationMethodCriteria: any = {};
   private biddingsubcriteria: any = {};
   private pickrow: any = {};
+  private mainForm: any = {};
+  private vendorScoring: any = {};
+
+
+
 
   get readOnly() {
     return this.bidding.biddingStatus === 'In Progress';
   }
 
-  created() {
+  mounted() {
+    
     this.bidding = { ...this.data };
-    console.log("this bidding",this.bidding);
-    
+    console.log("this bidding", this.bidding);
+    this.getVendorScoring();    
     this.bidding.step = BiddingStep.SCORING;
-
     this.getEvaluationMethod();
- 
-    // this.getVendorScoring();
-    
-    // this.getVendorScoringLine();
-
-    this.getbiddingsubcriteria();
-    
-    // this.getCriteria();    
-
-    // this.evaluationMethodCriteria={'awdawd':"awdad"}
     
   }
 
   @Watch('value')
   getLineVendorscoring() {
-    this.getEvaluationMethodLine()
-    
-    }
-    
+    this.mainForm.evaluationMethodId = this.value;
+    this.mainForm.biddingId = this.bidding.id;
+    this.mainForm.adOrganizationId = this.bidding.adOrganizationId;
+    this.mainForm.active = true;
+    this.getEvaluationMethodLine();
+  }
 
   private getEvaluationMethod() {
     this.commonService('/api/c-evaluation-methods')
       .retrieve({
         criteriaQuery: [
-          
+
         ],
         paginationQuery: {
           page: 0,
@@ -117,7 +110,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
       .retrieve({
         criteriaQuery: [
           `evaluationMethodId.equals=${this.value}`
-          
+
         ],
         paginationQuery: {
           page: 0,
@@ -127,30 +120,18 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
       })
       .then(res => {
         this.evaluationMethodLine = res.data;
+        let arrayform = [];
+        this.evaluationMethodLine.forEach(element => {
+          console.log("this element", element);
+          let a :any= {};
+          a.evaluationMethodLineId = element.id;
+          a.adOrganizationId = element.adOrganizationId;
+          arrayform.push(a);
+        });
+        this.mainForm.vendorScoringLineDTOList = arrayform;
         console.log("this.EvaluationMethodLine", this.evaluationMethodLine);
       });
   }
-
-
-  private getbiddingsubcriteria() {
-    this.commonService('api/c-bidding-sub-criteria')
-      .retrieve({
-        criteriaQuery: [
-          `biddingCriteriaId.equals=1955454`          
-        ],
-        paginationQuery: {
-          page: 0,
-          size: 10000,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        this.biddingsubcriteria = res.data;
-        console.log("this.getbiddingsubcriteria", this.biddingsubcriteria);
-      });
-  }
-
-
 
   private getVendorScoring() {
     this.commonService('/api/m-vendor-scorings')
@@ -164,79 +145,28 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
           sort: ['id']
         }
       })
-      .then(res => {
-        this.bidding.scoringCriteria = res.data;
-        console.log("this.bidding.scoringCriteria", this.bidding.scoringCriteria);
-      });
-  }
-
-  private getVendorScoringLine() {
-    this.commonService('/api/m-vendor-scoring-lines')
-      .retrieve({
-        criteriaQuery: [
-          `vendorScoringId.equals=${this.bidding.scoringCriteria.id}`
-        ],
-        paginationQuery: {
-          page: 0,
-          size: 10000,
-          sort: ['id']
+      .then(res => {       
+        res.data.forEach(element => {
+          this.vendorScoring=element
+        });
+        if (this.vendorScoring.evaluationMethodName.length) {
+          this.index = true;
         }
-      })
-      .then(res => {
-        this.line = res.data;
-        console.log("this.bidding.scoringCriteria.line", this.line);
-        
+        console.log("this.vendorScoring", this.vendorScoring);
       });
   }
 
-  private pushVendorScoringLine(data) {
-    this.commonService('/api/m-vendor-scoring-lines')
-      .create(data);
-  }
-
-  private getCriteria() {
-    this.commonService('/api/c-bidding-criteria')
-      .retrieve({
-        criteriaQuery: this.updateCriteria([`active.equals=true`])
-      })
-      .then(res => {
-        this.criteriaOptions = res.data;
-      });
-  }
-
-  getSubCriteria(criteriaId?: number) {
-    if (!criteriaId) {
-      return;
-    }
-
-    this.vendorScoringCriteria.subCriteria = '';
-    this.vendorScoringCriteria.pic = '';
-    this.vendorScoringCriteria.picName = '';
-    this.commonService('/api/c-bidding-sub-criteria')
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          `biddingCriteriaId.equals=${criteriaId}`
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: 1000,
-          sort: ['name']
-        }
-      })
-      .then(res => {
-        this.subCriteriaOptions = res.data;
-      });
-  }
-
-  getPic(subCriteriaId?: number) {
-    let subCriteriaObj = this.subCriteriaOptions.find(item => item.id === subCriteriaId);
-    this.vendorScoringCriteria.pic = subCriteriaObj.adUserUserId;
-    this.vendorScoringCriteria.picName = subCriteriaObj.adUserUserName;
+  private pushVendorScoring(data) {
+    this.commonService('/api/m-vendor-scorings')
+      .create(data)
+      .then(res => { 
+        this.getVendorScoring();
+      })    
   }
 
   addScoring(row) {
-    this.pickrow = row; 
+    this.pickrow = row;
+    this.mainForm = this.mainForm;
     this.criteriaPA = true;
   }
 
@@ -245,26 +175,23 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     this.pickrow = null;
   }
 
-  removeScoring(index) {
-    this.bidding.scoringCriteria.splice(index, 1);
+  cekmainform() {
+    console.log("this main", this.mainForm);
+    // this.pushVendorScoring(this.mainForm);
+    // this.reload();
+    // console.log("this index", this.index);
+    // console.log("this vendor scoring", this.vendorScoring.evaluationMethodName, this.vendorScoring.evaluationMethodName.length);
+    this.pushVendorScoring(this.mainForm);    
+   
+   
   }
 
-  saveScoring() {
-
-    this.vendorScoringCriteria.criteriaObj = this.criteriaOptions.find(item => item.id === this.vendorScoringCriteria.criteria);
-    this.vendorScoringCriteria.subCriteriaObj = this.subCriteriaOptions.find(item => item.id === this.vendorScoringCriteria.subCriteria);
-
-    this.bidding.scoringCriteria.push(this.vendorScoringCriteria);
+  closecriteriaPA() {
     this.criteriaPA = false;
-    this.vendorScoringCriteria = {
-      criteria: '',
-      criteriaObj: '',
-      subCriteria: '',
-      subCriteriaObj: '',
-      percentage: '',
-      pic: '',
-      picName: ''
-    };
+    console.log("this close");
+    this.mounted();
+    this.pickrow = null;
+    
   }
 
   //=======================================================================

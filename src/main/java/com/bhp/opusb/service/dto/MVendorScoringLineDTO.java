@@ -27,6 +27,15 @@ public class MVendorScoringLineDTO implements Serializable {
     private String evaluationMethodLineEvaluationType;
     private String evaluationMethodLineWeight;
     private String evaluationMethodLinePassingGrade;
+    private String evaluationMethodLineEvaluation;
+
+    public String getEvaluationMethodLineEvaluation() {
+        return evaluationMethodLineEvaluation;
+    }
+
+    public void setEvaluationMethodLineEvaluation(String evaluationMethodLineEvaluation) {
+        this.evaluationMethodLineEvaluation = evaluationMethodLineEvaluation;
+    }
 
     private Long vendorScoringId;
 
@@ -167,6 +176,7 @@ public class MVendorScoringLineDTO implements Serializable {
             ", evaluationMethodLineEvaluationType='" + evaluationMethodLineEvaluationType + '\'' +
             ", evaluationMethodLineWeight='" + evaluationMethodLineWeight + '\'' +
             ", evaluationMethodLinePassingGrade='" + evaluationMethodLinePassingGrade + '\'' +
+            ", evaluationMethodLineEvaluation='" + evaluationMethodLineEvaluation + '\'' +
             ", vendorScoringId=" + vendorScoringId +
             '}';
     }

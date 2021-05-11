@@ -1,28 +1,29 @@
 package com.bhp.opusb.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.criteria.JoinType;
 
-import com.bhp.opusb.service.dto.*;
-import io.github.jhipster.service.filter.LongFilter;
+// for static metamodels
+import com.bhp.opusb.domain.*;
+import com.bhp.opusb.repository.CEvaluationMethodCriteriaRepository;
+import com.bhp.opusb.service.dto.CEvalMethodSubCriteriaCriteria;
+import com.bhp.opusb.service.dto.CEvalMethodSubCriteriaDTO;
+import com.bhp.opusb.service.dto.CEvaluationMethodCriteriaCriteria;
+import com.bhp.opusb.service.dto.CEvaluationMethodCriteriaDTO;
+import com.bhp.opusb.service.mapper.CEvaluationMethodCriteriaMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
-
-import com.bhp.opusb.domain.CEvaluationMethodCriteria;
-import com.bhp.opusb.domain.*; // for static metamodels
-import com.bhp.opusb.repository.CEvaluationMethodCriteriaRepository;
-import com.bhp.opusb.service.mapper.CEvaluationMethodCriteriaMapper;
+import io.github.jhipster.service.filter.LongFilter;
 
 /**
  * Service for executing complex queries for {@link CEvaluationMethodCriteria} entities in the database.

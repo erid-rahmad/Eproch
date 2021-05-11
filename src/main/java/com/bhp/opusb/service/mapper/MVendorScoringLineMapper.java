@@ -20,6 +20,7 @@ public interface MVendorScoringLineMapper extends EntityMapper<MVendorScoringLin
     @Mapping(source = "evaluationMethodLine.evaluationType", target = "evaluationMethodLineEvaluationType")
     @Mapping(source = "evaluationMethodLine.weight", target = "evaluationMethodLineWeight")
     @Mapping(source = "evaluationMethodLine.passingGrade", target = "evaluationMethodLinePassingGrade")
+    @Mapping(source = "evaluationMethodLine.evaluation", target = "evaluationMethodLineEvaluation")
     @Mapping(source = "vendorScoring.id", target = "vendorScoringId")
     MVendorScoringLineDTO toDto(MVendorScoringLine mVendorScoringLine);
 

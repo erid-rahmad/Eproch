@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    
+
     <!--
         Added the entity MVendorScoringCriteria.
     -->
@@ -68,6 +68,18 @@
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+    <changeSet id="20210507015200" author="erid">
+        <dropColumn tableName="m_vendor_scoring_criteria">
+            <column name="eval_method_criteria_line_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </dropColumn>
+        <addColumn tableName="m_vendor_scoring_criteria">
+            <column name="evaluation_method_criteria_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

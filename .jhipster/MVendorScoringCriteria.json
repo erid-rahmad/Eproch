@@ -28,9 +28,9 @@
         },
         {
             "relationshipType": "many-to-one",
-            "otherEntityName": "cEvalMethodCriteriaLine",
+            "otherEntityName": "cEvaluationMethodCriteria",
             "otherEntityRelationshipName": "mVendorScoringCriteria",
-            "relationshipName": "evalMethodCriteriaLine",
+            "relationshipName": "evaluationMethodCriteria",
             "otherEntityField": "id"
         },
         {

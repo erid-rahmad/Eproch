@@ -9,7 +9,7 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.MVendorScoringCriteria} entity.
  */
 public class MVendorScoringCriteriaDTO implements Serializable {
-    
+
     private Long id;
 
     @NotNull
@@ -22,14 +22,14 @@ public class MVendorScoringCriteriaDTO implements Serializable {
 
     private Long adOrganizationId;
 
-    private Long evalMethodCriteriaLineId;
+    private Long evaluationMethodCriteriaId;
 
     private Long evalMethodSubCriteriaId;
 
     private Long vendorScoringLineId;
 
     private Long biddingSubCriteriaLineId;
-    
+
     public Long getId() {
         return id;
     }
@@ -70,12 +70,12 @@ public class MVendorScoringCriteriaDTO implements Serializable {
         this.adOrganizationId = aDOrganizationId;
     }
 
-    public Long getEvalMethodCriteriaLineId() {
-        return evalMethodCriteriaLineId;
+    public Long getEvaluationMethodCriteriaId() {
+        return evaluationMethodCriteriaId;
     }
 
-    public void setEvalMethodCriteriaLineId(Long cEvalMethodCriteriaLineId) {
-        this.evalMethodCriteriaLineId = cEvalMethodCriteriaLineId;
+    public void setEvaluationMethodCriteriaId(Long cEvaluationMethodCriteriaId) {
+        this.evaluationMethodCriteriaId = cEvaluationMethodCriteriaId;
     }
 
     public Long getEvalMethodSubCriteriaId() {
@@ -131,7 +131,7 @@ public class MVendorScoringCriteriaDTO implements Serializable {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
-            ", evalMethodCriteriaLineId=" + getEvalMethodCriteriaLineId() +
+            ", evaluationMethodCriteriaId=" + getEvaluationMethodCriteriaId() +
             ", evalMethodSubCriteriaId=" + getEvalMethodSubCriteriaId() +
             ", vendorScoringLineId=" + getVendorScoringLineId() +
             ", biddingSubCriteriaLineId=" + getBiddingSubCriteriaLineId() +

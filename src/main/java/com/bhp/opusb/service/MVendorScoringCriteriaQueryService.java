@@ -104,9 +104,9 @@ public class MVendorScoringCriteriaQueryService extends QueryService<MVendorScor
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MVendorScoringCriteria_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
-            if (criteria.getEvalMethodCriteriaLineId() != null) {
-                specification = specification.and(buildSpecification(criteria.getEvalMethodCriteriaLineId(),
-                    root -> root.join(MVendorScoringCriteria_.evalMethodCriteriaLine, JoinType.LEFT).get(CEvalMethodCriteriaLine_.id)));
+            if (criteria.getEvaluationMethodCriteriaId() != null) {
+                specification = specification.and(buildSpecification(criteria.getEvaluationMethodCriteriaId(),
+                    root -> root.join(MVendorScoringCriteria_.evaluationMethodCriteria, JoinType.LEFT).get(CEvaluationMethodCriteria_.id)));
             }
             if (criteria.getEvalMethodSubCriteriaId() != null) {
                 specification = specification.and(buildSpecification(criteria.getEvalMethodSubCriteriaId(),

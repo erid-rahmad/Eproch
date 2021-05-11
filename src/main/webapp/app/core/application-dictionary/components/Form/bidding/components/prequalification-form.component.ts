@@ -9,53 +9,38 @@ const PrequalificationFormProps = Vue.extend({
     pickrow: {
       type: Object,
       default: () => {}
-    } ,
+    },
+
   }
 });
 
 @Component
 export default class PrequalificationForm extends Mixins(AccessLevelMixin, PrequalificationFormProps)  {
 
-  testing() {
-    console.log("help");
-    
-  }
-
-  mainForm = {};
-  
-
-  testing2(row) {
-    console.log(row);    
-  }
 
   @Inject('dynamicWindowService')
   protected commonService: (baseApiUrl: string) => DynamicWindowService;
   private evaluationMethodCriteria: any = {};
-  requerment: any = {};
+  private MVendorScoringNestedDTO: any = {};
+  private vendorScoringCriteria: any = {};
+  private input: boolean = true;
 
   mounted() {
-    console.log("this.pickrow",this.pickrow);    
-    this.getEvaluationMethodCriteria(this.pickrow.id);
-    
+    console.log("this.pickrow", this.pickrow);    
+    this.getEvaluationMethodCriteria(this.pickrow.evaluationMethodLineId);  
   }
 
   @Watch('pickrow')
   updatedata() {
-    console.log("this.pickrow",this.pickrow);    
-    this.getEvaluationMethodCriteria(this.pickrow.id);    
+    console.log("this.pickrow", this.pickrow);   
+    this.getEvaluationMethodCriteria(this.pickrow.evaluationMethodLineId);      
   }
   
-  @Watch('evaluationMethodCriteria',{deep:true})
-  updatedataevaluationMethodCriteria(value) {
-    console.log("change",value);   
-    }
-    
   private getEvaluationMethodCriteria(lineId) {
     this.commonService('/api/c-evaluation-method-criteria')
       .retrieve({
         criteriaQuery: [
-          `evaluationMethodLineId.equals=${lineId}`
-          
+          `evaluationMethodLineId.equals=${lineId}`          
         ],
         paginationQuery: {
           page: 0,
@@ -65,96 +50,89 @@ export default class PrequalificationForm extends Mixins(AccessLevelMixin, Prequ
       })
       .then(res => {
         this.evaluationMethodCriteria = res.data;
-        console.log("this.evaluationMethodCriteria", this.evaluationMethodCriteria);
+        console.log("this.evaluationMethodCriteria", this.evaluationMethodCriteria);  
+      });
+      this.getVendorScoringCriteria(this.pickrow.id);
+  }
+
+  getanswer(id) {
+    const found = this.vendorScoringCriteria.find(element => element.biddingSubCriteriaLineId === id);
+    return found.requirement;
+  }
+
+  private getVendorScoringCriteria(lineId) {
+    this.commonService('/api/m-vendor-scoring-criteria')
+      .retrieve({
+        criteriaQuery: [
+          `vendorScoringLineId.equals=${lineId}`
+          
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.vendorScoringCriteria = res.data;
+        console.log("this vendoring criteria data",this.vendorScoringCriteria);
+        
+        console.log("this.vendorScoringCriteria", res.data.length); 
+        if (res.data.length) {
+          this.input = false;
+        } else { 
+          this.input = true;
+        }
       });
   }
 
+  private pushVendorScoringAnswer(data) {
+    this.commonService('/api/m-vendor-scoring-criteria-answer')
+      .create(data)
+      .then(res => {
+        
+        
+        this.pickrow = null;
+      });
+  }
+  
+  setpushVendorScoringAnswer() {    
+    console.log("this sent"); 
+    this.emptyhandler();
+    this.MVendorScoringNestedDTO.evaluationMethodCriteriaNested = this.evaluationMethodCriteria;
+    this.MVendorScoringNestedDTO.evaluationMethodLineId = this.pickrow.id;
+    this.pushVendorScoringAnswer(this.MVendorScoringNestedDTO);
+    this.$emit("closecriteriaPA");
 
 
+   
+  
+   
+  }
 
-  // methods = [
-  //   {
-  //     id: 1,
-  //     name: 'Metode Prakualifikasi 2021'
-  //   }
-  // ];
+  emptyhandler() { 
+    console.log("this empty handler",this.evaluationMethodCriteria);
+    this.evaluationMethodCriteria.forEach(element => {
+      element.evalMethodSubCriteriaList.forEach(element => {
+        element.biddingSubCriteriaDTO.forEach(element => {
+          element.criteriaLineDTO.forEach(element => {
+           
+            
+            console.log("this element", element);
+            if (element.requirement === null) { 
+              console.log("this handler null");
+              this.$notify.error({
+                title: 'Error',
+                message: 'Answer Required'
+              });
+              
+            }
+          });
+        });
+      });
+    });
+      
+  }
 
 
-
-
-  // requirements = [
-  //   {
-  //     code: 'O',
-  //     name: 'Optional'
-  //   },
-  //   {
-  //     code: 'M',
-  //     name: 'Required'
-  //   }
-  // ]
- 
-
-  // formData = {
-  //   method: 1,
-  //   criteria: [
-  //     {
-  //       id: 1,
-  //       name: 'Pengelolaan K3L',
-  //       subCriteria: [
-  //         {
-  //           id: 1,
-  //           name: 'Faktor Utama',
-  //           questions: [
-  //             {
-  //               question: 'Policy Statement - apakah perusahaan memiliki kebijakan K3L dalam menjalankan usahanya?',
-  //               requirement: 'M'
-  //             },
-  //             {
-  //               question: 'Emergency Response Procedures - apakah perusahaan memiliki prosedur tanggap darurat?',
-  //               requirement: 'M'
-  //             },
-  //             {
-  //               question: 'Basic Safety Rules - apakah perusahaan memiliki peraturan dasar keselamatan kerja?',
-  //               requirement: 'M'
-  //             }
-  //           ]
-  //         },
-  //         {
-  //           id: 2,
-  //           name: 'Faktor Pendukung',
-  //           questions: [
-  //             {
-  //               question: 'Professional Safety Support - Bagaimana penanganan/pengelolaan professional safety support? ',
-  //               requirement: 'M'
-  //             },
-  //             {
-  //               question: 'Enviromental - Sejauh mana perusahaan anda mengelola kebijakan tentang lingkungan kerja?',
-  //               requirement: 'M'
-  //             }
-  //           ]
-  //         }
-  //       ]
-  //     },
-  //     {
-  //       id: 2,
-  //       name: 'Organisasi dan Manajemen',
-  //       subCriteria: [
-  //         {
-  //           id: 3,
-  //           name: 'Organisasi dan Manajemen',
-  //           questions: [
-  //             {
-  //               question: 'Apakah pengurus telah menetapkan struktur organisasi perusahaan?',
-  //               requirement: 'M'
-  //             },
-  //             {
-  //               question: 'Apakah pengurus menetapkan kebijakan pengelolaan usaha dan pengendalian kegiatan usaha perusahaan?',
-  //               requirement: 'M'
-  //             }
-  //           ]
-  //         }
-  //       ]
-  //     }
-  //   ]
-  // };
 }

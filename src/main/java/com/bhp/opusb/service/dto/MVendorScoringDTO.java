@@ -2,6 +2,7 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -25,6 +26,16 @@ public class MVendorScoringDTO implements Serializable {
 
     private Long evaluationMethodId;
     private String evaluationMethodName;
+
+    private List<MVendorScoringLineDTO> vendorScoringLineDTOList;
+
+    public List<MVendorScoringLineDTO> getVendorScoringLineDTOList() {
+        return vendorScoringLineDTOList;
+    }
+
+    public void setVendorScoringLineDTOList(List<MVendorScoringLineDTO> vendorScoringLineDTOList) {
+        this.vendorScoringLineDTOList = vendorScoringLineDTOList;
+    }
 
     public String getBiddingName() {
         return biddingName;
@@ -131,6 +142,7 @@ public class MVendorScoringDTO implements Serializable {
             ", adOrganizationName='" + adOrganizationName + '\'' +
             ", evaluationMethodId=" + evaluationMethodId +
             ", evaluationMethodName='" + evaluationMethodName + '\'' +
+            ", vendorScoringLineDTOList=" + vendorScoringLineDTOList +
             '}';
     }
 }
