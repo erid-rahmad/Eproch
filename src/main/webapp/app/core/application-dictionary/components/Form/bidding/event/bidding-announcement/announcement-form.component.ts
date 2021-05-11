@@ -150,6 +150,10 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
   }
 
   retrieveEmailList() {
+    if (!this.vendorSuggestions.length) {
+      return;
+    }
+    
     const vendorQuery = this.vendorSuggestions.map(vendor => `cVendorId.in=${vendor.vendorId}`);
 
     this.loadingEmailList = true;
