@@ -23,10 +23,10 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
-  
+
   private vendorJoin: any = {};
   private vendorNotJoin: any = {};
-  private vendorNoResponse: any = {};  
+  private vendorNoResponse: any = {};
 
   mounted() {
     console.log("this more info", this.moreinfo);
@@ -59,7 +59,7 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `announcementId.equals=${this.moreinfo.id}`,
-          `invitationStatus.equals=Tidak Berminat`          
+          `invitationStatus.equals=Tidak Berminat`
         ]),
         paginationQuery: {
           page: 0,
@@ -78,7 +78,7 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `announcementId.equals=${this.moreinfo.id}`,
-          `invitationStatus.equals=Belum Terdaftar` 
+          `invitationStatus.equals=U`
         ]),
         paginationQuery: {
           page: 0,
@@ -93,7 +93,7 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
   }
 
   formattime(date) {
-    console.log("format");    
+    console.log("format");
     return moment(String(date)).format('MM-DD-YYYY hh:mm');
   }
 

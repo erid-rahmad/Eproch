@@ -73,6 +73,7 @@ class CBiddingCriteriaGatlingTest extends Simulation {
             .body(StringBody("""{
                 "id":null
                 , "name":"SAMPLE_TEXT"
+                , "type":"SAMPLE_TEXT"
                 , "uid":null
                 , "active":null
                 }""")).asJson

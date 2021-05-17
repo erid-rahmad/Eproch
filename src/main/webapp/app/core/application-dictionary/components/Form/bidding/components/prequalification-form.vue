@@ -2,7 +2,6 @@
     <div class="prequalification-form">
         <el-form ref="mainForm" label-position="left" label-width="200px" size="mini">
             <!-- <el-row v-for="criteria in evaluationMethodCriteria" :key="criteria.id" class="criteria-section" :class="`criteria-${index}`"> -->
-
             <el-row v-for="criteria in evaluationMethodCriteria" :key="criteria.id">
                 <el-col :span="24">
                     <el-row>
@@ -49,8 +48,8 @@
                                         <el-table-column label="Question" min-width="320" show-overflow-tooltip sortable prop="name"></el-table-column>
                                         <el-table-column label="Requirement" width="150">
                                             <template slot-scope="{ row }">
-                                                 {{ getanswer(row.id)}}                                              
-                                                <!-- <el-input v-model="row.requirement" class="form-input" clearable></el-input>                                                -->
+                                                 {{ getanswer(row.id)}}
+                                                 <el-input v-model="row.id" class="form-input"  clearable></el-input>
                                             </template>
                                         </el-table-column>
                                     </div>

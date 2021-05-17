@@ -68,6 +68,7 @@
                   tableName="c_bidding_criteria">
             <column name="id" type="numeric"/>
             <column name="name" type="string"/>
+            <column name="type" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
@@ -79,6 +80,14 @@
         <dropColumn tableName="c_bidding_criteria">
             <column name="description" type="varchar(255)"></column>
         </dropColumn>
+    </changeSet>
+
+    <changeSet id="20210511122800" author="erid">
+        <addColumn tableName="c_bidding_criteria">
+            <column name="type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

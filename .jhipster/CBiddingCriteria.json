@@ -9,6 +9,13 @@
             ]
         },
         {
+            "fieldName": "type",
+            "fieldType": "String",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
             "fieldName": "uid",
             "fieldType": "UUID"
         },

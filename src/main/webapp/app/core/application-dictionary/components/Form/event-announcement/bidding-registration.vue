@@ -15,7 +15,7 @@
 
                                 <el-table-column  label="Publish Date" sortable min-width="210">
                                     <template slot-scope="{ row }">
-                                        <span>{{formattime(row.announcementPublishDate) }}</span>                                       
+                                        <span>{{formattime(row.announcementPublishDate) }}</span>
                                     </template>
                                 </el-table-column>
 
@@ -48,7 +48,7 @@
             </el-col>
         </el-row>
 
-  
+
 
         <el-dialog title="" :visible.sync="reasonPA" width="60%" center>
             <span>Alasan Tidak Tertarik</span>

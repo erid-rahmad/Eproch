@@ -1,13 +1,13 @@
 <template>
     <div class="details-announcement">
         <el-row>
-            <el-row :gutter="columnSpacing">
-                <el-col :span="24">
-                    <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">
-                        Back
-                    </el-button>
-                </el-col>
-            </el-row>
+<!--            <el-row :gutter="columnSpacing">-->
+<!--                <el-col :span="24">-->
+<!--                    <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">-->
+<!--                        Back-->
+<!--                    </el-button>-->
+<!--                </el-col>-->
+<!--            </el-row>-->
             <el-col :span="24">
                 <el-divider content-position="left">
                     <h4>Pendaftaran dan Penyampaian Dokumen Pengadaan</h4>

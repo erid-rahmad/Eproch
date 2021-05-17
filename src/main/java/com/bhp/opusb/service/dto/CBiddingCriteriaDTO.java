@@ -15,6 +15,9 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
     @NotNull
     private String name;
 
+    @NotNull
+    private String type;
+
     private UUID uid;
 
     private Boolean active;
@@ -37,6 +40,14 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public UUID getUid() {
@@ -97,6 +108,7 @@ public class CBiddingCriteriaDTO extends AbstractAuditingDTO {
         return "CBiddingCriteriaDTO{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", type='" + getType() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +

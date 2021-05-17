@@ -17,7 +17,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "c_bidding_criteria")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-public class CBiddingCriteria extends AbstractAuditingEntity {
+public class CBiddingCriteria implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,6 +29,10 @@ public class CBiddingCriteria extends AbstractAuditingEntity {
     @NotNull
     @Column(name = "name", nullable = false)
     private String name;
+
+    @NotNull
+    @Column(name = "type", nullable = false)
+    private String type;
 
     @Column(name = "uid")
     private UUID uid;
@@ -61,6 +65,19 @@ public class CBiddingCriteria extends AbstractAuditingEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public CBiddingCriteria type(String type) {
+        this.type = type;
+        return this;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public UUID getUid() {
@@ -103,11 +120,6 @@ public class CBiddingCriteria extends AbstractAuditingEntity {
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 
-    @PrePersist
-    public void assignUUID() {
-        this.uid = UUID.randomUUID();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -129,6 +141,7 @@ public class CBiddingCriteria extends AbstractAuditingEntity {
         return "CBiddingCriteria{" +
             "id=" + getId() +
             ", name='" + getName() + "'" +
+            ", type='" + getType() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             "}";
