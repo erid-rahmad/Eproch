@@ -70,7 +70,10 @@ public class CAnnouncementResource {
     public ResponseEntity<CAnnouncementDTO> createCAnnouncement(@Valid @RequestBody CAnnouncementDTO cAnnouncementDTO) throws URISyntaxException {
         log.debug("REST request to save CAnnouncement : {}", cAnnouncementDTO);
         if (cAnnouncementDTO.getId() != null) {
-            throw new BadRequestAlertException("A new cAnnouncement cannot already have an ID", ENTITY_NAME, "idexists");
+            log.debug("update C CAnnouncement");
+            updateCAnnouncement(cAnnouncementDTO);
+            return ResponseEntity.ok(cAnnouncementDTO);
+
         }
         CAnnouncementDTO result = cAnnouncementService.save(cAnnouncementDTO);
         return ResponseEntity.created(new URI("/api/c-announcements/" + result.getId()))
@@ -81,7 +84,7 @@ public class CAnnouncementResource {
     /**
      * {@code POST  /c-announcements} : Create a new cAnnouncement.
      *
-     * @param cAnnouncementDTO the cAnnouncementDTO to create.
+     * @param cAnnouncementPublishDTO the cAnnouncementDTO to create.
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new cAnnouncementDTO, or with status {@code 400 (Bad Request)} if the cAnnouncement has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
