@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingSubItem} entity.
  */
@@ -30,6 +32,7 @@ public class MBiddingSubItemDTO extends AbstractAuditingDTO {
     private Long productId;
     private String productName;
 
+    @JsonProperty("mBiddingSubItemLines")
     private List<MBiddingSubItemLineDTO> mBiddingSubItemLines = new ArrayList<>();
 
     public Long getId() {

@@ -7,7 +7,7 @@ import com.bhp.opusb.service.dto.MBiddingSubItemLineDTO;
 import com.bhp.opusb.service.mapper.MBiddingSubItemMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -47,6 +47,7 @@ public class MBiddingSubItemService {
      * @param mBiddingSubItemDTO the entity to save.
      * @return the persisted entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.MBiddingSubItem.mBiddingSubItemLines", allEntries = true)
     public MBiddingSubItemDTO save(MBiddingSubItemDTO mBiddingSubItemDTO) {
         log.debug("Request to save MBiddingSubItem : {}", mBiddingSubItemDTO);
         final MBiddingSubItem mBiddingSubItem = mBiddingSubItemMapper.toEntity(mBiddingSubItemDTO);
@@ -67,6 +68,7 @@ public class MBiddingSubItemService {
      * @param mBiddingSubItemDTOs the list of entities to save.
      * @return the persisted entities.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.MBiddingSubItem.mBiddingSubItemLines", allEntries = true)
     public List<MBiddingSubItemDTO> saveAll(List<MBiddingSubItemDTO> mBiddingSubItemDTOs) {
         log.debug("Request to save list of MBiddingSubItems. size : {}", mBiddingSubItemDTOs.size());
         List<MBiddingSubItem> mBiddingSubItems = mBiddingSubItemMapper.toEntity(mBiddingSubItemDTOs);
@@ -136,6 +138,7 @@ public class MBiddingSubItemService {
      *
      * @param id the id of the entity.
      */
+    @CacheEvict(cacheNames = "com.bhp.opusb.domain.MBiddingSubItem.mBiddingSubItemLines", allEntries = true)
     public void delete(Long id) {
         log.debug("Request to delete MBiddingSubItem : {}", id);
         mBiddingSubItemRepository.deleteById(id);

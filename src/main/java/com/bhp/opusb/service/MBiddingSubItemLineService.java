@@ -2,6 +2,7 @@ package com.bhp.opusb.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import com.bhp.opusb.domain.MBiddingSubItemLine;
 import com.bhp.opusb.repository.MBiddingSubItemLineRepository;
@@ -54,7 +55,11 @@ public class MBiddingSubItemLineService {
      */
     public List<MBiddingSubItemLineDTO> saveAll(List<MBiddingSubItemLineDTO> mBiddingSubItemLineDTOs) {
         log.debug("Request to save MBiddingSubItemLine : {}", mBiddingSubItemLineDTOs);
-        List<MBiddingSubItemLine> mBiddingSubItemLines = mBiddingSubItemLineMapper.toEntity(mBiddingSubItemLineDTOs);
+        List<MBiddingSubItemLine> mBiddingSubItemLines = mBiddingSubItemLineMapper.toEntity(mBiddingSubItemLineDTOs)
+            .stream()
+            .filter(line -> line.getAdOrganization() != null && line.getProduct() != null && line.getUom() != null)
+            .collect(Collectors.toList());
+
         mBiddingSubItemLines = mBiddingSubItemLineRepository.saveAll(mBiddingSubItemLines);
         return mBiddingSubItemLineMapper.toDto(mBiddingSubItemLines);
     }
