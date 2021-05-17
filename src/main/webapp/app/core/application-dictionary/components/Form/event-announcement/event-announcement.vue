@@ -39,49 +39,57 @@
         <div class="card">
             <el-table
                 v-if="page === 1"
-                v-loading="loading"
                 ref="mainGrid"
-                border
+                v-loading="loading"
                 :data="gridData"
                 :default-sort="gridSchema.defaultSort"
                 :empty-text="gridSchema.emptyText"
+                border
                 highlight-current-row
                 size="mini"
                 stripe
             >
-                <el-table-column width="50" label="No">
+                <el-table-column label="No" width="50">
                     <template slot-scope="row">
                         {{ row.$index + 1 }}
                     </template>
                 </el-table-column>
-                <el-table-column min-width="80" sortable prop="biddingDocNo" label="Bidding No" />
-                <el-table-column min-width="100" sortable prop="biddingName" label="Title" />
+                <el-table-column label="Bidding No" min-width="80" prop="biddingDocNo" sortable/>
+                <el-table-column label="Title" min-width="100" prop="biddingName" sortable/>
                 <el-table-column align="center" min-width="20">
                     <template slot="header">
                         &nbsp;
                     </template>
                     <template slot-scope="{ row }">
                         <el-button
-                            size="mini"
                             icon="el-icon-search"
+                            size="mini"
                             type="primary"
                             @click="viewDetails(row)"
-                        >View</el-button>
+                        >View
+                        </el-button>
+                        <el-button
+                            icon="el-icon-search"
+                            size="mini"
+                            type="primary"
+                            @click="moreInfo(row)"
+                        >View Response
+                        </el-button>
                     </template>
                 </el-table-column>
             </el-table>
 
-            <!-- <details-announcement-form
+            <details-announcement-form
                 v-if="page === 2"
-                @back="back"
                 :moreinfo="moreinfo"
-            ></details-announcement-form> -->
+                @back="back"
+            ></details-announcement-form>
 
             <announcement-form
                 v-else-if="page === 3"
                 ref="announcementForm"
                 :schedule-id="selectedRow.biddingScheduleId"
-            ></announcement-form>   
+            ></announcement-form>
         </div>
         <!-- <el-dialog title="Joined Vendors" :visible.sync="vendorListVisible">
             <el-table border :data="joinedVendors" size="mini">
@@ -102,21 +110,21 @@
 
 <style lang="scss">
 .compact .bidding-announcement {
-  .el-table--mini {
+    .el-table--mini {
 
-    th,
-    td {
-        height: 35px;
+        th,
+        td {
+            height: 35px;
+        }
     }
-  }
 
-  .toolbar {
-    padding: 4px 16px 0;
+    .toolbar {
+        padding: 4px 16px 0;
 
-    .el-button + .el-button {
-      margin-left: 0;
+        .el-button + .el-button {
+            margin-left: 0;
+        }
     }
-  }
 }
 
 </style>

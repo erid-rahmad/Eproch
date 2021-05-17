@@ -36,7 +36,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
   public itemname: any = {};
   public emailList: any[] = [];
   private accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
-  private action: string = "/api/c-attachments/upload"  
+  private action: string = "/api/c-attachments/upload"
   private limit: number = 1;
   private vendorSuggestions: any[] = [];
   private dataForAnnouncment: any = {};
@@ -88,7 +88,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
 
   changedata() {
     this.emailList = this.dataForAnnouncment.emaillist;
-    this.vendorSuggestions = this.dataForAnnouncment.vendorlist;  
+    this.vendorSuggestions = this.dataForAnnouncment.vendorlist;
 
     console.log(this.dataForAnnouncment.emaillist);
     console.log(this.dataForAnnouncment.vendorlist);
@@ -153,7 +153,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
     if (!this.vendorSuggestions.length) {
       return;
     }
-    
+
     const vendorQuery = this.vendorSuggestions.map(vendor => `cVendorId.in=${vendor.vendorId}`);
 
     this.loadingEmailList = true;
@@ -279,13 +279,14 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
   printFileName(attachment: any) {
     return attachment?.fileName;
   }
-  
+
   openRecipientList() {
     this.recipientListVisible = true;
   }
 
   publish() {
     this.loading = true;
+    console.log("this vendor suggestion ",this.vendorSuggestions)
     if (this.selectedRecipients.length == 0) {
       this.$message.error('Please select at least one recipient');
     } else {
@@ -296,7 +297,9 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
           name: this.mainForm.biddingTitle,
           documentNo: this.mainForm.biddingNo
         },
-        users: []
+        users: [],
+        vendor: this.vendorSuggestions,
+
       };
 
       for (const recipient of this.selectedRecipients) {

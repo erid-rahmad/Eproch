@@ -17,14 +17,12 @@ import com.bhp.opusb.repository.CAnnouncementRepository;
 import com.bhp.opusb.repository.MBiddingInvitationRepository;
 import com.bhp.opusb.repository.MBiddingSubmissionRepository;
 import com.bhp.opusb.repository.MVendorSuggestionRepository;
-import com.bhp.opusb.service.dto.AdUserDTO;
-import com.bhp.opusb.service.dto.CAnnouncementDTO;
-import com.bhp.opusb.service.dto.CAnnouncementPublishDTO;
-import com.bhp.opusb.service.dto.MBiddingDTO;
+import com.bhp.opusb.service.dto.*;
 import com.bhp.opusb.service.mapper.AdUserMapper;
 import com.bhp.opusb.service.mapper.CAnnouncementMapper;
 import com.bhp.opusb.service.mapper.MBiddingMapper;
 
+import com.bhp.opusb.service.mapper.MVendorSuggestionMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +71,8 @@ public class CAnnouncementService {
         this.mBiddingMapper = mBiddingMapper;
         this.adUserMapper = adUserMapper;
     }
+    @Autowired
+    MVendorSuggestionMapper mVendorSuggestionMapper;
 
     /**
      * Save a cAnnouncement.
@@ -100,24 +100,31 @@ public class CAnnouncementService {
         final MBiddingDTO mBiddingDTO = cAnnouncementPublishDTO.getBidding();
         final String content = cAnnouncement.getDescription();
         final List<AdUserDTO> users = cAnnouncementPublishDTO.getUsers();
+        final List<MVendorSuggestionDTO> mvendor =  cAnnouncementPublishDTO.getVendor();
+
+
         MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
+        log.info("this vendor {}",mvendor);
 
         String body = content.replace("#biddingTitle", mBiddingDTO.getName());
 
-        for (final AdUserDTO user : users) {
-            final AdUser adUser = adUserMapper.toEntity(user);
-
+        for ( final MVendorSuggestionDTO mvendor_ : mvendor ){
+            MVendorSuggestion mVendorSuggestion =mVendorSuggestionMapper.toEntity(mvendor_);
             MBiddingInvitation mBiddingInvitation = new MBiddingInvitation()
                 .active(true)
                 .adOrganization(cAnnouncement.getAdOrganization())
                 .bidding(mBidding)
-                .vendor(adUser.getCVendor())
+                .vendor(mVendorSuggestion.getVendor())
                 .invitationStatus("U")
                 .announcement(cAnnouncement);
 
             // Create the invitation record.
             mBiddingInvitationRepository.save(mBiddingInvitation);
+        }
 
+
+        for (final AdUserDTO user : users) {
+            final AdUser adUser = adUserMapper.toEntity(user);
             body = body.replace("#vendorName", user.getcVendorName());
             mailService.sendEmail(user.getEmail(), "Bidding Invitation", body, false, true);
         }

@@ -75,8 +75,8 @@ public class MBiddingInvitationService {
         Optional<MBiddingInvitationDTO> mBiddingInvitationDTO =mBiddingInvitationRepository.findById(id)
             .map(mBiddingInvitationMapper::toDto);
         String email=mBiddingInvitationDTO.get().getAnnouncementDescription();
-        email=email.replace("#TenderName",mBiddingInvitationDTO.get().getBiddingName());
-        email=email.replace("#VendorName",mBiddingInvitationDTO.get().getVendorName());
+        email=email.replace("#biddingTitle",mBiddingInvitationDTO.get().getBiddingName());
+        email=email.replace("#vendorName",mBiddingInvitationDTO.get().getVendorName());
         mBiddingInvitationDTO.get().setAnnouncementDescription(email);
         return mBiddingInvitationDTO;
     }

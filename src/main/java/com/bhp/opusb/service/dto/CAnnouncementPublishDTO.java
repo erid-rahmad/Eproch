@@ -6,8 +6,17 @@ public class CAnnouncementPublishDTO {
   private CAnnouncementDTO announcement;
   private MBiddingDTO bidding;
   private List<AdUserDTO> users;
+  private List<MVendorSuggestionDTO> vendor;
 
-  public CAnnouncementDTO getAnnouncement() {
+    public List<MVendorSuggestionDTO> getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(List<MVendorSuggestionDTO> vendor) {
+        this.vendor = vendor;
+    }
+
+    public CAnnouncementDTO getAnnouncement() {
     return announcement;
   }
 
