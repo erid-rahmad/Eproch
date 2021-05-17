@@ -34,14 +34,14 @@
                         <el-table-column min-width="128" label="Evaluation" show-overflow-tooltip>
                             <template slot-scope="{ row }">
                                 <!-- {{ row.evaluation }} -->
-                                {{ row.evaluationMethodLineEvaluation }}
+                                {{ printEvaluation(row.evaluationMethodLineEvaluation) }}
 
                             </template>
                         </el-table-column>
 
                         <el-table-column min-width="128" label="Evaluation Type" show-overflow-tooltip>
                             <template slot-scope="{ row }">
-                                {{ row.evaluationMethodLineEvaluationType}}
+                                {{ printEvaluationType(row.evaluationMethodLineEvaluationType) }}
                             </template>
                         </el-table-column>
 

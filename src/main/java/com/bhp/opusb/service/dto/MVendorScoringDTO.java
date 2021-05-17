@@ -1,7 +1,5 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -9,13 +7,13 @@ import java.util.UUID;
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVendorScoring} entity.
  */
-public class MVendorScoringDTO implements Serializable {
+public class MVendorScoringDTO extends AbstractAuditingDTO {
 
     private Long id;
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
     private Long biddingId;
     private String biddingName;

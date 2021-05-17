@@ -61,21 +61,11 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   private mainForm: any = {};
   private vendorScoring: any = {};
 
-
-
+  evaluationList: any[] =[];
+  evaluationTypes: any[] =[];
 
   get readOnly() {
-    return this.bidding.biddingStatus === 'In Progress';
-  }
-
-  mounted() {
-    
-    this.bidding = { ...this.data };
-    console.log("this bidding", this.bidding);
-    this.getVendorScoring();    
-    this.bidding.step = BiddingStep.SCORING;
-    this.getEvaluationMethod();
-    
+    return this.bidding.biddingStatus === 'P';
   }
 
   @Watch('value')
@@ -85,6 +75,15 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     this.mainForm.adOrganizationId = this.bidding.adOrganizationId;
     this.mainForm.active = true;
     this.getEvaluationMethodLine();
+  }
+
+  created() {
+    this.bidding = { ...this.data };
+    this.bidding.step = BiddingStep.SCORING;
+    this.retrieveEvaluationList();
+    this.retrieveEvaluationTypes();
+    this.getVendorScoring();    
+    this.getEvaluationMethod();
   }
 
   private getEvaluationMethod() {
@@ -108,10 +107,10 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   private getEvaluationMethodLine() {
     this.commonService('api/c-evaluation-method-lines')
       .retrieve({
-        criteriaQuery: [
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true',
           `evaluationMethodId.equals=${this.value}`
-
-        ],
+        ]),
         paginationQuery: {
           page: 0,
           size: 10000,
@@ -159,7 +158,7 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
   private pushVendorScoring(data) {
     this.commonService('/api/m-vendor-scorings')
       .create(data)
-      .then(res => { 
+      .then(res => {
         this.getVendorScoring();
       })    
   }
@@ -182,19 +181,35 @@ export default class VendorScoring extends Mixins(AccessLevelMixin, VendorScorin
     // console.log("this index", this.index);
     // console.log("this vendor scoring", this.vendorScoring.evaluationMethodName, this.vendorScoring.evaluationMethodName.length);
     this.pushVendorScoring(this.mainForm);    
-   
-   
   }
 
   closecriteriaPA() {
     this.criteriaPA = false;
     console.log("this close");
-    this.mounted();
     this.pickrow = null;
-    
   }
 
-  //=======================================================================
+  printEvaluation(value: string) {
+    return this.evaluationList.find(item => item.value === value)?.name || value;
+  }
+
+  printEvaluationType(value: string) {
+    return this.evaluationTypes.find(item => item.value === value)?.name || value;
+  }
+
+  private retrieveEvaluationList() {
+    this.commonService(null)
+      .retrieveReferenceLists('evaluationList')
+      .then(res => this.evaluationList = res)
+      .catch(_err => console.warn('Failed getting the evaluation list'));
+  }
+
+  private retrieveEvaluationTypes() {
+    this.commonService(null)
+      .retrieveReferenceLists('evaluationType')
+      .then(res => this.evaluationTypes = res)
+      .catch(_err => console.warn('Failed getting the evaluation type list'));
+  }
 
   validate() {
     (this.$refs.productCatalog as ElForm).validate((passed, errors) => {
