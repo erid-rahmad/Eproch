@@ -117,7 +117,7 @@
             min-width="150"
           >
             <template slot-scope="{ row }">
-              {{ printStatus(row) }}
+              {{ printStatus(row.status) }}
             </template>
           </el-table-column>
 
@@ -135,6 +135,7 @@
               </el-button>
 
               <el-button
+                v-if="row.status && row.status !== 'N'"
                 size="mini"
                 type="primary"
                 @click="viewEvent(row)"

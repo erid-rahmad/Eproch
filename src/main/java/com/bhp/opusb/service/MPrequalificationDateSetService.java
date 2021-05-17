@@ -1,6 +1,10 @@
 package com.bhp.opusb.service;
 
+import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.MPrequalificationDateSet;
+import com.bhp.opusb.domain.view.MinMaxView;
+import com.bhp.opusb.repository.CEventTypelineRepository;
+import com.bhp.opusb.repository.MBiddingRepository;
 import com.bhp.opusb.repository.MPrequalificationDateSetRepository;
 import com.bhp.opusb.service.dto.MPrequalificationDateSetDTO;
 import com.bhp.opusb.service.mapper.MPrequalificationDateSetMapper;
@@ -12,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -23,12 +28,19 @@ public class MPrequalificationDateSetService {
 
     private final Logger log = LoggerFactory.getLogger(MPrequalificationDateSetService.class);
 
+    private final CEventTypelineRepository cEventTypelineRepository;
+
     private final MPrequalificationDateSetRepository mPrequalificationDateSetRepository;
+    private final MBiddingRepository mBiddingRepository;
 
     private final MPrequalificationDateSetMapper mPrequalificationDateSetMapper;
 
-    public MPrequalificationDateSetService(MPrequalificationDateSetRepository mPrequalificationDateSetRepository, MPrequalificationDateSetMapper mPrequalificationDateSetMapper) {
+    public MPrequalificationDateSetService(CEventTypelineRepository cEventTypelineRepository,
+            MPrequalificationDateSetRepository mPrequalificationDateSetRepository,
+            MBiddingRepository mBiddingRepository, MPrequalificationDateSetMapper mPrequalificationDateSetMapper) {
+        this.cEventTypelineRepository = cEventTypelineRepository;
         this.mPrequalificationDateSetRepository = mPrequalificationDateSetRepository;
+        this.mBiddingRepository = mBiddingRepository;
         this.mPrequalificationDateSetMapper = mPrequalificationDateSetMapper;
     }
 
@@ -42,6 +54,18 @@ public class MPrequalificationDateSetService {
         log.debug("Request to save MPrequalificationDateSet : {}", mPrequalificationDateSetDTO);
         MPrequalificationDateSet mPrequalificationDateSet = mPrequalificationDateSetMapper.toEntity(mPrequalificationDateSetDTO);
         mPrequalificationDateSet = mPrequalificationDateSetRepository.save(mPrequalificationDateSet);
+
+        String status = mPrequalificationDateSetDTO.getStatus();
+        MBidding mBidding = mBiddingRepository.findFirstByBiddingScheduleId(mPrequalificationDateSetDTO.getBiddingScheduleId());
+        MinMaxView sequences = cEventTypelineRepository.findMinMaxSequence(mBidding.getEventType().getId());
+        Integer currentSequence = mPrequalificationDateSetDTO.getSequence();
+
+        if (Objects.equals(currentSequence, sequences.getMin()) && status.equals("P")) {
+            mBidding.setBiddingStatus("P");
+        } else if (Objects.equals(currentSequence, sequences.getMax()) && status.equals("F")) {
+            mBidding.setBiddingStatus("F");
+        }
+
         return mPrequalificationDateSetMapper.toDto(mPrequalificationDateSet);
     }
 

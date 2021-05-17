@@ -44,7 +44,7 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
   private baseApiUrlReferenceList = '/api/ad-reference-lists';
   private keyReference: string = 'docStatus';
 
-  public documentStatuses: any[] = [];
+  public biddingStatuses: any[] = [];
 
   private filterQuery: string = '';
   private processing = false;
@@ -132,7 +132,7 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
     this.commonService(null)
       .retrieveReferenceLists('biddingStatus')
       .then(res => {
-        this.documentStatuses = res.map(item => ({ key: item.value, value: item.name }));
+        this.biddingStatuses = res.map(item => ({ key: item.value, value: item.name }));
       });
 
     this.transition();
@@ -178,8 +178,8 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
     this.retrieveAllRecords();
   }
 
-  formatDocumentStatus(value: string) {
-    return this.documentStatuses.find(status => status.key === value)?.value;
+  formatBiddingStatus(value: string) {
+    return this.biddingStatuses.find(status => status.key === value)?.value;
   }
 
   public retrieveAllRecords(): void {
@@ -200,36 +200,7 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
         paginationQuery
       })
       .then(res => {
-        this.gridData = res.data.map(item => {
-          const documentNo = item.documentNo;
-          let biddingStatus: string;
-          let vendorCount: number;
-
-          if (documentNo === 'BN-00001' || documentNo === 'BN-00002' || documentNo === 'BD-21030023') {
-            biddingStatus = 'In Progress';
-            if (documentNo === 'BN-00001') {
-              vendorCount = 3;
-            } else {
-              vendorCount = 5;
-            }
-          } else {
-            biddingStatus = 'Not Started';
-            if (documentNo === 'BN-00003') {
-              vendorCount = 4;
-            } else if (documentNo === 'BN-00004') {
-              vendorCount = 3;
-            } else if (documentNo === 'BN-00005') {
-              vendorCount = 5;
-            } else {
-              vendorCount = random(0, 5);
-            }
-          }
-
-          item.biddingStatus = biddingStatus;
-          item.vendorCount = vendorCount;
-          return item;
-        });
-
+        this.gridData = res.data;
         this.totalItems = Number(res.headers['x-total-count']);
         this.queryCount = this.totalItems;
 

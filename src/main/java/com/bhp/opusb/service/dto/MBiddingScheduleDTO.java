@@ -32,6 +32,7 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
 
     private Long eventTypeLineId;
     private String eventTypeLineName;
+    private Integer sequence;
 
     private AdFormDTO adForm;
     private Long adFormId;
@@ -144,6 +145,14 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
 
     public void setEventTypeLineName(String eventTypeLineName) {
         this.eventTypeLineName = eventTypeLineName;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 
     public AdFormDTO getAdForm() {

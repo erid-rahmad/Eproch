@@ -3,19 +3,21 @@ import DocumentActionButton from '@/core/application-dictionary/components/Docum
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
 import { ElForm } from 'element-ui/types/form';
+import { random } from 'lodash';
 import Vue from 'vue';
 import { Component, Inject, Mixins, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import { BiddingStep } from '../steps-form.component';
 import SubitemEditor from './subitem-editor.vue';
-import { random } from 'lodash';
 
 const BiddingInformationProp = Vue.extend({
   props: {
     editMode: Boolean,
     data: {
       type: Object,
-      default: () => {}
+      default: () => {
+        return {};
+      }
     }
   }
 });
@@ -114,7 +116,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   }
 
   get readOnly() {
-    return this.bidding.biddingStatus === 'In Progress';
+    return this.bidding.biddingStatus === 'P';
   }
 
   @Watch('bidding', { deep: true })

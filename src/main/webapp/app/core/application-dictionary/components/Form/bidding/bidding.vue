@@ -123,9 +123,12 @@
         <el-table-column
           label="Bidding Status"
           min-width="140"
-          prop="biddingStatus"
           sortable
-        ></el-table-column>
+        >
+          <template slot-scope="{ row }">
+            {{ formatBiddingStatus(row.biddingStatus) }}
+          </template>
+        </el-table-column>
 
         <el-table-column
           label="Joined Vendor"

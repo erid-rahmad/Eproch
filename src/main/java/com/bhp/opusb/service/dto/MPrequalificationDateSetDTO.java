@@ -18,7 +18,7 @@ public class MPrequalificationDateSetDTO implements Serializable {
     private ZonedDateTime endDate;
 
     @Size(max = 10)
-    private String status;
+    private String status = "N";
 
     private UUID uid;
 
@@ -27,6 +27,7 @@ public class MPrequalificationDateSetDTO implements Serializable {
 
     private Long biddingScheduleId;
     private String biddingScheduleName;
+    private Integer sequence;
 
     private Long adOrganizationId;
     private String adOrganizationName;
@@ -93,6 +94,14 @@ public class MPrequalificationDateSetDTO implements Serializable {
 
     public void setBiddingScheduleName(String biddingScheduleName) {
         this.biddingScheduleName = biddingScheduleName;
+    }
+
+    public Integer getSequence() {
+        return sequence;
+    }
+
+    public void setSequence(Integer sequence) {
+        this.sequence = sequence;
     }
 
     public Long getAdOrganizationId() {

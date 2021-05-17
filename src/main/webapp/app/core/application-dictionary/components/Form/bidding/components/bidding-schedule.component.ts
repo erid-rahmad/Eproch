@@ -59,7 +59,7 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   }
 
   get readOnly() {
-    return this.bidding.biddingStatus === 'In Progress';
+    return this.bidding.biddingStatus === 'P';
   }
 
   @Watch('bidding', { deep: true })
@@ -79,7 +79,8 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
         actual: [
           new Date(dateSet.startDate),
           new Date(dateSet.endDate)
-        ]
+        ],
+        status: dateSet.status
       }
     };
 
@@ -256,8 +257,8 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     }
   }
 
-  printStatus(record: any) {
-    return this.eventStatuses.find(status => record.status === status.value)?.name || record.status;
+  printStatus(status: string) {
+    return this.eventStatuses.find(item => status === item.value)?.name || status;
   }
 
   /**

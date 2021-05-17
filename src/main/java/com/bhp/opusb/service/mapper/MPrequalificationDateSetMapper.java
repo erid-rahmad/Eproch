@@ -14,6 +14,7 @@ import org.mapstruct.Mapping;
 public interface MPrequalificationDateSetMapper extends EntityMapper<MPrequalificationDateSetDTO, MPrequalificationDateSet> {
 
     @Mapping(source = "biddingSchedule.id", target = "biddingScheduleId")
+    @Mapping(source = "biddingSchedule.eventTypeLine.sequence", target = "sequence")
     @Mapping(source = "biddingSchedule.eventTypeLine.CEvent.name", target = "biddingScheduleName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
