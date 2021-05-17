@@ -982,6 +982,10 @@ entity CEvaluationMethodLine {
 	/** Referenced from M_Reference */
 	evaluation String required maxlength(5)
 	evaluationType String
+
+	/** Specify the type of event form */
+	formType String maxlength(10)
+	
 	weight BigDecimal max(100)
 	passingGrade BigDecimal
 	uid UUID
@@ -1243,7 +1247,7 @@ entity MVendorScoring {
 	active Boolean
 }
 entity MVendorScoringLine {
-    evaluation String
+	evaluation String
 	uid UUID
 	active Boolean
 }
@@ -1779,6 +1783,7 @@ relationship ManyToOne {
 
 	MProposalAdministration{adOrganization required} to ADOrganization
 	MProposalAdministration{biddingSubmission required} to MBiddingSubmission
+	MProposalAdministration{biddingSubCriteriaLine required} to CBiddingSubCriteriaLine
 
 	MProposalAdministrationFile{adOrganization required} to ADOrganization
 	MProposalAdministrationFile{biddingSubmission required} to MBiddingSubmission
@@ -1786,6 +1791,7 @@ relationship ManyToOne {
 
 	MProposalTechnical{adOrganization required} to ADOrganization
 	MProposalTechnical{biddingSubmission required} to MBiddingSubmission
+	MProposalTechnical{biddingSubCriteriaLine required} to CBiddingSubCriteriaLine
 
 	MProposalTechnicalFile{adOrganization required} to ADOrganization
 	MProposalTechnicalFile{biddingSubmission required} to MBiddingSubmission

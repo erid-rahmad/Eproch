@@ -76,8 +76,17 @@
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
             <column name="bidding_submission_id" type="numeric"/>
+            <column name="bidding_sub_criteria_line_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210511054900" author="Ananta Aryadewa">
+        <addColumn tableName="m_proposal_technical">
+            <column name="bidding_sub_criteria_line_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

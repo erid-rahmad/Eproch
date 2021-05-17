@@ -1,6 +1,5 @@
 package com.bhp.opusb.service.dto;
 
-import javax.validation.constraints.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
@@ -20,8 +19,11 @@ public class MVendorScoringLineDTO implements Serializable {
 
 
     private Long adOrganizationId;
+    private String adOrganizationName;
 
     private Long evaluationMethodLineId;
+    private String evaluationMethodLineName;
+    private String evaluationMethodLineFormType;
     private String evaluationMethodLineEvaluationType;
     private String evaluationMethodLineWeight;
     private String evaluationMethodLinePassingGrade;
@@ -101,12 +103,36 @@ public class MVendorScoringLineDTO implements Serializable {
         this.adOrganizationId = aDOrganizationId;
     }
 
+    public String getAdOrganizationName() {
+        return adOrganizationName;
+    }
+
+    public void setAdOrganizationName(String adOrganizationName) {
+        this.adOrganizationName = adOrganizationName;
+    }
+
     public Long getEvaluationMethodLineId() {
         return evaluationMethodLineId;
     }
 
     public void setEvaluationMethodLineId(Long cEvaluationMethodLineId) {
         this.evaluationMethodLineId = cEvaluationMethodLineId;
+    }
+
+    public String getEvaluationMethodLineName() {
+        return evaluationMethodLineName;
+    }
+
+    public void setEvaluationMethodLineName(String evaluationMethodLineName) {
+        this.evaluationMethodLineName = evaluationMethodLineName;
+    }
+
+    public String getEvaluationMethodLineFormType() {
+        return evaluationMethodLineFormType;
+    }
+
+    public void setEvaluationMethodLineFormType(String evaluationMethodLineFormType) {
+        this.evaluationMethodLineFormType = evaluationMethodLineFormType;
     }
 
     public Long getVendorScoringId() {

@@ -4,6 +4,7 @@ import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MProposalAdministration;
 import com.bhp.opusb.domain.ADOrganization;
 import com.bhp.opusb.domain.MBiddingSubmission;
+import com.bhp.opusb.domain.CBiddingSubCriteriaLine;
 import com.bhp.opusb.repository.MProposalAdministrationRepository;
 import com.bhp.opusb.service.MProposalAdministrationService;
 import com.bhp.opusb.service.dto.MProposalAdministrationDTO;
@@ -102,6 +103,16 @@ public class MProposalAdministrationResourceIT {
             mBiddingSubmission = TestUtil.findAll(em, MBiddingSubmission.class).get(0);
         }
         mProposalAdministration.setBiddingSubmission(mBiddingSubmission);
+        // Add required entity
+        CBiddingSubCriteriaLine cBiddingSubCriteriaLine;
+        if (TestUtil.findAll(em, CBiddingSubCriteriaLine.class).isEmpty()) {
+            cBiddingSubCriteriaLine = CBiddingSubCriteriaLineResourceIT.createEntity(em);
+            em.persist(cBiddingSubCriteriaLine);
+            em.flush();
+        } else {
+            cBiddingSubCriteriaLine = TestUtil.findAll(em, CBiddingSubCriteriaLine.class).get(0);
+        }
+        mProposalAdministration.setBiddingSubCriteriaLine(cBiddingSubCriteriaLine);
         return mProposalAdministration;
     }
     /**
@@ -136,6 +147,16 @@ public class MProposalAdministrationResourceIT {
             mBiddingSubmission = TestUtil.findAll(em, MBiddingSubmission.class).get(0);
         }
         mProposalAdministration.setBiddingSubmission(mBiddingSubmission);
+        // Add required entity
+        CBiddingSubCriteriaLine cBiddingSubCriteriaLine;
+        if (TestUtil.findAll(em, CBiddingSubCriteriaLine.class).isEmpty()) {
+            cBiddingSubCriteriaLine = CBiddingSubCriteriaLineResourceIT.createUpdatedEntity(em);
+            em.persist(cBiddingSubCriteriaLine);
+            em.flush();
+        } else {
+            cBiddingSubCriteriaLine = TestUtil.findAll(em, CBiddingSubCriteriaLine.class).get(0);
+        }
+        mProposalAdministration.setBiddingSubCriteriaLine(cBiddingSubCriteriaLine);
         return mProposalAdministration;
     }
 
@@ -523,6 +544,22 @@ public class MProposalAdministrationResourceIT {
 
         // Get all the mProposalAdministrationList where biddingSubmission equals to biddingSubmissionId + 1
         defaultMProposalAdministrationShouldNotBeFound("biddingSubmissionId.equals=" + (biddingSubmissionId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMProposalAdministrationsByBiddingSubCriteriaLineIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        CBiddingSubCriteriaLine biddingSubCriteriaLine = mProposalAdministration.getBiddingSubCriteriaLine();
+        mProposalAdministrationRepository.saveAndFlush(mProposalAdministration);
+        Long biddingSubCriteriaLineId = biddingSubCriteriaLine.getId();
+
+        // Get all the mProposalAdministrationList where biddingSubCriteriaLine equals to biddingSubCriteriaLineId
+        defaultMProposalAdministrationShouldBeFound("biddingSubCriteriaLineId.equals=" + biddingSubCriteriaLineId);
+
+        // Get all the mProposalAdministrationList where biddingSubCriteriaLine equals to biddingSubCriteriaLineId + 1
+        defaultMProposalAdministrationShouldNotBeFound("biddingSubCriteriaLineId.equals=" + (biddingSubCriteriaLineId + 1));
     }
 
     /**

@@ -27,6 +27,9 @@ public class MProposalAdministrationDTO extends AbstractAuditingDTO {
 
     private Long biddingSubmissionId;
     private String biddingSubmissionName;
+
+    private Long biddingSubCriteriaLineId;
+    private String biddingSubCriteriaLineName;
     
     public Long getId() {
         return id;
@@ -100,6 +103,22 @@ public class MProposalAdministrationDTO extends AbstractAuditingDTO {
         this.biddingSubmissionName = biddingSubmissionName;
     }
 
+    public Long getBiddingSubCriteriaLineId() {
+        return biddingSubCriteriaLineId;
+    }
+
+    public void setBiddingSubCriteriaLineId(Long cBiddingSubCriteriaLineId) {
+        this.biddingSubCriteriaLineId = cBiddingSubCriteriaLineId;
+    }
+
+    public String getBiddingSubCriteriaLineName() {
+        return biddingSubCriteriaLineName;
+    }
+
+    public void setBiddingSubCriteriaLineName(String biddingSubCriteriaLineName) {
+        this.biddingSubCriteriaLineName = biddingSubCriteriaLineName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -131,6 +150,7 @@ public class MProposalAdministrationDTO extends AbstractAuditingDTO {
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", biddingSubmissionId=" + getBiddingSubmissionId() +
+            ", biddingSubCriteriaLineId=" + getBiddingSubCriteriaLineId() +
             "}";
     }
 }

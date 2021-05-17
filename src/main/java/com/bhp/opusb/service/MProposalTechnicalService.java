@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,6 +44,19 @@ public class MProposalTechnicalService {
         MProposalTechnical mProposalTechnical = mProposalTechnicalMapper.toEntity(mProposalTechnicalDTO);
         mProposalTechnical = mProposalTechnicalRepository.save(mProposalTechnical);
         return mProposalTechnicalMapper.toDto(mProposalTechnical);
+    }
+
+    /**
+     * Save mProposalTechnicals.
+     *
+     * @param mProposalTechnicalDTOs the entities to save.
+     * @return the persisted entities.
+     */
+    public List<MProposalTechnicalDTO> saveRequirements(List<MProposalTechnicalDTO> mProposalTechnicalDTOs) {
+        log.debug("Request to save MProposalTechnicals. size : {}", mProposalTechnicalDTOs.size());
+        List<MProposalTechnical> mProposalTechnicals = mProposalTechnicalMapper.toEntity(mProposalTechnicalDTOs);
+        mProposalTechnicals = mProposalTechnicalRepository.saveAll(mProposalTechnicals);
+        return mProposalTechnicalMapper.toDto(mProposalTechnicals);
     }
 
     /**

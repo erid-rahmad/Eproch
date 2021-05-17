@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,6 +44,19 @@ public class MProposalAdministrationService {
         MProposalAdministration mProposalAdministration = mProposalAdministrationMapper.toEntity(mProposalAdministrationDTO);
         mProposalAdministration = mProposalAdministrationRepository.save(mProposalAdministration);
         return mProposalAdministrationMapper.toDto(mProposalAdministration);
+    }
+
+    /**
+     * Save mProposalAdministrations.
+     *
+     * @param mProposalAdministrationDTOs the entities to save.
+     * @return the persisted entities.
+     */
+    public List<MProposalAdministrationDTO> saveRequirements(List<MProposalAdministrationDTO> mProposalAdministrationDTOs) {
+        log.debug("Request to save MProposalAdministrations. size : {}", mProposalAdministrationDTOs.size());
+        List<MProposalAdministration> mProposalAdministrations = mProposalAdministrationMapper.toEntity(mProposalAdministrationDTOs);
+        mProposalAdministrations = mProposalAdministrationRepository.saveAll(mProposalAdministrations);
+        return mProposalAdministrationMapper.toDto(mProposalAdministrations);
     }
 
     /**

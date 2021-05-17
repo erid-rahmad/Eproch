@@ -54,6 +54,11 @@ public class MProposalAdministration extends AbstractAuditingEntity {
     @JsonIgnoreProperties("mProposalAdministrations")
     private MBiddingSubmission biddingSubmission;
 
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mProposalAdministrations")
+    private CBiddingSubCriteriaLine biddingSubCriteriaLine;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
@@ -139,6 +144,19 @@ public class MProposalAdministration extends AbstractAuditingEntity {
 
     public void setBiddingSubmission(MBiddingSubmission mBiddingSubmission) {
         this.biddingSubmission = mBiddingSubmission;
+    }
+
+    public CBiddingSubCriteriaLine getBiddingSubCriteriaLine() {
+        return biddingSubCriteriaLine;
+    }
+
+    public MProposalAdministration biddingSubCriteriaLine(CBiddingSubCriteriaLine cBiddingSubCriteriaLine) {
+        this.biddingSubCriteriaLine = cBiddingSubCriteriaLine;
+        return this;
+    }
+
+    public void setBiddingSubCriteriaLine(CBiddingSubCriteriaLine cBiddingSubCriteriaLine) {
+        this.biddingSubCriteriaLine = cBiddingSubCriteriaLine;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

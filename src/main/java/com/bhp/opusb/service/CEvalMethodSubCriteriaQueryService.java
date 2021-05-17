@@ -74,23 +74,24 @@ public class CEvalMethodSubCriteriaQueryService extends QueryService<CEvalMethod
         log.debug("find by criteria : {}, page: {}", criteria, page);
 
         final Specification<CEvalMethodSubCriteria> specification = createSpecification(criteria);
-        Page<CEvalMethodSubCriteriaDTO> cEvalMethodSubCriteriaDTOS=
-         cEvalMethodSubCriteriaRepository.findAll(specification, page)
-            .map(cEvalMethodSubCriteriaMapper::toDto);
+        Page<CEvalMethodSubCriteriaDTO> cEvalMethodSubCriteriaDTOS = cEvalMethodSubCriteriaRepository
+                .findAll(specification, page).map(cEvalMethodSubCriteriaMapper::toDto);
 
-        List<CEvalMethodSubCriteriaDTO> CEvalMethodSubCriteriaDTO =new ArrayList<>();
-
-        for(CEvalMethodSubCriteriaDTO evalMethodSubCriteriaDTO_:cEvalMethodSubCriteriaDTOS.getContent()){
+        for (CEvalMethodSubCriteriaDTO evalMethodSubCriteriaDTO : cEvalMethodSubCriteriaDTOS.getContent()) {
             LongFilter longFilter = new LongFilter();
+
             CBiddingSubCriteriaCriteria criteriaCriteria = new CBiddingSubCriteriaCriteria();
-            criteriaCriteria.setId((LongFilter) longFilter.setEquals(evalMethodSubCriteriaDTO_.getBiddingSubCriteriaId()));
-            Page<CBiddingSubCriteriaDTO> biddingSubCriteriaDTOS_=cBiddingSubCriteriaQueryService.findByCriteria(criteriaCriteria,page);
-            log.info("this biddingSubCriteriaDTOS_ {} ",biddingSubCriteriaDTOS_);
-            evalMethodSubCriteriaDTO_.setBiddingSubCriteriaDTO(biddingSubCriteriaDTOS_.getContent());
-            CEvalMethodSubCriteriaDTO.add(evalMethodSubCriteriaDTO_);
+            criteriaCriteria
+                    .setId((LongFilter) longFilter.setEquals(evalMethodSubCriteriaDTO.getBiddingSubCriteriaId()));
+
+            Page<CBiddingSubCriteriaDTO> biddingSubCriteriaDTOs = cBiddingSubCriteriaQueryService
+                    .findByCriteria(criteriaCriteria, page);
+
+            log.debug("this biddingSubCriteriaDTOS_ {} ", biddingSubCriteriaDTOs);
+            evalMethodSubCriteriaDTO.setBiddingSubCriteriaDTO(biddingSubCriteriaDTOs.getContent());
         }
-        Page<CEvalMethodSubCriteriaDTO> pages = new PageImpl<>(CEvalMethodSubCriteriaDTO);
-        return pages;
+
+        return cEvalMethodSubCriteriaDTOS;
     }
 
     /**

@@ -121,14 +121,8 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   onBiddingChanged(_bidding: Record<string, any>) {
     if (this.editMode && this.recordsLoaded && ! this.updated) {
       this.updated = true;
-      console.log('record updated');
       this.$emit('change');
     }
-  }
-
-  @Watch('data')
-  onDataChanged(data: any) {
-    console.log('bidding info data changed:', data);
   }
 
   onBiddingTypeChanged(biddingTypeId?: number) {

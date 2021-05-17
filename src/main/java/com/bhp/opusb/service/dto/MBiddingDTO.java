@@ -28,7 +28,7 @@ public class MBiddingDTO extends AbstractAuditingDTO {
     private BigDecimal estimatedPrice;
 
     @NotNull
-    private String biddingStatus;
+    private String biddingStatus = "N";
 
     private Integer joinedVendorCount;
 

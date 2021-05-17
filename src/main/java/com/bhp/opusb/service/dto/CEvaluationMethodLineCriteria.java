@@ -2,15 +2,13 @@ package com.bhp.opusb.service.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
+
 import io.github.jhipster.service.Criteria;
+import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.BooleanFilter;
-import io.github.jhipster.service.filter.DoubleFilter;
 import io.github.jhipster.service.filter.Filter;
-import io.github.jhipster.service.filter.FloatFilter;
-import io.github.jhipster.service.filter.IntegerFilter;
 import io.github.jhipster.service.filter.LongFilter;
 import io.github.jhipster.service.filter.StringFilter;
-import io.github.jhipster.service.filter.BigDecimalFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 
 /**
@@ -32,6 +30,8 @@ public class CEvaluationMethodLineCriteria implements Serializable, Criteria {
 
     private StringFilter evaluationType;
 
+    private StringFilter formType;
+
     private BigDecimalFilter weight;
 
     private BigDecimalFilter passingGrade;
@@ -51,6 +51,7 @@ public class CEvaluationMethodLineCriteria implements Serializable, Criteria {
         this.id = other.id == null ? null : other.id.copy();
         this.evaluation = other.evaluation == null ? null : other.evaluation.copy();
         this.evaluationType = other.evaluationType == null ? null : other.evaluationType.copy();
+        this.formType = other.formType == null ? null : other.formType.copy();
         this.weight = other.weight == null ? null : other.weight.copy();
         this.passingGrade = other.passingGrade == null ? null : other.passingGrade.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
@@ -86,6 +87,14 @@ public class CEvaluationMethodLineCriteria implements Serializable, Criteria {
 
     public void setEvaluationType(StringFilter evaluationType) {
         this.evaluationType = evaluationType;
+    }
+
+    public StringFilter getFormType() {
+        return formType;
+    }
+
+    public void setFormType(StringFilter formType) {
+        this.formType = formType;
     }
 
     public BigDecimalFilter getWeight() {
@@ -150,6 +159,7 @@ public class CEvaluationMethodLineCriteria implements Serializable, Criteria {
             Objects.equals(id, that.id) &&
             Objects.equals(evaluation, that.evaluation) &&
             Objects.equals(evaluationType, that.evaluationType) &&
+            Objects.equals(formType, that.formType) &&
             Objects.equals(weight, that.weight) &&
             Objects.equals(passingGrade, that.passingGrade) &&
             Objects.equals(uid, that.uid) &&
@@ -164,6 +174,7 @@ public class CEvaluationMethodLineCriteria implements Serializable, Criteria {
         id,
         evaluation,
         evaluationType,
+        formType,
         weight,
         passingGrade,
         uid,
@@ -179,6 +190,7 @@ public class CEvaluationMethodLineCriteria implements Serializable, Criteria {
                 (id != null ? "id=" + id + ", " : "") +
                 (evaluation != null ? "evaluation=" + evaluation + ", " : "") +
                 (evaluationType != null ? "evaluationType=" + evaluationType + ", " : "") +
+                (formType != null ? "formType=" + formType + ", " : "") +
                 (weight != null ? "weight=" + weight + ", " : "") +
                 (passingGrade != null ? "passingGrade=" + passingGrade + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +

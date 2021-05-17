@@ -194,9 +194,7 @@ public class MBiddingService {
 
         } else if (MBiddingProcess.SCHEDULE.equals(step)) {
             final List<MBiddingScheduleDTO> biddingSchedules = mBiddingDTO.getBiddingSchedules();
-            final List<MDocumentScheduleDTO> documentSchedules = mBiddingDTO.getDocumentSchedules();
-            final List<MDocumentScheduleDTO> removedDocumentSchedules = mBiddingDTO.getRemovedDocumentSchedules();
-            saveSchedule(mBiddingDTO, biddingSchedules, documentSchedules, removedDocumentSchedules);
+            saveSchedule(mBiddingDTO, biddingSchedules);
         } else if (MBiddingProcess.SELECTION.equals(step)) {
             final List<MVendorInvitationDTO> vendorInvitations = mBiddingDTO.getVendorInvitations();
             final List<MVendorInvitationDTO> removedVendorInvitations = mBiddingDTO.getRemovedVendorInvitations();
@@ -241,13 +239,8 @@ public class MBiddingService {
      * @param removedDocumentSchedules
      * @return
      */
-    private MBiddingDTO saveSchedule(MBiddingDTO mBiddingDTO, List<MBiddingScheduleDTO> biddingSchedules,
-            List<MDocumentScheduleDTO> documentSchedules, List<MDocumentScheduleDTO> removedDocumentSchedules) {
-
+    private MBiddingDTO saveSchedule(MBiddingDTO mBiddingDTO, List<MBiddingScheduleDTO> biddingSchedules) {
         mBiddingScheduleService.saveAll(biddingSchedules);
-        mDocumentScheduleService.saveAll(documentSchedules, mBiddingDTO);
-        mDocumentScheduleService.deleteAll(removedDocumentSchedules);
-        removedDocumentSchedules.clear();
         return mBiddingDTO;
     }
 
@@ -266,7 +259,10 @@ public class MBiddingService {
 
         mVendorInvitationService.saveAll(vendorInvitations, mBiddingDTO);
         mVendorInvitationService.deleteAll(removedVendorInvitations);
+        mVendorSuggestionService.saveAll(vendorSuggestions, mBiddingDTO);
+        mVendorSuggestionService.deleteAll(removedVendorSuggestions);
         removedVendorInvitations.clear();
+        removedVendorSuggestions.clear();
         return mBiddingDTO;
     }
 

@@ -291,9 +291,6 @@
 <script lang="ts" src="./grid-view.component.ts"></script>
 
 <style lang="scss">
-.el-table__fixed, .el-table__fixed-right{
-  box-shadow: none;
-}
 .grid-view {
 
   .el-table {
