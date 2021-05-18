@@ -127,6 +127,7 @@ public class CAnnouncementService {
             final AdUser adUser = adUserMapper.toEntity(user);
             body = body.replace("#vendorName", user.getcVendorName());
             mailService.sendEmail(user.getEmail(), "Bidding Invitation", body, false, true);
+
         }
 
         // Update the announcement published date.

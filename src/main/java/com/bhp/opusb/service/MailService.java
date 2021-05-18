@@ -7,6 +7,7 @@ import com.bhp.opusb.service.dto.MVerificationLineDTO;
 
 import io.github.jhipster.config.JHipsterProperties;
 
+import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
@@ -16,6 +17,7 @@ import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -77,6 +79,11 @@ public class MailService {
             message.setText(content, isHtml);
             javaMailSender.send(mimeMessage);
             log.debug("Sent email to User '{}'", to);
+
+//            FileSystemResource file = new FileSystemResource(new File());
+//            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+//            helper.addAttachment("logo.jpg", file);
+
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", to, e);
         }

@@ -8,7 +8,7 @@ import java.util.UUID;
  * A DTO for the {@link com.bhp.opusb.domain.MBiddingInvitation} entity.
  */
 public class MBiddingInvitationDTO extends AbstractAuditingDTO {
-    
+
     private Long id;
 
     private String invitationStatus;
@@ -25,6 +25,7 @@ public class MBiddingInvitationDTO extends AbstractAuditingDTO {
     private Long adOrganizationId;
 
     private Long announcementId;
+    private ZonedDateTime announcementEndDate;
 
     private String announcementDescription;
 
@@ -36,6 +37,14 @@ public class MBiddingInvitationDTO extends AbstractAuditingDTO {
 
     private Long vendorId;
     private String vendorName;
+
+    public ZonedDateTime getAnnouncementEndDate() {
+        return announcementEndDate;
+    }
+
+    public void setAnnouncementEndDate(ZonedDateTime announcementEndDate) {
+        this.announcementEndDate = announcementEndDate;
+    }
 
     public String getAnnouncementDescription() {
         return announcementDescription;
@@ -173,16 +182,21 @@ public class MBiddingInvitationDTO extends AbstractAuditingDTO {
     @Override
     public String toString() {
         return "MBiddingInvitationDTO{" +
-            "id=" + getId() +
-            ", invitationStatus='" + getInvitationStatus() + "'" +
-            ", reason='" + getReason() + "'" +
-            ", answerDate='" + getAnswerDate() + "'" +
-            ", uid='" + getUid() + "'" +
-            ", active='" + isActive() + "'" +
-            ", adOrganizationId=" + getAdOrganizationId() +
-            ", announcementId=" + getAnnouncementId() +
-            ", biddingId=" + getBiddingId() +
-            ", vendorId=" + getVendorId() +
-            "}";
+            "id=" + id +
+            ", invitationStatus='" + invitationStatus + '\'' +
+            ", reason='" + reason + '\'' +
+            ", answerDate=" + answerDate +
+            ", uid=" + uid +
+            ", active=" + active +
+            ", adOrganizationId=" + adOrganizationId +
+            ", announcementId=" + announcementId +
+            ", announcementEndDate=" + announcementEndDate +
+            ", announcementDescription='" + announcementDescription + '\'' +
+            ", announcementPublishDate=" + announcementPublishDate +
+            ", biddingId=" + biddingId +
+            ", biddingName='" + biddingName + '\'' +
+            ", vendorId=" + vendorId +
+            ", vendorName='" + vendorName + '\'' +
+            '}';
     }
 }
