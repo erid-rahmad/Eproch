@@ -23,9 +23,11 @@ import com.bhp.opusb.service.mapper.CAnnouncementMapper;
 import com.bhp.opusb.service.mapper.MBiddingMapper;
 
 import com.bhp.opusb.service.mapper.MVendorSuggestionMapper;
+import com.bhp.opusb.util.MapperJSONUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,9 @@ public class CAnnouncementService {
 
     @Autowired
     private AdUserRepository adUserRepository;
+
+    @Value("${upload.dir}")
+    private String UploadDir;
 
     private final MBiddingInvitationRepository mBiddingInvitationRepository;
 
@@ -96,6 +101,8 @@ public class CAnnouncementService {
      * @param cAnnouncementPublishDTO
      */
     public void publish(CAnnouncementPublishDTO cAnnouncementPublishDTO) {
+        log.info("this in {}", MapperJSONUtil.prettyLog(cAnnouncementPublishDTO));
+
         CAnnouncement cAnnouncement = cAnnouncementMapper.toEntity(cAnnouncementPublishDTO.getAnnouncement());
         final MBiddingDTO mBiddingDTO = cAnnouncementPublishDTO.getBidding();
         final String content = cAnnouncement.getDescription();
@@ -126,24 +133,21 @@ public class CAnnouncementService {
         for (final AdUserDTO user : users) {
             final AdUser adUser = adUserMapper.toEntity(user);
             body = body.replace("#vendorName", user.getcVendorName());
-            mailService.sendEmail(user.getEmail(), "Bidding Invitation", body, false, true);
-
+            mailService.sendMailWithAttachment(user.getEmail(), "Bidding Invitation", body, false, true,
+                UploadDir+cAnnouncementPublishDTO.getAnnouncement().getAttachmentName());
         }
-
         // Update the announcement published date.
         cAnnouncement.setPublishDate(ZonedDateTime.now());
         cAnnouncementRepository.save(cAnnouncement);
     }
 
     public Map<String,Object> emailInvitation (Long id){
-
         ArrayList emaillist =new ArrayList();
         ArrayList vendorlist = new ArrayList();
 
         Map<String,Object> dataForAnnouncment = new HashMap<String,Object>();
         List<MVendorSuggestion> mVendorSuggestion = mVendorSuggestionRepository.findbyheaderid(id);
         log.info(String.valueOf(mVendorSuggestion));
-
 
         for (MVendorSuggestion mVendorSuggestion1 : mVendorSuggestion){
             log.info("this vendor id {}",mVendorSuggestion1.getVendor().getId().toString());

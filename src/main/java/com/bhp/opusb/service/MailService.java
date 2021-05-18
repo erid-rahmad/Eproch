@@ -8,19 +8,25 @@ import com.bhp.opusb.service.dto.MVerificationLineDTO;
 import io.github.jhipster.config.JHipsterProperties;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
+import javax.mail.*;
+import javax.mail.internet.*;
 
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
+import org.springframework.mail.MailParseException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
@@ -54,6 +60,8 @@ public class MailService {
 
     private final SpringTemplateEngine templateEngine;
 
+
+
     public MailService(JHipsterProperties jHipsterProperties, JavaMailSender javaMailSender,
             MessageSource messageSource, SpringTemplateEngine templateEngine) {
 
@@ -62,6 +70,8 @@ public class MailService {
         this.messageSource = messageSource;
         this.templateEngine = templateEngine;
     }
+
+
 
     @Async
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
@@ -77,15 +87,59 @@ public class MailService {
             message.setFrom(jHipsterProperties.getMail().getFrom());
             message.setSubject(subject);
             message.setText(content, isHtml);
+
             javaMailSender.send(mimeMessage);
             log.debug("Sent email to User '{}'", to);
 
-//            FileSystemResource file = new FileSystemResource(new File());
-//            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-//            helper.addAttachment("logo.jpg", file);
-
         } catch (MailException | MessagingException e) {
             log.warn("Email could not be sent to user '{}'", to, e);
+        }
+    }
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    public void sendMailWithAttachment(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileToAttach){
+        MimeMessage message = mailSender.createMimeMessage();
+        try{
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("admin@yahoo.com");
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(content,true);
+            FileSystemResource file = new FileSystemResource(fileToAttach);
+            helper.addAttachment(file.getFilename(), file);
+        }catch (MessagingException e) {
+            throw new MailParseException(e);
+        }
+        mailSender.send(message);
+    }
+
+    public void sendMailWithInlineResources(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileToAttach )
+    {
+        MimeMessagePreparator preparator = new MimeMessagePreparator()
+        {
+            public void prepare(MimeMessage mimeMessage) throws Exception
+            {
+                mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
+                mimeMessage.setFrom(new InternetAddress("admin@gmail.com"));
+                mimeMessage.setSubject(subject);
+
+                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
+
+                helper.setText(content, true);
+
+                FileSystemResource res = new FileSystemResource(new File(fileToAttach));
+                helper.addInline("identifier1234", res);
+            }
+        };
+
+        try {
+            mailSender.send(preparator);
+        }
+        catch (MailException ex) {
+            // simply log it and go on...
+            System.err.println(ex.getMessage());
         }
     }
 
