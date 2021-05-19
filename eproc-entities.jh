@@ -985,7 +985,7 @@ entity CEvaluationMethodLine {
 
 	/** Specify the type of event form */
 	formType String maxlength(10)
-	
+
 	weight BigDecimal max(100)
 	passingGrade BigDecimal
 	uid UUID
@@ -1184,6 +1184,19 @@ entity MProjectInformation {
 entity MBiddingSchedule {
 	startDate ZonedDateTime
 	endDate ZonedDateTime
+	uid UUID
+	active Boolean
+}
+
+entity MBiddingEvaluation {
+    evaluationStatus String
+	uid UUID
+	active Boolean
+}
+
+entity MBiddingEvaluationLine {
+    Status String
+    evaluationStatus String
 	uid UUID
 	active Boolean
 }
@@ -1735,6 +1748,14 @@ relationship ManyToOne {
 	MBiddingSchedule{bidding required} to MBidding
 	MBiddingSchedule{adOrganization required} to ADOrganization
 	MBiddingSchedule{eventTypeLine required} to CEventTypeline
+
+	MBiddingEvaluation{biddingSubmission required} to MBiddingSubmission
+	MBiddingEvaluation{biddingSchedule required} to MBiddingSchedule
+	MBiddingEvaluation{adOrganization required} to ADOrganization
+
+
+    MBiddingEvaluationLine{adOrganization required} to ADOrganization
+    MBiddingEvaluationLine{biddingEvaluation required} to MBiddingEvaluation
 
 	MBiddingScheduleAttachment{adOrganization required} to ADOrganization
 
