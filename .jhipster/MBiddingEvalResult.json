@@ -1,0 +1,47 @@
+{
+    "name": "MBiddingEvalResult",
+    "fields": [
+        {
+            "fieldName": "status",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mBiddingEvalResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingSubmission",
+            "otherEntityRelationshipName": "mBiddingEvalResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSubmission",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210519162400",
+    "entityTableName": "m_bidding_eval_result",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

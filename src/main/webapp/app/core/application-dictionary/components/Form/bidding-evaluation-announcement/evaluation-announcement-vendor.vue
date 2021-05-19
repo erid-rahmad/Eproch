@@ -1,22 +1,21 @@
 <template>
     <div class="app-container">
-
         <el-row v-if="index" class="main" ref="tableWrapper">
             <el-col :span="24">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                     <keep-alive>
                         <el-col :span="24">
-                            <el-table :data="tableData" size="mini" style="width: 100%">
+                            <el-table :data="biddingResults" size="mini" style="width: 100%">
                                 <el-table-column min-width="50" label="No">
                                     <template slot-scope="row">
                                         {{ row.$index+1 }}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="0" label="Bidding Number" sortable width="100">
+                                <el-table-column prop="biddingNo" label="Bidding Number" sortable width="100">
                                 </el-table-column>
-                                <el-table-column prop="1" label="Title" sortable min-width="210">
+                                <el-table-column prop="biddingName" label="Title" sortable min-width="210">
                                 </el-table-column>
-                                <el-table-column prop="2" label="Bidding Type" sortable min-width="210">
+                                <el-table-column prop="biddingType" label="Bidding Type" sortable min-width="210">
                                 </el-table-column>
                                 <el-table-column prop="3" label="Bidding Schedule" sortable min-width="150">
                                     <template slot-scope="{ row }">
@@ -25,7 +24,7 @@
                                         </el-button>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="2" label="Bidding Status" sortable min-width="210">
+                                <el-table-column prop="biddingStatus" label="Bidding Status" sortable min-width="210">
                                 </el-table-column>
                                 <el-table-column prop="6" label="Action" sortable min-width="180">
                                     <template slot-scope="{ row }">
@@ -50,7 +49,6 @@
                 </el-table-column>
                 <el-table-column property="event" label="Event" width="200" show-overflow-tooltip></el-table-column>
                 <el-table-column property="startdate" label="Start Date" min-width="200" show-overflow-tooltip></el-table-column>
-
                 <el-table-column property="finisdate" label="Finish Date" min-width="200" show-overflow-tooltip></el-table-column>
                 <el-table-column min-width="100" label="Action">
                     <template slot-scope="{ row }">
@@ -64,7 +62,7 @@
 
         <el-row v-if="!index" class="main">
             <announcementDetail @back="back"></announcementDetail>
-            
+
         </el-row>
 
     </div>

@@ -1,0 +1,74 @@
+{
+    "name": "CAnnouncementResult",
+    "fields": [
+        {
+            "fieldName": "description",
+            "fieldType": "byte[]",
+            "fieldTypeBlobContent": "text",
+            "fieldValidateRules": [
+                "required"
+            ]
+        },
+        {
+            "fieldName": "publishDate",
+            "fieldType": "ZonedDateTime"
+        },
+        {
+            "fieldName": "documentNo",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "cAnnouncementResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBidding",
+            "otherEntityRelationshipName": "cAnnouncementResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "bidding",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingSchedule",
+            "otherEntityRelationshipName": "cAnnouncementResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingSchedule",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cAttachment",
+            "otherEntityRelationshipName": "cAnnouncementResult",
+            "relationshipName": "attachment",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210520050500",
+    "entityTableName": "c_announcement_result",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

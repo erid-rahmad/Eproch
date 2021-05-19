@@ -11,7 +11,7 @@
                                         {{ row.$index+1 }}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="0" label="Tanggal" sortable min-width="100">
+                                <el-table-column prop="0" label="Tanggal asd" sortable min-width="100">
                                 </el-table-column>
                                 <el-table-column prop="1" label="Nama Pengadaan" sortable min-width="210">
                                 </el-table-column>
@@ -38,7 +38,7 @@
                 </el-tabs>
             </el-col>
         </el-row>
- 
+
         <el-dialog title="" :visible.sync="centerDialogVisible" width="30%" center>
             <span>Alasan Tidak Tertarik</span>
             <el-input v-model="reson" class="form-input" clearable></el-input>
