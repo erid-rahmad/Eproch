@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.MVendorScoringLine;
 import com.bhp.opusb.service.dto.MVendorScoringLineDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link MVendorScoringLine} and its DTO {@link MVendorScoringLineDTO}.
@@ -22,6 +23,9 @@ public interface MVendorScoringLineMapper extends EntityMapper<MVendorScoringLin
     @Mapping(source = "evaluationMethodLine.passingGrade", target = "evaluationMethodLinePassingGrade")
     @Mapping(source = "evaluationMethodLine.evaluation", target = "evaluationMethodLineEvaluation")
     @Mapping(source = "vendorScoring.id", target = "vendorScoringId")
+    @Mapping(source = "vendorScoring.evaluationMethod.name", target = "vendorScoringName")
+    @Mapping(source = "vendorScoring.bidding.id", target = "biddingId")
+    @Mapping(source = "vendorScoring.bidding.name", target = "biddingName")
     MVendorScoringLineDTO toDto(MVendorScoringLine mVendorScoringLine);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")
