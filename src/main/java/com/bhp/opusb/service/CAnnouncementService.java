@@ -52,7 +52,7 @@ public class CAnnouncementService {
     @Autowired
     private AdUserRepository adUserRepository;
 
-    @Value("${upload.dir}")
+    @Value("${application.attachment.upload-dir}")
     private String UploadDir;
 
     private final MBiddingInvitationRepository mBiddingInvitationRepository;
@@ -134,7 +134,7 @@ public class CAnnouncementService {
             final AdUser adUser = adUserMapper.toEntity(user);
             body = body.replace("#vendorName", user.getcVendorName());
             mailService.sendMailWithAttachment(user.getEmail(), "Bidding Invitation", body, false, true,
-                UploadDir+cAnnouncementPublishDTO.getAnnouncement().getAttachmentName());
+                UploadDir+"/"+cAnnouncementPublishDTO.getAnnouncement().getAttachmentName());
         }
         // Update the announcement published date.
         cAnnouncement.setPublishDate(ZonedDateTime.now());
