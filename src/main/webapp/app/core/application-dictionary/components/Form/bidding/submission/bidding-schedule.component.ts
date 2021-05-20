@@ -10,6 +10,7 @@ const BiddingScheduleProp = Vue.extend({
     biddingId: Number,
     biddingName: String,
     biddingNo: String,
+    submissionId: Number
   }
 });
 
@@ -137,9 +138,11 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
         path: url,
         query: {
           t: `${timestamp}`,
-          biddingScheduleId: `${event.id}`
+          biddingScheduleId: `${event.id}`,
+          submissionId: `${this.submissionId}`
         }
       });
+      this.$emit('form-open');
     }
   }
 

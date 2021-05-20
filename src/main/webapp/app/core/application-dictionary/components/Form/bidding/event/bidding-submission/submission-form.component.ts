@@ -50,8 +50,28 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
     });
   }
 
-  onMainFormUpdated(mainForm: any) {
-
+  onVendorChanged(vendorId: number) {
+    if (vendorId) {
+      this.commonService(baseApiBiddingSubmission)
+        .retrieve({
+          criteriaQuery: [
+            `biddingId.equals=${this.mainForm.biddingId}`,
+            `vendorId.equals=${vendorId}`
+          ],
+          paginationQuery: {
+            page: 0,
+            size: 1,
+            sort: ['id']
+          }
+        })
+        .then(res => {
+          if (res.data.length) {
+            this.$emit('vendor-changed', res.data[0].id);
+          }
+        });
+      } else {
+        this.$emit('vendor-changed', null);
+      }
   }
 
   created() {

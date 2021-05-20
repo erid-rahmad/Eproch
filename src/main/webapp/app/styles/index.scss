@@ -189,6 +189,10 @@ aside {
 }
 
 // Element UI overrides.
+.is-error .el-input__inner {
+  border-color: #ff4949;
+}
+
 .el-button--warning {
   color: #1f2d3d;
 }

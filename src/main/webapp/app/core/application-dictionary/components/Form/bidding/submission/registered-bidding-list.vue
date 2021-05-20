@@ -51,7 +51,7 @@
         type="primary"
         @click="openProposalForm(proposal)"
       >
-        {{ proposal.evaluation }} Proposal
+        {{ printEvaluation(proposal.evaluationMethodLineEvaluation) }} Proposal
       </el-button>
     </div>
 
@@ -223,6 +223,8 @@
           :bidding-id="selectedRow.biddingId"
           :bidding-name="selectedRow.biddingName"
           :bidding-no="selectedRow.biddingNo"
+          :submission-id="selectedRow.id"
+          @form-open="biddingScheduleVisible = false"
         ></bidding-schedule>
       </el-dialog>
     </div>
@@ -245,6 +247,11 @@
     .el-button + .el-button {
       margin-left: 8px;
     }
+  }
+}
+.bidding-schedule-dialog {
+  .el-dialog__body {
+    padding-bottom: 20px;
   }
 }
 </style>

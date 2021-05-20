@@ -3,7 +3,11 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.MProposalPrice;
 import com.bhp.opusb.repository.MProposalPriceRepository;
 import com.bhp.opusb.service.dto.MProposalPriceDTO;
+import com.bhp.opusb.service.dto.MProposalPriceLineDTO;
+import com.bhp.opusb.service.dto.MProposalPriceVM;
 import com.bhp.opusb.service.mapper.MProposalPriceMapper;
+import com.bhp.opusb.service.mapper.MProposalPriceVMMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -23,13 +28,20 @@ public class MProposalPriceService {
 
     private final Logger log = LoggerFactory.getLogger(MProposalPriceService.class);
 
+    private final MProposalPriceLineService mProposalPriceLineService;
+
     private final MProposalPriceRepository mProposalPriceRepository;
 
     private final MProposalPriceMapper mProposalPriceMapper;
+    private final MProposalPriceVMMapper mProposalPriceVMMapper;
 
-    public MProposalPriceService(MProposalPriceRepository mProposalPriceRepository, MProposalPriceMapper mProposalPriceMapper) {
+    public MProposalPriceService(MProposalPriceLineService mProposalPriceLineService,
+            MProposalPriceRepository mProposalPriceRepository, MProposalPriceMapper mProposalPriceMapper,
+            MProposalPriceVMMapper mProposalPriceVMMapper) {
+        this.mProposalPriceLineService = mProposalPriceLineService;
         this.mProposalPriceRepository = mProposalPriceRepository;
         this.mProposalPriceMapper = mProposalPriceMapper;
+        this.mProposalPriceVMMapper = mProposalPriceVMMapper;
     }
 
     /**
@@ -43,6 +55,24 @@ public class MProposalPriceService {
         MProposalPrice mProposalPrice = mProposalPriceMapper.toEntity(mProposalPriceDTO);
         mProposalPrice = mProposalPriceRepository.save(mProposalPrice);
         return mProposalPriceMapper.toDto(mProposalPrice);
+    }
+
+    /**
+     * Save a mProposalPriceVM, as well as its lines.
+     *
+     * @param mProposalPriceVM the entity to save.
+     * @return the persisted entity.
+     */
+    public MProposalPriceDTO saveForm(MProposalPriceVM mProposalPriceVM) {
+        log.debug("Request to save MProposalPrice form : {}", mProposalPriceVM);
+        MProposalPrice mProposalPrice = mProposalPriceMapper.toEntity(mProposalPriceVM);
+        mProposalPrice = mProposalPriceRepository.save(mProposalPrice);
+
+        MProposalPriceVM result = mProposalPriceVMMapper.toDto(mProposalPrice);
+        List<MProposalPriceLineDTO> lines = mProposalPriceLineService.saveAll(mProposalPriceVM.getProposalPriceLines(), result);
+
+        result.setProposalPriceLines(lines);
+        return result;
     }
 
     /**

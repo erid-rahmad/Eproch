@@ -42,6 +42,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
 
   schedule: any = {};
   selectedRow: any = {};
+  evaluationList: any[] = [];
   
   gridSchema = {
     defaultSort: {},
@@ -122,6 +123,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
     if (this.isVendor) {
       this.retrieveBiddingStatuses();
       this.retrieveDocStatuses();
+      this.retrieveEvaluationList();
       this.transition();
     } else {
       this.section = SubmissionPage.SUBMISSION;
@@ -184,6 +186,10 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
     this.section = SubmissionPage.PROPOSAL;
   }
 
+  printEvaluation(value: string) {
+    return this.evaluationList.find(item => item.value === value)?.name || value;
+  }
+
   printBiddingStatus(status: string) {
     return this.biddingStatuses.find(stat => stat.value === status)?.name || status;
   }
@@ -202,6 +208,13 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
     this.commonService(null).retrieveReferenceLists('docStatus')
       .then(res => this.docStatuses = res)
       .catch(err => this.$message.warning('Failed to get document statuses'));
+  }
+
+  private retrieveEvaluationList() {
+    this.commonService(null)
+      .retrieveReferenceLists('evaluationList')
+      .then(res => this.evaluationList = res)
+      .catch(_err => console.warn('Failed getting the evaluation list'));
   }
 
   private retrieveAllRecords(): void {

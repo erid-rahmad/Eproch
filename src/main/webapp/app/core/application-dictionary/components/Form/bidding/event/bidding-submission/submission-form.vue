@@ -44,6 +44,7 @@
                 class="form-input"
                 clearable
                 filterable
+                @change="onVendorChanged"
               >
                 <el-option
                   v-for="item in vendorOptions"
