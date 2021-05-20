@@ -52,7 +52,9 @@
               type="datetime"
             ></el-date-picker>
           </el-form-item>
-          <el-form-item label="">
+          <el-form-item
+            v-if="!isVendor"
+            label="">
             <el-button
               type="primary"
               @click="viewParticipants"
