@@ -2,6 +2,7 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MBiddingSchedule;
+import com.bhp.opusb.domain.MPrequalificationDateSet;
 import com.bhp.opusb.domain.MBiddingScheduleAttachment;
 import com.bhp.opusb.domain.MBidding;
 import com.bhp.opusb.domain.ADOrganization;
@@ -583,6 +584,26 @@ public class MBiddingScheduleResourceIT {
         // Get all the mBiddingScheduleList where active is null
         defaultMBiddingScheduleShouldNotBeFound("active.specified=false");
     }
+
+    @Test
+    @Transactional
+    public void getAllMBiddingSchedulesByDateSetIsEqualToSomething() throws Exception {
+        // Initialize the database
+        mBiddingScheduleRepository.saveAndFlush(mBiddingSchedule);
+        MPrequalificationDateSet dateSet = MPrequalificationDateSetResourceIT.createEntity(em);
+        em.persist(dateSet);
+        em.flush();
+        mBiddingSchedule.setDateSet(dateSet);
+        mBiddingScheduleRepository.saveAndFlush(mBiddingSchedule);
+        Long dateSetId = dateSet.getId();
+
+        // Get all the mBiddingScheduleList where dateSet equals to dateSetId
+        defaultMBiddingScheduleShouldBeFound("dateSetId.equals=" + dateSetId);
+
+        // Get all the mBiddingScheduleList where dateSet equals to dateSetId + 1
+        defaultMBiddingScheduleShouldNotBeFound("dateSetId.equals=" + (dateSetId + 1));
+    }
+
 
     @Test
     @Transactional

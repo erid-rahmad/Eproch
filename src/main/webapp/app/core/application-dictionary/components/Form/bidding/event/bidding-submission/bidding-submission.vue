@@ -32,7 +32,7 @@
         type="primary"
         @click="openProposalForm(proposal)"
       >
-        {{ proposal.evaluation }} Proposal
+        {{ printEvaluation(proposal.evaluationMethodLineEvaluation) }} Proposal
       </el-button>
     </div>
 

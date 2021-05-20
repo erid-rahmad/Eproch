@@ -21,4 +21,9 @@
                                  referencedTableName="ad_organization"/>
 
     </changeSet>
+
+    <changeSet id="20210519150000" author="Ananta Aryadewa">
+        <dropForeignKeyConstraint baseTableName="m_prequalification_date_set" constraintName="fk_m_prequalification_date_set_ad_organization_id" />
+        <dropColumn tableName="m_prequalification_date_set" columnName="bidding_schedule_id"/>
+    </changeSet>
 </databaseChangeLog>

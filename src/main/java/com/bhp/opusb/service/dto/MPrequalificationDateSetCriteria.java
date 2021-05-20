@@ -36,9 +36,9 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
 
     private BooleanFilter active;
 
-    private LongFilter biddingScheduleId;
-
     private LongFilter adOrganizationId;
+
+    private LongFilter biddingScheduleId;
 
     public MPrequalificationDateSetCriteria() {
     }
@@ -50,8 +50,8 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         this.status = other.status == null ? null : other.status.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
-        this.biddingScheduleId = other.biddingScheduleId == null ? null : other.biddingScheduleId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.biddingScheduleId = other.biddingScheduleId == null ? null : other.biddingScheduleId.copy();
     }
 
     @Override
@@ -107,20 +107,20 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         this.active = active;
     }
 
-    public LongFilter getBiddingScheduleId() {
-        return biddingScheduleId;
-    }
-
-    public void setBiddingScheduleId(LongFilter biddingScheduleId) {
-        this.biddingScheduleId = biddingScheduleId;
-    }
-
     public LongFilter getAdOrganizationId() {
         return adOrganizationId;
     }
 
     public void setAdOrganizationId(LongFilter adOrganizationId) {
         this.adOrganizationId = adOrganizationId;
+    }
+
+    public LongFilter getBiddingScheduleId() {
+        return biddingScheduleId;
+    }
+
+    public void setBiddingScheduleId(LongFilter biddingScheduleId) {
+        this.biddingScheduleId = biddingScheduleId;
     }
 
 
@@ -140,8 +140,8 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
             Objects.equals(status, that.status) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
-            Objects.equals(biddingScheduleId, that.biddingScheduleId) &&
-            Objects.equals(adOrganizationId, that.adOrganizationId);
+            Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(biddingScheduleId, that.biddingScheduleId);
     }
 
     @Override
@@ -153,8 +153,8 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
         status,
         uid,
         active,
-        biddingScheduleId,
-        adOrganizationId
+        adOrganizationId,
+        biddingScheduleId
         );
     }
 
@@ -167,8 +167,8 @@ public class MPrequalificationDateSetCriteria implements Serializable, Criteria 
                 (status != null ? "status=" + status + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
-                (biddingScheduleId != null ? "biddingScheduleId=" + biddingScheduleId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (biddingScheduleId != null ? "biddingScheduleId=" + biddingScheduleId + ", " : "") +
             "}";
     }
 

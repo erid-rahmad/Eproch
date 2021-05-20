@@ -1,6 +1,6 @@
 package com.bhp.opusb.domain.view;
 
 public interface MinMaxView {
-  Integer getMin();
-  Integer getMax();
+  Integer getMinSequence();
+  Integer getMaxSequence();
 }

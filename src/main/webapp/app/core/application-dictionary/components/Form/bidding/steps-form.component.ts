@@ -137,7 +137,8 @@ export default class StepsForm extends StepsFormProps {
       this.editMode = true;
     }
 
-    if (++this.active <= 3) {
+    const active = this.direction > 0 ? this.active++ : this.active--;
+    if (active <= 3) {
       this.bidding = data;
     }
   }

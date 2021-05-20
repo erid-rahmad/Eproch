@@ -103,6 +103,22 @@ public class MBiddingScheduleQueryService extends QueryService<MBiddingSchedule>
             if (criteria.getActive() != null) {
                 specification = specification.and(buildSpecification(criteria.getActive(), MBiddingSchedule_.active));
             }
+            if (criteria.getDateSetId() != null) {
+                specification = specification.and(buildSpecification(criteria.getDateSetId(),
+                    root -> root.join(MBiddingSchedule_.dateSet, JoinType.INNER).get(MPrequalificationDateSet_.id)));
+            }
+            if (criteria.getActualStartDate() != null) {
+                specification = specification.and(buildSpecification(criteria.getActualStartDate(),
+                    root -> root.join(MBiddingSchedule_.dateSet, JoinType.INNER).get(MPrequalificationDateSet_.startDate)));
+            }
+            if (criteria.getActualEndDate() != null) {
+                specification = specification.and(buildSpecification(criteria.getActualEndDate(),
+                    root -> root.join(MBiddingSchedule_.dateSet, JoinType.INNER).get(MPrequalificationDateSet_.endDate)));
+            }
+            if (criteria.getStatus() != null) {
+                specification = specification.and(buildSpecification(criteria.getStatus(),
+                    root -> root.join(MBiddingSchedule_.dateSet, JoinType.INNER).get(MPrequalificationDateSet_.status)));
+            }
             if (criteria.getMBiddingScheduleAttachmentId() != null) {
                 specification = specification.and(buildSpecification(criteria.getMBiddingScheduleAttachmentId(),
                     root -> root.join(MBiddingSchedule_.mBiddingScheduleAttachments, JoinType.LEFT).get(MBiddingScheduleAttachment_.id)));

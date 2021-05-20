@@ -2,8 +2,8 @@ package com.bhp.opusb.web.rest;
 
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MPrequalificationDateSet;
-import com.bhp.opusb.domain.MBiddingSchedule;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.MBiddingSchedule;
 import com.bhp.opusb.repository.MPrequalificationDateSetRepository;
 import com.bhp.opusb.service.MPrequalificationDateSetService;
 import com.bhp.opusb.service.dto.MPrequalificationDateSetDTO;
@@ -94,16 +94,6 @@ public class MPrequalificationDateSetResourceIT {
             .uid(DEFAULT_UID)
             .active(DEFAULT_ACTIVE);
         // Add required entity
-        MBiddingSchedule mBiddingSchedule;
-        if (TestUtil.findAll(em, MBiddingSchedule.class).isEmpty()) {
-            mBiddingSchedule = MBiddingScheduleResourceIT.createEntity(em);
-            em.persist(mBiddingSchedule);
-            em.flush();
-        } else {
-            mBiddingSchedule = TestUtil.findAll(em, MBiddingSchedule.class).get(0);
-        }
-        mPrequalificationDateSet.setBiddingSchedule(mBiddingSchedule);
-        // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
             aDOrganization = ADOrganizationResourceIT.createEntity(em);
@@ -113,6 +103,16 @@ public class MPrequalificationDateSetResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mPrequalificationDateSet.setAdOrganization(aDOrganization);
+        // Add required entity
+        MBiddingSchedule mBiddingSchedule;
+        if (TestUtil.findAll(em, MBiddingSchedule.class).isEmpty()) {
+            mBiddingSchedule = MBiddingScheduleResourceIT.createEntity(em);
+            em.persist(mBiddingSchedule);
+            em.flush();
+        } else {
+            mBiddingSchedule = TestUtil.findAll(em, MBiddingSchedule.class).get(0);
+        }
+        mPrequalificationDateSet.setBiddingSchedule(mBiddingSchedule);
         return mPrequalificationDateSet;
     }
     /**
@@ -129,16 +129,6 @@ public class MPrequalificationDateSetResourceIT {
             .uid(UPDATED_UID)
             .active(UPDATED_ACTIVE);
         // Add required entity
-        MBiddingSchedule mBiddingSchedule;
-        if (TestUtil.findAll(em, MBiddingSchedule.class).isEmpty()) {
-            mBiddingSchedule = MBiddingScheduleResourceIT.createUpdatedEntity(em);
-            em.persist(mBiddingSchedule);
-            em.flush();
-        } else {
-            mBiddingSchedule = TestUtil.findAll(em, MBiddingSchedule.class).get(0);
-        }
-        mPrequalificationDateSet.setBiddingSchedule(mBiddingSchedule);
-        // Add required entity
         ADOrganization aDOrganization;
         if (TestUtil.findAll(em, ADOrganization.class).isEmpty()) {
             aDOrganization = ADOrganizationResourceIT.createUpdatedEntity(em);
@@ -148,6 +138,16 @@ public class MPrequalificationDateSetResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mPrequalificationDateSet.setAdOrganization(aDOrganization);
+        // Add required entity
+        MBiddingSchedule mBiddingSchedule;
+        if (TestUtil.findAll(em, MBiddingSchedule.class).isEmpty()) {
+            mBiddingSchedule = MBiddingScheduleResourceIT.createUpdatedEntity(em);
+            em.persist(mBiddingSchedule);
+            em.flush();
+        } else {
+            mBiddingSchedule = TestUtil.findAll(em, MBiddingSchedule.class).get(0);
+        }
+        mPrequalificationDateSet.setBiddingSchedule(mBiddingSchedule);
         return mPrequalificationDateSet;
     }
 
@@ -650,22 +650,6 @@ public class MPrequalificationDateSetResourceIT {
 
     @Test
     @Transactional
-    public void getAllMPrequalificationDateSetsByBiddingScheduleIsEqualToSomething() throws Exception {
-        // Get already existing entity
-        MBiddingSchedule biddingSchedule = mPrequalificationDateSet.getBiddingSchedule();
-        mPrequalificationDateSetRepository.saveAndFlush(mPrequalificationDateSet);
-        Long biddingScheduleId = biddingSchedule.getId();
-
-        // Get all the mPrequalificationDateSetList where biddingSchedule equals to biddingScheduleId
-        defaultMPrequalificationDateSetShouldBeFound("biddingScheduleId.equals=" + biddingScheduleId);
-
-        // Get all the mPrequalificationDateSetList where biddingSchedule equals to biddingScheduleId + 1
-        defaultMPrequalificationDateSetShouldNotBeFound("biddingScheduleId.equals=" + (biddingScheduleId + 1));
-    }
-
-
-    @Test
-    @Transactional
     public void getAllMPrequalificationDateSetsByAdOrganizationIsEqualToSomething() throws Exception {
         // Get already existing entity
         ADOrganization adOrganization = mPrequalificationDateSet.getAdOrganization();
@@ -677,6 +661,22 @@ public class MPrequalificationDateSetResourceIT {
 
         // Get all the mPrequalificationDateSetList where adOrganization equals to adOrganizationId + 1
         defaultMPrequalificationDateSetShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMPrequalificationDateSetsByBiddingScheduleIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        MBiddingSchedule biddingSchedule = mPrequalificationDateSet.getBiddingSchedule();
+        mPrequalificationDateSetRepository.saveAndFlush(mPrequalificationDateSet);
+        Long biddingScheduleId = biddingSchedule.getId();
+
+        // Get all the mPrequalificationDateSetList where biddingSchedule equals to biddingScheduleId
+        defaultMPrequalificationDateSetShouldBeFound("biddingScheduleId.equals=" + biddingScheduleId);
+
+        // Get all the mPrequalificationDateSetList where biddingSchedule equals to biddingScheduleId + 1
+        defaultMPrequalificationDateSetShouldNotBeFound("biddingScheduleId.equals=" + (biddingScheduleId + 1));
     }
 
     /**

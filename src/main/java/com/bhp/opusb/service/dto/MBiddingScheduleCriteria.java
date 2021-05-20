@@ -7,6 +7,7 @@ import io.github.jhipster.service.Criteria;
 import io.github.jhipster.service.filter.BooleanFilter;
 import io.github.jhipster.service.filter.Filter;
 import io.github.jhipster.service.filter.LongFilter;
+import io.github.jhipster.service.filter.StringFilter;
 import io.github.jhipster.service.filter.UUIDFilter;
 import io.github.jhipster.service.filter.ZonedDateTimeFilter;
 
@@ -33,6 +34,11 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
 
     private BooleanFilter active;
 
+    private LongFilter dateSetId;
+    private ZonedDateTimeFilter actualStartDate;
+    private ZonedDateTimeFilter actualEndDate;
+    private StringFilter status;
+
     private LongFilter mBiddingScheduleAttachmentId;
 
     private LongFilter biddingId;
@@ -50,6 +56,10 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.endDate = other.endDate == null ? null : other.endDate.copy();
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
+        this.dateSetId = other.dateSetId == null ? null : other.dateSetId.copy();
+        this.actualStartDate = other.actualStartDate == null ? null : other.actualStartDate.copy();
+        this.actualEndDate = other.actualEndDate == null ? null : other.actualEndDate.copy();
+        this.status = other.status == null ? null : other.status.copy();
         this.mBiddingScheduleAttachmentId = other.mBiddingScheduleAttachmentId == null ? null : other.mBiddingScheduleAttachmentId.copy();
         this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
@@ -101,6 +111,38 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.active = active;
     }
 
+    public LongFilter getDateSetId() {
+        return dateSetId;
+    }
+
+    public void setDateSetId(LongFilter dateSetId) {
+        this.dateSetId = dateSetId;
+    }
+
+    public ZonedDateTimeFilter getActualStartDate() {
+        return actualStartDate;
+    }
+
+    public void setActualStartDate(ZonedDateTimeFilter actualStartDate) {
+        this.actualStartDate = actualStartDate;
+    }
+
+    public ZonedDateTimeFilter getActualEndDate() {
+        return actualEndDate;
+    }
+
+    public void setActualEndDate(ZonedDateTimeFilter actualEndDate) {
+        this.actualEndDate = actualEndDate;
+    }
+
+    public StringFilter getStatus() {
+        return status;
+    }
+
+    public void setStatus(StringFilter status) {
+        this.status = status;
+    }
+
     public LongFilter getMBiddingScheduleAttachmentId() {
         return mBiddingScheduleAttachmentId;
     }
@@ -149,6 +191,10 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
             Objects.equals(endDate, that.endDate) &&
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
+            Objects.equals(dateSetId, that.dateSetId) &&
+            Objects.equals(actualStartDate, that.actualStartDate) &&
+            Objects.equals(actualEndDate, that.actualEndDate) &&
+            Objects.equals(status, that.status) &&
             Objects.equals(mBiddingScheduleAttachmentId, that.mBiddingScheduleAttachmentId) &&
             Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
@@ -163,6 +209,10 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         endDate,
         uid,
         active,
+        dateSetId,
+        actualStartDate,
+        actualEndDate,
+        status,
         mBiddingScheduleAttachmentId,
         biddingId,
         adOrganizationId,
@@ -178,6 +228,10 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
                 (endDate != null ? "endDate=" + endDate + ", " : "") +
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
+                (dateSetId != null ? "dateSetId=" + dateSetId + ", " : "") +
+                (actualStartDate != null ? "actualStartDate=" + actualStartDate + ", " : "") +
+                (actualEndDate != null ? "actualEndDate=" + actualEndDate + ", " : "") +
+                (status != null ? "status=" + status + ", " : "") +
                 (mBiddingScheduleAttachmentId != null ? "mBiddingScheduleAttachmentId=" + mBiddingScheduleAttachmentId + ", " : "") +
                 (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +

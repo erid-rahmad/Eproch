@@ -20,8 +20,8 @@ public interface MPrequalificationDateSetMapper extends EntityMapper<MPrequalifi
     @Mapping(source = "adOrganization.name", target = "adOrganizationName")
     MPrequalificationDateSetDTO toDto(MPrequalificationDateSet mPrequalificationDateSet);
 
-    @Mapping(source = "biddingScheduleId", target = "biddingSchedule")
     @Mapping(source = "adOrganizationId", target = "adOrganization")
+    @Mapping(target = "biddingSchedule", ignore = true)
     MPrequalificationDateSet toEntity(MPrequalificationDateSetDTO mPrequalificationDateSetDTO);
 
     default MPrequalificationDateSet fromId(Long id) {

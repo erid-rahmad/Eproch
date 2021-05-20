@@ -31,7 +31,7 @@
       </el-button>
       
       <el-button
-        v-if="!submissionPage"
+        v-if="!mainPage && !submissionPage"
         size="mini"
         type="primary"
         @click="saveProposal"
@@ -45,7 +45,7 @@
       ></el-divider>
 
       <el-button
-        v-for="proposal in proposals"
+        v-for="proposal in displayedProposals"
         :key="proposal.id"
         size="mini"
         type="primary"
@@ -172,6 +172,7 @@
           >
             <template slot-scope="{ row }">
               <el-button
+                v-if="isStarted(row)"
                 class="button"
                 size="mini"
                 type="primary"
@@ -208,8 +209,22 @@
         ref="proposalForm"
         :is="proposalComponent"
         :data="selectedProposal"
+        :schedule="schedule"
         :submission-id="selectedRow.id"
       ></component>
+
+      <el-dialog
+        class="bidding-schedule-dialog"
+        width="80%"
+        :visible.sync="biddingScheduleVisible"
+        title="Bidding Schedule"
+      >
+        <bidding-schedule
+          :bidding-id="selectedRow.biddingId"
+          :bidding-name="selectedRow.biddingName"
+          :bidding-no="selectedRow.biddingNo"
+        ></bidding-schedule>
+      </el-dialog>
     </div>
   </div>
 </template>

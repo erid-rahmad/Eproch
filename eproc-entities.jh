@@ -1299,7 +1299,7 @@ relationship OneToOne {
 	MProductCatalog{cGallery} to CGallery
 	MBiddingLine{subItem} to MBiddingSubItem{biddingLine}
 	MBiddingScheduleAttachment{cAttachment required} to CAttachment
-	MPrequalificationDateSet{biddingSchedule required} to MBiddingSchedule
+	MBiddingSchedule{dateSet} to MPrequalificationDateSet{biddingSchedule required}
 
 	// Bidding event form.
 	MPreBidMeeting{biddingSchedule required} to MBiddingSchedule

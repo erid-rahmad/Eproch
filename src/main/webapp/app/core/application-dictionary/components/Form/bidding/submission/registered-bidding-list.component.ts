@@ -1,3 +1,4 @@
+import BiddingSchedule from "@/core/application-dictionary/components/Form/bidding/submission/bidding-schedule.vue";
 import ProposalForm from '@/core/application-dictionary/components/Form/bidding/event/bidding-submission/proposal-form.vue';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
@@ -8,7 +9,6 @@ import AdministrationProposal from '../event/bidding-submission/administration-p
 import PriceProposal from '../event/bidding-submission/price-proposal.vue';
 import SubmissionForm from "../event/bidding-submission/submission-form.vue";
 import TechnicalProposal from '../event/bidding-submission/technical-proposal.vue';
-import { proposalNameMap } from '../event/bidding-submission/proposal-form.component';
 
 const enum SubmissionPage {
   MAIN = 'main',
@@ -21,6 +21,7 @@ const baseApiVendorScoringLine = 'api/m-vendor-scoring-lines';
 
 @Component({
   components: {
+    BiddingSchedule,
     SubmissionForm,
     AdministrationProposal,
     TechnicalProposal,
@@ -33,11 +34,13 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  biddingScheduleVisible: boolean = false;
   loading: boolean = false;
   formType: string = null;
 
   gridData: any[] = [];
 
+  schedule: any = {};
   selectedRow: any = {};
   
   gridSchema = {
@@ -64,6 +67,15 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   biddingStatuses: any[] = [];
   docStatuses: any[] = [];
 
+  get displayedProposals() {
+    if (!this.proposalName) {
+      return this.proposals;
+    }
+
+    return this.proposals
+      .filter(proposal => proposal.evaluationMethodLineName !== this.proposalName);
+  }
+
   get isVendor() {
     return AccountStoreModule.isVendor;
   }
@@ -77,7 +89,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   }
 
   get proposalComponent() {
-    if (this.proposalName === 'price') {
+    if (this.proposalName === 'P') {
       return 'price-proposal';
     }
 
@@ -94,11 +106,15 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
   }
 
   onFormClosed() {
+    this.proposals = [];
     this.section = SubmissionPage.MAIN;
   }
 
   onSubmissionFormLoaded(data: any) {
+    this.schedule = data;
     this.formType = data.formType;
+
+    // Get the proposal buttons based on the submission's form type.
     this.retrieveVendorScoringLines(data.biddingId, data.formType);
   }
 
@@ -154,11 +170,16 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
 
   closeProposalPage() {
     this.section = SubmissionPage.SUBMISSION;
+    this.proposalName = null;
+    this.selectedProposal = null;
+  }
+
+  isStarted(data: any) {
+    return data.biddingScheduleStatus && data.biddingScheduleStatus !== 'N';
   }
 
   openProposalForm(data: any) {
-    const { evaluationMethodLineName } = data;
-    this.proposalName = proposalNameMap.get(evaluationMethodLineName);
+    this.proposalName = data.evaluationMethodLineName;
     this.selectedProposal = data;
     this.section = SubmissionPage.PROPOSAL;
   }
@@ -251,6 +272,7 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
 
   viewSchedule(row: any) {
     this.selectedRow = row;
+    this.biddingScheduleVisible = true;
   }
 
   viewDetails(row: any) {

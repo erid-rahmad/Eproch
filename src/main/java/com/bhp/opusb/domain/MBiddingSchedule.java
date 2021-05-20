@@ -10,8 +10,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
@@ -48,6 +50,10 @@ public class MBiddingSchedule extends AbstractAuditingEntity {
 
     @Column(name = "active")
     private Boolean active;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private MPrequalificationDateSet dateSet;
 
     @OneToMany(mappedBy = "biddingSchedule")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -127,6 +133,19 @@ public class MBiddingSchedule extends AbstractAuditingEntity {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public MPrequalificationDateSet getDateSet() {
+        return dateSet;
+    }
+
+    public MBiddingSchedule dateSet(MPrequalificationDateSet mPrequalificationDateSet) {
+        this.dateSet = mPrequalificationDateSet;
+        return this;
+    }
+
+    public void setDateSet(MPrequalificationDateSet mPrequalificationDateSet) {
+        this.dateSet = mPrequalificationDateSet;
     }
 
     public Set<MBiddingScheduleAttachment> getMBiddingScheduleAttachments() {

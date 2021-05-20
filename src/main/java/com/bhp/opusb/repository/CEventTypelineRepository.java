@@ -18,6 +18,6 @@ public interface CEventTypelineRepository extends JpaRepository<CEventTypeline, 
 
   List<CEventTypeline> findByEventType_IdOrderBySequence(Long eventTypeId);
 
-  @Query("SELECT MAX(l.sequence), MIN(l.sequence) FROM CEventTypeline l INNER JOIN l.eventType AS e WHERE e.id = ?1")
+  @Query("SELECT MAX(l.sequence) AS maxSequence, MIN(l.sequence) AS minSequence FROM CEventTypeline l INNER JOIN l.eventType AS e WHERE e.id = ?1")
   MinMaxView findMinMaxSequence(Long eventTypeId);
 }

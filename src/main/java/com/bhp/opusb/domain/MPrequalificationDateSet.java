@@ -8,7 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
@@ -17,6 +16,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import org.hibernate.annotations.Cache;
@@ -53,15 +53,14 @@ public class MPrequalificationDateSet extends AbstractAuditingEntity {
     @Column(name = "active")
     private Boolean active;
 
-    @OneToOne(optional = false)
-    @NotNull
-    @JoinColumn(unique = true)
-    private MBiddingSchedule biddingSchedule;
-
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mPrequalificationDateSets")
     private ADOrganization adOrganization;
+
+    @OneToOne(mappedBy = "dateSet")
+    @JsonIgnore
+    private MBiddingSchedule biddingSchedule;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
@@ -137,19 +136,6 @@ public class MPrequalificationDateSet extends AbstractAuditingEntity {
         this.active = active;
     }
 
-    public MBiddingSchedule getBiddingSchedule() {
-        return biddingSchedule;
-    }
-
-    public MPrequalificationDateSet biddingSchedule(MBiddingSchedule mBiddingSchedule) {
-        this.biddingSchedule = mBiddingSchedule;
-        return this;
-    }
-
-    public void setBiddingSchedule(MBiddingSchedule mBiddingSchedule) {
-        this.biddingSchedule = mBiddingSchedule;
-    }
-
     public ADOrganization getAdOrganization() {
         return adOrganization;
     }
@@ -161,6 +147,19 @@ public class MPrequalificationDateSet extends AbstractAuditingEntity {
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
+    }
+
+    public MBiddingSchedule getBiddingSchedule() {
+        return biddingSchedule;
+    }
+
+    public MPrequalificationDateSet biddingSchedule(MBiddingSchedule mBiddingSchedule) {
+        this.biddingSchedule = mBiddingSchedule;
+        return this;
+    }
+
+    public void setBiddingSchedule(MBiddingSchedule mBiddingSchedule) {
+        this.biddingSchedule = mBiddingSchedule;
     }
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
 

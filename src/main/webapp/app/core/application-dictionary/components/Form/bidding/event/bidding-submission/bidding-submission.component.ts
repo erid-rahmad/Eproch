@@ -27,6 +27,7 @@ export default class BiddingSubmissionEvent extends Vue {
   section: SubmissionPage = SubmissionPage.SUBMISSION;
   formType: string = null;
 
+  evaluationList: any[] = [];
   proposals: any[] = [];
   proposalName: string = null;
   selectedProposal: number = null;
@@ -45,7 +46,13 @@ export default class BiddingSubmissionEvent extends Vue {
 
   onSubmissionFormLoaded(data: any) {
     this.formType = data.formType;
+
+    // Get the proposal buttons based on the submission's form type.
     this.retrieveVendorScoringLines(data.biddingId, data.formType);
+  }
+
+  created() {
+    this.retrieveEvaluationList();
   }
 
   closeProposalPage() {
@@ -57,6 +64,17 @@ export default class BiddingSubmissionEvent extends Vue {
     this.proposalName = proposalNameMap.get(evaluationMethodLineName);
     this.selectedProposal = data;
     this.section = SubmissionPage.PROPOSAL;
+  }
+
+  printEvaluation(value: string) {
+    return this.evaluationList.find(item => item.value === value)?.name || value;
+  }
+
+  private retrieveEvaluationList() {
+    this.commonService(null)
+      .retrieveReferenceLists('evaluationList')
+      .then(res => this.evaluationList = res)
+      .catch(_err => console.warn('Failed getting the evaluation list'));
   }
 
   private retrieveVendorScoringLines(biddingId: number, formType: string) {

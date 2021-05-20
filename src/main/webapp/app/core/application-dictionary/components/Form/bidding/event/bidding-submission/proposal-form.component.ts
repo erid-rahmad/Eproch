@@ -1,6 +1,6 @@
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
-import { Component, Inject, Mixins, Vue } from "vue-property-decorator";
+import { Component, Inject, Mixins, Vue, Watch } from "vue-property-decorator";
 import { AccountStoreModule } from '@/shared/config/store/account-store';
 import Schema from "async-validator";
 
@@ -10,9 +10,9 @@ const baseApiProposalAdministration = 'api/m-proposal-administrations';
 const baseApiProposalTechnical = 'api/m-proposal-technicals';
 
 export const proposalNameMap: Map<string, string> = new Map([
-  ['A', 'administration'],
-  ['P', 'price'],
-  ['T', 'technical'],
+  ['A', 'Administration'],
+  ['P', 'Price'],
+  ['T', 'Technical'],
 ]);
 
 const ProposalFormProps = Vue.extend({
@@ -45,6 +45,13 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
 
   get isTechnical() {
     return this.data.evaluationMethodLineName === 'T';
+  }
+
+  @Watch('data')
+  onDataChanged(data: any) {
+    this.answers = [];
+    this.requirements.clear();
+    this.retrieveVendorScoringCriteria(data.id, data.evaluationMethodLineId);
   }
 
   created() {
@@ -190,12 +197,13 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
     }
 
     const baseApiUrl = this.isAdministration ? baseApiProposalAdministration : baseApiProposalTechnical
+    const evaluationName = proposalNameMap.get(this.data.evaluation);
     this.commonService(baseApiUrl + '/requirements')
       .create(data)
-      .then(res => this.$message.success(`${this.data.evaluation} proposal has been saved successfully`))
+      .then(res => this.$message.success(`${evaluationName} proposal has been saved successfully`))
       .catch(err => {
         console.error('Failed to save the proposal. %O', err);
-        this.$message.error(`Failed saving the ${this.data.evaluation} proposal`);
+        this.$message.error(`Failed saving the ${evaluationName} proposal`);
       })
       .finally(() => this.$emit('processing', false));
   }
