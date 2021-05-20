@@ -1,5 +1,6 @@
 <template>
-    <div class="app-container">
+    <div class="app-container card-view bidding-process">
+
 
         <div v-if="page===1">
             <el-row>
@@ -23,7 +24,7 @@
                          <el-table-column min-width="70" sortable prop="documentStatus" label="Bidding Status" />
                           <el-table-column min-width="60" sortable prop="join" label="Joined Vendor" />
                         <el-table-column align="center" min-width="30">
-   
+
                             <template slot-scope="row">
                                 <!-- <el-button size="mini" icon="el-icon-view" type="primary" @click="moreinfo()" /> -->
                                 <el-button size="mini"  type="primary" @click="moreinfo()" >Action</el-button>
@@ -34,7 +35,7 @@
             </el-row>
         </div>
         <div v-if="page===2">
-                      
+
         </div>
         <div v-if="page===3">
             <!-- <AddAnnouncementForm @back="back"></AddAnnouncementForm> -->
@@ -67,88 +68,36 @@
 </script>
 
 <style lang="scss">
-    .el-table__fixed,
-    .el-table__fixed-right {
-        box-shadow: none;
-    }
+.compact .bidding-process {
+    display: grid;
+    grid-template-columns: 100%;
+    grid-template-rows: 36px auto;
 
-    .main {
-        padding: 0px;
-
-        .button {
-            width: 100%;
+    .joined-vendor-dialog .el-table.vendor-list {
+        td {
+            height: 35px;
         }
     }
+}
 
-    .header {
-        .button {
-            margin-bottom: 5px;
-        }
-    }
+.el-table__fixed, .el-table__fixed-right{
+    box-shadow: none;
+}
 
-    .form-input {
+.main {
+    padding: 0px;
+
+    .button {
         width: 100%;
     }
+}
 
-    .steps-control-btn-group {
-        float: right;
-        padding: 0 24px;
-    }
+.toolbar {
+    padding: 4px 16px;
+}
 
-    .ProseMirror {
-        >*+* {
-            margin-top: 0.75em;
-        }
-
-        ul,
-        ol {
-            padding: 0 1rem;
-        }
-
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            line-height: 1.1;
-        }
-
-        code {
-            background-color: rgba(#616161, 0.1);
-            color: #616161;
-        }
-
-        pre {
-            background: #0D0D0D;
-            color: #FFF;
-            font-family: 'JetBrainsMono', monospace;
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-
-            code {
-                color: inherit;
-                padding: 0;
-                background: none;
-                font-size: 0.8rem;
-            }
-        }
-
-        img {
-            max-width: 100%;
-            height: auto;
-        }
-
-        blockquote {
-            padding-left: 1rem;
-            border-left: 2px solid rgba(#0D0D0D, 0.1);
-        }
-
-        hr {
-            border: none;
-            border-top: 2px solid rgba(#0D0D0D, 0.1);
-            margin: 2rem 0;
-        }
-    }
+.form-input {
+    width: 100%;
+}
 
 </style>

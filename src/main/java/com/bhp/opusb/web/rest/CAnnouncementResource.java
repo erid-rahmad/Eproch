@@ -1,11 +1,13 @@
 package com.bhp.opusb.web.rest;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
 import javax.validation.Valid;
 
 import com.bhp.opusb.service.CAnnouncementQueryService;
@@ -89,7 +91,7 @@ public class CAnnouncementResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/c-announcements/publish/{id}")
-    public ResponseEntity<CAnnouncementDTO> publishAnnouncement(@PathVariable Long id, @RequestBody CAnnouncementPublishDTO cAnnouncementPublishDTO) throws URISyntaxException {
+    public ResponseEntity<CAnnouncementDTO> publishAnnouncement(@PathVariable Long id, @RequestBody CAnnouncementPublishDTO cAnnouncementPublishDTO) throws URISyntaxException, MessagingException, IOException {
         log.debug("REST request to publish CAnnouncement : {}", cAnnouncementPublishDTO);
         if (id == null) {
             throw new BadRequestAlertException("Cannot publish announcement without its ID", ENTITY_NAME, "noid");

@@ -27,12 +27,14 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
   private vendorJoin: any = {};
   private vendorNotJoin: any = {};
   private vendorNoResponse: any = {};
+  private vendorDownload: any = {};
 
   mounted() {
     console.log("this more info", this.moreinfo);
     this.biddingInvitations();
     this.biddingInvitationsjoin();
     this.biddingInvitationsNoResponse();
+    this.biddingInvitationsDownload();
   }
 
   private biddingInvitationsjoin() {
@@ -40,7 +42,7 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `announcementId.equals=${this.moreinfo.id}`,
-          `invitationStatus.equals=Terdaftar`
+          `invitationStatus.equals=R`
         ]),
         paginationQuery: {
           page: 0,
@@ -59,7 +61,7 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `announcementId.equals=${this.moreinfo.id}`,
-          `invitationStatus.equals=Tidak Berminat`
+          `invitationStatus.equals=N`
         ]),
         paginationQuery: {
           page: 0,
@@ -89,6 +91,25 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
       .then(res => {
         this.vendorNoResponse = res.data;
         console.log("vendorjoin",this.vendorNoResponse);
+      });
+  }
+
+  private biddingInvitationsDownload() {
+    this.commonService('/api/m-bidding-invitations')
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          `announcementId.equals=${this.moreinfo.id}`,
+          `invitationStatus.equals=D`
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        this.vendorDownload = res.data;
+        console.log("vendordownload",this.vendorDownload);
       });
   }
 

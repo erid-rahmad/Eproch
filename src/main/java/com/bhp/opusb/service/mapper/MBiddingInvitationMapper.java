@@ -16,6 +16,7 @@ public interface MBiddingInvitationMapper extends EntityMapper<MBiddingInvitatio
     @Mapping(source = "announcement.id", target = "announcementId")
     @Mapping(source = "announcement.description", target = "announcementDescription")
     @Mapping(source = "announcement.publishDate", target = "announcementPublishDate")
+    @Mapping(source = "announcement.biddingSchedule.endDate", target = "announcementEndDate")
     @Mapping(source = "bidding.id", target = "biddingId")
     @Mapping(source = "bidding.name", target = "biddingName")
     @Mapping(source = "vendor.id", target = "vendorId")
