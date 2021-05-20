@@ -595,7 +595,7 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
   /**
    * Invoked before proceeding to the next step.
    */
-  save() {
+  save(changeStep: boolean) {
     (this.$refs.biddingInformation as ElForm).validate((passed, errors) => {
       if (passed) {
         let service = this.commonService('/api/m-biddings/save-form');
@@ -607,8 +607,10 @@ export default class BiddingInformation extends Mixins(AccessLevelMixin, Bidding
               this.$set(this.bidding, 'documentNo', res.documentNo);
             }
 
+            this.$message.success('Bidding Information has been saved successfully');
             this.$emit('saved', {
-              data: res
+              data: res,
+              changeStep
             });
           })
           .catch(err => {

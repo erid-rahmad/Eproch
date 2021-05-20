@@ -11,7 +11,9 @@ const VendorInvitationProp = Vue.extend({
     editMode: Boolean,
     data: {
       type: Object,
-      default: () => {}
+      default: () => {
+        return {};
+      }
     }
   }
 })
@@ -71,7 +73,7 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   vendorSelection: string;
 
   get readOnly() {
-    return this.bidding.biddingStatus === 'In Progress';
+    return this.bidding.biddingStatus === 'P';
   }
 
   @Watch('bidding', { deep: true })
@@ -191,9 +193,9 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
     const nodes = (<any>this.$refs.businessCategories).getCheckedNodes();
     const classifications = new Set<number>();
     const vendorInvitations = this.bidding.vendorInvitations || [];
-    let vendorSuggestionCriteria = [
+    let vendorSuggestionCriteria: Set<string> = new Set(this.updateCriteria[
       'active.equals=true'
-    ];
+    ]);
 
     nodes.forEach(element => {
       const path = element.path;
@@ -217,20 +219,20 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
         if (!lineExist) {
           vendorInvitations.push(vendorInvitation);
 
-          if (this.vendorSelection === 'OPN') {
+          if (this.vendorSelection === 'IVT') {
+            vendorSuggestionCriteria.add(`subBusinessCategoryId.in=${path[2]}`);
+          } else {
             if (! classifications.has(path[0])) {
               classifications.add(path[0]);
-              vendorSuggestionCriteria.push(`businessClassificationId.in=${path[0]}`);
+              vendorSuggestionCriteria.add(`businessClassificationId.in=${path[0]}`);
             }
-          } else if (this.vendorSelection === 'IVT') {
-            vendorSuggestionCriteria.push(`subBusinessCategoryId.in=${path[2]}`);
           }
         }
       }
     });
 
     this.bidding = {...this.bidding, ...{ vendorInvitations }};
-    this.onVendorInvitationChanged(vendorSuggestionCriteria);
+    this.onVendorInvitationChanged(Array.from(vendorSuggestionCriteria));
     this.vendorInvitationFormVisible = false;
   }
 
@@ -252,11 +254,15 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   }
 
   removeBusinessCategory(index) {
-    this.bidding.vendorInvitations.splice(index, 1);
+    const removedItem = this.bidding.vendorInvitations.splice(index, 1);
+    this.bidding.removedVendorInvitations.push(removedItem[0]);
+    console.log('removed suggestion:', this.bidding.removedVendorInvitations);
   }
 
   removeVendorSuggestion(index) {
-    this.bidding.vendorSuggestions.splice(index, 1);
+    const removedItem = this.bidding.vendorSuggestions.splice(index, 1);
+    this.bidding.removedVendorSuggestions.push(removedItem[0]);
+    console.log('removed suggestion:', this.bidding.removedVendorSuggestions);
   }
 
   private retrieveBusinessCategories() {
@@ -395,10 +401,9 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   }
 
   getVendor(businessCategory) {
-    const classifications = new Set<number>();
-    let vendorSuggestionCriteria = [
+    let vendorSuggestionCriteria = this.updateCriteria([
       'active.equals=true'
-    ];
+    ]);
 
     this.retrieveVendorsByCriteria(vendorSuggestionCriteria);
     this.vendorSuggestion.vendor = "";
@@ -473,12 +478,14 @@ export default class VendorInvitation extends Mixins(AccessLevelMixin, VendorInv
   /**
    * Invoked before proceeding to the next step.
    */
-  save() {
+  save(changeStep: boolean) {
     this.commonService('/api/m-biddings/save-form')
       .update(this.bidding)
       .then(res => {
+        this.$message.success('Vendor Invitation has been saved successfully');
         this.$emit('saved', {
-          data: res
+          data: res,
+          changeStep
         });
       })
       .catch(err => {

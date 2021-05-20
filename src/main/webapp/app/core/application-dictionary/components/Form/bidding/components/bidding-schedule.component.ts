@@ -236,12 +236,14 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   /**
    * Invoked before proceeding to the next step.
    */
-  save() {
+  save(changeStep: boolean) {
     this.commonService('/api/m-biddings/save-form')
       .update(this.bidding)
       .then(res => {
+        this.$message.success('Bidding Schedule has been saved successfully');
         this.$emit('saved', {
-          data: res
+          data: res,
+          changeStep
         });
       })
       .catch(err => {
