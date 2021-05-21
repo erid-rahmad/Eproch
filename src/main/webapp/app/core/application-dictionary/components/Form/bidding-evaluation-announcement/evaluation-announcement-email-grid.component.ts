@@ -34,7 +34,6 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
   private formData :any={};
   private action: string = "/api/c-attachments/upload"
   private accept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .csv, .ppt, .pptx, .pdf";
-  // hasAttachment =false;
   private file: any = {};
   attachmentFormVisible = false;
 
@@ -42,6 +41,8 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
   loading: boolean = false;
   private emailList:any={};
   private selectedRecipients:any={};
+  private schedule:any={};
+
 
   index: boolean = true;
   pages: number = 1;
@@ -55,6 +56,7 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
     console.log("this row",this.pickRow);
     this.retrieveBiddingEvalResult();
     this.retrieveapiAnnouncementResults(this.pickRow.id);
+    this.retrieveBiddingSchedule()
   }
 
   private retrieveBiddingEvalResult() {
@@ -62,7 +64,6 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
       .retrieve({
         criteriaQuery: this.updateCriteria([
           // `biddingId.equals=${this.pickRow.id}`
-
         ]),
         paginationQuery: {
           page: 0,
@@ -73,15 +74,39 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
       .then(res => {
         let biddingEvent:any=[];
         res.data.forEach(result => {
-          console.log("this result before",result)
+          // console.log("this result before",result)
           if (result.biddingId===this.pickRow.id){
-            console.log(result.biddingId,this.pickRow.id)
+            // console.log(result.biddingId,this.pickRow.id)
             biddingEvent.push(result);
           }
         });
         this.biddingEvalResult = biddingEvent;
-        console.log("this biddingEvent",biddingEvent)
-        console.log("this biddingEvalResult",this.biddingEvalResult)
+        // console.log("this biddingEvent",biddingEvent)
+        // console.log("this biddingEvalResult",this.biddingEvalResult)
+      });
+  }
+
+  private retrieveBiddingSchedule() {
+    const a : String="RS";
+    this.commonService("api/m-bidding-schedules")
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          `biddingId.equals=${this.pickRow.id}`,
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        res.data.forEach(result => {
+          console.log("this result",result)
+          if (result.formType==="RS"){
+            this.schedule=result;
+          }
+        });
+        console.log("this schedule ",this.schedule);
       });
   }
 
@@ -90,13 +115,7 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
   }
 
   retrieveEmailList() {
-    // if (!this.vendorSuggestions.length) {
-    //   return;
-    // }
-
     const vendorQuery = this.biddingEvalResult.map(vendor => `cVendorId.in=${vendor.vendorId}`);
-
-    // this.loadingEmailList = true;
     this.commonService("api/ad-users")
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -109,7 +128,6 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
         this.emailList = res.data;
       })
       .catch(err => this.$message.error('Failed to get the email recipients'))
-      // .finally(() => this.loadingEmailList = false);
   }
 
   private retrieveapiAnnouncementResults(biddingId: number) {
@@ -118,7 +136,6 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `biddingId.equals=${biddingId}`,
-
         ])
       })
       .then(res => {
@@ -128,7 +145,6 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
         }
       })
       .catch(err => this.$message.error('Failed to get bidding announcement'))
-      // .finally(() => this.loading = false);
   }
 
   //upload
@@ -234,7 +250,7 @@ export default class EventAnnouncement extends mixins(Vue2Filters.mixin, AlertMi
     console.log()
     this.formData.adOrganizationId=1;
     this.formData.biddingId=this.pickRow.id;
-    this.formData.biddingScheduleId=1960402;
+    this.formData.biddingScheduleId=this.schedule.id;
     console.log(this.formData)
 
     this.loading = false

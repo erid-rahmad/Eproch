@@ -1,5 +1,7 @@
 <template>
-    <div class="app-container">
+    <div class="app-container card-view bidding-process">
+        <div></div>
+        <div></div>
         <el-row v-if="index" class="main" ref="tableWrapper">
             <el-col :span="24">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
@@ -26,9 +28,9 @@
                                 </el-table-column>
                                 <el-table-column prop="biddingStatus" label="Bidding Status" sortable min-width="210">
                                 </el-table-column>
-                                <el-table-column prop="6" label="Action" sortable min-width="180">
+                                <el-table-column  label="Action" sortable min-width="180">
                                     <template slot-scope="{ row }">
-                                        <el-button class="btn-attachment" size="mini" type="primary" @click="downloadAttachment(row)">
+                                        <el-button class="btn-attachment" size="mini" type="primary" @click="view(row)">
                                             Action
                                         </el-button>
                                     </template>
@@ -39,7 +41,6 @@
                 </el-tabs>
             </el-col>
         </el-row>
-
         <el-dialog title="Bidding Schedule" :visible.sync="ScheduleListVisible" width="90%">
             <el-table border :data="BiddingSchedule" size="mini">
                 <el-table-column width="60" label="No">
@@ -59,10 +60,8 @@
                 </el-table-column>
             </el-table>
         </el-dialog>
-
         <el-row v-if="!index" class="main">
-            <announcementDetail @back="back"></announcementDetail>
-
+            <announcementDetail @back="back" :pickRow="pickRow" ></announcementDetail>
         </el-row>
 
     </div>

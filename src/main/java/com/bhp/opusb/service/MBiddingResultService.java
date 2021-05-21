@@ -82,8 +82,6 @@ public class MBiddingResultService {
                 UploadDir+"/"+mBiddingResultPublish.getcAnnouncementResultDTO().getAttachmentName());
         }
 
-
-
         return mBiddingResultPublish;
     }
 
@@ -109,8 +107,19 @@ public class MBiddingResultService {
     @Transactional(readOnly = true)
     public Optional<MBiddingResultDTO> findOne(Long id) {
         log.debug("Request to get MBiddingResult : {}", id);
-        return mBiddingResultRepository.findById(id)
-            .map(mBiddingResultMapper::toDto);
+        Optional<MBiddingResult> mBiddingResult = mBiddingResultRepository.findById(id);
+        log.info("this bidding schedule {}",mBiddingResult.get().getBiddingEvalResult().getBiddingSubmission().getBiddingSchedule());
+        mBiddingResult.get().getBiddingEvalResult().getBiddingSubmission().getBiddingSchedule();
+
+        String email= mBiddingResult.get().getAnnouncementResult().getDescription();
+        email=email.replace("#vendorName",mBiddingResult.get().getBiddingEvalResult().getBiddingSubmission().getVendor().getName());
+        email=email.replace("#status",mBiddingResult.get().getBiddingEvalResult().getStatus());
+        email=email.replace("#email",mBiddingResult.get().getVendor().getEmail());
+        Optional<MBiddingResultDTO> mBiddingResultDTO=mBiddingResult.map(mBiddingResultMapper::toDto);
+        mBiddingResultDTO.get().setAnnouncementResultName(email);
+        mBiddingResultDTO.get().setStartDate(mBiddingResult.get().getAnnouncementResult().getBiddingSchedule().getStartDate());
+        mBiddingResultDTO.get().setEndDate(mBiddingResult.get().getAnnouncementResult().getBiddingSchedule().getStartDate());
+        return mBiddingResultDTO;
     }
 
     /**

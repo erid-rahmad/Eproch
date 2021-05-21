@@ -103,7 +103,6 @@
                 </el-col>
             </el-row>
             <span slot="footer" class="dialog-footer">
-<!--        <el-button @click="downloadAttachment">Download</el-button>-->
         <el-button v-if="accbutton" type="primary" @click="minatAction">Accept Invitation</el-button>
       </span>
         </el-dialog>
