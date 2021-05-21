@@ -4,6 +4,7 @@ import HtmlEditor from '@/shared/components/HtmlEditor/index.vue';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
 import { ElForm } from 'element-ui/types/form';
 import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
+import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
 
 const baseApiBidding = 'api/m-biddings'
 const baseApiAnnouncement = 'api/c-announcements';
@@ -15,7 +16,7 @@ const baseApiUser = 'api/ad-users'
     HtmlEditor
   }
 })
-export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
+export default class AnnouncementForm extends Mixins(ScheduleEventMixin,AccessLevelMixin) {
 
   @Inject('accountService')
   private accountService: () => AccountService;
@@ -28,6 +29,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
   attachmentFormVisible = false;
   emailPreviewVisible = false;
   recipientListVisible = false;
+  private schedule:any={};
 
   private file: any = {};
 
@@ -40,6 +42,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
   private limit: number = 1;
   private vendorSuggestions: any[] = [];
   private dataForAnnouncment: any = {};
+
 
   private selectedRecipients = [];
 
@@ -80,6 +83,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
     this.$set(this.formData, 'biddingScheduleId', mainForm.id);
     this.retrieveVendorSuggestions(mainForm.biddingId);
     this.retrieveAnnouncement(mainForm.biddingId, mainForm.id);
+    this.biddingSchedules();
   }
 
   created() {
@@ -92,8 +96,8 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
 
     console.log(this.dataForAnnouncment.emaillist);
     console.log(this.dataForAnnouncment.vendorlist);
-  }
 
+  }
   private retrieveBiddings() {
     this.commonService(baseApiBidding)
       .retrieve({
@@ -147,6 +151,33 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin) {
         this.$message.error('Failed to get the vendor suggestions');
       })
       .finally(() => this.loadingVendors = false);
+  }
+
+
+
+
+  biddingSchedules() {
+    const a : String="RS";
+    this.commonService("api/m-bidding-schedules")
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          `biddingId.equals=${this.mainForm.biddingId}`,
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 10000,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        res.data.forEach(result => {
+          console.log("this result",result)
+          if (result.formType==="RS"){
+            this.schedule=result;
+          }
+        });
+        this.mainForm.biddingScheduleId=this.schedule.id;
+      });
   }
 
   retrieveEmailList() {
