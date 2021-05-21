@@ -25,6 +25,8 @@ const PriceProposalProp = Vue.extend({
       }
     },
 
+    disabled: Boolean,
+
     schedule: {
       type: Object,
       default: () => {
@@ -106,10 +108,6 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
 
   get isVendor() {
     return AccountStoreModule.isVendor;
-  }
-
-  get readOnly() {
-    return false;
   }
 
   get timeRemaining() {
@@ -331,6 +329,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
           const item = this.lineCache.get(line.biddingLineId);
           item.deliveryDate = line.deliveryDate;
           item.proposedPrice = line.proposedPrice;
+          item.totalPriceSubmission = item.quantity * line.proposedPrice;
         })
       })
   }

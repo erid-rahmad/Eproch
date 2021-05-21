@@ -97,6 +97,10 @@ export default class RegisteredBiddingList extends Mixins(AccessLevelMixin) {
     return `proposal-form`;
   }
 
+  get submitted() {
+    return this.selectedRow.documentStatus === 'SMT';
+  }
+
   @Watch('page')
   onPageChange(page: number) {
     this.loadPage(page);

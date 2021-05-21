@@ -3,6 +3,7 @@ import { Component, Inject, Vue } from 'vue-property-decorator';
 import PriceProposal from './price-proposal.vue';
 import ProposalForm from './proposal-form.vue';
 import SubmissionForm from './submission-form.vue';
+import { AccountStoreModule } from '@/shared/config/store/account-store';
 
 const baseApiVendorScoringLine = 'api/m-vendor-scoring-lines';
 
@@ -31,7 +32,23 @@ export default class BiddingSubmissionEvent extends Vue {
   proposals: any[] = [];
   proposalName: string = null;
   selectedProposal: number = null;
-  submissionId: number = null;
+  submission: any = {};
+
+  get isVendor() {
+    return AccountStoreModule.isVendor;
+  }
+
+  get submitted() {
+    return this.submission.documentStatus === 'SMT';
+  }
+
+  get cannotSave() {
+    if (this.isVendor) {
+      return this.submitted;
+    }
+
+    return this.proposalName === 'P' && this.submitted;
+  }
 
   get displayedProposals() {
     if (!this.proposalName) {
@@ -62,12 +79,13 @@ export default class BiddingSubmissionEvent extends Vue {
     this.retrieveVendorScoringLines(data.biddingId, data.formType);
   }
 
-  onVendorChanged(submissionId: number) {
-    this.submissionId = submissionId;
-  }
-
   created() {
-    this.submissionId = parseInt(this.$route.query.submissionId as string);
+    const submissionId = (this.$route.query.submissionId as string);
+    if (submissionId) {
+      this.submission = {
+        id: submissionId
+      };
+    }
     this.retrieveEvaluationList();
   }
 
@@ -109,5 +127,9 @@ export default class BiddingSubmissionEvent extends Vue {
 
   saveProposal() {
     (<any>this.$refs.proposalForm).save();
+  }
+
+  submitProposals() {
+    (<any>this.$refs.submissionForm).submit();
   }
 }

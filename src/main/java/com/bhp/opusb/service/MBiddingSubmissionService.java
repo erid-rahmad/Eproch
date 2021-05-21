@@ -46,6 +46,18 @@ public class MBiddingSubmissionService {
     }
 
     /**
+     * TODO Use a generic method to update the document status for every entities.
+     * TODO Use the workflow engine for maintaining the flow state.
+     */
+    public void updateDocumentStatus(MBiddingSubmissionDTO mBiddingSubmissionDTO) {
+        log.debug("Request to update CVendor's document status : {}", mBiddingSubmissionDTO);
+        MBiddingSubmission mBiddingSubmission = mBiddingSubmissionMapper.toEntity(mBiddingSubmissionDTO);
+        String action = mBiddingSubmission.getDocumentAction();
+
+        mBiddingSubmissionRepository.updateDocumentStatus(mBiddingSubmission.getId(), action, action, false, false);
+    }
+
+    /**
      * Get all the mBiddingSubmissions.
      *
      * @param pageable the pagination information.

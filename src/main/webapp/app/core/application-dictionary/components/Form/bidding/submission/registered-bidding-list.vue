@@ -23,6 +23,7 @@
       
       <el-button
         v-if="submissionPage && isVendor"
+        :disabled="submitted"
         size="mini"
         type="primary"
         @click="submitProposals"
@@ -31,7 +32,7 @@
       </el-button>
       
       <el-button
-        v-if="!mainPage && !submissionPage"
+        v-if="!mainPage && !submissionPage && !submitted"
         size="mini"
         type="primary"
         @click="saveProposal"
@@ -201,6 +202,7 @@
         v-else-if="submissionPage"
         ref="submissionForm"
         :schedule-id="selectedRow.biddingScheduleId"
+        :submission="selectedRow"
         @data-loaded="onSubmissionFormLoaded"
       ></submission-form>
 
@@ -209,6 +211,7 @@
         ref="proposalForm"
         :is="proposalComponent"
         :data="selectedProposal"
+        :disabled="submitted"
         :schedule="schedule"
         :submission-id="selectedRow.id"
       ></component>

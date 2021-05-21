@@ -90,6 +90,25 @@ public class MBiddingSubmissionResource {
     }
 
     /**
+     * TODO Make a single endpoint for document status update.
+     * {@code PUT  /m-bidding-submissions/update-doc-status} : Apply the document action to an existing submission.
+     *
+     * @param mBiddingSubmissionDTO the mBiddingSubmissionDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)},
+     * or with status {@code 400 (Bad Request)} if the mBiddingSubmissionDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the mBiddingSubmissionDTO couldn't be updated.
+     */
+    @PutMapping("/m-bidding-submissions/update-doc-status")
+    @ResponseStatus(HttpStatus.OK)
+    public void applyDocumentAction(@RequestBody MBiddingSubmissionDTO mBiddingSubmissionDTO) {
+        log.debug("REST request to apply MBiddingSubmissionDTO's document action : {}", mBiddingSubmissionDTO);
+        if (mBiddingSubmissionDTO.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        mBiddingSubmissionService.updateDocumentStatus(mBiddingSubmissionDTO);
+    }
+
+    /**
      * {@code GET  /m-bidding-submissions} : get all the mBiddingSubmissions.
      *
      * @param pageable the pagination information.

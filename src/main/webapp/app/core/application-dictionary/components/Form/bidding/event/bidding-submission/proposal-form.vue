@@ -84,6 +84,7 @@
                     <template slot-scope="{ row }">
                       <el-input
                         v-model="row.answer"
+                        :disabled="disabled"
                         :readonly="!isVendor"
                         size="mini"
                       ></el-input>

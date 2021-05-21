@@ -18,6 +18,7 @@ export const proposalNameMap: Map<string, string> = new Map([
 const ProposalFormProps = Vue.extend({
   props: {
     data: Object,
+    disabled: Boolean,
     submissionId: Number
   }
 });
@@ -197,7 +198,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
     }
 
     const baseApiUrl = this.isAdministration ? baseApiProposalAdministration : baseApiProposalTechnical
-    const evaluationName = proposalNameMap.get(this.data.evaluation);
+    const evaluationName = proposalNameMap.get(this.data.evaluationMethodLineName);
     this.commonService(baseApiUrl + '/requirements')
       .create(data)
       .then(res => this.$message.success(`${evaluationName} proposal has been saved successfully`))

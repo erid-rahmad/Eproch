@@ -3,7 +3,6 @@ import DynamicWindowService from '../components/DynamicWindow/dynamic-window.ser
 import AccessLevelMixin from './AccessLevelMixin';
 
 const baseApiSchedule = 'api/m-bidding-schedules';
-const baseApiDateSet = 'api/m-prequalification-date-sets';
 
 const ScheduleEventMixinProps = Vue.extend({
   props: {

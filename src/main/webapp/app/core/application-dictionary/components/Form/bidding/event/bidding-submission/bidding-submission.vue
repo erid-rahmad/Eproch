@@ -12,7 +12,17 @@
       </el-button>
 
       <el-button
-        v-if="!submissionPage"
+        v-if="submissionPage && isVendor"
+        :disabled="submitted"
+        size="mini"
+        type="primary"
+        @click="submitProposals"
+      >
+        <svg-icon name="guide"></svg-icon> Submit
+      </el-button>
+      
+      <el-button
+        v-if="!submissionPage && !cannotSave"
         size="mini"
         type="primary"
         @click="saveProposal"
@@ -28,7 +38,7 @@
       <el-button
         v-for="proposal in displayedProposals"
         :key="proposal.id"
-        :disabled="!submissionId"
+        :disabled="!submission.id"
         size="mini"
         type="primary"
         @click="openProposalForm(proposal)"
@@ -40,8 +50,9 @@
     <div class="card">
       <submission-form
         v-if="submissionPage"
+        ref="submissionForm"
+        :submission.sync="submission"
         @data-loaded="onSubmissionFormLoaded"
-        @vendor-changed="onVendorChanged"
       ></submission-form>
 
       <component
@@ -49,8 +60,9 @@
         ref="proposalForm"
         :is="proposalComponent"
         :data="selectedProposal"
+        :disabled="submitted"
         :schedule="schedule"
-        :submission-id="submissionId"
+        :submission-id="submission.id"
       ></component>
     </div>
   </div>
