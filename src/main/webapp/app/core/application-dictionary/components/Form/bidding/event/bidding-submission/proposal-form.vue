@@ -29,12 +29,22 @@
           >
             <el-col :span="24">
               <el-row>
-                <el-col :span="8">
+                <el-col
+                  :xs="24"
+                  :sm="24"
+                  :md="12"
+                  :xl="8"
+                >
                   <el-form-item label="Sub Criteria">
                     {{ subCriteria.biddingSubCriteriaName }}
                   </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col
+                  :xs="24"
+                  :sm="24"
+                  :md="12"
+                  :xl="8"
+                >
                   <el-button
                     size="mini"
                     type="primary"
@@ -79,7 +89,7 @@
 
                   <el-table-column
                     label="Answer"
-                    width="200"
+                    width="320"
                   >
                     <template slot-scope="{ row }">
                       <el-input

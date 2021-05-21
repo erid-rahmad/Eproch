@@ -23,6 +23,7 @@
       
       <el-button
         v-if="!submissionPage && !cannotSave"
+        :loading="loading"
         size="mini"
         type="primary"
         @click="saveProposal"
@@ -61,6 +62,7 @@
         :is="proposalComponent"
         :data="selectedProposal"
         :disabled="submitted"
+        :loading.sync="loading"
         :schedule="schedule"
         :submission-id="submission.id"
       ></component>

@@ -4,6 +4,8 @@ import com.bhp.opusb.domain.MBiddingSubmission;
 import com.bhp.opusb.repository.MBiddingSubmissionRepository;
 import com.bhp.opusb.service.dto.MBiddingSubmissionDTO;
 import com.bhp.opusb.service.mapper.MBiddingSubmissionMapper;
+import com.bhp.opusb.util.DocumentUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 /**
@@ -53,6 +56,12 @@ public class MBiddingSubmissionService {
         log.debug("Request to update CVendor's document status : {}", mBiddingSubmissionDTO);
         MBiddingSubmission mBiddingSubmission = mBiddingSubmissionMapper.toEntity(mBiddingSubmissionDTO);
         String action = mBiddingSubmission.getDocumentAction();
+
+        // TODO The following process is less-efficient. Make this more efficient.
+        if (mBiddingSubmission.getDateSubmit() == null && DocumentUtil.isSubmit(action)) {
+            mBiddingSubmission.setDateSubmit(ZonedDateTime.now());
+            mBiddingSubmissionRepository.save(mBiddingSubmission);
+        }
 
         mBiddingSubmissionRepository.updateDocumentStatus(mBiddingSubmission.getId(), action, action, false, false);
     }

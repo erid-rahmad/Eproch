@@ -19,6 +19,7 @@ const ProposalFormProps = Vue.extend({
   props: {
     data: Object,
     disabled: Boolean,
+    loading: Boolean,
     submissionId: Number
   }
 });
@@ -32,7 +33,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
   evaluationMethodCriteria: any[] = [];
   requirements: Map<number, string> = new Map();
 
-  answers: any[] = [];
+  answers: Map<number, any> = new Map();
 
   validationSchema: any = {};
 
@@ -50,7 +51,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
 
   @Watch('data')
   onDataChanged(data: any) {
-    this.answers = [];
+    this.answers.clear();
     this.requirements.clear();
     this.retrieveVendorScoringCriteria(data.id, data.evaluationMethodLineId);
   }
@@ -121,7 +122,7 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
                 subCriteriaLine.documentEvaluation = false;
 
                 // List of answers will be submitted later.
-                this.answers.push(subCriteriaLine);
+                this.answers.set(subCriteriaLine.id, subCriteriaLine);
               });
             });
           });
@@ -149,16 +150,18 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
       })
       .then(res => {
         for (const proposal of res.data) {
-          const item = this.answers.find(ans => ans.id === proposal.biddingSubCriteriaLineId);
+          const item = this.answers.get(proposal.biddingSubCriteriaLineId);
           item.answer = proposal.answer;
+          item.documentEvaluation = proposal.documentEvaluation;
         }
       })
   }
 
   save() {
-    this.$emit('processing', true);
-    console.log('Saving proposal. data: %O', this.answers);
-    const data: any[] = this.answers.map(answer => {
+    this.$emit('update:loading', true);
+    const data: any[] = [];
+    
+    this.answers.forEach(answer => {
       const {
         id,
         name,
@@ -166,21 +169,20 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
         adOrganizationName,
         biddingSubCriteriaId,
         biddingSubCriteriaName,
+        uid,
         ...proposal
       } = answer;
 
       proposal.biddingSubmissionId = this.submissionId;
       proposal.biddingSubCriteriaLineId = answer.id;
-
-      return proposal;
-    });
+      data.push(proposal);
+    })
 
     // Validate each record.
     const validator = new Schema(this.validationSchema);
     let valid = true;
 
     for (const proposal of data) {
-
       validator.validate(proposal, (errors: any) => {
         if (errors) {
           valid = false;
@@ -201,11 +203,11 @@ export default class ProposalForm extends Mixins(AccessLevelMixin, ProposalFormP
     const evaluationName = proposalNameMap.get(this.data.evaluationMethodLineName);
     this.commonService(baseApiUrl + '/requirements')
       .create(data)
-      .then(res => this.$message.success(`${evaluationName} proposal has been saved successfully`))
+      .then(_res => this.$message.success(`${evaluationName} proposal has been saved successfully`))
       .catch(err => {
         console.error('Failed to save the proposal. %O', err);
-        this.$message.error(`Failed saving the ${evaluationName} proposal`);
+        this.$message.error(`Failed to save the ${evaluationName} proposal`);
       })
-      .finally(() => this.$emit('processing', false));
+      .finally(() => this.$emit('update:loading', false));
   }
 }

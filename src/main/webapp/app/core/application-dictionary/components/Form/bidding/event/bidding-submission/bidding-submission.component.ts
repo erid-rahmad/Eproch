@@ -26,6 +26,7 @@ export default class BiddingSubmissionEvent extends Vue {
 
   section: SubmissionPage = SubmissionPage.SUBMISSION;
   formType: string = null;
+  loading: boolean = false;
 
   schedule: any = {};
   evaluationList: any[] = [];
