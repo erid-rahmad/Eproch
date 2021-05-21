@@ -35,6 +35,8 @@ public class MPreBidMeetingParticipantCriteria implements Serializable, Criteria
 
     private LongFilter adOrganizationId;
 
+    private LongFilter preBidMeetingId;
+
     private LongFilter vendorId;
 
     public MPreBidMeetingParticipantCriteria() {
@@ -47,6 +49,7 @@ public class MPreBidMeetingParticipantCriteria implements Serializable, Criteria
         this.uid = other.uid == null ? null : other.uid.copy();
         this.active = other.active == null ? null : other.active.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
+        this.preBidMeetingId = other.preBidMeetingId == null ? null : other.preBidMeetingId.copy();
         this.vendorId = other.vendorId == null ? null : other.vendorId.copy();
     }
 
@@ -103,6 +106,14 @@ public class MPreBidMeetingParticipantCriteria implements Serializable, Criteria
         this.adOrganizationId = adOrganizationId;
     }
 
+    public LongFilter getPreBidMeetingId() {
+        return preBidMeetingId;
+    }
+
+    public void setPreBidMeetingId(LongFilter preBidMeetingId) {
+        this.preBidMeetingId = preBidMeetingId;
+    }
+
     public LongFilter getVendorId() {
         return vendorId;
     }
@@ -128,6 +139,7 @@ public class MPreBidMeetingParticipantCriteria implements Serializable, Criteria
             Objects.equals(uid, that.uid) &&
             Objects.equals(active, that.active) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
+            Objects.equals(preBidMeetingId, that.preBidMeetingId) &&
             Objects.equals(vendorId, that.vendorId);
     }
 
@@ -140,6 +152,7 @@ public class MPreBidMeetingParticipantCriteria implements Serializable, Criteria
         uid,
         active,
         adOrganizationId,
+        preBidMeetingId,
         vendorId
         );
     }
@@ -153,6 +166,7 @@ public class MPreBidMeetingParticipantCriteria implements Serializable, Criteria
                 (uid != null ? "uid=" + uid + ", " : "") +
                 (active != null ? "active=" + active + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
+                (preBidMeetingId != null ? "preBidMeetingId=" + preBidMeetingId + ", " : "") +
                 (vendorId != null ? "vendorId=" + vendorId + ", " : "") +
             "}";
     }

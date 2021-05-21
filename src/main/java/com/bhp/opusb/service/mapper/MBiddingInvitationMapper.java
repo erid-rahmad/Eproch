@@ -1,10 +1,11 @@
 package com.bhp.opusb.service.mapper;
 
 
-import com.bhp.opusb.domain.*;
+import com.bhp.opusb.domain.MBiddingInvitation;
 import com.bhp.opusb.service.dto.MBiddingInvitationDTO;
 
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 /**
  * Mapper for the entity {@link MBiddingInvitation} and its DTO {@link MBiddingInvitationDTO}.
@@ -20,7 +21,9 @@ public interface MBiddingInvitationMapper extends EntityMapper<MBiddingInvitatio
     @Mapping(source = "bidding.id", target = "biddingId")
     @Mapping(source = "bidding.name", target = "biddingName")
     @Mapping(source = "vendor.id", target = "vendorId")
+    @Mapping(source = "vendor.code", target = "vendorCode")
     @Mapping(source = "vendor.name", target = "vendorName")
+    @Mapping(source = "vendor.type", target = "vendorType")
     MBiddingInvitationDTO toDto(MBiddingInvitation mBiddingInvitation);
 
     @Mapping(source = "adOrganizationId", target = "adOrganization")

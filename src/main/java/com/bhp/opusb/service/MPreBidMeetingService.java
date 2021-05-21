@@ -3,6 +3,7 @@ package com.bhp.opusb.service;
 import com.bhp.opusb.domain.MPreBidMeeting;
 import com.bhp.opusb.repository.MPreBidMeetingRepository;
 import com.bhp.opusb.service.dto.MPreBidMeetingDTO;
+import com.bhp.opusb.service.dto.MPreBidMeetingVM;
 import com.bhp.opusb.service.mapper.MPreBidMeetingMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,11 +24,15 @@ public class MPreBidMeetingService {
 
     private final Logger log = LoggerFactory.getLogger(MPreBidMeetingService.class);
 
+    private final MPreBidMeetingParticipantService mPreBidMeetingParticipantService;
+
     private final MPreBidMeetingRepository mPreBidMeetingRepository;
 
     private final MPreBidMeetingMapper mPreBidMeetingMapper;
 
-    public MPreBidMeetingService(MPreBidMeetingRepository mPreBidMeetingRepository, MPreBidMeetingMapper mPreBidMeetingMapper) {
+    public MPreBidMeetingService(MPreBidMeetingParticipantService mPreBidMeetingParticipantService,
+            MPreBidMeetingRepository mPreBidMeetingRepository, MPreBidMeetingMapper mPreBidMeetingMapper) {
+        this.mPreBidMeetingParticipantService = mPreBidMeetingParticipantService;
         this.mPreBidMeetingRepository = mPreBidMeetingRepository;
         this.mPreBidMeetingMapper = mPreBidMeetingMapper;
     }
@@ -43,6 +48,19 @@ public class MPreBidMeetingService {
         MPreBidMeeting mPreBidMeeting = mPreBidMeetingMapper.toEntity(mPreBidMeetingDTO);
         mPreBidMeeting = mPreBidMeetingRepository.save(mPreBidMeeting);
         return mPreBidMeetingMapper.toDto(mPreBidMeeting);
+    }
+
+    /**
+     * Save a mPreBidMeetingVM.
+     *
+     * @param mPreBidMeetingVM the entity to save.
+     * @return the persisted entity.
+     */
+    public MPreBidMeetingVM updateAttendees(MPreBidMeetingVM mPreBidMeetingVM) {
+        log.debug("Request to update attendees of MPreBidMeeting : {}", mPreBidMeetingVM);
+        mPreBidMeetingParticipantService.saveAll(mPreBidMeetingVM.getAddedAttendees());
+        mPreBidMeetingParticipantService.deleteByVendorIds(mPreBidMeetingVM.getId(), mPreBidMeetingVM.getRemovedAttendees());
+        return mPreBidMeetingVM;
     }
 
     /**

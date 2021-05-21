@@ -53,13 +53,13 @@
             ></el-date-picker>
           </el-form-item>
           <el-form-item
-            v-if="!isVendor"
+            v-if="!isVendor && preBidMeeting.id"
             label="">
             <el-button
               type="primary"
               @click="viewParticipants"
             >
-              <svg-icon name="icomoo/115-users"></svg-icon> Participants
+              <svg-icon name="icomoo/115-users"></svg-icon> Attendees
             </el-button>
           </el-form-item>
         </el-col>
@@ -99,6 +99,12 @@
         </el-col>
       </el-row>
     </el-form>
+    <participant-list
+      v-if="!isVendor && preBidMeeting.id"
+      :bidding-id="preBidMeeting.biddingId"
+      :pre-bid-meeting="preBidMeeting"
+      :visible.sync="participantListVisible"
+    ></participant-list>
   </div>
 </template>
 <script lang="ts" src="./pre-bid-meeting.component.ts"></script>

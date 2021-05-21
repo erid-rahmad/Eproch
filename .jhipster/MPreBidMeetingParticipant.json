@@ -29,6 +29,14 @@
         },
         {
             "relationshipType": "many-to-one",
+            "otherEntityName": "mPreBidMeeting",
+            "otherEntityRelationshipName": "mPreBidMeetingParticipant",
+            "relationshipValidateRules": "required",
+            "relationshipName": "preBidMeeting",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
             "otherEntityName": "cVendor",
             "otherEntityRelationshipName": "mPreBidMeetingParticipant",
             "relationshipValidateRules": "required",

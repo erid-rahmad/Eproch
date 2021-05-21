@@ -76,9 +76,18 @@
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
             <column name="ad_organization_id" type="numeric"/>
+            <column name="pre_bid_meeting_id" type="numeric"/>
             <column name="vendor_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>
+    </changeSet>
+
+    <changeSet id="20210521141900" author="Ananta Aryadewa">
+        <addColumn tableName="m_pre_bid_meeting_participant">
+            <column name="pre_bid_meeting_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

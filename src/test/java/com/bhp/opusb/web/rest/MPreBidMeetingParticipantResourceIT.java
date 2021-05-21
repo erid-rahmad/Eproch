@@ -3,6 +3,7 @@ package com.bhp.opusb.web.rest;
 import com.bhp.opusb.OpusWebApp;
 import com.bhp.opusb.domain.MPreBidMeetingParticipant;
 import com.bhp.opusb.domain.ADOrganization;
+import com.bhp.opusb.domain.MPreBidMeeting;
 import com.bhp.opusb.domain.CVendor;
 import com.bhp.opusb.repository.MPreBidMeetingParticipantRepository;
 import com.bhp.opusb.service.MPreBidMeetingParticipantService;
@@ -99,6 +100,16 @@ public class MPreBidMeetingParticipantResourceIT {
         }
         mPreBidMeetingParticipant.setAdOrganization(aDOrganization);
         // Add required entity
+        MPreBidMeeting mPreBidMeeting;
+        if (TestUtil.findAll(em, MPreBidMeeting.class).isEmpty()) {
+            mPreBidMeeting = MPreBidMeetingResourceIT.createEntity(em);
+            em.persist(mPreBidMeeting);
+            em.flush();
+        } else {
+            mPreBidMeeting = TestUtil.findAll(em, MPreBidMeeting.class).get(0);
+        }
+        mPreBidMeetingParticipant.setPreBidMeeting(mPreBidMeeting);
+        // Add required entity
         CVendor cVendor;
         if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
             cVendor = CVendorResourceIT.createEntity(em);
@@ -132,6 +143,16 @@ public class MPreBidMeetingParticipantResourceIT {
             aDOrganization = TestUtil.findAll(em, ADOrganization.class).get(0);
         }
         mPreBidMeetingParticipant.setAdOrganization(aDOrganization);
+        // Add required entity
+        MPreBidMeeting mPreBidMeeting;
+        if (TestUtil.findAll(em, MPreBidMeeting.class).isEmpty()) {
+            mPreBidMeeting = MPreBidMeetingResourceIT.createUpdatedEntity(em);
+            em.persist(mPreBidMeeting);
+            em.flush();
+        } else {
+            mPreBidMeeting = TestUtil.findAll(em, MPreBidMeeting.class).get(0);
+        }
+        mPreBidMeetingParticipant.setPreBidMeeting(mPreBidMeeting);
         // Add required entity
         CVendor cVendor;
         if (TestUtil.findAll(em, CVendor.class).isEmpty()) {
@@ -521,6 +542,22 @@ public class MPreBidMeetingParticipantResourceIT {
 
         // Get all the mPreBidMeetingParticipantList where adOrganization equals to adOrganizationId + 1
         defaultMPreBidMeetingParticipantShouldNotBeFound("adOrganizationId.equals=" + (adOrganizationId + 1));
+    }
+
+
+    @Test
+    @Transactional
+    public void getAllMPreBidMeetingParticipantsByPreBidMeetingIsEqualToSomething() throws Exception {
+        // Get already existing entity
+        MPreBidMeeting preBidMeeting = mPreBidMeetingParticipant.getPreBidMeeting();
+        mPreBidMeetingParticipantRepository.saveAndFlush(mPreBidMeetingParticipant);
+        Long preBidMeetingId = preBidMeeting.getId();
+
+        // Get all the mPreBidMeetingParticipantList where preBidMeeting equals to preBidMeetingId
+        defaultMPreBidMeetingParticipantShouldBeFound("preBidMeetingId.equals=" + preBidMeetingId);
+
+        // Get all the mPreBidMeetingParticipantList where preBidMeeting equals to preBidMeetingId + 1
+        defaultMPreBidMeetingParticipantShouldNotBeFound("preBidMeetingId.equals=" + (preBidMeetingId + 1));
     }
 
 

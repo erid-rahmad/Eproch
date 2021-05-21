@@ -21,4 +21,14 @@
                                  referencedTableName="c_vendor"/>
 
     </changeSet>
+
+    <changeSet id="20210521141800" author="Anant Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="pre_bid_meeting_id"
+                                 baseTableName="m_pre_bid_meeting_participant"
+                                 constraintName="fk_m_pre_bid_meeting_participant_pre_bid_meeting_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_pre_bid_meeting"/>
+
+    </changeSet>
 </databaseChangeLog>

@@ -4,11 +4,16 @@ import ScheduleEventMixin from '@/core/application-dictionary/mixins/ScheduleEve
 import settings from '@/settings';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
 import { Component, Inject, Mixins } from "vue-property-decorator";
+import ParticipantList from './participant-list.vue';
 
 const baseApiPreBidMeeting = 'api/m-pre-bid-meetings';
 const baseApiPreBidMeetingAttachment = 'api/m-pre-bid-meeting-attachments'
 
-@Component
+@Component({
+  components: {
+    ParticipantList
+  }
+})
 export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
 
   @Inject('accountService')
@@ -19,6 +24,7 @@ export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
 
   gutterSize: number = 24;
   loadingAttachments: boolean = false;
+  participantListVisible: boolean = false;
 
   uploadAccept: string = ".jpg, .jpeg, .png, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .pdf";
   uploadEndpoint = '/api/c-attachments/upload';
@@ -99,7 +105,7 @@ export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
   }
 
   viewParticipants() {
-    
+    this.participantListVisible = true;
   }
 
   private retrievePreBidMeeting(scheduleId: number): Promise<boolean> {

@@ -13,6 +13,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring", uses = {MBiddingScheduleMapper.class, ADOrganizationMapper.class})
 public interface MPreBidMeetingMapper extends EntityMapper<MPreBidMeetingDTO, MPreBidMeeting> {
 
+    @Mapping(source = "biddingSchedule.bidding.id", target = "biddingId")
+    @Mapping(source = "biddingSchedule.bidding.name", target = "biddingName")
     @Mapping(source = "biddingSchedule.id", target = "biddingScheduleId")
     @Mapping(source = "biddingSchedule.eventTypeLine.CEvent.name", target = "biddingScheduleName")
     @Mapping(source = "adOrganization.id", target = "adOrganizationId")

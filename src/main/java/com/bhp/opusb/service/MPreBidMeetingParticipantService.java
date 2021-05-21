@@ -1,18 +1,19 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.bhp.opusb.domain.MPreBidMeetingParticipant;
 import com.bhp.opusb.repository.MPreBidMeetingParticipantRepository;
 import com.bhp.opusb.service.dto.MPreBidMeetingParticipantDTO;
 import com.bhp.opusb.service.mapper.MPreBidMeetingParticipantMapper;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link MPreBidMeetingParticipant}.
@@ -43,6 +44,11 @@ public class MPreBidMeetingParticipantService {
         MPreBidMeetingParticipant mPreBidMeetingParticipant = mPreBidMeetingParticipantMapper.toEntity(mPreBidMeetingParticipantDTO);
         mPreBidMeetingParticipant = mPreBidMeetingParticipantRepository.save(mPreBidMeetingParticipant);
         return mPreBidMeetingParticipantMapper.toDto(mPreBidMeetingParticipant);
+    }
+
+    public List<MPreBidMeetingParticipantDTO> saveAll(List<MPreBidMeetingParticipantDTO> mPreBidMeetingParticipantDTOs) {
+        List<MPreBidMeetingParticipant> attendees = mPreBidMeetingParticipantMapper.toEntity(mPreBidMeetingParticipantDTOs);
+        return mPreBidMeetingParticipantMapper.toDto(mPreBidMeetingParticipantRepository.saveAll(attendees));
     }
 
     /**
@@ -79,5 +85,15 @@ public class MPreBidMeetingParticipantService {
     public void delete(Long id) {
         log.debug("Request to delete MPreBidMeetingParticipant : {}", id);
         mPreBidMeetingParticipantRepository.deleteById(id);
+    }
+
+    /**
+     * Delete the mPreBidMeetingParticipants.
+     *
+     * @param ids the ids of the entities.
+     */
+    public void deleteByVendorIds(Long preBidMeetingId, List<Long> vendorIds) {
+        log.debug("Request to delete MPreBidMeetingParticipants : {} of preBidMeeting : {}", vendorIds, preBidMeetingId);
+        mPreBidMeetingParticipantRepository.deleteByVendorIds(preBidMeetingId, vendorIds);
     }
 }

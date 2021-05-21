@@ -36,7 +36,9 @@ public class MBiddingInvitationDTO extends AbstractAuditingDTO {
 
 
     private Long vendorId;
+    private String vendorCode;
     private String vendorName;
+    private String vendorType;
 
     public ZonedDateTime getAnnouncementEndDate() {
         return announcementEndDate;
@@ -52,14 +54,6 @@ public class MBiddingInvitationDTO extends AbstractAuditingDTO {
 
     public void setAnnouncementDescription(String announcementDescription) {
         this.announcementDescription = announcementDescription;
-    }
-
-    public String getVendorName() {
-        return vendorName;
-    }
-
-    public void setVendorName(String vendorName) {
-        this.vendorName = vendorName;
     }
 
     public ZonedDateTime getAnnouncementPublishDate() {
@@ -156,6 +150,30 @@ public class MBiddingInvitationDTO extends AbstractAuditingDTO {
 
     public void setVendorId(Long cVendorId) {
         this.vendorId = cVendorId;
+    }
+
+    public String getVendorCode() {
+        return vendorCode;
+    }
+
+    public void setVendorCode(String vendorCode) {
+        this.vendorCode = vendorCode;
+    }
+
+    public String getVendorName() {
+        return vendorName;
+    }
+
+    public void setVendorName(String vendorName) {
+        this.vendorName = vendorName;
+    }
+
+    public String getVendorType() {
+        return vendorType;
+    }
+
+    public void setVendorType(String vendorType) {
+        this.vendorType = vendorType;
     }
 
     @Override

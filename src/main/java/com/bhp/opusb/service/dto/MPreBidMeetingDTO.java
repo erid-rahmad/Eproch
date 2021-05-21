@@ -18,6 +18,8 @@ public class MPreBidMeetingDTO extends AbstractAuditingDTO {
 
     private Boolean active = true;
 
+    private Long biddingId;
+    private String biddingName;
 
     private Long biddingScheduleId;
     private String biddingScheduleName;
@@ -50,6 +52,22 @@ public class MPreBidMeetingDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Long getBiddingId() {
+        return biddingId;
+    }
+
+    public void setBiddingId(Long biddingId) {
+        this.biddingId = biddingId;
+    }
+
+    public String getBiddingName() {
+        return biddingName;
+    }
+
+    public void setBiddingName(String biddingName) {
+        this.biddingName = biddingName;
     }
 
     public Long getBiddingScheduleId() {

@@ -107,6 +107,10 @@ public class MPreBidMeetingParticipantQueryService extends QueryService<MPreBidM
                 specification = specification.and(buildSpecification(criteria.getAdOrganizationId(),
                     root -> root.join(MPreBidMeetingParticipant_.adOrganization, JoinType.LEFT).get(ADOrganization_.id)));
             }
+            if (criteria.getPreBidMeetingId() != null) {
+                specification = specification.and(buildSpecification(criteria.getPreBidMeetingId(),
+                    root -> root.join(MPreBidMeetingParticipant_.preBidMeeting, JoinType.LEFT).get(MPreBidMeeting_.id)));
+            }
             if (criteria.getVendorId() != null) {
                 specification = specification.and(buildSpecification(criteria.getVendorId(),
                     root -> root.join(MPreBidMeetingParticipant_.vendor, JoinType.LEFT).get(CVendor_.id)));

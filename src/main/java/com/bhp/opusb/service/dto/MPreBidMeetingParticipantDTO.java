@@ -13,7 +13,7 @@ public class MPreBidMeetingParticipantDTO extends AbstractAuditingDTO {
 
     private Boolean attended;
 
-    private ZonedDateTime registerDate;
+    private ZonedDateTime registerDate = ZonedDateTime.now();
 
     private UUID uid;
 
@@ -22,6 +22,8 @@ public class MPreBidMeetingParticipantDTO extends AbstractAuditingDTO {
 
     private Long adOrganizationId;
     private String adOrganizationName;
+
+    private Long preBidMeetingId;
 
     private Long vendorId;
     private String vendorName;
@@ -82,6 +84,14 @@ public class MPreBidMeetingParticipantDTO extends AbstractAuditingDTO {
         this.adOrganizationName = adOrganizationName;
     }
 
+    public Long getPreBidMeetingId() {
+        return preBidMeetingId;
+    }
+
+    public void setPreBidMeetingId(Long mPreBidMeetingId) {
+        this.preBidMeetingId = mPreBidMeetingId;
+    }
+
     public Long getVendorId() {
         return vendorId;
     }
@@ -128,6 +138,7 @@ public class MPreBidMeetingParticipantDTO extends AbstractAuditingDTO {
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
             ", adOrganizationId=" + getAdOrganizationId() +
+            ", preBidMeetingId=" + getPreBidMeetingId() +
             ", vendorId=" + getVendorId() +
             "}";
     }

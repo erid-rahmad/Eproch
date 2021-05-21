@@ -1,30 +1,39 @@
 package com.bhp.opusb.web.rest;
 
-import com.bhp.opusb.service.MPreBidMeetingService;
-import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
-import com.bhp.opusb.service.dto.MPreBidMeetingDTO;
-import com.bhp.opusb.service.dto.MPreBidMeetingCriteria;
-import com.bhp.opusb.service.MPreBidMeetingQueryService;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
-import io.github.jhipster.web.util.HeaderUtil;
-import io.github.jhipster.web.util.PaginationUtil;
-import io.github.jhipster.web.util.ResponseUtil;
+import javax.validation.Valid;
+
+import com.bhp.opusb.service.MPreBidMeetingQueryService;
+import com.bhp.opusb.service.MPreBidMeetingService;
+import com.bhp.opusb.service.dto.MPreBidMeetingCriteria;
+import com.bhp.opusb.service.dto.MPreBidMeetingDTO;
+import com.bhp.opusb.service.dto.MPreBidMeetingVM;
+import com.bhp.opusb.web.rest.errors.BadRequestAlertException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.validation.Valid;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Optional;
+import io.github.jhipster.web.util.HeaderUtil;
+import io.github.jhipster.web.util.PaginationUtil;
+import io.github.jhipster.web.util.ResponseUtil;
 
 /**
  * REST controller for managing {@link com.bhp.opusb.domain.MPreBidMeeting}.
@@ -66,6 +75,23 @@ public class MPreBidMeetingResource {
         return ResponseEntity.created(new URI("/api/m-pre-bid-meetings/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
+    }
+
+    /**
+     * {@code POST  /m-pre-bid-meetings/update-attendees} : Add/remove a new mPreBidMeeting.
+     *
+     * @param mPreBidMeetingDTO the mPreBidMeetingDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new mPreBidMeetingDTO, or with status {@code 400 (Bad Request)} if the mPreBidMeeting has already an ID.
+     * @throws URISyntaxException if the Location URI syntax is incorrect.
+     */
+    @PostMapping("/m-pre-bid-meetings/update-attendees")
+    public ResponseEntity<MPreBidMeetingDTO> updateAttendees(@RequestBody MPreBidMeetingVM mPreBidMeetingVM) {
+        log.debug("REST request to save MPreBidMeetingVM : {}", mPreBidMeetingVM);
+        if (mPreBidMeetingVM.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        MPreBidMeetingDTO result = mPreBidMeetingService.updateAttendees(mPreBidMeetingVM);
+        return ResponseEntity.ok().body(result);
     }
 
     /**

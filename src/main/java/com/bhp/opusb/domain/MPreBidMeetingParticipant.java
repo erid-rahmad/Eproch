@@ -52,6 +52,11 @@ public class MPreBidMeetingParticipant extends AbstractAuditingEntity {
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties("mPreBidMeetingParticipants")
+    private MPreBidMeeting preBidMeeting;
+
+    @ManyToOne(optional = false)
+    @NotNull
+    @JsonIgnoreProperties("mPreBidMeetingParticipants")
     private CVendor vendor;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
@@ -126,6 +131,19 @@ public class MPreBidMeetingParticipant extends AbstractAuditingEntity {
 
     public void setAdOrganization(ADOrganization aDOrganization) {
         this.adOrganization = aDOrganization;
+    }
+
+    public MPreBidMeeting getPreBidMeeting() {
+        return preBidMeeting;
+    }
+
+    public MPreBidMeetingParticipant preBidMeeting(MPreBidMeeting mPreBidMeeting) {
+        this.preBidMeeting = mPreBidMeeting;
+        return this;
+    }
+
+    public void setPreBidMeeting(MPreBidMeeting mPreBidMeeting) {
+        this.preBidMeeting = mPreBidMeeting;
     }
 
     public CVendor getVendor() {
