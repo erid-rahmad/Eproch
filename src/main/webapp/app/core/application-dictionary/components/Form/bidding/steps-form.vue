@@ -20,9 +20,9 @@
         class="step-panel"
         :edit-mode="editMode"
         :data="bidding"
-        @change="dataChanged = true"
-        @error="showSaveDialog = false"
-        @saved="goToNextStep"
+        @change="onStepChanged"
+        @error="onStepError"
+        @saved="onStepSaved"
       ></bidding-information>
 
       <bidding-schedule
@@ -31,9 +31,9 @@
         class="step-panel"
         :edit-mode="editMode"
         :data="bidding"
-        @change="dataChanged = true"
-        @error="showSaveDialog = false"
-        @saved="goToNextStep"
+        @change="onStepChanged"
+        @error="onStepError"
+        @saved="onStepSaved"
       ></bidding-schedule>
 
       <vendor-invitation
@@ -42,9 +42,9 @@
         v-if="active === 2"
         :edit-mode="editMode"
         :data="bidding"
-        @change="dataChanged = true"
-        @error="showSaveDialog = false"
-        @saved="goToNextStep"
+        @change="onStepChanged"
+        @error="onStepError"
+        @saved="onStepSaved"
       ></vendor-invitation>
 
       <vendor-scoring
@@ -53,9 +53,9 @@
         v-if="active === 3"
         :edit-mode="editMode"
         :data="bidding"
-        @change="dataChanged = true"
-        @error="showSaveDialog = false"
-        @saved="goToNextStep"
+        @change="onStepChanged"
+        @error="onStepError"
+        @saved="onStepSaved"
       ></vendor-scoring>
     </el-scrollbar>
 
@@ -101,7 +101,7 @@
           size="mini"
           icon="el-icon-check"
           type="primary"
-          @click="saveStep"
+          @click="saveStep(true)"
         >
           {{ $t('entity.action.save') }}
         </el-button>

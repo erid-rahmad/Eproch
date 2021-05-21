@@ -72,6 +72,7 @@ export default class StepsForm extends StepsFormProps {
   onSkipSave() {
     this.dataChanged = false;
     this.showSaveDialog = false;
+    this.$emit('change', false);
 
     if (this.editMode) {
       if (this.direction > 0) {
@@ -79,6 +80,34 @@ export default class StepsForm extends StepsFormProps {
       } else {
         --this.active;
       }
+    }
+  }
+
+  onStepChanged() {
+    this.dataChanged = true;
+    this.$emit('change');
+  }
+
+  onStepError() {
+    this.showSaveDialog = false;
+  }
+
+  onStepSaved({ data, changeStep }) {
+    this.showSaveDialog = false;
+    this.dataChanged = false;
+    this.$emit('change', false);
+
+    if (! this.editMode && data.id) {
+      this.editMode = true;
+    }
+
+    let active = this.active;
+    if (changeStep) {
+      active = this.direction > 0 ? this.active++ : this.active--;
+    }
+
+    if (active <= 3) {
+      this.bidding = data;
     }
   }
 
@@ -124,21 +153,8 @@ export default class StepsForm extends StepsFormProps {
     }
   }
 
-  saveStep() {
+  saveStep(changeStep: boolean) {
     const currentStep = this.$refs[`step-${this.active}`] as any;
-    currentStep.save();
-  }
-
-  goToNextStep({ data }) {
-    this.showSaveDialog = false;
-    this.dataChanged = false;
-
-    if (! this.editMode && data.id) {
-      this.editMode = true;
-    }
-
-    if (++this.active <= 3) {
-      this.bidding = data;
-    }
+    currentStep.save(changeStep);
   }
 }

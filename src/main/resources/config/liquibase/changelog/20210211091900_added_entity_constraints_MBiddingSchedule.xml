@@ -7,7 +7,7 @@
         Added the constraints for entity MBiddingSchedule.
     -->
     <changeSet id="20210211091900-2" author="jhipster">
-        
+
         <addForeignKeyConstraint baseColumnNames="bidding_id"
                                  baseTableName="m_bidding_schedule"
                                  constraintName="fk_m_bidding_schedule_bidding_id"
@@ -25,6 +25,16 @@
                                  constraintName="fk_m_bidding_schedule_event_type_line_id"
                                  referencedColumnNames="id"
                                  referencedTableName="c_event_typeline"/>
+
+    </changeSet>
+
+    <changeSet id="20210519145600" author="Ananta Aryadewa">
+
+        <addForeignKeyConstraint baseColumnNames="date_set_id"
+                                 baseTableName="m_bidding_schedule"
+                                 constraintName="fk_m_bidding_schedule_date_set_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="m_prequalification_date_set"/>
 
     </changeSet>
 </databaseChangeLog>

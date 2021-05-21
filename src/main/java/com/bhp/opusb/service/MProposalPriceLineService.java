@@ -2,6 +2,7 @@ package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MProposalPriceLine;
 import com.bhp.opusb.repository.MProposalPriceLineRepository;
+import com.bhp.opusb.service.dto.MProposalPriceDTO;
 import com.bhp.opusb.service.dto.MProposalPriceLineDTO;
 import com.bhp.opusb.service.mapper.MProposalPriceLineMapper;
 import org.slf4j.Logger;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -43,6 +45,21 @@ public class MProposalPriceLineService {
         MProposalPriceLine mProposalPriceLine = mProposalPriceLineMapper.toEntity(mProposalPriceLineDTO);
         mProposalPriceLine = mProposalPriceLineRepository.save(mProposalPriceLine);
         return mProposalPriceLineMapper.toDto(mProposalPriceLine);
+    }
+
+    /**
+     * Save the mProposalPriceLines.
+     *
+     * @param mProposalPriceLineDTOs the entities to save.
+     * @return the persisted entities.
+     */
+    public List<MProposalPriceLineDTO> saveAll(List<MProposalPriceLineDTO> mProposalPriceLineDTOs, MProposalPriceDTO mProposalPriceDTO) {
+        log.debug("Request to save MProposalPriceLines. count : {}", mProposalPriceLineDTOs.size());
+        mProposalPriceLineDTOs.forEach(line -> line.setProposalPriceId(mProposalPriceDTO.getId()));
+
+        List<MProposalPriceLine> mProposalPriceLines = mProposalPriceLineMapper.toEntity(mProposalPriceLineDTOs);
+        mProposalPriceLines = mProposalPriceLineRepository.saveAll(mProposalPriceLines);
+        return mProposalPriceLineMapper.toDto(mProposalPriceLines);
     }
 
     /**

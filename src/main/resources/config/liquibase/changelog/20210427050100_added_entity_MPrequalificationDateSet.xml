@@ -80,7 +80,6 @@
             <column name="status" type="string"/>
             <column name="uid" type="${uuidType}"/>
             <column name="active" type="boolean"/>
-            <column name="bidding_schedule_id" type="numeric"/>
             <column name="ad_organization_id" type="numeric"/>
             <!-- jhipster-needle-liquibase-add-loadcolumn - JHipster (and/or extensions) can add load columns here, do not remove-->
         </loadData>

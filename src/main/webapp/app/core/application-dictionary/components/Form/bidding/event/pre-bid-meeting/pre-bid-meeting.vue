@@ -36,7 +36,7 @@
           </el-form-item>
           <el-form-item label="Start Date">
             <el-date-picker
-              v-model="mainForm.startDate"
+              v-model="mainForm.actualStartDate"
               disabled
               :format="dateDisplayFormat"
               size="mini"
@@ -45,14 +45,16 @@
           </el-form-item>
           <el-form-item label="End Date">
             <el-date-picker
-              v-model="mainForm.endDate"
+              v-model="mainForm.actualEndDate"
               disabled
               :format="dateDisplayFormat"
               size="mini"
               type="datetime"
             ></el-date-picker>
           </el-form-item>
-          <el-form-item label="">
+          <el-form-item
+            v-if="!isVendor"
+            label="">
             <el-button
               type="primary"
               @click="viewParticipants"
@@ -74,7 +76,8 @@
               :accept="uploadAccept"
               :action="uploadEndpoint"
               class="attachment"
-              drag
+              :disabled="isVendor"
+              :drag="!isVendor"
               :before-remove="beforeFileRemove"
               :file-list="uploadedFiles"
               :headers="uploadHeaders"
@@ -84,8 +87,13 @@
               :on-success="onUploadSuccess"
               multiple
             >
-              <em class="el-icon-upload"></em>
-              <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
+              <strong v-if="isVendor">
+                Download Documents:
+              </strong>
+              <template v-else>
+                <em class="el-icon-upload"></em>
+                <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
+              </template>
             </el-upload>
           </el-form-item>
         </el-col>

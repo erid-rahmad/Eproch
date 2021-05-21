@@ -4,17 +4,10 @@
       <el-button v-if="!index" icon="el-icon-close" size="mini" type="danger" @click="onFormClosed">
         Close
       </el-button>
+      <el-button v-if="!index" :disabled="!dataChanged" size="mini" type="primary" @click="onFormSaved">
+        <svg-icon name="icomoo/273-checkmark"></svg-icon> Save
+      </el-button>
       <el-button v-if="index" class="button" icon="el-icon-plus" size="mini" type="primary" @click="onCreateClicked"></el-button>
-
-      <document-action-button
-        v-show="index || editMode"
-        :approved="documentApproved"
-        :document-type-id="documentTypeId"
-        :next-action="defaultDocumentAction"
-        size="mini"
-        window-type="TRANSACTION"
-        @change="onDocumentActionChanged"
-      ></document-action-button>
     </div>
 
     <div v-if="index" class="card">
@@ -94,7 +87,15 @@
       ></el-pagination>
     </div>
 
-    <step-form v-else class="card" ref="biddingForm" :edit-mode="editMode" :data="selectedRow" :step-index="stepIndex"></step-form>
+    <step-form
+      v-else
+      class="card"
+      ref="biddingForm"
+      :edit-mode="editMode"
+      :data="selectedRow"
+      :step-index="stepIndex"
+      @change="onStepChanged"
+    ></step-form>
 
     <document-action-confirm
       :action="selectedDocumentAction"

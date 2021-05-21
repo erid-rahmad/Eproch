@@ -1,13 +1,12 @@
 package com.bhp.opusb.service.dto;
 
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MVendorScoringLine} entity.
  */
-public class MVendorScoringLineDTO implements Serializable {
+public class MVendorScoringLineDTO extends AbstractAuditingDTO {
 
     private Long id;
 
@@ -15,7 +14,7 @@ public class MVendorScoringLineDTO implements Serializable {
 
     private UUID uid;
 
-    private Boolean active;
+    private Boolean active = true;
 
 
     private Long adOrganizationId;
@@ -30,6 +29,10 @@ public class MVendorScoringLineDTO implements Serializable {
     private String evaluationMethodLineEvaluation;
 
     private Long vendorScoringId;
+    private String vendorScoringName;
+
+    private Long biddingId;
+    private String biddingName;
 
     public String getEvaluationMethodLineEvaluationType() {
         return evaluationMethodLineEvaluationType;
@@ -143,6 +146,30 @@ public class MVendorScoringLineDTO implements Serializable {
         this.vendorScoringId = mVendorScoringId;
     }
 
+    public String getVendorScoringName() {
+        return vendorScoringName;
+    }
+
+    public void setVendorScoringName(String vendorScoringName) {
+        this.vendorScoringName = vendorScoringName;
+    }
+
+    public Long getBiddingId() {
+        return biddingId;
+    }
+
+    public void setBiddingId(Long biddingId) {
+        this.biddingId = biddingId;
+    }
+
+    public String getBiddingName() {
+        return biddingName;
+    }
+
+    public void setBiddingName(String biddingName) {
+        this.biddingName = biddingName;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -178,6 +205,7 @@ public class MVendorScoringLineDTO implements Serializable {
             ", evaluationMethodLinePassingGrade='" + evaluationMethodLinePassingGrade + '\'' +
             ", evaluationMethodLineEvaluation='" + evaluationMethodLineEvaluation + '\'' +
             ", vendorScoringId=" + vendorScoringId +
+            ", biddingId=" + biddingId +
             '}';
     }
 }

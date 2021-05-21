@@ -12,7 +12,7 @@
       <el-row :gutter="24">
         <el-col :xs="24" :sm="12" :lg="8">
           <el-form-item label="Title" prop="name" required>
-            <el-input v-model="bidding.name" class="form-input" clearable></el-input>
+            <el-input v-model="bidding.name" class="form-input" clearable :disabled="editMode"></el-input>
           </el-form-item>
           <el-form-item label="Bidding No" prop="biddingNo">
             <el-input v-model="bidding.documentNo" class="form-input" clearable :disabled="editMode"></el-input>

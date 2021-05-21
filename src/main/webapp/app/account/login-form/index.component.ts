@@ -67,9 +67,10 @@ export default class Login extends Vue {
   handleLogin() {
     (this.$refs.loginForm as ElForm).validate((valid: boolean) => {
       if (valid) {
+        this.loading = true;
         axios
           .post('api/authenticate', this.loginForm)
-          .then(result => {
+          .then(async result => {
             const bearerToken = result.headers.authorization;
             if (bearerToken && bearerToken.slice(0, 7) === 'Bearer ') {
               const jwt = bearerToken.slice(7, bearerToken.length);
@@ -79,7 +80,7 @@ export default class Login extends Vue {
                 sessionStorage.setItem('jhi-authenticationToken', jwt);
               }
             }
-            this.accountService().retrieveAccount();
+            await this.accountService().retrieveAccount();
           })
           .catch(() => {
             this.$message.error({

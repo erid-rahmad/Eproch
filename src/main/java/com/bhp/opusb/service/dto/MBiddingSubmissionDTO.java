@@ -1,5 +1,6 @@
 package com.bhp.opusb.service.dto;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -52,8 +53,14 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
     private String biddingTypeName;
     private String biddingStatus;
 
+    private BigDecimal ceilingPrice;
+    private String currencyName;
+    private String eventTypeName;
+    private String vendorSelection;
+
     private Long biddingScheduleId;
     private String biddingScheduleName;
+    private String biddingScheduleStatus;
 
     private Long vendorId;
     private String vendorName;
@@ -213,6 +220,38 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
         this.biddingStatus = biddingStatus;
     }
 
+    public BigDecimal getCeilingPrice() {
+        return ceilingPrice;
+    }
+
+    public void setCeilingPrice(BigDecimal ceilingPrice) {
+        this.ceilingPrice = ceilingPrice;
+    }
+
+    public String getCurrencyName() {
+        return currencyName;
+    }
+
+    public void setCurrencyName(String currencyName) {
+        this.currencyName = currencyName;
+    }
+
+    public String getEventTypeName() {
+        return eventTypeName;
+    }
+
+    public void setEventTypeName(String eventTypeName) {
+        this.eventTypeName = eventTypeName;
+    }
+
+    public String getVendorSelection() {
+        return vendorSelection;
+    }
+
+    public void setVendorSelection(String vendorSelection) {
+        this.vendorSelection = vendorSelection;
+    }
+
     public Long getBiddingScheduleId() {
         return biddingScheduleId;
     }
@@ -227,6 +266,14 @@ public class MBiddingSubmissionDTO extends AbstractAuditingDTO {
 
     public void setBiddingScheduleName(String biddingScheduleName) {
         this.biddingScheduleName = biddingScheduleName;
+    }
+
+    public String getBiddingScheduleStatus() {
+        return biddingScheduleStatus;
+    }
+
+    public void setBiddingScheduleStatus(String biddingScheduleStatus) {
+        this.biddingScheduleStatus = biddingScheduleStatus;
     }
 
     public Long getVendorId() {

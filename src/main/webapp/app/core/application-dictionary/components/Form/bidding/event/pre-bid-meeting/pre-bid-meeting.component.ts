@@ -35,6 +35,10 @@ export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
     return settings.dateTimeDisplayFormat;
   }
 
+  get isVendor() {
+    return AccountStoreModule.isVendor;
+  }
+
   get uploadHeaders() {
     if (this.accountService().hasToken) {
       return {
@@ -89,9 +93,7 @@ export default class PreBidMeeting extends Mixins(ScheduleEventMixin) {
   }
 
   created() {
-    console.log('preBidMeeting created. scheduleId:', this.biddingScheduleId);
     const query = this.$route.query;
-
     const biddingScheduleId = parseInt(query.biddingScheduleId as string);
     this.retrievePreBidMeeting(biddingScheduleId);
   }

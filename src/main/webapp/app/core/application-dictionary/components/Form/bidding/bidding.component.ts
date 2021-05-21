@@ -3,11 +3,12 @@ import DocumentActionConfirm from '@/core/application-dictionary/components/Docu
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import settings from '@/settings';
 import { ElTable } from 'element-ui/types/table';
-import { random } from 'lodash';
 import { mixins } from 'vue-class-component';
 import { Component, Inject, Watch } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
 import StepForm from '../bidding/steps-form.vue';
+
+const baseApiUrl = 'api/m-biddings';
 
 @Component({
   components: {
@@ -21,9 +22,11 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
+  dataChanged: boolean = false;
+
   gridSchema = {
     defaultSort: {},
-    emptyText: 'No Records Found',
+    emptyText: 'No Records',
     maxHeight: 500,
     height: 500
   };
@@ -39,17 +42,10 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
   public totalItems = 0;
   public statusCatalog = '';
 
-  private baseApiUrl = '/api/m-biddings';
-  private baseApiUrlReference = '/api/ad-references';
-  private baseApiUrlReferenceList = '/api/ad-reference-lists';
-  private keyReference: string = 'docStatus';
+  processing = false;
 
-  public biddingStatuses: any[] = [];
-
-  private filterQuery: string = '';
-  private processing = false;
-
-  public gridData: any[] = [];
+  biddingStatuses: any[] = [];
+  gridData: any[] = [];
 
   showJoinedVendors = false;
   showTerminationDialog = false;
@@ -120,12 +116,25 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
   onFormClosed() {
     this.index = true;
     this.selectedRows = [];
+    this.dataChanged = false;
     this.transition();
+  }
+
+  onFormSaved() {
+    (<any>this.$refs.biddingForm).saveStep();
   }
 
   onSelectionChanged(value: any) {
     this.selectedRows = value;
     this.$emit('selectedRows', this.selectedRows);
+  }
+
+  onStepChanged(dataChanged: boolean = true) {
+    this.dataChanged = dataChanged;
+  }
+
+  onStepSaved() {
+    this.dataChanged = false;
   }
 
   created() {
@@ -183,10 +192,6 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
   }
 
   public retrieveAllRecords(): void {
-    if (!this.baseApiUrl) {
-      return;
-    }
-
     this.processing = true;
     const paginationQuery = {
       page: this.page - 1,
@@ -194,9 +199,11 @@ export default class BiddingProcess extends mixins(AccessLevelMixin) {
       sort: this.sort()
     };
 
-    this.commonService(this.baseApiUrl)
+    this.commonService(baseApiUrl)
       .retrieve({
-        criteriaQuery: this.filterQuery,
+        criteriaQuery: this.updateCriteria([
+          'active.equals=true'
+        ]),
         paginationQuery
       })
       .then(res => {

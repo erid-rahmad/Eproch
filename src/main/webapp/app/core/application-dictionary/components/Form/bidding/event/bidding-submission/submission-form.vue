@@ -44,6 +44,7 @@
                 class="form-input"
                 clearable
                 filterable
+                @change="onVendorChanged"
               >
                 <el-option
                   v-for="item in vendorOptions"
@@ -62,7 +63,7 @@
           >
             <el-form-item label="Submision Start Date">
               <el-date-picker
-                v-model="mainForm.startDate"
+                v-model="mainForm.actualStartDate"
                 disabled
                 :format="dateDisplayFormat"
                 size="mini"
@@ -71,7 +72,7 @@
             </el-form-item>
             <el-form-item label="Submision End Date">
               <el-date-picker
-                v-model="mainForm.endDate"
+                v-model="mainForm.actualEndDate"
                 disabled
                 :format="dateDisplayFormat"
                 size="mini"

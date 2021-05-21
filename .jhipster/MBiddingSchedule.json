@@ -20,6 +20,14 @@
     ],
     "relationships": [
         {
+            "relationshipType": "one-to-one",
+            "otherEntityName": "mPrequalificationDateSet",
+            "otherEntityRelationshipName": "biddingSchedule",
+            "relationshipName": "dateSet",
+            "otherEntityField": "id",
+            "ownerSide": true
+        },
+        {
             "relationshipType": "one-to-many",
             "otherEntityName": "mBiddingScheduleAttachment",
             "otherEntityRelationshipName": "biddingSchedule",

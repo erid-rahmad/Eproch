@@ -32,13 +32,17 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
   }
 
   get timeRemaining() {
-    if (!this.mainForm.endDate) {
+    if (!this.mainForm.actualEndDate) {
       return '';
+    }
+
+    if (this.currentDate >= new Date(this.mainForm.actualEndDate)) {
+      return 'Event has been ended';
     }
 
     const duration = intervalToDuration({
       start: this.currentDate,
-      end: new Date(this.mainForm.endDate)
+      end: new Date(this.mainForm.actualEndDate)
     });
 
     return formatDuration(duration, {
@@ -46,14 +50,39 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
     });
   }
 
-  onMainFormUpdated(mainForm: any) {
-
+  onVendorChanged(vendorId: number) {
+    if (vendorId) {
+      this.commonService(baseApiBiddingSubmission)
+        .retrieve({
+          criteriaQuery: [
+            `biddingId.equals=${this.mainForm.biddingId}`,
+            `vendorId.equals=${vendorId}`
+          ],
+          paginationQuery: {
+            page: 0,
+            size: 1,
+            sort: ['id']
+          }
+        })
+        .then(res => {
+          if (res.data.length) {
+            this.$emit('vendor-changed', res.data[0].id);
+          }
+        });
+      } else {
+        this.$emit('vendor-changed', null);
+      }
   }
 
   created() {
     this.timerId = setTimeout(() => {
-        this.intervalId = setInterval(this.updateCurrentDate, 60000);
-        this.updateCurrentDate();
+      this.intervalId = setInterval(this.updateCurrentDate, 60000);
+      this.updateCurrentDate();
+
+      if (this.currentDate >= new Date(this.mainForm.actualEndDate)) {
+        clearInterval(this.intervalId);
+        clearInterval(this.timerId);
+      }
     }, (60 - this.currentDate.getSeconds()) * 1000);
     
     if (!this.isVendor) {

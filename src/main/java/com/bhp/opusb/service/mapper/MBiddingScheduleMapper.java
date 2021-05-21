@@ -10,9 +10,13 @@ import org.mapstruct.Mapping;
 /**
  * Mapper for the entity {@link MBiddingSchedule} and its DTO {@link MBiddingScheduleDTO}.
  */
-@Mapper(componentModel = "spring", uses = {MBiddingMapper.class, ADOrganizationMapper.class, CEventTypelineMapper.class})
+@Mapper(componentModel = "spring", uses = {MPrequalificationDateSetMapper.class, MBiddingMapper.class, ADOrganizationMapper.class, CEventTypelineMapper.class})
 public interface MBiddingScheduleMapper extends EntityMapper<MBiddingScheduleDTO, MBiddingSchedule> {
 
+    @Mapping(source = "dateSet.id", target = "dateSetId")
+    @Mapping(source = "dateSet.startDate", target = "actualStartDate")
+    @Mapping(source = "dateSet.endDate", target = "actualEndDate")
+    @Mapping(source = "dateSet.status", target = "status")
     @Mapping(source = "bidding.id", target = "biddingId")
     @Mapping(source = "bidding.documentNo", target = "biddingNo")
     @Mapping(source = "bidding.name", target = "biddingTitle")
@@ -26,6 +30,7 @@ public interface MBiddingScheduleMapper extends EntityMapper<MBiddingScheduleDTO
     @Mapping(source = "eventTypeLine.CEvent.formType", target = "formType")
     MBiddingScheduleDTO toDto(MBiddingSchedule mBiddingSchedule);
 
+    @Mapping(source = "dateSetId", target = "dateSet")
     @Mapping(target = "mBiddingScheduleAttachments", ignore = true)
     @Mapping(target = "removeMBiddingScheduleAttachment", ignore = true)
     @Mapping(source = "biddingId", target = "bidding")

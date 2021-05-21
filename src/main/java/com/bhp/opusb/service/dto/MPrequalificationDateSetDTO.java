@@ -1,15 +1,15 @@
 package com.bhp.opusb.service.dto;
 
 import java.time.ZonedDateTime;
-import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
+
+import javax.validation.constraints.Size;
 
 /**
  * A DTO for the {@link com.bhp.opusb.domain.MPrequalificationDateSet} entity.
  */
-public class MPrequalificationDateSetDTO implements Serializable {
+public class MPrequalificationDateSetDTO extends AbstractAuditingDTO {
     
     private Long id;
 

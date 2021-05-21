@@ -253,7 +253,7 @@
           <el-form ref="vendorSuggestion" label-position="left" label-width="150px" size="mini" :model="vendorSuggestion">
             <el-row :gutter="24">
               <el-col :span="24">
-                <el-form-item label="SubCategory" prop="subCategory" required>
+                <el-form-item label="Sub Category" prop="subCategory" required>
                   <el-select
                     v-model="vendorSuggestion.subCategory"
                     class="form-input"

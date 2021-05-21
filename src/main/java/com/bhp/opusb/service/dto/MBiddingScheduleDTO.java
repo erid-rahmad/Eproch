@@ -9,8 +9,6 @@ import java.util.UUID;
  */
 public class MBiddingScheduleDTO extends AbstractAuditingDTO {
     
-    private static final long serialVersionUID = 1L;
-
     private Long id;
 
     private ZonedDateTime startDate;
@@ -21,6 +19,11 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
 
     private Boolean active = true;
 
+
+    private Long dateSetId;
+    private ZonedDateTime actualStartDate;
+    private ZonedDateTime actualEndDate;
+    private String status;
 
     private Long biddingId;
     private String biddingNo;
@@ -77,6 +80,38 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
 
     public void setActive(Boolean active) {
         this.active = active;
+    }
+
+    public Long getDateSetId() {
+        return dateSetId;
+    }
+
+    public void setDateSetId(Long mPrequalificationDateSetId) {
+        this.dateSetId = mPrequalificationDateSetId;
+    }
+
+    public ZonedDateTime getActualStartDate() {
+        return actualStartDate;
+    }
+
+    public void setActualStartDate(ZonedDateTime actualStartDate) {
+        this.actualStartDate = actualStartDate;
+    }
+
+    public ZonedDateTime getActualEndDate() {
+        return actualEndDate;
+    }
+
+    public void setActualEndDate(ZonedDateTime actualEndDate) {
+        this.actualEndDate = actualEndDate;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Long getBiddingId() {
@@ -208,6 +243,7 @@ public class MBiddingScheduleDTO extends AbstractAuditingDTO {
             ", endDate='" + getEndDate() + "'" +
             ", uid='" + getUid() + "'" +
             ", active='" + isActive() + "'" +
+            ", dateSetId=" + getDateSetId() +
             ", biddingId=" + getBiddingId() +
             ", adOrganizationId=" + getAdOrganizationId() +
             ", eventTypeLineId=" + getEventTypeLineId() +

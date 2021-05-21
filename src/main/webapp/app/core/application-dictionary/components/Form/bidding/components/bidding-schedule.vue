@@ -1,7 +1,6 @@
 <template>
   <div class="bidding-schedule">
     <el-form
-      ref="biddingInformation"
       disabled
       label-position="left"
       label-width="150px"
@@ -123,7 +122,7 @@
 
           <el-table-column
             fixed="right"
-            label="Attachments"
+            label="Action"
             min-width="200"
           >
             <template slot-scope="{ row }">

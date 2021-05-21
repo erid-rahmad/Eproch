@@ -1,7 +1,6 @@
 import DynamicWindowService from '@/core/application-dictionary/components/DynamicWindow/dynamic-window.service';
 import { Component, Inject, Vue } from 'vue-property-decorator';
 import PriceProposal from './price-proposal.vue';
-import { proposalNameMap } from './proposal-form.component';
 import ProposalForm from './proposal-form.vue';
 import SubmissionForm from './submission-form.vue';
 
@@ -27,12 +26,24 @@ export default class BiddingSubmissionEvent extends Vue {
   section: SubmissionPage = SubmissionPage.SUBMISSION;
   formType: string = null;
 
+  schedule: any = {};
+  evaluationList: any[] = [];
   proposals: any[] = [];
   proposalName: string = null;
   selectedProposal: number = null;
+  submissionId: number = null;
+
+  get displayedProposals() {
+    if (!this.proposalName) {
+      return this.proposals;
+    }
+
+    return this.proposals
+      .filter(proposal => proposal.evaluationMethodLineName !== this.proposalName);
+  }
 
   get proposalComponent() {
-    if (this.proposalName === 'price') {
+    if (this.proposalName === 'P') {
       return 'price-proposal';
     }
 
@@ -45,18 +56,41 @@ export default class BiddingSubmissionEvent extends Vue {
 
   onSubmissionFormLoaded(data: any) {
     this.formType = data.formType;
+    this.schedule = data;
+
+    // Get the proposal buttons based on the submission's form type.
     this.retrieveVendorScoringLines(data.biddingId, data.formType);
+  }
+
+  onVendorChanged(submissionId: number) {
+    this.submissionId = submissionId;
+  }
+
+  created() {
+    this.submissionId = parseInt(this.$route.query.submissionId as string);
+    this.retrieveEvaluationList();
   }
 
   closeProposalPage() {
     this.section = SubmissionPage.SUBMISSION;
+    this.proposalName = null;
   }
 
   openProposalForm(data: any) {
-    const { evaluationMethodLineName } = data;
-    this.proposalName = proposalNameMap.get(evaluationMethodLineName);
+    this.proposalName = data.evaluationMethodLineName;
     this.selectedProposal = data;
     this.section = SubmissionPage.PROPOSAL;
+  }
+
+  printEvaluation(value: string) {
+    return this.evaluationList.find(item => item.value === value)?.name || value;
+  }
+
+  private retrieveEvaluationList() {
+    this.commonService(null)
+      .retrieveReferenceLists('evaluationList')
+      .then(res => this.evaluationList = res)
+      .catch(_err => console.warn('Failed getting the evaluation list'));
   }
 
   private retrieveVendorScoringLines(biddingId: number, formType: string) {

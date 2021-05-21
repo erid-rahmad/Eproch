@@ -1,10 +1,12 @@
 package com.bhp.opusb.service;
 
 import com.bhp.opusb.domain.MBidding;
+import com.bhp.opusb.domain.MBiddingSchedule;
 import com.bhp.opusb.domain.MPrequalificationDateSet;
 import com.bhp.opusb.domain.view.MinMaxView;
 import com.bhp.opusb.repository.CEventTypelineRepository;
 import com.bhp.opusb.repository.MBiddingRepository;
+import com.bhp.opusb.repository.MBiddingScheduleRepository;
 import com.bhp.opusb.repository.MPrequalificationDateSetRepository;
 import com.bhp.opusb.service.dto.MPrequalificationDateSetDTO;
 import com.bhp.opusb.service.mapper.MPrequalificationDateSetMapper;
@@ -32,15 +34,18 @@ public class MPrequalificationDateSetService {
 
     private final MPrequalificationDateSetRepository mPrequalificationDateSetRepository;
     private final MBiddingRepository mBiddingRepository;
+    private final MBiddingScheduleRepository mBiddingScheduleRepository;
 
     private final MPrequalificationDateSetMapper mPrequalificationDateSetMapper;
 
     public MPrequalificationDateSetService(CEventTypelineRepository cEventTypelineRepository,
             MPrequalificationDateSetRepository mPrequalificationDateSetRepository,
-            MBiddingRepository mBiddingRepository, MPrequalificationDateSetMapper mPrequalificationDateSetMapper) {
+            MBiddingRepository mBiddingRepository, MBiddingScheduleRepository mBiddingScheduleRepository,
+            MPrequalificationDateSetMapper mPrequalificationDateSetMapper) {
         this.cEventTypelineRepository = cEventTypelineRepository;
         this.mPrequalificationDateSetRepository = mPrequalificationDateSetRepository;
         this.mBiddingRepository = mBiddingRepository;
+        this.mBiddingScheduleRepository = mBiddingScheduleRepository;
         this.mPrequalificationDateSetMapper = mPrequalificationDateSetMapper;
     }
 
@@ -55,15 +60,30 @@ public class MPrequalificationDateSetService {
         MPrequalificationDateSet mPrequalificationDateSet = mPrequalificationDateSetMapper.toEntity(mPrequalificationDateSetDTO);
         mPrequalificationDateSet = mPrequalificationDateSetRepository.save(mPrequalificationDateSet);
 
-        String status = mPrequalificationDateSetDTO.getStatus();
+        final String status = mPrequalificationDateSetDTO.getStatus();
         MBidding mBidding = mBiddingRepository.findFirstByBiddingScheduleId(mPrequalificationDateSetDTO.getBiddingScheduleId());
         MinMaxView sequences = cEventTypelineRepository.findMinMaxSequence(mBidding.getEventType().getId());
         Integer currentSequence = mPrequalificationDateSetDTO.getSequence();
+        String biddingStatus = null;
 
-        if (Objects.equals(currentSequence, sequences.getMin()) && status.equals("P")) {
-            mBidding.setBiddingStatus("P");
-        } else if (Objects.equals(currentSequence, sequences.getMax()) && status.equals("F")) {
-            mBidding.setBiddingStatus("F");
+        if (currentSequence == null) {
+            Optional<MBiddingSchedule> mBiddingSchedule = mBiddingScheduleRepository.findById(mPrequalificationDateSetDTO.getBiddingScheduleId());
+            if (mBiddingSchedule.isPresent()) {
+                MBiddingSchedule schedule = mBiddingSchedule.get();
+                currentSequence = schedule.getEventTypeLine().getSequence();
+            }
+        }
+        
+        log.debug("status: {}, current sequence: {}, min: {}, max: {}", status, currentSequence, sequences.getMinSequence(), sequences.getMaxSequence());
+        if (Objects.equals(currentSequence, sequences.getMinSequence())) {
+            biddingStatus = status.equals("N") ? status : "P";
+        } else if (Objects.equals(currentSequence, sequences.getMaxSequence())) {
+            biddingStatus = status.equals("F") ? status : "P";
+        }
+        
+        log.debug("bidding status: {}", biddingStatus);
+        if (biddingStatus != null) {
+            mBidding.setBiddingStatus(biddingStatus);
         }
 
         return mPrequalificationDateSetMapper.toDto(mPrequalificationDateSet);

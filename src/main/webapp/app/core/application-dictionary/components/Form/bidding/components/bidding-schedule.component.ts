@@ -12,7 +12,9 @@ const BiddingScheduleProp = Vue.extend({
     editMode: Boolean,
     data: {
       type: Object,
-      default: () => {}
+      default: () => {
+        return {};
+      }
     }
   }
 });
@@ -70,9 +72,9 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     }
   }
 
-  onDateSettingSaved(dateSet: any) {
+  async onDateSettingSaved(dateSet: any) {
     this.recordsLoaded = false;
-    const selectedIndex = this.bidding.biddingSchedules.indexOf(this.selectedEvent);
+    const newDateSet = !this.selectedEvent.dateSetId;
     const record = {
       ...this.selectedEvent,
       ...{
@@ -81,11 +83,23 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
           new Date(dateSet.endDate)
         ],
         status: dateSet.status
-      }
+      },
+      dateSetId: dateSet.id,
     };
 
-    this.bidding.biddingSchedules.splice(selectedIndex, 1, record);
-    this.recordsLoaded = true;
+    try {
+      if (newDateSet) {
+        await this.saveSchedule(record);
+      }
+
+      const selectedIndex = this.bidding.biddingSchedules.indexOf(this.selectedEvent);
+      this.bidding.biddingSchedules.splice(selectedIndex, 1, record);
+    } catch (err) {
+      this.$message.error('Failed when applying the new date setting');
+    } finally {
+      console.log('date setting updated');
+      this.recordsLoaded = true;
+    }
   }
 
   onDateSettingError(error: any) {
@@ -138,15 +152,15 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
             ];
           }
 
-          item.actual = [];
-          item.startDateActual = null;
-          item.endDateActual = null;
-          item.status = null;
+          if (item.actualStartDate && item.actualEndDate) {
+            item.actual = [
+              new Date(item.actualStartDate),
+              new Date(item.actualEndDate)
+            ];
+          }
+          
           return item;
         }));
-
-        const scheduleIds: number[] = this.bidding.biddingSchedules.map((sch: any) => sch.id);
-        await this.retrieveDateSet(scheduleIds);
         resolve(true);
       })
       .catch(err => {
@@ -156,42 +170,6 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
       })
       .finally(() => {
         this.loadingSchedules = false;
-      });
-    });
-  }
-
-  private retrieveDateSet(scheduleIds: number[]): Promise<boolean> {
-    return new Promise(resolve => {
-      this.commonService('api/m-prequalification-date-sets')
-      .retrieve({
-        criteriaQuery: this.updateCriteria([
-          'active.equals=true',
-          ...scheduleIds.map(id => `biddingScheduleId.in=${id}`)
-        ]),
-        paginationQuery: {
-          page: 0,
-          size: scheduleIds.length,
-          sort: ['id']
-        }
-      })
-      .then(res => {
-        const dateSets = res.data as any[];
-        for (const dateSet of dateSets) {
-          const schedule = this.bidding.biddingSchedules
-            .find(sch => sch.id === dateSet.biddingScheduleId);
-
-          schedule.status = dateSet.status;
-          schedule.actual = [
-            new Date(dateSet.startDate),
-            new Date(dateSet.endDate)
-          ];
-        }
-        resolve(true);
-      })
-      .catch(err => {
-        console.error('Failed to get schedule date set. %O', err);
-        this.$message.error('Failed to get schedule details');
-        resolve(false);
       });
     });
   }
@@ -208,11 +186,6 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
       });
   }
 
-  editAttachments(event: any) {
-    this.selectedEvent = event;
-    this.eventAttachmentVisible = true;
-  }
-
   editSchedule(event: any) {
     this.selectedEvent = event;
     this.editScheduleVisible = true;
@@ -222,7 +195,6 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
     this.selectedEvent = event;
     const unspecifiedForm = () => {
       this.$message.error('No form specified for the selected event');
-      return;
     }
 
     if (!event.adFormId) {
@@ -264,17 +236,34 @@ export default class BiddingSchedule extends Mixins(AccessLevelMixin, BiddingSch
   /**
    * Invoked before proceeding to the next step.
    */
-  save() {
+  save(changeStep: boolean) {
     this.commonService('/api/m-biddings/save-form')
       .update(this.bidding)
       .then(res => {
+        this.$message.success('Bidding Schedule has been saved successfully');
         this.$emit('saved', {
-          data: res
+          data: res,
+          changeStep
         });
       })
       .catch(err => {
         console.log('Failed to save bidding schedule. %O', err);
         this.$message.error('Failed to save bidding schedule');
       });
+  }
+
+  private saveSchedule(data: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.commonService('api/m-bidding-schedules')
+        .update(data)
+        .then(res => {
+          this.$message.success('Date settings has been updated successfully');
+          resolve(res);
+        })
+        .catch(err => {
+          this.$message.error('Failed when updating the date settings')
+          reject(err);
+        });
+    });
   }
 }

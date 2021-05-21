@@ -24,7 +24,7 @@ export default class AccessLevelMixin extends Vue {
   }
 
   protected updateCriteria(criteria: string[]) {
-    if (this.adOrganizationId > 1) {
+    if (accountStore.isVendor || this.adOrganizationId > 1) {
       return [...criteria, ...this.additionalCriteria];
     }
 

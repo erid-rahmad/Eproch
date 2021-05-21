@@ -26,13 +26,14 @@
       ></el-divider>
 
       <el-button
-        v-for="proposal in proposals"
+        v-for="proposal in displayedProposals"
         :key="proposal.id"
+        :disabled="!submissionId"
         size="mini"
         type="primary"
         @click="openProposalForm(proposal)"
       >
-        {{ proposal.evaluation }} Proposal
+        {{ printEvaluation(proposal.evaluationMethodLineEvaluation) }} Proposal
       </el-button>
     </div>
 
@@ -40,6 +41,7 @@
       <submission-form
         v-if="submissionPage"
         @data-loaded="onSubmissionFormLoaded"
+        @vendor-changed="onVendorChanged"
       ></submission-form>
 
       <component
@@ -47,6 +49,8 @@
         ref="proposalForm"
         :is="proposalComponent"
         :data="selectedProposal"
+        :schedule="schedule"
+        :submission-id="submissionId"
       ></component>
     </div>
   </div>
