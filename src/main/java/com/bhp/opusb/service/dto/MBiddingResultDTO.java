@@ -2,6 +2,7 @@ package com.bhp.opusb.service.dto;
 
 import javax.validation.constraints.*;
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,14 +23,39 @@ public class MBiddingResultDTO extends AbstractAuditingDTO {
     private Long announcementResultId;
     private String announcementResultName;
     private String attachmentName;
-    private String uploadDir;
-
+    private String attachmentId;
 
     private Long biddingId;
     private String biddingName;
     private String biddingStatus;
     private String biddingNo;
     private String biddingType;
+    private ZonedDateTime startDate;
+    private ZonedDateTime endDate;
+
+    public String getAttachmentId() {
+        return attachmentId;
+    }
+
+    public void setAttachmentId(String attachmentId) {
+        this.attachmentId = attachmentId;
+    }
+
+    public ZonedDateTime getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(ZonedDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public ZonedDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(ZonedDateTime endDate) {
+        this.endDate = endDate;
+    }
 
     public String getAnnouncementResultName() {
         return announcementResultName;
@@ -45,14 +71,6 @@ public class MBiddingResultDTO extends AbstractAuditingDTO {
 
     public void setAttachmentName(String attachmentName) {
         this.attachmentName = attachmentName;
-    }
-
-    public String getUploadDir() {
-        return uploadDir;
-    }
-
-    public void setUploadDir(String uploadDir) {
-        this.uploadDir = uploadDir;
     }
 
     public String getBiddingName() {
@@ -184,11 +202,16 @@ public class MBiddingResultDTO extends AbstractAuditingDTO {
             ", active=" + active +
             ", adOrganizationId=" + adOrganizationId +
             ", announcementResultId=" + announcementResultId +
+            ", announcementResultName='" + announcementResultName + '\'' +
+            ", attachmentName='" + attachmentName + '\'' +
+            ", attachmentId='" + attachmentId + '\'' +
             ", biddingId=" + biddingId +
             ", biddingName='" + biddingName + '\'' +
             ", biddingStatus='" + biddingStatus + '\'' +
             ", biddingNo='" + biddingNo + '\'' +
             ", biddingType='" + biddingType + '\'' +
+            ", startDate=" + startDate +
+            ", endDate=" + endDate +
             ", vendorId=" + vendorId +
             ", biddingEvalResultId=" + biddingEvalResultId +
             '}';

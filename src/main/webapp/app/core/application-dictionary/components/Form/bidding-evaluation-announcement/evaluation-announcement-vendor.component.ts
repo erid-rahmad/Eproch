@@ -31,9 +31,11 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
   }
 
   private biddingResults:any={};
+  private pickRow:any={};
 
   index: boolean = true;
   ScheduleListVisible = false;
+
 
   BiddingSchedule = [
     {
@@ -69,21 +71,6 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
 
   ]
 
-
-  tableData = [
-    {
-      0: '22-22-2021',
-      1: 'Pengadaan Kendaraan Operasional',
-      2: '22-22-2021',
-      3: 'Belum Terdaftar',
-      4: 'View Schejule',
-      5: 'In progres',
-      re: '3',
-      7: '22/22/2021',
-      8: 'Admin Tender'
-    },
-  ];
-
   created() {
     this.retrieveBiddingResult();
   }
@@ -102,6 +89,12 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin,Access
       })
       .catch(err => this.$message.error('Failed to get bidding announcement'))
     // .finally(() => this.loading = false);
+  }
+
+  view(row){
+    this.index=false;
+    this.pickRow=row;
+
   }
 
   back() {
