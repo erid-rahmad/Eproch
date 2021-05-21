@@ -5,7 +5,7 @@
         <div v-if="page===1">
             <el-row>
                 <el-col :span="24">
-                    <el-table :data="gridData1" style="width: 100%" size="mini">
+                    <el-table :data="biddingGrid" style="width: 100%" size="mini">
                         <el-table-column width="50" label="No">
                             <template slot-scope="row">
                                 {{ row.$index + 1 }}
@@ -24,10 +24,9 @@
                          <el-table-column min-width="70" sortable prop="documentStatus" label="Bidding Status" />
                           <el-table-column min-width="60" sortable prop="join" label="Joined Vendor" />
                         <el-table-column align="center" min-width="30">
-
-                            <template slot-scope="row">
+                            <template slot-scope="{row}">
                                 <!-- <el-button size="mini" icon="el-icon-view" type="primary" @click="moreinfo()" /> -->
-                                <el-button size="mini"  type="primary" @click="moreinfo()" >Action</el-button>
+                                <el-button size="mini"  type="primary" @click="view(row)" >Action</el-button>
                             </template>
                         </el-table-column>
                     </el-table>
@@ -35,11 +34,10 @@
             </el-row>
         </div>
         <div v-if="page===2">
-
         </div>
         <div v-if="page===3">
             <!-- <AddAnnouncementForm @back="back"></AddAnnouncementForm> -->
-             <EmailGrid  @back="back" ></EmailGrid>
+             <EmailGrid  @back="back" :pickRow="pickRow" ></EmailGrid>
         </div>
         <el-dialog title="Bidding Schedule" :visible.sync="ScheduleListVisible" width="90%">
             <el-table border :data="BiddingSchedule" size="mini">

@@ -1,0 +1,67 @@
+{
+    "name": "MBiddingResult",
+    "fields": [
+        {
+            "fieldName": "uid",
+            "fieldType": "UUID"
+        },
+        {
+            "fieldName": "active",
+            "fieldType": "Boolean"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "aDOrganization",
+            "otherEntityRelationshipName": "mBiddingResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "adOrganization",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cAnnouncementResult",
+            "otherEntityRelationshipName": "mBiddingResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "announcementResult",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBidding",
+            "otherEntityRelationshipName": "mBiddingResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "bidding",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "cVendor",
+            "otherEntityRelationshipName": "mBiddingResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "vendor",
+            "otherEntityField": "id"
+        },
+        {
+            "relationshipType": "many-to-one",
+            "otherEntityName": "mBiddingEvalResult",
+            "otherEntityRelationshipName": "mBiddingResult",
+            "relationshipValidateRules": "required",
+            "relationshipName": "biddingEvalResult",
+            "otherEntityField": "id"
+        }
+    ],
+    "changelogDate": "20210520080200",
+    "entityTableName": "m_bidding_result",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceClass",
+    "jpaMetamodelFiltering": true,
+    "fluentMethods": true,
+    "readOnly": false,
+    "embedded": false,
+    "clientRootFolder": "",
+    "applications": "*",
+    "skipClient": true
+}

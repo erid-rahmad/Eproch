@@ -1,0 +1,11 @@
+id;uid;active;ad_organization_id;announcement_result_id;bidding_id;vendor_id;bidding_eval_result_id
+1;8d561a1f-4d28-4b11-9865-aaaf2c46af0a;false;1;1;1;1;1
+2;ea68dc24-b9bf-4d8f-a90e-0787672fe8c0;false;2;2;2;2;2
+3;2f8eba1e-3b87-4db8-a283-41dfda95cccf;false;3;3;3;3;3
+4;23b2eede-ae1c-4136-bfa7-4d3d699471c1;true;4;4;4;4;4
+5;716c8014-d941-40f9-8a2b-a226ed1e09e0;false;5;5;5;5;5
+6;963a0a08-9d8a-4f4a-b471-8b55d8be7f40;false;6;6;6;6;6
+7;8b1fe9d4-e9d9-4b9d-ba7a-574958def1e3;true;7;7;7;7;7
+8;124eba1c-dc13-4c1a-ad06-7a388ee3090f;false;8;8;8;8;8
+9;3c37caf6-0fb9-4387-9223-a79e6166eaae;false;9;9;9;9;9
+10;cd321f30-37f5-4ff5-9606-0a9220dfcc3e;false;10;10;10;10;10

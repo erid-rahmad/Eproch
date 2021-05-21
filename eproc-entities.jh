@@ -162,6 +162,13 @@ entity CAnnouncement{
 	uid UUID
 	active Boolean
 }
+entity CAnnouncementResult{
+	description TextBlob required
+	publishDate ZonedDateTime
+	documentNo String
+	uid UUID
+	active Boolean
+}
 /**
  * The Registration Document Type entity.
  */
@@ -1201,6 +1208,14 @@ entity MBiddingEvaluationLine {
 	active Boolean
 }
 
+entity MBiddingEvalResult {
+    status String
+	uid UUID
+	active Boolean
+}
+
+
+
 entity MPrequalificationDateSet {
 	startDate ZonedDateTime
 	endDate ZonedDateTime
@@ -1235,6 +1250,11 @@ entity MBiddingInvitation {
 	invitationStatus String
 	reason String
 	answerDate ZonedDateTime
+	uid UUID
+	active Boolean
+}
+
+entity MBiddingResult {
 	uid UUID
 	active Boolean
 }
@@ -1415,6 +1435,11 @@ relationship ManyToOne {
 	CAnnouncement{bidding required} to MBidding
 	CAnnouncement{biddingSchedule required} to MBiddingSchedule
 	CAnnouncement{attachment} to CAttachment
+
+	CAnnouncementResult{adOrganization required} to ADOrganization
+    CAnnouncementResult{bidding required} to MBidding
+    CAnnouncementResult{biddingSchedule required} to MBiddingSchedule
+    CAnnouncementResult{attachment} to CAttachment
 
 	CVendor{adOrganization required} to ADOrganization
 	CVendor{documentType required} to CDocumentType
@@ -1757,6 +1782,9 @@ relationship ManyToOne {
     MBiddingEvaluationLine{adOrganization required} to ADOrganization
     MBiddingEvaluationLine{biddingEvaluation required} to MBiddingEvaluation
 
+    MBiddingEvalResult{adOrganization required} to ADOrganization
+    MBiddingEvalResult{biddingSubmission required} to MBiddingSubmission
+
 	MBiddingScheduleAttachment{adOrganization required} to ADOrganization
 
 	MDocumentSchedule{bidding required} to MBidding
@@ -1831,6 +1859,12 @@ relationship ManyToOne {
 	MBiddingInvitation{announcement required} to CAnnouncement
 	MBiddingInvitation{bidding required} to MBidding
 	MBiddingInvitation{vendor required} to CVendor
+
+	MBiddingResult{adOrganization required} to ADOrganization
+    MBiddingResult{announcementResult required} to CAnnouncementResult
+    MBiddingResult{bidding required} to MBidding
+    MBiddingResult{vendor required} to CVendor
+    MBiddingResult{biddingEvalResult required} to MBiddingEvalResult
 }
 
 // Allow filtering to all entities.

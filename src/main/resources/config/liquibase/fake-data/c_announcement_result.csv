@@ -1,0 +1,11 @@
+id;description;publish_date;document_no;uid;active;ad_organization_id;bidding_id;bidding_schedule_id
+1;../fake-data/blob/hipster.txt;2021-05-20T04:53:45;PNG;1beb98fb-e82f-4687-b2d8-3ba5df33919f;false;1;1;1
+2;../fake-data/blob/hipster.txt;2021-05-20T00:22:11;Music Awesome South Dakota;5f113a04-d62c-4f86-babd-69e400ffa73d;false;2;2;2
+3;../fake-data/blob/hipster.txt;2021-05-19T11:58:05;XML Games;0e1f0b95-4391-4f02-9002-fd57321de158;true;3;3;3
+4;../fake-data/blob/hipster.txt;2021-05-19T19:42:20;program transmit background;2021cef0-0163-4898-afd5-2ad250c34a39;true;4;4;4
+5;../fake-data/blob/hipster.txt;2021-05-19T12:10:07;UAE Dirham heuristic compressing;fb086ac3-f4e5-4f88-8cab-70e56bc21968;true;5;5;5
+6;../fake-data/blob/hipster.txt;2021-05-19T18:01:52;payment Computers Manager;24e733da-a164-4b55-9c88-0b28ad9dcff2;false;6;6;6
+7;../fake-data/blob/hipster.txt;2021-05-19T22:26:28;Lodge;20bb8ad6-3e02-4af4-8e0e-b72013478b7d;false;7;7;7
+8;../fake-data/blob/hipster.txt;2021-05-19T21:49:26;distributed implement;0c44bf40-2c92-45aa-9800-70d44e89510c;true;8;8;8
+9;../fake-data/blob/hipster.txt;2021-05-19T07:17:12;microchip;388819db-4b65-475f-bc55-4b5d58c4f17b;false;9;9;9
+10;../fake-data/blob/hipster.txt;2021-05-19T16:48:09;Forward compress Internal;205c2496-745e-4b62-b1aa-f21de49efa3b;true;10;10;10

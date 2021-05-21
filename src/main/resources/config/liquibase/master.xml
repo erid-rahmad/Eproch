@@ -163,6 +163,9 @@
     <include file="config/liquibase/changelog/20210511075800_added_entity_CPrequalificationEventLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210519092400_added_entity_MBiddingEvaluation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210519092500_added_entity_MBiddingEvaluationLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210519162400_added_entity_MBiddingEvalResult.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210520050500_added_entity_CAnnouncementResult.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210520080200_added_entity_MBiddingResult.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <include file="config/liquibase/changelog/20200415082600_added_entity_constraints_ADReferenceList.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20200420192000_added_entity_constraints_ADOrganization.xml" relativeToChangelogFile="false"/>
@@ -306,5 +309,8 @@
     <include file="config/liquibase/changelog/20210511075800_added_entity_constraints_CPrequalificationEventLine.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210519092400_added_entity_constraints_MBiddingEvaluation.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20210519092500_added_entity_constraints_MBiddingEvaluationLine.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210519162400_added_entity_constraints_MBiddingEvalResult.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210520050500_added_entity_constraints_CAnnouncementResult.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20210520080200_added_entity_constraints_MBiddingResult.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
 </databaseChangeLog>
