@@ -25,6 +25,9 @@ const PriceProposalProp = Vue.extend({
       }
     },
 
+    disabled: Boolean,
+    loading: Boolean,
+
     schedule: {
       type: Object,
       default: () => {
@@ -106,10 +109,6 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
 
   get isVendor() {
     return AccountStoreModule.isVendor;
-  }
-
-  get readOnly() {
-    return false;
   }
 
   get timeRemaining() {
@@ -331,12 +330,13 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
           const item = this.lineCache.get(line.biddingLineId);
           item.deliveryDate = line.deliveryDate;
           item.proposedPrice = line.proposedPrice;
+          item.totalPriceSubmission = item.quantity * line.proposedPrice;
         })
       })
   }
 
   save() {
-    console.log('validating form:', this.mainForm);
+    this.$emit('update:loading', true);
     let valid = true;
     const data = (({
       id,
@@ -370,7 +370,7 @@ export default class PriceProposal extends Mixins(AccessLevelMixin, PriceProposa
             console.error('Failed to save the proposal. %O', err);
             this.$message.error(`Failed saving the price proposal`);
           })
-          .finally(() => this.$emit('processing', false));
+          .finally(() => this.$emit('update:loading', false));
       }
     });
   }

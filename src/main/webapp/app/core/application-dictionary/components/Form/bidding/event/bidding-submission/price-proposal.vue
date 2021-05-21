@@ -237,6 +237,7 @@
                 v-model="row.proposedPrice"
                 v-inputmask="{ alias: 'currency' }"
                 :class="{ 'is-error': row.proposedPriceError }"
+                :disabled="disabled"
                 size="mini"
                 @change="value => onProposedPriceChange(row, $index, value)"
               ></el-input>
@@ -270,7 +271,7 @@
                 class="form-input"
                 :class="{ 'is-error': row.deliveryDateError }"
                 clearable
-                :disabled="readOnly"
+                :disabled="disabled"
                 :format="dateDisplayFormat"
                 placeholder="Pick a date"
                 size="mini"
@@ -293,7 +294,7 @@
     <el-dialog :show-close="false" title="Edit Sub Item" :visible.sync="subItemEditorVisible" @closed="onSubItemClosed">
       <subitem-editor
         ref="subitemEditor"
-        :read-only="readOnly"
+        :read-only="disabled"
         :item-index="selectedItemIndex"
         :item-detail="selectedItem"
         @saved="onSubItemSaved"
@@ -305,7 +306,7 @@
           {{ $t('entity.action.cancel') }}
         </el-button>
         <el-button
-          v-if="!readOnly"
+          v-if="!disabled"
           :loading="savingSubitem"
           icon="el-icon-check"
           size="mini"

@@ -9,7 +9,8 @@ const baseApiBiddingSubmission = 'api/m-bidding-submissions';
 
 const SubmissionFormProps = Vue.extend({
   props: {
-    data: Object
+    data: Object,
+    submission: Object,
   }
 })
 
@@ -20,7 +21,7 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
   private intervalId;
   private currentDate = new Date();
 
-  page = 1;
+  submitConfirmationVisible: boolean = false;
   vendorOptions: any[] = [];
 
   get dateDisplayFormat() {
@@ -50,28 +51,18 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
     });
   }
 
+  protected onMainFormUpdated(_mainForm: any) {
+    if (this.isVendor) {
+      this.retrieveSubmission(AccountStoreModule.vendorInfo.id);
+    }
+  }
+
   onVendorChanged(vendorId: number) {
     if (vendorId) {
-      this.commonService(baseApiBiddingSubmission)
-        .retrieve({
-          criteriaQuery: [
-            `biddingId.equals=${this.mainForm.biddingId}`,
-            `vendorId.equals=${vendorId}`
-          ],
-          paginationQuery: {
-            page: 0,
-            size: 1,
-            sort: ['id']
-          }
-        })
-        .then(res => {
-          if (res.data.length) {
-            this.$emit('vendor-changed', res.data[0].id);
-          }
-        });
-      } else {
-        this.$emit('vendor-changed', null);
-      }
+      this.retrieveSubmission(vendorId);
+    } else {
+      this.$emit('vendor-changed', null);
+    }
   }
 
   created() {
@@ -95,12 +86,35 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
     clearInterval(this.timerId);
   }
 
+  private retrieveSubmission(vendorId?: number) {
+    const vendorCriteria = vendorId ? `vendorId.equals=${vendorId}` : null;
+    this.commonService(baseApiBiddingSubmission)
+      .retrieve({
+        criteriaQuery: [
+          `biddingId.equals=${this.mainForm.biddingId}`,
+          vendorCriteria
+        ],
+        paginationQuery: {
+          page: 0,
+          size: 1,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        if (res.data.length) {
+          const submission = res.data[0];
+          this.$emit('update:submission', submission);
+        }
+      });
+  }
+
   private retrieveJoinedVendors(scheduleId: number) {
     this.commonService(baseApiBiddingSubmission)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           'active.equals=1',
-          `biddingScheduleId.equals=${scheduleId}`
+          `biddingScheduleId.equals=${scheduleId}`,
+          'documentStatus.equals=SMT'
         ]),
         paginationQuery: {
           page: 0,
@@ -118,8 +132,31 @@ export default class SubmissionForm extends Mixins(ScheduleEventMixin, Submissio
       })
   }
 
-  submit() {
-    console.log('This will submit the submission');
+  submit(confirm: boolean) {
+    if (confirm) {
+      this.commonService(baseApiBiddingSubmission)
+        .applyDocAction({
+          id: this.submission.id,
+          documentAction: 'SMT'
+        })
+        .then(status => {
+          this.submitConfirmationVisible = false;
+          this.$message({
+            message: `Document has been submitted successfully`,
+            type: 'success'
+          });
+        })
+        .catch(err => {
+          console.error('Error updating the document status! %O', err);
+          const message = `Error updating the document status`;
+          this.$message({
+            message: message.toString(),
+            type: 'error'
+          });
+        });
+    } else {
+      this.submitConfirmationVisible = true;
+    }
   }
 
   private updateCurrentDate() {
