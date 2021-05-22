@@ -49,7 +49,6 @@ public class MVendorScoringCriteriaService {
     }
 
     public List<CEvaluationMethodCriteriaDTO> vendorScoringAnswer (List<CEvaluationMethodCriteriaDTO> evaluationMethodCriteria,Long vendorscoringlineId){
-        log.debug("Request to save MVendorScoring annwer : {}", MapperJSONUtil.prettyLog(evaluationMethodCriteria));
 
         for (CEvaluationMethodCriteriaDTO cEvaluationMethodCriteriaDTO:evaluationMethodCriteria) {
             for ( CEvalMethodSubCriteriaDTO evalMethodSubCriteriaDTO:cEvaluationMethodCriteriaDTO.getEvalMethodSubCriteriaList()) {

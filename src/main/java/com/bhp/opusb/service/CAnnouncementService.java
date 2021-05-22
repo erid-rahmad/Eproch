@@ -104,7 +104,7 @@ public class CAnnouncementService {
      * @param cAnnouncementPublishDTO
      */
     public void publish(CAnnouncementPublishDTO cAnnouncementPublishDTO) {
-        log.info("this in {}", MapperJSONUtil.prettyLog(cAnnouncementPublishDTO));
+//        log.info("this in {}", MapperJSONUtil.prettyLog(cAnnouncementPublishDTO));
 
         CAnnouncement cAnnouncement = cAnnouncementMapper.toEntity(cAnnouncementPublishDTO.getAnnouncement());
         final MBiddingDTO mBiddingDTO = cAnnouncementPublishDTO.getBidding();
@@ -113,6 +113,8 @@ public class CAnnouncementService {
         final MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
 
         String body = content.replace("#biddingTitle", mBiddingDTO.getName());
+        List<Long> vendorlist = new ArrayList<>();
+
 
         for (final AdUserDTO user : users) {
             final AdUser adUser = adUserMapper.toEntity(user);
@@ -125,7 +127,10 @@ public class CAnnouncementService {
                 .announcement(cAnnouncement);
 
             // Create the invitation record.
-            mBiddingInvitationRepository.save(mBiddingInvitation);
+            if(!vendorlist.contains(mBiddingInvitation.getVendor().getId())){
+                mBiddingInvitationRepository.save(mBiddingInvitation);
+            }
+            vendorlist.add(mBiddingInvitation.getVendor().getId());
 
             // Send the email.
             final String fileName = cAnnouncementPublishDTO.getAnnouncement().getAttachmentName();

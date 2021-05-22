@@ -15,7 +15,9 @@ const BiddingInvitationResponseProps = Vue.extend({
     },
     moreinfo: {
       type: Object,
-      default: () => {}
+      default: () => {
+        return {};
+      }
     }
   }
 });
@@ -97,7 +99,8 @@ export default class BiddingInvitationResponse extends Mixins(AccessLevelMixin, 
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `announcementId.equals=${this.moreinfo.id}`,
-          `invitationStatus.equals=D`
+          `invitationStatus.in=D`,
+          `invitationStatus.in=R`
         ]),
         paginationQuery: {
           page: 0,
@@ -107,7 +110,6 @@ export default class BiddingInvitationResponse extends Mixins(AccessLevelMixin, 
       })
       .then(res => {
         this.vendorDownload = res.data;
-        console.log("vendordownload",this.vendorDownload);
       });
   }
 
