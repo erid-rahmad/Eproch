@@ -12,7 +12,7 @@
       <el-row :gutter="24">
         <el-col :xs="24" :sm="24" :lg="18" :xl="8">
           <el-form-item label="Bidding No." prop="biddingId">
-            <el-select v-model="formData.biddingId" clearable filterable @change="retrieveVendorSuggestions">
+            <el-select v-model="formData.biddingId" clearable :disabled="!newRecord" filterable @change="retrieveVendorSuggestions">
               <el-option v-for="item in biddingData" :key="item.id" :label="item.documentNo" :value="item.id"></el-option>
             </el-select>
           </el-form-item>
@@ -85,7 +85,8 @@
     >
       <el-table v-loading="loadingEmailList" border :data="emailList" size="mini" stripe @selection-change="onRecipientSelectionChanged">
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="Name" property="name" min-width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column label="Vendor Name" property="cVendorName" min-width="150" show-overflow-tooltip></el-table-column>
+        <el-table-column label="Username" property="name" min-width="150" show-overflow-tooltip></el-table-column>
         <el-table-column label="Position" property="position" min-width="150" show-overflow-tooltip></el-table-column>
         <el-table-column label="Email" property="email" min-width="150" show-overflow-tooltip></el-table-column>
       </el-table>

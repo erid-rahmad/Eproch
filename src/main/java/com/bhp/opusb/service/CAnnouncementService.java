@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import com.bhp.opusb.config.ApplicationProperties;
 import com.bhp.opusb.domain.AdUser;
 import com.bhp.opusb.domain.CAnnouncement;
 import com.bhp.opusb.domain.MBidding;
@@ -17,17 +18,19 @@ import com.bhp.opusb.repository.CAnnouncementRepository;
 import com.bhp.opusb.repository.MBiddingInvitationRepository;
 import com.bhp.opusb.repository.MBiddingSubmissionRepository;
 import com.bhp.opusb.repository.MVendorSuggestionRepository;
-import com.bhp.opusb.service.dto.*;
+import com.bhp.opusb.service.dto.AdUserDTO;
+import com.bhp.opusb.service.dto.CAnnouncementDTO;
+import com.bhp.opusb.service.dto.CAnnouncementPublishDTO;
+import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.mapper.AdUserMapper;
 import com.bhp.opusb.service.mapper.CAnnouncementMapper;
 import com.bhp.opusb.service.mapper.MBiddingMapper;
-
 import com.bhp.opusb.service.mapper.MVendorSuggestionMapper;
 import com.bhp.opusb.util.MapperJSONUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -52,9 +55,6 @@ public class CAnnouncementService {
     @Autowired
     private AdUserRepository adUserRepository;
 
-    @Value("${application.attachment.upload-dir}")
-    private String UploadDir;
-
     private final MBiddingInvitationRepository mBiddingInvitationRepository;
 
     private final MailService mailService;
@@ -63,11 +63,13 @@ public class CAnnouncementService {
     private final MBiddingMapper mBiddingMapper;
     private final AdUserMapper adUserMapper;
 
+    private final ApplicationProperties properties;
+
     public CAnnouncementService(CAnnouncementRepository cAnnouncementRepository,
             MBiddingSubmissionRepository mBiddingSubmissionRepository,
             MBiddingInvitationRepository mBiddingInvitationRepository, MailService mailService,
             CAnnouncementMapper cAnnouncementMapper, MBiddingMapper mBiddingMapper,
-            AdUserMapper adUserMapper) {
+            AdUserMapper adUserMapper, ApplicationProperties properties) {
         this.cAnnouncementRepository = cAnnouncementRepository;
         this.mBiddingSubmissionRepository = mBiddingSubmissionRepository;
         this.mBiddingInvitationRepository = mBiddingInvitationRepository;
@@ -75,6 +77,7 @@ public class CAnnouncementService {
         this.cAnnouncementMapper = cAnnouncementMapper;
         this.mBiddingMapper = mBiddingMapper;
         this.adUserMapper = adUserMapper;
+        this.properties = properties;
     }
     @Autowired
     MVendorSuggestionMapper mVendorSuggestionMapper;
@@ -107,35 +110,35 @@ public class CAnnouncementService {
         final MBiddingDTO mBiddingDTO = cAnnouncementPublishDTO.getBidding();
         final String content = cAnnouncement.getDescription();
         final List<AdUserDTO> users = cAnnouncementPublishDTO.getUsers();
-        final List<MVendorSuggestionDTO> mvendor =  cAnnouncementPublishDTO.getVendor();
-
-
-        MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
-        log.info("this vendor {}",mvendor);
+        final MBidding mBidding = mBiddingMapper.toEntity(mBiddingDTO);
 
         String body = content.replace("#biddingTitle", mBiddingDTO.getName());
 
-        for ( final MVendorSuggestionDTO mvendor_ : mvendor ){
-            MVendorSuggestion mVendorSuggestion =mVendorSuggestionMapper.toEntity(mvendor_);
+        for (final AdUserDTO user : users) {
+            final AdUser adUser = adUserMapper.toEntity(user);
             MBiddingInvitation mBiddingInvitation = new MBiddingInvitation()
                 .active(true)
                 .adOrganization(cAnnouncement.getAdOrganization())
                 .bidding(mBidding)
-                .vendor(mVendorSuggestion.getVendor())
+                .vendor(adUser.getCVendor())
                 .invitationStatus("U")
                 .announcement(cAnnouncement);
 
             // Create the invitation record.
             mBiddingInvitationRepository.save(mBiddingInvitation);
-        }
 
-
-        for (final AdUserDTO user : users) {
-            final AdUser adUser = adUserMapper.toEntity(user);
+            // Send the email.
+            final String fileName = cAnnouncementPublishDTO.getAnnouncement().getAttachmentName();
             body = body.replace("#vendorName", user.getcVendorName());
+            String attachmentPath = null;
+
+            if (fileName != null) {
+                attachmentPath = properties.getAttachment().getUploadDir() + "/" + fileName;
+            }
             mailService.sendMailWithAttachment(user.getEmail(), "Bidding Invitation", body, false, true,
-                UploadDir+"/"+cAnnouncementPublishDTO.getAnnouncement().getAttachmentName());
+                attachmentPath);
         }
+
         // Update the announcement published date.
         cAnnouncement.setPublishDate(ZonedDateTime.now());
         cAnnouncementRepository.save(cAnnouncement);

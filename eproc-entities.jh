@@ -1823,6 +1823,7 @@ relationship ManyToOne {
 	MPreBidMeeting{adOrganization required} to ADOrganization
 	MPreBidMeetingAttachment{adOrganization required} to ADOrganization
 	MPreBidMeetingParticipant{adOrganization required} to ADOrganization
+	MPreBidMeetingParticipant{preBidMeeting required} to MPreBidMeeting
 	MPreBidMeetingParticipant{vendor required} to CVendor
 
 	MBiddingSubmission{bidding required} to MBidding

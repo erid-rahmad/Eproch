@@ -3,20 +3,26 @@ import ScheduleEventMixin from '@/core/application-dictionary/mixins/ScheduleEve
 import HtmlEditor from '@/shared/components/HtmlEditor/index.vue';
 import { AccountStoreModule } from '@/shared/config/store/account-store';
 import { ElForm } from 'element-ui/types/form';
-import { Component, Inject, Mixins, Watch } from "vue-property-decorator";
-import AccessLevelMixin from "@/core/application-dictionary/mixins/AccessLevelMixin";
+import { Component, Inject, Mixins, Vue, Watch } from "vue-property-decorator";
 
 const baseApiBidding = 'api/m-biddings'
+const baseApiBiddingSchedule = 'api/m-bidding-schedules'
 const baseApiAnnouncement = 'api/c-announcements';
 const baseApiVendorSuggestion = 'api/m-vendor-suggestions';
-const baseApiUser = 'api/ad-users'
+const baseApiUser = 'api/ad-users';
+
+const AnnouncementFormProps = Vue.extend({
+  props: {
+    newRecord: Boolean
+  }
+})
 
 @Component({
   components: {
     HtmlEditor
   }
 })
-export default class AnnouncementForm extends Mixins(ScheduleEventMixin,AccessLevelMixin) {
+export default class AnnouncementForm extends Mixins(ScheduleEventMixin, AnnouncementFormProps) {
 
   @Inject('accountService')
   private accountService: () => AccountService;
@@ -29,7 +35,6 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin,AccessLe
   attachmentFormVisible = false;
   emailPreviewVisible = false;
   recipientListVisible = false;
-  private schedule:any={};
 
   private file: any = {};
 
@@ -42,7 +47,6 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin,AccessLe
   private limit: number = 1;
   private vendorSuggestions: any[] = [];
   private dataForAnnouncment: any = {};
-
 
   private selectedRecipients = [];
 
@@ -79,11 +83,16 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin,AccessLe
   }
 
   onMainFormUpdated(mainForm: any) {
-    this.$set(this.formData, 'biddingId', mainForm.biddingId);
-    this.$set(this.formData, 'biddingScheduleId', mainForm.id);
+    if (!this.newRecord) {
+      this.$set(this.formData, 'biddingId', mainForm.biddingId);
+      this.$set(this.formData, 'biddingScheduleId', mainForm.id);
+    }
+    
     this.retrieveVendorSuggestions(mainForm.biddingId);
-    this.retrieveAnnouncement(mainForm.biddingId, mainForm.id);
-    this.biddingSchedules();
+
+    if (!this.newRecord) {
+      this.retrieveAnnouncement(mainForm.biddingId, mainForm.id);
+    }
   }
 
   created() {
@@ -93,10 +102,6 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin,AccessLe
   changedata() {
     this.emailList = this.dataForAnnouncment.emaillist;
     this.vendorSuggestions = this.dataForAnnouncment.vendorlist;
-
-    console.log(this.dataForAnnouncment.emaillist);
-    console.log(this.dataForAnnouncment.vendorlist);
-
   }
   private retrieveBiddings() {
     this.commonService(baseApiBidding)
@@ -137,6 +142,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin,AccessLe
 
   retrieveVendorSuggestions(biddingId: number) {
     this.loadingVendors = true;
+    this.retrieveBiddingScheduleByFormType(biddingId, 'AN');
     this.commonService(baseApiVendorSuggestion)
       .retrieve({
         criteriaQuery: this.updateCriteria([
@@ -153,31 +159,20 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin,AccessLe
       .finally(() => this.loadingVendors = false);
   }
 
-
-
-
-  biddingSchedules() {
-    const a : String="RS";
-    this.commonService("api/m-bidding-schedules")
+  retrieveBiddingScheduleByFormType(biddingId: number, formType: string) {
+    this.commonService(baseApiBiddingSchedule)
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          `biddingId.equals=${this.mainForm.biddingId}`,
+          `biddingId.equals=${biddingId}`,
+          `formType.equals=${formType}`
         ]),
         paginationQuery: {
           page: 0,
-          size: 10000,
+          size: 1,
           sort: ['id']
         }
       })
-      .then(res => {
-        res.data.forEach(result => {
-          console.log("this result",result)
-          if (result.formType==="RS"){
-            this.schedule=result;
-          }
-        });
-        this.mainForm.biddingScheduleId=this.schedule.id;
-      });
+      .then(res => this.formData.biddingScheduleId = res.data[0]?.id);
   }
 
   retrieveEmailList() {

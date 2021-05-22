@@ -99,7 +99,7 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendMailWithAttachment(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileToAttach){
+    public void sendMailWithAttachment(String to, String subject, String content, boolean isMultipart, boolean isHtml, String fileToAttach){
         MimeMessage message = mailSender.createMimeMessage();
         try{
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -107,8 +107,11 @@ public class MailService {
             helper.setTo(to);
             helper.setSubject(subject);
             helper.setText(content,true);
-            FileSystemResource file = new FileSystemResource(fileToAttach);
-            helper.addAttachment(file.getFilename(), file);
+
+            if (fileToAttach != null) {
+                FileSystemResource file = new FileSystemResource(fileToAttach);
+                helper.addAttachment(file.getFilename(), file);
+            }
         }catch (MessagingException e) {
             throw new MailParseException(e);
         }

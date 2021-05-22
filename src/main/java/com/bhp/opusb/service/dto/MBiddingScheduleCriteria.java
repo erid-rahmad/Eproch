@@ -46,6 +46,7 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
     private LongFilter adOrganizationId;
 
     private LongFilter eventTypeLineId;
+    private StringFilter formType;
 
     public MBiddingScheduleCriteria() {
     }
@@ -64,6 +65,7 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.biddingId = other.biddingId == null ? null : other.biddingId.copy();
         this.adOrganizationId = other.adOrganizationId == null ? null : other.adOrganizationId.copy();
         this.eventTypeLineId = other.eventTypeLineId == null ? null : other.eventTypeLineId.copy();
+        this.formType = other.formType == null ? null : other.formType.copy();
     }
 
     @Override
@@ -175,6 +177,13 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         this.eventTypeLineId = eventTypeLineId;
     }
 
+    public StringFilter getFormType() {
+        return formType;
+    }
+
+    public void setFormType(StringFilter formType) {
+        this.formType = formType;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -198,7 +207,8 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
             Objects.equals(mBiddingScheduleAttachmentId, that.mBiddingScheduleAttachmentId) &&
             Objects.equals(biddingId, that.biddingId) &&
             Objects.equals(adOrganizationId, that.adOrganizationId) &&
-            Objects.equals(eventTypeLineId, that.eventTypeLineId);
+            Objects.equals(eventTypeLineId, that.eventTypeLineId) &&
+            Objects.equals(formType, that.formType);
     }
 
     @Override
@@ -216,7 +226,8 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
         mBiddingScheduleAttachmentId,
         biddingId,
         adOrganizationId,
-        eventTypeLineId
+        eventTypeLineId,
+        formType
         );
     }
 
@@ -236,6 +247,7 @@ public class MBiddingScheduleCriteria implements Serializable, Criteria {
                 (biddingId != null ? "biddingId=" + biddingId + ", " : "") +
                 (adOrganizationId != null ? "adOrganizationId=" + adOrganizationId + ", " : "") +
                 (eventTypeLineId != null ? "eventTypeLineId=" + eventTypeLineId + ", " : "") +
+                (formType != null ? "formType=" + formType + ", " : "") +
             "}";
     }
 

@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import io.github.jhipster.service.QueryService;
 
-import com.bhp.opusb.domain.MBiddingSchedule;
 import com.bhp.opusb.domain.*; // for static metamodels
 import com.bhp.opusb.repository.MBiddingScheduleRepository;
 import com.bhp.opusb.service.dto.MBiddingScheduleCriteria;
@@ -134,6 +133,12 @@ public class MBiddingScheduleQueryService extends QueryService<MBiddingSchedule>
             if (criteria.getEventTypeLineId() != null) {
                 specification = specification.and(buildSpecification(criteria.getEventTypeLineId(),
                     root -> root.join(MBiddingSchedule_.eventTypeLine, JoinType.LEFT).get(CEventTypeline_.id)));
+            }
+            if (criteria.getFormType() != null) {
+                specification = specification.and(buildSpecification(criteria.getFormType(),
+                    root -> root
+                        .join(MBiddingSchedule_.eventTypeLine, JoinType.INNER)
+                        .join(CEventTypeline_.cEvent, JoinType.INNER).get(CEvent_.formType)));
             }
         }
         return specification;
