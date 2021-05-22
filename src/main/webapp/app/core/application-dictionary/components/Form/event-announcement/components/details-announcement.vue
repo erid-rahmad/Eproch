@@ -1,80 +1,105 @@
 <template>
-  <div class="details-announcement">
+  <div class="bidding-invitation-response">
+    <h3 style="margin-top: 0">Bidding Invitation Details</h3>
+    <div class="header">
+      <h2>{{ moreinfo.biddingDocNo }}</h2>
+      <p>{{ moreinfo.biddingName }}</p>
+    </div>
     <el-row>
-      <!--            <el-row :gutter="columnSpacing">-->
-      <!--                <el-col :span="24">-->
-      <!--                    <el-button type="danger" plain size="mini" icon="el-icon-close" @click="back">-->
-      <!--                        Back-->
-      <!--                    </el-button>-->
-      <!--                </el-col>-->
-      <!--            </el-row>-->
-      <el-col :span="24">
-        <el-divider content-position="left">
-          <h4>Pendaftaran dan Penyampaian Dokumen Pengadaan</h4>
-        </el-divider>
-        <div class="header">
-          <h2>{{ moreinfo.biddingDocNo }}</h2>
-          <p>{{ moreinfo.biddingName }}</p>
-        </div>
+      <el-col
+        :xs="24"
+        :sm="20"
+        :md="18"
+        :lg="16"
+        :xl="12"
+      >
         <div>
           <el-divider content-position="left">
-            <h4>Penyedia yang Sudah Mendaftar</h4>
+            <h4>Interested Vendors</h4>
           </el-divider>
-          <el-table :data="vendorJoin" style="width: 80%" size="mini">
+          <el-table
+            border
+            :data="vendorJoin"
+            highlight-current-row
+            size="mini"
+            stripe
+          >
             <el-table-column width="50" label="No">
               <template slot-scope="row">
                 {{ row.$index + 1 }}
               </template>
             </el-table-column>
-            <el-table-column min-width="80" sortable prop="vendorName" label="Nama Perusahaan" />
-            <el-table-column min-width="100" sortable label="Tanggal Daftar">
+            <el-table-column label="Vendor Name" min-width="200" prop="vendorName" sortable show-overflow-tooltip></el-table-column>
+            <el-table-column label="Joined Date" width="150" sortable>
               <template slot-scope="{ row }">
-                <span>{{ formattime(row.answerDate) }}</span>
+                {{ row.answerDate | formatDate }}
               </template>
             </el-table-column>
           </el-table>
         </div>
+
         <div>
           <el-divider content-position="left">
-            <h4>Penyedia yang Menolak</h4>
+            <h4>Uninterested Vendors</h4>
           </el-divider>
-          <el-table :data="vendorNotJoin" style="width: 80%" size="mini">
+          <el-table
+            border
+            :data="vendorNotJoin"
+            highlight-current-row
+            size="mini"
+            stripe
+          >
             <el-table-column width="50" label="No">
               <template slot-scope="row">
                 {{ row.$index + 1 }}
               </template>
             </el-table-column>
-            <el-table-column min-width="80" sortable prop="vendorName" label="Nama Perusahaan" />
-            <el-table-column min-width="100" sortable label="Tanggal Tolak">
+            <el-table-column min-width="200" sortable prop="vendorName" label="Vendor Name" show-overflow-tooltip></el-table-column>
+            <el-table-column width="150" sortable label="Refusal Date">
               <template slot-scope="{ row }">
-                <span>{{ formattime(row.answerDate) }}</span>
+                {{ row.answerDate | formatDate }}
               </template>
             </el-table-column>
-            <el-table-column min-width="100" sortable prop="reason" label="Alasan" />
+            <el-table-column min-width="200" sortable prop="reason" label="Alasan" />
           </el-table>
-            <el-divider content-position="left">
-                <h4>Penyedia yang Download</h4>
-            </el-divider>
-            <el-table :data="vendorDownload" style="width: 80%" size="mini">
-                <el-table-column width="50" label="No">
-                    <template slot-scope="row">
-                        {{ row.$index + 1 }}
-                    </template>
-                </el-table-column>
-                <el-table-column min-width="80" sortable prop="vendorName" label="Nama Perusahaan" />
-            </el-table>
+        </div>
+        <div>
+
+          <el-divider content-position="left">
+              <h4>Vendors who have downloaded the documents</h4>
+          </el-divider>
+          <el-table
+            border
+            :data="vendorDownload"
+            highlight-current-row
+            size="mini"
+            stripe
+          >
+              <el-table-column width="50" label="No">
+                  <template slot-scope="row">
+                      {{ row.$index + 1 }}
+                  </template>
+              </el-table-column>
+              <el-table-column min-width="200" sortable prop="vendorName" label="Vendor Name"></el-table-column>
+          </el-table>
         </div>
         <div>
           <el-divider content-position="left">
-            <h4>Penyedia yang Tidak Menjawab</h4>
+            <h4>Not yet Responding</h4>
           </el-divider>
-          <el-table :data="vendorNoResponse" style="width: 80%" size="mini">
+          <el-table
+            border
+            :data="vendorNoResponse"
+            highlight-current-row
+            size="mini"
+            stripe
+          >
             <el-table-column width="50" label="No">
               <template slot-scope="row">
                 {{ row.$index + 1 }}
               </template>
             </el-table-column>
-            <el-table-column min-width="80" sortable prop="vendorName" label="Nama Perusahaan" />
+            <el-table-column min-width="200" sortable prop="vendorName" label="Vendor Name" show-overflow-tooltip></el-table-column>
           </el-table>
         </div>
       </el-col>
@@ -83,7 +108,7 @@
 </template>
 <script lang="ts" src="./details-announcement.component.ts"></script>
 <style lang="scss">
-.compact .details-announcement {
+.compact .bidding-invitation-response {
   .el-table--mini {
     td,
     th {
@@ -98,7 +123,7 @@
 }
 </style>
 <style lang="scss" scoped>
-.details-announcement {
+.bidding-invitation-response {
   .criteria-section {
     &:not(.criteria-0),
     > .el-col > .sub-criteria-section:not(.sub-0) {

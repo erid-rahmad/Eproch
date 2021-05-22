@@ -95,7 +95,6 @@
             <bidding-invitation-response
                 v-if="page === 2"
                 :moreinfo="moreinfo"
-                @back="back"
             ></bidding-invitation-response>
 
             <announcement-form

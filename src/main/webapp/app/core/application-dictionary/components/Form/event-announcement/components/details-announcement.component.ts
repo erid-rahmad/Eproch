@@ -1,7 +1,6 @@
-import { Component, Vue,Inject,Mixins } from "vue-property-decorator";
-import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
-import moment from 'moment';
+import { Component, Inject, Mixins, Vue } from "vue-property-decorator";
+import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
 
 const baseApiUrl = 'api/m-bidding-invitations';
 
@@ -28,10 +27,10 @@ export default class BiddingInvitationResponse extends Mixins(AccessLevelMixin, 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
-  private vendorJoin: any = {};
-  private vendorNotJoin: any = {};
-  private vendorNoResponse: any = {};
-  private vendorDownload: any = {};
+  vendorJoin: any = [];
+  vendorNotJoin: any = [];
+  vendorNoResponse: any = [];
+  vendorDownload: any = [];
 
   created() {
     this.biddingInvitations();
@@ -111,14 +110,5 @@ export default class BiddingInvitationResponse extends Mixins(AccessLevelMixin, 
       .then(res => {
         this.vendorDownload = res.data;
       });
-  }
-
-  formattime(date) {
-    console.log("format");
-    return moment(String(date)).format('MM-DD-YYYY hh:mm');
-  }
-
-  back() {
-    this.$emit("back");
   }
 }
