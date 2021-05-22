@@ -60,11 +60,8 @@ public class MBiddingResultService {
     }
 
     public MBiddingResultPublish publish(MBiddingResultPublish mBiddingResultPublish) {
-        log.debug("this debug 1 {}", MapperJSONUtil.prettyLog(mBiddingResultPublish));
-
 
         for(MBiddingEvalResultDTO mBiddingEvalResult_:mBiddingResultPublish.getmBiddingEvalResult()){
-            log.debug("this debug 2 {}",MapperJSONUtil.prettyLog(mBiddingEvalResult_));
             MBiddingResultDTO mBiddingResultDTO =new MBiddingResultDTO();
             mBiddingResultDTO.setBiddingId(mBiddingEvalResult_.getBiddingId());
             mBiddingResultDTO.setVendorId(mBiddingEvalResult_.getVendorId());

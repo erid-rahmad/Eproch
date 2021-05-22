@@ -79,7 +79,7 @@ public class MVendorScoringCriteriaResource {
     @PostMapping("/m-vendor-scoring-criteria-answer")
     @Transactional
     public ResponseEntity<MVendorScoringNestedDTO> createMVendorScoringCriteria(@Valid @RequestBody MVendorScoringNestedDTO answer) throws URISyntaxException {
-        log.debug("REST request to save MVendorScoringCriteria : {}", MapperJSONUtil.prettyLog(answer));
+//        log.debug("REST request to save MVendorScoringCriteria : {}", MapperJSONUtil.prettyLog(answer));
         List<CEvaluationMethodCriteriaDTO> result2 =mVendorScoringCriteriaService.vendorScoringAnswer(answer.getEvaluationMethodCriteriaNested(),answer.getEvaluationMethodLineId());
         log.info("ok {}",result2);
         return ResponseEntity.ok(answer);

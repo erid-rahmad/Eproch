@@ -99,6 +99,7 @@ public class MailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Async
     public void sendMailWithAttachment(String to, String subject, String content, boolean isMultipart, boolean isHtml, String fileToAttach){
         MimeMessage message = mailSender.createMimeMessage();
         try{

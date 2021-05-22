@@ -53,6 +53,7 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
       .then(res => {
         this.vendorJoin = res.data;
         console.log("vendorJoin",this.vendorJoin);
+
       });
   }
 
@@ -99,7 +100,6 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `announcementId.equals=${this.moreinfo.id}`,
-          `invitationStatus.equals=D`
         ]),
         paginationQuery: {
           page: 0,
@@ -108,7 +108,13 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
         }
       })
       .then(res => {
-        this.vendorDownload = res.data;
+        let dataa:any=[];
+        res.data.forEach(result => {
+          if (result.invitationStatus==="D" ||result.invitationStatus==="R"){
+            dataa.push(result);
+          }
+        });
+        this.vendorDownload = dataa;
         console.log("vendordownload",this.vendorDownload);
       });
   }
