@@ -1,36 +1,32 @@
 package com.bhp.opusb.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+
 import com.bhp.opusb.domain.User;
 import com.bhp.opusb.service.dto.MBiddingDTO;
 import com.bhp.opusb.service.dto.MVerificationDTO;
 import com.bhp.opusb.service.dto.MVerificationLineDTO;
 
-import io.github.jhipster.config.JHipsterProperties;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Locale;
-import javax.mail.*;
-import javax.mail.internet.*;
-
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.MailException;
 import org.springframework.mail.MailParseException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import io.github.jhipster.config.JHipsterProperties;
 
 /**
  * Service for sending emails.
@@ -96,55 +92,25 @@ public class MailService {
         }
     }
 
-    @Autowired
-    private JavaMailSender mailSender;
-
     @Async
-    public void sendMailWithAttachment(String to, String subject, String content, boolean isMultipart, boolean isHtml, String fileToAttach){
-        MimeMessage message = mailSender.createMimeMessage();
-        try{
+    public void sendMailWithAttachment(String to, String subject, String content, boolean isMultipart, boolean isHtml,
+            String fileToAttach) {
+        MimeMessage message = javaMailSender.createMimeMessage();
+        try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
             helper.setFrom("admin@yahoo.com");
             helper.setTo(to);
             helper.setSubject(subject);
-            helper.setText(content,true);
+            helper.setText(content, true);
 
             if (fileToAttach != null) {
                 FileSystemResource file = new FileSystemResource(fileToAttach);
                 helper.addAttachment(file.getFilename(), file);
             }
-        }catch (MessagingException e) {
+        } catch (MessagingException e) {
             throw new MailParseException(e);
         }
-        mailSender.send(message);
-    }
-
-    public void sendMailWithInlineResources(String to, String subject, String content, boolean isMultipart, boolean isHtml,String fileToAttach )
-    {
-        MimeMessagePreparator preparator = new MimeMessagePreparator()
-        {
-            public void prepare(MimeMessage mimeMessage) throws Exception
-            {
-                mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(to));
-                mimeMessage.setFrom(new InternetAddress("admin@gmail.com"));
-                mimeMessage.setSubject(subject);
-
-                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-
-                helper.setText(content, true);
-
-                FileSystemResource res = new FileSystemResource(new File(fileToAttach));
-                helper.addInline("identifier1234", res);
-            }
-        };
-
-        try {
-            mailSender.send(preparator);
-        }
-        catch (MailException ex) {
-            // simply log it and go on...
-            System.err.println(ex.getMessage());
-        }
+        javaMailSender.send(message);
     }
 
     @Async
@@ -163,6 +129,26 @@ public class MailService {
     }
 
     @Async
+    public void sendEmailFromTemplate(User user, String templateName, String titleKey, Map<String, Object> contextVariables) {
+        if (user.getEmail() == null) {
+            log.warn("Email doesn't exist for user '{}'", user.getLogin());
+            return;
+        }
+        Locale locale = Locale.forLanguageTag(user.getLangKey());
+        final Context context = new Context(locale);
+        context.setVariable(USER, user);
+        context.setVariable(BASE_URL, jHipsterProperties.getMail().getBaseUrl());
+
+        contextVariables.entrySet().forEach(entry -> {
+            context.setVariable(entry.getKey(), entry.getValue());
+        });
+
+        String content = templateEngine.process(templateName, context);
+        String subject = messageSource.getMessage(titleKey, null, locale);
+        sendEmail(user.getEmail(), subject, content, false, true);
+    }
+
+    @Async
     public void sendEmailFromTemplate(String email, String templateName, String titleKey) {
         Locale locale = Locale.forLanguageTag("en");
         Context context = new Context(locale);
@@ -175,7 +161,7 @@ public class MailService {
     public void sendEmailFromTemplate(String email, String templateName, String titleKey,MBiddingDTO mBiddingDTO) {
         Locale locale = Locale.forLanguageTag("en");
         Context context = new Context(locale);
-        context.setVariable("BIDING_DATA",mBiddingDTO);
+        context.setVariable("BIDING_DATA", mBiddingDTO);
         String content = templateEngine.process(templateName, context);
         String subject = titleKey;
         sendEmail(email, subject, content, false, true);
@@ -203,19 +189,19 @@ public class MailService {
 
     @Async
     public void sendWinnerEmail(String email) {
-        log.debug("Sending activation email to '{}'");
+        log.debug("Sending activation email to '{}'", email);
         sendEmailFromTemplate(email, "mail/winnerEmail", "Pengumuman Pemenang Lelang");
     }
 
     @Async
-    public void sendBiddingInvatationEmail(String email,MBiddingDTO mBiddingDTO) {
-        log.debug("Sending activation email to '{}'");
-        sendEmailFromTemplate(email, "mail/biddingInvitationEmail", "Undangan Lelang",mBiddingDTO);
+    public void sendBiddingInvatationEmail(String email, MBiddingDTO mBiddingDTO) {
+        log.debug("Sending bidding invitation email to '{}'", email);
+        sendEmailFromTemplate(email, "mail/biddingInvitationEmail", "Undangan Lelang", mBiddingDTO);
     }
 
     @Async
     public void sendTerminateEmail(String email) {
-        log.debug("Sending activation email to '{}'");
+        log.debug("Sending bidding termination email to '{}'", email);
         sendEmailFromTemplate(email, "mail/biddingTerminateEmail", "Pembatalan Lelang");
     }
 
@@ -247,6 +233,11 @@ public class MailService {
     public void sendPaidInvoiceEmail(User user, MVerificationDTO mVerification, List<MVerificationLineDTO> mVerificationLines) {
         log.debug("Sending payment status (Paid) email notification to '{}'", user.getEmail());
         sendEmailFromTemplate(user, mVerification.getLastModifiedBy(), mVerification, mVerificationLines, "mail/invoicePaidEmail", "email.verification.title");
+    }
+
+    public void sendInvitationCodeEmail(User user, Map<String, Object> contextVariables) {
+        log.debug("Sending invitation code email to '{}'", user.getEmail());
+        sendEmailFromTemplate(user, "mail/invitationCodeEmail", "email.invitationCode.title", contextVariables);
     }
 
 

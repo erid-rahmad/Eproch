@@ -31,6 +31,7 @@ export default class Login extends Vue {
   };
 
   loading = false;
+  checkingInvitationCode = false;
   showInvitationCodeDialog = false;
   capsTooltip = false;
   private redirect?: string;
@@ -96,10 +97,17 @@ export default class Login extends Vue {
 
   // TODO Add invitation code in phase 2.
   verifyInvitationCode() {
+    this.checkingInvitationCode = true;
     setTimeout(() => {
-      this.$message.error({
-        message: 'Invalid code'
-      });
+      if (this.invitation.code === 'KfFjbi5X') {
+        this.showInvitationCodeDialog = false;
+        this.$router.push('register');
+      } else {
+        this.$message.error({
+          message: 'Invalid code'
+        });
+      }
+      this.checkingInvitationCode = false;
     }, 1000);
   }
 

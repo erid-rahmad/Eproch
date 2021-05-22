@@ -142,6 +142,7 @@
       <span slot="footer">
         <el-button @click="showInvitationCodeDialog = false">Cancel</el-button>
         <el-button
+          :loading="checkingInvitationCode"
           type="primary"
           @click="verifyInvitationCode"
         >
@@ -212,11 +213,15 @@
       }
 
       .forgot-password-link {
-        color: #1890ff;
+        color: #004b99;
         font-size: 14px;
         font-weight: 400;
         line-height: 1;
         padding: 5px 2px 5px 0;
+
+        &:hover {
+          color: #336fad;
+        }
       }
 
       .login-button {
@@ -227,7 +232,7 @@
       .register-link {
         font-size: 14px;
         padding-left: 0;
-        padding-top: 4px;
+        padding-top: 0;
       }
 
       .remember-me {

@@ -152,6 +152,10 @@ public class AdUserService {
             .map(adUserMapper::toDto);
     }
 
+    public List<AdUser> findByActiveVendorId(Long vendorId) {
+        return adUserRepository.findBycVendorIdAndActiveTrue(vendorId);
+    }
+
     /**
      * Delete the adUser by id.
      *
