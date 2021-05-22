@@ -3,14 +3,14 @@ import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMi
 import { AccountStoreModule as accountStore } from '@/shared/config/store/account-store';
 import { Component, Inject, Mixins } from 'vue-property-decorator';
 import DynamicWindowService from '../../DynamicWindow/dynamic-window.service';
-import DetailsAnnouncementForm from './components/details-announcement.vue';
+import BiddingInvitationResponse from './components/details-announcement.vue';
 
 
 
 @Component({
   components: {
     AnnouncementForm,
-    DetailsAnnouncementForm,
+    BiddingInvitationResponse,
   }
 })
 export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
@@ -19,12 +19,14 @@ export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
   private commonService: (baseApiUrl: string) => DynamicWindowService;
 
   loading: boolean = false;
+  newRecord: boolean = false;
+
   gridData: any = [];
-  private moreinfo: any = {};
+  moreinfo: any = {};
 
   gridSchema = {
     defaultSort: {},
-    emptyText: 'No Records Found',
+    emptyText: 'No Records',
     maxHeight: 500,
     height: 500
   };
@@ -34,6 +36,7 @@ export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
 
   onFormClosed() {
     this.page = 1;
+    this.newRecord = false;
     this.retrieveAnnouncements();
   }
 
@@ -75,6 +78,7 @@ export default class EventAnnouncement extends Mixins(AccessLevelMixin) {
   }
 
   addAnnouncement() {
+    this.newRecord = true;
     this.page = 3;
   }
 

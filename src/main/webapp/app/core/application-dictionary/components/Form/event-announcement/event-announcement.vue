@@ -54,9 +54,21 @@
                         {{ row.$index + 1 }}
                     </template>
                 </el-table-column>
-                <el-table-column label="Bidding No" min-width="80" prop="biddingDocNo" sortable/>
-                <el-table-column label="Title" min-width="100" prop="biddingName" sortable/>
-                <el-table-column align="center" min-width="20">
+                <el-table-column
+                    label="Bidding No"
+                    prop="biddingDocNo"
+                    show-overflow-tooltip
+                    sortable
+                    width="200"
+                ></el-table-column>
+                <el-table-column
+                    label="Title"
+                    prop="biddingName"
+                    show-overflow-tooltip
+                    sortable
+                    width="250"
+                ></el-table-column>
+                <el-table-column width="200">
                     <template slot="header">
                         &nbsp;
                     </template>
@@ -66,42 +78,33 @@
                             size="mini"
                             type="primary"
                             @click="viewDetails(row)"
-                        >View
+                        >
+                            View
                         </el-button>
                         <el-button
-                            icon="el-icon-search"
                             size="mini"
                             type="primary"
                             @click="moreInfo(row)"
-                        >View Response
+                        >
+                            <svg-icon name="icomoo/269-info"></svg-icon> Invitation
                         </el-button>
                     </template>
                 </el-table-column>
             </el-table>
 
-            <details-announcement-form
+            <bidding-invitation-response
                 v-if="page === 2"
                 :moreinfo="moreinfo"
                 @back="back"
-            ></details-announcement-form>
+            ></bidding-invitation-response>
 
             <announcement-form
                 v-else-if="page === 3"
                 ref="announcementForm"
+                :new-record="newRecord"
                 :schedule-id="selectedRow.biddingScheduleId"
             ></announcement-form>
         </div>
-        <!-- <el-dialog title="Joined Vendors" :visible.sync="vendorListVisible">
-            <el-table border :data="joinedVendors" size="mini">
-                <el-table-column width="50" label="No">
-                    <template slot-scope="row">
-                        {{ row.$index + 1 }}
-                    </template>
-                </el-table-column>
-                <el-table-column property="vendorName" label="Vendor Name" width="200" show-overflow-tooltip></el-table-column>
-                <el-table-column property="address" label="Address" min-width="200" show-overflow-tooltip></el-table-column>
-            </el-table>
-        </el-dialog> -->
     </div>
 </template>
 

@@ -3,7 +3,9 @@ import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service'
 import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
 import moment from 'moment';
 
-const EventAnnouncement = Vue.extend({
+const baseApiUrl = 'api/m-bidding-invitations';
+
+const BiddingInvitationResponseProps = Vue.extend({
   props: {
     page: {
       type: Number,
@@ -19,7 +21,7 @@ const EventAnnouncement = Vue.extend({
 });
 
 @Component
-export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, EventAnnouncement) {
+export default class BiddingInvitationResponse extends Mixins(AccessLevelMixin, BiddingInvitationResponseProps) {
 
   @Inject('dynamicWindowService')
   private commonService: (baseApiUrl: string) => DynamicWindowService;
@@ -29,8 +31,7 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
   private vendorNoResponse: any = {};
   private vendorDownload: any = {};
 
-  mounted() {
-    console.log("this more info", this.moreinfo);
+  created() {
     this.biddingInvitations();
     this.biddingInvitationsjoin();
     this.biddingInvitationsNoResponse();
@@ -38,7 +39,7 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
   }
 
   private biddingInvitationsjoin() {
-    this.commonService('/api/m-bidding-invitations')
+    this.commonService(baseApiUrl)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `announcementId.equals=${this.moreinfo.id}`,
@@ -46,18 +47,17 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
         ]),
         paginationQuery: {
           page: 0,
-          size: 10000,
+          size: 100,
           sort: ['id']
         }
       })
       .then(res => {
         this.vendorJoin = res.data;
-        console.log("vendorJoin",this.vendorJoin);
       });
   }
 
   private biddingInvitations() {
-    this.commonService('/api/m-bidding-invitations')
+    this.commonService(baseApiUrl)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `announcementId.equals=${this.moreinfo.id}`,
@@ -65,18 +65,17 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
         ]),
         paginationQuery: {
           page: 0,
-          size: 10000,
+          size: 100,
           sort: ['id']
         }
       })
       .then(res => {
         this.vendorNotJoin = res.data;
-        console.log("vendornotjoin",this.vendorNotJoin);
       });
   }
 
   private biddingInvitationsNoResponse() {
-    this.commonService('/api/m-bidding-invitations')
+    this.commonService(baseApiUrl)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           `announcementId.equals=${this.moreinfo.id}`,
@@ -84,13 +83,12 @@ export default class DetailsAnnouncementForm extends Mixins(AccessLevelMixin, Ev
         ]),
         paginationQuery: {
           page: 0,
-          size: 10000,
+          size: 100,
           sort: ['id']
         }
       })
       .then(res => {
         this.vendorNoResponse = res.data;
-        console.log("vendorjoin",this.vendorNoResponse);
       });
   }
 
