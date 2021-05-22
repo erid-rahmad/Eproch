@@ -35,7 +35,7 @@ export const forms: Map<string, () => Promise<typeof import('*.vue')>> = new Map
   ['biddingResult', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/bidding-submission-grid.vue')],
   ['biddingResultAnnouncement', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/announcement.vue')],
   ['biddingResultForm', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-result/components/result.vue')],
-  ['biddingEvaluation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-evaluation/product-catalog.vue')],
+  ['biddingEvaluation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-evaluation/bidding-evaluation-grid.vue')],
   ['biddingEvaluationApproval', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/bidding-evaluation/bidding-evaluation-approval.vue')],
   ['costEvaluation', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/cost-evaluation/product-catalog.vue')],
   ['costEvaluationList', () => import(/* webpackChunkName: "bidding" */'@/core/application-dictionary/components/Form/cost-evaluation/index.vue')],

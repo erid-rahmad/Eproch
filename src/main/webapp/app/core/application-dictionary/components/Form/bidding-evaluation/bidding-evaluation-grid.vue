@@ -1,63 +1,53 @@
 <template>
     <div class="app-container">
-   
         <el-row v-if="index" class="main" ref="tableWrapper">
             <el-col :span="24">
                 <el-tabs v-model="activeName" @tab-click="handleClick">
                         <keep-alive>
                             <el-col :span="24">
-                                <el-table size="mini" :data="tableData" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
+                                <el-table size="mini" :data="bidding" :default-sort="{prop: 'date', order: 'descending'}" style="width: 100%">
                                     <el-table-column min-width="30" label="No">
                                         <template slot-scope="row">
                                             {{ row.$index+1 }}
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="documentNo" label="Bidding No" sortable width="180">
+                                    <el-table-column prop="documentNo" label="Bidding Number" sortable width="180">
                                     </el-table-column>
                                     <el-table-column prop="name" label="Title" sortable width="180">
                                     </el-table-column>
                                     <el-table-column prop="biddingTypeName" label="Biding Type" sortable width="180">
                                     </el-table-column>
-                                    <el-table-column prop="costCenterName" label="Depertement" sortable width="180">
+                                    <el-table-column prop="costCenterName" label="Depertement type" sortable width="180">
                                     </el-table-column>
-                                    <el-table-column prop="adUserUserName" label="PIC" sortable width="180">
+                                    <el-table-column prop="adUserUserName" label="Biding Schedule" sortable width="180">
                                     </el-table-column>
-                                    <el-table-column prop="5" label="Join Vendor" sortable width="180">
-                                        <template slot-scope="{row}">
-                                             <el-button class="button" size="mini" icon="el-icon-user" @click="dialogTableVisible = true">{{row.joinedVendorCount}}</el-button>                                             
-                                        </template>                                       
-                                    </el-table-column>
+<!--                                    <el-table-column prop="5" label="Join Vendor" sortable width="180">-->
+<!--                                        <template slot-scope="{row}">-->
+<!--                                             <el-button class="button" size="mini" icon="el-icon-user" @click="dialogTableVisible = true">{{row.joinedVendorCount}}</el-button>-->
+<!--                                        </template>-->
+<!--                                    </el-table-column>-->
                                     <el-table-column prop="documentStatus" label="Biding Status" sortable width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="lastModifiedDate" label="Modified" width="180">
-                                    </el-table-column>
-                                    <el-table-column prop="lastModifiedBy" label="Modified By" width="180">
                                     </el-table-column>
                                     <el-table-column min-width="120" sortable label="Summary">
                                         <template slot-scope="{ row }">
-                                            <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="onClick('add')">
+                                            <el-button class="button" icon="el el-download-alt" size="mini" type="primary" @click="evaluate(row)">
                                                 Evaluate
                                             </el-button>
                                         </template>
                                     </el-table-column>
                                 </el-table>
                             </el-col>
-                        </keep-alive>                
+                        </keep-alive>
                 </el-tabs>
             </el-col>
         </el-row>
         <el-row v-if="!index" class="main" ref="tableWrapper">
             <el-col :span="24" class="tab-container">
-
-                <product-information :setRowProductCatalog="setRow" @closeProductInformation="closeProductInformation" />
-
+                <product-information :pickRow="pickRow" @close="close" />
             </el-col>
         </el-row>
         <el-row v-if="index" class="header">
         </el-row>
-
-
-
         <el-dialog title="Shipping address" :visible.sync="dialogTableVisible">
             <el-table :data="gridData">
                 <el-table-column property="no" label="no" width="150"><template slot-scope="row">
@@ -70,7 +60,7 @@
     </div>
 </template>
 
-<script lang="ts" src="./product-catalog.component.ts">
+<script lang="ts" src="./bidding-evaluation-grid.component.ts">
 </script>
 
 <style lang="scss">
@@ -92,7 +82,7 @@
         width: 100%;
     }
 
-    
+
 
 
 

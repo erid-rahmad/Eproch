@@ -8,7 +8,7 @@ import {
 import Vue2Filters from 'vue2-filters';
 import ContextVariableAccessor from "../../ContextVariableAccessor";
 import CatalogGrid from './components/catalog-grid.vue';
-// import ProductInformation from './product-information.vue';
+// import ProductInformation from './bidding-evaliuation.vue';
 import submission from './bidding-submission.vue';
 
 
@@ -39,7 +39,7 @@ export default class Catalog extends mixins(Vue2Filters.mixin, AlertMixin, Conte
             6: '04-20-2021 14:00',
             7: '04-20-2021 14:00',
             8: '3',
-  
+
         },
         {
           1: 'BN-00001',
