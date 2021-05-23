@@ -29,6 +29,10 @@ export default class ScheduleEventMixin extends Mixins(AccessLevelMixin, Schedul
     // No default behavior.
   }
 
+  protected onMainFormUpdatedtes(mainForm: any) {
+    // No default behavior.
+  }
+
   created() {
     const query = this.$route.query;
     let scheduleId = query.biddingScheduleId ? parseInt(query.biddingScheduleId as string) : this.scheduleId;
@@ -47,6 +51,8 @@ export default class ScheduleEventMixin extends Mixins(AccessLevelMixin, Schedul
       this.mainForm = res;
       this.$emit('data-loaded', {...this.mainForm});
       this.onMainFormUpdated(this.mainForm);
+      this.onMainFormUpdatedtes(this.mainForm)
+
     })
     .catch(err => {
       console.error('Failed to get bidding schedule. %O', err);

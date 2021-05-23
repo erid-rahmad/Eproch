@@ -41,7 +41,7 @@ public class MBiddingInvitationService {
      */
     public MBiddingInvitationDTO save(MBiddingInvitationDTO mBiddingInvitationDTO) {
         log.debug("Request to save MBiddingInvitation : {}", mBiddingInvitationDTO);
-        if (mBiddingInvitationDTO.getInvitationStatus().equals("Tidak Berminat") ||mBiddingInvitationDTO.getInvitationStatus().equals("Terdaftar") ){
+        if (mBiddingInvitationDTO.getInvitationStatus().equals("R") ||mBiddingInvitationDTO.getInvitationStatus().equals("N") ){
             mBiddingInvitationDTO.setAnswerDate(ZonedDateTime.now());
             log.info("change time");
         }
