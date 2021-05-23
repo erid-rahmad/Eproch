@@ -209,6 +209,9 @@ application:
     bidding:
       documentType: 'Bidding'
       documentNumberPrefix: 'BD-'
+    biddingSubmission:
+      documentType: 'Bidding Submission'
+      documentNumberPrefix: 'BS-'
     purchaseOrder:
       documentType: 'Purchase Order'
       documentNumberPrefix: 'PO-'
