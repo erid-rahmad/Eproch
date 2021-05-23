@@ -1,24 +1,20 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.bhp.opusb.domain.MVendorScoring;
 import com.bhp.opusb.repository.MVendorScoringRepository;
 import com.bhp.opusb.service.dto.MVendorScoringDTO;
 import com.bhp.opusb.service.dto.MVendorScoringLineDTO;
 import com.bhp.opusb.service.mapper.MVendorScoringMapper;
-import com.bhp.opusb.util.MapperJSONUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link MVendorScoring}.
@@ -28,17 +24,19 @@ import java.util.Optional;
 public class MVendorScoringService {
 
     private final Logger log = LoggerFactory.getLogger(MVendorScoringService.class);
+    
+    private final MVendorScoringLineService mVendorScoringLineService;
 
     private final MVendorScoringRepository mVendorScoringRepository;
-
+    
     private final MVendorScoringMapper mVendorScoringMapper;
-
-    public MVendorScoringService(MVendorScoringRepository mVendorScoringRepository, MVendorScoringMapper mVendorScoringMapper) {
+    
+    public MVendorScoringService(MVendorScoringLineService mVendorScoringLineService,
+            MVendorScoringRepository mVendorScoringRepository, MVendorScoringMapper mVendorScoringMapper) {
+        this.mVendorScoringLineService = mVendorScoringLineService;
         this.mVendorScoringRepository = mVendorScoringRepository;
         this.mVendorScoringMapper = mVendorScoringMapper;
     }
-    @Autowired
-    MVendorScoringLineService mVendorScoringLineService;
 
     /**
      * Save a mVendorScoring.
@@ -50,18 +48,12 @@ public class MVendorScoringService {
         log.debug("Request to save MVendorScoring : {}", mVendorScoringDTO);
         MVendorScoring mVendorScoring = mVendorScoringMapper.toEntity(mVendorScoringDTO);
         mVendorScoring = mVendorScoringRepository.save(mVendorScoring);
-        MVendorScoringDTO mVendorScoringDTO_=
-         mVendorScoringMapper.toDto(mVendorScoring);
-        log.info("result of mVendorScoringDTO_ {}",mVendorScoringDTO_);
-        List<MVendorScoringLineDTO> vendorScoringLineDTOList = new ArrayList<>();
-        for ( MVendorScoringLineDTO mVendorScoringLineDTO:mVendorScoringDTO.getVendorScoringLineDTOList()) {
-            mVendorScoringLineDTO.setVendorScoringId(mVendorScoringDTO_.getId());
-            mVendorScoringLineDTO.setActive(true);
-            MVendorScoringLineDTO mVendorScoringLineDTO_ = mVendorScoringLineService.save(mVendorScoringLineDTO);
-            vendorScoringLineDTOList.add(mVendorScoringLineDTO_);
-        }
-        mVendorScoringDTO_.setVendorScoringLineDTOList(vendorScoringLineDTOList);
-        return mVendorScoringDTO_;
+
+        MVendorScoringDTO result = mVendorScoringMapper.toDto(mVendorScoring);
+        List<MVendorScoringLineDTO> lines = mVendorScoringLineService.saveAll(mVendorScoringDTO.getVendorScoringLineDTOList(), result.getId());
+
+        result.setVendorScoringLineDTOList(lines);
+        return result;
     }
 
 

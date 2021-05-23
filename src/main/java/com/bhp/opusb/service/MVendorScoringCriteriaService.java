@@ -1,21 +1,23 @@
 package com.bhp.opusb.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import com.bhp.opusb.domain.MVendorScoringCriteria;
 import com.bhp.opusb.repository.MVendorScoringCriteriaRepository;
-import com.bhp.opusb.service.dto.*;
+import com.bhp.opusb.service.dto.CBiddingSubCriteriaDTO;
+import com.bhp.opusb.service.dto.CBiddingSubCriteriaLineDTO;
+import com.bhp.opusb.service.dto.CEvalMethodSubCriteriaDTO;
+import com.bhp.opusb.service.dto.CEvaluationMethodCriteriaDTO;
+import com.bhp.opusb.service.dto.MVendorScoringCriteriaDTO;
 import com.bhp.opusb.service.mapper.MVendorScoringCriteriaMapper;
-import com.bhp.opusb.util.MapperJSONUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link MVendorScoringCriteria}.
@@ -45,6 +47,19 @@ public class MVendorScoringCriteriaService {
         log.debug("Request to save MVendorScoringCriteria : {}", mVendorScoringCriteriaDTO);
         MVendorScoringCriteria mVendorScoringCriteria = mVendorScoringCriteriaMapper.toEntity(mVendorScoringCriteriaDTO);
         mVendorScoringCriteria = mVendorScoringCriteriaRepository.save(mVendorScoringCriteria);
+        return mVendorScoringCriteriaMapper.toDto(mVendorScoringCriteria);
+    }
+
+    /**
+     * Save a list of mVendorScoringCriteria.
+     *
+     * @param mVendorScoringCriteriaDTOs the entities to save.
+     * @return the persisted entities.
+     */
+    public List<MVendorScoringCriteriaDTO> saveRequirements(List<MVendorScoringCriteriaDTO> mVendorScoringCriteriaDTOs) {
+        log.debug("Request to save MVendorScoringCriterias. size : {}", mVendorScoringCriteriaDTOs.size());
+        List<MVendorScoringCriteria> mVendorScoringCriteria = mVendorScoringCriteriaMapper.toEntity(mVendorScoringCriteriaDTOs);
+        mVendorScoringCriteria = mVendorScoringCriteriaRepository.saveAll(mVendorScoringCriteria);
         return mVendorScoringCriteriaMapper.toDto(mVendorScoringCriteria);
     }
 
