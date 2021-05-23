@@ -42,10 +42,6 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
     return accountStore.isVendor;
   }
 
-  public get settingsAccount(): any {
-    return accountStore.account;
-  }
-
   public get username(): string {
     return accountStore.account ? accountStore.account.login : '';
   }
@@ -55,12 +51,11 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
       this.vendorId = accountStore.userDetails.cVendorId;
     }
     this.biddingInvitations();
-    this.getemail();
+    // this.getemail();
   }
 
   @Watch('pickdetailemail')
   updateemail(pick: any) {
-    console.log(pick);
     this.getemail();
   }
 
@@ -68,11 +63,11 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
     axios
       .get(`/api/m-bidding-invitations/${this.pickdetailemail.id}`)
       .then(response => (this.info = response.data));
-    console.log("this info", this.info);
+
   }
 
   minat(row) {
-    console.log(row);
+
     this.accbutton = false;
     this.retrieveProjectInformations(row.biddingId);
     this.selecrow = null;
@@ -103,7 +98,7 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
   }
 
   tidakminat(row) {
-    console.log(row);
+
     this.selecrow = row;
     this.reasonPA = true;
     if (row.invitationStatus === "R") {
@@ -120,16 +115,10 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
   }
 
   viewemail(row) {
-    console.log(row);
+
     this.showemaildetail = true;
     this.pickdetailemail = row;
   }
-
-  formattime(date) {
-    console.log("format");
-    return moment(String(date)).format('MM-DD-YYYY hh:mm');
-  }
-
   getStatus(row){
     if(row.invitationStatus==="R"){
       return "Registered"
@@ -157,8 +146,6 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
       })
       .then(res => {
         this.biddingInvitationsGridData = res.data;
-        console.log("announcmentGridData", this.biddingInvitationsGridData);
-
       });
   }
 
