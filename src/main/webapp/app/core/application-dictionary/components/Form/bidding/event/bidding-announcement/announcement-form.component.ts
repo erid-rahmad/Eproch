@@ -87,7 +87,7 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
       this.$set(this.formData, 'biddingId', mainForm.biddingId);
       this.$set(this.formData, 'biddingScheduleId', mainForm.id);
     }
-    
+
     this.retrieveVendorSuggestions(mainForm.biddingId);
 
     if (!this.newRecord) {
@@ -97,7 +97,13 @@ export default class AnnouncementForm extends Mixins(ScheduleEventMixin, Announc
 
   created() {
     this.retrieveBiddings();
+    if(this.formData.description===null){
+      this.formData.description='<p><br>Kepada Bapak/Ibu Pimpinan <br>#vendorName <br>Hal: Undangan #biddingTitle <br>Dengan hormat </p><p>Sehubung dengan bidding sesuai judul di atas,kami mengundang Ibu/Bapak untuk mengikuti bidding tersebut. Silahkan Bapak/Ibu melakukan login di login.com untuk mendaftar pada bidding tersebut. Demikian penyampaian ini kami dengan senang hati menerima bila ada yang hendak di komunikasikan silahkan sampaikan ke email eproc.berca.co.id </p><p>Hormat Kami<br>Berca.co.id</p>';
+
+    }
   }
+
+
 
   changedata() {
     this.emailList = this.dataForAnnouncment.emaillist;

@@ -1,10 +1,9 @@
-import AccessLevelMixin from '@/core/application-dictionary/mixins/AccessLevelMixin';
-import { Component, Inject, Mixins, Vue } from "vue-property-decorator";
-import DynamicWindowService from '../../../DynamicWindow/dynamic-window.service';
-
+import { Component,  Mixins, Vue } from "vue-property-decorator";
+import ScheduleEventMixin from "@/core/application-dictionary/mixins/ScheduleEventMixin";
 const baseApiUrl = 'api/m-bidding-invitations';
+const baseBiddingInvitationApiUrl = 'api/m-bidding-invitations';
 
-const BiddingInvitationResponseProps = Vue.extend({
+const DetailsAnnouncementProps = Vue.extend({
   props: {
     page: {
       type: Number,
@@ -22,28 +21,49 @@ const BiddingInvitationResponseProps = Vue.extend({
 });
 
 @Component
-export default class BiddingInvitationResponse extends Mixins(AccessLevelMixin, BiddingInvitationResponseProps) {
+export default class DetailsAnnouncement extends Mixins(DetailsAnnouncementProps,ScheduleEventMixin) {
 
-  @Inject('dynamicWindowService')
-  private commonService: (baseApiUrl: string) => DynamicWindowService;
+  private vendorJoin: any = [];
+  private vendorNotJoin: any = [];
+  private vendorNoResponse: any = [];
+  private vendorDownload: any = [];
+  private invitationData: any = {};
 
-  vendorJoin: any = [];
-  vendorNotJoin: any = [];
-  vendorNoResponse: any = [];
-  vendorDownload: any = [];
 
   created() {
-    this.biddingInvitations();
-    this.biddingInvitationsjoin();
-    this.biddingInvitationsNoResponse();
-    this.biddingInvitationsDownload();
+    this.retrivedata(this.moreinfo.id);
   }
 
-  private biddingInvitationsjoin() {
+  onMainFormUpdatedtes(mainForm: any) {
+    console.log(mainForm)
+    this.commonService(baseBiddingInvitationApiUrl)
+      .retrieve({
+        criteriaQuery: this.updateCriteria([
+          `biddingId.equals=${mainForm.biddingId}`,
+        ]),
+        paginationQuery: {
+          page: 0,
+          size: 100,
+          sort: ['id']
+        }
+      })
+      .then(res => {
+        const data = res.data as any[];
+        if (data.length) {
+          this.invitationData = {...this.invitationData, ...data[0]};
+          console.log("data", this.invitationData)
+        }
+        console.log("data1", data)
+      })
+      .finally(() => this.retrivedata(this.invitationData.announcementId))
+
+  }
+
+  retrivedata(announcementId: number) {
     this.commonService(baseApiUrl)
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          `announcementId.equals=${this.moreinfo.id}`,
+          `announcementId.equals=${announcementId}`,
           `invitationStatus.equals=R`
         ]),
         paginationQuery: {
@@ -55,13 +75,10 @@ export default class BiddingInvitationResponse extends Mixins(AccessLevelMixin, 
       .then(res => {
         this.vendorJoin = res.data;
       });
-  }
-
-  private biddingInvitations() {
     this.commonService(baseApiUrl)
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          `announcementId.equals=${this.moreinfo.id}`,
+          `announcementId.equals=${announcementId}`,
           `invitationStatus.equals=N`
         ]),
         paginationQuery: {
@@ -73,13 +90,11 @@ export default class BiddingInvitationResponse extends Mixins(AccessLevelMixin, 
       .then(res => {
         this.vendorNotJoin = res.data;
       });
-  }
 
-  private biddingInvitationsNoResponse() {
     this.commonService(baseApiUrl)
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          `announcementId.equals=${this.moreinfo.id}`,
+          `announcementId.equals=${announcementId}`,
           `invitationStatus.equals=U`
         ]),
         paginationQuery: {
@@ -91,13 +106,11 @@ export default class BiddingInvitationResponse extends Mixins(AccessLevelMixin, 
       .then(res => {
         this.vendorNoResponse = res.data;
       });
-  }
 
-  private biddingInvitationsDownload() {
     this.commonService('/api/m-bidding-invitations')
       .retrieve({
         criteriaQuery: this.updateCriteria([
-          `announcementId.equals=${this.moreinfo.id}`,
+          `announcementId.equals=${announcementId}`,
           `invitationStatus.in=D`,
           `invitationStatus.in=R`
         ]),

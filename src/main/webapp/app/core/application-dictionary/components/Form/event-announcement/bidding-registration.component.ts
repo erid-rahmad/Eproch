@@ -10,6 +10,9 @@ import moment from 'moment';
 import axios from 'axios';
 import {AccountStoreModule as accountStore} from '@/shared/config/store/account-store';
 
+const biddingInvitationsAPI ="api/m-bidding-invitations"
+const ProjectInformationsAPI ="api/m-project-informations"
+
 @Component
 export default class BiddingRegistration extends mixins(Vue2Filters.mixin, AccessLevelMixin, AlertMixin, ContextVariableAccessor) {
 
@@ -47,17 +50,12 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
     return accountStore.account ? accountStore.account.login : '';
   }
 
-  mounted() {
+  created() {
     if (this.isVendor == true) {
       this.vendorId = accountStore.userDetails.cVendorId;
     }
     this.biddingInvitations();
-    this.getAnnouncment();
     this.getemail();
-  }
-
-  help() {
-    console.log("this info", this.info);
   }
 
   @Watch('pickdetailemail')
@@ -145,7 +143,7 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
   }
 
   private biddingInvitations() {
-    this.commonService('/api/m-bidding-invitations')
+    this.commonService(biddingInvitationsAPI)
       .retrieve({
         criteriaQuery: this.updateCriteria([
           // 'active.equals=true',
@@ -164,28 +162,17 @@ export default class BiddingRegistration extends mixins(Vue2Filters.mixin, Acces
       });
   }
 
-  private getAnnouncment() {
-    this.commonService(`/api/m-bidding-invitations/`)
-      .find(1972751)
-      .then(res => {
-        this.thisemail = res.data;
-      });
-  }
-
   private UpdatebiddingInvitation() {
-    this.commonService('/api/m-bidding-invitations')
+    this.commonService(biddingInvitationsAPI)
       .update(this.selecrow)
       .then(res => {
-        // this.biddingInvitationsGridData = res.data;
-        // console.log("announcmentGridData",this.biddingInvitationsGridData);
-
       });
   }
 
   private retrieveProjectInformations(biddingId: number): Promise<boolean> {
     return new Promise((resolve, reject) => {
       // this.loadingProjectInfo = true;
-      this.commonService('/api/m-project-informations')
+      this.commonService(ProjectInformationsAPI)
         .retrieve({
           criteriaQuery: this.updateCriteria([
             'active.equals=true',
