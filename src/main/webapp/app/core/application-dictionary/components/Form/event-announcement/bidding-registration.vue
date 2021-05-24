@@ -2,7 +2,7 @@
     <div class="app-container">
         <el-row ref="tableWrapper" class="main">
             <el-col :span="24">
-                <el-tabs v-model="activeName" @tab-click="handleClick">
+                <el-tabs >
                     <keep-alive>
                         <el-col :span="24">
                             <el-table :data="biddingInvitationsGridData" size="mini" style="width: 100%">
@@ -16,25 +16,25 @@
                                         <span>{{ row.announcementPublishDate | formatDate }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="Bidding Name" min-width="210" prop="biddingName"
+                                <el-table-column label="Bidding Name" min-width="210"
                                                  sortable></el-table-column>
                                 <el-table-column label="End Date" min-width="210"  sortable>
                                     <template slot-scope="{ row }">
                                         <span>{{ row.announcementEndDate | formatDate }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="Status" min-width="150" prop="invitationStatus" sortable>
+                                <el-table-column label="Status" min-width="150"  sortable>
                                     <template slot-scope="{ row }">
                                         <span>{{ getStatus(row) }}</span>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="Detail" prop="4" sortable width="180">
+                                <el-table-column label="Detail"  sortable width="180">
                                     <template slot-scope="{ row }">
                                         <el-button class="btn-attachment" icon="el-icon-search" size="mini"
                                                    type="primary" @click="viewemail(row)"></el-button>
                                     </template>
                                 </el-table-column>
-                                <el-table-column  label="Action" prop="6" sortable width="180">
+                                <el-table-column  label="Action" sortable width="180">
                                     <template v-if="answerbutton" slot-scope="{ row }">
                                         <el-button class="btn-attachment" icon="el-icon-circle-check" size="mini"
                                                    type="primary" @click="minat(row)">
